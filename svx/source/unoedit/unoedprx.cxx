@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:34:14 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,6 +1076,58 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( USHORT nPara, USHORT nIndex, 
                aIndex.GetIndex() <= USHRT_MAX,
                "SvxAccessibleTextIndex::SetIndex: index value overflow");
     nEnd = static_cast< USHORT > (aIndex.GetIndex());
+
+    return sal_True;
+}
+
+sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+{
+    DBG_ASSERT(mrTextForwarder, "SvxAccessibleTextAdapter: no forwarder");
+
+    SvxAccessibleTextIndex aIndex;
+    aIndex.SetIndex(nPara, nIndex, *this);
+    nIndex = aIndex.GetEEIndex();
+
+    if( aIndex.InBullet() )
+    {
+        DBG_ASSERT(aIndex.GetBulletLen() >= 0 &&
+                   aIndex.GetBulletLen() <= USHRT_MAX,
+                   "SvxAccessibleTextIndex::SetIndex: index value overflow");
+
+        // always treat bullet as distinct attribute
+        nStartIndex = 0;
+        nEndIndex = static_cast< USHORT > (aIndex.GetBulletLen());
+
+        return sal_True;
+    }
+
+    if( aIndex.InField() )
+    {
+        DBG_ASSERT(aIndex.GetIndex() - aIndex.GetFieldOffset() >= 0 &&
+                   aIndex.GetIndex() - aIndex.GetFieldOffset() <= USHRT_MAX,
+                   "SvxAccessibleTextIndex::SetIndex: index value overflow");
+
+        // always treat field as distinct attribute
+        nStartIndex = static_cast< USHORT > (aIndex.GetIndex() - aIndex.GetFieldOffset());
+        nEndIndex = static_cast< USHORT > (nStartIndex + aIndex.GetFieldLen());
+
+        return sal_True;
+    }
+
+    if( !mrTextForwarder->GetAttributeRun( nStartIndex, nEndIndex, nPara, nIndex ) )
+        return sal_False;
+
+    aIndex.SetEEIndex( nPara, nStartIndex, *this );
+    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
+               aIndex.GetIndex() <= USHRT_MAX,
+               "SvxAccessibleTextIndex::SetIndex: index value overflow");
+    nStartIndex = static_cast< USHORT > (aIndex.GetIndex());
+
+    aIndex.SetEEIndex( nPara, nEndIndex, *this );
+    DBG_ASSERT(aIndex.GetIndex() >= 0 &&
+               aIndex.GetIndex() <= USHRT_MAX,
+               "SvxAccessibleTextIndex::SetIndex: index value overflow");
+    nEndIndex = static_cast< USHORT > (aIndex.GetIndex());
 
     return sal_True;
 }

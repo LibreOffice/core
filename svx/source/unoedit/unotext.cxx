@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:34:16 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2228,6 +2228,11 @@ sal_Bool SvxDummyTextSource::GetIndexAtPoint( const Point&, USHORT& nPara, USHOR
 }
 
 sal_Bool SvxDummyTextSource::GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const
+{
+    return sal_False;
+}
+
+sal_Bool SvxDummyTextSource::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
 {
     return sal_False;
 }

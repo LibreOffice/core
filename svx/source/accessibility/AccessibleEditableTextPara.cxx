@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 14:05:36 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,76 @@ namespace accessibility
     {
     }
 
+    ::rtl::OUString AccessibleEditableTextPara::implGetText()
+    {
+        return GetTextRange( 0, GetTextLen() );
+    }
+
+    ::com::sun::star::lang::Locale AccessibleEditableTextPara::implGetLocale()
+    {
+        lang::Locale        aLocale;
+
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
+
+        // return locale of first character in the paragraph
+        return SvxLanguageToLocale(aLocale, GetTextForwarder().GetLanguage( static_cast< USHORT >( GetParagraphIndex() ), 0 ));
+    }
+
+    void AccessibleEditableTextPara::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
+    {
+        USHORT nStart, nEnd;
+
+        if( GetSelection( nStart, nEnd ) )
+        {
+            nStartIndex = nStart;
+            nEndIndex = nEnd;
+        }
+        else
+        {
+            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No selection available")),
+                                        uno::Reference< uno::XInterface >
+                                        ( static_cast< ::cppu::OWeakObject* >
+                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+        }
+    }
+
+    void AccessibleEditableTextPara::implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    {
+        rBoundary.startPos = 0;
+        rBoundary.endPos = GetTextLen();
+    }
+
+    void AccessibleEditableTextPara::implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex )
+    {
+        SvxTextForwarder&   rCacheTF = GetTextForwarder();
+        sal_Int32           nParaIndex = GetParagraphIndex();
+
+        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
+
+        sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
+
+        CheckIndex(nIndex);
+
+        USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
+        sal_Int32 nCurIndex;
+        for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
+        {
+            nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
+
+            if( nCurIndex > nIndex )
+            {
+                rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
+                rBoundary.endPos = nCurIndex;
+                break;
+            }
+        }
+
+        rBoundary.startPos = nTextLen;
+        rBoundary.endPos = nTextLen;
+    }
+
     void AccessibleEditableTextPara::SetIndexInParent( sal_Int32 nIndex )
     {
         mnIndexInParent = nIndex;
@@ -312,6 +382,49 @@ namespace accessibility
     {
         CheckPosition( nStart );
         CheckPosition( nEnd );
+    }
+
+    sal_Bool AccessibleEditableTextPara::GetSelection( USHORT& nStartPos, USHORT& nEndPos ) SAL_THROW((uno::RuntimeException))
+    {
+        ESelection aSelection;
+        USHORT nPara = static_cast< USHORT > ( GetParagraphIndex() );
+        if( !GetEditViewForwarder().GetSelection( aSelection ) )
+            return sal_False;
+
+        if( aSelection.nStartPara < aSelection.nEndPara )
+        {
+            if( aSelection.nStartPara > nPara ||
+                aSelection.nEndPara < nPara )
+                return sal_False;
+
+            if( nPara == aSelection.nStartPara )
+                nStartPos = aSelection.nStartPos;
+            else
+                nStartPos = 0;
+
+            if( nPara == aSelection.nEndPara )
+                nEndPos = aSelection.nEndPos;
+            else
+                nEndPos = GetTextLen();
+        }
+        else
+        {
+            if( aSelection.nStartPara < nPara ||
+                aSelection.nEndPara > nPara )
+                return sal_False;
+
+            if( nPara == aSelection.nStartPara )
+                nStartPos = aSelection.nStartPos;
+            else
+                nStartPos = GetTextLen();
+
+            if( nPara == aSelection.nEndPara )
+                nEndPos = aSelection.nEndPos;
+            else
+                nEndPos = 0;
+        }
+
+        return sal_True;
     }
 
     String AccessibleEditableTextPara::GetText( sal_Int32 nIndex ) SAL_THROW((uno::RuntimeException))
@@ -570,6 +683,11 @@ namespace accessibility
         }
     }
 
+    sal_Bool AccessibleEditableTextPara::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, sal_Int32 nIndex )
+    {
+        return GetTextForwarder().GetAttributeRun( nStartIndex, nEndIndex, GetParagraphIndex(), nIndex );
+    }
+
     uno::Any SAL_CALL AccessibleEditableTextPara::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
     {
         uno::Any aRet;
@@ -748,13 +866,7 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        lang::Locale        aLocale;
-
-        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
-
-        // return locale of first character in the paragraph
-        return SvxLanguageToLocale(aLocale, GetTextForwarder().GetLanguage( static_cast< USHORT >( GetParagraphIndex() ), 0 ));
+        return implGetLocale();
     }
 
     void SAL_CALL AccessibleEditableTextPara::addEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException)
@@ -928,9 +1040,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacter: index value overflow");
 
-        CheckIndex( nIndex );
-
-        return GetText( nIndex ).GetChar(0);
+        return OCommonAccessibleText::getCharacter( nIndex );
     }
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getCharacterAttributes( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -1016,7 +1126,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getCharacterCount: index value overflow");
 
-        return GetTextLen();
+        return OCommonAccessibleText::getCharacterCount();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getIndexAtPoint( const awt::Point& rPoint ) throw (uno::RuntimeException)
@@ -1049,49 +1159,6 @@ namespace accessibility
         }
     }
 
-    sal_Bool AccessibleEditableTextPara::GetSelection( USHORT& nStartPos, USHORT& nEndPos ) SAL_THROW((uno::RuntimeException))
-    {
-        ESelection aSelection;
-        USHORT nPara = static_cast< USHORT > ( GetParagraphIndex() );
-        if( !GetEditViewForwarder().GetSelection( aSelection ) )
-            return sal_False;
-
-        if( aSelection.nStartPara < aSelection.nEndPara )
-        {
-            if( aSelection.nStartPara > nPara ||
-                aSelection.nEndPara < nPara )
-                return sal_False;
-
-            if( nPara == aSelection.nStartPara )
-                nStartPos = aSelection.nStartPos;
-            else
-                nStartPos = 0;
-
-            if( nPara == aSelection.nEndPara )
-                nEndPos = aSelection.nEndPos;
-            else
-                nEndPos = GetTextLen();
-        }
-        else
-        {
-            if( aSelection.nStartPara < nPara ||
-                aSelection.nEndPara > nPara )
-                return sal_False;
-
-            if( nPara == aSelection.nStartPara )
-                nStartPos = aSelection.nStartPos;
-            else
-                nStartPos = GetTextLen();
-
-            if( nPara == aSelection.nEndPara )
-                nEndPos = aSelection.nEndPos;
-            else
-                nEndPos = 0;
-        }
-
-        return sal_True;
-    }
-
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getSelectedText() throw (uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -1102,11 +1169,7 @@ namespace accessibility
         if( !HaveEditView() )
             return ::rtl::OUString();
 
-        USHORT nStartPos, nEndPos;
-        if( GetSelection( nStartPos, nEndPos ) )
-            return GetTextRange( nStartPos, nEndPos );
-
-        return ::rtl::OUString();
+        return OCommonAccessibleText::getSelectedText();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionStart() throw (uno::RuntimeException)
@@ -1119,11 +1182,7 @@ namespace accessibility
         if( !HaveEditView() )
             return -1;
 
-        USHORT nStartPos, nEndPos;
-        if( GetSelection( nStartPos, nEndPos) )
-            return nStartPos;
-        else
-            return -1;
+        return OCommonAccessibleText::getSelectionStart();
     }
 
     sal_Int32 SAL_CALL AccessibleEditableTextPara::getSelectionEnd() throw (uno::RuntimeException)
@@ -1136,11 +1195,7 @@ namespace accessibility
         if( !HaveEditView() )
             return -1;
 
-        USHORT nStartPos, nEndPos;
-        if( GetSelection( nStartPos, nEndPos) )
-            return nEndPos;
-        else
-            return -1;
+        return OCommonAccessibleText::getSelectionEnd();
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -1162,7 +1217,7 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getText: paragraph index value overflow");
 
-        return GetTextRange( 0, GetTextLen() );
+        return OCommonAccessibleText::getText();
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -1172,258 +1227,91 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
-        CheckRange(nStartIndex, nEndIndex);
-
-        return GetTextRange(nStartIndex, nEndIndex);
+        return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxTextForwarder&   rCacheTF = GetTextForwarder();
-        sal_Int32           nParaIndex = GetParagraphIndex();
 
-        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
-
-        sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
-
-        CheckIndex(nIndex);
-
-        ::rtl::OUString aRetVal;
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
         switch( aTextType )
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
-                // GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
-                // beware: array is sorted in start positions, the end positions can overlap!
-                // TODO
-                break;
-
-            case AccessibleTextType::GLYPH:
-                // TODO: CTL?
-            case AccessibleTextType::CHARACTER:
-                aRetVal = String( getCharacter( nIndex ) );
-                break;
-
-            case AccessibleTextType::WORD:
             {
-                USHORT nStart, nEnd;
-                if( rCacheTF.GetWordIndices( static_cast< USHORT >( nParaIndex ), static_cast< USHORT >( nIndex ), nStart, nEnd ) )
-                    aRetVal = GetTextRange( nStart, nEnd );
-                break;
+                USHORT nStartIndex, nEndIndex;
+
+                if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
+                    return GetTextRange(nStartIndex, nEndIndex);
+                else
+                    return ::rtl::OUString();
             }
-
-            case AccessibleTextType::LINE:
-            {
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex;
-                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
-                {
-                    nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
-
-                    if( nCurIndex > nIndex )
-                    {
-                        aRetVal = GetTextRange( nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine), nCurIndex );
-                        break;
-                    }
-                }
-                break;
-            }
-
-            case AccessibleTextType::SENTENCE:
-                // TODO. currently fallback to paragraph.
-            case AccessibleTextType::PARAGRAPH:
-                aRetVal = getText();
-                break;
 
             default:
-                throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text type value out of range")),
-                                                      uno::Reference< uno::XInterface >
-                                                      ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
-
-        return aRetVal;
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxTextForwarder&   rCacheTF = GetTextForwarder();
-        sal_Int32           nParaIndex = GetParagraphIndex();
 
-        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextBeforeIndex: paragraph index value overflow");
-
-        sal_Int32 nTextLen( rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) ) );
-
-        CheckIndex(nIndex);
-
-        ::rtl::OUString aRetVal;
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
         switch( aTextType )
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
-                // TODO
-                break;
-
-            case AccessibleTextType::GLYPH:
-                // TODO: CTL?
-            case AccessibleTextType::CHARACTER:
-                aRetVal = nIndex > 0 ? String(getCharacter( nIndex-1 )) : String();
-                break;
-
-            case AccessibleTextType::WORD:
             {
-                USHORT nStart, nEnd;
-                if( rCacheTF.GetWordIndices( static_cast< USHORT >( nParaIndex ), static_cast< USHORT >( nIndex ), nStart, nEnd ) )
+                USHORT nStartIndex, nEndIndex;
+
+                if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
                 {
-                    // semantics:
-                    //
-                    // word w|ord word # word |word word # word| word
-                    // ^^^^              ^^^^              ^^^^
-                    //
-
-                    // already at the left border
-                    if( nStart == 0 )
-                        break;
-
-                    // one word to the left
-                    if( rCacheTF.GetWordIndices( static_cast< USHORT >( nParaIndex ), static_cast< USHORT >( nStart ), nStart, nEnd ) )
-                        aRetVal = GetTextRange(nStart, nEnd);
-
-                    break;
-                }
-            }
-
-            case AccessibleTextType::LINE:
-            {
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex, nLastIndex, nCurLineLen;
-                // get the line before the line the index points into
-                for( nLine=0, nCurIndex=0, nLastIndex=0; nLine<nLineCount; ++nLine )
-                {
-                    nLastIndex = nCurIndex;
-                    nCurLineLen = rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-                    nCurIndex += nCurLineLen;
-
-                    if( nCurIndex > nIndex &&
-                        nLastIndex > nCurLineLen )
+                    // already at the left border?
+                    if( nStartIndex != 0 )
                     {
-                        aRetVal = GetTextRange( nLastIndex - nCurLineLen, static_cast< USHORT >( nLastIndex ) );
-                        break;
+                        if( GetAttributeRun(nStartIndex, nEndIndex, nStartIndex-1) )
+                            return GetTextRange(nStartIndex, nEndIndex);
                     }
                 }
-                break;
+                return ::rtl::OUString();
             }
 
-            case AccessibleTextType::SENTENCE:
-                // TODO. currently fallback to paragraph.
-            case AccessibleTextType::PARAGRAPH:
-                // get paragraph before (convenience? bug? feature?)
-                if( nParaIndex &&
-                    GetParaInterface( nParaIndex - 1 ).is() )
-                {
-                    aRetVal = GetParaInterface( nParaIndex - 1 )->getText();
-                }
-                break;
-
             default:
-                throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text type value out of range")),
-                                                      uno::Reference< uno::XInterface >
-                                                      ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
-
-        return aRetVal;
     }
 
     ::rtl::OUString SAL_CALL AccessibleEditableTextPara::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        SvxTextForwarder& rCacheTF = GetTextForwarder();
-        sal_Int32 nParaIndex = GetParagraphIndex();
 
-        DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextBehindIndex: paragraph index value overflow");
-
-        sal_Int32 nTextLen( rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) ) );
-
-        CheckIndex(nIndex);
-
-        ::rtl::OUString aRetVal;
+        DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
+                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
 
         switch( aTextType )
         {
             case AccessibleTextType::ATTRIBUTE_RUN:
-                // TODO
-                break;
-
-            case AccessibleTextType::GLYPH:
-                // TODO: CTL?
-            case AccessibleTextType::CHARACTER:
-                aRetVal = nIndex < nTextLen-1 ? String(getCharacter( nIndex+1 )) : String();
-                break;
-
-            case AccessibleTextType::WORD:
             {
-                USHORT nStart, nEnd;
-                if( rCacheTF.GetWordIndices( static_cast< USHORT >( nParaIndex ), static_cast< USHORT >( nIndex ), nStart, nEnd ) )
+                USHORT nStartIndex, nEndIndex;
+
+                if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
                 {
-                    // semantics:
-                    //
-                    // word w|ord word # word |word # word word| word
-                    //            ^^^^         ^^^^              ^^^^
-                    //
-
-                    // already at the right border
-                    if( nEnd >= nTextLen-2 )
-                        break;
-
-                    // one word to the right
-                    if( rCacheTF.GetWordIndices( static_cast< USHORT >( nParaIndex ), nEnd+1, nStart, nEnd ) )
-                        aRetVal = GetTextRange(nStart, nEnd);
-
-                    break;
-                }
-            }
-
-            case AccessibleTextType::LINE:
-            {
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex;
-                // get the line after the line the index points into
-                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
-                {
-                    nCurIndex += rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-
-                    if( nCurIndex > nIndex &&
-                        nLine < nLineCount-1 )
+                    // already at the right border?
+                    if( nEndIndex < GetTextLen() )
                     {
-                        aRetVal = GetTextRange( nCurIndex, nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1) );
-                        break;
+                        if( GetAttributeRun(nStartIndex, nEndIndex, nEndIndex) )
+                            return GetTextRange(nStartIndex, nEndIndex);
                     }
                 }
-                break;
+                return ::rtl::OUString();
             }
 
-            case AccessibleTextType::SENTENCE:
-                // TODO. currently fallback to paragraph.
-            case AccessibleTextType::PARAGRAPH:
-                // get paragraph behind (convenience? bug? feature?)
-                if( nParaIndex < rCacheTF.GetParagraphCount() - 1 &&
-                    GetParaInterface( nParaIndex + 1 ).is() )
-                {
-                    aRetVal = GetParaInterface( nParaIndex + 1 )->getText();
-                }
-                break;
-
             default:
-                throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text type value out of range")),
-                                                      uno::Reference< uno::XInterface >
-                                                      ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
+                return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
-
-        return aRetVal;
     }
 
     sal_Bool SAL_CALL AccessibleEditableTextPara::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)

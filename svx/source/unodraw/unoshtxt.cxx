@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 09:38:16 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,7 +934,7 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify && !mbNotificationsDisabled )
     {
-        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHelper::EENotification2Hint( aNotify) );
 
         if( aHint.get() )
             Broadcast( *aHint.get() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 16:19:17 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #endif
 
+#ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
+#include <comphelper/accessibletexthelper.hxx>
+#endif
+
 #ifndef _SVX_ACCESSIBLE_PARA_MANAGER_HXX
 #include "AccessibleParaManager.hxx"
 #endif
@@ -135,8 +139,16 @@ namespace accessibility
 
     /** This class implements the actual text paragraphs for the EditEngine/Outliner UAA
      */
-    class AccessibleEditableTextPara : public AccessibleTextParaInterfaceBase
+    class AccessibleEditableTextPara : public AccessibleTextParaInterfaceBase, public ::comphelper::OCommonAccessibleText
     {
+
+    protected:
+        // override OCommonAccessibleText methods
+        virtual ::rtl::OUString                 implGetText();
+        virtual ::com::sun::star::lang::Locale  implGetLocale();
+        virtual void                            implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex );
+        virtual void                            implGetParagraphBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
+        virtual void                            implGetLineBoundary( ::com::sun::star::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
     public:
         /// Create accessible object for given parent
@@ -330,6 +342,21 @@ namespace accessibility
         // declared, but not defined
         AccessibleEditableTextPara( const AccessibleEditableTextPara& );
         AccessibleEditableTextPara& operator= ( const AccessibleEditableTextPara& );
+
+        /** Calculate character range of similar attributes
+
+            @param nStartIndex
+            Therein, the start of the character range with the same attributes is returned
+
+            @param nEndIndex
+            Therein, the end (exclusively) of the character range with the same attributes is returned
+
+            @param nIndex
+            The character index at where to look for similar character attributes
+
+            @return sal_False, if the method was not able to determine the range
+         */
+        sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, sal_Int32 nIndex );
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;

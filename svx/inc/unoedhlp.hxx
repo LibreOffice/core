@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:20:51 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #endif
 
 struct EENotify;
+class EditEngine;
 
 #define EDITSOURCE_HINT_PARASMOVED          20
 #define EDITSOURCE_HINT_SELECTIONCHANGED    21
@@ -105,7 +106,7 @@ public:
 
 /** Helper class for common functionality in edit sources
  */
-class SvxEditSourceHintTranslator
+class SvxEditSourceHelper
 {
 public:
 
@@ -117,6 +118,30 @@ public:
         @return the translated hint
      */
     static ::std::auto_ptr<SfxHint> EENotification2Hint( EENotify* aNotify );
+
+    /** Calculate attribute run for EditEngines
+
+        Please note that the range returned is half-open: [nStartIndex,nEndIndex)
+
+        @param nStartIndex
+        Herein, the start index of the range of similar attributes is returned
+
+        @param nEndIndex
+        Herein, the end index (exclusive) of the range of similar attributes is returned
+
+        @param rEE
+        The EditEngine to query for attributes
+
+        @param nPara
+        The paragraph the following index value is to be interpreted in
+
+        @param nIndex
+        The character index from which the range of similar attributed characters is requested
+
+        @return sal_True, if the range has been successfully determined
+     */
+    static sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex );
+
 };
 
 #endif

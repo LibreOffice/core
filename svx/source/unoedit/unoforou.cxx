@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:34:15 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,8 @@
 #include <editeng.hxx>
 #include <editdata.hxx>
 #include <outliner.hxx>
-#include "svdobj.hxx"
+#include <unoedhlp.hxx>
+#include <svdobj.hxx>
 
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
@@ -83,7 +84,7 @@
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include "eeitem.hxx"
+#include <eeitem.hxx>
 #endif
 
 #include "unoforou.hxx"
@@ -384,6 +385,11 @@ sal_Bool SvxOutlinerForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, USHO
     }
 
     return sal_False;
+}
+
+sal_Bool SvxOutlinerForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+{
+    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rOutliner.GetEditEngine(), nPara, nIndex );
 }
 
 USHORT SvxOutlinerForwarder::GetLineCount( USHORT nPara ) const

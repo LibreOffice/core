@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 09:24:19 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ namespace accessibility
         void UpdateVisibleChildren();
 
         // check all children for changes in positíon and size
-        void UpdateVisibleData();
+        void UpdateBoundRect();
 
         // calls SetSelection on the forwarder and updates maLastSelection
         // cache.
@@ -625,24 +625,6 @@ namespace accessibility
         catch( const uno::RuntimeException& ) {}
     }
 
-    // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&, void >
-    {
-    public:
-        AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
-        void operator()( const accessibility::AccessibleParaManager::WeakChild& rPara )
-        {
-            // retrieve hard reference from weak one
-            accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
-
-            if( aHardRef.is() )
-                mrImpl.FireEvent(AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
-        }
-
-    private:
-        AccessibleTextHelper_Impl&  mrImpl;
-    };
-
     void AccessibleTextHelper_Impl::ShutdownEditSource() SAL_THROW((uno::RuntimeException))
     {
         // This should only be called with solar mutex locked, i.e. from the main office thread
@@ -655,11 +637,11 @@ namespace accessibility
 
         // invalidate children
         maParaManager.Dispose();
+        maParaManager.SetNum(0);
 
         // lost all children
-        AccessibleTextHelper_LostChildEvent aFunctor( *this );
-        ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
-        maParaManager.SetNum(0);
+        if( mxFrontEnd.is() )
+            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
 
         // quit listen on stale edit source
         if( maEditSource.IsValid() )
@@ -702,7 +684,7 @@ namespace accessibility
 
         // in all cases, check visibility afterwards.
         UpdateVisibleChildren();
-        UpdateVisibleData();
+        UpdateBoundRect();
     }
 
     void AccessibleTextHelper_Impl::UpdateVisibleChildren()
@@ -785,10 +767,10 @@ namespace accessibility
             // something failed - currently no children
             mnFirstVisibleChild = -1;
             mnLastVisibleChild = -2;
-
-            AccessibleTextHelper_LostChildEvent aFunctor( *this );
-            ::std::for_each( maParaManager.begin(), maParaManager.end(), aFunctor );
             maParaManager.SetNum(0);
+
+            // lost all children
+            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
         }
     }
 
@@ -818,7 +800,7 @@ namespace accessibility
                 }
 
                 // visible data changed
-                aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT );
+                aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT );
             }
 
             // identity transform
@@ -829,9 +811,9 @@ namespace accessibility
         AccessibleTextHelper_Impl&  mrImpl;
     };
 
-    void AccessibleTextHelper_Impl::UpdateVisibleData()
+    void AccessibleTextHelper_Impl::UpdateBoundRect()
     {
-        // send ACCESSIBLE_VISIBLE_DATA_EVENT to affected children
+        // send ACCESSIBLE_BOUNDRECT_EVENT to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
         ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
@@ -846,6 +828,24 @@ namespace accessibility
         }
     }
 #endif
+
+    // functor for sending child events (no stand-alone function, they are maybe not inlined)
+    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&, void >
+    {
+    public:
+        AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
+        void operator()( const accessibility::AccessibleParaManager::WeakChild& rPara )
+        {
+            // retrieve hard reference from weak one
+            accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
+
+            if( aHardRef.is() )
+                mrImpl.FireEvent(AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
+        }
+
+    private:
+        AccessibleTextHelper_Impl&  mrImpl;
+    };
 
     void AccessibleTextHelper_Impl::ParagraphsMoved( sal_Int32 nFirst, sal_Int32 nMiddle, sal_Int32 nLast )
     {
@@ -912,12 +912,15 @@ namespace accessibility
             ::std::advance( begin, nFirst );
             ::std::advance( end, nLast+1 );
 
+            // TODO: maybe optimize here in the following way.  If the
+            // number of removed children exceeds a certain threshold,
+            // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
             ::std::for_each( begin, end, aFunctor );
 
             maParaManager.Release(nFirst, nLast+1);
-            // should be no need for UpdateVisibleData, since all affected children are cleared.
+            // should be no need for UpdateBoundRect, since all affected children are cleared.
         }
     }
 
@@ -950,6 +953,9 @@ namespace accessibility
             ::std::advance( begin, nFirst );
             ::std::advance( end, nLast+1 );
 
+            // TODO: maybe optimize here in the following way.  If the
+            // number of removed children exceeds a certain threshold,
+            // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
             ::std::for_each( begin, end, aFunctor );
         }
@@ -978,6 +984,9 @@ namespace accessibility
         ::std::advance( begin, nFirst );
         ::std::advance( end, nLast+1 );
 
+        // TODO: maybe optimize here in the following way.  If the
+        // number of removed children exceeds a certain threshold,
+        // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
         AccessibleTextHelper_LostChildEvent aFunctor( *this );
         ::std::for_each( begin, end, aFunctor );
 
@@ -1025,7 +1034,7 @@ namespace accessibility
             {
                 ParagraphsInserted( nFirstParaInsert );
                 UpdateVisibleChildren();
-                UpdateVisibleData();
+                UpdateBoundRect();
             }
 
             sal_Int32 nFirstParaRemove( 0 ); // default range is pessimization, don't know where to add
@@ -1038,7 +1047,7 @@ namespace accessibility
                 // remove excess paragraphs (range is pessimization, don't know where to remove)
                 ParagraphsRemoved( nFirstParaRemove );
                 UpdateVisibleChildren();
-                UpdateVisibleData();
+                UpdateBoundRect();
             }
 
             if( pEditSourceHint )
@@ -1105,7 +1114,7 @@ namespace accessibility
 
                 // in all cases, check visibility afterwards.
                 UpdateVisibleChildren();
-                UpdateVisibleData();
+                UpdateBoundRect();
             }
             else if( pViewHint )
             {
@@ -1114,7 +1123,7 @@ namespace accessibility
                     case SVX_HINT_VIEWCHANGED:
                         // just check visibility
                         UpdateVisibleChildren();
-                        UpdateVisibleData();
+                        UpdateBoundRect();
                         break;
                 }
             }
@@ -1547,7 +1556,7 @@ namespace accessibility
 #endif
 
         mpImpl->UpdateVisibleChildren();
-        mpImpl->UpdateVisibleData();
+        mpImpl->UpdateBoundRect();
 
         mpImpl->UpdateSelection();
 

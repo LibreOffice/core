@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:34:15 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,8 @@
 
 #include <svtools/itemset.hxx>
 #include <editeng.hxx>
-#include "editview.hxx"
+#include <editview.hxx>
+#include <unoedhlp.hxx>
 #include <editdata.hxx>
 #include <outliner.hxx>
 #include <editobj.hxx>      // nur fuer die GetText-Kruecke
@@ -412,6 +413,11 @@ sal_Bool SvxEditEngineForwarder::GetWordIndices( USHORT nPara, USHORT nIndex, US
     }
 
     return sal_False;
+}
+
+sal_Bool SvxEditEngineForwarder::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const
+{
+    return SvxEditSourceHelper::GetAttributeRun( nStartIndex, nEndIndex, rEditEngine, nPara, nIndex );
 }
 
 USHORT SvxEditEngineForwarder::GetLineCount( USHORT nPara ) const

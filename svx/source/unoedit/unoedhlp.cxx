@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:27:21 $
+ *  last change: $Author: thb $ $Date: 2002-08-02 11:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include "unoedhlp.hxx"
 #include "editdata.hxx"
+#include "editeng.hxx"
 
 //------------------------------------------------------------------------
 
@@ -118,7 +119,7 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
 
 //------------------------------------------------------------------------
 
-::std::auto_ptr<SfxHint> SvxEditSourceHintTranslator::EENotification2Hint( EENotify* aNotify )
+::std::auto_ptr<SfxHint> SvxEditSourceHelper::EENotification2Hint( EENotify* aNotify )
 {
     if( aNotify )
     {
@@ -146,10 +147,51 @@ void SvxEditSourceHint::SetEndValue( ULONG n )
                 return ::std::auto_ptr<SfxHint>( new SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
 
             default:
-                DBG_ERROR( "SvxEditSourceHintTranslator::EENotification2Hint unknown notification" );
+                DBG_ERROR( "SvxEditSourceHelper::EENotification2Hint unknown notification" );
                 break;
         }
     }
 
     return ::std::auto_ptr<SfxHint>( new SfxHint() );
+}
+
+sal_Bool SvxEditSourceHelper::GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex )
+{
+    EECharAttribArray aCharAttribs;
+
+    rEE.GetCharAttribs( nPara, aCharAttribs );
+
+    // find closest index in front of nIndex
+    USHORT nAttr, nCurrIndex;
+    sal_Int32 nClosestStartIndex;
+    for( nAttr=0, nClosestStartIndex=0; nAttr<aCharAttribs.Count(); ++nAttr )
+    {
+        nCurrIndex = aCharAttribs[nAttr].nStart;
+
+        if( nCurrIndex > nIndex )
+            break; // aCharAttribs array is sorted in increasing order for nStart values
+
+        if( nCurrIndex > nClosestStartIndex )
+        {
+            nClosestStartIndex = nCurrIndex;
+        }
+    }
+
+    // find closest index behind of nIndex
+    sal_Int32 nClosestEndIndex;
+    for( nAttr=0, nClosestEndIndex=rEE.GetTextLen(); nAttr<aCharAttribs.Count(); ++nAttr )
+    {
+        nCurrIndex = aCharAttribs[nAttr].nEnd;
+
+        if( nCurrIndex > nIndex &&
+            nCurrIndex < nClosestEndIndex )
+        {
+            nClosestEndIndex = nCurrIndex;
+        }
+    }
+
+    nStartIndex = static_cast<USHORT>( nClosestStartIndex );
+    nEndIndex = static_cast<USHORT>( nClosestEndIndex );
+
+    return sal_True;
 }
