@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 14:06:57 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 #include "topfrm.hxx"
 #include "appimp.hxx"
 #include "mailchildwin.hxx"
+#include "partwnd.hxx"
 #include "sfxsids.hrc"
 
 //===================================================================
@@ -110,6 +111,8 @@ void SfxApplication::Registrations_Impl()
     SfxNavigatorWrapper::RegisterChildWindow();
     SfxToolboxCustomWindow::RegisterChildWindow();
     SfxMailChildWinWrapper_Impl::RegisterChildWindow();
+    SfxMailChildWinWrapper_Impl::RegisterChildWindow();
+    SfxPartChildWnd_Impl::RegisterChildWindow();
 
 /*! (pb) no help at this time
     SfxHelpPIWrapper::RegisterChildWindow();

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+#   last change: $Author: mba $ $Date: 2000-10-23 12:09:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,7 @@ SLOFILES =\
         $(SLO)$/templdlg.obj		\
         $(SLO)$/tplcitem.obj		\
         $(SLO)$/tplpitem.obj		\
+                $(SLO)$/partwnd.obj            \
         $(SLO)$/versdlg.obj
 
 EXCEPTIONSFILES=\
