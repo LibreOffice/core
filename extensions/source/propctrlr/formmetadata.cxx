@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 08:41:48 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 09:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,9 @@ namespace pcr
             case PROPERTY_ID_NAVIGATION:
                 sSeparatedList = String(ModuleRes(RID_STR_ENUM_NAVIGATION));
                 break;
+            case PROPERTY_ID_TARGET_FRAME:
+                sSeparatedList = String(ModuleRes(RID_STR_ENUM_SUBMIT_TARGET));
+                break;
         }
 
         sal_Int32 nTokens = sSeparatedList.GetTokenCount(';');
@@ -466,6 +469,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/17 08:41:48  fs
+ *  #82726# renamed the display text for the navigation bar
+ *
  *  Revision 1.1  2001/01/12 11:28:26  fs
  *  initial checkin - outsourced the form property browser
  *
