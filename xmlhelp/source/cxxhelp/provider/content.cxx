@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,6 +508,8 @@ Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rPrope
         else if( rProp.Name.compareToAscii( "MediaType" ) == 0  )
             if( m_aURLParameter.isPicture() )
                 xRow->appendString( rProp,rtl::OUString::createFromAscii( "image/gif" ) );
+            else if( m_aURLParameter.isActive() )
+                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/plain" ) );
             else if( m_aURLParameter.isFile() )
                 xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/html" ) );
             else if( m_aURLParameter.isRoot() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-12 14:16:41 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,27 @@ URLParameter::URLParameter( const rtl::OUString&  aURL,
 }
 
 
+rtl::OString URLParameter::getByName( const char* par )
+{
+    rtl::OUString val;
+
+    if( strcmp( par,"Program" ) == 0 )
+        val = get_program();
+    else if( strcmp( par,"Database" ) == 0 )
+        val = get_module();
+    else if( strcmp( par,"Id" ) == 0 )
+        val = get_id();
+    else if( strcmp( par,"Path" ) == 0 )
+        val = get_path();
+    else if( strcmp( par,"Language" ) == 0 )
+        val = get_language();
+    else if( strcmp( par,"System" ) == 0 )
+        val = get_system();
+
+    return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
+}
+
+
 rtl::OUString URLParameter::get_id()
 {
     if( m_aId.compareToAscii( "52821" ) == 0 || m_aId.compareToAscii("start") == 0 )
@@ -335,10 +356,7 @@ class InputStreamTransformer
 {
 public:
 
-    InputStreamTransformer( sal_uInt32 length,char* bff );
-
-    InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
-                            URLParameter* urlParam,
+    InputStreamTransformer( URLParameter* urlParam,
                             Databases*    pDatatabases );
 
     ~InputStreamTransformer();
@@ -409,6 +427,9 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
         if( IsRoot )
         {
+            // error handling is missing
+            // better not to open the file every time it is requested
+
             url =
                 m_pDatabases->getInstallPathAsURL()         +
                 rtl::OUString::createFromAscii( "custom.css" );
@@ -449,9 +470,8 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
         }
     }
     else
-    {   // a standard document, plug in the new input stream
-        xDataSink->setInputStream( new InputStreamTransformer( rxSMgr,this,m_pDatabases ) );
-    }
+        // a standard document or else an active help text, plug in the new input stream
+        xDataSink->setInputStream( new InputStreamTransformer( this,m_pDatabases ) );
 }
 
 
@@ -645,112 +665,90 @@ int schemehandlerclose( void *userData,
 
 struct UserData {
 
-    UserData( const Reference< XMultiServiceFactory >& rxSMgr,
-              InputStreamTransformer* pTransformer,
+    UserData( InputStreamTransformer* pTransformer,
               URLParameter*           pInitial,
               Databases*              pDatabases )
-        : m_xSMgr( rxSMgr ),
-          m_pTransformer( pTransformer ),
+        : m_pTransformer( pTransformer ),
           m_pInitial( pInitial ),
           m_pDatabases( pDatabases )
     {
     }
 
-    Reference< XMultiServiceFactory >   m_xSMgr;
     InputStreamTransformer*             m_pTransformer;
     Databases*                          m_pDatabases;
     URLParameter*                       m_pInitial;
 };
 
 
-rtl::OString URLParameter::getByName( const char* par )
-{
-    rtl::OUString val;
 
-    if( strcmp( par,"Program" ) == 0 )
-        val = get_program();
-    else if( strcmp( par,"Database" ) == 0 )
-        val = get_module();
-    else if( strcmp( par,"Id" ) == 0 )
-        val = get_id();
-    else if( strcmp( par,"Path" ) == 0 )
-        val = get_path();
-    else if( strcmp( par,"Language" ) == 0 )
-        val = get_language();
-    else if( strcmp( par,"System" ) == 0 )
-        val = get_system();
-
-    return rtl::OString( val.getStr(),val.getLength(),RTL_TEXTENCODING_UTF8 );
-}
-
-
-InputStreamTransformer::InputStreamTransformer( sal_uInt32 length,char* bff )
-    : pos( 0 ),
-      len( length ),
-      buffer( new char[ length ] )
-{
-    rtl_copyMemory( buffer,bff,length );
-}
-
-
-
-InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFactory >& rxSMgr,
-                                                URLParameter* urlParam,
+InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases )
     : len( 0 ),
       pos( 0 ),
       buffer( new char[0] )
 {
-    SchemeHandler schemeHandler;
-    schemeHandler.getAll = schemehandlergetall;
-    schemeHandler.freeMemory = schemehandlerfreememory;
-    schemeHandler.open = schemehandleropen;
-    schemeHandler.get = schemehandlerget;
-    schemeHandler.put = schemehandlerput;
-    schemeHandler.close = schemehandlerclose;
+    if( urlParam->isActive() )
+    {
+        delete[] buffer;
+        pDatabases->setActiveText( urlParam->get_module(),
+                                   urlParam->get_language(),
+                                   urlParam->get_id(),
+                                   &buffer,
+                                   &len );
+    }
+    else
+    {
+        SchemeHandler schemeHandler;
+        schemeHandler.getAll = schemehandlergetall;
+        schemeHandler.freeMemory = schemehandlerfreememory;
+        schemeHandler.open = schemehandleropen;
+        schemeHandler.get = schemehandlerget;
+        schemeHandler.put = schemehandlerput;
+        schemeHandler.close = schemehandlerclose;
 
-    UserData userData( rxSMgr,this,urlParam,pDatabases );
+        UserData userData( this,urlParam,pDatabases );
 
-    // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
+        // Uses the implementation detail, that rtl::OString::getStr returns a zero terminated character-array
 
-    const char* parameter[13];
-    rtl::OString parString[12];
+        const char* parameter[13];
+        rtl::OString parString[12];
 
-    parString[ 0] = "Program";
-    parString[ 1] = urlParam->getByName( "Program" );
-    parString[ 2] = "Database";
-    parString[ 3] = urlParam->getByName( "Database" );
-    parString[ 4] = "Id";
-    parString[ 5] = urlParam->getByName( "Id" );
-    parString[ 6] = "Path";
-    parString[ 7] = urlParam->getByName( "Path" );
-    parString[ 8] = "Language";
-    parString[ 9] = urlParam->getByName( "Language" );
-    parString[10] = "System";
-    parString[11] = urlParam->getByName( "System" );
+        parString[ 0] = "Program";
+        parString[ 1] = urlParam->getByName( "Program" );
+        parString[ 2] = "Database";
+        parString[ 3] = urlParam->getByName( "Database" );
+        parString[ 4] = "Id";
+        parString[ 5] = urlParam->getByName( "Id" );
+        parString[ 6] = "Path";
+        parString[ 7] = urlParam->getByName( "Path" );
+        parString[ 8] = "Language";
+        parString[ 9] = urlParam->getByName( "Language" );
+        parString[10] = "System";
+        parString[11] = urlParam->getByName( "System" );
 
-    for( int i = 0; i < 12; ++i )
-        parameter[i] = parString[i].getStr();
-    parameter[12] = 0;
+        for( int i = 0; i < 12; ++i )
+            parameter[i] = parString[i].getStr();
+        parameter[12] = 0;
 
 
-    SablotHandle p;
-    SablotCreateProcessor(&p);
-    SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
+        SablotHandle p;
+        SablotCreateProcessor(&p);
+        SablotRegHandler( p,HLR_SCHEME,&schemeHandler,(void*)(&userData) );
 
-    rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
-    rtl::OString xslURLascii = "file:";
-    xslURLascii += rtl::OString( xslURL.getStr()+6,xslURL.getLength()-6,RTL_TEXTENCODING_UTF8 );
-    xslURLascii += "main_transform.xsl";
+        rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
+        rtl::OString xslURLascii = "file:";
+        xslURLascii += rtl::OString( xslURL.getStr()+6,xslURL.getLength()-6,RTL_TEXTENCODING_UTF8 );
+        xslURLascii += "main_transform.xsl";
 
-    SablotRunProcessor( p,
-                        const_cast<char*>(xslURLascii.getStr()),
-                        "vnd.sun.star.pkg:/",
-                        "vnd.sun.star.resultat:/",
-                        const_cast<char**>(parameter),
-                        0 );
+        SablotRunProcessor( p,
+                            const_cast<char*>(xslURLascii.getStr()),
+                            "vnd.sun.star.pkg:/",
+                            "vnd.sun.star.resultat:/",
+                            const_cast<char**>(parameter),
+                            0 );
 
-    SablotDestroyProcessor( p );
+        SablotDestroyProcessor( p );
+    }
 }
 
 
@@ -893,48 +891,6 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
     delete tmp;
     len += len_;
 }
-
-
-
-class XActiveDataSinkImpl
-    : public OWeakObject,
-      public XActiveDataSink
-{
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException )
-    {
-        Any aRet = ::cppu::queryInterface( rType,
-                                           SAL_STATIC_CAST( XActiveDataSink*,this ) );
-
-        return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
-    }
-
-    virtual void SAL_CALL acquire( void ) throw( RuntimeException )
-    {
-        OWeakObject::acquire();
-    }
-
-    virtual void SAL_CALL release( void ) throw( RuntimeException )
-    {
-        OWeakObject::release();
-    }
-
-    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& xInputStream )
-    {
-        m_xInputStream = xInputStream;
-    }
-
-    virtual Reference< XInputStream > SAL_CALL getInputStream()
-    {
-        return m_xInputStream;
-    }
-
-
-private:
-
-    Reference< XInputStream > m_xInputStream;
-};
-
-
 
 
 
@@ -1102,3 +1058,44 @@ int schemehandlerclose( void *userData,
 {
     return 0;
 }
+
+
+//  currently unused:
+
+//  class XActiveDataSinkImpl
+//      : public OWeakObject,
+//        public XActiveDataSink
+//  {
+//      virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException )
+//      {
+//          Any aRet = ::cppu::queryInterface( rType,
+//                                             SAL_STATIC_CAST( XActiveDataSink*,this ) );
+
+//          return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
+//      }
+
+//      virtual void SAL_CALL acquire( void ) throw( RuntimeException )
+//      {
+//          OWeakObject::acquire();
+//      }
+
+//      virtual void SAL_CALL release( void ) throw( RuntimeException )
+//      {
+//          OWeakObject::release();
+//      }
+
+//      virtual void SAL_CALL setInputStream( const Reference< XInputStream >& xInputStream )
+//      {
+//          m_xInputStream = xInputStream;
+//      }
+
+//      virtual Reference< XInputStream > SAL_CALL getInputStream()
+//      {
+//          return m_xInputStream;
+//      }
+
+
+//  private:
+
+//      Reference< XInputStream > m_xInputStream;
+//  };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-12 14:16:41 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 09:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,14 +337,19 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
 
 
 Db* Databases::getBerkeley( const rtl::OUString& Database,
-                            const rtl::OUString& Language )
+                            const rtl::OUString& Language,
+                            bool helpText )
 {
     if( ! Database.getLength() || ! Language.getLength() )
         return 0;
 
     osl::MutexGuard aGuard( m_aMutex );
 
-    rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + Database;
+    rtl::OUString key =
+        lang(Language) +
+        rtl::OUString::createFromAscii( "/" ) +
+        Database +
+        ( helpText ? rtl::OUString::createFromAscii( ".ht" ) : rtl::OUString::createFromAscii( ".db" ) );
 
     DatabasesTable::iterator it =
         m_aDatabases.insert( DatabasesTable::value_type( key,0 ) ).first;
@@ -355,8 +360,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
         rtl::OUString fileNameOU =
             getInstallPathAsSystemPath() +
-            key +
-            rtl::OUString::createFromAscii( ".db" );
+            key;
 
         rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
 
@@ -679,6 +683,33 @@ void Databases::errorDocument( const rtl::OUString& Language,
     rtl_copyMemory( *buffer,m_pErrorDoc,m_nErrorDocLength );
 }
 
+
+
+void Databases::setActiveText( const rtl::OUString& Module,
+                               const rtl::OUString& Language,
+                               const rtl::OUString& Id,
+                               char** buffer,
+                               int* byteCount )
+{
+    Db* db = getBerkeley( Module,Language,true );
+
+    if( db )
+    {
+        rtl::OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
+        Dbt key( static_cast< void* >( const_cast< sal_Char* >( id.getStr() ) ),id.getLength() );
+        Dbt data;
+        db->get( 0,&key,&data,0 );
+        *byteCount = data.get_size();
+        *buffer = new char[ 1 + *byteCount ];
+        (*buffer)[*byteCount] = 0;
+        rtl_copyMemory( *buffer,data.get_data(),*byteCount );
+    }
+    else
+    {
+        *byteCount = 0;
+        *buffer = new char[0];
+    }
+}
 
 
 void Databases::setInstallPath( const rtl::OUString& aInstDir )
