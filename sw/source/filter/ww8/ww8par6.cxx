@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-23 10:29:28 $
+ *  last change: $Author: cmc $ $Date: 2002-09-27 10:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,10 +843,9 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
         rData.nSwHLo = nWWUp - nWWHTop;
-#if 0
-        if( rData.nSwHLo < MINLAY )
-            rData.nSwHLo = MINLAY;
-#endif
+
+        if (rData.nSwHLo < MM50)
+            rData.nSwHLo = MM50;
     }
     else // kein Header -> Up einfach uebernehmen
         rData.nSwUp = nWWUp;
@@ -860,10 +859,9 @@ void SwWW8ImplReader::GetPageULData( const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
         rData.nSwFUp = nWWLo - nWWFBot;
-#if 0
-        if (rData.nSwFUp < MINLAY)
-            rData.nSwFUp = MINLAY;
-#endif
+
+        if (rData.nSwFUp < MM50)
+            rData.nSwFUp = MM50;
     }
     else // kein Footer -> Lo einfach uebernehmen
         rData.nSwLo = nWWLo;
@@ -881,10 +879,9 @@ void SwWW8ImplReader::SetPageULSpaceItems(SwFrmFmt &rFmt, WW8ULSpaceData& rData)
         //Kopfzeilenhoehe minimal sezten
         if (SwFrmFmt* pHdFmt = (SwFrmFmt*)rFmt.GetHeader().GetHeaderFmt())
         {
-            pHdFmt->SetAttr( SwFmtFrmSize( ATT_MIN_SIZE, 0, MM50 ) );
+            pHdFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
             SvxULSpaceItem aHdUL(pHdFmt->GetULSpace());
-            const SwFmtFrmSize &rSize = pHdFmt->GetFrmSize();
-            aHdUL.SetLower(rData.nSwHLo - rSize.GetHeight());
+            aHdUL.SetLower(rData.nSwHLo - MM50);
             pHdFmt->SetAttr(aHdUL);
             pHdFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
@@ -895,10 +892,9 @@ void SwWW8ImplReader::SetPageULSpaceItems(SwFrmFmt &rFmt, WW8ULSpaceData& rData)
     {
         if (SwFrmFmt* pFtFmt = (SwFrmFmt*)rFmt.GetFooter().GetFooterFmt())
         {
-            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, MM50));
+            pFtFmt->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
             SvxULSpaceItem aFtUL(pFtFmt->GetULSpace());
-            const SwFmtFrmSize &rSize = pFtFmt->GetFrmSize();
-            aFtUL.SetUpper(rData.nSwFUp - rSize.GetHeight());
+            aFtUL.SetUpper(rData.nSwFUp - MM50);
             pFtFmt->SetAttr(aFtUL);
             pFtFmt->SetAttr(SwHeaderAndFooterEatSpacingItem(
                 RES_HEADER_FOOTER_EAT_SPACING, true));
