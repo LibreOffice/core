@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 15:01:42 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,71 +152,27 @@ SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
 }
 
 //====================================================================
+/*
 
 ModalDialog* SfxModule::CreateAboutDialog()
 {
     return SFX_APP()->CreateAboutDialog();
 }
 
-//====================================================================
-
 BOOL SfxModule::QueryUnload()
 {
     return TRUE;
 }
 
-//====================================================================
-
 SfxModule* SfxModule::Load()
-
-/*  [Description]
-
-    This methode must be overrided in subclasses to load the real module.
-    In your dummy subclass you implement it as follows ('...' is the name
-    of your library, e.g. 'Sd'):
-
-        SfxModule* ...ModuleDummy::Load()
-        {
-            return LoadLib...() ? ..._MOD() : 0;
-        }
-
-    In your real subclass you implement it as follows:
-
-        SfxModule* ...Module::Load()
-        {
-            return this;
-        }
-
-    The code must be behind the invocation of SFX_...OBJECTFACTORY_LIB,
-    which defines the function LoadLib...().
-*/
-
 {
     return 0;
 }
 
-//====================================================================
-
 void SfxModule::Free()
-
-/*  [Description]
-
-    This methode must be overrided in subclasses to free the real module.
-    In your real subclass you implement it as follows ('...' is the name
-    of your library, e.g. 'Sd'):
-
-        void ...Module::Free()
-        {
-            FreeLib...();
-        }
-
-    The code must be behind the invocation of SFX_...OBJECTFACTORY_LIB,
-    which defines the function LoadLib...().
-*/
-
 {
 }
-
+*/
 
 //====================================================================
 
@@ -477,3 +433,10 @@ void SfxModule::Invalidate( USHORT nId )
             Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
+BOOL SfxModule::IsActive()
+{
+    SfxViewFrame* pFrame = SfxViewFrame::Current();
+    if ( pFrame && pFrame->GetObjectShell()->GetFactory().GetModule() == this )
+        return TRUE;
+    return FALSE;
+}
