@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,7 +791,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable,
 }
 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat)
+    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges = aTables[nTable];
@@ -821,7 +821,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_uInt16 nTable, const 
         }
         else
         {
-            if ((*aItr).aRangeAddress.EndRow < nRow)
+            if (bRemoveRange && (*aItr).aRangeAddress.EndRow < nRow)
                 aItr = pFormatRanges->erase(aItr);
             else
                 aItr++;
@@ -840,6 +840,7 @@ void ScFormatRangeStyles::GetFormatRanges(const sal_Int32 nStartColumn, const sa
     sal_Int32 nColumns = 0;
     while (aItr != pFormatRanges->end() && nColumns < nTotalColumns)
     {
+        table::CellRangeAddress aRange = (*aItr).aRangeAddress;
         if (((*aItr).aRangeAddress.StartRow <= nRow) &&
             ((*aItr).aRangeAddress.EndRow >= nRow))
         {
@@ -906,16 +907,6 @@ void ScFormatRangeStyles::AddRangeStyleName(const table::CellRangeAddress aCellR
     ScMyFormatRangeAddresses* pFormatRanges = aTables[aCellRangeAddress.Sheet];
     pFormatRanges->push_back(aFormatRange);
 }
-
-/*rtl::OUString* ScFormatRangeStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow)
-{
-    sal_Bool bIsAutoStyle;
-    sal_Int32 nIndex = GetStyleNameIndex(nTable, nColumn, nRow, bIsAutoStyle);
-    if (bIsAutoStyle)
-        return aAutoStyleNames.at(nIndex);
-    else
-        return aStyleNames.at(nIndex);
-}*/
 
 rtl::OUString* ScFormatRangeStyles::GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:58:08 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,6 @@ public:
 
 struct ScMyRowFormatRange
 {
-//  com::sun::star::table::CellRangeAddress aRangeAddress;
     sal_Int32   nStartColumn;
     sal_Int32   nRepeatColumns;
     sal_Int32   nRepeatRows;
@@ -216,7 +215,6 @@ struct ScMyFormatRange
     sal_Int32                               nValidationIndex;
     sal_Int32                               nNumberFormat;
     sal_Bool                                bIsAutoStyle : 1;
-    sal_Bool                                bWriteStyleName : 1;
 
     ScMyFormatRange();
     sal_Bool operator< (const ScMyFormatRange& rRange);
@@ -247,12 +245,11 @@ public:
         sal_Bool& bIsAutoStyle) const;
     // deletes not necessary ranges
     sal_Int32 GetStyleNameIndex(const sal_uInt16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-        sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat );
+        sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange = sal_True );
     void GetFormatRanges(const sal_Int32 nStartColumn, const sal_Int32 nEndColumn, const sal_Int32 nRow,
                     const sal_Int16 nTable, ScRowFormatRanges* pFormatRanges);
     void AddRangeStyleName(const com::sun::star::table::CellRangeAddress aCellRangeAddress, const sal_Int32 nStringIndex,
                     const sal_Bool bIsAutoStyle, const sal_Int32 nValidationIndex, const sal_Int32 nNumberFormat);
-//  rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nColumn, const sal_Int32 nRow);
     rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex, const sal_Bool bIsAutoStyle);
     void Sort();
 };

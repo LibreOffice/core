@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 08:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,6 +1185,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 pRowFormatRanges->Clear();
                 pCellStyles->GetFormatRanges(0, pSharedData->GetLastColumn(nSheet), nStartRow + nRows, nSheet, pRowFormatRanges);
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
+                DBG_ASSERT(nMaxRows, "something wents wrong");
                 if (nMaxRows >= nTotalRows - nRows)
                 {
                     OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 05:19:26 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 08:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,6 +684,9 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
 {
     DBG_ASSERT(aAnnotations.empty(), "not all Annotations saved");
+    aLastAddress.Row = 0;
+    aLastAddress.Column = 0;
+    aLastAddress.Sheet = nTable;
     if (nCurrentTable != nTable)
     {
         nCurrentTable = static_cast<sal_Int16>(nTable);
@@ -773,9 +776,12 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
         HasAnnotation( aCell );
         SetMatrixCellData( aCell );
         sal_Bool bIsAutoStyle;
+        sal_Bool bRemoveStyleRange((aLastAddress.Column == aCell.aCellAddress.Column) &&
+            (aLastAddress.Row + 1 == aCell.aCellAddress.Row));
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
             aCell.aCellAddress.Column, aCell.aCellAddress.Row,
-            bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat);
+            bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, bRemoveStyleRange);
+        aLastAddress = aCell.aCellAddress;
         aCell.bIsAutoStyle = bIsAutoStyle;
     }
     return bFoundCell;
