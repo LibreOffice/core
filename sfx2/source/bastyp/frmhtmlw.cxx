@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:35:27 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#include <so3/iface.hxx>
 #ifndef _INETDEF_HXX
 #include <svtools/inetdef.hxx>
 #endif
+
 //!(dv) #include <chaos2/cntapi.hxx>
 #ifndef GCC
 #pragma hdrstop
@@ -86,6 +86,8 @@
 #include "bastyp.hrc"
 
 // -----------------------------------------------------------------------
+
+using namespace com::sun::star;
 
 extern sal_Char __FAR_DATA sHTML_META_classification[];
 
@@ -291,77 +293,85 @@ void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
 */
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
-    SvStream& rOut, const SfxFrameDescriptor *pFrame, BOOL bFlatten,
-    SfxFrame* pTopFrame, rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
+    SvStream& rOut, const uno::Reference < beans::XPropertySet >& xSet,
+    rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
 {
-    SfxFrameSetDescriptor *pFSet = pFrame->GetFrameSet();
-
-    ByteString sOut;
-
-    String aURL = bFlatten ?
-        pFrame->GetActualURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) :
-        pFrame->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI );
-    if( aURL.Len() )
+    try
     {
-        if( !bFlatten ) aURL = INetURLObject::AbsToRel( aURL );
-        ((sOut += ' ') += sHTML_O_src) += "=\"";
-        rOut << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
-        sOut = '\"';
-    }
+        ByteString sOut;
+        ::rtl::OUString aStr;
+        uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
+        if ( (aAny >>= aStr) && aStr.getLength() )
+        {
+            String aURL = INetURLObject( aStr ).GetMainURL( INetURLObject::DECODE_TO_IURI );
+            if( aURL.Len() )
+            {
+                aURL = INetURLObject::AbsToRel( aURL );
+                ((sOut += ' ') += sHTML_O_src) += "=\"";
+                rOut << sOut.GetBuffer();
+                HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
+                sOut = '\"';
+            }
+        }
 
-    // der Name (nur wenn der String nicht leer ist)
-    const String& rName = pFrame->GetName();
-    if( rName.Len() )
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
+        if ( (aAny >>= aStr) && aStr.getLength() )
+        {
+            ((sOut += ' ') += sHTML_O_name) += "=\"";
+            rOut << sOut.GetBuffer();
+            HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
+            sOut = '\"';
+        }
+
+        sal_Int32 nVal = SIZE_NOT_SET;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth") );
+        if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
+            (((sOut += ' ') += sHTML_O_marginwidth) += '=') += ByteString::CreateFromInt32( nVal );
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight") );
+        if ( (aAny >>= nVal) && nVal != SIZE_NOT_SET )
+            (((sOut += ' ') += sHTML_O_marginheight) += '=') += ByteString::CreateFromInt32( nVal );
+
+        sal_Bool bVal = sal_True;
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
+        if ( (aAny >>= bVal) && !bVal )
+        {
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode") );
+            if ( aAny >>= bVal )
+            {
+                const sal_Char *pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
+                (((sOut += ' ') += sHTML_O_scrolling) += '=') += pStr;
+            }
+        }
+
+        // frame border (MS+Netscape-Erweiterung)
+        aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder") );
+        if ( (aAny >>= bVal) && !bVal )
+        {
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder") );
+            if ( aAny >>= bVal )
+            {
+                const char* pStr = bVal ? sHTML_SC_yes : sHTML_SC_no;
+                (((sOut += ' ') += sHTML_O_frameborder) += '=') += pStr;
+            }
+        }
+
+        // TODO/LATER: currently not supported attributes
+        // resize
+        //if( !pFrame->IsResizable() )
+        //    (sOut += ' ') += sHTML_O_noresize;
+        //
+        //if ( pFrame->GetWallpaper() )
+        //{
+        //    ((sOut += ' ') += sHTML_O_bordercolor) += '=';
+        //    rOut << sOut.GetBuffer();
+        //    HTMLOutFuncs::Out_Color( rOut, pFrame->GetWallpaper()->GetColor(), eDestEnc );
+        //}
+        //else
+            rOut << sOut.GetBuffer();
+    }
+    catch ( uno::Exception& )
     {
-        ((sOut += ' ') += sHTML_O_name) += "=\"";
-        rOut << sOut.GetBuffer();
-        HTMLOutFuncs::Out_String( rOut, rName, eDestEnc, pNonConvertableChars );
-        sOut = '\"';
     }
-
-    // margin width und height; -1 ist der Default-Margin
-    const Size& rMargin = pFrame->GetMargin();
-    if( rMargin.Width() >= 0 )
-        (((sOut += ' ') += sHTML_O_marginwidth) += '=')
-            += ByteString::CreateFromInt32( (sal_Int32)rMargin.Width() );
-    if( rMargin.Height() >= 0 )
-        (((sOut += ' ') += sHTML_O_marginheight) += '=')
-            += ByteString::CreateFromInt32( (sal_Int32)rMargin.Height() );
-
-    // scroll mode
-    const sal_Char *pStr = 0;
-    switch( pFrame->GetScrollingMode() )
-    {
-        case ScrollingYes:  pStr = sHTML_SC_yes;    break;
-        case ScrollingNo:   pStr = sHTML_SC_no;     break;
-          case ScrollingAuto:                           break;  // -Wall
-//      case ScrollingAuto: pStr = sHTML_SC_auto;   break;  // Default !!
-    }
-
-    if( pStr )
-        (((sOut += ' ') += sHTML_O_scrolling) += '=') += pStr;
-
-    // resize
-    if( !pFrame->IsResizable() )
-        (sOut += ' ') += sHTML_O_noresize;
-
-    // frame border (MS+Netscape-Erweiterung)
-    if ( pFrame->IsFrameBorderSet() )
-    {
-        pStr = pFrame->IsFrameBorderOn() ? sHTML_SC_yes : sHTML_SC_no;
-        if( pStr )
-            (((sOut += ' ') += sHTML_O_frameborder) += '=') += pStr;
-    }
-
-    if ( pFrame->GetWallpaper() )
-    {
-        ((sOut += ' ') += sHTML_O_bordercolor) += '=';
-        rOut << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( rOut, pFrame->GetWallpaper()->GetColor(), eDestEnc );
-    }
-    else
-        rOut << sOut.GetBuffer();
 }
 
 String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
