@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-05 20:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 |* Dialog zum Einstellen von Filteroptionen bei Pixelformaten
 |*
 \************************************************************************/
+
+class FilterConfigItem;
 class DlgExportPix : public ModalDialog
 {
 private:
@@ -97,10 +99,10 @@ private:
     GroupBox            aGrpMode;
     ComboBox            aCbbRes;
 
-    Config*             pConfig;
+    FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
 
-    const String&       rExt;
+    String              aExt;
 
                         DECL_LINK( OK, void* p );
                         DECL_LINK( ClickRbOriginal,void* p );
@@ -110,6 +112,7 @@ private:
 
 public:
                         DlgExportPix( FltCallDialogParameter& rPara );
+                        ~DlgExportPix();
 };
 
 
@@ -135,10 +138,10 @@ private:
     MetricField         aMtfSizeY;
     GroupBox            aGrpSize;
 
-    Config*             pConfig;
+    FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
 
-    const String&       rExt;
+    String              aExt;
 
     DECL_LINK( OK, void* p );
     DECL_LINK( ClickRbOriginal,void* p );
@@ -146,6 +149,7 @@ private:
 
 public:
             DlgExportVec( FltCallDialogParameter& rPara );
+            ~DlgExportVec();
 };
 
 #endif // _DLGEXPOR_HXX_

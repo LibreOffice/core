@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-05 20:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,30 +88,25 @@ String EXPORT_DIALOG_TITLE
 
 String KEY_MODE
 {
-    Text = "-EXPORT-MODE" ;
+    Text = "ExportMode" ;
 };
 
 String KEY_RES
 {
-    Text = "-EXPORT-RES" ;
+    Text = "Resolution" ;
 };
 
-String KEY_SIZEX
+String KEY_SIZE
 {
-    Text = "-EXPORT-SIZEX" ;
-};
-
-String KEY_SIZEY
-{
-    Text = "-EXPORT-SIZEY" ;
+    Text = "Size" ;
 };
 
 String KEY_COLORS
 {
-    Text = "-COLORS" ;
+    Text = "Color" ;
 };
 
 String KEY_RLE_CODING
 {
-    Text = "-RLE_CODING" ;
+    Text = "RLE_Coding" ;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: sj $ $Date: 2001-03-05 20:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,10 @@
 #pragma hdrstop
 
 #include <tools/ref.hxx>
-#include <vcl/config.hxx>
+#include <FilterConfigItem.hxx>
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 #include <vcl/msgbox.hxx>
 #include "dlgexpor.hxx"
 #include "dlgexpor.hrc"
@@ -91,13 +94,15 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
                 aGrpColors          ( this, ResId( GRP_COLORS ) ),
                 aLbColors           ( this, ResId( LB_COLORS ) ),
                 aCbxRLE             ( this, ResId( CBX_RLE ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr ),
-                rExt                ( rPara.aFilterExt )
-
+                aExt                ( rPara.aFilterExt )
 {
-    String  aTitle( rExt );
+    aExt.ToUpperAscii();
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+    aFilterConfigPath.Append( aExt );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
+    String  aTitle( aExt );
     FreeResource();
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportPix, OK ) );
@@ -110,48 +115,29 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
     aTitle += String( ResId( EXPORT_DIALOG_TITLE, pMgr ) );
     SetText( aTitle );
 
-
     // Config-Parameter lesen
-    ByteString aStrColors( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrColors.Append( ByteString( String( ResId( KEY_COLORS, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrColors = pConfig->ReadKey( aStrColors );
-    ByteString aStrMode( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrMode.Append( ByteString( String( ResId( KEY_MODE, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrMode = pConfig->ReadKey( aStrMode );
-    ByteString aStrRes( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrRes.Append( ByteString( String( ResId( KEY_RES, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrRes = pConfig->ReadKey( aStrRes );
-    ByteString aStrSizeX( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrSizeX.Append( ByteString( String( ResId( KEY_SIZEX, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrSizeX = pConfig->ReadKey( aStrSizeX );
-    ByteString aStrSizeY( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrSizeY.Append( ByteString( String( ResId( KEY_SIZEY, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrSizeY = pConfig->ReadKey( aStrSizeY );
-    ByteString aStrRLE( rExt, RTL_TEXTENCODING_UTF8 );
-    aStrRLE.Append( ByteString( String( ResId( KEY_RLE_CODING, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrRLE = pConfig->ReadKey( aStrRLE );
+    sal_Int32   nColors = pConfigItem->ReadInt32( String( ResId( KEY_COLORS, pMgr ) ), 0 );
+    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
+    sal_Int32   nRes = pConfigItem->ReadInt32( String( ResId( KEY_RES, pMgr ) ), 75 );
+    sal_Bool    bRleCoding = pConfigItem->ReadBool( String( ResId( KEY_RLE_CODING, pMgr ) ), sal_True );
 
-    aLbColors.SelectEntryPos( Min( (USHORT) 7, (USHORT)aStrColors.ToInt32() ) );
-    aCbxRLE.Check( aStrRLE.CompareIgnoreCaseToAscii( "false", 5 ) == COMPARE_EQUAL );
+    aLbColors.SelectEntryPos( Min( (sal_uInt16) 7, (sal_uInt16)nColors ) );
 
-    if ( !aStrRes.Len() )
-        aStrRes = 75;
+    String aStrRes( String::CreateFromInt32( nRes ) );
+    aStrRes.Append( String( RTL_CONSTASCII_USTRINGPARAM( " DPI" ) ) );
+    aCbbRes.SetText( aStrRes );
 
-    aStrRes += " DPI";
-    aCbbRes.SetText( UniString( aStrRes, RTL_TEXTENCODING_UTF8 ) );
+    ::com::sun::star::awt::Size aDefault( 10000, 10000 );
+    ::com::sun::star::awt::Size aSize;
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
+
+    aCbxRLE.Check( bRleCoding );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
 
-    if ( !aStrSizeX.Len() )
-        aMtfSizeX.SetValue( 10000 );
-    else
-        aMtfSizeX.SetValue( aStrSizeX.ToInt32() );
-
-    if ( !aStrSizeY.Len() )
-        aMtfSizeY.SetValue( 10000 );
-    else
-        aMtfSizeY.SetValue( aStrSizeY.ToInt32() );
+    aMtfSizeX.SetValue( aSize.Width );
+    aMtfSizeY.SetValue( aSize.Height );
 
     switch ( rPara.eFieldUnit )
     {
@@ -176,7 +162,7 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
         break;
     }
 
-    switch ( aStrMode.ToInt32() )
+    switch ( nMode )
     {
         case 2 :
         {
@@ -200,6 +186,12 @@ DlgExportPix::DlgExportPix( FltCallDialogParameter& rPara ) :
     SelectLbColors( &aLbColors );
 }
 
+DlgExportPix::~DlgExportPix()
+{
+    delete pConfigItem;
+}
+
+
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -210,48 +202,25 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
 
-    ByteString  aStrMode;
-    ByteString  aRLEStr;
+    sal_Int32   nRes = Max( Min( aCbbRes.GetText().ToInt32(), 600L), 75L );
+    ::com::sun::star::awt::Size aSize(
+        (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
+            (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
 
-    long    nRes = Max( Min( aCbbRes.GetText().ToInt32(), 600L), 75L );
-    long nSizeX = (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM );
-    long nSizeY = (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM );
-
+    sal_Int32 nMode;
     if ( aRbRes.IsChecked() )
-        aStrMode = '1';
+        nMode = 1;
     else if ( aRbSize.IsChecked() )
-        aStrMode = '2';
+        nMode = 2;
     else
-        aStrMode = '0';
+        nMode = 0;
 
-    if ( aCbxRLE.IsChecked() )
-        aRLEStr = ByteString( "TRUE", 4 );
-    else
-        aRLEStr = ByteString( "FALSE", 5 );
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nMode );
+    pConfigItem->WriteInt32( String( ResId( KEY_RES, pMgr ) ), nRes );
 
-    ByteString aExt0( rExt, RTL_TEXTENCODING_UTF8 );
-    aExt0.Append( ByteString( String( ResId( KEY_MODE, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt0, aStrMode );
-
-    ByteString aExt1( rExt, RTL_TEXTENCODING_UTF8 );
-    aExt1.Append( ByteString( String( ResId( KEY_RES, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt1, ByteString::CreateFromInt32( nRes )  );
-
-    ByteString aExt2( rExt, RTL_TEXTENCODING_UTF8 );
-    aExt2.Append( ByteString( String( ResId( KEY_SIZEX, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt2, ByteString::CreateFromInt32( nSizeX )  );
-
-    ByteString aExt3( rExt, RTL_TEXTENCODING_UTF8 );
-    aExt3.Append( ByteString( String( ResId( KEY_SIZEY, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt3, ByteString::CreateFromInt32( nSizeY )  );
-
-    ByteString aExt4( rExt, RTL_TEXTENCODING_UTF8 );
-    aExt4.Append( ByteString( String( ResId( KEY_COLORS, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt4, ByteString::CreateFromInt32( (sal_Int32)aLbColors.GetSelectEntryPos() ) );
-
-    ByteString aExt5( rExt, RTL_TEXTENCODING_UTF8  );
-    aExt5.Append( ByteString( String( ResId( KEY_RLE_CODING, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aExt5, ByteString::CreateFromInt32( (sal_Int32)aLbColors.GetSelectEntryPos() ) );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    pConfigItem->WriteInt32( String( ResId( KEY_COLORS, pMgr ) ), (sal_Int32)aLbColors.GetSelectEntryPos() );
+    pConfigItem->WriteBool( String( ResId( KEY_RLE_CODING, pMgr ) ), aCbxRLE.IsChecked() );
 
     EndDialog( RET_OK );
 
@@ -356,13 +325,16 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
                 aFtSizeY            ( this, ResId( FT_SIZEY_VEC ) ),
                 aMtfSizeY           ( this, ResId( MTF_SIZEY_VEC ) ),
                 aGrpSize            ( this, ResId( GRP_SIZE_VEC ) ),
-                pConfig             ( rPara.pCfg ),
                 pMgr                ( rPara.pResMgr ),
-                rExt                ( rPara.aFilterExt )
+                aExt                ( rPara.aFilterExt )
 
 {
-    String  aTitle( rExt );
+    aExt.ToUpperAscii();
+    String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/" ) );
+    aFilterConfigPath.Append( aExt );
+    pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
+    String  aTitle( aExt );
     FreeResource();
 
     aBtnOK.SetClickHdl( LINK( this, DlgExportVec, OK ) );
@@ -373,33 +345,18 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
     aTitle += String( ResId( EXPORT_DIALOG_TITLE, pMgr ) );
     SetText( aTitle );
 
-    // Config-Parameter lesen
-    //  String aStrMode = pConfig->ReadKey( rExt + String( ResId( KEY_MODE, pMgr ) ) );
-    ByteString aExt( rExt, RTL_TEXTENCODING_UTF8 );
-    ByteString aStrMode( aExt );
-    aStrMode.Append( ByteString( String( ResId( KEY_MODE, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrMode = pConfig->ReadKey( aStrMode );
+    // reading config-parameter
 
-    ByteString aStrSizeX( aExt );
-    aStrSizeX.Append( ByteString( String( ResId( KEY_SIZEX, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrSizeX = pConfig->ReadKey( aStrSizeX );
+    sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
 
-    ByteString aStrSizeY( aExt );
-    aStrSizeY.Append( ByteString( String( ResId( KEY_SIZEY, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    aStrSizeY = pConfig->ReadKey( aStrSizeY );
+    ::com::sun::star::awt::Size aDefault( 10000, 10000 );
+    ::com::sun::star::awt::Size aSize;
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
-
-    if ( !aStrSizeX.Len() )
-        aMtfSizeX.SetValue( 10000 );
-    else
-        aMtfSizeX.SetValue( aStrSizeX.ToInt32() );
-
-    if ( !aStrSizeY.Len() )
-        aMtfSizeY.SetValue( 10000 );
-    else
-        aMtfSizeY.SetValue( aStrSizeY.ToInt32() );
+    aMtfSizeX.SetValue( aSize.Width );
+    aMtfSizeY.SetValue( aSize.Height );
 
     switch ( rPara.eFieldUnit )
     {
@@ -424,7 +381,7 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
         break;
     }
 
-    switch ( aStrMode.ToInt32() )
+    switch ( nMode )
     {
         case 1 :
         {
@@ -442,6 +399,10 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
     }
 }
 
+DlgExportVec::~DlgExportVec()
+{
+    delete pConfigItem;
+}
 /*************************************************************************
 |*
 |* Speichert eingestellte Werte in ini-Datei
@@ -451,28 +412,18 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
 IMPL_LINK( DlgExportVec, OK, void *, EMPTYARG )
 {
     // Config-Parameter schreiben
-    long nSizeX = (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM );
-    long nSizeY = (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM );
+    ::com::sun::star::awt::Size aSize(
+        (long)MetricField::ConvertDoubleValue( aMtfSizeX.GetValue(), 2, aMtfSizeX.GetUnit(), MAP_100TH_MM ),
+            (long)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
 
-    ByteString aStrMode;
+    sal_Int32 nMode;
     if ( aRbSize.IsChecked() )
-        aStrMode = '1';
+        nMode = 1;
     else
-        aStrMode = '0';
+        nMode = 0;
 
-    ByteString aExt( rExt, RTL_TEXTENCODING_UTF8 );
-    ByteString aDest( aExt );
-    aDest.Append( ByteString( String( ResId( KEY_MODE, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aDest, aStrMode );
-
-    aDest = aExt;
-    aDest.Append( ByteString( String( ResId( KEY_SIZEX, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aDest, ByteString::CreateFromInt32( nSizeX ) );
-
-    aDest = aExt;
-    aDest.Append( ByteString( String( ResId( KEY_SIZEY, pMgr ) ), RTL_TEXTENCODING_UTF8 ) );
-    pConfig->WriteKey( aDest, ByteString::CreateFromInt32( nSizeY ) );
-
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nMode );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
     EndDialog( RET_OK );
 
     return 0;
