@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-25 20:09:14 $
+ *  last change: $Author: vg $ $Date: 2002-05-06 09:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,10 +148,10 @@ TabPage RID_SVXPAGE_PAGE
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
-        Text [ spanish ] = "A~ncho" ;
+        Text [ spanish ] = "Ancho" ;
         Text [ english_us ] = "~Width" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÂÆΩÂ∫¶(~W)";
@@ -192,7 +192,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "~Korkeus" ;
         Text [ danish ] = "H¯jde" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "Hˆj~d" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
@@ -259,12 +259,12 @@ TabPage RID_SVXPAGE_PAGE
         Text = "Ho~chformat" ;
         Text [ ENGLISH ] = "~Portrait" ;
         Text [ norwegian ] = "~Portrett" ;
-        Text [ italian ] = "~Verticale" ;
+        Text [ italian ] = "Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
         Text [ finnish ] = "~Pystytaso" ;
         Text [ danish ] = "StÂende" ;
-        Text [ french ] = "~Portrait" ;
+        Text [ french ] = "Portrait" ;
         Text [ swedish ] = "StÂ~ende" ;
         Text [ dutch ] = "~Staand" ;
         Text [ spanish ] = "~Vertical" ;
@@ -292,7 +292,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ russian ] = "¿Î¸·ÓÏÌ˚È";
         Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";
         Text[ dutch ] = "L~iggend";
-        Text[ french ] = "Pa~ysage";
+        Text[ french ] = "Paysage";
         Text[ spanish ] = "~Horizontal";
         Text[ finnish ] = "V~aakataso";
         Text[ italian ] = "Orizzontale";
@@ -590,7 +590,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "Venstre" ;
-        Text [ french ] = "~¿ gauche" ;
+        Text [ french ] = "¿ gauche" ;
         Text [ swedish ] = "~V‰nster" ;
         Text [ dutch ] = "~Links" ;
         Text [ spanish ] = "~Izquierda" ;
@@ -634,10 +634,10 @@ TabPage RID_SVXPAGE_PAGE
         Text [ portuguese ] = "Di~reita" ;
         Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "H¯jre" ;
-        Text [ french ] = "~¿ droite" ;
+        Text [ french ] = "¿ droite" ;
         Text [ swedish ] = "Hˆ~ger" ;
         Text [ dutch ] = "Re~chts" ;
-        Text [ spanish ] = "~Derecha" ;
+        Text [ spanish ] = "Derecha" ;
         Text [ english_us ] = "~Right" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Âè≥(~R)";
@@ -722,7 +722,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ portuguese ] = "~Inferior" ;
         Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Bund" ;
-        Text [ french ] = "En ~bas" ;
+        Text [ french ] = "En bas" ;
         Text [ swedish ] = "~Nere" ;
         Text [ dutch ] = "B~eneden" ;
         Text [ spanish ] = "A~bajo" ;
@@ -1254,7 +1254,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ greek ] = "Table alignment";
         Text[ dutch ] = "Uitlijning tabel";
         Text[ french ] = "Alignement de la table";
-        Text[ spanish ] = "OrientaciÛn de hoja";
+        Text[ spanish ] = "OrientaciÛn de la hoja";
         Text[ finnish ] = "Taulukon tasaus";
         Text[ italian ] = "Allineamento tabella";
         Text[ danish ] = "Table alignment";
@@ -1397,7 +1397,7 @@ TabPage RID_SVXPAGE_PAGE
         Text [ english_us ] = "Reference ~Style" ;
         Text [ italian ] = "Modello di paragr.di rifer." ;
         Text [ spanish ] = "Estilo de ~referencia" ;
-        Text [ french ] = "Style de ~paragraphe rÈf." ;
+        Text [ french ] = "Style de paragraphe rÈfÈrence" ;
         Text [ dutch ] = "Re~ferentie-alineaprofiel" ;
         Text [ swedish ] = "Referenss~tyckeformatmall" ;
         Text [ danish ] = "Reference-afsnitstypografi" ;
