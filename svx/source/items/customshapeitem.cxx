@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customshapeitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:07:39 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,33 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rPropVal.Name );
     if ( pAny )
+    {   // property is already available
+        sal_Int32 i;
+        if ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        {   // old property is a sequence->each entry has to be removed from the HashPairMap
+            ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
+                *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
+            for ( i = 0; i < rSecSequence.getLength(); i++ )
+            {
+                PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rPropVal.Name, rSecSequence[ i ].Name ) ) );
+                if ( aHashIter != aPropPairHashMap.end() )
+                    aPropPairHashMap.erase( aHashIter );
+            }
+        }
         *pAny = rPropVal.Value;
+        if ( rPropVal.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        {   // the new property is a sequence->each entry has to be inserted into the HashPairMap
+            ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
+                *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pAny->getValue());
+            for ( i = 0; i < rSecSequence.getLength(); i++ )
+            {
+                beans::PropertyValue& rPropVal2 = rSecSequence[ i ];
+                aPropPairHashMap[ PropertyPair( rPropVal.Name, rPropVal2.Name ) ] = i;
+            }
+        }
+    }
     else
-    {
+    {   // its a new property
         sal_uInt32 nIndex = aPropSeq.getLength();
         aPropSeq.realloc( nIndex + 1 );
         aPropSeq[ nIndex ] = rPropVal ;
@@ -170,7 +194,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const com::sun::star::beans::
 void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenceName, const com::sun::star::beans::PropertyValue& rPropVal )
 {
     com::sun::star::uno::Any* pAny = GetPropertyValueByName( rSequenceName, rPropVal.Name );
-    if ( pAny )
+    if ( pAny ) // just replacing
         *pAny = rPropVal.Value;
     else
     {
@@ -181,9 +205,13 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenc
             beans::PropertyValue aValue;
             aValue.Name = rSequenceName;
             aValue.Value = ::com::sun::star::uno::makeAny( aSeq );
-            SetPropertyValue( aValue );
 
-            pSeqAny = GetPropertyValueByName( rSequenceName );
+            sal_uInt32 nIndex = aPropSeq.getLength();
+            aPropSeq.realloc( nIndex + 1 );
+            aPropSeq[ nIndex ] = aValue;
+            aPropHashMap[ rSequenceName ] = nIndex;
+
+            pSeqAny = &aPropSeq[ nIndex ].Value;
         }
 
         DBG_ASSERT( pSeqAny, "SdrCustomShapeGeometryItem::SetPropertyValue() - No Value??" );
@@ -210,6 +238,78 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const rtl::OUString& rSequenc
 
                     aPropPairHashMap[ PropertyPair( rSequenceName, rPropVal.Name ) ] = nCount;
                 }
+            }
+        }
+    }
+}
+
+void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rPropName )
+{
+    if ( aPropSeq.getLength() )
+    {
+        PropertyHashMap::iterator aHashIter( aPropHashMap.find( rPropName ) );
+        if ( aHashIter != aPropHashMap.end() )
+        {
+             com::sun::star::uno::Any* pSeqAny = &aPropSeq[ (*aHashIter).second ].Value;
+            if ( pSeqAny )
+            {
+                if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+                {
+                    ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
+                        *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pSeqAny->getValue());
+
+                    sal_Int32 i;
+                    for ( i = 0; i < rSecSequence.getLength(); i++ )
+                    {
+                        PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rPropName, rSecSequence[ i ].Name ) ) );
+                        if ( aHashIter != aPropPairHashMap.end() )
+                            aPropPairHashMap.erase( aHashIter );        // removing property from pair hashmap
+                    }
+                }
+            }
+            sal_Int32 nLength = aPropSeq.getLength();
+            if ( nLength )
+            {
+                sal_Int32 nIndex  = (*aHashIter).second;
+                if ( nIndex != ( nLength - 1 ) )                        // resizing sequence
+                {
+                    PropertyHashMap::iterator aHashIter2( aPropHashMap.find( aPropSeq[ nLength - 1 ].Name ) );
+                    (*aHashIter2).second = nIndex;
+                    aPropSeq[ (*aHashIter).second ] = aPropSeq[ aPropSeq.getLength() - 1 ];
+                }
+                aPropSeq.realloc( aPropSeq.getLength() - 1 );
+            }
+            aPropHashMap.erase( aHashIter );                            // removing property from hashmap
+        }
+    }
+}
+
+void SdrCustomShapeGeometryItem::ClearPropertyValue( const rtl::OUString& rSequenceName, const rtl::OUString& rPropName )
+{
+    com::sun::star::uno::Any* pSeqAny = GetPropertyValueByName( rSequenceName );
+    if ( pSeqAny )
+    {
+        if ( pSeqAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < beans::PropertyValue >*)0) )
+        {
+            PropertyPairHashMap::iterator aHashIter( aPropPairHashMap.find( PropertyPair( rSequenceName, rPropName ) ) );
+            if ( aHashIter != aPropPairHashMap.end() )
+            {
+                ::com::sun::star::uno::Sequence < beans::PropertyValue >& rSecSequence =
+                    *((::com::sun::star::uno::Sequence < beans::PropertyValue >*)pSeqAny->getValue());
+
+                sal_Int32 nLength = rSecSequence.getLength();
+                if ( nLength )
+                {
+                    sal_Int32 nIndex  = (*aHashIter).second;
+                    if ( nIndex != ( nLength - 1 ) )                            // resizing sequence
+                    {
+                        PropertyPairHashMap::iterator aHashIter2( aPropPairHashMap.find( PropertyPair( rSequenceName, rSecSequence[ nLength - 1 ].Name ) ) );
+                        (*aHashIter2).second = nIndex;
+                        rSecSequence[ nIndex ] = rSecSequence[ nLength - 1 ];
+                    }
+                    rSecSequence.realloc( aPropSeq.getLength() - 1 );
+                }
+                aPropPairHashMap.erase( aHashIter );
             }
         }
     }
