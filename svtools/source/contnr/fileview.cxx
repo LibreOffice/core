@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-25 08:56:06 $
+ *  last change: $Author: fs $ $Date: 2002-10-17 15:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,8 @@ public:
     void                    FilterFolderContent_Impl( const OUString &rFilter );
 
     void                    OpenFolder_Impl();
+    // #83004# -------
+    void                    ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
     void                    CreateVector_Impl( const Sequence < OUString > &rList );
     void                    SortFolderContent_Impl();
@@ -2148,6 +2150,17 @@ void SvtFileView_Impl::ResetCursor()
     mpView->Update();
 }
 
+// #83004# -------
+void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
+{
+    OUString aTab     = OUString::createFromAscii( "\t" );
+    OUString aTabString = OUString::createFromAscii( "%09" );
+    sal_Int32 iPos;
+
+    while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
+       aValue = aValue.replaceAt( iPos, 1, aTabString );
+}
+
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::CreateDisplayText_Impl()
 {
@@ -2163,6 +2176,8 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     {
         // title, type, size, date
         aValue = (*aIt)->GetTitle();
+        // #83004# --------------------
+        ReplaceTabWithString( aValue );
         aValue += aTab;
         aValue += (*aIt)->maType;
         aValue += aTab;
@@ -2217,6 +2232,8 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         // get the title
         pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
         aDisplayText = pEntry->GetTitle();
+        // #83004# --------------------
+        ReplaceTabWithString( aDisplayText );
         aDisplayText += aTab;
 
         // get the type
@@ -2483,6 +2500,9 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     // title, type, size, date
     aValue = pData->GetTitle();
+    // #83004# --------------------
+    ReplaceTabWithString( aValue );
+    aValue += aTab;
     aValue += aTab;
     aValue += pData->maType;
     aValue += aTab;
