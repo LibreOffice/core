@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #include <string.h>
 
-#define _SV_IMAGE_CXX
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -71,13 +69,13 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
-#ifndef _SV_RC_HXX
-#include <rc.hxx>
+#ifndef _TOOLS_RC_HXX
+#include <tools/rc.hxx>
 #endif
 #ifndef _SV_RESMGR_HXX
-#include <resmgr.hxx>
+#include <tools/resmgr.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
