@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:18:57 $
+ *  last change: $Date: 2005-02-24 17:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ class OSHelper
     public static boolean isWindows()
         {
             String sOSName = System.getProperty("os.name");
-            if (sOSName.startsWith("Win"))
+            if (sOSName.toLowerCase().startsWith("windows"))
             {
                 return true;
             }
