@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:41:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,23 +162,16 @@ namespace {
         rtl::OUString aResourceName;
         rtl::OUString aResourceType;
         sal_Bool      bRemovable;
-        bool bUri = false;
         bool bResourceName = false;
         bool bResourceType = false;
         bool bRemoveProperty = false;
 
-        if (pShell->uncheckMountPoint(rPhysicalUrl, aUri))
-        {
-            bUri = true;
-            // For security reasons, exhibit the system path only if it is not
-            // subject to mount point mapping:
-            if (rPhysicalUrl == aUri
-                && osl::FileBase::getSystemPathFromFileURL(
-                    rPhysicalUrl,
-                    aResourceName)
-                == osl::FileBase::E_None)
-                bResourceName = true;
-        }
+        if (rPhysicalUrl == aUri
+            && osl::FileBase::getSystemPathFromFileURL(
+                rPhysicalUrl,
+                aResourceName)
+            == osl::FileBase::E_None)
+            bResourceName = true;
 
         // The resource types "folder" (i.e., directory) and
         // "volume" seem to be
@@ -216,18 +209,17 @@ namespace {
                 }
         }
 
-        Sequence< Any > aArguments( (bUri ? 1 : 0)              +
+        Sequence< Any > aArguments( 1              +
                                     (bResourceName ? 1 : 0)     +
                                     (bResourceType ? 1 : 0)     +
                                     (bRemoveProperty ? 1 : 0) );
         sal_Int32 i = 0;
-        if (bUri)
-            aArguments[i++]
-                <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "Uri")),
-                                  -1,
-                                  makeAny(aUri),
-                                  PropertyState_DIRECT_VALUE);
+        aArguments[i++]
+            <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Uri")),
+                              -1,
+                              makeAny(aUri),
+                              PropertyState_DIRECT_VALUE);
         if (bResourceName)
             aArguments[i++]
                 <<= PropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -928,18 +920,6 @@ namespace fileaccess {
                 rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "a file or directory could not be deleted")),
-                xComProc );
-        }
-        else if( errorCode == TASKHANDLING_TRANSFER_MOUNTPOINTS )
-        {
-            ioErrorCode = IOErrorCode_NOT_EXISTING;
-            cancelCommandExecution(
-                ioErrorCode,
-                generateErrorArguments(pShell, aUncPath),
-                xEnv,
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "")),
                 xComProc );
         }
         else if( errorCode == TASKHANDLING_TRANSFER_BY_COPY_SOURCE         ||
