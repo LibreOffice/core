@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:17:53 $
+ *  last change: $Author: obo $ $Date: 2004-09-16 10:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3000,26 +3000,6 @@ BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
                 aNumInfo.GetList().GetObject(0) == pTxtNode)
                 bResult = TRUE;
         }
-    }
-
-    return bResult;
-}
-
-// #106897#
-sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName)
-{
-    sal_Bool bResult = sal_False;
-    SwNumRule * pOldRule = FindNumRulePtr(rOldName);
-
-    if (pOldRule)
-    {
-        MakeNumRule(rNewName, pOldRule);
-
-        SwPosition aPos = SwPosition(SwNodeIndex(*aNodes[0]));
-        bResult = ReplaceNumRule(aPos, rOldName, rNewName);
-
-        if (bResult)
-            bResult = DelNumRule(rOldName);
     }
 
     return bResult;
