@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:20:00 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,19 +147,19 @@ public class CallReportWizard {
             bWizardstartedalready = false;
             }
             else if (sEvent.compareTo("fill") == 0){
-                        Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                        XTextDocument xTextDocument = null;
-                        if ( databaseproperties != null )
-                        {
-                            for( int i=0;i < databaseproperties.length;++i)
-                            {
-                                if ( databaseproperties[i].Name.equals("TextDocument") )
-                                    xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
+                Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
+                XTextDocument xTextDocument = null;
+                if ( databaseproperties != null )
+                {
+                    for( int i=0;i < databaseproperties.length;++i)
+                    {
+                        if ( databaseproperties[i].Name.equals("TextDocument") )
+                            xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
 
-                            }
-                            if ( xTextDocument != null )
-                                CurDataimport.createReport(xmultiservicefactory,xTextDocument);
-                        }
+                    }
+                    if ( xTextDocument != null )
+                        CurDataimport.createReport(xmultiservicefactory,xTextDocument,databaseproperties);
+                }
             }
         }
         catch( Exception exception ){
