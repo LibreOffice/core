@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtopt.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 14:55:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 class ScFilterOptions : public utl::ConfigItem
 {
     BOOL        bWK3Flag;
-    BOOL        bBreakShared;
     double      fExcelColScale;
     double      fExcelRowScale;
 
@@ -92,7 +91,6 @@ public:
     virtual void    Commit();
 
     BOOL        GetWK3Flag() const          { return bWK3Flag; }
-    BOOL        GetBreakShared() const      { return bBreakShared; }
     double      GetExcelColScale() const    { return fExcelColScale; }
     double      GetExcelRowScale() const    { return fExcelRowScale; }
 
