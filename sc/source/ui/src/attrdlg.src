@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:41:51 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Numeri" ;
                 Text [ portuguese_brazilian ] = "N?ero" ;
                 Text [ portuguese ] = "Números" ;
-                Text [ finnish ] = "Numerot" ;
+                Text [ finnish ] = "Luku" ;
                 Text [ danish ] = "Tal" ;
                 Text [ french ] = "Nombres" ;
                 Text [ swedish ] = "Tal" ;
@@ -160,7 +160,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text[ english_us ] = "Font Effects";
                 Text[ portuguese ] = "Efeitos do tipo de letra";
-                Text[ russian ] = "İôôåêò øğèôòà";
+                Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
                 Text[ dutch ] = "Schrifteffect";
                 Text[ french ] = "Effets de caractères";
@@ -218,7 +218,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
-                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
                 Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
@@ -373,7 +373,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ english_us ] = "~Protected" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é”å®šçš„(~P)";
-        Text[ russian ] = "Çàáëîêèğîâàíî";
+        Text[ russian ] = "Çàùèùåíî";
         Text[ polish ] = "Ochrona";
         Text[ japanese ] = "ä¿è­·ã™ã‚‹(~P)";
         Text[ chinese_traditional ] = "é–å®š(~P)";
@@ -426,8 +426,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Nascondi ~tutto" ;
         Text [ portuguese_brazilian ] = "Orecortar ~Tudo" ;
         Text [ portuguese ] = "Ocultar ~tudo" ;
-        Text [ finnish ] = "~Piilota kaikki" ;
-        Text [ danish ] = "Skjul alt" ;
+        Text [ finnish ] = "Piilota ~kaikki" ;
+        Text [ danish ] = "S~kjul alt" ;
         Text [ french ] = "Masquer ~tout" ;
         Text [ swedish ] = "Dölj ~allt" ;
         Text [ dutch ] = "~Alles verbergen" ;
@@ -461,11 +461,11 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
         Text [ portuguese_brazilian ] = "Para ativar a prote??o da c?lula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
-        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva lomake on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Lomake." ;
+        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva taulukko on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Taulukko." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
         Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
         Text [ swedish ] = "Cellskyddet är bara verksamt om den aktiva tabellen är skyddad.\n\nVälj 'Skydda dokument' på menyn 'Verktyg' och därefter 'Tabell' för att skydda tabellen." ;
-        Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie \"Document beveiligen\" en vervolgens de optie 'Werkblad'." ;
+        Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie 'Document beveiligen' en vervolgens de optie 'Werkblad'." ;
         Text [ spanish ] = "La protección de celdas será efectiva solamente si la hoja activa está protegida.\n\nEn 'Herramientas' seleccione el comando 'Proteger documento' y a continuación 'Hoja de cálculo'." ;
         Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text[ chinese_simplified ] = "åªæœ‰åœ¨ä½¿ç”¨ä¿æŠ¤å·¥ä½œè¡¨åï¼Œå•å…ƒæ ¼æ‰ä¼šå—åˆ°ä¿æŠ¤ã€‚\n\nè¯·ç‚¹å‡»èœå•å‘½ä»¤\"å·¥å…·\"ï¼Œ\"ä¿æŠ¤æ–‡æ¡£\"ï¼Œ\"å·¥ä½œè¡¨\"ã€‚";
@@ -521,7 +521,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "~Non stampare" ;
         Text [ portuguese_brazilian ] = "Ocultar para ~Impress?o" ;
         Text [ portuguese ] = "Ocultar para ~impressão" ;
-        Text [ finnish ] = "~Piilota tulostettaessa" ;
+        Text [ finnish ] = "Piilota ~tulostettaessa" ;
         Text [ danish ] = "Skjul ved udskrivning" ;
         Text [ french ] = "Masquer pour l'~impression" ;
         Text [ swedish ] = "Dölj vid ~utskrift" ;
@@ -530,7 +530,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ english_us ] = "Hide ~when printing" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "æ‰“å°æ—¶éšå…¥(~W)";
-        Text[ russian ] = "Ñêğûòü äëÿ ïå÷àòè";
+        Text[ russian ] = "Ñêğûòü ïğè ïå÷àòè";
         Text[ polish ] = "U~kryj na wydruku";
         Text[ japanese ] = "å°åˆ·ã—ãªã„(~W)";
         Text[ chinese_traditional ] = "åˆ—å°æ™‚éš±è—(~W)";
@@ -561,7 +561,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ spanish ] = "Las celdas seleccionadas no se imprimirán." ;
         Text [ english_us ] = "The cells selected will be omitted when printing." ;
         Text[ chinese_simplified ] = "å½“å‰é€‰ä¸­å•å…ƒæ ¼ä¸ä¼šè¢«æ‰“å°å‡ºæ¥ã€‚";
-        Text[ russian ] = "Ïğè ïå÷àòè âûäåëåííûå ÿ÷åéêè ïîêàçàíû íå áóäóò.";
+        Text[ russian ] = "Ïğè ïå÷àòè âûäåëåííûå ÿ÷åéêè áóäóò ïğîïóùåíû.";
         Text[ polish ] = "Zaznaczone komórki zostan¹ pominiête przy wydruku.";
         Text[ japanese ] = "ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚»ãƒ«ã¯å°åˆ·ã•ã‚Œã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "ç›®å‰é¸å–çš„å„²å­˜æ ¼ä¸æœƒè¢«åˆ—å°å‡ºä¾†ã€‚";
