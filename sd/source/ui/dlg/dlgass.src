@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:09:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,6 +1420,10 @@ ModalDialog DLG_ASS
     Text[ hindi ] = "ओटोपैलट् प्रस्तुति";
     Text[ slovak ] = "Sprievodca prezentáciou";
 };
+
+
+
+
 
 
 
