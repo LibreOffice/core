@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-07 14:02:57 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,17 @@ public:
         sal_uInt16 nFamily, const rtl::OUString& rStyleName, XmlShapeType eShapeType,
         sal_Int32 nFeatures = SEF_DEFAULT,
         com::sun::star::awt::Point* pRefPoint = NULL
-        );
+    );
+    static void ImpWriteSingleShapeStyleInfos(SvXMLExport& rExp,
+        com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xShapes,
+        sal_Int32 nFeatures = SEF_DEFAULT,
+        com::sun::star::awt::Point* pRefPoint = NULL
+    );
+    static void ImpStartWriteGroupShape(SvXMLExport& rExp,
+        const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+        sal_Int32 nFeatures = SEF_DEFAULT,
+        com::sun::star::awt::Point* pRefPoint = NULL
+    );
 
     static void ImpCalcShapeType(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
         XmlShapeType& eShapeType);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: aw $ $Date: 2000-12-07 15:13:55 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3322,6 +3322,86 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(const uno::Reference< drawing::XS
         ImpCalcShapeType(xShape, eShapeType);
         ImpWriteSingleShapeStyleInfo(*this, xShape,
             pInfo->GetFamily(), pInfo->GetStyleName(), eShapeType, nFeatures, pRefPoint );
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// static version of ImpWriteSingleShapeStyleInfos() for external export
+// used by XMLShapeExport::exportShape(...)
+void SdXMLExport::ImpWriteSingleShapeStyleInfos(SvXMLExport& rExp,
+    uno::Reference< container::XIndexAccess >& xShapes,
+    sal_Int32 nFeatures, awt::Point* pRefPoint)
+{
+    const sal_Int32 nShapeCount(xShapes->getCount());
+    sal_Int32 nShapeId;
+
+    // loop over shapes
+    for(nShapeId = 0L; nShapeId < nShapeCount; nShapeId++)
+    {
+        uno::Any aAny(xShapes->getByIndex(nShapeId));
+        uno::Reference< drawing::XShape > xShape;
+
+        if(aAny >>= xShape)
+        {
+            uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
+            if(xShapes.is() && xShapes->getCount())
+            {
+                // group shape
+                ImpStartWriteGroupShape(rExp, xShape, nFeatures, pRefPoint);
+            }
+            else
+            {
+                // single shape
+                rExp.GetShapeExport()->exportShape(xShape, nFeatures, pRefPoint);
+            }
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void SdXMLExport::ImpStartWriteGroupShape(SvXMLExport& rExp,
+    const uno::Reference< drawing::XShape >& xShape,
+    sal_Int32 nFeatures, awt::Point* pRefPoint)
+{
+    uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
+    if(xShapes.is() && xShapes->getCount())
+    {
+        // group shape or 3Dscene?
+        sal_Bool bIsScene(FALSE);
+        uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
+        if(xShapeDescriptor.is())
+        {
+            String aType((OUString)xShapeDescriptor->getShapeType());
+            if(aType.EqualsAscii((const sal_Char*)"com.sun.star.drawing.Shape3DSceneObject"))
+            {
+                bIsScene = TRUE;
+            }
+        }
+
+        if(bIsScene)
+        {
+            // prepare write 3DScene
+            ImpPrepareExport3DScene(rExp, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
+
+            // write 3DScene shape
+            SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DR3D, sXML_3DScene, sal_True, sal_True);
+
+            // write 3DSceneLights
+            ImpExport3DLamps(rExp, xShape, XmlShapeTypeDraw3DSceneObject, nFeatures, pRefPoint);
+
+            // write members
+            ImpWriteSingleShapeStyleInfos(rExp, xShapes, nFeatures, pRefPoint);
+        }
+        else
+        {
+            // write group shape
+            SvXMLElementExport aPGR(rExp, XML_NAMESPACE_DRAW, sXML_g, sal_True, sal_True);
+
+            // write members
+            ImpWriteSingleShapeStyleInfos(rExp, xShapes, nFeatures, pRefPoint);
+        }
     }
 }
 

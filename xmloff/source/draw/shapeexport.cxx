@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:24:20 $
+ *  last change: $Author: aw $ $Date: 2000-12-07 18:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,18 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
         SdXMLExport::ImpCalcShapeType(xShape, eShapeType);
 
-        SdXMLExport::ImpWriteSingleShapeStyleInfo(GetExport(), xShape,
-            XML_STYLE_FAMILY_SD_GRAPHICS_ID, aNewName, eShapeType, nFeatures, pRefPoint);
+        uno::Reference< container::XIndexAccess > xShapes(xShape, uno::UNO_QUERY);
+        if(xShapes.is() && xShapes->getCount())
+        {
+            // group shape
+            SdXMLExport::ImpStartWriteGroupShape(GetExport(), xShape, nFeatures, pRefPoint);
+        }
+        else
+        {
+            // single shape
+            SdXMLExport::ImpWriteSingleShapeStyleInfo(GetExport(), xShape,
+                XML_STYLE_FAMILY_SD_GRAPHICS_ID, aNewName, eShapeType, nFeatures, pRefPoint);
+        }
     }
 }
 
