@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:29:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,7 +383,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message [ portuguese ] = "É impossível carregar o texto-fonte." ;
     Message[ chinese_simplified ] = "ÎŞ·¨×°ÈëÔ´ÎÄ±¾¡£";
     Message[ russian ] = "Çàãğóçêà èñõîäíîãî òåêñòà íåâîçìîæíà.";
-    Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu ?ród³owego.";
+    Message[ polish ] = "Nie mo¿na by³o za³adowaæ tekstu Ÿród³owego.";
     Message[ japanese ] = "¿°½Ã·½Ä‚ğ“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "µLªk¸ü¤J­ì©lÀÉ¡C";
     Message[ arabic ] = ".áÇ íãßä ÊÍãíá äÕ ÇáãÕÏÑ";
@@ -413,7 +413,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ russian ] = "Â Ñåğâèñ/Ïàğàìåòğû/%1/Ïå÷àòü ôàêñ-ïğèíòåğ íå óñòàíîâëåí.";
     Message[ greek ] = "Äåí İ÷åé ïñéóôåß åêôõğùôŞò ãéá Fax óôç äéáäñïìŞ Åñãáëåßá/Åğéëïãİò/%1/Åêôığùóç.";
     Message[ japanese ] = "Â°Ù ¨ µÌß¼®İ ¨ %1 ¨ ˆóü‚Å Fax ÌßØİÀ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Message[ korean ] = "µµ±¸/¿É¼Ç/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Message[ korean ] = "µµ±¸/¿É¼Ç/%1/ÀÎ¼âÇÏ¿¡¼­  ÆÑ½º ÇÁ¸°ÅÍ°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     Message[ chinese_simplified ] = "ÔÚ¹¤¾ß/Ñ¡Ïî/%1/´òÓ¡»ú´¦Ã»ÓĞÉè¶¨´«Õæ´òÓ¡»ú¡£";
     Message[ chinese_traditional ] = "¦b¤u¨ã/¿ï¶µ/%1/¾÷¦Lªí¾÷³B¨S¦³³]©w¦C¦L¶Ç¯uªºÅX°Êµ{¦¡¡C";
     Message[ arabic ] = "áíÓÊ åäÇß ÅÚÏÇÏÇÊ ØÇÈÚÉ İÇßÓ ÊÍÊ \"ÃÏæÇÊ/ÎíÇÑÇÊ/%1/ØÈÇÚÉ\".";
@@ -539,7 +539,7 @@ InfoBox MSG_SCAN_NOSOURCE
     Message [ portuguese ] = "Fonte não especificada." ;
     Message[ chinese_simplified ] = "Ã»ÓĞÖ¸¶¨Ô´¡£";
     Message[ russian ] = "Èñòî÷íèê íå óêàçàí";
-    Message[ polish ] = "Nie okre?lono ?ród³a.";
+    Message[ polish ] = "Nie okreœlono Ÿród³a.";
     Message[ japanese ] = "¿°½‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¨S¦³©w¸q¨Ó·½¡C";
     Message[ arabic ] = ".áã íÊã ÊÍÏíÏ ÇáãÕÏÑ";
@@ -756,7 +756,7 @@ String RID_SRCVIEW_TOOLBOX
     Text [ portuguese_brazilian ] = "Quelltext" ;
     Text[ chinese_simplified ] = "Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò";
-    Text[ polish ] = "Tekst ?ród³owy";
+    Text[ polish ] = "Tekst Ÿród³owy";
     Text[ japanese ] = "¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "­ì©lÀÉ";
     Text[ arabic ] = "äÕ ÇáãÕÏÑ";
@@ -859,7 +859,7 @@ String STR_PRINT_MSG
     Text[ swedish ] = "Vill du skriva ut det markerade eller hela dokumentet?";
     Text[ dutch ] = "Wilt u de selectie of het hele document afdrukken?";
     Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
-    Text[ english_us ] = "Do you wish to print the selection or the entire document?";
+    Text[ english_us ] = "Do you want to print the selection or the entire document?";
     Text[ chinese_simplified ] = "ÄúÒª´òÓ¡Ñ¡ÔñµÄ²¿·Ö»¹ÊÇÒª´òÓ¡Õû¸öÎÄµµ£¿";
     Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåíèå?";
     Text[ polish ] = "Czy chcesz wydrukowaæ selekcjê czy te¿ ca³y dokument?";
@@ -966,7 +966,7 @@ String STR_SAVEAS_SRC
     Text [ english_us ] = "~Export source..." ;
     Text[ chinese_simplified ] = "Êä³öÔ´ÎÄ±¾(~E)...";
     Text[ russian ] = "İêñïîğò èñõîäíîãî òåêñòà...";
-    Text[ polish ] = "Eksportuj tekst ?ród³owy...";
+    Text[ polish ] = "Eksportuj tekst Ÿród³owy...";
     Text[ japanese ] = "¿°½Ã·½Ä‚ğ´¸½Îß°Ä‚·‚é(~E)...";
     Text[ chinese_traditional ] = "¿é¥X­ì©lÀÉ(~E)...";
     Text[ arabic ] = "ÊÕÏíÑ äÕ ÇáãÕÏÑ...";
@@ -992,7 +992,7 @@ String MN_SRCVIEW_POPUPMENU
     Text [ dutch ] = "HTML - brontekst" ;
     Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
     Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
-    Text[ polish ] = "Tekst ?ród³owy HTML";
+    Text[ polish ] = "Tekst Ÿród³owy HTML";
     Text[ japanese ] = "HTML ¿°½Ã·½Ä";
     Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
     Text[ arabic ] = "äÕ ãÕÏÑ HTML";
@@ -1217,7 +1217,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text [ portuguese_brazilian ] = "HTML-Quelltext" ;
             Text[ chinese_simplified ] = "HTML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò â ôîğìàòå HTML";
-            Text[ polish ] = "Tekst ?ród³owy HTML";
+            Text[ polish ] = "Tekst Ÿród³owy HTML";
             Text[ japanese ] = "HTML ¿°½Ã·½Ä";
             Text[ chinese_traditional ] = "HTML ­ì©lÀÉ";
             Text[ arabic ] = "äÕ ãÕÏÑ HTML";
