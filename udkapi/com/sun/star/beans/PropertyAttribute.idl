@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:38 $
+ *  last change: $Author: kso $ $Date: 2002-11-11 08:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,17 @@ constants PropertyAttribute
     /** same as <const>PropertyAttribute::REMOVEABLE</const>.
      */
     const short REMOVABLE = 128;
+
+    /** indicates that a property is optional.
+
+        <p>This attribute is not of interest for concrete property
+        implementations. It's needed for property specifications inside
+        service specifications in UNOIDL.
+
+        @see com::sun::star::reflection::PropertyDescription
+        @see com::sun::star::reflection::XServiceTypeDescription
+     */
+    const short OPTIONAL = 256;
 };
 
 //=============================================================================
