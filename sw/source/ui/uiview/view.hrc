@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #define STR_NUM_LEVEL               (RC_VIEW_BEGIN + 3)
 
 #define STR_ERROR_NOLANG            (RC_VIEW_BEGIN + 6)
-#define STR_VERB_FOR_GRF            (RC_VIEW_BEGIN + 7)
 
 #define STR_EDIT_FOOTNOTE           (RC_VIEW_BEGIN + 14)
 

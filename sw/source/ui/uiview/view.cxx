@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-22 08:10:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,17 +326,6 @@ void SwView::ImpSetVerb( int nSelType )
             {
                 SvInPlaceObjectRef xRef = GetWrtShell().GetOLEObj();
                 SetVerbs( &xRef->GetVerbList() );
-                bVerbsActive = sal_True;
-                bResetVerbs = sal_False;
-            }
-            if ( nSelType & SwWrtShell::SEL_GRF &&
-
-                 SFX_APP()->HasFeature( SFX_FEATURE_SIMAGE ) )
-            {
-                SvVerb aVerb( 0, SW_RESSTR( STR_VERB_FOR_GRF ));
-                SvVerbList aLst;
-                aLst.Append( aVerb );
-                SetVerbs( &aLst );
                 bVerbsActive = sal_True;
                 bResetVerbs = sal_False;
             }
@@ -1155,13 +1144,6 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
     }
 }
 
-void SwView::UIDeactivate( SvInPlaceObject* )
-{
-    GetEditWin().OleToGrf();
-}
-
-
-
 void SwView::ShowCursor( FASTBOOL bOn )
 {
     if ( bOn )
@@ -1180,8 +1162,6 @@ ErrCode SwView::DoVerb( long nVerb )
         const int nSel = rSh.GetSelectionType();
         if ( nSel & SwWrtShell::SEL_OLE )
             rSh.LaunchOLEObj( nVerb );
-        else if ( nSel & SwWrtShell::SEL_GRF && nVerb == 0 )
-            GetDispatcher().Execute( SID_SIM_START );
     }
     return ERRCODE_NONE;
 }
