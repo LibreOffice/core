@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-13 07:47:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 07:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         StreamExceptionsEnabler sexc_in(in);
 
         //skip the byte-order-mark 0xEF 0xBB 0xBF, identifying UTF8 files
-        char BOM[3] = {0xEF, 0xBB, 0xBF};
+        unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
         char buff[3];
         in.read(&buff[0], 3);
 
