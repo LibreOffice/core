@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleText.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
     a document, the text for headers and footers or for single cells of a
     table.@see XText
  */
-interface XSimpleText: com::sun::star::text::XTextRange
+published interface XSimpleText: com::sun::star::text::XTextRange
 {
     //-------------------------------------------------------------------------
 
