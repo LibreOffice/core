@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-18 09:22:51 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,7 +782,7 @@ void JoinMainLoopThread()
         WaitForSingleObject(hThreadID, INFINITE);
 #else
         osl_joinWithThread(hThreadID);
-        osl_freeThreadHandle( hThreadID );
+        osl_destroyThread( hThreadID );
 #endif
     }
 }

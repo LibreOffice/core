@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-05 20:14:26 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 16:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ThreadExecutor::~ThreadExecutor()
 {
     osl_destroyCondition( m_aFinish );
     if( m_aThread )
-        osl_freeThreadHandle( m_aThread );
+        osl_destroyThread( m_aThread );
 }
 
 void ThreadExecutor::worker( void* pInstance )
@@ -88,7 +88,7 @@ long ThreadExecutor::execute()
 {
     osl_resetCondition( m_aFinish );
     if( m_aThread )
-        osl_freeThreadHandle( m_aThread ), m_aThread = NULL;
+        osl_destroyThread( m_aThread ), m_aThread = NULL;
     m_aThread = osl_createThread( worker, this );
     while( ! osl_checkCondition( m_aFinish ) )
         Application::Reschedule();
