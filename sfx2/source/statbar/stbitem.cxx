@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:17:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,10 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #endif
 
+#include <vcl/status.hxx>
+
 #include "stbitem.hxx"
 #include "sfxtypes.hxx"
-#include "stbmgr.hxx"
 #include "msg.hxx"
 #include "arrdecl.hxx"
 #include "bindings.hxx"
@@ -100,7 +101,6 @@
 #include "dispatch.hxx"
 #include "unoctitm.hxx"
 #include "objsh.hxx"
-
 #include "sfx.hrc"
 
 #include <comphelper/processfactory.hxx>
