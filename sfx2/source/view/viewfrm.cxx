@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3164,6 +3164,8 @@ SfxInPlaceFrame* SfxViewFrame::GetIPFrame_Impl() const
 
 String SfxViewFrame::GetActualPresentationURL_Impl() const
 {
+    if ( xObjSh.Is() )
+        return xObjSh->GetMedium()->GetName();
     return pImp->aActualPresentationURL;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: as $ $Date: 2001-11-29 11:06:45 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 //________________________________________________________________________________________________________
 //  my own includes
 //________________________________________________________________________________________________________
+
+#include <time.h>
 
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
 #include <sfxbasecontroller.hxx>
@@ -143,6 +145,26 @@
 #define XSTATUSINDICATORSUPPLIER                ::com::sun::star::task::XStatusIndicatorSupplier
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
 
+#define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
+
+sal_uInt32 Get10ThSec()
+{
+    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
+    return n10Ticks / CLOCKS_PER_SEC;
+}
+
+sal_Int32 m_nInReschedule = 0;  /// static counter for rescheduling
+
+void reschedule()
+{
+    if ( m_nInReschedule == 0 )
+    {
+        ++m_nInReschedule;
+        Application::Reschedule();
+        --m_nInReschedule;
+    }
+}
+
 class SfxStatusIndicator : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XStatusIndicator >
 {
 friend class SfxBaseController;
@@ -150,6 +172,7 @@ friend class SfxBaseController;
     SfxWorkWindow*          pWorkWindow;
     sal_Int32               _nRange;
     sal_Int32               _nValue;
+    long                    _nStartTime;
 public:
                             SfxStatusIndicator(SfxBaseController* pController, SfxWorkWindow* pWork)
                                 : wOwner( pController )
@@ -176,6 +199,8 @@ void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 
         pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( pMgr && !pMgr->IsProgressMode() )
             pMgr->StartProgressMode( aText, nRange );
+        _nStartTime = Get10ThSec();
+        reschedule();
     }
 }
 
@@ -187,6 +212,7 @@ void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::Runtime
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( pMgr && pMgr->IsProgressMode() )
             pMgr->EndProgressMode();
+        reschedule();
     }
 }
 
@@ -221,6 +247,8 @@ void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::
                 }
             }
         }
+
+        reschedule();
     }
 }
 
@@ -233,6 +261,9 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun:
         SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
         if ( pMgr && pMgr->IsProgressMode() )
             pMgr->SetProgressState( nValue );
+        sal_Bool bReschedule = (( Get10ThSec() - _nStartTime ) > TIMEOUT_START_RESCHEDULE );
+        if ( bReschedule )
+            reschedule();
     }
 }
 
@@ -245,6 +276,7 @@ void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeEx
         if ( pMgr )
             pMgr->ShowItems();
         pWorkWindow->SetTempStatusBar_Impl( FALSE );
+        reschedule();
     }
 }
 

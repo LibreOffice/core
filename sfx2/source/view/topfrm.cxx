@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-22 17:39:33 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 17:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ void SfxTopWindow_Impl::GetFocus()
 
 void SfxTopWindow_Impl::Resize()
 {
-    if ( IsReallyVisible() || IsReallyShown() )
+    if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
         DoResize();
 }
 
@@ -350,7 +350,7 @@ void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
 
 void SfxTopViewWin_Impl::Resize()
 {
-    if ( IsReallyVisible() || IsReallyShown() )
+    if ( IsReallyVisible() || IsReallyShown() || GetOutputSizePixel().Width() )
         pFrame->Resize();
 }
 
