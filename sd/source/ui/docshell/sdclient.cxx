@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:00:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ Client::~Client()
 
 void Client::RequestObjAreaPixel(const Rectangle& rRect)
 {
-    ::Window* pWin = pViewShell->GetWindow();
+    ::Window* pWin = pViewShell->GetActiveWindow();
     Rectangle aObjRect( pWin->PixelToLogic( rRect.TopLeft() ),
                         pWin->PixelToLogic( rRect.GetSize() ) );
 
@@ -166,7 +166,7 @@ void Client::RequestObjAreaPixel(const Rectangle& rRect)
 
         aObjRect.SetPos(aPos);
 
-        SfxInPlaceClient::RequestObjAreaPixel(pViewShell->GetWindow()->
+        SfxInPlaceClient::RequestObjAreaPixel(pViewShell->GetActiveWindow()->
                                               LogicToPixel(aObjRect) );
     }
     else
