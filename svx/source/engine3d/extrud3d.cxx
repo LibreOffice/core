@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:25:53 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,19 @@
 #include "svx3ditems.hxx"
 #endif
 
+#ifndef _SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
+#include <svx/sdr/properties/e3dextrudeproperties.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::E3dExtrudeProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 
 /*************************************************************************
@@ -127,7 +140,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const PolyPolygon& 
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
-    mpObjectItemSet->Put(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
+    GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -149,7 +162,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const XPolyPolygon&
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
-    mpObjectItemSet->Put(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
+    GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
 
     // Geometrie erzeugen
     CreateGeometry();
@@ -165,21 +178,17 @@ E3dExtrudeObj::E3dExtrudeObj()
 
 void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 {
-    // Defaults setzen
-    ImpForceItemSet();
-
     fExtrudeScale = rDefault.GetDefaultExtrudeScale();
 
-    // #107245#
-    mpObjectItemSet->Put(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
-    mpObjectItemSet->Put(Svx3DSmoothLidsItem(rDefault.GetDefaultExtrudeSmoothFrontBack()));
-    mpObjectItemSet->Put(Svx3DCharacterModeItem(rDefault.GetDefaultExtrudeCharacterMode()));
-    mpObjectItemSet->Put(Svx3DCloseFrontItem(rDefault.GetDefaultExtrudeCloseFront()));
-    mpObjectItemSet->Put(Svx3DCloseBackItem(rDefault.GetDefaultExtrudeCloseBack()));
+    GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(rDefault.GetDefaultExtrudeSmoothed()));
+    GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(rDefault.GetDefaultExtrudeSmoothFrontBack()));
+    GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(rDefault.GetDefaultExtrudeCharacterMode()));
+    GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(rDefault.GetDefaultExtrudeCloseFront()));
+    GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultExtrudeCloseBack()));
 
     // Bei extrudes defaultmaessig StdTexture in X und Y
-    mpObjectItemSet->Put(Svx3DTextureProjectionXItem(1));
-    mpObjectItemSet->Put(Svx3DTextureProjectionYItem(1));
+    GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(1));
+    GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(1));
 }
 
 /*************************************************************************
@@ -267,7 +276,9 @@ void E3dExtrudeObj::CreateGeometry()
 
         // Was muss erzeugt werden?
         if(!aFrontSide.IsClosed())
-            mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
+        {
+            GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
+        }
 
         double fTextureDepth=1.0;
         double fTextureStart=0.0;
@@ -311,7 +322,7 @@ void E3dExtrudeObj::CreateGeometry()
     else
     {
         // nur ein Polygon erzeugen
-        mpObjectItemSet->Put(Svx3DDoubleSidedItem(TRUE));
+        GetProperties().SetObjectItemDirect(Svx3DDoubleSidedItem(TRUE));
 
         // Fuer evtl. selbst erzeugte Normalen
         PolyPolygon3D aNormalsFront;
@@ -439,22 +450,22 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             rIn >> fExtrudeScale;
 
             rIn >> fTmp;
-            mpObjectItemSet->Put(Svx3DDepthItem(sal_uInt32(fTmp + 0.5)));
+            GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fTmp + 0.5)));
 
             rIn >> fTmp;
-            mpObjectItemSet->Put(Svx3DBackscaleItem(sal_uInt16(fTmp * 100.0)));
+            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(sal_uInt16(fTmp * 100.0)));
 
             rIn >> fTmp;
-            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
+            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(sal_uInt16(fTmp * 200.0)));
 
             rIn >> bTmp; // #107245# bExtrudeSmoothed = bTmp;
-            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(bTmp));
 
             rIn >> bTmp; // #107245# bExtrudeSmoothFrontBack = bTmp;
-            mpObjectItemSet->Put(Svx3DSmoothLidsItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(bTmp));
 
             rIn >> bTmp; // #107245# bExtrudeCharacterMode = bTmp;
-            mpObjectItemSet->Put(Svx3DCharacterModeItem(bTmp));
+            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(bTmp));
 
             bAllDone = TRUE;
 
@@ -465,18 +476,18 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 BOOL bTmp;
 
                 rIn >> bTmp; // #107245# bExtrudeCloseFront = bTmp;
-                mpObjectItemSet->Put(Svx3DCloseFrontItem(bTmp));
+                GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(bTmp));
 
                 rIn >> bTmp; // #107245# bExtrudeCloseBack = bTmp;
-                mpObjectItemSet->Put(Svx3DCloseBackItem(bTmp));
+                GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(bTmp));
             }
             else
             {
                 // #107245# bExtrudeCloseFront = TRUE;
-                mpObjectItemSet->Put(Svx3DCloseFrontItem(sal_True));
+                GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(sal_True));
 
                 // #107245# bExtrudeCloseBack = TRUE;
-                mpObjectItemSet->Put(Svx3DCloseBackItem(sal_True));
+                GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(sal_True));
             }
         }
     }
@@ -530,11 +541,13 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 // Hintereinanderliegende Paare in der alten Version waren
                 // 0,1 und 3,2 (0,3 vorne)
                 double fVal = (rOtherPoly[0][1] - rOtherPoly[0][0]).GetLength();
-                mpObjectItemSet->Put(Svx3DDepthItem(sal_uInt32(fVal + 0.5)));
+                GetProperties().SetObjectItemDirect(Svx3DDepthItem(sal_uInt32(fVal + 0.5)));
             }
             else
+            {
                 // Einen Default vorsehen, kann aber eigentlich nie geschehen
-                mpObjectItemSet->Put(Svx3DDepthItem(100));
+                GetProperties().SetObjectItemDirect(Svx3DDepthItem(100));
+            }
 
             // Polygon fuer Vorderseite holen
             if(pFront)
@@ -599,18 +612,17 @@ void E3dExtrudeObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // Setze die weiteren Parameter auf die defaults
             fExtrudeScale = 1.0;
 
-            mpObjectItemSet->Put(Svx3DBackscaleItem(100));
-
-            mpObjectItemSet->Put(Svx3DPercentDiagonalItem(10));
+            GetProperties().SetObjectItemDirect(Svx3DBackscaleItem(100));
+            GetProperties().SetObjectItemDirect(Svx3DPercentDiagonalItem(10));
 
             // #107245# bExtrudeSmoothed = TRUE;
-            mpObjectItemSet->Put(Svx3DSmoothNormalsItem(sal_True));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothNormalsItem(sal_True));
 
             // #107245# bExtrudeSmoothFrontBack = FALSE;
-            mpObjectItemSet->Put(Svx3DSmoothLidsItem(sal_False));
+            GetProperties().SetObjectItemDirect(Svx3DSmoothLidsItem(sal_False));
 
             // #107245# bExtrudeCharacterMode = FALSE;
-            mpObjectItemSet->Put(Svx3DCharacterModeItem(sal_False));
+            GetProperties().SetObjectItemDirect(Svx3DCharacterModeItem(sal_False));
         }
     }
 
@@ -695,84 +707,6 @@ void E3dExtrudeObj::SetExtrudeScale(double fNew)
     }
 }
 
-// #107245#
-// void E3dExtrudeObj::SetExtrudeSmoothed(BOOL bNew)
-// {
-//  if(bExtrudeSmoothed != bNew)
-//  {
-//      bExtrudeSmoothed = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dExtrudeObj::SetExtrudeSmoothFrontBack(BOOL bNew)
-// {
-//  if(bExtrudeSmoothFrontBack != bNew)
-//  {
-//      bExtrudeSmoothFrontBack = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dExtrudeObj::SetExtrudeCharacterMode(BOOL bNew)
-// {
-//  if(bExtrudeCharacterMode != bNew)
-//  {
-//      bExtrudeCharacterMode = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dExtrudeObj::SetExtrudeCloseFront(BOOL bNew)
-// {
-//  if(bExtrudeCloseFront != bNew)
-//  {
-//      bExtrudeCloseFront = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-// #107245#
-// void E3dExtrudeObj::SetExtrudeCloseBack(BOOL bNew)
-// {
-//  if(bExtrudeCloseBack != bNew)
-//  {
-//      bExtrudeCloseBack = bNew;
-//      bGeometryValid = FALSE;
-//  }
-// }
-
-//////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-
-void E3dExtrudeObj::PostItemChange(const sal_uInt16 nWhich)
-{
-    // call parent
-    E3dCompoundObject::PostItemChange(nWhich);
-
-    switch(nWhich)
-    {
-        case SDRATTR_3DOBJ_PERCENT_DIAGONAL:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_BACKSCALE:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-        case SDRATTR_3DOBJ_DEPTH:
-        {
-            bGeometryValid = FALSE;
-            break;
-        }
-    }
-}
-
 /*************************************************************************
 |*
 |* Get the name of the object (singular)
@@ -836,12 +770,12 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
             pPathObj->ToggleClosed(0);
 
         // Attribute setzen
-        SfxItemSet aSet(GetItemSet());
+        SfxItemSet aSet(GetObjectItemSet());
 
         // Linien aktivieren, um Objekt garantiert sichtbar zu machen
         aSet.Put(XLineStyleItem (XLINE_SOLID));
 
-        pPathObj->SetItemSet(aSet);
+        pPathObj->SetMergedItemSet(aSet);
     }
 
     return pPathObj;
