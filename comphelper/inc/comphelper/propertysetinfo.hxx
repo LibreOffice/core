@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetinfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 09:08:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //=========================================================================
 //= property helper classes
@@ -100,7 +103,7 @@ class PropertyMapImpl;
 /** this class implements a XPropertySetInfo that is initialized with arrays of PropertyMapEntry.
     It is used by the class PropertySetHelper.
 */
-class PropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+class COMPHELPER_DLLPUBLIC PropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
 private:
     PropertyMapImpl* mpMap;
