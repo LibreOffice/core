@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-14 12:18:54 $
+ *  last change: $Author: jsc $ $Date: 2001-08-02 12:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,25 +128,25 @@ public class RegistryServiceFactory {
         if (writeRegistryFile == null && readRegistryFile == null)
             throw new com.sun.star.uno.Exception("No registry is specified!");
 
-        if (writeRegistryFile != null) {
-            java.io.File file = new java.io.File(writeRegistryFile);
+//          if (writeRegistryFile != null) {
+//              java.io.File file = new java.io.File(writeRegistryFile);
 
-            if (file.exists()) {
-                if (!file.isFile())
-                    throw new com.sun.star.uno.Exception(writeRegistryFile + " is not a file!");
-            } else
-                throw new com.sun.star.uno.Exception(writeRegistryFile + " doese not exist!");
-        }
+//              if (file.exists()) {
+//                  if (!file.isFile())
+//                      throw new com.sun.star.uno.Exception(writeRegistryFile + " is not a file!");
+//              } else
+//                  throw new com.sun.star.uno.Exception(writeRegistryFile + " doese not exist!");
+//          }
 
-        if (readRegistryFile != null) {
-            java.io.File file = new java.io.File(readRegistryFile);
+//          if (readRegistryFile != null) {
+//              java.io.File file = new java.io.File(readRegistryFile);
 
-            if (file.exists()) {
-                if (!file.isFile())
-                    throw new com.sun.star.uno.Exception(readRegistryFile + " is not a file!");
-            } else
-                throw new com.sun.star.uno.Exception(readRegistryFile + " doese not exist!");
-        }
+//              if (file.exists()) {
+//                  if (!file.isFile())
+//                      throw new com.sun.star.uno.Exception(readRegistryFile + " is not a file!");
+//              } else
+//                  throw new com.sun.star.uno.Exception(readRegistryFile + " doese not exist!");
+//          }
 
         Object obj = createRegistryServiceFactory( writeRegistryFile, readRegistryFile, readOnly );
         return (XMultiServiceFactory) UnoRuntime.queryInterface(
