@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:37:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     //  TRUE for XML file or template
     //  (template filter has no internal name -> allow configuration key names)
 
-    String aName = pFilter->GetFilterName();
+    String aName(pFilter->GetFilterName());
     return aName.EqualsAscii(pFilterXML) ||
            aName.EqualsAscii("calc_StarOffice_XML_Calc") ||
            aName.EqualsAscii("calc_StarOffice_XML_Calc_Template");
@@ -381,14 +381,14 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         {
             // remember input stream and content and put them into the descriptor later
             // should be done here since later the medium can switch to a version
-            xStream = aMedium.GetInputStream();
-            xContent = aMedium.GetContent();
+            xStream.set(aMedium.GetInputStream());
+            xContent.set(aMedium.GetContent());
             bReadOnly = aMedium.IsReadOnly();
 
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage());
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
@@ -487,10 +487,10 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                     {
                         // Excel-5: detect through contained streams
                         // there are some "excel" formats from 3rd party vendors that need to be distinguished
-                        String aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Workbook"));
+                        String aStreamName(RTL_CONSTASCII_STRINGPARAM("Workbook"));
                         BOOL bExcel97Stream = ( aStorage->IsStream( aStreamName ) );
 
-                        aStreamName = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Book"));
+                        aStreamName = String(RTL_CONSTASCII_STRINGPARAM("Book"));
                         BOOL bExcel5Stream = ( aStorage->IsStream( aStreamName ) );
                         if ( bExcel97Stream || bExcel5Stream )
                         {
@@ -879,7 +879,7 @@ UNOOUSTRING SAL_CALL ScFilterDetect::getImplementationName() throw( UNORUNTIMEEX
 /* XServiceInfo */
 sal_Bool SAL_CALL ScFilterDetect::supportsService( const UNOOUSTRING& sServiceName ) throw( UNORUNTIMEEXCEPTION )
 {
-    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames =   getSupportedServiceNames();
+    UNOSEQUENCE< UNOOUSTRING >  seqServiceNames(getSupportedServiceNames());
     const UNOOUSTRING*          pArray          =   seqServiceNames.getConstArray();
     for ( sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength(); nCounter++ )
     {
