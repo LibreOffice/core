@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 07:44:43 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 14:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,6 +526,8 @@ void SfxWorkWindow::ArrangeChilds_Impl()
 void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
 {
     aClientArea = GetTopRect_Impl();
+    if ( aClientArea.IsEmpty() )
+        return;
 
     SvBorder aBorder;
     if ( nChilds )
@@ -552,6 +554,8 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
         return;
 
     aClientArea = GetTopRect_Impl();
+    if ( aClientArea.IsEmpty() )
+        return;
 
     SvBorder aBorder;
     if ( nChilds )

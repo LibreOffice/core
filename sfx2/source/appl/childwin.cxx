@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-11-28 11:21:51 $
+ *  last change: $Author: mba $ $Date: 2001-12-03 14:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,12 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     aInfo.aPos  = pWindow->GetPosPixel();
     aInfo.aSize = pWindow->GetSizePixel();
     if ( pWindow->IsSystemWindow() )
-        aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState();
+    {
+        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
+        if ( pWindow->GetStyle() & WB_SIZEABLE )
+            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
+        aInfo.aWinState = ((SystemWindow*)pWindow)->GetWindowState( nMask );
+    }
     else if ( pWindow->GetType() == RSC_DOCKINGWINDOW && ((DockingWindow*)pWindow)->GetFloatingWindow() )
         aInfo.aWinState = ((DockingWindow*)pWindow)->GetFloatingWindow()->GetWindowState();
 
