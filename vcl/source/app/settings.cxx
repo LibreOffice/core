@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-03 14:20:57 $
+ *  last change: $Author: hdu $ $Date: 2001-08-13 10:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,6 +449,7 @@ ImplStyleData::ImplStyleData()
     mnSpinSize                  = 16;
     mnIconHorzSpace             = 50;
     mnIconVertSpace             = 40;
+    mnAntialiasedMin            = 0;
     mnCursorSize                = 2;
 #ifdef REMOTE_APPSERVER
     mnCursorBlinkTime           = STYLE_CURSOR_NOBLINKTIME;
@@ -465,6 +466,7 @@ ImplStyleData::ImplStyleData()
     mnDragFullOptions           = 0;
     mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
+    mnDisplayOptions            = 0;
     mnOptions                   = 0;
 
     SetStandardStyles();
@@ -536,6 +538,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnSpinSize                  = rData.mnSpinSize;
     mnIconHorzSpace             = rData.mnIconHorzSpace;
     mnIconVertSpace             = rData.mnIconVertSpace;
+    mnAntialiasedMin            = rData.mnAntialiasedMin;
     mnCursorSize                = rData.mnCursorSize;
     mnCursorBlinkTime           = rData.mnCursorBlinkTime;
     mnScreenZoom                = rData.mnScreenZoom;
@@ -548,6 +551,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnDragFullOptions           = rData.mnDragFullOptions;
     mnAnimationOptions          = rData.mnAnimationOptions;
     mnSelectionOptions          = rData.mnSelectionOptions;
+    mnDisplayOptions            = rData.mnDisplayOptions;
     mnOptions                   = rData.mnOptions;
 }
 
@@ -975,6 +979,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
          (mpData->mnAnimationOptions        == rSet.mpData->mnAnimationOptions)         &&
          (mpData->mnSelectionOptions        == rSet.mpData->mnSelectionOptions)         &&
+         (mpData->mnDisplayOptions          == rSet.mpData->mnDisplayOptions)           &&
          (mpData->mnCursorSize              == rSet.mpData->mnCursorSize)               &&
          (mpData->mnCursorBlinkTime         == rSet.mpData->mnCursorBlinkTime)          &&
          (mpData->mnBorderSize              == rSet.mpData->mnBorderSize)               &&
@@ -987,6 +992,7 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnSpinSize                == rSet.mpData->mnSpinSize)                 &&
          (mpData->mnIconHorzSpace           == rSet.mpData->mnIconHorzSpace)            &&
          (mpData->mnIconVertSpace           == rSet.mpData->mnIconVertSpace)            &&
+         (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
          (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
          (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
          (mpData->mnRadioButtonStyle        == rSet.mpData->mnRadioButtonStyle)         &&

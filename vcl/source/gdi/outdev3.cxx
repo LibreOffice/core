@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 18:11:20 $
+ *  last change: $Author: hdu $ $Date: 2001-08-13 10:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3672,9 +3672,15 @@ void OutputDevice::ImplInitFont()
 
     if ( mbInitFont )
     {
-        // Set Antialisied Mode
-        BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
-        mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+        if ( meOutDevType != OUTDEV_PRINTER )
+        {
+            // decide if antialiasing is appropriate
+            BOOL bNonAntialiased = (GetAntialiasing() & ANTIALIASING_DISABLE_TEXT) != 0;
+            const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+            bNonAntialiased |= (rStyleSettings.GetDisplayOptions() & DISPLAY_OPTION_AA_DISABLE) != 0;
+            bNonAntialiased |= (rStyleSettings.GetAntialiasingMinPixelHeight() > mpFontEntry->maFontSelData.mnHeight);
+            mpFontEntry->maFontSelData.mbNonAntialiased = bNonAntialiased;
+        }
 
         // Select Font
         mpFontEntry->mnSetFontFlags = mpGraphics->SetFont( &(mpFontEntry->maFontSelData) );
