@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Policy.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:33:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef __com_sun_star_security_Policy_idl__
 #define __com_sun_star_security_Policy_idl__
-
 #ifndef __com_sun_star_security_XPolicy_idl__
 #include <com/sun/star/security/XPolicy.idl>
 #endif
@@ -73,7 +72,7 @@ module com {  module sun {  module star {  module security {
 
     @since #107627#
 */
-service Policy
+published service Policy
 {
     interface XPolicy;
 };
