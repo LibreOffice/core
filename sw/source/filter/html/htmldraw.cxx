@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-29 14:48:25 $
+ *  last change: $Author: dvo $ $Date: 2002-03-05 18:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
+
+#ifndef ITEMID_FIELD
+#   define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <flditem.hxx> benoetigt */
+#endif
+
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
 #include <svx/outliner.hxx>
