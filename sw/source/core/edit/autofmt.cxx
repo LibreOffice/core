@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:29:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2740,7 +2740,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 {
                     short nSz;
                     SvxLRSpaceItem* pLRSpace;
-                    if( SFX_ITEM_SET == pAktTxtNd->GetpSwAttrSet()->
+                    if( bReplaceStyles &&
+                        SFX_ITEM_SET == pAktTxtNd->GetpSwAttrSet()->
                         GetItemState( RES_LR_SPACE, FALSE,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
