@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 12:53:04 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 10:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
+#include <com/sun/star/io/XStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
+#include <com/sun/star/io/XTruncate.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -92,6 +98,8 @@ namespace utl { class TempFile; }
 class XTempFile : public com::sun::star::io::XInputStream,
                   public com::sun::star::io::XOutputStream,
                   public com::sun::star::io::XSeekable,
+                  public com::sun::star::io::XStream,
+                  public com::sun::star::io::XTruncate,
                   public com::sun::star::beans::XPropertySet,
                   public cppu::OWeakObject
 {
@@ -99,6 +107,10 @@ protected:
     ::utl::TempFile*    mpTempFile;
     ::osl::Mutex        maMutex;
     SvStream*           mpStream;
+    sal_Bool            mbRemoveFile;
+    sal_Bool            mbInClosed;
+    sal_Bool            mbOutClosed;
+
     void checkError () const;
     void checkConnected () const;
 
@@ -137,6 +149,16 @@ public:
     virtual sal_Int64 SAL_CALL getPosition(  )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength(  )
+        throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+
+    // XStream
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // XTruncate
+    virtual void SAL_CALL truncate()
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
