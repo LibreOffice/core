@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:15:25 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,7 @@
         Text[ polish ] = "~Name Object...";\
         Text[ portuguese_brazilian ] = "~Name Object...";\
         Text[ japanese ] = "オブジェクトに名前を付ける...";\
-        Text[ korean ] = "이름 개체(N)...";\
+        Text[ korean ] = "개체 명칭(N)...";\
         Text[ chinese_simplified ] = "命名对象...";\
         Text[ chinese_traditional ] = "命名物件...";\
         Text[ turkish ] = "~Name Object...";\
