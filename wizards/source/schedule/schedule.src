@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-24 21:14:33 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 11:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ String  dlgCalOptionYear
 Text = "~Jahresübersicht";
 Text[ English ] = "~Year Overview";
 Text[ English_us ] = "~Year Overview";
-Text[ french ] = "~Année";
+Text[ french ] = "Année";
 Text[ italian ] = "~Panoramica annuale";
 Text[ spanish ] = "~Resumen del año";
 Text[ portuguese ] = "~Plano anual";
@@ -757,7 +757,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ portuguese_brazilian ] = "usa.bmp";
     Text[ japanese ] = "japan.bmp";
     Text[ korean ] = "germany.wmf";
-    Text[ chinese_simplified ] = "china.bmp";
+    Text[ chinese_simplified ] = "china.gif";
     Text[ chinese_traditional ] = "taiwan.bmp";
     Text[ arabic ] = "egypt.bmp";
     Text[ turkish ] = "turkiye.bmp";
