@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 14:34:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)
 TYPEINIT1(SbProperty,SbxProperty)
+TYPEINIT1(SbProcedureProperty,SbProperty)
 TYPEINIT1(SbJScriptModule,SbModule)
 TYPEINIT1(SbJScriptMethod,SbMethod)
 
@@ -348,6 +349,25 @@ SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
     return pProp;
 }
 
+SbProcedureProperty* SbModule::GetProcedureProperty
+    ( const String& rName, SbxDataType t )
+{
+    SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
+    SbProcedureProperty* pProp = p ? PTR_CAST(SbProcedureProperty,p) : NULL;
+    if( p && !pProp )
+        pProps->Remove( p );
+    if( !pProp )
+    {
+        pProp = new SbProcedureProperty( rName, t );
+        pProp->SetFlag( SBX_READWRITE );
+        pProp->SetParent( this );
+        pProps->Put( pProp, pProps->Count() );
+        StartListening( pProp->GetBroadcaster(), TRUE );
+    }
+    return pProp;
+}
+
+
 // Aus dem Codegenerator: Ungueltige Eintraege entfernen
 
 void SbModule::EndDefinitions( BOOL bNewState )
@@ -391,7 +411,8 @@ const String& SbModule::GetSource() const
 
 void SbModule::SetParent( SbxObject* p )
 {
-    DBG_ASSERT( !p || p->IsA( TYPE(StarBASIC) ), "SbModules nur in BASIC eintragen" );
+    // #118083: Assertion is not valid any more
+    // DBG_ASSERT( !p || p->IsA( TYPE(StarBASIC) ), "SbModules nur in BASIC eintragen" );
     pParent = p;
 }
 
@@ -2171,6 +2192,11 @@ SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )
 }
 
 SbProperty::~SbProperty()
+{}
+
+/////////////////////////////////////////////////////////////////////////
+
+SbProcedureProperty::~SbProcedureProperty()
 {}
 
 
