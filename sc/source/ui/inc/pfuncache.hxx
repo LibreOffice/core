@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfuncache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:37:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef SC_PFUNCACHE_HXX
 #define SC_PFUNCACHE_HXX
 
+#include <vector>
+
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
 #ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"
 #endif
@@ -101,6 +107,23 @@ public:
 };
 
 
+/** The range that is printed on a page (excluding repeated columns/rows),
+    and its position on the page, used to find hyperlink targets. */
+
+struct ScPrintPageLocation
+{
+    long        nPage;
+    ScRange     aCellRange;
+    Rectangle   aRectangle;     // pixels
+
+    ScPrintPageLocation() :
+        nPage(-1) {}            // default: invalid
+
+    ScPrintPageLocation( long nP, const ScRange& rRange, const Rectangle& rRect ) :
+        nPage(nP), aCellRange(rRange), aRectangle(rRect) {}
+};
+
+
 /** Stores the data for printing that is needed from several sheets,
     so it doesn't have to be calculated for rendering each page. */
 
@@ -111,6 +134,8 @@ class ScPrintFuncCache
     long                    nTotalPages;
     long                    nPages[MAXTABCOUNT];
     long                    nFirstAttr[MAXTABCOUNT];
+    std::vector<ScPrintPageLocation> aLocations;
+    bool                    bLocInitialized;
 
 public:
             ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
@@ -118,6 +143,9 @@ public:
             ~ScPrintFuncCache();
 
     BOOL    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
+
+    void    InitLocations( const ScMarkData& rMark, OutputDevice* pDev );
+    bool    FindLocation( const ScAddress& rCell, ScPrintPageLocation& rLocation ) const;
 
     long    GetPageCount() const                { return nTotalPages; }
     long    GetFirstAttr( SCTAB nTab ) const    { return nFirstAttr[nTab]; }
