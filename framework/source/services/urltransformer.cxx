@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:42:15 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,23 +165,15 @@ DEFINE_XTYPEPROVIDER_3              (   URLTransformer  ,
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   URLTransformer                      ,
+                                        OWeakObject                         ,
                                         SERVICENAME_URLTRANSFORMER          ,
                                         IMPLEMENTATIONNAME_URLTRANSFORMER
                                     )
 
-// Attention: If you have enabled any testmode different from TEST_NOTHING => you have declared XDebugging-interface automaticly!
-// Bhere is no macro to define and implement the right methods. You are the only one, who know - how you will use this mechanism.
-// It exist a macro to switch on or off your implementation only.
-// SERVICEDEBUG_ENABLED must be defined, to activate your code!
-
-//#ifdef SERVICEDEBUG_ENABLED
-
-    // Debug mechanism for services is not used in this implementation.
-    // This define will expand to nothing if SERVICEDEBUG_ENABLED unknown!
-    // But if you will implement your own code - activate this define before ... and deactivate follow line.
-    //DEFINE_EMPTY_XSPECIALDEBUGINTERFACE( URLTransformer )
-
-//#endif // #ifdef SERVICEDEBUG_ENABLED
+DEFINE_INIT_SERVICE                 (   URLTransformer,
+                                        {
+                                        }
+                                    )
 
 //*****************************************************************************************************************
 //  XURLTransformer

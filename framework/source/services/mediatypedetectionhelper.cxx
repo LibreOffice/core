@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediatypedetectionhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,14 @@ DEFINE_XTYPEPROVIDER_3              (   MediaTypeDetectionHelper
                                     )
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
+                                        , ::cppu::OWeakObject
                                         , SERVICENAME_MEDIATYPEDETECTIONHELPER
                                         , IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER
+                                    )
+
+DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
+                                        {
+                                        }
                                     )
 
 //*****************************************************************************************************************
@@ -164,6 +170,9 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/29 13:17:15  as
+    no TF_FILTER, split defines.hxx, namespaces, new thread helper, some threadsafe code
+
     Revision 1.3  2001/01/26 06:42:14  as
     change baeh_services/BAEHSERVICES to services/SERVICES
 

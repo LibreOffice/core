@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:39:33 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,10 +194,8 @@
 #include <com/sun/star/awt/FocusEvent.hpp>
 #endif
 
-#if SUPD>633
-    #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
-    #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETELISTENER_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -506,24 +504,24 @@ class Frame :   // interfaces
 
     private:
 
-        static sal_Bool impl_cp_ctor                                (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&             xFactory            );
-        static sal_Bool impl_cp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
-        static sal_Bool impl_cp_initialize                          (   const   css::uno::Reference< css::awt::XWindow >&                           xWindow             );
-        static sal_Bool impl_cp_setCreator                          (   const   css::uno::Reference< css::frame::XFramesSupplier >&                 xCreator            );
-        static sal_Bool impl_cp_setName                             (   const   ::rtl::OUString&                                                    sName               );
-        static sal_Bool impl_cp_findFrame                           (   const   ::rtl::OUString&                                                    sTargetFrameName    ,
-                                                                                sal_Int32                                                           nSearchFlags        );
-        static sal_Bool impl_cp_setComponent                        (   const   css::uno::Reference< css::awt::XWindow >&                           xComponentWindow    ,
-                                                                        const   css::uno::Reference< css::frame::XController >&                     xController         );
-        static sal_Bool impl_cp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-        static sal_Bool impl_cp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
-        static sal_Bool impl_cp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-        static sal_Bool impl_cp_removeEventListener                 (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
-        static sal_Bool impl_cp_windowResized                       (   const   css::awt::WindowEvent&                                              aEvent              );
-        static sal_Bool impl_cp_focusGained                         (   const   css::awt::FocusEvent&                                               aEvent              );
-        static sal_Bool impl_cp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
-        static sal_Bool impl_cp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
-        static sal_Bool impl_cp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
+        static sal_Bool implcp_ctor                                (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&             xFactory            );
+        static sal_Bool implcp_setActiveFrame                      (   const   css::uno::Reference< css::frame::XFrame >&                          xFrame              );
+        static sal_Bool implcp_initialize                          (   const   css::uno::Reference< css::awt::XWindow >&                           xWindow             );
+        static sal_Bool implcp_setCreator                          (   const   css::uno::Reference< css::frame::XFramesSupplier >&                 xCreator            );
+        static sal_Bool implcp_setName                             (   const   ::rtl::OUString&                                                    sName               );
+        static sal_Bool implcp_findFrame                           (   const   ::rtl::OUString&                                                    sTargetFrameName    ,
+                                                                               sal_Int32                                                           nSearchFlags        );
+        static sal_Bool implcp_setComponent                        (   const   css::uno::Reference< css::awt::XWindow >&                           xComponentWindow    ,
+                                                                       const   css::uno::Reference< css::frame::XController >&                     xController         );
+        static sal_Bool implcp_addFrameActionListener              (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
+        static sal_Bool implcp_removeFrameActionListener           (   const   css::uno::Reference< css::frame::XFrameActionListener >&            xListener           );
+        static sal_Bool implcp_addEventListener                    (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
+        static sal_Bool implcp_removeEventListener                 (   const   css::uno::Reference< css::lang::XEventListener >&                   xListener           );
+        static sal_Bool implcp_windowResized                       (   const   css::awt::WindowEvent&                                              aEvent              );
+        static sal_Bool implcp_focusGained                         (   const   css::awt::FocusEvent&                                               aEvent              );
+        static sal_Bool implcp_windowActivated                     (   const   css::lang::EventObject&                                             aEvent              );
+        static sal_Bool implcp_windowDeactivated                   (   const   css::lang::EventObject&                                             aEvent              );
+        static sal_Bool implcp_disposing                           (   const   css::lang::EventObject&                                             aEvent              );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -542,9 +540,7 @@ class Frame :   // interfaces
         css::uno::Reference< css::awt::XWindow >                                m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
         css::uno::Reference< css::awt::XWindow >                                m_xComponentWindow                  ;   /// window of the actual component
         css::uno::Reference< css::frame::XController >                          m_xController                       ;   /// controller of the actual frame
-        #if SUPD>633
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener               ;   /// listen to drag & drop
-        #endif
         EActiveState                                                            m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
         ::rtl::OUString                                                         m_sName                             ;   /// name of this frame
         sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:40:10 $
+ *  last change: $Author: as $ $Date: 2001-07-04 13:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,8 @@
 #include <services.h>
 #endif
 
-#if SUPD>633
-    #ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
-    #include <classes/droptargetlistener.hxx>
-    #endif
+#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
+#include <classes/droptargetlistener.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -149,14 +147,12 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-#if SUPD>633
-    #ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
-    #include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
+#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
+#endif
 
-    #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
-    #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -276,8 +272,55 @@ DEFINE_XTYPEPROVIDER_16             (   Frame                                   
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
+                                        ::cppu::OWeakObject                                                     ,
                                         SERVICENAME_FRAME                                                       ,
                                         IMPLEMENTATIONNAME_FRAME
+                                    )
+
+DEFINE_INIT_SERVICE                 (   Frame,
+                                        {
+                                            /*Attention
+                                                I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
+                                                to create a new instance of this class by our own supported service factory.
+                                                see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                                            */
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // Initialize a new dispatchhelper-object to handle dispatches.
+                                            // We use these helper as slave for our interceptor helper ... not directly!
+                                            // But he is event listener on THIS instance!
+                                            DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
+                                            css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
+                                            // Set created dispatch provider as slowest slave of it.
+                                            // Hold interception helper by reference only - not by pointer!
+                                            // So it's easiear to destroy it.
+                                            InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
+                                            m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
+                                            // We hold member as reference ... not as pointer too!
+                                            // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
+                                            // But look on dispose() for right order of deinitialization.
+                                            OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildFrameContainer );
+                                            m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
+
+                                            //-------------------------------------------------------------------------------------------------------------
+                                            // Initialize a the drop target listener.
+                                            // We hold member as reference ... not as pointer too!
+                                            DropTargetListener* pDropListener = new DropTargetListener( this );
+                                            m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pDropListener), css::uno::UNO_QUERY );
+
+                                            // Safe impossible cases
+                                            // We can't work without these helpers!
+                                            LOG_ASSERT2( xDispatchProvider.is    ()==sal_False, "Frame::impl_initService()", "Slowest slave for dispatch- and interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!" )
+                                            LOG_ASSERT2( m_xDispatchHelper.is    ()==sal_False, "Frame::impl_initService()", "Interception helper isn't valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not full supported!"                                 )
+                                            LOG_ASSERT2( m_xFramesHelper.is      ()==sal_False, "Frame::impl_initService()", "Frames helper isn't valid. XFrames, XIndexAccess and XElementAcces are not supported!"                                                                )
+                                            LOG_ASSERT2( m_xDropTargetListener.is()==sal_False, "Frame::impl_initService()", "DropTarget helper isn't valid. Drag and drop without functionality!"                                                                                  )
+                                        }
                                     )
 
 /*-****************************************************************************************************//**
@@ -285,7 +328,15 @@ DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                   
     @descr      This constructor initialize a new instance of this class by valid factory,
                 and will be set valid values on his member and baseclasses.
 
-    @seealso    -
+    @attention  a)  Don't use your own reference during an UNO-Service-ctor! There is no guarantee, that you
+                    will get over this. (e.g. using of your reference as parameter to initialize some member)
+                    Do such things in DEFINE_INIT_SERVICE() method, which is called automaticly after your ctor!!!
+                b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!
+                    The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
+                    If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
+                    I don't know why! (other compiler not tested .. but it works!)
+
+    @seealso    method DEFINE_INIT_SERVICE()
 
     @param      "xFactory" is the multi service manager, which create this instance.
                 The value must be different from NULL!
@@ -293,14 +344,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                   
 
     @onerror    ASSERT in debug version or nothing in relaese version.
 *//*-*****************************************************************************************************/
-
-/*HACK
-    Baseclass OBroadcastHelper is a typedef in namespace cppu!
-    The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
-    If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
-    I don't know why!
- */
-
 Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
         //  init baseclasses first!
         //  Attention: Don't change order of initialization!
@@ -320,60 +363,12 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_eActiveState              ( E_INACTIVE                                        )
         ,   m_sName                     (                                                   )
         ,   m_bIsFrameTop               ( sal_True                                          ) // I think we are top without a parent ... and there is no parent yet!
-        ,   m_bConnected                ( sal_False                                         )
+        ,   m_bConnected                ( sal_False                                         ) // There exist no component inside of use => sal_False, we are not connected!
 {
-    // We cant create our helper objects, because they hold wekreferences to us!
-    // This references are tested at initialization ... + ... - ... and OK - we are dead :-(
-    // But with a HACK (++refcount) its "OK" :-)
-    // Don't forget to decrease it at the end of this ctor!
-    ++m_refCount;
+    // Check incoming parameter to avoid against wrong initialization.
+    LOG_ASSERT2( implcp_ctor( xFactory ), "Frame::Frame()", "Invalid parameter detected!" )
 
-    /*ATTENTION
-         Our helper need a this-pointer for initializing. You must use "this" directly.
-        If you define an extra variable to do that (like: css::uno::Reference< XFrame > xTHIS( ... )) and
-        forget to clear this reference BEFORE "--m_refCount" (!), our refcount will be less then 0
-        and the new frame instance will die as an hero!!! ...
-    */
-
-    /*TODO
-        a) Implement all helper as listener for disposing()!
-        b) Don't create ODispatchProvider here ... do it in InterceptionHelper!
-     */
-
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a new dispatchhelper-object to handle dispatches for "SELF" private and fast.
-    // We use these helper as slave for our interceptor helper ... not directly!
-
-    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
-
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a new interception helper object to handle dispatches and interceptor mechanism.
-    // We hold member as reference ... not as pointer!
-    InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this,
-                                                                      css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY )
-                                                                    );
-    m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
-
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
-    // We hold member as reference ... not as pointer!
-    OFrames* pFramesHelper = new OFrames( m_xFactory, this, &m_aChildFrameContainer );
-    m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
-
-    // Safe impossible cases
-    // We can't work without these helpers!
-    LOG_ASSERT2( m_xDispatchHelper.is()==sal_False, "Frame::Frame()", "DispatchHelper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not supported!" )
-    LOG_ASSERT2( m_xFramesHelper.is  ()==sal_False, "Frame::Frame()", "FramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!"                       )
-
-    #if SUPD>633
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a the drop target listener.
-    DropTargetListener* pListener = new DropTargetListener( this );
-    m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >( static_cast< ::cppu::OWeakObject* >(pListener), css::uno::UNO_QUERY );
-    #endif
-
-    // Don't forget it - or we live for ever!
-    --m_refCount;
+    /* Please have a look on "@attentions" of description before! */
 }
 
 /*-****************************************************************************************************//**
@@ -389,6 +384,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 *//*-*****************************************************************************************************/
 Frame::~Frame()
 {
+    LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "Frame::~Frame()", "Who forgot to dispose this service?" )
 }
 
 /*-****************************************************************************************************//**
@@ -473,7 +469,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameters.
-    LOG_ASSERT2( impl_cp_setActiveFrame( xFrame ), "Frame::setActiveFrame()", "Invalid parameter detected!" )
+    LOG_ASSERT2( implcp_setActiveFrame( xFrame ), "Frame::setActiveFrame()", "Invalid parameter detected!" )
     // Look for rejected calls!
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -559,7 +555,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
+    LOG_ASSERT2( implcp_initialize( xWindow ), "Frame::initialize()", "Invalid parameter detected!" )
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
@@ -640,7 +636,7 @@ void SAL_CALL Frame::setCreator( const css::uno::Reference< css::frame::XFramesS
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_setCreator( xCreator ), "Frame::setCreator()", "Invalid parameter detected!" )
+    LOG_ASSERT2( implcp_setCreator( xCreator ), "Frame::setCreator()", "Invalid parameter detected!" )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -731,7 +727,7 @@ void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::Ru
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_setName( sName ), "Frame::setName()", "Invalid parameter detected!" )
+    LOG_ASSERT2( implcp_setName( sName ), "Frame::setName()", "Invalid parameter detected!" )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -787,7 +783,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
 
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()", "Invalid parameter detected." )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1170,7 +1166,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_setComponent( xComponentWindow, xController ), "Frame::setComponent()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_setComponent( xComponentWindow, xController ), "Frame::setComponent()", "Invalid parameter detected." )
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1256,7 +1252,7 @@ void SAL_CALL Frame::addFrameActionListener( const css::uno::Reference< css::fra
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_addFrameActionListener( xListener ), "Frame::addFrameActionListener()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_addFrameActionListener( xListener ), "Frame::addFrameActionListener()", "Invalid parameter detected." )
     // Listener container is threadsafe by himself ... but we must look for rejected calls!
     // Our OMenuDispatch-helper (is a member of ODispatchProvider!) is create at startup of this frame BEFORE initialize!
     // => soft exceptions!
@@ -1271,7 +1267,7 @@ void SAL_CALL Frame::removeFrameActionListener( const css::uno::Reference< css::
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_removeFrameActionListener( xListener ), "Frame::removeFrameActionListener()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_removeFrameActionListener( xListener ), "Frame::removeFrameActionListener()", "Invalid parameter detected." )
     // Listener container is threadsafe by himself ... but we must look for rejected calls after disposing!
     // But we must work with E_SOFTEXCEPTIONS ... because sometimes we are called from our listeners
     // during dispose! Our work mode is E_BEFORECLOSE then ... and E_HARDEXCEPTIONS whould throw a DisposedException.
@@ -1409,9 +1405,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // This calls should be easy ... I hope it :-)
     m_xDispatchHelper     = css::uno::Reference< css::frame::XDispatchProvider >();
     m_xFactory            = css::uno::Reference< css::lang::XMultiServiceFactory >();
-    #if SUPD>633
     m_xDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
-    #endif
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -1433,7 +1427,7 @@ void SAL_CALL Frame::addEventListener( const css::uno::Reference< css::lang::XEv
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_addEventListener( xListener ), "Frame::addEventListener()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_addEventListener( xListener ), "Frame::addEventListener()", "Invalid parameter detected." )
     // Look for rejected calls only!
     // Container is threadsafe.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1447,7 +1441,7 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_removeEventListener( xListener ), "Frame::removeEventListener()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_removeEventListener( xListener ), "Frame::removeEventListener()", "Invalid parameter detected." )
     // Look for rejected calls only!
     // Container is threadsafe.
     // Use E_SOFTEXCEPTIONS to allow removing listeners during dispose call!
@@ -1689,7 +1683,7 @@ void SAL_CALL Frame::windowResized( const css::awt::WindowEvent& aEvent ) throw(
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_windowResized( aEvent ), "Frame::windowResized()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_windowResized( aEvent ), "Frame::windowResized()", "Invalid parameter detected." )
     // Look for rejected calls.
     // Part of dispose-mechanism => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -1705,7 +1699,7 @@ void SAL_CALL Frame::focusGained( const css::awt::FocusEvent& aEvent ) throw( cs
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_focusGained( aEvent ), "Frame::focusGained()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_focusGained( aEvent ), "Frame::focusGained()", "Invalid parameter detected." )
     // Look for rejected calls.
     // Part of dispose() mechanism ... => soft exceptions!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -1741,7 +1735,7 @@ void SAL_CALL Frame::windowActivated( const css::lang::EventObject& aEvent ) thr
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_windowActivated( aEvent ), "Frame::windowActivated()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_windowActivated( aEvent ), "Frame::windowActivated()", "Invalid parameter detected." )
     // Look for rejected calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
@@ -1764,7 +1758,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_windowDeactivated( aEvent ), "Frame::windowDeactivated()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_windowDeactivated( aEvent ), "Frame::windowDeactivated()", "Invalid parameter detected." )
     // Look for rejected calls.
     // Sometimes called during dispose() => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -1821,7 +1815,7 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Check incoming parameter.
-    LOG_ASSERT2( impl_cp_disposing( aEvent ), "Frame::disposing()", "Invalid parameter detected." )
+    LOG_ASSERT2( implcp_disposing( aEvent ), "Frame::disposing()", "Invalid parameter detected." )
     // Look for rejected calls.
     // May be we are called during releasing our windows in our in dispose call!? => soft exceptions
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -2572,9 +2566,7 @@ void Frame::implts_startWindowListening()
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
-    #if SUPD>633
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
-    #endif
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -2591,7 +2583,6 @@ void Frame::implts_startWindowListening()
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
 
-            #if SUPD>633
             css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
             if( xTransfer.is() == sal_True )
             {
@@ -2602,7 +2593,6 @@ void Frame::implts_startWindowListening()
                     xDropTarget->setActive( sal_True );
                 }
             }
-            #endif
         }
     }
 }
@@ -2619,9 +2609,7 @@ void Frame::implts_stopWindowListening()
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::awt::XWindow >                            xContainerWindow    = m_xContainerWindow   ;
     css::uno::Reference< css::lang::XMultiServiceFactory >              xFactory            = m_xFactory           ;
-    #if SUPD>633
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >  xDragDropListener   = m_xDropTargetListener;
-    #endif
     css::uno::Reference< css::awt::XWindowListener >                    xWindowListener     ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XFocusListener >                     xFocusListener      ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XTopWindowListener >                 xTopWindowListener  ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
@@ -2638,7 +2626,6 @@ void Frame::implts_stopWindowListening()
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
 
-            #if SUPD>633
             css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( xFactory->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
             if( xTransfer.is() == sal_True )
             {
@@ -2649,7 +2636,6 @@ void Frame::implts_stopWindowListening()
                     xDropTarget->setActive( sal_False );
                 }
             }
-            #endif
         }
     }
 }
@@ -2660,19 +2646,14 @@ void Frame::implts_stopWindowListening()
 
 /*-----------------------------------------------------------------------------------------------------------------
     The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the autor or add it himself !(?)
-        But ... look for right testing! See using of this methods!
+    we return "sal_True". (otherwise sal_False) This mechanism is used to throw an ASSERT!
 -----------------------------------------------------------------------------------------------------------------*/
 
 #ifdef ENABLE_ASSERTIONS
 
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
-sal_Bool Frame::impl_cp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+sal_Bool Frame::implcp_ctor( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
 {
     return  (
                 ( &xFactory     ==  NULL        )   ||
@@ -2683,7 +2664,7 @@ sal_Bool Frame::impl_cp_ctor( const css::uno::Reference< css::lang::XMultiServic
 //*****************************************************************************************************************
 // Its allowed to reset the active frame membervariable with a NULL-css::uno::Reference but not with a NULL-pointer!
 // And we accept frames only! No tasks and desktops!
-sal_Bool Frame::impl_cp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
+sal_Bool Frame::implcp_setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     return  (
                 ( &xFrame                                                                                   ==  NULL        )   ||
@@ -2695,14 +2676,14 @@ sal_Bool Frame::impl_cp_setActiveFrame( const css::uno::Reference< css::frame::X
 
 //*****************************************************************************************************************
 // We don't accept null pointer ... but NULL-References are allowed!
-sal_Bool Frame::impl_cp_initialize( const css::uno::Reference< css::awt::XWindow >& xWindow )
+sal_Bool Frame::implcp_initialize( const css::uno::Reference< css::awt::XWindow >& xWindow )
 {
     return( &xWindow == NULL );
 }
 
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
-sal_Bool Frame::impl_cp_setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator )
+sal_Bool Frame::implcp_setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator )
 {
     return  (
                 ( &xCreator     ==  NULL        )   ||
@@ -2712,7 +2693,7 @@ sal_Bool Frame::impl_cp_setCreator( const css::uno::Reference< css::frame::XFram
 
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
-sal_Bool Frame::impl_cp_setName( const ::rtl::OUString& sName )
+sal_Bool Frame::implcp_setName( const ::rtl::OUString& sName )
 {
     return( &sName == NULL );
 }
@@ -2720,7 +2701,7 @@ sal_Bool Frame::impl_cp_setName( const ::rtl::OUString& sName )
 //*****************************************************************************************************************
 // We don't accept null pointer or references!
 // An empty target name is allowed => is the same like "_self"
-sal_Bool Frame::impl_cp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
+sal_Bool Frame::implcp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
                                             sal_Int32        nSearchFlags    )
 {
     return( &sTargetFrameName == NULL );
@@ -2728,7 +2709,7 @@ sal_Bool Frame::impl_cp_findFrame(  const   ::rtl::OUString& sTargetFrameName,
 
 //*****************************************************************************************************************
 // We don't accept null pointer!
-sal_Bool Frame::impl_cp_setComponent(   const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
+sal_Bool Frame::implcp_setComponent(   const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
                                         const   css::uno::Reference< css::frame::XController >& xController         )
 {
     return  (
@@ -2738,7 +2719,7 @@ sal_Bool Frame::impl_cp_setComponent(   const   css::uno::Reference< css::awt::X
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
+sal_Bool Frame::implcp_addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return  (
                 ( &xListener        ==  NULL        )   ||
@@ -2747,7 +2728,7 @@ sal_Bool Frame::impl_cp_addFrameActionListener( const css::uno::Reference< css::
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
+sal_Bool Frame::implcp_removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener )
 {
     return  (
                 ( &xListener        ==  NULL        )   ||
@@ -2756,7 +2737,7 @@ sal_Bool Frame::impl_cp_removeFrameActionListener( const css::uno::Reference< cs
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+sal_Bool Frame::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return  (
                 ( &xListener        ==  NULL        )   ||
@@ -2765,7 +2746,7 @@ sal_Bool Frame::impl_cp_addEventListener( const css::uno::Reference< css::lang::
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
+sal_Bool Frame::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return  (
                 ( &xListener        ==  NULL        )   ||
@@ -2774,7 +2755,7 @@ sal_Bool Frame::impl_cp_removeEventListener( const css::uno::Reference< css::lan
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_windowResized( const css::awt::WindowEvent& aEvent )
+sal_Bool Frame::implcp_windowResized( const css::awt::WindowEvent& aEvent )
 {
     return  (
                 ( &aEvent               ==  NULL        )   ||
@@ -2783,7 +2764,7 @@ sal_Bool Frame::impl_cp_windowResized( const css::awt::WindowEvent& aEvent )
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_focusGained( const css::awt::FocusEvent& aEvent )
+sal_Bool Frame::implcp_focusGained( const css::awt::FocusEvent& aEvent )
 {
     return  (
                 ( &aEvent               ==  NULL        )   ||
@@ -2792,7 +2773,7 @@ sal_Bool Frame::impl_cp_focusGained( const css::awt::FocusEvent& aEvent )
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_windowActivated( const css::lang::EventObject& aEvent )
+sal_Bool Frame::implcp_windowActivated( const css::lang::EventObject& aEvent )
 {
     return  (
                 ( &aEvent               ==  NULL        )   ||
@@ -2801,7 +2782,7 @@ sal_Bool Frame::impl_cp_windowActivated( const css::lang::EventObject& aEvent )
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_windowDeactivated( const css::lang::EventObject& aEvent )
+sal_Bool Frame::implcp_windowDeactivated( const css::lang::EventObject& aEvent )
 {
     return  (
                 ( &aEvent               ==  NULL        )   ||
@@ -2810,7 +2791,7 @@ sal_Bool Frame::impl_cp_windowDeactivated( const css::lang::EventObject& aEvent 
 }
 
 //*****************************************************************************************************************
-sal_Bool Frame::impl_cp_disposing( const css::lang::EventObject& aEvent )
+sal_Bool Frame::implcp_disposing( const css::lang::EventObject& aEvent )
 {
     return  (
                 ( &aEvent               ==  NULL        )   ||
