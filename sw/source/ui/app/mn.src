@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 12:02:06 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ String MN_FRM_POPUPMENU
     Text [ english_us ] = "Frame" ;
     Text[ chinese_simplified ] = "¿ò";
     Text[ russian ] = "Ðàìêà";
-    Text[ polish ] = "ramka";
+    Text[ polish ] = "Ramka";
     Text[ japanese ] = "Ã·½ÄÎÞ¯¸½";
     Text[ chinese_traditional ] = "¤å¥»¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ";
@@ -296,7 +296,7 @@ String MN_DRAWFORM_POPUPMENU
     Text [ danish ] = "Kontrolelement" ;
     Text [ italian ] = "Campo di controllo" ;
     Text [ spanish ] = "Campo de control" ;
-    Text [ french ] = "Champ de contrôle" ;
+    Text [ french ] = "Contrôle" ;
     Text [ dutch ] = "Controleveld" ;
     Text [ portuguese ] = "Campo de controlo" ;
     Text[ chinese_simplified ] = "¿ØÖÆ";
