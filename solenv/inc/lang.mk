@@ -2,9 +2,9 @@
 #
 #   $RCSfile: lang.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:05:05 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:11:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,11 +61,11 @@
 #*************************************************************************
 
 
-.IF "$(GUI)"=="UNX" || "$(GUIBASE)"=="WIN"
-LANG_GUI=WIN
-.ELSE
+#.IF "$(GUI)"=="UNX" || "$(GUIBASE)"=="WIN"
+#LANG_GUI=WIN
+#.ELSE
 LANG_GUI=$(GUI)
-.ENDIF
+#.ENDIF
 
 ###################################################
 #
@@ -75,24 +75,7 @@ LANG_GUI=$(GUI)
 #
 ###################################################
 
-pol$(LANG_GUI)=-CHARSET_microsoft-cp1250
-slovak$(LANG_GUI)=-CHARSET_UTF8
-russ$(LANG_GUI)=-CHARSET_microsoft-cp1251
-czech$(LANG_GUI)=-CHARSET_UTF8
-slovenian$(LANG_GUI)=-CHARSET_UTF8
-hung$(LANG_GUI)=-CHARSET_UTF8
-japn$(LANG_GUI)=-CHARSET_UTF8
-chinsim$(LANG_GUI)=-CHARSET_UTF8
-chintrad$(LANG_GUI)=-CHARSET_UTF8
-arab$(LANG_GUI)=-CHARSET_microsoft-cp1256
-hebrew$(LANG_GUI)=-CHARSET_UTF8
-estonian$(LANG_GUI)=-CHARSET_UTF8
-greek$(LANG_GUI)=-CHARSET_microsoft-cp1253
-turk$(LANG_GUI)=-CHARSET_microsoft-cp1254
-korean$(LANG_GUI)=-CHARSET_UTF8
-thai$(LANG_GUI)=-CHARSET_UTF8
-hindi$(LANG_GUI)=-CHARSET_UTF8
-extern$(LANG_GUI)=-CHARSET_UTF8
+deut$(LANG_GUI)*=-CHARSET_microsoft-cp1252
 
 ###################################################
 #
@@ -100,13 +83,10 @@ extern$(LANG_GUI)=-CHARSET_UTF8
 #
 ###################################################
 
-.IF "$(solarlang)" == ""
-solarlang=deut
-.ENDIF
-
-LANGEXT=49
-RSCLANG=GERMAN
+#.IF "$(solarlang)" == ""
+#solarlang=deut
+#.ENDIF
 
 RSC_SRS_CHARSET=-CHARSET_DONTKNOW
-default$(LANG_GUI)*=-CHARSET_microsoft-cp1252
+default$(LANG_GUI)*=-CHARSET_UTF8
 
