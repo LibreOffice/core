@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-09 15:35:29 $
+ *  last change: $Author: mib $ $Date: 2001-03-12 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,9 +422,6 @@ void SwXMLImport::startDocument( void )
     if( !GetModel().is() )
         return;
 
-    if( (getImportFlags() & (IMPORT_CONTENT|IMPORT_MASTERSTYLES)) == 0 )
-        return;
-
     // There only is a text cursor by now if we are in insert mode. In any
     // other case we have to create one at the start of the document.
     Reference < XTextCursor > xTextCursor = GetTextImport()->GetCursor();
@@ -435,6 +432,9 @@ void SwXMLImport::startDocument( void )
         xTextCursor = xText->createTextCursor();
         GetTextImport()->SetCursor( xTextCursor );
     }
+
+    if( (getImportFlags() & (IMPORT_CONTENT|IMPORT_MASTERSTYLES)) == 0 )
+        return;
 
     Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
