@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallableStatement.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:11:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:41:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,9 +663,9 @@ void java_sql_CallableStatement::createStatement(JNIEnv* _pEnv)
         else
         {
             static char * cSignature = "(Ljava/lang/String;)Ljava/sql/CallableStatement;";
-            mID = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-            if( mID ){
-                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, str );
+            static jmethodID mID2 = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID2,"Unknown method id!");
+            if( mID2 ){
+                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, str );
             } //mID
         }
         t.pEnv->DeleteLocalRef(str);
