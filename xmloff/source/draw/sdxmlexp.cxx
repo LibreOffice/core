@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:35:56 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 15:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2110,7 +2110,7 @@ void SdXMLExport::exportFormsElement( uno::Reference< drawing::XDrawPage > xDraw
             if( xForms.is() && xForms->hasElements() )
             {
                 // write masterpage
-                SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE, sXML_forms, sal_True, sal_True);
+                ::xmloff::OOfficeFormsExport aForms(*this);
                 GetFormExport()->exportForms( xDrawPage );
             }
         }
