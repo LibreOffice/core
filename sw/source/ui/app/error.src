@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 08:12:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "·N¥~ªºÀÉ®×µ²§À";
         TEXT[ arabic ] = "äåÇíÉ ÛíÑ ãÊæŞÚÉ ááãáİ";
         TEXT[ greek ] = "Áğñïóäüêçôï ôİëïò áñ÷åßïõ";
-        TEXT[ korean ] = "±â´ëÇÏÁö¾ÊÀº¡¡ÆÄÀÏÀÇ ³¡";
+        TEXT[ korean ] = "±â´ëÇÏÁö ¾ÊÀº ÆÄÀÏÀÇ ³¡";
         TEXT[ turkish ] = "Beklenmeyen dosya sonu";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Fin inesperado de archivo";
@@ -486,7 +486,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡¿ù»~ $(ARG1)(¦æ¡A¦C)";
         Text[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ İí ÇáãæÖÚ $(ARG1)(ÓØÑ¡ÚãæÏ) İí Çáãáİ";
         Text[ greek ] = "Âñİèçêå óöÜëìá ìïñöïğïßçóçò óôç èİóç $(ARG1)(ãñáììŞ,óôŞëç) ôïõ áñ÷åßï";
-        Text[ korean ] = "ÆÄÀÏ¼­½Ä¡¡¿À·ù°¡ $(ARG1)(Çà,¿­)¿¡¼­¡¡¹ß°ßµÇ¾ú½À´Ï´Ù.";
+        Text[ korean ] = "ÆÄÀÏ¼­½Ä ¿À·ù°¡ $(ARG1)(Çà,¿­)¿¡¼­¡¡¹ß°ßµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "Dosya format hatası $(ARG1)(satır, sütun) bulundu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha descubierto un error de formato en el archivo en la posición $(ARG1)(fila,columna)";
@@ -560,7 +560,7 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ japanese ] = "Ì§²Ù‚Ì $(ARG2)(sA—ñ)‚É‚ ‚é•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
-        TEXT[ korean ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ korean ] = "ÆÄÀÏÀÇ $(ARG2)(Çà, ¿­)À§Ä¡¿¡ ÀÖ´Â ºÎºĞ ¹®¼­ $(ARG1)ÀÇ Æ÷¸Ë ¿À·ù ¹ß°ß";
         TEXT[ chinese_simplified ] = "·¢ÏÖÎÄ¼şµÄ×ÓÎÄµµ$(ARG1)ÄÚº¬´íÎó£¬Î»ÖÃÔÚ $(ARG2)(ĞĞ,ÁĞ)";
         TEXT[ chinese_traditional ] = "µo²{ÀÉ®×ªº¤l¤å¥ó$(ARG1)¤º§t¿ù»~¡A¦ì¸m¦b $(ARG2)(¦æ,Äæ)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -718,7 +718,7 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
         TEXT[ portuguese_brazilian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ japanese ] = "•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘‚«‚Ş‚Ì´×°";
-        TEXT[ korean ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ korean ] = "ºÎºĞ¹®¼­ $(ARG1) ¾²±â¿¡¼­ ¿À·ù";
         TEXT[ chinese_simplified ] = "ÔÚĞ´Èë×ÓÎÄµµ$(ARG1)Ê±·¢Éú´íÎó";
         TEXT[ chinese_traditional ] = "¦b¼g¤J¤l¤å¥ó$(ARG1)®Éµo¥Í¿ù»~";
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
@@ -749,7 +749,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer ÀÉ®×®æ¦¡§t¦³¤º³¡¿ù»~";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÏÇÎáí İí ÊäÓíŞ ãáİ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Åóùôåñéêü óöÜëìá óôç ìïñöŞ áñ÷åßïõ ôïõ %PRODUCTNAME Writer";
-        TEXT[ korean ] = "%PRODUCTNAME Writer ÆÄÀÏ¼­½Ä ÀÇ ³»ºÎ ¿À·ù";
+        TEXT[ korean ] = "%PRODUCTNAME Writer ÆÄÀÏ¼­½ÄÀÇ ³»ºÎ ¿À·ù";
         TEXT[ turkish ] = "Dahili %PRODUCTNAME Writer dosyası format hatası";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer";
@@ -884,7 +884,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "¥i¥ÎªÅ¶¡¤£¨¬";
         TEXT[ arabic ] = "áÇ íæÌÏ ãÓÇÍÉ ßÇİíÉ Úáì ãÍÑß ÇáÃŞÑÇÕ";
         TEXT[ greek ] = "Äåí õğÜñ÷åé áñêåôüò äéáèİóéìïò ÷şñïò óôï ìİóï áğïèŞêåõóçò";
-        TEXT[ korean ] = "µğ½ºÅ© °ø°£ÀÌ  ºÎÁ·ÇÕ´Ï´Ù.";
+        TEXT[ korean ] = "µğ½ºÅ© °ø°£ÀÌ ºÎÁ·ÇÕ´Ï´Ù.";
         TEXT[ turkish ] = "Yeterli disk alanı yok";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No hay suficiente espacio en el disco";
@@ -911,7 +911,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
-        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¿À·ù";
+        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¿À·ù";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error desconocido en el filtro W4W";
@@ -938,7 +938,7 @@ Resource RID_SW_ERRHDL
         TEXT[ chinese_traditional ] = "W4W ¹LÂo¾¹µo¥Í¤£©ú¿ù»~¡C";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ İí İáÊÑ W4W";
         TEXT[ greek ] = "¢ãíùóôï óöÜëìá óôï ößëôñï W4W";
-        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¿À·ù";
+        TEXT[ korean ] = "W4W ÇÊÅÍ¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¿À·ù";
         TEXT[ turkish ] = "W4W filtresinde bilinmeyen hata";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Error desconocido en el filtro W4W";
@@ -1017,7 +1017,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "$(ARG1) ¤w¸gÅÜ§ó¡C";
         Text[ arabic ] = "ÊÛíÑ $(ARG1)";
         Text[ greek ] = "$(ARG1) İ÷åé áëëÜîåé";
-        Text[ korean ] = "$(ARG1) ÀÌ£¨°¡£© º¯°æµÇ¾ú½À´Ï´Ù.";
+        Text[ korean ] = "$(ARG1)ÀÌ(°¡) º¯°æµÇ¾ú½À´Ï´Ù.";
         Text[ turkish ] = "$(ARG1) değişti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) se ha modificado";
@@ -1043,7 +1043,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "$(ARG1) ¤£¦s¦b";
         Text[ arabic ] = "$(ARG1) ÛíÑ ãæÌæÏ";
         Text[ greek ] = "$(ARG1) äåí õğÜñ÷åé";
-        Text[ korean ] = "$(ARG1)Àº£¨´Â£© Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+        Text[ korean ] = "$(ARG1)Àº(´Â) Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
         Text[ turkish ] = "$(ARG1) mevcut değil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ARG1) no existe";
@@ -1070,7 +1070,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "µLªk¤À¶}Àx¦s®æ";
         Text[ arabic ] = "áÇ íãßä ÊŞÓíã ÇáÎáÇíÇ ÃßËÑ ãä Ğáß";
         Text[ greek ] = "Ç åğéğëİïí äéáßñåóç ôùí êåëéşí åßíáé áäıíáôç";
-        Text[ korean ] = "¼¿Àº ´õÀÌ»ó ºĞÇÒµÉ ¼ö¡¡¾ø½À´Ï´Ù.";
+        Text[ korean ] = "¼¿Àº ´õ ÀÌ»ó ºĞÇÒµÉ ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Hücreler daha fazla bölünemiyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Las celdas no se pueden dividir más";
@@ -1207,7 +1207,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "µLªkÅª¨ú©Ò¦³ªºÄİ©Ê";
         Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ßá ÇáÓãÇÊ";
         Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áíÜãíùóç üëùí ôùí ÷áñáêôçñéóôéêşí";
-        Text[ korean ] = "¼Ó¼ºÀ»¡¡¸ğµÎ¡¡ÀĞÁö´Â¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "¼Ó¼ºÀ» ¸ğµÎ ÀĞÁö´Â ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tüm öznitelikler okunamadı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron leer todos los atributos";
@@ -1233,7 +1233,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "¤£¯à¼g¤J©Ò¦³ªºÄİ©Ê";
         Text[ arabic ] = "ÊÚĞÑ ßÊÇÈÉ ßá ÇáÓãÇÊ";
         Text[ greek ] = "Äåí Şôáí äõíáôŞ ç êáôáãñáöŞ üëùí ôùí ÷áñáêôçñéóôéêşí";
-        Text[ korean ] = "¼Ó¼ºÀ»¡¡¸ğµÎ¡¡¾²Áö´Â¡¡¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "¼Ó¼ºÀ» ¸ğµÎ ¾²Áö´Â ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Tüm öznitelikler yazılamadı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron grabar todos los atributos";
@@ -1260,7 +1260,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "¤@¨Ç OLE ª«¥ó¥u¯à¥H¹Ï§Î¤è¦¡¸Ë¸ü";
         Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
         Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
-        Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ ÀÎ¼öµÉ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ Àû¿ëµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Algunos objetos OLE se pudieron incluir solo como imágenes";
@@ -1287,7 +1287,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_traditional ] = "¤@¨Ç OLE ª«¥óµLªkÀx¦s¬°¹Ï§Î";
         Text[ arabic ] = "áã íßä ãä Çáããßä ÊØÈíŞ ÈÚÖ ßÇÆäÇÊ OLE ÅáÇ ßÑÓæãÇÊ";
         Text[ greek ] = "ÌåñéêÜ áíôéêåßìåíá OLE ìğüñåóáí íá öïñôùèïıí ìüíï ùò ãñáöéêÜ";
-        Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ ÀÎ¼öµÉ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ korean ] = "ÀÏºÎ OLE °³Ã¼µéÀº ±×·¡ÇÈÀ¸·Î¼­¸¸ Àû¿ëµÉ ¼ö ÀÖ½À´Ï´Ù.";
         Text[ turkish ] = "Bazı OLE nesneleri yalnızca grafik olarak yüklenebildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Algunos objetos OLE se pudieron incluir solo como imágenes";
@@ -1366,7 +1366,7 @@ Resource RID_SW_ERRHDL
         Text[ japanese ] = "‚±‚Ì HTML Œ`®ÄŞ·­ÒİÄ‚É %PRODUCTNAME Basic Ï¸‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B\n‚»‚ê‚ç‚ÍŒ»İ‚Ì´¸½Îß°Äİ’è‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ korean ] = "ÀÌ HTML ¹®¼­´Â %PRODUCTNAME Basic ¸ÅÅ©·Î¸¦ Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.\nÀÌ°ÍÀº ÇöÀçÀÇ ³»º¸³»±â ¼¼ÆÃÀ¸·Î ÀúÀåµÇÁö´Â ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "Õâ¸öHTMLÎÄµµº¬ÓĞ%PRODUCTNAME Basicºê¡£\nÎŞ·¨ÊôÓÚµ±Ç°µÄÊä³öÉè¶¨À´´æÅÌÕâĞ©ºê¡£";
-        Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ %PRODUCTNAME Basic ¥¨¶°¡C\nµLªk±Ä¥Î·í«eªº¿é¥X³]©w¨ÓÀx¦s¤å¥ó¡C";
+        Text[ chinese_traditional ] = "HTML ¤å¥ó§t¦³ %PRODUCTNAME Basic ¥¨¶°¡C\nµLªk±Ä¥Î·í«eªº¶×¥X³]©w¨ÓÀx¦s¤å¥ó¡C";
         Text[ arabic ] = "íÍÊæí ÇáãÓÊäÏ HTML Úáì æÍÏÇÊ ãÇßÑæ %PRODUCTNAME Basic.\náã íÊã ÍİÙåÇ ÈÅÚÏÇÏÇÊ ÇáÊÕÏíÑ ÇáÍÇáíÉ.";
         Text[ turkish ] = "HTML belgesinde StarBasic makroları var.\nBu makrolar, yürürlükteki verme ayarları ile kaydedilmemiş.";
         Text[ language_user1 ] = " ";
@@ -1390,7 +1390,7 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
         TEXT[ portuguese_brazilian ] = "Error in writing sub-document $(ARG1)";
         TEXT[ japanese ] = "•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘‚«‚Ş‚Ì´×°";
-        TEXT[ korean ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ korean ] = "ºÎºĞ¹®¼­ $(ARG1) ¾²±â¿¡¼­ ¿À·ù";
         TEXT[ chinese_simplified ] = "ÔÚĞ´Èë×ÓÎÄµµ$(ARG1)Ê±·¢Éú´íÎó";
         TEXT[ chinese_traditional ] = "¦b¼g¤J¤l¤å¥ó$(ARG1)®Éµo¥Í¿ù»~";
         TEXT[ turkish ] = "Error in writing sub-document $(ARG1)";
@@ -1415,7 +1415,7 @@ Resource RID_SW_ERRHDL
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
         TEXT[ portuguese_brazilian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ japanese ] = "Ì§²Ù‚Ì $(ARG2)(sA—ñ) ‚É‚ ‚é•”•ªÄŞ·­ÒİÄ $(ARG1) ‚É‘®´×°‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½B";
-        TEXT[ korean ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ korean ] = "ÆÄÀÏÀÇ $(ARG2)(Çà,¿­) À§Ä¡¿¡ ÀÖ´Â ºÎºĞ ¹®¼­ $(ARG1)ÀÇ Æ÷¸Ë ¿À·ù ¹ß°ß";
         TEXT[ chinese_simplified ] = "·¢ÏÖÎÄ¼şµÄ×ÓÎÄµµ$(ARG1)ÄÚº¬´íÎó£¬Î»ÖÃÔÚ $(ARG2)(ĞĞ,ÁĞ)";
         TEXT[ chinese_traditional ] = "µo²{ÀÉ®×ªº¤l¤å¥ó$(ARG1)¤º§t¿ù»~¡A¦ì¸m¦b $(ARG2)(¦æ,Äæ)";
         TEXT[ turkish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
@@ -1427,8 +1427,29 @@ Resource RID_SW_ERRHDL
     {
         TEXT = "Die folgenden Zeichen konnten nicht im gewählten Zeichsatz dargestellt werden: $(ARG1)" ;
         TEXT [ English ] = "These characters could not be exported using the chosen character encoding: $(ARG1)" ;
+        TEXT[ english_us ] = "The following characters could not be displayed in the selected character set: $(ARG1)";
+        TEXT[ portuguese ] = "Foi impossível representar os seguintes caracteres no conjunto seleccionado: $(ARG1)";
+        TEXT[ russian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ greek ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ dutch ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ french ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ spanish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ finnish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ italian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ danish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ swedish ] = "Följande tecken kan inte visas i den valda teckenuppsättningen: $(ARG1)";
+        TEXT[ polish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ portuguese_brazilian ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ japanese ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ korean ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ chinese_simplified ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ chinese_traditional ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ turkish ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ arabic ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
+        TEXT[ catalan ] = "These characters could not be exported using the chosen character encoding: $(ARG1)";
     };
 };
+
 
 
 
