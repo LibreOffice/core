@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:27 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,42 +1970,49 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             {
                 if( !rOStm.GetError() )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-
-                    if( xMgr.is() )
+                    try
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                        if( xSaxWriter.is() && xSVGWriter.is() )
+                        if( xMgr.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
-                                xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-                            if( xActiveDataSource.is() )
+                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                            if( xSaxWriter.is() && xSVGWriter.is() )
                             {
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
-                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
+                                    xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
 
-                                SvMemoryStream aMemStm( 65535, 65535 );
+                                if( xActiveDataSource.is() )
+                                {
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
+                                        static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
 
-                                aMemStm.SetCompressMode( COMPRESSMODE_FULL );
-                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+                                    SvMemoryStream aMemStm( 65535, 65535 );
 
-                                nPercent = 60;
-                                aUpdatePercentHdlLink.Call( this );
+                                    aMemStm.SetCompressMode( COMPRESSMODE_FULL );
+                                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
 
-                                xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
-                                    xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
-                                ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
-                                xSVGWriter->write( xSaxWriter, aMtfSeq );
-                                nPercent = 90;
-                                aUpdatePercentHdlLink.Call( this );
+                                    nPercent = 60;
+                                    aUpdatePercentHdlLink.Call( this );
+
+                                    xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
+                                        xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
+                                    ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                    xSVGWriter->write( xSaxWriter, aMtfSeq );
+                                    nPercent = 90;
+                                    aUpdatePercentHdlLink.Call( this );
+                                }
                             }
                         }
+                    }
+                    catch( ::com::sun::star::uno::Exception& )
+                    {
+                        nStatus = GRFILTER_IOERROR;
                     }
                 }
             }
