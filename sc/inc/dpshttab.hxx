@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpshttab.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: sab $ $Date: 2002-09-06 08:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class ScSheetDPData : public ScDPTableData
 {
 private:
     ScSheetDPData_Impl* pImpl;
+    BOOL* pSpecial;
 
 public:
                     ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc );
