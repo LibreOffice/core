@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-20 12:59:09 $
+ *  last change: $Author: os $ $Date: 2002-09-23 10:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,10 @@ SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     {
         for ( sal_Int32 nProp = 0; nProp < aNames.getLength(); nProp++ )
         {
-            DBG_WARNING( pValues[nProp].hasValue(), "property value missing" );
+#ifdef DBG_UTIL
+            if(!pValues[nProp].hasValue())
+                DBG_WARNING(  "property value missing" );
+#endif
             if ( pValues[nProp].hasValue() )
             {
                 switch ( nProp )
