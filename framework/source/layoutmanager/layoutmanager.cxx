@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 10:00:52 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2914,6 +2914,7 @@ void LayoutManager::implts_createStatusBar( const rtl::OUString& aStatusBarName 
         m_aStatusBarElement.m_aName      = aStatusBarName;
         m_aStatusBarElement.m_xUIElement = implts_createElement( aStatusBarName );
 
+/*
         if ( m_aProgressBarElement.m_xUIElement.is() )
         {
             ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_aProgressBarElement.m_xUIElement.get();
@@ -2926,27 +2927,39 @@ void LayoutManager::implts_createStatusBar( const rtl::OUString& aStatusBarName 
                 pWrapper->setStatusBar( xWindow, sal_False );
             }
         }
+*/
     }
+
+    implts_createProgressBar();
 }
 
 void LayoutManager::implts_createProgressBar()
 {
      Reference< XUIElement > xStatusBar;
     Reference< XUIElement > xProgressBar;
+    Reference< XUIElement > xProgressBarBackup;
     Reference< css::awt::XWindow > xContainerWindow;
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
+    WriteGuard aWriteLock( m_aLock );
     xStatusBar = Reference< XUIElement >( m_aStatusBarElement.m_xUIElement, UNO_QUERY );
     xProgressBar = Reference< XUIElement >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
+    xProgressBarBackup = m_xProgressBarBackup;
+    m_xProgressBarBackup.clear();
     xContainerWindow = m_xContainerWindow;
-    aReadLock.unlock();
+    aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     if ( xProgressBar.is() )
         return;
 
-    ProgressBarWrapper* pWrapper = new ProgressBarWrapper();
+    sal_Bool            bRecycled = xProgressBarBackup.is();
+    ProgressBarWrapper* pWrapper  = 0;
+    if ( bRecycled )
+        pWrapper = (ProgressBarWrapper*)xProgressBarBackup.get();
+    else
+        pWrapper = new ProgressBarWrapper();
+
     if ( xStatusBar.is() )
     {
         Reference< css::awt::XWindow > xWindow( xStatusBar->getRealInterface(), UNO_QUERY );
@@ -2964,25 +2977,54 @@ void LayoutManager::implts_createProgressBar()
         }
     }
 
-    WriteGuard aWriteLock( m_aLock );
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    aWriteLock.lock();
     m_aProgressBarElement.m_xUIElement = Reference< XUIElement >(
         static_cast< cppu::OWeakObject* >( pWrapper ), UNO_QUERY );
     aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    if ( bRecycled )
+        implts_showProgressBar();
+}
+
+void LayoutManager::implts_backupProgressBarWrapper()
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    if (m_xProgressBarBackup.is())
+        return;
+
+    // safe a backup copy of the current progress!
+    // This copy will be used automaticly inside createProgressBar() which is called
+    // implictly from implts_doLayout() .-)
+    m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
+
+    // remove the relation between this old progress bar and our old status bar.
+    // Otherwhise we work on disposed items ...
+    // The internal used ProgressBarWrapper can handle a NULL reference.
+    if ( m_xProgressBarBackup.is() )
+    {
+        ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_xProgressBarBackup.get();
+        if ( pWrapper )
+            pWrapper->setStatusBar( Reference< css::awt::XWindow >(), sal_False );
+    }
+
+    // prevent us from dispose() the m_aProgressBarElement.m_xUIElement inside implts_reset()
+    m_aProgressBarElement.m_xUIElement.clear();
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
 }
 
 void LayoutManager::implts_destroyProgressBar()
 {
-    Reference< XComponent > xCompProgressBar;
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    xCompProgressBar = Reference< XComponent >( m_aProgressBarElement.m_xUIElement, UNO_QUERY );
-    m_aProgressBarElement.m_xUIElement.clear();
-    aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-
-    if ( xCompProgressBar.is() )
-        xCompProgressBar->dispose();
+    // dont remove the progressbar in general
+    // We must reuse it if a new status bar is created later.
+    // Of course there exists one backup only.
+    // And further this backup will be released inside our dtor.
+    implts_backupProgressBarWrapper();
 }
 
 void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Size& rSize )
