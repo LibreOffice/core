@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScSubTotalDescriptorBase.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-12-11 12:13:17 $
+ *  last change:$Date: 2004-01-05 19:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ public class ScSubTotalDescriptorBase extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
