@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:43:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
 #endif
-
 #include <hash_set>
+
 
 using namespace rtl;
 using namespace psp;
