@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 15:38:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1030,7 +1030,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     }
     else if ( aFact.EqualsAscii("sbasic") )
     {
-        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.comp.basic.BasicIDE");
+        aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.script.BasicIDE");
     }
 
     return aServiceName;
