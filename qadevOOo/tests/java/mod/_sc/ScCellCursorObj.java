@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellCursorObj.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-10-06 13:33:19 $
+ *  last change:$Date: 2003-11-18 16:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import ifc.sheet._XCellRangesQuery;
 
 
 /**
@@ -245,6 +246,17 @@ public class ScCellCursorObj extends TestCase {
                             "Column and RowDescriptions can't be changed for this Object");
 
         tEnv.addObjRelation("SHEET", oSheet);
+        // add expected results for the XCellRangesQuery interface test
+        String[]expectedResults = new String[7];
+        expectedResults[_XCellRangesQuery.QUERYCOLUMNDIFFERENCES] = "Sheet1.B1";
+        expectedResults[_XCellRangesQuery.QUERYCONTENTCELLS] = "Sheet1.B2";
+        expectedResults[_XCellRangesQuery.QUERYEMPTYCELLS] = "Sheet1.A1 ... Sheet1.B1 ... Sheet1.B3 ... Sheet1.C1 ... Sheet1.D1";
+        expectedResults[_XCellRangesQuery.QUERYFORMULACELLS] = "";
+        expectedResults[_XCellRangesQuery.QUERYINTERSECTION] = "Sheet1.D4";
+        expectedResults[_XCellRangesQuery.QUERYROWDIFFERENCES] = "Sheet1.A2;Sheet1.C2";
+        expectedResults[_XCellRangesQuery.QUERYVISIBLECELLS] = "Sheet1.A2";
+        tEnv.addObjRelation("XCellRangesQuery.EXPECTEDRESULTS", expectedResults);
+
         tEnv.addObjRelation("NewData",
                             new Object[][]
         {
