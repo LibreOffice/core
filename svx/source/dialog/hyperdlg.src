@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:49:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,11 +101,11 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ italian ] = "Tipo di hyperlink";
         Text[ danish ] = "Hyperlinktype";
         Text[ swedish ] = "Typ av hyperlänk";
-        Text[ polish ] = "Typ hiper³¹cza";
+        Text[ polish ] = "Rodzaj hiper³¹cza";
         Text[ portuguese_brazilian ] = "Link Typ";
         Text[ japanese ] = "Ê²Êß°Øİ¸‚Ìí—Ş";
         Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©ÀÇ Á¾·ù";
-        Text[ chinese_simplified ] = "³¬Á´½ÓÀàĞÍ";
+        Text[ chinese_simplified ] = "³¬Á´½ÓµÄÀàĞÍ";
         Text[ chinese_traditional ] = "±¶®|Ãş«¬";
         Text[ arabic ] = "äæÚ ÇáÇÑÊÈÇØ ÇáÊÔÚÈí";
         Text[ turkish ] = "Hyperlink türü";
@@ -340,7 +340,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ italian ] = "Browser Web";
         QuickHelpText[ danish ] = "WWW-browser";
         QuickHelpText[ swedish ] = "WWW-browser";
-        QuickHelpText[ polish ] = "Przegl¹darka WWW";
+        QuickHelpText[ polish ] = "Przegl¹darka WWW!";
         QuickHelpText[ portuguese_brazilian ] = "Browse";
         QuickHelpText[ japanese ] = "WWWÌŞ×³»Ş!";
         QuickHelpText[ korean ] = "ºê¶ó¿ìÁî!";
@@ -373,7 +373,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ italian ] = "Destinazione";
         QuickHelpText[ danish ] = "Mål i dokumentet";
         QuickHelpText[ swedish ] = "Mål i dokumentet";
-        QuickHelpText[ polish ] = "Cel w dokumencie";
+        QuickHelpText[ polish ] = "Cel w dokumencie!";
         QuickHelpText[ portuguese_brazilian ] = "Target";
         QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ‚É‚ ‚éÀ°¹Ş¯Ä!";
         QuickHelpText[ korean ] = "¹®¼­³»¡¡´ë»ó!";
@@ -414,17 +414,17 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
         Text[ dutch ] = "Verdere opties";
-        Text[ french ] = "Autres paramètres";
+        Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
         Text[ danish ] = "Flere indstillinger";
         Text[ swedish ] = "Fler inställningar";
         Text[ polish ] = "Dodatkowe ustawienia";
         Text[ portuguese_brazilian ] = "More options";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ korean ] = "±×¹ÛÀÇ ¼³Á¤";
-        Text[ chinese_simplified ] = "¸½¼ÓÉè¶¨";
-        Text[ chinese_traditional ] = "¨ä¥¦³]©w";
+        Text[ chinese_simplified ] = "ÆäËûµÄÉè¶¨";
+        Text[ chinese_traditional ] = "¨ä¥Lªº³]©w";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÅÖÇİíÉ";
         Text[ turkish ] = "Diğer ayarlar";
         Text[ catalan ] = "Otras opciones";
@@ -446,7 +446,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Frame";
+        Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
@@ -706,7 +706,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Händelser";
-        QuickHelpText[ polish ] = "Wydarzenia";
+        QuickHelpText[ polish ] = "Wydarzenia!";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ!";
         QuickHelpText[ korean ] = "ÀÌº¥Æ®t!";
@@ -745,7 +745,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Mail & News" ;
         Text [ ENGLISH ] = "Mail & News" ;
-        Text [ english_us ] = "Mail & News" ;
+        Text [ english_us ] = "Mail & news" ;
         Text[ portuguese ] = "Mail & News";
         Text[ russian ] = "Ïèñüìà è íîâîñòè";
         Text[ greek ] = "Áëëçëïãñáößá êáé ÓõæçôŞóåéò";
@@ -755,9 +755,9 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ italian ] = "Mail e news";
         Text[ danish ] = "E-mail og nyheder";
         Text[ swedish ] = "E-post & nyheter";
-        Text[ polish ] = "E-mail & wiadomoœci";
+        Text[ polish ] = "Poczta i wiadomoœci";
         Text[ portuguese_brazilian ] = "Mail & News";
-        Text[ japanese ] = "Mail & Æ­°½";
+        Text[ japanese ] = "Ò°Ù‚ÆÆ­°½";
         Text[ korean ] = "¸ŞÀÏ & ´º½º";
         Text[ chinese_simplified ] = "µç×ÓÓÊ¼şºÍĞÂÎÅ×é";
         Text[ chinese_traditional ] = "¹q¤l¶l¥ó©M·s»D¸s²Õ";
@@ -810,7 +810,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ italian ] = "~News";
         Text[ danish ] = "Nyheder";
         Text[ swedish ] = "~Nyheter";
-        Text[ polish ] = "wiado~mo?ci";
+        Text[ polish ] = "wiado~moœci";
         Text[ portuguese_brazilian ] = "~News";
         Text[ japanese ] = "Æ­°½(~N)";
         Text[ korean ] = "´º½º(~N)";
@@ -889,7 +889,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         TabStop = TRUE ;
         QuickHelpText = "Adressbuch" ;
         QuickHelpText [ ENGLISH ] = "Adressbook" ;
-        QuickHelpText [ english_us ] = "Adressbook" ;
+        QuickHelpText [ english_us ] = "Address Book!" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "adrbook.bmp" ; };
@@ -904,7 +904,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ italian ] = "Rubrica";
         QuickHelpText[ danish ] = "Adressekartotek";
         QuickHelpText[ swedish ] = "Adressbok";
-        QuickHelpText[ polish ] = "Ksi¹¿ka adresowa";
+        QuickHelpText[ polish ] = "Ksi¹¿ka adresowa!";
         QuickHelpText[ portuguese_brazilian ] = "Adressbook";
         QuickHelpText[ japanese ] = "±ÄŞÚ½’£!";
         QuickHelpText[ korean ] = "ÁÖ¼Ò·Ï!";
@@ -927,17 +927,17 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
         Text[ dutch ] = "Verdere opties";
-        Text[ french ] = "Autres paramètres";
+        Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
         Text[ danish ] = "Flere indstillinger";
         Text[ swedish ] = "Fler inställningar";
         Text[ polish ] = "Dodatkowe ustawienia";
         Text[ portuguese_brazilian ] = "More options";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ korean ] = "±×¹ÛÀÇ ¼³Á¤";
-        Text[ chinese_simplified ] = "¸½¼ÓÉè¶¨";
-        Text[ chinese_traditional ] = "¨ä¥¦³]©w";
+        Text[ chinese_simplified ] = "ÆäËûµÄÉè¶¨";
+        Text[ chinese_traditional ] = "¨ä¥Lªº³]©w";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÅÖÇİíÉ";
         Text[ turkish ] = "Diğer ayarlar";
         Text[ catalan ] = "Otras opciones";
@@ -959,7 +959,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Frame";
+        Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
@@ -1219,7 +1219,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Händelser";
-        QuickHelpText[ polish ] = "Wydarzenia";
+        QuickHelpText[ polish ] = "Wydarzenia!";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ!";
         QuickHelpText[ korean ] = "ÀÌº¥Æ®!";
@@ -1290,7 +1290,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ japanese ] = "ÄŞ·­ÒİÄ";
         Text[ korean ] = "¹®¼­";
         Text[ chinese_simplified ] = "ÎÄµµ";
-        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ chinese_traditional ] = "¤å¥ó";
         Text[ arabic ] = "ãÓÊäÏ";
         Text[ turkish ] = "Belge";
         Text[ language_user1 ] = " ";
@@ -1313,7 +1313,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ italian ] = "~Percorso";
         Text[ danish ] = "Sti";
         Text[ swedish ] = "Sö~kväg";
-        Text[ polish ] = "?cie¿ka";
+        Text[ polish ] = "Œcie¿ka";
         Text[ portuguese_brazilian ] = "~Path";
         Text[ japanese ] = "Êß½(~P)";
         Text[ korean ] = "°æ·Î(~P)";
@@ -1331,7 +1331,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         TabStop = TRUE ;
         QuickHelpText = "Datei öffnen" ;
         QuickHelpText [ ENGLISH ] = "Open file" ;
-        QuickHelpText [ english_us ] = "Open file" ;
+        QuickHelpText [ english_us ] = "Open File!" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "fileopen.bmp" ; };
@@ -1346,7 +1346,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ italian ] = "Apri file";
         QuickHelpText[ danish ] = "Åbn fil";
         QuickHelpText[ swedish ] = "Öppna fil";
-        QuickHelpText[ polish ] = "Otwórz plik";
+        QuickHelpText[ polish ] = "Otwórz plik!";
         QuickHelpText[ portuguese_brazilian ] = "Fileopen";
         QuickHelpText[ japanese ] = "Ì§²Ù‚ğŠJ‚¯‚é!";
         QuickHelpText[ korean ] = "ÆÄÀÏ¿­±â!";
@@ -1497,7 +1497,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ italian ] = "Destinazione nel documento";
         QuickHelpText[ danish ] = "Mål i dokumentet";
         QuickHelpText[ swedish ] = "Mål i dokumentet";
-        QuickHelpText[ polish ] = "Cel w dokumencie";
+        QuickHelpText[ polish ] = "Cel w dokumencie!";
         QuickHelpText[ portuguese_brazilian ] = "Target in document";
         QuickHelpText[ japanese ] = "ÄŞ·­ÒİÄ‚É‚ ‚éÀ°¹Ş¯Ä!";
         QuickHelpText[ korean ] = " ¹®¼­³» ´ë»ó!";
@@ -1520,17 +1520,17 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
         Text[ dutch ] = "Verdere opties";
-        Text[ french ] = "Autres paramètres";
+        Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
         Text[ danish ] = "Flere indstillinger";
         Text[ swedish ] = "Fler inställningar";
         Text[ polish ] = "Dodatkowe ustawienia";
         Text[ portuguese_brazilian ] = "More options";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ korean ] = "±×¹ÛÀÇ ¼³Á¤";
-        Text[ chinese_simplified ] = "¸½¼ÓÉè¶¨";
-        Text[ chinese_traditional ] = "¨ä¥¦³]©w";
+        Text[ chinese_simplified ] = "ÆäËûµÄÉè¶¨";
+        Text[ chinese_traditional ] = "¨ä¥Lªº³]©w";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÅÖÇİíÉ";
         Text[ turkish ] = "Diğer ayarlar";
         Text[ catalan ] = "Otras opciones";
@@ -1552,7 +1552,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Frame";
+        Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
@@ -1812,7 +1812,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Händelser";
-        QuickHelpText[ polish ] = "Wydarzenia";
+        QuickHelpText[ polish ] = "Wydarzenia!";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ!";
         QuickHelpText[ korean ] = "ÀÌº¥Æ®!";
@@ -1881,8 +1881,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese_brazilian ] = "New document";
         Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
         Text[ korean ] = "»õ ¹®¼­";
-        Text[ chinese_simplified ] = "ĞÂÎÄµµ";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ";
+        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµ";
+        Text[ chinese_traditional ] = "·s¼W¤å¥ó";
         Text[ arabic ] = "ãÓÊäÏ ÌÏíÏ";
         Text[ turkish ] = "Yeni belge";
         Text[ language_user1 ] = " ";
@@ -1932,7 +1932,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ italian ] = "Modifica dopo";
         Text[ danish ] = "Rediger senere";
         Text[ swedish ] = "Redigera ~senare";
-        Text[ polish ] = "Edytuj pó?niej";
+        Text[ polish ] = "Edytuj póŸniej";
         Text[ portuguese_brazilian ] = "Edit ~later";
         Text[ japanese ] = "Œã‚Å•ÒW(~L)";
         Text[ korean ] = "³ªÁß¿¡ ÆíÁı(~L)";
@@ -2036,7 +2036,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ italian ] = "Seleziona percorso";
         QuickHelpText[ danish ] = "Vælg sti";
         QuickHelpText[ swedish ] = "Välj ut sökväg";
-        QuickHelpText[ polish ] = "Wybierz ?cie¿kê";
+        QuickHelpText[ polish ] = "Wybierz œcie¿kê!";
         QuickHelpText[ portuguese_brazilian ] = "Create";
         QuickHelpText[ japanese ] = "Êß½‚Ì‘I‘ğ!";
         QuickHelpText[ korean ] = "»ı¼º!";
@@ -2059,17 +2059,17 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Äîïîëíèòåëüíûå íàñòğîéêè";
         Text[ greek ] = "Ğåñéóóüôåñåò ñõèìßóåéò";
         Text[ dutch ] = "Verdere opties";
-        Text[ french ] = "Autres paramètres";
+        Text[ french ] = "Paramètres supplémentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
         Text[ danish ] = "Flere indstillinger";
         Text[ swedish ] = "Fler inställningar";
         Text[ polish ] = "Dodatkowe ustawienia";
         Text[ portuguese_brazilian ] = "More options";
-        Text[ japanese ] = "‚»‚Ì‘¼‚Ìİ’è";
+        Text[ japanese ] = "Ú×İ’è";
         Text[ korean ] = "±×¹ÛÀÇ ¼³Á¤";
-        Text[ chinese_simplified ] = "¸½¼ÓÉè¶¨";
-        Text[ chinese_traditional ] = "¨ä¥¦³]©w";
+        Text[ chinese_simplified ] = "ÆäËûµÄÉè¶¨";
+        Text[ chinese_traditional ] = "¨ä¥Lªº³]©w";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÅÖÇİíÉ";
         Text[ turkish ] = "Diğer ayarlar";
         Text[ catalan ] = "Otras opciones";
@@ -2091,7 +2091,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ italian ] = "F~rame";
         Text[ danish ] = "Frame";
         Text[ swedish ] = "~Ram";
-        Text[ polish ] = "Frame";
+        Text[ polish ] = "Ramka";
         Text[ portuguese_brazilian ] = "F~rame";
         Text[ japanese ] = "ÌÚ°Ñ(~R)";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~R)";
@@ -2351,7 +2351,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         QuickHelpText[ italian ] = "Eventi";
         QuickHelpText[ danish ] = "Begivenheder";
         QuickHelpText[ swedish ] = "Händelser";
-        QuickHelpText[ polish ] = "Wydarzenia";
+        QuickHelpText[ polish ] = "Wydarzenia!";
         QuickHelpText[ portuguese_brazilian ] = "Script";
         QuickHelpText[ japanese ] = "²ÍŞİÄ!";
         QuickHelpText[ korean ] = "Script!";
@@ -2621,7 +2621,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text[ italian ] = "Mail & news";
     Text[ danish ] = "E-mail og nyheder";
     Text[ swedish ] = "E-post & nyheter";
-    Text[ polish ] = "E-mail & wiadomo?ci";
+    Text[ polish ] = "E-mail & wiadomoœci";
     Text[ portuguese_brazilian ] = "Mail & News";
     Text[ japanese ] = "Ò°Ù & Æ­°½";
     Text[ korean ] = "¸ŞÀÏ & ´º½º";
@@ -2663,7 +2663,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
 {
     Text = "Neues Dokument";
     Text [ ENGLISH ] = "New document" ;
-    Text [ english_us ] = "New document" ;
+    Text [ english_us ] = "New Document" ;
     Text[ portuguese ] = "Novo documento";
     Text[ russian ] = "Íîâûé äîêóìåíò";
     Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
