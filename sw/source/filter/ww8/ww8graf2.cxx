@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-09-05 10:16:19 $
+ *  last change: $Author: vg $ $Date: 2001-09-06 13:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,7 @@ void SwWW8ImplReader::PicRead( SvStream *pDataStream, WW8_PIC *pPic,
     //Only the first 0x2e bytes are the same between version 6/7 and 8+
 #ifdef __WW8_NEEDS_COPY
     WW8_PIC_SHADOW aPicS;
-    pDataStream->Read( &aPicS, sizeof( aPicS );
+    pDataStream->Read( &aPicS, sizeof( aPicS ) );
     WW8PicShadowToReal( &aPicS, pPic );
 #else
     pDataStream->Read( pPic, 0x2E);
@@ -1098,11 +1098,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.11 2001-09-05 10:16:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.12 2001-09-06 13:38:55 vg Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/09/05 10:16:19  cmc
+      #91916# Improve size calculation of inline graphics to consider borders,shadows and spacing as word does
+
       Revision 1.10  2001/08/28 15:24:29  cmc
       #91622 Properties open at begin and end of tables and frames need to be cunningly duplicated outside and inside element
 
