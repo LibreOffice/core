@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:41:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,7 @@ shell::remove( sal_Int32 CommandId,
         }
 
         sal_Bool whileSuccess = sal_True;
-        sal_Int32 recurse;
+        sal_Int32 recurse = 0;
         rtl::OUString name;
 
         nError = aDirectory.getNextItem( aItem );
@@ -2065,7 +2065,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
                        sal_Bool testExistBeforeCopy )
     throw()
 {
-    osl::FileBase::RC err;
+    osl::FileBase::RC err = osl::FileBase::E_None;
 
     if( TypeToCopy == -1 ) // Document
     {
@@ -2086,7 +2086,7 @@ shell::copy_recursive( const rtl::OUString& srcUnqPath,
 
             while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
             {
-                sal_Bool IsDocument;
+                sal_Bool IsDocument = false;
                 osl::FileStatus aFileStatus( n_Mask );
                 aDirItem.getFileStatus( aFileStatus );
                 if( aFileStatus.isValid( FileStatusMask_Type ) )
