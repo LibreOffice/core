@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:21:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ String RID_SVXSTR_QRY_PRINT_TITLE
     Text[ hebrew ] = "Drucken der Selektion";
     Text[ hindi ] = "छपाई का चुनाव";
     Text[ slovak ] = "Tlač vybraných častí";
+    Text[ hungarian ] = "Kijelölés nyomtatása";
+    Text[ slovenian ] = "Izbor za tiskanje";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
@@ -121,6 +123,8 @@ String RID_SVXSTR_QRY_PRINT_MSG
     Text[ hebrew ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
     Text[ hindi ] = "आप चुनाव को अथवा संपूर्ण लेखपत्र को छपाई करना चाहते है?";
     Text[ slovak ] = "Chcete vytlačiť iba vybranú časť alebo celý dokument?";
+    Text[ hungarian ] = "A teljes dokumentumot vagy csak a kijelölt részt kívánja nyomtatni?";
+    Text[ slovenian ] = "Ali želite natisniti izbrano ali ves dokument?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
@@ -151,6 +155,8 @@ String RID_SVXSTR_QRY_PRINT_ALL
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "~सब";
     Text[ slovak ] = "~Všetko";
+    Text[ hungarian ] = "~Minden";
+    Text[ slovenian ] = "~Vse";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
@@ -159,7 +165,7 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ italian ] = "~Selezione";
     Text[ portuguese_brazilian ] = "~Sele��o";
     Text[ portuguese ] = "~Selec��o";
-    Text[ danish ] = "Markering";
+    Text[ danish ] = "~Markering";
     Text[ french ] = "~S�lection";
     Text[ swedish ] = "~Markering";
     Text[ dutch ] = "~Selectie";
@@ -181,7 +187,11 @@ String RID_SVXSTR_QRY_PRINT_SELECTION
     Text[ hebrew ] = "‮מבחר‬";
     Text[ hindi ] = "~चुनाव";
     Text[ slovak ] = "~Výber";
+    Text[ hungarian ] = "~Kijelölés";
+    Text[ slovenian ] = "I~zbor";
 };
+
+
 
 
 
