@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include "fusel.hxx"                // Start-Function
 #include "seltrans.hxx"
 #include "scmod.hxx"
+#include "AccessibilityHints.hxx"
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -320,6 +321,12 @@ void ScTabView::TabChanged()
     rBindings.Invalidate( SID_INSERT_SMATH );
     rBindings.Invalidate( SID_INSERT_GRAPHIC );
 #endif
+
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+    {
+        SfxSimpleHint aAccHint(SC_HINT_ACC_TABLECHANGED);
+        aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
+    }
 }
 
 void ScTabView::UpdateLayerLocks()

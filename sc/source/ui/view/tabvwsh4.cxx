@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:18:22 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1495,7 +1495,8 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     pDialogDPObject(NULL),      \
     nCurRefDlgId(0),            \
     pNavSettings(NULL),         \
-    aTarget( this )
+    aTarget( this ),            \
+    pAccessibilityBroadcaster(NULL)
 
 
 //------------------------------------------------------------------
@@ -1761,6 +1762,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     DELETEZ(pNavSettings);
 
     DELETEZ(pFormShell);
+    DELETEZ(pAccessibilityBroadcaster);
 }
 
 //------------------------------------------------------------------

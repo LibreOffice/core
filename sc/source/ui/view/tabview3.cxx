@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-07 15:45:35 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "patattr.hxx"
 #include "dociter.hxx"
 #include "seltrans.hxx"
+#include "AccessibilityHints.hxx"
 //! hier und output2.cxx in irgendein Headerfile verschieben!
 #define SC_CLIPMARK_SIZE    64
 
@@ -527,6 +528,12 @@ void ScTabView::CursorPosChanged()
     SelectionChanged();
 
     aViewData.SetTabStartCol( SC_TABSTART_NONE );
+
+    if (aViewData.GetViewShell()->HasAccessibilityObjects())
+    {
+        ScAccActiveCellChangeHint aAccHint(aViewData.GetCurPos());
+        aViewData.GetViewShell()->BroadcastAccessibility(aAccHint);
+    }
 }
 
 void ScTabView::TestHintWindow()
@@ -2439,6 +2446,13 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 
         ScTabViewShell* pShell = aViewData.GetViewShell();
         pShell->WindowChanged();
+
+        if (pShell->HasAccessibilityObjects())
+        {
+            ScAccGridViewChangeHint aAccHint(eOld, eWhich,
+                pGridWin[eOld]->GetAccessible(), pGridWin[eWhich]->GetAccessible());
+            pShell->BroadcastAccessibility(aAccHint);
+        }
 
         pSelEngine->SetWindow(pGridWin[eWhich]);
         pSelEngine->SetWhich(eWhich);

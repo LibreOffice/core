@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-05 14:33:02 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,32 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
     }
 }
 
+void ScTabViewShell::AddAccessibilityObject( SfxListener& rObject )
+{
+    if (!pAccessibilityBroadcaster)
+        pAccessibilityBroadcaster = new SfxBroadcaster;
+
+    rObject.StartListening( *pAccessibilityBroadcaster );
+}
+
+void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
+{
+    if (pAccessibilityBroadcaster)
+        rObject.EndListening( *pAccessibilityBroadcaster );
+    else
+        DBG_ERROR("kein Accessibility-Broadcaster??!?");
+}
+
+void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
+{
+    if (pAccessibilityBroadcaster)
+        pAccessibilityBroadcaster->Broadcast( rHint );
+}
+
+BOOL ScTabViewShell::HasAccessibilityObjects()
+{
+    return pAccessibilityBroadcaster != NULL;
+}
 
 
 
