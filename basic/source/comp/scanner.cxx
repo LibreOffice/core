@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-10 09:53:37 $
+ *  last change: $Author: ab $ $Date: 2001-08-27 11:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #include "sbcomp.hxx"
 #pragma hdrstop
-#include <ctype.h>
 #include <stdio.h>  // sprintf()
 #include <string.h>
 #if defined (ICC) || defined (WTC) || defined(__powerc) || defined ( MAC ) || defined UNX
@@ -229,7 +228,7 @@ BOOL SbiScanner::NextSym()
     if( *pLine == '#' ) pLine++, nCol++, bHash = TRUE;
 
     // Symbol? Dann Zeichen kopieren.
-    if( isalpha( *pLine & 0xFF ) || *pLine == '_' )
+    if( BasicSimpleCharClass::isAlpha( *pLine & 0xFF ) || *pLine == '_' )
     {
         // Wenn nach '_' nichts kommt, ist es ein Zeilenabschluss!
         if( *pLine == '_' && !*(pLine+1) )
@@ -237,7 +236,7 @@ BOOL SbiScanner::NextSym()
             goto eoln;  }
         bSymbol = TRUE;
         short n = nCol;
-        for ( ; (isalnum( *pLine & 0xFF ) || ( *pLine == '_' ) ); pLine++ )
+        for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
         aSym = aLine.Copy( n, nCol - n );
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
@@ -247,7 +246,7 @@ BOOL SbiScanner::NextSym()
         // Typkennung?
         // Das Ausrufezeichen bitte nicht testen, wenn
         // danach noch ein Symbol anschliesst
-        else if( *pLine != '!' || !isalpha( pLine[ 1 ] & 0xFF ) )
+        else if( *pLine != '!' || !BasicSimpleCharClass::isAlpha( pLine[ 1 ] & 0xFF ) )
         {
             SbxDataType t = GetSuffixType( *pLine );
             if( t != SbxVARIANT )
@@ -260,8 +259,8 @@ BOOL SbiScanner::NextSym()
     }
 
     // Zahl? Dann einlesen und konvertieren.
-    else if( isdigit( *pLine & 0xFF )
-        || ( *pLine == '.' && isdigit( *(pLine+1) & 0xFF ) ) )
+    else if( BasicSimpleCharClass::isDigit( *pLine & 0xFF )
+        || ( *pLine == '.' && BasicSimpleCharClass::isDigit( *(pLine+1) & 0xFF ) ) )
     {
         short exp = 0;
         short comma = 0;
@@ -376,7 +375,7 @@ BOOL SbiScanner::NextSym()
         long l = 0;
         int i;
         BOOL bBufOverflow = FALSE;
-        while( isalnum( *pLine & 0xFF ) )
+        while( BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF ) )
         {
             sal_Unicode ch = toupper( *pLine & 0xFF );
             pLine++; nCol++;
