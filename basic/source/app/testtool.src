@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 14:53:01 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ String S_READING_LONGNAMES
     Text[ korean ] = "±‰ ¿Ã∏ß ¿–±‚";
     Text[ chinese_simplified ] = "∂¡»°≥§√˚≥∆";
     Text[ chinese_traditional ] = "≈™®˙™¯¶W∫Ÿ°C";
-    Text[ arabic ] = "Reading long names";
+    Text[ arabic ] = "ﬁ—«¡… «·√”„«¡ «·ÿÊÌ·…";
     Text[ turkish ] = "Uzun adlar okunuyor";
     Text[ catalan ] = "Leyendo nombres largos";
     Text[ finnish ] = "Luetaan pitki‰ nimi‰";
