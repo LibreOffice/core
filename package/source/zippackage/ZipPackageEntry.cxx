@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 15:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,23 @@
 #ifndef _COM_SUN_STAR_PACKAGE_ZIP_ZIPCONSTANTS_HPP_
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _VOS_DIAGNOSE_H_
 #include <vos/diagnose.hxx>
 #endif
 #ifndef _IMPL_VALID_CHARACTERS_HXX_
 #include <ImplValidCharacters.hxx>
+#endif
+#ifndef _ZIP_PACKAGE_FOLDER_HXX
+#include <ZipPackageFolder.hxx>
+#endif
+#ifndef _ZIP_PACKAGE_STREAM_HXX
+#include <ZipPackageStream.hxx>
+#endif
+#ifndef _CONTENT_INFO_HXX_
+#include <ContentInfo.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 
 using namespace rtl;
@@ -82,40 +91,16 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
 
-ZipPackageEntry::ZipPackageEntry (void)
+ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
+: pParent ( NULL )
+, mbIsFolder ( bNewFolder )
 {
 }
 
-ZipPackageEntry::~ZipPackageEntry( void )
+ZipPackageEntry::~ZipPackageEntry()
 {
 }
-/* I made these pure virtual to bypass a couple of virtual calls...
- * acquire/release/queryInterface are called several thousand times in a single
- * ZipPackage instance
-Any SAL_CALL ZipPackageEntry::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ( ::cppu::queryInterface (   rType                                       ,
-                                                // OWeakObject interfaces
-                                                static_cast< XWeak*         > ( this )  ,
-                                                static_cast< XInterface*        > ( this )  ,
-                                                // my own interfaces
-                                                static_cast< XNamed*        > ( this )  ,
-                                                static_cast< XUnoTunnel*        > ( this )  ,
-                                                static_cast< XChild*        > ( this )  ) );
-}
-void SAL_CALL ZipPackageEntry::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ZipPackageEntry::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
-*/
-    // XChild
+// XChild
 OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(RuntimeException)
 {
@@ -124,53 +109,52 @@ OUString SAL_CALL ZipPackageEntry::getName(  )
 void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     throw(RuntimeException)
 {
-    Reference < XNameContainer > xCont (xParent, UNO_QUERY);
-    if (xCont.is() && xCont->hasByName ( aEntry.sName ) )
-        xCont->removeByName ( aEntry.sName );
+    if ( pParent && pParent->hasByName ( aEntry.sName ) )
+        pParent->removeByName ( aEntry.sName );
 
     const sal_Unicode *pChar = aName.getStr();
-    for ( sal_Int32 i = 0, nEnd = aName.getLength(); i < nEnd; i++)
-        VOS_ENSURE ( Impl_IsValidChar (pChar[i], sal_False), "Invalid character in new zip package entry name!");
+    VOS_ENSURE ( Impl_IsValidChar (pChar, static_cast < sal_Int16 > ( aName.getLength() ), sal_False), "Invalid character in new zip package entry name!");
 
     aEntry.sName = aName;
 
-    if (xCont.is())
-    {
-        Any aAny;
-        Reference < XUnoTunnel > xTunnel  = this;
-        aAny <<= xTunnel;
-        xCont->insertByName ( aEntry.sName, aAny );
-    }
+    if ( pParent )
+        pParent->doInsertByName ( this, sal_False );
 }
 Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException)
 {
     return xParent;
 }
-void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& Parent )
+
+void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert )
+{
+    xParent = pParent = pNewParent;
+    if ( bInsert && !pNewParent->hasByName ( aEntry.sName ) )
+        pNewParent->doInsertByName ( this, sal_False );
+}
+
+void SAL_CALL ZipPackageEntry::setParent( const Reference< XInterface >& xNewParent )
         throw(NoSupportException, RuntimeException)
 {
-    Reference < XNameContainer > xOldParent (xParent, UNO_QUERY), xNewParent (Parent, UNO_QUERY);
-
-    if ( !xNewParent.is())
+    sal_Int64 nTest;
+    Reference < XUnoTunnel > xTunnel ( xNewParent, UNO_QUERY );
+    if ( !xNewParent.is() || ( nTest = xTunnel->getSomething ( ZipPackageFolder::getUnoTunnelImplementationId () ) ) == 0 )
         throw NoSupportException();
-    if ( xOldParent != xNewParent )
+
+    ZipPackageFolder *pNewParent = reinterpret_cast < ZipPackageFolder * > ( nTest );
+
+    if ( pNewParent != pParent )
     {
-        if ( xOldParent.is() && xOldParent->hasByName(getName()))
-            xOldParent->removeByName(getName());
-        Any aAny;
-        Reference < XUnoTunnel > xTunnel  = this;
-        aAny <<= xTunnel;
-        if (!xNewParent->hasByName(getName()))
-            xNewParent->insertByName(getName(), aAny);
-        xParent = Parent;
+        if ( pParent && pParent->hasByName ( aEntry.sName ) )
+            pParent->removeByName( aEntry.sName );
+        doSetParent ( pNewParent, sal_True );
     }
 }
     //XPropertySet
 Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
         throw(RuntimeException)
 {
-    return Reference < beans::XPropertySetInfo > (NULL);
+    return Reference < beans::XPropertySetInfo > ();
 }
 void SAL_CALL ZipPackageEntry::addPropertyChangeListener( const OUString& aPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
@@ -188,3 +172,19 @@ void SAL_CALL ZipPackageEntry::removeVetoableChangeListener( const OUString& Pro
         throw(beans::UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
+Sequence< sal_Int8 > ZipPackageEntry::getUnoTunnelImplementationId( void )
+    throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:37 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 15:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGE_ZIP_ZIPENTRY_HPP_
-#include <com/sun/star/packages/zip/ZipEntry.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
@@ -79,6 +76,14 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _ZIP_ENTRY_HXX_
+#include <ZipEntry.hxx>
+#endif
+
+class ZipPackageFolder;
 
 class ZipPackageEntry : public com::sun::star::container::XNamed,
                         public com::sun::star::container::XChild,
@@ -86,19 +91,26 @@ class ZipPackageEntry : public com::sun::star::container::XNamed,
                         public com::sun::star::beans::XPropertySet
 {
 protected:
-    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
+    bool mbIsFolder:1;
+    com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;
     ::rtl::OUString     sMediaType;
+    ZipPackageFolder * pParent;
 public:
-    com::sun::star::packages::zip::ZipEntry aEntry;
+    ZipEntry aEntry;
+    ZipPackageEntry ( bool bNewFolder );
+    virtual ~ZipPackageEntry( void );
+
+
     ::rtl::OUString & GetMediaType () { return sMediaType; }
     void SetMediaType ( ::rtl::OUString & sNewType) { sMediaType = sNewType; }
-
-    ZipPackageEntry (void);
-    virtual ~ZipPackageEntry( void );
+    void doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert );
+    bool IsFolder ( ) { return mbIsFolder; }
+    ZipPackageFolder* GetParent ( ) { return pParent; }
+    void SetFolder ( bool bSetFolder ) { mbIsFolder = bSetFolder; }
 
     inline void clearParent ( void )
     {
-        xParent = com::sun::star::uno::Reference < com::sun::star::uno::XInterface > ();
+        xParent = com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > ();
     }
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
@@ -120,6 +132,7 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException) = 0;
+    com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId( void );
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
         throw(::com::sun::star::uno::RuntimeException);
