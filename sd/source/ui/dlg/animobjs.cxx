@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-15 13:03:48 $
+ *  last change: $Author: cl $ $Date: 2002-05-14 07:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "sdview.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
+#include "res_bmp.hrc"
 
 #include <string>
 #include <algorithm>
@@ -193,6 +194,11 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
         bAllObjects         ( FALSE )
 {
     FreeResource();
+
+    aBtnGetOneObject.SetModeImage( Image( SdResId( IMG_GET1OBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnGetAllObjects.SetModeImage( Image( SdResId( IMG_GETALLOBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnRemoveBitmap.SetModeImage( Image( SdResId( IMG_REMOVEBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnRemoveAll.SetModeImage( Image( SdResId( IMG_REMOVEALLBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     // neues Dokument mit Seite erzeugen
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
