@@ -1,0 +1,210 @@
+/*************************************************************************
+ *
+ *  $RCSfile: templwin.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // includes ------------------------------------------------------------------
+
+#include "svtools.hrc"
+#include "templwin.hrc"
+#include "helpid.hrc"
+
+#define MASK_COL    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+Control CTRL_FILEVIEW
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 180 ) ;
+};
+
+String STR_SVT_NEWDOC
+{
+    Text = "Neues Dokument";
+    Text [ english_us ] = "New Document";
+};
+
+Image IMG_SVT_NEWDOC
+{
+    ImageBitmap = Bitmap { File = "new_doc.bmp" ; };
+    MaskColor = MASK_COL
+};
+
+String STR_SVT_MYDOCS
+{
+    Text = "Eigene Dateien";
+    Text [ english_us ] = "My Documents";
+};
+
+Image IMG_SVT_MYDOCS
+{
+    ImageBitmap = Bitmap { File = "my_docs.bmp" ; };
+    MaskColor = MASK_COL
+};
+
+String STR_SVT_TEMPLATES
+{
+    Text = "Vorlagen";
+    Text [ english_us ] = "Templates";
+};
+
+Image IMG_SVT_TEMPLATES
+{
+    ImageBitmap = Bitmap { File = "template.bmp" ; };
+    MaskColor = MASK_COL
+};
+
+String STR_SVT_SAMPLES
+{
+    Text = "Beispiele";
+    Text [ english_us ] = "Samples";
+};
+
+Image IMG_SVT_SAMPLES
+{
+    ImageBitmap = Bitmap { File = "samples.bmp" ; };
+    MaskColor = MASK_COL
+};
+
+ToolBox 1001
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 100 , 12 ) ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_BACK;
+            ItemBitmap = Bitmap { File = "back_small.bmp" ; };
+            Text = "Zurück" ;
+            Text [ english_us ] = "Back" ;
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_PREV;
+            ItemBitmap = Bitmap { File = "up_small.bmp" ; };
+            Text = "Eine Ebene höher" ;
+            Text [ english_us ] = "Higher" ;
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = TI_DOCTEMPLATE_PRINT;
+            ItemBitmap = Bitmap { File = "sc05504.bmp" ; };
+            Text = "Drucken" ;
+            Text [ english_us ] = "Print" ;
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+ModalDialog DLG_DOCTEMPLATE
+{
+    HelpId = HID_TEMPLATEDLG_DIALOG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 400, 245 );
+    Text = "Vorlagen und Dokumente" ;
+    Text [ english_us ] = "Templates and Documents" ;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    FixedLine FL_DOCTEMPLATE
+    {
+        Pos = MAP_APPFONT( 1, 219 );
+        Size = MAP_APPFONT( 398, 1 );
+    };
+    PushButton BTN_DOCTEMPLATE_MANAGE
+    {
+        Disable = TRUE;
+        Pos = MAP_APPFONT( 6, 225 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text = "~Verwalten...";
+        Text [ english_us ] = "Manage...";
+    };
+    PushButton BTN_DOCTEMPLATE_EDIT
+    {
+        Pos = MAP_APPFONT( 59, 225 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text = "~Bearbeiten";
+        Text [ english_us ] = "Edit";
+    };
+    OKButton BTN_DOCTEMPLATE_OPEN
+    {
+        Pos = MAP_APPFONT( 235, 225 );
+        Size = MAP_APPFONT( 50, 14 );
+        DefButton = TRUE;
+        Text = "Ö~ffnen";
+        Text [ english_us ] = "Open";
+    };
+    CancelButton BTN_DOCTEMPLATE_CANCEL
+    {
+        Pos = MAP_APPFONT( 288, 225 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    HelpButton BTN_DOCTEMPLATE_HELP
+    {
+        Pos = MAP_APPFONT( 344, 225 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+};
+

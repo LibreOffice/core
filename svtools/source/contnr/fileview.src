@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fileview.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: pb $ $Date: 2001-05-07 10:33:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // includes ------------------------------------------------------------------
+
+#include "svtools.hrc"
+
+// strings --------------------------------------------------------------------
+
+String STR_SVT_FILEVIEW_COLUMN_TITLE
+{
+    Text = "Titel";
+    Text[English] = "Title";
+    Text[ english_us ] = "Title";
+    Text[ portuguese ] = "TÌtulo";
+    Text[ russian ] = "«‡„ÓÎÓ‚ÓÍ";
+    Text[ greek ] = "‘ﬂÙÎÔÚ";
+    Text[ dutch ] = "Titel";
+    Text[ french ] = "Titre";
+    Text[ spanish ] = "TÌtulo";
+    Text[ italian ] = "Titolo";
+    Text[ danish ] = "Titel";
+    Text[ swedish ] = "Titel";
+    Text[ polish ] = "Tytu≥";
+    Text[ portuguese_brazilian ] = "Title";
+    Text[ japanese ] = "¿≤ƒŸ";
+    Text[ korean ] = "¡¶∏Ò";
+    Text[ chinese_simplified ] = "±ÍÃ‚";
+    Text[ chinese_traditional ] = "º–√D";
+    Text[ turkish ] = "Title";
+    Text[ arabic ] = "«·⁄‰Ê«‰";
+};
+
+String STR_SVT_FILEVIEW_COLUMN_SIZE
+{
+    Text = "Grˆﬂe";
+    Text[English] = "Size";
+    Text[ english_us ] = "Size";
+    Text[ portuguese ] = "Tamanho";
+    Text[ russian ] = "–‡ÁÏÂ";
+    Text[ greek ] = "Ã›„ÂËÔÚ";
+    Text[ dutch ] = "Grootte";
+    Text[ french ] = "Taille";
+    Text[ spanish ] = "TamaÒo";
+    Text[ italian ] = "Dimensioni";
+    Text[ danish ] = "St¯rrelse";
+    Text[ swedish ] = "Storlek";
+    Text[ polish ] = "Rozmiar";
+    Text[ portuguese_brazilian ] = "Size";
+    Text[ japanese ] = "ª≤Ωﬁ";
+    Text[ korean ] = "≈©±‚";
+    Text[ chinese_simplified ] = "¥Û–°";
+    Text[ chinese_traditional ] = "§j§p";
+    Text[ turkish ] = "Size";
+    Text[ arabic ] = "«·ÕÃ„";
+};
+
+String STR_SVT_FILEVIEW_COLUMN_DATE
+{
+    Text = "ƒnderungsdatum";
+    Text[English] = "Modified Date";
+    Text[ english_us ] = "Modified Date";
+    Text[ portuguese ] = "Modificado em";
+    Text[ russian ] = "ƒ‡Ú‡ ËÁÏÂÌÂÌËˇ";
+    Text[ greek ] = "«ÏÂÒÔÏÁÌﬂ· ÙÒÔÔÔﬂÁÛÁÚ";
+    Text[ dutch ] = "Gewijzigd op";
+    Text[ french ] = "Date de modification";
+    Text[ spanish ] = "Fecha de modificaciÛn";
+    Text[ italian ] = "Data di modifica";
+    Text[ danish ] = "∆ndringsdato";
+    Text[ swedish ] = "ƒndringsdatum";
+    Text[ polish ] = "Data modyfikacji";
+    Text[ portuguese_brazilian ] = "Modified Date";
+    Text[ japanese ] = "ïœçXì˙";
+    Text[ korean ] = "∫Ø∞Ê¿œ¿⁄";
+    Text[ chinese_simplified ] = "∏¸∏ƒµƒ»’∆⁄";
+    Text[ chinese_traditional ] = "≈‹ßÛ™∫§È¥¡";
+    Text[ turkish ] = "Modified Date";
+    Text[ arabic ] = " «—ÌŒ «· ⁄œÌ·";
+};
+
+String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
+{
+    Text = "Der Ordner %1 konnte nicht angelegt werden.";
+    Text[ english_us ] = "Could not create the folder %1.";
+};
+
+String STR_SVT_BYTES
+{
+    Text = "Bytes" ;
+    Text [ ENGLISH ] = "Bytes" ;
+    Text [ english_us ] = "Bytes" ;
+    Text [ portuguese_brazilian ] = "Bytes" ;
+    Text [ swedish ] = "Byte" ;
+    Text [ danish ] = "Bytes" ;
+    Text [ italian ] = "Byte" ;
+    Text [ spanish ] = "Bytes" ;
+    Text [ french ] = "Octet(s)" ;
+    Text [ dutch ] = "Bytes" ;
+    Text [ portuguese ] = "Bytes" ;
+    Text[ chinese_simplified ] = "◊÷Ω⁄";
+    Text[ russian ] = "·‡ÈÚ";
+    Text[ polish ] = "Bajty";
+    Text[ japanese ] = " ﬁ≤ƒ";
+    Text[ chinese_traditional ] = "Bytes";
+    Text[ arabic ] = "»«Ì ";
+    Text[ greek ] = "Bytes";
+    Text[ korean ] = "πŸ¿Ã∆Æ";
+    Text[ turkish ] = "Byte";
+};
+
+String STR_SVT_KB
+{
+    Text = "KB" ;
+    Text [ ENGLISH ] = "KB" ;
+    Text [ portuguese ] = "KB" ;
+    Text [ english_us ] = "KB" ;
+    Text [ portuguese_brazilian ] = "KB" ;
+    Text [ swedish ] = "kB" ;
+    Text [ danish ] = "kB" ;
+    Text [ italian ] = "KB" ;
+    Text [ spanish ] = "KB" ;
+    Text [ french ] = "Ko" ;
+    Text [ dutch ] = "KB" ;
+    Text[ chinese_simplified ] = "«ß◊÷Ω⁄";
+    Text[ russian ] = " ¡";
+    Text[ polish ] = "KB";
+    Text[ japanese ] = "∑€ ﬁ≤ƒ";
+    Text[ chinese_traditional ] = "KB";
+    Text[ arabic ] = "ﬂÌ·Ê»«Ì ";
+    Text[ greek ] = "KB";
+    Text[ korean ] = "KB";
+    Text[ turkish ] = "KB";
+};
+
+String STR_SVT_MB
+{
+    Text = "MB" ;
+    Text [ ENGLISH ] = "MB" ;
+    Text [ portuguese ] = "MB" ;
+    Text [ english_us ] = "MB" ;
+    Text [ portuguese_brazilian ] = "MB" ;
+    Text [ swedish ] = "MB" ;
+    Text [ danish ] = "MB" ;
+    Text [ italian ] = "MB" ;
+    Text [ spanish ] = "MB" ;
+    Text [ french ] = "Mo" ;
+    Text [ dutch ] = "MB" ;
+    Text[ chinese_simplified ] = "’◊◊÷Ω⁄";
+    Text[ russian ] = "Ã¡";
+    Text[ polish ] = "MB";
+    Text[ japanese ] = "MB";
+    Text[ chinese_traditional ] = "MB";
+    Text[ arabic ] = "„Ì€«»«Ì ";
+    Text[ greek ] = "MB";
+    Text[ korean ] = "MB";
+    Text[ turkish ] = "MB";
+};
+
+
+String STR_SVT_GB
+{
+    Text = "GB" ;
+    Text [ ENGLISH ] = "GB" ;
+    Text [ portuguese ] = "GB" ;
+    Text [ english_us ] = "GB" ;
+    Text [ portuguese_brazilian ] = "GB" ;
+    Text [ swedish ] = "GB" ;
+    Text [ danish ] = "GB" ;
+    Text [ italian ] = "GB" ;
+    Text [ spanish ] = "GB" ;
+    Text [ french ] = "Go" ;
+    Text [ dutch ] = "GB" ;
+    Text[ chinese_simplified ] = "«ß’◊";
+    Text[ russian ] = "√¡";
+    Text[ polish ] = "GB";
+    Text[ japanese ] = "GB";
+    Text[ chinese_traditional ] = "GB";
+    Text[ arabic ] = "ÃÌÃ«»«Ì ";
+    Text[ greek ] = "GB";
+    Text[ korean ] = "GB";
+    Text[ turkish ] = "GB";
+};
+
+// Images ---------------------------------------------------------------------
+
+Image IMG_SVT_FOLDER
+{
+    ImageBitmap = Bitmap { File = "folder.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+};
+
+// eof ------------------------------------------------------------------------
+
