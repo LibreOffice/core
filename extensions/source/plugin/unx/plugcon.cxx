@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.4 2003-05-28 12:38:57 vg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.5 2004-03-17 10:16:14 obo Exp $
 
 *************************************************************************/
 #include <plugin/unx/plugcon.hxx>
@@ -14,7 +14,7 @@ UINT32 PluginConnector::GetStreamID( NPStream* pStream )
         if( m_aNPWrapStreams.GetObject( i ) == pStream )
             return i;
     medDebug( 1, "Error: NPStream has no ID\n" );
-    return ~0;
+    return UnknownStreamID;
 }
 
 UINT32 PluginConnector::GetNPPID( NPP instance )
@@ -23,7 +23,8 @@ UINT32 PluginConnector::GetNPPID( NPP instance )
         if( m_aInstances.GetObject( i )->instance == instance )
             return i;
     medDebug( 1, "Error: NPP has no ID\n" );
-    return ~0;
+
+    return UnknownNPPID;
 }
 
 struct PtrStruct
@@ -155,6 +156,7 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
         pArgnBuf( pargnbuf ),
         pArgvBuf( pargvbuf ),
         pShell( NULL ),
+        pForm( NULL ),
         pWidget( NULL )
 {
     memset( &window, 0, sizeof(window) );
@@ -213,6 +215,7 @@ char* GetCommandName( CommandAtoms eCommand )
 
         case eNPP_DestroyStream:        return "NPP_DestroyStream";
         case eNPP_Destroy:              return "NPP_Destroy";
+        case eNPP_DestroyPhase2:        return "NPP_DestroyPhase2";
         case eNPP_NewStream:            return "NPP_NewStream";
         case eNPP_New:                  return "NPP_New";
         case eNPP_SetWindow:            return "NPP_SetWindow";
