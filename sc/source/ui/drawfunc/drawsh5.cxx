@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:26:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using namespace com::sun::star;
 void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
 {
     ScDrawView* pView = pViewData->GetScDrawView();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
         //  Hyperlink
@@ -203,7 +203,7 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     if ( eMode == HLINK_DEFAULT || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
-                        const SdrMarkList& rMarkList = pView->GetMarkList();
+                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                         {
                             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
@@ -306,7 +306,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
             //  leave draw shell if nothing selected (layer may be locked)
-            if ( pView->GetMarkList().GetMarkCount() == 0 )
+            if ( pView->GetMarkedObjectList().GetMarkCount() == 0 )
                 pViewData->GetViewShell()->SetDrawShell( FALSE );
             break;
 
@@ -508,7 +508,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_RENAME_OBJECT:
             {
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if ( rMarkList.GetMarkCount() == 1 )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
@@ -623,7 +623,7 @@ IMPL_LINK( ScDrawShell, NameObjectHdl, AbstractSvxNameDialog*, pDialog )
 void ScDrawShell::ExecFormText(SfxRequest& rReq)
 {
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkList();
+    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
