@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:46:56 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ TabDialog DLG_ATTR
         Text [ danish ] = "~Tilbage" ;
         Text [ french ] = "Précédent" ;
         Text [ swedish ] = "~Tillbaka" ;
-        Text [ dutch ] = "~Ongedaan" ;
+        Text [ dutch ] = "~Vorige" ;
         Text [ spanish ] = "Regresar" ;
         Text [ english_us ] = "Bac~k" ;
         Text[ chinese_simplified ] = "è¿”å›(~K)";
@@ -236,7 +236,7 @@ TabDialog DLG_ATTR
         Text [ portuguese_brazilian ] = "Tabellenformatierung" ;
         Text [ portuguese ] = "Formatar tabela" ;
         Text[ chinese_simplified ] = "è¡¨æ ¼æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò òàáëèöû";
+        Text[ russian ] = "Îôîğìëåíèå òàáëèöû";
         Text[ polish ] = "Formatowanie tabeli";
         Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ›¸å¼è¨­å®š";
         Text[ chinese_traditional ] = "è¡¨æ ¼æ ¼å¼";
@@ -245,7 +245,7 @@ TabDialog DLG_ATTR
         Text[ korean ] = "ì‹œíŠ¸ ì„œì‹";
         Text[ turkish ] = "Tablo formatı";
         Text[ catalan ] = "Format de la taula";
-        Text[ finnish ] = "Taulukon muotoilu";
+        Text[ finnish ] = "Taulun muotoilu";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸•à¸²à¸£à¸²à¸‡";
     };
     Text[ chinese_simplified ] = "å­—æ®µæ ¼å¼";
