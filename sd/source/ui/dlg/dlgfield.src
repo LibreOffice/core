@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-21 15:29:17 $
+ *  last change: $Author: kz $ $Date: 2002-11-05 07:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,26 @@ ModalDialog DLG_FIELD_MODIFY
         Text = "~Sprache" ;
         Text [ ENGLISH ] = "~Language" ;
         Text [ english_us ] = "~Language" ;
+        Text[ portuguese ] = "~Language";
+        Text[ russian ] = "~Language";
+        Text[ greek ] = "~Language";
+        Text[ dutch ] = "~Language";
+        Text[ french ] = "~Language";
+        Text[ spanish ] = "~Language";
+        Text[ finnish ] = "~Language";
+        Text[ italian ] = "~Language";
+        Text[ danish ] = "~Language";
+        Text[ swedish ] = "~Language";
+        Text[ polish ] = "~Language";
+        Text[ portuguese_brazilian ] = "~Language";
+        Text[ japanese ] = "~Language";
+        Text[ korean ] = "~Language";
+        Text[ chinese_simplified ] = "~Language";
+        Text[ chinese_traditional ] = "~Language";
+        Text[ turkish ] = "~Language";
+        Text[ arabic ] = "~Language";
+        Text[ catalan ] = "~Language";
+        Text[ thai ] = "~Language";
     };
 
     ListBox LB_LANGUAGE
