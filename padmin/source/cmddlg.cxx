@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-13 16:01:24 $
+ *  last change: $Author: pl $ $Date: 2001-12-03 16:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
             {
                 pBuffer[ nLen-1 ] = 0;
                 aCommand = String( ByteString( pBuffer ), aEncoding );
-                aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps$/.pdf/` (OUTFILE)" );
+                aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" );
                 aSysCommands.push_back( aCommand );
             }
             pclose( pPipe );
