@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-06-20 11:50:17 $
+ *  last change: $Author: os $ $Date: 2002-11-01 10:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,12 +535,16 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
             if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == nDropFormat &&
                  EXCHG_IN_ACTION_LINK == nDropAction) ||
-                 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == nDropFormat )
+                 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE == nDropFormat  )
             {
                 SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
                 if( pMView && !pMView->IsDesignMode() )
                     return DND_ACTION_NONE;
             }
+            //controls cannot be created for the complete table
+            if(EXCHG_IN_ACTION_LINK == nDropAction &&
+                SOT_FORMATSTR_ID_SBA_DATAEXCHANGE == nDropFormat)
+                return DND_ACTION_NONE;
         }
 
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
@@ -599,6 +603,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2002/06/20 11:50:17  os
+    #100050# enable inserting of database fields if design mode is switched on
+
     Revision 1.11  2002/05/27 16:12:24  dvo
     #99027# re-evaluate drop action after the drop has been accepted
             this should enable the special treatment of single-element file
