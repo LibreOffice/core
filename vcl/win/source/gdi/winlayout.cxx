@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:00:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,10 +384,27 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
         nRC = ::GetCharacterPlacementW( mhDC, pBidiStr, mnGlyphCount,
             0, &aGCPW, nGcpOption );
-        mnGlyphCount = aGCPW.lpGlyphs ? aGCPW.nGlyphs : aGCPW.nMaxFit;
+
+        if( !aGCPW.lpGlyphs )
+            mnGlyphCount = aGCPW.nMaxFit;
+        else if( mnGlyphCount != aGCPW.nGlyphs )
+        {
+            // HOTFIX for #i27336# (automatic ligatures since XP_SP2):
+            // if the GCP call betrayed us by force feeding us ligatures
+            // then work around this by not giving GCP enough ligature context
+            nRC = 0;
+            for( int i = 0; i < mnGlyphCount; ++i )
+            {
+                aGCPW.lpDx = &mpGlyphAdvances[i];
+                aGCPW.lpGlyphs = &mpOutGlyphs[i];
+                ::GetCharacterPlacementW( mhDC, &pBidiStr[i], 1,
+                    0, &aGCPW, nGcpOption );
+                nRC += mpGlyphAdvances[i];
+            }
+        }
 
 #ifndef GCP_KERN_HACK
-        // get undisturbed placement
+        // get char placement only dependend on DX array, not on implicit kerning
         if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         {
             aGCPW.lpDx = mpGlyphOrigAdvs;
@@ -2268,7 +2285,7 @@ SalLayout* WinSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
     ImplWinFontEntry& rFontInstance = *mpWinFontEntry[ nFallbackLevel ];
 
 #if defined( USE_UNISCRIBE )
-    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
+    if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)
     &&   (aUspModule || (bUspEnabled && InitUSP())) )   // CTL layout engine
     {
         // script complexity is determined in upper layers
