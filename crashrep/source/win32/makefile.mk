@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-26 03:10:48 $
+#   last change: $Author: kz $ $Date: 2004-07-30 16:24:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@ TARGETTYPE=GUI
 
 # --- Resources ----------------------------------------------------
 
-RCFILES=$(TARGET).rc
+RCFILES=$(RES)$/$(TARGET).rc
 
 # --- Files --------------------------------------------------------
 
@@ -98,5 +98,5 @@ $(OBJ)$/soreport.obj: $(INCCOM)$/_version.h
 # using lngconvex.exe 
 
 $(RCFILES) : $(LNGFILES) makefile.mk rcfooter.txt rcheader.txt rctemplate.txt ctrylnglist.txt
-    +lngconvex.exe -lng $(COMMONMISC)$/crash_res$/crashrep.ulf -rc $(TARGET).rc -c  ctrylnglist.txt  -rct rctemplate.txt -rch rcheader.txt -rcf rcfooter.txt
+    +lngconvex.exe -ulf $(COMMONMISC)$/crash_res$/crashrep.ulf -rc $(RES)$/$(TARGET).rc  -rct rctemplate.txt -rch rcheader.txt -rcf rcfooter.txt
     
