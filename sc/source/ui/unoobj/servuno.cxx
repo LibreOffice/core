@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:51:43 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include "cellvaluebinding.hxx"
 #include "celllistsource.hxx"
 #include "addruno.hxx"
+#include "chart2uno.hxx"
 
 // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #ifndef _XMLEOHLP_HXX
@@ -147,7 +148,8 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
         SC_SERVICENAME_LISTCELLBIND,               // SC_SERVICE_LISTCELLBIND
         SC_SERVICENAME_LISTSOURCE,                 // SC_SERVICE_LISTSOURCE
         SC_SERVICENAME_CELLADDRESS,                // SC_SERVICE_CELLADDRESS
-        SC_SERVICENAME_RANGEADDRESS                // SC_SERVICE_RANGEADDRESS
+        SC_SERVICENAME_RANGEADDRESS,               // SC_SERVICE_RANGEADDRESS
+        SC_SERVICENAME_CHDATAPROV                  // SC_SERVICE_CHDATAPROV
     };
 
 //
@@ -195,7 +197,8 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_LISTCELLBIND
         "",                                         // SC_SERVICE_LISTSOURCE
         "",                                         // SC_SERVICE_CELLADDRESS
-        ""                                          // SC_SERVICE_RANGEADDRESS
+        "",                                         // SC_SERVICE_RANGEADDRESS
+        ""                                          // SC_SERVICE_CHDATAPROV
     };
 
 
@@ -369,6 +372,11 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 sal_Bool bRange = ( nType == SC_SERVICE_RANGEADDRESS );
                 xRet = *new ScAddressConversionObj( pDocShell, bRange );
             }
+            break;
+
+        case SC_SERVICE_CHDATAPROV:
+            if (pDocShell)
+                xRet = *new ScChart2DataProvider( pDocShell );
             break;
     }
     return xRet;
