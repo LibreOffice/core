@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-11 12:10:41 $
+ *  last change: $Author: sj $ $Date: 2001-01-12 12:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,36 @@
 
 #include "winmtf.hxx"
 #include <vcl/metaact.hxx>
+
+// ------------------------------------------------------------------------
+
+void WinMtfPathObj::AddPoint( const Point& rPoint )
+{
+    if ( !Count() )
+        Insert( Polygon(), POLYPOLY_APPEND );
+    Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+    rPoly.Insert( rPoly.GetSize(), POLY_NORMAL );
+}
+
+void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
+{
+    if ( !Count() )
+        Insert( Polygon(), POLYPOLY_APPEND );
+    Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
+    rPoly.Insert( rPoly.GetSize(), rPolyLine );
+}
+
+void WinMtfPathObj::AddPolygon( const Polygon& rPoly )
+{
+    Insert( rPoly, POLYPOLY_APPEND );
+}
+
+void WinMtfPathObj::AddPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+    sal_uInt16 i, nCount = rPolyPoly.Count();
+    for ( i = 0; i < nCount; i++ )
+        Insert( rPolyPoly[ i ], POLYPOLY_APPEND );
+}
 
 // ------------------------------------------------------------------------
 
@@ -441,7 +471,6 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
 void WinMtfOutput::Push( BOOL bWinExtSet )
 {
     SaveStruct* pSave = new SaveStruct;
-
     pSave->aActPos = maActPos;
     pSave->nActTextAlign = mnActTextAlign;
     pSave->nBkMode = mnBkMode;
@@ -464,6 +493,7 @@ void WinMtfOutput::Push( BOOL bWinExtSet )
         pSave->nDevWidth = mnDevWidth;
         pSave->nDevHeight = mnDevHeight;
     }
+    pSave->aPathObj = aPathObj;
     maSaveStack.Push( pSave );
 }
 
@@ -498,6 +528,7 @@ void WinMtfOutput::Pop()
             mnDevWidth = pSave->nDevWidth;
             mnDevHeight = pSave->nDevHeight;
         }
+        aPathObj = pSave->aPathObj;
         delete pSave;
     }
 }
@@ -692,7 +723,7 @@ void WinMtfOutput::DeleteObject( INT32 nIndex )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry )
+void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
 {
     rPosition = ImplMap( rPosition );
 
@@ -769,6 +800,25 @@ UINT32 WinMtfMetaOutput::SetRasterOp( UINT32 nRasterOp )
     return nRetROP;
 };
 
+//-----------------------------------------------------------------------------------
+
+void WinMtfMetaOutput::SelectClipPath( sal_Int32 nClippingMode )
+{
+    switch ( nClippingMode )
+    {
+        case RGN_OR :
+        case RGN_XOR :
+        case RGN_DIFF :
+        break;
+        case RGN_AND :
+        case RGN_COPY :
+        {
+            Region aRegion( aPathObj );
+            mpGDIMetaFile->AddAction( new MetaISectRegionClipRegionAction( aRegion ) );
+        }
+        break;
+    }
+}
 
 //-----------------------------------------------------------------------------------
 
@@ -779,11 +829,16 @@ void WinMtfMetaOutput::DrawPixel( const Point& rSource, const Color& rColor )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::LineTo( const Point& rPoint )
+void WinMtfMetaOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 {
     Point aDest( ImplMap( rPoint ) );
-    UpdateLineStyle();
-    mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
+    if ( bRecordPath )
+        aPathObj.AddPoint( rPoint );
+    else
+    {
+        UpdateLineStyle();
+        mpGDIMetaFile->AddAction( new MetaLineAction( maActPos, aDest, maLineStyle.aLineInfo ) );
+    }
     maActPos = aDest;
 }
 
@@ -934,63 +989,77 @@ void WinMtfMetaOutput::DrawChord( const Rectangle& rRect, const Point& rStart, c
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolygon( Polygon& rPolygon )
+void WinMtfMetaOutput::DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath )
 {
-    UpdateFillStyle();
-
-    if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
+    ImplMap( rPolygon );
+    if ( bRecordPath )
+        aPathObj.AddPolygon( rPolygon );
+    else
     {
-        USHORT nCount = rPolygon.GetSize();
-        if ( nCount )
+        UpdateFillStyle();
+        if ( maLineStyle.aLineInfo.GetWidth() || ( maLineStyle.aLineInfo.GetStyle() == LINE_DASH ) )
         {
-            if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
+            USHORT nCount = rPolygon.GetSize();
+            if ( nCount )
             {
-                Point aPoint( rPolygon[ 0 ] );
-                rPolygon.Insert( nCount, aPoint );
+                if ( rPolygon[ nCount - 1 ] != rPolygon[ 0 ] )
+                {
+                    Point aPoint( rPolygon[ 0 ] );
+                    rPolygon.Insert( nCount, aPoint );
+                }
             }
+            mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
+            mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+            mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+            mpGDIMetaFile->AddAction( new MetaPopAction() );
         }
-        mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, FALSE ) );
-        mpGDIMetaFile->AddAction( new MetaPolygonAction( ImplMap( rPolygon ) ) );
-        mpGDIMetaFile->AddAction( new MetaLineColorAction( maLineStyle.aLineColor, !maLineStyle.bTransparent ) );
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
-        mpGDIMetaFile->AddAction( new MetaPopAction() );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolygonAction( rPolygon ) );
+        }
     }
+}
+
+//-----------------------------------------------------------------------------------
+
+void WinMtfMetaOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath )
+{
+    if ( bRecordPath )
+        aPathObj.AddPolyPolygon( rPolyPolygon );
     else
     {
         UpdateLineStyle();
-        mpGDIMetaFile->AddAction( new MetaPolygonAction( ImplMap( rPolygon ) ) );
+        UpdateFillStyle();
+        mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( ImplMap( rPolyPolygon ) ) );
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
+void WinMtfMetaOutput::DrawPolyLine( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
-    UpdateLineStyle();
-    UpdateFillStyle();
-    mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( ImplMap( rPolyPolygon ) ) );
-}
-
-//-----------------------------------------------------------------------------------
-
-void WinMtfMetaOutput::DrawPolyLine( Polygon& rPolygon, BOOL bTo )
-{
-    UpdateLineStyle();
     ImplMap( rPolygon );
     if ( bTo )
     {
         rPolygon[ 0 ] = maActPos;
         maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
     }
-    mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+    if ( bRecordPath )
+        aPathObj.AddPolyLine( rPolygon );
+    else
+    {
+        UpdateLineStyle();
+        mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+    }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawPolyBezier( Polygon& rPolygon, BOOL bTo )
+void WinMtfMetaOutput::DrawPolyBezier( Polygon& rPolygon, sal_Bool bTo, sal_Bool bRecordPath )
 {
-    UpdateLineStyle();
     UINT16 nPoints = rPolygon.GetSize();
     if ( ( nPoints >= 4 ) && ( ( ( nPoints - 4 ) % 3 ) == 0 ) )
     {
@@ -1017,13 +1086,19 @@ void WinMtfMetaOutput::DrawPolyBezier( Polygon& rPolygon, BOOL bTo )
 
         if( nBezPos != aBezPoly.GetSize() )
             aBezPoly.SetSize( nBezPos );
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( aBezPoly, maLineStyle.aLineInfo ) );
+        if ( bRecordPath )
+            aPathObj.AddPolyLine( aBezPoly );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( aBezPoly, maLineStyle.aLineInfo ) );
+        }
     }
 }
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry )
+void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sal_Bool bRecordPath )
 {
     WinMtfOutput::DrawText( rPosition, rText, pDXArry );
 
@@ -1063,11 +1138,17 @@ void WinMtfMetaOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry
         if( mnActTextAlign & TA_UPDATECP )
             maActPos.X() = rPosition.X() + nTextWidth;
     }
-
-    if( pDXArry )
-        mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDXArry, 0, STRING_LEN ) );
+    if ( bRecordPath )
+    {
+        // ToDo
+    }
     else
-        mpGDIMetaFile->AddAction( new MetaTextAction( rPosition, rText, 0, STRING_LEN ) );
+    {
+        if( pDXArry )
+            mpGDIMetaFile->AddAction( new MetaTextArrayAction( rPosition, rText, pDXArry, 0, STRING_LEN ) );
+        else
+            mpGDIMetaFile->AddAction( new MetaTextAction( rPosition, rText, 0, STRING_LEN ) );
+    }
 }
 
 //-----------------------------------------------------------------------------------
@@ -1102,7 +1183,7 @@ void WinMtfMetaOutput::ResolveBitmapActions( List& rSaveList )
         {
             pSave = (BSaveStruct*)rSaveList.GetObject( i );
 
-            sal_uInt32  nOldRop, nWinRop = pSave->nWinRop;
+            sal_uInt32  nWinRop = pSave->nWinRop;
             sal_uInt8   nRasterOperation = (sal_uInt8)( nWinRop >> 16 );
 
             sal_uInt32  nUsed =  0;

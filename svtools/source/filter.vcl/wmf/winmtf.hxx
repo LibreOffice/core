@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 16:48:05 $
+ *  last change: $Author: sj $ $Date: 2001-01-12 12:44:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,11 @@
 #include <fltcall.hxx>
 #endif
 
+#define RGN_AND                 1
+#define RGN_OR                  2
+#define RGN_XOR                 3
+#define RGN_DIFF                4
+#define RGN_COPY                5
 
 #define TRANSPARENT             1
 #define OPAQUE                  2
@@ -288,6 +293,20 @@ struct LOGFONTW
 
 // -----------------------------------------------------------------------------
 
+class WinMtfPathObj : public PolyPolygon
+{
+        sal_Bool    bClosed;
+
+    public :
+
+        void    ClosePath() { bClosed = sal_True; };
+
+        void    AddPoint( const Point& rPoint );
+        void    AddPolygon( const Polygon& rPoly );
+        void    AddPolyLine( const Polygon& rPoly );
+        void    AddPolyPolygon( const PolyPolygon& rPolyPolygon );
+};
+
 struct WinMtfFontStyle
 {
     Font        aFont;
@@ -376,6 +395,8 @@ struct SaveStruct
     BOOL                bFontChanged;
     Font                aFont;
     UINT32              nActTextAlign;
+    sal_Bool            bRecordPath;
+    WinMtfPathObj       aPathObj;
 };
 
 DECLARE_STACK( SaveStack, SaveStruct* );
@@ -463,6 +484,7 @@ class WinMtfOutput
 {
     protected:
 
+        WinMtfPathObj       aPathObj;
         GDIObj**            mpGDIObj;
         UINT32              mnEntrys;
         UINT32              mnActTextAlign;         // Aktuelle Textausrichtung (im MS-Windows-Format)
@@ -527,9 +549,13 @@ class WinMtfOutput
         void                SelectObject( INT32 nIndex );
         CharSet             GetCharSet(){ return maFont.GetCharSet(); };
 
+        void                ClearPath(){ aPathObj.Clear(); };
+        void                ClosePath(){ aPathObj.ClosePath(); };
+        virtual void        SelectClipPath( sal_Int32 nClipMode ){};
+
         virtual void        DrawPixel( const Point& rSource, const Color& rColor ){};
         void                MoveTo( const Point& rPoint ) { maActPos = ImplMap( rPoint ); };
-        virtual void        LineTo( const Point& rPoint ){};
+        virtual void        LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False ){};
         virtual void        DrawLine( const Point& rSource, const Point& rDest ){};
         virtual void        DrawRect( const Rectangle& rRect, BOOL bEdge = TRUE ){};
         virtual void        DrawRoundRect( const Rectangle& rRect, const Size& rSize ){};
@@ -537,11 +563,11 @@ class WinMtfOutput
         virtual void        DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, BOOL bDrawTo = FALSE ){};
         virtual void        DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle ){};
         virtual void        DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle ){};
-        virtual void        DrawPolygon( Polygon& rPolygon ){};
-        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon ){};
-        virtual void        DrawPolyLine( Polygon& rPolygon, BOOL bDrawTo = FALSE ){};
-        virtual void        DrawPolyBezier( Polygon& rPolygin, BOOL bDrawTo = FALSE ){};
-        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL );
+        virtual void        DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False ){};
+        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False ){};
+        virtual void        DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False ){};
+        virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False ){};
+        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
         virtual void        ResolveBitmapActions( List& rSaveList ){};
         virtual void        IntersectClipRect( const Rectangle& rRectangle ){};
         virtual void        MoveClipRegion( const Size& rSize ){};
@@ -581,8 +607,9 @@ class WinMtfMetaOutput : public WinMtfOutput
         virtual void        Pop();
 
         virtual UINT32      SetRasterOp( UINT32 nRasterOp );
+        virtual void        SelectClipPath( sal_Int32 nClipMode );
 
-        virtual void        LineTo( const Point& rPoint );
+        virtual void        LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
         virtual void        DrawPixel( const Point& rSource, const Color& rColor );
         virtual void        DrawLine( const Point& rSource, const Point& rDest );
         virtual void        DrawRect( const Rectangle& rRect, BOOL bEdge = TRUE );
@@ -591,11 +618,11 @@ class WinMtfMetaOutput : public WinMtfOutput
         virtual void        DrawArc( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle, BOOL bDrawTo = FALSE );
         virtual void        DrawPie( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
         virtual void        DrawChord( const Rectangle& rRect, const Point& rStartAngle, const Point& rEndAngle );
-        virtual void        DrawPolygon( Polygon& rPolygon );
-        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon );
-        virtual void        DrawPolyLine( Polygon& rPolygon, BOOL bDrawTo = FALSE );
-        virtual void        DrawPolyBezier( Polygon& rPolygin, BOOL bDrawTo = FALSE );
-        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL );
+        virtual void        DrawPolygon( Polygon& rPolygon, sal_Bool bRecordPath = sal_False );
+        virtual void        DrawPolyPolygon( PolyPolygon& rPolyPolygon, sal_Bool bRecordPath = sal_False );
+        virtual void        DrawPolyLine( Polygon& rPolygon, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
+        virtual void        DrawPolyBezier( Polygon& rPolygin, sal_Bool bDrawTo = sal_False, sal_Bool bRecordPath = sal_False );
+        virtual void        DrawText( Point& rPosition, String& rString, INT32* pDXArry = NULL, sal_Bool bRecordPath = sal_False );
         virtual void        ResolveBitmapActions( List& rSaveList );
         virtual void        IntersectClipRect( const Rectangle& rRectangle );
         virtual void        MoveClipRegion( const Size& rSize );
@@ -639,7 +666,8 @@ class EnhWMFReader : public WinMtf
 
 private:
 
-    INT32           nRecordCount;
+    sal_Bool        bRecordPath;
+    sal_Int32       nRecordCount;
 
     BOOL            ReadHeader();
     Rectangle       ReadRectangle( INT32, INT32, INT32, INT32 );            // Liesst und konvertiert ein Rechteck
@@ -648,7 +676,9 @@ private:
 public:
                     EnhWMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile,
                                     PFilterCallback pcallback, void * pcallerdata ) : WinMtf( new WinMtfMetaOutput( rGDIMetaFile ), rStreamWMF,
-                                                                                        pcallback, pcallerdata ) {};
+                                                                                        pcallback, pcallerdata ),
+                                                                                            bRecordPath( sal_False ) {};
+                    ~EnhWMFReader();
 
     BOOL            ReadEnhWMF();
 };
