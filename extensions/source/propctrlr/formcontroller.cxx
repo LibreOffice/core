@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:51:08 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,7 +2057,8 @@ class EventsNameReplace_Impl:
                    continue;
                 if ( nPropId == PROPERTY_ID_DATASOURCE )
                 {
-                    if ( m_xPropValueAccess.is() && ::dbtools::getActiveConnectionFromParent(m_xPropValueAccess).is() )
+                    Reference< XConnection > xConn;
+                    if ( m_xPropValueAccess.is() && ::dbtools::isEmbeddedInDatabase( m_xPropValueAccess, xConn ) )
                         continue;
                 }
 
@@ -2611,7 +2612,8 @@ class EventsNameReplace_Impl:
 
                         pProperty->eControlType = BCT_COMBOBOX;
 
-                        if ( xInter.is() && ::dbtools::getActiveConnectionFromParent(xInter).is() )
+                        Reference< XConnection > xConnection;
+                        if ( xInter.is() && ::dbtools::isEmbeddedInDatabase( xInter, xConnection ) )
                         {
                             nPropertyUIFlags = nPropertyUIFlags & ~(PROP_FLAG_FORM_VISIBLE | PROP_FLAG_DIALOG_VISIBLE);
                             getPropertyBox()->EnablePropertyLine( PROPERTY_DATASOURCE, sal_False );
