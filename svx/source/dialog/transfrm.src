@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2001-02-06 15:23:05 $
+ *  last change: $Author: af $ $Date: 2001-02-09 14:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage RID_SVXPAGE_POSITION
     GroupBox GRP_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 65 ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -259,8 +259,8 @@ TabPage RID_SVXPAGE_POSITION
 
     GroupBox GB_ANCHOR
     {
-        Pos = MAP_APPFONT ( 6 , 93  ) ;
-        Size = MAP_APPFONT ( 248 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 71  ) ;
+        Size = MAP_APPFONT ( 248 , 45 ) ;
         Text = "Verankerung" ;
         Text [ ENGLISH ] = "Anchor" ;
         Hide = TRUE ;
@@ -286,7 +286,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ANCHOR
     {
-        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Pos = MAP_APPFONT ( 12 , 84  ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Anker" ;
         Text [ ENGLISH ] = "~Anchor" ;
@@ -313,7 +313,7 @@ TabPage RID_SVXPAGE_POSITION
     };
     ListBox LB_ANCHOR
     {
-        Pos = MAP_APPFONT ( 53 , 104  ) ;
+        Pos = MAP_APPFONT ( 53 , 82  ) ;
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -467,14 +467,14 @@ TabPage RID_SVXPAGE_POSITION
     };
     FixedText FT_ORIENT
     {
-        Pos = MAP_APPFONT ( 12 , 122  ) ;
+        Pos = MAP_APPFONT ( 12 , 100  ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
         Text = "~Position" ;
         Hide = TRUE ;
     };
     ListBox LB_ORIENT
     {
-        Pos = MAP_APPFONT ( 53 , 120  );
+        Pos = MAP_APPFONT ( 53 , 98  );
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
@@ -785,7 +785,7 @@ TabPage RID_SVXPAGE_SIZE
     GroupBox GRP_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 73 ) ;
         Text = "Größe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ norwegian ] = "Størrelse" ;
@@ -928,7 +928,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     CheckBox CBX_SCALE
     {
-        Pos = MAP_APPFONT ( 12 , 52  ) ;
+        Pos = MAP_APPFONT ( 12 , 46  ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~Abgleich" ;
         Text [ ENGLISH ] = "~Match" ;
@@ -955,8 +955,8 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_PROTECT
     {
-        Pos = MAP_APPFONT ( 12 , 66  ) ;
-        Size = MAP_APPFONT ( 220 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 60  ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "Sch~ützen" ;
         Text [ ENGLISH ] = "~Protect" ;
         Text [ norwegian ] = "~Beskytte" ;
@@ -985,8 +985,8 @@ TabPage RID_SVXPAGE_SIZE
 
     GroupBox GRP_ADJUST
     {
-        Pos = MAP_APPFONT ( 6 , 93  ) ;
-        Size = MAP_APPFONT ( 248 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 79  ) ;
+        Size = MAP_APPFONT ( 248 , 45 ) ;
         Text = "Anpassen" ;
         Text [ ENGLISH ] = "Adjust" ;
         Text [ english_us ] = "Adapt" ;
@@ -1011,7 +1011,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
-        Pos = MAP_APPFONT ( 12 , 104  ) ;
+        Pos = MAP_APPFONT ( 12 , 90  ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
         Text = "Br~eite an Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~width to text" ;
@@ -1038,7 +1038,7 @@ TabPage RID_SVXPAGE_SIZE
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 120  ) ;
+        Pos = MAP_APPFONT ( 12 , 106  ) ;
         Size = MAP_APPFONT ( 220 , 12 ) ;
         Text = "Höhe ~an Text anpassen" ;
         Text [ ENGLISH ] = "Fit ~height to text" ;
@@ -1096,7 +1096,7 @@ TabPage RID_SVXPAGE_ANGLE
     GroupBox GRP_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 65 ) ;
         Text = "Drehpunkt" ;
         Text [ ENGLISH ] = "Pivot" ;
         Text [ norwegian ] = "Pivot" ;
@@ -1209,8 +1209,8 @@ TabPage RID_SVXPAGE_ANGLE
     };
     GroupBox GRP_ANGLE
     {
-        Pos = MAP_APPFONT ( 6 , 93  ) ;
-        Size = MAP_APPFONT ( 248 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 71  ) ;
+        Size = MAP_APPFONT ( 248 , 65 ) ;
         Text = "Drehwinkel" ;
         Text [ ENGLISH ] = "Angle" ;
         Text [ norwegian ] = "Vinkel" ;
@@ -1237,7 +1237,7 @@ TabPage RID_SVXPAGE_ANGLE
     };
     FixedText FT_ANGLE
     {
-        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Pos = MAP_APPFONT ( 12 , 84  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "~Angle" ;
@@ -1266,7 +1266,7 @@ TabPage RID_SVXPAGE_ANGLE
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 104  ) ;
+        Pos = MAP_APPFONT ( 56 , 82  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1333,7 +1333,7 @@ TabPage RID_SVXPAGE_ANGLE
     {
         HelpId = HID_TPROTATION_CTRL2 ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 104  ) ;
+        Pos = MAP_APPFONT ( 178 , 82  ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
     };
@@ -1368,7 +1368,7 @@ TabPage RID_SVXPAGE_SLANT
     GroupBox GRP_RADIUS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 87 ) ;
+        Size = MAP_APPFONT ( 248 , 29 ) ;
         Text = "Eckenradius" ;
         Text [ ENGLISH ] = "Edge radius" ;
         Text [ dutch ] = "Hoekafronding" ;
@@ -1434,8 +1434,8 @@ TabPage RID_SVXPAGE_SLANT
     };
     GroupBox GRP_SLANT
     {
-        Pos = MAP_APPFONT ( 6 , 93  ) ;
-        Size = MAP_APPFONT ( 248 , 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 35  ) ;
+        Size = MAP_APPFONT ( 248 , 29 ) ;
         Text = "Schräg stellen" ;
         Text [ ENGLISH ] = "Slant" ;
         Text [ english_us ] = "Slant" ;
@@ -1460,7 +1460,7 @@ TabPage RID_SVXPAGE_SLANT
     };
     FixedText FT_ANGLE
     {
-        Pos = MAP_APPFONT ( 12 , 106  ) ;
+        Pos = MAP_APPFONT ( 12 , 48  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "~Angle" ;
@@ -1487,7 +1487,7 @@ TabPage RID_SVXPAGE_SLANT
     MetricField MTR_FLD_ANGLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 56 , 104  ) ;
+        Pos = MAP_APPFONT ( 56 , 46  ) ;
         Size = MAP_APPFONT ( 54 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
