@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 14:08:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _OFA_OPTGDLG_HXX
 #define _OFA_OPTGDLG_HXX
-
 #ifndef _SV_LSTBOX_HXX //autogen wg. ListBox
 #include <vcl/lstbox.hxx>
 #endif
@@ -140,7 +139,7 @@ private:
     ListBox         aIconSizeLB;
     CheckBox        m_aSystemFont;
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     CheckBox        aFontAntiAliasing;
     FixedText       aAAPointLimitLabel;
     NumericField    aAAPointLimit;
@@ -154,6 +153,8 @@ private:
     FixedLine       aFontListsFL;
     CheckBox        aFontShowCB;
     CheckBox        aFontHistoryCB;
+    FixedLine       aRenderingFL;
+    CheckBox        aUseHardwareAccell;
 
     FixedLine       aWorkingSetBox;
     CheckBox        aDocViewBtn;
@@ -177,7 +178,7 @@ private:
     SvtTabAppearanceCfg* pAppearanceCfg;
 
     DECL_LINK( OpenGLHdl, CheckBox* );
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     DECL_LINK( OnAntialiasingToggled, void* );
 #endif
 public:
