@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:44:08 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text = "Halb-/normalbreite Formen" ;
         Text [ English ] = "Match half/full width forms" ;
         Text[ english_us ] = "Match half/full-width forms";
-        Text[ portuguese ] = "Match half/full width forms";
+        Text[ portuguese ] = "Formas de meia-largura e largura normal";
         Text[ russian ] = "Ќормальные/полуширокие формы";
         Text[ greek ] = "÷ьсмет ме кбнпнйкь/мйуь рл№фпт";
         Text[ dutch ] = "Match half/full width forms";
@@ -631,7 +631,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text = "ƒhnl. Schreibweise (Jap.)" ;
         Text [ English ] = "Sounds like (Japanese)" ;
         Text[ english_us ] = "Sounds like (Japanese)";
-        Text[ portuguese ] = "Sounds like (Japanese)";
+        Text[ portuguese ] = "Ortografia semelhante (Japonкs)";
         Text[ russian ] = "ѕодобное письмо (€понский)";
         Text[ greek ] = "–бсьмпйб гсбцё (…брщнЁжйкб)";
         Text[ dutch ] = "Sounds like (Japanese)";
@@ -657,6 +657,23 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text = "..." ;
         Text [ english ] = "..." ;
         Text [ english_us ] = "..." ;
+        Text[ portuguese ] = "...";
+        Text[ russian ] = "...";
+        Text[ greek ] = "...";
+        Text[ dutch ] = "...";
+        Text[ french ] = "...";
+        Text[ spanish ] = "...";
+        Text[ italian ] = "...";
+        Text[ danish ] = "...";
+        Text[ swedish ] = "...";
+        Text[ polish ] = "...";
+        Text[ portuguese_brazilian ] = "...";
+        Text[ japanese ] = "...";
+        Text[ korean ] = "...";
+        Text[ chinese_simplified ] = "...";
+        Text[ chinese_traditional ] = "...";
+        Text[ turkish ] = "...";
+        Text[ arabic ] = "...";
     };
     GroupBox GB_STATE
     {
