@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-13 09:39:28 $
+ *  last change: $Author: nf $ $Date: 2001-02-13 12:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,11 +544,11 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                     BOOL bOk = FALSE;
 #ifdef UNX
                     sPath = "UnixVolume";
-                    GenericInformation *pUnixVolume = pDrive->GetInfo( sPath );
+                    GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
                     if ( pUnixVolume ) {
                         String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
                         aEntry = DirEntry( sRoot );
-                        bOK = TRUE;
+                        bOk = TRUE;
                      }
 #else
                     bOk = TRUE;
