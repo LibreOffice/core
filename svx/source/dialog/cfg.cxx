@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:26:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 18:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4907,25 +4907,6 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
         {
             // We have to reset all images because we change to/from high contrast mode
             m_bHiContrastMode = GetDisplayBackground().GetColor().IsDark();
-
-            /*
-            SfxImageManager*    pImgMgr = m_pBindings->GetImageManager();
-            SvLBoxEntry*        pEntry  = NULL;
-            for ( ULONG n = 0; n < GetEntryCount(); n++ )
-            {
-                pEntry = GetEntry( 0, n );
-                SvxToolbarEntryInfo_Impl* pInfo =
-                    (SvxToolbarEntryInfo_Impl*)pEntry->GetUserData();
-
-                if ( pInfo )
-                {
-                    // Retrieve image for the correct color mode
-                    Image aImage = pImgMgr->SeekImage( pInfo->nId, m_bHiContrastMode );
-                    SetExpandedEntryBmp( pEntry, aImage );
-                    SetCollapsedEntryBmp( pEntry, aImage );
-                }
-            }
-            */
         }
 
         BuildCheckBoxButtonImages( m_pButtonData );
