@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-27 21:13:18 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ turkish ] = "Properties: ";
     Text[ arabic ] = "«·Œ’«∆’: ";
     Text[ finnish ] = "Ominaisuudet:";
-    Text[ catalan ] = "Properties: ";
+    Text[ catalan ] = "Propietats: ";
 };
 String RID_STR_BRWTITLE_NO_PROPERTIES
 {
@@ -199,7 +199,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ turkish ] = "No Control marked";
     Text[ arabic ] = "·„ Ì „  ÕœÌœ ⁄‰’—  Õﬂ„";
     Text[ finnish ] = "Kein Kontrollelement markiert";
-    Text[ catalan ] = "No Control marked";
+    Text[ catalan ] = "Sense marques de control";
 };
 String RID_STR_BRWTITLE_MULTISELECT
 {
@@ -224,10 +224,11 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ turkish ] = "Multiselection";
     Text[ arabic ] = " ÕœÌœ „ ⁄œœ";
     Text[ finnish ] = "Monivalinta";
-    Text[ catalan ] = "Multiselection";
+    Text[ catalan ] = "SelecciÛ m˙ltiple";
 };
 
 // -----------------------------------------------------------------------
+
 
 
 
