@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleEditableText.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:56:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module accessibility {
 
     @since #107627#
 */
-interface XAccessibleEditableText
+published interface XAccessibleEditableText
     : ::com::sun::star::accessibility::XAccessibleText
 {
     /** Copies the text range into the clipboard.
