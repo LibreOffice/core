@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-28 16:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,7 +1698,7 @@ Writer& OutWW8_SwSectionNode( Writer& rWrt, SwSectionNode& rSectionNode )
 
     SwNodeIndex aIdx( rSectionNode, 1 );
     const SwNode& rNd = aIdx.GetNode();
-    if( !rNd.IsSectionNode()  )
+    if (!rNd.IsSectionNode() && !rWW8Wrt.bIsInTable) //No sections in table
     {
         // Bug 74245 - if the first Node inside the section has an own
         //              PageDesc or PageBreak attribut, then dont write

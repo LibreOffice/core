@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-28 16:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1843,7 +1843,7 @@ void SwWW8Writer::WriteText()
             else
             if(    aIdx.GetNode().IsSectionNode() )
                 ;
-            else
+            else if (!bIsInTable) //No sections in table
             {
                 ReplaceCr( (char)0xc ); // Indikator fuer Page/Section-Break
 
