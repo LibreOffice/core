@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-07 14:01:43 $
+#   last change: $Author: hjs $ $Date: 2002-11-04 18:10:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,9 +151,9 @@ GNUCOPY=cp
 GNUPATCH=patch
 .ENDIF			# "$(OS)"=="SOLARIS"
 .IF "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
-GNUMAKE=make
+GNUMAKE*=make
 .ELSE			# "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
-GNUMAKE=gmake
+GNUMAKE*=gmake
 .ENDIF			# "$(OS)"=="LINUX" || "$(OS)"=="MACOSX"
 TOUCH=touch
 RENAME=mv
@@ -166,7 +166,7 @@ ECHON=echo -n
 ECHONL=echo
 .ENDIF
 
-MAKEDEPEND*=makedepend
+MAKEDEPEND*=$(WRAPCMD) makedepend
 
 RM+=$(RMFLAGS)
 
