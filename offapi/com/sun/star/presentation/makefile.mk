@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cl $ $Date: 2002-01-29 13:13:17 $
+#   last change: $Author: cl $ $Date: 2002-11-19 15:11:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,30 +73,37 @@ PACKAGE=com$/sun$/star$/presentation
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    PresentationView.idl\
-    PreviewView.idl\
-    OutlineView.idl\
-    SlidesView.idl\
-    NotesView.idl\
-    HandoutView.idl\
-    XHandoutMasterSupplier.idl\
     AnimationEffect.idl\
     AnimationSpeed.idl\
+    ChartShape.idl\
     ClickAction.idl\
     CustomPresentation.idl\
     CustomPresentationAccess.idl\
     DrawPage.idl\
     FadeEffect.idl\
+    GraphicObjectShape.idl\
+    HandoutShape.idl\
+    HandoutView.idl\
+    NotesShape.idl\
+    NotesView.idl\
+    OLE2Shape.idl\
     OutlinerShape.idl\
+    OutlineView.idl\
+    PageShape.idl\
     Presentation.idl\
     PresentationDocument.idl\
     PresentationRange.idl\
+    PresentationView.idl\
+    PreviewView.idl\
     Shape.idl\
+    SlidesView.idl\
+    SubtitleShape.idl\
     TitleTextShape.idl\
     XCustomPresentationSupplier.idl\
+    XHandoutMasterSupplier.idl\
     XPresentation.idl\
     XPresentationPage.idl\
-    XPresentationSupplier.idl\
+    XPresentationSupplier.idl
 
 # ------------------------------------------------------------------
 
