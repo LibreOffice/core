@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:53:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-
+#include <sal/types.h>
 
 #include <test/Test1.hpp>
 #include <test/Test2.hpp>
@@ -408,17 +408,17 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny = makeAny( (sal_uInt16)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt16 *)0 ) );
     OSL_ASSERT( *(sal_Int16*)aAny.getValue() == 2 );
-    sal_Int64 aInt64 = 0x200000000;
+    sal_Int64 aInt64 = SAL_CONST_INT64(0x200000000);
     aAny = makeAny( aInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int64 *)0 ) );
-    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == 0x200000000 );
+    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == SAL_CONST_INT64(0x200000000) );
     aAny = makeAny( (sal_Int32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int32 *)0 ) );
     OSL_ASSERT( *(sal_Int32*)aAny.getValue() == 2 );
-    sal_uInt64 auInt64 = 0x200000000;
+    sal_uInt64 auInt64 = SAL_CONST_UINT64(0x200000000);
     aAny = makeAny( auInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt64 *)0 ) );
-    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == 0x200000000 );
+    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == SAL_CONST_UINT64(0x200000000) );
     aAny = makeAny( (sal_uInt32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt32 *)0 ) );
     OSL_ASSERT( *(sal_uInt32*)aAny.getValue() == 2 );
@@ -459,17 +459,17 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     aAny <<=( (sal_uInt16)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt16 *)0 ) );
     OSL_ASSERT( *(sal_Int16*)aAny.getValue() == 2 );
-    sal_Int64 aInt64 = 0x200000000;
+    sal_Int64 aInt64 = SAL_CONST_INT64(0x200000000);
     aAny <<=( aInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int64 *)0 ) );
-    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == 0x200000000 );
+    OSL_ASSERT( *(sal_Int64*)aAny.getValue() == SAL_CONST_UINT64(0x200000000) );
     aAny <<=( (sal_Int32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_Int32 *)0 ) );
     OSL_ASSERT( *(sal_Int32*)aAny.getValue() == 2 );
-    sal_uInt64 auInt64 = 0x200000000;
+    sal_uInt64 auInt64 = SAL_CONST_UINT64(0x200000000);
     aAny <<=( auInt64 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt64 *)0 ) );
-    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == 0x200000000 );
+    OSL_ASSERT( *(sal_uInt64*)aAny.getValue() == SAL_CONST_UINT64(0x200000000) );
     aAny <<=( (sal_uInt32)2 );
     OSL_ASSERT( aAny.getValueType() == getCppuType( (sal_uInt32 *)0 ) );
     OSL_ASSERT( *(sal_uInt32*)aAny.getValue() == 2 );
@@ -502,13 +502,13 @@ nPos = (sal_Int32)&((Test3 *)0)->aAny;
     OSL_ASSERT( (makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("2") )) >>= a3.aString) &&
                 a3.aString == OUString::createFromAscii("2") );
     OSL_ASSERT( (makeAny( (sal_uInt16)2) >>= a3.nuInt16) && a3.nuInt16 == 2 );
-    sal_Int64 aInt64 = 0x200000000;
+    sal_Int64 aInt64 = SAL_CONST_INT64(0x200000000);
     OSL_ASSERT( makeAny( aInt64 ) >>= a3.nInt64 );
-    OSL_ASSERT( a3.nInt64 == 0x200000000 );
+    OSL_ASSERT( a3.nInt64 == SAL_CONST_INT64(0x200000000) );
     OSL_ASSERT( (makeAny( (sal_Int32)2) >>= a3.nInt32) && a3.nInt32 == 2 );
-    sal_uInt64 auInt64 = 0x200000000;
+    sal_uInt64 auInt64 = SAL_CONST_UINT64(0x200000000);
     OSL_ASSERT( makeAny( auInt64 ) >>= a3.nuInt64 );
-    OSL_ASSERT( a3.nuInt64 == 0x200000000 );
+    OSL_ASSERT( a3.nuInt64 == SAL_CONST_UINT64(0x200000000) );
     OSL_ASSERT( (makeAny( (sal_uInt32)2) >>= a3.nuInt32) && a3.nuInt32 == 2 );
     OSL_ASSERT( (makeAny( TypeClass_STRUCT) >>= a3.eType) && a3.eType == TypeClass_STRUCT );
     //OSL_ASSERT( (makeAny( L'2' ) >>= a3.wChar) && a3.nInt8 ==L'2';
