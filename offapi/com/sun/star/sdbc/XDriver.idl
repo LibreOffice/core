@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDriver.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 16:46:46 $
+ *  last change: $Author: oj $ $Date: 2002-06-25 06:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,8 @@ interface XDriverManager;
 
 
 
-    <p>Each driver should supply a service that implements
+    <p>
+    Each driver should supply a service that implements
     the Driver interface.
 
     </p>
@@ -97,11 +98,13 @@ interface XDriverManager;
     driver in turn to try to connect to the target URL.
 
     </p>
-    <p>It is strongly recommended that each Driver object should be
+    <p>
+    It is strongly recommended that each Driver object should be
     small and standalone so that the Driver object can be loaded and
     queried without bringing in vast quantities of supporting code.
 
-    </p>@see com::sun::star::sdbc::XDriverManager
+    </p>
+    @see com::sun::star::sdbc::XDriverManager
      @see com::sun::star::sdbc::XConnection
  */
 interface XDriver: com::sun::star::uno::XInterface
@@ -109,23 +112,42 @@ interface XDriver: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDriver::connect
     /** attempts to make a database connection to the given URL.
-        The driver should return <NULL/> if it realizes it is the wrong kind
+        The driver should return
+        <NULL/>
+        if it realizes it is the wrong kind
         of driver to connect to the given URL.  This will be common, as when
         the driver manager is asked to connect to a given URL it passes
         the URL to each loaded driver in turn.
 
 
 
-        <p>The driver should raise a SQLException if it is the right
+        <p>
+        The driver should raise a
+        <type scope="com::sun::star::sdbc">SQLException</type>
+        if it is the right
         driver to connect to the given URL, but has trouble connecting to
         the database.
 
         </p>
-        <p>The info argument can be used to pass arbitrary
+        <p>
+        The info argument can be used to pass arbitrary
         string tag/value pairs as connection arguments.
         Normally at least "user" and "password" properties should be
-        included in the Properties.
+        included in the Properties. For a JDBC driver also the java class must be supplied. The property is named JavaDriverClass.
+        Possible property value names are when supported by the driver:
+        @see com::sun::star::sdbc::ConnectionProperties
         </p>
+
+        @param url
+            is the URL of the database to which to connect.
+        @param info
+            a list of arbitrary string tag/value pairs as connection arguments. Normally at least a "user" and "password" property should be included.
+            @see com::sun::star::sdbc::ConnectionProperties
+        @returns
+            a Connection object that represents a connection to the URL
+        @throws SQLException
+            if a database access error occurs
+
      */
     XConnection connect(
                 [in]string url,
@@ -138,6 +160,13 @@ interface XDriver: com::sun::star::uno::XInterface
         to the given URL.  Typically drivers will return <TRUE/> if they
         understand the subprotocol specified in the URL and <FALSE/> if
         they do not.
+
+        @param url
+            is the URL of the database to which to connect.
+        @returns
+            <TRUE/> if this driver can connect to the given URL.
+        @throws SQLException
+            if a database access error occurs.
      */
     boolean acceptsURL([in]string url) raises (SQLException);
     //-------------------------------------------------------------------------
@@ -169,12 +198,16 @@ interface XDriver: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMajorVersion
     /** gets the driver's major version number. Initially this should be 1.
+        @returns
+            this driver's major version number
      */
     long getMajorVersion();
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::sdbc::XDriver::getMinorVersion
     /** gets the driver's minor version number. Initially this should be 0.
+        @returns
+            this driver's minor version number.
      */
     long getMinorVersion();
 };
@@ -185,6 +218,15 @@ interface XDriver: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.7.2.2  2002/06/25 06:10:18  oj
+    new service for ConnectionProperties implemented
+
+    Revision 1.7.2.1  2002/02/18 08:58:22  oj
+    #97563# parameter,return value and exception description
+
+    Revision 1.7  2001/11/01 16:46:46  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.6  2001/03/16 16:41:35  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
