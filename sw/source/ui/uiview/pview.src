@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1073,6 +1073,7 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
 
 
 
