@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:52:00 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3618,19 +3618,15 @@ ToolBox RID_ENVTOOLBOX
         SID_RELOAD;\
         SID_EDITDOC;\
         SID_SAVEDOC;\
-        SID_SAVEDOCTOBOOKMARK;\
         SID_CREATELINK;\
-        SID_MAIL_SEND;\
         SID_PRINTDOCDIRECT;\
         SID_CUT;\
         SID_COPY;\
         SID_UNDO;\
         SID_REDO;\
         SID_EXPLORER;\
-        SID_BROWSER;\
         SID_NAVIGATOR;\
         SID_STYLE_DESIGNER;\
-        SID_AUTOMAIL;\
         SID_AUTOBROWSE;\
         SID_EXPLORER_CREATEFOLDER;\
         SID_EXPLORER_CREATEBOOKMARK;\
@@ -3640,7 +3636,6 @@ ToolBox RID_ENVTOOLBOX
         SID_EXPLORER_CREATENEWSSERVER;\
         SID_EXPLORER_CREATEFTPSERVER;\
         SID_EXPLORER_CREATEDATABASE;\
-        SID_EXPLORER_CREATEGALLERY;\
         SID_PROPERTIES;\
         SID_EXPLORER_MAKEROOT;\
         SID_EXPLORER_MAKEBMKDIR;\
@@ -3657,7 +3652,7 @@ ToolBox RID_ENVTOOLBOX
         SID_EXPLORER_ICONS;\
     };\
     IdCount = {\
-        45;\
+        40;\
     };
 
 #ifndef IMAGE_STDBTN_COLOR
