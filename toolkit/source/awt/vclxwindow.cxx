@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-16 11:15:57 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 13:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 }
 
 // ::com::sun::star::lang::XUnoTunnel
-IMPL_XUNOTUNNEL( VCLXWindow )
+IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXWindow )

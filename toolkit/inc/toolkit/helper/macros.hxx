@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 13:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,36 @@ sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_In
         return (sal_Int64)this; \
     } \
     return 0; \
+} \
+const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
+{ \
+    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = NULL; \
+    if( !pSeq ) \
+    { \
+        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ); \
+        if( !pSeq ) \
+        { \
+            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 ); \
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True ); \
+            pSeq = &aSeq; \
+        } \
+    } \
+    return *pSeq; \
+} \
+ClassName* ClassName::GetImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxIFace ) throw() \
+{ \
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xUT( rxIFace, ::com::sun::star::uno::UNO_QUERY ); \
+    return xUT.is() ? (ClassName*)xUT->getSomething( ClassName::GetUnoTunnelId() ) : NULL; \
+}
+
+#define IMPL_XUNOTUNNEL2( ClassName, BaseClass ) \
+sal_Int64 ClassName::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rIdentifier ) throw(::com::sun::star::uno::RuntimeException) \
+{ \
+    if( ( rIdentifier.getLength() == 16 ) && ( 0 == rtl_compareMemory( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
+    { \
+        return (sal_Int64)this; \
+    } \
+    return BaseClass::getSomething( rIdentifier ); \
 } \
 const ::com::sun::star::uno::Sequence< sal_Int8 >& ClassName::GetUnoTunnelId() throw() \
 { \
