@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 16:09:46 $
+#   last change: $Author: kz $ $Date: 2004-05-19 03:25:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,13 @@ RESLIB1LIST=\
     $(SOLARVERSION)$/$(INPATH)$/res$(EXT_UPDMINOR)$/sfx.srs
 
 RESLIB1NAME=sc
+RESLIB1IMAGES=\
+    $(PRJ)$/res					\
+    $(PRJ)$/res/imglst/apptbx	\
+    $(PRJ)$/res/imglst/dbgui	\
+    $(PRJ)$/res/imglst/navipi	
+    
+    
 RESLIB1SRSFILES=\
     $(RESLIB1LIST)
 
