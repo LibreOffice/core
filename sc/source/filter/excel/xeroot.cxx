@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:03:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
+#ifndef SC_XENAME_HXX
+#include "xename.hxx"
+#endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
@@ -94,6 +97,9 @@
 #ifndef SC_XEPIVOT_HXX
 #include "xepivot.hxx"
 #endif
+
+// for filter manager
+#include "excrecds.hxx"
 
 // Global data ================================================================
 
@@ -115,72 +121,153 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
     XclRoot( rExpRootData ),
     mrExpData( rExpRootData )
 {
-    mrExpData.mxProgress.reset( new XclExpProgressBar( GetRoot() ) );
-    mrExpData.mxPalette.reset( new XclExpPalette( GetRoot() ) );
-    mrExpData.mxFontBfr.reset( new XclExpFontBuffer( GetRoot() ) );
-    mrExpData.mxNumFmtBfr.reset( new XclExpNumFmtBuffer( GetRoot() ) );
-    mrExpData.mxXFBfr.reset( new XclExpXFBuffer( GetRoot() ) );
-    mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
-    mrExpData.mxLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
-    mrExpData.mxFmlaComp.reset( new XclExpFormulaCompiler( GetRoot() ) );
+}
 
-    // initialization of objects needing complete root data
-    mrExpData.mxProgress->Initialize();
-    mrExpData.mxXFBfr->InitDefaults();
+XclExpTabInfo& XclExpRoot::GetTabInfo() const
+{
+    DBG_ASSERT( mrExpData.mxTabInfo.is(), "XclExpRoot::GetTabInfo - missing object (wrong BIFF?)" );
+    return *mrExpData.mxTabInfo;
+}
+
+XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
+{
+    DBG_ASSERT( mrExpData.mxFmlaComp.is(), "XclExpRoot::GetFormulaCompiler - missing object (wrong BIFF?)" );
+    return *mrExpData.mxFmlaComp;
 }
 
 XclExpProgressBar& XclExpRoot::GetProgressBar() const
 {
+    DBG_ASSERT( mrExpData.mxProgress.is(), "XclExpRoot::GetProgressBar - missing object (wrong BIFF?)" );
     return *mrExpData.mxProgress;
 }
 
 XclExpSst& XclExpRoot::GetSst() const
 {
-    if( !mrExpData.mxSst.get() )
-        mrExpData.mxSst.reset( new XclExpSst );
+    DBG_ASSERT( mrExpData.mxSst.is(), "XclExpRoot::GetSst - missing object (wrong BIFF?)" );
     return *mrExpData.mxSst;
 }
 
 XclExpPalette& XclExpRoot::GetPalette() const
 {
+    DBG_ASSERT( mrExpData.mxPalette.is(), "XclExpRoot::GetPalette - missing object (wrong BIFF?)" );
     return *mrExpData.mxPalette;
 }
 
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
+    DBG_ASSERT( mrExpData.mxFontBfr.is(), "XclExpRoot::GetFontBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxFontBfr;
 }
 
 XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
 {
+    DBG_ASSERT( mrExpData.mxNumFmtBfr.is(), "XclExpRoot::GetNumFmtBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxNumFmtBfr;
 }
 
 XclExpXFBuffer& XclExpRoot::GetXFBuffer() const
 {
+    DBG_ASSERT( mrExpData.mxXFBfr.is(), "XclExpRoot::GetXFBuffer - missing object (wrong BIFF?)" );
     return *mrExpData.mxXFBfr;
 }
 
-XclExpTabInfo& XclExpRoot::GetTabInfo() const
+XclExpLinkManager& XclExpRoot::GetGlobalLinkManager() const
 {
-    return *mrExpData.mxTabInfo;
+    DBG_ASSERT( mrExpData.mxGlobLinkMgr.is(), "XclExpRoot::GetGlobalLinkManager - missing object (wrong BIFF?)" );
+    return *mrExpData.mxGlobLinkMgr;
 }
 
-XclExpLinkManager& XclExpRoot::GetLinkManager() const
+XclExpLinkManager& XclExpRoot::GetLocalLinkManager() const
 {
-    return *mrExpData.mxLinkMgr;
+    DBG_ASSERT( GetLocalLinkMgrRef().is(), "XclExpRoot::GetLocalLinkManager - missing object (wrong BIFF?)" );
+    return *GetLocalLinkMgrRef();
 }
 
-XclExpFormulaCompiler& XclExpRoot::GetFormulaCompiler() const
+XclExpNameManager& XclExpRoot::GetNameManager() const
 {
-    return *mrExpData.mxFmlaComp;
+    DBG_ASSERT( mrExpData.mxNameMgr.is(), "XclExpRoot::GetNameManager - missing object (wrong BIFF?)" );
+    return *mrExpData.mxNameMgr;
+}
+
+XclExpFilterManager& XclExpRoot::GetFilterManager() const
+{
+    DBG_ASSERT( mrExpData.mxFilterMgr.is(), "XclExpRoot::GetFilterManager - missing object (wrong BIFF?)" );
+    return *mrExpData.mxFilterMgr;
 }
 
 XclExpPivotTableManager& XclExpRoot::GetPivotTableManager() const
 {
-    if( !mrExpData.mxPTableMgr.get() )
-        mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
+    DBG_ASSERT( mrExpData.mxPTableMgr.is(), "XclExpRoot::GetPivotTableManager - missing object (wrong BIFF?)" );
     return *mrExpData.mxPTableMgr;
+}
+
+void XclExpRoot::InitializeConvert()
+{
+    mrExpData.mxTabInfo.reset( new XclExpTabInfo( GetRoot() ) );
+    mrExpData.mxFmlaComp.reset( new XclExpFormulaCompiler( GetRoot() ) );
+    mrExpData.mxProgress.reset( new XclExpProgressBar( GetRoot() ) );
+
+    GetProgressBar().Initialize();
+}
+
+void XclExpRoot::InitializeGlobals()
+{
+    SetCurrScTab( SCTAB_GLOBAL );
+
+    if( GetBiff() >= xlBiff5 )
+    {
+        mrExpData.mxPalette.reset( new XclExpPalette( GetRoot() ) );
+        mrExpData.mxFontBfr.reset( new XclExpFontBuffer( GetRoot() ) );
+        mrExpData.mxNumFmtBfr.reset( new XclExpNumFmtBuffer( GetRoot() ) );
+        mrExpData.mxXFBfr.reset( new XclExpXFBuffer( GetRoot() ) );
+        mrExpData.mxGlobLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
+        mrExpData.mxNameMgr.reset( new XclExpNameManager( GetRoot() ) );
+    }
+
+    if( GetBiff() >= xlBiff8 )
+    {
+        mrExpData.mxSst.reset( new XclExpSst );
+        mrExpData.mxFilterMgr.reset( new XclExpFilterManager( GetRoot() ) );
+        mrExpData.mxPTableMgr.reset( new XclExpPivotTableManager( GetRoot() ) );
+        // BIFF8: only one link manager for all sheets
+        mrExpData.mxLocLinkMgr = mrExpData.mxGlobLinkMgr;
+    }
+
+    GetXFBuffer().Initialize();
+    GetNameManager().Initialize();
+}
+
+void XclExpRoot::InitializeTable( SCTAB nScTab )
+{
+    SetCurrScTab( nScTab );
+    if( (GetBiff() == xlBiff5) || (GetBiff() == xlBiff7) )
+    {
+        // local link manager per sheet
+        mrExpData.mxLocLinkMgr.reset( new XclExpLinkManager( GetRoot() ) );
+    }
+}
+
+void XclExpRoot::InitializeSave()
+{
+    GetPalette().Finalize();
+    GetXFBuffer().Finalize();
+}
+
+XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
+{
+    XclExpRecordRef xRec;
+    switch( nRecId )
+    {
+        case EXC_ID_PALETTE:        xRec = mrExpData.mxPalette;     break;
+        case EXC_ID_FONT:           xRec = mrExpData.mxFontBfr;     break;
+        case EXC_ID_FORMAT:         xRec = mrExpData.mxNumFmtBfr;   break;
+        case EXC_ID_XF:             xRec = mrExpData.mxXFBfr;       break;
+        case EXC_ID_SST:            xRec = mrExpData.mxSst;         break;
+        case EXC_ID_EXTERNSHEET:    xRec = GetLocalLinkMgrRef();    break;
+        case EXC_ID_NAME:           xRec = mrExpData.mxNameMgr;     break;
+    }
+    DBG_ASSERT( xRec.is(), "XclExpRoot::CreateRecord - unknown record ID or missing object" );
+    return xRec;
 }
 
 bool XclExpRoot::CheckCellAddress( const ScAddress& rPos ) const
@@ -196,6 +283,11 @@ bool XclExpRoot::CheckCellRange( ScRange& rRange ) const
 void XclExpRoot::CheckCellRangeList( ScRangeList& rRanges ) const
 {
     XclRoot::CheckCellRangeList( rRanges, GetXclMaxPos() );
+}
+
+XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const
+{
+    return IsInGlobals() ? mrExpData.mxGlobLinkMgr : mrExpData.mxLocLinkMgr;
 }
 
 // ============================================================================
