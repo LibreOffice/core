@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-10 17:37:31 $
+ *  last change: $Author: sab $ $Date: 2001-12-14 18:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,7 +2505,7 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
     {
         const ScMyAreaLink& rAreaLink = rMyCell.aAreaLink;
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, rAreaLink.sSourceStr );
-        AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, rAreaLink.sURL );
+        AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(rAreaLink.sURL) );
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_NAME, rAreaLink.sFilter );
         if( rAreaLink.sFilterOptions.getLength() )
             AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
@@ -2904,7 +2904,7 @@ void ScXMLExport::WriteTableSource()
                             aAny >>= nRefresh;
                             if (sLink.getLength())
                             {
-                                AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sLink);
+                                AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetRelativeReference(sLink));
                                 if (sTableName.getLength())
                                     AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sTableName);
                                 if (sFilter.getLength())
