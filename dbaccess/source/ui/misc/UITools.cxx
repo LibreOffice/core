@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:08:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -420,9 +423,9 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     return aInfo;
 }
 // -----------------------------------------------------------------------------
-Reference< XModel > getDataSourceByName_displayError( const Reference< XNameAccess >& _rxDBContext,
+Reference< XDataSource > getDataSourceByName_displayError( const Reference< XNameAccess >& _rxDBContext,
     const ::rtl::OUString& _rDataSourceName, Window* _pErrorMessageParent, Reference< XMultiServiceFactory > _rxORB,
-    bool _bDisplayError )
+    bool _bDisplayError)
 {
     OSL_PRECOND( _rxDBContext.is() && _rxORB.is(), "getDataSourceByName_displayError: invalid service factory!" );
 
@@ -460,7 +463,7 @@ Reference< XModel > getDataSourceByName_displayError( const Reference< XNameAcce
     }
 
     if ( xDatasource.is() )
-        return Reference< XModel >( xDatasource, UNO_QUERY );
+        return xDatasource;
 
     if ( _bDisplayError )
     {
@@ -472,9 +475,25 @@ Reference< XModel > getDataSourceByName_displayError( const Reference< XNameAcce
             // by spec, we must pass this to an interaction handler ...
         }
     }
-    return Reference< XModel >();
+    return Reference<XDataSource>();
 }
+// -----------------------------------------------------------------------------
+Reference< XInterface > getDataSourceOrModel(const Reference< XInterface >& _xObject)
+{
+    Reference< XInterface > xRet;
+    Reference<XDocumentDataSource> xDocumentDataSource(_xObject,UNO_QUERY);
+    if ( xDocumentDataSource.is() )
+        xRet = xDocumentDataSource->getDatabaseDocument();
 
+    if ( !xRet.is() )
+    {
+        Reference<XOfficeDatabaseDocument> xOfficeDoc(_xObject,UNO_QUERY);
+        if ( xOfficeDoc.is() )
+            xRet = xOfficeDoc->getDataSource();
+    }
+
+    return xRet;
+}
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XMultiServiceFactory >& _xFactory)
 {
@@ -1335,7 +1354,7 @@ sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 // -----------------------------------------------------------------------------
 sal_Bool isAppendTableAliasEnabled(const Reference<XConnection>& _xConnection)
 {
-    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,PROPERTY_ENABLETABLEALIAS,sal_True);
+    return ::dbtools::isDataSourcePropertyEnabled(_xConnection,INFO_APPEND_TABLE_ALIAS,sal_True);
 }
 
 // -----------------------------------------------------------------------------
@@ -1447,7 +1466,7 @@ namespace
                 DBG_ERRORFILE( "Property 'AnchorName' is missing" );
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( Exception& )
         {
         }
 
@@ -1573,7 +1592,7 @@ sal_Int32 askForUserAction(Window* _pParent,USHORT _nTitle,USHORT _nText,sal_Boo
 }
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> createView( const ::rtl::OUString& _sName
-                                   ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
+                                   ,const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
                                    ,const Reference<XPropertySet>& _xSourceObject)
 {
     Reference<XViewsSupplier> xSup(_xConnection,UNO_QUERY);
