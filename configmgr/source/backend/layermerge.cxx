@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:30:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ LayerMergeHandler::~LayerMergeHandler(  )
 void LayerMergeHandler::prepareLayer()
 {
     OSL_ENSURE(isDone(), "LayerMergeHandler: Warning: Previous layer or schema not terminated properly");
-    m_aLocale = OUString();
+    m_aLocale = localehelper:: getDefaultLocale();
     m_bSublayer = false;
 
     promoteToDefault(m_rData);
@@ -366,7 +366,7 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
     {
         OSL_ENSURE(isLocalizedValueSet(*pLocalizedCont),"Layer merging: property node is not a value");
 
-        if (INode * pLocale = pLocalizedCont->getChild(m_aLocale))
+        if (INode * pLocale = pLocalizedCont->getChild(_aLocale))
         {
             if (ValueNode * pLocValue = pLocale->asValueNode())
             {
@@ -384,7 +384,7 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
             OSL_ENSURE(valueType != uno::Type(),
                                 "Cannot determine type for localised value") ;
             std::auto_ptr<ValueNode> localisedValue =
-                m_aFactory.getNodeFactory().createNullValueNode(m_aLocale,
+                m_aFactory.getNodeFactory().createNullValueNode(_aLocale,
                                                                 valueType,
                                                                 attributes) ;
 
