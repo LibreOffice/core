@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscflag.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:52:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Programmabh„ngige Includes.
-#ifndef _RSCFLAG_HXX
 #include <rscflag.hxx>
-#endif
 
 /****************** C O D E **********************************************/
 /****************** R s c F l a g ****************************************/
@@ -81,25 +78,24 @@
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-RscFlag::RscFlag( HASHID nId, USHORT nTypeId, BOOL bUSHORT_ )
+RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
             : RscConst( nId, nTypeId )
-            , bUSHORT( bUSHORT_ )
 {}
 
 /*************************************************************************
 |*
 |*    RscFlag::Size()
 |*
-|*    Beschreibung      Die Groeáe der Instanzdaten richtet sich nach
+|*    Beschreibung      Die Groeï¿½e der Instanzdaten richtet sich nach
 |*                      der Anzahl der Flags
 |*    Ersterstellung    MM 03.04.91
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-USHORT RscFlag::Size()
+sal_uInt32 RscFlag::Size()
 {
     return( ALIGNED_SIZE( sizeof( RscFlagInst ) *
-            ( 1 + (nEntries -1) / (sizeof( USHORT ) * 8) ) ) );
+            ( 1 + (nEntries -1) / (sizeof( sal_uInt32 ) * 8) ) ) );
 }
 
 /*************************************************************************
@@ -111,12 +107,13 @@ USHORT RscFlag::Size()
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, HASHID nConst ){
-    USHORT i, nFlag;
+ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, Atom nConst )
+{
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     &= ~nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return( ERR_OK );
@@ -134,13 +131,13 @@ ERRTYPE RscFlag::SetNotConst( const RSCINST & rInst, HASHID nConst ){
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-ERRTYPE RscFlag::SetConst( const RSCINST & rInst, HASHID nConst, INT32 nVal )
+ERRTYPE RscFlag::SetConst( const RSCINST & rInst, Atom nConst, INT32 nVal )
 {
-    USHORT i, nFlag;
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( nEntries != (i = GetConstPos( nConst )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
         ((RscFlagInst *)rInst.pData)[ i ].nFlags     |= nFlag;
         ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags &= ~nFlag;
         return( ERR_OK );
@@ -164,7 +161,7 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 
     if( !pInst ){
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA) RscMem::Malloc( Size() );
+        aInst.pData = (CLASS_DATA) rtl_allocateMemory( Size() );
     }
     else
         aInst = *pInst;
@@ -181,9 +178,10 @@ RSCINST RscFlag::CreateBasic( RSCINST * pInst )
 |*    Letzte Aenderung  MM 16.01.92
 |*
 *************************************************************************/
-RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass ){
+RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass )
+{
     RSCINST aInst = CreateBasic( pInst );
-    USHORT  i;
+    sal_uInt32  i = 0;
 
     if( !bOwnClass && rDflt.IsInst() )
         bOwnClass = rDflt.pClass->InHierarchy( this );
@@ -195,7 +193,7 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
         for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
         {
             ((RscFlagInst *)aInst.pData)[ i ].nFlags = 0;
-            ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags = 0xFFFF;
+            ((RscFlagInst *)aInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
         }
     };
 
@@ -212,17 +210,17 @@ RSCINST RscFlag::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnClass 
 |*
 *************************************************************************/
 RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
-                               BOOL bOwnClass, HASHID nConstId )
+                               BOOL bOwnClass, Atom nConstId )
 {
     RSCINST aInst = CreateBasic( pInst );
-    USHORT i, nFlag;
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( !bOwnClass && rDfltI.IsInst() )
         bOwnClass = rDfltI.pClass->InHierarchy( this );
 
     if( nEntries != (i = GetConstPos( nConstId )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
         if( bOwnClass ){
             ((RscFlagInst *)aInst.pData)[ i ].nFlags &=
             ~nFlag | ((RscFlagInst *)rDfltI.pData)[ i ].nFlags;
@@ -249,10 +247,10 @@ RSCINST RscFlag::CreateClient( RSCINST * pInst, const RSCINST & rDfltI,
 *************************************************************************/
 void RscFlag::SetToDefault( const RSCINST & rInst )
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
-        ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags = 0xFFFF;
+        ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags = 0xFFFFFFFF;
 }
 
 /*************************************************************************
@@ -266,21 +264,21 @@ void RscFlag::SetToDefault( const RSCINST & rInst )
 *************************************************************************/
 BOOL RscFlag::IsDefault( const RSCINST & rInst )
 {
-    USHORT i;
+    sal_uInt32 i = 0;
 
     for( i = 0; i < Size() / sizeof( RscFlagInst ); i++ )
-        if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags != 0xFFFF )
+        if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags != 0xFFFFFFFF )
             return( FALSE );
     return( TRUE );
 }
 
-BOOL RscFlag::IsDefault( const RSCINST & rInst, HASHID nConstId )
+BOOL RscFlag::IsDefault( const RSCINST & rInst, Atom nConstId )
 {
-    USHORT i, nFlag;
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( nEntries != (i = GetConstPos( nConstId )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
         if( ((RscFlagInst *)rInst.pData)[ i ].nDfltFlags & nFlag )
             return( TRUE );
         else
@@ -299,13 +297,13 @@ BOOL RscFlag::IsDefault( const RSCINST & rInst, HASHID nConstId )
 |*
 *************************************************************************/
 BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
-                              HASHID nConstId )
+                              Atom nConstId )
 {
-    USHORT i, nFlag;
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( nEntries != (i = GetConstPos( nConstId )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
 
         if( pDef ){
             if( (((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag)
@@ -319,15 +317,16 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
     return FALSE;
 }
 
-BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
-    USHORT i;
+BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+{
+    sal_uInt32 i = 0;
 
     if( pDef ){
-        USHORT  Flag, nIndex;
+        sal_uInt32  Flag = 0, nIndex = 0;
 
         Flag = 1;
         for( i = 0; i < nEntries; i++ ){
-            nIndex = i / (sizeof( USHORT ) * 8);
+            nIndex = i / (sizeof( sal_uInt32 ) * 8);
             if( (((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag)
               != (((RscFlagInst *)pDef)[ nIndex ].nFlags & Flag)  )
             {
@@ -353,12 +352,13 @@ BOOL RscFlag::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
 |*    Letzte Aenderung  MM 10.04.91
 |*
 *************************************************************************/
-BOOL RscFlag::IsSet( const RSCINST & rInst, HASHID nConstId ){
-    USHORT i, nFlag;
+BOOL RscFlag::IsSet( const RSCINST & rInst, Atom nConstId )
+{
+    sal_uInt32 i = 0, nFlag = 0;
 
     if( nEntries != (i = GetConstPos( nConstId )) ){
-        nFlag = 1 << (i % (sizeof( USHORT ) * 8) );
-        i = i / (sizeof( USHORT ) * 8);
+        nFlag = 1 << (i % (sizeof( sal_uInt32 ) * 8) );
+        i = i / (sizeof( sal_uInt32 ) * 8);
         if( ((RscFlagInst *)rInst.pData)[ i ].nFlags & nFlag )
             return( TRUE );
         else
@@ -377,22 +377,22 @@ BOOL RscFlag::IsSet( const RSCINST & rInst, HASHID nConstId ){
 |*
 *************************************************************************/
 void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                        RscTypCont *, USHORT, const char * )
+                        RscTypCont *, sal_uInt32, const char * )
 {
-    USHORT  i, Flag, nIndex;
+    sal_uInt32  i = 0, Flag = 0, nIndex = 0;
     BOOL    bComma = FALSE;
 
     Flag = 1;
     for( i = 0; i < nEntries; i++ ){
-        nIndex = i / (sizeof( USHORT ) * 8);
+        nIndex = i / (sizeof( sal_uInt32 ) * 8);
         if( !( ((RscFlagInst *)rInst.pData)[ nIndex ].nDfltFlags & Flag) ){
             if( bComma )
                 fprintf( fOutput, ", " );
             if( ((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag )
-                fprintf( fOutput, "%s", pHS->Get( pVarArray[ i ].nId ) );
+                fprintf( fOutput, "%s", pHS->getString( pVarArray[ i ].nId ).getStr() );
             else{
                 fprintf( fOutput, "not " );
-                fprintf( fOutput, "%s", pHS->Get( pVarArray[ i ].nId ) );
+                fprintf( fOutput, "%s", pHS->getString( pVarArray[ i ].nId ).getStr() );
             }
             bComma = TRUE;
         }
@@ -412,14 +412,14 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, USHORT, BOOL )
+                          RscTypCont *, sal_uInt32, BOOL )
 {
     INT32   lVal = 0;
-    USHORT  i, Flag, nIndex;
+    sal_uInt32  i = 0, Flag = 0, nIndex = 0;
 
     Flag = 1;
     for( i = 0; i < nEntries; i++ ){
-        nIndex = i / (sizeof( USHORT ) * 8);
+        nIndex = i / (sizeof( sal_uInt32 ) * 8);
         if( ((RscFlagInst *)rInst.pData)[ nIndex ].nFlags & Flag )
             lVal |= pVarArray[ i ].lValue;
 
@@ -428,10 +428,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
             Flag = 1;
     };
 
-    if( bUSHORT )
-        aMem.Put( (USHORT)lVal );
-    else
-        aMem.Put( (INT32)lVal );
+    aMem.Put( (INT32)lVal );
     return( ERR_OK );
 }
 
@@ -444,8 +441,8 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 |*    Letzte Aenderung  MM 08.04.91
 |*
 *************************************************************************/
-RscClient::RscClient( HASHID nId, USHORT nTypeId, RscFlag * pClass,
-                       HASHID nConstantId )
+RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
+                       Atom nConstantId )
            : RscTop ( nId, nTypeId )
 {
    pRefClass = pClass;
@@ -476,7 +473,7 @@ RSCCLASS_TYPE RscClient::GetClassType() const
 |*
 *************************************************************************/
 void RscClient::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                          RscTypCont *, USHORT, const char * )
+                          RscTypCont *, sal_uInt32, const char * )
 {
     if( pRefClass->IsSet( rInst, nConstId ) )
         fprintf( fOutput, "TRUE" );
