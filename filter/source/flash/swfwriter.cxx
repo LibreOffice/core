@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 11:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,10 @@ void ImplCopySvStreamToXOutputStream( SvStream& rIn, Reference< XOutputStream > 
         DBG_ASSERT( nRead == nBufferSize, "ImplCopySvStreamToXOutputStream failed!" );
         xOut->writeBytes( aBuffer );
 
-        nSize -= nBufferSize;
+        if( nRead == 0 )
+            break;
+
+        nSize -= nRead;
     }
 }
 
