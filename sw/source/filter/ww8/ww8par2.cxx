@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-12 12:07:19 $
+ *  last change: $Author: cmc $ $Date: 2001-03-12 12:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2548,8 +2548,14 @@ void WW8RStyle::Set1StyleDefaults()
 
     if( !pIo->bNoAttrImport )
     {
-        if( !bFSizeChanged )    // Style hat keine FontSize ? WW-Default: 10pt
-            pIo->pAktColl->SetAttr( SvxFontHeightItem( 200 ) );
+        // Style has no FontSize ? WinWord Default is 10pt for western and asian
+        if( !bFSizeChanged )
+        {
+            SvxFontHeightItem aAttr(200);
+            pIo->pAktColl->SetAttr(aAttr);
+            aAttr.SetWhich(RES_CHRATR_CJK_FONTSIZE);
+            pIo->pAktColl->SetAttr(aAttr);
+        }
 
         if( pIo->pWDop->fWidowControl && !bWidowsChanged )  // Widows ?
         {
@@ -3017,11 +3023,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.5 2001-03-12 12:07:19 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.6 2001-03-12 12:58:56 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/03/12 12:07:19  cmc
+      ##513##, #79474# a set of floating table rows following inline table rows are not to be counted as rows in first table
+
       Revision 1.4  2001/02/23 12:45:26  os
       Complete use of DefaultNumbering component
 
