@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:20:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,9 +1380,9 @@ String SfxViewFrame::UpdateTitle()
     if ( !pObjSh )
         return String();
 
-    if  ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-        // kein UpdateTitle mit Embedded-ObjectShell
-        return String();
+//    if  ( pObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+//        // kein UpdateTitle mit Embedded-ObjectShell
+//        return String();
 
     const SfxMedium *pMedium = pObjSh->GetMedium();
     String aURL;
