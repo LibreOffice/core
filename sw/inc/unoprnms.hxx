@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:45 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,9 @@ enum SwPropNameIds
 /* 0651 */  UNO_NAME_FILE_NAME_FROM_COLUMN,
 /* 0652 */  UNO_NAME_FILE_NAME_PREFIX,
 /* 0653 */  UNO_NAME_CHAR_STYLE_NAMES,
-/* 0654 */  SW_PROPNAME_END
+/* 0654 */  UNO_NAME_DAD_COMMAND,       /* DAD = DataAccessDescriptor (see com.sun.star.sdb.DataAccessDescriptor) */
+/* 0655 */  UNO_NAME_DAD_COMMAND_TYPE,
+/* 0656 */  SW_PROPNAME_END
 
 };
 
