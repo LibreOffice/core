@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-28 09:50:24 $
+ *  last change: $Author: cmc $ $Date: 2002-06-28 09:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bWasParaEnd = bWasParaEnd;
     pRdr->bPgSecBreak   = bPgSecBreak;
     pRdr->nAktColl      = nAktColl;
+    pRdr->bHasBorder = bHasBorder;
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
