@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 10:13:06 $
+ *  last change: $Author: kr $ $Date: 2001-02-02 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ import com.sun.star.lib.uno.environments.java.Proxy;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 
 
-
 public class java_remote_bridge_Test {
     static IEnvironment __java_environment_A;
     static IEnvironment __java_environment_B;
@@ -102,7 +101,21 @@ public class java_remote_bridge_Test {
 
     static byte __bytes[] = new byte[] {(byte)255, (byte)0, (byte)128};
 
-    static boolean test_lifecycle(int objects) throws Exception {
+    static class YXInstanceProvider implements XInstanceProvider {
+        Object _object;
+
+        void createNewObject() {
+            _object = new TestInterface_Object(); // create the instance, which is to be mapped from A to B
+        }
+
+        public Object getInstance(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
+//          System.err.println("\t\tTest_XInstanceProvider.getInstance:" + name);
+
+            return _object;
+        }
+    }
+
+    static boolean test_lifecycle(int objects, YXInstanceProvider yXInstanceProvider) throws Exception {
         System.err.println("\tjava_remote_bridge - testing lifecycle...");
 
         boolean passed = true;
@@ -110,15 +123,26 @@ public class java_remote_bridge_Test {
 //          XInterface theProxy = (XInterface)__java_remote_bridge_B.mapInterfaceFrom("testinstance", XInterface.class); // map the instance back from oid world to Bs real world
         XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", new Type(XInterface.class), true, false);
 
+
         TestInterface theProxy_TestInterfaces[] = new TestInterface[objects];
 
         for(int i = 0; i < objects; ++ i) {
-            theProxy_TestInterfaces[i] = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
+            yXInstanceProvider.createNewObject();
 
+            // map object
+            theProxy_TestInterfaces[i] = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
             theProxy_TestInterfaces[i].function(); // call the function
+
+            // remap object once
+            TestInterface remappedObject = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
+            remappedObject.function(); // call the function
+
+            // remap object twice
+            remappedObject = (TestInterface)com.sun.star.uno.UnoRuntime.queryInterface(TestInterface.class, theProxy);
+            remappedObject.function(); // call the function
         }
 
-        System.err.println("\t\tobject method called " + TestInterface_Object.__called + " times, should be " + objects + " - passed?" + (TestInterface_Object.__called == objects));
+        System.err.println("\t\tobject method called " + TestInterface_Object.__called + " times, should be " + (objects * 3) + " - passed?" + (TestInterface_Object.__called == (objects * 3)));
 
 
         System.err.println("\t\tbridge A life count: " + __java_remote_bridge_A.getLifeCount() + " should be " + objects + " - passed?" + (__java_remote_bridge_A.getLifeCount() == objects));
@@ -176,21 +200,16 @@ public class java_remote_bridge_Test {
         __java_environment_B = new java_environment(null);
 
 
-        class yXInstanceProvider implements XInstanceProvider {
-            public Object getInstance(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.uno.RuntimeException {
-//                  System.err.println("\t\tTest_XInstanceProvider.getInstance:" + name);
-                return new TestInterface_Object(); // create the instance, which is to be mapped from A to B
-            }
-        }
+        YXInstanceProvider yXInstanceProvider = new YXInstanceProvider();
 
-          __xInstanceProvider = new yXInstanceProvider();
+          __xInstanceProvider = yXInstanceProvider;
 
         __java_remote_bridge_A = new java_remote_bridge(__java_environment_A, null, new Object[]{protocol, __xConnection_A, __xInstanceProvider});
         __java_remote_bridge_B = new java_remote_bridge(__java_environment_B, null, new Object[]{protocol, __xConnection_B, null});
 //          __java_remote_bridge_A = new java_remote_bridge(__java_environment_A, null, new Object[]{"iiop", __xConnection_A, __xInstanceProvider});
 //          __java_remote_bridge_B = new java_remote_bridge(__java_environment_B, null, new Object[]{"iiop", __xConnection_B, null});
 
-          boolean passed =  test_lifecycle(100);
+          boolean passed =  test_lifecycle(100, yXInstanceProvider);
         passed = passed && test_releasing_of_outmapped_objects();
 
         System.err.println("java_remote_bridge_Test - " + protocol + " test passed?" + passed);

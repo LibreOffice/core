@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:32 $
+ *  last change: $Author: kr $ $Date: 2001-02-02 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:32 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-02 09:01:04 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -273,8 +273,16 @@ public class urp extends Protocol {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShortRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
-    private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[]) throws Exception  {
+    private void readLongRequest(byte header, String operation[], Object param[][], boolean synchron[], boolean mustReply[]) throws Exception  {
         ++ _requestsRecieved;
+
+        // read the extended flags
+        if((header & MOREFLAGS) != 0) {// is there an extended flags byte?
+            byte exFlags = _unmarshal.readbyte();
+
+            mustReply[0] = (exFlags & MUSTREPLY) != 0;
+            synchron[0]  = (exFlags & SYNCHRONOUSE) != 0;
+        }
 
         // read the method id
         int methodId = 0;
@@ -286,6 +294,11 @@ public class urp extends Protocol {
         if((header & NEWTYPE) != 0)
             _in_interface = _unmarshal.readTypeDescription();
 
+        MethodDescription methodDescription = _in_interface.getMethodDescription(methodId);
+
+        if((header & MOREFLAGS) == 0) // no ex flags, so get info from typeinfo
+            synchron[0] = !methodDescription.isOneway();
+
         if((header & NEWOID) != 0) // new oid?
             _in_oid = _unmarshal.readOid();
 
@@ -293,21 +306,6 @@ public class urp extends Protocol {
             _in_threadId = _unmarshal.readThreadID();
 
         _ignore_cache = ((header & IGNORECACHE) != 0); // do not use cache for this request?
-
-        MethodDescription methodDescription = _in_interface.getMethodDescription(methodId);
-        boolean mustReply;
-
-        if((header & MOREFLAGS) != 0) {// is there an extended flags byte?
-            byte exFlags = _unmarshal.readbyte();
-
-            mustReply   = (exFlags & MUSTREPLY) != 0;
-            synchron[0] = (exFlags & SYNCHRONOUSE) != 0;
-        }
-        else {
-            // the typeinfo does not differentiate between MUSTREPLY and SYNCHRONOUSE
-            synchron[0] = !methodDescription.isOneway();
-            mustReply = synchron[0];
-        }
 
         operation[0] = methodDescription.getName();
 
@@ -319,7 +317,7 @@ public class urp extends Protocol {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readLongRequest:" + _in_oid + " " + operation[0] + " " + synchron[0]);
     }
 
-    private Object readMessage(String operation[], Object param[], boolean synchron[], boolean exception[]) throws Exception {
+    private Object readMessage(String operation[], Object param[], boolean synchron[], boolean mustReply[], boolean exception[]) throws Exception {
         byte header = _unmarshal.readbyte();
 
         Class signature[];
@@ -328,12 +326,16 @@ public class urp extends Protocol {
 
         if((header & BIG_HEADER) != 0) { // full header?
             if((header & REQUEST) != 0) // a request ?
-                readLongRequest(header, operation, (Object [][])param, synchron);
+                readLongRequest(header, operation, (Object [][])param, synchron, mustReply);
             else // a reply
                 result = readReply(header, exception);
         }
         else // only a short request header
             readShortRequest(header, operation, (Object[][])param, synchron);
+
+        if(synchron[0]) // synchron implies MUSTREPLY
+            mustReply[0] = true;
+
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readMessage:" + _in_oid + " " + operation[0] + " " + _in_threadId + " " + param[0] + " " + result);
 
@@ -390,7 +392,7 @@ public class urp extends Protocol {
 
             boolean hasExFlags = false;
 
-            // if the type of request is provided, test if it differs from declaration
+            // if synchron is provided, test if it differs from declaration
             if(synchron[0] != null) {
                 if(methodDescription.isOneway() == synchron[0].booleanValue()) {
                     bigHeader = true;
@@ -400,17 +402,14 @@ public class urp extends Protocol {
             else
                 synchron[0] = new Boolean(!methodDescription.isOneway());
 
-
-            // if the type of request is provided, test if it differs from declaration
-            if(mustReply[0] != null) {
-                if(methodDescription.isOneway() == mustReply[0].booleanValue()) {
-                    bigHeader = true;
-                    hasExFlags = true;
-                }
+            // if mustReply is provided and if it differs from synchron
+            // then we have to write it
+            if(mustReply[0] != null && (mustReply[0] != synchron[0])) {
+                bigHeader = true;
+                hasExFlags = true;
             }
             else
-                mustReply[0] = new Boolean(!methodDescription.isOneway());
-
+                mustReply[0] = synchron[0];
 
             if(bigHeader) { // something has changed, send big header
                 header |= BIG_HEADER; // big header
@@ -428,7 +427,7 @@ public class urp extends Protocol {
                     exFlags |= synchron[0].booleanValue() ? SYNCHRONOUSE : 0;
                     exFlags |= mustReply[0].booleanValue() ? MUSTREPLY : 0;
 
-                    _marshal.writebyte(exFlags);
+                      _marshal.writebyte(exFlags);
                 }
 
                 // write the method id
@@ -546,6 +545,7 @@ public class urp extends Protocol {
         String    _operation;
         ThreadID  _threadId;
         boolean   _synchron;
+        boolean   _mustReply;
         boolean   _exception;
         Object    _params[];
 
@@ -555,6 +555,7 @@ public class urp extends Protocol {
                 String    operation,
                 ThreadID  threadId,
                 boolean   synchron,
+                boolean   mustReply,
                 boolean   exception,
                 Object    params[])
         {
@@ -564,6 +565,7 @@ public class urp extends Protocol {
             _operation = operation;
             _threadId  = threadId;
             _synchron  = synchron;
+            _mustReply = mustReply;
             _exception = exception;
             _params    = params;
         }
@@ -582,6 +584,10 @@ public class urp extends Protocol {
 
         public boolean isSynchron() {
             return _synchron;
+        }
+
+        public boolean mustReply() {
+            return _mustReply;
         }
 
         public boolean isException() {
@@ -626,9 +632,10 @@ public class urp extends Protocol {
                 String operation[]  = new String[1];
                 Object params[][]   = new Object[1][];
                 boolean synchron[]  = new boolean[1];
+                boolean mustReply[] = new boolean[1];
                 boolean exception[] = new boolean[1];
 
-                Object result = readMessage(operation, params, synchron, exception);
+                Object result = readMessage(operation, params, synchron, mustReply, exception);
 
                 if(operation[0] == null) { // a reply ?
                     iMessage = new Message(null, // oid
@@ -636,6 +643,7 @@ public class urp extends Protocol {
                                            null, // interface
                                            null, // operation
                                            _in_threadId,
+                                           false,
                                            false,
                                            exception[0],
                                            params[0]);
@@ -647,6 +655,7 @@ public class urp extends Protocol {
                                            operation[0],
                                            _in_threadId,
                                            synchron[0],
+                                           mustReply[0],
                                            false,
                                            params[0]);
                 }

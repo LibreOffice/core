@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-31 10:32:33 $
+ *  last change: $Author: kr $ $Date: 2001-02-02 09:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.12 $ $ $Date: 2001-01-31 10:32:33 $
+ * @version     $Revision: 1.13 $ $ $Date: 2001-02-02 09:01:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -200,11 +200,15 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public class MessageDispatcher extends Thread {
         boolean _quit = false;
 
+        private ThreadID _threadID;
+
         MessageDispatcher() {
             super("MessageDispatcher");
         }
 
         public void run() {
+            _threadID = ThreadPool.getThreadId();
+
             if(__MessageDispatcher_run_hook != null) {
                 try {
                     __MessageDispatcher_run_hook.invoke(this, "doWork", null);
@@ -225,11 +229,18 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                         // Use the protocol to read a job.
                         IMessage iMessage = _iProtocol.readMessage(_inputStream);
 
+
+                        if(iMessage.getThreadID().equals(_threadID)) {
+                            continue;
+                        }
+
                         // Take care of special methods release and acquire
                         if(iMessage.getOperation() != null && iMessage.getOperation().equals("release")) {
                             _java_environment.revokeInterface(iMessage.getOid(), new Type(iMessage.getInterface()));
                             remRefHolder(new Type(iMessage.getInterface()), iMessage.getOid());
 
+                            if(iMessage.mustReply())
+                                sendReply(false, iMessage.getThreadID(), null);
                         }
                         else if(iMessage.getOperation() != null && iMessage.getOperation().equals("acquire")) {
                             String oid_o[] = new String[]{iMessage.getOid()};
@@ -332,7 +343,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     protected Vector            _stableListeners;
 
     protected boolean           _negotiate;
-    protected boolean           _forceSynchronouse;
+    protected boolean           _forceSynchronous;
 
     /**
      * This method is for testing only.
@@ -457,13 +468,13 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
                 negotiateTouched = true;
             }
-            else if(left.equals("forcesynchronouse")) {
+            else if(left.equals("forcesynchronous")) {
                 if(right != null)
-                    _forceSynchronouse = (Integer.parseInt(right) == 1);
+                    _forceSynchronous = (Integer.parseInt(right) == 1);
                 else
-                    _forceSynchronouse = true;
+                    _forceSynchronous = true;
 
-                if(_forceSynchronouse && !negotiateTouched)
+                if(_forceSynchronous && !negotiateTouched)
                     _negotiate = true;
             }
             else
@@ -606,6 +617,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         // see if we already have object with zInterface of given oid
         Object object = _java_environment.getRegisteredInterface((String)oId, type);
+
         if(object != null) {
             if(object instanceof DispatcherAdapterBase) {
                 DispatcherAdapterBase dispatcherAdapterBase = (DispatcherAdapterBase)object;
@@ -613,9 +625,14 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 if(dispatcherAdapterBase.getObject() instanceof DispatcherAdapterBase) {
                     dispatcherAdapterBase = (DispatcherAdapterBase)dispatcherAdapterBase.getObject();
 
-                    if((dispatcherAdapterBase.getObject() instanceof String)) { // is it not my object?
+                    if((dispatcherAdapterBase.getObject() instanceof String)) { // is it my proxy?
                         try {
-                            sendRequest(oId, type, "release", null, null, null);
+                            sendRequest(oId,
+                                        type,
+                                        "release",
+                                        null,
+                                        new Boolean[]{new Boolean(_forceSynchronous)},
+                                          new Boolean[]{new Boolean(_forceSynchronous)});
                         }
                         catch(Exception exception) {
                             throw new MappingException(exception.getMessage());
@@ -627,7 +644,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         else {
             String oid[] = new String[]{(String)oId};
 
-            Object proxy = Proxy.create(this, oid[0], type, false, _forceSynchronouse); // this proxy sends a release, when finalized
+            Object proxy = Proxy.create(this, oid[0], type, false, _forceSynchronous); // this proxy sends a release, when finalized
             object = _java_environment.registerInterface(proxy, oid, type);
         }
 
@@ -702,15 +719,10 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         // because there can be active proxies
 //          _life_count = 0;
 
-        synchronized(_xConnection) {
+        synchronized(_outputStream) {
             _iProtocol.ignore_next_closeConnection();
             _iProtocol.send_closeConnection(_outputStream);
-            try {
-                _xConnection.flush();
-            }
-            catch(com.sun.star.io.IOException ioException) {
-                throw new IOException(ioException.toString());
-            }
+            _outputStream.flush();
         }
     }
 
@@ -838,11 +850,11 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
 
         if(_disposed) throw new RuntimeException("java_remote_bridge(" + this + ").sendReply - is disposed");
 
-        synchronized(_xConnection) {
+        synchronized(_outputStream) {
             _iProtocol.writeReply(exception, threadId, result);
             _iProtocol.flush(new DataOutputStream(_outputStream));
 
-              _xConnection.flush();
+              _outputStream.flush();
         }
     }
 
@@ -866,11 +878,12 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             synchronized(_xConnection) {
                 _iProtocol.writeRequest((String)object, (TypeDescription)type.getTypeDescription(), operation, ThreadPool.getThreadId(), params, synchron, mustReply);
 
-                if(synchron[0].booleanValue()) // prepare a queue for this thread in the threadpool
+                if(synchron[0].booleanValue()  && Thread.currentThread() != _messageDispatcher) // prepare a queue for this thread in the threadpool
                     ThreadPool.addThread(this);
 
                 _iProtocol.flush(new DataOutputStream(_outputStream));
                 _outputStream.flush();
+
             }
         }
           catch(Exception exception) {
@@ -883,9 +896,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             throw exception;
         }
 
-        _xConnection.flush();
+//          _xConnection.flush();
 
-          if(synchron[0].booleanValue()) {
+          if(synchron[0].booleanValue() && Thread.currentThread() != _messageDispatcher) { // the message dispatcher must not block
             result = ThreadPool.enter();
         }
 
