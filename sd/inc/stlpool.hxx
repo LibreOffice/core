@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-30 15:29:32 $
+ *  last change: $Author: cl $ $Date: 2002-01-09 14:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,16 @@ public:
 
                             // Caller muss Liste loeschen
     List*               CreateOutlineSheetList(const String& rLayoutName);
-    void                CreateLayoutStyleSheets(const String& rLayoutName);
+
+    /** creates all layout style sheets for the givin layout name if they
+        don't exist yet.
+
+        @param rLayoutName  Must be the name of a master page
+        @param bCheck       If set to true, the debug version will assert if a style
+                            had to be created. This is used to assert errors in documents
+                            when styles are missing.
+    */
+    void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
     void                EraseLayoutStyleSheets(const String& rLayoutName);
     List*               CreateLayoutSheetNames(const String& rLayoutName) const;
     List*               CreateLayoutSheetList(const String& rLayoutName);
