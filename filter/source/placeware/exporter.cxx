@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-05 14:13:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -128,6 +125,7 @@ using namespace ::std;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::presentation::XPresentationPage;
+using com::sun::star::task::XStatusIndicator;
 
 // -----------------------------------------------------------------------------
 
@@ -360,31 +358,12 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
 
 //#define PLACEWARE_DEBUG 1
 
-sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
+sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream,
+                                        const rtl::OUString& rURL, Reference < XInterface > xHandler, Reference < XStatusIndicator >& xStatusIndicator )
 {
     sal_Bool bRet = sal_False;
 
     mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ) );
-
-    Reference< com::sun::star::task::XStatusIndicator> xStatusIndicator;
-
-    // create the status indicator
-    Reference< com::sun::star::frame::XModel > xModel( xDoc, UNO_QUERY );
-    if( xModel.is() )
-    {
-        Reference< com::sun::star::frame::XController >xController(xModel->getCurrentController());
-        if(xController.is())
-        {
-            Reference < com::sun::star::frame::XFrame >xFrame(xController->getFrame());
-            if(xFrame.is())
-            {
-                Reference<com::sun::star::task::XStatusIndicatorFactory> xFactory(xFrame,UNO_QUERY);
-                if (xFactory.is())
-                    xStatusIndicator = xFactory->createStatusIndicator();
-            }
-        }
-    }
-
     Reference< XDrawPagesSupplier > xDrawPagesSupplier(xDoc, UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         return sal_False;
