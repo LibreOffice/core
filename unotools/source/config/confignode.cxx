@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 09:10:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 12:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,26 @@ namespace utl
         return bIsSet;
     }
 
+    //---------------------------------------------------------------------
+    //--- 20.08.01 19:03:20 -----------------------------------------------
+
+    sal_Bool OConfigurationNode::hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw()
+    {
+        OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );
+        try
+        {
+            if ( m_xHierarchyAccess.is() )
+            {
+                ::rtl::OUString sName = normalizeName( _rName, NO_CALLER );
+                return m_xHierarchyAccess->hasByHierarchicalName( sName );
+            }
+        }
+        catch(Exception&)
+        {
+        }
+        return sal_False;
+    }
+
     //------------------------------------------------------------------------
     sal_Bool OConfigurationNode::hasByName(const ::rtl::OUString& _rName) const throw()
     {
@@ -417,7 +437,7 @@ namespace utl
     {
         sal_Bool bResult = false;
 
-        OSL_ENSURE(m_xReplaceAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
+        OSL_ENSURE(m_xReplaceAccess.is(), "OConfigurationNode::setNodeValue: object is invalid!");
         if (m_xReplaceAccess.is())
         {
             try
@@ -703,6 +723,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/07/26 09:10:58  oj
+ *  #89831# new method to append an existing node with different name
+ *
  *  Revision 1.3  2001/07/10 11:30:37  jb
  *  #87904# Use public helpers for handling of new configuration pathes
  *

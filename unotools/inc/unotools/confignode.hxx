@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 09:13:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 12:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ namespace utl
         sal_Bool isSetNode() const;
         /// checks whether or not a direct child with a given name exists
         sal_Bool hasByName(const ::rtl::OUString& _rName) const throw();
+        /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
+        sal_Bool hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw();
         /// check if the objects represents a valid configuration node
         sal_Bool isValid() const { return m_xHierarchyAccess.is(); }
         /// check whether the object is read-only of updatable
@@ -322,6 +324,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/07/26 09:13:23  oj
+ *  #89831# new method to append an existing node with different name
+ *
  *  Revision 1.1  2001/06/13 16:26:04  fs
  *  initial checkin - non-UNO wrapper for configuration nodes
  *
