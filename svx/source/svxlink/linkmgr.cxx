@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-19 15:48:17 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 15:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,6 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
                 // minimiert!
 
             SfxUInt16Item aViewStat( SID_VIEW_ZOOM_MODE, 0 );
-            SfxRectangleItem aRectItem( SID_VIEW_POS_SIZE, Rectangle() );
             SfxStringItem aReferer( SID_REFERER, sReferer );
 
             SfxBoolItem aSilent(SID_SILENT, TRUE);
