@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:07:33 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Oblast";
         Text[ hebrew ] = "Bereich";
         Text[ hindi ] = "फैलाव";
+        Text[ slovak ] = "Oblasť";
     };
     Edit ED_ASSIGN
     {
@@ -167,6 +168,7 @@ ModelessDialog RID_SCDLG_CHANGES
         QuickHelpText[ czech ] = "Minimalizovat/Maximalizovat";
         QuickHelpText[ hebrew ] = "Verkleinern/Vergrößern";
         QuickHelpText[ hindi ] = "छोटा करो/बड़ा करो";
+        QuickHelpText[ slovak ] = "Minimalizovať/Maximalizovať";
     };
     String STR_INSERT_COLS
     {
@@ -212,6 +214,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Sloupec byl vložen";
         Text[ hebrew ] = "Spalte eingefügt";
         Text[ hindi ] = "स्तंभ को जोड़ा";
+        Text[ slovak ] = "Stĺpec bol vložený";
     };
     String STR_INSERT_ROWS
     {
@@ -244,6 +247,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Řádek byl vložen ";
         Text[ hebrew ] = "Zeile eingefügt";
         Text[ hindi ] = "पंक्ति को जोड़ा";
+        Text[ slovak ] = "Riadok bol vložený";
     };
     String STR_INSERT_TABS
     {
@@ -276,6 +280,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "List byl vložen ";
         Text[ hebrew ] = "Tabelle eingefügt";
         Text[ hindi ] = "शीट् को जोड़ा ";
+        Text[ slovak ] = "List bol vložený";
     };
     String STR_DELETE_COLS
     {
@@ -308,6 +313,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Sloupec byl odstraněn";
         Text[ hebrew ] = "Spalte gelöscht";
         Text[ hindi ] = "स्तंभ को मिटाया";
+        Text[ slovak ] = "Stĺpec bol odstránený";
     };
     String STR_DELETE_ROWS
     {
@@ -340,6 +346,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Řádek byl odstraněn";
         Text[ hebrew ] = "Zeile gelöscht";
         Text[ hindi ] = "पंक्ति को मिटाया";
+        Text[ slovak ] = "Riadok bol odstránený";
     };
     String STR_DELETE_TABS
     {
@@ -372,6 +379,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "List byl odstraněn";
         Text[ hebrew ] = "Tabelle gelöscht";
         Text[ hindi ] = "शीट् को मिटाया";
+        Text[ slovak ] = "List bol odstránený";
     };
     String STR_MOVE
     {
@@ -404,6 +412,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Oblast přesunuta";
         Text[ hebrew ] = "Bereich verschoben";
         Text[ hindi ] = "फैलाव का स्थान परिवर्तन किया";
+        Text[ slovak ] = "Oblasť presunutá";
     };
     String STR_CONTENT
     {
@@ -436,6 +445,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Obsah byl změněn";
         Text[ hebrew ] = "Inhaltsänderung";
         Text[ hindi ] = "परिवर्तन किया हुआ विषयें";
+        Text[ slovak ] = "Zmenený obsah";
     };
     String STR_CONTENT_WITH_CHILD
     {
@@ -468,6 +478,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Obsah byl změněn";
         Text[ hebrew ] = "Inhaltsänderung";
         Text[ hindi ] = "Changed contents";
+        Text[ slovak ] = "Zmenený obsah";
     };
     String STR_CHILD_CONTENT
     {
@@ -500,6 +511,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Změněno na ";
         Text[ hebrew ] = "Änderung zu";
         Text[ hindi ] = "को परिवर्तन किया ";
+        Text[ slovak ] = "Zmenené na ";
     };
     String STR_CHILD_ORGCONTENT
     {
@@ -532,6 +544,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Původní";
         Text[ hebrew ] = "Original";
         Text[ hindi ] = "यथार्थ";
+        Text[ slovak ] = "Pôvodný";
     };
     String STR_REJECT
     {
@@ -564,6 +577,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Změny zamítnuty";
         Text[ hebrew ] = "Änderung verworfen";
         Text[ hindi ] = "परिवर्तनों को अस्वीकृत किया";
+        Text[ slovak ] = "Zmeny zamietnuté";
     };
     String STR_ACCEPTED
     {
@@ -596,6 +610,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Přijato";
         Text[ hebrew ] = "Akzeptierte";
         Text[ hindi ] = "स्वीकृत";
+        Text[ slovak ] = "Prijaté";
     };
     String STR_REJECTED
     {
@@ -628,6 +643,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Odmítnuto";
         Text[ hebrew ] = "Abgelehnte";
         Text[ hindi ] = "अस्वीकृत";
+        Text[ slovak ] = "Odmietnuté";
     };
     String STR_NO_ENTRY
     {
@@ -660,6 +676,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "Žádná položka";
         Text[ hebrew ] = "Kein Eintrag";
         Text[ hindi ] = "कोई प्रविष्टि नहीं";
+        Text[ slovak ] = "Žiadna položka";
     };
     String STR_EMPTY
     {
@@ -692,6 +709,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ czech ] = "<prázdné>";
         Text[ hebrew ] = "<leer>";
         Text[ hindi ] = "<खाली>";
+        Text[ slovak ] = "<prázdne>";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -727,7 +745,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ dutch ] = "Wijzigingen accepteren of verwerpen";
     Text[ chinese_simplified ] = "接受或舍弃更改内容";
     Text[ greek ] = "������� � �������� �������";
-    Text[ korean ] = "변경 사항  적용 또는 취소";
+    Text[ korean ] = "변경 사항 적용 또는 무시";
     Text[ turkish ] = "De�i�iklikleri kabul/reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Accepta o rebutja els canvis";
@@ -736,6 +754,7 @@ ModelessDialog RID_SCDLG_CHANGES
     Text[ czech ] = "Přijmout nebo odmítnout změny";
     Text[ hebrew ] = "Änderungen akzeptieren oder verwerfen";
     Text[ hindi ] = "परिवर्तनों को स्वीकार अथवा अस्वीकार करो";
+    Text[ slovak ] = "Prijať alebo odmietnuť zmeny";
 };
 Menu RID_POPUP_CHANGES
 {
@@ -775,6 +794,7 @@ Menu RID_POPUP_CHANGES
             Text[ czech ] = "Upravit poznámku...";
             Text[ hebrew ] = "Kommentar bearbeiten...";
             Text[ hindi ] = "अपवाद का संपादन...";
+            Text[ slovak ] = "Upraviť komentár...";
         };
         MenuItem
         {
@@ -820,6 +840,7 @@ Menu RID_POPUP_CHANGES
                         Text[ czech ] = "Akce";
                         Text[ hebrew ] = "‮פעולה‬";
                         Text[ hindi ] = "कार्य";
+                        Text[ slovak ] = "Činnosť";
                     };
                     MenuItem
                     {
@@ -855,6 +876,7 @@ Menu RID_POPUP_CHANGES
                         Text[ czech ] = "Umístění";
                         Text[ hebrew ] = "‮מיקום‬";
                         Text[ hindi ] = "Position";
+                        Text[ slovak ] = "Umiestnenie";
                     };
                     MenuItem
                     {
@@ -890,6 +912,7 @@ Menu RID_POPUP_CHANGES
                         Text[ czech ] = "Autor";
                         Text[ hebrew ] = "‮מבצע הפעולה‬";
                         Text[ hindi ] = "लेखक";
+                        Text[ slovak ] = "Autor";
                     };
                     MenuItem
                     {
@@ -925,6 +948,7 @@ Menu RID_POPUP_CHANGES
                         Text[ czech ] = "Datum";
                         Text[ hebrew ] = "‮תאריך‬";
                         Text[ hindi ] = "दिनांक";
+                        Text[ slovak ] = "Dátum";
                     };
                     MenuItem
                     {
@@ -960,6 +984,7 @@ Menu RID_POPUP_CHANGES
                         Text[ czech ] = "Popis";
                         Text[ hebrew ] = "‮תאור‬";
                         Text[ hindi ] = "विवरण";
+                        Text[ slovak ] = "Popis";
                     };
                 };
             };
@@ -990,9 +1015,14 @@ Menu RID_POPUP_CHANGES
             Text[ czech ] = "Řazení";
             Text[ hebrew ] = "Sortiere";
             Text[ hindi ] = "सोर्ट करना";
+            Text[ slovak ] = "Radenie";
         };
     };
 };
+
+
+
+
 
 
 
