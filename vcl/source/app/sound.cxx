@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:35 $
+ *  last change: $Author: ka $ $Date: 2000-11-14 13:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,15 @@
 
 #define _SV_SOUND_CXX
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
-
 #ifndef REMOTE_APPSERVER
 #ifndef _SV_SALSOUND_HXX
 #include <salsound.hxx>
@@ -214,7 +219,22 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
 #endif
     }
     else if( mpSound->IsValid() )
-        bRet = mpSound->Init( NULL, rSoundName, mnSoundLen );
+    {
+        INetURLObject   aSoundURL( rSoundName );
+        String          aSoundName, aTmp;
+
+        if( aSoundURL.GetProtocol() != INET_PROT_NOT_VALID )
+            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aSoundURL.GetMainURL(), aSoundName );
+        else if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rSoundName, aTmp ) )
+            aSoundName = rSoundName;
+        else
+        {
+            DBG_ERROR( "invalid sound file name" );
+            aSoundName = String();
+        }
+
+        bRet = mpSound->Init( NULL, aSoundName, mnSoundLen );
+    }
     else
         bRet = FALSE;
 
