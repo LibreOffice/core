@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:15:39 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 17:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,18 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="SFX" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: MBA-->
+  <info>
+    <desc xml:lang="en-US">This is the component-schema for the framework module.</desc>
+  </info>
   <component>
+	<info>
+	  <desc xml:lang="en-US">Contains general settings for the framework module.</desc>
+	</info>
     <group oor:name="Help">
+	  <info>
+	    <desc xml:lang="en-US">Contains settings which specifies how the help in Office should work.</desc>
+	  </info>
       <prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
         <!-- OldLocation: hlpagent.ini -->
         <!-- Responsible: PB-->
