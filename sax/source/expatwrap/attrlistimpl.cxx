@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlistimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:12 $
+ *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ using namespace ::com::sun::star::xml::sax;
 
 #include "attrlistimpl.hxx"
 
+namespace sax_expatwrap {
 struct TagAttribute
 {
     TagAttribute()
@@ -231,3 +232,4 @@ void AttributeListImpl::setAttributeList( const Reference<  XAttributeList >  &r
     assert( nMax == getLength() );
 }
 
+}

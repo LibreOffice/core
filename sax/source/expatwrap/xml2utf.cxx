@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ using namespace ::com::sun::star::io;
 
 #include "xml2utf.hxx"
 
+namespace sax_expatwrap {
 
 sal_Int32 XMLFile2UTFConverter::readAndConvert( Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
     throw ( IOException, NotConnectedException , BufferSizeExceededException , RuntimeException )
@@ -605,3 +606,4 @@ void Unicode2TextConverter::init( rtl_TextEncoding encoding )
 };
 
 
+}

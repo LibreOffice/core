@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-25 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ using namespace ::com::sun::star::io;
 #include "factory.hxx"
 #include "attrlistimpl.hxx"
 #include "xml2utf.hxx"
+
+namespace sax_expatwrap {
 
 OUString XmlNChar2OUString( const XML_Char *p , int nLen )
 {
@@ -959,7 +961,8 @@ void SaxExpatParser_Impl::callbackEndCDATA( void *pvThis )
     CALL_ELEMENT_HANDLER_AND_CARE_FOR_EXCEPTIONS(pImpl,rExtendedDocumentHandler->endCDATA() );
 }
 
-
+}
+using namespace sax_expatwrap;
 
 extern "C"
 {
