@@ -167,6 +167,9 @@ public class XmlUpdater extends Thread {
         starBasicPath= starBasicPath.concat(File.separator+"user"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
         //System.out.println( "Office StarBasic path: " + starBasicPath );
 
+        String regSchemaOfficePath=installPath;
+        regSchemaOfficePath= regSchemaOfficePath.concat(File.separator+"share"+File.separator+"registry"+File.separator+"schema"+File.separator+"org"+File.separator+"openoffice"+File.separator+"Office"+File.separator);
+        //System.out.println( "Office schema path: " + regSchemaOfficePath );
 
         // Get the NetBeans installation
         //String netbeansPath=
@@ -382,6 +385,11 @@ public class XmlUpdater extends Thread {
             return;
     }
 
+        if (!zd.extractEntry("schema/Scripting.xcs",regSchemaOfficePath, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
 
 //--------------------------------
 
