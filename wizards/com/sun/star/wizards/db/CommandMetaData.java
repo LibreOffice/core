@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CommandMetaData.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:52:45 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:14:46 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -116,6 +116,18 @@ public class CommandMetaData extends DBMetaData {
         }
     }
 
+
+    public void setFieldColumns(boolean _bgetDefaultValue, String _CommandName) {
+        this.setCommandName(_CommandName);
+        DBFieldColumns = new FieldColumn[FieldNames.length];
+        for (int i = 0; i < FieldNames.length; i++) {
+            DBFieldColumns[i] = new FieldColumn(this, FieldNames[i], this.getCommandName());
+            if (_bgetDefaultValue)
+                DBFieldColumns[i].getDefaultValue();
+        }
+    }
+
+
     public XPropertySet getColumnObjectByFieldName(String _FieldColumnName) {
         try {
             FieldColumn CurFieldColumn = getFieldColumnByDisplayName(_FieldColumnName);
@@ -207,6 +219,22 @@ public class CommandMetaData extends DBMetaData {
         sMsgNoFieldsFromCommand = JavaTools.replaceSubString(sMsgNoFieldsFromCommand, _commandname, "%NAME");
         showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgNoFieldsFromCommand);
         return false;
+    }
+
+
+    public String[] getOrderableColumns(String[] _fieldnames){
+        Vector aOrderableColumns = new Vector();
+        int ncount = 0;
+        for (int i = 0; i < _fieldnames.length; i++){
+            FieldColumn ofieldcolumn = getFieldColumn(_fieldnames[i]);
+            if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.xColPropertySet)){
+                aOrderableColumns.addElement(_fieldnames[i]);
+                ncount++;
+            }
+        }
+        String[] sretfieldnames = new String[ncount];
+        aOrderableColumns.toArray(sretfieldnames);
+        return sretfieldnames;
     }
 
 
