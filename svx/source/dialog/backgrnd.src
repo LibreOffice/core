@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 11:03:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
     text[ greek ] = "Ãñáöéêü ÷ùñßò óýíäåóç";    \
     text[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈ";    \
     text[ turkish ] = "Baðlantýsýz grafik"; \
-    text[ language_user1 ] = " ";
+    text[ language_user1 ] = " ";   \
+    text[ finnish ] = "Linkittämätön kuva"; \
+    text[ catalan ] = "Imagen no vinculada";
 
  // pragma ----------------------------------------------------------------
 
@@ -134,6 +136,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ÇüÅÂ(~S)";
         Text[ turkish ] = "~Artalan";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Nimellä";
+        Text[ catalan ] = "~Como";
     };
     ListBox LB_SELECTOR
     {
@@ -247,6 +251,16 @@ TabPage RID_SVXPAGE_BACKGROUND
             < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Väri" ; Default ; > ;
+        < "Kuva" ; Default ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Color" ; Default ; > ;
+        < "Imagen" ; Default ; > ;
+    };
     };
     FixedText FT_TBL_DESC
     {
@@ -276,6 +290,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "´ë»ó(~O)";
         Text[ turkish ] = "He~def";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Kohde";
+        Text[ catalan ] = "Pa~ra";
     };
     ListBox LB_TBL_BOX
     {
@@ -410,6 +426,18 @@ TabPage RID_SVXPAGE_BACKGROUND
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Solu" ; > ;
+        < "Rivi" ; > ;
+        < "Taulukko" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Celda" ; > ;
+        < "Fila" ; > ;
+        < "Tabla" ; > ;
+    };
     };
     ListBox LB_PARA_BOX
     {
@@ -523,6 +551,16 @@ TabPage RID_SVXPAGE_BACKGROUND
             < " " ; > ;
         < " " ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Kappale" ; > ;
+        < "Merkki" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+            < "Párrafo" ; > ;
+        < "Carácter" ; > ;
+    };
     };
      // Hintergrund-Brush  ----------------------------------------------------
     Control SET_BGDCOLOR
@@ -561,6 +599,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¹è°æ»ö";
         Text[ turkish ] = "Artalan rengi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Background color";
     };
     FixedLine GB_COL_PREVIEW
     {
@@ -590,6 +629,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Preview";
     };
     Window WIN_PREVIEW1
     {
@@ -633,6 +673,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¿¬°á(~L)";
         Text[ turkish ] = "Baðla";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Linkitä";
+        Text[ catalan ] = "~Vincular";
     };
     PushButton BTN_BROWSE
     {
@@ -660,6 +702,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¼±ÅÃÇÏ±â(~B)...";
         Text[ turkish ] = "Seç...";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Selaa";
+        Text[ catalan ] = "Seleccio~nar...";
     };
     CheckBox BTN_PREVIEW
     {
@@ -686,6 +730,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¹Ì¸® º¸±â(~V)";
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Esikatselu";
+        Text[ catalan ] = "Previsuali~zación";
     };
     FixedLine GB_FILE
     {
@@ -713,6 +759,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "ÆÄÀÏ";
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "File";
     };
     RadioButton BTN_POSITION
     {
@@ -740,6 +787,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "O~rtala";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Sijainti";
+        Text[ catalan ] = "~Posición";
     };
     RadioButton BTN_AREA
     {
@@ -768,6 +817,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¿µ¿ª(~E)";
         Text[ turkish ] = "Ser";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Alue";
+        Text[ catalan ] = "~Área";
     };
     RadioButton BTN_TILE
     {
@@ -795,6 +846,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "¹ÙµÏÆÇ½Ä(~T)";
         Text[ turkish ] = "~Döþe";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Vierekkäin";
+        Text[ catalan ] = "~Mosaico";
     };
     Control WND_POSITION
     {
@@ -831,6 +884,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "Çü½Ä";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Type";
     };
     Window WIN_PREVIEW2
     {
@@ -866,6 +920,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ greek ] = "Ðñïåðéóêüðçóç";
         Text[ korean ] = "±×·¡ÇÈ ¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
+        Text[ catalan ] = "Preview";
     };
     String STR_BROWSE
     {
@@ -890,6 +945,8 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "±×·¡ÇÈ Ã£±â";
         Text[ turkish ] = "Grafik bul";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Etsi kuvat";
+        Text[ catalan ] = "Buscar imagen";
     };
     String STR_UNLINKED
     {
@@ -905,5 +962,6 @@ TabPage RID_SVXPAGE_BACKGROUND
     Text[ korean ] = "¹è°æ";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fondo";
 };
  // ********************************************************************** EOF
