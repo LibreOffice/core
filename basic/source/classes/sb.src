@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-29 12:57:17 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 07:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Ongeldige bestandsnaam of -nummer";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÎÄ¼ş»òºÅÂë";
         Text[ greek ] = "ËÜèïò üíïìá Ş áñéèìüò áñ÷åßïõ";
-        Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ÀÌ¸§ ¶Ç´Â ÆÄÀÏ ¹øÈ£";
+        Text[ korean ] = "ÆÄÀÏ ÀÌ¸§ ¶Ç´Â ÆÄÀÏ ¹øÈ£ Æ²¸²";
         Text[ turkish ] = "Dosya adı ya da numarası yanlış";
         Text[ language_user1 ] = " ";
     };
@@ -914,7 +914,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onjuist record-nummer";
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿ºÅÂë´íÎó";
         Text[ greek ] = "Ëáíèáóìİíïò áñéèìüò åããñáöŞò";
-        Text[ korean ] = "Àß¸øµÈ µ¥ÀÌÅÍ ·¹ÄÚµå ¹øÈ£";
+        Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå ¹øÈ£ Æ²¸²";
         Text[ turkish ] = "Veri kümesi numarası yanlış";
         Text[ language_user1 ] = " ";
     };
