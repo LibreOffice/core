@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 15:04:40 $
+ *  last change: $Author: fs $ $Date: 2000-12-11 16:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
@@ -1599,7 +1602,7 @@ void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool 
     m_bInitializingControls = sal_False;
 
     if (!bValid)
-        m_aSuppressVersionColumns.Check(bSuppressVersionColumns);
+        m_aSuppressVersionColumns.Check(!bSuppressVersionColumns);
     if (_bSaveValue)
         m_aSuppressVersionColumns.SaveValue();
 
@@ -1671,6 +1674,7 @@ void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
         SQLExceptionInfo aErrorInfo;
         try
         {
+            WaitObject aWaitCursor(this);
             m_xCurrentConnection = m_aTablesList.UpdateTableList(sURL, aConnectionParams);
         }
         catch (SQLContext& e) { aErrorInfo = SQLExceptionInfo(e); }
@@ -1788,7 +1792,7 @@ sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
 
     if (m_aSuppressVersionColumns.IsChecked() != m_aSuppressVersionColumns.GetSavedValue())
-        _rCoreAttrs.Put( SfxBoolItem(DSID_SUPPRESSVERSIONCL, m_aSuppressVersionColumns.IsChecked()) );
+        _rCoreAttrs.Put( SfxBoolItem(DSID_SUPPRESSVERSIONCL, !m_aSuppressVersionColumns.IsChecked()) );
 
     return sal_True;
 }
@@ -1825,6 +1829,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2000/12/07 15:04:40  fs
+ *  #81490# reset the password when changing the user
+ *
  *  Revision 1.21  2000/12/07 14:27:53  fs
  *  #80939# clear the tables list when cancelling the password dialog
  *
