@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:15 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,8 @@ public class OfficeDocument
     public static final String PARCEL_PREFIX_DIR =
         ParcelZipper.PARCEL_PREFIX_DIR;
 
-    public static final String[] OFFICE_EXTENSIONS = {".sxc" , ".sxw"};
+    public static final String[] OFFICE_EXTENSIONS =
+        {".sxc" , ".sxw", ".sxi", ".sxd"};
     public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
     private File file = null;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaScriptIterator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:51:44 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ public class JavaScriptIterator implements TemplateWizard.Iterator {
         if (tmp.getExt().equals("java")) {
             try {
                 PackageRemover.removeDeclaration(FileUtil.toFile(tmp));
+
+                // IssueZilla 11986 - rename the FileObject
+                // so the JavaNode is resynchronized
+                tmp.rename(tmp.lock(), tmp.getName(), tmp.getExt());
             }
             catch (IOException ioe) {
                 NotifyDescriptor d = new NotifyDescriptor.Message(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:04:18 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,18 +147,20 @@ public class SVersionRCFile {
         long l = sversionrc.lastModified();
 
         if (l > lastModified) {
-            BufferedReader br;
+            BufferedReader br = null;
 
             try {
                 br = new BufferedReader(new FileReader(sversionrc));
+                load(br);
+                lastModified = l;
             }
             catch (FileNotFoundException fnfe) {
                 throw new IOException(fnfe.getMessage());
             }
-
-            load(br);
-            br.close();
-            lastModified = l;
+            finally {
+                if (br != null)
+                    br.close();
+            }
         }
         return versions.elements();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Manifest.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-04 13:37:47 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,11 +154,18 @@ public class Manifest {
 
     public InputStream getInputStream() throws IOException {
         InputStream result = null;
+        ByteArrayOutputStream out = null;
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        write(out);
-        result = new ByteArrayInputStream(out.toByteArray());
-        // result = replaceNewlines(out.toByteArray());
+        try {
+            out = new ByteArrayOutputStream();
+            write(out);
+            result = new ByteArrayInputStream(out.toByteArray());
+            // result = replaceNewlines(out.toByteArray());
+        }
+        finally {
+            if (out != null)
+                out.close();
+        }
 
         return result;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:03:27 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,27 +136,31 @@ public class ParcelZipper
         tmppath = realpath + ".tmp";
 
         File tmpfile = new File(tmppath);
+        ZipOutputStream out = null;
         try {
             if (tmpfile.exists() == true)
                 tmpfile.delete();
 
-            ZipOutputStream out =
-                new ZipOutputStream(new FileOutputStream(tmpfile));
+            out = new ZipOutputStream(new FileOutputStream(tmpfile));
 
             File[] children = basedir.listFiles();
             for (int i = 0; i < children.length; i++)
                 addFileToParcel(children[i], "", out, filter);
-
-            out.close();
         }
         catch (IOException ioe) {
+            out.close();
             tmpfile.delete();
             throw ioe;
+        }
+        finally {
+            if (out != null)
+                out.close();
         }
 
         if (targetfile.exists() == true)
             targetfile.delete();
         tmpfile.renameTo(targetfile);
+
         return targetfile.getAbsolutePath();
     }
 
@@ -183,11 +187,17 @@ public class ParcelZipper
 
             byte[] bytes = new byte[1024];
             int len;
-            FileInputStream fis = new FileInputStream(root);
 
-            while ((len = fis.read(bytes)) != -1)
-                out.write(bytes, 0, len);
+            FileInputStream fis = null;
+            try {
+                fis = new FileInputStream(root);
 
+                while ((len = fis.read(bytes)) != -1)
+                    out.write(bytes, 0, len);
+            }
+            finally {
+                if (fis != null) fis.close();
+            }
             out.closeEntry();
         }
     }
@@ -231,28 +241,25 @@ public class ParcelZipper
     private boolean isDocumentOverwriteNeeded(File parcel, File document)
         throws IOException
     {
-        ZipFile documentZip;
+        ZipFile documentZip = null;
         boolean result = false;
 
         try {
             documentZip = new ZipFile(document);
+
+            String name =
+                PARCEL_PREFIX_DIR + getParcelLanguage(parcel) +
+                    "/" + getParcelDirFromParcelZip(parcel.getName()) +
+                    "/" + PARCEL_DESCRIPTOR_XML;
+
+            if (documentZip.getEntry(name) != null)
+                result = true;
         }
         catch (IOException ioe) {
             return false;
         }
-
-        String name =
-            PARCEL_PREFIX_DIR + getParcelLanguage(parcel) +
-                "/" + getParcelDirFromParcelZip(parcel.getName()) +
-                "/" + PARCEL_DESCRIPTOR_XML;
-
-        if (documentZip.getEntry(name) != null)
-            result = true;
-
-        try {
-            documentZip.close();
-        }
-        catch (IOException ioe) {
+        finally {
+            if (documentZip != null) documentZip.close();
         }
 
         return result;
@@ -277,7 +284,7 @@ public class ParcelZipper
     private String unzipToDirectory(File parcel, File targetDirectory)
         throws IOException {
 
-        ZipInputStream in;
+        ZipInputStream in = null;
         File parcelDir = new File(targetDirectory,
             getParcelLanguage(parcel) + File.separator +
             getParcelDirFromParcelZip(parcel.getName()));
@@ -289,33 +296,41 @@ public class ParcelZipper
             }
         }
 
-        in = new ZipInputStream(new FileInputStream(parcel));
+        try {
+            in = new ZipInputStream(new FileInputStream(parcel));
 
-        File outFile;
-        ZipEntry inEntry = in.getNextEntry();
-        byte[] bytes = new byte[1024];
-        int len;
+            File outFile;
+            ZipEntry inEntry = in.getNextEntry();
+            byte[] bytes = new byte[1024];
+            int len;
 
-        while (inEntry != null) {
-            outFile = new File(parcelDir, inEntry.getName());
-            if (inEntry.isDirectory()) {
-                //System.err.println("Creating directory: " + outFile.getAbsolutePath());
-                outFile.mkdir();
+            while (inEntry != null) {
+                outFile = new File(parcelDir, inEntry.getName());
+                if (inEntry.isDirectory()) {
+                    outFile.mkdir();
+                }
+                else {
+                    if (outFile.getParentFile().exists() != true)
+                        outFile.getParentFile().mkdirs();
+
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream(outFile);
+
+                        while ((len = in.read(bytes)) != -1)
+                            out.write(bytes, 0, len);
+                    }
+                    finally {
+                        if (out != null) out.close();
+                    }
+                }
+                inEntry = in.getNextEntry();
             }
-            else {
-                if (outFile.getParentFile().exists() != true)
-                    outFile.getParentFile().mkdirs();
-
-                FileOutputStream out = new FileOutputStream(outFile);
-                // System.out.println("Writing file: " + outFile.getAbsolutePath());
-                while ((len = in.read(bytes)) != -1)
-                    out.write(bytes, 0, len);
-                out.close();
-            }
-
-            inEntry = in.getNextEntry();
         }
-        in.close();
+        finally {
+            if (in != null) in.close();
+        }
+
         return parcelDir.getAbsolutePath();
     }
 
@@ -335,8 +350,9 @@ public class ParcelZipper
     private String unzipToZip(File parcel, File targetDocument)
         throws IOException {
 
-        ZipInputStream documentStream, parcelStream;
-        ZipOutputStream outStream;
+        ZipInputStream documentStream = null;
+        ZipInputStream parcelStream = null;
+        ZipOutputStream outStream = null;
         Manifest manifest;
 
         String language = getParcelLanguage(parcel);
@@ -352,22 +368,24 @@ public class ParcelZipper
 
         manifest = addParcelToManifest(targetDocument, parcel);
 
-        documentStream =
-            new ZipInputStream(new FileInputStream(targetDocument));
-        parcelStream = new ZipInputStream(new FileInputStream(parcel));
-        outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
-
         try {
+            documentStream =
+                new ZipInputStream(new FileInputStream(targetDocument));
+            parcelStream = new ZipInputStream(new FileInputStream(parcel));
+            outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
+
             copyParcelToZip(parcelStream, outStream, PARCEL_PREFIX_DIR +
                 language + "/" + getParcelDirFromParcelZip(parcel.getName()));
             copyDocumentToZip(documentStream, outStream, manifest);
-            documentStream.close();
-            parcelStream.close();
-            outStream.close();
         }
         catch (IOException ioe) {
             tmpfile.delete();
             throw ioe;
+        }
+        finally {
+            if (documentStream != null) documentStream.close();
+            if (parcelStream != null) parcelStream.close();
+            if (outStream != null) outStream.close();
         }
 
         if (targetDocument.delete() == false) {
@@ -419,9 +437,16 @@ public class ParcelZipper
 
             if(inEntry.getName().equals("META-INF/manifest.xml") &&
                manifest != null) {
-                InputStream manifestStream = manifest.getInputStream();
-                while ((len = manifestStream.read(bytes)) != -1)
-                    out.write(bytes, 0, len);
+                InputStream manifestStream = null;
+                try {
+                    manifestStream = manifest.getInputStream();
+                    while ((len = manifestStream.read(bytes)) != -1)
+                        out.write(bytes, 0, len);
+                }
+                finally {
+                    if (manifestStream != null)
+                        manifestStream.close();
+                }
             }
             else if (inEntry.isDirectory() == false) {
                 while ((len = in.read(bytes)) != -1)
@@ -435,8 +460,8 @@ public class ParcelZipper
     public String removeParcel(File document, String parcelName)
         throws IOException {
 
-        ZipInputStream documentStream;
-        ZipOutputStream outStream;
+        ZipInputStream documentStream = null;
+        ZipOutputStream outStream = null;
         Manifest manifest = null;
 
         if (!parcelName.startsWith(PARCEL_PREFIX_DIR))
@@ -446,14 +471,14 @@ public class ParcelZipper
         // first write contents of document to tmpfile
         File tmpfile = new File(document.getAbsolutePath() + ".tmp");
 
-        documentStream = new ZipInputStream(new FileInputStream(document));
-        outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
-
         try {
             ZipEntry outEntry;
             ZipEntry inEntry;
             byte[] bytes = new byte[1024];
             int len;
+
+            documentStream = new ZipInputStream(new FileInputStream(document));
+            outStream = new ZipOutputStream(new FileOutputStream(tmpfile));
 
             while ((inEntry = documentStream.getNextEntry()) != null) {
 
@@ -465,9 +490,16 @@ public class ParcelZipper
 
                 if(inEntry.getName().equals("META-INF/manifest.xml") &&
                    manifest != null) {
-                    InputStream manifestStream = manifest.getInputStream();
-                    while ((len = manifestStream.read(bytes)) != -1)
-                        outStream.write(bytes, 0, len);
+                    InputStream manifestStream = null;
+                    try {
+                        manifestStream = manifest.getInputStream();
+                        while ((len = manifestStream.read(bytes)) != -1)
+                            outStream.write(bytes, 0, len);
+                    }
+                    finally {
+                        if (manifestStream != null)
+                            manifestStream.close();
+                    }
                 }
                 else if (inEntry.isDirectory() == false) {
                     while ((len = documentStream.read(bytes)) != -1)
@@ -482,8 +514,11 @@ public class ParcelZipper
             throw ioe;
         }
         finally {
-            documentStream.close();
-            outStream.close();
+            if (documentStream != null)
+                documentStream.close();
+
+            if (outStream != null)
+                outStream.close();
         }
 
         if (document.delete() == false) {
@@ -497,31 +532,25 @@ public class ParcelZipper
     }
 
     private Manifest getManifestFromDocument(File document) {
-        ZipFile documentZip;
+        ZipFile documentZip = null;
         Manifest result = null;
 
         try {
             documentZip = new ZipFile(document);
+            ZipEntry original = documentZip.getEntry("META-INF/manifest.xml");
+            if (original != null) {
+                result = new Manifest(documentZip.getInputStream(original));
+            }
         }
         catch (IOException ioe) {
-            return null;
+            result = null;
         }
-
-        ZipEntry original = documentZip.getEntry("META-INF/manifest.xml");
-        if (original != null) {
+        finally {
             try {
-                result =
-                    new Manifest(documentZip.getInputStream(original));
+                if (documentZip != null)
+                    documentZip.close();
             }
-            catch (IOException ioe) {
-                result = null;
-            }
-        }
-
-        try {
-            documentZip.close();
-        }
-        catch (IOException ioe) {
+            catch (IOException ioe) {}
         }
 
         return result;
@@ -530,7 +559,7 @@ public class ParcelZipper
     private Manifest addParcelToManifest(File document, File parcel)
         throws IOException {
 
-        ZipFile parcelZip;
+        ZipFile parcelZip = null;
         Manifest result = null;
 
         result = getManifestFromDocument(document);
@@ -541,24 +570,25 @@ public class ParcelZipper
 
         try {
             parcelZip = new ZipFile(parcel);
+
+            String prefix = PARCEL_PREFIX_DIR + language + "/" +
+                getParcelDirFromParcelZip(parcel.getName()) + "/";
+
+            Enumeration entries = parcelZip.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = (ZipEntry)entries.nextElement();
+                result.add(prefix + entry.getName());
+            }
         }
         catch (IOException ioe) {
             return null;
         }
-
-        String prefix = PARCEL_PREFIX_DIR + language + "/" +
-            getParcelDirFromParcelZip(parcel.getName()) + "/";
-
-        Enumeration entries = parcelZip.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry)entries.nextElement();
-            result.add(prefix + entry.getName());
-        }
-
-        try {
-            parcelZip.close();
-        }
-        catch (IOException ioe) {
+        finally {
+            try {
+                if (parcelZip != null)
+                    parcelZip.close();
+            }
+            catch (IOException ioe) {}
         }
 
         return result;
@@ -576,14 +606,28 @@ public class ParcelZipper
     }
 
     public String getParcelLanguage(File file) throws IOException {
-        ZipFile zf = new ZipFile(file);
-        ZipEntry ze = zf.getEntry(PARCEL_DESCRIPTOR_XML);
+        ZipFile zf = null;
+        ZipEntry ze = null;
+        InputStream is = null;
+        ParcelDescriptor pd;
 
-        if (ze == null)
-            throw new IOException("Could not find Parcel Descriptor in parcel");
+        try {
+            zf = new ZipFile(file);
+            ze = zf.getEntry(PARCEL_DESCRIPTOR_XML);
 
-        InputStream is = zf.getInputStream(ze);
-        ParcelDescriptor pd = new ParcelDescriptor(is);
+            if (ze == null)
+                throw new IOException("Could not find Parcel Descriptor in parcel");
+
+            is = zf.getInputStream(ze);
+            pd = new ParcelDescriptor(is);
+        }
+        finally {
+            if (zf != null)
+                zf.close();
+
+            if (is != null)
+                is.close();
+        }
 
         return pd.getLanguage().toLowerCase();
     }

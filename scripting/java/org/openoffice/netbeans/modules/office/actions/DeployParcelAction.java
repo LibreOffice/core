@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeployParcelAction.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:01:53 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
                 if (file.isDirectory() ||
                     file.getName().endsWith(".sxw") ||
                     file.getName().endsWith(".sxc") ||
+                    file.getName().endsWith(".sxd") ||
                     file.getName().endsWith(".sxi"))
                     return true;
                 return false;
