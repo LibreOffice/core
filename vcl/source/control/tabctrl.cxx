@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:51:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <hash_map>
 #include <vector>
 
-#pragma hdrstop
+
 
 // =======================================================================
 
