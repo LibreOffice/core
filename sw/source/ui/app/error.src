@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 23:20:36 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,11 +664,11 @@ Resource RID_SW_ERRHDL
         TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
         TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
         TEXT [ english_us ] = "Internal error in %PRODUCTNAME Writer file format" ;
-        TEXT[ chinese_simplified ] = "ΔΪ²ΏµΔ %PRODUCTNAME Writer ΞΔΌώΈρΚ½΄νΞσ";
+        TEXT[ chinese_simplified ] = "%PRODUCTNAME Writer ΞΔΌώΈρΚ½Ί¬ΣΠΔΪ²Ώ΄νΞσ";
         TEXT[ russian ] = "Ξψθακΰ βνσςπθ τξπμΰςΰ τΰιλΰ %PRODUCTNAME Writer";
         TEXT[ polish ] = "Wewnκtrzny b³Ήd w formacie pliku %PRODUCTNAME Writer";
         TEXT[ japanese ] = "%PRODUCTNAME Writer Μ§²Ω‘®‚Μ“ΰ•”΄Χ°";
-        TEXT[ chinese_traditional ] = "¤Ί³΅ªΊ %PRODUCTNAME Writer ΐΙ®Χ®ζ¦΅Ώω»~";
+        TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer ΐΙ®Χ®ζ¦΅§t¦³¤Ί³΅Ώω»~";
         TEXT[ arabic ] = "ΝΟΛ ΞΨΓ ΟΗΞαν έν ΚδΣνή γαέ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Εσωτερικό σφάλμα στη μορφή αρχείου του %PRODUCTNAME Writer";
         TEXT[ korean ] = "%PRODUCTNAME WriterΖΔΐΟΌ­½Δ ΐΗ ³»ΊΞ Ώΐ·ω";
@@ -689,12 +689,12 @@ Resource RID_SW_ERRHDL
         TEXT [ swedish ] = "Internt fel i %PRODUCTNAME Writer-filformatet" ;
         TEXT [ dutch ] = "Interne fout in %PRODUCTNAME Writer bestandsformaat" ;
         TEXT [ spanish ] = "Error interno en el formato de archivo de %PRODUCTNAME Writer" ;
-        TEXT [ english_us ] = "Internal Error in %PRODUCTNAME Writer file format" ;
-        TEXT[ chinese_simplified ] = "ΔΪ²ΏµΔ %PRODUCTNAME Writer ΞΔΌώΈρΚ½΄νΞσ";
+        TEXT [ english_us ] = "Internal error in %PRODUCTNAME Writer file format" ;
+        TEXT[ chinese_simplified ] = "%PRODUCTNAME Writer ΞΔΌώΈρΚ½Ί¬ΣΠΔΪ²Ώ΄νΞσ";
         TEXT[ russian ] = "Ξψθακΰ βνσςπθ τξπμΰςΰ τΰιλΰ %PRODUCTNAME Writer";
         TEXT[ polish ] = "Wewnκtrzny b³Ήd w formacie pliku %PRODUCTNAME Writer";
         TEXT[ japanese ] = "%PRODUCTNAME Writer Μ§²Ω‘®‚Μ“ΰ•”΄Χ°";
-        TEXT[ chinese_traditional ] = "¤Ί³΅ªΊ %PRODUCTNAME Writer ΐΙ®Χ®ζ¦΅Ώω»~";
+        TEXT[ chinese_traditional ] = "%PRODUCTNAME Writer ΐΙ®Χ®ζ¦΅§t¦³¤Ί³΅Ώω»~";
         TEXT[ arabic ] = "ΝΟΛ ΞΨΓ ΟΗΞαν έν ΚδΣνή γαέ %PRODUCTNAME Writer";
         TEXT[ greek ] = "Εσωτερικό σφάλμα στη μορφή αρχείου του %PRODUCTNAME Writer";
         TEXT[ korean ] = "%PRODUCTNAME Writer ΖΔΐΟΌ­½ΔΐΗ ³»ΊΞ Ώΐ·ω";
@@ -1241,7 +1241,7 @@ Resource RID_SW_ERRHDL
         Text[ english_us ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
         Text[ portuguese ] = "Este documento HTML contιm macros %PRODUCTNAME Basic.\nEstas nγo foram guardadas com as predefiniηυes de exportaηγo activas.";
         Text[ russian ] = "έςξς δξκσμενς HTML ρξδεπζθς μΰκπξρϋ %PRODUCTNAME Basic.\nΞνθ νε ρξυπΰνθλθρό ρ ςεκσωθμθ νΰρςπξικΰμθ ύκροξπςΰ.";
-        Text[ greek ] = "Το αρχείο HTML περιέχει μακροεντολές του %PRODUCTNAME Basic.\nΑυτές δεν αποθηκεύτηκαν με τις τρέχουσες ρυθμίσεις εισαγωγής.";
+        Text[ greek ] = "Το έγγραφο HTML περιέχει μακροεντολές του %PRODUCTNAME Basic.\nΑυτές δεν αποθηκεύτηκαν με τις τρέχουσες ρυθμίσεις εισαγωγής.";
         Text[ dutch ] = "Dit HTML document bevat %PRODUCTNAME Basic-macro's.\nDeze konden niet worden opgeslagen met de actuele exportinstellingen.";
         Text[ french ] = "Le document HTML contient des macros %PRODUCTNAME Basic.\nCelles-ci n'ont pas ιtι enregistrιes avec les paramθtres d'export actifs.";
         Text[ spanish ] = "El documento HTML contiene macros %PRODUCTNAME Basic.\nNo se guardaron con la configuraciσn actual de exportaciσn.";
@@ -1250,10 +1250,10 @@ Resource RID_SW_ERRHDL
         Text[ swedish ] = "HTML-dokumentet innehεller %PRODUCTNAME Basic-makron.\nDe sparades inte med de aktuella exportinstδllningarna.";
         Text[ polish ] = "Dokument HTML zawiera makra %PRODUCTNAME Basic.\nNie zosta³y one zapisane razem z aktualnymi ustawieniami eksportu.";
         Text[ portuguese_brazilian ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved because of the current export options.";
-        Text[ japanese ] = "‚±‚ΜHTMLΔή·­ÒέΔ‚Ν%PRODUCTNAME Basic ΟΈΫ‚πά‚ρ‚Ε‚Ά‚ά‚·B\n‚»‚κ‚η‚Ν»έ‚Μ΄Έ½Ξί°Δέ’θ‚Ε‚Ν•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
+        Text[ japanese ] = "‚±‚Μ HTML `®Δή·­ÒέΔ‚Ι %PRODUCTNAME Basic ΟΈ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B\n‚»‚κ‚η‚Ν»έ‚Μ΄Έ½Ξί°Δέ’θ‚Ε•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB";
         Text[ korean ] = "ΐΜ HTML Ή®Ό­΄Β %PRODUCTNAME Basic ΈΕΕ©·ΞΈ¦ ΖχΗΤΗΟ°ν ΐΦ½ΐ΄Ο΄Ω.\nΗφΐηΐΗ ΊΈ³»±β Ό³Α¤ΐΈ·Ξ΄Β ΈΕΕ©·Ξ°΅ ΐϊΐεµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
-        Text[ chinese_simplified ] = "ΥβΈφHTMLΞΔµµΊ¬ΣΠ%PRODUCTNAME BasicΊκ΅£\nΣΙΣΪµ±Η°µΔΚδ³φΙθ¶¨¶ψ²»Δά΄ζΕΜΥβΠ©Ίκ΅£";
-        Text[ chinese_traditional ] = "HTML ¤ε¥σ§t¦³ %PRODUCTNAME Basic ¥¨¶°΅C\n¦]·ν«eªΊΏι¥X³]©w¦Σ¤£―ΰΐx¦s¤ε¥σ΅C";
+        Text[ chinese_simplified ] = "ΥβΈφHTMLΞΔµµΊ¬ΣΠ%PRODUCTNAME BasicΊκ΅£\nΞή·¨ΚτΣΪµ±Η°µΔΚδ³φΙθ¶¨ΐ΄΄ζΕΜΥβΠ©Ίκ΅£";
+        Text[ chinese_traditional ] = "HTML ¤ε¥σ§t¦³ %PRODUCTNAME Basic ¥¨¶°΅C\nµLªk±Δ¥Ξ·ν«eªΊΏι¥X³]©w¨Σΐx¦s¤ε¥σ΅C";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ HTML Ϊαμ ζΝΟΗΚ γΗίΡζ %PRODUCTNAME Basic.\nαγ νΚγ ΝέΩεΗ ΘΕΪΟΗΟΗΚ ΗαΚΥΟνΡ ΗαΝΗανΙ.";
         Text[ turkish ] = "HTML belgesinde StarBasic makrolarύ var.\nBu makrolar, yόrόrlόkteki verme ayarlarύ ile kaydedilmemiώ.";
         Text[ language_user1 ] = " ";
