@@ -2,9 +2,9 @@
 *
 *  $RCSfile: binarywriter.cxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: vg $ $Date: 2003-05-26 08:04:57 $
+*  last change: $Author: vg $ $Date: 2003-06-04 10:19:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -94,9 +94,6 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XDATAOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XDataOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XObjectOutputStream.hpp>
 #endif
 
 #ifndef CONFIGMGR_TYPECONVERTER_HXX
