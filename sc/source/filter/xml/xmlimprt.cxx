@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-20 14:23:54 $
+ *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,7 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
                                   sXML_n_text, XML_NAMESPACE_TEXT );
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
                                   sXML_n_table, XML_NAMESPACE_TABLE );*/
-    pStylesImportHelper = new ScMyStylesImportHelper();
+    pStylesImportHelper = new ScMyStylesImportHelper(*this);
 
     xScPropHdlFactory = new XMLScPropHdlFactory;
     xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);

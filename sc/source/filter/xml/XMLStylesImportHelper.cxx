@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-20 14:23:54 $
+ *  last change: $Author: sab $ $Date: 2001-06-21 07:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,59 @@ ScMyStyleRanges::~ScMyStyleRanges()
         delete pCurrencyList;
 }
 
-void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
+void ScMyStyleRanges::AddRange(const ScRange& rRange, ScRangeList* pList,
+    const rtl::OUString& rStyleName, const sal_Int16 nType,
+    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
+{
+    pList->Join(rRange);
+    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
+    if (pList->Count() > nMaxRanges)
+    {
+        sal_Int32 nCount(pList->Count());
+        ScRange* pRange = NULL;
+        rtl::OUString sEmpty;
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            pRange = pList->GetObject(i);
+            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
+            {
+                rImport.SetStyleToRange(*pRange, rStyleName, nType, sEmpty);
+                delete pRange;
+                pRange = NULL;
+                pList->Remove(i);
+            }
+        }
+    }
+}
+
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
+    const rtl::OUString& rStyleName, const rtl::OUString& rCurrency,
+    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
+{
+    xList->Join(rRange);
+    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
+    if (xList->Count() > nMaxRanges)
+    {
+        sal_Int32 nCount(xList->Count());
+        ScRange* pRange = NULL;
+        rtl::OUString sEmpty;
+        for (sal_Int32 i = 0; i < nCount; i++)
+        {
+            pRange = xList->GetObject(i);
+            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
+            {
+                rImport.SetStyleToRange(*pRange, rStyleName, util::NumberFormat::CURRENCY, rCurrency);
+                delete pRange;
+                pRange = NULL;
+                xList->Remove(i);
+            }
+        }
+    }
+}
+
+void ScMyStyleRanges::AddRange(const ScRange& rRange,
+    const rtl::OUString& rStyleName, const sal_Int16 nType,
+    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
 {
     switch (nType)
     {
@@ -138,42 +190,42 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
         {
             if (!pNumberList)
                 pNumberList = new ScRangeList();
-            pNumberList->Join(rRange);
+            AddRange(rRange, pNumberList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         case util::NumberFormat::TEXT:
         {
             if (!pTextList)
                 pTextList = new ScRangeList();
-            pTextList->Join(rRange);
+            AddRange(rRange, pTextList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         case util::NumberFormat::TIME:
         {
             if (!pTimeList)
                 pTimeList = new ScRangeList();
-            pTimeList->Join(rRange);
+            AddRange(rRange, pTimeList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         case util::NumberFormat::DATETIME:
         {
             if (!pDateTimeList)
                 pDateTimeList = new ScRangeList();
-            pDateTimeList->Join(rRange);
+            AddRange(rRange, pDateTimeList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         case util::NumberFormat::PERCENT:
         {
             if (!pPercentList)
                 pPercentList = new ScRangeList();
-            pPercentList->Join(rRange);
+            AddRange(rRange, pPercentList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         case util::NumberFormat::LOGICAL:
         {
             if (!pLogicalList)
                 pLogicalList = new ScRangeList();
-            pLogicalList->Join(rRange);
+            AddRange(rRange, pLogicalList, rStyleName, nType, rImport, nMaxRanges);
         }
         break;
         default:
@@ -184,7 +236,9 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
     }
 }
 
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUString& rCurrency)
+void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange,
+    const rtl::OUString& rStyleName, const rtl::OUString& rCurrency,
+    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
 {
     if (!pCurrencyList)
         pCurrencyList = new ScMyCurrencyStylesSet();
@@ -197,7 +251,7 @@ void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const rtl::OUStrin
         if (aPair.second)
         {
             aItr = aPair.first;
-            aItr->xRanges->Join(rRange);
+            AddCurrencyRange(rRange, aItr->xRanges, rStyleName, rCurrency, rImport, nMaxRanges);
         }
     }
     else
@@ -289,11 +343,13 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString& rStyleName, ScXMLIm
 
 //----------------------------------------------------------------------------
 
-ScMyStylesImportHelper::ScMyStylesImportHelper()
+ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
     aCellStyles(),
     aColDefaultStyles(),
-    bPrevRangeAdded(sal_True)
+    bPrevRangeAdded(sal_True),
+    rImport(rTempImport),
+    nMaxRanges(0)
 {
     aRowDefaultStyle = aCellStyles.end();
 }
@@ -369,13 +425,17 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
 
 void ScMyStylesImportHelper::AddSingleRange(const ScRange& rRange)
 {
+    if (nMaxRanges == 0)
+        nMaxRanges = aColDefaultStyles.size();
     ScMyStylesSet::iterator aItr = GetIterator(sPrevStyleName);
     if (aItr != aCellStyles.end())
     {
         if (nPrevCellType != util::NumberFormat::CURRENCY)
-            aItr->xRanges->AddRange(rRange, nPrevCellType);
+            aItr->xRanges->AddRange(rRange, sPrevStyleName, nPrevCellType,
+                rImport, nMaxRanges);
         else
-            aItr->xRanges->AddCurrencyRange(rRange, sPrevCurrency);
+            aItr->xRanges->AddCurrencyRange(rRange, sPrevStyleName, sPrevCurrency,
+                rImport, nMaxRanges);
     }
 }
 
@@ -506,9 +566,10 @@ void ScMyStylesImportHelper::EndTable()
         AddRange();
         bPrevRangeAdded = sal_True;
     }
+    nMaxRanges = 0;
 }
 
-void ScMyStylesImportHelper::SetStylesToRanges(ScXMLImport& rImport)
+void ScMyStylesImportHelper::SetStylesToRanges()
 {
     ScMyStylesSet::iterator aItr = aCellStyles.begin();
     while (aItr != aCellStyles.end())
@@ -518,5 +579,6 @@ void ScMyStylesImportHelper::SetStylesToRanges(ScXMLImport& rImport)
     }
     aCellStyles.clear();
     aColDefaultStyles.clear();
+    nMaxRanges = 0;
 }
 
