@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNoException.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:07:56 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 12:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,28 +239,21 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 nLength -= 8;
 
             //  char cChar;
-            if (nLength < STRING_MAXLEN && bIsText)
+            ::rtl::OUString aStr;
+            while ( nLength >= STRING_MAXLEN )
             {
                 ByteString aBStr;
-                aBStr.Expand(USHORT (nLength));
-                m_pMemoStream->Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
-                aBStr.ReleaseBufferAccess();
-                ::rtl::OUString aStr(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
-                aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
+                aBStr.Expand(STRING_MAXLEN);
+                m_pMemoStream->Read(aBStr.AllocBuffer(STRING_MAXLEN),STRING_MAXLEN);
+                aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+                nLength -= STRING_MAXLEN;
             }
-            else
-            {
-                Sequence<sal_Int8> aText(nLength);
-                sal_Int8* pData = aText.getArray();
-                sal_Char cChar;
-                for (ULONG i = 0; i < nLength; i++)
-                {
-                    m_pMemoStream->Read(&cChar,1);
-                    (*pData++) = cChar;
-                }
-                aVariable = aText;
-                //  return sal_False;
-            }
+            ByteString aBStr;
+            aBStr.Expand(nLength);
+            m_pMemoStream->Read(aBStr.AllocBuffer(nLength),nLength);
+            aStr += ::rtl::OUString(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
+
+            aVariable = aStr;
         }
     }
     return sal_True;
