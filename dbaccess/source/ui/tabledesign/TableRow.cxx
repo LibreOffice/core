@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 07:42:49 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ void OTableRow::SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce )
                 m_pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
             if(!_pType->bAutoIncrement && m_pActFieldDescr->IsAutoIncrement())
                 m_pActFieldDescr->SetAutoIncrement(sal_False);
+            m_pActFieldDescr->SetCurrency( _pType->bCurrency );
             m_pActFieldDescr->SetType(_pType);
         }
     }
