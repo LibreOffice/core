@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:13:13 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ int _cdecl main( int argc, char* argv[] )
         "-sf=s,         absolute path and name to the signal file.",
 //! new (helpful if at debug time)
         "-dntsf,        if given, do not touch signal file, also if one exist.",
-        "-rmsf,         remove signalfile.",
+        "-dnrmsf,       do not remove signalfile. ",
         "-jobonly=s,    job control file, these jobs should only executed.",
         "-jobfilter=s,  use a filter for just some tests.",
         "-onlyshowjobs, show only all jobs, do no tests.",
@@ -184,7 +184,7 @@ int _cdecl main( int argc, char* argv[] )
     GetOpt opt( argv, optionSet );
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.9 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.10 $\n");
     }
 
     // someone indicates that he needs help
@@ -253,74 +253,4 @@ int _cdecl main( int argc, char* argv[] )
 
     return 0;
 }
-
-// all functions, which exist in the library
-// all functions + the given, no one twice
-// only the given functions
-
-// Exception info
-// Due to the fact that exceptions will caught, on exceptions the ASSERTION text is given.
-// but we know also the real thrown exception
-
-// PARAMETER:
-// - emacs mode
-// - test runner in perl.
-// - Version/Buildno. in Date
-// - xml
-
-// Remove rtl_tres_state from SAL!
-// no longer need, because
-// the new tool use c_rtl_tres_state()
-
-
-// What is a good test?
-// init your data
-// ASSERT( check if a generated result is, what you expect )
-//
-// that's all
-// really all, no
-// because who called this test.
-// so we envelop it into a function.
-// Same checks should envelop in a class
-// but the question is also here, who create this class and called all it's containing functions?
-// class
-// {
-// public:
-//   test function1
-//   test function2
-// };
-// Due to the fact, that there exist no official way to get a list of all functions at run time,
-// we have to register the functions by hand.
-// To cut down the overhead,
-// there exist some macros to help you to register your functions into an internal registry.
-// class
-// {
-// public:
-//   test function1
-//   test function2
-//   REGISTER(test functions)
-// };
-
-// all classes have also to register there exist also a macro
-// NAMED_REGISTER
-// that's all
-// too much?
-// Ok, due to the fact that much code here is recur, there exist a code generator which help you to generate the
-// code. You have to build a simple job list, which says, package.class.function for every entry.
-// For every line in the job list there will create a function with an assertion stub.
-// the code is compileable, you don't need to register the functions, because this code will also created for you.
-// ok, you also need an addition to a makefile.mk which the code generator also build for you.
-//
-// So your work is reduced to write down a job list, call the code generator with this job list.
-// If a makefile exist, there exist a makefile.new which contains the code to build the new generated stubs.
-// So you have to replace the assertion stub() by your test code.
-// Build your test library by calling dmake
-// call testshl2 with this library.
-// get info what works, what not.
-
-// By a human readable line by line info.
-
-// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?automated+testing
-// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?fault-based+testing
-// http://foldoc.doc.ic.ac.uk/foldoc/foldoc.cgi?confidence+test
 
