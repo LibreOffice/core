@@ -2,9 +2,9 @@
 #
 #   $RCSfile: media.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 15:01:12 $
+#   last change: $Author: vg $ $Date: 2005-02-24 16:23:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,8 @@ sub get_media_cabinet
     my $number = 1000 + $id;
     my $filename = "f_" . $number . ".cab";
 
+    if ( $installer::globals::include_cab_in_msi ) { $filename = "\#" . $filename; }
+
     return $filename;
 }
 
@@ -175,6 +177,8 @@ sub generate_cab_filename_for_some_cabs
 
     $name = $name . $id . ".cab";
 
+    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
+
     return $name;
 }
 
@@ -193,6 +197,8 @@ sub generate_cab_filename
     $name =~ s/\s//g;
 
     $name = $name . ".cab";
+
+    if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
 
     return $name;
 }
@@ -232,6 +238,8 @@ sub create_media_table
 
     installer::windows::idtglobal::write_idt_header(\@mediatable, "media");
 
+    if ( $installer::globals::product =~ /ada/i ) { $installer::globals::include_cab_in_msi = 1; }
+
     if ( $installer::globals::cab_file_per_component )
     {
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
@@ -265,6 +273,7 @@ sub create_media_table
 
             push(@mediatable, $oneline);
 
+            $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
             set_cabinetfilename_for_component_in_file_collector($media{'Cabinet'}, $filesref, $filecomponent, $i);
         }
     }
@@ -318,6 +327,8 @@ sub create_media_table
 
                 # Saving the cabinet file name in the file collector
 
+                $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
+
                 for ( my $j = 0; $j <= $i; $j++ )
                 {
                     my $onefile = ${$filesref}[$j];
@@ -349,6 +360,8 @@ sub create_media_table
         push(@mediatable, $oneline);
 
         # Saving the cabinet file name in the file collector
+
+        $media{'Cabinet'} =~ s/^\s*\#//;    # removing leading hash
 
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
