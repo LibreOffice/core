@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsclone.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 11:43:01 $
+#   last change: $Author: hr $ $Date: 2004-12-13 17:26:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.2 $ ';
+my $id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -178,11 +178,11 @@ foreach my $module (split( /\s+/, $cvs_aliases{'OpenOffice'})) {
         if (!-d "$stand_dir/$module/CVS") {
             print("\tChecking out '$module' with tag '$use_tag' ...");
             $result1 = $cvs_module->checkout($stand_dir, $use_tag, '');
-            output_update_infomation($result1);
+            output_update_information($result1);
         } else {
             print "\tUpdating '$module' to tag '$use_tag' ...";
             ($result1, $result2) = $cvs_module->update($stand_dir, $use_tag, '-dPRC', 1 );
-            output_update_infomation($result1, $result2);
+            output_update_information($result1, $result2);
             if($opt_prune) { prune_files($result2, $module ); }
         }
     }
@@ -235,11 +235,11 @@ sub is_valid_cws
     return 1;
 }
 
-sub output_update_infomation {
+sub output_update_information {
     my $updated_files_ref = shift;
     my $nonrepolist = shift;
     my ($updated, $merged, $conflicts, $non_repo);
-    if ( $updated_files_ref eq 'invaildpath' || $updated_files_ref eq 'cantchdir') {
+    if ( $updated_files_ref eq 'invalidpath' || $updated_files_ref eq 'cantchdir') {
         die('ERROR: Can\'t chdir() into module');
     }
     else {
