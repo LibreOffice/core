@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,10 @@ namespace configmgr
             ISynchronizedData* getTreeLock() const;
 
             static ElementTree extract(Tree const& aTree);
+            /** gives ownership of the node tree to the element tree.
+                <p>WARNING: The INode passed must correspond to the root of the element tree</p>
+            */
+            static void takeElementOwnership(std::auto_ptr<INode>& rOldOwner, ElementTree const& aElementTree);
             /** if the element tree owns it's node tree, ownership is given to the caller.
                 <p>WARNING: Irresponsible use of this feature produces crashes</p>
             */

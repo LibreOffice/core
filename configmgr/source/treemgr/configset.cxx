@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,15 @@ ElementTree ElementTree::extract(Tree const& aTree)
     TreeImpl* pTree = TreeImplHelper::impl(aTree);
     ElementTreeImpl* pImpl = pTree ? pTree->asElementTree() : 0;
     return ElementTree(pImpl);
+}
+//-----------------------------------------------------------------------------
+
+void ElementTree::takeElementOwnership(std::auto_ptr<INode>& rOldOwner, ElementTree const& aElementTree)
+{
+    OSL_PRECOND(aElementTree.isValid(),"ERROR: Trying to transfer ownership to a NULL element tree");
+    OSL_PRECOND(!aElementTree->isFree(),"Trying to give ownership to an element tree that is not free");
+
+    aElementTree->takeNodeFrom(rOldOwner);
 }
 //-----------------------------------------------------------------------------
 

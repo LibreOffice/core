@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-08-06 15:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,8 +318,6 @@ namespace
         OSL_ASSERT(aValue.isValid());
 
         Name aValueName = aValue.getNodeName();
-
-        SubNodeID( m_aParentID, aValueName);
 
         m_rValueList.push_back(SubNodeID( m_aParentID, aValueName));
 
