@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:17:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3489,7 +3489,7 @@ String STR_POOLCOLL_LABEL_DRAWING
     Text[ catalan ] = "Dibuix";
     Text[ finnish ] = "Piirros";
     Text[ thai ] = "วาดรูป";
-    Text[ czech ] = "Kresba";
+    Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "‮ציור‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
@@ -5523,6 +5523,10 @@ String STR_POOLCHR_VERT_NUM
     Text[ hindi ] = "Vertical Numbering Symbols";
     Text[ slovak ] = "Zvislé číslovacie symboly";
 };
+
+
+
+
 
 
 
