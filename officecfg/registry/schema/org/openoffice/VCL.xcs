@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:32:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 				<desc xml:lang="th">Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
 				<desc xml:lang="hi-IN">Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
 				<desc xml:lang="x-comment">; Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
+				<desc xml:lang="sk">Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
 			</info>
 			<prop oor:name="SubstFonts" oor:type="xs:string">
 				<info>
@@ -122,6 +123,7 @@
 					<desc xml:lang="th">Contains a list of substitute fonts used in office documents.</desc>
 					<desc xml:lang="hi-IN">Contains a list of substitute fonts used in office documents.</desc>
 					<desc xml:lang="x-comment">; Contains a list of substitute fonts used in office documents.</desc>
+					<desc xml:lang="sk">Contains a list of substitute fonts used in office documents.</desc>
 				</info>
 			</prop>
 			<prop oor:name="SubstFontsMS" oor:type="xs:string">
@@ -151,6 +153,7 @@
 					<desc xml:lang="th">Contains a list of substitute fonts used in MS import filters.</desc>
 					<desc xml:lang="hi-IN">Contains a list of substitute fonts used in MS import filters.</desc>
 					<desc xml:lang="x-comment">; Contains a list of substitute fonts used in MS import filters.</desc>
+					<desc xml:lang="sk">Contains a list of substitute fonts used in MS import filters.</desc>
 				</info>
 			</prop>
 			<prop oor:name="SubstFontsPS" oor:type="xs:string">
@@ -180,6 +183,7 @@
 					<desc xml:lang="th">Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
 					<desc xml:lang="hi-IN">Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
 					<desc xml:lang="x-comment">; Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
+					<desc xml:lang="sk">Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
 				</info>
 			</prop>
 			<prop oor:name="SubstFontsHTML" oor:type="xs:string">
@@ -209,6 +213,7 @@
 					<desc xml:lang="th">Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
 					<desc xml:lang="hi-IN">Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
 					<desc xml:lang="x-comment">; Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
+					<desc xml:lang="sk">Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
 				</info>
 			</prop>
 			<prop oor:name="FontWidth" oor:type="xs:string">
@@ -238,6 +243,7 @@
 					<desc xml:lang="th">Specifies the font width. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
 					<desc xml:lang="hi-IN">Specifies the font width. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
 					<desc xml:lang="x-comment">; Specifies the font width. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
+					<desc xml:lang="sk">Specifies the font width. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
 				</info>
 			</prop>
 			<prop oor:name="FontWeight" oor:type="xs:string">
@@ -267,6 +273,7 @@
 					<desc xml:lang="th">Specifies the font weight. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
 					<desc xml:lang="hi-IN">Specifies the font weight. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
 					<desc xml:lang="x-comment">; Specifies the font weight. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
+					<desc xml:lang="sk">Specifies the font weight. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
 				</info>
 			</prop>
 			<prop oor:name="FontType" oor:type="xs:string">
@@ -296,6 +303,7 @@
 					<desc xml:lang="th">Denotes the compatible styles for the font. Multiple styles are separated by &apos;,&apos;. Valid styles are: &quot;Default&quot;, &quot;Standard&quot;, &quot;Normal&quot;, &quot;Symbol&quot;, &quot;Fixed&quot;, &quot;SansSerif&quot;, &quot;Serif&quot;, &quot;Decorative&quot;, &quot;Special&quot;, &quot;Italic&quot;, &quot;Title&quot;, &quot;Capitals&quot;, &quot;CJK&quot;, &quot;CJK_JP&quot;, &quot;CJK_SC&quot;, &quot;CJK_TC&quot;, &quot;CJK_KR&quot;, &quot;CTL&quot;, &quot;NoneLatin&quot;, &quot;Full&quot;, &quot;Outline&quot;, &quot;Shadow&quot;, &quot;Rounded&quot;, &quot;Typewriter&quot;, &quot;Script&quot;, &quot;Handwriting&quot;, &quot;Chancery&quot;, &quot;comic&quot;, &quot;brushscript&quot;, &quot;gothic&quot;, &quot;schoolbook&quot;, &quot;other&quot;</desc>
 					<desc xml:lang="hi-IN">Denotes the compatible styles for the font. Multiple styles are separated by &apos;,&apos;. Valid styles are: &quot;Default&quot;, &quot;Standard&quot;, &quot;Normal&quot;, &quot;Symbol&quot;, &quot;Fixed&quot;, &quot;SansSerif&quot;, &quot;Serif&quot;, &quot;Decorative&quot;, &quot;Special&quot;, &quot;Italic&quot;, &quot;Title&quot;, &quot;Capitals&quot;, &quot;CJK&quot;, &quot;CJK_JP&quot;, &quot;CJK_SC&quot;, &quot;CJK_TC&quot;, &quot;CJK_KR&quot;, &quot;CTL&quot;, &quot;NoneLatin&quot;, &quot;Full&quot;, &quot;Outline&quot;, &quot;Shadow&quot;, &quot;Rounded&quot;, &quot;Typewriter&quot;, &quot;Script&quot;, &quot;Handwriting&quot;, &quot;Chancery&quot;, &quot;comic&quot;, &quot;brushscript&quot;, &quot;gothic&quot;, &quot;schoolbook&quot;, &quot;other&quot;</desc>
 					<desc xml:lang="x-comment">; Denotes the compatible styles for the font. Multiple styles are separated by &apos;,&apos;. Valid styles are: &quot;Default&quot;, &quot;Standard&quot;, &quot;Normal&quot;, &quot;Symbol&quot;, &quot;Fixed&quot;, &quot;SansSerif&quot;, &quot;Serif&quot;, &quot;Decorative&quot;, &quot;Special&quot;, &quot;Italic&quot;, &quot;Title&quot;, &quot;Capitals&quot;, &quot;CJK&quot;, &quot;CJK_JP&quot;, &quot;CJK_SC&quot;, &quot;CJK_TC&quot;, &quot;CJK_KR&quot;, &quot;CTL&quot;, &quot;NoneLatin&quot;, &quot;Full&quot;, &quot;Outline&quot;, &quot;Shadow&quot;, &quot;Rounded&quot;, &quot;Typewriter&quot;, &quot;Script&quot;, &quot;Handwriting&quot;, &quot;Chancery&quot;, &quot;comic&quot;, &quot;brushscript&quot;, &quot;gothic&quot;, &quot;schoolbook&quot;, &quot;other&quot;</desc>
+					<desc xml:lang="sk">Denotes the compatible styles for the font. Multiple styles are separated by &apos;,&apos;. Valid styles are: &quot;Default&quot;, &quot;Standard&quot;, &quot;Normal&quot;, &quot;Symbol&quot;, &quot;Fixed&quot;, &quot;SansSerif&quot;, &quot;Serif&quot;, &quot;Decorative&quot;, &quot;Special&quot;, &quot;Italic&quot;, &quot;Title&quot;, &quot;Capitals&quot;, &quot;CJK&quot;, &quot;CJK_JP&quot;, &quot;CJK_SC&quot;, &quot;CJK_TC&quot;, &quot;CJK_KR&quot;, &quot;CTL&quot;, &quot;NoneLatin&quot;, &quot;Full&quot;, &quot;Outline&quot;, &quot;Shadow&quot;, &quot;Rounded&quot;, &quot;Typewriter&quot;, &quot;Script&quot;, &quot;Handwriting&quot;, &quot;Chancery&quot;, &quot;comic&quot;, &quot;brushscript&quot;, &quot;gothic&quot;, &quot;schoolbook&quot;, &quot;other&quot;</desc>
 				</info>
 			</prop>
 		</group>
@@ -327,6 +335,7 @@
 				<desc xml:lang="th">Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
 				<desc xml:lang="hi-IN">Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
 				<desc xml:lang="x-comment">; Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
+				<desc xml:lang="sk">Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
 			</info>
 		</group>
 		<group oor:name="LocalizedDefaultFonts" oor:extensible="true">
@@ -357,6 +366,7 @@
 				<desc xml:lang="th">Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
 				<desc xml:lang="hi-IN">Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
 				<desc xml:lang="x-comment">; Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
+				<desc xml:lang="sk">Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
 			</info>
 		</group>
 		<set oor:name="LocalizedFontSubstitutions" oor:node-type="LFonts">
@@ -387,6 +397,7 @@
 				<desc xml:lang="th">Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
 				<desc xml:lang="hi-IN">Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
 				<desc xml:lang="x-comment">; Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
+				<desc xml:lang="sk">Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
 			</info>
 		</set>
 	</templates>
@@ -419,6 +430,7 @@
 				<desc xml:lang="th">Contains the settings for VCL (see template description).</desc>
 				<desc xml:lang="hi-IN">Contains the settings for VCL (see template description).</desc>
 				<desc xml:lang="x-comment">; Contains the settings for VCL (see template description).</desc>
+				<desc xml:lang="sk">Contains the settings for VCL (see template description).</desc>
 			</info>
 		</set>
 		<set oor:name="DefaultFonts" oor:node-type="LocalizedDefaultFonts">
@@ -449,6 +461,7 @@
 				<desc xml:lang="th">Contains the localized default fonts for VCL (see template description).</desc>
 				<desc xml:lang="hi-IN">Contains the localized default fonts for VCL (see template description).</desc>
 				<desc xml:lang="x-comment">; Contains the localized default fonts for VCL (see template description).</desc>
+				<desc xml:lang="sk">Contains the localized default fonts for VCL (see template description).</desc>
 			</info>
 		</set>
 		<set oor:name="FontSubstitutions" oor:node-type="LocalizedFontSubstitutions">
@@ -479,10 +492,15 @@
 				<desc xml:lang="th">Contains the localized font substitution tables for VCL (see template description).</desc>
 				<desc xml:lang="hi-IN">Contains the localized font substitution tables for VCL (see template description).</desc>
 				<desc xml:lang="x-comment">; Contains the localized font substitution tables for VCL (see template description).</desc>
+				<desc xml:lang="sk">Contains the localized font substitution tables for VCL (see template description).</desc>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
 
 
 
