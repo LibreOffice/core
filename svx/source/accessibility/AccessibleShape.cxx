@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:26:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,8 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("shape has no child with index ")+nIndex,
+            ::rtl::OUString::createFromAscii ("shape has no child with index ")
+            + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
     return xChild;
