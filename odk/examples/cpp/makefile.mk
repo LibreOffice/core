@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:46:38 $
+#   last change: $Author: obo $ $Date: 2004-05-28 15:49:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,10 +93,15 @@ REMOTECLIENT_FILES=\
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclient.cxx \
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclientsample.uno.xml
 
+SIMPLEBOOTSTRAP_FILES=\
+    $(DESTDIRCPPEXAMPLES)$/SimpleBootstrap$/SimpleBootstrap.cxx \
+    $(DESTDIRCPPEXAMPLES)$/SimpleBootstrap$/Makefile
+
 DIR_FILE_LIST= \
     $(COUNTER_FILES) \
     $(DOUCMENTLOADER_FILES) \
-    $(REMOTECLIENT_FILES)
+    $(REMOTECLIENT_FILES) \
+    $(SIMPLEBOOTSTRAP_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/ex_cpp_dirs_created.txt
