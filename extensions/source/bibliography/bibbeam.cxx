@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-24 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ namespace bib
             Reference< awt::XControlModel >     m_xGridModel;
             Reference< awt::XControl >          m_xControl;
             Reference< awt::XControlContainer > m_xControlContainer;
+            // #100312# ---------
+            Reference< frame::XDispatchProviderInterception> m_xDispatchProviderInterception;
 
     protected:
 
@@ -177,6 +179,8 @@ namespace bib
             void disposeGridWin();
 
             const Reference< awt::XControlContainer >& getControlContainer() const { return m_xControlContainer; }
+            // #100312# ---------
+            const Reference< frame::XDispatchProviderInterception>& getDispatchProviderInterception() const { return m_xDispatchProviderInterception; }
 
             virtual void GetFocus();
     };
@@ -237,6 +241,8 @@ namespace bib
                     // Peer als Child zu dem FrameWindow
                     m_xControlContainer->addControl(C2U("GridControl"), m_xControl);
                     m_xGridWin=uno::Reference< awt::XWindow > (m_xControl, UNO_QUERY );
+                    // #100312# -----
+                    m_xDispatchProviderInterception=uno::Reference< frame::XDispatchProviderInterception > (m_xControl, UNO_QUERY );
                     m_xGridWin->setVisible( sal_True );
                     m_xControl->setDesignMode( sal_True );
                         // initially switch on the desing mode - switch it off _after_ loading the form
@@ -349,6 +355,15 @@ namespace bib
         Reference< awt::XControlContainer > xReturn;
         if ( pGridWin )
             xReturn = pGridWin->getControlContainer();
+        return xReturn;
+    }
+
+    // #100312# -----------------------------------------------------------
+    Reference< frame::XDispatchProviderInterception > BibBeamer::getDispatchProviderInterception()
+    {
+        Reference< frame::XDispatchProviderInterception > xReturn;
+        if ( pGridWin )
+            xReturn = pGridWin->getDispatchProviderInterception();
         return xReturn;
     }
 

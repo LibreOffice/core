@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-24 08:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,10 @@
 #ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
 #include <com/sun/star/form/XForm.hpp>
 #endif
-
+// #100312# -----------------
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
+#include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
@@ -122,10 +125,13 @@ namespace bib
             void                    createToolBar();
             void                    createGridWin();
 
-            // FormControlContainer
+            // FormControlContainer ----------
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
                     getControlContainer();
         public:
+            // #100312# -------------------
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
+                    getDispatchProviderInterception();
 
             BibBeamer(Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );
             ~BibBeamer();
