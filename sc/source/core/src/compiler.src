@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 07:54:13 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,7 +1671,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "DATEVALUE" ;
         Text[ chinese_simplified ] = "DATEVALUE";
         Text[ russian ] = "ƒ¿“¿«Õ¿◊";
-        Text[ polish ] = "DATA.WARTO?∆";
+        Text[ polish ] = "DATA.WARTOå∆";
         Text[ japanese ] = "DATEVALUE";
         Text[ chinese_traditional ] = "DATEVALUE";
         Text[ arabic ] = "DATEVALUE";
@@ -1700,7 +1700,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "TIMEVALUE" ;
         Text[ chinese_simplified ] = "TIMEVALUE";
         Text[ russian ] = "¬–≈Ãﬂ«Õ¿◊";
-        Text[ polish ] = "CZAS.WARTO?∆";
+        Text[ polish ] = "CZAS.WARTOå∆";
         Text[ japanese ] = "TIMEVALUE";
         Text[ chinese_traditional ] = "TIMEVALUE";
         Text[ arabic ] = "TIMEVALUE";
@@ -1876,7 +1876,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "LEN" ;
         Text[ chinese_simplified ] = "LEG";
         Text[ russian ] = "ƒÀ—“–";
-        Text[ polish ] = "D£UGO?∆";
+        Text[ polish ] = "D£UGOå∆";
         Text[ japanese ] = "LEN";
         Text[ chinese_traditional ] = "LEG";
         Text[ arabic ] = "LEN";
@@ -1906,7 +1906,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "VALUE" ;
         Text[ chinese_simplified ] = "VALUE";
         Text[ russian ] = "«Õ¿◊≈Õ";
-        Text[ polish ] = "WARTO?∆";
+        Text[ polish ] = "WARTOå∆";
         Text[ japanese ] = "VALUE";
         Text[ chinese_traditional ] = "VALUE";
         Text[ arabic ] = "VALUE";
@@ -1936,7 +1936,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CLEAN" ;
         Text[ chinese_simplified ] = "CLEAN";
         Text[ russian ] = "œ≈◊—»Ã¬";
-        Text[ polish ] = "WYCZY?∆";
+        Text[ polish ] = "WYCZYå∆";
         Text[ japanese ] = "CLEAN";
         Text[ chinese_traditional ] = "CLEAN";
         Text[ arabic ] = "CLEAN";
@@ -3007,7 +3007,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "AVERAGE" ;
         Text[ chinese_simplified ] = "AVERAGE";
         Text[ russian ] = "—–«Õ¿◊";
-        Text[ polish ] = "?REDNIA";
+        Text[ polish ] = "åREDNIA";
         Text[ japanese ] = "AVERAGE";
         Text[ chinese_traditional ] = "AVERAGE";
         Text[ arabic ] = "AVERAGE";
@@ -3036,7 +3036,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "AVERAGEA" ;
         Text[ chinese_simplified ] = "AVERAGEA";
         Text[ russian ] = "—–«Õ¿◊¿";
-        Text[ polish ] = "?REDNIAA";
+        Text[ polish ] = "åREDNIAA";
         Text[ japanese ] = "AVERAGEA";
         Text[ chinese_traditional ] = "AVERAGEA";
         Text[ arabic ] = "AVERAGEA";
@@ -3094,7 +3094,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "COUNTA" ;
         Text[ chinese_simplified ] = "COUNTA";
         Text[ russian ] = "—◊≈“2";
-        Text[ polish ] = "ILO?∆2";
+        Text[ polish ] = "ILOå∆2";
         Text[ japanese ] = "COUNTA";
         Text[ chinese_traditional ] = "COUNTA";
         Text[ arabic ] = "COUNTA";
@@ -4389,7 +4389,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "SUBTOTAL" ;
         Text[ chinese_simplified ] = "SUBTOTAL";
         Text[ russian ] = "»“Œ√";
-        Text[ polish ] = "SUMY.PO?REDNIE";
+        Text[ polish ] = "SUMY.POåREDNIE";
         Text[ japanese ] = "SUBTOTAL";
         Text[ chinese_traditional ] = "SUBTOTAL";
         Text[ arabic ] = "SUBTOTAL";
@@ -4505,7 +4505,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "DAVERAGE" ;
         Text[ chinese_simplified ] = "DAVERAGE";
         Text[ russian ] = "ƒ—–«Õ¿◊";
-        Text[ polish ] = "BD.?REDNIA";
+        Text[ polish ] = "BD.åREDNIA";
         Text[ japanese ] = "DAVERAGE";
         Text[ chinese_traditional ] = "DAVERAGE";
         Text[ arabic ] = "DAVERAGE";
@@ -4766,7 +4766,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "INDIRECT" ;
         Text[ chinese_simplified ] = "INDIRECT";
         Text[ russian ] = "ƒ¬——€À";
-        Text[ polish ] = "ADR.PO?R";
+        Text[ polish ] = "ADR.POåR";
         Text[ japanese ] = "INDIRECT";
         Text[ chinese_traditional ] = "INDIRECT";
         Text[ arabic ] = "INDIRECT";
@@ -5232,7 +5232,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "FIND" ;
         Text[ chinese_simplified ] = "FIND";
         Text[ russian ] = "Õ¿…“»";
-        Text[ polish ] = "ZNAJD?";
+        Text[ polish ] = "ZNAJDè";
         Text[ japanese ] = "FIND";
         Text[ chinese_traditional ] = "FIND";
         Text[ arabic ] = "FIND";
@@ -5522,7 +5522,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "MVALUE" ;
         Text[ chinese_simplified ] = "MVALUE";
         Text[ russian ] = "Ã«Õ¿◊";
-        Text[ polish ] = "WARTO?∆M";
+        Text[ polish ] = "WARTOå∆M";
         Text[ japanese ] = "MVALUE";
         Text[ chinese_traditional ] = "MVALUE";
         Text[ arabic ] = "MVALUE";
@@ -5986,7 +5986,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "HARMEAN" ;
         Text[ chinese_simplified ] = "HARMEAN";
         Text[ russian ] = "—–√¿–Ã";
-        Text[ polish ] = "?REDNIA.HARMONICZNA";
+        Text[ polish ] = "åREDNIA.HARMONICZNA";
         Text[ japanese ] = "HARMEAN";
         Text[ chinese_traditional ] = "HARMEAN";
         Text[ arabic ] = "HARMEAN";
@@ -6015,7 +6015,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "GEOMEAN" ;
         Text[ chinese_simplified ] = "GEOMEAN";
         Text[ russian ] = "—–√≈ŒÃ";
-        Text[ polish ] = "?REDNIA.GEOMETRYCZNA";
+        Text[ polish ] = "åREDNIA.GEOMETRYCZNA";
         Text[ japanese ] = "GEOMEAN";
         Text[ chinese_traditional ] = "GEOMEAN";
         Text[ arabic ] = "GEOMEAN";
@@ -6073,7 +6073,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "AVEDEV" ;
         Text[ chinese_simplified ] = "AVEDEV";
         Text[ russian ] = "—–Œ“ À";
-        Text[ polish ] = "ODCH.?REDNIE";
+        Text[ polish ] = "ODCH.åREDNIE";
         Text[ japanese ] = "AVEDEV";
         Text[ chinese_traditional ] = "AVEDEV";
         Text[ arabic ] = "AVEDEV";
@@ -6102,7 +6102,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "SKEW" ;
         Text[ chinese_simplified ] = "SKEW";
         Text[ russian ] = "— Œ—";
-        Text[ polish ] = "SKO?NO?∆";
+        Text[ polish ] = "SKOåNOå∆";
         Text[ japanese ] = "SKEW";
         Text[ chinese_traditional ] = "SKEW";
         Text[ arabic ] = "SKEW";
@@ -6189,7 +6189,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "MODE" ;
         Text[ chinese_simplified ] = "MODE";
         Text[ russian ] = "ÃŒƒ¿";
-        Text[ polish ] = "WYST.NAJCZ ?CIEJ";
+        Text[ polish ] = "WYST.NAJCZ åCIEJ";
         Text[ japanese ] = "MODE";
         Text[ chinese_traditional ] = "MODE";
         Text[ arabic ] = "MODE";
@@ -6423,7 +6423,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "FREQUENCY" ;
         Text[ chinese_simplified ] = "FREQUENCY";
         Text[ russian ] = "◊¿—“Œ“¿";
-        Text[ polish ] = "CZ STO?∆";
+        Text[ polish ] = "CZ STOå∆";
         Text[ japanese ] = "FREQUENCY";
         Text[ chinese_traditional ] = "FREQUENCY";
         Text[ arabic ] = "FREQUENCY";
@@ -6510,7 +6510,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CONFIDENCE" ;
         Text[ chinese_simplified ] = "CONFIDENCE";
         Text[ russian ] = "ƒŒ¬≈–»“";
-        Text[ polish ] = "UFNO?∆";
+        Text[ polish ] = "UFNOå∆";
         Text[ japanese ] = "CONFIDENCE";
         Text[ chinese_traditional ] = "CONFIDENCE";
         Text[ arabic ] = "CONFIDENCE";
@@ -6568,7 +6568,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "TRIMMEAN" ;
         Text[ chinese_simplified ] = "TRIMMEAN";
         Text[ russian ] = "”–≈«—–≈ƒÕ≈≈";
-        Text[ polish ] = "?REDNIA.WEWN";
+        Text[ polish ] = "åREDNIA.WEWN";
         Text[ japanese ] = "TRIMMEAN";
         Text[ chinese_traditional ] = "TRIMMEAN";
         Text[ arabic ] = "TRIMMEAN";
@@ -7796,3 +7796,4 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
     String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };
+
