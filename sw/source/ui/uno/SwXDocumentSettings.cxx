@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-26 16:54:10 $
+ *  last change: $Author: mtg $ $Date: 2001-07-27 13:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _SW_XDOCUMENT_SETTINGS_HXX
 #include <SwXDocumentSettings.hxx>
+#endif
+#ifndef _SW_XPRINTPREVIEWSETTINGS_HXX_
+#include <SwXPrintPreviewSettings.hxx>
 #endif
 #ifndef _COMPHELPER_MASTERPROPERTSETINFO_HXX_
 #include <comphelper/MasterPropertySetInfo.hxx>
@@ -176,7 +179,8 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpDocSh ( NULL )
 , mpDoc ( NULL )
 {
-    registerSlave ( new SwXPrintSettings ( sal_False, mpModel->GetDocShell()->GetDoc() ) );
+    registerSlave ( new SwXPrintSettings ( sal_False ) );
+    registerSlave ( new SwXPrintPreviewSettings ( mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
