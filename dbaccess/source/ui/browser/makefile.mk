@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-26 14:42:21 $
+#   last change: $Author: oj $ $Date: 2000-11-15 14:48:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
+            $(SLO)$/dbexchange.obj		\
             $(SLO)$/dbloader.obj		\
             $(SLO)$/dbtreemodel.obj		\
             $(SLO)$/dbtreelistbox.obj	\
