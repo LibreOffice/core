@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:32:51 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 
 #pragma hdrstop
 
-#ifndef _BIFFDUMP_HXX
+#ifndef SC_BIFFDUMP_HXX
 #include "biffdump.hxx"
 #endif
 
-#ifdef DEBUGGING
+#if EXC_INCL_DUMPER
 
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -3040,6 +3040,52 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 LINESTART();
                 ADDTEXT( "num of DV recs: " );
                 ADDDEC( 4 );
+                PRINT();
+            }
+            break;
+            case 0x01B6:    // TXO - text box
+            {
+                LINESTART();
+                rIn >> __nFlags;
+                STARTFLAG();
+                switch( __nFlags & 0x000E )
+                {
+                    case 0x0002:    ADDTEXT( " h-left" );   break;
+                    case 0x0004:    ADDTEXT( " h-center" ); break;
+                    case 0x0006:    ADDTEXT( " h-right" );  break;
+                    case 0x0008:    ADDTEXT( " h-block" );  break;
+                    default:        ADDTEXT( " *h-unknown*" );
+                }
+                switch( __nFlags & 0x0070 )
+                {
+                    case 0x0010:    ADDTEXT( " v-top" );    break;
+                    case 0x0020:    ADDTEXT( " v-center" ); break;
+                    case 0x0030:    ADDTEXT( " v-bottom" ); break;
+                    case 0x0040:    ADDTEXT( " v-block" );  break;
+                    default:        ADDTEXT( " *v-unknown*" );
+                }
+                ADDFLAG( 0x0200, "lock-text" );
+                ADDRESERVED( 0xFD81 );
+                ADDTEXT( "   orient=" );
+                sal_uInt16 nOrient = rIn.ReaduInt16();
+                __AddDec( t, nOrient );
+                ADDTEXT( " (" );
+                switch( nOrient )
+                {
+                    case 0:     ADDTEXT( "no-rot" );    break;
+                    case 1:     ADDTEXT( "stacked" );   break;
+                    case 2:     ADDTEXT( "90° ccw" );   break;
+                    case 3:     ADDTEXT( "90° cw" );    break;
+                    default:    ADDTEXT( "!unknown!" );
+                }
+                ADDTEXT( ")" );
+                PRINT();
+                LINESTART();
+                ADDTEXT( "reserved=" );
+                ADDHEX( 2 ); ADDTEXT( " " ); ADDHEX( 2 ); ADDTEXT( " " ); ADDHEX( 2 );
+                ADDTEXT( "   text-len=" );      ADDDEC( 2 );
+                ADDTEXT( "   format-size=" );   ADDDEC( 2 );
+                ADDTEXT( "   reserved=" );      ADDHEX( 4 );
                 PRINT();
             }
             break;
