@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 15:56:27 $
+ *  last change: $Author: af $ $Date: 2002-10-11 11:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,13 @@ BOOL SdrSnapView::EndSetPageOrg()
         bSetPageOrg=FALSE;
         Point aPnt=aDragStat.GetNow();
         SdrPageView* pPV=HitPage(aPnt);
+
+        // According to bug #99937# the page origin shall allways be set,
+        // even when it lies outside the actual page area.  Therefore, the
+        // first page is used as a fallback when no other is found.
+        if (pPV == NULL)
+            pPV = GetPageViewPvNum (0);
+
         if (pPV!=NULL) {
             aPnt-=pPV->GetOffset();
             pPV->SetPageOrigin(aPnt);
