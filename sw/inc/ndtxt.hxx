@@ -2,9 +2,12 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:46:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:28 $
+ *  $Revision: 1.35 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,8 +304,30 @@ public:
     // (Methode steht im ndcopy.cxx!!)
     void CopyCollFmt( SwTxtNode& rDestNd );
 
-    // Numerierung
-    const SwNodeNum* UpdateNum( const SwNodeNum& );
+
+    //
+    // BEGIN OF BULLET/NUMBERING/OUTLINE STUFF:
+    //
+
+    /**
+       Updates SwNodeNum of this node.
+
+       @param rNum     SwNodeNum to be set
+
+       Copies rNum to this node's SwNodeNum.
+
+       EXCEPTION: If the level of rNum is NO_NUMBERING the SwNodeNum
+       is deleted.
+
+       @return pointer to this node's SwNodeNum after update
+     */
+    const SwNodeNum* UpdateNum( const SwNodeNum& rNum);
+
+    /**
+       Returns numbering rule of this text node.
+
+       @return numbering rule of this text node or NULL if none is set
+     */
     SwNumRule *GetNumRule() const;
 
     /**
@@ -328,7 +353,6 @@ public:
     */
     const SwNodeNum* GetOutlineNum(BOOL bUpdate = FALSE) const;
 
-    // ->#i36903#
     /**
        Return non-outline number of this text node.
 
@@ -346,21 +370,192 @@ public:
        @retval FALSE     else
      */
     BOOL IsOutline() const;
-    // <- #i36903#
 
-    BOOL MayBeNumbered() const; // #i23730#
-    void NumRuleChgd();                 // Frames benachrichtigen
-    XubString GetNumString() const;     // returnt Outline oder Num - String
+    /** -> #i23730#
+
+        Returns if this text node may be numbered.
+
+        A text node may be numbered if
+          - it has no SwNodeNum
+          - it has a SwNodeNum and it has a numbering rule and the according
+            SwNumFmt defines a numbering type that is an enumeration.
+
+       @retval TRUE      this text node may be numbered
+       @retval FALSE     else
+     */
+    BOOL MayBeNumbered() const;
+
+    /**
+       Notify this textnode that its numbering rule has changed.
+     */
+    void NumRuleChgd();
+
+    /**
+       Returns outline of numbering string
+     */
+    XubString GetNumString() const;
+
+    /**
+       Returns the additional indents of this text node and its numbering.
+
+       @param bTxtLeft  ???
+
+       @return additional indents
+     */
     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
+
+    /**
+       Returns the combined first line indent of this text node and
+       its numbering.
+
+       @param the first line indent of this text node taking the
+               numbering into account (return parameter)
+
+       If the paragraph has a SwNodeNum and it has a numbering rule:
+         - if the number is not shown (! IsNum()) the first line offset is 0
+         - else if old numbering is active the first line offset is the first
+              line offset of the numbering (aka spacing to text).
+         - else the first line offset is the sum of the text node's first line
+              offset and that of the numbering.
+
+       @retval TRUE   this node has SwNodeNum and has numbering rule
+       @retval FALSE  else
+     */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
-#ifdef VERTICAL_LAYOUT
+    /** -> #i29560
+        Returns if this text node has a number.
+
+        This text node has a number if it has a SwNodeNum and a
+        numbering rule and the numbering format specified for the
+        level of the SwNodeNum is of an enumeration type.
+
+        @retval TRUE    This text node has a number.
+        @retval FALSE   else
+     */
+    BOOL HasNumber() const;
+
+    /** -> #i29560
+        Returns if this text node has a bullet.
+
+        This text node has a bullet if it has a SwNodeNum and a
+        numbering rule and the numbering format specified for the
+        level of the SwNodeNum is of a bullet type.
+
+        @retval TRUE    This text node has a bullet.
+        @retval FALSE   else
+     */
+    BOOL HasBullet() const;
+
+    /** -> #i27615#
+        Returns is this text node is numbered.
+
+        This node is numbered if it has a SwNodeNum and it has a
+        numbering rule and has not a hidden SwNodeNum.
+
+        ATTENTION: Returns TRUE even if the SwNumFmt has type
+        SVX_NUM_NUMBER_NONE.
+
+        @retval TRUE      This node is numbered.
+        @retval FALSE     else
+     */
+    BOOL IsNumbered() const;
+
+    /** -> #i27615#
+        Returns if this text node has a marked label.
+
+        This text node has a marked label if it has a label and it has
+        a numbering rule and the level of the label is marked in the
+        numbering rule.
+
+        @retval TRUE       This text node has a marked label.
+        @retval FALSE      else
+     */
+    BOOL HasMarkedLabel() const;
+
+    /**
+       Returns the numbering level of this text node.
+
+       The level returned is the real level, no flags included.
+
+       @return the level of this node or NO_NUMBERING if it has no
+               numbering label.
+     */
+    BYTE GetLevel() const;
+
+    /**
+       Sets the numbering level of this text node.
+
+       @param nLevel     level to set (no flags)
+     */
+    void SetLevel(BYTE nLevel);
+
+    /**
+       Returns outline level of this textn node.
+
+       If a text node has an outline number (i.e. it has an SwNodeNum
+       and a outline numbering rule) the outline level is the level of
+       this SwNodeNum.
+
+       If a text node has no outline number and has a paragraph style
+       attached the outline level is the outline level of the
+       paragraph style.
+
+       Otherwise the text node has no outline level (NO_NUMBERING).
+
+       NOTE: The outline level of text nodes is subject to change. The
+       plan is to have an SwTxtNode::nOutlineLevel member that is
+       updated from a paragraph style upon appliance of that paragraph
+       style.
+
+       @return outline level or NO_NUMBERING if there is no outline level
+     */
+    BYTE GetOutlineLevel() const;
+
+    /**
+       Sets the out line level *at* a text node.
+
+       @param nLevel     the level to be set
+
+       If the text node has an outline number the level is set at the
+       outline number.
+
+       If the text node has no outline number but has a paragraph
+       style applied the outline level is set at the paragraph style.
+
+       NOTE: This is subject to change, see GetOutlineLevel.
+     */
+    void SetOutlineLevel(BYTE nLevel);
+
+    /**
+       Returns the width of leading tabs/blanks in this paragraph.
+       This space will be converted into numbering indent if the paragraph
+       is set to be numbered.
+
+       @return     the width of the leading whitespace
+     */
+    USHORT GetWidthOfLeadingTabs() const;
+
+
+    /**
+       Returns if the paragraph has a visible numbering or bullet.
+       This includes all kinds of numbering/bullet/outlines.
+       Note: This function returns false, if the numbering format is
+       SVX_NUM_NUMBER_NONE or if the numbering/bullet has been deleted.
+
+       @return     TRUE if the paragraph has a visible numbering/bullet/outline
+     */
+    bool HasVisibleNumberingOrBullet() const;
+
+    //
+    // END OF BULLET/NUMBERING/OUTLINE STUFF:
+    //
+
+
     USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
                     USHORT nScript = 0 ) const;
-#else
-    USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0) const;
-#endif
-        // steht in ndcopy.cxx
+
+    // steht in ndcopy.cxx
     BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
@@ -434,7 +629,6 @@ public:
 
     // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-//  virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     // aus SwIndexReg
     virtual void Update( const SwIndex & aPos, USHORT xub_StrLen,
@@ -458,24 +652,7 @@ public:
      */
     SwPosition * GetPosition(const SwTxtAttr * pAttr);
 
-    // -> #i29560
-    BOOL HasNumber() const;
-    BOOL HasBullet() const;
-    // <- #i29560
-
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
-
-    // -> #i27615#
-    BOOL IsNumbered() const;
-    BOOL HasMarkedLabel() const;
-    // <- #i27615#
-
-    BYTE GetLevel() const;
-    void SetLevel(BYTE nLevel);
-    BYTE GetOutlineLevel() const;
-    void SetOutlineLevel(BYTE nLevel);
-
-    USHORT GetWidthOfLeadingTabs() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
 };
