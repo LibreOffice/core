@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:38 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
-#include <com/sun/star/mozilla/XPluginInstance.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -153,7 +149,7 @@ namespace framework{
                     The can be created internaly by the following DispatchProvider.
                     Here we define some identifier to force creation of the right one.
 
-    @modified       17.05.2002 07:56, as96863
+    @modified       20.08.2003 08:34, as96863
 */
 enum EDispatchHelper
 {
@@ -163,8 +159,7 @@ enum EDispatchHelper
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
-    E_CLOSEDISPATCHER       ,
-    E_PLUGINDISPATCHER
+    E_CLOSEDISPATCHER
 };
 
 //_________________________________________________________________________________________________________________
@@ -172,9 +167,8 @@ enum EDispatchHelper
 /**
     @short          implement a helper for XDispatchProvider interface
     @descr          The result of a queryDispatch() call depends from the owner, which use an instance of this class.
-                    (frame, task, plugin, desktop) All of them must provides different functionality.
+                    (frame, desktop) All of them must provides different functionality.
                     E.g:    - task can be created by the desktop only
-                            - a plugin intercept some calls to forward it to the browser
                             - a task can have a beamer as direct child
                             - a normal frame never can create a new one by himself
 
@@ -210,12 +204,9 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatch > m_xHelpAgentDispatcher;
 /*      css::uno::Reference< css::frame::XDispatch > m_xBlankDispatcher    ;
         css::uno::Reference< css::frame::XDispatch > m_xSelfDispatcher     ;
-        css::uno::Reference< css::frame::XDispatch > m_xPlugInDispatcher   ;
         css::uno::Reference< css::frame::XDispatch > m_xDefaultDispatcher  ;*/
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
-        // if we are running plugged inside a browser we must intercept some queryDispatch() calls and forward it to the browser
-        static css::uno::WeakReference< css::mozilla::XPluginInstance > m_xPluginInterceptor;
 
     /* interface */
     public:
@@ -230,8 +221,6 @@ class DispatchProvider  :   // interfaces
                                                                                                                    sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
 
-        static void setPluginInterceptor( const css::uno::Reference< css::mozilla::XPluginInstance >& xPlugin );
-
     /* helper */
     protected:
         // Let him protected! So nobody can use us as base ...
@@ -240,17 +229,14 @@ class DispatchProvider  :   // interfaces
     private:
         css::uno::Reference< css::frame::XDispatch > implts_getOrCreateDispatchHelper   (       EDispatchHelper                            eHelper                       ,
                                                                                           const css::uno::Reference< css::frame::XFrame >& xOwner                        ,
-                                                                                          const css::uno::Any&                             aParameters = css::uno::Any() );
+                                                                                          const ::rtl::OUString&                           sTarget = ::rtl::OUString()   ,
+                                                                                                sal_Int32                                  nSearchFlags = 0              );
         sal_Bool                                     implts_isLoadableContent           ( const css::util::URL&                            aURL                          );
         css::uno::Reference< css::frame::XDispatch > implts_queryDesktopDispatch        ( const css::uno::Reference< css::frame::XFrame >  xDesktop                      ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const ::rtl::OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
         css::uno::Reference< css::frame::XDispatch > implts_queryFrameDispatch          ( const css::uno::Reference< css::frame::XFrame >  xFrame                        ,
-                                                                                          const css::util::URL&                            aURL                          ,
-                                                                                          const ::rtl::OUString&                           sTargetFrameName              ,
-                                                                                                sal_Int32                                  nSearchFlags                  );
-        css::uno::Reference< css::frame::XDispatch > implts_queryPluginDispatch         ( const css::uno::Reference< css::frame::XFrame >  xPlugin                       ,
                                                                                           const css::util::URL&                            aURL                          ,
                                                                                           const ::rtl::OUString&                           sTargetFrameName              ,
                                                                                                 sal_Int32                                  nSearchFlags                  );
