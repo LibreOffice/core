@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:28:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,14 @@ static void ImplCalcMapResolution( const MapMode& rMapMode,
             ImplSVData* pSVData = ImplGetSVData();
             if ( !pSVData->maGDIData.mnAppFontX )
             {
-                WorkWindow* pWin = new WorkWindow( NULL, 0 );
-                delete pWin;
+                if( pSVData->maWinData.mpFirstFrame )
+                    Window::ImplInitAppFontData( pSVData->maWinData.mpFirstFrame );
+                else
+                {
+                    WorkWindow* pWin = new WorkWindow( NULL, 0 );
+                    Window::ImplInitAppFontData( pWin );
+                    delete pWin;
+                }
             }
             if ( rMapMode.GetMapUnit() == MAP_REALAPPFONT )
                 rMapRes.mnMapScNumX   = pSVData->maGDIData.mnRealAppFontX;
