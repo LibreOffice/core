@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:47:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 15:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ SfxSlotInfo FN_AUTO_CORRECT
     SlotName[ arabic ] = "ΚΥΝνΝ ΚαήΗΖν";
     SlotName[ dutch ] = "AutoCorrectie";
     SlotName[ chinese_simplified ] = "θ‡ªε¨ζ›΄ζ­£";
-    SlotName[ greek ] = "ΑυτοΔιόρθωση";
+    SlotName[ greek ] = "Αυτόματη Διόρθωση";
     SlotName[ korean ] = "μλ™ μμ •";
     SlotName[ turkish ] = "Otomatik dόzeltme";
     SlotName[ language_user1 ] = " ";
@@ -215,7 +215,7 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ arabic ] = "ΗΣΚΞΟΗγ ΞνΗΡΗΚ AutoFormat";
     SlotName[ dutch ] = "AutoOpmaak-opties toepassen";
     SlotName[ chinese_simplified ] = "ι‡‡η”¨θ‡ªε¨ζ ΌεΌι€‰ι΅Ή";
-    SlotName[ greek ] = "Εφαρμογή επιλογών ΑυτοΜορφής";
+    SlotName[ greek ] = "Εφαρμογή επιλογών αυτόματης διόρθωσης";
     SlotName[ korean ] = "μλ™ μ„μ‹ μµμ…μ„ μ μ©";
     SlotName[ turkish ] = "Otomatik formatlama seηeneklerini uygula";
     SlotName[ language_user1 ] = " ";
@@ -234,7 +234,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ english_us ] = "AutoFormat While Typing";
     SlotName[ portuguese ] = "AutoFormato ao digitar";
     SlotName[ russian ] = "ΐβςξτξπμΰς βξ βπεμÿ ββξδΰ";
-    SlotName[ greek ] = "ΑυτοΜορφή";
+    SlotName[ greek ] = "Αυτόματη μορφοποίηση κατά την πληκτρολόγηση";
     SlotName[ dutch ] = "AutoOpmaak bij invoer";
     SlotName[ french ] = "AutoFormat pour la saisie";
     SlotName[ spanish ] = "Formateado automαtico mientras se escribe";
@@ -278,7 +278,7 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ arabic ] = "ΗΣΚΞΟΗγ ΞνΗΡΗΚ AutoFormat ζΚΓίνΟ ΗαΚΫννΡΗΚ";
     SlotName[ dutch ] = "AutoOpmaak-opties toepassen en wijzigingen bevestigen";
     SlotName[ chinese_simplified ] = "δ½Ώη”¨θ‡ªε¨ζ ΌεΌι€‰ι΅ΉεΉ¶η΅®ε®ζ›΄ζ”Ή";
-    SlotName[ greek ] = "Εφαρμογή επιλογών ΑυτοΜορφής και επιβεβαίωση αλλαγών";
+    SlotName[ greek ] = "Εφαρμογή επιλογών αυτόματης μορφοποίησης και επιβεβαίωση αλλαγών";
     SlotName[ korean ] = "μλ™ μ„μ‹ μµμ… μ μ© λ° λ³€κ²½ ν™•μΈ";
     SlotName[ turkish ] = "Otomatik formatlama seηeneklerini uygula ve deπiώiklikleri onayla";
     SlotName[ language_user1 ] = " ";
@@ -377,7 +377,7 @@ SfxSlotInfo FN_CALCULATE
     SlotName[ arabic ] = "ΝΣΗΘ ΗαΚΝΟνΟ";
     SlotName[ dutch ] = "Selectie berekenen";
     SlotName[ chinese_simplified ] = "θΏη®—ι€‰δΈ­εΊε";
-    SlotName[ greek ] = "Υπολογοσμός επιλογής";
+    SlotName[ greek ] = "Υπολογισμός επιλογής";
     SlotName[ korean ] = "μ„ νƒ κ³„μ‚°";
     SlotName[ turkish ] = "Seηimi hesapla";
     SlotName[ language_user1 ] = " ";
@@ -634,7 +634,7 @@ SfxSlotInfo FN_CONVERT_TEXT_TABLE
     SlotName[ danish ] = "Konverter tabel/tekst";
     SlotName[ swedish ] = "Konvertera tabell/text";
     SlotName[ polish ] = "Konwertuj tabelκ/tekst";
-    SlotName[ portuguese_brazilian ] = "Converter Tabela/Texto";
+    SlotName[ portuguese_brazilian ] = "Converter tabela p/ texto";
     SlotName[ japanese ] = "θ΅¨γ¨γƒ†γ‚­γ‚Ήγƒγ®ε¤‰ζ›";
     SlotName[ chinese_simplified ] = "θ½¬ζΆ θ΅¨ζ Ό/ζ–‡ζ¬";
     SlotName[ chinese_traditional ] = "θ½‰ζ›ζθ΅¨ζ Ό/ζ–‡ε­—";
@@ -1158,7 +1158,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ danish ] = "Indekselement";
     SlotName[ swedish ] = "Fφrteckningspost";
     SlotName[ polish ] = "Wpis indeksu";
-    SlotName[ portuguese_brazilian ] = "Entrada do Νndice";
+    SlotName[ portuguese_brazilian ] = "Entrada do νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ι …η›®";
     SlotName[ chinese_simplified ] = "η›®ε½•ζ΅η›®";
     SlotName[ chinese_traditional ] = "η›®ι„ζΆη›®";
@@ -1858,7 +1858,7 @@ SfxSlotInfo FN_ESCAPE
     SlotName[ arabic ] = "ΕαΫΗΑ ΗαΓγΡ";
     SlotName[ dutch ] = "Annuleren";
     SlotName[ chinese_simplified ] = "ε–ζ¶";
-    SlotName[ greek ] = "Ακύρωση";
+    SlotName[ greek ] = "Άκυρο";
     SlotName[ korean ] = "μ·¨μ†";
     SlotName[ turkish ] = "έptal";
     SlotName[ language_user1 ] = " ";
@@ -1924,7 +1924,7 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
     SlotName[ arabic ] = "ΚδένΠ ΗαΕΟΞΗα ΗαΚαήΗΖν ααδΥ";
     SlotName[ dutch ] = "AutoTekst-item uitvoeren";
     SlotName[ chinese_simplified ] = "ζ‰§θ΅θ‡ªε¨ε›Ύζ–‡ι›†ζ΅η›®";
-    SlotName[ greek ] = "Εκτέλεση καταχώρισης ΑυτοΚειμένου";
+    SlotName[ greek ] = "Εκτέλεση καταχώρισης αυτόματου κειμένου";
     SlotName[ korean ] = "μλ™ ν…μ¤νΈ ν•­λª© μ‹¤ν–‰";
     SlotName[ turkish ] = "Otomatik metin giriώini uygula";
     SlotName[ language_user1 ] = " ";
@@ -2016,7 +2016,7 @@ SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
     SlotName[ danish ] = "Til fodnote/anker";
     SlotName[ swedish ] = "Till fotnot/ankare";
     SlotName[ polish ] = "Do punktu zakotwiczenia przypisu";
-    SlotName[ portuguese_brazilian ] = "Para Βncora da Nota de Rodapι";
+    SlotName[ portuguese_brazilian ] = "Para βncora da nota de rodapι";
     SlotName[ japanese ] = "θ„ζ³¨γΎγγ―θ„ζ³¨ε‚η…§γΈ";
     SlotName[ chinese_simplified ] = "θ½¬ε°ζ³¨θ„/ζ ‡θ®°";
     SlotName[ chinese_traditional ] = "θ½‰ε°θ¨»θ…³/ζ¨™θ™";
@@ -2478,7 +2478,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
     SlotName[ danish ] = "Placer nederst";
     SlotName[ swedish ] = "Placera vid underkant";
     SlotName[ polish ] = "Wyrσwnaj do do³u";
-    SlotName[ portuguese_brazilian ] = "Alinhar Embaixo";
+    SlotName[ portuguese_brazilian ] = "Alinhar em baixo";
     SlotName[ japanese ] = "δΈ‹ζƒγ";
     SlotName[ chinese_simplified ] = "ε‘δΈ‹ε―Ήι½";
     SlotName[ chinese_traditional ] = "ε‘δΈ‹ε°ι½";
@@ -2742,7 +2742,7 @@ SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
     SlotName[ danish ] = "Placer ψverst";
     SlotName[ swedish ] = "Placera vid φverkant";
     SlotName[ polish ] = "Wyrσwnaj do gσry";
-    SlotName[ portuguese_brazilian ] = "Alinhar Acima";
+    SlotName[ portuguese_brazilian ] = "Alinhar em cima";
     SlotName[ japanese ] = "δΈζƒγ";
     SlotName[ chinese_simplified ] = "ε‘δΈε―Ήι½";
     SlotName[ chinese_traditional ] = "ε‘δΈε°ι½";
@@ -2907,7 +2907,7 @@ SfxSlotInfo FN_FRAME_TO_ANCHOR
     SlotName[ danish ] = "Sζt markψr pε anker";
     SlotName[ swedish ] = "Sδtt markφren pε ankaret";
     SlotName[ polish ] = "Ustaw kursor na zakotwiczeniu";
-    SlotName[ portuguese_brazilian ] = "Definir Cursor na Βncora";
+    SlotName[ portuguese_brazilian ] = "Definir cursor na βncora";
     SlotName[ japanese ] = "γ‚«γƒΌγ‚½γƒ«γ‚’γ‚Άγƒ³γ‚«γƒΌγ«θ¨­η½®";
     SlotName[ chinese_simplified ] = "η½®ε…‰ζ ‡δΊζ ‡θ®°ε¤„";
     SlotName[ chinese_traditional ] = "ζΈΈζ¨™θ½‰ε°ζ¨™θ™";
@@ -3244,7 +3244,7 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName[ arabic ] = "ΚΝΡνΡ ΗαδΥ ΗαΚαήΗΖν";
     SlotName[ dutch ] = "AutoTekst bewerken";
     SlotName[ chinese_simplified ] = "ηΌ–θΎ‘θ‡ªε¨ε›Ύζ–‡ι›†";
-    SlotName[ greek ] = "Επεξεργασία ΑυτοΚείμενο";
+    SlotName[ greek ] = "Επεξεργασία αυτόματου κειμένου";
     SlotName[ korean ] = "μλ™ ν…μ¤νΈ νΈμ§‘";
     SlotName[ turkish ] = "Otomatik metin dόzenle";
     SlotName[ language_user1 ] = " ";
@@ -3310,7 +3310,7 @@ SfxSlotInfo FN_GOTO_NEXT_MARK
     SlotName[ arabic ] = "Εαμ ΗαΪδΥΡ ΗαδΗΖΘ ΗαΚΗαν";
     SlotName[ dutch ] = "Naar volgende plaatsvervanger";
     SlotName[ chinese_simplified ] = "θ½¬ε°δΈ‹δΈ€δΈªι€ι…η¬¦";
-    SlotName[ greek ] = "Προς το επόμενο σύμβολο κράτησης θέσης";
+    SlotName[ greek ] = "Προς το επόμενο πλαίσιο δείκτη τοποθέτησης";
     SlotName[ korean ] = "λ‹¤μ ν”λ μ΄μ¤ν™€λ”λ΅";
     SlotName[ turkish ] = "Sonraki genel arama karakteri";
     SlotName[ language_user1 ] = " ";
@@ -3442,7 +3442,7 @@ SfxSlotInfo FN_GOTO_PREV_MARK
     SlotName[ arabic ] = "Εαμ ΗαΪδΥΡ ΗαδΗΖΘ ΗαΣΗΘή";
     SlotName[ dutch ] = "Naar vorige plaatsvervanger";
     SlotName[ chinese_simplified ] = "θ½¬ε°δΈδΈ€δΈªι€ι…η¬¦";
-    SlotName[ greek ] = "Προς το προηγούμενο σύμβολο κράτησης θέσης";
+    SlotName[ greek ] = "Προς το προηγούμενο πλαίσιο δείκτη τοποθέτησης";
     SlotName[ korean ] = "μ΄μ „ ν”λ μ΄μ¤ν™€λ”λ΅";
     SlotName[ turkish ] = "Φnceki  genel arama karakteri";
     SlotName[ language_user1 ] = " ";
@@ -3541,7 +3541,7 @@ SfxSlotInfo FN_GOTO_REFERENCE
     SlotName[ arabic ] = "Εαμ ΗαγΡΜΪ";
     SlotName[ dutch ] = "Bij verwijzing";
     SlotName[ chinese_simplified ] = "θ½¬ε°εΌ•η”¨";
-    SlotName[ greek ] = "Προς αναφορά";
+    SlotName[ greek ] = "Προς παραπομπή";
     SlotName[ korean ] = "μ°Έμ΅°λ΅";
     SlotName[ turkish ] = "Referans";
     SlotName[ language_user1 ] = " ";
@@ -3699,7 +3699,7 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ danish ] = "Indeksmarkering til indeks";
     SlotName[ swedish ] = "Indexmδrke till index";
     SlotName[ polish ] = "Znacznik indeksu do indeksu";
-    SlotName[ portuguese_brazilian ] = "Marca de Νndice para o Νndice";
+    SlotName[ portuguese_brazilian ] = "Marca de νndice para o νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ι …η›®γ‚’η›®ζ¬΅γ¨η΄ΆεΌ•γΈ";
     SlotName[ chinese_simplified ] = "ζ‡ε‘η΄ΆεΌ•η„η΄ΆεΌ•ζ ‡θ®°";
     SlotName[ chinese_traditional ] = "ζ‡ε‘η΄ΆεΌ•η„η΄ΆεΌ•ζ¨™θ¨";
@@ -4003,7 +4003,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ arabic ] = "ΕΟΡΗΜ Νήζα";
     SlotName[ dutch ] = "Dialoogvenster voor veldopdrachten";
     SlotName[ chinese_simplified ] = "ε­—ζ®µζ‡δ»¤ε―Ήθ―ζ΅†";
-    SlotName[ greek ] = "Εισαγωγή εντολής πεδίου";
+    SlotName[ greek ] = "Παράθυρο διαλόγου πεδίων";
     SlotName[ korean ] = "ν•„λ“ λ€ν™” μƒμ";
     SlotName[ turkish ] = "Alanlar Penceresi";
     SlotName[ language_user1 ] = " ";
@@ -4036,7 +4036,7 @@ SfxSlotInfo FN_INSERT_FIELD_CTRL
     SlotName[ arabic ] = "ΕΟΡΗΜ Νήζα";
     SlotName[ dutch ] = "Veldopdrachten invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥ε­—ζ®µζ‡δ»¤";
-    SlotName[ greek ] = "Εισαγωγή εντολής πεδίου";
+    SlotName[ greek ] = "Εισαγωγή πεδίων";
     SlotName[ korean ] = "ν•„λ“ μ‚½μ…";
     SlotName[ turkish ] = "Alan φπeleri ekle";
     SlotName[ language_user1 ] = " ";
@@ -4495,7 +4495,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ arabic ] = "ΕΟΡΗΜ ΝΡέ γΣΗέΙ γΝγν";
     SlotName[ dutch ] = "Harde spatie invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥δΏζ¤η„η©Ίζ Όε­—η¬¦";
-    SlotName[ greek ] = "Προσθήκη προστατευόμενου κενού";
+    SlotName[ greek ] = "Εισαγωγή προστατευόμενου κενού";
     SlotName[ korean ] = "μ¤„ λ°”κΏν•μ§€ μ•λ” κ³µλ°± μ‚½μ…";
     SlotName[ turkish ] = "Bφlόnemez boώluk ekle";
     SlotName[ language_user1 ] = " ";
@@ -4528,7 +4528,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ arabic ] = "ΕΟΡΗΜ ΤΡΨΙ έΗΥαΙ γΝγνΙ";
     SlotName[ dutch ] = "Vast scheidingsteken invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥θΏε­—η¬¦";
-    SlotName[ greek ] = "Προσθήκη έντονου διαχωριστικού";
+    SlotName[ greek ] = "Εισαγωγή έντονου διαχωριστικού";
     SlotName[ korean ] = "μ¤„ λ°”κΏν•μ§€ μ•λ” ν•μ΄ν” μ‚½μ…";
     SlotName[ turkish ] = "Bφlόnemez tire ekle";
     SlotName[ language_user1 ] = " ";
@@ -4652,7 +4652,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ danish ] = "Indsζt indeksmarkering";
     SlotName[ swedish ] = "Infoga indexmarkering";
     SlotName[ polish ] = "Wstaw znacznik indeksu";
-    SlotName[ portuguese_brazilian ] = "Inserir Marcador de Νndice";
+    SlotName[ portuguese_brazilian ] = "Inserir marcador de νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ι …η›®η™»ι²";
     SlotName[ chinese_simplified ] = "ζ’ε…¥η΄ΆεΌ•ζ ‡θ®°";
     SlotName[ chinese_traditional ] = "ζ’ε…¥η΄ΆεΌ•ιΈε–";
@@ -4755,7 +4755,7 @@ SfxSlotInfo FN_INSERT_OBJECT_DLG
     SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΖδΗΚ ΓΞΡμ";
     SlotName[ dutch ] = "Andere objecten invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥ε…¶ε®ƒε―Ήθ±΅";
-    SlotName[ greek ] = "Προσθήκη άλλων αντικειμένων";
+    SlotName[ greek ] = "Εισαγωγή άλλων αντικειμένων";
     SlotName[ korean ] = "λ‹¤λ¥Έ κ°μ²΄ μ‚½μ…";
     SlotName[ turkish ] = "Baώka nesne ekle";
     SlotName[ language_user1 ] = " ";
@@ -4887,7 +4887,7 @@ SfxSlotInfo FN_INSERT_REF_FIELD
     SlotName[ arabic ] = "ΕΟΡΗΜ ΕΣδΗΟΗΚ ΚΡΗέήνΙ";
     SlotName[ dutch ] = "Kruisverwijzing invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥ε‚η…§";
-    SlotName[ greek ] = "Εισαγωγή παραπομπής";
+    SlotName[ greek ] = "Εισαγωγή παραπομπής πεδίου";
     SlotName[ korean ] = "μƒνΈ μ°Έμ΅° μ‚½μ…";
     SlotName[ turkish ] = "Ηapraz baώvuru alanύ ekle";
     SlotName[ language_user1 ] = " ";
@@ -4984,7 +4984,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ arabic ] = "ΕΟΡΗΜ έΗΥαΙ ΗΞΚνΗΡνΙ";
     SlotName[ dutch ] = "Zacht scheidingsteken invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥θ½―ζ€§θΏε­—η¬¦";
-    SlotName[ greek ] = "Προσθήκη ήπιου διαχωριστικού";
+    SlotName[ greek ] = "Εισαγωγή ήπιου διαχωριστικού";
     SlotName[ korean ] = "μ„μμ ν•μ΄ν” μ‚½μ…";
     SlotName[ turkish ] = "Tire ekle";
     SlotName[ language_user1 ] = " ";
@@ -5701,7 +5701,7 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ danish ] = "Til nζste indeksmarkering";
     SlotName[ swedish ] = "Till nδsta indexmarkering";
     SlotName[ polish ] = "Przejd do nastκpnego znacznika indeksu";
-    SlotName[ portuguese_brazilian ] = "Ir para a Prσxima Marca de Νndice";
+    SlotName[ portuguese_brazilian ] = "Ir para a prσxima marca de νndice";
     SlotName[ japanese ] = "ζ¬΅γ®η›®ζ¬΅γ¨η΄ΆεΌ•γ®ι …η›®γΈ";
     SlotName[ chinese_simplified ] = "θ½¬ε°δΈ‹δΈ€δΈªη΄ΆεΌ•ζ ‡θ®°";
     SlotName[ chinese_traditional ] = "θ½‰ε°δΈ‹δΈ€ε€‹η΄ΆεΌ•ζ¨™θ¨";
@@ -5874,7 +5874,7 @@ SfxSlotInfo FN_NUM_BULLET_MOVEUP
     SlotName[ dutch ] = "Naar boven verplaatsen";
     SlotName[ chinese_simplified ] = "ε‘δΈη§»ε¨";
     SlotName[ greek ] = "Μεταφορά προς τα άνω";
-    SlotName[ korean ] = "μ„λ΅ μ΄λ™";
+    SlotName[ korean ] = "μ„λ΅";
     SlotName[ turkish ] = "Yukarύ taώύ";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Mou cap amunt";
@@ -5998,7 +5998,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
     SlotName[ danish ] = "Nedad med underpunkter";
     SlotName[ swedish ] = "Nedεt med undernivεer";
     SlotName[ polish ] = "Poziom w dσ³ z podpunktami";
-    SlotName[ portuguese_brazilian ] = "Mover para Baixo com Sub Pontos";
+    SlotName[ portuguese_brazilian ] = "Mover para baixo com sub parαgrafos";
     SlotName[ japanese ] = "γ‚µγƒ–γƒ¬γƒ™γƒ«γ¨ε…±γ«γƒ¬γƒ™γƒ«δΈ‹γ’";
     SlotName[ chinese_simplified ] = "θΏεε†ηΊ§ε‘δΈ‹";
     SlotName[ chinese_traditional ] = "ι€£εε†η΄ε‘δΈ‹";
@@ -6031,7 +6031,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
     SlotName[ danish ] = "Flyt nedad med underpunkter";
     SlotName[ swedish ] = "Flytta nedεt med undernivεer";
     SlotName[ polish ] = "Przenie w dσ³ z podpunktami";
-    SlotName[ portuguese_brazilian ] = "Mover para Baixo com Sub Pontos";
+    SlotName[ portuguese_brazilian ] = "Mover para baixo com sub parαgrafos";
     SlotName[ japanese ] = "γ‚µγƒ–γƒ¬γƒ™γƒ«γ¨ε…±γ«δΈ‹γΈ";
     SlotName[ chinese_simplified ] = "θΏεε†ηΊ§ε‘δΈ‹η§»ε¨";
     SlotName[ chinese_traditional ] = "ι€£εε†ι»ε‘δΈ‹η§»ε‹•";
@@ -6064,7 +6064,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
     SlotName[ danish ] = "Flyt opad med underpunkter";
     SlotName[ swedish ] = "Flytta uppεt med undernivεer";
     SlotName[ polish ] = "Przenie w gσrκ z podpunktami";
-    SlotName[ portuguese_brazilian ] = "Mover para Cima com Sub Pontos";
+    SlotName[ portuguese_brazilian ] = "Mover para cima com sub parαgrafos";
     SlotName[ japanese ] = "γ‚µγƒ–γƒ¬γƒ™γƒ«γ¨ε…±γ«δΈγΈ";
     SlotName[ chinese_simplified ] = "θΏεε†ηΊ§ε‘δΈη§»ε¨";
     SlotName[ chinese_traditional ] = "ι€£εε†η΄ε‘δΈη§»ε‹•";
@@ -6097,7 +6097,7 @@ SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
     SlotName[ danish ] = "Opad med underpunkter";
     SlotName[ swedish ] = "Uppεt med undernivεer";
     SlotName[ polish ] = "Poziom w gσrκ z podpunktami";
-    SlotName[ portuguese_brazilian ] = "Mover para Cima com Sub Pontos";
+    SlotName[ portuguese_brazilian ] = "Mover para cima com sub parαgrafos";
     SlotName[ japanese ] = "γ‚µγƒ–γƒ¬γƒ™γƒ«γ¨ε…±γ«γƒ¬γƒ™γƒ«δΈγ’";
     SlotName[ chinese_simplified ] = "θΏεε†ηΊ§ε‘δΈ";
     SlotName[ chinese_traditional ] = "ι€£εε†η΄ε‘δΈ";
@@ -6359,7 +6359,7 @@ SfxSlotInfo FN_NUMBER_NEWSTART
     SlotName[ spanish ] = "Reiniciar numeraciσn";
     SlotName[ italian ] = "Ricomincia numerazione";
     SlotName[ danish ] = "Start nummerering forfra";
-    SlotName[ swedish ] = "Starta om numrering";
+    SlotName[ swedish ] = "Starta numrering pε nytt";
     SlotName[ polish ] = "Zacznij numeracjκ od nowa";
     SlotName[ portuguese_brazilian ] = "Reiniciar Numeraηγo";
     SlotName[ japanese ] = "η•ªε·δ»γ‘γ‚’ζ–°γ—γι–‹ε§‹";
@@ -6625,14 +6625,14 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ danish ] = "Disposition til udklipsbakke";
     SlotName[ swedish ] = "Disposition till urklippet";
     SlotName[ polish ] = "Konspekt do schowka";
-    SlotName[ portuguese_brazilian ] = "Estrutura de Tσpicos para a Αrea de Transferκncia";
+    SlotName[ portuguese_brazilian ] = "Estrutura de tσpicos para a αrea de transferκncia";
     SlotName[ japanese ] = "γ‚―γƒªγƒƒγƒ—γƒγƒΌγƒ‰γ®γ‚Άγ‚¦γƒγƒ©γ‚¤γƒ³";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€θ‡³ε‰ªθ΄΄ζΏ";
     SlotName[ chinese_traditional ] = "ε¤§η¶±ι€ε°ε‰ªθ²Όη°Ώ";
     SlotName[ arabic ] = "ΗαΚήΣνγ Εαμ ΗαΝΗέΩΙ";
     SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€θ‡³ε‰ªθ΄΄ζΏ";
-    SlotName[ greek ] = "Διάρθρωση προς το πρόχειρο";
+    SlotName[ greek ] = "Διάρθρωση σε πρόχειρο";
     SlotName[ korean ] = "ν΄λ¦½λ³΄λ“ κ°μ”";
     SlotName[ turkish ] = "Panoya Dύώηizgi";
     SlotName[ language_user1 ] = " ";
@@ -7186,7 +7186,7 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ danish ] = "Til forrige indeksmarkering";
     SlotName[ swedish ] = "Till fφregεende indexmarkering";
     SlotName[ polish ] = "Przejd do poprzedniego znacznika indeksu";
-    SlotName[ portuguese_brazilian ] = "Ir para a Marca de Νndice Anterior";
+    SlotName[ portuguese_brazilian ] = "Ir para a marca de νndice anterior";
     SlotName[ japanese ] = "ε‰γ®η›®ζ¬΅γ¨η΄ΆεΌ•γ®ι …η›®γΈ";
     SlotName[ chinese_simplified ] = "θ½¬ε°δΈδΈ€δΈªη΄ΆεΌ•ζ ‡θ®°";
     SlotName[ chinese_traditional ] = "θ½‰ε°δΈδΈ€ε€‹η΄ΆεΌ•ζ¨™θ¨";
@@ -7421,7 +7421,7 @@ SfxSlotInfo FN_QRY_MERGE
     SlotName[ arabic ] = "ΚΜενÒ ΗαΨΘΗΪΙ ΗαγΣαΣαΙ";
     SlotName[ dutch ] = "Afdrukken standaardbrief voorbereiden";
     SlotName[ chinese_simplified ] = "ε‡†ε¤‡ι‚®δ»¶εεΉ¶";
-    SlotName[ greek ] = "Προετοιμασία για εκτύπωση μαζικής αλληλογραφίας";
+    SlotName[ greek ] = "Προετοιμασία για συγχώνευση αλληλογραφίας";
     SlotName[ korean ] = "νΈμ§€ λ³‘ν•© μ¤€λΉ„";
     SlotName[ turkish ] = "Standart mektup yazdύrmayύ hazύrla";
     SlotName[ language_user1 ] = " ";
@@ -7980,7 +7980,7 @@ SfxSlotInfo FN_SHADOWCURSOR
     SlotName[ arabic ] = "ΚΤΫνα/ΕνήΗέ ΗαγΔΤΡ ΗαγΘΗΤΡ";
     SlotName[ dutch ] = "Directcursor aan/uit";
     SlotName[ chinese_simplified ] = "ε―ε¨ζ–ε…³ι—­η›΄ζ¥ε®δ½ε…‰ζ ‡";
-    SlotName[ greek ] = "Άμεσος δρομέας Ναι/Όχι";
+    SlotName[ greek ] = "Κατακόρυφος δρομέας Ναι/Όχι";
     SlotName[ korean ] = "μ»¤μ„ μ„μΉ μ§μ ‘ μ΅°μ •μ„ μ μ©/ν•΄μ ";
     SlotName[ turkish ] = "Serbest imleη aηύk/kapalύ";
     SlotName[ language_user1 ] = " ";
@@ -8050,7 +8050,7 @@ SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
     SlotName[ thai ] = "Page Preview: Multiple Pages";
     SlotName[ czech ] = "NΓ΅hled: VΓ­ce strΓ΅nek";
     SlotName[ hebrew ] = "Page Preview: Multiple Pages";
-    SlotName[ portuguese_brazilian ] = "Page Preview: Multiple Pages";
+    SlotName[ portuguese_brazilian ] = "Visualizar pαginas: Mϊltiplas pαginas";
     SlotName[ hindi ] = "Page Preview: Multiple Pages";
     SlotName[ slovak ] = "NΓ΅hΔΎad: viac strΓ΅nok";
 };
@@ -8173,7 +8173,7 @@ SfxSlotInfo FN_SPELLING_DLG
     SlotName[ arabic ] = "ΚΟήνή ΕγαΗΖν";
     SlotName[ dutch ] = "Spelling";
     SlotName[ chinese_simplified ] = "ζ‹Όε†™ζ£€ζ¥";
-    SlotName[ greek ] = "Ορθογραφία";
+    SlotName[ greek ] = "Ορθογραφικός έλεγχος";
     SlotName[ korean ] = "λ§μ¶¤λ²• κ²€μ‚¬";
     SlotName[ turkish ] = "έmla denetimi";
     SlotName[ language_user1 ] = " ";
@@ -9160,7 +9160,7 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ arabic ] = "ΟγΜ ΗαΞαΗνΗ";
     SlotName[ dutch ] = "Cellen koppelen";
     SlotName[ chinese_simplified ] = "εεΉ¶ε•ε…ƒζ Ό";
-    SlotName[ greek ] = "Ένωση κελιών";
+    SlotName[ greek ] = "Συγχώνευση κελιών";
     SlotName[ korean ] = "μ…€ λ³‘ν•©";
     SlotName[ turkish ] = "Hόcreleri birleώtir";
     SlotName[ language_user1 ] = " ";
@@ -9589,7 +9589,7 @@ SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
     SlotName[ arabic ] = "ΕαΫΗΑ ΝγΗνΙ ΗαΜΟζα";
     SlotName[ dutch ] = "Werkbladbeveiliging opheffen";
     SlotName[ chinese_simplified ] = "ε–ζ¶θ΅¨ζ ΌδΏζ¤";
-    SlotName[ greek ] = "Κατάργηση προστασίας πίνακα";
+    SlotName[ greek ] = "Κατάργηση προστασίας φύλλου";
     SlotName[ korean ] = "μ‹νΈ λ³΄νΈ ν•΄μ ";
     SlotName[ turkish ] = "Tablo korumasύnύ kaldύr";
     SlotName[ language_user1 ] = " ";
@@ -9688,7 +9688,7 @@ SfxSlotInfo FN_TABLE_VERT_CENTER
     SlotName[ arabic ] = "ΚζΣνΨ (ΡΓΣν)";
     SlotName[ dutch ] = "Gecentreerd (verticaal)";
     SlotName[ chinese_simplified ] = "ε±…δΈ­(ε‚η›΄)";
-    SlotName[ greek ] = "Κεντραρισμένα (κατακόρυφα)";
+    SlotName[ greek ] = "Στο κέντρο (κατακόρυφα)";
     SlotName[ korean ] = "κ°€μ΄λ°(μμ§)";
     SlotName[ turkish ] = "Ortalanmύώ (dikey)";
     SlotName[ language_user1 ] = " ";
@@ -9846,7 +9846,7 @@ SfxSlotInfo FN_TOOL_ANKER
     SlotName[ danish ] = "Skift ankerpunkt";
     SlotName[ swedish ] = "Byt fφrankring";
     SlotName[ polish ] = "Zmieρ zakotwiczenie";
-    SlotName[ portuguese_brazilian ] = "Alterar a Βncora";
+    SlotName[ portuguese_brazilian ] = "Alterar a βncora";
     SlotName[ japanese ] = "γ‚Άγƒ³γ‚«γƒΌγ®ε¤‰ζ›΄";
     SlotName[ chinese_simplified ] = "ζ›΄ζ”Ήι”ε®";
     SlotName[ chinese_traditional ] = "θ®ζ›΄ι–ε®";
@@ -9919,7 +9919,7 @@ SfxSlotInfo FN_TOOL_ANKER_CHAR
     SlotName[ arabic ] = "ΕΡΣΗΑ Ϊαμ ΗαΓΝΡέ";
     SlotName[ dutch ] = "Als teken verankeren";
     SlotName[ chinese_simplified ] = "ε½“δ½ε­—η¬¦ι”ε®";
-    SlotName[ greek ] = "Αγκύρωση στον χαρακτήρα";
+    SlotName[ greek ] = "Αγκύρωση ως χαρακτήρας";
     SlotName[ korean ] = "λ¬Έμλ΅ κΈ°μ¤€ μ„μΉ";
     SlotName[ turkish ] = "Ηapa Karakter Olarak";
     SlotName[ language_user1 ] = " ";
@@ -10242,7 +10242,7 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ danish ] = "Opdater indeks";
     SlotName[ swedish ] = "Uppdatera fφrteckning";
     SlotName[ polish ] = "Aktualizuj indeks";
-    SlotName[ portuguese_brazilian ] = "Atualizar Νndice";
+    SlotName[ portuguese_brazilian ] = "Atualizar νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ζ›΄ζ–°";
     SlotName[ chinese_simplified ] = "ζ›΄ζ–°η›®ε½•";
     SlotName[ chinese_traditional ] = "ζ›΄ζ–°η›®ι„";
@@ -10372,7 +10372,7 @@ SfxSlotInfo FN_UPDATE_TOX
     SlotName[ danish ] = "Opdater alle indeks";
     SlotName[ swedish ] = "Uppdatera fφrteckningar";
     SlotName[ polish ] = "Aktualizuj indeksy";
-    SlotName[ portuguese_brazilian ] = "Atualizar Νndices";
+    SlotName[ portuguese_brazilian ] = "Atualizar νndices";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ζ›΄ζ–°";
     SlotName[ chinese_simplified ] = "ζ›΄ζ–°η›®ε½•";
     SlotName[ chinese_traditional ] = "ζ›΄ζ–°η›®ι„";
@@ -10497,7 +10497,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ english_us ] = "Graphics On/Off";
     SlotName[ portuguese ] = "Mostrar/Ocultar imagem";
     SlotName[ russian ] = "Γπΰτθχερκθε ξαϊεκςϋ";
-    SlotName[ greek ] = "Γραφικό Ναι/Όχι";
+    SlotName[ greek ] = "Γραφικά Ναι/Όχι";
     SlotName[ dutch ] = "Afbeelding aan/uit";
     SlotName[ french ] = "Afficher/masquer les images";
     SlotName[ spanish ] = "Activar/desactivar imαgenes";
@@ -10514,7 +10514,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
     SlotName[ arabic ] = "ΕΩεΗΡ/ΕΞέΗΑ ΗαΥζΡΙ";
     SlotName[ catalan ] = "Grΰfics activats/desactivats";
     SlotName[ finnish ] = "Grafiikka kδytφssδ / poissa kδytφstδ";
-    SlotName[ language_user1 ] = "BLG 27.07.00 : Plural, da Funktion fόr alle Grafiken (ob selektiert oder nicht) des Doks gόltig.";
+    SlotName[ language_user1 ] = "; BLG 27.07.00 : Plural, da Funktion fόr alle Grafiken (ob selektiert oder nicht) des Doks gόltig.";
     SlotName[ thai ] = "ΰΈΰΈ£ΰΈ²ΰΈΰΈ΄ΰΈ„ ΰΈ΅ΰΈµ/ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµ";
     SlotName[ czech ] = "ObrΓ΅zky zap/vyp";
     SlotName[ hebrew ] = "β€®Χ’Χ¨Χ¤Χ™Χ§Χ” ΧΧ•Χ¤ΧΆΧ/ΧΧ•Χ¤Χ΅Χ§β€¬";
@@ -10568,14 +10568,14 @@ SfxSlotInfo FN_VIEW_MARKS
     SlotName[ danish ] = "Markeringer";
     SlotName[ swedish ] = "Markeringar";
     SlotName[ polish ] = "Cieniowanie pσl";
-    SlotName[ portuguese_brazilian ] = "Sombreamentos de Campo";
+    SlotName[ portuguese_brazilian ] = "Sombreamento de campo";
     SlotName[ japanese ] = "η°θ‰²γ®θƒζ™―γ§εΌ·θªΏ";
     SlotName[ chinese_simplified ] = "ηΊΆθ‰²ζ›²ηΊΏ";
     SlotName[ chinese_traditional ] = "η΄…θ‰²ζ›²η·";
     SlotName[ arabic ] = "ΪαΗγΗΚ";
     SlotName[ dutch ] = "Markeringen";
     SlotName[ chinese_simplified ] = "ηΊΆθ‰²ζ›²ηΊΏ";
-    SlotName[ greek ] = "Σημάδια";
+    SlotName[ greek ] = "Σκίαση πεδίων";
     SlotName[ korean ] = "ν•„λ“ μμ";
     SlotName[ turkish ] = "Belirteηler";
     SlotName[ language_user1 ] = " ";
@@ -10869,7 +10869,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR2
     SlotName[ arabic ] = "αζδ ΗαΞΨ";
     SlotName[ dutch ] = "Tekenkleur";
     SlotName[ chinese_simplified ] = "ε­—η¬¦ιΆθ‰²";
-    SlotName[ greek ] = "Χρώμα γραμματοσειράς";
+    SlotName[ greek ] = "Χρώμα γραμμ/ράς";
     SlotName[ korean ] = "κΈ€κΌ΄ μƒ‰";
     SlotName[ turkish ] = "Yazύtipi rengi";
     SlotName[ language_user1 ] = " ";
@@ -10962,7 +10962,7 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ italian ] = "Inserisci indice";
     SlotName[ danish ] = "Indsζt indeks";
     SlotName[ polish ] = "Wstaw indeks";
-    SlotName[ portuguese_brazilian ] = "Inserir Νndice";
+    SlotName[ portuguese_brazilian ] = "Inserir νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ζΏε…¥";
     SlotName[ korean ] = "μƒ‰μΈ μ‚½μ…";
     SlotName[ chinese_simplified ] = "ζ’ε…¥η›®ε½•";
@@ -11056,7 +11056,7 @@ SfxSlotInfo FN_REMOVE_CUR_TOX
     SlotName[ danish ] = "Slet indeks";
     SlotName[ swedish ] = "Radera fφrteckning";
     SlotName[ polish ] = "Usuρ indeks";
-    SlotName[ portuguese_brazilian ] = "Excluir Νndice";
+    SlotName[ portuguese_brazilian ] = "Excluir νndice";
     SlotName[ japanese ] = "η›®ζ¬΅γ¨η΄ΆεΌ•γ®ε‰ι™¤";
     SlotName[ korean ] = "μƒ‰μΈ μ‚­μ ";
     SlotName[ chinese_simplified ] = "ε ι™¤η›®ε½•";
@@ -11109,7 +11109,7 @@ SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
     SlotName[ english_us ] = "Number Recognition";
     SlotName[ portuguese ] = "Number Recognition";
     SlotName[ russian ] = "Πΰροξηνΰβΰνθε χθρελ";
-    SlotName[ greek ] = "Number Recognition";
+    SlotName[ greek ] = "Αναγνώριση αριθμών";
     SlotName[ dutch ] = "Getalherkenning";
     SlotName[ french ] = "Reconnaissance des nombres";
     SlotName[ spanish ] = "Reconocimiento de nϊmero";
@@ -11139,7 +11139,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ english_us ] = "Update Charts";
     SlotName[ portuguese ] = "Update Charts";
     SlotName[ russian ] = "Ξανξβθςό δθΰγπΰμμϋ";
-    SlotName[ greek ] = "Update Charts";
+    SlotName[ greek ] = "Ενημέρωση διαγραμμάτων";
     SlotName[ dutch ] = "Diagrammen bijwerken";
     SlotName[ french ] = "Actualiser les diagrammes";
     SlotName[ spanish ] = "Actualizar diagramas";
@@ -11211,7 +11211,7 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ danish ] = "Close Preview";
     SlotName[ swedish ] = "Stδng fφrhandsgranskning";
     SlotName[ polish ] = "Close Preview";
-    SlotName[ portuguese_brazilian ] = "Close Preview";
+    SlotName[ portuguese_brazilian ] = "Fechar visualizaηγo";
     SlotName[ japanese ] = "ε°ε·γƒ—γƒ¬γƒ“γƒ¥γƒΌγ‚’ι–‰γγ‚‹";
     SlotName[ korean ] = "λ―Έλ¦¬ λ³΄κΈ° λ‹«κΈ°";
     SlotName[ chinese_simplified ] = "ε…³ι—­ι΅µιΆιΆ„θ§";
@@ -11241,7 +11241,7 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ danish ] = "Edit Footnote/Endnote";
     SlotName[ swedish ] = "Redigera fotnot/slutnot";
     SlotName[ polish ] = "Edit Footnote/Endnote";
-    SlotName[ portuguese_brazilian ] = "Edit Footnote/Endnote";
+    SlotName[ portuguese_brazilian ] = "Editar notas de rodapι / notas de fim";
     SlotName[ japanese ] = "θ„ζ³¨γ¨ζ–‡ζ«θ„ζ³¨γ®η·¨ι›†";
     SlotName[ korean ] = "κ°μ£Ό λ° λ―Έμ£Ό νΈμ§‘";
     SlotName[ chinese_simplified ] = "ηΌ–θΎ‘ζ³¨θ„/ε°Ύζ³¨";
@@ -11271,7 +11271,7 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ danish ] = "Select Text";
     SlotName[ swedish ] = "Markera text";
     SlotName[ polish ] = "Select Text";
-    SlotName[ portuguese_brazilian ] = "Select Text";
+    SlotName[ portuguese_brazilian ] = "Selecionar texto";
     SlotName[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®ιΈζ";
     SlotName[ korean ] = "ν…μ¤νΈ μ„ νƒ";
     SlotName[ chinese_simplified ] = "ι€‰ζ‹©ζ–‡ε­—";
@@ -11285,6 +11285,8 @@ SfxSlotInfo FN_READONLY_SELECTION_MODE
     SlotName[ hindi ] = "Select Text";
     SlotName[ slovak ] = "VybraΕ¥ text";
 };
+
+
 
 
 
