@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:19:43 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 07:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,13 @@
 #include <tools/fract.hxx>
 #endif
 
+#ifdef BIDI
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
+#endif
+#endif
+
+
 class OutputDevice;
 class Point;
 class SwWrongList;
@@ -90,6 +97,37 @@ class SwAttrHandler;
 
 #ifdef VERTICAL_LAYOUT
 class SwTxtFrm;
+#endif
+
+#ifdef BIDI
+
+/*************************************************************************
+ *                class SwScanner
+ * Hilfsklasse, die beim Spellen die Worte im gewuenschten Bereich
+ * nacheinander zur Verfuegung stellt.
+ *************************************************************************/
+
+class SwScanner
+{
+    XubString aWord;
+    const SwWrongList* pWrong;
+    SwTxtNode* pNode;
+    xub_StrLen nEndPos;
+    xub_StrLen nBegin;
+    xub_StrLen nLen;
+    BOOL bReverse;
+    BOOL bStart;
+    BOOL bIsOnlineSpell;
+public:
+    SwScanner( SwTxtNode* pNd, const SwWrongList* pWrng, xub_StrLen nStart,
+                xub_StrLen nEnde, BOOL bRev, BOOL bOS );
+    BOOL NextWord( LanguageType aLang );
+    const XubString& GetWord() const    { return aWord; }
+    xub_StrLen GetBegin() const         { return nBegin; }
+    xub_StrLen GetEnd() const           { return nBegin + nLen; }
+    xub_StrLen GetLen() const           { return nLen; }
+};
+
 #endif
 
 /*************************************************************************
@@ -106,6 +144,7 @@ private:
 #ifdef BIDI
     SvXub_StrLens aDirChg;
     SvBytes aDirType;
+    SvXub_StrLens aKashida;
 #endif
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
@@ -134,6 +173,9 @@ public:
     inline USHORT CountDirChg() const;
     inline xub_StrLen GetDirChg( const USHORT nCnt ) const;
     inline BYTE GetDirType( const USHORT nCnt ) const;
+
+    inline USHORT CountKashida() const;
+    inline xub_StrLen GetKashida( const USHORT nCnt ) const;
 #endif
 
     inline USHORT CountCompChg() const;
@@ -163,6 +205,28 @@ public:
     long Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
                    const USHORT nCompress, const USHORT nFontHeight,
                    Point* pPoint = NULL ) const;
+
+#ifdef BIDI
+/** Performes a kashida justification on the kerning array
+
+    @descr  Add some extra space for kashida justification to the
+            positions in the kerning array.
+    @param  pKernArray
+                The printers kerning array.
+    @param  pScrArray
+                The screen kerning array.
+    @param  nIdx
+                Start referring to the paragraph.
+    @param  nLen
+                The number of characters to be considered.
+    @param  nSpace
+                The value which has to be added to a kashida opportunity.
+    @return The number of kashida opportunities in the given range
+*/
+    USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
+                           xub_StrLen nIdx, xub_StrLen nLen,
+                           const USHORT nSpace = 0 ) const;
+#endif
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
@@ -183,6 +247,7 @@ inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 }
 
 #ifdef BIDI
+
 inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
 inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
 {
@@ -194,6 +259,14 @@ inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
     ASSERT( nCnt < aDirChg.Count(),"No DirType today!");
     return aDirType[ nCnt ];
 }
+
+inline USHORT SwScriptInfo::CountKashida() const { return aKashida.Count(); }
+inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
+{
+    ASSERT( nCnt < aKashida.Count(),"No Kashidas today!");
+    return aKashida[ nCnt ];
+}
+
 #endif
 
 inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
