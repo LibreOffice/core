@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:08 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,8 @@ PrinterJob::StartJob (
     rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
     mpJobHeader  = CreateSpoolFile (rtl::OUString::createFromAscii("psp_head"), aExt);
     mpJobTrailer = CreateSpoolFile (rtl::OUString::createFromAscii("psp_tail"), aExt);
+    if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
+        return sal_False;
 
     // write document header according to Document Structuring Conventions (DSC)
     WritePS (mpJobHeader,
@@ -498,8 +500,11 @@ PrinterJob::EndJob ()
 {
     // write document setup (done here because it
     // includes the accumulated fonts
-    writeSetup( mpJobHeader, m_aDocumentJobData );
+    if( mpJobHeader )
+        writeSetup( mpJobHeader, m_aDocumentJobData );
     m_pGraphics->OnEndJob();
+    if( ! (mpJobHeader && mpJobTrailer) )
+        return sal_False;
 
     // write document trailer according to Document Structuring Conventions (DSC)
     rtl::OStringBuffer aTrailer(512);
@@ -570,24 +575,35 @@ PrinterJob::EndJob ()
     AppendPS (pDestFILE, mpJobHeader, pBuffer);
     mpJobHeader->close();
 
+    sal_Bool bSuccess = sal_True;
     std::list< osl::File* >::iterator pPageBody;
     std::list< osl::File* >::iterator pPageHead;
     for (pPageBody  = maPageList.begin(), pPageHead  = maHeaderList.begin();
          pPageBody != maPageList.end() && pPageHead != maHeaderList.end();
          pPageBody++, pPageHead++)
     {
-        osl::File::RC nError = (*pPageHead)->open(OpenFlag_Read);
-        if (nError == osl::File::E_None)
+        if( *pPageHead )
         {
-            AppendPS (pDestFILE, *pPageHead, pBuffer);
-            (*pPageHead)->close();
+            osl::File::RC nError = (*pPageHead)->open(OpenFlag_Read);
+            if (nError == osl::File::E_None)
+            {
+                AppendPS (pDestFILE, *pPageHead, pBuffer);
+                (*pPageHead)->close();
+            }
         }
-        nError = (*pPageBody)->open(OpenFlag_Read);
-        if (nError == osl::File::E_None)
+        else
+            bSuccess = sal_False;
+        if( *pPageBody )
         {
-            AppendPS (pDestFILE, *pPageBody, pBuffer);
-            (*pPageBody)->close();
+            osl::File::RC nError = (*pPageBody)->open(OpenFlag_Read);
+            if (nError == osl::File::E_None)
+            {
+                AppendPS (pDestFILE, *pPageBody, pBuffer);
+                (*pPageBody)->close();
+            }
         }
+        else
+            bSuccess = sal_False;
     }
 
     AppendPS (pDestFILE, mpJobTrailer, pBuffer);
@@ -600,7 +616,7 @@ PrinterJob::EndJob ()
     else
         pclose (pDestFILE);
 
-    return sal_True;
+    return bSuccess;
 }
 
 sal_Bool
@@ -660,6 +676,9 @@ PrinterJob::StartPage (const JobData& rJobSetup, sal_Bool bNewJobData)
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);
 
+    if( ! (pPageHeader && pPageBody) )
+        return sal_False;
+
     /* #i7262# write setup only before first page
      *  don't do this in StartJob since the jobsetup there may be
      *  different.
@@ -706,6 +725,9 @@ PrinterJob::EndPage ()
 
     osl::File* pPageHeader = maHeaderList.back();
     osl::File* pPageBody   = maPageList.back();
+
+    if( ! (pPageBody && pPageHeader) )
+        return sal_False;
 
     // copy page to paper and write page trailer according to DSC
 
@@ -932,6 +954,12 @@ bool PrinterJob::writeProlog (osl::File* pFile)
         "rlineto closepath } def\n"
         "/rectfill { rectangle fill } def\n"
         "/rectstroke { rectangle stroke } def } if\n"
+        "/bshow { currentlinewidth 3 1 roll currentpoint 3 index show moveto\n"
+        "setlinewidth false charpath stroke setlinewidth } def\n"
+        "/bxshow { currentlinewidth 4 1 roll setlinewidth exch dup length 1 sub\n"
+        "0 1 3 -1 roll { 1 string 2 index 2 index get 1 index exch 0 exch put dup\n"
+        "currentpoint 3 -1 roll show moveto currentpoint 3 -1 roll false charpath\n"
+        "stroke moveto 2 index exch get 0 rmoveto } for pop pop setlinewidth } def\n"
         "\n"
         "/psp_lzwfilter { currentfile /ASCII85Decode filter /LZWDecode filter } def\n"
         "/psp_ascii85filter { currentfile /ASCII85Decode filter } def\n"
