@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-04 12:02:41 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Θμÿ τΰιλΰ ρξηδΰνξ θη";
         Text[ polish ] = "Generuj nazwκ pliku z";
         Text[ japanese ] = "Μ§²Ω–Ό‚Μw’θ‚Ν";
-        Text[ chinese_traditional ] = "ΐΙ®Χ¦WªΊ¥Ν¦¨¤θ¦΅";
+        Text[ chinese_traditional ] = "ΐΙ®Χ¦W²£¥Ν±q";
         Text[ arabic ] = "ΕδΤΗΑ ΗΣγ Ηαγαέ γδ";
         Text[ greek ] = "Δημιουργία ονόματος αρχείου από";
         Text[ korean ] = "·ΞΊΞΕΝ ΖΔΐΟ ΐΜΈ§ »ύΌΊ";
@@ -451,7 +451,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Σρςΰνξβκΰ βπσχνσώ";
         Text[ polish ] = "Ustawienie rκczne";
         Text[ japanese ] = "”CΣέ’θ";
-        Text[ chinese_traditional ] = "¤β¤uΉw³]";
+        Text[ chinese_traditional ] = "¤β°ΚΉw³]";
         Text[ arabic ] = "ΗαΕΪΟΗΟ ΗανΟζν";
         Text[ greek ] = "Χειροκίνητη ρύθμιση";
         Text[ korean ] = "ΌφµΏ Ό³Α¤";
@@ -495,7 +495,7 @@ ModalDialog DLG_MAILMERGE
         Text[ russian ] = "Ρξηδΰςό ξςδελόνξε ηΰδΰνθε οεχΰςθ";
         Text[ polish ] = "Utwσrz pojedyncze zadania wydruku";
         Text[ japanese ] = "Β•ΚσόΌή®Μή‚Μμ¬(~S)";
-        Text[ chinese_traditional ] = "¥Ν¦¨³ζ­Σ¦C¦L¥τ°Θ(~S)";
+        Text[ chinese_traditional ] = "²£¥Ν³ζ­Σ¦C¦L¥τ°Θ(~S)";
         Text[ arabic ] = "ΕδΤΗΑ ζΩΗΖέ ΨΘΗΪΙ έΡΟνΙ";
         Text[ greek ] = "Δημιουργία μεμονωμένων εργασιών εκτύπωσης";
         Text[ korean ] = "°Ά°ΆΐΗ ΐΞΌβ ΐΫΎχ(~S)";
