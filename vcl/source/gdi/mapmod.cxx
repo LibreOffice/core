@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mapmod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:47:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@ SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rImplMapMode )
 static ImplMapMode* ImplGetStaticMapMode( MapUnit eUnit )
 {
     static long aStaticImplMapModeAry[(MAP_LASTENUMDUMMY)*sizeof(ImplMapMode)/sizeof(long)];
+
+    // #i19496 check for out-of-bounds
+     if( eUnit >= MAP_LASTENUMDUMMY )
+        return (ImplMapMode*)aStaticImplMapModeAry;
 
     ImplMapMode* pImplMapMode = ((ImplMapMode*)aStaticImplMapModeAry)+eUnit;
     if ( !pImplMapMode->mbSimple )
