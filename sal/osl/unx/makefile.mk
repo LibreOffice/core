@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-12 10:54:12 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:21:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/file_stat.obj
 #.ENDIF
 
-.IF "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF
