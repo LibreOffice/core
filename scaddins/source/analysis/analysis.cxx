@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #define MY_SERVICE                  "com.sun.star.sheet.addin.Analysis"
 #define MY_IMPLNAME                 "com.sun.star.sheet.addin.AnalysisImpl"
 
+using namespace                 ::rtl;
+using namespace                 ::com::sun::star;
 
 //------------------------------------------------------------------
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,10 @@ public:
     virtual STRING SAL_CALL     getArgumentDescription( const STRING& aProgrammaticFunctionName, sal_Int32 nArgument ) THROWDEF_RTE;
     virtual STRING SAL_CALL     getProgrammaticCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
     virtual STRING SAL_CALL     getDisplayCategoryName( const STRING& aProgrammaticFunctionName ) THROWDEF_RTE;
-    //sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames( string aProgrammaticName );
-    virtual SEQofLocName SAL_CALL   getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE;
+
+                                // XCompatibilityNames
+    virtual SEQofLocName SAL_CALL getCompatibilityNames( const STRING& aProgrammaticName ) THROWDEF_RTE;
+
                                 // XLocalizable
     virtual void SAL_CALL       setLocale( const CSS::lang::Locale& eLocale ) THROWDEF_RTE;
     virtual CSS::lang::Locale SAL_CALL getLocale(  ) THROWDEF_RTE;

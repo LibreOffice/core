@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
+ *  last change: $Author: dr $ $Date: 2001-10-02 07:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,6 @@
 //#include "analysis_solmath.hxx"
 
 
-using namespace com::sun::star;
-using namespace rtl;
-
-
 class ResMgr;
 class SortedIndividualInt32List;
 
@@ -101,7 +97,7 @@ sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear, sal_Bool bLeapYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
 void                DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear );
-sal_Int32           GetNullDate( const REF( beans::XPropertySet )& xOptions ) THROWDEF_RTE;
+sal_Int32           GetNullDate( const REF( CSS::beans::XPropertySet )& xOptions ) THROWDEF_RTE;
 sal_Int32           GetDiffDate360(
                         sal_uInt16 nDay1, sal_uInt16 nMonth1, sal_uInt16 nYear1, sal_Bool bLeapYear1,
                         sal_uInt16 nDay2, sal_uInt16 nMonth2, sal_uInt16 nYear2,
@@ -354,7 +350,7 @@ struct FuncDataBase
 class FuncData
 {
 private:
-    OUString                aIntName;
+    ::rtl::OUString         aIntName;
     sal_uInt16              nUINameID;
     sal_uInt16              nDescrID;           // leads also to parameter descriptions!
     sal_Bool                bDouble;            // flag for names, wich already exist in Calc
@@ -374,7 +370,7 @@ public:
     inline sal_Bool         HasIntParam( void ) const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
-    inline sal_Bool         Is( const OUString& rCompareTo ) const;
+    inline sal_Bool         Is( const ::rtl::OUString& rCompareTo ) const;
 
     inline const StringList&    GetCompNameList( void ) const;
 
@@ -397,7 +393,7 @@ public:
 
 class FuncDataList : private MyList
 {
-    OUString                aLastName;
+    ::rtl::OUString         aLastName;
     sal_uInt32              nLast;
 public:
                             FuncDataList( ResMgr& );
@@ -406,7 +402,7 @@ public:
     inline const FuncData*  Get( sal_uInt32 nIndex ) const;
     MyList::Count;
 
-    const FuncData*         Get(  const OUString& aProgrammaticName ) const;
+    const FuncData*         Get( const ::rtl::OUString& aProgrammaticName ) const;
 };
 
 
@@ -840,7 +836,7 @@ inline sal_Bool FuncData::HasIntParam( void ) const
 }
 
 
-inline sal_Bool FuncData::Is( const OUString& r ) const
+inline sal_Bool FuncData::Is( const ::rtl::OUString& r ) const
 {
     return aIntName == r;
 }
