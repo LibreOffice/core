@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:01:43 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,7 +617,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ danish ] = "Diasovergang ved klik på baggrunden" ;
         Text [ portuguese ] = "Transição diapos.: clique plano de ~fundo" ;
         Text [ portuguese_brazilian ] = "Diawechsel bei ~Klick auf Hintergrund" ;
-        Text[ chinese_simplified ] = "µ¥»÷±³¾°¸ü»»ÑİÊ¾ÎÄ¸å(~M)";
+        Text[ chinese_simplified ] = "µ¥»÷±³¾°£¬¸ü»»ÑİÊ¾ÎÄ¸åÒ³Ãæ(~M)";
         Text[ russian ] = "Ïåğåõîä ñëàéäà ïî ùåë÷êó íà ôîíå";
         Text[ polish ] = "Zmiana ~slajdu przy klikniêciu t³a";
         Text[ japanese ] = "”wŒi‚ğ¸Ø¯¸‚µ‚Ä‰æ–ÊØ‚è‘Ö‚¦(~M)";
