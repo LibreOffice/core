@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:05:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@
 #ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
 #endif
+#include "LayerTabBar.hxx"
 
 // #97016# IV
 #ifndef _SVDITER_HXX
@@ -596,7 +597,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                 {
                     // The type of reaction depends on whether the layer
                     // mode is active.
-                    if (static_cast<DrawViewShell*>(pViewShell)->GetLayerMode())
+                    if (static_cast<DrawViewShell*>(pViewShell)
+                        ->IsLayerModeActive())
                     {
                         // With the layer mode active pressing page-up
                         // moves to the previous layer.
@@ -648,7 +650,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                     // The type of reaction depends on whether the layer
                     // mode is active.
                     if (static_cast<DrawViewShell*>(pViewShell)
-                        ->GetLayerMode())
+                        ->IsLayerModeActive())
                     {
                         // With the layer mode active pressing page-down
                         // moves to the next layer.
