@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
 #include <drafts/com/sun/star/geometry/AffineMatrix2D.hpp>
 #endif
-
+#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_MATRIX2D_HPP_
+#include <drafts/com/sun/star/geometry/Matrix2D.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <drafts/com/sun/star/rendering/RenderState.hpp>
 #endif
@@ -74,6 +76,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_COMPOSITEOPERATION_HPP__
 #include <drafts/com/sun/star/rendering/CompositeOperation.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP__
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -91,11 +99,15 @@
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#endif
 
 #include <canvas/canvastools.hxx>
 
 #include <memory>
 #include <algorithm>
+#include <cstdio>
 
 
 using namespace ::drafts::com::sun::star;
@@ -103,9 +115,14 @@ using namespace ::com::sun::star;
 
 namespace canvas
 {
-
     namespace tools
     {
+        // prototypes
+        uno::Sequence< uno::Any >& getVCLDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
+        uno::Sequence< uno::Any >& getDXDeviceInfo( uno::Reference< rendering::XGraphicDevice > xDevice, uno::Sequence< uno::Any >& o_rxParams );
+
+        // ---------------------------------------------------------------------
+
         rendering::RenderState& initRenderState( rendering::RenderState& renderState )
         {
             // setup identity transform
@@ -213,7 +230,7 @@ namespace canvas
             ::basegfx::B2DHomMatrix     aTmpMatrix;
             geometry::AffineMatrix2D    convertedMatrix;
 
-            resultViewState.Clip = NULL; // TODO: intersect clippings
+            resultViewState.Clip = NULL; // TODO(F2): intersect clippings
 
             return setViewStateTransform(
                 resultViewState,
@@ -230,6 +247,16 @@ namespace canvas
             matrix.m10 = 0.0;
             matrix.m11 = 1.0;
             matrix.m12 = 0.0;
+
+            return matrix;
+        }
+
+        geometry::Matrix2D& setIdentityMatrix2D( geometry::Matrix2D& matrix )
+        {
+            matrix.m00 = 1.0;
+            matrix.m01 = 0.0;
+            matrix.m10 = 0.0;
+            matrix.m11 = 1.0;
 
             return matrix;
         }
@@ -372,7 +399,7 @@ namespace canvas
             if( xDenom != 0.0 && yDenom != 0.0 )
                 aCorrectedTransform.scale( destRect.getWidth() / xDenom,
                                            destRect.getHeight() / yDenom );
-            // TODO: error handling
+            // TODO(E2): error handling
 
             // translate to final position
             aCorrectedTransform.translate( destRect.getMinX(),
@@ -384,6 +411,37 @@ namespace canvas
             return o_transform;
         }
 
+        uno::Sequence< uno::Any >& getDeviceInfo( const uno::Reference< rendering::XCanvas >& i_rxCanvas,
+                                                  uno::Sequence< uno::Any >&                  o_rxParams )
+        {
+            o_rxParams.realloc( 0 );
+
+            if( i_rxCanvas.is() )
+            {
+                try
+                {
+                    uno::Reference< rendering::XGraphicDevice > xDevice( i_rxCanvas->getDevice(),
+                                                                         uno::UNO_QUERY_THROW );
+
+                    uno::Reference< lang::XServiceInfo >  xServiceInfo( xDevice,
+                                                                        uno::UNO_QUERY_THROW );
+                    uno::Reference< beans::XPropertySet > xPropSet( xDevice,
+                                                                    uno::UNO_QUERY_THROW );
+
+                    o_rxParams.realloc( 2 );
+
+                    o_rxParams[ 0 ] = uno::makeAny( xServiceInfo->getImplementationName() );
+                    o_rxParams[ 1 ] = uno::makeAny( xPropSet->getPropertyValue(
+                                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DeviceHandle") ) ) );
+                }
+                catch( uno::Exception& )
+                {
+                    // ignore, but return empty sequence
+                }
+            }
+
+            return o_rxParams;
+        }
     } // namespace tools
 
 } // namespace canvas
