@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:29 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #endif
 
 #include <tools/fsys.hxx>
+#include <tools/intn.hxx>
 
 #ifndef _RSCERROR_H
 #include <rscerror.h>
@@ -141,13 +142,13 @@ USHORT          nRefDeep     = 10;
 *************************************************************************/
 void RscCmdLine::Init()
 {
-    nSourceCharSet  = RTL_TEXTENCODING_MS_1252;
     nCommands       = 0;
-    nLangTypeId     = LANGUAGE_DONTKNOW;
     nByteOrder      = RSC_BIGENDIAN;
 
     DirEntry aEntry;
     aPath = ByteString( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US ); //Immer im Aktuellen Pfad suchen
+    m_aOutputFiles.clear();
+    m_aOutputFiles.push_back( OutputFile() );
 }
 
 /*************************************************************************
@@ -194,6 +195,9 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
     i = 1;
     while( ppStr && i < (USHORT)(aCmdLine.GetCount() -1) )
     {
+#ifdef DEBUG
+        fprintf( stderr, "CmdLineArg: \"%s\"\n", *ppStr );
+#endif
         if( '-' == **ppStr )
         {
             if( !rsc_stricmp( (*ppStr) + 1, "h" )
@@ -256,7 +260,9 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fs", 2 ) )
             { // anderer Name fuer .rc-file
-                aOutputRc = (*ppStr) + 3;
+                if( m_aOutputFiles.back().aOutputRc.Len() )
+                    m_aOutputFiles.push_back( OutputFile() );
+                m_aOutputFiles.back().aOutputRc = (*ppStr) + 3;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp", 2 ) )
             { // anderer Name fuer .srs-file
@@ -293,6 +299,7 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "CHARSET_", 8 ) )
             {
+                CharSet nSourceCharSet = RTL_TEXTENCODING_ASCII_US;
                 if( !rsc_stricmp( (*ppStr) + 9, "ANSI" ) )
                      nSourceCharSet = RTL_TEXTENCODING_MS_1252;
                 else if( !rsc_stricmp( (*ppStr) + 9, "MAC" ) )
@@ -325,17 +332,23 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                         break;
                     }
                 }
+                if( m_aOutputFiles.back().nSourceCharSet != RTL_TEXTENCODING_ASCII_US )
+                    m_aOutputFiles.push_back( OutputFile() );
+                m_aOutputFiles.back().nSourceCharSet = nSourceCharSet;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "lg" ) )
             {
-                nLangTypeId = LANGUAGE_DONTKNOW;
+                m_aOutputFiles.back().nLangTypeId = LANGUAGE_DONTKNOW;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "lg", 2 ) )
             {
-                nLangTypeId = LANGUAGE_DONTKNOW;
-#define LT(Name)                                            \
-                if( !rsc_stricmp( (*ppStr) + 3, #Name ) )   \
-                    nLangTypeId = LANGUAGE_##Name
+#define LT(Name)                                                                    \
+                if( !rsc_stricmp( (*ppStr) + 3, #Name ) )                           \
+                {                                                                   \
+                    if( m_aOutputFiles.back().nLangTypeId != LANGUAGE_DONTKNOW )    \
+                        m_aOutputFiles.push_back( OutputFile() );                   \
+                    m_aOutputFiles.back().nLangTypeId = LANGUAGE_##Name ;           \
+                }
                 LT( SYSTEM              );
 #include <rsclang.c>
                 LT( USER1               );
@@ -348,8 +361,12 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
                 LT( USER8               );
                 LT( USER9               );
                 if( !rsc_stricmp( (*ppStr) + 3, "EXTERN" ) )
-                    nLangTypeId = LANGUAGE_USER9;
-                if( nLangTypeId == LANGUAGE_DONTKNOW )
+                {
+                    if( m_aOutputFiles.back().nLangTypeId != LANGUAGE_DONTKNOW )
+                        m_aOutputFiles.push_back( OutputFile() );
+                    m_aOutputFiles.back().nLangTypeId = LANGUAGE_USER9;
+                }
+                if( m_aOutputFiles.back().nLangTypeId == LANGUAGE_DONTKNOW )
                     pEH->FatalError( ERR_UNKNOWNSW, RscId(), *ppStr );
             }
             else
@@ -369,31 +386,17 @@ RscCmdLine::RscCmdLine( short argc, char ** argv, RscError * pEH )
     // was an inputted file specified
     else if( aInputList.Count() )
     {
-        if( ! aOutputRc.Len() )
-            aOutputRc  = OutputFile( *aInputList.First(), "rc"  );
+        ::std::list<OutputFile>::iterator it;
+        for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
+        {
+            if( ! it->aOutputRc.Len() )
+                it->aOutputRc  = ::OutputFile( *aInputList.First(), "rc"  );
+        }
         if( ! bOutputSrsIsSet )
-            aOutputSrs = OutputFile( *aInputList.First(), "srs" );
+            aOutputSrs = ::OutputFile( *aInputList.First(), "srs" );
     }
     else if( !(nCommands & PRINTSYNTAX_FLAG) )
         pEH->FatalError( ERR_NOINPUT, RscId() );
-}
-
-/*************************************************************************
-|*
-|*    RscCmdLine::SetInputFile()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 22.04.91
-|*    Letzte Aenderung  MM 22.04.91
-|*
-*************************************************************************/
-void RscCmdLine::SetInputFile( const ByteString & rInputName )
-{
-    ByteString * pString;
-
-    while( NULL != (pString = aInputList.Remove( (ULONG)0 )) )
-        delete pString;
-    aInputList.Insert( new ByteString( rInputName ) );
 }
 
 /*************************************************************************
@@ -474,8 +477,6 @@ RscCompiler::~RscCompiler()
 
     if( fExitFile )
         fclose( fExitFile );
-    if( aTmpOutputRc.Len() )
-        unlink( aTmpOutputRc.GetBuffer() );
     if( aTmpOutputHxx.Len() )
         unlink( aTmpOutputHxx.GetBuffer() );
     if( aTmpOutputCxx.Len() )
@@ -662,15 +663,6 @@ void RscCompiler::EndCompile()
         unlink( aTmpOutputSrc.GetBuffer() );// TempDatei  loeschen
         aTmpOutputSrc = ByteString();
     }
-
-    if( aTmpOutputRc.Len() )
-    {
-        // kopiere von TMP auf richtigen Namen
-        unlink( pCL->aOutputRc.GetBuffer() );    // Zieldatei loeschen
-        Append( pCL->aOutputRc, aTmpOutputRc );
-        unlink( aTmpOutputRc.GetBuffer() ); // TempDatei  loeschen
-        aTmpOutputRc = ByteString();
-    }
 }
 
 /*************************************************************************
@@ -705,8 +697,7 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
             RscFile         * pFNTmp;
             ByteString        aPathName;
             RscDepend       * pDep;
-            RscFileInst       aFileInst( pTC, lFileKey, lFileKey,
-                                         finput, pCL->nSourceCharSet );
+            RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
             pFName->bScanned = TRUE;
             ::IncludeParser( &aFileInst );
@@ -787,8 +778,7 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey )
             }
             else
             {
-                RscFileInst aFileInst( pTC, lFileKey, lFileKey, finput,
-                                       pCL->nSourceCharSet );
+                RscFileInst aFileInst( pTC, lFileKey, lFileKey, finput );
                 // Parser schreibt Punkte fuer jedes Objekt auf
                 // unterster Ebene nach stdout
                 pTC->pEH->StdOut( "reading file " );
@@ -851,20 +841,44 @@ ERRTYPE RscCompiler::Link()
     FILE *  foutput;
     ERRTYPE aError;
 
+#ifdef UNX
+#define PATHSEP '/'
+#else
+#define PATHSEP '\\'
+#endif
+
     if( !(pCL->nCommands & NOLINK_FLAG) )
     {
-        // rc-Datei schreiben
-        aTmpOutputRc = ::GetTmpFileName();
-        if ( NULL == (fExitFile = foutput = fopen( aTmpOutputRc.GetBuffer(), "wb" )) )
-            pTC->pEH->FatalError( ERR_OPENFILE, RscId(), aTmpOutputRc.GetBuffer() );
+        ::std::list<RscCmdLine::OutputFile>::const_iterator it;
+        for( it = pCL->m_aOutputFiles.begin(); it != pCL->m_aOutputFiles.end(); ++it )
+        {
+            // rc-Datei schreiben
+            ByteString aDir( it->aOutputRc );
+            aDir.SetToken( aDir.GetTokenCount( PATHSEP )-1, PATHSEP, ByteString() );
+            char* pTmp = tempnam( aDir.GetBuffer(), "rsc" );
+            if ( NULL == (fExitFile = foutput = fopen( pTmp, "wb" )) )
+                pTC->pEH->FatalError( ERR_OPENFILE, RscId(), pTmp );
 
-        pTC->pEH->StdOut( "Generating .rc file\n" );
+            pTC->pEH->StdOut( "Generating .rc file\n" );
 
-        // Schreibe Datei
-        aError = pTC->WriteRc( foutput );
+            // Schreibe Datei
+#ifdef DEBUG
+            fprintf( stderr, "using tmp file %s\n", pTmp );
+#endif
+            pTC->ChangeLanguage( it->nLangTypeId );
+            pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
+            pTC->SetSourceCharSet( it->nSourceCharSet );
+            aError = pTC->WriteRc( foutput );
 
-        fclose( foutput );
-        fExitFile = NULL;
+            fclose( foutput );
+            fExitFile = NULL;
+#ifdef DEBUG
+            fprintf( stderr, "move %s -> %s\n", pTmp, it->aOutputRc.GetBuffer() );
+#endif
+            link( pTmp, it->aOutputRc.GetBuffer() );
+            unlink( pTmp );
+            free( pTmp );
+        }
     };
 
     // hxx-Datei schreiben

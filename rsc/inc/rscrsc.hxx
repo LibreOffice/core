@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrsc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <rsctools.hxx>
 #endif
 
+#include <list>
+
 class RscTypCont;
 
 /****************** T Y P E S ********************************************/
@@ -93,22 +95,31 @@ public:
     RscStrList          aInputList;     // Liste der Quelldateien
     RscStrList          aSymbolList;    // Liste der Symbole
     ByteString          aPath;        // Liste der Pfade
-    CharSet             nSourceCharSet; // Welcher Quellzeichensatz
-    LanguageType        nLangTypeId;    // Globale Sprachtyp
     RSCBYTEORDER_TYPE   nByteOrder;
     short               nCommands;      // Steuerbits
-    ByteString          aOutputSrs;     // Name der Srs-Ausgabedatei
-    ByteString          aOutputRc;      // Name der Rc-Ausgabedatei
     ByteString          aOutputLst;     // Name der List-Ausgabedatei
+    ByteString          aOutputSrs;     // Name der Srs-Ausgabedatei
     ByteString          aOutputSrc;     // Name der Src-Ausgabedatei
     ByteString          aOutputRcCtor;  // Name der Ctor-Ausgabedatei
     ByteString          aOutputCxx;     // Name der Cxx-Ausgabedatei
     ByteString          aOutputHxx;     // Name der Hxx-Ausgabedatei
 
+    struct OutputFile
+    {
+        LanguageType        nLangTypeId;    // Globale Sprachtyp
+        CharSet             nSourceCharSet; // Welcher Quellzeichensatz
+        ByteString          aOutputRc;      // Name der Rc-Ausgabedatei
+
+        OutputFile() :
+                nLangTypeId( LANGUAGE_DONTKNOW ),
+                nSourceCharSet( RTL_TEXTENCODING_ASCII_US )
+        {}
+    };
+    ::std::list<OutputFile>                     m_aOutputFiles;
+
                         RscCmdLine( short argc, char ** argv, RscError * pEH );
                         RscCmdLine();
 
-    void                SetInputFile( const ByteString & rInputName );
                         ~RscCmdLine();
 };
 /****************** R s c ************************************************/
@@ -116,7 +127,6 @@ class RscCompiler
 {
 private:
     RscStrList      aTmpFileList;   // Liste der Tmp-Dateien
-    ByteString      aTmpOutputRc;   // Name der TempRc-Ausgabedatei
     ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
     ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
     ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@ int cdecl main ( int argc, char ** argv) {
 #ifdef MAC
     InitCursorCtl( 0 );
 #endif
+#ifdef DEBUG
+    fprintf( stderr, "debugging %s\n", argv[0] );
+#endif
 
     ERRTYPE     aError;
 
@@ -135,9 +138,9 @@ int cdecl main ( int argc, char ** argv) {
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
 #endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
-                                             pCmdLine->nLangTypeId,
+                                             pCmdLine->m_aOutputFiles.front().nLangTypeId,
                                              pCmdLine->nByteOrder,
-                                             pCmdLine->nSourceCharSet,
+                                             pCmdLine->m_aOutputFiles.front().nSourceCharSet,
                                              pCmdLine->aPath,
                                              pCmdLine->nCommands );
 

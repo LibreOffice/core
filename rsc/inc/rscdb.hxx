@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,20 +374,26 @@ public:
     LanguageType    GetDefLanguage() const
     { return (LanguageType)nDfltLangTypeId; }
     LanguageType    ChangeLanguage( LanguageType eLang )
-                    {
-                        LanguageType nOldLang = (LanguageType)nLangTypeId;
-                        nLangTypeId = eLang;
-                        return nOldLang;
-                    }
+    {
+        LanguageType nOldLang = (LanguageType)nLangTypeId;
+        nLangTypeId = eLang;
+        return nOldLang;
+    }
     LanguageType    ChangeDefLanguage( LanguageType eLang )
-                    {
-                        LanguageType nOldLang = (LanguageType)nDfltLangTypeId;
-                        nDfltLangTypeId = eLang;
-                        return nOldLang;
-                    }
+    {
+        LanguageType nOldLang = (LanguageType)nDfltLangTypeId;
+        nDfltLangTypeId = eLang;
+        return nOldLang;
+    }
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
     CharSet         GetSourceCharSet() const { return nSourceCharSet; }
+    CharSet         SetSourceCharSet( CharSet aCharSet )
+    {
+        CharSet aOld = nSourceCharSet;
+        nSourceCharSet = aCharSet;
+        return aOld;
+    }
     void            SetSearchPath( const ByteString & rStr) { aSearchPath = rStr; }
     ByteString      GetSearchPath() const { return aSearchPath; }
     void        InsertType( RscTop * pType )

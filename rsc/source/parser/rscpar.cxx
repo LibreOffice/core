@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,6 @@
 *************************************************************************/
 void RscFileInst::Init()
 {
-    SetCharSet( RTL_TEXTENCODING_MS_1252 );
-
     nLineNo = 0;
     nLineBufLen = 256;
     pLine = (char *)RscMem::Malloc( nLineBufLen );
@@ -105,8 +103,7 @@ void RscFileInst::Init()
 |*
 *************************************************************************/
 RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                          ULONG lFIndex, FILE * fFile,
-                          rtl_TextEncoding nSourceCharSet )
+                          ULONG lFIndex, FILE * fFile )
 {
     pTypCont = pTC;
     Init();
@@ -115,16 +112,13 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
     lSrcIndex = lIndexSrc;
     fInputFile = fFile;
 
-    SetCharSet( nSourceCharSet );
-
     //Status: Zeiger am Ende des Lesepuffers
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
     pInput    = (char *)RscMem::Malloc( nInputBufLen );
 }
 
 RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                          ULONG lFIndex, const ByteString& rBuf,
-                          rtl_TextEncoding nSourceCharSet )
+                          ULONG lFIndex, const ByteString& rBuf )
 {
     pTypCont     = pTC;
     Init();
@@ -133,8 +127,6 @@ RscFileInst::RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
     fInputFile   = NULL;
     nInputPos    = 0;
     nInputEndPos = rBuf.Len();
-
-    SetCharSet( nSourceCharSet );
 
     // Muss groesser sein wegen Eingabeende bei nInputBufLen < nInputEndPos
     nInputBufLen = nInputEndPos +1;

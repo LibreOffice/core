@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:30 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
         if( '@' == **(ppArgv +i) ){ // wenn @, dann Response-Datei
             if( NULL == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
                 return( (*(ppArgv +i)) );
-
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
             while( nItems )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,6 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 static BOOL CallRsc2( ByteString aRsc2Name,
                       RscStrList * pInputList,
                       ByteString aSrsName,
-                      ByteString aRcName,
                       RscPtrPtr * pCmdLine )
 {
     RscPtrPtr       aNewCmdL;       // Kommandozeile
@@ -248,7 +247,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         {
             if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp", 3 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo", 3 )
-              || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fs", 3 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-pp", 3 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 )
               || !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 )
@@ -264,8 +262,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
                          (const char *)pCmdLine->GetEntry( i ) );
         };
 
-        fprintf( fRspFile, "%s -fs%s",
-                 aSrsName.GetBuffer(), aRcName.GetBuffer() );
+        fprintf( fRspFile, aSrsName.GetBuffer() );
 
         pString = pInputList->First();
         while( pString )
@@ -297,28 +294,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 }
 
 /*************************************************************************
-|*    CallRes
-|*
-|*    Beschreibung
-*************************************************************************/
-static BOOL CallRes( ByteString aRcName, ByteString aResName )
-{
-    short       nExit;
-
-    unlink( aResName.GetBuffer() );   // Zieldatei loeschen
-    printf( "Copy %s to %s\n", aRcName.GetBuffer(), aResName.GetBuffer() );
-    if( !Append( aResName, aRcName ) )
-    {
-        printf( "Cannot open file <%s or %s>\n",
-                aResName.GetBuffer(), aRcName.GetBuffer() );
-        nExit = 1;
-    }
-    else
-        nExit = 0;
-    return( nExit == 0 );
-}
-
-/*************************************************************************
 |*
 |*    main()
 |*
@@ -343,7 +318,6 @@ int cdecl main ( int argc, char ** argv)
     ByteString      aPrePro( "rscpp" );
     ByteString      aRsc2Name( "rsc2" );
     ByteString      aSrsName;
-    ByteString      aRcName;
     ByteString      aResName;
     RscStrList      aInputList;
     RscStrList      aTmpList;
@@ -396,10 +370,6 @@ int cdecl main ( int argc, char ** argv)
             { // anderer Name fuer .res-file
                 aResName = (*ppStr) + 3;
             }
-            else if( !rsc_strnicmp( (*ppStr) + 1, "fs", 2 ) )
-            { // anderer Name fuer .rc-file
-                aRcName = (*ppStr) + 3;
-            }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp", 2 ) )
             { // anderer Name fuer .srs-file
                 bSetSrs  = TRUE;
@@ -420,8 +390,6 @@ int cdecl main ( int argc, char ** argv)
         /* build the output file names          */
         if( ! aResName.Len() )
             aResName = OutputFile( *aInputList.First(), "res" );
-        if( ! aRcName.Len() )
-            aRcName  = OutputFile( *aInputList.First(), "rc"  );
         if( ! bSetSrs )
         {
             aSrsName = "-fp";
@@ -456,7 +424,7 @@ int cdecl main ( int argc, char ** argv)
     if( !bError )
     {
         if( !CallRsc2( aRsc2Name, bPrePro ? &aTmpList : &aInputList,
-                       aSrsName, aRcName, &aCmdLine ) )
+                       aSrsName, &aCmdLine ) )
         {
             if( !bHelp )
             {
@@ -471,17 +439,6 @@ int cdecl main ( int argc, char ** argv)
     {
         unlink( pString->GetBuffer() );
         pString = aTmpList.Next();
-    };
-
-    if( !bError && bResFile )
-    {
-        if( !CallRes( aRcName, aResName ) )
-        {
-            printf( "Error in system resource compiler\n" );
-            bError = TRUE;
-        }
-        else
-            unlink( aRcName.GetBuffer() );
     };
 
     return( bError );

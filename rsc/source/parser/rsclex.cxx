@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
                 pBuf[i++]   = c;
         }
         pBuf[i++] = '\0';
-        //pStr = pTokenVal->string = RscChar::MakeUTF8( pBuf, pFI->GetCharSet() );
         pStr = pTokenVal->string = pBuf;
-        //PutStringBack( pBuf );
         return( STRING );
     }
     if (isdigit (c)){

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@ class RscFileInst
     ERRTYPE             aFirstError;// Erster Fehler
     USHORT              nErrorLine; // Zeile des ersten Fehlers
     USHORT              nErrorPos;  // Position des ersten Fehlers
-    rtl_TextEncoding    nCharSet;   // Zeichensatz der einzulesenden Datei
     BOOL                bIncLine;   // Muss Zeilennummer incrementiert werden
     USHORT              nLineNo;    // Zeile in der Eingabedatei
     ULONG               lFileIndex; // Index auf Eingabedatei
@@ -99,15 +98,11 @@ public:
     RscTypCont *        pTypCont;
     void    Init();  // ctor initialisieren
             RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                         ULONG lFileIndex, FILE * fFile,
-                         rtl_TextEncoding nSourceCharSet );
+                         ULONG lFileIndex, FILE * fFile );
             RscFileInst( RscTypCont * pTC, ULONG lIndexSrc,
-                         ULONG lFileIndex, const ByteString &,
-                         rtl_TextEncoding nSourceCharSet );
+                         ULONG lFileIndex, const ByteString & );
             ~RscFileInst();
     BOOL    IsEof() const { return bEof; }
-    void    SetCharSet( rtl_TextEncoding nSet ) { nCharSet = nSet; }
-    UINT16  GetCharSet() const { return (UINT16)nCharSet; }
     void    SetFileIndex( ULONG lFIndex ) { lFileIndex = lFIndex;  }
     ULONG   GetFileIndex()                { return( lFileIndex );  }
     ULONG   GetSrcIndex()                 { return( lSrcIndex );   }
