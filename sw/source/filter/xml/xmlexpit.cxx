@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:57:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,6 +1123,18 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
                 if( bOk )
                     aOut.append( sValue );
             }
+        }
+        break;
+
+        case RES_COLLAPSING_BORDERS:
+        {
+            const SfxBoolItem* pBorders = PTR_CAST(SfxBoolItem, &rItem);
+            DBG_ASSERT( pBorders != NULL, "Wrong RES-ID" );
+
+            aOut.append( pBorders->GetValue()
+                         ? GetXMLToken( XML_COLLAPSING )
+                         : GetXMLToken( XML_SEPARATING ) );
+            bOk = sal_True;
         }
         break;
 
