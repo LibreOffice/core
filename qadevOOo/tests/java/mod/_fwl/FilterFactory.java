@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterFactory.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:28:33 $
+ *  last change:$Date: 2004-01-28 19:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package mod._fwl;
 
+import com.sun.star.beans.NamedValue;
 import java.io.PrintWriter;
 import java.util.Vector;
 
@@ -114,7 +115,7 @@ public class FilterFactory extends TestCase {
 
         try {
             oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.comp.framework.FilterFactory") ;
+                ("com.sun.star.document.FilterFactory") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
             e.printStackTrace(log);
@@ -142,7 +143,9 @@ public class FilterFactory extends TestCase {
         PropertyValue instanceProp = new PropertyValue();
         try{
             instance = (Object[]) xNA.getByName(filterName);
-            instanceProp = (PropertyValue) instance[9];
+            PropertyValue[] props = (PropertyValue[]) instance;
+            instanceProp = (PropertyValue) getPropertyValue
+                    (((PropertyValue[]) instance), "FilterService"); //instance[9];
         } catch (com.sun.star.container.NoSuchElementException e){
             throw new StatusException(
             Status.failed("Couldn't get elements from object"));
@@ -151,18 +154,12 @@ public class FilterFactory extends TestCase {
             Status.failed("Couldn't get elements from object"));
         }
 
-        log.println("adding INSTANCEn as obj relation to environment");
+        log.println("adding INSTANCE 1 as obj relation to environment");
 
-        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
-
-        for (int n = 1; n < (THRCNT + 1); n++) {
-            log.println("adding INSTANCE" + n +
-                        " as obj relation to environment");
-
-            instanceProp.Value = "INSTANCE"+n + System.currentTimeMillis();
-            instance[9] = instanceProp;
-            tEnv.addObjRelation("INSTANCE" + n, instance);
-        }
+        //instanceProp.Value = "INSTANCE1";
+        setPropertyValueValue((PropertyValue[])instance, "UserData", "INSTANCE1");
+        //instance[9] = instanceProp;
+        tEnv.addObjRelation("INSTANCE" +1, instance);
 
 
         // XMSF
@@ -171,6 +168,7 @@ public class FilterFactory extends TestCase {
         for (int i = 0; i < filterNames.length; i++) {
             PropertyValue[] filterProps = null;
             try {
+                System.out.println(filterNames[i]);
                 filterProps = (PropertyValue[])
                     xNA.getByName(filterNames[i]);
             } catch (com.sun.star.lang.WrappedTargetException e) {
@@ -178,11 +176,12 @@ public class FilterFactory extends TestCase {
             } catch (com.sun.star.container.NoSuchElementException e) {
                 throw new StatusException("Couldn't create relation", e);
             }
-
-            String filterImpl = (String) getPropertyValue
+            //System.out.println("Hallo Welt");
+            String filterImpl = (String) getPropertyValueValue
                 (filterProps, "FilterService");
+          //      System.out.println("FILTER:" + filterImpl);
             if (filterImpl != null && filterImpl.length() > 0) {
-                String filterType = (String) getPropertyValue
+                String filterType = (String) getPropertyValueValue
                     (filterProps, "Type");
                 vFTypes.add(filterType);
                 PropertyValue prop = new PropertyValue();
@@ -200,13 +199,44 @@ public class FilterFactory extends TestCase {
         tEnv.addObjRelation("XMSF.Args",
             vFArgs.toArray(new Object[vFArgs.size()][]));
 
+        // com.sun.star.container.XContainerQuery
+        NamedValue[] querySequenze = new NamedValue[1];
+        NamedValue query = new NamedValue();
+        query.Name = "Name";
+        query.Value = "Rich Text Format";
+        querySequenze[0] = query;
+
+        tEnv.addObjRelation("XContainerQuery.createSubSetEnumerationByProperties",
+            querySequenze);
+
+
         return tEnv;
     } // finish method getTestEnvironment
 
-    protected Object getPropertyValue(PropertyValue[] props, String pName) {
+    protected Object getPropertyValueValue(PropertyValue[] props, String pName) {
         int i = 0;
-        while (i < props.length && !props[i].Name.equals(pName)) i++;
+        while (i < props.length && !props[i].Name.equals(pName)) {
+            i++;
+        }
         return i < props.length ? props[i].Value : null;
+
+    }
+
+    protected void setPropertyValueValue(PropertyValue[] props, String pName, Object pValue) {
+        int i = 0;
+        while (i < props.length && !props[i].Name.equals(pName)) {
+            i++;
+        }
+        props[i].Value = pValue;
+    }
+
+    protected PropertyValue getPropertyValue(PropertyValue[] props, String pName) {
+        int i = 0;
+        while (i < props.length && !props[i].Name.equals(pName)) {
+            i++;
+        }
+        return i < props.length ? props[i] : null;
+
     }
 }
 
