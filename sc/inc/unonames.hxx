@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-10-23 12:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,11 +246,11 @@
 #define SC_UNO_SRCHWORDS            "SearchWords"
 
 //  page styles
-#define SC_UNO_PAGE_BACKCOLOR       "BackgroundColor"
-#define SC_UNO_PAGE_BACKTRANS       "IsBackgroundTransparent"
-#define SC_UNO_PAGE_GRAPHICFILT     "GraphicFilter"
-#define SC_UNO_PAGE_GRAPHICLOC      "GraphicLocation"
-#define SC_UNO_PAGE_GRAPHICURL      "GraphicURL"
+#define SC_UNO_PAGE_BACKCOLOR       "BackColor"
+#define SC_UNO_PAGE_BACKTRANS       "BackTransparent"
+#define SC_UNO_PAGE_GRAPHICFILT     "BackGraphicFilter"
+#define SC_UNO_PAGE_GRAPHICLOC      "BackGraphicLocation"
+#define SC_UNO_PAGE_GRAPHICURL      "BackGraphicURL"
 #define SC_UNO_PAGE_LEFTBORDER      SC_UNONAME_LEFTBORDER
 #define SC_UNO_PAGE_RIGHTBORDER     SC_UNONAME_RIGHTBORDER
 #define SC_UNO_PAGE_BOTTBORDER      SC_UNONAME_BOTTBORDER
@@ -260,13 +260,13 @@
 #define SC_UNO_PAGE_RIGHTMARGIN     "RightMargin"
 #define SC_UNO_PAGE_TOPMARGIN       "TopMargin"
 #define SC_UNO_PAGE_BOTTMARGIN      "BottomMargin"
-#define SC_UNO_PAGE_LANDSCAPE       "Landscape"
+#define SC_UNO_PAGE_LANDSCAPE       "IsLandscape"
 #define SC_UNO_PAGE_NUMBERTYPE      "NumberingType"
 #define SC_UNO_PAGE_SYTLELAYOUT     "PageStyleLayout"
 #define SC_UNO_PAGE_PAPERTRAY       "PrinterPaperTray"
 #define SC_UNO_PAGE_SIZE            "Size"
-#define SC_UNO_PAGE_WIDTH           "PageWidth"
-#define SC_UNO_PAGE_HEIGHT          "PageHeight"
+#define SC_UNO_PAGE_WIDTH           "Width"
+#define SC_UNO_PAGE_HEIGHT          "Height"
 #define SC_UNO_PAGE_CENTERHOR       "CenterHorizontally"
 #define SC_UNO_PAGE_CENTERVER       "CenterVertically"
 #define SC_UNO_PAGE_PRINTANNOT      "PrintAnnotations"
@@ -285,11 +285,11 @@
 #define SC_UNO_PAGE_RIGHTFTRCON     "RightPageFooterContent"
 #define SC_UNO_PAGE_PRINTFORMUL     "PrintFormulas"
 #define SC_UNO_PAGE_PRINTZERO       "PrintZeroValues"
-#define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackgroundColor"
-#define SC_UNO_PAGE_HDRBACKTRAN     "TransparentHeaderBackground"
-#define SC_UNO_PAGE_HDRGRFFILT      "HeaderGraphicFilter"
-#define SC_UNO_PAGE_HDRGRFLOC       "HeaderGraphicLocation"
-#define SC_UNO_PAGE_HDRGRFURL       "HeaderGraphicURL"
+#define SC_UNO_PAGE_HDRBACKCOL      "HeaderBackColor"
+#define SC_UNO_PAGE_HDRBACKTRAN     "HeaderBackTransparent"
+#define SC_UNO_PAGE_HDRGRFFILT      "HeaderBackGraphicFilter"
+#define SC_UNO_PAGE_HDRGRFLOC       "HeaderBackGraphicLocation"
+#define SC_UNO_PAGE_HDRGRFURL       "HeaderBackGraphicURL"
 #define SC_UNO_PAGE_HDRLEFTBOR      "HeaderLeftBorder"
 #define SC_UNO_PAGE_HDRRIGHTBOR     "HeaderRightBorder"
 #define SC_UNO_PAGE_HDRBOTTBOR      "HeaderBottomBorder"
@@ -299,14 +299,14 @@
 #define SC_UNO_PAGE_HDRRIGHTMAR     "HeaderRightMargin"
 #define SC_UNO_PAGE_HDRBODYDIST     "HeaderBodyDistance"
 #define SC_UNO_PAGE_HDRHEIGHT       "HeaderHeight"
-#define SC_UNO_PAGE_HDRON           "HeaderOn"
-#define SC_UNO_PAGE_HDRDYNAMIC      "HeaderDynamic"
-#define SC_UNO_PAGE_HDRSHARED       "HeaderShared"
-#define SC_UNO_PAGE_FTRBACKCOL      "FooterBackgroundColor"
-#define SC_UNO_PAGE_FTRBACKTRAN     "TransparentFooterBackground"
-#define SC_UNO_PAGE_FTRGRFFILT      "FooterGraphicFilter"
-#define SC_UNO_PAGE_FTRGRFLOC       "FooterGraphicLocation"
-#define SC_UNO_PAGE_FTRGRFURL       "FooterGraphicURL"
+#define SC_UNO_PAGE_HDRON           "HeaderIsOn"
+#define SC_UNO_PAGE_HDRDYNAMIC      "HeaderIsDynamicHeight"
+#define SC_UNO_PAGE_HDRSHARED       "HeaderIsShared"
+#define SC_UNO_PAGE_FTRBACKCOL      "FooterBackColor"
+#define SC_UNO_PAGE_FTRBACKTRAN     "FooterBackTransparent"
+#define SC_UNO_PAGE_FTRGRFFILT      "FooterBackGraphicFilter"
+#define SC_UNO_PAGE_FTRGRFLOC       "FooterBackGraphicLocation"
+#define SC_UNO_PAGE_FTRGRFURL       "FooterBackGraphicURL"
 #define SC_UNO_PAGE_FTRLEFTBOR      "FooterLeftBorder"
 #define SC_UNO_PAGE_FTRRIGHTBOR     "FooterRightBorder"
 #define SC_UNO_PAGE_FTRBOTTBOR      "FooterBottomBorder"
@@ -316,9 +316,9 @@
 #define SC_UNO_PAGE_FTRRIGHTMAR     "FooterRightMargin"
 #define SC_UNO_PAGE_FTRBODYDIST     "FooterBodyDistance"
 #define SC_UNO_PAGE_FTRHEIGHT       "FooterHeight"
-#define SC_UNO_PAGE_FTRON           "FooterOn"
-#define SC_UNO_PAGE_FTRDYNAMIC      "FooterDynamic"
-#define SC_UNO_PAGE_FTRSHARED       "FooterShared"
+#define SC_UNO_PAGE_FTRON           "FooterIsOn"
+#define SC_UNO_PAGE_FTRDYNAMIC      "FooterIsDynamicHeight"
+#define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
 
 //  document settings
 #define SC_UNO_CALCASSHOWN          "CalcAsShown"
