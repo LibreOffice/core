@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:25:38 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     Text[ chinese_simplified ] = "æ ‡ç­¾";                \
     Text[ russian ] = "Íàêëåéêè";                       \
     Text[ polish ] = "Etykiety";                        \
-    Text[ japanese ] = "ï¾—ï¾ï¾ï¾™";                          \
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«";                          \
     Text[ chinese_traditional ] = "è²¼æ¨™";               \
     Text[ arabic ] = "ÈØÇŞÇÊ ÚäæäÉ";                    \
     Text[ greek ] = "Åôéêİôåò";                         \
@@ -234,7 +234,7 @@ TabDialog DLG_LAB
                 Text[ chinese_simplified ] = "å…¶ä»–";
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Dodatki";
-                Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
                 Text[ chinese_traditional ] = "å…¶ä»–";
                 Text[ arabic ] = "ÎíÇÑÇÊ";
                 Text[ greek ] = "Ğñüóèåôá";
@@ -379,7 +379,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "æ•°æ®åº“";
         Text[ russian ] = "Áàçà äàííûõ";
         Text[ polish ] = "Baza danych";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
         Text[ chinese_traditional ] = "è³‡æ–™åº«";
         Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "ÂÜóç ~äåäïìİíùí";
@@ -414,7 +414,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "è¡¨æ ¼";
         Text[ russian ] = "Òàáëèöà";
         Text[ polish ] = "Tabela";
-        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™";
+        Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
         Text[ chinese_traditional ] = "è¡¨æ ¼";
         Text[ arabic ] = "ÇáÌÏæá";
         Text[ greek ] = "Ğßíáêáò";
@@ -459,7 +459,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "æ•°æ®åº“å­—æ®µ";
         Text[ russian ] = "Ïîëå áàçû äàííûõ";
         Text[ polish ] = "Pole bazy danych";
-        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ï¾Œï½¨ï½°ï¾™ï¾„ï¾(~F)";
+        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
         Text[ chinese_traditional ] = "è³‡æ–™åº«æ¬„ä½";
         Text[ arabic ] = "ÍŞá ŞÇÚÏÉ ÇáÈíÇäÇÊ";
         Text[ greek ] = "Ğåäßï âÜóçò äåäïìİíùí";
@@ -557,7 +557,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_simplified ] = "çº¸å¼ (~S)";
         Text[ russian ] = "Îòäåëüíî";
         Text[ polish ] = "Arkusz";
-        Text[ japanese ] = "ï½¼ï½°ï¾„(~S)";
+        Text[ japanese ] = "ã‚·ãƒ¼ãƒˆ(~S)";
         Text[ chinese_traditional ] = "ç´™å¼µ(~S)";
         Text[ arabic ] = "İÑÎ æÑŞ";
         Text[ greek ] = "~ÖÜêåëïò";
@@ -710,7 +710,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ chinese_simplified ] = "æ ‡ç­¾åŒæ­¥åŒ–";
         Text[ russian ] = "Ñèíõğîíèçèğîâàòü íàêëåéêè";
         Text[ polish ] = "Synchronizacja etykiet";
-        Text[ japanese ] = "ï¾—ï¾ï¾ï¾™ã‚’åŒæœŸã•ã›ã‚‹";
+        Text[ japanese ] = "ãƒ©ãƒ™ãƒ«ã‚’åŒæœŸã•ã›ã‚‹";
         Text[ chinese_traditional ] = "è²¼æ¨™åŒæ­¥åŒ–";
         Text[ arabic ] = "ÊÒÇãä ÈØÇŞÇÊ ÇáÚäæäÉ";
         Text[ greek ] = "Óõã÷ñïíéóìüò åôéêåôşí";
@@ -740,7 +740,7 @@ String STR_DOC_TITLE
     Text[ chinese_simplified ] = "æ ‡ç­¾";
     Text[ russian ] = "Íàêëåéêè";
     Text[ polish ] = "Etykiety";
-    Text[ japanese ] = "ï¾—ï¾ï¾ï¾™";
+    Text[ japanese ] = "ãƒ©ãƒ™ãƒ«";
     Text[ chinese_traditional ] = "è²¼æ¨™";
     Text[ arabic ] = "ÈØÇŞÇÊ ÚäæäÉ";
     Text[ greek ] = "Åôéêİôåò";
@@ -766,7 +766,7 @@ String STR_CUSTOM
     Text[ swedish ] = "[Användare]";
     Text[ polish ] = "[U¿ytkownik]";
     Text[ portuguese_brazilian ] = "[Pessoal]";
-    Text[ japanese ] = "[ï¾•ï½°ï½»ï¾ï½°]";
+    Text[ japanese ] = "[ãƒ¦ãƒ¼ã‚¶ãƒ¼]";
     Text[ korean ] = "[ì‚¬ìš©ì]";
     Text[ chinese_simplified ] = "[ä½¿ç”¨è€…]";
     Text[ chinese_traditional ] = "[ä½¿ç”¨è€…]";
@@ -806,10 +806,10 @@ TabPage TP_VISITING_CARDS
         Text[ swedish ] = "AutoText - område";
         Text[ polish ] = "Obszar Autotekstu";
         Text[ portuguese_brazilian ] = "AutoText group";
-        Text[ japanese ] = "å…¥åŠ›æ”¯æ´ï½¸ï¾ï¾™ï½°ï¾Œï¾Ÿ(~S)";
+        Text[ japanese ] = "å…¥åŠ›æ”¯æ´ã‚°ãƒ«ãƒ¼ãƒ—";
         Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸- ì˜ì—­";
-        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†åˆ†ç±»(~S)";
-        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†åˆ†é¡(~S)";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†åˆ†ç±»";
+        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†åˆ†é¡";
         Text[ arabic ] = "äØÇŞ ÇáäÕ ÇáÊáŞÇÆí";
         Text[ turkish ] = "Otomatik metin - alanı";
         Text[ language_user1 ] = " ";
@@ -885,7 +885,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Privata data";
         Text[ polish ] = "Dane prywatne";
         Text[ portuguese_brazilian ] = "Private data";
-        Text[ japanese ] = "å€‹äººï¾ƒï¾ï½°ï¾€";
+        Text[ japanese ] = "å€‹äººãƒ‡ãƒ¼ã‚¿";
         Text[ korean ] = "ê°œì¸ ë°ì´í„°";
         Text[ chinese_simplified ] = "ç§äººèµ„æ–™";
         Text[ chinese_traditional ] = "ç§äººè³‡æ–™";
@@ -913,7 +913,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "~För-/efternamn/initialer";
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name";
-        Text[ japanese ] = "å/å§“/ï½²ï¾†ï½¼ï½¬ï¾™(~N)";
+        Text[ japanese ] = "å/å§“/ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«(~N)";
         Text[ korean ] = "ì´ë¦„/ì„±/ë¨¸ë¦¬ê¸€ì(~N)";
         Text[ chinese_simplified ] = "åå­—/å§“æ°/ç¼©å†™(~N)";
         Text[ chinese_traditional ] = "åå­—/å§“æ°/ç¸®å¯«(~N)";
@@ -959,7 +959,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "För-/efter~namn/initialer 2";
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name 2";
-        Text[ japanese ] = "å§“/å/ï½²ï¾†ï½¼ï½¬ï¾™ 2 (~N)";
+        Text[ japanese ] = "å§“/å/ã‚¤ãƒ‹ã‚·ãƒ£ãƒ« 2 (~N)";
         Text[ korean ] = "ì´ë¦„/ì„±/ë¨¸ë¦¬ê¸€ì 2(~N)";
         Text[ chinese_simplified ] = "åå­—/å§“æ°/ç¼©å†™ 2(~N)";
         Text[ chinese_traditional ] = "åå­—/å§“æ°/ç¸®å¯« 2(~N)";
@@ -1231,7 +1231,7 @@ TabPage TP_PRIVATE_DATA
         Text[ swedish ] = "Hemsida / e-post";
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
-        Text[ japanese ] = "ï¾ï½°ï¾‘ï¾ï¾Ÿï½°ï½¼ï¾/E-mail";
+        Text[ japanese ] = "ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸/E-mail";
         Text[ korean ] = "í™ˆí˜ì´ì§€ / E-Mail";
         Text[ chinese_simplified ] = "ä¸»é¡µ/ç”µå­é‚®ä»¶";
         Text[ chinese_traditional ] = "é¦–é /é›»å­éƒµä»¶";
@@ -1277,7 +1277,7 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "Affärsdata";
         Text[ polish ] = "Dane s³u¿bowe";
         Text[ portuguese_brazilian ] = "Business data";
-        Text[ japanese ] = "ç¤¾ç”¨ï¾ƒï¾ï½°ï¾€";
+        Text[ japanese ] = "ç¤¾ç”¨ãƒ‡ãƒ¼ã‚¿";
         Text[ korean ] = "ì—…ë¬´ ë°ì´í„°";
         Text[ chinese_simplified ] = "å•†åŠ¡èµ„æ–™";
         Text[ chinese_traditional ] = "å•†å‹™è³‡æ–™";
@@ -1373,7 +1373,7 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "Sl~ogan";
         Text[ polish ] = "Slogan";
         Text[ portuguese_brazilian ] = "Slogan";
-        Text[ japanese ] = "ï½½ï¾›ï½°ï½¶ï¾ï¾";
+        Text[ japanese ] = "ã‚¹ãƒ­ãƒ¼ã‚¬ãƒ³";
         Text[ korean ] = "ìŠ¬ë¡œê±´";
         Text[ chinese_simplified ] = "å¹¿å‘Šç”¨è¯­";
         Text[ chinese_traditional ] = "åè¨€";
@@ -1627,7 +1627,7 @@ TabPage TP_BUSINESS_DATA
         Text[ swedish ] = "He~msida / e-post";
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
-        Text[ japanese ] = "ï¾ï½°ï¾‘ï¾ï¾Ÿï½°ï½¼ï¾/E-~mail";
+        Text[ japanese ] = "ãƒ›ãƒ¼ãƒ ãƒšãƒ¼ã‚¸/E-~mail";
         Text[ korean ] = "í™ˆí˜ì´ì§€ /E-~Mail";
         Text[ chinese_simplified ] = "ä¸»é¡µ/ç”µå­é‚®ä»¶(~M)";
         Text[ chinese_traditional ] = "é¦–é /é›»å­éƒµä»¶(~M)";
@@ -1650,6 +1650,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
