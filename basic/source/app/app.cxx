@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:11:42 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 17:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,11 +648,15 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     WinBits( WB_APP | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) )
 , bIsAutoRun( FALSE )
 , pDisplayHidDlg( NULL )
-, pBasic( NULL )
-, pWork( NULL )
-, pExecutionStatus( NULL )
+, pEditVar ( 0 )
 , bAutoReload( FALSE )
 , bAutoSave( TRUE )
+, pBasic( NULL )
+, pExecutionStatus( NULL )
+, pStatus( NULL )
+, pList( NULL )
+, pWork( NULL )
+, pPrn( NULL )
 {
 
     Application::SetDefDialogParent( this );
@@ -1306,7 +1310,7 @@ IMPL_LINK_INLINE_END( BasicFrame, Accel, Accelerator*, pAcc )
 IMPL_LINK_INLINE_START( BasicFrame, ShowLineNr, AutoTimer *, pTimer )
 {
     String aPos;
-    if ( pWork )
+    if ( pWork && pWork->ISA(AppBasEd))
     {
         aPos = String::CreateFromInt32(pWork->GetLineNr());
     }
