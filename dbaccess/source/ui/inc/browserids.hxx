@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:44:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,6 @@
 #define ID_FORM_NEW_TEXT                    15
 #define ID_FORM_NEW_CALC                    16
 #define ID_FORM_NEW_IMPRESS                 17
-#define ID_FORM_NEW_PILOT                   18
 #define ID_NEW_QUERY_DESIGN                 20
 #define ID_EDIT_QUERY_DESIGN                21
 #define ID_NEW_QUERY_SQL                    22
@@ -136,7 +135,6 @@
 #define ID_APP_NEW_QUERY_AUTO_PILOT         44
 #define ID_NEW_TABLE_DESIGN_AUTO_PILOT      45
 #define ID_NEW_VIEW_DESIGN_AUTO_PILOT       46
-#define ID_NEW_VIEW_SQL                     47
 
 
 // other
