@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:42:11 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
     { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },          // RES_PARATR_VERTALIGN
     { SID_ATTR_PARA_SNAPTOGRID, SFX_ITEM_POOLABLE },    // RES_PARATR_SNAPTOGRID
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY4
+    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_CONNECT_BORDER
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY6
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY7
@@ -807,8 +807,8 @@ void _InitCore()
     aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =
                             new SvxParaVertAlignItem( 0 );
     aAttrTab[ RES_PARATR_SNAPTOGRID - POOLATTR_BEGIN ] = new SvxParaGridItem;
+    aAttrTab[ RES_PARATR_CONNECT_BORDER - POOLATTR_BEGIN ] = new SwParaConnectBorderItem;
 // ParaAttr - Dummies
-    aAttrTab[ RES_PARATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY4 );
     aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );
     aAttrTab[ RES_PARATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY6 );
     aAttrTab[ RES_PARATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY7 );
