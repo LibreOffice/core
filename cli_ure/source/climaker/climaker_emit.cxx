@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-28 12:37:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,11 @@
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
+#include "com/sun/star/reflection/XStructTypeDescription.hpp"
+#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp"
-
+#include <vector>
 
 using namespace ::System::Reflection;
 
@@ -173,6 +175,15 @@ static inline void emit_ldarg( Emit::ILGenerator * code, ::System::Int32 index )
     }
 }
 
+void polymorphicStructNameToStructName(::System::String ** sPolyName)
+{
+    if ((*sPolyName)->EndsWith(S">") == false)
+        return;
+
+    int index = (*sPolyName)->LastIndexOf('<');
+    OSL_ASSERT(index != -1);
+    *sPolyName = (*sPolyName)->Substring(0, index);
+}
 //______________________________________________________________________________
 Assembly * TypeEmitter::type_resolve(
     ::System::Object * sender, ::System::ResolveEventArgs * args )
@@ -1032,6 +1043,19 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     }
 
     ::System::String * cts_name = to_cts_name( uno_name );
+//remove later
+//     System::Console::WriteLine(System::String::Concat(cts_name, new System::String( S"\n")));
+//  if (cts_name->Equals(new System::String(S"unoidl.test.testtools.bridgetest.TestPolyStruct<[]any>")))
+//  {
+//      int a = 3;
+//  }
+//------------
+    // if the struct is an instantiated polymorpic struct then we create the simple struct name
+    // For example:
+    // void func ([in] PolyStruct<boolean> arg);
+    //PolyStruct<boolean> will be converted to PolyStruct
+    polymorphicStructNameToStructName( & cts_name);
+
     ::System::Type * ret_type = get_type( cts_name, false /* no exc */ );
     if (0 == ret_type)
     {
@@ -1065,8 +1089,15 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         sal_Int32 members_length = seq_members.getLength();
         OSL_ASSERT( seq_member_names.getLength() == members_length );
 
+        Sequence< OUString > seq_type_parameters;
+        Reference< reflection::XStructTypeDescription> xStructTypeDesc(
+            xType, UNO_QUERY);
+        if (xStructTypeDesc.is())
+            seq_type_parameters = xStructTypeDesc->getTypeParameters();
+
         sal_Int32 all_members_length = 0;
         sal_Int32 member_pos;
+        sal_Int32 type_param_pos = 0;
 
         // collect base types; wrong order
         ::System::Collections::ArrayList * base_types_list =
@@ -1166,8 +1197,27 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
         {
             ::System::String * field_name =
                   ustring_to_String( pseq_member_names[ member_pos ] );
-            ::System::Type * field_type =
+            ::System::Type * field_type;
+            //Special handling of struct parameter types
+            if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
+            {
+                if (type_param_pos < seq_type_parameters.getLength())
+                {
+                    field_type = __typeof(::System::Object);
+                    type_param_pos++;
+                }
+                else
+                {
+                    throw RuntimeException(
+                        OUSTR("unexpected member type in ") + xType->getName(),
+                        Reference< XInterface >() );
+                }
+            }
+            else
+            {
+                field_type =
                   get_type( pseq_members[ member_pos ] );
+            }
             members[ member_pos ] =
                 type_builder->DefineField(
                     field_name, field_type, FieldAttributes::Public );
@@ -1302,7 +1352,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
 
 //______________________________________________________________________________
 ::System::Type * TypeEmitter::get_type(
-    Reference< reflection::XInterfaceTypeDescription > const & xType )
+    Reference< reflection::XInterfaceTypeDescription2 > const & xType )
 {
     OUString uno_name( xType->getName() );
     if (uno_name.equalsAsciiL(
@@ -1322,27 +1372,59 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                                                 TypeAttributes::Abstract |
                                                 TypeAttributes::AnsiClass);
 
-        Reference< reflection::XInterfaceTypeDescription > xBaseType(
-            xType->getBaseType(), UNO_QUERY );
-        if (xBaseType.is() &&
-            !xBaseType->getName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ))
+        std::vector<Reference<reflection::XInterfaceTypeDescription2> > vecBaseTypes;
+        Sequence<Reference< reflection::XTypeDescription > > seqBaseTypes =
+            xType->getBaseTypes();
+        if (seqBaseTypes.getLength() > 0)
         {
+            for (int i = 0; i < seqBaseTypes.getLength(); i++)
+            {
+                Reference<reflection::XTypeDescription>& aType = seqBaseTypes[i];
+                Reference<reflection::XInterfaceTypeDescription2> xIfaceTd(
+                    aType, UNO_QUERY);
+                if (xIfaceTd.is() == sal_False)
+                {
+                    Reference<reflection::XIndirectTypeDescription> xIndTd(
+                        aType, UNO_QUERY_THROW);
+                    Reference<reflection::XTypeDescription> xRefTD;
+                    while (1)
+                    {
+                        Reference<reflection::XTypeDescription>  xRefTD =
+                            xIndTd->getReferencedType();
+
+                        Reference<reflection::XInterfaceTypeDescription2> xIfaceTd2(
+                            xRefTD, UNO_QUERY);
+                        if (xIfaceTd2.is())
+                        {
+                            xIfaceTd = xIfaceTd2;
+                            break;
+                        }
+                    }
+                }
+                if (xIfaceTd->getName().equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
+                {
+                    vecBaseTypes.push_back(xIfaceTd);
+                }
+            }
+
             ::System::Type * base_interfaces __gc [] =
-                  new ::System::Type * __gc [ 1 ];
-            base_interfaces[ 0 ] = get_type( xBaseType );
+                  new ::System::Type * __gc [ vecBaseTypes.size() ];
+
+            typedef std::vector<Reference<reflection::XInterfaceTypeDescription2> >::const_iterator it;
+            int index = 0;
+            for (it i = vecBaseTypes.begin(); i != vecBaseTypes.end(); i++, index++)
+                base_interfaces[ index ] = get_type( *i );
             type_builder = m_module_builder->DefineType(
                 cts_name, attr, 0, base_interfaces );
         }
         else
         {
-            if (! xBaseType.is())
-            {
-                ::System::Console::WriteLine(
-                    "warning: IDL interface {0} is not derived from "
-                    "com.sun.star.uno.XInterface!",
-                    ustring_to_String( uno_name ) );
-            }
+            ::System::Console::WriteLine(
+                "warning: IDL interface {0} is not derived from "
+                "com.sun.star.uno.XInterface!",
+                ustring_to_String( uno_name ) );
+
             type_builder = m_module_builder->DefineType( cts_name, attr );
         }
 
@@ -1363,18 +1445,46 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
 ::System::Type * TypeEmitter::complete_iface_type( iface_entry * entry )
 {
     Emit::TypeBuilder * type_builder = entry->m_type_builder;
-    reflection::XInterfaceTypeDescription * xType = entry->m_xType;
+    reflection::XInterfaceTypeDescription2 * xType = entry->m_xType;
 
-    Reference< reflection::XTypeDescription > xBaseType( xType->getBaseType() );
-    if (xBaseType.is())
+    Sequence<Reference< reflection::XTypeDescription > > seqBaseTypes( xType->getBaseTypes() );
+    if (seqBaseTypes.getLength() > 0)
     {
-        ::System::String * basetype_name = to_cts_name( xBaseType->getName() );
-        iface_entry * base_entry = dynamic_cast< iface_entry * >(
-            m_incomplete_ifaces->get_Item( basetype_name ) );
-        if (0 != base_entry)
+        for (int i = 0; i < seqBaseTypes.getLength(); i++)
         {
-            // complete uncompleted base type first
-            complete_iface_type( base_entry );
+            Reference< reflection::XTypeDescription >  aBaseType = seqBaseTypes[i];
+            //make sure we get the interface rather then a typedef
+            Reference<reflection::XIndirectTypeDescription> xIndTd(
+                aBaseType, UNO_QUERY);
+            if (xIndTd.is())
+            {
+                Reference<reflection::XTypeDescription> xRefTD;
+                while (1)
+                {
+                    Reference<reflection::XTypeDescription>  xRefTD =
+                        xIndTd->getReferencedType();
+
+                    Reference<reflection::XInterfaceTypeDescription2> xIfaceTd2(
+                        xRefTD, UNO_QUERY);
+                    if (xIfaceTd2.is())
+                    {
+                        aBaseType = Reference<reflection::XTypeDescription>::query(xIfaceTd2);
+                        break;
+                    }
+                }
+            }
+            if (aBaseType->getName().equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("com.sun.star.uno.XInterface") ) == sal_False)
+            {
+                ::System::String * basetype_name = to_cts_name( aBaseType->getName() );
+                iface_entry * base_entry = dynamic_cast< iface_entry * >(
+                    m_incomplete_ifaces->get_Item( basetype_name ) );
+                if (0 != base_entry)
+                {
+                // complete uncompleted base type first
+                    complete_iface_type( base_entry );
+                }
+            }
         }
     }
 
@@ -1620,7 +1730,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
     }
     case TypeClass_INTERFACE:
         return get_type(
-            Reference< reflection::XInterfaceTypeDescription >(
+            Reference< reflection::XInterfaceTypeDescription2 >(
                 xType, UNO_QUERY_THROW ) );
     case TypeClass_CONSTANT:
         return get_type(
