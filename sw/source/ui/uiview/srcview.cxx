@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:49:01 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,6 +609,17 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 GetDocShell()->GetDoc()->SetModified();
         }
         break;
+        case FN_REPEAT_SEARCH:
+        {
+            SvxSearchItem* pSrchItem = GetSearchItem();
+            if(pSrchItem)
+            {
+                StartSearchAndReplace( *pSrchItem, FALSE, rReq.IsAPI() );
+                if(aEditWin.IsModified())
+                    GetDocShell()->GetDoc()->SetModified();
+            }
+        }
+        break;
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
         {
@@ -704,6 +715,12 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                 pSrchItem->SetSearchString( sSelected );
                 rSet.Put( *pSrchItem );
             }
+            break;
+            case FN_REPEAT_SEARCH:
+            {
+                if(!GetSearchItem())
+                    rSet.DisableItem(nWhich);
+            };
             break;
             case SID_UNDO:
             case SID_REDO:
