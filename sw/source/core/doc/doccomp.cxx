@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1622,6 +1622,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                 SwComparePosition eCmpPos = ComparePosition( *pDStt, *pDEnd, *pRStt, *pREnd );
                 switch( eCmpPos )
                 {
+                case POS_COLLIDE_START:
                 case POS_BEHIND:
                     break;
 
@@ -1630,6 +1631,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                     delete pDestRedl, pDestRedl = 0;
                     // break; -> kein break !!!!
 
+                case POS_COLLIDE_END:
                 case POS_BEFORE:
                     n = rRedlineTbl.Count();
                     break;

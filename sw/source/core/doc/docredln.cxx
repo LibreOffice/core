@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:49:14 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,10 +272,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     if( pRedl->IsOwnRedline( *pNewRedl ) )
                     {
                         // ggfs. verschmelzen?
-                        if( POS_BEHIND == eCmpPos &&
+                        if( (( POS_BEHIND == eCmpPos &&
+                                    IsPrevPos( *pREnd, *pStt ) ) ||
+                             POS_COLLIDE_START == eCmpPos ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
-                            ( *pStt == *pREnd ||
-                             IsPrevPos( *pREnd, *pStt )) &&
                             ( n+1 >= pRedlineTbl->Count() ||
                              *(*pRedlineTbl)[ n+1 ]->Start() != *pREnd ))
                         {
@@ -287,10 +287,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pRedlineTbl->Insert( pRedl );
                             }
                         }
-                        else if( POS_BEFORE == eCmpPos &&
+                        else if( (( POS_BEFORE == eCmpPos &&
+                                    IsPrevPos( *pEnd, *pRStt ) ) ||
+                                   POS_COLLIDE_END == eCmpPos ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
-                            ( *pEnd == *pRStt ||
-                              IsPrevPos( *pEnd, *pRStt )) &&
                             ( !n ||
                              *(*pRedlineTbl)[ n-1 ]->End() != *pRStt ))
                         {
@@ -423,13 +423,12 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
-                    case POS_BEFORE:
-                    case POS_BEHIND:
+
+                    case POS_COLLIDE_START:
+                    case POS_COLLIDE_END:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
 //                          1 == pRedl->GetStackCount() &&
-                            pRedl->CanCombine( *pNewRedl ) &&
-                            (POS_BEHIND == eCmpPos ? *pREnd == *pStt
-                                                   : *pRStt == *pEnd ))
+                            pRedl->CanCombine( *pNewRedl ) )
                         {
                             if( IsHideChanges( eRedlineMode ))
                             {
@@ -447,7 +446,7 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
                             // dann kann das zusammengefasst werden, sprich
                             // der neue deckt das schon ab.
-                            if( POS_BEHIND == eCmpPos )
+                            if( POS_COLLIDE_START == eCmpPos )
                                 pNewRedl->SetStart( *pRStt, pStt );
                             else
                                 pNewRedl->SetEnd( *pREnd, pEnd );
@@ -818,10 +817,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
-                    case POS_BEFORE:
+
+                    case POS_COLLIDE_END:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
-                            pRedl->CanCombine( *pNewRedl ) &&
-                            *pRStt == *pEnd && n &&
+                            pRedl->CanCombine( *pNewRedl ) && n &&
                             *(*pRedlineTbl)[ n-1 ]->End() < *pStt )
                         {
                             // dann kann das zusammengefasst werden, sprich
@@ -830,10 +829,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->DeleteAndDestroy( n-- );
                         }
                         break;
-                    case POS_BEHIND:
+                    case POS_COLLIDE_START:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
-                            *pREnd == *pStt && n+1 < pRedlineTbl->Count() &&
+                            n+1 < pRedlineTbl->Count() &&
                             *(*pRedlineTbl)[ n+1 ]->Start() < *pEnd )
                         {
                             // dann kann das zusammengefasst werden, sprich
@@ -1096,6 +1095,7 @@ BOOL SwDoc::DeleteRedline( const SwPaM& rRange, BOOL bSaveInUndo,
             }
             break;
 
+        case POS_COLLIDE_END:
         case POS_BEFORE:
             n = pRedlineTbl->Count();
             break;

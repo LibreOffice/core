@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 11:59:18 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1539,10 +1539,12 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
                     const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
                     switch( ComparePosition( *pRStt, *pREnd, aStPos, aEndPos ))
                     {
+                    case POS_COLLIDE_START:
                     case POS_BEHIND:            // Pos1 liegt hinter Pos2
                         nRedlPos = GetRedlineTbl().Count();
                         break;
 
+                    case POS_COLLIDE_END:
                     case POS_BEFORE:            // Pos1 liegt vor Pos2
                         break;
                     case POS_INSIDE:            // Pos1 liegt vollstaendig in Pos2

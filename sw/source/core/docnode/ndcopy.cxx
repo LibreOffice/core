@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 13:41:45 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,9 +599,11 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
                 SwComparePosition eCmpPos = ComparePosition( *pStt, *pEnd, *pRStt, *pREnd );
                 switch( eCmpPos )
                 {
+                case POS_COLLIDE_END:
                 case POS_BEFORE:                // Pos1 liegt vor Pos2
                     break;
 
+                case POS_COLLIDE_START:
                 case POS_BEHIND:                // Pos1 liegt hinter Pos2
                     n = rTbl.Count();
                     break;

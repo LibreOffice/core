@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,8 @@ SwComparePosition ComparePosition(
                 nRet = POS_OVERLAP_BEFORE;
 
         }
+        else if( rEnd1 == rStt2 )
+            nRet = POS_COLLIDE_END;
         else
             nRet = POS_BEFORE;
     }
@@ -243,6 +245,47 @@ SwComparePosition ComparePosition(
         else
             nRet = POS_OVERLAP_BEHIND;
     }
+    else if( rEnd2 == rStt1 )
+        nRet = POS_COLLIDE_START;
+    else
+        nRet = POS_BEHIND;
+    return nRet;
+}
+
+SwComparePosition ComparePosition(
+            const unsigned long nStt1, const unsigned long nEnd1,
+            const unsigned long nStt2, const unsigned long nEnd2 )
+{
+    SwComparePosition nRet;
+    if( nStt1 < nStt2 )
+    {
+        if( nEnd1 > nStt2 )
+        {
+            if( nEnd1 >= nEnd2 )
+                nRet = POS_OUTSIDE;
+            else
+                nRet = POS_OVERLAP_BEFORE;
+
+        }
+        else if( nEnd1 == nStt2 )
+            nRet = POS_COLLIDE_END;
+        else
+            nRet = POS_BEFORE;
+    }
+    else if( nEnd2 > nStt1 )
+    {
+        if( nEnd2 >= nEnd1 )
+        {
+            if( nEnd2 == nEnd1 && nStt2 == nStt1 )
+                nRet = POS_EQUAL;
+            else
+                nRet = POS_INSIDE;
+        }
+        else
+            nRet = POS_OVERLAP_BEHIND;
+    }
+    else if( nEnd2 == nStt1 )
+        nRet = POS_COLLIDE_START;
     else
         nRet = POS_BEHIND;
     return nRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:20:40 $
+ *  last change: $Author: jp $ $Date: 2001-01-26 18:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,11 +126,17 @@ enum SwComparePosition {
     POS_OUTSIDE,            // Pos2 liegt vollstaendig in Pos1
     POS_EQUAL,              // Pos1 ist genauso gross wie Pos2
     POS_OVERLAP_BEFORE,     // Pos1 ueberlappt Pos2 am Anfang
-    POS_OVERLAP_BEHIND      // Pos1 ueberlappt Pos2 am Ende
+    POS_OVERLAP_BEHIND,     // Pos1 ueberlappt Pos2 am Ende
+    POS_COLLIDE_START,      // Pos1 Start stoesst an Pos2 Ende
+    POS_COLLIDE_END         // Pos1 End stoesst an Pos2 Start
 };
 SwComparePosition ComparePosition(
             const SwPosition& rStt1, const SwPosition& rEnd1,
             const SwPosition& rStt2, const SwPosition& rEnd2 );
+
+SwComparePosition ComparePosition(
+            const unsigned long nStt1, const unsigned long nEnd1,
+            const unsigned long nStt2, const unsigned long nEnd2 );
 
 
 // SwPointAndMark / SwPaM
