@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 11:52:05 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 13:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,8 +688,6 @@ void ElementDescriptor::readDefaults()
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
     addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ),
              * reinterpret_cast< const OUString * >( a.getValue() ) );
-    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ClassId") ),
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":class-id") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tab-index") ) );
 

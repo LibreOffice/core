@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.5 2001-03-01 11:52:05 dbo Exp $
+	$Id: dialog.dtd,v 1.6 2001-03-01 13:14:50 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -63,7 +63,6 @@
 			       dialog:width %numeric; #REQUIRED
 			       dialog:height %numeric; #REQUIRED
 			       dialog:style-id CDATA #IMPLIED
-			       dialog:class-id CDATA #IMPLIED
 			       dialog:tab-index %numeric; #IMPLIED
 			       dialog:disabled %boolean; #IMPLIED
 			       dialog:printable %boolean; #IMPLIED

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-01 11:22:45 $
+ *  last change: $Author: dbo $ $Date: 2001-03-01 13:14:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,9 +820,6 @@ void ControlImportContext::importDefaults(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
         makeAny( _aId ) );
 
-    importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ClassId") ),
-                          OUString( RTL_CONSTASCII_USTRINGPARAM("class-id") ),
-                          xAttributes );
     importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("TabIndex") ),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("tab-index") ),
                         xAttributes );
