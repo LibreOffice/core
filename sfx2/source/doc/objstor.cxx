@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 19:16:28 $
+ *  last change: $Author: mba $ $Date: 2000-12-20 21:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,8 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         String aPath( aLastName );
                         bool bWasAbsolute = FALSE;
                         INetURLObject aObj( SvtPathOptions().GetWorkPath() );
-                        aObj.RelToAbs( aPath, bWasAbsolute );
+                        aObj.setFinalSlash();
+                        aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
                         pDlg->SetPath( aObj.GetMainURL() );
                     }
