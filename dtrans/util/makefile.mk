@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-30 16:36:23 $
+#   last change: $Author: hjs $ $Date: 2001-09-04 12:03:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,6 @@ TARGET1=mcnttype
 TARGET2=ftransl
 TARGET3=sysdtrans
 TARGET4=dnd
-TARGETTYPE=GUI
 
 # --- Settings -----------------------------------------------------
 
