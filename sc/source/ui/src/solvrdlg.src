@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-16 21:59:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   solvrdlg.src  $
- //   $Author: rt $
- //     $Date: 2001-06-16 21:59:37 $
- // $Revision: 1.16 $
+ //   $Author: kz $
+ //     $Date: 2001-07-14 20:21:36 $
+ // $Revision: 1.17 $
  //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
  //----------------------------------------------------------------------------
 
@@ -113,12 +113,12 @@ ModelessDialog RID_SCDLG_SOLVER
         Text[ chinese_simplified ] = "¹«Ê½µ¥Ôª¸ñ(~F)";
         Text[ russian ] = "ß÷åéêà ôîğìóë";
         Text[ polish ] = "Komórka formu³y";
-        Text[ japanese ] = "”®¾Ù";
+        Text[ japanese ] = "”®¾Ù(~F)";
         Text[ chinese_traditional ] = "¤½¦¡Àx¦s®æ(~F)";
         Text[ arabic ] = "ÎáíÉ ÕíÛÉ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Êåëß ôığïõ";
-        Text[ korean ] = "¼ö½Ä ¼¿";
+        Text[ korean ] = "¼ö½Ä ¼¿(~F)";
         Text[ turkish ] = "~Formül hücresi";
         Text[ catalan ] = "Celda de ~fórmula";
     };
@@ -146,18 +146,18 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Ãà¼Ò!";
+        QuickHelpText[ korean ] = "Ãà¼Ò";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     FixedText FT_TARGETVAL
     {
@@ -248,18 +248,18 @@ ModelessDialog RID_SCDLG_SOLVER
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz!";
-        QuickHelpText[ japanese ] = "k¬!";
+        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ japanese ] = "k¬";
         QuickHelpText[ chinese_simplified ] = "ËõĞ¡";
         QuickHelpText[ chinese_traditional ] = "ÁY¤p";
         QuickHelpText[ arabic ] = "ÊÕÛíÑ";
         QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "Min/Max!";
+        QuickHelpText[ korean ] = "Min/Max";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
-        QuickHelpText[ finnish ] = "Kutista!";
+        QuickHelpText[ finnish ] = "Kutista";
     };
     FixedLine FL_VARIABLES
     {
@@ -277,7 +277,7 @@ ModelessDialog RID_SCDLG_SOLVER
         Text [ swedish ] = "Förinställningar" ;
         Text [ dutch ] = "Standaard" ;
         Text [ spanish ] = "Predeterminaciones" ;
-        Text [ english_us ] = "Defaults" ;
+        Text [ english_us ] = "Default settings" ;
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ polish ] = "Ustawienia domyœlne";
@@ -431,6 +431,7 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Buscar valor destino";
 };
+
 
 
 
