@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:09:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@
 #endif
 #include "LayerTabBar.hxx"
 #include "ViewShellManager.hxx"
+#include "UpdateLockManager.hxx"
 
 #ifdef WNT
 #pragma optimize ( "", off )
@@ -202,13 +203,16 @@ namespace sd {
 
 void DrawViewShell::Activate(BOOL bIsMDIActivate)
 {
-    ViewShell::Activate(bIsMDIActivate);
+    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
+    {
+        ViewShell::Activate(bIsMDIActivate);
 
-    // When no object bars are active then activate some.
-    ObjectBarManager& rObjectBarManager (GetObjectBarManager());
-    if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
-        rObjectBarManager.SwitchObjectBar (
-            rObjectBarManager.GetDefaultObjectBarId());
+        // When no object bars are active then activate some.
+        ObjectBarManager& rObjectBarManager (GetObjectBarManager());
+        if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
+            rObjectBarManager.SwitchObjectBar (
+                rObjectBarManager.GetDefaultObjectBarId());
+    }
 }
 
 void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
@@ -240,7 +244,10 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 
 void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
 {
-    ViewShell::Deactivate(bIsMDIActivate);
+    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
+    {
+        ViewShell::Deactivate(bIsMDIActivate);
+    }
 }
 
 /*************************************************************************
