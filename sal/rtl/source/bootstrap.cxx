@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:59:31 $
+ *  last change: $Author: dbo $ $Date: 2002-10-21 15:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,14 @@ struct rtl_bootstrap_NameValue
 {
     rtl::OUString sName;
     rtl::OUString sValue;
+
+    inline rtl_bootstrap_NameValue() SAL_THROW( () )
+        {}
+    inline rtl_bootstrap_NameValue(
+        OUString const & name, OUString const & value ) SAL_THROW( () )
+        : sName( name ),
+          sValue( value )
+        {}
 };
 
 typedef std::list<
@@ -362,6 +370,9 @@ static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rt
     }
 }
 
+static NameValueList s_rtl_bootstrap_set_list;
+
+
 static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
 {
     static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
@@ -388,19 +399,23 @@ static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl
 
     else
     {
-        getFromCommandLineArgs(ppValue, pName);
-        if(!*ppValue)
+        getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
+         if (! *ppValue)
         {
-            getFromList(pNameValueList, ppValue, pName);
-            if( ! *ppValue )
+            getFromCommandLineArgs(ppValue, pName);
+            if(!*ppValue)
             {
-                getFromEnvironment( ppValue, pName );
+                getFromList(pNameValueList, ppValue, pName);
                 if( ! *ppValue )
                 {
-                    result = sal_False;
+                    getFromEnvironment( ppValue, pName );
+                    if( ! *ppValue )
+                    {
+                        result = sal_False;
 
-                    if(pDefault)
-                        rtl_uString_assign( ppValue , pDefault );
+                        if(pDefault)
+                            rtl_uString_assign( ppValue , pDefault );
+                    }
                 }
             }
         }
@@ -598,6 +613,36 @@ sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue ,
 {
     return rtl_bootstrap_get_from_handle(
         get_static_bootstrap_handle(), pName, ppValue, pDefault);
+}
+
+void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
+    SAL_THROW_EXTERN_C()
+{
+    OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+    OUString const & value = *reinterpret_cast< OUString const * >( &pValue );
+
+    ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
+
+    NameValueList::iterator iPos( s_rtl_bootstrap_set_list.begin() );
+    NameValueList::iterator iEnd( s_rtl_bootstrap_set_list.end() );
+    for ( ; iPos != iEnd; ++iPos )
+    {
+        if (iPos->sName.equals( name ))
+        {
+            iPos->sValue = value;
+            return;
+        }
+    }
+
+#ifdef DEBUG
+    OString cstr_name( OUStringToOString( name, RTL_TEXTENCODING_ASCII_US ) );
+    OString cstr_value( OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE(
+        "bootstrap.cxx: explicitly setting: name=%s value=%s\n",
+        cstr_name.getStr(), cstr_value.getStr() );
+#endif
+
+    s_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
 
 void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
