@@ -2,9 +2,9 @@
  *
  *  $RCSfile: forms_module.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:17:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,26 @@ namespace FORMS_MODULE_NAMESPACE
                 aOwnNames \
             ); \
         } \
+
+    #define IMPLEMENT_SERVICE_REGISTRATION_7( classname, baseclass, service1, service2, service3, service4 , service5, service6, service7 ) \
+        IMPLEMENT_SERVICE_REGISTRATION_BASE( classname, baseclass ) \
+        \
+           Sequence< ::rtl::OUString > SAL_CALL classname::getSupportedServiceNames_Static() \
+           { \
+                   Sequence< ::rtl::OUString > aOwnNames( 7 ); \
+                   aOwnNames[ 0 ] = service1; \
+                   aOwnNames[ 1 ] = service2; \
+                   aOwnNames[ 2 ] = service3; \
+                   aOwnNames[ 3 ] = service4; \
+                   aOwnNames[ 4 ] = service5; \
+                   aOwnNames[ 5 ] = service6; \
+                   aOwnNames[ 6 ] = service7; \
+            \
+            return ::comphelper::concatSequences( \
+                baseclass::getSupportedServiceNames_Static(), \
+                aOwnNames \
+            ); \
+           } \
 
 //.........................................................................
 }   // namespace FORMS_MODULE_NAMESPACE
