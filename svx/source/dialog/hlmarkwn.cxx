@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: cl $ $Date: 2000-10-10 16:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,57 +396,45 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 
         aAny = xLinks->getByName( aLink );
 
-        if( aAny.getValueType() == ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0))
-        {
-            uno::Reference< beans::XPropertySet > xTarget( (beans::XPropertySet*)aAny.getValue() );
+        uno::Reference< beans::XPropertySet > xTarget;
 
-            if( xTarget.is() )
+        if( aAny >>= xTarget )
+        {
+            try
             {
+                // get name to display
+                aAny = xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayName" ) );
+                OUString aDisplayName;
+                aAny >>= aDisplayName;
+                String aStrDisplayname ( aDisplayName );
+
+                // is it a target ?
+                uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
+                BOOL bIsTarget = xSI->supportsService( OUString::createFromAscii( "com.sun.star.document.LinkTarget" ) );
+
+                // create userdata
+                TargetData *pData = new TargetData ( aLink, bIsTarget );
+
+                SvLBoxEntry* pEntry;
+
                 try
                 {
-                    // get name to display
-                    aAny = xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayName" ) );
-                    OUString aDisplayName;
-                    aAny >>= aDisplayName;
-                    String aStrDisplayname ( aDisplayName );
-
-                    // is it a target ?
-                    uno::Reference< lang::XServiceInfo > xSI( xTarget, uno::UNO_QUERY );
-                    BOOL bIsTarget = xSI->supportsService( OUString::createFromAscii( "com.sun.star.document.LinkTarget" ) );
-
-                    // create userdata
-                    TargetData *pData = new TargetData ( aLink, bIsTarget );
-
-                    SvLBoxEntry* pEntry;
-
-                    try
+                    // get bitmap for the tree-entry
+                    uno::Any aAny( xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayBitmap" ) ) );
+                    if( aAny.getValueType() == ::getCppuType(( const uno::Reference< awt::XBitmap >*)0) && aAny.hasValue() )
                     {
-                        // get bitmap for the tree-entry
-                        uno::Any aAny( xTarget->getPropertyValue( OUString::createFromAscii( "LinkDisplayBitmap" ) ) );
-                        if( aAny.getValueType() == ::getCppuType(( const uno::Reference< awt::XBitmap >*)0) && aAny.hasValue() )
-                        {
-                            uno::Reference< awt::XBitmap > xBmp( (awt::XBitmap *)aAny.getValue() );
-                            BitmapEx aBmp( VCLUnoHelper::GetBitmap( xBmp ) );
+                        uno::Reference< awt::XBitmap > xBmp( (awt::XBitmap *)aAny.getValue() );
+                        BitmapEx aBmp( VCLUnoHelper::GetBitmap( xBmp ) );
 
-                            // insert Displayname into treelist with bitmaps
-                            pEntry = maLbTree.InsertEntry ( aStrDisplayname,
-                                                            aBmp, aBmp,
-                                                            pParentEntry,
-                                                            FALSE, LIST_APPEND,
-                                                            (void*)pData );
-                            nEntries++;
-                        }
-                        else
-                        {
-                            // insert Displayname into treelist without bitmaps
-                            pEntry = maLbTree.InsertEntry ( aStrDisplayname,
-                                                            pParentEntry,
-                                                            FALSE, LIST_APPEND,
-                                                            (void*)pData );
-                            nEntries++;
-                        }
+                        // insert Displayname into treelist with bitmaps
+                        pEntry = maLbTree.InsertEntry ( aStrDisplayname,
+                                                        aBmp, aBmp,
+                                                        pParentEntry,
+                                                        FALSE, LIST_APPEND,
+                                                        (void*)pData );
+                        nEntries++;
                     }
-                    catch(...)
+                    else
                     {
                         // insert Displayname into treelist without bitmaps
                         pEntry = maLbTree.InsertEntry ( aStrDisplayname,
@@ -455,14 +443,23 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                                                         (void*)pData );
                         nEntries++;
                     }
-
-                    uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
-                    if( xLTS.is() )
-                        nEntries += FillTree( xLTS->getLinks(), pEntry );
                 }
                 catch(...)
                 {
+                    // insert Displayname into treelist without bitmaps
+                    pEntry = maLbTree.InsertEntry ( aStrDisplayname,
+                                                    pParentEntry,
+                                                    FALSE, LIST_APPEND,
+                                                    (void*)pData );
+                    nEntries++;
                 }
+
+                uno::Reference< document::XLinkTargetSupplier > xLTS( xTarget, uno::UNO_QUERY );
+                if( xLTS.is() )
+                    nEntries += FillTree( xLTS->getLinks(), pEntry );
+            }
+            catch(...)
+            {
             }
         }
     }
