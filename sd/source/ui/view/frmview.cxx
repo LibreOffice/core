@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:59:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     EnableExtendedMouseEventDispatcher(FALSE);
     EnableExtendedCommandEventDispatcher(FALSE);
 
-    SetGridFront( TRUE );
+    SetGridFront( FALSE );
+    SetHlplFront( FALSE );
     SetOConSnap( FALSE );
     SetFrameDragSingles( TRUE );
     SetSlidesPerRow(4);
