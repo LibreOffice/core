@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtypeprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:12:18 $
+ *  last change: $Author: as $ $Date: 2001-08-16 12:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,108 @@ ________________________________________________________________________________
                                                                         TYPE14  ,                                                                               \
                                                                         TYPE15  ,                                                                               \
                                                                         TYPE16                                                                                  \
+                                                                    ))                                                                                          \
+                                        )
+
+//  implementation of XTypeProvider with 17 additional interfaces for getTypes()
+#define DEFINE_XTYPEPROVIDER_17( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12, TYPE13, TYPE14, TYPE15, TYPE16, TYPE17 ) \
+    PRIVATE_DEFINE_XTYPEPROVIDER_LARGE  (   CLASS,                                                                                                              \
+                                            (PRIVATE_DEFINE_TYPE_12 (   TYPE1   ,                                                                               \
+                                                                        TYPE2   ,                                                                               \
+                                                                        TYPE3   ,                                                                               \
+                                                                        TYPE4   ,                                                                               \
+                                                                        TYPE5   ,                                                                               \
+                                                                        TYPE6   ,                                                                               \
+                                                                        TYPE7   ,                                                                               \
+                                                                        TYPE8   ,                                                                               \
+                                                                        TYPE9   ,                                                                               \
+                                                                        TYPE10  ,                                                                               \
+                                                                        TYPE11  ,                                                                               \
+                                                                        TYPE12                                                                                  \
+                                                                    )),                                                                                         \
+                                            (PRIVATE_DEFINE_TYPE_5  (   TYPE13  ,                                                                               \
+                                                                        TYPE14  ,                                                                               \
+                                                                        TYPE15  ,                                                                               \
+                                                                        TYPE16  ,                                                                               \
+                                                                        TYPE17                                                                                  \
+                                                                    ))                                                                                          \
+                                        )
+
+//  implementation of XTypeProvider with 18 additional interfaces for getTypes()
+#define DEFINE_XTYPEPROVIDER_18( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12, TYPE13, TYPE14, TYPE15, TYPE16, TYPE17, TYPE18 ) \
+    PRIVATE_DEFINE_XTYPEPROVIDER_LARGE  (   CLASS,                                                                                                              \
+                                            (PRIVATE_DEFINE_TYPE_12 (   TYPE1   ,                                                                               \
+                                                                        TYPE2   ,                                                                               \
+                                                                        TYPE3   ,                                                                               \
+                                                                        TYPE4   ,                                                                               \
+                                                                        TYPE5   ,                                                                               \
+                                                                        TYPE6   ,                                                                               \
+                                                                        TYPE7   ,                                                                               \
+                                                                        TYPE8   ,                                                                               \
+                                                                        TYPE9   ,                                                                               \
+                                                                        TYPE10  ,                                                                               \
+                                                                        TYPE11  ,                                                                               \
+                                                                        TYPE12                                                                                  \
+                                                                    )),                                                                                         \
+                                            (PRIVATE_DEFINE_TYPE_6  (   TYPE13  ,                                                                               \
+                                                                        TYPE14  ,                                                                               \
+                                                                        TYPE15  ,                                                                               \
+                                                                        TYPE16  ,                                                                               \
+                                                                        TYPE17  ,                                                                               \
+                                                                        TYPE18                                                                                  \
+                                                                    ))                                                                                          \
+                                        )
+
+//  implementation of XTypeProvider with 19 additional interfaces for getTypes()
+#define DEFINE_XTYPEPROVIDER_19( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12, TYPE13, TYPE14, TYPE15, TYPE16, TYPE17, TYPE18, TYPE19 ) \
+    PRIVATE_DEFINE_XTYPEPROVIDER_LARGE  (   CLASS,                                                                                                              \
+                                            (PRIVATE_DEFINE_TYPE_12 (   TYPE1   ,                                                                               \
+                                                                        TYPE2   ,                                                                               \
+                                                                        TYPE3   ,                                                                               \
+                                                                        TYPE4   ,                                                                               \
+                                                                        TYPE5   ,                                                                               \
+                                                                        TYPE6   ,                                                                               \
+                                                                        TYPE7   ,                                                                               \
+                                                                        TYPE8   ,                                                                               \
+                                                                        TYPE9   ,                                                                               \
+                                                                        TYPE10  ,                                                                               \
+                                                                        TYPE11  ,                                                                               \
+                                                                        TYPE12                                                                                  \
+                                                                    )),                                                                                         \
+                                            (PRIVATE_DEFINE_TYPE_7  (   TYPE13  ,                                                                               \
+                                                                        TYPE14  ,                                                                               \
+                                                                        TYPE15  ,                                                                               \
+                                                                        TYPE16  ,                                                                               \
+                                                                        TYPE17  ,                                                                               \
+                                                                        TYPE18  ,                                                                               \
+                                                                        TYPE19                                                                                  \
+                                                                    ))                                                                                          \
+                                        )
+
+//  implementation of XTypeProvider with 20 additional interfaces for getTypes()
+#define DEFINE_XTYPEPROVIDER_20( CLASS, TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8, TYPE9, TYPE10, TYPE11, TYPE12, TYPE13, TYPE14, TYPE15, TYPE16, TYPE17, TYPE18, TYPE19, TYPE20 ) \
+    PRIVATE_DEFINE_XTYPEPROVIDER_LARGE  (   CLASS,                                                                                                              \
+                                            (PRIVATE_DEFINE_TYPE_12 (   TYPE1   ,                                                                               \
+                                                                        TYPE2   ,                                                                               \
+                                                                        TYPE3   ,                                                                               \
+                                                                        TYPE4   ,                                                                               \
+                                                                        TYPE5   ,                                                                               \
+                                                                        TYPE6   ,                                                                               \
+                                                                        TYPE7   ,                                                                               \
+                                                                        TYPE8   ,                                                                               \
+                                                                        TYPE9   ,                                                                               \
+                                                                        TYPE10  ,                                                                               \
+                                                                        TYPE11  ,                                                                               \
+                                                                        TYPE12                                                                                  \
+                                                                    )),                                                                                         \
+                                            (PRIVATE_DEFINE_TYPE_8  (   TYPE13  ,                                                                               \
+                                                                        TYPE14  ,                                                                               \
+                                                                        TYPE15  ,                                                                               \
+                                                                        TYPE16  ,                                                                               \
+                                                                        TYPE17  ,                                                                               \
+                                                                        TYPE18  ,                                                                               \
+                                                                        TYPE19  ,                                                                               \
+                                                                        TYPE20                                                                                  \
                                                                     ))                                                                                          \
                                         )
 
