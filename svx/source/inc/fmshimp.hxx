@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-12 11:26:24 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCONTROLCONTAINER_HPP_
+#include <com/sun/star/awt/XControlContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -221,8 +224,7 @@ DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XF
 #define FORMS_SYNC          0x0000      // default: do in synchronous
 
 #define FORMS_UNLOAD        0x0001      // unload
-#define FORMS_RESET         0x0002      // reset after the load/unload
-#define FORMS_ASYNC         0x0004      // do this async
+#define FORMS_ASYNC         0x0002      // do this async
 
 //==============================================================================
 // FmFormNavigationDispatcher - a dispatcher responsible for a form navigation slot
@@ -485,6 +487,10 @@ public:
             void        viewActivated( FmFormView* _pCurrentView, sal_Bool _bSyncAction = sal_False );
             void        viewDeactivated( FmFormView* _pCurrentView, sal_Bool _bDeactivateController = sal_True );
 
+    void ExecuteTabOrderDialog(         // execute SID_FM_TAB_DIALOG
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >& _rxForForm
+    );
+
 protected:
     // form handling
     /// load or unload the forms on a page
@@ -500,9 +506,8 @@ protected:
     void startListening();
     void stopListening();
 
-    void ExecuteSearch();       // execute SID_FM_SEARCH
-
-    void CreateExternalView();  // execute SID_FM_VIEW_AS_GRID
+    void ExecuteSearch();               // execute SID_FM_SEARCH
+    void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
 
     sal_Bool    GetY2KState(sal_uInt16& n);
     void    SetY2KState(sal_uInt16 n);
@@ -627,6 +632,9 @@ private:
     // ConfigItem related stuff
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
     void implAdjustConfigCache();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+            getControlContainerForView();
 
     // ---------------------------------------------------
     // asyncronous cursor actions/navigation slot handling
