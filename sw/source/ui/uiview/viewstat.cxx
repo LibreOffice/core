@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:52:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 //#ifndef _TWAIN_HXX //autogen
 //#include <svtools/twain.hxx>
@@ -392,7 +395,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
-        case FN_THESAURUS_DLG:
+            case FN_THESAURUS_DLG:
             {
                 SwWrtShell  &rSh = GetWrtShell();
                 if (2 <= rSh.GetCrsrCnt())  // multi selection?
@@ -408,6 +411,12 @@ void SwView::GetState(SfxItemSet &rSet)
                         !xThes->hasLocale( SvxCreateLocale( nLang ) ))
                         rSet.DisableItem(nWhich);
                 }
+            }
+            break;
+            case SID_HANGUL_HANJA_CONVERSION:
+            {
+                if (!SvtCJKOptions().IsAnyEnabled())
+                    rSet.DisableItem(nWhich);
             }
             break;
             case SID_MAIL_SCROLLBODY_PAGEDOWN:
