@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontactredirector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:31:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 #define _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -84,7 +88,7 @@ namespace sdr
         // single ViewObjectContacts. An own derivation may be set at single ViewContacts
         // or at the ObjectContact for redirecting all. If both is used, the one at single
         // objects will have priority.
-        class ViewObjectContactRedirector
+        class SVX_DLLPUBLIC ViewObjectContactRedirector
         {
         public:
             // basic constructor.
