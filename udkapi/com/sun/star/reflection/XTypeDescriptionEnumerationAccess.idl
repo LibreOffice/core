@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:14:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,9 @@ published interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XIn
                     </tr>
                     <tr>
                         <td>struct</td>
-                        <td><type>XCompoundTypeDescription</type></td>
+                        <td><type>XCompoundTypeDescription</type> (the returned
+                        object should actually implement
+                        <type>XStructTypeDescription</type>)</td>
                     </tr>
                     <tr>
                         <td>exception</td>
