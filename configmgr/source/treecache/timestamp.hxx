@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timestamp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-14 16:21:19 $
+ *  last change: $Author: jb $ $Date: 2000-12-15 16:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ namespace configmgr
         aResult += aInterval;
         return aResult;
     }
-
+////////////////////////////////////////////////////////////////////////////////
     inline sal_Bool operator ==(TimeStamp const& lhs, TimeStamp const& rhs)
     { return lhs.getTimeValue() == rhs.getTimeValue(); }
     inline sal_Bool operator < (TimeStamp const& lhs, TimeStamp const& rhs)
@@ -146,6 +146,13 @@ namespace configmgr
     {
         return never() <= *this;
     }
+////////////////////////////////////////////////////////////////////////////////
+
+    struct ltTimeStamp //: std::binary_function<TimeStamp,TimeStamp,bool>
+    {
+        bool operator()(TimeStamp const& lhs, TimeStamp const& rhs) const
+        { return !!(lhs < rhs); }
+    };
 
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace configmgr
