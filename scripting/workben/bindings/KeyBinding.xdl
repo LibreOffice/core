@@ -1,37 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
-<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="KeyBindingDialog" dlg:left="70" dlg:top="83" dlg:width="229" dlg:height="236" dlg:closeable="true" dlg:moveable="true" dlg:title="Assign Script (Java) To Key">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="MenuBindingDialog" dlg:left="64" dlg:top="89" dlg:width="179" dlg:height="217" dlg:closeable="true" dlg:moveable="true" dlg:title="Assign Script To Key">
+ <dlg:styles>
+  <dlg:style dlg:style-id="0" dlg:font-height="7"/>
+ </dlg:styles>
  <dlg:bulletinboard>
-  <dlg:menulist dlg:id="ScriptList" dlg:tab-index="0" dlg:left="62" dlg:top="20" dlg:width="150" dlg:height="55"/>
-  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="1" dlg:left="65" dlg:top="8" dlg:width="157" dlg:height="7"/>
-  <dlg:text dlg:id="Label1" dlg:tab-index="2" dlg:left="7" dlg:top="7" dlg:width="57" dlg:height="9" dlg:value="Select script function"/>
-  <dlg:button dlg:id="Help" dlg:tab-index="3" dlg:left="182" dlg:top="218" dlg:width="36" dlg:height="13" dlg:value="Help">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyHelpButton" script:language="StarBasic"/>
+  <dlg:button dlg:id="Help" dlg:tab-index="0" dlg:left="136" dlg:top="200" dlg:width="36" dlg:height="13" dlg:value="Help">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuHelpButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="Cancel" dlg:tab-index="4" dlg:left="143" dlg:top="218" dlg:width="36" dlg:height="13" dlg:value="Cancel">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyCancelButton" script:language="StarBasic"/>
+  <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="1" dlg:left="9" dlg:top="190" dlg:width="167" dlg:height="6"/>
+  <dlg:button dlg:id="Cancel" dlg:tab-index="2" dlg:left="96" dlg:top="200" dlg:width="36" dlg:height="13" dlg:value="Cancel">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuCancelButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="OK" dlg:tab-index="5" dlg:left="104" dlg:top="218" dlg:width="36" dlg:height="13" dlg:value="OK">
-   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyOKButton" script:language="StarBasic"/>
+  <dlg:button dlg:id="OK" dlg:tab-index="3" dlg:left="57" dlg:top="200" dlg:width="36" dlg:height="13" dlg:value="OK">
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.MenuOKButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:fixedline dlg:id="FixedLine3" dlg:tab-index="6" dlg:left="94" dlg:top="86" dlg:width="129" dlg:height="5"/>
-  <dlg:text dlg:id="Label4" dlg:tab-index="7" dlg:left="7" dlg:top="84" dlg:width="88" dlg:height="10" dlg:value="Choose shortcut key to assign to"/>
-  <dlg:menulist dlg:id="KeyList" dlg:tab-index="8" dlg:left="62" dlg:top="114" dlg:width="150" dlg:height="40">
-   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyListListener" script:language="StarBasic"/>
-  </dlg:menulist>
-  <dlg:text dlg:id="Label6" dlg:tab-index="9" dlg:left="17" dlg:top="118" dlg:width="42" dlg:height="10" dlg:value="Shortcut Key"/>
-  <dlg:fixedline dlg:id="FixedLine4" dlg:tab-index="10" dlg:left="2" dlg:top="209" dlg:width="223" dlg:height="6"/>
-  <dlg:combobox dlg:id="KeyCombo" dlg:tab-index="11" dlg:left="62" dlg:top="97" dlg:width="150" dlg:height="12" dlg:spin="true">
+  <dlg:fixedline dlg:id="FixedLine4" dlg:tab-index="4" dlg:left="94" dlg:top="99" dlg:width="81" dlg:height="5"/>
+  <dlg:text dlg:id="Label4" dlg:tab-index="5" dlg:left="5" dlg:top="97" dlg:width="90" dlg:height="8" dlg:value="Choose shortcut key to assign to"/>
+  <dlg:combobox dlg:id="KeyCombo" dlg:tab-index="6" dlg:left="63" dlg:top="110" dlg:width="108" dlg:height="12" dlg:spin="true">
    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyComboListener" script:language="StarBasic"/>
   </dlg:combobox>
-  <dlg:text dlg:id="Label3" dlg:tab-index="12" dlg:left="17" dlg:top="97" dlg:width="42" dlg:height="10" dlg:value="Key Group"/>
-  <dlg:button dlg:id="Delete" dlg:tab-index="13" dlg:left="158" dlg:top="159" dlg:width="53" dlg:height="13" dlg:value="Delete Script Key">
+  <dlg:text dlg:id="Label5" dlg:tab-index="7" dlg:left="12" dlg:top="112" dlg:width="40" dlg:height="10" dlg:value="Key Group"/>
+  <dlg:menulist dlg:id="KeyList" dlg:tab-index="8" dlg:left="63" dlg:top="125" dlg:width="108" dlg:height="59">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyListListener" script:language="StarBasic"/>
+  </dlg:menulist>
+  <dlg:text dlg:id="Label6" dlg:tab-index="9" dlg:left="12" dlg:top="127" dlg:width="40" dlg:height="10" dlg:value="Shortcut Key"/>
+  <dlg:button dlg:id="Delete" dlg:tab-index="10" dlg:left="17" dlg:top="141" dlg:width="38" dlg:height="13" dlg:value="Delete">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyDeleteButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="NewButton" dlg:tab-index="14" dlg:left="158" dlg:top="188" dlg:width="53" dlg:height="13" dlg:value="New Script Key">
+  <dlg:button dlg:id="NewButton" dlg:tab-index="11" dlg:left="17" dlg:top="171" dlg:width="38" dlg:height="13" dlg:value="Assign">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.KeyNewButton" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:fixedline dlg:id="FixedLine2" dlg:tab-index="15" dlg:left="82" dlg:top="178" dlg:width="139" dlg:height="5"/>
-  <dlg:text dlg:id="Label2" dlg:tab-index="16" dlg:left="5" dlg:top="176" dlg:width="75" dlg:height="10" dlg:value="Assign script to shortcut key"/>
+  <dlg:menulist dlg:id="ScriptList" dlg:tab-index="12" dlg:left="64" dlg:top="48" dlg:width="108" dlg:height="44"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="13" dlg:left="43" dlg:top="7" dlg:width="132" dlg:height="6"/>
+  <dlg:text dlg:id="Label1" dlg:tab-index="14" dlg:left="5" dlg:top="7" dlg:width="36" dlg:height="8" dlg:value="Select script"/>
+  <dlg:combobox dlg:id="LocationCombo" dlg:tab-index="15" dlg:left="64" dlg:top="18" dlg:width="108" dlg:height="12" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
+  </dlg:combobox>
+  <dlg:combobox dlg:id="LanguageCombo" dlg:tab-index="16" dlg:left="64" dlg:top="34" dlg:width="108" dlg:height="12" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
+  </dlg:combobox>
+  <dlg:text dlg:id="Label7" dlg:tab-index="17" dlg:left="12" dlg:top="19" dlg:width="28" dlg:height="10" dlg:value="Location"/>
+  <dlg:text dlg:id="Label8" dlg:tab-index="18" dlg:left="12" dlg:top="32" dlg:width="35" dlg:height="8" dlg:value="Language"/>
+  <dlg:text dlg:id="Label9" dlg:tab-index="19" dlg:left="13" dlg:top="51" dlg:width="23" dlg:height="12" dlg:value="Script"/>
+  <dlg:text dlg:id="Label10" dlg:tab-index="20" dlg:left="103" dlg:top="-9" dlg:width="3" dlg:height="0" dlg:value="Label10"/>
+  <dlg:text dlg:style-id="0" dlg:id="AddOn" dlg:tab-index="21" dlg:disabled="true" dlg:left="17" dlg:top="154" dlg:width="38" dlg:height="10" dlg:value="[Add-on&apos;s only]"/>
+  <dlg:checkbox dlg:id="detail" dlg:tab-index="22" dlg:left="17" dlg:top="69" dlg:width="44" dlg:height="10" dlg:value="Detailed view" dlg:checked="false">
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="ScriptBindingLibrary.ScriptBinding.LangLocComboListener" script:language="StarBasic"/>
+  </dlg:checkbox>
  </dlg:bulletinboard>
 </dlg:window>

@@ -235,14 +235,15 @@
     </menu:menupopup>
    </menu:menu>
    <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
-   <menu:menu menu:id="slot:4" menu:label="Assign Script (Ja~va) To">
+   <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
     <menu:menupopup>
-     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="~Menu..."/>
-     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="~Key..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Scrpt to ~Menu..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteEventBinding()" menu:label="Assign Script to ~Event..."/>
+     <menu:menuitem menu:id="script://Interactive.BeanShell" menu:label="Interactive ~Beanshell Scripting..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshAllScripts()" menu:label="~Refresh All Scripts"/>
     </menu:menupopup>
    </menu:menu>
-   <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshUserScripts()" menu:label="~Refresh User Scripts (Java)"/>
-   <menu:menuitem menu:id="script://Interactive.BeanShell" menu:helpid="1929" menu:label="Interactive BeanShell Scripting"/>
    <menu:menuitem menu:id="slot:31630" menu:helpid="31630" menu:label="~Options..."/>
   </menu:menupopup>
  </menu:menu>

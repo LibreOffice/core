@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE menu:menubar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "menubar.dtd">
+<menu:menubar xmlns:menu="http://openoffice.org/2001/menu" menu:id="menubar">
+ <menu:menu menu:id="slot:5510" menu:label="~File">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:5537" menu:helpid="5537" menu:label="~New"/>
+   <menu:menuitem menu:id="slot:5501" menu:helpid="5501" menu:label="~Open..."/>
+   <menu:menuitem menu:id="slot:6381" menu:helpid="6381" menu:label="A~utoPilot"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5503" menu:helpid="5503" menu:label="~Close"/>
+   <menu:menuitem menu:id="slot:5505" menu:helpid="5505" menu:label="~Save"/>
+   <menu:menuitem menu:id="slot:5502" menu:helpid="5502" menu:label="Save ~As..."/>
+   <menu:menuitem menu:id="slot:5309" menu:helpid="5309" menu:label="Sa~ve All"/>
+   <menu:menuitem menu:id="slot:5508" menu:helpid="5508" menu:label="Reload"/>
+   <menu:menuitem menu:id="slot:6583" menu:helpid="6583" menu:label="Versions..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5829" menu:helpid="5829" menu:label="~Export..."/>
+   <menu:menu menu:id="slot:98" menu:label="Sen~d">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5331" menu:helpid="5331" menu:label="Document as ~E-mail..."/>
+     <menu:menuitem menu:id="slot:6672" menu:helpid="6672" menu:label="Document as P~DF Attachment..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5535" menu:helpid="5535" menu:label="Propert~ies..."/>
+   <menu:menu menu:id="slot:103" menu:label="~Templates">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5540" menu:helpid="5540" menu:label="~Organize..."/>
+     <menu:menuitem menu:id="slot:6655" menu:helpid="6655" menu:label="~Address Book Source..."/>
+     <menu:menuitem menu:id="slot:5538" menu:helpid="5538" menu:label="~Save..."/>
+     <menu:menuitem menu:id="slot:5594" menu:helpid="5594" menu:label="~Edit..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5504" menu:helpid="5504" menu:label="~Print..."/>
+   <menu:menuitem menu:id="slot:5302" menu:helpid="5302" menu:label="P~rinter Settings..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5300" menu:helpid="5300" menu:label="E~xit"/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:20" menu:label="~Edit">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:5701" menu:helpid="5701" menu:label="Can&apos;t Undo"/>
+   <menu:menuitem menu:id="slot:5700" menu:helpid="5700" menu:label="Can&apos;t Restore"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5710" menu:helpid="5710" menu:label="Cu~t"/>
+   <menu:menuitem menu:id="slot:5711" menu:helpid="5711" menu:label="~Copy"/>
+   <menu:menuitem menu:id="slot:5712" menu:helpid="5712" menu:label="~Paste"/>
+   <menu:menuitem menu:id="slot:27003" menu:helpid="27003" menu:label="Paste ~Special..."/>
+   <menu:menuitem menu:id="slot:5723" menu:helpid="5723" menu:label="Select ~All"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5961" menu:helpid="5961" menu:label="~Find &amp; Replace..."/>
+   <menu:menuitem menu:id="slot:10366" menu:helpid="10366" menu:label="Na~vigator"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27004" menu:helpid="27004" menu:label="Duplicat~e..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10126" menu:helpid="10126" menu:label="Poi~nts"/>
+   <menu:menuitem menu:id="slot:27301" menu:helpid="27301" menu:label="~Glue Points"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27319" menu:helpid="27319" menu:label="Cross-fading..."/>
+   <menu:menuitem menu:id="slot:27362" menu:helpid="27362" menu:label="F~ields..."/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:341" menu:label="S~lide">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27268" menu:helpid="27268" menu:label="~Rename Slide..."/>
+     <menu:menuitem menu:id="slot:27080" menu:helpid="27080" menu:label="D~elete Slide..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:340" menu:label="La~yer">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27043" menu:helpid="27043" menu:label="~Insert"/>
+     <menu:menuitem menu:id="slot:27048" menu:helpid="27048" menu:label="~Modify"/>
+     <menu:menuitem menu:id="slot:27081" menu:helpid="27081" menu:label="Delete"/>
+     <menu:menuitem menu:id="slot:27269" menu:helpid="27269" menu:label="~Rename"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27005" menu:helpid="27005" menu:label="Lin~ks..."/>
+   <menu:menuitem menu:id="slot:10371" menu:helpid="10371" menu:label="ImageMap"/>
+   <menu:menuitem menu:id="slot:5575" menu:helpid="5575" menu:label="~Object"/>
+   <menu:menuitem menu:id="slot:27382" menu:helpid="27382" menu:label="H~yperlink..."/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:23" menu:label="~View">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:10000" menu:helpid="10000" menu:label="~Zoom..."/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:92" menu:label="~Toolbars">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5910" menu:helpid="5910" menu:label="~Function Bar"/>
+     <menu:menuitem menu:id="slot:5905" menu:helpid="5905" menu:label="~Object Bar"/>
+     <menu:menuitem menu:id="slot:5909" menu:helpid="5909" menu:label="Main ~Toolbar"/>
+     <menu:menuitem menu:id="slot:10360" menu:helpid="10360" menu:label="~Hyperlink Bar"/>
+     <menu:menuitem menu:id="slot:5911" menu:helpid="5911" menu:label="Optio~n Bar"/>
+     <menu:menuitem menu:id="slot:10417" menu:helpid="10417" menu:label="~Color Bar"/>
+     <menu:menuseparator/>
+     <menu:menuitem menu:id="slot:5908" menu:helpid="5908" menu:label="Customi~ze..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:27040" menu:helpid="27040" menu:label="~Rulers"/>
+   <menu:menuitem menu:id="slot:5920" menu:helpid="5920" menu:label="~Status Bar"/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:100" menu:label="~Display Quality">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27366" menu:helpid="27366" menu:label="~Color"/>
+     <menu:menuitem menu:id="slot:27367" menu:helpid="27367" menu:label="~Grayscale"/>
+     <menu:menuitem menu:id="slot:27368" menu:helpid="27368" menu:label="~Black and White"/>
+     <menu:menuitem menu:id="slot:27400" menu:helpid="27400" menu:label="~High Contrast"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:27327" menu:helpid="27327" menu:label="~Preview"/>
+   <menu:menu menu:id="slot:101" menu:label="Pre~view Mode">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27369" menu:helpid="27369" menu:label="~Color"/>
+     <menu:menuitem menu:id="slot:27370" menu:helpid="27370" menu:label="~Grayscale"/>
+     <menu:menuitem menu:id="slot:27371" menu:helpid="27371" menu:label="~Black and White"/>
+     <menu:menuitem menu:id="slot:27401" menu:helpid="27401" menu:label="~High Contrast"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27049" menu:helpid="27049" menu:label="S~lide"/>
+   <menu:menuitem menu:id="slot:27050" menu:helpid="27050" menu:label="La~yer"/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:338" menu:label="~Grid">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27322" menu:helpid="27322" menu:label="~Visible Grid"/>
+     <menu:menuitem menu:id="slot:27154" menu:helpid="27154" menu:label="Snap to Grid"/>
+     <menu:menuitem menu:id="slot:27323" menu:helpid="27323" menu:label="Grid to ~Front"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:339" menu:label="~Snap Lines">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27324" menu:helpid="27324" menu:label="~Snap Lines Visible"/>
+     <menu:menuitem menu:id="slot:27152" menu:helpid="27152" menu:label="Snap to Snap Lines"/>
+     <menu:menuitem menu:id="slot:27325" menu:helpid="27325" menu:label="Snap Lines to Front"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5627" menu:helpid="5627" menu:label="F~ull Screen"/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:21" menu:label="~Insert">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:27014" menu:helpid="27014" menu:label="Slid~e"/>
+   <menu:menuitem menu:id="slot:27342" menu:helpid="27342" menu:label="D~uplicate Slide"/>
+   <menu:menuitem menu:id="slot:27043" menu:helpid="27043" menu:label="~Layer..."/>
+   <menu:menuitem menu:id="slot:27038" menu:helpid="27038" menu:label="~Insert Snap Point/Line..."/>
+   <menu:menu menu:id="slot:99" menu:label="Fiel~ds">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27358" menu:helpid="27358" menu:label="~Date (fixed)"/>
+     <menu:menuitem menu:id="slot:27357" menu:helpid="27357" menu:label="Dat~e (variable)"/>
+     <menu:menuitem menu:id="slot:27360" menu:helpid="27360" menu:label="~Time (fixed)"/>
+     <menu:menuitem menu:id="slot:27359" menu:helpid="27359" menu:label="T~ime (variable)"/>
+     <menu:menuseparator/>
+     <menu:menuitem menu:id="slot:27364" menu:helpid="27364" menu:label="~Author"/>
+     <menu:menuitem menu:id="slot:27361" menu:helpid="27361" menu:label="~Page Numbers"/>
+     <menu:menuitem menu:id="slot:27363" menu:helpid="27363" menu:label="~File Name"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:27019" menu:helpid="27019" menu:label="S~pecial Character..."/>
+   <menu:menuitem menu:id="slot:5678" menu:helpid="5678" menu:label="~Hyperlink"/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:1" menu:label="Scan">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:10331" menu:helpid="10331" menu:label="~Select Source..."/>
+     <menu:menuitem menu:id="slot:10332" menu:helpid="10332" menu:label="~Request..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10217" menu:helpid="10217" menu:label="Sp~readsheet"/>
+   <menu:menuitem menu:id="slot:10241" menu:helpid="10241" menu:label="~Graphics..."/>
+   <menu:menu menu:id="slot:2" menu:label="~Object">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5561" menu:helpid="5561" menu:label="~OLE Object..."/>
+     <menu:menuitem menu:id="slot:5672" menu:helpid="5672" menu:label="~Plug-in..."/>
+     <menu:menuitem menu:id="slot:5676" menu:helpid="5676" menu:label="~Sound..."/>
+     <menu:menuitem menu:id="slot:5677" menu:helpid="5677" menu:label="~Video..."/>
+     <menu:menuitem menu:id="slot:5673" menu:helpid="5673" menu:label="~Applet..."/>
+     <menu:menuitem menu:id="slot:27106" menu:helpid="27106" menu:label="~Formula..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:10140" menu:helpid="10140" menu:label="Chart"/>
+   <menu:menuitem menu:id="slot:5563" menu:helpid="5563" menu:label="Float~ing Frame..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27015" menu:helpid="27015" menu:label="~File..."/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:22" menu:label="F~ormat">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:10456" menu:helpid="10456" menu:label="~Default"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10143" menu:helpid="10143" menu:label="L~ine..."/>
+   <menu:menuitem menu:id="slot:10142" menu:helpid="10142" menu:label="A~rea..."/>
+   <menu:menuitem menu:id="slot:27281" menu:helpid="27281" menu:label="Te~xt..."/>
+   <menu:menuitem menu:id="slot:10087" menu:helpid="10087" menu:label="Position and Si~ze..."/>
+   <menu:menuitem menu:id="slot:10613" menu:helpid="10613" menu:label="Con~trol..."/>
+   <menu:menuitem menu:id="slot:10614" menu:helpid="10614" menu:label="For~m..."/>
+   <menu:menuitem menu:id="slot:27320" menu:helpid="27320" menu:label="Dimen~sions..."/>
+   <menu:menuitem menu:id="slot:27338" menu:helpid="27338" menu:label="~Connector..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10296" menu:helpid="10296" menu:label="C~haracter..."/>
+   <menu:menuitem menu:id="slot:10156" menu:helpid="10156" menu:label="~Numbering/Bullets..."/>
+   <menu:menu menu:id="slot:1" menu:label="Case/Characters">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:10912" menu:helpid="10912" menu:label="~Uppercase"/>
+     <menu:menuitem menu:id="slot:10913" menu:helpid="10913" menu:label="~Lowercase"/>
+     <menu:menuitem menu:id="slot:10914" menu:helpid="10914" menu:label="H~alf-width"/>
+     <menu:menuitem menu:id="slot:10915" menu:helpid="10915" menu:label="Full-width"/>
+     <menu:menuitem menu:id="slot:10916" menu:helpid="10916" menu:label="~Hiragana"/>
+     <menu:menuitem menu:id="slot:10917" menu:helpid="10917" menu:label="~Katakana"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:10297" menu:helpid="10297" menu:label="P~aragraph..."/>
+   <menu:menuitem menu:id="slot:27002" menu:helpid="27002" menu:label="~Page..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27048" menu:helpid="27048" menu:label="~Layer..."/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:95" menu:label="Styl~es">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5573" menu:helpid="5573" menu:label="~Catalog..."/>
+     <menu:menuitem menu:id="slot:27064" menu:helpid="27064" menu:label="~Slide Design..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:5539" menu:helpid="5539" menu:label="St~ylist"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10256" menu:helpid="10256" menu:label="F~ontWork"/>
+   <menu:menuitem menu:id="slot:10644" menu:helpid="10644" menu:label="~3D Effects"/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:25" menu:label="~Tools">
+  <menu:menupopup>
+   <menu:menu menu:id="slot:94" menu:label="~Spellcheck">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:10243" menu:helpid="10243" menu:label="~Check..."/>
+     <menu:menuitem menu:id="slot:12021" menu:helpid="12021" menu:label="~AutoSpellcheck"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:10245" menu:helpid="10245" menu:label="~Thesaurus..."/>
+   <menu:menuitem menu:id="slot:27340" menu:helpid="27340" menu:label="~Hyphenation"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10424" menu:helpid="10424" menu:label="~AutoCorrect..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5960" menu:helpid="5960" menu:label="~Gallery"/>
+   <menu:menuitem menu:id="slot:10350" menu:helpid="10350" menu:label="~Eyedropper"/>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:1" menu:label="~Macros">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:6669" menu:helpid="6669" menu:label="Record Macro"/>
+     <menu:menuitem menu:id="slot:5959" menu:helpid="5959" menu:label="~Macro..."/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:5904" menu:helpid="5904" menu:label="~Configure..."/>
+   <menu:menu menu:id="slot:4" menu:label="Scripting Add-on's">
+    <menu:menupopup>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteMenuBinding()" menu:label="Assign Scrpt to ~Menu..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteKeyBinding" menu:label="Assign Script to ~Key..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.ExecuteEventBinding()" menu:label="Assign Script to ~Event..."/>
+     <menu:menuitem menu:id="script://Interactive.BeanShell" menu:label="Interactive ~Beanshell Scripting..."/>
+     <menu:menuitem menu:id="macro:///ScriptBindingLibrary.ScriptBinding.RefreshAllScripts()" menu:label="~Refresh All Scripts"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:31630" menu:helpid="31630" menu:label="~Options..."/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:24" menu:label="~Modify">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:10129" menu:helpid="10129" menu:label="~Rotate"/>
+   <menu:menu menu:id="slot:1" menu:label="~Flip">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27034" menu:helpid="27034" menu:label="~Vertically"/>
+     <menu:menuitem menu:id="slot:27035" menu:helpid="27035" menu:label="~Horizontally"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menu menu:id="slot:2" menu:label="~Convert">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:27036" menu:helpid="27036" menu:label="To ~Curve"/>
+     <menu:menuitem menu:id="slot:27037" menu:helpid="27037" menu:label="To ~Polygon"/>
+     <menu:menuitem menu:id="slot:27381" menu:helpid="27381" menu:label="To C~ontour"/>
+     <menu:menuitem menu:id="slot:10648" menu:helpid="10648" menu:label="To 3~D"/>
+     <menu:menuitem menu:id="slot:10649" menu:helpid="10649" menu:label="To 3D ~Rotation Object"/>
+     <menu:menuitem menu:id="slot:27378" menu:helpid="27378" menu:label="To ~Bitmap"/>
+     <menu:menuitem menu:id="slot:27379" menu:helpid="27379" menu:label="To ~Metafile"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menu menu:id="slot:96" menu:label="~Arrange">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:10286" menu:helpid="10286" menu:label="~Bring to Front"/>
+     <menu:menuitem menu:id="slot:27031" menu:helpid="27031" menu:label="Bring ~Forward"/>
+     <menu:menuitem menu:id="slot:27032" menu:helpid="27032" menu:label="Send Back~ward"/>
+     <menu:menuitem menu:id="slot:10287" menu:helpid="10287" menu:label="~Send to Back"/>
+     <menu:menuseparator/>
+     <menu:menuitem menu:id="slot:27326" menu:helpid="27326" menu:label="In Front of ~Object"/>
+     <menu:menuitem menu:id="slot:27116" menu:helpid="27116" menu:label="Be~hind Object"/>
+     <menu:menuseparator/>
+     <menu:menuitem menu:id="slot:27117" menu:helpid="27117" menu:label="~Reverse"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menu menu:id="slot:3" menu:label="A~lignment">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:10131" menu:helpid="10131" menu:label="~Left"/>
+     <menu:menuitem menu:id="slot:10132" menu:helpid="10132" menu:label="~Centered"/>
+     <menu:menuitem menu:id="slot:10133" menu:helpid="10133" menu:label="~Right"/>
+     <menu:menuseparator/>
+     <menu:menuitem menu:id="slot:10134" menu:helpid="10134" menu:label="~Top"/>
+     <menu:menuitem menu:id="slot:10135" menu:helpid="10135" menu:label="C~enter"/>
+     <menu:menuitem menu:id="slot:10136" menu:helpid="10136" menu:label="~Bottom"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuitem menu:id="slot:5683" menu:helpid="5683" menu:label="~Distribution..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27027" menu:helpid="27027" menu:label="~Name Object..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:10454" menu:helpid="10454" menu:label="~Group"/>
+   <menu:menuitem menu:id="slot:10455" menu:helpid="10455" menu:label="~Ungroup"/>
+   <menu:menuitem menu:id="slot:27096" menu:helpid="27096" menu:label="~Enter Group"/>
+   <menu:menuitem menu:id="slot:27097" menu:helpid="27097" menu:label="E~xit Group"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27026" menu:helpid="27026" menu:label="Comb~ine"/>
+   <menu:menuitem menu:id="slot:27082" menu:helpid="27082" menu:label="~Split"/>
+   <menu:menu menu:id="slot:4" menu:label="~Shapes">
+    <menu:menupopup>
+     <menu:menuitem menu:id="slot:5679" menu:helpid="5679" menu:label="~Merge"/>
+     <menu:menuitem menu:id="slot:5680" menu:helpid="5680" menu:label="~Subtract"/>
+     <menu:menuitem menu:id="slot:5681" menu:helpid="5681" menu:label="I~ntersect"/>
+    </menu:menupopup>
+   </menu:menu>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:27093" menu:helpid="27093" menu:label="C~onnect"/>
+   <menu:menuitem menu:id="slot:27094" menu:helpid="27094" menu:label="~Break"/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:5610" menu:label="~Window">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:5620" menu:helpid="5620" menu:label="~New Window"/>
+   <menu:menuitem menu:id="slot:5621" menu:helpid="5621" menu:label="Close"/>
+   <menu:menuseparator/>
+  </menu:menupopup>
+ </menu:menu>
+ <menu:menu menu:id="slot:5410" menu:label="~Help">
+  <menu:menupopup>
+   <menu:menuitem menu:id="slot:5401" menu:helpid="5401" menu:label="~Contents"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5962" menu:helpid="5962" menu:label="Help ~Agent"/>
+   <menu:menuitem menu:id="slot:5404" menu:helpid="5404" menu:label="~Tips"/>
+   <menu:menuitem menu:id="slot:5403" menu:helpid="5403" menu:label="~Extended Tips"/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:6537" menu:helpid="6537" menu:label="~Registration..."/>
+   <menu:menuseparator/>
+   <menu:menuitem menu:id="slot:5301" menu:helpid="5301" menu:label="A~bout OpenOffice.org..."/>
+  </menu:menupopup>
+ </menu:menu>
+</menu:menubar>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE accel:acceleratorlist PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "accelerator.dtd">
+<accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <accel:item accel:code="KEY_F8" accel:shift="true" accel:mod1="true" xlink:href="slot:10367"/>
+ <accel:item accel:code="KEY_P" accel:shift="true" accel:mod1="true" xlink:href="slot:10294"/>
+ <accel:item accel:code="KEY_N" accel:shift="true" accel:mod1="true" xlink:href="slot:5500"/>
+ <accel:item accel:code="KEY_K" accel:shift="true" accel:mod1="true" xlink:href="slot:27026"/>
+ <accel:item accel:code="KEY_G" accel:shift="true" accel:mod1="true" xlink:href="slot:10454"/>
+ <accel:item accel:code="KEY_B" accel:shift="true" accel:mod1="true" xlink:href="slot:10295"/>
+ <accel:item accel:code="KEY_SUBTRACT" accel:mod1="true" xlink:href="slot:27032"/>
+ <accel:item accel:code="KEY_ADD" accel:mod1="true" xlink:href="slot:27031"/>
+ <accel:item accel:code="KEY_INSERT" accel:mod1="true" xlink:href="slot:5711"/>
+ <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href="slot:5573"/>
+ <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href="slot:10245"/>
+ <accel:item accel:code="KEY_F3" accel:mod1="true" xlink:href="slot:27097"/>
+ <accel:item accel:code="KEY_Z" accel:mod1="true" xlink:href="slot:5701"/>
+ <accel:item accel:code="KEY_Y" accel:mod1="true" xlink:href="slot:5700"/>
+ <accel:item accel:code="KEY_X" accel:mod1="true" xlink:href="slot:5710"/>
+ <accel:item accel:code="KEY_V" accel:mod1="true" xlink:href="slot:5712"/>
+ <accel:item accel:code="KEY_U" accel:mod1="true" xlink:href="slot:10014"/>
+ <accel:item accel:code="KEY_S" accel:mod1="true" xlink:href="slot:5505"/>
+ <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href="slot:10029"/>
+ <accel:item accel:code="KEY_Q" accel:mod1="true" xlink:href="slot:5300"/>
+ <accel:item accel:code="KEY_P" accel:mod1="true" xlink:href="slot:5504"/>
+ <accel:item accel:code="KEY_O" accel:mod1="true" xlink:href="slot:5501"/>
+ <accel:item accel:code="KEY_L" accel:mod1="true" xlink:href="slot:10028"/>
+ <accel:item accel:code="KEY_J" accel:mod1="true" xlink:href="slot:10031"/>
+ <accel:item accel:code="KEY_I" accel:mod1="true" xlink:href="slot:10008"/>
+ <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href="slot:10030"/>
+ <accel:item accel:code="KEY_C" accel:mod1="true" xlink:href="slot:5711"/>
+ <accel:item accel:code="KEY_B" accel:mod1="true" xlink:href="slot:10009"/>
+ <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href="slot:10035"/>
+ <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href="slot:10036"/>
+ <accel:item accel:code="KEY_1" accel:mod1="true" xlink:href="slot:10034"/>
+ <accel:item accel:code="KEY_DELETE" accel:shift="true" xlink:href="slot:5710"/>
+ <accel:item accel:code="KEY_INSERT" accel:shift="true" xlink:href="slot:5712"/>
+ <accel:item accel:code="KEY_F3" accel:shift="true" xlink:href="slot:27004"/>
+ <accel:item accel:code="KEY_REPEAT" xlink:href="slot:5702"/>
+ <accel:item accel:code="KEY_UNDO" xlink:href="slot:5701"/>
+ <accel:item accel:code="KEY_PASTE" xlink:href="slot:5712"/>
+ <accel:item accel:code="KEY_COPY" xlink:href="slot:5711"/>
+ <accel:item accel:code="KEY_CUT" xlink:href="slot:5710"/>
+ <accel:item accel:code="KEY_OPEN" xlink:href="slot:5501"/>
+ <accel:item accel:code="KEY_DELETE" xlink:href="slot:5713"/>
+ <accel:item accel:code="KEY_F11" xlink:href="slot:5539"/>
+ <accel:item accel:code="KEY_F8" xlink:href="slot:10126"/>
+ <accel:item accel:code="KEY_F7" xlink:href="slot:10243"/>
+ <accel:item accel:code="KEY_F5" xlink:href="slot:10366"/>
+ <accel:item accel:code="KEY_F4" xlink:href="slot:10087"/>
+ <accel:item accel:code="KEY_F3" xlink:href="slot:27096"/>
+ <accel:item accel:code="KEY_F2" xlink:href="slot:10006"/>
+</accel:acceleratorlist>
