@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-19 11:47:40 $
+ *  last change: $Author: pl $ $Date: 2002-09-20 11:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <rmoutdev.hxx>
 #endif
 #include <osl/thread.h>
+#include <rtl/crc.h>
 
 #include "implncvt.hxx"
 
@@ -3740,10 +3741,10 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
                   "<< /Type /XObject\r\n"
                   "   /Subtype /Image\r\n"
                   "   /Width " );
-    aLine.append( (sal_Int32)rObject.m_aPixelSize.Width() );
+    aLine.append( (sal_Int32)rObject.m_aID.m_aPixelSize.Width() );
     aLine.append( "\r\n"
                   "   /Height " );
-    aLine.append( (sal_Int32)rObject.m_aPixelSize.Height() );
+    aLine.append( (sal_Int32)rObject.m_aID.m_aPixelSize.Height() );
     aLine.append( "\r\n"
                   "   /BitsPerComponent 8\r\n"
                   "   /ColorSpace /DeviceRGB\r\n"
@@ -4014,18 +4015,41 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 
 void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
+    MARK( "drawJPGBitmap" );
+
     OStringBuffer aLine( 80 );
     updateGraphicsState();
 
-    m_aJPGs.push_front( JPGEmit() );
-    JPGEmit& rEmit = m_aJPGs.front();
-    rEmit.m_pStream = new SvMemoryStream;
+    SvMemoryStream* pStream = new SvMemoryStream;
     rDCTData.Seek( 0 );
-    *rEmit.m_pStream << rDCTData;
-    rEmit.m_aPixelSize = rSizePixel;
-    if( !! rMask && rMask.GetSizePixel() == rSizePixel )
-        rEmit.m_aMask = rMask;
-    rEmit.m_nObject = createObject();
+    *pStream << rDCTData;
+    pStream->Seek( STREAM_SEEK_TO_END );
+
+    BitmapID aID;
+    aID.m_aPixelSize    = rSizePixel;
+    aID.m_nSize         = pStream->Tell();
+    pStream->Seek( STREAM_SEEK_TO_BEGIN );
+    aID.m_nChecksum     = rtl_crc32( 0, pStream->GetData(), aID.m_nSize );
+    if( ! rMask.IsEmpty() )
+        aID.m_nMaskChecksum = rMask.GetChecksum();
+
+    std::list< JPGEmit >::const_iterator it;
+    for( it = m_aJPGs.begin(); it != m_aJPGs.end() && ! (aID == it->m_aID); ++it )
+        ;
+    if( it == m_aJPGs.end() )
+    {
+        m_aJPGs.push_front( JPGEmit() );
+        JPGEmit& rEmit = m_aJPGs.front();
+        rEmit.m_nObject     = createObject();
+        rEmit.m_aID         = aID;
+        rEmit.m_pStream     = pStream;
+        if( !! rMask && rMask.GetSizePixel() == rSizePixel )
+            rEmit.m_aMask   = rMask;
+
+        it = m_aJPGs.begin();
+    }
+    else
+        delete pStream;
 
     aLine.append( "q " );
     m_aPages.back().appendMappedLength( rTargetArea.GetWidth(), aLine, false );
@@ -4034,7 +4058,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, c
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\r\n  /Im" );
-    aLine.append( rEmit.m_nObject );
+    aLine.append( it->m_nObject );
     aLine.append( " Do Q\r\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -4061,25 +4085,49 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& rBitmap, bool bDrawMask )
+{
+    BitmapID aID;
+    aID.m_aPixelSize        = rBitmap.GetSizePixel();
+    aID.m_nSize             = rBitmap.GetBitCount();
+    aID.m_nChecksum         = rBitmap.GetBitmap().GetChecksum();
+    aID.m_nMaskChecksum     = 0;
+    if( rBitmap.IsAlpha() )
+        aID.m_nMaskChecksum = rBitmap.GetAlpha().GetChecksum();
+    else
+    {
+        Bitmap aMask = rBitmap.GetMask();
+        if( ! aMask.IsEmpty() )
+            aID.m_nMaskChecksum = aMask.GetChecksum();
+    }
+    for( std::list< BitmapEmit >::const_iterator it = m_aBitmaps.begin(); it != m_aBitmaps.end(); ++it )
+    {
+        if( aID == it->m_aID )
+            return *it;
+    }
+    m_aBitmaps.push_front( BitmapEmit() );
+    m_aBitmaps.front().m_aID        = aID;
+    m_aBitmaps.front().m_aBitmap    = rBitmap;
+    m_aBitmaps.front().m_nObject    = createObject();
+    m_aBitmaps.front().m_bDrawMask  = bDrawMask;
+
+    return m_aBitmaps.front();
+}
+
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap )
 {
     MARK( "drawBitmap (Bitmap)" );
 
-    m_aBitmaps.push_back( BitmapEmit() );
-    m_aBitmaps.back().m_nObject             = createObject();
-    m_aBitmaps.back().m_aBitmap             = BitmapEx( rBitmap );
-
-    drawBitmap( rDestPoint, rDestSize, m_aBitmaps.back(), Color( COL_TRANSPARENT ) );
+    const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( rBitmap ) );
+    drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap )
 {
     MARK( "drawBitmap (BitmapEx)" );
 
-    m_aBitmaps.push_back( BitmapEmit() );
-    m_aBitmaps.back().m_nObject             = createObject();
-    m_aBitmaps.back().m_aBitmap             = rBitmap;
-    drawBitmap( rDestPoint, rDestSize, m_aBitmaps.back(), Color( COL_TRANSPARENT ) );
+    const BitmapEmit& rEmit = createBitmapEmit( rBitmap );
+    drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
 
 void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor )
@@ -4091,12 +4139,8 @@ void PDFWriterImpl::drawMask( const Point& rDestPoint, const Size& rDestSize, co
         aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
     DBG_ASSERT( aBitmap.GetBitCount() == 1, "mask conversion failed" );
 
-    m_aBitmaps.push_back( BitmapEmit() );
-    m_aBitmaps.back().m_nObject             = createObject();
-    m_aBitmaps.back().m_aBitmap             = aBitmap;
-    m_aBitmaps.back().m_bDrawMask           = true;
-
-    drawBitmap( rDestPoint, rDestSize, m_aBitmaps.back(), rFillColor );
+    const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ), true );
+    drawBitmap( rDestPoint, rDestSize, rEmit, rFillColor );
 }
 
 sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& rSize )
@@ -4316,9 +4360,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
             else
             {
                 // push the bitmap
-                m_aBitmaps.push_back( BitmapEmit() );
-                m_aBitmaps.back().m_nObject = createObject();
-                m_aBitmaps.back().m_aBitmap = aBitmap;
+                const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ) );
 
                 // convert to page coordinates; this needs to be done here
                 // since the emit does not know the page anymore
@@ -4328,7 +4370,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                 // push the pattern
                 m_aTilings.push_back( BitmapPatternEmit() );
                 m_aTilings.back().m_nObject         = createObject();
-                m_aTilings.back().m_nBitmapObject   = m_aBitmaps.back().m_nObject;
+                m_aTilings.back().m_nBitmapObject   = rEmit.m_nObject;
                 m_aTilings.back().m_aRectangle      = aConvertRect;
 
                 updateGraphicsState();

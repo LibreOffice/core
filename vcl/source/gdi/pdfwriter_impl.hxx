@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-19 11:47:41 $
+ *  last change: $Author: pl $ $Date: 2002-09-20 11:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,36 @@ public:
 
     friend struct PDFPage;
 
+    struct BitmapID
+    {
+        Size        m_aPixelSize;
+        sal_Int32   m_nSize;
+        sal_Int32   m_nChecksum;
+        sal_Int32   m_nMaskChecksum;
+
+        BitmapID() : m_nSize( 0 ), m_nChecksum( 0 ), m_nMaskChecksum( 0 ) {}
+
+        BitmapID& operator=( const BitmapID& rCopy )
+        {
+            m_aPixelSize    = rCopy.m_aPixelSize;
+            m_nSize         = rCopy.m_nSize;
+            m_nChecksum     = rCopy.m_nChecksum;
+            m_nMaskChecksum = rCopy.m_nMaskChecksum;
+            return *this;
+        }
+
+        bool operator==( const BitmapID& rComp )
+        {
+            return (m_aPixelSize == rComp.m_aPixelSize &&
+                    m_nSize == rComp.m_nSize &&
+                    m_nChecksum == rComp.m_nChecksum &&
+                    m_nMaskChecksum == rComp.m_nMaskChecksum );
+        }
+    };
+
     struct BitmapEmit
     {
+        BitmapID    m_aID;
         BitmapEx    m_aBitmap;
         sal_Int32   m_nObject;
         bool        m_bDrawMask;
@@ -189,9 +217,9 @@ public:
 
     struct JPGEmit
     {
+        BitmapID            m_aID;
         SvMemoryStream*     m_pStream;
         Bitmap              m_aMask;
-        Size                m_aPixelSize;
         sal_Int32           m_nObject;
 
         JPGEmit() : m_pStream( NULL ) {}
@@ -376,6 +404,10 @@ private:
     bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
 
     bool writeJPG( JPGEmit& rEmit );
+
+    /* tries to find the bitmap by its id and returns its emit data if exists,
+       else creates a new emit data block */
+    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, bool bDrawMask = false );
 
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
