@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:44:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3917,7 +3917,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "NPER" ;
         Text[ chinese_simplified ] = "NPER";
         Text[ russian ] = " œ≈–";
-        Text[ polish ] = "LICZBA_RAT";
+        Text[ polish ] = "LICZBA.RAT";
         Text[ japanese ] = "NPER";
         Text[ chinese_traditional ] = "NPER";
         Text[ arabic ] = "NPER";
@@ -4029,7 +4029,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CUMIPMT" ;
         Text[ chinese_simplified ] = "CUMIPMT";
         Text[ russian ] = "Œ¡ŸœÀ¿“¿";
-        Text[ polish ] = "IPMT";
+        Text[ polish ] = "CUMIPMT";
         Text[ japanese ] = "CUMIPMT";
         Text[ chinese_traditional ] = "CUMIPMT";
         Text[ arabic ] = "CUMIPMT";
@@ -4057,7 +4057,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CUMPRINC" ;
         Text[ chinese_simplified ] = "CUMPRINC";
         Text[ russian ] = "Œ¡ŸƒŒ’Œƒ";
-        Text[ polish ] = "PMT";
+        Text[ polish ] = "CUMPRINC";
         Text[ japanese ] = "CUMPRINC";
         Text[ chinese_traditional ] = "CUMPRINC";
         Text[ arabic ] = "CUMPRINC";
