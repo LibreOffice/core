@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 12:39:46 $
+ *  last change: $Author: mba $ $Date: 2000-12-07 11:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,18 @@ sal_Bool SfxObjectShell::DoSave()
     return bOk;
 }
 
+void Lock_Impl( SfxObjectShell* pDoc, BOOL bLock )
+{
+    SfxViewFrame *pFrame= SfxViewFrame::GetFirst( pDoc );
+    while ( pFrame )
+    {
+        pFrame->GetDispatcher()->Lock( bLock );
+        pFrame->Enable( !bLock );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDoc );
+    }
+
+}
+
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::SaveTo_Impl
@@ -705,19 +717,16 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     sal_Bool bOldStat = pImp->bForbidReload;
     pImp->bForbidReload = sal_True;
 
-    SfxViewFrame *pFrame= SfxViewFrame::GetFirst(this);
-    while ( pFrame )
-    {
-        pFrame->GetDispatcher()->Lock( sal_True );
-        pFrame->Enable( sal_False );
-        pFrame = SfxViewFrame::GetNext(*pFrame, this);
-    }
-
+    Lock_Impl( this, TRUE );
     if(IsOwnStorageFormat_Impl(rMedium))
     {
         SvStorageRef aMedRef = rMedium.GetStorage();
         if ( !aMedRef.Is() )
+        {
+            Lock_Impl( this, FALSE );
             return sal_False;
+        }
+
         String aPasswd;
         if ( GetPasswd_Impl( rMedium.GetItemSet(), aPasswd ) )
             aMedRef->SetKey( S2BS( aPasswd ) ); //!!! (pb) needs new implementation
@@ -888,16 +897,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         bOk=rMedium.Commit();
     }
     else
-        return sal_False;
-
-    pFrame = SfxViewFrame::GetFirst(this);
-    while ( pFrame )
     {
-        pFrame->GetDispatcher()->Lock( sal_False );
-        pFrame->Enable( sal_True );
-        pFrame = SfxViewFrame::GetNext(*pFrame, this);
+        Lock_Impl( this, FALSE );
+        return sal_False;
     }
 
+    Lock_Impl( this, FALSE );
     pImp->bForbidReload = bOldStat;
 
     if(bOk && pFilter)
