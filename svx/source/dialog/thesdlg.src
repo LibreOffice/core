@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:53:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ ModalDialog RID_SVXDLG_THESAURUS
         Text = "Variationen" ;
         Text [ English ] = "Variations" ;
         Text [ norwegian ] = "Variasjoner" ;
-        Text [ italian ] = "Alternative" ;
+        Text [ italian ] = "Variazioni" ;
         Text [ portuguese_brazilian ] = "Varia??es" ;
         Text [ portuguese ] = "Alternativas" ;
         Text [ finnish ] = "Muunnelmat" ;
@@ -410,7 +410,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text [ English ] = "Choice" ;
         Text [ english_us ] = "Selection" ;
         Text [ dutch ] = "Selectie" ;
-        Text [ italian ] = "Scelta" ;
+        Text [ italian ] = "Selezione" ;
         Text [ spanish ] = "Selección" ;
         Text [ french ] = "Sélection" ;
         Text [ swedish ] = "Urval" ;
@@ -421,7 +421,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Text[ russian ] = "Âûáîð";
         Text[ polish ] = "Wybór";
         Text[ japanese ] = "‘I‘ð";
-        Text[ chinese_traditional ] = "¿ï¾Ü";
+        Text[ chinese_traditional ] = "¿ï¨ú";
         Text[ arabic ] = "ÇáÇÎÊíÇÑ";
         Text[ greek ] = "ÅðéëïãÞ";
         Text[ korean ] = "¼±ÅÃ";
@@ -460,4 +460,5 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Text[ finnish ] = "Valitse kieli";
 };
  // ********************************************************************** EOF
+
 
