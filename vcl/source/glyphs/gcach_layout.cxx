@@ -4,8 +4,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.8 $
- *  last change: $Author: hdu $ $Date: 2002-06-06 14:49:22 $
+ *  $Revision: 1.9 $
+ *  last change: $Author: hdu $ $Date: 2002-06-10 14:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ ServerFontLayout* IcuLayoutEngine::operator()( ServerFont* pFont,
     // find matching script
     // TODO: handle errors better
     // TODO: consider script changes
-    le_int32 eScriptCode = uscript_getScript( pIcuChars[0], &rcI18n );
+    le_int32 eScriptCode = uscript_getScript( pIcuChars[rArgs.mnFirstCharIndex], &rcI18n );
 
     // get layout engine matching to this script
     // no engine change necessary if script is latin
