@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:08 $
+ *  last change: $Author: mt $ $Date: 2002-02-08 11:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/awt/Size.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
+#endif
+
 #include <tools/gen.hxx>
 
 inline ::com::sun::star::awt::Size AWTSize( const Size& rVCLSize )
@@ -80,6 +84,16 @@ inline ::com::sun::star::awt::Size AWTSize( const Size& rVCLSize )
 inline Size VCLSize( const ::com::sun::star::awt::Size& rAWTSize )
 {
     return Size( rAWTSize.Width, rAWTSize.Height );
+}
+
+inline ::com::sun::star::awt::Point AWTPoint( const Point& rVCLPoint )
+{
+    return ::com::sun::star::awt::Point( rVCLPoint.X(), rVCLPoint.Y() );
+}
+
+inline Point VCLPoint( const ::com::sun::star::awt::Point& rAWTPoint )
+{
+    return Point( rAWTPoint.X, rAWTPoint.Y );
 }
 
 inline ::com::sun::star::awt::Rectangle AWTRectangle( const Rectangle& rVCLRect )
