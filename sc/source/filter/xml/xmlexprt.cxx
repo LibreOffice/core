@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 06:38:44 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
     pValidationsContainer = new ScMyValidationsContainer();
     pDetectiveObjContainer = new ScMyDetectiveObjContainer();
     pCellsItr = new ScMyNotEmptyCellsIterator(*this);
-    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper();
+    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
     DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
     if ( xSpreadDoc.is() )
@@ -527,7 +527,7 @@ void ScXMLExport::_ExportFontDecls()
 
 void ScXMLExport::_ExportChangeTracking()
 {
-    pChangeTrackingExportHelper->CollectAndWriteChanges(GetDocument());
+    pChangeTrackingExportHelper->CollectAndWriteChanges();
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -2080,8 +2080,8 @@ void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
             uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
             if (xSheetAnnotation.is() && xSimpleText.is())
             {
-                rtl::OUString sText = xSimpleText->getString();
-                if (sText.getLength())
+                rtl::OUString sOUText = xSimpleText->getString();
+                if (sOUText.getLength())
                 {
                     AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, xSheetAnnotation->getAuthor());
                     String aDate(xSheetAnnotation->getDate());
@@ -2101,10 +2101,30 @@ void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
                     }
                     else
                         AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
-                    if (!xSheetAnnotation->getIsVisible())
-                        AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_false);
-                    SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_False);
-                    GetDocHandler()->characters(sText);
+                    if (xSheetAnnotation->getIsVisible())
+                        AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_true);
+                    SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_True);
+                    sal_Int32 i = 0;
+                    rtl::OUStringBuffer sTemp;
+                    sal_Bool bPrevCharWasSpace(sal_True);
+                    String sText(sOUText);
+                    rtl::OUString sOUText2 (sText.ConvertLineEnd(LINEEND_LF));
+                    while(i < sOUText2.getLength())
+                    {
+                        if (sOUText2[i] == '\n')
+                        {
+                            SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                            GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                        }
+                        else
+                            sTemp.append(sOUText2[i]);
+                        i++;
+                    }
+                    if (sTemp.getLength())
+                    {
+                        SvXMLElementExport aElemP(*this, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                        GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
+                    }
                 }
             }
             CheckAttrList();

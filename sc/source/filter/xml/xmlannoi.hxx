@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,16 +67,21 @@
 #ifndef _XMLOFF_XMLIMP_HXX
 #include <xmloff/xmlimp.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 class ScXMLImport;
 class ScXMLTableRowCellContext;
 
 class ScXMLAnnotationContext : public SvXMLImportContext
 {
-    rtl::OUString   sOUText;
+    rtl::OUStringBuffer sOUText;
     rtl::OUString   sAuthor;
     rtl::OUString   sCreateDate;
+    sal_Int32       nParagraphCount;
     sal_Bool        bDisplay;
+    sal_Bool        bHasTextP;
     ScXMLTableRowCellContext*   pCellContext;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }

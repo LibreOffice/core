@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-18 17:33:58 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,16 @@
 #include "xmlannoi.hxx"
 #include "xmlimprt.hxx"
 #include "xmlcelli.hxx"
+#ifndef SC_XMLCONTI_HXX
+#include "xmlconti.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -85,7 +91,9 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                       ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bDisplay(sal_True)
+    nParagraphCount(0),
+    bDisplay(sal_False),
+    bHasTextP(sal_False)
 {
     pCellContext = pTempCellContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -119,8 +127,8 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY:
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bDisplay = sal_False;
+                if (sValue.compareToAscii(sXML_true) == 0)
+                    bDisplay = sal_True;
             }
             break;
         }
@@ -138,6 +146,19 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
+    if ((nPrefix == XML_NAMESPACE_TEXT) && (rLName.compareToAscii(sXML_p) == 0) )
+    {
+        if (!bHasTextP)
+        {
+            bHasTextP = sal_True;
+            sOUText.setLength(0);
+        }
+        if(nParagraphCount)
+            sOUText.append(static_cast<sal_Unicode>('\n'));
+        nParagraphCount++;
+        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sOUText);
+    }
+
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -146,7 +167,8 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 {
-    sOUText += rChars;
+    if (!bHasTextP)
+        sOUText.append(rChars);
 }
 
 void ScXMLAnnotationContext::EndElement()
@@ -154,7 +176,7 @@ void ScXMLAnnotationContext::EndElement()
     ScMyAnnotation aMyAnnotation;
     aMyAnnotation.sAuthor = sAuthor;
     aMyAnnotation.sCreateDate = sCreateDate;
-    aMyAnnotation.sText = sOUText;
+    aMyAnnotation.sText = sOUText.makeStringAndClear();
     aMyAnnotation.bDisplay = bDisplay;
     pCellContext->AddAnnotation(aMyAnnotation);
 }
