@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,16 +245,20 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
                             public  ::utl::OPropertyArrayUsageHelper<OResultSet>
         {
 
+        protected:
             ::std::vector<void*>                                m_aBindVector;
             ::std::vector<sal_Int32>                            m_aColMapping; // pos 0 is unused so we don't have to decrement 1 everytime
 
             OValueRow                                           m_aRow;
             OValueRow                                           m_aEvaluateRow; // contains all values of a row
             OValueRow                                           m_aParameterRow;
+            OValueRow                                           m_aInsertRow;   // needed for insert by cursor
             ORefAssignValues                                    m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
             ::std::vector<sal_Int32>*                           m_pEvaluationKeySet;
             ::std::vector<sal_Int32>::iterator                  m_aEvaluateIter;
+
+            ::std::map<sal_Int32,sal_Int32>                     m_aBookmarkToPos;
 
             OKeySet*                                            m_pFileSet;
             OKeySet::iterator                                   m_aFileSetIter;
@@ -278,7 +282,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             ::com::sun::star::uno::WeakReferenceHelper                                      m_aStatement;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>        m_xDBMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDBMetaData;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xColNames; // table columns
 
             ::rtl::OUString                                     m_aTableRange;
@@ -291,10 +295,14 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             sal_Bool                                            m_bEOF;                 // after last record
             sal_Bool                                            m_bLastRecord;
             sal_Bool                                            m_bFileSetFrozen;
+            sal_Bool                                            m_bInserted;            // true when moveToInsertRow was called
+                                                                                        // set to false when cursor moved or cancel
+            sal_Bool                                            m_bRowUpdated;
+            sal_Bool                                            m_bRowInserted;
+            sal_Bool                                            m_bRowDeleted;
 
             void construct();
             sal_Bool evaluate();
-            BOOL Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
             BOOL ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
                                 INT32 nOffset = 1,
                                 BOOL bRebind = TRUE,
@@ -319,6 +327,10 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
         protected:
 
+            using OResultSet_BASE::rBHelper;
+
+            BOOL Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
+            BOOL SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper

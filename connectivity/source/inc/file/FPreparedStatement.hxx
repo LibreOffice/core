@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,10 @@ namespace connectivity
     {
 
         class OPreparedStatement :  public  OStatement_BASE2,
-                                                                        public  ::com::sun::star::sdbc::XPreparedStatement,
-                                                                        public  ::com::sun::star::sdbc::XParameters,
-                                                                        public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                                        public  ::com::sun::star::lang::XServiceInfo
+                                    public  ::com::sun::star::sdbc::XPreparedStatement,
+                                    public  ::com::sun::star::sdbc::XParameters,
+                                    public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                    public  ::com::sun::star::lang::XServiceInfo
 
         {
         protected:
@@ -105,9 +105,13 @@ namespace connectivity
 
             ::rtl::OUString                                     m_aSql;
             OValueRow                                           m_aRow;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                      m_xRS; // only to enshure that the result isn't deleted
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >          m_xRS; // only to enshure that the result isn't deleted
             OResultSet*                                         m_pResultSet;
+            OFileTable*                                         m_pTable;
+
+            // factory method for resultset's
+            virtual OResultSet* createResultSet();
 
         public:
             DECLARE_CTY_DEFAULTS(OStatement_BASE2);
@@ -115,12 +119,14 @@ namespace connectivity
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OPreparedStatement( OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo);
 
-                        void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            void construct(const ::rtl::OUString& sql)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
+            // OComponentHelper
+            virtual void SAL_CALL disposing(void);
             //XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XPreparedStatement
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

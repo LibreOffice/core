@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,11 @@ namespace connectivity
 {
     namespace file
     {
-                typedef ::cppu::WeakComponentImplHelper4<       ::com::sun::star::sdbc::XStatement,
-                                                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                                                        ::com::sun::star::util::XCancellable,
-                                                                                        ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
+        class OResultSet;
+        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
+                                                    ::com::sun::star::sdbc::XWarningsSupplier,
+                                                    ::com::sun::star::util::XCancellable,
+                                                    ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
 
         //**************************************************************
         //************ Class: java.sql.Statement
@@ -129,8 +130,8 @@ namespace connectivity
                                         public  ::utl::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
-                        ::com::sun::star::sdbc::SQLWarning                                                    m_aLastWarning;
-                        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
+            ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement
         protected:
 
@@ -152,13 +153,15 @@ namespace connectivity
             sal_Bool                                    m_bEscapeProcessing;
         protected:
 
-                        void reset () throw( ::com::sun::star::sdbc::SQLException);
-                        void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
-                        void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
+            void reset () throw( ::com::sun::star::sdbc::SQLException);
+            void clearMyResultSet () throw( ::com::sun::star::sdbc::SQLException);
+            void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();
 
+            // factory method for resultset's
+            virtual OResultSet* createResultSet() = 0;
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
             // OPropertySetHelper
@@ -174,33 +177,33 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void){OStatement_BASE::disposing();}
             // XInterface
-                        //      virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) = 0;
+            //      virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) = 0;
             // XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             // XPropertySet
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
             {
                 return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
             }
             // XStatement
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-                        virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-                        virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL executeQuery( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual sal_Bool SAL_CALL execute( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) ;
             // XWarningsSupplier
-                        virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-                        virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XCancellable
-                        virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL cancel(  ) throw(::com::sun::star::uno::RuntimeException);
             // XCloseable
-                        virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
-        class OStatement_BASE2 : public OStatement_Base,
-                     public connectivity::OSubComponent< OStatement_BASE2>
+        class OStatement_BASE2 :    public OStatement_Base,
+                                    public connectivity::OSubComponent< OStatement_BASE2>
 
         {
             friend class connectivity::OSubComponent< OStatement_BASE2>;
@@ -210,19 +213,22 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-                        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
         };
 
         class OStatement :  public OStatement_BASE2,
-                                                        public ::com::sun::star::lang::XServiceInfo
+                            public ::com::sun::star::lang::XServiceInfo
         {
+        protected:
+            // factory method for resultset's
+            virtual OResultSet* createResultSet();
         public:
             DECLARE_CTY_DEFAULTS(OStatement_BASE2);
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}
             DECLARE_SERVICE_INFO();
 
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
             {
                 return OStatement_BASE2::queryInterface( rType);
             }

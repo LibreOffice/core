@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ namespace connectivity
             virtual sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool bRetrieveData) = 0;
 
             ::vos::ORef<OSQLColumns> getTableColumns() const {return m_aColumns;}
-            virtual BOOL InsertRow(ORefAssignValues& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+            virtual BOOL InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
             {
                 return sal_False;
             }
@@ -153,6 +153,7 @@ namespace connectivity
 
             const ::rtl::OUString& getName() const { return m_Name; }
             const ::rtl::OUString& getSchema() const { return m_SchemaName; }
+            sal_Bool isReadOnly() const { return m_aFileStream.IsOpen() && (m_aFileStream.GetStreamMode() & STREAM_READWRITE) != STREAM_READWRITE; }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();

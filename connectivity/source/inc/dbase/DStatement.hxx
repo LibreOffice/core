@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: DConnection.hxx,v $
+ *  $RCSfile: DStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:02:09 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -42,7 +42,7 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
@@ -59,35 +59,28 @@
  *
  ************************************************************************/
 
-#ifndef _CONNECTIVITY_DBASE_DCONNECTION_HXX_
-#define _CONNECTIVITY_DBASE_DCONNECTION_HXX_
+#ifndef _CONNECTIVITY_DBASE_DSTATEMENT_HXX_
+#define _CONNECTIVITY_DBASE_DSTATEMENT_HXX_
 
-#ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
-#include "file/FConnection.hxx"
+#ifndef _CONNECTIVITY_FILE_OSTATEMENT_HXX_
+#include "file/FStatement.hxx"
 #endif
 
 namespace connectivity
 {
     namespace dbase
     {
-        class ODriver;
-        class ODbaseConnection : public file::OConnection
+        class OConnection;
+        class ODbaseStatement : public file::OStatement
         {
+        protected:
+            virtual file::OResultSet* createResultSet();
         public:
-            ODbaseConnection(ODriver*   _pDriver);
-            virtual ~ODbaseConnection();
-
-            // XServiceInfo
+            //  DECLARE_CTY_DEFAULTS(file::OStatement);
+            ODbaseStatement( file::OConnection* _pConnection) : file::OStatement( _pConnection){}
             DECLARE_SERVICE_INFO();
-
-            // XConnection
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }
-#endif // _CONNECTIVITY_DBASE_DCONNECTION_HXX_
 
+#endif //_CONNECTIVITY_DBASE_DSTATEMENT_HXX_

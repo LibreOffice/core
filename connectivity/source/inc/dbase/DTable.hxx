@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-20 06:51:20 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace connectivity
             BOOL CreateImpl();
             String getEntry();
 
-            virtual BOOL InsertRow(file::ORefAssignValues& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            virtual BOOL InsertRow(file::OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
             virtual BOOL DeleteRow(const OSQLColumns& _rCols);
             virtual BOOL UpdateRow(file::OValueVector& rRow, file::OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
         };
