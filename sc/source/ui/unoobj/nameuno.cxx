@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:56:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:10:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,14 +179,14 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewCon
             {
                 ScRangeData* pOld = (*pNames)[nPos];
 
-                String aInsName = pOld->GetName();
+                String aInsName(pOld->GetName());
                 if (pNewName)
                     aInsName = *pNewName;
                 String aContent;                // Inhalt immer ueber Strings ->
                 pOld->GetEnglishSymbol(aContent);       //  keine Probleme mit geaenderter Position etc.
                 if (pNewContent)
                     aContent = *pNewContent;
-                ScAddress aPos = pOld->GetPos();
+                ScAddress aPos(pOld->GetPos());
                 if (pNewPos)
                     aPos = *pNewPos;
                 sal_uInt16 nType = pOld->GetType();
@@ -225,7 +225,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
     ScUnoGuard aGuard;
     //! Formeln anpassen ?????
 
-    String aNewStr = aNewName;
+    String aNewStr(aNewName);
     Modify_Impl( &aNewStr, NULL, NULL, NULL );
 
     if ( aName != aNewStr )                 // some error occured...
@@ -235,7 +235,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
 rtl::OUString SAL_CALL ScNamedRangeObj::getContent() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aContent;
+       String aContent;
     ScRangeData* pData = GetRangeData_Impl();
     if (pData)
         pData->GetEnglishSymbol(aContent);
@@ -246,7 +246,7 @@ void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aContStr = aContent;
+    String aContStr(aContent);
     Modify_Impl( NULL, &aContStr, NULL, NULL );
 }
 
@@ -339,7 +339,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo( lcl_GetNamedRangeMap() );
+    static uno::Reference< beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( lcl_GetNamedRangeMap() ));
     return aRef;
 }
 
@@ -358,7 +358,7 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
     uno::Any aRet;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     if ( aString.EqualsAscii( SC_UNO_LINKDISPBIT ) )
     {
         //  no target bitmaps for individual entries (would be all equal)
@@ -450,10 +450,7 @@ ScNamedRangeObj* ScNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 ScNamedRangeObj* ScNamedRangesObj::GetObjectByName_Impl(const rtl::OUString& aName)
 {
     if ( pDocShell && hasByName(aName) )
-    {
-        String aString = aName;
-        return new ScNamedRangeObj( pDocShell, aString );
-    }
+        return new ScNamedRangeObj( pDocShell, String(aName) );
     return NULL;
 }
 
@@ -462,8 +459,8 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
         sal_Int32 nUnoType ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameStr = aName;
-    String aContStr = aContent;
+    String aNameStr(aName);
+    String aContStr(aContent);
     ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, aPosition.Sheet );
 
     sal_uInt16 nNewType = RT_NAME;
@@ -535,7 +532,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            String aString = aName;
+            String aString(aName);
             sal_uInt16 nPos = 0;
             if (pNames->SearchName( aString, nPos ))
                 if ( lcl_UserVisibleName((*pNames)[nPos]) )
@@ -599,13 +596,12 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange = GetObjectByIndex_Impl((sal_uInt16)nIndex);
-    uno::Any aAny;
+    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if ( xRange.is() )
-        aAny <<= xRange;
+        return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
@@ -625,13 +621,12 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XNamedRange >  xRange = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference< sheet::XNamedRange >  xRange(GetObjectByName_Impl(aName));
     if ( xRange.is() )
-        aAny <<= xRange;
+        return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -671,9 +666,8 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
         if (pNames)
         {
-            String aString = aName;
             sal_uInt16 nPos = 0;
-            if (pNames->SearchName( aString, nPos ))
+            if (pNames->SearchName( String(aName), nPos ))
                 if ( lcl_UserVisibleName((*pNames)[nPos]) )
                     return sal_True;
         }
@@ -728,7 +722,7 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
         ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
         if (pOldList)
         {
-            ScRangePairListRef xNewList = pOldList->Clone();
+            ScRangePairListRef xNewList(pOldList->Clone());
             ScRangePair* pEntry = xNewList->Find( aRange );
             if (pEntry)
             {
@@ -857,7 +851,7 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
         ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
         if (pOldList)
         {
-            ScRangePairListRef xNewList = pOldList->Clone();
+            ScRangePairListRef xNewList(pOldList->Clone());
 
             ScRange aLabelRange;
             ScRange aDataRange;
@@ -891,7 +885,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
 
         if ( pOldList && nIndex < (sal_Int32)pOldList->Count() )
         {
-            ScRangePairListRef xNewList = pOldList->Clone();
+            ScRangePairListRef xNewList(pOldList->Clone());
 
             ScRangePair* pEntry = xNewList->GetObject( nIndex );
             if (pEntry)
@@ -946,13 +940,12 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< sheet::XLabelRange >  xRange = GetObjectByIndex_Impl((sal_uInt16)nIndex);
-    uno::Any aAny;
+    uno::Reference< sheet::XLabelRange >  xRange(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if ( xRange.is() )
-        aAny <<= xRange;
+        return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException)
