@@ -9,6 +9,11 @@ component_getDescriptionFunc
 ?getApi@ORealDynamicLoader@salhelper@@QBAPAXXZ
 ?newInstance@ORealDynamicLoader@salhelper@@SAPAV12@PAPAV12@ABVOUString@rtl@@1@Z
 ?release@ORealDynamicLoader@salhelper@@QAAKXZ
+??1SimpleReferenceObject@salhelper@@MAE@XZ
+??2SimpleReferenceObject@salhelper@@SAPAXI@Z
+??2SimpleReferenceObject@salhelper@@SAPAXIABUnothrow_t@std@@@Z
+??3SimpleReferenceObject@salhelper@@SAXPAX@Z
+??3SimpleReferenceObject@salhelper@@SAXPAXABUnothrow_t@std@@@Z
     local:
         *;
 };
