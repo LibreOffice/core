@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-09-25 14:01:07 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,12 @@
 #ifdef _USE_UNO
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/registerucb.hxx>
-#include <unotools/regpathhelper.hxx>
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_REGPATHHELPER_HXX_
+#include <comphelper/regpathhelper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -119,7 +123,7 @@
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/ContentProviderServiceInfo2.hpp>
 
-using namespace utl;
+using namespace comphelper;
 using namespace ucb;
 using namespace cppu;
 using namespace rtl;
