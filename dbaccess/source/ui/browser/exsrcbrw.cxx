@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:53 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 16:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,17 +276,27 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         // create the col
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(getControlModel(), UNO_QUERY);
         Reference< ::com::sun::star::beans::XPropertySet >  xNewCol = xColFactory->createColumn(sControlType);
+        Reference< XPropertySetInfo > xNewColProperties;
+        if (xNewCol.is())
+            xNewColProperties = xNewCol->getPropertySetInfo();
         // set it's properties
-        const ::com::sun::star::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
-        for (i=0; i<aControlProps.getLength(); ++i, ++pControlProps)
+        if (xNewColProperties.is())
         {
-            try
+            const ::com::sun::star::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
+            for (i=0; i<aControlProps.getLength(); ++i, ++pControlProps)
             {
-                xNewCol->setPropertyValue(pControlProps->Name, pControlProps->Value);
-            }
-            catch(Exception&)
-            {
-                OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::dispatch : could not set a column property (maybe you forgot a READONLY attribute for a dispatch-argument ?) !");
+                try
+                {
+                    if (xNewColProperties->hasPropertyByName(pControlProps->Name))
+                        xNewCol->setPropertyValue(pControlProps->Name, pControlProps->Value);
+                }
+                catch(Exception&)
+                {
+                    OSL_ENSURE(sal_False,
+                        (   ByteString("SbaExternalSourceBrowser::dispatch : could not set a column property (")
+                        +=  ByteString(pControlProps->Name.getStr(), pControlProps->Name.getLength(), RTL_TEXTENCODING_ASCII_US)
+                        +=  ByteString(")!")).GetBuffer());
+                }
             }
         }
 
@@ -687,7 +697,6 @@ void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setModel(const Refer
 //------------------------------------------------------------------
 Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getModel(void) throw( RuntimeException )
 {
-    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::getModel : don't (and won't) have a model !");
     if (m_pOwner->m_pDataSourceImpl)
         return Reference< ::com::sun::star::awt::XTabControllerModel > ((Reference< XInterface > )*m_pOwner->m_pDataSourceImpl, UNO_QUERY);
 
