@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 10:29:15 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 10:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,15 @@ String RID_SVXSTR_TABLE_PRESET_NONE
     Text[ korean ] = "Set No Borders";
     Text[ turkish ] = "Set No Borders";
     Text[ thai ] = "Set No Borders";
+    Text[ greek ] = "Set No Borders";
+    Text[ dutch ] = "Set No Borders";
+    Text[ french ] = "Set No Borders";
+    Text[ finnish ] = "Set No Borders";
+    Text[ danish ] = "Set No Borders";
+    Text[ chinese_simplified ] = "Set No Borders";
+    Text[ chinese_traditional ] = "Set No Borders";
+    Text[ arabic ] = "Set No Borders";
+    Text[ catalan ] = "Set No Borders";
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
@@ -773,6 +782,15 @@ String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
     Text[ korean ] = "Set Outer Border Only";
     Text[ turkish ] = "Set Outer Border Only";
     Text[ thai ] = "Set Outer Border Only";
+    Text[ greek ] = "Set Outer Border Only";
+    Text[ dutch ] = "Set Outer Border Only";
+    Text[ french ] = "Set Outer Border Only";
+    Text[ finnish ] = "Set Outer Border Only";
+    Text[ danish ] = "Set Outer Border Only";
+    Text[ chinese_simplified ] = "Set Outer Border Only";
+    Text[ chinese_traditional ] = "Set Outer Border Only";
+    Text[ arabic ] = "Set Outer Border Only";
+    Text[ catalan ] = "Set Outer Border Only";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
@@ -789,6 +807,15 @@ String RID_SVXSTR_TABLE_PRESET_OUTERHORI
     Text[ korean ] = "Set Outer Border and Horizontal Lines";
     Text[ turkish ] = "Set Outer Border and Horizontal Lines";
     Text[ thai ] = "Set Outer Border and Horizontal Lines";
+    Text[ greek ] = "Set Outer Border and Horizontal Lines";
+    Text[ dutch ] = "Set Outer Border and Horizontal Lines";
+    Text[ french ] = "Set Outer Border and Horizontal Lines";
+    Text[ finnish ] = "Set Outer Border and Horizontal Lines";
+    Text[ danish ] = "Set Outer Border and Horizontal Lines";
+    Text[ chinese_simplified ] = "Set Outer Border and Horizontal Lines";
+    Text[ chinese_traditional ] = "Set Outer Border and Horizontal Lines";
+    Text[ arabic ] = "Set Outer Border and Horizontal Lines";
+    Text[ catalan ] = "Set Outer Border and Horizontal Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
@@ -805,6 +832,15 @@ String RID_SVXSTR_TABLE_PRESET_OUTERALL
     Text[ korean ] = "Set Outer Border and All Inner Lines";
     Text[ turkish ] = "Set Outer Border and All Inner Lines";
     Text[ thai ] = "Set Outer Border and All Inner Lines";
+    Text[ greek ] = "Set Outer Border and All Inner Lines";
+    Text[ dutch ] = "Set Outer Border and All Inner Lines";
+    Text[ french ] = "Set Outer Border and All Inner Lines";
+    Text[ finnish ] = "Set Outer Border and All Inner Lines";
+    Text[ danish ] = "Set Outer Border and All Inner Lines";
+    Text[ chinese_simplified ] = "Set Outer Border and All Inner Lines";
+    Text[ chinese_traditional ] = "Set Outer Border and All Inner Lines";
+    Text[ arabic ] = "Set Outer Border and All Inner Lines";
+    Text[ catalan ] = "Set Outer Border and All Inner Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
@@ -821,6 +857,15 @@ String RID_SVXSTR_TABLE_PRESET_OUTERINNER
     Text[ korean ] = "Set Outer Border Without Changing Inner Lines";
     Text[ turkish ] = "Set Outer Border Without Changing Inner Lines";
     Text[ thai ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ greek ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ dutch ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ french ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ finnish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ danish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ chinese_simplified ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ chinese_traditional ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ arabic ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ catalan ] = "Set Outer Border Without Changing Inner Lines";
 };
 String RID_SVXSTR_PARA_PRESET_NONE
 {
@@ -837,6 +882,15 @@ String RID_SVXSTR_PARA_PRESET_NONE
     Text[ korean ] = "Set No Border";
     Text[ turkish ] = "Set No Border";
     Text[ thai ] = "Set No Border";
+    Text[ greek ] = "Set No Border";
+    Text[ dutch ] = "Set No Border";
+    Text[ french ] = "Set No Border";
+    Text[ finnish ] = "Set No Border";
+    Text[ danish ] = "Set No Border";
+    Text[ chinese_simplified ] = "Set No Border";
+    Text[ chinese_traditional ] = "Set No Border";
+    Text[ arabic ] = "Set No Border";
+    Text[ catalan ] = "Set No Border";
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
@@ -853,6 +907,15 @@ String RID_SVXSTR_PARA_PRESET_ALL
     Text[ korean ] = "Set All Four Borders";
     Text[ turkish ] = "Set All Four Borders";
     Text[ thai ] = "Set All Four Borders";
+    Text[ greek ] = "Set All Four Borders";
+    Text[ dutch ] = "Set All Four Borders";
+    Text[ french ] = "Set All Four Borders";
+    Text[ finnish ] = "Set All Four Borders";
+    Text[ danish ] = "Set All Four Borders";
+    Text[ chinese_simplified ] = "Set All Four Borders";
+    Text[ chinese_traditional ] = "Set All Four Borders";
+    Text[ arabic ] = "Set All Four Borders";
+    Text[ catalan ] = "Set All Four Borders";
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
@@ -869,6 +932,15 @@ String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
     Text[ korean ] = "Set Left and Right Borders Only";
     Text[ turkish ] = "Set Left and Right Borders Only";
     Text[ thai ] = "Set Left and Right Borders Only";
+    Text[ greek ] = "Set Left and Right Borders Only";
+    Text[ dutch ] = "Set Left and Right Borders Only";
+    Text[ french ] = "Set Left and Right Borders Only";
+    Text[ finnish ] = "Set Left and Right Borders Only";
+    Text[ danish ] = "Set Left and Right Borders Only";
+    Text[ chinese_simplified ] = "Set Left and Right Borders Only";
+    Text[ chinese_traditional ] = "Set Left and Right Borders Only";
+    Text[ arabic ] = "Set Left and Right Borders Only";
+    Text[ catalan ] = "Set Left and Right Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
 {
@@ -885,6 +957,15 @@ String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
     Text[ korean ] = "Set Top and Bottom Borders Only";
     Text[ turkish ] = "Set Top and Bottom Borders Only";
     Text[ thai ] = "Set Top and Bottom Borders Only";
+    Text[ greek ] = "Set Top and Bottom Borders Only";
+    Text[ dutch ] = "Set Top and Bottom Borders Only";
+    Text[ french ] = "Set Top and Bottom Borders Only";
+    Text[ finnish ] = "Set Top and Bottom Borders Only";
+    Text[ danish ] = "Set Top and Bottom Borders Only";
+    Text[ chinese_simplified ] = "Set Top and Bottom Borders Only";
+    Text[ chinese_traditional ] = "Set Top and Bottom Borders Only";
+    Text[ arabic ] = "Set Top and Bottom Borders Only";
+    Text[ catalan ] = "Set Top and Bottom Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
@@ -901,6 +982,15 @@ String RID_SVXSTR_PARA_PRESET_ONLYLEFT
     Text[ korean ] = "Set Left Border Only";
     Text[ turkish ] = "Set Left Border Only";
     Text[ thai ] = "Set Left Border Only";
+    Text[ greek ] = "Set Left Border Only";
+    Text[ dutch ] = "Set Left Border Only";
+    Text[ french ] = "Set Left Border Only";
+    Text[ finnish ] = "Set Left Border Only";
+    Text[ danish ] = "Set Left Border Only";
+    Text[ chinese_simplified ] = "Set Left Border Only";
+    Text[ chinese_traditional ] = "Set Left Border Only";
+    Text[ arabic ] = "Set Left Border Only";
+    Text[ catalan ] = "Set Left Border Only";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
@@ -917,6 +1007,15 @@ String RID_SVXSTR_SHADOW_STYLE_NONE
     Text[ korean ] = "No Shadow";
     Text[ turkish ] = "No Shadow";
     Text[ thai ] = "No Shadow";
+    Text[ greek ] = "No Shadow";
+    Text[ dutch ] = "No Shadow";
+    Text[ french ] = "No Shadow";
+    Text[ finnish ] = "No Shadow";
+    Text[ danish ] = "No Shadow";
+    Text[ chinese_simplified ] = "No Shadow";
+    Text[ chinese_traditional ] = "No Shadow";
+    Text[ arabic ] = "No Shadow";
+    Text[ catalan ] = "No Shadow";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
 {
@@ -933,6 +1032,15 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
     Text[ korean ] = "Cast Shadow to Bottom Right";
     Text[ turkish ] = "Cast Shadow to Bottom Right";
     Text[ thai ] = "Cast Shadow to Bottom Right";
+    Text[ greek ] = "Cast Shadow to Bottom Right";
+    Text[ dutch ] = "Cast Shadow to Bottom Right";
+    Text[ french ] = "Cast Shadow to Bottom Right";
+    Text[ finnish ] = "Cast Shadow to Bottom Right";
+    Text[ danish ] = "Cast Shadow to Bottom Right";
+    Text[ chinese_simplified ] = "Cast Shadow to Bottom Right";
+    Text[ chinese_traditional ] = "Cast Shadow to Bottom Right";
+    Text[ arabic ] = "Cast Shadow to Bottom Right";
+    Text[ catalan ] = "Cast Shadow to Bottom Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
 {
@@ -949,6 +1057,15 @@ String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
     Text[ korean ] = "Cast Shadow to Top Right";
     Text[ turkish ] = "Cast Shadow to Top Right";
     Text[ thai ] = "Cast Shadow to Top Right";
+    Text[ greek ] = "Cast Shadow to Top Right";
+    Text[ dutch ] = "Cast Shadow to Top Right";
+    Text[ french ] = "Cast Shadow to Top Right";
+    Text[ finnish ] = "Cast Shadow to Top Right";
+    Text[ danish ] = "Cast Shadow to Top Right";
+    Text[ chinese_simplified ] = "Cast Shadow to Top Right";
+    Text[ chinese_traditional ] = "Cast Shadow to Top Right";
+    Text[ arabic ] = "Cast Shadow to Top Right";
+    Text[ catalan ] = "Cast Shadow to Top Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
 {
@@ -965,6 +1082,15 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
     Text[ korean ] = "Cast Shadow to Bottom Left";
     Text[ turkish ] = "Cast Shadow to Bottom Left";
     Text[ thai ] = "Cast Shadow to Bottom Left";
+    Text[ greek ] = "Cast Shadow to Bottom Left";
+    Text[ dutch ] = "Cast Shadow to Bottom Left";
+    Text[ french ] = "Cast Shadow to Bottom Left";
+    Text[ finnish ] = "Cast Shadow to Bottom Left";
+    Text[ danish ] = "Cast Shadow to Bottom Left";
+    Text[ chinese_simplified ] = "Cast Shadow to Bottom Left";
+    Text[ chinese_traditional ] = "Cast Shadow to Bottom Left";
+    Text[ arabic ] = "Cast Shadow to Bottom Left";
+    Text[ catalan ] = "Cast Shadow to Bottom Left";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
 {
@@ -981,6 +1107,15 @@ String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
     Text[ korean ] = "Cast Shadow to Top Left";
     Text[ turkish ] = "Cast Shadow to Top Left";
     Text[ thai ] = "Cast Shadow to Top Left";
+    Text[ greek ] = "Cast Shadow to Top Left";
+    Text[ dutch ] = "Cast Shadow to Top Left";
+    Text[ french ] = "Cast Shadow to Top Left";
+    Text[ finnish ] = "Cast Shadow to Top Left";
+    Text[ danish ] = "Cast Shadow to Top Left";
+    Text[ chinese_simplified ] = "Cast Shadow to Top Left";
+    Text[ chinese_traditional ] = "Cast Shadow to Top Left";
+    Text[ arabic ] = "Cast Shadow to Top Left";
+    Text[ catalan ] = "Cast Shadow to Top Left";
 };
 
 // **********************************************************************
