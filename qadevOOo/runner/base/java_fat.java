@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:21 $
+ *  last change:$Date: 2003-02-14 09:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,8 @@ public class java_fat implements TestBase {
         }
 
         String conStr = (String) param.get("ConnectionString");
-        System.out.print("> Connecting the Office");
+        System.out.println("> ");
+        System.out.print("Connecting the Office");
         System.out.println(" With "+conStr);
 
         OfficeProvider office = new OfficeProvider();
@@ -153,6 +154,9 @@ public class java_fat implements TestBase {
             } catch (java.lang.IllegalArgumentException ie) {
                 entry.ErrorMsg=ie.getMessage();
                 entry.hasErrorMsg=true;
+            } catch (java.lang.NoClassDefFoundError ie) {
+                entry.ErrorMsg=ie.getMessage();
+                entry.hasErrorMsg=true;
             }
 
             if (tCase == null) {
@@ -179,7 +183,16 @@ public class java_fat implements TestBase {
                 System.out.println("Exception while creating "+tCase.getObjectName());
                 System.out.println("Message "+e.getMessage());
                 tEnv = null;
+            } catch (java.lang.UnsatisfiedLinkError e) {
+                System.out.println("Exception while creating "+tCase.getObjectName());
+                System.out.println("Message "+e.getMessage());
+                tEnv = null;
+            } catch (java.lang.NoClassDefFoundError e) {
+                System.out.println("Exception while creating "+tCase.getObjectName());
+                System.out.println("Message "+e.getMessage());
+                tEnv = null;
             }
+
             if (tEnv == null) {
                 sumIt.summarizeDown(entry,"Couldn't create "+tCase.getObjectName());
                 LogWriter sumObj = (LogWriter) dcl.getInstance(
@@ -223,6 +236,10 @@ public class java_fat implements TestBase {
                     System.out.println("Couldn't load class "+entry.SubEntries[j].entryName);
                     System.out.println("**** "+iae.getMessage()+" ****");
                     Summarizer.summarizeDown(entry.SubEntries[j],iae.getMessage());
+                } catch (java.lang.NoClassDefFoundError iae) {
+                    System.out.println("Couldn't load class "+entry.SubEntries[j].entryName);
+                    System.out.println("**** "+iae.getMessage()+" ****");
+                    Summarizer.summarizeDown(entry.SubEntries[j],iae.getMessage());
                 } catch (java.lang.RuntimeException e) {
                     helper.ProcessHandler ph =
                                 (helper.ProcessHandler) param.get("AppProvider");
@@ -257,7 +274,9 @@ public class java_fat implements TestBase {
             try {
                 tCase.cleanupTestCase(param);
             } catch (Exception e) {
-                System.out.println("#### couldn't cleanup :-(");
+                System.out.println("couldn't cleanup");
+            } catch (java.lang.NoClassDefFoundError e){
+                System.out.println("couldn't cleanup");
             }
             sumIt.summarizeUp(entry);
             LogWriter sumObj = (LogWriter) dcl.getInstance(
@@ -301,6 +320,9 @@ public class java_fat implements TestBase {
                 tCase = (TestCase)
                             dcl.getInstance("mod._"+entry.entryName);
             } catch (java.lang.IllegalArgumentException ie) {
+                entry.ErrorMsg=ie.getMessage();
+                entry.hasErrorMsg=true;
+            } catch (java.lang.NoClassDefFoundError ie) {
                 entry.ErrorMsg=ie.getMessage();
                 entry.hasErrorMsg=true;
             }
