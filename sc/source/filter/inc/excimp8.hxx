@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2000-09-28 10:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,12 +577,14 @@ class ImportExcel8 : public ImportExcel
         void                    ChartPieformat( void );         // 0x100B
         void                    ChartAttachedlabel( void );     // 0x100C
         void                    ChartSeriestext( void );        // 0x100D
+        void                    ChartChartformat( void );       // 0x1014
         void                    ChartLegend( void );            // 0x1015
         void                    ChartBar( void );               // 0x1017
         void                    ChartLine( void );              // 0x1018
         void                    ChartPie( void );               // 0x1019
         void                    ChartArea( void );              // 0x101A
         void                    ChartScatter( void );           // 0x101B
+        void                    ChartChartline( void );         // 0x101C
         void                    ChartAxis( void );              // 0x101D
         void                    ChartTick( void );              // 0x101E
         void                    ChartValuerange( void );        // 0x101F
@@ -592,6 +594,9 @@ class ImportExcel8 : public ImportExcel
         void                    ChartFontx( void );             // 0x1026
         void                    ChartObjectlink( void );        // 0x1027
         void                    ChartFrame( void );             // 0x1032
+        void                    ChartBegin( void );             // 0x1033
+        void                    ChartEnd( void );               // 0x1034
+        void                    ChartPlotarea( void );          // 0x1035
         void                    Chart3D( void );                // 0x103A
         void                    ChartPicf( void );              // 0x103C
         void                    ChartDropbar( void );           // 0x103D
