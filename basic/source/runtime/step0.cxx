@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:25:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ void SbiRuntime::StepSET()
     SbxDataType eValType = refVal->GetType();
     SbxDataType eVarType = refVar->GetType();
     if( (eValType != SbxOBJECT && eValType != SbxEMPTY && !(eValType & SbxARRAY)) ||
-        (eVarType != SbxOBJECT && !(eVarType & SbxARRAY) ) )
+        (eVarType != SbxOBJECT && eVarType != SbxEMPTY && !(eVarType & SbxARRAY) ) )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
     }
@@ -264,13 +264,17 @@ void SbiRuntime::StepSET()
         SbxBase* pObjVarObj = refVal->GetObject();
         if( pObjVarObj )
         {
-            SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+            SbxVariableRef xTypeHolderObj = PTR_CAST(TypeHolderObject,pObjVarObj);
+            if( !xTypeHolderObj )
+            {
+                SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
 
-            // #67733 Typen mit Array-Flag sind auch ok
-            if( refObjVal )
-                refVal = refObjVal;
-            else if( !(eValType & SbxARRAY) )
-                refVal = NULL;
+                // #67733 Typen mit Array-Flag sind auch ok
+                if( refObjVal )
+                    refVal = refObjVal;
+                else if( !(eValType & SbxARRAY) )
+                    refVal = NULL;
+            }
         }
 
         // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
