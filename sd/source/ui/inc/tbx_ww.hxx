@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:26:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:18:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #ifndef _SDRESID_HXX
 #include <sdresid.hxx>
-#endif
-
-#ifndef _SFXTBXMGR_HXX //autogen
-#include <sfx2/tbxmgr.hxx>
 #endif
 
 #ifndef _SFXTBXCTRL_HXX //autogen
