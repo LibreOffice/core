@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewSettings.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:26:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef __com_sun_star_view_DocumentZoomType_idl__
 #include <com/sun/star/view/DocumentZoomType.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
 
 //=============================================================================
@@ -287,6 +290,71 @@ published service ViewSettings
      mouse click. Otherwise they are handled like normal text.
          */
     [optional, property] boolean IsExecuteHyperlinks;
+
+    //-------------------------------------------------------------------------
+    /** Specifies whether to display the grid or not
+
+        @since i25719
+     */
+    [optional, property] boolean IsRasterVisible;
+
+    //-------------------------------------------------------------------------
+    /** Specifies whether to move frames, drawing elements, and form
+        functions only between grid points.
+
+        @since i25719
+     */
+    [optional, property] boolean IsSnapToRaster;
+
+    //-------------------------------------------------------------------------
+    /** Specifies the number of intervals between grid points on the X-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @since i25719
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionX;
+
+    //-------------------------------------------------------------------------
+    /** Specifies the number of intervals between grid points on the Y-axis.
+
+        <p>The value must be greater or equal to 0, and the application
+        may enforce an upper bound for the value.</p>
+
+        @since i25719
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterSubdivisionY;
+
+    //-------------------------------------------------------------------------
+    /** Defines the unit of measure for the spacing between grid points
+        on the X-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @since i25719
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionX;
+
+    //-------------------------------------------------------------------------
+    /** Defines the unit of measure for the spacing between grid points
+        on the Y-axis.
+
+        <p>The value must be greater than 0. The application
+        may enforce more restricting bounds for the value.</p>
+
+        @since i25719
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the value is out of bounds.
+     */
+    [optional, property] long RasterResolutionY;
 
 };
 
