@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:26:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,10 +120,6 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, XclBiff eB
     pExcRoot->pRootStorage = &rRootStorage;
 
     pExcRoot->pCharset = &eZielChar;
-
-    pExcRoot->pExtDocOpt = new ScExtDocOptions;
-    if( pDoc->GetExtDocOptions() )
-        *pExcRoot->pExtDocOpt = *pDoc->GetExtDocOptions();
 
     // options from configuration
 
