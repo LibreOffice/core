@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:41:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,340 +63,63 @@
 
 String STR_NONAME
 {
-    Text = "Unbenannt" ;
-    Text [ ENGLISH ] = "noname" ;
-    Text [ norwegian ] = "noname" ;
-    Text [ italian ] = "Senza nome" ;
-    Text [ portuguese_brazilian ] = "Sem nome" ;
-    Text [ portuguese ] = "Sem nome" ;
-    Text [ finnish ] = "Nimetön" ;
-    Text [ danish ] = "ikke-navngivet" ;
-    Text [ french ] = "Sans nom" ;
-    Text [ swedish ] = "Namnlös" ;
-    Text [ dutch ] = "naamloos" ;
-    Text [ spanish ] = "Sin nombre" ;
-    Text [ english_us ] = "Untitled" ;
-    Text[ chinese_simplified ] = "æœªå‘½å";
-    Text[ russian ] = "Äîêóìåíò";
-    Text[ polish ] = "Bez tytu³u";
-    Text[ japanese ] = "ç„¡é¡Œ";
-    Text[ chinese_traditional ] = "æœªå‘½å";
-    Text[ arabic ] = "ÈÏæä ÚäæÇä";
-    Text[ greek ] = "Äß÷ùò üíïìá";
-    Text[ korean ] = "ì œëª© ì—†ìŒ";
-    Text[ turkish ] = "İsimsiz";
-    Text[ catalan ] = "Sense nom";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸Šà¸·à¹ˆà¸­";
-    Text[ czech ] = "NepojmenovanÃ½";
-    Text[ hebrew ] = "â€®×œ×œ× ×›×•×ª×¨×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤¾à¤® à¤°à¤¹à¤¿à¤¤";
-    Text[ slovak ] = "Bez_nÃ¡zvu";
-    Text[ hungarian ] = "NÃ©vtelen";
-    Text[ slovenian ] = "Neimenovano";
+    Text [ de ] = "Unbenannt" ;
+    Text [ en-US ] = "Untitled" ;
 };
 
 String STR_NONE
 {
-    Text = "- Keine -" ;
-    Text [ ENGLISH ] = "- None -" ;
-    Text [ norwegian ] = "- Ingen -" ;
-    Text [ italian ] = "- Senza -" ;
-    Text [ portuguese_brazilian ] = "- Nenhum -" ;
-    Text [ portuguese ] = "- Nenhum -" ;
-    Text [ finnish ] = "- Ei mitään -" ;
-    Text [ danish ] = "- Ingen -" ;
-    Text [ french ] = "- Aucun(e) -" ;
-    Text [ swedish ] = "- Ingen -" ;
-    Text [ dutch ] = "- Geen -" ;
-    Text [ spanish ] = "- Ninguno -" ;
-    Text [ english_us ] = "- None -" ;
-    Text[ chinese_simplified ] = "- æ—  -";
-    Text[ russian ] = "- Íåò -";
-    Text[ polish ] = "- Brak -";
-    Text[ japanese ] = "-ãªã—-";
-    Text[ chinese_traditional ] = "- ç„¡ -";
-    Text[ arabic ] = "- ÈÏæä -";
-    Text[ greek ] = "- Êáíİíá -";
-    Text[ korean ] = "- ì—†ìŒ -";
-    Text[ turkish ] = "- Yok -";
-    Text[ catalan ] = "- cap -";
-    Text[ thai ] = "- à¹„à¸¡à¹ˆà¸¡à¸µ -";
-    Text[ czech ] = "- Å¾Ã¡dnÃ¡ -";
-    Text[ hebrew ] = "â€®- ×œ×œ× -â€¬";
-    Text[ hindi ] = "- à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚ -";
-    Text[ slovak ] = "- Å¾iadna -";
-    Text[ hungarian ] = "- Nincs szegÃ©ly -";
-    Text[ slovenian ] = "-Brez-";
+    Text [ de ] = "- Keine -" ;
+    Text [ en-US ] = "- None -" ;
 };
 
 String STR_CLOSE
 {
-    Text = "Schließen" ;
-    Text [ ENGLISH ] = "Close" ;
-    Text [ norwegian ] = "Lukk" ;
-    Text [ italian ] = "Chiudi" ;
-    Text [ portuguese_brazilian ] = "Fechar" ;
-    Text [ portuguese ] = "Fechar" ;
-    Text [ finnish ] = "Sulje" ;
-    Text [ danish ] = "Luk" ;
-    Text [ french ] = "Fermer" ;
-    Text [ swedish ] = "Stäng" ;
-    Text [ dutch ] = "Sluiten" ;
-    Text [ spanish ] = "Cerrar" ;
-    Text [ english_us ] = "Close" ;
-    Text[ chinese_simplified ] = "å…³é—­";
-    Text[ russian ] = "Çàêğûòü";
-    Text[ polish ] = "Zamknij";
-    Text[ japanese ] = "é–‰ã˜ã‚‹";
-    Text[ chinese_traditional ] = "é—œé–‰";
-    Text[ arabic ] = "ÅÛáÇŞ";
-    Text[ greek ] = "Êëåßóéìï";
-    Text[ korean ] = "ë‹«ê¸°";
-    Text[ turkish ] = "Kapat";
-    Text[ catalan ] = "Tanca";
-    Text[ thai ] = "à¸›à¸´à¸”";
-    Text[ czech ] = "ZavÅ™Ã­t";
-    Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-    Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "ZavrieÅ¥";
-    Text[ hungarian ] = "BezÃ¡rÃ¡s";
-    Text[ slovenian ] = "Zapri";
+    Text [ de ] = "Schließen" ;
+    Text [ en-US ] = "Close" ;
 };
 
 String STR_STYLE_FILTER_AUTO
 {
-    TEXT = "Automatisch" ;
-    TEXT [ English ] = "Automatic" ;
-    TEXT [ norwegian ] = "Automatic" ;
-    TEXT [ italian ] = "Automatico" ;
-    TEXT [ portuguese_brazilian ] = "Automático" ;
-    TEXT [ portuguese ] = "Automático" ;
-    TEXT [ finnish ] = "Automaattinen" ;
-    TEXT [ danish ] = "Automatisk" ;
-    TEXT [ french ] = "Automatique" ;
-    TEXT [ swedish ] = "Automatisk" ;
-    TEXT [ dutch ] = "Automatisch" ;
-    TEXT [ spanish ] = "Automático" ;
-    TEXT [ english_us ] = "Automatic" ;
-    TEXT[ chinese_simplified ] = "è‡ªåŠ¨";
-    TEXT[ russian ] = "Àâòîìàòè÷åñêè";
-    TEXT[ polish ] = "Automatycznie";
-    TEXT[ japanese ] = "è‡ªå‹•";
-    TEXT[ chinese_traditional ] = "è‡ªå‹•";
-    TEXT[ arabic ] = "ÊáŞÇÆí";
-    TEXT[ greek ] = "Áõôüìáôá";
-    TEXT[ korean ] = "ìë™";
-    TEXT[ turkish ] = "Otomatik";
-    TEXT[ catalan ] = "Automàtic";
-    TEXT[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    TEXT[ czech ] = "Automaticky";
-    TEXT[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
-    TEXT[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤";
-    TEXT[ slovak ] = "Automaticky";
-    TEXT[ hungarian ] = "Automatikus";
-    TEXT[ slovenian ] = "Samodejno";
+    Text [ de ] = "Automatisch" ;
+    Text [ en-US ] = "Automatic" ;
 };
 
 String STR_STYLE_FILTER_USED
 {
-    TEXT = "Verwendete Vorlagen" ;
-    TEXT [ English ] = "Used styles" ;
-    TEXT [ norwegian ] = "Brukte stiler" ;
-    TEXT [ italian ] = "Modelli usati" ;
-    TEXT [ portuguese_brazilian ] = "Estilos aplicados" ;
-    TEXT [ portuguese ] = "Estilos usados" ;
-    TEXT [ finnish ] = "Käytetyt tyylit" ;
-    TEXT [ danish ] = "Anvendte typografier" ;
-    TEXT [ french ] = "Styles utilisés" ;
-    TEXT [ swedish ] = "Använda mallar" ;
-    TEXT [ dutch ] = "Gebruikte opmaakprofielen" ;
-    TEXT [ spanish ] = "Estilos utilizados" ;
-    TEXT [ english_us ] = "Applied Styles" ;
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨çš„æ ·å¼";
-    TEXT[ russian ] = "Èñïîëüçóåìûå ñòèëè";
-    TEXT[ polish ] = "Zastosowane style";
-    TEXT[ japanese ] = "ä½¿ç”¨ã—ãŸã‚¹ã‚¿ã‚¤ãƒ«";
-    TEXT[ chinese_traditional ] = "ä½¿ç”¨çš„æ¨£å¼";
-    TEXT[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
-    TEXT[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
-    TEXT[ korean ] = "ì ìš©ëœ ìŠ¤íƒ€ì¼";
-    TEXT[ turkish ] = "Kullanılan biçimler";
-    TEXT[ catalan ] = "Estils aplicats";
-    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œ";
-    TEXT[ czech ] = "PouÅ¾itÃ© styly";
-    TEXT[ hebrew ] = "â€®×¡×’× ×•× ×•×ª ××™×•×©××™×â€¬";
-    TEXT[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
-    TEXT[ slovak ] = "PouÅ¾itÃ© Å¡tÃ½ly";
-    TEXT[ hungarian ] = "Alkalmazott stÃ­lusok";
-    TEXT[ slovenian ] = "Uporabljeni slogi";
+    Text [ de ] = "Verwendete Vorlagen" ;
+    Text [ en-US ] = "Applied Styles" ;
 };
 
 
 
 String STR_STYLE_FILTER_USERDEF
 {
-    TEXT = "Benutzervorlagen" ;
-    TEXT [ English ] = "User styles" ;
-    TEXT [ norwegian ] = "Brukerstiler" ;
-    TEXT [ italian ] = "Modelli utente" ;
-    TEXT [ portuguese_brazilian ] = "Estilos personalizados" ;
-    TEXT [ portuguese ] = "Estilos do utilizador" ;
-    TEXT [ finnish ] = "Mukautetut tyylit" ;
-    TEXT [ danish ] = "Brugerdefinerede typografier" ;
-    TEXT [ french ] = "Styles personnalisés" ;
-    TEXT [ swedish ] = "Användardefinierade formatmallar" ;
-    TEXT [ dutch ] = "Eigen opmaakprofielen" ;
-    TEXT [ spanish ] = "Estilos del usuario" ;
-    TEXT [ english_us ] = "Custom Styles" ;
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨è€…æ ·å¼";
-    TEXT[ russian ] = "Ñòèëè ïîëüçîâàòåëÿ";
-    TEXT[ polish ] = "Style niestandardowe";
-    TEXT[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ã‚¹ã‚¿ã‚¤ãƒ«";
-    TEXT[ chinese_traditional ] = "è‡ªè¨‚æ¨£å¼";
-    TEXT[ arabic ] = "ÃäãÇØ ãÎÕÕÉ";
-    TEXT[ greek ] = "Óôõë ÷ñŞóôç";
-    TEXT[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¤íƒ€ì¼";
-    TEXT[ turkish ] = "Kullanıcı tanımlı biçimler";
-    TEXT[ catalan ] = "Estils personalitzats";
-    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
-    TEXT[ czech ] = "VlastnÃ­ styly";
-    TEXT[ hebrew ] = "â€®×¡×’× ×•× ×•×ª ××•×ª×××™×â€¬";
-    TEXT[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "VlastnÃ© Å¡tÃ½ly";
-    TEXT[ hungarian ] = "EgyÃ©ni stÃ­lusok";
-    TEXT[ slovenian ] = "Slogi po meri";
+    Text [ de ] = "Benutzervorlagen" ;
+    Text [ en-US ] = "Custom Styles" ;
 };
 
 String STR_STYLE_FILTER_ALL
 {
-    TEXT = "Alle Vorlagen" ;
-    TEXT [ English ] = "All styles" ;
-    TEXT [ norwegian ] = "Alle stiler" ;
-    TEXT [ italian ] = "Tutti i modelli" ;
-    TEXT [ portuguese_brazilian ] = "Todos os estilos" ;
-    TEXT [ portuguese ] = "Estilos todos" ;
-    TEXT [ finnish ] = "Kaikki tyylit" ;
-    TEXT [ danish ] = "Alle typografier" ;
-    TEXT [ french ] = "Tous les styles" ;
-    TEXT [ swedish ] = "Alla mallar" ;
-    TEXT [ dutch ] = "Alle opmaakprofielen" ;
-    TEXT [ spanish ] = "Todos los estilos" ;
-    TEXT [ english_us ] = "All Styles" ;
-    TEXT[ chinese_simplified ] = "å…¨éƒ¨æ ·å¼";
-    TEXT[ russian ] = "Âñå ñòèëè";
-    TEXT[ polish ] = "Wszystkie style";
-    TEXT[ japanese ] = "ã™ã¹ã¦ã®ã‚¹ã‚¿ã‚¤ãƒ«";
-    TEXT[ chinese_traditional ] = "å…¨éƒ¨æ¨£å¼";
-    TEXT[ arabic ] = "ßá ÇáÃäãÇØ";
-    TEXT[ greek ] = "¼ëá ôá ğñüôõğá";
-    TEXT[ korean ] = "ëª¨ë“  ìŠ¤íƒ€ì¼";
-    TEXT[ turkish ] = "Tüm biçimler";
-    TEXT[ catalan ] = "Tots els estils";
-    TEXT[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-    TEXT[ czech ] = "VÅ¡echny styly";
-    TEXT[ hebrew ] = "â€®×›×œ ×”×¡×’× ×•× ×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤¸à¤¬ à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
-    TEXT[ slovak ] = "VÅ¡etky Å¡tÃ½ly";
-    TEXT[ hungarian ] = "Minden stÃ­lus";
-    TEXT[ slovenian ] = "Vsi slogi";
+    Text [ de ] = "Alle Vorlagen" ;
+    Text [ en-US ] = "All Styles" ;
 };
 
 String STR_STANDARD
 {
-    Text = "Standard" ;
-    Text [ English ] = "Standard" ;
-    Text [ english_us ] = "Standard" ;
-    Text[ portuguese ] = "Padrão";
-    Text[ russian ] = "Ïî óìîë÷àíèş";
-    Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ dutch ] = "Standaard";
-    Text[ french ] = "Par défaut";
-    Text[ spanish ] = "Predeterminado";
-    Text[ italian ] = "Standard";
-    Text[ danish ] = "Standard";
-    Text[ swedish ] = "Standard";
-    Text[ polish ] = "Standardowy";
-    Text[ portuguese_brazilian ] = "Padrão";
-    Text[ japanese ] = "æ¨™æº–";
-    Text[ korean ] = "í‘œì¤€";
-    Text[ chinese_simplified ] = "æ ‡å‡†";
-    Text[ chinese_traditional ] = "æ¨™æº–";
-    Text[ arabic ] = "ŞíÇÓí";
-    Text[ turkish ] = "Standart";
-    Text[ catalan ] = "Predeterminat";
-    Text[ finnish ] = "Vakio";
-    Text[ thai ] = "à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
-    Text[ czech ] = "StandardnÃ­";
-    Text[ hebrew ] = "â€®×¨×’×™×œâ€¬";
-    Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤¾à¤°à¥à¤¡";
-    Text[ slovak ] = "Å tandardnÃ½";
-    Text[ hungarian ] = "Standard";
-    Text[ slovenian ] = "Standardno";
+    Text [ de ] = "Standard" ;
+    Text [ en-US ] = "Standard" ;
 };
 String STR_STANDARD_SHORTCUT
 {
-    Text = "~Standard" ;
-    Text [ English ] = "~Standard" ;
-    Text [ english_us ] = "Standard" ;
-    Text[ portuguese ] = "~Padrão";
-    Text[ russian ] = "Ñòàíäàğò";
-    Text[ greek ] = "ĞñïåğéëïãŞ";
-    Text[ dutch ] = "Standaar~d";
-    Text[ french ] = "Standard";
-    Text[ spanish ] = "~Predeterminado";
-    Text[ finnish ] = "Vakio";
-    Text[ italian ] = "Standard";
-    Text[ danish ] = "Standard";
-    Text[ swedish ] = "Standard";
-    Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "æ¨™æº–";
-    Text[ korean ] = "í‘œì¤€";
-    Text[ chinese_simplified ] = "æ ‡å‡†";
-    Text[ chinese_traditional ] = "æ¨™æº–";
-    Text[ turkish ] = "Standart";
-    Text[ arabic ] = "ŞíÇÓí";
-    Text[ catalan ] = "~Estàndard";
-    Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
-    Text[ portuguese_brazilian ] = "~Definir como impressora padrão";
-    Text[ czech ] = "StandardnÃ­";
-    Text[ hebrew ] = "â€®×¨×’×™×œâ€¬";
-    Text[ hindi ] = "Standard";
-    Text[ slovak ] = "Å tandardnÃ½";
-    Text[ hungarian ] = "Standard";
-    Text[ slovenian ] = "Standardno";
+    Text [ de ] = "~Standard" ;
+    Text [ en-US ] = "Standard" ;
 };
 
 String STR_FILTERNAME_ALL
 {
-    Text = "Alle Dateien (*.*)" ;
-    Text [ english ] = "All files (*.*)" ;
-    Text [ english_us ] = "All files (*.*)" ;
-    Text[ portuguese ] = "<Todos>";
-    Text[ russian ] = "Âñå ôàéëû (*.*)";
-    Text[ greek ] = "¼ëá ôá áñ÷åßá (*.*)";
-    Text[ dutch ] = "Alle bestanden (*.*)";
-    Text[ french ] = "Tous les fichiers (*.*)";
-    Text[ spanish ] = "Todos los archivos (*.*)";
-    Text[ finnish ] = "Kaikki tiedostot (*.*)";
-    Text[ italian ] = "Tutti i file (*.*)";
-    Text[ danish ] = "Alle filer (*.*)";
-    Text[ swedish ] = "Alla filer (*.*)";
-    Text[ polish ] = "Wszystkie pliki (*.*)";
-    Text[ portuguese_brazilian ] = "Todos os arquivos (*.*)";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ« (*.*)";
-    Text[ korean ] = "ëª¨ë“  íŒŒì¼(*.*)";
-    Text[ chinese_simplified ] = "å…¨éƒ¨æ–‡ä»¶ (*.*)";
-    Text[ chinese_traditional ] = "å…¨éƒ¨çš„æª”æ¡ˆ(*.*)";
-    Text[ turkish ] = "Tüm dosyalar (*.*)";
-    Text[ arabic ] = "<Çáßá>";
-    Text[ catalan ] = "<Tot>";
-    Text[ thai ] = "à¸—à¸¸à¸à¹„à¸Ÿà¸¥à¹Œ (*.*)";
-    Text[ czech ] = "VÅ¡echny soubory (*.*)";
-    Text[ hebrew ] = "â€®×›×œ ×”×§×‘×¦×™× (*.*)â€¬";
-    Text[ hindi ] = "à¤¸à¤¬ à¤«à¤¾à¤‡à¤²à¥‡à¤‚ (*.*)";
-    Text[ slovak ] = "VÅ¡etky sÃºbory (*.*)";
-    Text[ hungarian ] = "Minden fÃ¡jl (*.*)";
-    Text[ slovenian ] = "Vse datoteke (*.*)";
+    Text [ de ] = "Alle Dateien (*.*)" ;
+    Text [ en-US ] = "All files (*.*)" ;
 };
 
 String STR_HUMAN_APPNAME
@@ -406,305 +129,60 @@ String STR_HUMAN_APPNAME
 
 String STR_BYTES
 {
-    Text = "Bytes" ;
-    Text [ ENGLISH ] = "Bytes" ;
-    Text [ english_us ] = "Bytes" ;
-    Text [ portuguese_brazilian ] = "Bytes" ;
-    Text [ swedish ] = "Byte" ;
-    Text [ danish ] = "Bytes" ;
-    Text [ italian ] = "Byte" ;
-    Text [ spanish ] = "Bytes" ;
-    Text [ french ] = "Octets" ;
-    Text [ dutch ] = "Bytes" ;
-    Text [ portuguese ] = "Bytes" ;
-    Text[ chinese_simplified ] = "å­—èŠ‚";
-    Text[ russian ] = "áàéò";
-    Text[ polish ] = "B";
-    Text[ japanese ] = "ãƒã‚¤ãƒˆ";
-    Text[ chinese_traditional ] = "Bytes";
-    Text[ arabic ] = "ÈÇíÊ";
-    Text[ greek ] = "Bytes";
-    Text[ korean ] = "ë°”ì´íŠ¸";
-    Text[ turkish ] = "Byte";
-    Text[ catalan ] = "Bytes";
-    Text[ finnish ] = "Tavua";
-    Text[ thai ] = "à¹„à¸šà¸•à¹Œ";
-    Text[ czech ] = "BajtÅ¯";
-    Text[ hebrew ] = "â€®×‘×ª×™×â€¬";
-    Text[ hindi ] = "à¤¬à¤‡à¤Ÿà¥à¤¸";
-    Text[ slovak ] = "Bajtov";
-    Text[ hungarian ] = "Byte";
-    Text[ slovenian ] = "Bajtov";
+    Text [ de ] = "Bytes" ;
+    Text [ en-US ] = "Bytes" ;
 };
 
 String STR_KB
 {
-    Text = "KB" ;
-    Text [ ENGLISH ] = "KB" ;
-    Text [ portuguese ] = "KB" ;
-    Text [ english_us ] = "KB" ;
-    Text [ portuguese_brazilian ] = "KB" ;
-    Text [ swedish ] = "kB" ;
-    Text [ danish ] = "kB" ;
-    Text [ italian ] = "KB" ;
-    Text [ spanish ] = "KB" ;
-    Text [ french ] = "Ko" ;
-    Text [ dutch ] = "KB" ;
-    Text[ chinese_simplified ] = "åƒå­—èŠ‚";
-    Text[ russian ] = "Êá";
-    Text[ polish ] = "KB";
-    Text[ japanese ] = "ã‚­ãƒ­ãƒã‚¤ãƒˆ";
-    Text[ chinese_traditional ] = "KB";
-    Text[ arabic ] = "ßíáæÈÇíÊ";
-    Text[ greek ] = "KB";
-    Text[ korean ] = "KB";
-    Text[ turkish ] = "KB";
-    Text[ catalan ] = "kB";
-    Text[ finnish ] = "Kt";
-    Text[ thai ] = "KB";
-    Text[ czech ] = "KB";
-    Text[ hebrew ] = "â€®KBâ€¬";
-    Text[ hindi ] = "KB";
-    Text[ slovak ] = "kB";
-    Text[ hungarian ] = "kB";
-    Text[ slovenian ] = "KB";
+    Text [ de ] = "KB" ;
+    Text [ en-US ] = "KB" ;
 };
 
 String STR_MB
 {
-    Text = "MB" ;
-    Text [ ENGLISH ] = "MB" ;
-    Text [ portuguese ] = "MB" ;
-    Text [ english_us ] = "MB" ;
-    Text [ portuguese_brazilian ] = "MB" ;
-    Text [ swedish ] = "MB" ;
-    Text [ danish ] = "MB" ;
-    Text [ italian ] = "MB" ;
-    Text [ spanish ] = "MB" ;
-    Text [ french ] = "Mo" ;
-    Text [ dutch ] = "MB" ;
-    Text[ chinese_simplified ] = "å…†å­—èŠ‚";
-    Text[ russian ] = "Ìá";
-    Text[ polish ] = "MB";
-    Text[ japanese ] = "MB";
-    Text[ chinese_traditional ] = "MB";
-    Text[ arabic ] = "ãíÛÇÈÇíÊ";
-    Text[ greek ] = "MB";
-    Text[ korean ] = "MB";
-    Text[ turkish ] = "MB";
-    Text[ catalan ] = "MB";
-    Text[ finnish ] = "Mt";
-    Text[ thai ] = "MB";
-    Text[ czech ] = "MB";
-    Text[ hebrew ] = "MB";
-    Text[ hindi ] = "MB";
-    Text[ slovak ] = "MB";
-    Text[ hungarian ] = "MB";
-    Text[ slovenian ] = "MB";
+    Text [ de ] = "MB" ;
+    Text [ en-US ] = "MB" ;
 };
 
 
 String STR_GB
 {
-    Text = "GB" ;
-    Text [ ENGLISH ] = "GB" ;
-    Text [ portuguese ] = "GB" ;
-    Text [ english_us ] = "GB" ;
-    Text [ portuguese_brazilian ] = "GB" ;
-    Text [ swedish ] = "GB" ;
-    Text [ danish ] = "GB" ;
-    Text [ italian ] = "GB" ;
-    Text [ spanish ] = "GB" ;
-    Text [ french ] = "Go" ;
-    Text [ dutch ] = "GB" ;
-    Text[ chinese_simplified ] = "åƒå…†";
-    Text[ russian ] = "Ãá";
-    Text[ polish ] = "GB";
-    Text[ japanese ] = "GB";
-    Text[ chinese_traditional ] = "GB";
-    Text[ arabic ] = "ÌíÌÇÈÇíÊ";
-    Text[ greek ] = "GB";
-    Text[ korean ] = "GB";
-    Text[ turkish ] = "GB";
-    Text[ catalan ] = "GB";
-    Text[ finnish ] = "Gt";
-    Text[ thai ] = "GB";
-    Text[ czech ] = "GB";
-    Text[ hebrew ] = "â€®GBâ€¬";
-    Text[ hindi ] = "GB";
-    Text[ slovak ] = "GB";
-    Text[ hungarian ] = "GB";
-    Text[ slovenian ] = "GB";
+    Text [ de ] = "GB" ;
+    Text [ en-US ] = "GB" ;
 };
 
 String STR_UNDO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rückgängig:  : R³ckgõngig:  */
-    Text = "Rückgängig: " ;
-    Text [ English ] = "Undo " ;
-    Text [ norwegian ] = "Angre " ;
-    Text [ italian ] = "Annulla " ;
-    Text [ portuguese_brazilian ] = "~Desfazer: " ;
-    Text [ portuguese ] = "Anular: " ;
-    Text [ finnish ] = "Kumoa: " ;
-    Text [ danish ] = "Fortryd: " ;
-    Text [ french ] = "Annuler : " ;
-    Text [ swedish ] = "Ångra:  " ;
-    Text [ dutch ] = "Ongedaan maken:" ;
-    Text [ spanish ] = "Deshacer: " ;
-    Text [ english_us ] = "Undo: " ;
-    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ï¼š ";
-    Text[ russian ] = "Îòìåíèòü:  ";
-    Text[ polish ] = "Co~fnij: ";
-    Text[ japanese ] = "å…ƒã«æˆ»ã™: ";
-    Text[ chinese_traditional ] = "å¾©åŸï¼š";
-    Text[ arabic ] = "ÊÑÇÌÚ: ";
-    Text[ greek ] = "Áíáß~ñåóç: ";
-    Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ: ";
-    Text[ turkish ] = "Geri al: ";
-    Text[ catalan ] = "Desfés: ";
-    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³: ";
-    Text[ czech ] = "~ZpÄ›t: ";
-    Text[ hebrew ] = "â€®×‘×™×˜×•×œ ×¤×¢×•×œ×”:â€¬";
-    Text[ hindi ] = "à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿: ";
-    Text[ slovak ] = "SpÃ¤Å¥: ";
-    Text[ hungarian ] = "VisszavonÃ¡s:";
-    Text[ slovenian ] = "Razveljavi: ";
+    Text [ de ] = "Rückgängig: " ;
+    Text [ en-US ] = "Undo: " ;
 };
 
 String STR_REDO
 {
-    Text = "Wiederherstellen: " ;
-    Text [ English ] = "Redo: " ;
-    Text [ english_us ] = "Re~do: " ;
-    Text [ portuguese ] = "Restaurar: " ;
-    Text [ portuguese_brazilian ] = "Re~fazer: " ;
-    Text [ swedish ] = "Återställ:  " ;
-    Text [ danish ] = "Gendan: " ;
-    Text [ italian ] = "Ripristina: " ;
-    Text [ spanish ] = "Restaurar: " ;
-    Text [ french ] = "Restaurer : " ;
-    Text [ dutch ] = "Herstellen:" ;
-    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ (~D)";
-    Text[ russian ] = "Âåğíóòü: ";
-    Text[ polish ] = "Ponów: ";
-    Text[ japanese ] = "ã‚„ã‚Šç›´ã—(~D):";
-    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆæŒ‡ä»¤(~D):";
-    Text[ arabic ] = "ÅÚÇÏÉ: ";
-    Text[ greek ] = "Åğáíåêôİëåóç: ";
-    Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰(~D):";
-    Text[ turkish ] = "~Yinele: ";
-    Text[ catalan ] = "Restaurar: ";
-    Text[ finnish ] = "Tois~ta: ";
-    Text[ thai ] = "~à¸—à¸³à¸‹à¹‰à¸³: ";
-    Text[ czech ] = "Zn~ovu: ";
-    Text[ hebrew ] = "â€®×©×—×–×•×¨ ×¤×¢×•×œ×”:â€¬";
-    Text[ hindi ] = "à¤«à¤¼à¤¿à¤° à¤¸à¥‡ ~à¤•à¤°à¥‹: ";
-    Text[ slovak ] = "Z~novu: ";
-    Text[ hungarian ] = "~IsmÃ©t:";
-    Text[ slovenian ] = "~Uveljavi: ";
+    Text [ de ] = "Wiederherstellen: " ;
+    Text [ en-US ] = "Re~do: " ;
 };
 
 String STR_REPEAT
 {
-    Text = "Letzter ~Befehl: " ;
-    Text [ English ] = "~Repeat: " ;
-    Text [ english_us ] = "~Repeat: " ;
-    Text [ portuguese ] = "~Repetir: " ;
-    Text [ portuguese_brazilian ] = "~Repetir: " ;
-    Text [ swedish ] = "Senaste ~kommando:  " ;
-    Text [ danish ] = "~Gentag: " ;
-    Text [ italian ] = "Ultimo ~comando: " ;
-    Text [ spanish ] = "~Repetir: " ;
-    Text [ french ] = "~Répéter : " ;
-    Text [ dutch ] = "~Herhalen:" ;
-    Text[ chinese_simplified ] = "ä¸Šä¸€ä¸ªå‘½ä»¤(~R)";
-    Text[ russian ] = "Ïîâòîğèòü:  ";
-    Text[ polish ] = "Powtó~rz: ";
-    Text[ japanese ] = "ç¹°ã‚Šè¿”ã—(~R):";
-    Text[ chinese_traditional ] = "ä¸Šä¸€å€‹æŒ‡ä»¤(~R)";
-    Text[ arabic ] = "ÇáÃãÑ ÇáÃÎíÑ: ";
-    Text[ greek ] = "ÅğáíÜëçøç: ";
-    Text[ korean ] = "ë°˜ë³µ(~R):";
-    Text[ turkish ] = "Son ~komutu yinele: ";
-    Text[ catalan ] = "~Repeteix: ";
-    Text[ finnish ] = "~Toista: ";
-    Text[ thai ] = "~à¸‹à¹‰à¸³: ";
-    Text[ czech ] = "O~pakovat: ";
-    Text[ hebrew ] = "â€®×‘×¦×•×¢ ×—×•×–×¨:â€¬";
-    Text[ hindi ] = "~à¤¦à¥à¤¹à¤°à¤¾à¤¨à¤¾: ";
-    Text[ slovak ] = "Opako~vaÅ¥: ";
-    Text[ hungarian ] = "IsmÃ©~tlÃ©s:";
-    Text[ slovenian ] = "~Ponovi: ";
+    Text [ de ] = "Letzter ~Befehl: " ;
+    Text [ en-US ] = "~Repeat: " ;
 };
 
 String RID_STR_NEW_TASK
 {
-    Text = "Neue Task";
-    Text [ english ] = "New task";
-    Text[ english_us ] = "New task";
-    Text[ portuguese ] = "Nova tarefa";
-    Text[ russian ] = "Ñîçäàòü çàäà÷ó";
-    Text[ dutch ] = "Nieuwe taak";
-    Text[ french ] = "Nouvelle tâche";
-    Text[ spanish ] = "Tarea nueva";
-    Text[ italian ] = "Nuovo compito";
-    Text[ danish ] = "Ny opgave";
-    Text[ swedish ] = "Ny aktivitet";
-    Text[ polish ] = "Nowe zadanie";
-    Text[ portuguese_brazilian ] = "Nova tarefa";
-    Text[ japanese ] = "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦";
-    Text[ chinese_simplified ] = "æ–°å¢è§†çª—";
-    Text[ chinese_traditional ] = "é–‹æ–°æª”æ¡ˆ";
-    Text[ arabic ] = "ãåãÉ ÌÏíÏÉ";
-    Text[ greek ] = "Íİá åñãáóßá";
-    Text[ korean ] = "ìƒˆ ì‘ì—…";
-    Text[ turkish ] = "Yeni görev";
-    Text[ catalan ] = "Tasca nova";
-    Text[ finnish ] = "Uusi tehtävä";
-    Text[ thai ] = "à¸‡à¸²à¸™à¹ƒà¸«à¸¡à¹ˆ";
-    Text[ czech ] = "NovÃ½ Ãºkol";
-    Text[ hebrew ] = "â€®××©×™××” ×—×“×©×”â€¬";
-    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤•à¤¾à¤°à¥à¤¯";
-    Text[ slovak ] = "NovÃ¡ Ãºloha";
-    Text[ hungarian ] = "Ãšj feladat";
-    Text[ slovenian ] = "Novo opravilo";
+    Text [ de ] = "Neue Task";
+    Text [ en-US ] = "New task";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Alle Änderungen aufheben? : Alle nderungen aufheben? */
-    Message = "Alle Änderungen aufheben?" ;
-    Message [ English ] = "Cancel all changes?" ;
-    Message [ norwegian ] = "Slett alle endringer?" ;
-    Message [ italian ] = "Volete annullare tutte le modifiche?" ;
-    Message [ portuguese_brazilian ] = "Cancelar todas as alterações?" ;
-    Message [ portuguese ] = "Cancelar todas as modificações?" ;
-    Message [ finnish ] = "Peruutetaanko kaikki muutokset?" ;
-    Message [ danish ] = "Vil du annullere alle ændringer?" ;
-    Message [ french ] = "Annuler toutes les modifications ?" ;
-    Message [ swedish ] = "Ångra alla ändringar?" ;
-    Message [ dutch ] = "Alle wijzigingen ongedaan maken?" ;
-    Message [ spanish ] = "¿Cancelar todos los cambios?" ;
-    Message [ english_us ] = "Cancel all changes?" ;
-    Message[ chinese_simplified ] = "è¦å–æ¶ˆæ›´æ”¹?";
-    Message[ russian ] = "Îòìåíèòü âñå èçìåíåíèÿ?";
-    Message[ polish ] = "Anulowaæ wszystkie zmiany?";
-    Message[ japanese ] = "ã™ã¹ã¦ã®å¤‰æ›´ã‚’è§£é™¤ã—ã¾ã™ã‹ã€‚";
-    Message[ chinese_traditional ] = "å–æ¶ˆæ‰€æœ‰çš„è®Šæ›´ï¼Ÿ";
-    Message[ greek ] = "Áêıñùóç üëùí ôùí áëëáãşí;";
-    Message[ korean ] = "ëª¨ë“  ë³€ê²½ ë‚´ìš©ì„ ì·¨ì†Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ arabic ] = "åá ÊÑíÏ ÑİÖ ßá ÇáÊÛííÑÇÊ¿";
-    Message[ turkish ] = "Tüm değişiklikleri iptal et?";
-    Message[ catalan ] = "Cancel.la tots els canvis?";
-    Message[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "ZruÅ¡it vÅ¡echny zmÄ›ny?";
-    Message[ hebrew ] = "â€®×”×× ×œ×‘×˜×œ ×›×œ ×”×©×™× ×•×™×™×?â€¬";
-    Message[ hindi ] = "à¤¸à¤¬ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤°à¤¦à¥à¤¦ à¤•à¤°à¤¨à¤¾ à¤¹à¥ˆ?";
-    Message[ slovak ] = "ZruÅ¡iÅ¥ vÅ¡etky zmeny?";
-    Message[ hungarian ] = "Minden vÃ¡ltozÃ¡st elvet?";
-    Message[ slovenian ] = "PrekliÄem vse spremembe?";
+    Message [ de ] = "Alle Änderungen aufheben?" ;
+    Message [ en-US ] = "Cancel all changes?" ;
 };
 
 
