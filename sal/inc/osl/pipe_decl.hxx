@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe_decl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: hro $ $Date: 2002-07-12 10:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,13 @@ public:
     */
     inline Pipe();
 
-    /** Creates a pipe.
+    /** Creates an insecure pipe that is accessible for all users.
         @param strName
         @param Options
-        @param Security
     */
     inline Pipe(const ::rtl::OUString& strName, oslPipeOptions Options);
 
-    /** Creates a pipe.
+    /** Creates a secure pipe that access depends on the umask settings.
         @param strName
         @param Options
         @param Security
@@ -124,7 +123,8 @@ public:
 
     inline sal_Bool SAL_CALL is() const;
 
-    /** Create a pipe with the given attributes.
+    /** Creates an insecure pipe that is accessible for all users
+        with the given attributes.
         If the pipe was already created, the old one will be discarded.
         @param strName
         @param Options
@@ -134,7 +134,9 @@ public:
     inline sal_Bool create( const ::rtl::OUString & strName,
                             oslPipeOptions Options, const Security &rSec );
 
-    /** Create a pipe with the given attributes.
+    /** Creates a secure that access rights depend on the umask settings
+        with the given attributes.
+
         If socket was already created, the old one will be discarded.
         @param strName
         @param Options
