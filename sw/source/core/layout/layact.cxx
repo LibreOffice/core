@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:05 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,6 +1351,11 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
             if ( bTstCnt )
             {
+                // --> OD 2004-06-04 #i27756# - check after each frame calculation,
+                // if the content frame has changed the page. If yes, no other
+                // frame calculation is performed
+                bool bPageChg = false;
+
                 if ( pCntnt->IsInSct() )
                 {
                     const SwSectionFrm *pSct = ((SwFrm*)pCntnt)->ImplFindSctFrm();
@@ -1360,15 +1365,24 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return FALSE;
+                        // --> OD 2004-06-04 #i27756#
+                        bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
+                                   prPage->GetPrev();
                     }
                 }
-                if ( !pCntnt->IsValid() )
-                {   pCntnt->Calc();
+
+                if ( !bPageChg && !pCntnt->IsValid() )
+                {
+                    pCntnt->Calc();
                     pCntnt->SetCompletePaint();
                     if ( IsAgain() )
                         return FALSE;
+                    // --> OD 2004-06-04 #i27756#
+                    bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
+                               prPage->GetPrev();
                 }
-                if ( pCntnt->IsInTab() )
+
+                if ( !bPageChg && pCntnt->IsInTab() )
                 {
                     const SwTabFrm *pTab = ((SwFrm*)pCntnt)->ImplFindTabFrm();
                     if ( !pTab->IsValid() )
@@ -1377,9 +1391,13 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pTab->SetCompletePaint();
                         if ( IsAgain() )
                             return FALSE;
+                        // --> OD 2004-06-04 #i27756#
+                        bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
+                                   prPage->GetPrev();
                     }
                 }
-                if ( pCntnt->IsInSct() )
+
+                if ( !bPageChg && pCntnt->IsInSct() )
                 {
                     const SwSectionFrm *pSct = ((SwFrm*)pCntnt)->ImplFindSctFrm();
                     if ( !pSct->IsValid() )
@@ -1388,27 +1406,27 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return FALSE;
+                        // --> OD 2004-06-04 #i27756#
+                        bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
+                                   prPage->GetPrev();
                     }
                 }
-#ifdef USED
-                if ( (pCntnt->FindPageFrm() != p2ndPage) &&
-                     prPage->GetPrev() )
-                {
-                    prPage = (SwPageFrm*)prPage->GetPrev();
-                    bRet = FALSE;
-                }
-#else
-                const SwPageFrm* pTmp = pCntnt->FindPageFrm();
-                if ( pTmp != p2ndPage && prPage->GetPrev() )
+
+                // --> OD 2004-06-04 #i27756#
+                if ( bPageChg )
                 {
                     bRet = FALSE;
-                    if( pTmp->GetPhyPageNum() < prPage->GetPhyPageNum()
-                        && pTmp->IsInvalid() )
+                    const SwPageFrm* pTmp = pCntnt->FindPageFrm();
+                    if ( pTmp->GetPhyPageNum() < prPage->GetPhyPageNum() &&
+                         pTmp->IsInvalid() )
+                    {
                         prPage = (SwPageFrm*)pTmp;
+                    }
                     else
+                    {
                         prPage = (SwPageFrm*)prPage->GetPrev();
+                    }
                 }
-#endif
             }
         }
     }
