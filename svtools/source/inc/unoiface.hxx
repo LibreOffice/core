@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 14:02:22 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class VCLXMultiLineEdit :   public ::com::sun::star::awt::XTextComponent,
 {
 private:
     TextListenerMultiplexer maTextListeners;
+    bool                    mbJavaCompatibleTextNotifications;
     LineEnd                 meLineEndType;
 
 protected:
@@ -153,6 +154,9 @@ public:
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XWindow
+    void SAL_CALL setFocus(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
