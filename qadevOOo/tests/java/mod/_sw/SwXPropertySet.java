@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPropertySet.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:12:08 $
+ *  last change:$Date: 2005-01-25 16:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ public class SwXPropertySet extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create text document", e );
+            throw new StatusException( "Couldn't create text document", e );
         }
 
         TestEnvironment tEnv = new TestEnvironment( xTextDoc );

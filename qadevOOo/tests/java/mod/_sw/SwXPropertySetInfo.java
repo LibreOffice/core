@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXPropertySetInfo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 20:12:31 $
+ *  last change:$Date: 2005-01-25 16:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ public class SwXPropertySetInfo extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
 
         log.println( "    getting the XPropertySetInfo" );
