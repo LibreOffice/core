@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-18 07:03:35 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,6 +373,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // control attributes (border exists one mor time for the text additions of shapes)
     { "ControlBackground",              XML_NAMESPACE_FO,   sXML_background_color,      XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
     { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "ControlDataStyle",               XML_NAMESPACE_STYLE,sXML_data_style_name,       XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE },
 
     // special entries for floating frames
     { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, sXML_frame_display_scrollbar,   XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
@@ -1315,6 +1316,26 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     }
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+}
+
+void XMLShapeExportPropertyMapper::handleSpecialItem(
+        SvXMLAttributeList& rAttrList,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
+{
+    switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
+    {
+        case CTF_SD_CONTROL_SHAPE_DATA_STYLE:
+            // not to be handled by the base class
+            break;
+
+        default:
+            SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
+            break;
+    }
 }
 
 void XMLShapeExportPropertyMapper::handleElementItem(
