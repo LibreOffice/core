@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:44:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   ctredlin.src  $
  //   $Author: kz $
- //     $Date: 2001-03-09 20:44:09 $
- // $Revision: 1.11 $
+ //     $Date: 2001-03-28 12:42:20 $
+ // $Revision: 1.12 $
  //  $Logfile:   T:/svx/source/dialog/ctredlin.srv  $
  //---------------------------------------------------------------------------
 
@@ -532,7 +532,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ chinese_traditional ] = "§@ªÌ(~A)";
         Text[ arabic ] = "ÇáãÄáÝ";
         Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ÀÛ¼ºÀÚ";
+        Text[ korean ] = "ÀÛ¼ºÀÚ(~A)";
         Text[ turkish ] = "~Yazan";
         Text[ language_user1 ] = " ";
     };
@@ -818,14 +818,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Tout a~ccepter" ;
         Text [ dutch ] = "Alle ac~cepteren" ;
         Text [ portuguese ] = "~Aceitar tudo" ;
-        Text[ chinese_simplified ] = "È«²¿½ÓÊÜ(~A)";
+        Text[ chinese_simplified ] = "È«²¿½ÓÊÜ(~C)";
         Text[ russian ] = "Ïðèíÿòü âñå";
         Text[ polish ] = "Akcept. wszystkie";
         Text[ japanese ] = "‚·‚×‚Ä“K—p(~C)";
-        Text[ chinese_traditional ] = "¥þ³¡±µ¨ü(~A)";
+        Text[ chinese_traditional ] = "¥þ³¡±µ¨ü(~C)";
         Text[ arabic ] = "ÞÈæá Çáßá";
         Text[ greek ] = "Áðïäï~÷Þ üëùí";
-        Text[ korean ] = "¸ðµÎ ¼ö¶ô(~A)";
+        Text[ korean ] = "¸ðµÎ ¼ö¶ô(~C)";
         Text[ turkish ] = "~Tümünü kabul et";
         Text[ language_user1 ] = " ";
     };
@@ -845,14 +845,14 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ french ] = "Tout r~efuser" ;
         Text [ dutch ] = "Alle ver~werpen" ;
         Text [ portuguese ] = "Rejeitar ~tudo" ;
-        Text[ chinese_simplified ] = "È«²¿¾Ü¾ø(~R)";
+        Text[ chinese_simplified ] = "È«²¿¾Ü¾ø(~E)";
         Text[ russian ] = "Îòêëîíèòü âñå";
         Text[ polish ] = "Odrzuæ wszystkie";
         Text[ japanese ] = "‚·‚×‚Ä·¬Ý¾Ù(~E)";
-        Text[ chinese_traditional ] = "¥þ³¡©Úµ´(~R)";
+        Text[ chinese_traditional ] = "¥þ³¡©Úµ´(~E)";
         Text[ arabic ] = "ÑÝÖ Çáßá";
         Text[ greek ] = "Áðüññéøç üëùí";
-        Text[ korean ] = "¸ðµÎ °ÅºÎ(~R)";
+        Text[ korean ] = "¸ðµÎ °ÅºÎ(~E)";
         Text[ turkish ] = "Tümünü ~reddet";
         Text[ language_user1 ] = " ";
     };
