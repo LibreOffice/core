@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 17:36:38 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,20 @@
 #ifndef _SV_XMLAUTOCORRECTEXPORT_HXX
 #include <SvXMLAutoCorrectExport.hxx>
 #endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
 
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -1521,7 +1534,7 @@ BOOL SvxAutoCorrect::DeleteText( const String& rShort, LanguageType eLang )
 
     //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
     //      koennen aus der Wortliste herausgeholt werden!)
-BOOL SvxAutoCorrect::GetLongText( SvStorage&, const String& , String& )
+BOOL SvxAutoCorrect::GetLongText( SvStorageRef&, const String& , String& )
 {
     return FALSE;
 }
@@ -1544,6 +1557,21 @@ void EncryptBlockName_Imp( String& rName )
     {
         if( lcl_IsInAsciiArr( "!/:.\\", *pName ))
             *pName &= 0x0f;
+    }
+}
+
+/* This code is copied from SwXMLTextBlocks::GeneratePackageName */
+void GeneratePackageName ( const String& rShort, String& rPackageName )
+{
+    rPackageName = rShort;
+    xub_StrLen nPos = 0;
+    sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
+    ByteString sByte ( rPackageName, RTL_TEXTENCODING_UTF7);
+    rPackageName = String (sByte, RTL_TEXTENCODING_ASCII_US);
+    while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
+    {
+        rPackageName.SetChar( nPos, '_' );
+        ++nPos;
     }
 }
 
@@ -2061,6 +2089,13 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
             {
                 xStrm->SetSize( 0 );
                 xStrm->SetBufferSize( 8192 );
+                String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+                OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+                uno::Any aAny;
+                aAny <<= aMime;
+                xStrm->SetProperty( aPropName, aAny );
+
+
                 Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
                 DBG_ASSERT( xServiceFactory.is(),
@@ -2105,8 +2140,6 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
  * --------------------------------------------------*/
 SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 {
-
-
     if( pAutocorr_List )
         pAutocorr_List->DeleteAndDestroy( 0, pAutocorr_List->Count() );
     else
@@ -2178,7 +2211,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
                     if( !bOnlyTxt )
                     {
                         String sLongSave( sLong );
-                        if( !rAutoCorrect.GetLongText( *xStg, sShort, sLong ) &&
+                        if( !rAutoCorrect.GetLongText( xStg, sShort, sLong ) &&
                             sLongSave.Len() )
                         {
                             sLong = sLongSave;
@@ -2549,11 +2582,62 @@ void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const String& rName )
 
 void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 {
-    if( sUserAutoCorrFile != sShareAutoCorrFile )
+    // The conversion needs to happen if the file is already in the user
+    // directory and is in the old format. Additionally it needs to
+    // happen when the file is being copied from share to user.
+
+    sal_Bool bError = sal_False, bConvert = sal_False, bCopy = sal_False;
+    INetURLObject aDest;
+    INetURLObject aSource;
+
+//  String sDestPath = sUserAutoCorrFile.Copy ( 0, sUserAutoCorrFile.Len()-3);
+//  sDestPath.AppendAscii ("bak");
+
+
+    if (sUserAutoCorrFile != sShareAutoCorrFile )
     {
-        // at first copy the complete storage file from the share to
-        // user directory
-        SfxMedium aSrcMedium( sShareAutoCorrFile, STREAM_STD_READ, TRUE );
+        aSource = INetURLObject ( sShareAutoCorrFile ); //aSource.setFSysPath ( sShareAutoCorrFile, INetURLObject::FSYS_DETECT );
+        aDest = INetURLObject ( sUserAutoCorrFile );
+        if ( SotStorage::IsOLEStorage ( sShareAutoCorrFile ) )
+        {
+            aDest.SetExtension ( String::CreateFromAscii ( "bak" ) );
+            bConvert = sal_True;
+        }
+        bCopy = sal_True;
+    }
+    else if ( SotStorage::IsOLEStorage ( sUserAutoCorrFile ) )
+    {
+        aSource = INetURLObject ( sUserAutoCorrFile );
+        aDest = INetURLObject ( sUserAutoCorrFile );
+        aDest.SetExtension ( String::CreateFromAscii ( "bak" ) );
+        bCopy = bConvert = sal_True;
+    }
+    if (bCopy)
+    {
+        try
+        {
+            String sMain(aDest.GetMainURL());
+            sal_Unicode cSlash = '/';
+            xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
+            sMain.Erase(nSlashPos);
+            ::ucb::Content aNewContent( sMain, Reference< XCommandEnvironment > ());
+            Any aAny;
+            TransferInfo aInfo;
+            aInfo.NameClash = NameClash::OVERWRITE;
+            aInfo.NewTitle  = aDest.GetName();
+            aInfo.SourceURL = aSource.GetMainURL();
+            aInfo.MoveData  = FALSE;
+            aAny <<= aInfo;
+            aNewContent.executeCommand( OUString ( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ), aAny);
+        }
+        catch (...)
+        {
+            bError = sal_True;
+        }
+    }
+    if (bConvert && !bError)
+    {
+        SfxMedium aSrcMedium( aDest.GetMainURL(), STREAM_STD_READ, TRUE );
         SvStorageRef xSrcStg = aSrcMedium.GetStorage();
         SfxMedium aDstMedium( sUserAutoCorrFile, STREAM_STD_WRITE, TRUE );
         // Copy it to a UCBStorage
@@ -2598,6 +2682,14 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             sShareAutoCorrFile = sUserAutoCorrFile;
             xDstStg = 0;
             aDstMedium.Commit();
+            try
+            {
+                ::ucb::Content aContent ( aDest.GetMainURL(), Reference < XCommandEnvironment > ());
+                aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "delete" ) ), makeAny ( sal_Bool (sal_True ) ) );
+            }
+            catch (...)
+            {
+            }
         }
     }
 }
@@ -2611,17 +2703,25 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
     BOOL bRet = TRUE, bRemove = !pAutocorr_List || !pAutocorr_List->Count();
     if( !bRemove )
     {
+        /*
         if ( rStg.IsContained( sStrmName) )
         {
             rStg.Remove ( sStrmName );
             rStg.Commit();
         }
+        */
         SvStorageStreamRef refList = rStg.OpenStream( sStrmName,
                     ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE ) );
         if( refList.Is() )
         {
             refList->SetSize( 0 );
             refList->SetBufferSize( 8192 );
+            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+            uno::Any aAny;
+            aAny <<= aMime;
+            refList->SetProperty( aPropName, aAny );
+
             Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
             DBG_ASSERT( xServiceFactory.is(),
@@ -2734,7 +2834,11 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
             {
                 // dann ist der Storage noch zu entfernen
                 String sStgNm( rShort );
-                EncryptBlockName_Imp( sStgNm );
+                if (xStg->IsOLEStorage())
+                    EncryptBlockName_Imp( sStgNm );
+                else
+                    GeneratePackageName ( rShort, sStgNm);
+
                 if( xStg->IsContained( sStgNm ) )
                     xStg->Remove( sStgNm );
             }
@@ -2820,12 +2924,16 @@ BOOL SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
             if( !pFnd->IsTextOnly() )
             {
                 String aName( rShort );
-                EncryptBlockName_Imp( aName );
+                if (xStg->IsOLEStorage())
+                    EncryptBlockName_Imp( aName );
+                else
+                    GeneratePackageName ( rShort, aName );
                 if( xStg->IsContained( aName ) )
                 {
                     xStg->Remove( aName );
                     bRet = xStg->Commit();
                 }
+
             }
             // die Wortliste aktualisieren
             pAutocorr_List->DeleteAndDestroy( nPos );
