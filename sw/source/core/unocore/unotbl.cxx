@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-09 14:52:25 $
+ *  last change: $Author: mtg $ $Date: 2001-10-10 16:47:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3565,16 +3565,25 @@ OUString SwXCellRange::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXCellRange::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return C2U("com.sun.star.table.CellRange") == rServiceName;
+    return
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.CellRange" ) ) ||
+         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterProperties" ) ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesAsian" ) ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.CharacterPropertiesComplex") ) ||
+        rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.style.ParagraphProperties" ) );
 }
 /* -----------------------------19.04.00 15:21--------------------------------
 
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(5);
     OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.table.CellRange");
+    pArray[0] = C2U("com.sun.star.text.CellRange");
+     pArray[1] = C2U("com.sun.star.style.CharacterProperties");
+    pArray[2] = C2U("com.sun.star.style.CharacterPropertiesAsian");
+    pArray[3] = C2U("com.sun.star.style.CharacterPropertiesComplex");
+    pArray[4] = C2U("com.sun.star.style.ParagraphProperties");
     return aRet;
 }
 /*-- 11.12.98 14:27:32---------------------------------------------------
