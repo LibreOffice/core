@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:17:56 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
 #endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -99,9 +102,6 @@ namespace com { namespace sun { namespace star { namespace util {
     struct DateTime;
     struct Time;
 }
-    namespace lang {
-        class DisposedException;
-    }
 }}}
 
 namespace connectivity

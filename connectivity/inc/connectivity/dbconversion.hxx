@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 12:54:45 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 13:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #define _DBHELPER_DBCONVERSION_HXX_
 
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#endif
 //#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
 //#include <com/sun/star/sdb/XColumnUpdate.hpp>
 //#endif
@@ -95,7 +98,6 @@ namespace com
         {
             namespace lang
             {
-                class IllegalArgumentException;
                 struct Locale;
             }
             namespace sdb
