@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-23 15:49:06 $
+ *  last change: $Author: sb $ $Date: 2002-01-15 17:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,6 +911,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
             /* This is no actual MIME character set name, it's only a guess */
         { "gb18030", RTL_TEXTENCODING_GB_18030 },
             /* This is no actual MIME character set name, it's only a guess */
+        { "big5hkscs", RTL_TEXTENCODING_BIG5_HKSCS },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 

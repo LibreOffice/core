@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-29 15:14:45 $
+ *  last change: $Author: sb $ $Date: 2002-01-15 16:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,9 @@ typedef sal_uInt16 rtl_TextEncoding;
 #define RTL_TEXTENCODING_JIS_X_0212             (RTL_TEXTENC_CAST( 83 ))
 #define RTL_TEXTENCODING_MS_1361                (RTL_TEXTENC_CAST( 84 ))
 #define RTL_TEXTENCODING_GB_18030               (RTL_TEXTENC_CAST( 85 ))
+#define RTL_TEXTENCODING_BIG5_HKSCS             (RTL_TEXTENC_CAST( 86 ))
 
-#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 86 ))
+#define RTL_TEXTENCODING_STD_COUNT              (RTL_TEXTENC_CAST( 87 ))
 
 #define RTL_TEXTENCODING_USER_START             (RTL_TEXTENC_CAST( 0x8000 ))
 #define RTL_TEXTENCODING_USER_END               (RTL_TEXTENC_CAST( 0xEFFF ))
@@ -214,6 +215,7 @@ Chinese Traditional (BIG5)                      RTL_TEXTENCODING_BIG5
 # Chinese Traditional (EUC-TW)                    RTL_TEXTENCODING_EUC_TW
 Chinese Traditional (GBT-12345)                 RTL_TEXTENCODING_GBT_12345
 Chinese Traditional (Windows-950)               RTL_TEXTENCODING_MS_950
+Chinese Traditional (BIG5-HKSCS)                RTL_TEXTENCODING_BIG5_HKSCS
 
 Cyrillic (Apple Macintosh)                      RTL_TEXTENCODING_APPLE_CYRILLIC
 Cyrillic (Apple Macintosh/Ukrainian)            RTL_TEXTENCODING_APPLE_UKRAINIAN

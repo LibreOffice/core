@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: sb $ $Date: 2001-11-23 09:42:42 $
+#   last change: $Author: sb $ $Date: 2002-01-15 17:01:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ TARGET = textenc
 
 SLOFILES = \
     $(SLO)$/context.obj \
+    $(SLO)$/convertbig5hkscs.obj \
     $(SLO)$/converter.obj \
     $(SLO)$/converteuctw.obj \
     $(SLO)$/convertgb18030.obj \
@@ -87,6 +88,7 @@ SLOFILES = \
 
 OBJFILES = \
     $(OBJ)$/context.obj \
+    $(OBJ)$/convertbig5hkscs.obj \
     $(OBJ)$/converter.obj \
     $(OBJ)$/converteuctw.obj \
     $(OBJ)$/convertgb18030.obj \
