@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:37:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void ModulWindow::DoInit()
 void __EXPORT ModulWindow::Paint( const Rectangle& )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //  SetFillInBrush( Brush( Color( COL_GREEN ) ) );
 //  Size aSz = GetOutputSize();
 //  DrawRect( Rectangle( Point( 0, 0 ), aSz ) );
