@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:31:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,6 @@ SfxApplication::SfxApplication()
     , pAcceleratorMgr( 0 )
     , pStatusBarMgr( 0 )
     , pCfgMgr( 0 )
-    , pImageMgr( 0 )
     , pOptions( 0 )
     , pAppData_Impl( 0 )
     , nInterfaces( 0 )
