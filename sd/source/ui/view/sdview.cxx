@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:05:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,13 +702,13 @@ BOOL View::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
 BOOL View::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin,
                          BOOL bIsNewObj, SdrOutliner* pGivenOutliner,
                          OutlinerView* pGivenOutlinerView, BOOL bDontDeleteOutliner,
-                         BOOL bOnlyOneView)
+                         BOOL bOnlyOneView, BOOL bGrabFocus)
 {
     GetViewShell()->GetViewShellBase().GetEventMultiplexer().MultiplexEvent( sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
     BOOL bReturn = FmFormView::BegTextEdit(pObj, pPV, pWin, bIsNewObj, pGivenOutliner,
                                         pGivenOutlinerView, bDontDeleteOutliner,
-                                        bOnlyOneView);
+                                        bOnlyOneView, bGrabFocus);
 
     if (bReturn)
     {
