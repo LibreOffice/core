@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:12:47 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,34 +103,6 @@ void Resource::GetRes( const ResId& rResId )
 
 // =======================================================================
 
-UniString::UniString( const ResId& rResId )
-{
-    rResId.SetRT( RSC_STRING );
-    ResMgr* pResMgr = rResId.GetResMgr();
-    if ( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
-    if ( pResMgr->GetResource( rResId ) )
-    {
-        // String laden
-        RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
-        USHORT nLen = pResHdr->GetLocalOff() - sizeof( RSHEADER_TYPE );
-
-        USHORT nStringLen = strlen( (char*)(pResHdr+1) );
-        InitStringRes( (const char*)(pResHdr+1), nStringLen );
-
-        USHORT nSize = sizeof( RSHEADER_TYPE ) + nStringLen + 1;
-        nSize += nSize % 2;
-        pResMgr->Increment( nSize );
-    }
-
-    ResHookProc pImplResHookProc = ResMgr::GetReadStringHook();
-    if ( pImplResHookProc )
-        pImplResHookProc( *this );
-}
-
-// =======================================================================
-
 Time::Time( const ResId& rResId )
 {
     nTime = 0;
@@ -139,7 +111,7 @@ Time::Time( const ResId& rResId )
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    USHORT nObjMask = (USHORT)pResMgr->ReadShort();
+    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
         SetHour( (USHORT)pResMgr->ReadShort() );
@@ -160,7 +132,7 @@ Date::Date( const ResId& rResId )
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    USHORT nObjMask = (USHORT)pResMgr->ReadShort();
+    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
         SetYear( (USHORT)pResMgr->ReadShort() );
@@ -179,22 +151,22 @@ International::International( const ResId& rResId )
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    USHORT nObjMask = (USHORT)pResMgr->ReadShort();
+    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
 
     LanguageType eLangType = LANGUAGE_SYSTEM;
     LanguageType eFormatType = LANGUAGE_SYSTEM;
 
     if ( 0x0001 & nObjMask )
     {
-            eLangType = (LanguageType)(USHORT)pResMgr->ReadShort();
+            eLangType = (LanguageType)pResMgr->ReadLong();
             eFormatType = eLangType;
     }
     if ( 0x0002 & nObjMask )
-        eFormatType = (LanguageType)(USHORT)pResMgr->ReadShort();
+        eFormatType = (LanguageType)pResMgr->ReadLong();
     Init( eLangType, eFormatType );
 
     if ( 0x0004 & nObjMask )
-        SetDateFormat( (DateFormat)(USHORT)pResMgr->ReadShort() );
+        SetDateFormat( (DateFormat)pResMgr->ReadLong() );
     if ( 0x0008 & nObjMask )
             SetDateDayLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
     if ( 0x0010 & nObjMask )
@@ -202,9 +174,9 @@ International::International( const ResId& rResId )
     if ( 0x0020 & nObjMask )
         SetDateCentury( (BOOL)(USHORT)pResMgr->ReadShort() );
     if ( 0x0040 & nObjMask )
-        SetLongDateFormat( (DateFormat)(USHORT)pResMgr->ReadShort() );
+        SetLongDateFormat( (DateFormat)pResMgr->ReadLong() );
     if ( 0x0080 & nObjMask )
-            SetLongDateDayOfWeekFormat( (DayOfWeekFormat)(USHORT)pResMgr->ReadShort() );
+            SetLongDateDayOfWeekFormat( (DayOfWeekFormat)pResMgr->ReadLong() );
     if ( 0x0100 & nObjMask )
         SetLongDateDayOfWeekSep( pResMgr->ReadString() );
     if ( 0x0200 & nObjMask )
@@ -212,7 +184,7 @@ International::International( const ResId& rResId )
     if ( 0x0400 & nObjMask )
         SetLongDateDaySep( pResMgr->ReadString() );
     if ( 0x0800 & nObjMask )
-        SetLongDateMonthFormat( (MonthFormat)(USHORT)pResMgr->ReadShort() );
+        SetLongDateMonthFormat( (MonthFormat)pResMgr->ReadLong() );
     if ( 0x1000 & nObjMask )
         SetLongDateMonthSep( pResMgr->ReadString() );
     if ( 0x2000 & nObjMask )
@@ -220,10 +192,10 @@ International::International( const ResId& rResId )
     if ( 0x4000 & nObjMask )
         SetLongDateYearSep( pResMgr->ReadString() );
     if ( 0x8000 & nObjMask )
-        SetTimeFormat( (TimeFormat)(USHORT)pResMgr->ReadShort() );
+        SetTimeFormat( (TimeFormat)pResMgr->ReadLong() );
 
     // Zweite Maske holen
-    nObjMask = (USHORT)pResMgr->ReadShort();
+    nObjMask = pResMgr->ReadLong();
     if ( 0x0001 & nObjMask )
         SetTimeLeadingZero( (BOOL)(USHORT)pResMgr->ReadShort() );
     if ( 0x0002 & nObjMask )
