@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:27:48 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,7 @@ Resource RID_SW_SHELLRES
         Text[ russian ] = "Преобразование $(ARG1)";
         Text[ greek ] = "МефбфспрЮ $(ARG1)";
         Text[ dutch ] = "Convert $(ARG1)";
-        Text[ french ] = "Convert $(ARG1)";
+        Text[ french ] = "Conversion $(ARG1)";
         Text[ spanish ] = "Convertir $(ARG1)";
         Text[ italian ] = "Convert $(ARG1)";
         Text[ danish ] = "Convert $(ARG1)";
@@ -1056,7 +1056,7 @@ Resource RID_SW_SHELLRES
         Text[ russian ] = "Первое преобразование $(ARG1)";
         Text[ greek ] = "Рсюфз МефбфспрЮ $(ARG1)";
         Text[ dutch ] = "First convert $(ARG1)";
-        Text[ french ] = "First convert $(ARG1)";
+        Text[ french ] = "Premiиre conversion $(ARG1)";
         Text[ spanish ] = "Primer Convertir $(ARG1)";
         Text[ italian ] = "First convert $(ARG1)";
         Text[ danish ] = "First convert $(ARG1)";
@@ -1068,7 +1068,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_simplified ] = "µЪТ»ёцЧЄ»» $(ARG1)";
         Text[ chinese_traditional ] = "ІД¤@­УВаґ« $(ARG1)";
         Text[ turkish ] = "First convert $(ARG1)";
-        Text[ arabic ] = "First convert $(ARG1)";
+        Text[ arabic ] = "Гжб КНжнб$(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
     String STR_PAGEDESC_FOLLOWNAME
@@ -1080,7 +1080,7 @@ Resource RID_SW_SHELLRES
         Text[ russian ] = "Последовательность преобразования $(ARG1)";
         Text[ greek ] = "МефбфспрЮ УхнЭчейб $(ARG1)";
         Text[ dutch ] = "Convert follow $(ARG1)";
-        Text[ french ] = "Convert follow $(ARG1)";
+        Text[ french ] = "Conversion suivante $(ARG1)";
         Text[ spanish ] = "Convertir, serie $(ARG1)";
         Text[ italian ] = "Convert follow $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
@@ -1092,7 +1092,7 @@ Resource RID_SW_SHELLRES
         Text[ chinese_simplified ] = "ЧЄ»»Чй $(ARG1)";
         Text[ chinese_traditional ] = "Ваґ«ІХ $(ARG1)";
         Text[ turkish ] = "Convert follow $(ARG1)";
-        Text[ arabic ] = "Convert follow $(ARG1)";
+        Text[ arabic ] = "КНжнб КЗбн $(ARG1)";
         Text[ language_user1 ] = "DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
 };
