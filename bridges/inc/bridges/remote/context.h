@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:09:57 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <typelib/typedescription.h>
 
 #include <uno/environment.h>
+#include <uno/any2.h>
 
 struct uno_Context
 {
@@ -94,7 +95,8 @@ typedef void ( SAL_CALL * remote_getInstanceFunc ) (
     uno_Environment *pEnvRemote,
     remote_Interface **ppRemoteI,
     rtl_uString *pOid,
-    typelib_TypeDescriptionReference *pInterfaceTypeRef);
+    typelib_TypeDescriptionReference *pInterfaceTypeRef,
+    uno_Any **ppException );
 
 struct remote_InstanceProvider
 {
@@ -104,8 +106,8 @@ struct remote_InstanceProvider
                                      uno_Environment *pEnvRemote,
                                      remote_Interface **ppRemoteI,
                                      rtl_uString *pInstanceName,
-                                     typelib_InterfaceTypeDescription *pType
-                                     );
+                                     typelib_InterfaceTypeDescription *pType,
+                                     uno_Any **ppException );
 };
 
 struct remote_DisposingListener

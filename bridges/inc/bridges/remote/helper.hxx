@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 11:09:57 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace bridges_remote
         uno_Environment *pEnvRemote,
         remote_Interface **ppRemoteI,
         rtl_uString *pOid ,
-        typelib_TypeDescriptionReference *pType
+        typelib_TypeDescriptionReference *pType,
+        uno_Any **ppException
         );
 }
