@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 15:59:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2010,10 +2010,10 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ finnish ] = "%PRODUCTNAME 6.0 -tekstiasiakirja";
     Text[ language_user1 ] = " ";
     Text[ thai ] = "ข้อความเอกสาร%PRODUCTNAME 6.0 ";
-    Text[ czech ] = "Textový dokument %PRODUCTNAME 6.0";
+    Text[ czech ] = "Textový dokument %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Text Dokument";
     Text[ hindi ] = "%PRODUCTNAME 6.0 टेक्स्ट् लेखपत्र";
-    Text[ slovak ] = "Textový dokument %PRODUCTNAME 6.0";
+    Text[ slovak ] = "Textový dokument %PRODUCTNAME %PRODUCTVERSION";
 };
 
 
@@ -3497,7 +3497,7 @@ String STR_ABSTRACT_TITLE
     Text[ arabic ] = "�������: ";
     Text[ dutch ] = "Overzicht:";
     Text[ chinese_simplified ] = "摘要： ";
-    Text[ greek ] = "��������: ";
+    Text[ greek ] = "Abstract: ";
     Text[ korean ] = "요약: ";
     Text[ turkish ] = "�zet: ";
     Text[ catalan ] = "Resum:";
@@ -3563,7 +3563,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ arabic ] = "����� ������: ";
     Text[ dutch ] = "Huidige sjabloon";
     Text[ chinese_simplified ] = "格式样式：";
-    Text[ greek ] = "������ �������:  ";
+    Text[ greek ] = "������ �������:  ";
     Text[ korean ] = "스타일: ";
     Text[ turkish ] = "Bi�emler:";
     Text[ language_user1 ] = " ";
@@ -4018,7 +4018,35 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
     Message[ chinese_traditional ] = "已紀錄目前的文件之内的變更，但是並沒有立刻顯示出來。在編輯一個比較龐大的文件時會發生延遲的現象。您想要讓變更部分顯示出來以避免延遲？";
     Message[ slovak ] = "V aktívnom dokumente sa nahrávajú zmeny, ale program ich neeviduje. Vo veľkých dokumentoch, môže nastať oneskorenie pri úpravách. Chcete zobraziť zmeny, aby sa zabránilo oneskoreniu?";
     Message[ portuguese_brazilian ] = "No documento atual, as modifica��es s�o gravadas mas n�o s�o apresentadas como tal. Em documentos grandes, atrasos poder�o ocorrer quando o documento � editado. Deseja exibir as modifical��es para evitar os atrasos?";
+    Message[ greek ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ dutch ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ finnish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ czech ] = "Změny v současném dokumentu jsou zaznamenávány, ale nejsou zobrazovány. Ve velkých dokumentech mohou nastat prodlevy při jejich úpravách. Chcete zobrazovat změny pro snížení této prodlevy?";
+    Message[ danish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ arabic ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ hebrew ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ catalan ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ hindi ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ portuguese ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ russian ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ polish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ turkish ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
+    Message[ thai ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
