@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocument.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $
+ *  last change: $Author: kz $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,10 @@ import com.sun.star.uno.XInterface;
  *
  * Object implements the following interfaces :
  * <ul>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleComponent</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleContext</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
- *  <li> <code>drafts::com::sun::star::accessibility::XAccessibleSelection</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleComponent</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleContext</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleEventBroadcaster</code></li>
+ *  <li> <code>::com::sun::star::accessibility::XAccessibleSelection</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleComponent
