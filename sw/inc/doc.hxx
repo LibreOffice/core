@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:04 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ public:
                         const SfxItemSet* pFlyAttrSet = 0,
                         const SfxItemSet* pGrfAttrSet = 0,
                         SwFrmFmt* = 0 );
-    SwFlyFrmFmt* InsertOLE( const SwPaM &rRg, String& rObjName,
+    SwFlyFrmFmt* InsertOLE( const SwPaM &rRg, const String& rObjName,
                         const SfxItemSet* pFlyAttrSet = 0,
                         const SfxItemSet* pGrfAttrSet = 0,
                         SwFrmFmt* = 0 );
