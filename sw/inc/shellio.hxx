@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:42:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,6 @@ public:
      * JP 25.04.95: oder falls es mitgegeben wird, in dieses.
      *              Sonderfall fuer Load mit Sw3Reader
      */
-    SwReader( SvStream&, const String& rFilename, SwDoc *pDoc = 0 );
     SwReader( SvStorage&, const String& rFilename, SwDoc *pDoc = 0 );
     SwReader( SfxMedium&, const String& rFilename, SwDoc *pDoc = 0 );
     /*
@@ -394,7 +393,6 @@ class SwTextBlocks
 
 public:
     SwTextBlocks( const String& );
-    SwTextBlocks( SvStorage& );
     ~SwTextBlocks();
 
     void Flush(){}
@@ -425,7 +423,6 @@ public:
     BOOL   BeginPutDoc( const String&, const String& ); // Speichern Beginn
     USHORT PutDoc();                                // Speichern Ende
 
-    const String& GetText( USHORT );                // Textinhalt einlesen
     USHORT PutText( const String&, const String&, const String& ); // Speichern( Kurzn., Text)
 
     BOOL IsOnlyTextBlock( USHORT ) const;
