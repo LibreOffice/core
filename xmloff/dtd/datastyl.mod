@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.10 2002-06-11 18:06:26 nn Exp $
+   $Id: datastyl.mod,v 1.11 2002-06-26 16:52:37 er Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -171,6 +171,38 @@
 <!ATTLIST number:time-style style:volatile %boolean; #IMPLIED>
 <!ATTLIST number:boolean-style style:volatile %boolean; #IMPLIED>
 <!ATTLIST number:text-style style:volatile %boolean; #IMPLIED>
+
+<!ATTLIST number:number-style number:transliteration-format CDATA "1">
+<!ATTLIST number:currency-style number:transliteration-format CDATA "1">
+<!ATTLIST number:percentage-style number:transliteration-format CDATA "1">
+<!ATTLIST number:date-style number:transliteration-format CDATA "1">
+<!ATTLIST number:time-style number:transliteration-format CDATA "1">
+<!ATTLIST number:boolean-style number:transliteration-format CDATA "1">
+<!ATTLIST number:text-style number:transliteration-format CDATA "1">
+
+<!ATTLIST number:number-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:currency-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:percentage-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:date-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:time-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:boolean-style number:transliteration-language CDATA #IMPLIED>
+<!ATTLIST number:text-style number:transliteration-language CDATA #IMPLIED>
+
+<!ATTLIST number:number-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:currency-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:percentage-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:date-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:time-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:boolean-style number:transliteration-country CDATA #IMPLIED>
+<!ATTLIST number:text-style number:transliteration-country CDATA #IMPLIED>
+
+<!ATTLIST number:number-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:currency-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:percentage-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:date-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:time-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:boolean-style number:transliteration-style (short|medium|long) "short">
+<!ATTLIST number:text-style number:transliteration-style (short|medium|long) "short">
 
 <!ATTLIST number:currency-style number:automatic-order %boolean; "false">
 <!ATTLIST number:date-style number:automatic-order %boolean; "false">

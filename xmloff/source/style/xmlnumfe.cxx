@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-11 18:11:40 $
+ *  last change: $Author: er $ $Date: 2002-06-26 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
+#include <drafts/com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include "xmlnumfe.hxx"
 #include "xmlnmspe.hxx"
@@ -1179,6 +1180,26 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                               XML_FALSE );
     }
 
+    //
+    // Native number transliteration
+    //
+    ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes aAttr;
+    rFormat.GetNatNumXml( aAttr, nPart );
+    if ( aAttr.Format.getLength() )
+    {
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,
+                              aAttr.Format );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,
+                              aAttr.Locale.Language );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,
+                              aAttr.Locale.Country );
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,
+                              aAttr.Style );
+    }
+
+    //
+    // The element
+    //
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, eType,
                               sal_True, sal_True );
 
@@ -1189,6 +1210,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     const Color* pCol = rFormat.GetColor( nPart );
     if (pCol)
         WriteColorElement_Impl(*pCol);
+
 
     //  detect if there is "real" content, excluding color and maps
     //! move to implementation of Write... methods?

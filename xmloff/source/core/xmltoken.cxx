@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-11 18:08:22 $
+ *  last change: $Author: er $ $Date: 2002-06-26 16:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2116,6 +2116,11 @@ namespace xmloff { namespace token {
         TOKEN( "table-type" ),                 // XML_TABLE_TYPE
 
         TOKEN( "display-factor" ),             // XML_DISPLAY_FACTOR
+
+        TOKEN( "transliteration-format" ),     // XML_TRANSLITERATION_FORMAT
+        TOKEN( "transliteration-language" ),   // XML_TRANSLITERATION_LANGUAGE
+        TOKEN( "transliteration-country" ),    // XML_TRANSLITERATION_COUNTRY
+        TOKEN( "transliteration-style" ),      // XML_TRANSLITERATION_STYLE
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };

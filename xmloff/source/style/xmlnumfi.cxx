@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-11 18:11:40 $
+ *  last change: $Author: er $ $Date: 2002-06-26 16:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,11 @@ enum SvXMLStyleAttrTokens
     XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER,
     XML_TOK_STYLE_ATTR_FORMAT_SOURCE,
     XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW,
-    XML_TOK_STYLE_ATTR_VOLATILE
+    XML_TOK_STYLE_ATTR_VOLATILE,
+    XML_TOK_STYLE_ATTR_TRANSL_FORMAT,
+    XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE,
+    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY,
+    XML_TOK_STYLE_ATTR_TRANSL_STYLE
 };
 
 enum SvXMLStyleElemAttrTokens
@@ -408,6 +412,10 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleAttrMap[] =
     { XML_NAMESPACE_NUMBER, XML_FORMAT_SOURCE,         XML_TOK_STYLE_ATTR_FORMAT_SOURCE         },
     { XML_NAMESPACE_NUMBER, XML_TRUNCATE_ON_OVERFLOW,  XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW  },
     { XML_NAMESPACE_STYLE,  XML_VOLATILE,              XML_TOK_STYLE_ATTR_VOLATILE              },
+    { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_FORMAT,     XML_TOK_STYLE_ATTR_TRANSL_FORMAT    },
+    { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_LANGUAGE,   XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE  },
+    { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_COUNTRY,    XML_TOK_STYLE_ATTR_TRANSL_COUNTRY   },
+    { XML_NAMESPACE_NUMBER, XML_TRANSLITERATION_STYLE,      XML_TOK_STYLE_ATTR_TRANSL_STYLE     },
     XML_TOKEN_MAP_END
 };
 
@@ -1173,6 +1181,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     nKey(-1)
 {
     OUString sLanguage, sCountry;
+    ::drafts::com::sun::star::i18n::NativeNumberXmlAttributes aNatNumAttr;
     sal_Bool bAttrBool;
     sal_uInt16 nAttrEnum;
 
@@ -1218,6 +1227,18 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
                 if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
                     bRemoveAfterUse = bAttrBool;
                 break;
+            case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
+                aNatNumAttr.Format = sValue;
+                break;
+            case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
+                aNatNumAttr.Locale.Language = sValue;
+                break;
+            case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
+                aNatNumAttr.Locale.Country = sValue;
+                break;
+            case XML_TOK_STYLE_ATTR_TRANSL_STYLE:
+                aNatNumAttr.Style = sValue;
+                break;
         }
     }
 
@@ -1226,6 +1247,29 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         nFormatLang = ConvertIsoNamesToLanguage( sLanguage, sCountry );
         if ( nFormatLang == LANGUAGE_DONTKNOW )
             nFormatLang = LANGUAGE_SYSTEM;          //! error handling for invalid locales?
+    }
+
+    if ( aNatNumAttr.Format.getLength() )
+    {
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if ( pFormatter )
+        {
+            sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
+            aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "[NatNum" ) );
+            aFormatCode.append( nNatNum, 10 );
+
+            LanguageType eLang = ConvertIsoNamesToLanguage(
+                    aNatNumAttr.Locale.Language, aNatNumAttr.Locale.Country );
+            if ( eLang == LANGUAGE_DONTKNOW )
+                eLang = LANGUAGE_SYSTEM;            //! error handling for invalid locales?
+            if ( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+            {
+                aFormatCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "][$-" ) );
+                // language code in upper hex:
+                aFormatCode.append( String::CreateFromInt32( sal_Int32( eLang ), 16 ).ToUpperAscii() );
+            }
+            aFormatCode.append( sal_Unicode(']') );
+        }
     }
 }
 
