@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:57:10 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#ifndef _SV_SALFRAME_H
+#include <salframe.h>
 #endif
 #ifndef _SV_POLY_HXX
 #include "poly.hxx"
@@ -561,7 +561,7 @@ static SalColor ImplGetROPSalColor( SalROPColor nROPColor )
 
 // =======================================================================
 
-void ImplSalInitGraphics( SalGraphicsData* pData )
+void ImplSalInitGraphics( WinSalGraphics* pData )
 {
     // Beim Printer berechnen wir die minimale Linienstaerke
     if ( pData->mbPrinter )
@@ -580,7 +580,7 @@ void ImplSalInitGraphics( SalGraphicsData* pData )
 
 // -----------------------------------------------------------------------
 
-void ImplSalDeInitGraphics( SalGraphicsData* pData )
+void ImplSalDeInitGraphics( WinSalGraphics* pData )
 {
     // Default Objekte selektieren
     if ( pData->mhDefPen )
@@ -762,99 +762,99 @@ void ImplRenderPath( HDC hdc, ULONG nPoints, const SalPoint* pPtAry, const BYTE*
 
 // =======================================================================
 
-SalGraphics::SalGraphics()
+WinSalGraphics::WinSalGraphics()
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
-        maGraphicsData.mhFonts[ i ] = 0;
-    maGraphicsData.mhDC                 = 0;
-    maGraphicsData.mhPen                = 0;
-    maGraphicsData.mhBrush              = 0;
-    maGraphicsData.mhRegion             = 0;
-    maGraphicsData.mhDefPen             = 0;
-    maGraphicsData.mhDefBrush           = 0;
-    maGraphicsData.mhDefFont            = 0;
-    maGraphicsData.mhDefPal             = 0;
-    maGraphicsData.mpStdClipRgnData     = NULL;
-    maGraphicsData.mpLogFont            = NULL;
-    maGraphicsData.mpFontCharSets       = NULL;
-    maGraphicsData.mnFontCharSetCount   = 0;
-    maGraphicsData.mpFontKernPairs      = NULL;
-    maGraphicsData.mnFontKernPairCount  = 0;
-    maGraphicsData.mbFontKernInit       = FALSE;
-    maGraphicsData.mbXORMode            = FALSE;
-    maGraphicsData.mnPenWidth           = GSL_PEN_WIDTH;
+        mhFonts[ i ] = 0;
+    mhDC                = 0;
+    mhPen               = 0;
+    mhBrush             = 0;
+    mhRegion            = 0;
+    mhDefPen            = 0;
+    mhDefBrush          = 0;
+    mhDefFont           = 0;
+    mhDefPal            = 0;
+    mpStdClipRgnData    = NULL;
+    mpLogFont           = NULL;
+    mpFontCharSets      = NULL;
+    mnFontCharSetCount  = 0;
+    mpFontKernPairs     = NULL;
+    mnFontKernPairCount = 0;
+    mbFontKernInit      = FALSE;
+    mbXORMode           = FALSE;
+    mnPenWidth          = GSL_PEN_WIDTH;
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics::~SalGraphics()
+WinSalGraphics::~WinSalGraphics()
 {
     // free obsolete GDI objekts
     for( int i = 0; i < MAX_FALLBACK; ++i )
-        if( maGraphicsData.mhFonts[ i ] )
-            DeleteFont( maGraphicsData.mhFonts[ i ] );
+        if( mhFonts[ i ] )
+            DeleteFont( mhFonts[ i ] );
 
-    if ( maGraphicsData.mhPen )
+    if ( mhPen )
     {
-        if ( !maGraphicsData.mbStockPen )
-            DeletePen( maGraphicsData.mhPen );
+        if ( !mbStockPen )
+            DeletePen( mhPen );
     }
-    if ( maGraphicsData.mhBrush )
+    if ( mhBrush )
     {
-        if ( !maGraphicsData.mbStockBrush )
-            DeleteBrush( maGraphicsData.mhBrush );
+        if ( !mbStockBrush )
+            DeleteBrush( mhBrush );
     }
 
-    if ( maGraphicsData.mhRegion )
+    if ( mhRegion )
     {
-        DeleteRegion( maGraphicsData.mhRegion );
-        maGraphicsData.mhRegion = 0;
+        DeleteRegion( mhRegion );
+        mhRegion = 0;
     }
 
     // Cache-Daten zerstoeren
-    if ( maGraphicsData.mpStdClipRgnData )
-        delete [] maGraphicsData.mpStdClipRgnData;
+    if ( mpStdClipRgnData )
+        delete [] mpStdClipRgnData;
 
-    if ( maGraphicsData.mpLogFont )
-        delete maGraphicsData.mpLogFont;
+    if ( mpLogFont )
+        delete mpLogFont;
 
-    if ( maGraphicsData.mpFontCharSets )
-        delete maGraphicsData.mpFontCharSets;
+    if ( mpFontCharSets )
+        delete mpFontCharSets;
 
-    if ( maGraphicsData.mpFontKernPairs )
-        delete maGraphicsData.mpFontKernPairs;
+    if ( mpFontKernPairs )
+        delete mpFontKernPairs;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
+void WinSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSX );
-    rDPIY = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSY );
+    rDPIX = GetDeviceCaps( mhDC, LOGPIXELSX );
+    rDPIY = GetDeviceCaps( mhDC, LOGPIXELSY );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
+void WinSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 {
-    rDPIX = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSX );
-    rDPIY = GetDeviceCaps( maGraphicsData.mhDC, LOGPIXELSY );
+    rDPIX = GetDeviceCaps( mhDC, LOGPIXELSX );
+    rDPIY = GetDeviceCaps( mhDC, LOGPIXELSY );
 }
 
 // -----------------------------------------------------------------------
 
-USHORT SalGraphics::GetBitCount()
+USHORT WinSalGraphics::GetBitCount()
 {
-    return (USHORT)GetDeviceCaps( maGraphicsData.mhDC, BITSPIXEL );
+    return (USHORT)GetDeviceCaps( mhDC, BITSPIXEL );
 }
 
 // -----------------------------------------------------------------------
 
-long SalGraphics::GetGraphicsWidth()
+long WinSalGraphics::GetGraphicsWidth()
 {
-    if( maGraphicsData.mhWnd && IsWindow( maGraphicsData.mhWnd ) )
+    if( mhWnd && IsWindow( mhWnd ) )
     {
-        SalFrame* pFrame = GetWindowPtr( maGraphicsData.mhWnd );
+        WinSalFrame* pFrame = GetWindowPtr( mhWnd );
         if( pFrame )
         {
             if( pFrame->maGeometry.nWidth )
@@ -863,7 +863,7 @@ long SalGraphics::GetGraphicsWidth()
             {
                 // TODO: perhaps not needed, maGeometry should always be up-to-date
                 RECT aRect;
-                GetClientRect( maGraphicsData.mhWnd, &aRect );
+                GetClientRect( mhWnd, &aRect );
                 return aRect.right;
             }
         }
@@ -874,64 +874,64 @@ long SalGraphics::GetGraphicsWidth()
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::ResetClipRegion()
+void WinSalGraphics::ResetClipRegion()
 {
-    if ( maGraphicsData.mhRegion )
+    if ( mhRegion )
     {
-        DeleteRegion( maGraphicsData.mhRegion );
-        maGraphicsData.mhRegion = 0;
+        DeleteRegion( mhRegion );
+        mhRegion = 0;
     }
 
-    SelectClipRgn( maGraphicsData.mhDC, 0 );
+    SelectClipRgn( mhDC, 0 );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::BeginSetClipRegion( ULONG nRectCount )
+void WinSalGraphics::BeginSetClipRegion( ULONG nRectCount )
 {
-    if ( maGraphicsData.mhRegion )
+    if ( mhRegion )
     {
-        DeleteRegion( maGraphicsData.mhRegion );
-        maGraphicsData.mhRegion = 0;
+        DeleteRegion( mhRegion );
+        mhRegion = 0;
     }
 
     ULONG nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
-        if ( !maGraphicsData.mpStdClipRgnData )
-            maGraphicsData.mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
-        maGraphicsData.mpClipRgnData = maGraphicsData.mpStdClipRgnData;
+        if ( !mpStdClipRgnData )
+            mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
+        mpClipRgnData = mpStdClipRgnData;
     }
     else
-        maGraphicsData.mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-    maGraphicsData.mpClipRgnData->rdh.dwSize    = sizeof( RGNDATAHEADER );
-    maGraphicsData.mpClipRgnData->rdh.iType     = RDH_RECTANGLES;
-    maGraphicsData.mpClipRgnData->rdh.nCount    = nRectCount;
-    maGraphicsData.mpClipRgnData->rdh.nRgnSize  = nRectBufSize;
-    SetRectEmpty( &(maGraphicsData.mpClipRgnData->rdh.rcBound) );
-    maGraphicsData.mpNextClipRect           = (RECT*)(&(maGraphicsData.mpClipRgnData->Buffer));
-    maGraphicsData.mbFirstClipRect          = TRUE;
+        mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
+    mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
+    mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
+    mpClipRgnData->rdh.nCount   = nRectCount;
+    mpClipRgnData->rdh.nRgnSize = nRectBufSize;
+    SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
+    mpNextClipRect          = (RECT*)(&(mpClipRgnData->Buffer));
+    mbFirstClipRect         = TRUE;
 }
 
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice* )
+BOOL WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     if ( nWidth && nHeight )
     {
-        RECT*       pRect = maGraphicsData.mpNextClipRect;
-        RECT*       pBoundRect = &(maGraphicsData.mpClipRgnData->rdh.rcBound);
+        RECT*       pRect = mpNextClipRect;
+        RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
         long        nRight = nX + nWidth;
         long        nBottom = nY + nHeight;
 
-        if ( maGraphicsData.mbFirstClipRect )
+        if ( mbFirstClipRect )
         {
             pBoundRect->left    = nX;
             pBoundRect->top     = nY;
             pBoundRect->right   = nRight;
             pBoundRect->bottom  = nBottom;
-            maGraphicsData.mbFirstClipRect = FALSE;
+            mbFirstClipRect = FALSE;
         }
         else
         {
@@ -952,12 +952,12 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, 
         pRect->top      = (int)nY;
         pRect->right    = (int)nRight;
         pRect->bottom   = (int)nBottom;
-        maGraphicsData.mpNextClipRect++;
+        mpNextClipRect++;
     }
     else
     {
-        maGraphicsData.mpClipRgnData->rdh.nCount--;
-        maGraphicsData.mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
+        mpClipRgnData->rdh.nCount--;
+        mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
     }
 
     return TRUE;
@@ -965,73 +965,73 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight, 
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::EndSetClipRegion()
+void WinSalGraphics::EndSetClipRegion()
 {
     // create clip region from ClipRgnData
-    if ( maGraphicsData.mpClipRgnData->rdh.nCount == 1 )
+    if ( mpClipRgnData->rdh.nCount == 1 )
     {
-        RECT* pRect = &(maGraphicsData.mpClipRgnData->rdh.rcBound);
-        maGraphicsData.mhRegion = CreateRectRgn( pRect->left, pRect->top,
+        RECT* pRect = &(mpClipRgnData->rdh.rcBound);
+        mhRegion = CreateRectRgn( pRect->left, pRect->top,
                                                  pRect->right, pRect->bottom );
     }
     else
     {
-        ULONG nSize = maGraphicsData.mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
-        maGraphicsData.mhRegion = ExtCreateRegion( NULL, nSize, maGraphicsData.mpClipRgnData );
+        ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
 
         // if ExtCreateRegion(...) is not supported
-        if( !maGraphicsData.mhRegion )
+        if( !mhRegion )
         {
-            RGNDATAHEADER* pHeader = (RGNDATAHEADER*) maGraphicsData.mpClipRgnData;
+            RGNDATAHEADER* pHeader = (RGNDATAHEADER*) mpClipRgnData;
 
             if( pHeader->nCount )
             {
-                RECT* pRect = (RECT*) maGraphicsData.mpClipRgnData->Buffer;
-                maGraphicsData.mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
+                RECT* pRect = (RECT*) mpClipRgnData->Buffer;
+                mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
                 pRect++;
 
                 for( ULONG n = 1; n < pHeader->nCount; n++, pRect++ )
                 {
                     HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                    CombineRgn( maGraphicsData.mhRegion, maGraphicsData.mhRegion, hRgn, RGN_OR );
+                    CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
                     DeleteRegion( hRgn );
                 }
             }
         }
 
-        if ( maGraphicsData.mpClipRgnData != maGraphicsData.mpStdClipRgnData )
-            delete [] maGraphicsData.mpClipRgnData;
+        if ( mpClipRgnData != mpStdClipRgnData )
+            delete [] mpClipRgnData;
     }
 
-    SelectClipRgn( maGraphicsData.mhDC, maGraphicsData.mhRegion );
+    SelectClipRgn( mhDC, mhRegion );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetLineColor()
+void WinSalGraphics::SetLineColor()
 {
     // create and select new pen
     HPEN hNewPen = GetStockPen( NULL_PEN );
-    HPEN hOldPen = SelectPen( maGraphicsData.mhDC, hNewPen );
+    HPEN hOldPen = SelectPen( mhDC, hNewPen );
 
     // destory or save old pen
-    if ( maGraphicsData.mhPen )
+    if ( mhPen )
     {
-        if ( !maGraphicsData.mbStockPen )
-            DeletePen( maGraphicsData.mhPen );
+        if ( !mbStockPen )
+            DeletePen( mhPen );
     }
     else
-        maGraphicsData.mhDefPen = hOldPen;
+        mhDefPen = hOldPen;
 
     // set new data
-    maGraphicsData.mhPen        = hNewPen;
-    maGraphicsData.mbPen        = FALSE;
-    maGraphicsData.mbStockPen   = TRUE;
+    mhPen       = hNewPen;
+    mbPen       = FALSE;
+    mbStockPen  = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetLineColor( SalColor nSalColor )
+void WinSalGraphics::SetLineColor( SalColor nSalColor )
 {
     COLORREF    nPenColor = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                         SALCOLOR_GREEN( nSalColor ),
@@ -1041,7 +1041,7 @@ void SalGraphics::SetLineColor( SalColor nSalColor )
 
     // search for stock pen (only screen, because printer have problems,
     // when we use stock objects)
-    if ( !maGraphicsData.mbPrinter )
+    if ( !mbPrinter )
     {
         SalData* pSalData = GetSalData();
         for ( USHORT i = 0; i < pSalData->mnStockPenCount; i++ )
@@ -1058,61 +1058,61 @@ void SalGraphics::SetLineColor( SalColor nSalColor )
     // create new pen
     if ( !hNewPen )
     {
-        if ( !maGraphicsData.mbPrinter )
+        if ( !mbPrinter )
         {
             if ( GetSalData()->mhDitherPal && ImplIsSysColorEntry( nSalColor ) )
                 nPenColor = PALRGB_TO_RGB( nPenColor );
         }
 
-        hNewPen = CreatePen( PS_SOLID, maGraphicsData.mnPenWidth, nPenColor );
+        hNewPen = CreatePen( PS_SOLID, mnPenWidth, nPenColor );
         bStockPen = FALSE;
     }
 
     // select new pen
-    HPEN hOldPen = SelectPen( maGraphicsData.mhDC, hNewPen );
+    HPEN hOldPen = SelectPen( mhDC, hNewPen );
 
     // destory or save old pen
-    if ( maGraphicsData.mhPen )
+    if ( mhPen )
     {
-        if ( !maGraphicsData.mbStockPen )
-            DeletePen( maGraphicsData.mhPen );
+        if ( !mbStockPen )
+            DeletePen( mhPen );
     }
     else
-        maGraphicsData.mhDefPen = hOldPen;
+        mhDefPen = hOldPen;
 
     // set new data
-    maGraphicsData.mnPenColor   = nPenColor;
-    maGraphicsData.mhPen        = hNewPen;
-    maGraphicsData.mbPen        = TRUE;
-    maGraphicsData.mbStockPen   = bStockPen;
+    mnPenColor  = nPenColor;
+    mhPen       = hNewPen;
+    mbPen       = TRUE;
+    mbStockPen  = bStockPen;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetFillColor()
+void WinSalGraphics::SetFillColor()
 {
     // create and select new brush
     HBRUSH hNewBrush = GetStockBrush( NULL_BRUSH );
-    HBRUSH hOldBrush = SelectBrush( maGraphicsData.mhDC, hNewBrush );
+    HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
 
     // destory or save old brush
-    if ( maGraphicsData.mhBrush )
+    if ( mhBrush )
     {
-        if ( !maGraphicsData.mbStockBrush )
-            DeleteBrush( maGraphicsData.mhBrush );
+        if ( !mbStockBrush )
+            DeleteBrush( mhBrush );
     }
     else
-        maGraphicsData.mhDefBrush = hOldBrush;
+        mhDefBrush = hOldBrush;
 
     // set new data
-    maGraphicsData.mhBrush      = hNewBrush;
-    maGraphicsData.mbBrush      = FALSE;
-    maGraphicsData.mbStockBrush = TRUE;
+    mhBrush     = hNewBrush;
+    mbBrush     = FALSE;
+    mbStockBrush = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetFillColor( SalColor nSalColor )
+void WinSalGraphics::SetFillColor( SalColor nSalColor )
 {
     SalData*    pSalData    = GetSalData();
     BYTE        nRed        = SALCOLOR_RED( nSalColor );
@@ -1124,7 +1124,7 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
 
     // search for stock brush (only screen, because printer have problems,
     // when we use stock objects)
-    if ( !maGraphicsData.mbPrinter )
+    if ( !mbPrinter )
     {
         for ( USHORT i = 0; i < pSalData->mnStockBrushCount; i++ )
         {
@@ -1140,7 +1140,7 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
     // create new brush
     if ( !hNewBrush )
     {
-        if ( maGraphicsData.mbPrinter || !pSalData->mhDitherDIB )
+        if ( mbPrinter || !pSalData->mhDitherDIB )
             hNewBrush = CreateSolidBrush( nBrushColor );
         else
         {
@@ -1196,92 +1196,92 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
     }
 
     // select new brush
-    HBRUSH hOldBrush = SelectBrush( maGraphicsData.mhDC, hNewBrush );
+    HBRUSH hOldBrush = SelectBrush( mhDC, hNewBrush );
 
     // destory or save old brush
-    if ( maGraphicsData.mhBrush )
+    if ( mhBrush )
     {
-        if ( !maGraphicsData.mbStockBrush )
-            DeleteBrush( maGraphicsData.mhBrush );
+        if ( !mbStockBrush )
+            DeleteBrush( mhBrush );
     }
     else
-        maGraphicsData.mhDefBrush = hOldBrush;
+        mhDefBrush = hOldBrush;
 
     // set new data
-    maGraphicsData.mnBrushColor = nBrushColor;
-    maGraphicsData.mhBrush      = hNewBrush;
-    maGraphicsData.mbBrush      = FALSE;
-    maGraphicsData.mbStockBrush = bStockBrush;
+    mnBrushColor = nBrushColor;
+    mhBrush     = hNewBrush;
+    mbBrush     = FALSE;
+    mbStockBrush = bStockBrush;
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetXORMode( BOOL bSet )
+void WinSalGraphics::SetXORMode( BOOL bSet )
 {
-    maGraphicsData.mbXORMode = bSet;
-    ::SetROP2( maGraphicsData.mhDC, bSet ? R2_XORPEN : R2_COPYPEN );
+    mbXORMode = bSet;
+    ::SetROP2( mhDC, bSet ? R2_XORPEN : R2_COPYPEN );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
+void WinSalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     SetLineColor( ImplGetROPSalColor( nROPColor ) );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
+void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     SetFillColor( ImplGetROPSalColor( nROPColor ) );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY, const OutputDevice* )
+void WinSalGraphics::drawPixel( long nX, long nY )
 {
-    if ( maGraphicsData.mbXORMode )
+    if ( mbXORMode )
     {
-        HBRUSH  hBrush = CreateSolidBrush( maGraphicsData.mnPenColor );
-        HBRUSH  hOldBrush = SelectBrush( maGraphicsData.mhDC, hBrush );
-        PatBlt( maGraphicsData.mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( maGraphicsData.mhDC, hOldBrush );
+        HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
+        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
+        PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
+        SelectBrush( mhDC, hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        SetPixel( maGraphicsData.mhDC, (int)nX, (int)nY, maGraphicsData.mnPenColor );
+        SetPixel( mhDC, (int)nX, (int)nY, mnPenColor );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor, const OutputDevice*  )
+void WinSalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
     COLORREF nCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                 SALCOLOR_GREEN( nSalColor ),
                                 SALCOLOR_BLUE( nSalColor ) );
 
-    if ( !maGraphicsData.mbPrinter &&
+    if ( !mbPrinter &&
          GetSalData()->mhDitherPal &&
          ImplIsSysColorEntry( nSalColor ) )
         nCol = PALRGB_TO_RGB( nCol );
 
-    if ( maGraphicsData.mbXORMode )
+    if ( mbXORMode )
     {
         HBRUSH  hBrush = CreateSolidBrush( nCol );
-        HBRUSH  hOldBrush = SelectBrush( maGraphicsData.mhDC, hBrush );
-        PatBlt( maGraphicsData.mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
-        SelectBrush( maGraphicsData.mhDC, hOldBrush );
+        HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
+        PatBlt( mhDC, (int)nX, (int)nY, (int)1, (int)1, PATINVERT );
+        SelectBrush( mhDC, hOldBrush );
         DeleteBrush( hBrush );
     }
     else
-        ::SetPixel( maGraphicsData.mhDC, (int)nX, (int)nY, nCol );
+        ::SetPixel( mhDC, (int)nX, (int)nY, nCol );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const OutputDevice* )
+void WinSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    MoveToEx( maGraphicsData.mhDC, (int)nX1, (int)nY1, NULL );
+    MoveToEx( mhDC, (int)nX1, (int)nY1, NULL );
 
     // we must paint the endpoint
     int bPaintEnd = TRUE;
@@ -1302,33 +1302,33 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2, const Output
             nX2--;
     }
 
-    LineTo( maGraphicsData.mhDC, (int)nX2, (int)nY2 );
+    LineTo( mhDC, (int)nX2, (int)nY2 );
 
-    if ( bPaintEnd && !maGraphicsData.mbPrinter )
+    if ( bPaintEnd && !mbPrinter )
     {
-        if ( maGraphicsData.mbXORMode )
+        if ( mbXORMode )
         {
-            HBRUSH  hBrush = CreateSolidBrush( maGraphicsData.mnPenColor );
-            HBRUSH  hOldBrush = SelectBrush( maGraphicsData.mhDC, hBrush );
-            PatBlt( maGraphicsData.mhDC, (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
-            SelectBrush( maGraphicsData.mhDC, hOldBrush );
+            HBRUSH  hBrush = CreateSolidBrush( mnPenColor );
+            HBRUSH  hOldBrush = SelectBrush( mhDC, hBrush );
+            PatBlt( mhDC, (int)nX2, (int)nY2, (int)1, (int)1, PATINVERT );
+            SelectBrush( mhDC, hOldBrush );
             DeleteBrush( hBrush );
         }
         else
-            SetPixel( maGraphicsData.mhDC, (int)nX2, (int)nY2, maGraphicsData.mnPenColor );
+            SetPixel( mhDC, (int)nX2, (int)nY2, mnPenColor );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const OutputDevice* )
+void WinSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    if ( !maGraphicsData.mbPen )
+    if ( !mbPen )
     {
-        if ( !maGraphicsData.mbPrinter )
+        if ( !mbPrinter )
         {
-            PatBlt( maGraphicsData.mhDC, (int)nX, (int)nY, (int)nWidth, (int)nHeight,
-                    maGraphicsData.mbXORMode ? PATINVERT : PATCOPY );
+            PatBlt( mhDC, (int)nX, (int)nY, (int)nWidth, (int)nHeight,
+                    mbXORMode ? PATINVERT : PATCOPY );
         }
         else
         {
@@ -1337,47 +1337,47 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, const O
             aWinRect.top    = nY;
             aWinRect.right  = nX+nWidth;
             aWinRect.bottom = nY+nHeight;
-            ::FillRect( maGraphicsData.mhDC, &aWinRect, maGraphicsData.mhBrush );
+            ::FillRect( mhDC, &aWinRect, mhBrush );
         }
     }
     else
-        WIN_Rectangle( maGraphicsData.mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
+        WIN_Rectangle( mhDC, (int)nX, (int)nY, (int)(nX+nWidth), (int)(nY+nHeight) );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
+void WinSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolyLine(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
-    if ( !Polyline( maGraphicsData.mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        Polyline( maGraphicsData.mhDC, pWinPtAry, MAX_64KSALPOINTS );
+    if ( !Polyline( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        Polyline( mhDC, pWinPtAry, MAX_64KSALPOINTS );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry, const OutputDevice* )
+void WinSalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolygon(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolygon(): POINT != SalPoint" );
 
     POINT* pWinPtAry = (POINT*)pPtAry;
     // Wegen Windows 95 und der Beschraenkung auf eine maximale Anzahl
     // von Punkten
-    if ( !WIN_Polygon( maGraphicsData.mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
-        WIN_Polygon( maGraphicsData.mhDC, pWinPtAry, MAX_64KSALPOINTS );
+    if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
+        WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
 }
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
-                                   PCONSTSALPOINT* pPtAry, const OutputDevice* )
+void WinSalGraphics::drawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
+                                   PCONSTSALPOINT* pPtAry )
 {
     UINT    aWinPointAry[SAL_POLYPOLYCOUNT_STACKBUF];
     UINT*   pWinPointAry;
@@ -1405,7 +1405,7 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
         pWinPointAryAry = new POINT[nPolyPolyPoints];
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolyPolygon(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolyPolygon(): POINT != SalPoint" );
     const SalPoint* pPolyAry;
     UINT            n = 0;
     for ( i = 0; i < (UINT)nPoly; i++ )
@@ -1417,7 +1417,7 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
         n += nPoints;
     }
 
-    if ( !WIN_PolyPolygon( maGraphicsData.mhDC, pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
+    if ( !WIN_PolyPolygon( mhDC, pWinPointAryAry, (int*)pWinPointAry, (UINT)nPoly ) &&
          (nPolyPolyPoints > MAX_64KSALPOINTS) )
     {
         nPolyPolyPoints  = 0;
@@ -1432,9 +1432,9 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
         if ( pWinPointAry[(UINT)nPoly] > MAX_64KSALPOINTS )
             pWinPointAry[(UINT)nPoly] = MAX_64KSALPOINTS;
         if ( nPoly == 1 )
-            WIN_Polygon( maGraphicsData.mhDC, pWinPointAryAry, *pWinPointAry );
+            WIN_Polygon( mhDC, pWinPointAryAry, *pWinPointAry );
         else
-            WIN_PolyPolygon( maGraphicsData.mhDC, pWinPointAryAry, (int*)pWinPointAry, nPoly );
+            WIN_PolyPolygon( mhDC, pWinPointAryAry, (int*)pWinPointAry, nPoly );
     }
 
     if ( pWinPointAry != aWinPointAry )
@@ -1449,14 +1449,14 @@ void SalGraphics::DrawPolyPolygon( ULONG nPoly, const ULONG* pPoints,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
+sal_Bool WinSalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolyLineBezier(): POINT != SalPoint" );
 
-    ImplRenderPath( maGraphicsData.mhDC, nPoints, pPtAry, pFlgAry );
+    ImplRenderPath( mhDC, nPoints, pPtAry, pFlgAry );
 
     return sal_True;
 #else
@@ -1466,12 +1466,12 @@ sal_Bool SalGraphics::DrawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry, const OutputDevice* )
+sal_Bool WinSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolygonBezier(): POINT != SalPoint" );
 
     POINT   aStackAry1[SAL_POLY_STACKBUF];
     BYTE    aStackAry2[SAL_POLY_STACKBUF];
@@ -1492,13 +1492,13 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 
     sal_Bool bRet( sal_False );
 
-    if( BeginPath( maGraphicsData.mhDC ) )
+    if( BeginPath( mhDC ) )
     {
-        PolyDraw(maGraphicsData.mhDC, pWinPointAry, pWinFlagAry, nPoints);
+        PolyDraw(mhDC, pWinPointAry, pWinFlagAry, nPoints);
 
-        if( EndPath( maGraphicsData.mhDC ) )
+        if( EndPath( mhDC ) )
         {
-            if( StrokeAndFillPath( maGraphicsData.mhDC ) )
+            if( StrokeAndFillPath( mhDC ) )
                 bRet = sal_True;
         }
     }
@@ -1517,13 +1517,13 @@ sal_Bool SalGraphics::DrawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, 
 
 // -----------------------------------------------------------------------
 
-sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry, const OutputDevice* )
+sal_Bool WinSalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
+                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
 {
 #ifdef USE_GDI_BEZIERS
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
-                "SalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
+                "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
 
     ULONG nCurrPoly, nTotalPoints;
     const ULONG* pCurrPoints = pPoints;
@@ -1549,13 +1549,13 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
 
     sal_Bool bRet( sal_False );
 
-    if( BeginPath( maGraphicsData.mhDC ) )
+    if( BeginPath( mhDC ) )
     {
-        PolyDraw(maGraphicsData.mhDC, pWinPointAry, pWinFlagAry, nTotalPoints);
+        PolyDraw(mhDC, pWinPointAry, pWinFlagAry, nTotalPoints);
 
-        if( EndPath( maGraphicsData.mhDC ) )
+        if( EndPath( mhDC ) )
         {
-            if( StrokeAndFillPath( maGraphicsData.mhDC ) )
+            if( StrokeAndFillPath( mhDC ) )
                 bRet = sal_True;
         }
     }
@@ -1667,15 +1667,15 @@ inline void ImplWriteString( BYTE** pBuf, const char* sString )
     *pBuf += strlen( sString );
 }
 
-BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize, const OutputDevice* )
+BOOL WinSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize )
 {
     BOOL bRetValue = FALSE;
 
-    if ( maGraphicsData.mbPrinter )
+    if ( mbPrinter )
     {
         int nEscape = POSTSCRIPT_PASSTHROUGH;
 
-        if ( Escape( maGraphicsData.mhDC, QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
+        if ( Escape( mhDC, QUERYESCSUPPORT, sizeof( int ), ( LPSTR )&nEscape, 0 ) )
         {
             BYTE* pBuf = new BYTE[ POSTSCRIPT_BUFSIZE ];
 
@@ -1712,7 +1712,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                 ImplWriteString( &pTemp, "  } if\n" );
                 ImplWriteString( &pTemp, "} if\n\n" );
                 *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
 
 
                 // #107797# Write out EPS transformation code
@@ -1730,7 +1730,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                 ImplWriteString( &pTemp, "] concat\n" );
                 ImplWriteString( &pTemp, "%%BeginDocument:\n" );
                 *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
 
 
                 // #107797# Write out actual EPS content
@@ -1744,7 +1744,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                         nDoNow = POSTSCRIPT_BUFSIZE - 2;
                     *((USHORT*)pBuf) = (USHORT)nDoNow;
                     memcpy( pBuf + 2, (BYTE*)pPtr + nSize - nToDo, nDoNow );
-                    ULONG nResult = Escape ( maGraphicsData.mhDC, nEscape, nDoNow + 2, (LPTSTR)((BYTE*)pBuf), 0 );
+                    ULONG nResult = Escape ( mhDC, nEscape, nDoNow + 2, (LPTSTR)((BYTE*)pBuf), 0 );
                     if (!nResult )
                         break;
                     nToDo -= nResult;
@@ -1759,7 +1759,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                 ImplWriteString( &pTemp, "countdictstack dict_count_salWin sub {end} repeat\n" );
                 ImplWriteString( &pTemp, "b4_Inc_state_salWin restore\n\n" );
                 *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
-                Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+                Escape ( mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
                 bRetValue = TRUE;
             }
             delete [] pBuf;
