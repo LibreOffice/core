@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <idlc/astexpression.hxx>
 #endif
 
+namespace typereg { class Writer; }
+
 class AstConstant : public AstDeclaration
 {
 public:
@@ -82,7 +84,7 @@ public:
     const ExprType getConstValueType()
         { return m_constValueType; }
 
-    sal_Bool dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index);
+    sal_Bool dumpBlob(typereg::Writer & rBlob, sal_uInt16 index);
 private:
     AstExpression*                  m_pConstValue;
     const ExprType  m_constValueType;
