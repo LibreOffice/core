@@ -114,7 +114,7 @@ docugen .SETDIR=$(DESTDIRDOC)$/.. .PHONY :
     +-$(RENAME) udk* $(PRODUCT_NAME)
     +-$(MY_DELETE_RECURSIVE) "udk*"
 
-docu .PHONY :
+docu .PHONY : docugen
     -$(MKDIR) $(DESTDIRAPIDOC) >& $(NULLDEV)
     +-$(MY_COPY_RECURSIVE) $(TARGETDIRDOC) $(DESTDIRAPIDOC)
     +$(RM_CVS_DIRS)
@@ -308,46 +308,46 @@ checkit .SETDIR=$(DESTDIR)$/.. .PHONY:
     +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/bridges $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/com $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/cppu $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/cppuhelper $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/osl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/rtl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/sal $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/stl $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/store $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/typelib $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/uno $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/include$/vos $(SOLARINCDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/lib $(SOLARLIBDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
     +dircmp $(CHECKDIR)$/$(PRODUCT_NAME)$/idl $(SOLARIDLDIR) > $(TMP)$/odkcheck.txt
-    +perl $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
+    +$(PERL) $(CHECKSRCIPT) $(TMP)$/odkcheck.txt
     +$(RM) $(TMP)$/odkcheck.txt
 
 cleanit .PHONY:
