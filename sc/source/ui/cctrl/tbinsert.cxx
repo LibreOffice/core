@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:53:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,11 +126,6 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                      aSlotURL,
                                      hasBigImages(),
                                      GetToolBox().GetDisplayBackground().GetColor().IsDark() );
-/*
-            Image aImage = GetBindings().GetImageManager()->GetImage( nImageId,
-                           GetToolBox().GetDisplayBackground().GetColor().IsDark(),
-                           SC_MOD() );
-*/
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
