@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:57:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "ÀÚµ¿(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Automático";
     };
     RadioButton RB_NUMBER_CHAR
     {
@@ -189,6 +190,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "¹®ÀÚ(~C)";
         Text[ turkish ] = "~Karakter";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Caracteres";
     };
     GroupBox GB_NUMBER
     {
@@ -217,6 +219,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Numaralama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Numeración";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -240,7 +243,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ danish ] = "Fodnote" ;
         Text [ italian ] = "~Nota a piè pagina" ;
         Text [ spanish ] = "N~ota al pie" ;
-        Text [ french ] = "Note de ~bas de page" ;
+        Text [ french ] = "Note de bas de pa~ge..." ;
         Text [ dutch ] = "~Voetnoot" ;
         Text[ chinese_simplified ] = "×¢½Å(~F)";
         Text[ russian ] = "Îáû÷íàÿ";
@@ -252,6 +255,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "°¢ÁÖ(~F)";
         Text[ turkish ] = "~Dipnot";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~ota al pie";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
@@ -278,6 +282,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "¹ÌÁÖ(~E)";
         Text[ turkish ] = "~Sonnot";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nota al ~final";
     };
     GroupBox GB_TYPE
     {
@@ -304,6 +309,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text[ korean ] = "Á¾·ù";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     Text[ chinese_simplified ] = "²åÈë×¢½Å";
     Text[ russian ] = "Âñòàâèòü ñíîñêó";
@@ -315,4 +321,5 @@ ModalDialog DLG_INS_FOOTNOTE
     Text[ korean ] = "°¢ÁÖ »ðÀÔ";
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar nota al pie";
 };
