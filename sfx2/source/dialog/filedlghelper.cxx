@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-16 09:48:55 $
+ *  last change: $Author: gt $ $Date: 2002-10-18 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,7 +1979,15 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 
     switch( _eNewContext )
     {
-        case FileDialogHelper::SW_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
+        case FileDialogHelper::SW_INSERT_GRAPHIC:
+        case FileDialogHelper::SC_INSERT_GRAPHIC:
+        case FileDialogHelper::SD_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
+        case FileDialogHelper::SW_INSERT_SOUND:
+        case FileDialogHelper::SC_INSERT_SOUND:
+        case FileDialogHelper::SD_INSERT_SOUND:         nNewHelpId = SID_INSERT_SOUND;          break;
+        case FileDialogHelper::SW_INSERT_VIDEO:
+        case FileDialogHelper::SC_INSERT_VIDEO:
+        case FileDialogHelper::SD_INSERT_VIDEO:         nNewHelpId = SID_INSERT_VIDEO;          break;
         default:                                        nNewHelpId = 0;
     }
 
