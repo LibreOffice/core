@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swlbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:07:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <vcl/combobox.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwBoxEntry;
 class Window;
 
@@ -82,7 +86,7 @@ SV_DECL_PTRARR_DEL(SwEntryLst, SwBoxEntry*, 10, 10)
      Beschreibung: SwBoxEntry
  --------------------------------------------------------------------*/
 
-class SwBoxEntry
+class SW_DLLPUBLIC SwBoxEntry
 {
     friend class SwComboBox;
 
@@ -96,45 +100,6 @@ public:
 
     String  aName;
     USHORT  nId;
-};
-
-/*--------------------------------------------------------------------
-     Beschreibung:  Listbox mit Entry-Verwaltung
- --------------------------------------------------------------------*/
-
-/*class SwListBox : private ListBox
-{
-    SwEntryLst  aEntryLst;
-    SwBoxEntry  aDefault;
-
-    BOOL SeekEntry( const SwBoxEntry& rEntryLst, USHORT* pPos = 0 );
-public:
-    // die SwListBox ist default NICHT sortiert!
-    // Eine Sortierung erfolgt nur ueber das interne Array. Das errechnet
-    // die richtige Position in der Box!
-    SwListBox( Window* pParent, const ResId& rId );
-    ~SwListBox();
-
-    void                    InsertEntry( const SwBoxEntry&,
-                                        USHORT nPos = LISTBOX_APPEND );
-    void                    InsertEntrySort( const SwBoxEntry& );
-    void                    RemoveEntry( USHORT nPos );
-    void                    Clear();
-
-    const SwBoxEntry&       GetEntry( USHORT ) const;
-    const SwBoxEntry&       GetSelectEntry() const;
-
-    // ueberladene Methoden der ListBox:
-    inline void SetSelectHdl( const Link& rLink );
-    inline void SetDoubleClickHdl( const Link& rLink );
-    inline void SetUpdateMode( BOOL bFlag );
-    inline void SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE );
-    inline void SelectEntry( const String& rStr, BOOL bSelect = TRUE );
-    inline USHORT GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
-    inline USHORT GetEntryPos( const String& rStr ) const;
-    inline USHORT GetEntryCount() const;
-    // fuer zugriffe aufs Control, aber nicht auf die ListBox!
-    inline Control& GetControl()    { return *this; }
 };
 
 /*--------------------------------------------------------------------
@@ -154,15 +119,16 @@ enum SwComboBoxStyle
 #endif
 };
 
-class SwComboBox : public ComboBox
+class SW_DLLPUBLIC SwComboBox : public ComboBox
 {
     SwEntryLst              aEntryLst;
     SwEntryLst              aDelEntryLst;
     SwBoxEntry              aDefault;
     USHORT                  nStyle;
 
-    void                    InitComboBox();
-    void                    InsertSorted(SwBoxEntry* pEntry);
+    SW_DLLPRIVATE void                  InitComboBox();
+    SW_DLLPRIVATE void                  InsertSorted(SwBoxEntry* pEntry);
+
 public:
     SwComboBox(Window* pParent, const ResId& rId,
                USHORT nStyleBits = CBS_ALL);
@@ -186,42 +152,4 @@ public:
     String                  GetText() const;
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung: Inlines
- --------------------------------------------------------------------*/
-
-/*inline void SwListBox::SetSelectHdl( const Link& rLink )
-{
-    ListBox::SetSelectHdl(rLink);
-}
-inline void SwListBox::SetDoubleClickHdl( const Link& rLink )
-{
-    ListBox::SetDoubleClickHdl( rLink );
-}
-inline void SwListBox::SetUpdateMode( BOOL bFlag )
-{
-    ListBox::SetUpdateMode(bFlag);
-}
-inline void SwListBox::SelectEntryPos( USHORT nPos, BOOL bSelect )
-{
-    ListBox::SelectEntryPos( nPos, bSelect );
-}
-inline void SwListBox::SelectEntry( const String& rStr, BOOL bSelect )
-{
-    ListBox::SelectEntry( rStr, bSelect );
-}
-inline USHORT SwListBox::GetSelectEntryPos( USHORT nSelIndex ) const
-{
-    return ListBox::GetSelectEntryPos( nSelIndex );
-}
-inline USHORT SwListBox::GetEntryPos( const String& rStr ) const
-{
-    return ListBox::GetEntryPos( rStr );
-}
-inline USHORT SwListBox::GetEntryCount() const
-{
-    return ListBox::GetEntryCount();
-}
-*/
-#endif  // _SWLBOX_HXX
-
+#endif /* _SWLBOX_HXX */
