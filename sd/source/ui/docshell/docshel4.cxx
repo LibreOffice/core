@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-20 14:49:52 $
+ *  last change: $Author: ka $ $Date: 2002-01-09 16:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,20 +820,6 @@ SdDrawDocument* SdDrawDocShell::GetDoc()
 SfxStyleSheetBasePool* SdDrawDocShell::GetStyleSheetPool()
 {
     return( (SfxStyleSheetBasePool*) pDoc->GetStyleSheetPool() );
-}
-
-/*************************************************************************
-|*
-|* IOPProgressHdl()
-|*
-\************************************************************************/
-
-IMPL_LINK( SdDrawDocShell, IOProgressHdl, USHORT*, pPercent )
-{
-    if( pProgress )
-        pProgress->SetState( *pPercent );
-
-    return 0;
 }
 
 /*************************************************************************
