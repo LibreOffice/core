@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-30 17:32:52 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 15:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <saldisp.hxx>
 #include <dtint.hxx>
 #include <msgbox.hxx>
+#include <button.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -187,4 +188,59 @@ int ImplShowNativeDialog( const String& rTitle, const String& rMessage, const st
         nRet = -1;
 
     return nRet;
+}
+
+int ImplShowNativeMessageBox(const String& rTitle, const String& rMessage, int nButtonCombination, int nDefaultButton)
+{
+    int nDefButton = 0;
+    std::list< String > aButtons;
+    int nButtonIds[5], nBut = 0;
+
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_OK ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_YES ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_YES;
+        aButtons.push_back( Button::GetStandardText( BUTTON_NO ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO;
+        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_NO )
+            nDefButton = 1;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_OK_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_YES_NO_CANCEL ||
+        nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
+    {
+        if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_RETRY_CANCEL )
+        {
+            aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
+            nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
+        }
+        aButtons.push_back( Button::GetStandardText( BUTTON_CANCEL ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL;
+        if( nDefaultButton == SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL )
+            nDefButton = aButtons.size()-1;
+    }
+    if( nButtonCombination == SALSYSTEM_SHOWNATIVEMSGBOX_BTNCOMBI_ABORT_RETRY_IGNORE )
+    {
+        aButtons.push_back( Button::GetStandardText( BUTTON_ABORT ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_ABORT;
+        aButtons.push_back( Button::GetStandardText( BUTTON_RETRY ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY;
+        aButtons.push_back( Button::GetStandardText( BUTTON_IGNORE ) );
+        nButtonIds[nBut++] = SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE;
+        switch( nDefaultButton )
+        {
+            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_RETRY: nDefButton = 1;break;
+            case SALSYSTEM_SHOWNATIVEMSGBOX_BTN_IGNORE: nDefButton = 2;break;
+        }
+    }
+    int nResult = ImplShowNativeDialog( rTitle, rMessage, aButtons, nDefButton );
+
+    return nResult != -1 ? nButtonIds[ nResult ] : 0;
 }

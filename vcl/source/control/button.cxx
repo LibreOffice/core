@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 10:15:15 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 15:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,9 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         SV_BUTTONTEXT_RETRY,
         SV_BUTTONTEXT_HELP,
         SV_BUTTONTEXT_CLOSE,
-        SV_BUTTONTEXT_MORE
+        SV_BUTTONTEXT_MORE,
+        SV_BUTTONTEXT_IGNORE,
+        SV_BUTTONTEXT_ABORT
     };
 
     ResId aResId( aResIdAry[(USHORT)eButton], ImplGetResMgr() );

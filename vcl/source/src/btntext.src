@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 12:58:43 $
+ *  last change: $Author: pl $ $Date: 2002-10-31 15:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,12 @@ String SV_BUTTONTEXT_IGNORE
     Text[ arabic ] = "~Ignore";
     Text[ catalan ] = "~Ignore";
     Text[ thai ] = "~Ignore";
+};
+
+String SV_BUTTONTEXT_ABORT
+{
+    Text = "~Abbrechen";
+    Text [ English ] = "~Abort";
 };
 
 /* HelpTexte, die wir derzeit nicht mehr verwenden:
