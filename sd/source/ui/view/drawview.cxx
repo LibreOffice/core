@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-30 13:51:20 $
+ *  last change: $Author: cl $ $Date: 2002-05-07 09:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,6 @@
 #include "stlsheet.hxx"
 #endif
 
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
-#endif
-
 #include <svx/svdoutl.hxx>
 
 #include "glob.hrc"
@@ -175,12 +171,6 @@ SdDrawView::SdDrawView(SdDrawDocShell* pDocSh, OutputDevice* pOutDev,
                        bActionMode(TRUE)
 {
     SetCurrentObj(OBJ_RECT, SdrInventor);
-
-    svx::ColorConfig aConfig;
-    svx::ColorConfigValue aGridValue( aConfig.GetColorValue( svx::DRAWGRID ) );
-
-    SetGridVisible( aGridValue.bIsVisible );
-    SetGridColor( Color( aGridValue.nColor ) );
 }
 
 /*************************************************************************
@@ -512,16 +502,6 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
             }
         }
-    }
-
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
-    {
-        svx::ColorConfig aConfig;
-        svx::ColorConfigValue aGridValue( aConfig.GetColorValue( svx::DRAWGRID ) );
-
-        SetGridVisible( aGridValue.bIsVisible );
-        SetGridColor( Color( aGridValue.nColor ) );
-
     }
 
     SdView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
