@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 11:13:08 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5321,7 +5321,7 @@ SprmReadInfo aSprmReadTab[] = {
     0x2859, (FNReadRecord)0, //"sprmCSfxText" // chp.sfxtText;text animation;byte;
 //0x085A, ? ? ?  , "sprmCFBiDi", // ;;;
 //0x085B, ? ? ?  , "sprmCFDiacColor", // ;;;
-//0x085C, ? ? ?  , "sprmCFBoldBi", // ;;;
+    0x085C, (FNReadRecord)0, //"sprmCFBoldBi", // ;;;
 //0x085D, ? ? ?  , "sprmCFItalicBi", // ;;;
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
     0x485F, (FNReadRecord)0, // "sprmCLidBi", // ;;;

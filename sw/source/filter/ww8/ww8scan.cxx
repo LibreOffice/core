@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 11:13:08 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6079,7 +6079,7 @@ static SprmInfo aWwSprmTab[] = {
     0x2859, 1, L_FIX, // "sprmCSfxText" chp.sfxtText;text animation;byte;
 //0x085A, 0, L_FIX, // "sprmCFBiDi" ;;;
 //0x085B, 0, L_FIX, // "sprmCFDiacColor" ;;;
-//0x085C, 0, L_FIX, // "sprmCFBoldBi" ;;;
+    0x085C, 1, L_FIX, // "sprmCFBoldBi" ;;;
 //0x085D, 0, L_FIX, // "sprmCFItalicBi" ;;;
 //0x4A5E, 0, L_FIX, // "sprmCFtcBi" ;;;
     0x485F, 2, L_FIX, // "sprmCLidBi" ;;;

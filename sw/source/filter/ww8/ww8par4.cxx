@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:36 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 11:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,8 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
-    if( !pPlcxMan ) return;
+    if (!pPlcxMan)
+        return;
     const BYTE* pSprmCIbstRMark;
     const BYTE* pSprmCDttmRMark;
     if( REDLINE_FORMAT == eType )
@@ -572,13 +573,15 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType,
             pSprmCDttmRMark = pPlcxMan->HasCharSprm( bIns ? 0x6805 : 0x6864 );
         }
     }
-    if( !pSprmCIbstRMark || !pSprmCDttmRMark ) return;
 
-    if( nLen < 0 )
-    {
-        // end of current revision mark
+    ASSERT(nLen < 0 || (pSprmCIbstRMark || pSprmCDttmRMark),
+        "The wheels have fallen off revision mark import");
+
+    if (!pSprmCIbstRMark || !pSprmCDttmRMark)
+        return;
+
+    if (nLen < 0)
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_REDLINE );
-    }
     else
     {
         // start of new revision mark
