@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:15:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,8 +436,8 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_simplified ] = "¾ÓÖĞ(~N)";
         Text[ russian ] = "ïî öåíòğó";
         Text[ polish ] = "Wyœrodkuj";
-        Text[ japanese ] = "’†‰›(~C)";
-        Text[ chinese_traditional ] = "¸m¤¤(~C)";
+        Text[ japanese ] = "’†‰›(~N)";
+        Text[ chinese_traditional ] = "¸m¤¤(~N)";
         Text[ arabic ] = "ÊæÓíØ";
         Text[ greek ] = "êåíôñáñéóìİíá";
         Text[ korean ] = "°¡¿îµ¥(~N)";
@@ -491,11 +491,11 @@ TabPage RID_SVXPAGE_LINE
         Text [ spanish ] = "Sincroni~zar finales" ;
         Text [ english_us ] = "Synchroni~ze ends" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ïß¶ËÍ¬²½»¯(~N)";
+        Text[ chinese_simplified ] = "Ïß¶ËÍ¬²½»¯(~Z)";
         Text[ russian ] = "Èäåíòè÷íûå êîíöû";
         Text[ polish ] = "Synchronizuj koñce";
-        Text[ japanese ] = "¼İ¸ÛÅ²½Ş‚ğI—¹(~N)";
-        Text[ chinese_traditional ] = "½uºİ¦P¨B¤Æ(~N)";
+        Text[ japanese ] = "¼İ¸ÛÅ²½Ş‚ğI—¹(~Z)";
+        Text[ chinese_traditional ] = "½uºİ¦P¨B¤Æ(~Z)";
         Text[ arabic ] = "ÊÒÇãä ÇáäåÇíÇÊ";
         Text[ greek ] = "Óõã÷ñïíéóìüò Üêñùí";
         Text[ korean ] = "µ¿±âÈ­ Á¾·á(~Z)";
