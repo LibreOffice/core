@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-10 13:40:41 $
+ *  last change: $Author: hro $ $Date: 2003-06-10 13:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1086,7 +1086,7 @@ int main( int argc, char** argv )
 
     // Don't start if accessiblity is enabled or report server is not given
 
-    if ( setup_version() && !get_accessibility_state() )
+    if ( !get_accessibility_state() && setup_version() )
     {
            gtk_set_locale ();
            gtk_init (&argc, &argv);
