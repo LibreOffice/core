@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-29 11:28:52 $
+ *  last change: $Author: sj $ $Date: 2000-10-10 09:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4656,16 +4656,10 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                     rIn >> nDummy16;
                 if ( nMask & 16 )
                     rIn >> nDummy16;
-                nMask >>= 5;
-                nMask &= 0x3;
-                UINT32 nBitCount = 0;
-                for ( UINT16 i = 17; nMask; i++, nMask >>= 1 )
-                {
-                    if ( nMask & 1 )
-                        nBitCount++;
-                }
-                if ( nBitCount )
-                    rIn.SeekRel( nBitCount << 1 );
+                if ( nMask & 32 )
+                    rIn >> nDummy16;
+                if ( nMask & 64 )
+                    rIn >> nDummy16;
                 if ( nExtParaPos )                          // if set, get the new ppt2000 numrules
                 {
                     if ( nExtParaPos < rExtParaHd.GetRecEndFilePos() )
@@ -4713,9 +4707,11 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             if ( rRuler.GetDefaultTab( aParaPropSet.pParaSet->mnDepth, aSet.mpArry[ PPT_ParaAttr_DefaultTab ] ) )
                 aSet.mnAttrSet |= 1 << PPT_ParaAttr_DefaultTab;
 
-            if ( nStringLen - ( nCharAnzRead + nCharCount ) < 0 )
+            if ( ( nCharCount > nStringLen ) || ( nStringLen - ( nCharAnzRead + nCharCount ) < 0 ) )
             {
                 bTextPropAtom = FALSE;
+                nCharCount = nStringLen - nCharAnzRead;
+                aParaPropSet = PPTParaPropSet();
                 DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
             }
             nParaCount = 1;
