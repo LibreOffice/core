@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 11:33:11 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 09:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ private:
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
+    Point                           maTextOffset;
     BOOL                            mbDataValid;
     BOOL                            mbDestroyed;
     BOOL                            mbIsLocked;
@@ -178,6 +179,8 @@ private:
     SvxTextForwarder*               GetBackgroundTextForwarder();
     SvxTextForwarder*               GetEditModeTextForwarder();
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
+
+    void                            SetupOutliner();
 
     sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
     sal_Bool                        IsEditMode() const
@@ -208,9 +211,9 @@ public:
 
     BOOL                    IsValid() const;
 
-    Rectangle               GetVisArea() const;
-    Point                   LogicToPixel( const Point&, const MapMode& rMapMode ) const;
-    Point                   PixelToLogic( const Point&, const MapMode& rMapMode ) const;
+    Rectangle               GetVisArea();
+    Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
+    Point                   PixelToLogic( const Point&, const MapMode& rMapMode );
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -331,8 +334,20 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         switch( pSdrHint->GetKind() )
         {
             case HINT_OBJCHG:
+            {
                 mbDataValid = FALSE;                        // Text muss neu geholt werden
+
+                if( HasView() )
+                {
+                    // #101029# Broadcast object changes, as they might change visible attributes
+                    SvxViewHint aHint(SVX_HINT_VIEWCHANGED);
+                    Broadcast( aHint );
+
+                    // #101029# Update outliner setup and
+                    SetupOutliner();
+                }
                 break;
+            }
 
             case HINT_OBJREMOVED:
                 if( mpObject == pSdrHint->GetObject() )
@@ -448,6 +463,29 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         mpWindow = NULL;
 
         Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
+    }
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEditSourceImpl::SetupOutliner()
+{
+    // #101029#
+    // only for UAA edit source: setup outliner equivalently as in
+    // SdrTextObj::Paint(), such that formatting equals screen
+    // layout
+    if( mpObject && mpOutliner )
+    {
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        Rectangle aPaintRect;
+        if( pTextObj )
+        {
+            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            pTextObj->SetupOutlinerFormatting( *mpOutliner, aPaintRect );
+
+            // #101029# calc text offset from shape anchor
+            maTextOffset = aPaintRect.TopLeft() - aBoundRect.TopLeft();
+        }
     }
 }
 
@@ -577,14 +615,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
     if( bCreated && mpOutliner && HasView() )
     {
-#if 0
-        // only for UAA edit source: setup outliner equivalently as in
-        // SdrTextObj::Paint(), such that formatting equals screen
-        // layout
-        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-        if( pTextObj )
-            pTextObj->SetupOutlinerFormatting( *mpOutliner );
-#endif
+        // #101029#
+        SetupOutliner();
 
         // register as listener - need to broadcast state change messages
         mpOutliner->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
@@ -658,7 +690,14 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
         // register as listener - need to broadcast state change messages
         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
-        return new SvxDrawOutlinerViewForwarder( *mpView->GetTextEditOutlinerView() );
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( pTextObj )
+        {
+            Rectangle aBoundRect( pTextObj->GetBoundRect() );
+            OutlinerView& rOutlView = *mpView->GetTextEditOutlinerView();
+
+            return new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() );
+        }
     }
 
     return NULL;
@@ -803,7 +842,7 @@ BOOL SvxTextEditSourceImpl::IsValid() const
     return mpView && mpWindow ? TRUE : FALSE;
 }
 
-Rectangle SvxTextEditSourceImpl::GetVisArea() const
+Rectangle SvxTextEditSourceImpl::GetVisArea()
 {
     if( IsValid() )
     {
@@ -826,30 +865,66 @@ Rectangle SvxTextEditSourceImpl::GetVisArea() const
     return Rectangle();
 }
 
-Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
+Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint, const MapMode& rMapMode )
 {
-    if( IsValid() && mpModel )
+    // #101029#: The responsibilities of ViewForwarder happen to be
+    // somewhat mixed in this case. On the one hand, we need the
+    // different interface queries on the SvxEditSource interface,
+    // since we need both VisAreas. On the other hand, if an
+    // EditViewForwarder exists, maTextOffset does not remain static,
+    // but may change with every key press.
+    if( IsEditMode() )
     {
-        Point aPoint( OutputDevice::LogicToLogic( rPoint, rMapMode,
-                                                  MapMode(mpModel->GetScaleUnit()) ) );
+        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(sal_False);
+
+        if( pForwarder )
+            return pForwarder->LogicToPixel( rPoint, rMapMode );
+    }
+    else if( IsValid() && mpModel )
+    {
+        // #101029#
+        Point aPoint1( rPoint );
+        aPoint1.X() += maTextOffset.X();
+        aPoint1.Y() += maTextOffset.Y();
+
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1, rMapMode,
+                                                   MapMode(mpModel->GetScaleUnit()) ) );
         MapMode aMapMode(mpWindow->GetMapMode());
         aMapMode.SetOrigin(Point());
-        return mpWindow->LogicToPixel( aPoint, aMapMode );
+        return mpWindow->LogicToPixel( aPoint2, aMapMode );
     }
 
     return Point();
 }
 
-Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
+Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint, const MapMode& rMapMode )
 {
-    if( IsValid() && mpModel )
+    // #101029#: The responsibilities of ViewForwarder happen to be
+    // somewhat mixed in this case. On the one hand, we need the
+    // different interface queries on the SvxEditSource interface,
+    // since we need both VisAreas. On the other hand, if an
+    // EditViewForwarder exists, maTextOffset does not remain static,
+    // but may change with every key press.
+    if( IsEditMode() )
+    {
+        SvxEditViewForwarder* pForwarder = GetEditViewForwarder(sal_False);
+
+        if( pForwarder )
+            return pForwarder->PixelToLogic( rPoint, rMapMode );
+    }
+    else if( IsValid() && mpModel )
     {
         MapMode aMapMode(mpWindow->GetMapMode());
         aMapMode.SetOrigin(Point());
-        Point aPoint( mpWindow->PixelToLogic( rPoint, aMapMode ) );
-        return OutputDevice::LogicToLogic( aPoint,
-                                           MapMode(mpModel->GetScaleUnit()),
-                                           rMapMode );
+        Point aPoint1( mpWindow->PixelToLogic( rPoint, aMapMode ) );
+        Point aPoint2( OutputDevice::LogicToLogic( aPoint1,
+                                                   MapMode(mpModel->GetScaleUnit()),
+                                                   rMapMode ) );
+        // #101029#
+        aPoint2.X() -= maTextOffset.X();
+        aPoint2.Y() -= maTextOffset.Y();
+
+        return aPoint2;
     }
 
     return Point();
