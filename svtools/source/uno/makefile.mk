@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-11 12:33:31 $
+#   last change: $Author: hr $ $Date: 2001-01-12 15:46:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -235,7 +235,6 @@ SRC1FILES=  unoifac2.src
 .ENDIF
 
 SLOFILES= \
-            $(SLO)$/staticmbuno.obj\
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
@@ -259,6 +258,7 @@ LIB1OBJFILES=  \
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=			$(SLO)$/staticmbuno.obj
 LIB1OBJFILES+=$(SLO)$/staticmbuno.obj
 .ENDIF
 
