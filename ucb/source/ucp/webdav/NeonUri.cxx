@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,27 @@ using namespace webdav_ucp;
 
 uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL };
 uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL };
+uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL };
 
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
+
+namespace {
+
+//TODO! rtl::OString::matchIgnoreAsciiCaseAsciiL() missing
+inline bool matchIgnoreAsciiCase(rtl::OString const & rStr1,
+                                 sal_Char const * pStr2,
+                                 sal_Int32 nStr2Len) SAL_THROW(())
+{
+    return
+        rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
+                rStr1.getStr(), rStr1.getLength(), pStr2, nStr2Len, nStr2Len)
+            == 0;
+}
+
+}
+
 NeonUri::NeonUri( const rtl::OUString & inUri )
 {
     if ( inUri.getLength() <= 0 )
@@ -93,8 +110,14 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
         = theInputUri.copy( 0, RTL_CONSTASCII_LENGTH( "https:" ) );
 
     uri theUri;
-    uri* pUriDefs = aProtocol.equalsIgnoreAsciiCase( "https:" )
-                  ? &sUriDefaultsHTTPS : &sUriDefaultsHTTP;
+    uri* pUriDefs
+        = matchIgnoreAsciiCase(theInputUri,
+                               RTL_CONSTASCII_STRINGPARAM("http:")) ?
+              &sUriDefaultsHTTP :
+          matchIgnoreAsciiCase(theInputUri,
+                               RTL_CONSTASCII_STRINGPARAM("https:")) ?
+              &sUriDefaultsHTTPS :
+              &sUriDefaultsFTP;
 
     if ( uri_parse( theInputUri.getStr(), &theUri, pUriDefs ) != 0 )
     {
@@ -103,6 +126,7 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     }
 
     mScheme   = rtl::OStringToOUString( theUri.scheme, RTL_TEXTENCODING_UTF8 );
+    mUserInfo = rtl::OStringToOUString( theUri.authinfo, RTL_TEXTENCODING_UTF8 );
     mHostName = rtl::OStringToOUString( theUri.host, RTL_TEXTENCODING_UTF8 );
     mPort     = theUri.port;
     mPath     = rtl::OStringToOUString( theUri.path, RTL_TEXTENCODING_UTF8 );
@@ -123,6 +147,12 @@ void NeonUri::calculateURI ()
 {
     mURI = mScheme;
     mURI += rtl::OUString::createFromAscii ("://");
+    if (mUserInfo.getLength() > 0)
+    {
+        //TODO! differentiate between empty and missing userinfo
+        mURI += mUserInfo;
+        mURI += rtl::OUString::createFromAscii ("@");
+    }
     mURI += mHostName;
     mURI += rtl::OUString::createFromAscii (":");
     mURI += rtl::OUString::valueOf (mPort);

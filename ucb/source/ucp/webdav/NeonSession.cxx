@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-27 08:57:37 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #include "UCBDeadPropertyValue.hxx"
 #endif
 
+#ifndef HTTP_REQUEST_H // for HTTP_SESSION_FTP
+#include "http_request.h"
+#endif
+
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
@@ -183,6 +187,8 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
 
     NeonUri theUri( inUri );
 
+    mScheme = theUri.GetScheme();
+
     mHostName = theUri.GetHost();
     mPort = theUri.GetPort();
 
@@ -194,7 +200,11 @@ NeonSession::NeonSession( DAVSessionFactory* pSessionFactory,
     mHttpSession = CreateSession( mHostName,
                                   theUri.GetPort(),
                                   mProxyName,
-                                  rProxyCfg.nPort );
+                                  rProxyCfg.nPort,
+                                  mScheme.
+                                      equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                       "ftp")),
+                                  theUri.GetUserInfo() );
     if ( mHttpSession == NULL )
         throw DAVException( DAVException::DAV_SESSION_CREATE,
                             theUri.makeConnectionEndPointString() );
@@ -240,7 +250,8 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
     sal_Bool IsConnected = sal_False;
     NeonUri theUri( inUri );
     if ( ( theUri.GetPort() == mPort ) &&
-         ( theUri.GetHost() == mHostName ) )
+         ( theUri.GetHost() == mHostName ) &&
+         ( theUri.GetScheme() == mScheme) )
          IsConnected = sal_True;
     return IsConnected;
 }
@@ -910,7 +921,9 @@ void NeonSession::HandleError( int nError )
 HttpSession * NeonSession::CreateSession( const rtl::OUString & inHostName,
                                              int inPort,
                                           const rtl::OUString & inProxyName,
-                                             int inProxyPort )
+                                             int inProxyPort,
+                                          bool inFtp,
+                                          const rtl::OUString & inUserInfo )
     throw ( DAVException )
 {
     if ( inHostName.getLength() == 0 || inPort <= 0 )
@@ -931,6 +944,14 @@ HttpSession * NeonSession::CreateSession( const rtl::OUString & inHostName,
 
     // Add hooks (i.e. for adding additional headers to the request)
     http_add_hooks( theHttpSession, &mRequestHooks, this, NULL );
+
+#if defined HTTP_SESSION_FTP
+    if (inFtp)
+        http_session_ftp(theHttpSession,
+                         rtl::OUStringToOString(inUserInfo,
+                                                RTL_TEXTENCODING_UTF8).
+                             getStr());
+#endif // HTTP_SESSION_FTP
 
     if ( inProxyName.getLength() )
     {

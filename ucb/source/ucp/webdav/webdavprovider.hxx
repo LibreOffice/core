@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:30:00 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ namespace webdav_ucp {
 
 #define HTTPS_URL_SCHEME        "https"
 #define HTTPS_URL_SCHEME_LENGTH 5
+
+#define FTP_URL_SCHEME "ftp"
 
 #define HTTP_CONTENT_TYPE \
                 "application/" HTTP_URL_SCHEME "-content"

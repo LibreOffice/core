@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-12 15:04:46 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #endif
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #include "webdavcontent.hxx"
+#endif
+
+#ifndef HTTP_REQUEST_H // for HTTP_SESSION_FTP
+#include "http_request.h"
 #endif
 
 using namespace com::sun::star;
@@ -166,7 +170,13 @@ ContentProvider::queryContent(
          !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( HTTPS_URL_SCHEME ) ) &&
          !aScheme.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) ) )
+            RTL_CONSTASCII_STRINGPARAM( WEBDAV_URL_SCHEME ) )
+#if defined HTTP_SESSION_FTP
+         &&
+         !aScheme.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) )
+#endif // HTTP_SESSION_FTP
+       )
         throw com::sun::star::ucb::IllegalIdentifierException();
 
     // Normalize URL and create new Id, if nessacary.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: sb $ $Date: 2001-08-08 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ namespace webdav_ucp
 
 #define DEFAULT_HTTP_PORT       80
 #define DEFAULT_HTTPS_PORT      443
+#define DEFAULT_FTP_PORT        21
 
 // -------------------------------------------------------------------
 // NeonUri
@@ -84,11 +85,13 @@ class NeonUri
     private:
         ::rtl::OUString mURI;
         ::rtl::OUString mScheme;
+        ::rtl::OUString mUserInfo;
         ::rtl::OUString mHostName;
         sal_Int32       mPort;
         ::rtl::OUString mPath;
         static uri      sUriDefaultsHTTP;
         static uri      sUriDefaultsHTTPS;
+        static uri      sUriDefaultsFTP;
 
         void calculateURI ();
 
@@ -100,6 +103,8 @@ class NeonUri
                                             { return mURI; };
         const ::rtl::OUString & GetScheme( void ) const
                                             { return mScheme; };
+        const ::rtl::OUString & GetUserInfo( void ) const
+                                            { return mUserInfo; };
         const ::rtl::OUString & GetHost( void ) const
                                             { return mHostName; };
         sal_Int32       GetPort( void )     const
