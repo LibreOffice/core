@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-18 12:46:52 $
+ *  last change: $Author: ssa $ $Date: 2002-07-19 11:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,14 +597,13 @@ void ScrollBar::ImplDraw( USHORT nDrawFlags )
 
 long ScrollBar::ImplScroll( long nNewPos, BOOL bCallEndScroll )
 {
-    //long nOldPos = mnThumbPos;
+    long nOldPos = mnThumbPos;
     SetThumbPos( nNewPos );
-    //long nDelta = mnThumbPos-nOldPos;
-    long nDelta = mnDelta;
+    long nDelta = mnThumbPos-nOldPos;
     if ( nDelta )
     {
-        //mnDelta = nDelta;
-        //Scroll();
+        mnDelta = nDelta;
+        Scroll();
         if ( bCallEndScroll )
             EndScroll();
         mnDelta = 0;
@@ -799,10 +798,10 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         // Bei Abbruch, die alte ThumbPosition wieder herstellen
         if ( rTEvt.IsTrackingCanceled() )
         {
-            //long nOldPos = mnThumbPos;
+            long nOldPos = mnThumbPos;
             SetThumbPos( mnStartPos );
-            //mnDelta = mnThumbPos-nOldPos;
-            //Scroll();
+            mnDelta = mnThumbPos-nOldPos;
+            Scroll();
         }
 
         if ( meScrollType == SCROLL_DRAG )
@@ -1076,10 +1075,8 @@ void ScrollBar::SetThumbPos( long nNewThumbPos )
 
     if ( mnThumbPos != nNewThumbPos )
     {
-        mnDelta = nNewThumbPos - mnThumbPos;
         mnThumbPos = nNewThumbPos;
         StateChanged( STATE_CHANGE_DATA );
-        Scroll();
     }
 }
 
