@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-06-10 14:54:09 $
+#   last change: $Date: 2005-02-02 13:52:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,13 @@
 
 PRJ     = ..$/..$/..$/..
 TARGET  = FCFGPkgFilters
-PRJNAME = $(TARGET)
+PRJNAME = filter 
+
+# -----------------------------------------------------------------------------
+# include all package definition files
+# -----------------------------------------------------------------------------
+
+.INCLUDE: ..$/packagedef.mk
 
 # -----------------------------------------------------------------------------
 # include global settings
@@ -70,20 +76,19 @@ PRJNAME = $(TARGET)
 
 .INCLUDE: settings.mk
 
-# -----------------------------------------------------------------------------
-# build nothing!
-# This makefile is a fake, to force localization of filters
-# in combination with our data base tool!
-# -----------------------------------------------------------------------------
-
-FILTER_LIST= \
-    $(BIN)$/dummy.dummy
+FILTERS_LIST= \
+    $(foreach,i,$(all_fragments) $(foreach,j,$(FILTERS_4fcfg_$(i)) $(MISC)$/filters$/$(j:f)))
 
 .INCLUDE: target.mk
 
 .IF "$(SOLAR_JAVA)"!=""
-ALLTAR: $(FILTER_LIST) 
+ALLTAR: $(FILTERS_LIST) 
 .ENDIF
 
-$(FILTER_LIST) :
-    +@echo "localize filters ..."
+$(MISC)$/filters$/%.xcu : %.xcu
+    +$(MKDIRHIER) $(@:d)
+    $(WRAPCMD) $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
+
+.IF "$(FILTERS_LIST)"!=""
+$(FILTERS_LIST) : localize.sdf
+.ENDIF          # "$(FILTERS_LIST)"!=""
