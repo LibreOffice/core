@@ -1,5 +1,12 @@
 Windows Registry Editor Version 5.00
 
+[HKEY_CLASSES_ROOT\soffice.StarMathDocument.6]
+@="com.sun.star.comp.Math.FormulaDocument"
+
+[HKEY_CLASSES_ROOT\soffice.StarMathDocument.6\CLSID]
+@="{D0484DE6-AAEE-468a-991F-8D4B0737B57A}"
+
+
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1]
 @="StarOffice Embedded Math Document"
 
@@ -7,6 +14,18 @@ Windows Registry Editor Version 5.00
 @="{D0484DE6-AAEE-468a-991F-8D4B0737B57A}"
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1\Insertable]
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1\protocol\StdFileEditing\server]
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1\protocol\StdFileEditing\verb\0]
+@="&Edit"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1\protocol\StdFileEditing\verb\-1]
+@="&Show"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument.1\protocol\StdFileEditing\verb\-2]
+@="&Open"
 
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument]
@@ -20,18 +39,30 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument\Insertable]
 
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument\protocol\StdFileEditing\server]
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument\protocol\StdFileEditing\verb\0]
+@="&Edit"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument\protocol\StdFileEditing\verb\-1]
+@="&Show"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Math.FormulaDocument\protocol\StdFileEditing\verb\-2]
+@="&Open"
+
 
 [HKEY_CLASSES_ROOT\CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}]
 @="StarOffice Embedded Math Document"
 
 [HKEY_CLASSES_ROOT\CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\LocalServer32]
-@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe -nodefault -nologo"
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe -nodefault -nologo"
 
 [HKEY_CLASSES_ROOT\CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\InprocHandler32]
 @="ole32.dll"
 
 [HKEY_CLASSES_ROOT\CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\DefaultIcon]
-@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe,0"
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe,0"
 
 [HKEY_CLASSES_ROOT\CLSID\{D0484DE6-AAEE-468a-991F-8D4B0737B57A}\Insertable]
 

@@ -1,5 +1,12 @@
 Windows Registry Editor Version 5.00
 
+[HKEY_CLASSES_ROOT\soffice.StarImpressDocument.6]
+@="com.sun.star.comp.Draw.PresentationDocument"
+
+[HKEY_CLASSES_ROOT\soffice.StarImpressDocument.6\CLSID]
+@="{E5A0B632-DFBA-4549-9346-E414DA06E6F8}"
+
+
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1]
 @="StarOffice Embedded Impress Document"
 
@@ -7,6 +14,18 @@ Windows Registry Editor Version 5.00
 @="{E5A0B632-DFBA-4549-9346-E414DA06E6F8}"
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1\Insertable]
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1\protocol\StdFileEditing\server]
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1\protocol\StdFileEditing\verb\0]
+@="&Edit"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1\protocol\StdFileEditing\verb\-1]
+@="&Show"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument.1\protocol\StdFileEditing\verb\-2]
+@="&Open"
 
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument]
@@ -20,18 +39,30 @@ Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument\Insertable]
 
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument\protocol\StdFileEditing\server]
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument\protocol\StdFileEditing\verb\0]
+@="&Edit"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument\protocol\StdFileEditing\verb\-1]
+@="&Show"
+
+[HKEY_CLASSES_ROOT\com.sun.star.comp.Draw.PresentationDocument\protocol\StdFileEditing\verb\-2]
+@="&Open"
+
 
 [HKEY_CLASSES_ROOT\CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}]
 @="StarOffice Embedded Impress Document"
 
 [HKEY_CLASSES_ROOT\CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\LocalServer32]
-@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe -nodefault -nologo"
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe -nodefault -nologo"
 
 [HKEY_CLASSES_ROOT\CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\InprocHandler32]
 @="ole32.dll"
 
 [HKEY_CLASSES_ROOT\CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\DefaultIcon]
-@="d:\\OFFICES\\SRX644\\mav3_nonpro\\program\\soffice.exe,0"
+@="d:\\OFFICES\\SRX644\\mav3_new_nonpro\\program\\soffice.exe,0"
 
 [HKEY_CLASSES_ROOT\CLSID\{E5A0B632-DFBA-4549-9346-E414DA06E6F8}\Insertable]
 
