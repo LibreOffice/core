@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:24:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:04:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SHOW_RECORDACTIONS,     "ShowRecordActions" );
     PCR_CONSTASCII_STRING( PROPERTY_SHOW_FILTERSORT,        "ShowFilterSort" );
 
-    PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
-    PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
+    PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
 
     PCR_CONSTASCII_STRING( PROPERTY_ADDRESS,                "Address");
     PCR_CONSTASCII_STRING( PROPERTY_REFERENCE_SHEET,        "ReferenceSheet");
@@ -232,6 +231,11 @@ namespace pcr
 
     // "virtual" properties (not to be used with real property sets)
     PCR_CONSTASCII_STRING( PROPERTY_CELL_EXCHANGE_TYPE,     "ExchangeSelectionIndex");
+    PCR_CONSTASCII_STRING( PROPERTY_BOUND_CELL,             "BoundCell");
+    PCR_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,        "CellRange");
+    PCR_CONSTASCII_STRING( PROPERTY_AUTOLINEBREAK,          "AutomaticLineBreak");
+    PCR_CONSTASCII_STRING( PROPERTY_TEXTTYPE,               "TextType");
+    PCR_CONSTASCII_STRING( PROPERTY_RICHTEXT,               "RichText");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox" );
