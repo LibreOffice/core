@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:58:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ PspGraphics::~PspGraphics()
 {
 }
 
-void PspGraphics::GetResolution( long &rDPIX, long &rDPIY )
+void PspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 {
     if (m_pJobData != NULL)
     {
@@ -297,7 +297,7 @@ void PspGraphics::GetResolution( long &rDPIX, long &rDPIY )
     }
 }
 
-void PspGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY )
+void PspGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
 {
     m_pPrinterGfx->GetScreenFontResolution (rDPIX, rDPIY);
 }
@@ -749,8 +749,8 @@ void PspServerFontLayout::InitFont() const
 void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
 {
     const int nMaxGlyphs = 200;
-    long        aGlyphAry[ nMaxGlyphs ];
-    long        aWidthAry[ nMaxGlyphs ];
+    sal_Int32   aGlyphAry[ nMaxGlyphs ];
+    sal_Int32   aWidthAry[ nMaxGlyphs ];
     sal_Int32   aIdxAry  [ nMaxGlyphs ];
     sal_Unicode aUnicodes[ nMaxGlyphs ];
     Point aPos;
@@ -761,17 +761,17 @@ void DrawPrinterLayout( const SalLayout& rLayout, ::psp::PrinterGfx& rGfx )
         if( !nGlyphCount )
             break;
 
-        long nXOffset = 0;
+        sal_Int32 nXOffset = 0;
         for( int i = 0; i < nGlyphCount; ++i )
         {
             nXOffset += aWidthAry[ i ];
             aIdxAry[ i ] = nXOffset / nUnitsPerPixel;
-            long nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
+            sal_uInt32 nGlyphIdx = aGlyphAry[i] & (GF_IDXMASK | GF_ROTMASK);
             aUnicodes[i] = (aGlyphAry[i] & GF_ISCHAR) ? nGlyphIdx : 0;
             aGlyphAry[i] = nGlyphIdx;
         }
 
-        rGfx.DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
+        rGfx.DrawGlyphs( aPos, (sal_uInt32 *)aGlyphAry, aUnicodes, nGlyphCount, aIdxAry );
     }
 }
 
@@ -1065,7 +1065,7 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 BOOL PspGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    ImplFontData* pFont,
-                                   long* pGlyphIDs,
+                                   sal_Int32* pGlyphIDs,
                                    sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
                                    int nGlyphs,
@@ -1119,7 +1119,7 @@ const std::map< sal_Unicode, sal_Int32 >* PspGraphics::GetFontEncodingVector( Im
 
 bool PspGraphics::DoCreateFontSubset( const rtl::OUString& rToFile,
                                       psp::fontID aFont,
-                                      long* pGlyphIDs,
+                                      sal_Int32* pGlyphIDs,
                                       sal_uInt8* pEncoding,
                                       sal_Int32* pWidths,
                                       int nGlyphs,
