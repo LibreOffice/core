@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:46:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,12 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
             pPor = pPor->GetPortion();
         }
 
-#ifndef USED
         // 7529: bei PostIts auch pLast returnen.
         if( pLast && !pLast->Width() && pLast->IsPostItsPortion() )
         {
             pPor = pLast;
             GetInfo().SetIdx( GetInfo().GetIdx() - pPor->GetLen() );
         }
-#endif
     }
     return pPor;
 }
