@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:08:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1866,4 +1866,13 @@ sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::
     return ( aWarnBox.Execute() == RET_YES );
 }
 
-
+// static
+void SfxStoringHelper::ExecuteFilterDialog( SfxStoringHelper& _rStorageHelper
+                                            ,const ::rtl::OUString& _sFilterName
+                                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _xModel
+                                            ,/*OUT*/::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgsSequence)
+{
+    ModelData_Impl aModelData( _rStorageHelper, _xModel, _rArgsSequence );
+    if ( aModelData.ExecuteFilterDialog_Impl( _sFilterName ) )
+        _rArgsSequence = aModelData.GetMediaDescr().getAsConstPropertyValueList();
+}
