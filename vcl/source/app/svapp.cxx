@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-30 15:38:11 $
+ *  last change: $Author: pl $ $Date: 2001-04-26 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@ extern "C" {
 class RVPConnectionListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XStreamListener >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::connection::XConnectionBroadcaster >    m_xBroadcaster;
+
+    DECL_LINK( signalSolarThread, void* );
 public:
     RVPConnectionListener( const ::com::sun::star::uno::Reference<
         ::com::sun::star::connection::XConnectionBroadcaster >& xBroadcaster ) :
@@ -202,6 +204,12 @@ public:
     virtual void SAL_CALL terminated();
     virtual void SAL_CALL error( const ::com::sun::star::uno::Any& rException );
 };
+
+IMPL_LINK( RVPConnectionListener, signalSolarThread, void*, pDummy )
+{
+    osl_raiseSignal( OSL_SIGNAL_USER_RVPCONNECTIONERROR, NULL );
+    return 0;
+}
 
 void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject& rObject )
 {
@@ -231,7 +239,7 @@ void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException 
 #ifdef DEBUG
     fprintf( stderr, "connection to client lost ... terminating\n" );
 #endif
-    osl_raiseSignal( OSL_SIGNAL_USER_RVPCONNECTIONERROR, NULL );
+    Application::PostUserEvent( LINK( this, RVPConnectionListener, signalSolarThread ) );
 }
 
 #endif /* REMOTE_APPSERVER */
