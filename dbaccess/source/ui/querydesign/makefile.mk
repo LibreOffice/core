@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-30 15:14:30 $
+#   last change: $Author: obo $ $Date: 2001-10-09 11:35:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ EXCEPTIONSFILES =\
             $(SLO)$/TableWindowListBox.obj		\
             $(SLO)$/TableWindowTitle.obj		\
             $(SLO)$/QueryTextView.obj			\
+            $(SLO)$/QTableConnection.obj		\
             $(SLO)$/querycontroller.obj			\
             $(SLO)$/querycontainerwindow.obj    \
             $(SLO)$/queryview.obj
@@ -102,7 +103,6 @@ SLOFILES =\
             $(SLO)$/TableFieldInfo.obj			\
             $(SLO)$/QTableConnectionData.obj	\
             $(SLO)$/QTableWindowData.obj		\
-            $(SLO)$/QTableConnection.obj		\
             $(SLO)$/TableConnection.obj			\
             $(SLO)$/TableConnectionData.obj		\
             $(SLO)$/ConnectionLine.obj			\
