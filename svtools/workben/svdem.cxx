@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+ *  last change: $Author: hro $ $Date: 2001-07-16 16:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/drag.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
@@ -184,8 +183,6 @@ public:
     virtual long    DeactivatePage();
     virtual long    AllowRenaming();
     virtual void    Split();
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual BOOL    QueryDrop( DropEvent& rDEvt );
 };
 
 // -----------------------------------------------------------------------
@@ -592,52 +589,6 @@ void MyTabBar::Split()
     else if ( nWidth > nMaxWidth )
         nWidth = nMaxWidth;
     SetSizePixel( Size( nWidth, aSize.Height() ) );
-}
-
-// -----------------------------------------------------------------------
-
-void MyTabBar::Command( const CommandEvent& rCEvt )
-{
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        Region aRegion;
-        if ( StartDrag( rCEvt, aRegion ) )
-        {
-            DragServer::Clear();
-            DragServer::CopyString( XubString( RTL_CONSTASCII_USTRINGPARAM( "TabBar" ) ) );
-            if ( GetSelectPageCount() > 1 )
-            {
-                ExecuteDrag( Pointer( POINTER_MOVEFILES ),
-                             Pointer( POINTER_COPYFILES ),
-                             DRAG_ALL, &aRegion );
-            }
-            else
-            {
-                ExecuteDrag( Pointer( POINTER_MOVEFILE ),
-                             Pointer( POINTER_COPYFILE ),
-                             DRAG_ALL, &aRegion );
-            }
-            HideDropPos();
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-BOOL MyTabBar::QueryDrop( DropEvent& rDEvt )
-{
-    if ( rDEvt.IsLeaveWindow() )
-        HideDropPos();
-    else
-        ShowDropPos( rDEvt.GetPosPixel() );
-/*
-    if ( rDEvt.IsLeaveWindow() )
-        EndSwitchPage();
-    else
-        SwitchPage( rDEvt.GetPosPixel() );
-*/
-
-    return TRUE;
 }
 
 // -----------------------------------------------------------------------
