@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:31:12 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,8 +611,11 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
             GetImpl()->CancelAnyPendingCursorAction();
 
         SdrPageView* pCurPageView = m_pFormView->GetPageViewPvNum(0);
-        sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
-        if (nPos != SDRPAGEVIEWWIN_NOTFOUND)
+
+        // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
+        SdrPageViewWindow* pWindow = pCurPageView ? pCurPageView->FindWindow(*((OutputDevice*)m_pFormView->GetActualOutDev())) : 0L;
+
+        if(pWindow)
         {
             // Zunaechst werden die aktuellen Inhalte der Controls gespeichert
             // Wenn alles glatt gelaufen ist, werden die modifizierten Datensaetze gespeichert
