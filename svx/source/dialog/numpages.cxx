@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 10:00:20 $
+ *  last change: $Author: os $ $Date: 2001-07-09 11:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _SVX_CHARMAP_HXX //autogen
 #include <charmap.hxx>
 #endif
+#ifndef _SVX_FLSTITEM_HXX
+#include <flstitem.hxx>
+#endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <dlgutil.hxx>
 #endif
@@ -130,6 +133,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -296,7 +302,7 @@ Font& lcl_GetDefaultBulletFont()
                                 String(), Size( 0, 14 ) );
     if(!bInit)
     {
-        aDefBulletFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+        aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
         aDefBulletFont.SetFamily( FAMILY_DONTKNOW );
         aDefBulletFont.SetPitch( PITCH_DONTKNOW );
         aDefBulletFont.SetWeight( WEIGHT_DONTKNOW );
@@ -903,6 +909,8 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
         bPreset = FALSE;
         bModified = TRUE;
 
+        const FontList*  pList = 0;
+
         SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[pExamplesVS->GetSelectItemId() - 1];
 
         Font& rActBulletFont = lcl_GetDefaultBulletFont();
@@ -918,22 +926,41 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
             USHORT nUpperLevelOrChar = (USHORT)pLevelSettings->nParentNumbering;
             if(aFmt.GetNumberingType() == SVX_NUM_CHAR_SPECIAL)
             {
-                Font* pF;
                 if( pLevelSettings->sBulletFont.getLength() &&
                     pLevelSettings->sBulletFont.compareTo(
                             rActBulletFont.GetName()))
                 {
-                    pF = new Font( pLevelSettings->sBulletFont,
-                                            String(), Size( 0, 14 ) );
-                    pF->SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-                    pF->SetFamily( FAMILY_DONTKNOW );
-                    pF->SetPitch( PITCH_DONTKNOW );
-                    pF->SetWeight( WEIGHT_DONTKNOW );
-                    pF->SetTransparent( TRUE );
+                    //search for the font
+                    if(!pList)
+                    {
+                        SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+                        const SvxFontListItem* pFontListItem =
+                                (const SvxFontListItem* )pCurDocShell
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                        pList = pFontListItem ? pFontListItem->GetFontList() : 0;
+                    }
+                    if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
+                    {
+                        FontInfo aInfo = pList->Get(
+                            pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
+                        Font aFont(aInfo);
+                        aFmt.SetBulletFont(&aFont);
+                    }
+                    else
+                    {
+                        //if it cannot be found then create a new one
+                        Font aCreateFont( pLevelSettings->sBulletFont,
+                                                String(), Size( 0, 14 ) );
+                        aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+                        aCreateFont.SetFamily( FAMILY_DONTKNOW );
+                        aCreateFont.SetPitch( PITCH_DONTKNOW );
+                        aCreateFont.SetWeight( WEIGHT_DONTKNOW );
+                        aCreateFont.SetTransparent( TRUE );
+                        aFmt.SetBulletFont( &aCreateFont );
+                    }
                 }
                 else
-                    pF = &rActBulletFont;
-                aFmt.SetBulletFont( pF );
+                    aFmt.SetBulletFont( &rActBulletFont );
 
                 aFmt.SetBulletChar( pLevelSettings->sBulletChar.getLength()
                                         ? pLevelSettings->sBulletChar.getStr()[0]
