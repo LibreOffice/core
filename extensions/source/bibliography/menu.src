@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-07-05 14:44:37 $
+ *  last change: $Author: gt $ $Date: 2002-07-25 09:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,32 +93,86 @@ Menu RID_MAIN_MENU
         {
             MenuItem
             {
-            ITEM_FILE_NEWDOC
+                ITEM_FILE_NEWDOC
             };
             MenuItem
             {
-            ITEM_FILE_OPENDOC
+                ITEM_FILE_OPENDOC
             };
             ITEM_FILE_AUTOPILOT
             MenuItem
             {
-            Separator = TRUE ;
+                Separator = TRUE ;      // -----------------------------
             };
             MenuItem
             {
-            ITEM_FILE_CLOSEDOC
+                ITEM_FILE_CLOSEDOC
             };
             MenuItem
             {
-            ITEM_FILE_SAVEDOCS //!!muss fuer andere geoeffnete Tasks drinbleiben
+                ITEM_FILE_SAVEDOC
             };
             MenuItem
             {
-            Separator = TRUE ;
+                ITEM_FILE_SAVEASDOC
             };
             MenuItem
             {
-            ITEM_FILE_QUITAPP
+                ITEM_FILE_SAVEDOCS
+            };
+            MenuItem
+            {
+                ITEM_FILE_LASTVERSIONDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_VERSIONDIALOG
+            };
+            MenuItem
+            {
+                Separator = TRUE ;      // -----------------------------
+            };
+            MenuItem
+            {
+                Text = "S~enden" ;
+                Text [ english ] = "Send to" ;
+                Text [ english_us ] = "Sen~d" ;
+            };
+            MenuItem
+            {
+                Separator = TRUE ;      // -----------------------------
+            };
+            MenuItem
+            {
+                ITEM_FILE_DOCINFO
+            };
+            MenuItem
+            {
+                ITEM_FILE_DOCTEMPLATE
+            };
+            MenuItem
+            {
+                Separator = TRUE ;      // -----------------------------
+            };
+            MenuItem
+            {
+                ITEM_FILE_PRINTPREVIEW
+            };
+            MenuItem
+            {
+                ITEM_FILE_PRINTDOC
+            };
+            MenuItem
+            {
+                ITEM_FILE_SETUPPRINTER
+            };
+            MenuItem
+            {
+                Separator = TRUE ;      // -----------------------------
+            };
+            MenuItem
+            {
+                ITEM_FILE_QUITAPP
             };
         };
         };
