@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:03 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,8 @@
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
 #define __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// include files of own module
 
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
@@ -72,10 +71,6 @@
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
@@ -90,17 +85,19 @@
 #include <macros/debug.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
+#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#include <macros/generic.hxx>
+#endif
+
+//_______________________________________________
+// include UNO interfaces
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// include all others
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -110,104 +107,96 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  namespace
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// namespace
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-//  exported const
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+// definitions
 
-//_________________________________________________________________________________________________________________
-//  exported definitions
-//_________________________________________________________________________________________________________________
+//_______________________________________________
+/**
+    @short          implement a status indicator object
 
-/*-************************************************************************************************************//**
-    @short          implement a status indicator
     @descr          With this indicator you can show a message and a progress ...
-                    but you share the output device sometimes with other indicators, if
-                    this instances was created by the same factory!
+                    but you share the output device with other indicator objects,
+                    if this instances was created by the same factory.
                     Then the last created object has full access to device.
+                    All others change her internal data structure only.
 
-    @implements     XInterface
-                    XTypeProvider
-                    XStatusIndicator
-
-    @base           ThreadhelpBase
-                    TransactionBase
-                    OWeakObject
+                    All objects of this StatusIndicator class calls a c++ interface
+                    on the StatusIndicatorFactory (where they was created).
+                    The factory holds all data structures and paints the progress.
 
     @devstatus      ready to use
     @threadsafe     yes
-*//*-*************************************************************************************************************/
-class StatusIndicator  :    public  css::lang::XTypeProvider    ,
-                            public  css::task::XStatusIndicator ,
-                            private ThreadHelpBase              ,   // Order of baseclasses is neccessary for right initializaton!
-                            public  ::cppu::OWeakObject             // => XInterface
+*/
+class StatusIndicator : public  css::lang::XTypeProvider
+                      , public  css::task::XStatusIndicator
+                      , private ThreadHelpBase                  // Order of baseclasses is neccessary for right initializaton!
+                      , public  ::cppu::OWeakObject             // => XInterface
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    //-------------------------------------------
+    // member
+    private:
+
+        /** @short  weak reference to our factory
+            @descr  All our interface calls will be forwarded
+                    to a suitable c++ interface on this factory.
+                    But we dont hold our factory alive. They
+                    correspond with e.g. with a Frame service and
+                    will be owned by him. If the frame will be closed
+                    he close our factory too ...
+         */
+        css::uno::WeakReference< css::task::XStatusIndicatorFactory > m_xFactory;
+
+    //-------------------------------------------
+    // c++ interface
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-                 StatusIndicator( StatusIndicatorFactory* pFactory );
-        virtual ~StatusIndicator(                                  );
+        //----------------------------------------
+        /** @short  initialize new instance of this class.
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
+            @param  pFactory
+                    pointer to our factory
+         */
+        StatusIndicator(StatusIndicatorFactory* pFactory);
+
+        //----------------------------------------
+        /** @short  does nothing real ....
+         */
+        virtual ~StatusIndicator();
+
+    //-------------------------------------------
+    // uno interface
+    public:
+
+        //---------------------------------------
+        // XInterface, XTypeProvider
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XStatusIndicator
-        //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL start   ( const ::rtl::OUString& sText  ,
-                                              sal_Int32        nRange ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL end     (                               ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL reset   (                               ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL setText ( const ::rtl::OUString& sText  ) throw( css::uno::RuntimeException );
-        virtual void SAL_CALL setValue(       sal_Int32        nValue ) throw( css::uno::RuntimeException );
+        //---------------------------------------
+        // XStatusIndicator
+        virtual void SAL_CALL start(const ::rtl::OUString& sText ,
+                                          sal_Int32        nRange)
+            throw(css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-    protected:
+        virtual void SAL_CALL end()
+            throw(css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
+        virtual void SAL_CALL reset()
+            throw(css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-    private:
-        static sal_Bool implcp_StatusIndicator(       StatusIndicatorFactory* pFactory );
-        static sal_Bool implcp_start          ( const ::rtl::OUString&        sText    ,
-                                                      sal_Int32               nRange   );
-        static sal_Bool implcp_setText        ( const ::rtl::OUString&        sText    );
-        static sal_Bool implcp_setValue       (       sal_Int32               nValue   );
-    #endif  // #ifdef ENABLE_ASSERTIONS
+        virtual void SAL_CALL setText(const ::rtl::OUString& sText)
+            throw(css::uno::RuntimeException);
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    private:
+        virtual void SAL_CALL setValue(sal_Int32 nValue)
+            throw(css::uno::RuntimeException);
 
-        css::uno::WeakReference< css::task::XStatusIndicatorFactory >   m_xFactoryWeak      ;   /// Weakreference to factory, which has created us
-        StatusIndicatorFactory*                                         m_pFactory          ;   /// Pointer to factory ... We use it only, if weakreference is valid!
+}; // class StatusIndicator
 
-};      //  class StatusIndicator
+} // namespace framework
 
-}       //  namespace framework
-
-#endif  //  #ifndef __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
+#endif // __FRAMEWORK_HELPER_STATUSINDICATOR_HXX_
