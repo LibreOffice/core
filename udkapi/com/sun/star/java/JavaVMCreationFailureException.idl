@@ -3,9 +3,9 @@
  *
  *  $RCSfile: JavaVMCreationFailureException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:29:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ module com { module sun { module star { module java {
     return because it tries to quit the process ( _exit), the shared
     library is corrupted, so that the symbols for JNI_GetDefaultVMInitArgs
     or JNI_CreateJavaVM cannot be found, etc.
+
+    @since #107627#
  */
 exception JavaVMCreationFailureException: JavaInitializationException
 {
