@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: er $ $Date: 2002-09-12 16:05:49 $
+ *  last change: $Author: er $ $Date: 2002-09-16 12:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2744,6 +2744,14 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
     else
     {
+/*
+ * Set SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE to 1 if we wanted to preserve as
+ * many shared formulas as possible instead of replacing them with direct code.
+ * Note that this may produce shared formula usage Excel doesn't understand,
+ * which would have to be adapted for in the export filter. Advisable as a long
+ * term goal, since it could decrease memory footprint.
+ */
+#define SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE 0
         ScRangeData* pRangeData = NULL;
         ScToken* t;
         pArr->Reset();
@@ -2754,7 +2762,12 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             {
                 ScRangeData* pName = pDoc->GetRangeName()->FindIndex( t->GetIndex() );
                 if (pName && pName->HasType(RT_SHAREDMOD))
+                {
                     pRangeData = pName;     // maybe need a replacement of shared with own code
+#if ! SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
+                    rChanged = TRUE;
+#endif
+                }
             }
             else if( t->GetType() != svIndex )  // es kann ein DB-Bereich sein !!!
             {
@@ -2778,6 +2791,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                 }
             }
         }
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
         BOOL bEasyShared, bPosInRange;
         if ( !pRangeData )
             bEasyShared = bPosInRange = FALSE;
@@ -2786,12 +2800,17 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             bEasyShared = TRUE;
             bPosInRange = r.In( eUpdateRefMode == URM_MOVE ? aPos : rOldPos );
         }
+#endif
         pArr->Reset();
         for( t = pArr->GetNextReferenceRPN(); t;
              t = pArr->GetNextReferenceRPN() )
         {
             if ( t->GetRef() != 1 )
+            {
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                 bEasyShared = FALSE;
+#endif
+            }
             else
             {   // if nRefCnt>1 it's already updated in token code
                 if ( t->GetType() == svSingleRef )
@@ -2812,6 +2831,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                             )
                             rChanged = TRUE;
                     }
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
                     {
                         const SingleRefData& rSRD = aMod.Ref().Ref1;
@@ -2819,6 +2839,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         if ( r.In( aRef ) != bPosInRange )
                             bEasyShared = FALSE;
                     }
+#endif
                 }
                 else
                 {
@@ -2836,6 +2857,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                             )
                             rChanged = TRUE;
                     }
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
                     if ( bEasyShared )
                     {
                         ScRange aRef( rRef.Ref1.nCol, rRef.Ref1.nRow,
@@ -2844,9 +2866,11 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
                         if ( r.In( aRef ) != bPosInRange )
                             bEasyShared = FALSE;
                     }
+#endif
                 }
             }
         }
+#if SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
         if ( pRangeData )
         {
             if ( bEasyShared )
@@ -2854,6 +2878,8 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
             else
                 rChanged = TRUE;
         }
+#endif
+#undef SC_PRESERVE_SHARED_FORMULAS_IF_POSSIBLE
         return pRangeData;
     }
 }
