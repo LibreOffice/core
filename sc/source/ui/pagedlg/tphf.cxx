@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nn $ $Date: 2001-03-01 14:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,10 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pSh);
     Point           aPos( aBackgroundBtn.GetPosPixel() );
 
-    aPos.Y() -= 8;
-    aBackgroundBtn.SetPosPixel( aPos );
+    // aBackgroundBtn position not changed anymore
 
-    aPos.Y() += aBackgroundBtn.GetSizePixel().Height();
-    aPos.Y() += 4;
+    aPos.X() += aBackgroundBtn.GetSizePixel().Width();
+    aPos.X() += 6;
     aBtnEdit.SetPosPixel( aPos );
     aBtnEdit.Show();
 
