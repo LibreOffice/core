@@ -8,6 +8,7 @@ Public iCommandTypes() as Integer
 Public CurCommandType as Integer
 Public oDataSource as Object
 Public bEnableBinaryOptionGroup as Boolean
+Public bSelectContent as Boolean
 
 
 Function GetDatabaseNames(baddFirstListItem as Boolean)
@@ -39,6 +40,10 @@ Sub GetSelectedDBMetaData()
 Dim OldsDBname as String
 Dim DBIndex as Integer
 Dim LocList() as String
+	If bStartUp Then
+		bStartUp = false
+		Exit Sub
+	End Sub
 	If Ubound(DialogModel.lstDatabases.SelectedItems()) &gt; -1 Then
 		DeleteFirstListBoxEntry(&quot;lstDatabases&quot;, sSelectDatasource)
 		ToggleDatabasePage(False)
@@ -50,6 +55,7 @@ Dim LocList() as String
 					If GetDBMetaData() Then
 						LocList() = AddListToList(Array(sSelectDBTable), TableNames())
 						.lstTables.StringItemList() = AddListToList(LocList(), QueryNames())
+						bSelectContent = True
 						.lstTables.SelectedItems() = Array(0)
 						iCommandTypes() = CreateCommandTypeList()
 						EmptyFieldsListboxes()
