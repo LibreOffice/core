@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 10:42:23 $
+ *  last change: $Author: thb $ $Date: 2001-06-20 17:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,6 +461,8 @@
 #define STR_EFFECTDLG_DOCUMENT              (RID_APP_START+383)
 #define STR_EFFECTDLG_PROGRAM               (RID_APP_START+384)
 #define STR_EFFECTDLG_MACRO                 (RID_APP_START+385)
+#define STR_EFFECTDLG_JUMP                  (RID_APP_START+386)
+#define STR_EFFECTDLG_ACTION                (RID_APP_START+387)
 
 /*  Fortsetzung von RID_APP_START+43 bis RID_APP_START+58:
  *  Dummy-Strings, diese ResourceIDs duerfen nicht an andere Strings vergeben

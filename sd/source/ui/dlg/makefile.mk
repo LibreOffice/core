@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-19 12:42:08 $
+#   last change: $Author: thb $ $Date: 2001-06-20 17:16:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         diactrl.cxx  \
         gluectrl.cxx  \
         sdtreelb.cxx \
-        tpeffect.cxx \
         tpaction.cxx \
         animobjs.cxx \
         prltempl.cxx \
@@ -136,7 +135,7 @@ SRCFILES =\
     new_foil.src\
     tabtempl.src\
     dlgpage.src\
-    tpeffect.src\
+    tpaction.src\
     animobjs.src\
     prltempl.src\
     prntopts.src\
@@ -173,14 +172,13 @@ SLOFILES =  \
         $(SLO)$/diactrl.obj  \
         $(SLO)$/gluectrl.obj  \
         $(SLO)$/sdtreelb.obj \
-        $(SLO)$/tpeffect.obj \
-        $(SLO)$/tpaction.obj \
         $(SLO)$/animobjs.obj \
         $(SLO)$/prltempl.obj \
         $(SLO)$/prntopts.obj \
         $(SLO)$/dlgsnap.obj  \
         $(SLO)$/copydlg.obj  \
         $(SLO)$/dlgolbul.obj \
+        $(SLO)$/tpaction.obj \
         $(SLO)$/tpoption.obj \
         $(SLO)$/filedlg.obj   \
         $(SLO)$/unchss.obj  \
@@ -212,13 +210,6 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/TemplateThread.obj
-
-.IF "$(GUI)" == "WIN"
-
-NOOPTFILES=\
-    $(SLO)$/tpeffect.obj
-
-.ENDIF
 
 # --- Tagets -------------------------------------------------------
 

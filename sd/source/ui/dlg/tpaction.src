@@ -1,0 +1,525 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tpaction.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: thb $ $Date: 2001-06-20 17:16:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "app.hrc"
+#include "helpids.h"
+#include "tpaction.hrc"
+#include <svtools/controldims.hrc>
+
+TabPage TP_ANIMATION
+{
+    HelpID = SID_ANIMATION_EFFECTS ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 260 , 164 ) ;
+    Hide = TRUE;
+    // always visible ---------------------------------------------------------------------
+#define MA_ACTIONLB_TOP     (RSC_SP_DLG_INNERBORDER_TOP + (2*RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y - RSC_CD_DROPDOWN_HEIGHT) / 2)
+#define MA_ACTIONLB_LEFT    (103)
+    FixedText FT_ACTION
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_ACTIONLB_TOP + 1 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Hide = TRUE ;
+        Text = "Aktion bei Mausklick" ;
+        Text [ ENGLISH ] = "Action at mouse click" ;
+        Text [ english_us ] = "Action at mouse click" ;
+        Text [ italian ] = "Azione al clic del mouse" ;
+        Text [ spanish ] = "AcciÛn con pulsaciÛn de ratÛn" ;
+        Text [ french ] = "Action par clic de souris" ;
+        Text [ dutch ] = "Activiteit per muisklik" ;
+        Text [ swedish ] = "≈tg‰rd vid musklick" ;
+        Text [ danish ] = "Handling ved klik med musen" ;
+        Text [ portuguese ] = "AcÁ„o com clique no rato" ;
+        Text [ portuguese_brazilian ] = "Aktion bei Mausklick" ;
+        Text[ chinese_simplified ] = "µ•ª˜ Û±Í ±÷¥––µƒ≤Ÿ◊˜";
+        Text[ russian ] = "ƒÂÈÒÚ‚ËÂ ÔË ˘ÂÎ˜ÍÂ Ï˚¯¸˛";
+        Text[ polish ] = "Akcja przy klikniÍciu myszπ";
+        Text[ japanese ] = "œ≥Ω∏ÿØ∏Ç≈±∏ºÆ›";
+        Text[ chinese_traditional ] = "´ˆπ´º–Æ…∞ı¶Ê™∫∞ ß@";
+        Text[ arabic ] = "≈Ã—«¡ ⁄‰œ «·‰ﬁ— »«·„«Ê”";
+        Text[ greek ] = "≈Ì›Ò„ÂÈ· ÏÂ ÍÎÈÍ ÙÔı ÔÌÙÈÍÈÔ˝";
+        Text[ korean ] = "∏∂øÏΩ∫ ≈¨∏Ø«“ ∂ß Ω««‡";
+        Text[ turkish ] = "T˝klama sonras˝ i˛lem";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AcciÛn con pulsaciÛn de ratÛn";
+        Text[ finnish ] = "Toiminto napsautettaessa";
+    };
+    ListBox LB_ACTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_ACTIONLB_TOP ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 79 ) ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    // sometimes visible ---------------------------------------------------------------------
+
+    //------------------------------------
+    // Fade object stuff
+#define MA_Y0 (MA_ACTIONLB_TOP + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_BOTTOM)
+    FixedLine FL_EFFECT
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT , MA_Y0 ) ;
+        Size = MAP_APPFONT ( 247 , 8 ) ;
+        Text = "Effekt" ;
+        Text [ ENGLISH ] = "Effect" ;
+        Text [ NORWEGIAN ] = "Effect" ;
+        Text [ DANISH ] = "Effekt" ;
+        Text [ ENGLISH_US ] = "Effects" ;
+        Text [ SPANISH ] = "Efecto" ;
+        Text [ FINNISH ] = "Tehosteet" ;
+        Text [ FRENCH ] = "Effet" ;
+        Text [ ITALIAN ] = "Effetto" ;
+        Text [ DUTCH ] = "Effect" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Efeito" ;
+        Text [ SWEDISH ] = "Effekt" ;
+        Text [ PORTUGUESE ] = "Efeitos" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "–ßπ˚";
+        Text[ russian ] = "›ÙÙÂÍÚ";
+        Text[ polish ] = "Efekt";
+        Text[ japanese ] = "å¯â ";
+        Text[ chinese_traditional ] = "Æƒ™G";
+        Text[ arabic ] = "«· √ÀÌ—";
+        Text[ greek ] = "≈ˆ›";
+        Text[ korean ] = "»ø∞˙";
+        Text[ turkish ] = "Efektler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Efecto";
+    };
+#define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
+    FixedText FT_ANIMATION
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y1 + 1) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "Animation" ;
+        Text [ ENGLISH ] = "Animation" ;
+        Hide = TRUE ;
+    };
+    ListBox LB_EFFECT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y1 ) ;
+        Size = MAP_APPFONT ( 82 , 63 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+    };
+#define MA_Y2 (MA_Y1 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+    FixedText FT_SPEED
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y2 + 1) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "Geschwindigkeit" ;
+        Text [ ENGLISH ] = "Speed" ;
+        Hide = TRUE ;
+    };
+    RadioButton RBT_SLOW
+    {
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 ) ;
+        Size = MAP_APPFONT ( 83 , 12 ) ;
+        Text = "~Langsam" ;
+        Text [ ENGLISH ] = "S~low" ;
+        Text [ norwegian ] = "S~low" ;
+        Text [ italian ] = "~Lento" ;
+        Text [ portuguese_brazilian ] = "S~low" ;
+        Text [ portuguese ] = "~Lento" ;
+        Text [ french ] = "~Lent" ;
+        Text [ dutch ] = "~Langzaam" ;
+        Text [ spanish ] = "~Lenta" ;
+        Text [ danish ] = "Langsom" ;
+        Text [ swedish ] = "~LÂngsamt" ;
+        Text [ finnish ] = "~Hidas" ;
+        Text [ english_us ] = "~Slow" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "¬˝ÀŸ(~S)";
+        Text[ russian ] = "~ÃÂ‰ÎÂÌÌÓ";
+        Text[ polish ] = "Powoli";
+        Text[ japanese ] = "Ç‰Ç¡Ç≠ÇË(~S)";
+        Text[ chinese_traditional ] = "∫C≥t(~S)";
+        Text[ arabic ] = "»ÿÌ¡";
+        Text[ greek ] = "¡Ò„‹";
+        Text[ korean ] = "√µ√µ»˜(~S)";
+        Text[ turkish ] = "Yava˛";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Lenta";
+    };
+    RadioButton RBT_MEDIUM
+    {
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 + RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
+        Size = MAP_APPFONT ( 83 , 12 ) ;
+        Text = "~Mittel" ;
+        Text [ ENGLISH ] = "~Medium" ;
+        Text [ norwegian ] = "~Middels" ;
+        Text [ italian ] = "~Medio" ;
+        Text [ portuguese_brazilian ] = "~M?dio" ;
+        Text [ portuguese ] = "~Meio" ;
+        Text [ french ] = "~Moyen" ;
+        Text [ dutch ] = "~Middel" ;
+        Text [ spanish ] = "~Media" ;
+        Text [ danish ] = "Middel" ;
+        Text [ swedish ] = "~Medel" ;
+        Text [ finnish ] = "~Normaali" ;
+        Text [ english_us ] = "~Medium" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "÷–ÀŸ(~M)";
+        Text[ russian ] = "~ÕÓÏ‡Î¸ÌÓ";
+        Text[ polish ] = "årednio";
+        Text[ japanese ] = "ïÅí (~M)";
+        Text[ chinese_traditional ] = "§§≥t(~M)";
+        Text[ arabic ] = "„ Ê”ÿ";
+        Text[ greek ] = "ÃÂÛ·ﬂÔ";
+        Text[ korean ] = "¡ﬂ∞£(~M)";
+        Text[ turkish ] = "Normal";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Media";
+    };
+    RadioButton RBT_FAST
+    {
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y2 + 2*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y) ) ;
+        Size = MAP_APPFONT ( 83 , 12 ) ;
+        Text = "S~chnell" ;
+        Text [ ENGLISH ] = "~Fast" ;
+        Text [ norwegian ] = "~Raskt" ;
+        Text [ italian ] = "~Veloce" ;
+        Text [ portuguese_brazilian ] = "~R?pido" ;
+        Text [ portuguese ] = "~R·pido" ;
+        Text [ french ] = "~Rapide" ;
+        Text [ dutch ] = "~Snel" ;
+        Text [ spanish ] = "~R·pida" ;
+        Text [ danish ] = "Hurtig" ;
+        Text [ swedish ] = "S~nabbt" ;
+        Text [ finnish ] = "~Nopea" ;
+        Text [ english_us ] = "~Fast" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "øÏÀŸ(~F)";
+        Text[ russian ] = "¡˚ÒÚÓ";
+        Text[ polish ] = "Szybko";
+        Text[ japanese ] = "ë¨Ç≠(~F)";
+        Text[ chinese_traditional ] = "ß÷≥t(~F)";
+        Text[ arabic ] = "”—Ì⁄";
+        Text[ greek ] = "√Òﬁ„ÔÒ·";
+        Text[ korean ] = "∫¸∏£∞‘(~F)";
+        Text[ turkish ] = "H˝zl˝";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~R·pida";
+    };
+#define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
+    FixedText FT_TRANSPCOLOR
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + 1) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "Unsichtbare ~Farbe" ;
+        Text [ ENGLISH ] = "Invisible ~color" ;
+        Hide = TRUE ;
+        Text [ dutch ] = "~Onzichtbare kleur" ;
+        Text [ english_us ] = "Transparent" ;
+        Text [ italian ] = "Colore invisibile" ;
+        Text [ spanish ] = "~Color transparente" ;
+        Text [ french ] = "~Couleur invisible" ;
+        Text [ swedish ] = "Osynlig ~f‰rg" ;
+        Text [ danish ] = "Usynlig farve" ;
+        Text [ portuguese ] = "~Cor invisÌvel" ;
+        Text [ portuguese_brazilian ] = "Unsichtbare ~Farbe" ;
+        Text[ chinese_simplified ] = "Õ∏√˜";
+        Text[ russian ] = "œÓÁ‡˜Ì˚È";
+        Text[ polish ] = "Niewidoczny kolor";
+        Text[ japanese ] = "ìßñæêF";
+        Text[ chinese_traditional ] = "≥z©˙";
+        Text[ arabic ] = "·Ê‰ €Ì— „—∆Ì";
+        Text[ greek ] = "ÃÁ ÔÒ·Ù‹ ˜Ò˛Ï·Ù·";
+        Text[ korean ] = "∫∏¿Ã¡ˆ æ ¥¬ ªˆ";
+        Text[ turkish ] = "Gˆr¸nmez renk";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Color transparente";
+        Text[ finnish ] = "L‰pin‰kyv‰";
+    };
+    ListBox LB_TRANSPCOLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y3 ) ;
+        Size = MAP_APPFONT ( 82 , 63 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+    };
+#define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
+    TriStateBox TSB_SOUND
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 10 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text = "Mit Klang ausblenden" ;
+        Text [ ENGLISH ] = "Vanish with sound" ;
+    };
+    Edit EDT_SOUND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+     // Es ist schon wichtig, daﬂ Durchsuchen (search) und Suchen (seek/find) unter-
+     // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
+    PushButton BTN_SEARCH
+    {
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text = "Durch~suchen..." ;
+        Text [ ENGLISH ] = "~Search..." ;
+        Text [ dutch ] = "~Bladeren..." ;
+        Text [ english_us ] = "~Browse..." ;
+        Text [ italian ] = "~Sfoglia..." ;
+        Text [ spanish ] = "E~xaminar..." ;
+        Text [ french ] = "Parcourir..." ;
+        Text [ swedish ] = "Genom~sˆk..." ;
+        Text [ danish ] = "Gennemse..." ;
+        Text [ portuguese_brazilian ] = "~Buscar..." ;
+        Text [ portuguese ] = "~Pesquisar..." ;
+        Text[ chinese_simplified ] = "‰Ø¿¿(~B)...";
+        Text[ russian ] = "Œ·ÁÓ...";
+        Text[ polish ] = "Przeglπdaj...";
+        Text[ japanese ] = "åüçı(~B)...";
+        Text[ chinese_traditional ] = "¬sƒ˝(~B)...";
+        Text[ arabic ] = "«” ⁄—«÷...";
+        Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ...";
+        Text[ korean ] = "√£æ∆ ∫∏±‚(~B)...";
+        Text[ turkish ] = "Tara";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "E~xaminar...";
+        Text[ finnish ] = "~Selaa";
+    };
+    TriStateBox TSB_PLAY_FULL
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
+        Size = MAP_APPFONT ( 219 , 10 ) ;
+        Text = "Klang ~vollst‰ndig abspielen" ;
+        Text [ ENGLISH ] = "Play sound full" ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text [ dutch ] = "Geluid ~volledig afspelen" ;
+        Text [ english_us ] = "~Play in full" ;
+        Text [ italian ] = "Eseguire del tutto" ;
+        Text [ spanish ] = "Reproducir el sonido ~completo" ;
+        Text [ french ] = "~Jouer le son en entier" ;
+        Text [ swedish ] = "Spela ~upp ljud fullst‰ndigt" ;
+        Text [ danish ] = "Afspil lyden helt" ;
+        Text [ portuguese_brazilian ] = "Klang ~vollst?ndig abspielen" ;
+        Text [ portuguese ] = "Tocar som ~completo" ;
+        Text[ chinese_simplified ] = "…˘“ÙÕÍ’˚µÿ≤•∑≈(~P)";
+        Text[ russian ] = "¬ÓÒÔÓËÁ‚ÂÒÚË ÔÓÎÌÓÒÚ¸˛ Á‚ÛÍ";
+        Text[ polish ] = "OdtwÛrz pe≥ny düwiÍk";
+        Text[ japanese ] = "ª≥›ƒﬁÇâπó ñLÇ©Ç…çƒê∂(~P)";
+        Text[ chinese_traditional ] = "¡n≠µßπæ„¶aºΩ©Ò(~P)";
+        Text[ arabic ] = " ‘€Ì· «·’Ê  ﬂ«„·«";
+        Text[ greek ] = "–ÎﬁÒÁÚ ÂÍÙ›ÎÂÛÁ ﬁ˜Ôı";
+        Text[ korean ] = "ªÁøÓµÂ øœ∫Æ«œ∞‘ ¿Áª˝(~P)";
+        Text[ turkish ] = "Sesi sonuna kadar Áal";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reproducir el sonido ~completo";
+        Text[ finnish ] = "~Toista kokonaan";
+    };
+
+    //------------------------------------
+    // Goto page/object/document stuff
+    FixedText FT_TREE
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y0 + 4 );
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Hide = TRUE ;
+    };
+    Control LB_TREE
+    {
+        HelpID = HID_CTL_ACTION_DLG_1 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Control LB_TREE_DOCUMENT
+    {
+        HelpID = HID_CTL_ACTION_DLG_2 ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ListBox LB_OLE_ACTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT, MA_Y0 + 3 ) ;
+        Size = MAP_APPFONT ( 150 - RSC_SP_GRP_INNERBORDER_RIGHT , 77 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT , MA_Y1 + 63 + RSC_SP_FLGR_SPACE_Y + RSC_SP_FLGR_INNERBORDER_BOTTOM + 6 ) ;
+        Size = MAP_APPFONT ( 247 , 8 ) ;
+        Hide = TRUE ;
+    };
+    Edit EDT_BOOKMARK
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_DOCUMENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_PROGRAM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    Edit EDT_MACRO
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    PushButton BTN_SEEK
+    {
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        Text = "~Suchen" ;
+        Text [ ENGLISH ] = "~Seek" ;
+        Text [ english_us ] = "Search" ;
+        Text [ italian ] = "Cerca" ;
+        Text [ spanish ] = "~Buscar" ;
+        Text [ french ] = "~Rechercher" ;
+        Text [ dutch ] = "~Zoeken" ;
+        Text [ swedish ] = "~Sˆk" ;
+        Text [ danish ] = "S¯g" ;
+        Text [ portuguese ] = "~Localizar..." ;
+        Text [ portuguese_brazilian ] = "~Buscar..." ;
+        Text[ chinese_simplified ] = "À——∞";
+        Text[ russian ] = "~œÓËÒÍ";
+        Text[ polish ] = "Szukaj";
+        Text[ japanese ] = "åüçı";
+        Text[ chinese_traditional ] = "∑j¥M";
+        Text[ arabic ] = "»ÕÀ";
+        Text[ greek ] = "AÌ·ÊﬁÙÁÛÁ";
+        Text[ korean ] = "√£±‚";
+        Text[ turkish ] = "Ara";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Buscar";
+        Text[ finnish ] = "Etsi";
+    };
+
+    Text = "Interaktion" ;
+    Text [ ENGLISH ] = "Action" ;
+    Text [ italian ] = "Interazione";
+    Text [ portuguese_brazilian ] = "Interaktion";
+    Text [ portuguese ] = "InteracÁ„o";
+    Text [ danish ] = "Interaktion";
+    Text [ french ] = "Interaction";
+    Text [ swedish ] = "Interaktion";
+    Text [ dutch ] = "Interactie";
+    Text [ spanish ] = "InteracciÛn";
+    Text [ english_us ] = "Interaction";
+    Text[ chinese_simplified ] = "Ωªª• Ω";
+    Text[ russian ] = "»ÌÚÂ‡ÍˆËˇ";
+    Text[ polish ] = "Interakcja";
+    Text[ japanese ] = "≤›¿◊∏ºÆ›";
+    Text[ chinese_traditional ] = "§¨∞ ¶°";
+    Text[ arabic ] = " ›«⁄·";
+    Text[ greek ] = "¡ÎÎÁÎÂﬂ‰Ò·ÛÁ";
+    Text[ korean ] = "ªÛ»£¿€øÎ";
+    Text[ turkish ] = "Etkile˛im";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "InteracciÛn";
+    Text[ finnish ] = "Vuorovaikutus";
+    Text [ dutch ] = "Interactie" ;
+    Text [ english_us ] = "Interaction" ;
+    Text [ italian ] = "Interazione" ;
+    Text [ spanish ] = "InteracciÛn" ;
+    Text [ french ] = "Interaction" ;
+    Text [ swedish ] = "Interaktion" ;
+    Text [ danish ] = "Interaction" ;
+    Text [ portuguese_brazilian ] = "Interaktion" ;
+    Text [ portuguese ] = "InteracÁ„o" ;
+};

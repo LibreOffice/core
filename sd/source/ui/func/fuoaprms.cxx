@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: thb $ $Date: 2001-06-20 17:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
 #include "sdview.hxx"
-#include "tpeffect.hxx"
+#include "tpaction.hxx"
 #include "preview.hxx"
 #include "prevchld.hxx"
 
@@ -530,7 +530,6 @@ FuObjectAnimationParameters::FuObjectAnimationParameters
         else
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
 
-        //USHORT nDlgId = bOnMaster ? TAB_ACTIONSONLY : TAB_ANIMATION;
         SdActionDlg* pDlg = new SdActionDlg(NULL, &aSet, pView);
 
         USHORT nResult = pDlg->Execute();

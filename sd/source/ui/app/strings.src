@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-19 10:39:22 $
+ *  last change: $Author: thb $ $Date: 2001-06-20 17:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7174,6 +7174,16 @@ String STR_START_PRESENTATION
     Text[ turkish ] = "Ekran sunusunu baþlat";
     Text[ catalan ] = "Iniciar presentación";
     Text[ finnish ] = "Aloita diaesitys";
+};
+String STR_EFFECTDLG_JUMP
+{
+    Text = "Sprung~ziel" ;
+    Text [ ENGLISH ] = "~Destination" ;
+};
+String STR_EFFECTDLG_ACTION
+{
+    Text = "Akt~ion" ;
+    Text [ ENGLISH ] = "Act~ion" ;
 };
 String STR_EFFECTDLG_SOUND
 {
