@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateContainer.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-06 16:24:30 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 21:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 
     /** @returns
 
-                the name of the elements' template.
+                the name of the element's template.
             <p> If instances of multiple templates are accepted by the container,
                 this is the name of the basic or primary template.
             </p>
@@ -114,6 +114,9 @@ interface XTemplateContainer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/04/06 16:24:30  jb
+    Adjusted documentation; added developer's comments
+
     Revision 1.6  2001/03/16 16:41:17  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
