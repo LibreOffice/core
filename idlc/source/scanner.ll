@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:08:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,8 @@
 #ifndef _IDLC_FEHELPER_HXX_
 #include <idlc/fehelper.hxx>
 #endif
+
+#include "attributeexceptions.hxx"
 
 class AstExpression;
 class AstArray;
@@ -309,6 +311,11 @@ in              return IDL_IN;
 out             return IDL_OUT;
 inout           return IDL_INOUT;
 oneway          return IDL_ONEWAY;
+
+get             return IDL_GET;
+set             return IDL_SET;
+
+"..."           return IDL_ELLIPSIS;
 
 ("-")?{INT_LITERAL}+(l|L|u|U)?    {
             	yylval.ival = asciiToInteger( 10, yytext );
