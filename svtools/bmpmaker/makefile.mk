@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-13 23:53:12 $
+#   last change: $Author: ka $ $Date: 2001-05-10 13:57:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,6 @@
 #*************************************************************************
 
 PRJ=..
-
 PRJNAME=bmpmaker
 TARGET=bmp
 LIBTARGET=NO
@@ -74,18 +73,16 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-OBJFILES=   $(OBJ)$/bmp.obj
+OBJFILES=   $(OBJ)$/bmp.obj			\
+            $(OBJ)$/bmpgui.obj		\
+            $(OBJ)$/bmpcore.obj		
 
-SRC1FILES=   bmp.src
+SRC1FILES=bmp.src
 SRS1NAME=bmp
 RES1TARGET=bmp
 SRS1FILES=$(SRS)$/bmp.srs
 
 APP1TARGET= $(TARGET)
-
-.IF "$(GUI)" == "MAC"
-MACRES= $(SV_RES)MPWToolCfrg.r -d SVTOOLNAME="¶"SV TOOL¶""
-.ENDIF
 
 APP1STDLIBS =		\
     $(SVLIB)		\
@@ -93,21 +90,19 @@ APP1STDLIBS =		\
     $(VOSLIB) 		\
     $(SALLIB)
 
-.IF "$(COM)"=="GCC" || "$(GUI)"=="WNT"
-APP1STDLIBS+=$(CPPULIB)
-.ENDIF
-
 APP1DEPN=   $(L)$/itools.lib  $(SVLIBDEPEND)
-APP1OBJS=   $(OBJFILES)
 
+APP1OBJS=   $(OBJ)$/bmp.obj			\
+            $(OBJ)$/bmpcore.obj		
+            
 APP1BASE=0x10000000
 
-.IF "$(GUI)"!="UNX"
-APP1STDLIBS+= svtool.lib
-.ELSE
-APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
-APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
-.ENDIF
+# .IF "$(GUI)"!="UNX"
+# APP1STDLIBS+= svtool.lib
+# .ELSE
+# APP1STDLIBS+= -lsvt$(UPD)$(DLLSUFFIX) 
+# APP1STDLIBS+= -lsvl$(UPD)$(DLLSUFFIX) 
+# .ENDIF
 
 .IF "$(OS)"=="MACOSX"
 ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
@@ -116,24 +111,3 @@ ALL:	$(BIN)$/$(RES1TARGET).res ALLTAR
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-# ------------------------------------------------------------------
-# OS2
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(TARGET).def:
-    echo  NAME          $(TARGET) WINDOWAPI                 >$@
-    echo  DESCRIPTION   'BMP'						       >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB          'os2STUB.EXE'                      >>$@
-.ENDIF
-    echo  EXETYPE       OS2                                >>$@
-    echo  PROTMODE                                         >>$@
-    echo  CODE          PRELOAD                            >>$@
-    echo  DATA          PRELOAD MULTIPLE                   >>$@
-    echo  HEAPSIZE      8192                               >>$@
-    echo  STACKSIZE     32768                              >>$@
-
-.ENDIF
