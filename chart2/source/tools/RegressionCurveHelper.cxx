@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 16:43:15 $
+ *  last change: $Author: iha $ $Date: 2003-12-17 17:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,8 +254,8 @@ void RegressionCurveHelper::initializeCurveCalculator(
     {
         // initialize with 1, 2, ...
         aXValues.realloc( aYValues.getLength());
-        for( i=0; i<aXValues.getLength(); )
-            aXValues[i] = ++i;
+        for( i=0; i<aXValues.getLength(); ++i )
+            aXValues[i] = i+1;
         bXValuesFound = true;
     }
 
