@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:48:13 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1812,24 +1812,13 @@ Link SvLBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
 }
 
+void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
+}
+
 ::com::sun::star::uno::Reference< XAccessible > SvLBox::CreateAccessible()
 {
     return ::com::sun::star::uno::Reference< XAccessible >();
-}
-
-void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
-{
-    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-    rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
-
-    if ( IsEnabled() )
-        rStateSet.AddState( AccessibleStateType::ENABLED );
-    if ( GetSelectionMode() == MULTIPLE_SELECTION )
-        rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
-    if ( HasFocus() )
-        rStateSet.AddState( AccessibleStateType::FOCUSED );
-    if ( IsReallyVisible() )
-        rStateSet.AddState( AccessibleStateType::VISIBLE );
 }
 
 Rectangle SvLBox::GetBoundingRect( SvLBoxEntry* pEntry )
