@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-15 07:11:20 $
+ *  last change: $Author: gt $ $Date: 2004-07-15 07:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     Wallpaper       aBack( GetSettings().GetStyleSettings().GetWindowColor() );
 
     maFrameWin.SetBackground( aBack );
+    maCertImg.SetBackground( aBack );
     maCertInfoFI.SetBackground( aBack );
     maSep1FL.SetBackground( aBack );
     maHintNotTrustedFI.SetBackground( aBack );
