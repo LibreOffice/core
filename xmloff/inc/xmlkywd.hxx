@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
+ *  last change: $Author: dr $ $Date: 2000-11-08 13:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,7 @@ XML_CONSTASCII_ACTION( sXML_connector, "connector" );
 XML_CONSTASCII_ACTION( sXML_consolidation, "consolidation" );
 XML_CONSTASCII_ACTION( sXML_consecutive_numbering, "consecutive-numbering" );
 XML_CONSTASCII_ACTION( sXML_constant, "constant" );
+XML_CONSTASCII_ACTION( sXML_contains_error, "contains-error");
 XML_CONSTASCII_ACTION( sXML_contains_header, "contains-header");
 XML_CONSTASCII_ACTION( sXML_content, "content" );
 XML_CONSTASCII_ACTION( sXML_content_validation, "content-validation");
@@ -369,6 +370,7 @@ XML_CONSTASCII_ACTION( sXML_delay, "delay" );
 XML_CONSTASCII_ACTION( sXML_desc, "desc" );
 XML_CONSTASCII_ACTION( sXML_descending, "descending");
 XML_CONSTASCII_ACTION( sXML_description, "description" );
+XML_CONSTASCII_ACTION( sXML_detective, "detective" );
 XML_CONSTASCII_ACTION( sXML_direction, "direction");
 XML_CONSTASCII_ACTION( sXML_display, "display" );
 XML_CONSTASCII_ACTION( sXML_display_border, "display-border");
@@ -486,8 +488,10 @@ XML_CONSTASCII_ACTION( sXML_frame, "frame" );
 XML_CONSTASCII_ACTION( sXML_frame_content, "frame-content" );
 XML_CONSTASCII_ACTION( sXML_frame_end_margin, "frame-end-margin" );
 XML_CONSTASCII_ACTION( sXML_frame_start_margin, "frame-start-margin" );
+XML_CONSTASCII_ACTION( sXML_from_another_table, "from-another-table" );
 XML_CONSTASCII_ACTION( sXML_from_inside, "from-inside" );
 XML_CONSTASCII_ACTION( sXML_from_left, "from-left" );
+XML_CONSTASCII_ACTION( sXML_from_same_table, "from-same-table" );
 XML_CONSTASCII_ACTION( sXML_from_top, "from-top" );
 XML_CONSTASCII_ACTION( sXML_full, "full" );
 XML_CONSTASCII_ACTION( sXML_function, "function");
@@ -534,6 +538,7 @@ XML_CONSTASCII_ACTION( sXML_hidden, "hidden" );
 XML_CONSTASCII_ACTION( sXML_hidden_and_protected, "hidden-and-protected");
 XML_CONSTASCII_ACTION( sXML_hidden_paragraph, "hidden-paragraph" );
 XML_CONSTASCII_ACTION( sXML_hidden_text, "hidden-text" );
+XML_CONSTASCII_ACTION( sXML_highlighted_range, "highlighted-range" );
 XML_CONSTASCII_ACTION( sXML_horizontal, "horizontal" );
 XML_CONSTASCII_ACTION( sXML_horizontal_lines, "horizontal-lines" );
 XML_CONSTASCII_ACTION( sXML_horizontal_on_left_pages, "horizontal-on-left-pages" );
@@ -724,6 +729,7 @@ XML_CONSTASCII_ACTION( sXML_opaque_foreground, "foreground" );
 XML_CONSTASCII_ACTION( sXML_open_horizontal, "open-horizontal" );
 XML_CONSTASCII_ACTION( sXML_open_vertical, "open-vertical" );
 XML_CONSTASCII_ACTION( sXML_operator, "operator");
+XML_CONSTASCII_ACTION( sXML_operation, "operation");
 XML_CONSTASCII_ACTION( sXML_order, "order");
 XML_CONSTASCII_ACTION( sXML_ordered_list, "ordered-list" );
 XML_CONSTASCII_ACTION( sXML_orientation, "orientation");
@@ -852,6 +858,8 @@ XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
 XML_CONSTASCII_ACTION( sXML_relative, "relative" ) ;
 XML_CONSTASCII_ACTION( sXML_relative_tab_stop_position, "relative-tab-stop-position" );
+XML_CONSTASCII_ACTION( sXML_remove_dependents, "remove-dependents" );
+XML_CONSTASCII_ACTION( sXML_remove_precedents, "remove-precedents" );
 XML_CONSTASCII_ACTION( sXML_repeat, "repeat" );
 XML_CONSTASCII_ACTION( sXML_repeat_column, "repeat-column");
 XML_CONSTASCII_ACTION( sXML_repeat_row, "repeat-row");
@@ -1050,9 +1058,13 @@ XML_CONSTASCII_ACTION( sXML_time_adjust, "time-adjust" );
 XML_CONSTASCII_ACTION( sXML_time_style, "time-style" );
 XML_CONSTASCII_ACTION( sXML_time_value, "time-value");
 XML_CONSTASCII_ACTION( sXML_title, "title" );
+XML_CONSTASCII_ACTION( sXML_to_another_table, "to-another-table" );
 XML_CONSTASCII_ACTION( sXML_top, "top" );
 XML_CONSTASCII_ACTION( sXML_top_percent, "top percent");
 XML_CONSTASCII_ACTION( sXML_top_values, "top values");
+XML_CONSTASCII_ACTION( sXML_trace_dependents, "trace-dependents" );
+XML_CONSTASCII_ACTION( sXML_trace_errors, "trace-errors" );
+XML_CONSTASCII_ACTION( sXML_trace_precedents, "trace-precedents" );
 XML_CONSTASCII_ACTION( sXML_transform , "transform" );
 XML_CONSTASCII_ACTION( sXML_transparency, "transparency" );
 XML_CONSTASCII_ACTION( sXML_transparency_name, "transparency-name" );
