@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 09:15:44 $
+ *  last change: $Author: mt $ $Date: 2001-06-05 16:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #endif
 
 #include <vos/mutex.hxx>
@@ -1174,6 +1178,12 @@ void ImpEditView::CutCopy( BOOL bCut )
             uno::Reference< datatransfer::XTransferable > xData = pEditEngine->pImpEditEngine->CreateTransferable( GetEditSelection() );
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             xClipboard->setContents( xData, NULL );
+
+            // #87756# FlushClipboard, but it would be better to become a TerminateListener to the Desktop and flush on demand...
+            uno::Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+
             Application::AcquireSolarMutex( nRef );
 
             if ( bCut )
