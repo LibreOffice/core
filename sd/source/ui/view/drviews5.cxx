@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:18:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,7 +903,7 @@ void DrawViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     ViewShell::VisAreaChanged( rRect );
 
-    DrawSubController* pController = GetSubController();
+    DrawController* pController = GetController();
     if (pController != NULL)
         pController->FireVisAreaChanged (rRect);
 }
