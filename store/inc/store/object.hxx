@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,65 +54,139 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_OBJECT_HXX_
-#define _STORE_OBJECT_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_OBJECT_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_OBJECT_HXX_
-#include <vos/object.hxx>
-#endif
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
+#ifndef _OSL_INTERLCK_H_
+#include <osl/interlck.h>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
+
+/*========================================================================
+ *
+ * IStoreHandle interface.
+ *
+ *======================================================================*/
+class IStoreHandle : public rtl::IReference
+{
+public:
+    /** Replaces dynamic_cast type checking.
+     */
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId) = 0;
+};
+
+
+/** Template helper function as dynamic_cast replacement.
+ */
+template<class store_handle_type>
+store_handle_type * SAL_CALL query (
+    IStoreHandle * pHandle, store_handle_type *);
+
+
+/** Template helper class as type safe Reference to store_handle_type.
+ */
+template<class store_handle_type>
+class OStoreHandle : public rtl::Reference<store_handle_type>
+{
+public:
+    OStoreHandle (store_handle_type * pHandle)
+        : rtl::Reference<store_handle_type> (pHandle)
+    {}
+
+    static store_handle_type * SAL_CALL query (void * pHandle)
+    {
+        return store::query (
+            static_cast<IStoreHandle*>(pHandle),
+            static_cast<store_handle_type*>(0));
+    }
+};
 
 /*========================================================================
  *
  * OStoreObject interface.
  *
  *======================================================================*/
-class OStoreObject :
-    public NAMESPACE_VOS(OReference),
-    public NAMESPACE_VOS(OObject)
+class OStoreObject : public store::IStoreHandle
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OStoreObject, store));
+    /** Template function specialization as dynamic_cast replacement.
+     */
+    friend inline OStoreObject*
+    SAL_CALL query (IStoreHandle *pHandle, OStoreObject*);
 
 public:
+    /** Construction.
+     */
     OStoreObject (void);
 
+    /** Allocation.
+     */
+    static void* operator new (size_t n);
+    static void  operator delete (void *p);
+
+    /** IStoreHandle.
+     */
+    virtual sal_Bool SAL_CALL isKindOf (sal_uInt32 nTypeId);
+
+    /** IReference.
+     */
+    virtual oslInterlockedCount SAL_CALL acquire (void);
+    virtual oslInterlockedCount SAL_CALL release (void);
+
 protected:
+    /** Destruction.
+     */
     virtual ~OStoreObject (void);
 
 private:
+    /** The IStoreHandle TypeId.
+     */
+    static const sal_uInt32 m_nTypeId;
+
+    /** Representation.
+     */
+    oslInterlockedCount m_nRefCount;
+
     /** Not implemented.
      */
     OStoreObject (const OStoreObject&);
     OStoreObject& operator= (const OStoreObject&);
 };
 
+/** Template function specialization as dynamic_cast replacement.
+ */
+inline OStoreObject*
+SAL_CALL query (IStoreHandle *pHandle, OStoreObject*)
+{
+    if (pHandle && pHandle->isKindOf (OStoreObject::m_nTypeId))
+    {
+        // Handle is kind of OStoreObject.
+        return static_cast<OStoreObject*>(pHandle);
+    }
+    return 0;
+}
+
 /*========================================================================
  *
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_OBJECT_HXX_ */
 

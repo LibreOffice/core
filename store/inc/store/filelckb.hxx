@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_FILELCKB_HXX_
-#define _STORE_FILELCKB_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_FILELCKB_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -73,9 +73,6 @@
 #include <osl/mutex.hxx>
 #endif
 
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
@@ -83,9 +80,8 @@
 #include <store/lockbyte.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 class OFileLockBytes_Impl;
 
@@ -95,12 +91,12 @@ class OFileLockBytes_Impl;
  *
  *======================================================================*/
 class OFileLockBytes :
-    public NAMESPACE_STORE(ILockBytes),
-    public NAMESPACE_STORE(OStoreObject)
+    public store::OStoreObject,
+    public store::ILockBytes
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OFileLockBytes, store));
-
 public:
+    /** Construction.
+     */
     OFileLockBytes (void);
 
     /** create.
@@ -177,18 +173,19 @@ public:
 
     /** Delegate multiple inherited IReference.
      */
-    virtual RefCount SAL_CALL acquire (void);
-    virtual RefCount SAL_CALL release (void);
-    virtual RefCount SAL_CALL referenced (void) const;
+    virtual oslInterlockedCount SAL_CALL acquire (void);
+    virtual oslInterlockedCount SAL_CALL release (void);
 
 protected:
+    /** Destruction.
+     */
     virtual ~OFileLockBytes (void);
 
 private:
     /** Representation.
      */
-    NAMESPACE_OSL(Mutex)  m_aMutex;
-    OFileLockBytes_Impl  *m_pImpl;
+    osl::Mutex           m_aMutex;
+    OFileLockBytes_Impl *m_pImpl;
 
     /** Not implemented.
      */
@@ -201,9 +198,8 @@ private:
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_FILELCKB_HXX_ */
 

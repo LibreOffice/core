@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockbyte.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,39 +54,35 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_LOCKBYTE_HXX_
-#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
 #endif
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 /*========================================================================
  *
  * ILockBytes interface.
  *
  *======================================================================*/
-class ILockBytes : public NAMESPACE_VOS(IReference)
+class ILockBytes : public rtl::IReference
 {
 public:
     /**
@@ -153,6 +149,8 @@ public:
         sal_uInt32 nBytes) = 0;
 
 protected:
+    /** Destruction.
+     */
     virtual ~ILockBytes (void) {}
 };
 
@@ -161,9 +159,8 @@ protected:
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_LOCKBYTE_HXX_ */
 

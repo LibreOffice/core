@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memlckb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,25 +54,22 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_MEMLCKB_HXX_
-#define _STORE_MEMLCKB_HXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_MEMLCKB_HXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
-#ifndef _STORE_MACROS_HXX_
-#include <store/macros.hxx>
-#endif
 #ifndef _STORE_OBJECT_HXX_
 #include <store/object.hxx>
 #endif
@@ -80,9 +77,8 @@
 #include <store/lockbyte.hxx>
 #endif
 
-#ifdef _USE_NAMESPACE
-namespace store {
-#endif
+namespace store
+{
 
 class OMemoryLockBytes_Impl;
 
@@ -92,12 +88,12 @@ class OMemoryLockBytes_Impl;
  *
  *======================================================================*/
 class OMemoryLockBytes :
-    public NAMESPACE_STORE(ILockBytes),
-    public NAMESPACE_STORE(OStoreObject)
+    public store::OStoreObject,
+    public store::ILockBytes
 {
-    VOS_DECLARE_CLASSINFO (VOS_NAMESPACE (OMemoryLockBytes, store));
-
 public:
+    /** Construction.
+     */
     OMemoryLockBytes (void);
 
     /** Read at Offset into Buffer.
@@ -165,17 +161,18 @@ public:
 
     /** Delegate multiple inherited IReference.
      */
-    virtual RefCount SAL_CALL acquire (void);
-    virtual RefCount SAL_CALL release (void);
-    virtual RefCount SAL_CALL referenced (void) const;
+    virtual oslInterlockedCount SAL_CALL acquire (void);
+    virtual oslInterlockedCount SAL_CALL release (void);
 
 protected:
+    /** Destruction.
+     */
     virtual ~OMemoryLockBytes (void);
 
 private:
     /** Representation.
      */
-    NAMESPACE_VOS(OMutex)  m_aMutex;
+    osl::Mutex             m_aMutex;
     OMemoryLockBytes_Impl *m_pImpl;
 
     /** Not implemented.
@@ -189,9 +186,8 @@ private:
  * The End.
  *
  *======================================================================*/
-#ifdef _USE_NAMESPACE
-}
-#endif
+
+} // namespace store
 
 #endif /* !_STORE_MEMLCKB_HXX_ */
 
