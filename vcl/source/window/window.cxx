@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: th $ $Date: 2000-11-24 18:51:54 $
+ *  last change: $Author: th $ $Date: 2000-11-29 20:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3456,7 +3456,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         // Fenster zurueckgesetzt wird
         if ( mpLastFocusWindow && (mpLastFocusWindow != this) &&
              !(mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
-             mpLastFocusWindow->IsEnabled() )
+             mpLastFocusWindow->IsEnabled() && mpLastFocusWindow->IsInputEnabled() )
             mpLastFocusWindow->GrabFocus();
         else
             mpClientWindow->GrabFocus();
@@ -3470,12 +3470,16 @@ void Window::ImplGrabFocus( USHORT nFlags )
         // Fenster zurueckgesetzt wird
         if ( mpLastFocusWindow && (mpLastFocusWindow != this) &&
              !(mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
-             mpLastFocusWindow->IsEnabled() )
+             mpLastFocusWindow->IsEnabled() && mpLastFocusWindow->IsInputEnabled() )
         {
             mpLastFocusWindow->GrabFocus();
             return;
         }
     }
+
+    // If the Windows is disabled, then we doesn't change the focus
+    if ( !IsEnabled() || !IsInputEnabled() )
+        return;
 
     // Wir brauchen Focus nur setzen, wenn es diesen noch nicht hat
     ImplSVData* pSVData = ImplGetSVData();

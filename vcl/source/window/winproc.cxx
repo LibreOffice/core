@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-11-28 14:39:30 $
+ *  last change: $Author: th $ $Date: 2000-11-29 20:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,7 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
 
         if ( mpFrameData->mpFocusWin )
         {
-            if ( mpFrameData->mpFocusWin->IsEnabled() )
+            if ( mpFrameData->mpFocusWin->IsEnabled() && mpFrameData->mpFocusWin->IsInputEnabled() )
                 mpFrameData->mpFocusWin->GrabFocus();
             else
                 mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow()->GrabFocus();
