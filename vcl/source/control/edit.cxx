@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-30 13:44:07 $
+ *  last change: $Author: mt $ $Date: 2002-01-18 08:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,8 +401,22 @@ Edit::~Edit()
     if ( mpUpdateDataTimer )
         delete mpUpdateDataTimer;
 
-//    GetDragGestureRecognizer()->removeDragGestureListener( this );
-//    GetDropTarget()->removeDropTargetListener( this );
+    if ( mxDnDListener.is() )
+    {
+        if ( GetDragGestureRecognizer().is() )
+        {
+            uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
+            GetDragGestureRecognizer()->removeDragGestureListener( xDGL );
+        }
+        if ( GetDropTarget().is() )
+        {
+            uno::Reference< datatransfer::dnd::XDropTargetListener> xDTL( mxDnDListener, uno::UNO_QUERY );
+            GetDropTarget()->removeDropTargetListener( xDTL );
+        }
+
+        uno::Reference< lang::XEventListener> xEL( mxDnDListener, uno::UNO_QUERY );
+        xEL->disposing( lang::EventObject() );  // #95154# #96585# Empty Source means it's the Client
+    }
 }
 
 // -----------------------------------------------------------------------
