@@ -25,7 +25,7 @@ Sub InsertCompanyHistory()
 Dim StockName as String
 Dim CurRow as Integer
 Dim sMsgInternetError as String
-Dim CurRate
+Dim CurRate as Double
 Dim oCell as Object
 Dim sStockID as String
 Dim ChartSource as String	
@@ -91,7 +91,7 @@ Dim StocksCount as Integer
 Dim iStartRow as Integer
 Dim sUrl as String
 Dim StockName as String		
-Dim CurRate
+Dim CurRate as Double
 Dim oCell as Object
 Dim sMsgInternetError as String
 Dim sStockID as String
@@ -200,7 +200,6 @@ Dim iCellValue as Long
 	If RemoveCount &gt; 1 Then
 		oSheet.Rows.RemoveByIndex(iCurRow, RemoveCount-1)
 	End If
-	CurDate = EndDate
 	For i = 1 To iLastLinkRow
 		oCell = oSheet.GetCellbyPosition(SBDATECOLUMN,iCurRow)
 		iCellValue = oLinkSheet.GetCellByPosition(0,i).Value
@@ -209,11 +208,8 @@ Dim iCellValue as Long
 		Else
 			oCell.SetValue(StringToDate(oLinkSheet.GetCellByPosition(0,i).String)
 		End If
-		oCell.SetValue(CurDate)
-		CurDate = CurDate - iStep
 		oCell = oSheet.GetCellbyPosition(SBVALUECOLUMN,iCurRow)
 		oCell.SetValue(oLinkSheet.GetCellByPosition(4,i).Value)
-		
 		If i &lt; iLastLinkRow Then
 			iCurRow = iCurRow + 1
 			oSheet.Rows.InsertByIndex(iCurRow,1)
@@ -339,4 +335,5 @@ Dim bLeaveLoop as Boolean
 		oDateCell = oSheet.GetCellbyPosition(SBDATECOLUMN, SBSTARTROW + i-1)
 		oDateCell.Annotation.SetString(NoteText)
 	End If
-End Sub</script:module>
+End Sub
+</script:module>
