@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:49:20 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
+#endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
 #endif
 #ifndef _AVMEDIA_MEDIAPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
@@ -688,14 +691,17 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             break;
 
         case SID_FONTWORK_SHAPE:
+        case SID_FONTWORK_SHAPE_TYPE:
+        case SID_FONTWORK_SHAPE_TYPES:
         case SID_FONTWORK_ALIGNMENT:
+        case SID_FONTWORK_SAME_LETTER_HEIGHTS:
         case SID_FONTWORK_CHARACTER_SPACING:
         case SID_FONTWORK_KERN_CHARACTER_PAIRS:
         case SID_FONTWORK_GALLERY_FLOATER:
-        case SID_FONTWORK_SHAPE_FLOATER:
         case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
         case SID_FONTWORK_ALIGNMENT_FLOATER:
-            svx::FontworkBar::execute( pDrView, rReq );
+        case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
+            svx::FontworkBar::execute( pDrView, rReq, GetViewFrame()->GetBindings() );
             Cancel();
             rReq.Ignore ();
             break;
