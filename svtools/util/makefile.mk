@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.45 $
+#*  $Revision: 1.46 $
 #*
-#*  last change: $Author: hjs $ $Date: 2003-08-18 14:55:11 $
+#*  last change: $Author: vg $ $Date: 2004-01-06 19:34:38 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -81,9 +81,6 @@ USE_LDUMP2=TRUE
 LIB1TARGET= $(LB)$/svmem.lib
 LIB1ARCHIV=  $(LB)$/libsvarray.a
 LIB1FILES=	$(LB)$/svarray.lib
-
-LIB2TARGET=   $(LB)$/filearch.lib
-LIB2OBJFILES= $(OBJ)$/filearch.obj
 
 .IF "$(GUI)"!="UNX"
 LIB3TARGET= $(LB)$/svtool.lib
