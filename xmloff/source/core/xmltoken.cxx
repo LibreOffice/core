@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: dvo $ $Date: 2004-07-15 13:24:20 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2444,7 +2444,10 @@ namespace xmloff { namespace token {
         TOKEN( "cubic-spline" ),            // XML_CUBIC_SPLINE
         TOKEN( "b-spline" ),                // XML_B_SPLINE
 
-        { 0, NULL, NULL }                      // XML_TOKEN_END
+        TOKEN( "show-filter-button"),               // XML_SHOW_FILTER_BUTTON,
+        TOKEN( "drill-down-on-double-click"),       // XML_DRILL_DOWN_ON_DOUBLE_CLICK,
+
+        { 0, NULL, NULL }                       // XML_TOKEN_END
     };
 
 
