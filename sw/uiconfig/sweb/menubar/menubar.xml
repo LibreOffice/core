@@ -306,8 +306,13 @@
                     <menu:menuitem menu:id=".uno:SpellOnline" menu:helpid="12021" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
-            <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
-            <menu:menuitem menu:id=".uno:ThesaurusDialog" menu:helpid="20603" menu:label="" />
+            <menu:menu menu:id=".uno:LanguageMenu" menu:label="" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:HangulHanjaConversion" menu:helpid="10959" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ChineseConversion" menu:helpid="10999" menu:label="" />
+                    <menu:menuitem menu:id=".uno:ThesaurusDialog" menu:helpid="20603" menu:label="" />
+                </menu:menupopup>
+            </menu:menu>
             <menu:menuitem menu:id=".uno:WordCountDialog" menu:helpid="22298" menu:label="" />
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:AutoCorrectDlg" menu:helpid="10424" menu:label="" />
