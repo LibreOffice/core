@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:13:09 $
+ *  last change: $Author: tl $ $Date: 2002-06-19 11:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3291,7 +3291,9 @@ MakeObject:
                 break;
                 case FN_PARAM_FTN_INFO :
                 {
-                    const SfxPoolItem& rItem = aBase.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                    SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
+                    const SfxItemSet& rSet = aStyle.GetItemSet();
+                    const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
                     rItem.QueryValue(pRet[nProp], pMap->nMemberId);
                 }
                 break;
