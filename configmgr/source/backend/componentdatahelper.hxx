@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,33 +75,13 @@
 #include "stack.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/TemplateIdentifier.hpp>
-#include <drafts/com/sun/star/configuration/backend/MalformedDataException.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_TEMPLATEIDENTIFIER_HPP_
+#include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_MALFORMEDDATAEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/MalformedDataException.hpp>
+#endif
 
-#ifndef _COM_SUN_STAR_LANG_NOSUPPORTEXCEPTION_HPP_
-#include <com/sun/star/lang/NoSupportException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalAccessException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
-#include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
-#include <com/sun/star/container/ElementExistException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_ILLEGALTYPEEXCEPTION_HPP_
-#include <com/sun/star/beans/IllegalTypeException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYEXISTEXCEPTION_HPP_
-#include <com/sun/star/beans/PropertyExistException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
-#include <com/sun/star/beans/UnknownPropertyException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
@@ -126,14 +106,10 @@ namespace configmgr
     namespace backend
     {
 // -----------------------------------------------------------------------------
-        namespace uno       = ::com::sun::star::uno;
-        namespace beans     = ::com::sun::star::beans;
-        namespace container = ::com::sun::star::container;
-
-        namespace backenduno = ::drafts::com::sun::star::configuration::backend;
+        namespace uno        = ::com::sun::star::uno;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 
         using  backenduno::TemplateIdentifier;
-        using  backenduno::MalformedDataException;
 
         using ::rtl::OUString;
 
@@ -158,15 +134,15 @@ namespace configmgr
             OUString    getActiveComponent()    const { return m_aActiveComponent; }
 
             ISubtree &          getCurrentParent()
-                CFG_THROW2( MalformedDataException, uno::RuntimeException )
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
                 { return implGetCurrentParent(); }
 
             ISubtree const &    getCurrentParent() const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException )
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
                 { return implGetCurrentParent(); }
 
             node::Attributes    getCurrentAttributes() const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException )
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException )
                 { return implGetCurrentParent().getAttributes(); }
 
             OUString getTemplateComponent(TemplateIdentifier const & aItemType ) const;
@@ -175,14 +151,14 @@ namespace configmgr
             TemplateIdentifier completeComponent(TemplateIdentifier const & aItemType ) const;
 
             TemplateIdentifier getCurrentItemType() const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             TemplateIdentifier getValidItemType(TemplateIdentifier const & aItemType) const
-                CFG_THROW3( MalformedDataException, beans::IllegalTypeException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void startActiveComponent(OUString const & _aComponent)
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void endActiveComponent()
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             bool isProperty(INode * pProp) const
                 CFG_UNO_THROW_RTE();
@@ -193,12 +169,12 @@ namespace configmgr
             void pushNode(ISubtree * pTree)
                 CFG_UNO_THROW_RTE();
             void popNode()
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             INode    * findProperty(OUString const & _aName)
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             ISubtree * findNode(OUString const & _aName)
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             bool isWritable(INode const * pNode) const
                 CFG_NOTHROW(  );
@@ -206,40 +182,40 @@ namespace configmgr
                 CFG_NOTHROW(  );
 
             ISubtree  * addNodeToCurrent(std::auto_ptr<ISubtree>  _aNode)
-                CFG_THROW3( MalformedDataException, container::ElementExistException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             ISubtree  * addLocalizedToCurrent(std::auto_ptr<ISubtree>  _aNode)
-                CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace = false)
-                CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             void raiseMalformedDataException    (sal_Char const * _pText) const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseNoSupportException        (sal_Char const * _pText) const
-                CFG_UNO_THROW1( lang::NoSupportException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseIllegalAccessException    (sal_Char const * _pText) const
-                CFG_UNO_THROW1( lang::IllegalAccessException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseIllegalArgumentException  (sal_Char const * _pText, sal_Int16 _nPos = 0) const
-                CFG_UNO_THROW1( lang::IllegalArgumentException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseElementExistException     (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( container::ElementExistException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseNoSuchElementException    (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( container::NoSuchElementException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseUnknownPropertyException  (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( beans::UnknownPropertyException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raisePropertyExistException    (sal_Char const * _pText, OUString const & _sElement) const
-                CFG_UNO_THROW1( beans::PropertyExistException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             void raiseIllegalTypeException  (sal_Char const * _pText) const
-                CFG_UNO_THROW1( beans::IllegalTypeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             TemplateResult getTemplateData (TemplateRequest const & _aRequest  );
         private:
             INode * findChild(OUString const & _aName)
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
             OUString makeMessageWithName(sal_Char const * _pText, OUString const & _aName) const
                 CFG_UNO_THROW_RTE(  );
 
             ISubtree & implGetCurrentParent() const
-                CFG_THROW2( MalformedDataException, uno::RuntimeException );
+                CFG_UNO_THROW1( configuration::backend::MalformedDataException );
 
         };
 // -----------------------------------------------------------------------------
