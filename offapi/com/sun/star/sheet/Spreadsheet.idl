@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Spreadsheet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:02:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,6 @@
 #include <com/sun/star/sheet/XSheetPageBreak.idl>
 #endif
 
-#ifndef __com_sun_star_sheet_XScenario_idl__
-#include <com/sun/star/sheet/XScenario.idl>
-#endif
-
 #ifndef __com_sun_star_sheet_XSheetOutline_idl__
 #include <com/sun/star/sheet/XSheetOutline.idl>
 #endif
@@ -124,6 +120,10 @@
 
 #ifndef __com_sun_star_sheet_XSheetLinkable_idl__
 #include <com/sun/star/sheet/XSheetLinkable.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_Scenario_idl__
+#include <com/sun/star/sheet/Scenario.idl>
 #endif
 
 //=============================================================================
@@ -146,6 +146,10 @@ service Spreadsheet
     /** provides functionality for cell range handling.
      */
     service com::sun::star::sheet::SheetCellRange;
+
+    //=========================================================================
+
+    [optional] service com::sun::star::sheet::Scenario;
 
     //=========================================================================
 
@@ -177,7 +181,7 @@ service Spreadsheet
      */
     interface com::sun::star::sheet::XScenariosSupplier;
 
-    //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
 
     /** provides access to the collection of annotations.
      */
@@ -216,12 +220,6 @@ service Spreadsheet
 
     //-------------------------------------------------------------------------
 
-    /** provides methods for a scenario sheet.
-     */
-    interface com::sun::star::sheet::XScenario;
-
-    //-------------------------------------------------------------------------
-
     /** provides access to row and column outline settings.
      */
     interface com::sun::star::sheet::XSheetOutline;
@@ -237,6 +235,10 @@ service Spreadsheet
     /** provides methods for a linked sheet.
      */
     interface com::sun::star::sheet::XSheetLinkable;
+
+    //-------------------------------------------------------------------------
+
+    interface com::sun::star::sheet::XScenario;
 
     //=========================================================================
 
