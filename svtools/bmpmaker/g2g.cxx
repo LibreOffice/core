@@ -2,9 +2,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-26 09:33:34 $
+ *  last change: $Author: ka $ $Date: 2001-09-26 11:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <cstdio>
 #include <csignal>
+#include <ctype.h>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -73,6 +74,8 @@
 #define EXIT_INVALID_INPUTGRAPHIC   0x00000008
 #define EXIT_OUTPUTERROR            0x00000010
 
+#define LOWERHEXTONUM( _def_Char )  (((_def_Char)<='9') ? ((_def_Char)-'0') : ((_def_Char)-'a'+10))
+
 // ----------
 // - G2GApp -
 // ----------
@@ -81,16 +84,11 @@ class G2GApp : public Application
 {
 private:
 
-    String          aOutputFileName;
     BYTE            cExitCode;
 
     void            ShowUsage();
     BOOL            GetCommandOption( const String& rSwitch, String& rSwitchParam );
-    void            SetExitCode( BYTE cExit )
-                    {
-                        if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
-                            cExitCode = cExit;
-                    }
+    void            SetExitCode( BYTE cExit ) { if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) ) cExitCode = cExit; }
 
     virtual void    Message( const String& rText, BYTE cExitCode = EXIT_NOERROR );
 
@@ -151,14 +149,15 @@ void G2GApp::Message( const String& rText, BYTE cExitCode )
 
 void G2GApp::ShowUsage()
 {
-    Message( String() );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "usage:   g2g inputfile outputfile -f filter [ -# RRGGBB ]" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "param:   inputfile: complete path to input image" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "param:   outputfile: complete path to output image" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "param:   -f: short name of filter to use ( e.g. gif, png org jpg )" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "param:   -#: optional transparent color as hex value" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "example: g2g /home/test.bmp /home/test.jpg -f jpg" ) ) );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "example: g2g /home/test.bmp /home/test.gif -f gif -# C0C0C0" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    g2g inputfile outputfile -format exportformat -filterpath path [ -# RRGGBB ]" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -format       short name of export filter to use ( e.g. gif, png, jpg, ... )" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -filterpath   path to externally loaded filter libraries" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -#            hex value of color to be set transparent in export file (optional)" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    g2g /home/test.bmp /home/test.jpg -format jpg -filterpath /home/filter" ) ) );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    g2g /home/test.bmp /home/test.gif -format gif -filterpath /home/filter -# C0C0C0" ) ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -170,19 +169,18 @@ void G2GApp::Main( )
 
     cExitCode = EXIT_NOERROR;
 
-    if( !getenv( "STAR_RESOURCEPATH" ) )
-        Message( String( RTL_CONSTASCII_USTRINGPARAM( "STAR_RESOURCEPATH environment variable not set" ) ), EXIT_INVALID_FILE );
-    else if( nCmdCount >= 3 )
+    if( nCmdCount >= 6 )
     {
         GraphicFilter   aFilter( sal_False );
-        String          aInFile, aOutFile, aFilterStr, aTransColStr;
-
-        aFilter.SetFilterPath( String( getenv( "STAR_RESOURCEPATH" ), RTL_TEXTENCODING_ASCII_US ) );
+        String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
 
         aInFile = GetCommandLineParam( nCurCmd++ );
         aOutFile = GetCommandLineParam( nCurCmd++ );
-        GetCommandOption( 'f', aFilterStr );
+        GetCommandOption( String( RTL_CONSTASCII_USTRINGPARAM( "format" ) ), aFilterStr );
+        GetCommandOption( String( RTL_CONSTASCII_USTRINGPARAM( "filterpath" ) ), aFilterPath );
         GetCommandOption( '#', aTransColStr );
+
+        aFilter.SetFilterPath( aFilterPath );
 
         if( aInFile.Len() && aOutFile.Len() && aFilterStr.Len() )
         {
@@ -204,6 +202,35 @@ void G2GApp::Main( )
                     {
                         SvFileStream aOutStm( aOutFile, STREAM_WRITE | STREAM_TRUNC );
 
+                        if( ( aTransColStr.Len() == 6 ) && aFilter.IsExportPixelFormat( nExportFilter ) )
+                        {
+                            ByteString  aHexStr( aTransColStr, RTL_TEXTENCODING_ASCII_US );
+                            sal_Bool    bHex = sal_True;
+
+                            aHexStr.ToLowerAscii();
+
+                            for( sal_uInt16 i = 0; ( i < 6 ) && bHex; i++ )
+                                if( !isxdigit( aHexStr.GetChar( i ) ) )
+                                    bHex = sal_False;
+
+                            if( bHex )
+                            {
+                                const BYTE cTransR = ( LOWERHEXTONUM( aHexStr.GetChar( 0 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 1 ) );
+                                const BYTE cTransG = ( LOWERHEXTONUM( aHexStr.GetChar( 2 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 3 ) );
+                                const BYTE cTransB = ( LOWERHEXTONUM( aHexStr.GetChar( 4 ) ) << 4 ) | LOWERHEXTONUM( aHexStr.GetChar( 5 ) );
+
+                                BitmapEx    aBmpEx( aGraphic.GetBitmapEx() );
+                                Bitmap      aOldBmp( aBmpEx.GetBitmap() );
+                                Bitmap      aOldMask( aBmpEx.GetMask() );
+                                Bitmap      aNewMask( aOldBmp.CreateMask( Color( cTransR, cTransG, cTransB ) ) );
+
+                                if( !aOldMask.IsEmpty() )
+                                    aNewMask.CombineSimple( aOldMask, BMP_COMBINE_OR );
+
+                                aGraphic = BitmapEx( aOldBmp, aNewMask );
+                            }
+                        }
+
                         aFilter.ExportGraphic( aGraphic, aOutFile, aOutStm, nExportFilter );
 
                         if( aOutStm.GetError() )
@@ -218,10 +245,7 @@ void G2GApp::Main( )
         }
     }
     else
-    {
         ShowUsage();
-        Message( String(), EXIT_COMMONERROR );
-    }
 
     if( EXIT_NOERROR != cExitCode )
         raise( SIGABRT );
