@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 10:50:28 $
+ *  last change: $Author: ka $ $Date: 2001-09-05 12:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,45 +453,7 @@ void SdDrawViewShell::MouseButtonUp(const MouseEvent& rMEvt, SdWindow* pWin)
             bIsRulerDrag = FALSE;
         }
         else
-        {
-            const BOOL bNativeShow = pFuSlideShow &&
-                                     ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) &&
-                                     !pFuSlideShow->IsLivePresentation();
-
-            // paste of selection?
-            if( rMEvt.IsMiddle() && !bNativeShow &&
-                ( Application::GetSettings().GetMouseSettings().GetMiddleButtonAction() & MOUSE_MIDDLE_PASTESELECTION ) )
-            {
-                TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( pWindow ) );
-
-                if( aDataHelper.GetTransferable().is() )
-                {
-                    Point       aPos;
-                    sal_Int8    nDnDAction = DND_ACTION_COPY;
-
-                    if( pWindow )
-                        aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-
-                    if( !pDrView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
-                    {
-                        String          aEmptyStr;
-                        INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
-
-                        if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
-                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
-                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
-                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
-                        {
-                            InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
-                        }
-                    }
-                }
-            }
-            else
-                SdViewShell::MouseButtonUp(rMEvt, pWin);
-        }
+            SdViewShell::MouseButtonUp(rMEvt, pWin);
     }
 }
 
@@ -509,9 +471,37 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
                                  ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) &&
                                  !pFuSlideShow->IsLivePresentation();
 
-        if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
-             pWin != NULL && !pDrView->IsAction() &&
-             !SD_MOD()->GetWaterCan() && !bNativeShow )
+        if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
+        {
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSelection( pWindow ) );
+
+            if( aDataHelper.GetTransferable().is() )
+            {
+                Point       aPos;
+                sal_Int8    nDnDAction = DND_ACTION_COPY;
+
+                if( pWindow )
+                    aPos = pWindow->PixelToLogic( rCEvt.GetMousePosPixel() );
+
+                if( !pDrView->InsertData( aDataHelper, aPos, nDnDAction, FALSE ) )
+                {
+                    String          aEmptyStr;
+                    INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
+
+                    if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                        ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                          aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                    {
+                        InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                    }
+                }
+            }
+        }
+        else if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU && !bNativeShow &&
+                 pWin != NULL && !pDrView->IsAction() && !SD_MOD()->GetWaterCan() )
         {
             USHORT nSdResId = 0;          // ResourceID fuer Popup-Menue
             BOOL bGraphicShell = this->ISA( SdGraphicViewShell );
