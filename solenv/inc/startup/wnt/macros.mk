@@ -38,15 +38,14 @@ V *:= 		# RCS suffix
    SHELLMETAS       *:= "<>|
 #   GROUPSUFFIX      *:= .cmd
    GROUPSUFFIX      *:= .bat
-   DIVFILE          *=  $(TMPFILE:s,/,\)
-#   DIVFILE          *=  $(TMPFILE:s,/,\)
+   DIVFILE          *=  $(TMPFILE:s,/,\,)
    RM               *=  del
 #   RM               *=  +-del
    RMFLAGS          *= /y
    MV	            *=  rename
    __.DIVSEP-sh-yes *:= \\
    __.DIVSEP-sh-no  *:= \\
-    DIRSEPSTR		:=	\
+   DIRSEPSTR        := \\
 #	/ 				*=  $(DIRSEPSTR)$(DIRSEPSTR)
    PWD:=$(shell +echo %_cwd)
 .EXPORT : PWD
