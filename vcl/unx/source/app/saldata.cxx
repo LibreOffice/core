@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-03 16:37:24 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,14 @@
 #include <strings.h>
 #endif
 
-#include <prex.h>
-#include <X11/Shell.h>
-#include <X11/Xproto.h>
-#include <postx.h>
-
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
 #endif
 
-#include <salunx.h>
+#include <svunx.h>
+#include <prex.h>
+#include <X11/Xproto.h>
+#include <postx.h>
 
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
@@ -320,25 +318,6 @@ static int sal_XIOErrorHdl( Display *pDisplay )
     return 0;
 }
 
-static void sal_XtErrorHdl( XLIB_String sMsg )
-{
-#ifdef DBG_UTIL
-    fprintf( stderr, "X Toolkit Error: %s\n", sMsg );
-#endif
-    fflush( stdout );
-    fflush( stderr );
-    abort();
-}
-
-static void sal_XtWarningHdl( XLIB_String sMsg )
-{
-#ifdef DBG_UTIL
-    fprintf( stderr, "X Toolkit Warning: %s\n", sMsg );
-    fflush( stdout );
-    fflush( stderr );
-#endif
-}
-
 END_C
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -441,7 +420,6 @@ void SalData::Init( int *pArgc, char *ppArgv[] )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalXLib::SalXLib()
 {
-    pApplicationContext_    = NULL;
     Timeout_.tv_sec         = 0;
     Timeout_.tv_usec        = 0;
     nTimeoutMS_             = 0;
@@ -475,19 +453,8 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
 
     pInputMethod->SetLocale();
 
-    XtSetLanguageProc( NULL, NULL, NULL );
-    XtToolkitInitialize();
     XrmInitialize();
-    pApplicationContext_ = XtCreateApplicationContext();
-
-    Display *pDisp = XtOpenDisplay( pApplicationContext_,
-                                    NULL,
-                                    NULL,
-                                    "VCL",
-                                    NULL,
-                                    0,
-                                    pArgc,
-                                    ppArgv );
+    Display *pDisp = XOpenDisplay( NULL );
 
     if( !pDisp )
     {
@@ -533,28 +500,10 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
                                    aVI.visual,
                                    AllocNone );
 
-    Arg aArgs[10];
-    int nArgs = 0;
-     XtSetArg( aArgs[nArgs], XtNvisual,     aVI.visual  );  nArgs++;
-     XtSetArg( aArgs[nArgs], XtNdepth,      aVI.depth   );  nArgs++;
-     XtSetArg( aArgs[nArgs], XtNcolormap,   aColMap     );  nArgs++;
-
-    Widget wInitWidget = XtAppCreateShell( NULL,
-                                           "SAL",
-                                           applicationShellWidgetClass,
-                                           pDisp,
-                                           aArgs, nArgs );
-
-
     XSetIOErrorHandler    ( (XIOErrorHandler)sal_XIOErrorHdl );
     XSetErrorHandler      ( (XErrorHandler)sal_XErrorHdl );
 
-    XtAppSetErrorHandler  ( GetAppContext(),
-                            (XtErrorHandler)sal_XtErrorHdl );
-    XtAppSetWarningHandler( GetAppContext(),
-                            (XtErrorHandler)sal_XtWarningHdl );
-
-    SalDisplay *pSalDisplay = new SalDisplay( wInitWidget );
+    SalDisplay *pSalDisplay = new SalDisplay( pDisp, aVI.visual, aColMap );
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
@@ -569,12 +518,6 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
     SetIgnoreXErrors( bOldErrorSetting );
 
     pSalDisplay->SetKbdExtension( pKbdExtension );
-
-#if 0 // ! USE_XTOOLKIT
-
-    SalDisplay *pSalDisplay = new SalDisplay( pDisp, aVI.visual, aColMap );
-
-#endif
 }
 
 extern "C" {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-24 16:04:32 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 // ------------
 // - Lib-Name -

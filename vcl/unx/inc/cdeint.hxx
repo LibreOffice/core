@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-20 11:05:08 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,94 +65,11 @@
 #include <dtint.hxx>
 #endif
 
-#include <prex.h>
-#define Boolean XLIB_Boolean
-#define Window  XLIB_Window
-#include <X11/Intrinsic.h>
-#include <dt/dt.h>
-#include <dt/action.h>
-#include <dt/wsm.h>
-#undef Boolean
-#undef Window
-#include <postx.h>
-
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
-#endif
 class CDEIntegrator : public DtIntegrator
 {
     friend DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* );
 private:
-    static void*        pDtSvcLib;
-    static void*        pXmLib;
-    static void*        pMrmLib;
-    static void*        pXtLib;
-    static void*        pttLib;
-    static int          nRefCount;
-    static char*        pFallbackRes[];
-
-    // function pointers
-    // from DtSvc
-    static XLIB_Boolean (*pDtAppInitialize)
-        ( XtAppContext, Display*, Widget, char*, char* );
-    static void         (*pDtDtsLoadDataTypes)();
-    static void         (*pDtDtsRelease)();
-    static char*        (*pDtDtsFileToAttributeValue)
-        (const char*,const char*);
-    static void         (*pDtDtsFreeAttributeValue)( char* );
-    static DtActionInvocationID (*pDtActionInvoke)
-        ( Widget, char*, DtActionArg*, int, char*, char*, char*, int,
-          DtActionCallbackProc, XtPointer );
-    static Status       (*pDtWsmGetWorkspaceInfo)( Display*, XLIB_Window, Atom,
-                                                   DtWsmWorkspaceInfo** );
-    static void         (*pDtWsmFreeWorkspaceInfo)( DtWsmWorkspaceInfo* );
-    static Status       (*pDtWsmGetWorkspaceList)( Display*, XLIB_Window, Atom**,
-                                                   int* );
-    static Status       (*pDtWsmGetCurrentWorkspace)( Display*, XLIB_Window root, Atom* );
-    static Status       (*pDtWsmGetWorkspacesOccupied)( Display*, XLIB_Window, Atom**, unsigned long* );
-
-    // from Mrm
-    static void         (*pMrmInitialize)();
-
-    // from Xm
-    static WidgetClass* CDEIntegrator::pxmDrawingAreaWidgetClass;
-    static WidgetClass* CDEIntegrator::pxmRowColumnWidgetClass;
-    static WidgetClass* CDEIntegrator::pxmPushButtonWidgetClass;
-
-    // from Xt
-    static void         (*pXtToolkitInitialize)();
-    static XtAppContext (*pXtCreateApplicationContext)();
-    static Widget       (*pXtAppCreateShell)( char*, char*, WidgetClass,
-                                       Display*, ArgList, Cardinal );
-    static Widget       (*pXtVaCreateManagedWidget)( char*, WidgetClass,
-                                                     Widget, ... );
-    static void         (*pXtDisplayInitialize)( XtAppContext, Display*,
-                                                 char*, char*,
-                                                 XrmOptionDescRec*, Cardinal,
-                                                 int*, char**);
-    static Widget       (*pXtSetLanguageProc)( XtAppContext, XtLanguageProc, XtPointer );
-    static void         (*pXtAppSetFallbackResources)( XtAppContext, char** );
-    static Widget       (*pXtAppInitialize)(XtAppContext*, char*,
-                                            XrmOptionDescList,
-                                            Cardinal, int*, char**, char**,
-                                            ArgList, Cardinal );
-    static void         (*pXtRealizeWidget)( Widget );
-    static void         (*pXtUnrealizeWidget)( Widget );
-    static XLIB_Boolean (*pXtIsRealized)( Widget );
-    static void         (*pXtConfigureWidget)
-        ( Widget, Position, Position, Dimension, Dimension, Dimension );
-    static void         (*pXtAppProcessEvent)( XtAppContext, XtInputMask );
-    static XtInputMask  (*pXtAppPending)( XtAppContext );
-    static WidgetClass* pAppShellClass;
-
-
-    XtAppContext        maAppContext;
-    Widget              maAppWidget;
-
     CDEIntegrator( SalFrame* );
-
-    void GlobalInit();
-    void GlobalDeInit();
 
 public:
     virtual ~CDEIntegrator();

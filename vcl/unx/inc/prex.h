@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.7 $  $Author: pl $  $Date: 2001-08-27 09:42:34 $    //
+// $Revision: 1.8 $  $Author: pl $  $Date: 2001-10-24 16:32:21 $    //
 //                                                                            //
 // $Workfile:   prex.h  $                                                     //
 //  $Modtime:   08 Aug 1997 10:13:54  $                                       //
@@ -101,33 +101,17 @@ struct _XDisplay;
 #if defined __cplusplus && ! defined LINUX
 extern "C" {
 #endif
-
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-
-#ifdef SOLARIS
-#define USE_MOTIF
-#else
-#define USE_ATHENA
-#endif
+typedef unsigned long Pixel;
 
 #undef  DestroyAll
 #define DestroyAll      XLIB_DestroyAll
 #define XLIB_DestroyAll 0
 #undef  String
 #define String          XLIB_String
-#include <X11/IntrinsicP.h>
-#include <X11/Shell.h>
-#ifdef USE_MOTIF
-#include <Xm/BulletinB.h>
-#define SAL_COMPOSITE_WIDGET xmBulletinBoardWidgetClass
-#endif
-#ifdef USE_ATHENA
-#include <X11/Xaw/Box.h>
-#define SAL_COMPOSITE_WIDGET boxWidgetClass
-#endif
-#undef  XtInheritTranslations
-#define XtInheritTranslations  ((XLIB_String) (&_XtInheritTranslations))
 
 #undef  KeyCode
 #define KeyCode         XLIB_KeyCode //undef in intrinsics
@@ -138,7 +122,6 @@ extern "C" {
       #include <X11/X.h>
       #include <X11/Xlib.h>
       #include <X11/Xutil.h>
-      #include <X11/Intrinsic.h>
 
       Bool XSalIsDisplay( Display *p_display );
       Bool XSalIsPrinter( Display *p_display );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-20 11:05:09 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,232 +64,24 @@
 #include <sys/wait.h>
 #include <salunx.h>
 #include <saldisp.hxx>
+#include <cdeint.hxx>
 #include <salbmp.hxx>
 #include <salframe.hxx>
-#include <cdeint.hxx>
 #include <soicon.hxx>
 #include <strhelper.hxx>
+#include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
-void*   CDEIntegrator::pDtSvcLib = 0;
-void*   CDEIntegrator::pXtLib = 0;
-void*   CDEIntegrator::pXmLib = 0;
-void*   CDEIntegrator::pMrmLib = 0;
-void*   CDEIntegrator::pttLib = 0;
-int     CDEIntegrator::nRefCount = 0;
-char*   CDEIntegrator::pFallbackRes[] = {
-    "title:                 OfficeCDEIntegrationShell",
-    NULL
-};
-static char *ppDummyArgv[] = { "soffice.bin", NULL };
-static int  nDummyArgc = 1;
-
-// function pointers
-// from DtSvc
-XLIB_Boolean    (*CDEIntegrator::pDtAppInitialize)
-    ( XtAppContext, Display*, Widget, char*, char* ) = 0;
-void            (*CDEIntegrator::pDtDtsLoadDataTypes)() = 0;
-void            (*CDEIntegrator::pDtDtsRelease)() = 0;
-char*           (*CDEIntegrator::pDtDtsFileToAttributeValue)
-    (const char*,const char*) = 0;
-void            (*CDEIntegrator::pDtDtsFreeAttributeValue)( char* ) = 0;
-Status      (*CDEIntegrator::pDtWsmGetWorkspaceInfo)( Display*, XLIB_Window, Atom,
-                                                      DtWsmWorkspaceInfo** ) = 0;
-void        (*CDEIntegrator::pDtWsmFreeWorkspaceInfo)( DtWsmWorkspaceInfo* ) = 0;
-Status      (*CDEIntegrator::pDtWsmGetWorkspaceList)( Display*, XLIB_Window, Atom**,
-                                                      int* ) = 0;
-Status      (*CDEIntegrator::pDtWsmGetCurrentWorkspace)( Display*, XLIB_Window root, Atom* ) = 0;
-Status      (*CDEIntegrator::pDtWsmGetWorkspacesOccupied)( Display*, XLIB_Window, Atom**, unsigned long* ) = 0;
-
-// from Mrm
-void            (*CDEIntegrator::pMrmInitialize)() = 0;
-
-// from Xm
-WidgetClass* CDEIntegrator::pxmDrawingAreaWidgetClass = 0;
-WidgetClass* CDEIntegrator::pxmRowColumnWidgetClass = 0;
-WidgetClass* CDEIntegrator::pxmPushButtonWidgetClass = 0;
-
-// from Xt
-void            (*CDEIntegrator::pXtToolkitInitialize)() = 0;
-XtAppContext    (*CDEIntegrator::pXtCreateApplicationContext)() = 0;
-Widget          (*CDEIntegrator::pXtAppCreateShell)
-    ( char*, char*, WidgetClass, Display*, ArgList, Cardinal ) = 0;
-Widget          (*CDEIntegrator::pXtVaCreateManagedWidget)
-    ( char*, WidgetClass, Widget, ... ) = 0;
-void            (*CDEIntegrator::pXtDisplayInitialize)
-    ( XtAppContext, Display*, char*, char*, XrmOptionDescRec*, Cardinal,
-      int*, char**) = 0;
-void            (*CDEIntegrator::pXtAppSetFallbackResources)
-    ( XtAppContext, char** ) = 0;
-Widget          (*CDEIntegrator::pXtAppInitialize)
-    (XtAppContext*, char*, XrmOptionDescList, Cardinal, int*, char**, char**,
-     ArgList, Cardinal ) = 0;
-Widget          (*CDEIntegrator::pXtSetLanguageProc)
-    ( XtAppContext, XtLanguageProc, XtPointer ) = 0;
-DtActionInvocationID (*CDEIntegrator::pDtActionInvoke)
-    ( Widget, char*, DtActionArg*, int, char*, char*, char*, int,
-      DtActionCallbackProc, XtPointer ) = 0;
-void            (*CDEIntegrator::pXtRealizeWidget)( Widget ) = 0;
-void            (*CDEIntegrator::pXtUnrealizeWidget)( Widget ) = 0;
-XLIB_Boolean            (*CDEIntegrator::pXtIsRealized)( Widget ) = 0;
-void            (*CDEIntegrator::pXtConfigureWidget)
-    ( Widget, Position, Position, Dimension, Dimension, Dimension ) = 0;
-void            (*CDEIntegrator::pXtAppProcessEvent)
-    ( XtAppContext, XtInputMask ) = 0;
-XtInputMask     (*CDEIntegrator::pXtAppPending)( XtAppContext ) = 0;
-WidgetClass*    CDEIntegrator::pAppShellClass = 0;
-
-
 CDEIntegrator::CDEIntegrator( SalFrame* pFrame ) :
-        DtIntegrator( pFrame ),
-        maAppWidget( 0 )
+        DtIntegrator( pFrame )
 {
     meType = DtCDE;
-    if( ! nRefCount )
-        GlobalInit();
-    nRefCount++;
-
-    maAppWidget = pFrame->maFrameData.GetWidget();
-    SalDisplay *pDisp = pFrame->maFrameData.GetDisplay();
-    SalXLib    *pXlib = pDisp->GetXLib();
-    maAppContext = pXlib->GetAppContext ();
-
-    pDtAppInitialize( maAppContext, mpDisplay, maAppWidget,
-                      ppDummyArgv[ 0 ], "Office" );
-
-    pDtDtsLoadDataTypes();
+    mnRefCount++;
 }
 
 CDEIntegrator::~CDEIntegrator()
 {
-    nRefCount--;
-    if( ! nRefCount )
-        GlobalDeInit();
-}
-
-void CDEIntegrator::GlobalInit()
-{
-    if( ! pDtSvcLib )
-        pDtSvcLib = _LoadLibrary( "libDtSvc.so" );
-    if( ! pttLib )
-        pttLib = _LoadLibrary( "libtt.so" );
-    if( ! pXmLib )
-        pXmLib = _LoadLibrary( "libXm.so" );
-    if( ! pMrmLib )
-        pMrmLib = _LoadLibrary( "libMrm.so" );
-    if( ! pXtLib )
-        pXtLib  = _LoadLibrary( "libXt.so" );
-
-    if( pDtSvcLib && pXtLib && pttLib && pXmLib && pMrmLib )
-    {
-        bSymbolLoadFailed = FALSE;
-
-        pDtAppInitialize     = (XLIB_Boolean (*)( XtAppContext, Display*,
-                                                  Widget, char*, char* ))
-            _LoadSymbol( pDtSvcLib, "DtAppInitialize" );
-        pDtDtsLoadDataTypes  = (void (*)())
-            _LoadSymbol( pDtSvcLib, "DtDtsLoadDataTypes" );
-        pDtDtsRelease        = (void    (*)())
-            _LoadSymbol( pDtSvcLib, "DtDtsRelease" );
-        pDtDtsFileToAttributeValue = (char* (*)(const char*,const char*))
-            _LoadSymbol( pDtSvcLib, "DtDtsFileToAttributeValue" );
-        pDtDtsFreeAttributeValue = (void (*)( char* ))
-            _LoadSymbol( pDtSvcLib, "DtDtsFreeAttributeValue" );
-        pDtActionInvoke = (DtActionInvocationID(*)
-                           ( Widget, char*,DtActionArg*, int, char*,
-                             char*, char*, int,
-                             DtActionCallbackProc, XtPointer ))
-            _LoadSymbol( pDtSvcLib, "DtActionInvoke" );
-        pDtWsmGetWorkspaceInfo = (Status(*)( Display*, XLIB_Window, Atom,
-                                             DtWsmWorkspaceInfo** ))
-            _LoadSymbol( pDtSvcLib, "DtWsmGetWorkspaceInfo" );
-        pDtWsmFreeWorkspaceInfo =  (void(*)( DtWsmWorkspaceInfo* ))
-            _LoadSymbol( pDtSvcLib, "DtWsmFreeWorkspaceInfo" );
-        pDtWsmGetWorkspaceList = (Status(*)( Display*, XLIB_Window, Atom**, int* ))
-            _LoadSymbol( pDtSvcLib, "DtWsmGetWorkspaceList" );
-        pDtWsmGetCurrentWorkspace = (Status(*)( Display*, XLIB_Window, Atom*))
-            _LoadSymbol( pDtSvcLib, "DtWsmGetCurrentWorkspace" );
-        pDtWsmGetWorkspacesOccupied = (Status(*)( Display*, XLIB_Window, Atom**, unsigned long* ))
-            _LoadSymbol( pDtSvcLib, "DtWsmGetWorkspacesOccupied" );
-
-        pXtToolkitInitialize        = (void (*)())
-            _LoadSymbol( pXtLib, "XtToolkitInitialize" );
-        pXtCreateApplicationContext = (XtAppContext (*)())
-            _LoadSymbol( pXtLib, "XtCreateApplicationContext" );
-        pXtAppCreateShell           = (Widget (*)( char*, char*, WidgetClass,
-                                                   Display*, ArgList,
-                                                   Cardinal ))
-            _LoadSymbol( pXtLib, "XtAppCreateShell" );
-        pXtDisplayInitialize = (void (*)( XtAppContext, Display*, char*,
-                                          char*, XrmOptionDescRec*, Cardinal,
-                                          int*, char**) )
-            _LoadSymbol( pXtLib, "XtDisplayInitialize" );
-
-        pXtVaCreateManagedWidget = (Widget (*)( char*, WidgetClass, Widget, ... ))
-            _LoadSymbol( pXtLib, "XtVaCreateManagedWidget" );
-        pXtSetLanguageProc = (Widget (*)( XtAppContext, XtLanguageProc, XtPointer ))
-            _LoadSymbol( pXtLib, "XtSetLanguageProc" );
-        pXtAppSetFallbackResources = (void (*)( XtAppContext, char** ))
-            _LoadSymbol( pXtLib, "XtAppSetFallbackResources" );
-        pXtAppInitialize = (Widget (*)(XtAppContext*, char*, XrmOptionDescList,
-                                 Cardinal, int*, char**, char**, ArgList,
-                                 Cardinal ))
-            _LoadSymbol( pXtLib, "XtAppInitialize" );
-        pXtRealizeWidget = (void(*)( Widget ))
-            _LoadSymbol( pXtLib, "XtRealizeWidget" );
-        pXtIsRealized = (XLIB_Boolean(*)( Widget ))
-            _LoadSymbol( pXtLib, "XtIsRealized" );
-        pXtUnrealizeWidget = (void(*)( Widget ))
-            _LoadSymbol( pXtLib, "XtUnrealizeWidget" );
-        pXtAppProcessEvent = (void(*)( XtAppContext, XtInputMask ))
-            _LoadSymbol( pXtLib, "XtAppProcessEvent" );
-        pXtAppPending = (XtInputMask(*)( XtAppContext ))
-            _LoadSymbol( pXtLib, "XtAppPending" );
-        pXtConfigureWidget = (void (*)( Widget, Position, Position, Dimension,
-                                        Dimension, Dimension ))
-            _LoadSymbol( pXtLib, "XtConfigureWidget" );
-        pAppShellClass =
-            (WidgetClass*)_LoadSymbol( pXtLib, "applicationShellWidgetClass" );
-        pMrmInitialize = (void(*)())
-            _LoadSymbol( pMrmLib, "MrmInitialize" );
-        pxmDrawingAreaWidgetClass =
-            (WidgetClass*)_LoadSymbol( pXmLib, "xmDrawingAreaWidgetClass" );
-        pxmRowColumnWidgetClass =
-            (WidgetClass*)_LoadSymbol( pXmLib, "xmRowColumnWidgetClass" );
-        pxmPushButtonWidgetClass =
-            (WidgetClass*)_LoadSymbol( pXmLib, "xmPushButtonWidgetClass" );
-    }
-    else
-    {
-        if( pXtLib )
-            dlclose( pXtLib );
-        if( pXmLib )
-            dlclose( pXmLib );
-        if( pMrmLib )
-            dlclose( pMrmLib );
-        if( pttLib )
-            dlclose( pttLib );
-        if( pDtSvcLib )
-            dlclose( pDtSvcLib );
-        pttLib = pMrmLib = pXmLib = pXtLib = pDtSvcLib = 0;
-    }
-}
-
-void CDEIntegrator::GlobalDeInit()
-{
-    pDtDtsRelease();
-
-    if( pXtLib )
-        dlclose( pXtLib );
-    if( pXmLib )
-        dlclose( pXmLib );
-    if( pMrmLib )
-        dlclose( pMrmLib );
-    if( pttLib )
-        dlclose( pttLib );
-    if( pDtSvcLib )
-        dlclose( pDtSvcLib );
-    pttLib = pMrmLib = pXmLib = pXtLib = pDtSvcLib = 0;
+    mnRefCount--;
 }
 
 static int getHexDigit( const char c )

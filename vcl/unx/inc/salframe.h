@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:56:39 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,12 +142,11 @@ class SalFrameData
     void           *pInst_;             // instance handle for callback
 
     SalDisplay     *pDisplay_;
-    Widget          hShell_;
-    Widget          hComposite_;
-    XLIB_Window     hForeignParent_;
-    XLIB_Window     hForeignTopLevelWindow_;
+    XLIB_Window     mhWindow;
+    XLIB_Window     mhShellWindow;
+    XLIB_Window     mhForeignParent;
     // window to fall back to when no longer in fullscreen mode
-    XLIB_Window     hStackingWindow_;
+    XLIB_Window     mhStackingWindow;
     // window to listen for CirculateNotify events
 
     XLIB_Cursor     hCursor_;
@@ -213,7 +212,6 @@ class SalFrameData
     void            Maximize();
     void            Restore();
 
-    void            RepositionFloatChildren();
     void            RepositionChildren();
 
     long            HandleKeyEvent      ( XKeyEvent         *pEvent );
@@ -241,13 +239,10 @@ public:
     SalDisplay     *GetDisplay() const { return pDisplay_; }
     inline  Display        *GetXDisplay() const;
     inline  XLIB_Window     GetDrawable() const;
-    inline  XLIB_Window     GetWindow() const { return XtWindow( hComposite_ ); }
-    inline  Widget          GetWidget() const { return hComposite_; }
-    inline  XLIB_Window     GetShellWindow() const { return XtWindow( hShell_ ); }
-    inline  Widget          GetShellWidget() const { return hShell_; }
-    inline  XLIB_Window     GetForeignParent() const { return hForeignParent_; }
-    inline  XLIB_Window     GetForeignTopLevelWindow() const { return hForeignTopLevelWindow_; }
-    inline  XLIB_Window     GetStackingWindow() const { return hStackingWindow_; }
+    inline  XLIB_Window    GetWindow() const { return mhWindow; }
+    inline  XLIB_Window    GetShellWindow() const { return mhShellWindow; }
+    inline  XLIB_Window     GetForeignParent() const { return mhForeignParent; }
+    inline  XLIB_Window     GetStackingWindow() const { return mhStackingWindow; }
     inline  long            ShutDown() const
                 { return pProc_( pInst_, pFrame_, SALEVENT_SHUTDOWN, 0 ); }
     inline  long            Close() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                                        &pProperty) == 0
                    && nItems))
         {
-            if (*(XLIB_Boolean*)pProperty)
+#if NeedWidePrototypes
+            if (*(sal_Int32*)pProperty)
+#else
+            if (*pProperty)
+#endif
             {
                 m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
             }
@@ -1566,9 +1570,7 @@ void WMAdaptor::changeReferenceFrame( SalFrame* pFrame, SalFrame* pReferenceFram
         if( pReferenceFrame )
         {
             SalFrameData& rRefData( pReferenceFrame->maFrameData );
-            aTransient = (rRefData.nStyle_ & SAL_FRAME_STYLE_CHILD)
-                ? rRefData.hForeignTopLevelWindow_
-                : rRefData.GetShellWindow();
+            aTransient = rRefData.GetShellWindow();
             rData.mbTransientForRoot = false;
         }
         XSetTransientForHint( m_pDisplay,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:57:18 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,39 +270,37 @@ bool SalFrameData::IsOverrideRedirect() const
 void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 {
     nStyle_     = nSalFrameStyle;
+#ifdef DEBUG
+        fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
+#endif
 
     XWMHints Hints;
     Hints.flags = InputHint;
     Hints.input = True;
-    hStackingWindow_ = None;
+
+    int x = 0, y = 0;
+    unsigned int w = 500, h = 500;
+    XSetWindowAttributes Attributes;
+    int nAttrMask =
+        CWBackPixmap
+        | CWColormap
+        | CWOverrideRedirect
+        | CWEventMask
+        ;
+    Attributes.background_pixmap        = None;
+    Attributes.colormap                 = GetDisplay()->GetColormap().GetXColormap();
+    Attributes.override_redirect        = False;
+    Attributes.event_mask               = CLIENT_EVENTS;
+
+    SalVisual* pVis = GetDisplay()->GetVisual();
+    XLIB_Window aFrameParent = pParentData ? pParentData->aWindow : GetDisplay()->GetRootWindow();
 
     if( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
-        Arg aArgs[10];
-        int nArgs = 0;
+        w = 10;
+        h = 10;
+        Attributes.override_redirect = True;
 
-        SalVisual* pVis = GetDisplay()->GetVisual();
-        XtSetArg( aArgs[nArgs], XtNvisual, pVis->GetVisual() ); nArgs++;
-        XtSetArg( aArgs[nArgs], XtNdepth, pVis->GetDepth() );   nArgs++;
-        XtSetArg( aArgs[nArgs], XtNcolormap,
-                  GetDisplay()->GetColormap().GetXColormap() ); nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwidth, 10 );                 nArgs++;
-        XtSetArg( aArgs[nArgs], XtNheight, 10 );                nArgs++;
-
-        hShell_ = XtAppCreateShell( NULL, NULL,
-                                    overrideShellWidgetClass,
-                                    pDisplay_->GetDisplay(),
-                                    aArgs, nArgs );
-
-        XtSetMappedWhenManaged( hShell_, FALSE );
-        XtRealizeWidget( hShell_ );
-
-        hComposite_     = XtVaCreateManagedWidget(
-            "ShellComposite",
-            SAL_COMPOSITE_WIDGET,
-            hShell_,
-            NULL );
-        XtRealizeWidget( hComposite_ );
 #ifdef DEBUG
         fprintf( stderr, "created new FLOAT style shell\n" );
 #endif
@@ -310,75 +308,30 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     else if( pParentData )
     {
         nStyle_ |= SAL_FRAME_STYLE_CHILD;
+        Attributes.override_redirect = True;
 
         int x_ret, y_ret;
-        unsigned int w, h, bw, d;
-        XLIB_Window aRoot;
-        XLIB_Window aParent;
+        unsigned int bw, d;
+        XLIB_Window aRoot, aParent;
 
-        XGetGeometry( GetDisplay()->GetDisplay(), pParentData->aWindow,
+        XGetGeometry( GetXDisplay(), pParentData->aWindow,
                       &aRoot, &x_ret, &y_ret, &w, &h, &bw, &d );
+        mhForeignParent = pParentData->aWindow;
 
-        Arg aArgs[10];
-        int nArgs = 0;
-
-        SalVisual* pVis = GetDisplay()->GetVisual();
-        XtSetArg( aArgs[nArgs], XtNvisual, pVis->GetVisual() ); nArgs++;
-        XtSetArg( aArgs[nArgs], XtNdepth, pVis->GetDepth() );   nArgs++;
-        XtSetArg( aArgs[nArgs], XtNcolormap,
-                  GetDisplay()->GetColormap().GetXColormap() ); nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwidth, w );                  nArgs++;
-        XtSetArg( aArgs[nArgs], XtNheight, h );                 nArgs++;
-
-        hShell_ = XtAppCreateShell( NULL, NULL,
-                                    overrideShellWidgetClass,
-                                    pDisplay_->GetDisplay(),
-                                    aArgs, nArgs );
-
-        XtSetMappedWhenManaged( hShell_, FALSE );
-        XtRealizeWidget( hShell_ );
-
-        XEvent aEvent;
-        XReparentWindow( GetDisplay()->GetDisplay(), XtWindow( hShell_ ),
-                         pParentData->aWindow, 0, 0 );
-        GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE ); // hack for plugin
-        XSync( GetDisplay()->GetDisplay(), False );
-
-        while( ! XCheckTypedWindowEvent( GetDisplay()->GetDisplay(),
-                                         XtWindow( hShell_ ),
-                                         ReparentNotify,
-                                         &aEvent ) )
-        {
-            usleep(10000);
-        }
-
-        hComposite_     = XtVaCreateManagedWidget(
-            "ShellComposite",
-            SAL_COMPOSITE_WIDGET,
-            hShell_,
-            NULL );
-        XtRealizeWidget( hComposite_ );
-
-        hForeignParent_ = pParentData->aWindow;
-        // get foreign top level window
-        // we need the ConfigureNotifies of this window
-        // to update the positions of this frame's children of
-        // type SAL_FRAME_STYLE_FLOAT
-        aParent = hForeignParent_;
-        hForeignTopLevelWindow_ = hForeignParent_;
+        mhShellWindow = aParent = mhForeignParent;
         XLIB_Window* pChildren;
         unsigned int nChildren;
         bool bBreak = false;
         do
         {
-            XQueryTree( GetDisplay()->GetDisplay(), hForeignTopLevelWindow_,
+            XQueryTree( GetDisplay()->GetDisplay(), mhShellWindow,
                         &aRoot, &aParent, &pChildren, &nChildren );
             XFree( pChildren );
             if( aParent != aRoot )
-                hForeignTopLevelWindow_ = aParent;
+                mhShellWindow = aParent;
             int nCount = 0;
             Atom* pProps = XListProperties( GetDisplay()->GetDisplay(),
-                                            hForeignTopLevelWindow_,
+                                            mhShellWindow,
                                             &nCount );
             for( int i = 0; i < nCount && ! bBreak; ++i )
                 bBreak = (pProps[i] == XA_WM_HINTS);
@@ -389,27 +342,17 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         // check if this is really one of our own frames
         // do not change the input mask in that case
         SalFrame* pFrame = GetSalData()->pFirstFrame_;
-        while( pFrame &&
-               hForeignParent_ != pFrame->maFrameData.GetWindow() &&
-               hForeignParent_ != pFrame->maFrameData.GetShellWindow() )
+        while( pFrame && mhForeignParent != pFrame->maFrameData.GetWindow() )
             pFrame = pFrame->maFrameData.pNextFrame_;
 
         if( ! pFrame )
         {
-            XSelectInput( GetDisplay()->GetDisplay(), hForeignParent_, StructureNotifyMask | FocusChangeMask );
-            XSelectInput( GetDisplay()->GetDisplay(), hForeignTopLevelWindow_, StructureNotifyMask | FocusChangeMask );
+            XSelectInput( GetDisplay()->GetDisplay(), mhForeignParent, StructureNotifyMask | FocusChangeMask );
+            XSelectInput( GetDisplay()->GetDisplay(), mhShellWindow, StructureNotifyMask | FocusChangeMask );
         }
-
-        SetPosSize( Rectangle( Point( 0, 0 ), Size( w, h ) ) );
     }
     else
     {
-        SalVisual *pVisual = pDisplay_->GetVisual();
-
-         int w = 500;
-         int h = 400;
-        int x = -1;
-        int y = -1;
         const Size& rScreenSize( pDisplay_->GetScreenSize() );
         w = rScreenSize.Width();
         h = rScreenSize.Height();
@@ -467,92 +410,69 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                 }
             }
         }
-
-        Arg aArgs[16];
-        int nArgs=0;
-        SalVisual* pVis = GetDisplay()->GetVisual();
-        XtSetArg( aArgs[nArgs], XtNvisual, pVis->GetVisual() );     nArgs++;
-        XtSetArg( aArgs[nArgs], XtNdepth, pVis->GetDepth() );       nArgs++;
-        XtSetArg( aArgs[nArgs], XtNcolormap,
-                  GetDisplay()->GetColormap().GetXColormap() );     nArgs++;
-        if( x >= 0 && y >= 0 )
-        {
-            XtSetArg( aArgs[nArgs], XtNx, x );                      nArgs++;
-            XtSetArg( aArgs[nArgs], XtNy, y );                      nArgs++;
-        }
-        XtSetArg( aArgs[nArgs], XtNwidth, w );                      nArgs++;
-        XtSetArg( aArgs[nArgs], XtNheight, h );                     nArgs++;
-        XtSetArg( aArgs[nArgs], XtNallowShellResize, True );        nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwinGravity, NorthWestGravity );  nArgs++;
-        XtSetArg( aArgs[nArgs], XtNwaitForWm, False );              nArgs++;
+        Attributes.win_gravity = NorthWestGravity;
+        nAttrMask |= CWWinGravity;
         if( mpParent )
         {
-            XtSetArg( aArgs[nArgs], XtNsaveUnder, True );           nArgs++;
+            Attributes.save_under = True;
+            nAttrMask |= CWSaveUnder;
         }
-
-#ifdef DEBUG
-        fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
-#endif
-           if( IsOverrideRedirect() )
-           {
-               XtSetArg( aArgs[nArgs], XtNoverrideRedirect, True ); nArgs++;
-           }
-
-        hShell_ = XtAppCreateShell( "", "VCLSalFrame",
-                                    applicationShellWidgetClass,
-                                    GetXDisplay(),
-                                    aArgs, nArgs );
-
-        // X-Window erzeugen
-        XtSetMappedWhenManaged( hShell_, FALSE );
-        XtRealizeWidget( hShell_ );
-
-        hComposite_     = XtVaCreateManagedWidget(
-            "ShellComposite",
-            SAL_COMPOSITE_WIDGET,
-            hShell_,
-            NULL );
-        XtRealizeWidget( hComposite_ );
+        if( IsOverrideRedirect() )
+            Attributes.override_redirect = True;
 
         // default icon
         if( SelectAppIconPixmap( pDisplay_, mpParent ? mpParent->maFrameData.mnIconID : 1, 32,
                                  Hints.icon_pixmap, Hints.icon_mask ))
         {
-            Hints.flags      |= IconPixmapHint;
+            Hints.flags     |= IconPixmapHint;
             if( Hints.icon_mask )
                 Hints.flags |= IconMaskHint;
         }
 
-        Hints.flags        |= WindowGroupHint;
-        Hints.window_group  = mpParent ? mpParent->maFrameData.GetShellWindow() : pDisplay_->GetShellWindow();
-        if( x < 0 || y < 0 )
-            SetSize( Size( w, h ) );
-        else
-            SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
+        Hints.flags         |= WindowGroupHint;
+        SalFrame* pFrame = pFrame_;
+        while( pFrame->maFrameData.mpParent )
+            pFrame = pFrame->maFrameData.mpParent;
+        Hints.window_group  = pFrame->maFrameData.GetShellWindow();
     }
-    if( hShell_ )
-        XSetWindowBackgroundPixmap( pDisplay_->GetDisplay(), XtWindow( hShell_ ), None );
-    if( hComposite_ )
-        XSetWindowBackgroundPixmap( pDisplay_->GetDisplay(), XtWindow( hComposite_ ), None );
 
-    if( ! ( (nStyle_ & SAL_FRAME_STYLE_CHILD)  && pParentData ) )
+    mhWindow = XCreateWindow( GetXDisplay(),
+                               aFrameParent,
+                               x, y,
+                               w, h,
+                               0,
+                               pVis->GetDepth(),
+                               InputOutput,
+                               pVis->GetVisual(),
+                               nAttrMask,
+                               &Attributes );
+    mhShellWindow = pParentData ? mhShellWindow : mhWindow;
+
+    aPosSize_ = Rectangle( Point( x, y ), Size( w, h ) );
+
+    if( ! pParentData )
     {
-        XSetWMHints( GetXDisplay(), XtWindow( hShell_ ), &Hints );
+        XSizeHints* pHints = XAllocSizeHints();
+        pHints->flags = PWinGravity | PPosition | PSize;
+        pHints->x               = x;
+        pHints->y               = y;
+        pHints->width           = w;
+        pHints->height          = h;
+        pHints->win_gravity     = NorthWestGravity;
+        XFree( pHints );
 
-
+        XSetWMHints( GetXDisplay(), mhWindow, &Hints );
         // WM Protocols && internals
         Atom a[4];
         int  n = 0;
-
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_DELETE_WINDOW );
         a[n++] = pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_SAVE_YOURSELF );
-
-        XSetWMProtocols( GetXDisplay(), XtWindow( hShell_ ), a, n );
+        XSetWMProtocols( GetXDisplay(), mhWindow, a, n );
 
         // set client leader
         XLIB_Window aLeader = GetDisplay()->GetDrawable();
         XChangeProperty( GetXDisplay(),
-                         GetShellWindow(),
+                         mhWindow,
                          pDisplay_->getWMAdaptor()->getAtom( WMAdaptor::WM_CLIENT_LEADER),
                          XA_WINDOW,
                          32,
@@ -611,10 +531,10 @@ inline SalFrameData::SalFrameData( SalFrame *pFrame )
     pInst_                      = (void*)ILLEGAL_POINTER;
 
     pDisplay_                   = pSalData->GetCurDisp();
-    hShell_                     = NULL;
-    hComposite_                 = NULL;
-    hForeignParent_             = None;
-    hForeignTopLevelWindow_     = None;
+    mhWindow                    = None;
+    mhShellWindow               = None;
+    mhStackingWindow            = None;
+    mhForeignParent             = None;
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
@@ -720,11 +640,7 @@ inline SalFrameData::~SalFrameData()
         delete pFreeGraphics_;
     }
 
-    if( hShell_ != pDisplay_->GetShellWidget() )
-    {
-        XtDestroyWidget( hComposite_ );
-        XtDestroyWidget( hShell_ );
-    }
+    XDestroyWindow( GetXDisplay(), mhWindow );
 
     SalData* pSalData = GetSalData();
 
@@ -751,8 +667,8 @@ inline SalFrameData::~SalFrameData()
 
 SalFrame::~SalFrame()
 {
-    if( maFrameData.hStackingWindow_ )
-        aPresentationReparentList.remove( maFrameData.hStackingWindow_ );
+    if( maFrameData.mhStackingWindow )
+        aPresentationReparentList.remove( maFrameData.mhStackingWindow );
     // aus papis child liste entfernen
     if( maFrameData.mpParent )
         maFrameData.mpParent->maFrameData.maChildren.remove( this );
@@ -776,13 +692,13 @@ const SystemChildData* SalFrame::GetSystemData() const
     pFrame->maFrameData.maSystemChildData.pDisplay      = _GetXDisplay();
     pFrame->maFrameData.maSystemChildData.aWindow       = pFrame->maFrameData.GetWindow();
     pFrame->maFrameData.maSystemChildData.pSalFrame     = pFrame;
-    pFrame->maFrameData.maSystemChildData.pWidget       = pFrame->maFrameData.GetWidget();
+    pFrame->maFrameData.maSystemChildData.pWidget       = NULL;
     pFrame->maFrameData.maSystemChildData.pVisual       = _GetDisplay()->GetVisual()->GetVisual();
     pFrame->maFrameData.maSystemChildData.nDepth        = _GetDisplay()->GetVisual()->GetDepth();
     pFrame->maFrameData.maSystemChildData.aColormap     = _GetDisplay()->GetColormap().GetXColormap();
-    pFrame->maFrameData.maSystemChildData.pAppContext   = _GetDisplay()->GetXLib()->GetAppContext();
+    pFrame->maFrameData.maSystemChildData.pAppContext   = NULL;
     pFrame->maFrameData.maSystemChildData.aShellWindow  = pFrame->maFrameData.GetShellWindow();
-    pFrame->maFrameData.maSystemChildData.pShellWidget  = pFrame->maFrameData.GetShellWidget();
+    pFrame->maFrameData.maSystemChildData.pShellWidget  = NULL;
     return &maFrameData.maSystemChildData;
 }
 
@@ -919,13 +835,22 @@ void SalFrame::SetIcon( USHORT nIcon )
 
 void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
-    if( maFrameData.hShell_ )
+    if( maFrameData.GetShellWindow() )
     {
-        Arg args[10];
-        int n = 0;
-        XtSetArg( args[n], XtNminWidth, nWidth );   n++;
-        XtSetArg( args[n], XtNminHeight, nHeight ); n++;
-        XtSetValues( maFrameData.hShell_, args, n );
+        XSizeHints* pHints = XAllocSizeHints();
+        long nSupplied = 0;
+        XGetWMNormalHints( _GetXDisplay(),
+                           maFrameData.GetShellWindow(),
+                           pHints,
+                           &nSupplied
+                           );
+        pHints->min_width   = nWidth;
+        pHints->min_height  = nHeight;
+        pHints->flags |= PMinSize;
+        XSetWMNormalHints( _GetXDisplay(),
+                           maFrameData.GetShellWindow(),
+                           pHints );
+        XFree( pHints );
     }
 }
 
@@ -955,12 +880,12 @@ void SalFrame::Show( BOOL bVisible )
         if( pIntroBitmap && pIntroBitmap != this )
             pIntroBitmap->Show( FALSE );
 
-        if( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
-            XtPopup( maFrameData.hShell_, XtGrabNone );
-        else
-            XtMapWidget( maFrameData.hShell_ );
-        // Manch ein WM verschluckt Key Events im Fullscreenmode ...
-        XSelectInput( _GetXDisplay(), maFrameData.GetShellWindow(), CLIENT_EVENTS );
+        if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
+        {
+            XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
+            XSelectInput( _GetXDisplay(), maFrameData.GetShellWindow(), CLIENT_EVENTS );
+        }
+        XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
         XSelectInput( _GetXDisplay(), maFrameData.GetWindow(), CLIENT_EVENTS );
 
         if( !maFrameData.aPosSize_.IsEmpty()
@@ -1008,10 +933,7 @@ void SalFrame::Show( BOOL bVisible )
         if( maFrameData.getInputContext() )
             maFrameData.getInputContext()->Unmap( this );
 
-        if( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) )
-            XtPopdown( maFrameData.hShell_ );
-        else
-            XtUnmapWidget( maFrameData.hShell_ );
+        XUnmapWindow( _GetXDisplay(), maFrameData.GetWindow() );
     }
 }
 
@@ -1021,7 +943,11 @@ void SalFrame::ToTop( USHORT nFlags )
     int i;
 
     if( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
-        XtMapWidget( maFrameData.hShell_ );
+    {
+        if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
+            XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
+        XMapWindow( _GetXDisplay(), maFrameData.GetWindow() );
+    }
 
     XRaiseWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
     for( ::std::list< SalFrame* >::const_iterator it = maFrameData.maChildren.begin();
@@ -1079,12 +1005,12 @@ void SalFrameData::Center( )
         if( pFrame->maFrameData.aPosSize_.IsEmpty() )
             pFrame->maFrameData.GetPosSize( pFrame->maFrameData.aPosSize_ );
 
-        if( pFrame->maFrameData.hForeignTopLevelWindow_ )
+        if( pFrame->maFrameData.nStyle_ & SAL_FRAME_STYLE_CHILD )
         {
             XLIB_Window aRoot;
             unsigned int bw, depth;
             XGetGeometry( GetXDisplay(),
-                          pFrame->maFrameData.hForeignTopLevelWindow_,
+                          pFrame->maFrameData.GetShellWindow(),
                           &aRoot,
                           &nScreenX, &nScreenY,
                           (unsigned int*)&nScreenWidth,
@@ -1262,22 +1188,24 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             long nSuppliedFlag;
             Display*    pDisplay = _GetXDisplay();
             XLIB_Window hWindow  = maFrameData.GetShellWindow();
-            if (XGetWMNormalHints (pDisplay, hWindow, pHints, &nSuppliedFlag))
-            {
-                pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
-                pHints->win_gravity = nGravity;
-                pHints->x           = aPosSize.getX();
-                pHints->y           = aPosSize.getY();
+            XGetWMNormalHints(pDisplay, hWindow, pHints, &nSuppliedFlag);
+            pHints->flags       |= PWinGravity | PPosition | PSize;
+            pHints->win_gravity = nGravity;
+            pHints->x           = aPosSize.getX();
+            pHints->y           = aPosSize.getY();
 
-                XSetWMNormalHints (pDisplay, hWindow, pHints);
-                XSync (pDisplay, False);
-            }
-
+            XSetWMNormalHints (pDisplay, hWindow, pHints);
+            XSync (pDisplay, False);
             XFree (pHints);
 
             // resize with new args
             if (pWM->supportsICCCMPos())
+            {
+                if( maFrameData.mpParent )
+                    aPosSize.Move( -maFrameData.mpParent->maFrameData.aPosSize_.Left(),
+                                   -maFrameData.mpParent->maFrameData.aPosSize_.Top() );
                 maFrameData.SetPosSize( aPosSize );
+            }
             else
                 SetPosSize( 0, 0, aPosSize.GetWidth(), aPosSize.GetHeight(), SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
@@ -1376,7 +1304,7 @@ SalFrame::SnapShot()
     if (hPresentationWindow != None)
         hWindow = hPresentationWindow;
     else
-        hWindow = maFrameData.hStackingWindow_;
+        hWindow = maFrameData.GetStackingWindow();
 
     // query the contents of the window
     if (hWindow != None)
@@ -1412,26 +1340,35 @@ void SalFrameData::GetPosSize( Rectangle &rPosSize )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrameData::SetSize( const Size &rSize )
 {
-    XWindowChanges values;
-    values.width    = rSize.Width();
-    values.height   = rSize.Height();
-    if (values.width > 0 && values.height > 0)
+    if( rSize.Width() > 0 && rSize.Height() > 0 )
     {
-         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
+         if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+            && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+            && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
          {
-             Arg args[10];
-             int n = 0;
-             XtSetArg( args[n], XtNminWidth, rSize.Width() );   n++;
-             XtSetArg( args[n], XtNminHeight, rSize.Height() ); n++;
-             XtSetArg( args[n], XtNmaxWidth, rSize.Width() );   n++;
-             XtSetArg( args[n], XtNmaxHeight, rSize.Height() ); n++;
-             XtSetValues( hShell_, args, n );
+            XSizeHints* pHints = XAllocSizeHints();
+            long nSupplied = 0;
+            XGetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints,
+                               &nSupplied
+                               );
+            pHints->min_width   = rSize.Width();
+            pHints->min_height  = rSize.Height();
+            pHints->max_width   = rSize.Width();
+            pHints->max_height  = rSize.Height();
+            pHints->flags |= PMinSize | PMaxSize;
+            XSetWMNormalHints( GetXDisplay(),
+                               GetShellWindow(),
+                               pHints );
+            XFree( pHints );
          }
         XResizeWindow( GetXDisplay(), GetShellWindow(), rSize.Width(), rSize.Height() );
-        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
+        if( GetWindow() != GetShellWindow() )
+            XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, rSize.Width(), rSize.Height() );
 
         if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
-            MarkWindowAsGoodPositioned( XtWindow( hShell_ ) );
+            MarkWindowAsGoodPositioned( GetShellWindow() );
 
         aPosSize_.SetSize( rSize );
 
@@ -1482,7 +1419,7 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
 
     if( ! ( nStyle_ & ( SAL_FRAME_STYLE_CHILD | SAL_FRAME_STYLE_FLOAT ) ) )
     {
-        MarkWindowAsGoodPositioned( XtWindow( hShell_ ) );
+        MarkWindowAsGoodPositioned( GetShellWindow() );
 
         if( !(pDisplay_->GetProperties() & PROPERTY_SUPPORT_WM_ClientPos) )
         {
@@ -1491,20 +1428,32 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
         }
     }
 
-    if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE ) )
-     {
-         Arg args[10];
-         int n = 0;
-         XtSetArg( args[n], XtNminWidth, values.width );        n++;
-         XtSetArg( args[n], XtNminHeight, values.height );  n++;
-         XtSetArg( args[n], XtNmaxWidth, values.width );        n++;
-         XtSetArg( args[n], XtNmaxHeight, values.height );  n++;
-         XtSetValues( hShell_, args, n );
-     }
+    if( ! ( nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
+        && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+        && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+    {
+        XSizeHints* pHints = XAllocSizeHints();
+        long nSupplied = 0;
+        XGetWMNormalHints( GetXDisplay(),
+                           GetShellWindow(),
+                           pHints,
+                           &nSupplied
+                           );
+        pHints->min_width   = rPosSize.GetWidth();
+        pHints->min_height  = rPosSize.GetHeight();
+        pHints->max_width   = rPosSize.GetWidth();
+        pHints->max_height  = rPosSize.GetHeight();
+        pHints->flags |= PMinSize | PMaxSize;
+        XSetWMNormalHints( GetXDisplay(),
+                           GetShellWindow(),
+                           pHints );
+        XFree( pHints );
+    }
     XMoveResizeWindow( GetXDisplay(), GetShellWindow(), values.x, values.y, values.width, values.height );
-    XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
+    if( GetShellWindow() != GetWindow() )
+        XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, values.width, values.height );
 
-    aPosSize_ = Rectangle( Point( values.x, values.y ), Size( values.width, values.height ) );;
+    aPosSize_ = Rectangle( Point( values.x, values.y ), Size( values.width, values.height ) );
     if( bSized && ! bMoved )
         Call ( SALEVENT_RESIZE, NULL );
     else if( bMoved && ! bSized )
@@ -1527,7 +1476,7 @@ void SalFrameData::Minimize()
     }
 
     if( XIconifyWindow( GetXDisplay(),
-                        XtWindow( hShell_ ),
+                        GetShellWindow(),
                         pDisplay_->GetScreenNumber() ) )
         nShowState_ = SHOWSTATE_MINIMIZED;
 }
@@ -1537,7 +1486,7 @@ void SalFrameData::Maximize()
 {
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
-        XtMapWidget( hShell_ );
+        XMapWindow( GetXDisplay(), GetShellWindow() );
         nShowState_ = SHOWSTATE_NORMAL;
     }
 
@@ -1555,7 +1504,7 @@ void SalFrameData::Restore()
 
     if( SHOWSTATE_MINIMIZED == nShowState_ )
     {
-        XtMapWidget( hShell_ );
+        XMapWindow( GetXDisplay(), GetShellWindow() );
         nShowState_ = SHOWSTATE_NORMAL;
     }
 
@@ -1692,7 +1641,7 @@ void SalFrame::StartPresentation( BOOL bStart )
 inline void SalFrameData::SetPointer( PointerStyle ePointerStyle )
 {
     hCursor_ = pDisplay_->GetPointer( ePointerStyle );
-    XDefineCursor( GetXDisplay(), XtWindow( hComposite_ ), hCursor_ );
+    XDefineCursor( GetXDisplay(), GetWindow(), hCursor_ );
 
     if( IsCaptured() )
         XChangeActivePointerGrab( GetXDisplay(),
@@ -2449,7 +2398,7 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
 
     if ( pEvent->mode == NotifyNormal || pEvent->mode == NotifyWhileGrabbed ||
-         ( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == hForeignTopLevelWindow_ )
+         ( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
          )
     {
         if( FocusIn == pEvent->type )
@@ -2521,7 +2470,7 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
         && aPresentationReparentList.begin() == aPresentationReparentList.end() )
         // we are in fullscreen mode -> override redirect
          // focus is possibly lost, so reget it
-         XSetInputFocus( GetXDisplay(), XtWindow( hShell_ ), RevertToNone, CurrentTime );
+         XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToNone, CurrentTime );
 
     // width and height are extents, so they are of by one for rectangle
     maPaintRegion.Union( Rectangle( Point(aRect.x, aRect.y), Size(aRect.width+1, aRect.height+1) ) );
@@ -2542,27 +2491,8 @@ long SalFrameData::HandleExposeEvent( XEvent *pEvent )
     return 1;
 }
 
-void SalFrameData::RepositionFloatChildren()
-{
-    // move SAL_FRAME_STYLE_FLOAT children to new position
-    for( ::std::list< SalFrame* >::const_iterator it = maChildren.begin();
-         it != maChildren.end(); ++it )
-    {
-        SalFrameData* pData = &(*it)->maFrameData;
-        if( pData->nStyle_ & SAL_FRAME_STYLE_FLOAT )
-        {
-#ifdef DEBUG
-            fprintf( stderr, "moving FLOAT child\n" );
-#endif
-            pData->SetPosSize( pData->aPosSize_ );
-        }
-    }
-}
-
 void SalFrameData::RepositionChildren()
 {
-    RepositionFloatChildren();
-
     if( ! GetDisplay()->getWMAdaptor()->isTransientBehaviourAsExpected() )
     {
         ::std::list< SalFrame* >::const_iterator it;
@@ -2583,11 +2513,11 @@ void SalFrameData::RepositionChildren()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
 {
-    if (   pEvent->window != XtWindow( hShell_ )
-        && pEvent->window != XtWindow( hComposite_ )
-        && pEvent->window != hStackingWindow_
-        && pEvent->window != hForeignParent_
-        && pEvent->window != hForeignTopLevelWindow_ )
+    if (   pEvent->window != GetShellWindow()
+           && pEvent->window != GetWindow()
+           && pEvent->window != GetForeignParent()
+           && pEvent->window != GetStackingWindow()
+           )
     {
         // could be as well a sys-child window (aka SalObject)
         return 1;
@@ -2597,27 +2527,33 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
      if( nStyle_ & SAL_FRAME_STYLE_FLOAT )
          return 1;
 
-    if( pEvent->window == hForeignTopLevelWindow_ )
+    if( ( nStyle_ & SAL_FRAME_STYLE_CHILD ) && pEvent->window == GetShellWindow() )
     {
         // just update the children's positions
         RepositionChildren();
         return 1;
     }
 
-    if( pEvent->window == hForeignParent_ )
-    {
-        Arg args[10];
-           int n = 0;
-        XtSetArg(args[n], XtNheight, pEvent->height);   n++;
-        XtSetArg(args[n], XtNwidth,  pEvent->width);    n++;
-        XtSetValues( hShell_, args, n );
-    }
+    if( pEvent->window == GetForeignParent() )
+        XResizeWindow( GetXDisplay(),
+                       GetWindow(),
+                       pEvent->width,
+                       pEvent->height );
 
-    if( pEvent->window == hStackingWindow_ )
+    XLIB_Window hDummy;
+    XTranslateCoordinates( GetXDisplay(),
+                           GetWindow(),
+                           pDisplay_->GetRootWindow(),
+                           0, 0,
+                           &pEvent->x, &pEvent->y,
+                           &hDummy );
+
+    if( pEvent->window == GetStackingWindow() )
     {
         if( aPosSize_.Left() != pEvent->x || aPosSize_.Top() != pEvent->y )
         {
-            aPosSize_ = Rectangle( Point( pEvent->x, pEvent->y ), Size( pEvent->width, pEvent->height ) );
+
+            aPosSize_ = Rectangle( Point( pEvent->x, pEvent->y ), aPosSize_.GetSize() );
             Call( SALEVENT_MOVE, NULL );
         }
         return 1;
@@ -2651,24 +2587,12 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
         XFree (pHints);
     }
 
-    XLIB_Window hDummy;
-    XTranslateCoordinates( GetXDisplay(),
-                           GetWindow(),
-                           pDisplay_->GetRootWindow(),
-                           0, 0,
-                           &pEvent->x, &pEvent->y,
-                           &hDummy );
-
-    maResizeBuffer.SetPos( Point( pEvent->x, pEvent->y ) );
-    maResizeBuffer.SetSize( Size( pEvent->width, pEvent->height ) );
+    maResizeBuffer = Rectangle( Point( pEvent->x, pEvent->y ), Size( pEvent->width, pEvent->height ) );
 
     if( nWidth_ != pEvent->width || nHeight_ != pEvent->height )
     {
         nWidth_     = pEvent->width;
         nHeight_    = pEvent->height;
-
-        if( pEvent->window != XtWindow( hComposite_ ) )
-            XtResizeWidget(hComposite_, nWidth_, nHeight_, 0);
 
         maResizeTimer.Start();
     }
@@ -2747,20 +2671,20 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
             XFree( Children );
     } while( hDummy != hRoot );
 
-    if( hStackingWindow_ == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
+    if( GetStackingWindow() == None && ( ! pDisableStackingCheck || ! *pDisableStackingCheck ) )
     {
-        hStackingWindow_ = hWM_Parent;
-        XSelectInput( pDisplay, hStackingWindow_, StructureNotifyMask );
+        mhStackingWindow = hWM_Parent;
+        XSelectInput( pDisplay, GetStackingWindow(), StructureNotifyMask );
     }
 
     if(     hWM_Parent == pDisplay_->GetRootWindow()
-        ||  hWM_Parent == hForeignParent_
-        ||  pEvent->parent == pDisplay_->GetRootWindow()
-        || ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
+            ||  hWM_Parent == GetForeignParent()
+            ||  pEvent->parent == pDisplay_->GetRootWindow()
+            || ( nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
     {
         // Reparenting before Destroy
-        aPresentationReparentList.remove( hStackingWindow_ );
-        hStackingWindow_ = None;
+        aPresentationReparentList.remove( GetStackingWindow() );
+        mhStackingWindow = None;
         return 0;
     }
 
@@ -2774,25 +2698,25 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
      */
     if( hPresentationWindow != None
         && hPresentationWindow != GetWindow()
-        && hStackingWindow_ != None
-        && hStackingWindow_ != GetDisplay()->GetRootWindow()
+        && GetStackingWindow() != None
+        && GetStackingWindow() != GetDisplay()->GetRootWindow()
         )
     {
         int x = 0, y = 0;
         XLIB_Window aChild;
         XTranslateCoordinates( GetXDisplay(),
-                               hStackingWindow_,
+                               GetStackingWindow(),
                                GetDisplay()->GetRootWindow(),
                                0, 0,
                                &x, &y,
                                &aChild
                                );
         XReparentWindow( GetXDisplay(),
-                         hStackingWindow_,
+                         GetStackingWindow(),
                          hPresentationWindow,
                          x, y
                          );
-        aPresentationReparentList.push_back( hStackingWindow_ );
+        aPresentationReparentList.push_back( GetStackingWindow() );
     }
 
 #ifdef NC_EVENTS
@@ -2803,16 +2727,6 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
                 &Children,
                 &nChildren );
 
-#ifdef DBG_UTIL
-    if( hDummy != hRoot )
-    {
-        fprintf( stderr,
-                 "SalFrameData::HandleReparentEvent hDummy!=hRoot"
-                 " r=%ld d=%ld p=%ld n=%d\n",
-                 hRoot, hDummy, hWM_Parent, nChildren );
-        pDisplay_->PrintEvent( "HandleReparentEvent", (XEvent*)pEvent );
-    }
-#endif
     for( n = 0; n < nChildren; n++ )
         if( Children[n] != hShell_ && Children[n] != pEvent->parent )
             XSelectInput( pDisplay, Children[n], NC_EVENTS );
@@ -2820,7 +2734,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 #endif
 
     if( !XTranslateCoordinates( GetXDisplay(),
-                                XtWindow( hShell_ ),
+                                GetShellWindow(),
                                 hWM_Parent,
                                 0, 0,
                                 &nLeft_, &nTop_,
@@ -2852,9 +2766,9 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     XSizeHints* pHints = XAllocSizeHints();
     long nSuppliedFlags;
     if( XGetWMNormalHints( pEvent->display,
-                GetShellWindow(),
-                pHints,
-                &nSuppliedFlags ) )
+                           GetShellWindow(),
+                           pHints,
+                           &nSuppliedFlags ) )
     {
         if( pHints->flags & PMaxSize ) // supplied
         {
@@ -2862,7 +2776,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
             nMaxHeight_ = pHints->max_height;
             DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
         }
-        pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+        pHints->flags       = pHints->flags | PWinGravity;
         pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
         XSetWMNormalHints( pEvent->display,
                 GetShellWindow(),
@@ -2872,7 +2786,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
     XFree (pHints);
 
-    if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( XtWindow( hShell_ ) ) )
+    if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( GetShellWindow() ) )
         && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
     {
         nShowState_ = SHOWSTATE_NORMAL;
@@ -2922,7 +2836,7 @@ long SalFrameData::HandleStateEvent( XPropertyEvent *pEvent )
     unsigned char *prop = NULL;
 
     if( 0 != XGetWindowProperty( GetXDisplay(),
-                                 XtWindow( hShell_ ),
+                                 GetShellWindow(),
                                  pEvent->atom,          // property
                                  0,                     // long_offset (32bit)
                                  2,                     // long_length (32bit)
@@ -2980,7 +2894,10 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
         Close(); // ???
         return 1;
     }
-    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS ) )
+    else if( pEvent->message_type == rWMAdaptor.getAtom( WMAdaptor::WM_PROTOCOLS )
+             && ! ( nStyle_ & SAL_FRAME_STYLE_CHILD )
+             && ! ( nStyle_ & SAL_FRAME_STYLE_FLOAT )
+             )
     {
         if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
         {
@@ -3004,10 +2921,10 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
 #ifdef DEBUG
                 fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
 #endif
-                XSetCommand( GetXDisplay(), XtWindow( hShell_ ), argv, 2 );
+                XSetCommand( GetXDisplay(), GetShellWindow(), argv, 2 );
             }
             else
-                XDeleteProperty( GetXDisplay(), XtWindow( hShell_ ), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ) );
+                XDeleteProperty( GetXDisplay(), GetShellWindow(), rWMAdaptor.getAtom( WMAdaptor::WM_COMMAND ) );
         }
     }
     return 0;
@@ -3038,7 +2955,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
 #endif
     }
 
-    if( pEvent->xany.window == XtWindow( hShell_ ) || pEvent->xany.window == XtWindow( hComposite_ ) )
+    if( pEvent->xany.window == GetShellWindow() || pEvent->xany.window == GetWindow() )
     {
         switch( pEvent->type )
         {
@@ -3137,7 +3054,7 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case UnmapNotify:
-                if( pEvent->xunmap.window == XtWindow( hShell_ ) )
+                if( pEvent->xunmap.window == GetShellWindow() )
                 {
                     bMapped_   = FALSE;
                     bViewable_ = FALSE;
@@ -3149,8 +3066,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case ConfigureNotify:
-                if( pEvent->xconfigure.window == XtWindow( hShell_ )        ||
-                    pEvent->xconfigure.window == XtWindow( hComposite_ ) )
+                if( pEvent->xconfigure.window == GetShellWindow()
+                    || pEvent->xconfigure.window == GetWindow() )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
                 break;
 
@@ -3216,8 +3133,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
              case FocusIn:
              case FocusOut:
                 if( ( nStyle_ & SAL_FRAME_STYLE_CHILD )
-                    && (   pEvent->xfocus.window == hForeignTopLevelWindow_
-                           || pEvent->xfocus.window == hForeignParent_ )
+                    && ( pEvent->xfocus.window == GetShellWindow()
+                         || pEvent->xfocus.window == GetForeignParent() )
                     )
                 {
                     nRet = HandleFocusEvent( &pEvent->xfocus );
@@ -3225,28 +3142,13 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                  break;
 
             case ConfigureNotify:
-                if( pEvent->xconfigure.window == hForeignParent_ ||
-                    pEvent->xconfigure.window == hForeignTopLevelWindow_ )
+                if( pEvent->xconfigure.window == GetForeignParent() ||
+                    pEvent->xconfigure.window == GetShellWindow() )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
 
-                if( pEvent->xconfigure.window == hStackingWindow_ )
+                if( pEvent->xconfigure.window == GetStackingWindow() )
                     nRet = HandleSizeEvent( &pEvent->xconfigure );
-#if 0
-                {
-                    // update position here as well as in HandleSizeEvent
-                    // if the window is only moved this is the only
-                    // chance to notice that.
-                    XLIB_Window hDummy;
-                    int nX, nY;
-                    XTranslateCoordinates( GetXDisplay(),
-                                           GetWindow(),
-                                           pDisplay_->GetRootWindow(),
-                                           0, 0,
-                                           &nX, &nY,
-                                           &hDummy );
-                    aPosSize_.SetPos( Point( nX, nY ) );
-                }
-#endif
+
                 RepositionChildren();
                 break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-10 16:02:59 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,6 @@
 #include <prex.h>
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
-#ifdef USE_MOTIF
-#include <Xm/DrawingA.h>
-#else
-#include <X11/Xaw/Label.h>
-#endif
 #include <postx.h>
 
 #include <salunx.h>
@@ -87,12 +82,6 @@
 #endif
 #ifndef _SV_SALOBJ_HXX
 #include <salobj.hxx>
-#endif
-
-#ifdef USE_MOTIF
-#define OBJECT_WIDGET_CLASS xmDrawingAreaWidgetClass
-#else
-#define OBJECT_WIDGET_CLASS labelWidgetClass
 #endif
 
 SalObjectList SalObjectData::aAllObjects;
@@ -120,32 +109,37 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
         return NULL;
     }
 
-    SalDisplay* pSalDisp = pParent->maFrameData.GetDisplay();
-    Widget pWidgetParent = pParent->maFrameData.GetWidget();
+    SalDisplay* pSalDisp        = pParent->maFrameData.GetDisplay();
+    Display* pDisp              = pParent->maFrameData.GetXDisplay();
+    XLIB_Window aObjectParent   = pParent->maFrameData.GetWindow();
 
     pObject->maObjectData.maPrimary =
-        XtVaCreateWidget( "salobject primary",
-                          OBJECT_WIDGET_CLASS,
-                          pWidgetParent,
-                          NULL );
+        XCreateSimpleWindow( pDisp,
+                             aObjectParent,
+                             0, 0,
+                             100, 100, 0,
+                             pParent->maFrameData.GetDisplay()->GetColormap().GetBlackPixel(),
+                             pParent->maFrameData.GetDisplay()->GetColormap().GetWhitePixel()
+                             );
     pObject->maObjectData.maSecondary =
-        XtVaCreateWidget( "salobject secondary",
-                          OBJECT_WIDGET_CLASS,
-                          pObject->maObjectData.maPrimary,
-                          NULL );
-    XtRealizeWidget( pObject->maObjectData.maPrimary );
-    XtRealizeWidget( pObject->maObjectData.maSecondary );
-    XtMapWidget (pObject->maObjectData.maPrimary);
-    XtMapWidget (pObject->maObjectData.maSecondary );
+        XCreateSimpleWindow( pDisp,
+                             pObject->maObjectData.maPrimary,
+                             0, 0,
+                             100, 100, 0,
+                             pParent->maFrameData.GetDisplay()->GetColormap().GetBlackPixel(),
+                             pParent->maFrameData.GetDisplay()->GetColormap().GetWhitePixel()
+                             );
+    XMapWindow( pDisp, pObject->maObjectData.maPrimary );
+    XMapWindow( pDisp, pObject->maObjectData.maSecondary );
 
-    pObjData->pDisplay      = XtDisplay( pObject->maObjectData.maPrimary );
-    pObjData->aWindow       = XtWindow( pObject->maObjectData.maSecondary );
-    pObjData->pWidget       = pObject->maObjectData.maSecondary;
+    pObjData->pDisplay      = pDisp;
+    pObjData->aWindow       = pObject->maObjectData.maSecondary;
+    pObjData->pWidget       = NULL;
     pObjData->pVisual       = pSalDisp->GetVisual()->GetVisual();
     pObjData->nDepth        = pSalDisp->GetVisual()->GetDepth();
     pObjData->aColormap     = pSalDisp->GetColormap().GetXColormap();
-    pObjData->pAppContext   = pSalDisp->GetXLib()->GetAppContext();
-    XSync((Display*)pObjData->pDisplay, False);
+    pObjData->pAppContext   = NULL;
+    XSync(pDisp, False);
     return pObject;
 }
 
@@ -237,9 +231,9 @@ SalObject::~SalObject()
 {
     SalObjectData::aAllObjects.Remove( this );
     if ( maObjectData.maSecondary )
-        XtDestroyWidget ( maObjectData.maSecondary );
+        XDestroyWindow( (Display*)maObjectData.maSystemChildData.pDisplay, maObjectData.maSecondary );
     if ( maObjectData.maPrimary )
-        XtDestroyWidget ( maObjectData.maPrimary );
+        XDestroyWindow( (Display*)maObjectData.maSystemChildData.pDisplay, maObjectData.maPrimary );
 }
 
 
@@ -255,7 +249,7 @@ SalObject::ResetClipRegion()
     XWindowAttributes win_attrib;
     XRectangle        win_size;
 
-    XLIB_Window aShapeWindow = XtWindow( maObjectData.maPrimary );
+    XLIB_Window aShapeWindow = maObjectData.maPrimary;
 
     XGetWindowAttributes ( (Display*)maObjectData.maSystemChildData.pDisplay,
                            aShapeWindow,
@@ -316,7 +310,7 @@ SalObject::EndSetClipRegion()
             op = ShapeUnion;
     }
 
-    XLIB_Window aShapeWindow = XtWindow( maObjectData.maPrimary );
+    XLIB_Window aShapeWindow = maObjectData.maPrimary;
 
     XShapeCombineRectangles ( (Display*)maObjectData.maSystemChildData.pDisplay,
                               aShapeWindow,
@@ -341,10 +335,12 @@ SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
     if ( maObjectData.maPrimary && maObjectData.maSecondary && nWidth && nHeight )
     {
-        XtConfigureWidget( maObjectData.maPrimary,
-                            nX, nY, nWidth, nHeight, 0 );
-        XtConfigureWidget( maObjectData.maSecondary,
-                            0, 0, nWidth, nHeight, 0 );
+        XMoveResizeWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
+                           maObjectData.maPrimary,
+                            nX, nY, nWidth, nHeight );
+        XMoveResizeWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
+                           maObjectData.maSecondary,
+                            0, 0, nWidth, nHeight );
     }
 }
 
@@ -356,15 +352,11 @@ SalObject::Show( BOOL bVisible )
         return;
 
     if ( bVisible )
-    {
-        XtMapWidget( (Widget)maObjectData.maPrimary );
-        XtMapWidget( (Widget)maObjectData.maSecondary );
-    }
+        XMapWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
+                    maObjectData.maPrimary );
     else
-    {
-        XtUnmapWidget( (Widget)maObjectData.maSecondary );
-        XtUnmapWidget( (Widget)maObjectData.maPrimary );
-    }
+        XUnmapWindow( (Display*)maObjectData.maSystemChildData.pDisplay,
+                    maObjectData.maPrimary );
 
     maObjectData.mbVisible = bVisible;
 }
@@ -421,8 +413,8 @@ long SalObjectData::Dispatch( XEvent* pEvent )
     for( int n= 0; n < aAllObjects.Count(); n++ )
     {
         SalObject* pObject = aAllObjects.GetObject( n );
-        if( pEvent->xany.window == XtWindow( pObject->maObjectData.maPrimary ) ||
-            pEvent->xany.window == XtWindow( pObject->maObjectData.maSecondary ) )
+        if( pEvent->xany.window == pObject->maObjectData.maPrimary ||
+            pEvent->xany.window == pObject->maObjectData.maSecondary )
         {
             switch( pEvent->type )
             {

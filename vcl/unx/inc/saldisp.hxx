@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-12 09:20:59 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,6 @@ class SalXLib
 {
     STDAPI( SalXLib );
 
-    XtAppContext    pApplicationContext_;
     timeval         Timeout_;
     ULONG           nTimeoutMS_;
     int             nStateOfYield_;
@@ -288,9 +287,6 @@ public:
 
     inline  void            StartTimer( ULONG nMS );
     inline  void            StopTimer();
-
-    inline  XtAppContext    GetAppContext() const
-    { return pApplicationContext_; }
 };
 
 // -=-= SalXEvent =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -353,10 +349,6 @@ class SalDisplay
     SalXEvent      *pEventQueue_;       // threaded user event queue
     SalXEvent      *pDispatchStack_;    // Dispatch/Yield
 
-    // SalFrame
-    Widget          hShell_;            // Application Shell Widget
-    Widget          hComposite_;        // the composite child of the shell
-
     XLIB_Cursor     aPointerCache_[POINTER_COUNT];
     SalFrameData   *pCapture_;
 
@@ -400,10 +392,9 @@ public:
                                         int          nScreen,
                                         XVisualInfo &rVI );
 
-                            SalDisplay( Widget w );
                             SalDisplay( Display* pDisp,
                                         Visual* pVisual = NULL,
-                                        Colormap aColMap = None );
+                                        Colormap aColMap = None);
 
     ~SalDisplay();
 
@@ -454,11 +445,6 @@ public:
     inline  void            Insert( SalImage *pImage );
     inline  void            Remove( SalImage *pImage );
     void            Remove( XEvent   *pEvent );
-
-    XLIB_Window     GetWindow() const { return XtWindow( hComposite_ ); }
-    Widget          GetWidget() const { return hComposite_; }
-    XLIB_Window     GetShellWindow() const { return XtWindow( hShell_ ); }
-    Widget          GetShellWidget() const { return hShell_; }
 
     XLIB_Window     GetRootWindow() const { return hRootWindow_; }
     XLIB_Window     GetDrawable() const { return hRefWindow_; }

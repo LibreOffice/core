@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-19 13:19:20 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,10 +220,6 @@ extern "C" { int gethostname(char*,int); }
 #endif
 #include <X11/keysym.h>
 
-#ifdef USE_XMU
-#include <X11/Xmu/Atoms.h>
-#include <X11/Xmu/SysUtil.h>
-#endif
 #include <X11/Xatom.h>
 #include <postx.h>
 
@@ -360,13 +356,8 @@ inline const char *Null( const char *p ) { return p ? p : ""; }
 inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
 inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
 
-#ifdef USE_XMU
-inline const char *GetAtomName( Display *d, Atom a )
-{ return Null( XmuGetAtomName( d, a ) ); }
-#else
 inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
-#endif
 
 inline double Hypothenuse( long w, long h )
 { return sqrt( (w*w)+(h*h) ); }
@@ -668,54 +659,11 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-SalDisplay::SalDisplay( Widget w ) :
-        mpFallbackFactory ( NULL ),
-        m_pWMAdaptor( NULL )
-{
-    SalData *pSalData = GetSalData();
-
-    if( !pSalData->GetDefDisp() )
-        pSalData->SetDefDisp( this );
-    if( !pSalData->GetCurDisp() )
-        pSalData->SetCurDisp( this );
-
-    pXLib_          = pSalData->GetLib();
-    pDisp_          = XtDisplay( w );
-    nScreen_        = DefaultScreen( pDisp_ );
-    hShell_         = w;
-    hComposite_     = XtVaCreateManagedWidget(
-        "ShellComposite",
-        SAL_COMPOSITE_WIDGET,
-        hShell_,
-        NULL );
-
-    Visual     *pVisual = NULL;
-    Colormap    hColMap = None;
-    Arg         aArgs[10];
-
-    XtSetArg( aArgs[0], XtNvisual,      &pVisual    );
-    XtSetArg( aArgs[1], XtNcolormap,    &hColMap    );
-
-    XtGetValues( hShell_, aArgs, 2 );
-    if( !pVisual )
-        pVisual = DefaultVisual( pDisp_, nScreen_ );
-    if (!hColMap)
-        hColMap = DefaultColormap( pDisp_, nScreen_ );
-    if( !IsDisplay() && !hColMap)
-        hColMap = 1;   // trick for XPrinter
-
-    XVisualInfo aXVI;
-    sal_GetVisualInfo( pDisp_, XVisualIDFromVisual( pVisual ), aXVI );
-
-    Init( hColMap, &aXVI );
-}
-
 SalDisplay::SalDisplay( Display *display, Visual *pVisual, Colormap aColMap ) :
         pDisp_( display ),
         mpFallbackFactory ( NULL ),
         m_pWMAdaptor( NULL ),
-        hComposite_( NULL ),
-        hShell_( NULL )
+        hRefWindow_( None )
 {
     SalData *pSalData  = GetSalData();
     XVisualInfo aXVI;
@@ -782,11 +730,6 @@ SalDisplay::~SalDisplay( )
                 XFreeCursor( pDisp_, aPointerCache_[i] );
         }
 
-        if( hComposite_ )
-            XtDestroyWidget( hComposite_ );
-        if( hShell_ )
-            XtDestroyWidget( hShell_ );
-
         pXLib_->Remove( ConnectionNumber( pDisp_ ) );
 
         // free colormap before modifying pVisual_
@@ -799,7 +742,7 @@ SalDisplay::~SalDisplay( )
 
         delete mpInputMethod;
         delete mpKbdExtension;
-        XtCloseDisplay( pDisp_ );
+        XCloseDisplay( pDisp_ );
     }
 
     pDisp_  = (Display*)ILLEGAL_POINTER;
@@ -1288,41 +1231,8 @@ void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
         // - - - - - - - - - - Keyboardmapping - - - - - - - - - - -
 
         ModifierMapping();
-
-        // - - - - - - - - - - ShellWidget - - - - - - - - - - - - -
-
-
-        if( !XtWindow( hShell_ ) )
-        {
-            Position w, h;
-            Arg aArgs[10];
-
-            XtSetArg( aArgs[0], XtNwidth,   &w );
-            XtSetArg( aArgs[1], XtNheight,  &h  );
-            XtGetValues( hShell_, aArgs, 2 );
-
-            if( !w || !h )
-            {
-                if( GetProperties() & PROPERTY_FEATURE_Maximize )
-                {
-                    XtSetArg( aArgs[0], XtNwidth,   aSize_.Width() );
-                    XtSetArg( aArgs[1], XtNheight,  aSize_.Height() );
-                }
-                else
-                {
-                    XtSetArg( aArgs[0], XtNwidth,   500 );
-                    XtSetArg( aArgs[1], XtNheight,  400 );
-                }
-                XtSetValues( hShell_, aArgs, 2 );
-            }
-
-            // X-Window erzeugen
-            XtSetMappedWhenManaged( hShell_, FALSE );
-            XtRealizeWidget( hShell_ );
-        }
-        if( !XtWindow( hComposite_ ) )
-            XtRealizeWidget( hComposite_ );
     }
+
     m_pWMAdaptor = ::vcl_sal::WMAdaptor::createWMAdaptor( this );
 #ifdef DBG_UTIL
     PrintInfo();
@@ -2551,7 +2461,7 @@ void SalDisplay::SendEvent( Atom          aEvent,
     XEvent aClient;
 
     if( !hReceiver )
-        hReceiver = GetWindow();
+        hReceiver = hReceiver;
 
     pClient->type           = ClientMessage;
     pClient->display        = pDisp_;
@@ -2633,7 +2543,6 @@ void SalDisplay::Yield( BOOL bWait )
 
         nStateOfYield_ = 1;
 
-        DBG_ASSERT( XtAppPending( pXLib_->GetAppContext() ), "no pending event" );
         SalData *pSalData       = GetSalData();
         SalYieldMutex* pSalInstYieldMutex   =
             pSalData->pFirstInstance_->maInstData.mpSalYieldMutex;
@@ -2643,7 +2552,7 @@ void SalDisplay::Yield( BOOL bWait )
                     "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
         // note: alternate input is dispatched by XtAppNextEvent
-        XtAppNextEvent( pXLib_->GetAppContext(), &aEvent.event_ );
+        XNextEvent( pDisp_, &aEvent.event_ );
     }
 
     nStateOfYield_ = 0;
@@ -2743,17 +2652,12 @@ long SalDisplay::Dispatch( XEvent *pEvent )
     while( pFrame )
     {
         XLIB_Window aDispatchWindow = pEvent->xany.window;
-        if( pFrame->maFrameData.GetWindow() == aDispatchWindow      ||
-            pFrame->maFrameData.GetShellWindow() == aDispatchWindow
+        if( pFrame->maFrameData.GetWindow() == aDispatchWindow
+            || pFrame->maFrameData.GetShellWindow() == aDispatchWindow
+            || pFrame->maFrameData.GetForeignParent() == aDispatchWindow
             )
         {
             return pFrame->maFrameData.Dispatch( pEvent );
-        }
-        if( pFrame->maFrameData.GetForeignParent() == aDispatchWindow ||
-            pFrame->maFrameData.GetForeignTopLevelWindow() == aDispatchWindow )
-        {
-            pFrame->maFrameData.Dispatch( pEvent );
-            break;
         }
         if( pEvent->type == ConfigureNotify && pEvent->xconfigure.window == pFrame->maFrameData.GetStackingWindow() )
         {
@@ -2761,9 +2665,6 @@ long SalDisplay::Dispatch( XEvent *pEvent )
         }
         pFrame = pFrame->maFrameData.GetNextFrame();
     }
-
-    // dispatch to Xt
-    XtDispatchEvent( pEvent );
 
     // dispatch to salobjects
     SalObjectData::Dispatch( pEvent );
@@ -2956,11 +2857,7 @@ void SalDisplay::PrintInfo() const
                  GetEnv( "XPPATH" ) );
 
         char sHostname[ 120 ];
-#       ifdef USE_XMU
-        XmuGetHostname( sHostname, 120 );
-#       else
         gethostname (sHostname, 120 );
-#       endif
         fprintf( stderr, "Client\n" );
         fprintf( stderr, "\tHost              \t\"%s\"\n",
                  sHostname );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-20 11:05:09 $
+ *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,7 @@ DtIntegrator* DtIntegrator::CreateDtIntegrator( SalFrame* pFrame )
     nDtAtom = XInternAtom( pDisplay, "_DT_WM_READY", True );
     if( nDtAtom && ( pLibrary = _LoadLibrary( "libDtSvc.so" ) ) )
     {
-        // performance: do not dlopen DtSvc twice
-        CDEIntegrator::pDtSvcLib = pLibrary;
+        dlclose( pLibrary );
         return new CDEIntegrator( pFrame );
     }
 #endif
