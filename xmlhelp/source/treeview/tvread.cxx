@@ -57,7 +57,10 @@ namespace treeview {
 
         TVDom* getParent() const
         {
-            return parent;
+            if( parent )
+                return parent;
+            else
+                return const_cast<TVDom*>(this);    // I am my own parent, if I am the root
         }
 
         enum Kind {
@@ -430,49 +433,42 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
 {
     ConfigData configData = init( xMSF );
 
-    if( ! configData.fileurl.getLength() ||
-        ! configData.locale.getLength()  ||
-        ! configData.system.getLength()  ||
-        ! configData.filelen )
+    if( ! configData.locale.getLength()  ||
+        ! configData.system.getLength() )
         return;
 
-    osl::File aFile(
-        configData.fileurl );
+    sal_uInt64  ret,len = 0;
+    int j = 0;
 
-    configData.appendix =
-        rtl::OUString::createFromAscii( "?Language=" ) +
-        configData.locale +
-        rtl::OUString::createFromAscii( "&System=" ) +
-        configData.system;
-
-    sal_uInt64 ret,len = configData.filelen;
-    if( ! len ) return;
-
-    char* s = new char[ int(len) ];
-    int isFinal = true;
-
-    XML_Parser parser = XML_ParserCreate( 0 );
-
-    aFile.open( OpenFlag_Read );
-    aFile.read( s,len,ret );
-    aFile.close();
-
-    XML_SetElementHandler( parser,
-                           start_handler,
-                           end_handler );
-
-    XML_SetCharacterDataHandler( parser,
-                                 data_handler);
-
+    // Count number of items
+    while( configData.fileurl[j].getLength() )
+        ++j;
 
     TVDom tvDom;
     TVDom* pTVDom = &tvDom;
-    XML_SetUserData( parser,&pTVDom );
 
-    int parsed = XML_Parse( parser,s,int( len ),isFinal );
+    while( j )
+    {
+        len = configData.filelen[--j];
+        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        osl::File aFile( configData.fileurl[j] );
+        aFile.open( OpenFlag_Read );
+        aFile.read( s,len,ret );
+        aFile.close();
 
-    delete[] s;
-    XML_ParserFree( parser );
+        XML_Parser parser = XML_ParserCreate( 0 );
+        XML_SetElementHandler( parser,
+                               start_handler,
+                               end_handler );
+        XML_SetCharacterDataHandler( parser,
+                                     data_handler);
+        XML_SetUserData( parser,&pTVDom ); // does not return this
+
+        int parsed = XML_Parse( parser,s,int( len ),j==0 );
+
+        XML_ParserFree( parser );
+        delete[] s;
+    }
 
     // now TVDom holds the relevant information
 
@@ -770,21 +766,62 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                                                                aDirItem ) )
         ret = locale.copy( 0,idx );
 
-    url = url + ret + rtl::OUString::createFromAscii( "/treeview.xml" );
+    url = url + ret;
 
-    // Determine the filelen
-    sal_uInt64 filelen = 0;
+    // first of all, try do determine whether there are any *.tree files present
 
-    osl::FileStatus aStatus( FileStatusMask_FileSize );
-    if( osl::FileBase::E_None == osl::DirectoryItem::get( url,aDirItem ) &&
-        osl::FileBase::E_None == aDirItem.getFileStatus( aStatus )  &&
-        aStatus.isValid( FileStatusMask_FileSize ) )
-        filelen = aStatus.getFileSize();
+    osl::Directory aDirectory( url );
+    osl::FileStatus aFileStatus( FileStatusMask_FileSize | FileStatusMask_FileURL );
+    if( osl::Directory::E_None == aDirectory.open() )
+    {
+        int idx = 0,j = 0;
+        rtl::OUString aFileUrl;
+        while( aDirectory.getNextItem( aDirItem ) == osl::FileBase::E_None &&
+               aDirItem.getFileStatus( aFileStatus ) == osl::FileBase::E_None &&
+               aFileStatus.isValid( FileStatusMask_FileSize ) &&
+               aFileStatus.isValid( FileStatusMask_FileURL ) )
+        {
+            aFileUrl = aFileStatus.getFileURL();
+            idx = aFileUrl.lastIndexOf( sal_Unicode( '.' ) );
+            if( idx == -1 )
+                continue;
 
+            const sal_Unicode* str = aFileUrl.getStr();
 
-    configData.fileurl = url;
+            if( aFileUrl.getLength() == idx + 5                   &&
+                ( str[idx + 1] == 't' || str[idx + 1] == 'T' )    &&
+                ( str[idx + 2] == 'r' || str[idx + 2] == 'R' )    &&
+                ( str[idx + 3] == 'e' || str[idx + 3] == 'E' )    &&
+                ( str[idx + 4] == 'e' || str[idx + 4] == 'E' ) )
+            {
+                OSL_ENSURE( j < MAX_MODULE_COUNT,"too many modules installed" );
+                configData.filelen[j] = aFileStatus.getFileSize();
+                configData.fileurl[j++] = aFileUrl ;
+            }
+        }
+        aDirectory.close();
+    }
+
+//      url = url + ret + rtl::OUString::createFromAscii( "/treeview.xml" );
+
+//      // Determine the filelen
+//      sal_uInt64 filelen = 0;
+
+//      osl::FileStatus aStatus( FileStatusMask_FileSize );
+//      if( osl::FileBase::E_None == osl::DirectoryItem::get( url,aDirItem ) &&
+//          osl::FileBase::E_None == aDirItem.getFileStatus( aStatus )  &&
+//          aStatus.isValid( FileStatusMask_FileSize ) )
+//          filelen = aStatus.getFileSize();
+//      configData.fileurl = url;
+//      configData.filelen = filelen;
+
     configData.system = system;
     configData.locale = locale;
-    configData.filelen = filelen;
+    configData.appendix =
+        rtl::OUString::createFromAscii( "?Language=" ) +
+        configData.locale +
+        rtl::OUString::createFromAscii( "&System=" ) +
+        configData.system;
+
     return configData;
 }

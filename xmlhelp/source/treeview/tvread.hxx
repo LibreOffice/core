@@ -48,8 +48,11 @@ namespace treeview {
 
     struct ConfigData
     {
-        sal_uInt64 filelen;
-        rtl::OUString fileurl,locale,system;
+#define MAX_MODULE_COUNT 16
+
+        sal_uInt64    filelen[MAX_MODULE_COUNT];
+        rtl::OUString fileurl[MAX_MODULE_COUNT];
+        rtl::OUString locale,system;
         rtl::OUString appendix;
     };
 
