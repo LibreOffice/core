@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 08:57:48 $
+ *  last change: $Author: pl $ $Date: 2001-09-13 13:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,6 @@ typedef USHORT FileControlMode_Internal;
 #define FILECTRL_ORIGINALBUTTONTEXT     ((USHORT)0x0002)
 
 
-class VclFileDialog;
-class FileDialog;
 class FileControl : public Window
 {
 private:
@@ -96,9 +94,6 @@ private:
 
     String          maButtonText;
     BOOL            mbOpenDlg;
-
-    VclFileDialog*  mpVclDlg;
-    FileDialog*     mpFDlg;
 
     Link            maDialogCreatedHdl;
 
@@ -147,11 +142,6 @@ public:
     //use this to manipulate the dialog bevore executing it:
     void            SetDialogCreatedHdl( const Link& rLink ) { maDialogCreatedHdl = rLink; }
     const Link&     GetDialogCreatedHdl() const { return maDialogCreatedHdl; }
-
-        //only use the next two methods in 'DialogCreatedHdl' and don't store the dialog-pointer
-    VclFileDialog*  GetVclFileDialog() const { return mpVclDlg; }
-    FileDialog*     GetFileDialog() const { return mpFDlg; }
-    //------
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 09:00:03 $
+ *  last change: $Author: pl $ $Date: 2001-09-13 13:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,13 +64,6 @@
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_FILEDLG_HXX
-#include <vcl/filedlg.hxx>
-#endif
-
 #ifndef _SVTOOLS_SVTDATA_HXX
 #include <svtdata.hxx>
 #endif
@@ -92,9 +85,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     maButton( this, nStyle&(~WB_BORDER)|WB_NOLIGHTBORDER|WB_NOPOINTERFOCUS|WB_NOTABSTOP ),
     maButtonText( SvtResId( STR_FILECTRL_BUTTONTEXT ) ),
     mnFlags( nFlags ),
-    mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT ),
-    mpVclDlg( 0 ),
-    mpFDlg( 0 )
+    mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )
 {
     maButton.SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
     mbOpenDlg = TRUE;
