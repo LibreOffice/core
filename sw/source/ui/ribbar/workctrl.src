@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 12:46:32 $
+ *  last change: $Author: os $ $Date: 2002-07-05 07:58:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,6 +2117,12 @@ ImageButton BTN_NAVI
     Image IMG_BTN
     {
         ImageBitmap = Bitmap { File = "punkt.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+    };
+    Image IMG_BTN_H
+    {
+        ImageBitmap = Bitmap { File = "punkt_h.bmp" ; };
+        MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
     };
     String ST_QUICK
     {
@@ -2145,5 +2151,4 @@ ImageButton BTN_NAVI
         Text[ thai ] = "นำทาง";
     };
 };
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:57:04 $
+ *  last change: $Author: os $ $Date: 2002-07-05 07:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,12 +673,23 @@ void SwHlpImageButton::RequestHelp( const HelpEvent& rHEvt )
 SwNaviImageButton::SwNaviImageButton(Window* pParent) :
             ImageButton(pParent, SW_RES(BTN_NAVI)), pPopup(0),
             aImage(ResId(IMG_BTN)),
+            aImageH(ResId(IMG_BTN_H)),
             sQuickText(ResId(ST_QUICK))
 {
     FreeResource();
     SetStyle(GetStyle()|WB_NOPOINTERFOCUS);
     SetQuickHelpText(sQuickText);
-    SetImage(aImage);
+    SetImage( GetBackground().GetColor().IsDark() ? aImageH : aImage);
 }
+/* -----------------------------2002/07/05 9:41-------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwNaviImageButton::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            SetImage( GetBackground().GetColor().IsDark() ? aImageH : aImage);
+
+    Window::DataChanged( rDCEvt );
+}
 
