@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:48:00 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:56:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,16 +75,16 @@ ENABLE_EXCEPTIONS=TRUE
 # --- BEGIN --------------------------------------------------------
 SHL1OBJS=  \
     $(SLO)$/osl_File.obj
-SHL1TARGET= File
+SHL1TARGET= osl_File
 SHL1STDLIBS=\
-    $(SALLIB) 
-
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+    $(SALLIB) \
+    $(CPPUNITLIB)
+# .IF "$(GUI)" == "WNT"
+# SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+# .ENDIF
+# .IF "$(GUI)" == "UNX"
+# SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
@@ -108,6 +108,20 @@ SHL2VERSIONMAP = export.map
 DEF2NAME    =$(SHL2TARGET)
 
 
+# END --------------------------------------------------------------
+
+# --- BEGIN --------------------------------------------------------
+SHL3OBJS=  \
+    $(SLO)$/osl_old_test_file.obj
+SHL3TARGET= osl_old_test_file
+SHL3STDLIBS=\
+    $(SALLIB) \
+    $(CPPUNITLIB)
+
+SHL3IMPLIB= i$(SHL3TARGET)
+
+DEF3NAME    =$(SHL3TARGET)
+SHL3VERSIONMAP = export.map
 # END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
