@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:42:38 $
+#   last change: $Author: jb $ $Date: 2001-02-01 14:37:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,22 @@ PACKAGE=com$/sun$/star$/configuration
 
 IDLFILES=\
     ConfigurationAccess.idl\
-    ConfigurationContainer.idl\
     ConfigurationProvider.idl\
     ConfigurationUpdateAccess.idl\
     ConfigurationRegistry.idl\
+    HierarchyElement.idl\
+    AccessRootElement.idl\
+    UpdateRootElement.idl\
+    GroupElement.idl\
+    SetElement.idl\
+    HierarchyAccess.idl\
+    GroupAccess.idl\
+    GroupUpdate.idl\
+    SetAccess.idl\
+    SetUpdate.idl\
+    SimpleSetAccess.idl\
+    SimpleSetUpdate.idl\
+    PropertyHierarchy.idl\
     XTemplateContainer.idl\
     XTemplateInstance.idl\
 
