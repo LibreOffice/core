@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryListEventListener.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com { module sun { module star { module linguistic2 {
     @see    <type scope="com::sun::star::linguistic2">DictionaryListEvent</type>
     @see    <type scope="com::sun::star::linguistic2">XDictionaryList</type>
 */
-interface XDictionaryListEventListener : com::sun::star::lang::XEventListener
+published interface XDictionaryListEventListener : com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** is used to notify the object about dictionary-list events.
