@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:09:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ public:
 
     inline sal_Bool HasInvalidRect() const { return aInvalidRect.HasArea(); }
     void ChgHyphenation() { Reformat(); }
+    void ChgNumberDigits() { Reformat(); }
 
     //Methoden fuer Paint- und Scrollrects, die auf allen Shells im
     //Ring arbeiten.
