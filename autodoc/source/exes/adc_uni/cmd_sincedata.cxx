@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_sincedata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:35:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,51 +91,20 @@ SinceTagTransformationData::DoesTransform() const
     return NOT aTransformationTable.empty();
 }
 
-bool
-SinceTagTransformationData::StripSinceTagText( String & io_sSinceTagValue ) const
-{
-    StreamStr           sValue(200);
-    sValue << io_sSinceTagValue;
-
-    // Find first cipher preceded by a blank:
-    bool bStart = false;
-    bool bBlank = true;     // A cipher at start of line is accepted.
-    for ( const char * p = sValue.c_str();
-          *p != 0 AND NOT bStart;
-          ++p )
-    {
-        if (bBlank AND '0' <= *p AND *p <= '9')
-        {
-            bStart = true;
-            sValue.pop_front(p - sValue.c_str());
-        }
-        if (*p <= 32)
-            bBlank = true;
-        else
-            bBlank = false;
-    }
-    if (NOT bStart)
-        return false;
-
-    // Seek end of line and remove trailing whitespace:
-    const char * pData = sValue.c_str();
-    const char * pDataEnd = pData;
-    for ( ++pDataEnd;
-          *pDataEnd != 0 AND *pDataEnd != 10 AND *pDataEnd != 13;
-          ++pDataEnd );
-    sValue.seekp(pDataEnd - pData);
-    sValue.strip_back_whitespace();
-    io_sSinceTagValue.assign(sValue.c_str());
-    return true;
-}
-
 const String &
 SinceTagTransformationData::DisplayOf( const String & i_sVersionNumber ) const
 {
-    const String * ret = csv::find_in_map(aTransformationTable, i_sVersionNumber);
-    return ret != 0
-            ?   *ret
-            :   String::Null_();
+    if (DoesTransform())
+    {
+        const String * ret = csv::find_in_map(aTransformationTable, i_sVersionNumber);
+        return ret != 0
+                ?   *ret
+                :   String::Null_();
+    }
+    else
+    {
+        return i_sVersionNumber;
+    }
 }
 
 void

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_sincedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:36:02 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,22 +100,6 @@ class SinceTagTransformationData : public Context
     // INQUIRY
     /// False, if no transformation table exists.
     bool                DoesTransform() const;
-
-    /** Strips the value of an @@since tag down to the meaningful parts.
-
-        The meaningful parts are considered
-            - to start with the first cipher following a blank
-            - to end with the end of the line
-        and are
-            - stripped of trailing blanks.
-        If function returns false, io_sSinceTagValue stays unchanged.
-
-        @return
-        True, if a meaningful version number was found.
-        A version number is meaningful, if it contains at least one cipher.
-    */
-    bool                StripSinceTagText(
-                            String &            io_sSinceTagValue ) const;
 
     /** Gets the string to display for a version number.
 
