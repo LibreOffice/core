@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _UnoControlCheckBoxModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:06:43 $
+ *  last change:$Date: 2004-11-16 12:45:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,17 @@ public class _UnoControlCheckBoxModel extends MultiPropertyTest {
         }
     };
 
+    /**
+    * This property can be VOID, and in case if it is so new
+    * value must defined.
+    */
+    public void _BackgroundColor() {
+        testProperty("BackgroundColor", new PropertyTester() {
+            protected Object getNewValue(String p, Object old) {
+                return utils.isVoid(old) ? new Integer(1234) : null ;
+            }
+        }) ;
+    }
 
     /**
     * This property can be void, so if old value is <code> null </code>
