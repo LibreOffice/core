@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 10:41:42 $
+ *  last change: $Author: bm $ $Date: 2003-10-28 13:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,7 @@ void createTitle( const uno::Reference< XTitle >& xTitle
 
 void createLegend( const uno::Reference< XLegend > & xLegend
                    , awt::Rectangle & rOutSpaceLeft
+                   , const awt::Size & rPageSize
                    , const uno::Reference< drawing::XShapes>& xPageShapes
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
     )
@@ -614,7 +615,7 @@ void createLegend( const uno::Reference< XLegend > & xLegend
         VLegend aVLegend( xLegend );
         aVLegend.init( xPageShapes, xShapeFactory );
         aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ) );
-        aVLegend.changePosition( rOutSpaceLeft );
+        aVLegend.changePosition( rOutSpaceLeft, rPageSize );
     }
 }
 
@@ -706,7 +707,7 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     //------------ create legend
     awt::Rectangle aSpaceLeft( 0, nYOffset+nYDistance, rPageSize.Width, rPageSize.Height - nYOffset - 2*nYDistance );
     createLegend( LegendHelper::getLegend( m_xChartModel )
-                  , aSpaceLeft, xPageShapes, m_xShapeFactory );
+                  , aSpaceLeft, rPageSize, xPageShapes, m_xShapeFactory );
 
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
