@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: abi $ $Date: 2001-12-05 12:10:16 $
+ *  last change: $Author: abi $ $Date: 2001-12-18 12:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,7 +1108,7 @@ shell::move( sal_Int32 CommandId,
 
     switch( NameClash )
     {
-        case NameClash::KEEP:
+    case NameClash::KEEP:
         {
             nError = osl_File_move( srcUnqPath,dstUnqPath,true );
             if( nError != osl::FileBase::E_None && nError != osl::FileBase::E_EXIST )
@@ -1120,21 +1120,40 @@ shell::move( sal_Int32 CommandId,
             }
             break;
         }
-        case NameClash::OVERWRITE:
+    case NameClash::OVERWRITE:
         {
-#if 0
-            // don't call shell::remove because that function will send
-            // a deleted hint for dstUnqPath which isn't right.
-            // dstUnqPath will exist again after the call to osl::File::move.
-            // call osl::File::remove() instead.
+//  #if 0
+//              // don't call shell::remove because that function will send
+//              // a deleted hint for dstUnqPath which isn't right.
+//              // dstUnqPath will exist again after the call to osl::File::move.
+//              // call osl::File::remove() instead.
 
-            remove( CommandId,dstUnqPath,IsWhat );
-#else
+//              remove( CommandId,dstUnqPath,IsWhat );
+//  #else
+            // stat to determine whether we have a symlink
+            rtl::OUString targetPath(dstUnqPath);
+
+            osl::FileStatus aStatus(FileStatusMask_Type|FileStatusMask_LinkTargetURL);
+            osl::DirectoryItem aItem;
+            osl::DirectoryItem::get(dstUnqPath,aItem);
+            aItem.getFileStatus(aStatus);
+
+            if( aStatus.isValid(FileStatusMask_Type) && aStatus.isValid(FileStatusMask_LinkTargetURL) )
+            {
+                if( aStatus.getFileType() == osl::FileStatus::Link )
+                    targetPath = aStatus.getLinkTargetURL();
+            }
+            else
+            {
+                installError( CommandId,
+                              TASKHANDLING_OVERWRITE_FOR_MOVE );
+                return;
+            }
             // Will do nothing if file does not exist.
-            osl::File::remove( dstUnqPath );
-#endif
+            osl::File::remove( targetPath );
+//  #endif
 
-            nError = osl_File_move( srcUnqPath,dstUnqPath );
+            nError = osl_File_move( srcUnqPath,targetPath );
             if( nError != osl::FileBase::E_None )
             {
                 installError( CommandId,
@@ -1144,7 +1163,7 @@ shell::move( sal_Int32 CommandId,
             }
             break;
         }
-        case NameClash::RENAME:
+    case NameClash::RENAME:
         {
             rtl::OUString newDstUnqPath;
             nError = osl_File_move( srcUnqPath,dstUnqPath,true );
@@ -1195,7 +1214,7 @@ shell::move( sal_Int32 CommandId,
 
             break;
         }
-        case NameClash::ERROR:
+    case NameClash::ERROR:
         {
             nError = osl_File_move( srcUnqPath,dstUnqPath,true );
             if( nError == osl::FileBase::E_EXIST )
@@ -1213,12 +1232,12 @@ shell::move( sal_Int32 CommandId,
             }
             break;
         }
-        case NameClash::ASK:
-        default:
-            installError( CommandId,
-                          TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE );
-            return;
-            break;
+    case NameClash::ASK:
+    default:
+        installError( CommandId,
+                      TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE );
+        return;
+        break;
     }
 
     // Determine, whether we have moved a file or a folder
