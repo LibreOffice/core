@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cancelcommandexecution.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 11:20:24 $
+ *  last change: $Author: kso $ $Date: 2001-06-11 06:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,8 @@ void cancelCommandExecution( const uno::Any & rException,
                 = new ucbhelper::InteractionRequest( rException );
 
             uno::Sequence< uno::Reference< task::XInteractionContinuation > >
-                aContinuations( 2 );
+                aContinuations( 1 );
             aContinuations[ 0 ]
-                = new ucbhelper::InteractionApprove( xRequest.get() );
-            aContinuations[ 1 ]
                 = new ucbhelper::InteractionAbort( xRequest.get() );
 
             xRequest->setContinuations( aContinuations );

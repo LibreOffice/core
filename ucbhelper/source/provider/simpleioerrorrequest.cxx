@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleioerrorrequest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 11:21:42 $
+ *  last change: $Author: kso $ $Date: 2001-06-11 06:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,8 @@ SimpleIOErrorRequest::SimpleIOErrorRequest(
 
     // Fill continuations...
     uno::Sequence< uno::Reference<
-            task::XInteractionContinuation > > aContinuations( 2 );
-    aContinuations[ 0 ] = new InteractionApprove( this );
-    aContinuations[ 1 ] = new InteractionAbort( this );
+            task::XInteractionContinuation > > aContinuations( 1 );
+    aContinuations[ 0 ] = new InteractionAbort( this );
 
     setContinuations( aContinuations );
 }
