@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:47:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,6 +1536,15 @@ void SwDocShell::CalcLayoutForOLEObjects()
         }
     }
 }
+
+// --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
+// This new function is necessary to trigger update of links in docs
+// read by the binary filter:
+void SwDocShell::UpdateLinks()
+{
+    GetDoc()->UpdateLinks();
+}
+
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1576,6 +1585,5 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
         return SvPersist::SaveCompleted( pStor );
     return FALSE;
 } */
-
 
 
