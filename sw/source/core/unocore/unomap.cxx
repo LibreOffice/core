@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:18:36 $
+ *  last change: $Author: tl $ $Date: 2002-02-07 16:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,7 +1604,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, CPPU_E2T(CPPUTYPE_INT16),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
                     {SW_PROP_NMID(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     {SW_PROP_NMID(UNO_NAME_IS_START), FN_UNO_IS_START, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
-                    _REDLINE_PROPERTIES
+                    //_REDLINE_PROPERTIES
                     {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
                     {0,0,0,0,0}
                 };
@@ -1649,6 +1649,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
             }
+            break;
             case PROPERTY_MAP_TEXT_DEFAULT :
             {
                 static SfxItemPropertyMap aTextDefaultMap_Impl[] =
@@ -1661,6 +1662,22 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 for( SfxItemPropertyMap * pMap = aTextDefaultMap_Impl;
                         pMap->pName; ++pMap )
                     pMap->nFlags &= ~PropertyAttribute::MAYBEVOID;
+            }
+            break;
+            case PROPERTY_MAP_REDLINE_PORTION :
+            {
+                static SfxItemPropertyMap aRedlinePortionMap_Impl[] =
+                {
+                    COMPLETE_TEXT_CURSOR_MAP
+                    {SW_PROP_NMID(UNO_NAME_BOOKMARK), FN_UNO_BOOKMARK, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT),   PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
+                    {SW_PROP_NMID(UNO_NAME_CONTROL_CHARACTER), FN_UNO_CONTROL_CHARACTER, CPPU_E2T(CPPUTYPE_INT16),                 PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_HYPHEN_MIN_LEAD   },
+                    {SW_PROP_NMID(UNO_NAME_IS_COLLAPSED), FN_UNO_IS_COLLAPSED, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    {SW_PROP_NMID(UNO_NAME_IS_START), FN_UNO_IS_START, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+                    _REDLINE_PROPERTIES
+                    {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
+                    {0,0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aRedlinePortionMap_Impl;
             }
             break;
 //!!!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:19:35 $
+ *  last change: $Author: tl $ $Date: 2002-02-07 16:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,13 @@ SwFmtFld*   SwXTextPortion::GetFldFmt(sal_Bool bInit)
 /*-- 11.12.98 09:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr, uno::Reference< XText > & rParent,
+SwXTextPortion::SwXTextPortion(const SwUnoCrsr* pPortionCrsr,
+        uno::Reference< XText > & rParent,
         SwTextPortionType eType) :
-    aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
+    aPropSet(aSwMapProvider.GetPropertyMap(
+                (PORTION_REDLINE_START == eType ||
+                 PORTION_REDLINE_END   == eType) ?
+                    PROPERTY_MAP_REDLINE_PORTION : PROPERTY_MAP_TEXTPORTION_EXTENSIONS)),
     aLstnrCntnr( (XTextRange*)this),
     pFmtFld(0),
     xParentText(rParent),
@@ -305,8 +309,18 @@ void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeExcep
   -----------------------------------------------------------------------*/
 uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo(void) throw( uno::RuntimeException )
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aPropSet.getPropertySetInfo();
-    return xRef;
+    //! PropertySetInfo for text portion extensions
+    static uno::Reference< beans::XPropertySetInfo >
+            xTxtPorExtRef = SfxItemPropertySet( aSwMapProvider.GetPropertyMap(
+                    PROPERTY_MAP_TEXTPORTION_EXTENSIONS) ).getPropertySetInfo();
+    //! PropertySetInfo for redline portions
+    static uno::Reference< beans::XPropertySetInfo >
+            xRedlPorRef = SfxItemPropertySet( aSwMapProvider.GetPropertyMap(
+                    PROPERTY_MAP_REDLINE_PORTION) ).getPropertySetInfo();
+
+
+    return (PORTION_REDLINE_START == ePortionType ||
+            PORTION_REDLINE_END   == ePortionType) ? xRedlPorRef : xTxtPorExtRef;
 }
 /*-- 11.12.98 09:56:57---------------------------------------------------
 
