@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:29:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-//#define WORKAROUND_98119
+#define WORKAROUND_98119
 
 #ifdef WORKAROUND_98119
 #include <provider/bufferedinputstream.hxx>
