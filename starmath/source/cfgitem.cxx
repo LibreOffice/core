@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:56:31 $
+ *  last change: $Author: tl $ $Date: 2001-05-07 11:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,38 @@ using namespace com::sun::star::beans;
 
 static const char* aRootName = "Office.Math";
 
-#define SYMBOL_LIST     "SymbolList"
+#define SYMBOL_LIST         "SymbolList"
+#define FONT_FORMAT_LIST    "FontFormatList"
+
+SV_IMPL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry );
+
+/////////////////////////////////////////////////////////////////
+
+
+static Sequence< OUString > lcl_GetFontPropertyNames()
+{
+    static const char * aPropNames[] =
+    {
+        "Name",
+        "CharSet",
+        "Family",
+        "Pitch",
+        "Weight",
+        "Italic",
+        0
+    };
+
+    const char** ppPropName = aPropNames;
+
+    Sequence< OUString > aNames( 6 );
+    OUString *pNames = aNames.getArray();
+    for( INT32 i = 0; *ppPropName;  ++i, ++ppPropName )
+    {
+        pNames[i] = A2OU( *ppPropName );
+    }
+    //aNames.realloc( i );
+    return aNames;
+}
 
 /////////////////////////////////////////////////////////////////
 
@@ -85,21 +116,16 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
 {
     static const char * aPropNames[] =
     {
-        "Char",                     //  0
-        "Set",                      //  1
-        "Predefined",               //  2
-        "Font/Name",                //  3
-        "Font/CharSet",             //  4
-        "Font/Family",              //  5
-        "Font/Pitch",               //  6
-        "Font/Weight",              //  7
-        "Font/Italic",              //  8
+        "Char",
+        "Set",
+        "Predefined",
+        "FontFormatId",
         0
     };
 
     const char** ppPropName = aPropNames;
 
-    Sequence< OUString > aNames( 9 );
+    Sequence< OUString > aNames( 4 );
     OUString *pNames = aNames.getArray();
     for( INT32 i = 0; *ppPropName;  ++i, ++ppPropName )
     {
@@ -161,48 +187,13 @@ static const char * aFormatPropNames[] =
     "StandardFormat/Distance/RightSpace",
     "StandardFormat/Distance/TopSpace",
     "StandardFormat/Distance/BottomSpace",
-    "StandardFormat/VariableFont/Name",
-    "StandardFormat/VariableFont/CharSet",
-    "StandardFormat/VariableFont/Family",
-    "StandardFormat/VariableFont/Pitch",
-    "StandardFormat/VariableFont/Weight",
-    "StandardFormat/VariableFont/Italic",
-    "StandardFormat/FunctionFont/Name",
-    "StandardFormat/FunctionFont/CharSet",
-    "StandardFormat/FunctionFont/Family",
-    "StandardFormat/FunctionFont/Pitch",
-    "StandardFormat/FunctionFont/Weight",
-    "StandardFormat/FunctionFont/Italic",
-    "StandardFormat/NumberFont/Name",
-    "StandardFormat/NumberFont/CharSet",
-    "StandardFormat/NumberFont/Family",
-    "StandardFormat/NumberFont/Pitch",
-    "StandardFormat/NumberFont/Weight",
-    "StandardFormat/NumberFont/Italic",
-    "StandardFormat/TextFont/Name",
-    "StandardFormat/TextFont/CharSet",
-    "StandardFormat/TextFont/Family",
-    "StandardFormat/TextFont/Pitch",
-    "StandardFormat/TextFont/Weight",
-    "StandardFormat/TextFont/Italic",
-    "StandardFormat/SansFont/Name",
-    "StandardFormat/SansFont/CharSet",
-    "StandardFormat/SansFont/Family",
-    "StandardFormat/SansFont/Pitch",
-    "StandardFormat/SansFont/Weight",
-    "StandardFormat/SansFont/Italic",
-    "StandardFormat/SerifFont/Name",
-    "StandardFormat/SerifFont/CharSet",
-    "StandardFormat/SerifFont/Family",
-    "StandardFormat/SerifFont/Pitch",
-    "StandardFormat/SerifFont/Weight",
-    "StandardFormat/SerifFont/Italic",
-    "StandardFormat/FixedFont/Name",
-    "StandardFormat/FixedFont/CharSet",
-    "StandardFormat/FixedFont/Family",
-    "StandardFormat/FixedFont/Pitch",
-    "StandardFormat/FixedFont/Weight",
-    "StandardFormat/FixedFont/Italic"
+    "StandardFormat/VariableFont",
+    "StandardFormat/FunctionFont",
+    "StandardFormat/NumberFont",
+    "StandardFormat/TextFont",
+    "StandardFormat/SansFont",
+    "StandardFormat/SerifFont",
+    "StandardFormat/FixedFont"
 };
 
 
@@ -268,10 +259,137 @@ SmCfgOther::SmCfgOther()
 
 /////////////////////////////////////////////////////////////////
 
+
+SmFontFormat::SmFontFormat()
+{
+    aName.AssignAscii( "StarMath" );
+    nCharSet = nFamily = nPitch = nWeight = nItalic = 0;
+}
+
+
+SmFontFormat::SmFontFormat( const Font &rFont )
+{
+    aName       = rFont.GetName();
+    nCharSet    = (INT16) rFont.GetCharSet();
+    nFamily     = (INT16) rFont.GetFamily();
+    nPitch      = (INT16) rFont.GetPitch();
+    nWeight     = (INT16) rFont.GetWeight();
+    nItalic     = (INT16) rFont.GetItalic();
+}
+
+
+const Font SmFontFormat::GetFont() const
+{
+    Font aRes;
+    aRes.SetName( aName );
+    aRes.SetCharSet( (rtl_TextEncoding) nCharSet );
+    aRes.SetFamily( (FontFamily) nFamily );
+    aRes.SetPitch( (FontPitch) nPitch );
+    aRes.SetWeight( (FontWeight) nWeight );
+    aRes.SetItalic( (FontItalic) nItalic );
+    return aRes;
+}
+
+
+BOOL SmFontFormat::operator == ( const SmFontFormat &rFntFmt ) const
+{
+    return  aName    == rFntFmt.aName       &&
+            nCharSet == rFntFmt.nCharSet    &&
+            nFamily  == rFntFmt.nFamily     &&
+            nPitch   == rFntFmt.nPitch      &&
+            nWeight  == rFntFmt.nWeight     &&
+            nItalic  == rFntFmt.nItalic;
+}
+
+
+/////////////////////////////////////////////////////////////////
+
+SmFntFmtListEntry::SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt ) :
+    aId     (rId),
+    aFntFmt (rFntFmt)
+{
+}
+
+
+SmFontFormatList::SmFontFormatList()
+{
+}
+
+
+void SmFontFormatList::Clear()
+{
+    aEntries.Remove( 0, aEntries.Count() );
+}
+
+
+void SmFontFormatList::AddFontFormat( const String &rFntFmtId,
+        const SmFontFormat &rFntFmt )
+{
+    const SmFontFormat *pFntFmt = GetFontFormat( rFntFmtId );
+    DBG_ASSERT( !pFntFmt, "FontFormatId already exists" );
+    if (!pFntFmt)
+    {
+        SmFntFmtListEntry aEntry( rFntFmtId, rFntFmt );
+        aEntries.Insert( aEntry, aEntries.Count() );
+    }
+}
+
+
+const SmFontFormat * SmFontFormatList::GetFontFormat( const String &rFntFmtId ) const
+{
+    SmFontFormat *pRes = 0;
+
+    USHORT nCnt = aEntries.Count();
+    USHORT i;
+    for (i = 0;  i < nCnt  &&  !pRes;  ++i)
+    {
+        if (aEntries[i].aId == rFntFmtId)
+            pRes = &aEntries[i].aFntFmt;
+    }
+
+    return pRes;
+}
+
+
+const String SmFontFormatList::GetFontFormatId( const SmFontFormat &rFntFmt ) const
+{
+    String aRes;
+
+    USHORT nCnt = aEntries.Count();
+    USHORT i;
+    for (i = 0;  i < nCnt  &&  0 == aRes.Len();  ++i)
+    {
+        if (aEntries[i].aFntFmt == rFntFmt)
+            aRes = aEntries[i].aId;
+    }
+
+    return aRes;
+}
+
+
+const String SmFontFormatList::GetNewFontFormatId() const
+{
+    String aRes;
+
+    INT32 nCnt = GetCount();
+    for (INT32 i = 0;  i < nCnt + 1  &&  0 == aRes.Len();  ++i)
+    {
+        String aTmpId( String::CreateFromInt32( i ) );
+        if (!GetFontFormat( aTmpId ))
+            aRes = aTmpId;
+    }
+    DBG_ASSERT( 0 != aRes.Len(), "failed to create new FontFormatId" );
+
+    return aRes;
+}
+
+/////////////////////////////////////////////////////////////////
+
 SmMathConfig::SmMathConfig()
 {
     pFormat         = 0;
     pOther          = 0;
+    pFontFormatList = 0;
     pSymbols        = 0;
     nSymbolCount    = 0;
 
@@ -279,14 +397,6 @@ SmMathConfig::SmMathConfig()
 
     aSaveTimer.SetTimeout( 3000 );
     aSaveTimer.SetTimeoutHdl( LINK( this, SmMathConfig, TimeOut ) );
-
-#ifdef DEBUG
-    LoadSymbols();
-    LoadOther();
-    LoadFormat();
-    SaveOther();
-    SaveFormat();
-#endif
 }
 
 
@@ -295,6 +405,7 @@ SmMathConfig::~SmMathConfig()
     Save();
     delete pFormat;
     delete pOther;
+    delete pFontFormatList;
     delete [] pSymbols;
 }
 
@@ -367,32 +478,12 @@ SmSym SmMathConfig::ReadSymbol( SmMathConfigItem &rCfg,
             bOK = FALSE;
         ++pValue;
         if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
-            aFont.SetName( aTmpStr );
-        else
-            bOK = FALSE;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aFont.SetCharSet( (rtl_TextEncoding) nTmp16 );
-        else
-            bOK = FALSE;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aFont.SetFamily( (FontFamily) nTmp16 );
-        else
-            bOK = FALSE;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aFont.SetPitch( (FontPitch) nTmp16 );
-        else
-            bOK = FALSE;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aFont.SetWeight( (FontWeight) nTmp16 );
-        else
-            bOK = FALSE;
-        ++pValue;
-        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
-            aFont.SetItalic( (FontItalic) nTmp16 );
+        {
+            const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
+            DBG_ASSERT( pFntFmt, "unknown FontFormat" );
+            if (pFntFmt)
+                aFont = pFntFmt->GetFont();
+        }
         else
             bOK = FALSE;
         ++pValue;
@@ -442,6 +533,8 @@ void SmMathConfig::Save()
 {
     SaveOther();
     SaveFormat();
+    UpdateFontFormatList();
+    SaveFontFormatList();
 }
 
 
@@ -509,39 +602,131 @@ void SmMathConfig::ReplaceSymbols( const SmSym *pNewSymbols[], USHORT nCount )
         pVal->Name += pNames[2];
         pVal->Value <<= (BOOL) rSymbol.IsPredefined();
         pVal++;
-        // Font/Name
+        // FontFormatId
+        SmFontFormat aFntFmt( pFormat->GetFont( i ) );
+        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt ) );
+        DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
         pVal->Name  = aNodeNameDelim;
         pVal->Name += pNames[3];
-        pVal->Value <<= OUString( rFont.GetName() );
-        pVal++;
-        // Font/Charset
-        pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[4];
-        pVal->Value <<= (INT16) rFont.GetCharSet();
-        pVal++;
-        // Font/Famlily
-        pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[5];
-        pVal->Value <<= (INT16) rFont.GetFamily();
-        pVal++;
-        // Font/Pitch
-        pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[6];
-        pVal->Value <<= (INT16) rFont.GetPitch();
-        pVal++;
-        // Font/Weight
-        pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[7];
-        pVal->Value <<= (INT16) rFont.GetWeight();
-        pVal++;
-        // Font/Italic
-        pVal->Name  = aNodeNameDelim;
-        pVal->Name += pNames[8];
-        pVal->Value <<= (INT16) rFont.GetItalic();
+        pVal->Value <<= OUString( aFntFmtId );
         pVal++;
     }
     DBG_ASSERT( pVal - pValues == nCount * nSymbolProps, "properties missing" );
     aCfg.ReplaceSetProperties( A2OU( SYMBOL_LIST ) , aValues );
+
+    UpdateFontFormatList();
+    SaveFontFormatList();
+}
+
+
+SmFontFormatList & SmMathConfig::GetFontFormatList()
+{
+    if (!pFontFormatList)
+    {
+        LoadFontFormatList();
+    }
+    return *pFontFormatList;
+}
+
+
+void SmMathConfig::LoadFontFormatList()
+{
+    if (!pFontFormatList)
+        pFontFormatList = new SmFontFormatList;
+    else
+        pFontFormatList->Clear();
+
+    SmMathConfigItem aCfg( String::CreateFromAscii( aRootName ) );
+
+    Sequence< OUString > aNodes( aCfg.GetNodeNames( A2OU( FONT_FORMAT_LIST ) ) );
+    const OUString *pNode = aNodes.getConstArray();
+    INT32 nNodes = aNodes.getLength();
+
+    for (INT32 i = 0;  i < nNodes;  ++i)
+    {
+        SmFontFormat aFntFmt( ReadFontFormat( aCfg, pNode[i], A2OU( FONT_FORMAT_LIST ) ) );
+        if (!pFontFormatList->GetFontFormat( pNode[i] ))
+            pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
+    }
+}
+
+
+SmFontFormat SmMathConfig::ReadFontFormat( SmMathConfigItem &rCfg,
+        const OUString &rSymbolName, const OUString &rBaseNode ) const
+{
+    SmFontFormat aRes;
+
+    Sequence< OUString > aNames = lcl_GetFontPropertyNames();
+    INT32 nProps = aNames.getLength();
+
+    OUString aDelim( OUString::valueOf( (sal_Unicode) '/' ) );
+    OUString *pName = aNames.getArray();
+    for (INT32 i = 0;  i < nProps;  ++i)
+    {
+        OUString &rName = pName[i];
+        OUString aTmp( rName );
+        rName = rBaseNode;
+        rName += aDelim;
+        rName += rSymbolName;
+        rName += aDelim;
+        rName += aTmp;
+    }
+
+    const Sequence< Any > aValues = rCfg.GetProperties( aNames );
+
+    if (nProps  &&  aValues.getLength() == nProps)
+    {
+        const Any * pValue = aValues.getConstArray();
+
+        OUString    aTmpStr;
+        INT16       nTmp16 = 0;
+
+        BOOL bOK = TRUE;
+        if (pValue->hasValue()  &&  (*pValue >>= aTmpStr))
+            aRes.aName = aTmpStr;
+        else
+            bOK = FALSE;
+        ++pValue;
+        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+            aRes.nCharSet = nTmp16;
+        else
+            bOK = FALSE;
+        ++pValue;
+        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+            aRes.nFamily = nTmp16;
+        else
+            bOK = FALSE;
+        ++pValue;
+        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+            aRes.nPitch = nTmp16;
+        else
+            bOK = FALSE;
+        ++pValue;
+        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+            aRes.nWeight = nTmp16;
+        else
+            bOK = FALSE;
+        ++pValue;
+        if (pValue->hasValue()  &&  (*pValue >>= nTmp16))
+            aRes.nItalic = nTmp16;
+        else
+            bOK = FALSE;
+        ++pValue;
+
+        DBG_ASSERT( bOK, "read FontFormat failed" );
+    }
+
+    return aRes;
+}
+
+
+void SmMathConfig::SaveFontFormatList()
+{
+}
+
+
+void SmMathConfig::UpdateFontFormatList()
+{
 }
 
 
@@ -672,7 +857,6 @@ void SmMathConfig::SaveOther()
     SetOtherModified( FALSE );
 }
 
-
 void SmMathConfig::LoadFormat()
 {
     if (!pFormat)
@@ -731,22 +915,12 @@ void SmMathConfig::LoadFormat()
             aFnt.SetSize( pFormat->GetBaseSize() );
 
             if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
-                aFnt.SetName( aTmpStr );
-            ++pVal;
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                aFnt.SetCharSet( (rtl_TextEncoding) nTmp16 );
-            ++pVal;
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                aFnt.SetFamily( (FontFamily) nTmp16 );
-            ++pVal;
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                aFnt.SetPitch( (FontPitch) nTmp16 );
-            ++pVal;
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                aFnt.SetWeight( (FontWeight) nTmp16 );
-            ++pVal;
-            if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-                aFnt.SetItalic( (FontItalic) nTmp16 );
+            {
+                const SmFontFormat *pFntFmt = GetFontFormatList().GetFontFormat( aTmpStr );
+                DBG_ASSERT( pFntFmt, "unknown FontFormat" );
+                if (pFntFmt)
+                    aFnt = pFntFmt->GetFont();
+            }
             ++pVal;
 
             pFormat->SetFont( i, aFnt );
@@ -809,25 +983,12 @@ void SmMathConfig::SaveFormat()
 
     for (i = FNT_BEGIN;  i < FNT_END;  ++i)
     {
-        Font aFnt( pFormat->GetFont( i ) );
+        SmFontFormat aFntFmt( pFormat->GetFont( i ) );
+        String aFntFmtId( GetFontFormatList().GetFontFormatId( aFntFmt ) );
+        DBG_ASSERT( aFntFmtId.Len(), "FontFormatId not found" );
 
         pVal->Name  = *pNames++;
-        pVal->Value <<= OUString( aFnt.GetName() );
-        ++pVal;
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) aFnt.GetCharSet();
-        ++pVal;
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) aFnt.GetFamily();
-        ++pVal;
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) aFnt.GetPitch();
-        ++pVal;
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) aFnt.GetWeight();
-        ++pVal;
-        pVal->Name  = *pNames++;
-        pVal->Value <<= (INT16) aFnt.GetItalic();
+        pVal->Value <<= OUString( aFntFmtId );
         ++pVal;
     }
     DBG_ASSERT( pVal - pValues == nProps, "property mismatch" );

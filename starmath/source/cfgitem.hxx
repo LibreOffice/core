@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:56:40 $
+ *  last change: $Author: tl $ $Date: 2001-05-07 11:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
+#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -89,6 +92,7 @@ using namespace com::sun::star;
 
 class SmSym;
 class SmFormat;
+class Font;
 struct SmCfgOther;
 
 /////////////////////////////////////////////////////////////////
@@ -155,15 +159,69 @@ inline SmMathConfigItem::SmMathConfigItem(
 
 /////////////////////////////////////////////////////////////////
 
+
+struct SmFontFormat
+{
+    String      aName;
+    INT16       nCharSet;
+    INT16       nFamily;
+    INT16       nPitch;
+    INT16       nWeight;
+    INT16       nItalic;
+
+    SmFontFormat();
+    SmFontFormat( const Font &rFont );
+
+    const Font      GetFont() const;
+    BOOL            operator == ( const SmFontFormat &rFntFmt ) const;
+};
+
+
+struct SmFntFmtListEntry
+{
+    String          aId;
+    SmFontFormat    aFntFmt;
+
+    SmFntFmtListEntry( const String &rId, const SmFontFormat &rFntFmt );
+};
+
+
+SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 );
+
+
+class SmFontFormatList
+{
+    SmFntFmtListEntryArr    aEntries;
+
+    // disallow copy-constructor and assignment-operator for now
+    SmFontFormatList( const SmFontFormatList & );
+    SmFontFormatList & operator = ( const SmFontFormatList & );
+
+public:
+    SmFontFormatList();
+
+    void    Clear();
+    void    AddFontFormat( const String &rFntFmtId, const SmFontFormat &rFntFmt );
+
+    const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
+    const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
+    const String            GetNewFontFormatId() const;
+    USHORT                  GetCount() const    { return aEntries.Count(); }
+};
+
+
+/////////////////////////////////////////////////////////////////
+
 class SmMathConfig
 {
-    Timer           aSaveTimer;
-    SmSym *         pSymbols;
-    SmFormat *      pFormat;
-    SmCfgOther *    pOther;
-    USHORT          nSymbolCount;
-    BOOL            bIsOtherModified;
-    BOOL            bIsFormatModified;
+    Timer               aSaveTimer;
+    SmFormat *          pFormat;
+    SmCfgOther *        pOther;
+    SmFontFormatList *  pFontFormatList;
+    SmSym *             pSymbols;
+    USHORT              nSymbolCount;
+    BOOL                bIsOtherModified;
+    BOOL                bIsFormatModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmMathConfig( const SmMathConfig & );
@@ -175,9 +233,16 @@ class SmMathConfig
     void    SaveOther();
     void    LoadFormat();
     void    SaveFormat();
+    void    LoadFontFormatList();
+    void    SaveFontFormatList();
+    void    UpdateFontFormatList();
 
     void    Save();
-    SmSym   ReadSymbol( SmMathConfigItem &rCfg,
+
+    SmSym           ReadSymbol( SmMathConfigItem &rCfg,
+                        const rtl::OUString &rSymbolName,
+                        const rtl::OUString &rBaseNode ) const;
+    SmFontFormat    ReadFontFormat( SmMathConfigItem &rCfg,
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
 
@@ -190,6 +255,12 @@ protected:
     inline BOOL IsOtherModified() const     { return bIsOtherModified; }
     void        SetFormatModified( BOOL bVal );
     inline BOOL IsFormatModified() const    { return bIsFormatModified; }
+
+    SmFontFormatList &          GetFontFormatList();
+    const SmFontFormatList &    GetFontFormatList() const
+    {
+        return ((SmMathConfig *) this)->GetFontFormatList();
+    }
 
 public:
     SmMathConfig();
