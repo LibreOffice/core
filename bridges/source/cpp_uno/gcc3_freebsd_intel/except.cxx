@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:25:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,13 @@ static void deleteException( void * pExc )
 //==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
+#if defined DEBUG
+    OString cstr(
+        OUStringToOString(
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+            RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
+#endif
     void * pCppExc;
     type_info * rtti;
 
@@ -262,7 +269,12 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     TYPELIB_DANGER_GET( &pTypeDescr, pUnoExc->pType );
     OSL_ASSERT( pTypeDescr );
     if (! pTypeDescr)
-        terminate();
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get typedescription for type ") ) +
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+            Reference< XInterface >() );
+    }
 
     pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
@@ -288,29 +300,59 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
     if (! rtti)
-        terminate();
+    {
+        throw RuntimeException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no rtti for type ") ) +
+            *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
+            Reference< XInterface >() );
+    }
     }
 
     __cxa_throw( pCppExc, rtti, deleteException );
 }
 
 //==================================================================================================
-void fillUnoException( __cxa_exception * header, uno_Any * pExc, uno_Mapping * pCpp2Uno )
+void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
 {
-    OSL_ENSURE( header, "### no exception header!!!" );
     if (! header)
-        terminate();
+    {
+        RuntimeException aRE(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("no exception header!") ),
+            Reference< XInterface >() );
+        Type const & rType = ::getCppuType( &aRE );
+        uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+#if defined _DEBUG
+        OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr.getStr() );
+#endif
+        return;
+    }
 
     typelib_TypeDescription * pExcTypeDescr = 0;
     OUString unoName( toUNOname( header->exceptionType->name() ) );
-    ::typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
-    OSL_ENSURE( pExcTypeDescr, "### can not get type description for exception!!!" );
-    if (! pExcTypeDescr)
-        terminate();
-
-    // construct uno exception any
-    ::uno_any_constructAndConvert( pExc, header->adjustedPtr, pExcTypeDescr, pCpp2Uno );
-    ::typelib_typedescription_release( pExcTypeDescr );
+#if defined DEBUG
+    OString cstr_unoName( OUStringToOString( unoName, RTL_TEXTENCODING_ASCII_US ) );
+    fprintf( stderr, "> c++ exception occured: %s\n", cstr_unoName.getStr() );
+#endif
+    typelib_typedescription_getByName( &pExcTypeDescr, unoName.pData );
+    if (0 == pExcTypeDescr)
+    {
+        RuntimeException aRE(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("exception type not found: ") ) + unoName,
+            Reference< XInterface >() );
+        Type const & rType = ::getCppuType( &aRE );
+        uno_type_any_constructAndConvert( pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
+#if defined _DEBUG
+        OString cstr( OUStringToOString( aRE.Message, RTL_TEXTENCODING_ASCII_US ) );
+        OSL_ENSURE( 0, cstr.getStr() );
+#endif
+    }
+    else
+    {
+        // construct uno exception any
+        uno_any_constructAndConvert( pUnoExc, header->adjustedPtr, pExcTypeDescr, pCpp2Uno );
+        typelib_typedescription_release( pExcTypeDescr );
+    }
 }
 
 }
