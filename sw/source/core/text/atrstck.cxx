@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:25:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
 #endif
+#ifndef _SVX_CHARHIDDENITEM_HXX
+#include <svx/charhiddenitem.hxx>
+#endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
@@ -174,9 +177,10 @@
  * stack, the top most attribute on the stack is valid. Because some
  * kinds of attributes have to be pushed to the same stacks we map their
  * ids to stack ids
- * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx == 34 )
+ * Attention: The first NUM_DEFAULT_VALUES ( defined in swfntcch.hxx == 35 )
  * are stored in the defaultitem-cache, if you add one, you have to increase
  * NUM_DEFAULT_VALUES.
+ * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  *************************************************************************/
 
 const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
@@ -217,14 +221,14 @@ const BYTE StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] = {
     31, // RES_CHRATR_TWO_LINES,                 // 34
     32, // RES_CHRATR_SCALEW,                    // 35
     33, // RES_CHRATR_RELIEF,                    // 36
-     0, // RES_CHRATR_DUMMY1,                    // 37
+    34, // RES_CHRATR_HIDDEN,                    // 37
      0, // RES_TXTATR_INETFMT                    // 38
      0, // RES_TXTATR_DUMMY4,                    // 39
-    34, // RES_TXTATR_REFMARK,                   // 40
-    35, // RES_TXTATR_TOXMARK,                   // 41
+    35, // RES_TXTATR_REFMARK,                   // 40
+    36, // RES_TXTATR_TOXMARK,                   // 41
      0, // RES_TXTATR_CHARFMT,                   // 42
      0, // RES_TXTATR_DUMMY5,                    // 43
-    36, // RES_TXTATR_CJK_RUBY,                  // 44
+    37, // RES_TXTATR_CJK_RUBY,                  // 44
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 45
      0, // RES_TXTATR_DUMMY6,                    // 46
      0  // RES_TXTATR_DUMMY7,                    // 47
@@ -533,9 +537,9 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, 
     // attributes originating from redlining have highest priority
     // second priority are hyperlink attributes, which have a color replacement
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
-    if ( ! pTopAttr || rAttr.IsPriorityAttr() ||
-            ( ! pTopAttr->IsPriorityAttr() &&
-              ! lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell ) ) )
+    if ( !pTopAttr || rAttr.IsPriorityAttr() ||
+            ( !pTopAttr->IsPriorityAttr() &&
+              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
@@ -659,7 +663,6 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
     // default value has to be set, we only have default values for char attribs
     else if ( nStackPos < NUM_DEFAULT_VALUES )
         FontChg( *pDefaultArray[ nStackPos ], rFnt, sal_False );
-
     else if ( RES_TXTATR_REFMARK == nAttr )
         rFnt.GetRef()--;
     else if ( RES_TXTATR_TOXMARK == nAttr )
@@ -755,9 +758,17 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             rFnt.SetShadow( ((SvxShadowedItem&)rItem).GetValue() );
             break;
         case RES_CHRATR_UNDERLINE :
-            rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetUnderline() );
-            rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
+        {
+            const USHORT nStackPos = StackPos[ RES_CHRATR_HIDDEN ];
+            const SwTxtAttr* pTopAt = aAttrStack[ nStackPos ].Top();
+            const SfxPoolItem& rTmpItem = pTopAt ? pTopAt->GetAttr() : *pDefaultArray[ nStackPos ];
+            if ( !((SvxCharHiddenItem&)rTmpItem).GetValue() )
+            {
+                rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetUnderline() );
+                rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
+            }
             break;
+        }
         case RES_CHRATR_WEIGHT :
             rFnt.SetWeight( ((SvxWeightItem&)rItem).GetWeight(), SW_LATIN );
             break;
@@ -826,15 +837,20 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
         case RES_CHRATR_RELIEF :
             rFnt.SetRelief( (FontRelief)((SvxCharReliefItem&)rItem).GetValue() );
             break;
-
+        case RES_CHRATR_HIDDEN :
+            if ( ((SvxCharHiddenItem&)rItem).GetValue() )
+                rFnt.SetUnderline( UNDERLINE_DOTTED );
+            else
+                ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
+            break;
         case RES_CHRATR_ROTATE :
         {
             // rotate attribute is applied, when:
             // 1. ruby stack is empty and
             // 2. top of two line stack ( or default attribute )is an
             //    deactivated two line attribute
-            sal_Bool bRuby = 0 !=
-                             aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
+            const bool bRuby =
+                0 != aAttrStack[ StackPos[ RES_TXTATR_CJK_RUBY ] ].Count();
 
             if ( bRuby )
                 break;
