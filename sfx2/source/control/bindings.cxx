@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.31 $
- *  last change: $Author: kz $ $Date: 2004-10-04 20:48:57 $
+ *  $Revision: 1.32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2122,10 +2122,19 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
  */
 
 {
+    const long MAX_INPUT_DELAY = 200;
+
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
 
     DBG_PROFSTART(SfxBindingsNextJob_Impl0);
+
+    if ( Application::GetLastInputInterval() < MAX_INPUT_DELAY )
+    {
+        pImp->aTimer.SetTimeout(TIMEOUT_UPDATING);
+        return sal_True;
+    }
+
     SfxApplication *pSfxApp = SFX_APP();
 
     if( pDispatcher )
