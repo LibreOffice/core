@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-10 07:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #endif
 
 //#include <tools/debug.hxx>
-//#include <svx/editeng.hxx>
+//#include <editeng.hxx>
 
 #include <unoshtxt.hxx>
 #include <unoedhlp.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-11 11:26:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-10 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <editview.hxx>
 #include <editobj.hxx>
 #include <editstat.hxx>
-#include <svx/editdll.hxx>
+#include <editdll.hxx>
 #include <flditem.hxx>
 #include <itemdata.hxx>
 #include <tools/urlobj.hxx>
@@ -107,7 +107,7 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svx/dialdll.hxx>
+#include <dialdll.hxx>
 
 
 #include <so3/factory.hxx>
