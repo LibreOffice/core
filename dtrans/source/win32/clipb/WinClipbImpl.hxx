@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:37:37 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 #endif
 
 #include <windows.h>
-#include <comdef.h>
 
 class CWinClipboard;
 class CXNotifyingDataObject;
