@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:47:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #define RULER_UNIT_PICA     8
 #define RULER_UNIT_COUNT    9
 
+#define ROWFUZZY            40 //expanded find area for border lines
 // -----------------
 // - ImplRulerData -
 // -----------------
@@ -201,6 +202,9 @@ struct ImplRulerHitTest
     USHORT      mnDragSize;
     BOOL        bSize;
     BOOL        bSizeBar;
+    BOOL        bExpandTest;
+    ImplRulerHitTest() :
+        bExpandTest(FALSE) {}
 };
 
 // =======================================================================
@@ -1670,9 +1674,6 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
     nHitBottom = mnVirHeight+(RULER_OFF*2);
 
-    // Initialisieren
-    memset( pHitTest, 0, sizeof( ImplRulerHitTest ) );
-
     // Damit ueberstehende Tabs und Einzuege mit beruecksichtigt werden
     long nXExtraOff;
     if ( mpData->pTabs || mpData->pIndents )
@@ -1790,6 +1791,13 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
 
     // Danach die Spalten testen
+    int nBorderTolerance = 1;
+    if(pHitTest->bExpandTest)
+    {
+        Size aSize = maVirDev.LogicToPixel( Size( ROWFUZZY, ROWFUZZY ), maMapMode );
+        nBorderTolerance = aSize.Width();
+    }
+
     for ( i = mpData->nBorders; i; i-- )
     {
         n1 = mpData->pBorders[i-1].nPos;
@@ -1798,8 +1806,9 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
         // Spalten werden mit mindestens 3 Pixel breite gezeichnet
         if ( !mpData->pBorders[i-1].nWidth )
         {
-            n1--;
-            n2++;
+             n1 -= nBorderTolerance;
+             n2 += nBorderTolerance;
+
         }
 
         if ( (nX >= n1) && (nX <= n2) )
@@ -1858,10 +1867,12 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     }
 
     // Und zum Schluss die Raender
+    int nMarginTolerance = pHitTest->bExpandTest ? nBorderTolerance : RULER_MOUSE_MARGINWIDTH;
+
     if ( (mpData->nMargin1Style & (RULER_MARGIN_SIZEABLE | RULER_STYLE_INVISIBLE)) == RULER_MARGIN_SIZEABLE )
     {
         n1 = mpData->nMargin1;
-        if ( (nX >= n1-RULER_MOUSE_MARGINWIDTH) && (nX <= n1+RULER_MOUSE_MARGINWIDTH) )
+        if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
             pHitTest->eType = RULER_TYPE_MARGIN1;
             pHitTest->bSize = TRUE;
@@ -1871,7 +1882,7 @@ BOOL Ruler::ImplHitTest( const Point& rPos, ImplRulerHitTest* pHitTest,
     if ( (mpData->nMargin2Style & (RULER_MARGIN_SIZEABLE | RULER_STYLE_INVISIBLE)) == RULER_MARGIN_SIZEABLE )
     {
         n1 = mpData->nMargin2;
-        if ( (nX >= n1-RULER_MOUSE_MARGINWIDTH) && (nX <= n1+RULER_MOUSE_MARGINWIDTH) )
+        if ( (nX >= n1 - nMarginTolerance) && (nX <= n1 + nMarginTolerance) )
         {
             pHitTest->eType = RULER_TYPE_MARGIN2;
             pHitTest->bSize = TRUE;
@@ -2626,6 +2637,8 @@ BOOL Ruler::StartDocDrag( const MouseEvent& rMEvt, RulerType eDragType )
         USHORT              nMouseClicks = rMEvt.GetClicks();
         USHORT              nMouseModifier = rMEvt.GetModifier();
         ImplRulerHitTest    aHitTest;
+        if(eDragType != RULER_TYPE_DONTKNOW)
+            aHitTest.bExpandTest = TRUE;
 
         // Gegebenenfalls Lineal updaten (damit mit den richtigen Daten
         // gearbeitet wird und die Anzeige auch zur Bearbeitung passt)
