@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:47:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ TabPage TP_REDLINE_OPT
         < "É¾³ıÏß" ; > ;
         < "´óĞ´×ÖÄ¸" ; > ;
         < "Ğ¡Ğ´×ÖÄ¸" ; > ;
-        < "Ğ¡ĞÍ´óĞ´×ÖÌå" ; > ;
+        < "Ğ¡ĞÍ´óĞ´×ÖÄ¸" ; > ;
         < "±êÌâÎÄ×Ö" ; > ;
         < "±³¾°ÑÕÉ«" ; > ;
     };
@@ -1099,11 +1099,11 @@ TabPage TP_REDLINE_OPT
         Text [ spanish ] = "Según autor" ;
         Text [ french ] = "Par auteur" ;
         Text [ dutch ] = "Naar auteur" ;
-        Text[ chinese_simplified ] = "°´×÷Õß";
+        Text[ chinese_simplified ] = "ÒÀ×÷ÕßÉè¶¨";
         Text[ russian ] = "Ïî àâòîğó";
         Text[ polish ] = "Wed³ug autora";
         Text[ japanese ] = "ì¬Ò‚×‚Â";
-        Text[ chinese_traditional ] = "«ö·Ó§@ªÌ";
+        Text[ chinese_traditional ] = "¨Ì§@ªÌ³]©w";
         Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
         Text[ greek ] = "ÊáôÜ óõíôÜêôç";
         Text[ korean ] = "ÀÛ¼ºÀÚ¿¡ µû¶ó";
@@ -1138,6 +1138,7 @@ TabPage TP_REDLINE_OPT
         Text[ finnish ] = "[Ei mitään]";
     };
 };
+
 
 
 
