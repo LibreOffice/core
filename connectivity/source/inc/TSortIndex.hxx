@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,26 +61,32 @@
 #ifndef CONNECTIVITY_TSORTINDEX_HXX
 #define CONNECTIVITY_TSORTINDEX_HXX
 
+#ifndef CONNECTIVITY_TKEYVALUE_HXX
 #include "TKeyValue.hxx"
+#endif
 
 namespace connectivity
 {
     typedef enum
     {
-        SQL_ORDERBYKEY_NONE,        // Nicht sortieren
-        SQL_ORDERBYKEY_DOUBLE,      // Numerischer Key
+        SQL_ORDERBYKEY_NONE,        // do not sort
+        SQL_ORDERBYKEY_DOUBLE,      // numeric key
         SQL_ORDERBYKEY_STRING       // String Key
     } OKeyType;
 
     typedef enum
     {
-        SQL_ASC     = 1,
-        SQL_DESC    = -1
+        SQL_ASC     = 1,            // ascending
+        SQL_DESC    = -1            // otherwise
     } TAscendingOrder;
 
     class OKeySet;
-    class OKeyValue;
+    class OKeyValue;                // simple class which holds a sal_Int32 and a ::std::vector<ORowSetValueDecoratorRef>
 
+    /**
+        The class OSortIndex can be used to implement a sorted index.
+        This can depend on the fields which should be sorted.
+    */
     class OSortIndex
     {
     public:
@@ -101,29 +107,46 @@ namespace connectivity
         ~OSortIndex();
 
 
-        sal_Bool AddKeyValue(OKeyValue * pKeyValue);
-                                                            // TRUE, wenn erfolgreich hinzugefuegt, FALSE bei Ueberschreitung
-                                                            // der Index-Kapazitaet.
-                                                            // pKeyValue wird beim Zerstoeren des Index automatisch freigegeben.
+        /**
+            AddKeyValue appends a new value.
+            @param
+                OKeyValue* pKeyValue    the keyvalue to be appended
+            ATTENTION: when the sortindex is already frozen the parameter will be deleted
+        */
+        void AddKeyValue(OKeyValue * pKeyValue);
 
-        void Freeze();                                      // "Einfrieren" des Index:
-                                                            // Vor "Freeze" duerfen Count() und Get() nicht gerufen werden,
-                                                            // nach "Freeze" darf dafuer Add() nicht mehr gerufen werden.
+        /**
+            Freeze freezes the sortindex so that new values could only be appended by their value
+        */
+        void Freeze();
 
+        /**
+            CreateKeySet creates the keyset which vaalues could be used to travel in your table/result
+            The returned keyset is frozen.
+        */
         ::vos::ORef<OKeySet> CreateKeySet();
 
 
 
-        sal_Bool IsFrozen() const { return m_bFrozen; }         // TRUE nach Aufruf von Freeze()
+        // look at the name
+        sal_Bool IsFrozen() const { return m_bFrozen; }
+        // returns the current size of the keyvalues
+        sal_Int32 Count()   const { return m_aKeyValues.size(); }
+        /** GetValue returns the value at position nPos (1..n) [sorted access].
+            It only allowed to call this method after the sortindex has been frozen.
+        */
 
-        sal_Int32 Count()   const { return m_aKeyValues.size(); }       // Anzahl Key/Value-Paare im Index
-        sal_Int32 GetValue(sal_Int32 nPos) const;           // Value an Position nPos (1..n) [sortierter Zugriff].
+        sal_Int32 GetValue(sal_Int32 nPos) const;
 
         inline const ::std::vector<OKeyType>& getKeyType() const { return m_aKeyType; }
         inline sal_Int16 getAscending(::std::vector<sal_Int16>::size_type _nPos) const { return m_aAscending[_nPos]; }
 
     };
 
+    /**
+        The class OKeySet is a refcountable vector which also has a state.
+        This state gives information about if the keyset is fixed.
+    */
     class OKeySet : public ORefVector<sal_Int32>
     {
         sal_Bool m_bFrozen;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:43:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,10 +983,7 @@ again:
         if (m_pSortIndex)
         {
             OKeyValue* pKeyValue = GetOrderbyKeyValue(m_aEvaluateRow);
-            if (!m_pSortIndex->AddKeyValue(pKeyValue))
-            {
-                // Ueberwachung auf Ueberschreitung der Index-Kapazitaet:
-            }
+            m_pSortIndex->AddKeyValue(pKeyValue);
         }
         else if (m_pFileSet.isValid())
         {

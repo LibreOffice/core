@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 14:21:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-30 14:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,15 @@
  *
  *
  ************************************************************************/
+#ifndef CONNECTIVITY_TSORTINDEX_HXX
 #include "TSortIndex.hxx"
+#endif
 #include <algorithm>
 #include <functional>
 
 using namespace connectivity;
 //------------------------------------------------------------------
-/// binary_function Functor object for class ZZ returntype is bool
+/// binary_function Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
 struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::value_type,OSortIndex::TIntValuePairVector::value_type,bool>
 {
     OSortIndex* pIndex;
@@ -72,10 +74,9 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     TKeyValueFunc(OSortIndex* _pIndex) : pIndex(_pIndex)
     {
     }
+    // return false if compared values are equal otherwise true
     inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
     {
-        // Ueber die (max.) drei ORDER BY-Columns iterieren. Abbruch des Vergleiches, wenn Ungleichheit erkannt
-        // oder alle Columns gleich.
         const ::std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
         ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
         for (::std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
@@ -83,7 +84,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
             const bool nGreater = (pIndex->getAscending(i) == SQL_ASC) ? false : true;
             const bool nLess = !nGreater;
 
-            // Vergleich (je nach Datentyp):
+            // compare depending for type
             switch (*aIter)
             {
                 case SQL_ORDERBYKEY_STRING:
@@ -109,7 +110,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
             }
         }
 
-        // Wenn wir bis hierher gekommen sind, waren alle Werte gleich:
+        // know we know that the values are equal
         return false;
     }
 };
@@ -132,7 +133,6 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     return pKeySet;
 }
 // -----------------------------------------------------------------------------
-//------------------------------------------------------------------
 OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
                         const ::std::vector<sal_Int16>& _aAscending)
     : m_bFrozen(sal_False)
@@ -145,7 +145,7 @@ OSortIndex::~OSortIndex()
 {
 }
 //------------------------------------------------------------------
-sal_Bool OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
+void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
 {
     OSL_ENSURE(pKeyValue,"Can not be null here!");
     if(m_bFrozen)
@@ -155,7 +155,6 @@ sal_Bool OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
     }
     else
         m_aKeyValues.push_back(TIntValuePairVector::value_type(pKeyValue->getValue(),pKeyValue));
-    return sal_True;
 }
 
 
@@ -165,7 +164,7 @@ void OSortIndex::Freeze()
     OSL_ENSURE(! m_bFrozen,"OSortIndex::Freeze: already frozen!");
     // Sortierung:
     if (m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
-        // Sortierung, wenn mindestens nach dem ersten Key sortiert werden soll:
+        // we will sort ourself when the first keyType say so
         ::std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
 
     TIntValuePairVector::iterator aIter = m_aKeyValues.begin();
