@@ -4,7 +4,7 @@ interface TableText : Selection
 
     SID_ATTR_INSERT     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
-    SfxVoidItem Delete SID_DELETE ( )
+    SID_DELETE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

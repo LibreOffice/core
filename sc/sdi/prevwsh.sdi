@@ -13,7 +13,7 @@ interface TablePrintPreview : View
     SID_PREVIEW_FIRST       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PREVIEW_LAST        [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
-    SfxVoidItem CursorPageUp SID_CURSORPAGEUP
+    SfxVoidItem GoUpBlock SID_CURSORPAGEUP
     (
         SfxInt16Item By SID_CURSORPAGEUP
     )
@@ -25,7 +25,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem CursorPageDown SID_CURSORPAGEDOWN
+    SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
     (
         SfxInt16Item By SID_CURSORPAGEDOWN
     )
@@ -40,7 +40,7 @@ interface TablePrintPreview : View
     SID_CURSORHOME  [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CURSOREND   [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
-    SfxVoidItem CursorDown SID_CURSORDOWN
+    SfxVoidItem GoDown SID_CURSORDOWN
     (
         SfxInt16Item By SID_CURSORDOWN
     )
@@ -51,7 +51,7 @@ interface TablePrintPreview : View
         GroupId = GID_INTERN ;
         Cachable ;
     ]
-    SfxVoidItem CursorUp SID_CURSORUP
+    SfxVoidItem GoUp SID_CURSORUP
     (
         SfxInt16Item By SID_CURSORUP
     )
@@ -62,7 +62,7 @@ interface TablePrintPreview : View
         GroupId = GID_INTERN ;
         Cachable ;
     ]
-    SfxVoidItem CursorLeft SID_CURSORLEFT
+    SfxVoidItem GoLeft SID_CURSORLEFT
     (
         SfxInt16Item By SID_CURSORLEFT
     )
@@ -74,7 +74,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem CursorRight SID_CURSORRIGHT
+    SfxVoidItem GoRight SID_CURSORRIGHT
     (
         SfxInt16Item By SID_CURSORRIGHT
     )
@@ -86,7 +86,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem PPage SID_PREV_TABLE ( )
+    SID_PREV_TABLE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -95,7 +95,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem NPage SID_NEXT_TABLE ( )
+    SID_NEXT_TABLE
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -104,7 +104,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem FPage SID_CURSORTOPOFFILE ( )
+    SfxVoidItem GoToStart SID_CURSORTOPOFFILE ()
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
@@ -113,7 +113,7 @@ interface TablePrintPreview : View
         Cachable ;
     ]
 
-    SfxVoidItem LPage SID_CURSORENDOFFILE ( )
+    SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE ()
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: er $ $Date: 2001-04-25 14:01:57 $ $Revision: 1.2 $
+ // $Author: mba $ $Date: 2002-08-29 14:19:11 $ $Revision: 1.3 $
  // $Logfile:   T:/sc/sdi/docsh.sdv  $ $Workfile:   docsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -15,7 +15,6 @@ interface Name : Object
     uuid = "BA338A40-064E-11d0-89CB-008029E4B0B1" ;
 ]
 {
-    SID_SC_NAME_TITLE   [ ExecMethod = Execute; StateMethod = GetState; ] // ole() api(ply)
 }
 
 
@@ -115,6 +114,9 @@ shell ScDocShell : SfxObjectShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/04/25 14:01:57  er
+    ChangeTrack password protection (disables end, accept, reject)
+
     Revision 1.1.1.1  2000/09/18 16:44:52  hr
     initial import
 

@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: mba $ $Date: 2002-06-04 07:56:02 $ $Revision: 1.9 $
+ // $Author: mba $ $Date: 2002-08-29 14:19:09 $ $Revision: 1.10 $
  // $Logfile:   T:/sc/sdi/cellsh.sdv  $ $Workfile:   cellsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ interface CellSelection : Selection
     FID_INS_CELL_CONTENTS   [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CELL_FORMAT_RESET   [ ExecMethod = Execute; StateMethod = GetBlockState; ]
 
-    SfxVoidItem Clear SID_DELETE
+    SfxVoidItem Delete SID_DELETE
     (
         SfxStringItem Flags SID_DELETE
     )
@@ -179,14 +179,14 @@ interface CellMovement : Selection
     uuid ( "FF2E35C0-137B-11D3-B25B-006097DA68F3" )
 ]
 {
-    SfxVoidItem JumpToNextTable SID_NEXT_TABLE ( )
+    SID_NEXT_TABLE
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
         Cachable ;
     ]
 
-    SfxVoidItem JumpToPrevTable SID_PREV_TABLE ( )
+    SID_PREV_TABLE
     [
         ExecMethod = ExecuteMove ;
         StateMethod = GetStateCursor ;
@@ -255,6 +255,7 @@ interface CellMovement : Selection
         StateMethod = GetStateCursor ;
         Cachable ;
     ]
+
     SID_CURSORRIGHT_SEL     [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
     SID_CURSORBLKRIGHT      [ ExecMethod = ExecuteCursor;    StateMethod = GetStateCursor; ]
     SID_CURSORBLKRIGHT_SEL  [ ExecMethod = ExecuteCursorSel; StateMethod = GetStateCursor; ]
@@ -380,6 +381,9 @@ shell ScCellShell : ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/06/04 07:56:02  mba
+    #98570#: Recording of SearchDialog actions
+
     Revision 1.8  2002/04/10 15:38:05  nn
     #97777# keyboard shortcut for input line
 

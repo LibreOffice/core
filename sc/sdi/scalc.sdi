@@ -1847,31 +1847,6 @@ SfxVoidItem DeletePivotTable SID_PIVOT_KILL
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem DataPilotFilter SID_DP_FILTER
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-        HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem DeletePrintArea SID_DELETE_PRINTAREA
 ()
 [
@@ -3581,7 +3556,7 @@ SfxVoidItem InsertColumns FID_INS_COLUMN
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertContents FID_INS_CELL_CONTENTS
-(SfxStringItem Flags FID_INS_CELL_CONTENTS, SfxUInt16Item FormulaCommand FN_PARAM_1, SfxBoolItem SkipEmptyCells FN_PARAM_2, SfxBoolItem Transpose FN_PARAM_3, SfxBoolItem AsLink FN_PARAM_4, SfxInt16Item MoveMode FN_PARAM_5)
+(SfxStringItem Flags FID_INS_CELL_CONTENTS,SfxUInt16Item FormulaCommand FN_PARAM_1,SfxBoolItem SkipEmptyCells FN_PARAM_2,SfxBoolItem Transpose FN_PARAM_3,SfxBoolItem AsLink FN_PARAM_4,SfxInt16Item MoveMode FN_PARAM_5)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -3633,7 +3608,7 @@ SfxUInt16Item InsertCtrl SID_TBXCTL_INSERT
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertExternalDataSource SID_EXTERNAL_SOURCE
-( SfxStringItem FileName SID_FILE_NAME, SfxStringItem FilterName SID_FILTER_NAME, SfxStringItem Options SID_FILE_FILTEROPTIONS, SfxStringItem Source FN_PARAM_1, SfxUInt32Item Refresh FN_PARAM_2 )
+(SfxStringItem FileName SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Options SID_FILE_FILTEROPTIONS,SfxStringItem Source FN_PARAM_1,SfxUInt32Item Refresh FN_PARAM_2)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5258,7 +5233,7 @@ SfxUInt16Item RowHeight FID_ROW_HEIGHT
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem SbaUpdate SID_SBA_IMPORT
+SfxVoidItem SbaImport SID_SBA_IMPORT
 (SfxStringItem Query SID_SBA_IMPORT,SfxStringItem Target FN_PARAM_1)
 [
     /* flags: */
@@ -6585,7 +6560,7 @@ SfxVoidItem TableOperationDialog SID_OPENDLG_TABOP
 
 //--------------------------------------------------------------------------
 SfxVoidItem RenameTable FID_TAB_MENU_RENAME
-( SfxStringItem Name FID_TAB_RENAME )
+(SfxStringItem Name FID_TAB_RENAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6735,33 +6710,6 @@ SfxStringItem TextValue SID_RANGE_TEXTVALUE
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_INTERN;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem Title SID_SC_NAME_TITLE
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = ;
 ]
 
 //--------------------------------------------------------------------------
@@ -7145,6 +7093,8 @@ SfxBoolItem InputLineVisible FID_TOGGLEINPUTLINE
     RecordPerSet;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7170,6 +7120,8 @@ SfxBoolItem ViewRowColumnHeaders FID_TOGGLEHEADERS
     RecordPerSet;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -7194,6 +7146,8 @@ SfxBoolItem ViewValueHighlighting FID_TOGGLESYNTAX
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
+
+    Readonly = FALSE,
 
     /* config: */
     AccelConfig = TRUE,
@@ -7359,7 +7313,7 @@ SfxVoidItem ClosePreview SID_PREVIEW_CLOSE
 
 //--------------------------------------------------------------------------
 SfxVoidItem SelectTables SID_SELECT_TABLES
-( SfxIntegerListItem Tables SID_SELECT_TABLES )
+(SfxIntegerListItem Tables SID_SELECT_TABLES)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -7382,6 +7336,32 @@ SfxVoidItem SelectTables SID_SELECT_TABLES
     GroupId = GID_EDIT;
 ]
 
+//--------------------------------------------------------------------------
+SfxVoidItem DataPilotFilter SID_DP_FILTER
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DATA;
+]
+
+//--------------------------------------------------------------------------
 ScProtectionAttr Protection SID_SCATTR_PROTECTION
 
 [
@@ -7398,6 +7378,8 @@ ScProtectionAttr Protection SID_SCATTR_PROTECTION
     RecordPerSet;
     Synchron;
 
+    Readonly = FALSE,
+
     /* config: */
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -7405,5 +7387,4 @@ ScProtectionAttr Protection SID_SCATTR_PROTECTION
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
-
 

@@ -49,7 +49,7 @@ interface TableDraw : Selection
     SID_ATTR_TRANSFORM      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
      // ---- Ausrichtungs - Funktionen:
      //!    PseudoSlots gibt Aerger mit Referenz-Dialogen ???
-    SvxDrawAlignItem ObjectAlign SID_OBJECT_ALIGN
+    SID_OBJECT_ALIGN
     [
          //     PseudoSlots = TRUE;
         PseudoSlots = FALSE ;

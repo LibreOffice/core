@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2002-05-23 17:25:49 $ $Revision: 1.9 $
+ // $Author: mba $ $Date: 2002-08-29 14:19:17 $ $Revision: 1.10 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ interface BaseSelection : Selection
     SID_IMAP                    [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
     SID_IMAP_EXEC               [ ExecMethod = ExecImageMap; StateMethod = GetImageMapState; ]
 
-    SfxVoidItem InsertObjectStarChart SID_INSERT_DIAGRAM
+    SfxVoidItem InsertObjectChart SID_INSERT_DIAGRAM
     (
         SfxBoolItem ColHeaders SID_ATTR_COLHEADERS,
         SfxBoolItem RowHeaders SID_ATTR_ROWHEADERS,

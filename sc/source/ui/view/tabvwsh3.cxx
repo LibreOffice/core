@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 11:04:11 $
+ *  last change: $Author: mba $ $Date: 2002-08-29 14:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,9 +243,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if ( pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
                 else if ( nSlot == SID_JUMPTOMARK && pReqArgs->GetItemState(
-                                            ID_VAL_DUMMY0, TRUE, &pItem ) == SFX_ITEM_SET )
+                                            SID_JUMPTOMARK, TRUE, &pItem ) == SFX_ITEM_SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
-                //  SID_JUMPTOMARK steht in der IDL mit ID_VAL_DUMMY0 als Parameter
 
                 BOOL bUnmark = FALSE;
                 if ( pReqArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
