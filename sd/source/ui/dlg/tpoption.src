@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:13:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ finnish ] = "Kaikki ~B�zier-editorin ohjauspisteet";
         Text[ catalan ] = "~Tots els punts de control en l'editor B�zier";
         Text[ thai ] = "จุดควบคุม~ทั้งหมดในตัวแก้ไข B้zier ";
-        Text[ czech ] = "Všechny kontrolní body při úpravách Bézierových křivek";
+        Text[ czech ] = "Všechny kontrolní body při úpravách křivek";
         Text[ hebrew ] = "~Alle Steuerpunkte im Bezier-Editor";
         Text[ hindi ] = "~BÃ©zier संपादक का सभी नियंत्रण बिन्दु";
         Text[ slovak ] = "Všetky kontrolné ~body v Bézierovom editore";
@@ -1038,7 +1038,7 @@ TabPage TP_OPTIONS_MISC
         Text[ greek ] = "Us~e printer metrics for document formatting";
         Text[ dutch ] = "Us~e printer metrics for document formatting";
         Text[ finnish ] = "Us~e printer metrics for document formatting";
-        Text[ czech ] = "Us~e printer metrics for document formatting";
+        Text[ czech ] = "Pro formátování dokumentu použít metriky tiskárny";
         Text[ danish ] = "Us~e printer metrics for document formatting";
         Text[ polish ] = "Us~e printer metrics for document formatting";
         Text[ portuguese_brazilian ] = "Usar m�tricas da impressora para a formata��o do documento";
@@ -1048,6 +1048,7 @@ TabPage TP_OPTIONS_MISC
         Text[ catalan ] = "Us~e printer metrics for document formatting";
         Text[ thai ] = "Us~e printer metrics for document formatting";
         Text[ slovak ] = "Použiť mi~erky tlačiarne pri formátovaní textu";
+        Text[ hindi ] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -1076,10 +1077,10 @@ TabPage TP_OPTIONS_MISC
         Text[ finnish ] = "~Lis�� v�lit nykyisen asiakirjan kappaleiden v�liin";
         Text[ catalan ] = "Afegeix e~spais entre par�grafs en el document actual";
         Text[ thai ] = "เพิ่ม~ระยะห่างระหว่างย่อหน้าในเอกสารปัจจุบัน";
-        Text[ czech ] = "Přidat proklad mezi odstavci v aktuálním dokumentu";
+        Text[ czech ] = "Přidat proklad mezi odstavci a tabulkami (v aktuálním dokumentu)";
         Text[ hebrew ] = "Im aktuellen Dokument alle Absatzabst~ände addieren";
         Text[ hindi ] = "वर्त~मान लेखपत्र में परिच्छेदों के बीच अंतर जोड़ो";
-        Text[ slovak ] = "Zväčšiť rozo~stupy medzi odstavcami v aktuálnom dokumente";
+        Text[ slovak ] = "Pridať od~sadenie medzi odstavcami a tabuľkami (v aktuálnom dokumente)";
     };
     FixedLine GRP_SCALE
     {
@@ -1330,6 +1331,10 @@ TabPage TP_OPTIONS_MISC
     Text[ hindi ] = "अन्य";
     Text[ slovak ] = "Ostatné";
 };
+
+
+
+
 
 
 
