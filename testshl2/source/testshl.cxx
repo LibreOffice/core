@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-05 18:13:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ int _cdecl main( int argc, char* argv[] )
         "-dntsf,        if given, do not touch signal file, also if one exist.",
         "-dnrmsf,       do not remove signalfile. ",
         "-jobonly=s,    job control file, these jobs should only executed.",
+        "-jobexclude=s, job control file, but contains only job, they not execute.",
         "-jobfilter=s,  use a filter for just some tests.",
         "-onlyshowjobs, show only all jobs, do no tests.",
         "-forward=s,    this string will forwarded to the test libraries.",
@@ -264,6 +265,7 @@ int _cdecl main( int argc, char* argv[] )
         "-buildid=s,    this text is added to the date output line.",
         "-waitforkey,   wait until key pressed.",
         "-verbose,      be verbose.",
+        "-quiet,        be quiet. No t_print(...) will create output.",
         "-pid=s,        write current process id to file",
         "-endless,      testshl runs endless, for test only!!!",
         "-whereami,     shows at runtime, which function is tested next.",
@@ -283,7 +285,7 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.13 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.14 $\n");
     }
 
     if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
