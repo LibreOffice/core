@@ -123,7 +123,7 @@ $(JARTARGETN) .SETDIR=$(CLASSDIR) :
     @+-$(COPY) $(DMAKE_WORK_DIR)$/$(JARFLT) $(TARGET)_$(JARFLT) >& $(NULLDEV)
     $(STARJAR) $@ $(JARMANIFEST) $(TARGET)_$(JARFLT) + $(XSTARJARPATH:s/ /+/)
 .ELSE			# "$(use_starjar)"!=""
-    zip -u -r $@ $(JARMANIFEST) $(JARCLASSDIRS)
+    zip -u -r $@ $(JARMANIFEST) $(subst,\,/ $(JARCLASSDIRS))
 .ENDIF			# "$(use_starjar)"!=""
 .ENDIF			# "$(NEW_JAR_PACK)"==""
 .ENDIF
