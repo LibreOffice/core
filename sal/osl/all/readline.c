@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readline.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-30 08:54:31 $
+ *  last change: $Author: tra $ $Date: 2002-07-01 13:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,223 @@
 #include <rtl/byteseq.h>
 #include <rtl/alloc.h>
 
-/* defines */
 
+/* Test cases:
+
+    1.  A file without line ends
+    2.  A file with lines longer than the initial buffer size
+    3.  An empty file
+    4.
+*/
+
+/** Some defines
+*/
 #define CR 0x0D
 #define LF 0x0A
 
-#define INITIAL_BUFF_SIZE  128
-#define ENLARGEMENT_FACTOR 2
+#define INITIAL_BUFF_SIZE  80
+#define BUFFER_GROW_FACTOR 2
+#define READ_BLOCK_SIZE (INITIAL_BUFF_SIZE - 1)
+
+/** Helper data and function
+*/
+
+static struct _Buffer
+{
+    sal_Char*   m_pMem;
+    sal_uInt64  m_Capacity;           // elements possible in buffer
+    sal_uInt64  m_Size;               // elements actually in buffer
+    sal_uInt64  m_ActiveSectionStart; // buffer was lastly filled from here to (m_Size - 1)
+};
+
+typedef struct _Buffer Buffer;
+
+
+/** Allocate the memory of the buffer
+    @Returns    sal_True on succes
+*/
+static sal_Bool AllocateBuffer(Buffer* pBuffer, sal_uInt64 Capacity)
+{
+    sal_Bool rc = sal_False;
+
+    OSL_ASSERT(pBuffer);
+
+    if ((pBuffer->m_pMem = (sal_Char*)rtl_allocateZeroMemory((sal_uInt32)Capacity)))
+    {
+        pBuffer->m_Capacity = Capacity;
+        pBuffer->m_Size = 0;
+        pBuffer->m_ActiveSectionStart = 0;
+        rc = sal_True;
+    }
+
+    return rc;
+}
+
+/** Release the memory occupied by the buffer
+*/
+static void FreeBuffer(Buffer* pBuffer)
+{
+    OSL_ASSERT(pBuffer);
+
+    rtl_freeMemory(pBuffer->m_pMem);
+    pBuffer->m_pMem  = 0;
+    pBuffer->m_Capacity = 0;
+    pBuffer->m_Size   = 0;
+    pBuffer->m_ActiveSectionStart = 0;
+}
+
+/** Grow the buffer by the specified factor (usually doubling
+    the buffer size)
+    In case of failure, growing the buffer, the original buffer
+    stays untouched
+
+    @Returns    sal_True on success
+*/
+static sal_Bool GrowBuffer(Buffer* pBuffer, size_t factor)
+{
+    sal_Bool rc = sal_False;
+    void*    p  = 0;
+
+    OSL_ASSERT(pBuffer);
+
+    if ((p = rtl_reallocateMemory(
+        pBuffer->m_pMem, (sal_uInt32)(pBuffer->m_Capacity * factor))))
+    {
+        pBuffer->m_pMem      = (sal_Char*)p;
+        pBuffer->m_Capacity *= factor;
+        rc                   = sal_True;
+    }
+
+    return rc;
+}
+
+/** Read n bytes from file into buffer,
+    grow the buffer if necessary
+
+    @Returns osl_File_E_None on success else
+    an error code
+*/
+static oslFileError ReadFromFile(oslFileHandle hFile, Buffer* pBuffer, sal_uInt64 Requested, sal_uInt64* pRead)
+{
+    oslFileError rc;
+
+    OSL_ASSERT(pBuffer);
+    OSL_ASSERT(hFile);
+    OSL_ASSERT(pRead);
+
+    if (((pBuffer->m_Size + Requested) > pBuffer->m_Capacity) &&
+        !GrowBuffer(pBuffer, BUFFER_GROW_FACTOR))
+        return osl_File_E_NOMEM;
+
+    pBuffer->m_ActiveSectionStart = pBuffer->m_Size;
+
+    rc = osl_readFile(
+        hFile,
+        pBuffer->m_pMem + pBuffer->m_ActiveSectionStart,
+        Requested,
+        pRead);
+
+    if (osl_File_E_None == rc)
+        pBuffer->m_Size += *pRead;
+
+    return rc;
+}
+
+/** Makes a sequence from the given buffer and release the memory
+    occupied by the buffer
+*/
+static void MakeSequenceFreeBuffer(sal_Sequence** ppSequence, Buffer* pBuffer, sal_uInt64 Length)
+{
+    OSL_ASSERT(ppSequence);
+    OSL_ASSERT(pBuffer);
+    OSL_ASSERT(Length <= pBuffer->m_Capacity);
+
+    rtl_byte_sequence_constructFromArray(ppSequence, (sal_Int8*)pBuffer->m_pMem, (sal_Int32)Length);
+    FreeBuffer(pBuffer);
+}
+
+/** Handle occurence of LF character:
+    construct a sequence from buffer
+    correct file pointer (maybe we have read more than necessary)
+
+    @Returns osl_File_E_None on success else
+    an error code
+*/
+static oslFileError HandleLFFreeBuffer(oslFileHandle hFile, sal_Sequence** ppSequence, Buffer* pBuffer, sal_uInt64 Pos)
+{
+    sal_Int64    offset = 0;
+    oslFileError rc     = osl_File_E_None;
+
+    OSL_ASSERT(hFile);
+    OSL_ASSERT(pBuffer);
+    OSL_ASSERT(LF == pBuffer->m_pMem[Pos]);
+
+    /* correct file pointer pos in case we have read to far */
+    offset = pBuffer->m_Size - (Pos + 1);
+    rc = osl_setFilePos(hFile, osl_Pos_Current, -offset);
+
+    if (osl_File_E_None == rc)
+        MakeSequenceFreeBuffer(ppSequence, pBuffer, Pos);
+    else
+        FreeBuffer(pBuffer);
+
+    return rc;
+}
+
+/** Handle occurence of CR character
+    construct a sequence from buffer
+    correct file pointer (maybe we have read more than necessary)
+
+    @Returns osl_File_E_None on success else
+    an error code
+*/
+static oslFileError HandleCRFreeBuffer(oslFileHandle hFile, sal_Sequence** ppSequence, Buffer* pBuffer, sal_uInt64 Pos)
+{
+    sal_Int64    offset = 0;
+    sal_uInt64   nread  = 0;
+    oslFileError rc     = osl_File_E_None;
+
+    OSL_ASSERT(hFile);
+    OSL_ASSERT(pBuffer);
+    OSL_ASSERT(CR == pBuffer->m_pMem[Pos]);
+
+    if (Pos == (pBuffer->m_Size - 1))
+    {
+        /*  only need to check if the next byte is a LF
+            that's why reading only one byte from file */
+        rc = ReadFromFile(hFile, pBuffer, 1, &nread);
+
+        if (osl_File_E_None != rc)
+        {
+            FreeBuffer(pBuffer);
+            return rc;
+        }
+        else if (0 == nread)
+        {
+            MakeSequenceFreeBuffer(ppSequence, pBuffer, Pos);
+            return osl_File_E_None;
+        }
+    }
+
+    if (LF == pBuffer->m_pMem[Pos + 1])
+        Pos++;
+
+    /* correct the file pointer */
+    offset = pBuffer->m_Size - (Pos + 1);
+    rc = osl_setFilePos(hFile, osl_Pos_Current, -offset);
+
+    if (osl_File_E_None == rc)
+        MakeSequenceFreeBuffer(ppSequence, pBuffer, Pos - 1);
+    else
+        FreeBuffer(pBuffer);
+
+    return rc;
+}
 
 /***************************************************************************
-
     osl_readLine (platform independent)
     Reads a line from given file. The new line delimiter(s) are NOT returned!
+    Valid line ends: \n, \r\n or \r
 
     @param  Handle [in] Handle to an open file.
     @param  ppSequence [in/out] a pointer to a valid sequence.
@@ -84,133 +289,50 @@
 
     osl_File_E_INVAL        the format of the parameters was not valid<br>
     osl_File_E_NOMEM        the necessary memory could not be allocated
-
-    These errorcodes can (eventually) be returned:<p>
-    osl_File_E_INTR         function call was interrupted<br>
-    osl_File_E_IO           I/O error<br>
-    osl_File_E_ISDIR        Is a directory<br>
-    osl_File_E_BADF         Bad file<br>
-    osl_File_E_FAULT        Bad address<br>
-    osl_File_E_AGAIN        Operation would block<br>
-    osl_File_E_NOLINK       Link has been severed<p>
-
-    @see    osl_openFile
-    @see    osl_readFile
-    @see    osl_writeFile
-    @see    osl_setFilePos
-
 ****************************************************************************/
 
-oslFileError SAL_CALL osl_readLine( oslFileHandle Handle, sal_Sequence** ppSeq )
+oslFileError SAL_CALL osl_readLine(oslFileHandle Handle, sal_Sequence** ppSeq)
 {
-    oslFileError ferr;
-    sal_uInt64   nReadTotal    = 0;
-    sal_uInt64   nRead         = 0;
-    sal_uInt32   sizeBuff      = INITIAL_BUFF_SIZE;
-    sal_Char    *pchBuff       = 0;
+    oslFileError rc;
+    sal_uInt64   nread = 0;
+    Buffer       line_buffer;
+    sal_uInt64       pos;
 
-    OSL_PRECOND( ppSeq, "invalid parameter detected" );
+    OSL_PRECOND(Handle, "invalid handle");
+    OSL_PRECOND(ppSeq,  "invalid parameter detected");
 
-    /* initial allocate a buffer */
-
-    pchBuff = (sal_Char*)rtl_allocateZeroMemory( sizeBuff );
-    if ( 0 == pchBuff )
+    if (!AllocateBuffer(&line_buffer, INITIAL_BUFF_SIZE))
         return osl_File_E_NOMEM;
 
-    /* read character by character */
-
-    for( ;; )
+    for(;;)
     {
-        /* read the next character fro file into buffer */
+        rc = ReadFromFile(Handle, &line_buffer, READ_BLOCK_SIZE, &nread);
 
-        ferr = osl_readFile( Handle, pchBuff + nReadTotal, 1, &nRead );
-
-        if ( ferr != osl_File_E_None )
+        if (osl_File_E_None != rc)
         {
-            rtl_freeMemory( pchBuff );
-            return ferr;
+            FreeBuffer(&line_buffer);
+            return rc;
         }
-
-        if ( 0 == nRead )
+        else if (0 == nread)
         {
-            if ( nReadTotal > 0 )
-                rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)nReadTotal );
-            else
-                rtl_byte_sequence_construct( ppSeq, 0 );
-
-            rtl_freeMemory( pchBuff );
+            MakeSequenceFreeBuffer(ppSeq, &line_buffer, line_buffer.m_Size);
             return osl_File_E_None;
         }
 
-        OSL_ASSERT( 1 == nRead );
-
-        nReadTotal++;
-
-        if ( LF == *(pchBuff + nReadTotal - 1) )
+        // scann buffer for line end
+        for (pos = line_buffer.m_ActiveSectionStart; pos < line_buffer.m_Size; pos++)
         {
-            rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1) );
-            rtl_freeMemory( pchBuff );
-            return osl_File_E_None;
-        }
-        else if ( CR == *(pchBuff + nReadTotal - 1) )
-        {
-            /* read one more character to detect possible '\n' */
-
-            ferr = osl_readFile( Handle, pchBuff + nReadTotal, 1, &nRead );
-
-            if ( ferr != osl_File_E_None )
+            switch(line_buffer.m_pMem[pos])
             {
-                rtl_freeMemory( pchBuff );
-                return ferr;
+            case LF:
+                return HandleLFFreeBuffer(Handle, ppSeq, &line_buffer, pos);
+            case CR:
+                return HandleCRFreeBuffer(Handle, ppSeq, &line_buffer, pos);
             }
-
-            if ( nRead > 0 )
-            {
-                OSL_ASSERT( 1 == nRead );
-
-                /* we don't increment nReadTotal, so now last in buff is pchBuff + nReadTotal !!! */
-
-                if ( LF != *(pchBuff + nReadTotal) )
-                {
-                    /* correct the file pointer */
-
-                    ferr = osl_setFilePos( Handle, osl_Pos_Current, -1 );
-
-                    if ( ferr != osl_File_E_None )
-                    {
-                        rtl_freeMemory( pchBuff );
-                        return ferr;
-                    }
-                }
-            }
-
-            rtl_byte_sequence_constructFromArray( ppSeq, (sal_Int8*)pchBuff, (sal_Int32)(nReadTotal - 1));
-            rtl_freeMemory( pchBuff );
-            return osl_File_E_None;
         }
-
-        /* buffer handling */
-
-        if ( nReadTotal == sizeBuff )
-        {
-            sal_Char *pchTmp = (sal_Char*)rtl_reallocateMemory(
-                pchBuff, sizeBuff * ENLARGEMENT_FACTOR );
-
-            if ( 0 == pchTmp )
-            {
-                rtl_freeMemory( pchBuff );
-                return osl_File_E_NOMEM;
-            }
-
-            /* exchange pointer and update size info */
-
-            pchBuff   = pchTmp;
-            sizeBuff *= ENLARGEMENT_FACTOR;
-        }
-
     } /* end for */
 
-    OSL_POSTCOND( sal_False, "Should not arrive here" );
+    OSL_POSTCOND(sal_False, "Should not be here");
 
     return osl_File_E_None;
 }
