@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2002-02-26 08:49:02 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-#include <vos/mutex.hxx>
 
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
@@ -67,11 +66,18 @@
 #include "oleobjw.hxx"
 #include <rtl/unload.h>
 
+#include <tools/presys.h>
+#define _WIN32_WINNT 0x0400
+#include <atlbase.h>
+extern CComModule _Module;
+#include <atlcom.h>
+#include <tools/postsys.h>
+
+
 using namespace std;
 using namespace cppu;
 using namespace rtl;
 using namespace osl;
-using namespace vos;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge;
@@ -92,9 +98,6 @@ namespace ole_adapter
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
 
 extern  rtl_StandardModuleCount globalModuleCount;
-
-
-extern OMutex globalWrapperMutex;
 
 /*****************************************************************************
 

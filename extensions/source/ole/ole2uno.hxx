@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-06-27 10:56:03 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@
 #endif
 
 #define UNO_2_OLE_EXCEPTIONCODE 1001
-
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::script;
@@ -173,13 +173,6 @@ using namespace std;
 
 namespace ole_adapter
 {
-// function shared in this component
-//  Reference<XSingleServiceFactory>    o2u_getConverterProvider2(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-//  Reference<XSingleServiceFactory>    o2u_getConverterProviderVar1(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-//  Reference<XSingleServiceFactory>    o2u_getClientProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-//  Reference<XSingleServiceFactory>    o2u_getServerProvider(const Reference<XMultiServiceFactory>& xMan, const Reference<XRegistryKey>& xKey);
-
-//Reference<XMultiServiceFactory>   o2u_getMultiServiceFactory();
 Reference<XRegistryKey>     o2u_getRegistryKey();
 const VARTYPE getVarType( const Any& val);
 Type getType( BSTR type);
@@ -244,6 +237,7 @@ sal_Bool convertSelfToIDispatch( T& unoInterface, IDispatch** ppDisp)
 }
 
 
+Mutex* getBridgeMutex();
 
 
 inline sal_Bool operator == (const Uik & uik1, const Uik & uik2)

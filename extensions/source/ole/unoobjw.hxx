@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-09-17 14:15:46 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/script/InvocationInfo.hpp>
 #include <vos/refernce.hxx>
 
 #include <tools/presys.h>
@@ -86,6 +87,7 @@
 using namespace std;
 using namespace cppu;
 using namespace com::sun::star::bridge;
+using namespace com::sun::star::script;
 namespace ole_adapter
 {
 
@@ -251,6 +253,8 @@ protected:
 
     HRESULT convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
                             Sequence<Any>& rSeq);
+
+    sal_Bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
 
     vos::ORefCount                      m_refCount;
     Reference<XInvocation>                  m_xInvocation;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,12 @@
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 
-#include <vos/mutex.hxx>
 #include <typelib/typedescription.hxx>
 #include "ole2uno.hxx"
 
+// Test -------------------
+#include <com/sun/star/lang/XEventListener.hpp>
+// ------------------------
 // classes for wrapping uno objects
 #define INTERFACE_OLE_WRAPPER_IMPL      1
 #define UNO_OBJECT_WRAPPER_REMOTE_OPT   2
@@ -87,15 +89,31 @@
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
-using namespace vos;
 
 namespace ole_adapter
 {
-extern OMutex globalWrapperMutex;
 extern hash_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
 extern hash_map<sal_uInt32, sal_uInt32> WrapperToAdapterMap;
+typedef hash_map<sal_uInt32, sal_uInt32>::iterator IT_Wrap;
+typedef hash_map<sal_uInt32, sal_uInt32>::iterator CIT_Wrap;
+//Maps IUnknown pointers to a weak reference of the respective wrapper class (e.g.
+// IUnknownWrapperImpl. It is the responsibility of the wrapper to remove the entry when
+// it is being destroyed.
+// Used to ensure that an Automation object is always mapped to the same UNO objects.
+// extern hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
+// typedef hash_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Com;
+// typedef hash_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Com;
 
-    // createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
+// Maps XInterface pointers to a weak reference of its wrapper class (i.e.
+// InterfaceOleWrapper_Impl). It is the responsibility of the wrapper to remove the entry when
+// it is being destroyed. It is used to ensure the identity of objects. That is, an UNO interface
+// is mapped to IDispatch which is kept alive in the COM environment. If the same
+// UNO interface is mapped again to COM then the IDispach of the first mapped instance
+// must be returned.
+extern hash_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
+typedef hash_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Uno;
+typedef hash_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Uno;
+// createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
     // and initializes it via XInitialization. The wrapper object is required to implement
     // XBridgeSupplier so that it can convert itself to IDispatch.
     // class T: Deriving class ( must implement XInterface )
@@ -123,15 +141,15 @@ public:
 
     sal_Bool variantToAny(const VARIANT* pVariant, Any& rAny, sal_Bool bReduceValueRange = sal_True);
     sal_Bool variantToAny2( const VARIANTARG* pArg, Any& rAny, const Type& ptype, sal_Bool bReduceValueRange = sal_True);
-    Any createOleObjectWrapper(IUnknown* pUnknown);
-    Any createOleObjectWrapper(IUnknown* pUnknown, const Type& aType);
 
+    Any createOleObjectWrapper(IUnknown* pUnknown, const Type& aType= Type());
 
     sal_Bool convertValueObject( const VARIANTARG *var, Any& any, sal_Bool& bHandled);
     sal_Bool dispatchExObject2Sequence( const VARIANTARG* pvar, Any& anySeq, const Type& type);
 
-    Sequence<Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type);
-    Sequence<Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type);
+    Sequence<Any> createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index,
+                                             VARTYPE type, const Type& unotype);
+    Sequence<Any> createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const Type& unotype= Type());
 
 
     VARTYPE mapTypeClassToVartype( TypeClass type);
@@ -153,6 +171,8 @@ protected:
                                     sal_Int32 * parMultidimensionalIndex);
     // helper function for Sequence conversion
     size_t getOleElementSize( VARTYPE type);
+
+    Type getElementTypeOfSequence( const Type& seqType);
 
 
     // This member determines what class is used to convert a UNO object
@@ -190,7 +210,7 @@ template<class T>
 Reference< XSingleServiceFactory > UnoConversionUtilities<T>::getInvocationFactory(const Any& anyObject)
 {
     Reference< XSingleServiceFactory > retVal;
-    OGuard guard( globalWrapperMutex);
+    MutexGuard guard( getBridgeMutex());
     if( anyObject.getValueTypeClass() != TypeClass_STRUCT &&
         m_smgrRemote.is() )
     {
@@ -222,14 +242,11 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
         return sal_False;
 
     sal_Bool bHandled= sal_False;
-//      if( pArg->vt == VT_DISPATCH )
-//      {
+
     if( !convertValueObject( &var, rAny, bHandled))
         return sal_False;
     if( bHandled)
         OSL_ENSURE(  rAny.getValueType() == ptype, "type in Value Object must match the type parameter");
-//  }
-
 
     if( ! bHandled)
     {
@@ -310,8 +327,16 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
                 retVal= dispatchExObject2Sequence( pArg, rAny, ptype);
             }
             else
-                retVal= variantToAny(&var, rAny);
-            break; // maybe later ( convert to VT_ARRAY| ??? )
+            {
+                if ((var.vt & VT_ARRAY) != 0)
+                {
+                    VARTYPE oleType = var.vt ^ VT_ARRAY;
+                    Sequence<Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
+                    rAny.setValue( &unoSeq, getCppuType( &unoSeq));
+                    retVal = sal_True;
+                }
+             }
+            break;
         case TypeClass_VOID:
             rAny.setValue(NULL,Type());
             break;
@@ -403,6 +428,7 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
 template<class T>
 sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type)
 {
+    HRESULT hr= S_OK;
     sal_Bool ret= sal_False;
     type &= 0xffff ^ VT_BYREF; // remove VT_BYREF if set
     if( type & VT_ARRAY)
@@ -418,8 +444,22 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
         }
 
     }
+    else if(type == VT_VARIANT)
+    {
+        ret= anyToVariant(pVariant, rAny);
+    }
     else
-        ret= anyToVariant( pVariant, rAny);
+    {
+        CComVariant var;
+        if(anyToVariant( &var, rAny))
+        {
+            if(SUCCEEDED(hr= VariantChangeType(&var, &var, 0, type)))
+            {
+                if( SUCCEEDED(VariantCopy(pVariant, &var)))
+                    ret= sal_True;
+            }
+        }
+    }
 
     return ret;
 }
@@ -942,19 +982,24 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
 template<class T>
 IDispatch*  UnoConversionUtilities<T>::createUnoObjectWrapper(const Any& rObj)
 {
-    OGuard guard(globalWrapperMutex);
+    MutexGuard guard(getBridgeMutex());
 
     IDispatch* pDispatch = NULL;
     Reference<XInvocation> xInv;
     Reference<XInterface> xInt;
-
-
-    // If the UNO object is already a wrapped COM object then
-    // of course the original IDispatch is returned.
-    if( rObj.getValueTypeClass() == TypeClass_INTERFACE)
+    rObj >>= xInt;
+    //If there is already a wrapper for the UNO object then use it
+    if(xInt.is())
     {
-        if( rObj >>= xInt)
+        IT_Uno it_uno= UnoObjToWrapperMap.find( (sal_uInt32) xInt.get());
+        if(it_uno != UnoObjToWrapperMap.end())
         {
+            Reference<XInterface> wrapper( it_uno->second);
+        }
+    }
+
+    if(xInt.is())
+    {
             // can the object provide a Wrapper on its own
             if( ! convertSelfToIDispatch( xInt, &pDispatch) )
             {
@@ -969,13 +1014,11 @@ IDispatch*  UnoConversionUtilities<T>::createUnoObjectWrapper(const Any& rObj)
                 else
                     xInv= Reference<XInvocation>( xInt, UNO_QUERY);
             }
-        }
     }
 
     if (! pDispatch && !xInv.is())
     {
-
-
+        // create a XInvocation object for the uno interface or struct
         Reference<XSingleServiceFactory> xInvFactory= getInvocationFactory(rObj);
         if( xInvFactory.is())
         {
@@ -1019,6 +1062,12 @@ IDispatch*  UnoConversionUtilities<T>::createUnoObjectWrapper(const Any& rObj)
                 IDispatch* pDisp;
                 if( convertSelfToIDispatch( xIntWrapper, &pDisp))
                     pDispatch= pDisp;
+
+                // put the newly created object into a map. If the same object will
+                // be mapped again and there is already a wrapper then the old wrapper
+                // will be used.
+                if(xInt.is()) // only interfaces
+                   UnoObjToWrapperMap[(sal_uInt32) xInt.get()]= WeakReference<XInterface>(xIntWrapper);
             }
         }
     }
@@ -1295,57 +1344,12 @@ sal_Bool UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& 
 
     return ret;
 }
-
-template<class T>
-Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown)
-{
-    Any ret;
-
-    Reference<XInterface> xInt;
-
-    if (pUnknown == NULL)
-    {
-        ret <<= xInt;
-    }
-    else
-    {
-        CComQIPtr<IUnoObjectWrapper> spUno( pUnknown);
-        if( spUno)
-        {
-            // The wrapped UNO object can either be a struct that has been converted to XInvocation
-            // or another interface
-            // try first for an interface
-            Reference<XInterface> xInt;
-            if( SUCCEEDED( spUno->getOriginalUnoObject( &xInt)))
-            {
-                ret <<= xInt;
-            }
-            else
-            {
-                Any any;
-                if( SUCCEEDED( spUno->getOriginalUnoStruct(&any)))
-                    ret= any;
-            }
-        }
-        else
-        {
-            Reference<XInterface> xInt= createComWrapperInstance();
-            if( xInt.is())
-            {
-                Reference<XInitialization> xInit( xInt, UNO_QUERY);
-                if( xInit.is())
-                {
-                    Any param;
-                    param <<= (sal_uInt32) pUnknown;
-                    xInit->initialize( Sequence<Any>(&param, 1));
-                }
-            }
-            ret<<= Reference<XInvocation>( xInt, UNO_QUERY);
-        }
-    }
-
-    return ret;
-}
+// The function converts an IUnknown* into an UNO interface or struct. The
+// IUnknown pointer can constitute different kind of objects:
+// 1. a wrapper of an UNO struct (the wrapper was created by this bridge)
+// 2. a wrapper of an UNO interface (created by this bridge)
+// 3. a dispatch object that implements UNO interfaces
+// 4. a dispatch object.
 
 // If the parameter "aType" has a value then the COM object ( pUnknown) is supposed to
 // implement the interface described by "aType". Moreover it ( pUnknown) can implement
@@ -1364,14 +1368,16 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown)
 // UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
 // it is no struct) and returned.
 template<class T>
-Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const Type& aType)
+Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const Type& aType= Type())
 {
-    OGuard guard( globalWrapperMutex);
+    MutexGuard guard( getBridgeMutex());
+    static Type VOID_TYPE= Type();
     Any ret;
 
-    Reference<XInterface> xInt;
+    Type desiredType=  aType == VOID_TYPE ?  getCppuType((Reference<XInvocation>*) 0) : aType;
+     Reference<XInterface> xInt;
 
-    if (pUnknown == NULL)
+     if (pUnknown == NULL)
     {
         if( aType.getTypeClass() == TypeClass_INTERFACE)
             ret.setValue( &xInt, aType);
@@ -1385,17 +1391,12 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
         CComQIPtr<IUnoObjectWrapper> spUno( pUnknown);
         if( spUno)
         {
-            if( aType.getTypeClass() == TypeClass_INTERFACE)
+             Reference<XInterface> xInt;
+            if( SUCCEEDED( spUno->getOriginalUnoObject( &xInt)))
             {
-                Reference<XInterface> xInt;
-                spUno->getOriginalUnoObject( &xInt);
-                if( xInt.is())
-                {
-                    ret= xInt->queryInterface( aType);
-                }
-
+                ret <<= xInt;
             }
-            else if( aType.getTypeClass() == TypeClass_STRUCT)
+            else
             {
                 Any any;
                 if( SUCCEEDED( spUno->getOriginalUnoStruct(&any)))
@@ -1405,105 +1406,138 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(IUnknown* pUnknown, const 
         else
         {
             // "pUnknown" is a real COM object.
-            Reference<XInterface> xInt= createComWrapperInstance();
-            if( xInt.is())
-            {
-                Reference<XInvocation> xInv( xInt, UNO_QUERY);
-
-                Sequence<Type> seqTypes;
-
-                // create the actual Interface of type "Type"
-                // If the type is XInvocation than we use the COM wrapper directly.
-                if( aType.getTypeName() == OUString::createFromAscii("com.sun.star.script.XInvocation"))
+            // Before we create a new wrapper object we check if there is an existing wrapper
+         //    CIT_Com cit_currWrapper= ComPtrToWrapperMap.find( reinterpret_cast<sal_uInt32>(pUnknown));
+//             sal_Bool bSuccess= sal_False;
+//             if(cit_currWrapper != ComPtrToWrapperMap.end())
+//             {
+//                 WeakReference<XInterface> xweak= cit_currWrapper->second;
+//                 Reference<XInterface> xint= xweak;
+//                 // get the Adapter from the WrapperToAdapterMap. This is dangerous since the stored pointer
+//                 // might be invalid already. We should store the adapter in a map with a weak reference. The
+//                 // invocation adapter factory does not support adapter which can be kept weekly.
+//                 CIT_Wrap cit_w= WrapperToAdapterMap.find((sal_uInt32) xint.get());
+//                 if( cit_w != WrapperToAdapterMap.end())
+//                 {
+//                     Reference<XInterface> xIntAdapt(reinterpret_cast<XInterface*>( cit_w->second));
+//                     if(xIntAdapt.is())
+//                     {
+//                         ret= xIntAdapt->queryInterface(desiredType);
+//                         bSuccess= sal_True;
+//                     }
+//                 }
+//                 else
+//                 {
+//                     ret= xint->queryInterface(desiredType);
+//                     bSuccess= sal_True;
+//                 }
+//             }
+//             if(bSuccess == sal_False)
+//             {
+                //There is no existing wrapper, therefore we create one for the real COM object
+                Reference<XInterface> xInt= createComWrapperInstance();
+                if( xInt.is())
                 {
-                    ret <<= xInv;
-                }
-                else
-                {
-                    Reference< XInterface> xIntAdapterFac;
-                    xIntAdapterFac= m_smgr->createInstance( INTERFACE_ADAPTER_FACTORY);
-                    // We create an adapter object that does not only implement the required type but also
-                    // all types that the COM object pretends to implement. An COM object must therefore
-                    // support the property "_implementedInterfaces".
-                    CComDispatchDriver disp( pUnknown);
-                    if( disp)
+                    Reference<XInvocation> xInv( xInt, UNO_QUERY);
+
+                    Sequence<Type> seqTypes;
+                    //The wrapper implements already XInvocation and XInterface. Therefore if the
+                    //param aType is one of those we can use the wrapper object directly otherwise
+                    //we have to create an Adapter interface.
+                    //If aType is void then we assume the type to be XInterface
+
+                    if( desiredType == getCppuType((Reference<XInvocation>*)  0))
                     {
-                        CComVariant var;
-                        HRESULT hr= S_OK;
-                        // There are two different property names possible.
-                        if( FAILED( hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP, &var)))
+                        ret <<= xInt;
+//                        ComPtrToWrapperMap[reinterpret_cast<sal_uInt32>(pUnknown)]= xInt;
+                    }
+                   else
+                   {
+                        Reference< XInterface> xIntAdapterFac;
+                        xIntAdapterFac= m_smgr->createInstance( INTERFACE_ADAPTER_FACTORY);
+                        // We create an adapter object that does not only implement the required type but also
+                        // all types that the COM object pretends to implement. An COM object must therefore
+                        // support the property "_implementedInterfaces".
+                        CComDispatchDriver disp( pUnknown);
+                        if( disp)
                         {
-                            hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP2, &var);
-                        }
-                        if (SUCCEEDED( hr))
-                        {
-                            // we exspect an array( SafeArray or IDispatch) of Strings.
-                            Any anyNames;
-                            if( variantToAny2( &var, anyNames, getCppuType( (Sequence<Any>*) 0)))
+                            CComVariant var;
+                            HRESULT hr= S_OK;
+                            // There are two different property names possible.
+                            if( FAILED( hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP, &var)))
                             {
-                                Sequence<Any> seqAny;
-                                if( anyNames >>= seqAny)
+                                hr= disp.GetPropertyByName( SUPPORTED_INTERFACES_PROP2, &var);
+                            }
+                            if (SUCCEEDED( hr))
+                            {
+                                // we exspect an array( SafeArray or IDispatch) of Strings.
+                                Any anyNames;
+                                if( variantToAny2( &var, anyNames, getCppuType( (Sequence<Any>*) 0)))
                                 {
-                                    seqTypes.realloc( seqAny.getLength());
-                                    for( sal_Int32 i=0; i < seqAny.getLength(); i++)
+                                    Sequence<Any> seqAny;
+                                    if( anyNames >>= seqAny)
                                     {
-                                        OUString typeName;
-                                        seqAny[i] >>= typeName;
-                                        seqTypes[i]= Type( TypeClass_INTERFACE, typeName);
+                                        seqTypes.realloc( seqAny.getLength());
+                                        for( sal_Int32 i=0; i < seqAny.getLength(); i++)
+                                        {
+                                            OUString typeName;
+                                            seqAny[i] >>= typeName;
+                                            seqTypes[i]= Type( TypeClass_INTERFACE, typeName);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    Reference<XInterface> xIntAdapted;
-                    if( seqTypes.getLength() >0)
-                    {
-                        Reference< XInvocationAdapterFactory2> xAdapterFac( xIntAdapterFac, UNO_QUERY);
-                        if( xAdapterFac.is())
-                            xIntAdapted= xAdapterFac->createAdapter( xInv, seqTypes);
-                    }
-                    else
-                    {
-                        Reference<XInvocationAdapterFactory> xAdapterFac( xIntAdapterFac, UNO_QUERY);
-                        if( xAdapterFac.is())
-                            xIntAdapted= xAdapterFac->createAdapter( xInv, aType);
-                    }
-                    if( xIntAdapted.is())
-                    {
-                        ret= xIntAdapted->queryInterface( aType);
-                        // Put the pointer to the wrapper object and the interface pointer of the adapted interface
-                        // in a global map. Thus we can determine in a call to createUnoObjectWrapper whether the UNO
-                        // object is a wrapped COM object. In that case we extract the original COM object rather than
-                        // creating a wrapper around the UNO object.
-                        typedef hash_map<sal_uInt32,sal_uInt32>::value_type VALUE;
-                        AdapterToWrapperMap.insert( VALUE( (sal_uInt32) xIntAdapted.get(), (sal_uInt32) xInt.get()));
-                        WrapperToAdapterMap.insert( VALUE( (sal_uInt32) xInt.get(), (sal_uInt32) xIntAdapted.get()));
+                        Reference<XInterface> xIntAdapted;
+                        sal_Int32 seqTypesLen = seqTypes.getLength();
 
+                        if( seqTypesLen > 0)
+                        {
+                            Reference< XInvocationAdapterFactory2> xAdapterFac( xIntAdapterFac, UNO_QUERY);
+                            if( xAdapterFac.is())
+                                xIntAdapted= xAdapterFac->createAdapter( xInv, seqTypes);
+                        }
+                        else
+                        {
+                            Reference<XInvocationAdapterFactory> xAdapterFac( xIntAdapterFac, UNO_QUERY);
+                            if( xAdapterFac.is())
+                                xIntAdapted= xAdapterFac->createAdapter( xInv, desiredType);
+                        }
+                        if( xIntAdapted.is())
+                        {
+                            ret= xIntAdapted->queryInterface( desiredType);
+                            // Put the pointer to the wrapper object and the interface pointer of the adapted interface
+                            // in a global map. Thus we can determine in a call to createUnoObjectWrapper whether the UNO
+                            // object is a wrapped COM object. In that case we extract the original COM object rather than
+                            // creating a wrapper around the UNO object.
+                            typedef hash_map<sal_uInt32,sal_uInt32>::value_type VALUE;
+                            AdapterToWrapperMap.insert( VALUE( (sal_uInt32) xIntAdapted.get(), (sal_uInt32) xInt.get()));
+                            WrapperToAdapterMap.insert( VALUE( (sal_uInt32) xInt.get(), (sal_uInt32) xIntAdapted.get()));
+//                            ComPtrToWrapperMap[reinterpret_cast<sal_uInt32>(pUnknown)]= xInt;
+                        }
+                   }
+                    // initialize the COM wrapper ( IUnknown + Type s)
+                    Reference<XInitialization> xInit( xInt, UNO_QUERY);
+                    if( xInit.is())
+                    {
+                        Any  params[2];
+                        params[0] <<= (sal_uInt32) pUnknown;
+                        if( ! seqTypes.getLength()  )
+                        {
+                            params[1] <<= Sequence<Type>( &aType, 1);
+                        }
+                        else
+                        {
+                            params[1] <<= seqTypes;
+                        }
+
+                        xInit->initialize( Sequence<Any>( params, 2));
                     }
                 }
-
-                // initialize the COM wrapper ( IUnknown + Type s)
-                Reference<XInitialization> xInit( xInt, UNO_QUERY);
-                if( xInit.is())
-                {
-                    Any  params[2];
-                    params[0] <<= (sal_uInt32) pUnknown;
-                    if( ! seqTypes.getLength()  )
-                    {
-                        params[1] <<= Sequence<Type>( &aType, 1);
-                    }
-                    else
-                    {
-                        params[1] <<= seqTypes;
-                    }
-
-                    xInit->initialize( Sequence<Any>( params, 2));
-                }
-
-            }
-        }
-    }
+//            }
+         }
+     }
 
     return ret;
 }
@@ -1686,9 +1720,13 @@ sal_Bool UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG*
     return retVal;
 }
 
-
+/* The argument unotype is the type that is expected by the currently called UNO function.
+   For example: []long, [][]long. If the function calls itself recursively then unotype is
+   just passed on. It is only used to determine the element type (e.g. long here).
+*/
 template<class T>
-Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray, unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type)
+Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* pArray,
+              unsigned int dimCount, unsigned int actDim, long* index, VARTYPE type, const Type& unotype)
 {
     HRESULT hr= S_OK;
     long lBound;
@@ -1699,6 +1737,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
     SafeArrayGetUBound(pArray, actDim, &uBound);
     nCountElements= uBound - lBound +1;
 
+    Type elementType;
 
     Sequence<Any>   anySeq(nCountElements);
     Any*            pUnoArray = anySeq.getArray();
@@ -1707,7 +1746,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
     {
         if (actDim > 1 )
         {
-            Sequence<Any> element = createOleArrayWrapperOfDim(pArray, dimCount, actDim - 1, index, type);
+            Sequence<Any> element = createOleArrayWrapperOfDim(pArray, dimCount, actDim - 1, index, type, unotype);
 
             pUnoArray[index[actDim - 1] - lBound].setValue(&element, getCppuType(&element));
         }
@@ -1773,16 +1812,47 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapperOfDim(SAFEARRAY* p
                     break;
             }
 
-            variantToAny(&variant, pUnoArray[index[actDim - 1] - lBound], sal_False);
+            // obtain the element type of the sequence. In case the sequence contains a sequence, then
+            // get the element type of that sequence and so on. For example, element type of
+            // Sequence<Sequence<long> > is long
+            if( elementType.getTypeClass() == TypeClass_VOID)
+                elementType= getElementTypeOfSequence( unotype);
+
+            if( unotype.getTypeClass() == TypeClass_VOID)
+                // the function was called without specifying the destination type
+                variantToAny(&variant, pUnoArray[index[actDim - 1] - lBound], sal_False);
+            else if( variant.vt & VT_ARRAY)
+                variantToAny2(&variant, pUnoArray[index[actDim - 1] - lBound], unotype, sal_False);
+            else
+                variantToAny2(&variant, pUnoArray[index[actDim - 1] - lBound], elementType, sal_False);
 
             VariantClear(&variant);
         }
     }
-
     return anySeq;
 }
+
 template<class T>
-Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type)
+Type UnoConversionUtilities<T>::getElementTypeOfSequence( const Type& seqType)
+{
+    Type retValue;
+    if( seqType.getTypeClass() != TypeClass_VOID)
+    {
+        OSL_ASSERT( seqType.getTypeClass() == TypeClass_SEQUENCE);
+
+        typelib_IndirectTypeDescription* pDescSeq= NULL;
+        seqType.getDescription( (typelib_TypeDescription** ) & pDescSeq);
+        if( pDescSeq->pType->eTypeClass == TypeClass_SEQUENCE)
+            retValue= getElementTypeOfSequence( Type( pDescSeq->pType));
+        else
+            retValue= Type( pDescSeq->pType);
+
+        typelib_typedescription_release( (typelib_TypeDescription*) pDescSeq);
+    }
+    return retValue;
+}
+template<class T>
+Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray, VARTYPE type, const Type& unoType)
 {
     sal_uInt32 dim = SafeArrayGetDim(pArray);
 
@@ -1797,7 +1867,7 @@ Sequence<Any> UnoConversionUtilities<T>::createOleArrayWrapper(SAFEARRAY* pArray
             index[i] = 0;
         }
 
-        ret = createOleArrayWrapperOfDim(pArray, dim, dim, index, type);
+        ret = createOleArrayWrapperOfDim(pArray, dim, dim, index, type, unoType);
 
         delete[] index;
     }

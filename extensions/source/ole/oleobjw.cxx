@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
+ *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,6 @@
 #ifndef _COM_SUN_STAR_BRIDGE_XBRIDGESUPPLIER_HPP_
 #include <com/sun/star/bridge/XBridgeSupplier.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-//#include <com/sun/star/lang/XUnoTunnel.hpp>
-//#endif
-
 #ifndef _COM_SUN_STAR_BRIDGE_MODELDEPENDENT_HPP_
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #endif
@@ -145,9 +141,6 @@ namespace ole_adapter
 {
 
 
-
-
-
 // key: XInterface pointer created by Invocation Adapter Factory
 // value: XInterface pointer to the wrapper class.
 // Entries to the map are made within
@@ -165,7 +158,7 @@ hash_map<sal_uInt32,sal_uInt32> AdapterToWrapperMap;
 // adapted interface which is then used to locate the entry in AdapterToWrapperMap.
 hash_map<sal_uInt32,sal_uInt32> WrapperToAdapterMap;
 
-
+//hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
 /*****************************************************************************
 
     class implementation IUnknownWrapper_Impl
@@ -182,7 +175,7 @@ IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory>& xFa
 
 IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 {
-    OGuard guard( globalWrapperMutex);
+    MutexGuard guard(getBridgeMutex());
     acquire(); // make sure we don't delete us twice
     Reference<XInterface> xInt( static_cast<XWeak*>(this), UNO_QUERY);
 
@@ -196,6 +189,10 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
         AdapterToWrapperMap.erase( adapter);
         WrapperToAdapterMap.erase( it);
     }
+
+//  IT_Com it_c= ComPtrToWrapperMap.find( (sal_uInt32) m_pUnknown);
+//     if(it_c != ComPtrToWrapperMap.end())
+//         ComPtrToWrapperMap.erase(it_c);
 
     o2u_attachCurrentThread();
 
@@ -292,9 +289,12 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
     throw(IllegalArgumentException, CannotConvertException, InvocationTargetException,
           RuntimeException)
 {
+
+     Any ret;
+
     setCurrentInvokeCall( aFunctionName);
 
-    Any ret;
+
 
     DispIdMap::iterator iter = getDispIdEntry(aFunctionName);
 
@@ -318,9 +318,8 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
     {
         OUString message= OUString(RTL_CONSTASCII_USTRINGPARAM(
             "OleBridge: coult not get DISPID for ")) + aFunctionName;
-        throw RuntimeException( message, Reference<XInterface>());
-
-//      throw IllegalArgumentException();
+        //throw RuntimeException( message, Reference<XInterface>());
+        throw InvocationTargetException();
     }
 
     return ret;
@@ -1514,5 +1513,6 @@ ITypeInfo* IUnknownWrapper_Impl::getTypeInfo()
     }
     return m_spTypeInfo;
 }
+
 } // end namespace
 
