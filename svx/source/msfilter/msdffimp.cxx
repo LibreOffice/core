@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:02:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5936,7 +5936,6 @@ BOOL SvxMSDffManager::GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData) const
             pGrStream = pOut;
         }
 
-#define DBG_EXTRACTGRAPHICS
 #ifdef DBG_EXTRACTGRAPHICS
 
         static sal_Int32 nCount;
