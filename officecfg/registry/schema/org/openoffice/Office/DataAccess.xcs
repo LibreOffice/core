@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:52:50 $
+ *  last change: $Author: dg $ $Date: 2002-05-06 19:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,47 +429,6 @@
       </set>
     </group>
     <group oor:name="DriverSettings">
-      <group oor:name="com.sun.star.comp.sdbc.mozaddressbook.Driver">
-        <group oor:name="ColumnAliases">
-          <prop oor:name="FirstName" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="LastName" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="DisplayName" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="NickName" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="PrimaryEmail" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="SecondEmail" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="PreferMailFormat" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkPhone" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomePhone" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="FaxNumber" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="PagerNumber" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="CellularNumber" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeAddress" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeAddress2" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeCity" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeState" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeZipCode" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="HomeCountry" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkAddress" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkAddress2" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkCity" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkState" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkZipCode" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WorkCountry" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="JobTitle" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Department" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Company" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WebPage1" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="WebPage2" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="BirthYear" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="BirthMonth" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="BirthDay" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Custom1" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Custom2" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Custom3" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Custom4" oor:type="xs:string" oor:localized="true"/>
-          <prop oor:name="Notes" oor:type="xs:string" oor:localized="true"/>
-        </group>
-      </group>
       <group oor:name="com.sun.star.comp.sdbc.MozabDriver">
         <group oor:name="MozillaPreferences">
           <prop oor:name="ProfileName" oor:type="xs:string"/>
