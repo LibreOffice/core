@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
+ *  last change: $Author: ab $ $Date: 2002-11-01 11:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,9 +748,12 @@ void BasicIDE::MarkDocShellModified( StarBASIC* pBasic )
                     pIDEShell->SetAppBasicModified();
             }
 
-            SfxBindings& rBindings = BasicIDE::GetBindings();
-            rBindings.Invalidate( SID_SAVEDOC );
-            rBindings.Update( SID_SAVEDOC );
+            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+            if( pBindings )
+            {
+                pBindings->Invalidate( SID_SAVEDOC );
+                pBindings->Update( SID_SAVEDOC );
+            }
         }
 
         // Objectcatalog updaten...
@@ -1014,6 +1017,22 @@ SfxBindings& BasicIDE::GetBindings()
     DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
     return pCurFrame->GetBindings();
 }
+
+SfxBindings* BasicIDE::GetBindingsPtr()
+{
+    SfxViewFrame* pFrame;
+    BasicIDEDLL* pIDEDLL = IDE_DLL();
+    if ( pIDEDLL && pIDEDLL->GetShell() )
+        pFrame = pIDEDLL->GetShell()->GetFrame();
+    else
+        pFrame = SfxViewFrame::Current();
+
+    SfxBindings* pBindings = NULL;
+    if( pFrame != NULL )
+        pBindings = &pFrame->GetBindings();
+    return pBindings;
+}
+
 
 //----------------------------------------------------------------------------
 
