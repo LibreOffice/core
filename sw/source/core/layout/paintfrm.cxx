@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: od $ $Date: 2002-10-18 13:15:33 $
+ *  last change: $Author: fme $ $Date: 2002-10-24 08:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2035,6 +2035,13 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     pLines = new SwLineRects;   //Sammler fuer Umrandungen.
 
+    // #104289#. During painting, something (OLE) can
+    // load the linguistic, which in turn can cause a reformat
+    // of the document. Dangerous! We better set this flag to
+    // avoid the reformat.
+    const sal_Bool bOldAction = IsCallbackActionEnabled();
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( FALSE );
+
     const SwPageFrm *pPage = pSh->Imp()->GetFirstVisPage();
 
     while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
@@ -2144,6 +2151,8 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     if ( ViewShell::IsLstEndAction() && pSh->GetWin() && pSh->Imp()->HasDrawView() )
         pSh->Imp()->GetDrawView()->PostPaint();
+
+    ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
 
 /*************************************************************************
