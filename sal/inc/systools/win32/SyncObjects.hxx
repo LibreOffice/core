@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SyncObjects.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2000-09-29 13:10:51 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
