@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 14:17:57 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 03:52:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ SLOFILES=	\
         $(SLO)$/tdenum.obj	\
         $(SLO)$/tdcomp.obj	\
         $(SLO)$/tdiface.obj
+
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbregistry_tdprovider.obj
