@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:20:20 $
+ *  last change: $Author: os $ $Date: 2000-10-24 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2186,6 +2186,8 @@ Any SwXPageStyle::getPropertyValue(const OUString& rPropertyName) throw(::com::s
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                     aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PAGE_STYLE),
                     rPropertyName);
+    if(!pMap)
+        throw beans::UnknownPropertyException();
     if(GetBasePool())
     {
         sal_uInt16 nRes;
@@ -2365,6 +2367,8 @@ void SwXPageStyle::setPropertyValue(const OUString& rPropertyName, const Any& aV
     const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                         aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PAGE_STYLE),
                         rPropertyName);
+    if(!pMap)
+        throw beans::UnknownPropertyException();
     if(GetBasePool())
     {
         switch(pMap->nWID)
@@ -2567,6 +2571,9 @@ const SwStartNode* SwXPageStyle::GetStartNode(sal_Bool bHeader, sal_Bool bLeft)
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/18 11:20:20  mib
+    Setting/Getting PageNumber now works correctly for paragraph styles
+
     Revision 1.2  2000/10/12 17:15:50  mib
     (Header|Footer)Text(Left)? now don't respect UsedOn property
 
