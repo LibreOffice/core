@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-15 14:04:24 $
+ *  last change: $Author: mib $ $Date: 2000-11-15 14:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -662,7 +662,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         aOpt.SetNumRules( bLoadStyleNumbering );
         aOpt.SetMerge( !bLoadStyleOverwrite );
 
-        ULONG nErr = 0; //pDocShell->LoadStylesFromFile( rURL, aOpt, TRUE );
+        ULONG nErr = pDocShell->LoadStylesFromFile( rURL, aOpt, TRUE );
         if( nErr )
             throw io::IOException();
     }
