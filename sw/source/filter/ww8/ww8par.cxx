@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:19:39 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
         rRdr.maTracer.GetTrace()),
     rReader(rRdr), pFallbackStream(0), pOldEscherBlipCache(0)
 {
+    SetSvxMSDffSettings( GetSvxMSDffSettings() | SVXMSDFF_SETTINGS_IMPORT_IAS ); // #i27541#
     nSvxMSDffOLEConvFlags = SwMSDffManager::GetFilterFlags();
 }
 
@@ -503,24 +504,24 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             //textbox, this was changed for #88277# to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
-            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
-            if (!bTextFrame)
+            FASTBOOL bIsSimpleDrawingTextBox = (pImpRec->eShapeType == mso_sptTextBox);
+            if (!bIsSimpleDrawingTextBox)
             {
                 //Either
                 //a) its a simple text object or
                 //b) its a rectangle with text and square wrapping.
-                bTextFrame =
+                bIsSimpleDrawingTextBox =
                 (
                     (pImpRec->eShapeType == mso_sptTextSimple) ||
                     (
                         (pImpRec->eShapeType == mso_sptRectangle)
-                        && (eWrapMode == mso_wrapSquare)
+                        // && (eWrapMode == mso_wrapSquare)
                         && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
                     )
                 );
             }
 
-            if (bTextFrame)
+            if (bIsSimpleDrawingTextBox)
             {
                 delete pObj;
                 pObj = pOrgObj = 0;
@@ -620,7 +621,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             // Nur falls es eine einfache Textbox ist, darf der Writer
             // das Objekt durch einen Rahmen ersetzen, ansonsten
-            if( bTextFrame )
+            if( bIsSimpleDrawingTextBox )
             {
                 SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
                 aTmpRec.bSortByShapeId = TRUE;
