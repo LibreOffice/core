@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,19 +199,55 @@ bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange,
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects
-bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,  Factory& rFactory)
+bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
+    const memory::Accessor& aAccessor, Factory& rFactory)
 {
     if (aChange.isSetChange())
     {
-        uno::Reference<uno::XInterface> aNewUnoObject = rFactory.findUnoElement(aChange.getNewElementNodeID());
-        uno::Reference<uno::XInterface> aOldUnoObject = rFactory.findUnoElement(aChange.getOldElementNodeID());
+        //Check we have ElementTree
+        if ((aChange.element.newValue == NULL) &&
+            (aChange.element.oldValue == NULL))
+        {
+            if( ( aChange.unoData.newValue.getValue()!=NULL) ||
+               ( aChange.unoData.newValue.getValue()!=NULL))
+            {
+                return true;
+            }
+            else return false;
+        }
 
-        bool bFound = aNewUnoObject.is() || aOldUnoObject.is();
+        //Check if complex or simple type
+        Tree aTree = aChange.isRemoveSetChange()?
+            aChange.getOldElementTree(aAccessor):
+            aChange.getNewElementTree(aAccessor);
 
-        aUnoChange.newValue <<= aNewUnoObject;
-        aUnoChange.oldValue <<= aOldUnoObject;
+        NodeRef aNodeRef = aTree.getRootNode();
 
-        return bFound;
+        if (configuration::isStructuralNode(aTree, aNodeRef))
+        {
+            uno::Reference<uno::XInterface> aNewUnoObject = rFactory.findUnoElement(aChange.getNewElementNodeID());
+            uno::Reference<uno::XInterface> aOldUnoObject = rFactory.findUnoElement(aChange.getOldElementNodeID());
+
+            bool bFound = aNewUnoObject.is() || aOldUnoObject.is();
+            aUnoChange.newValue <<= aNewUnoObject;
+            aUnoChange.oldValue <<= aOldUnoObject;
+            return bFound;
+        }
+        else
+        {
+            aUnoChange.newValue = configuration::getSimpleElementValue(aTree, aNodeRef);
+
+            if (aChange.isReplaceSetChange() )
+            {
+                Tree aTree = aChange.getOldElementTree(aAccessor);
+
+                aNodeRef = aTree.getRootNode();
+                OSL_ENSURE(!configuration::isStructuralNode(aTree, aNodeRef), "resolveUnoObject types mismatch");
+                aUnoChange.oldValue =  configuration::getSimpleElementValue(aTree, aNodeRef);
+            }
+            bool bFound = aUnoChange.newValue.hasValue() || aUnoChange.oldValue.hasValue();
+            return bFound;
+        }
     }
     else if (aChange.isValueChange())
     {
@@ -226,10 +262,10 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,  Fa
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects inplace
-bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
+bool resolveToUno(NodeChangeData& aChange, const memory::Accessor& aAccessor, Factory& rFactory)
 {
     struct UnoChange aUnoChange;
-    if (resolveUnoObjects(aUnoChange,aChange,rFactory))
+    if (resolveUnoObjects(aUnoChange,aChange, aAccessor, rFactory))
     {
         aChange.unoData.newValue = aUnoChange.newValue;
         aChange.unoData.oldValue = aUnoChange.oldValue;
@@ -261,7 +297,8 @@ void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo
         OSL_ENSURE(false, "WARNING: Change is not part of the given Tree");
 
     UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
+
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
     rChange.Accessor        <<= aRelativePath.toString();
@@ -282,7 +319,7 @@ void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation 
 bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory)
 {
     UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
     {
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
         return false;
@@ -312,7 +349,7 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, NodeChangeInformation con
         return false;
 
      UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
     rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
