@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2001-09-26 20:34:09 $
+ *  last change: $Author: kz $ $Date: 2001-11-16 22:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1665,6 +1665,7 @@ Menu RID_POPUP_DRAWTEXT
         MN_DRWTXT
     };
 };
+
 
 
 
