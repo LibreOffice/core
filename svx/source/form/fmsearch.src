@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:26:55 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮יש לחפש‬";
         Text[ hindi ] = "केलिए खोज";
         Text[ slovak ] = "Hľadaný výraz";
+        Text[ hungarian ] = "Keresés";
+        Text[ slovenian ] = "Išči";
     };
     RadioButton RB_SEARCHFORTEXT
     {
@@ -157,6 +159,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Text";
+        Text[ hungarian ] = "~Szöveg";
+        Text[ slovenian ] = "~Besedilo";
     };
     RadioButton RB_SEARCHFORNULL
     {
@@ -172,7 +176,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ french ] = "Contenu de champ est ~NULL";
         Text[ spanish ] = "Contenido del campo es ~NULL";
         Text[ italian ] = "Il contenuto di campo � ~NULL";
-        Text[ danish ] = "Feltindhold er lig med NULL";
+        Text[ danish ] = "Feltindhold er lig med ~NULL";
         Text[ swedish ] = "F�ltinneh�ll �r NULL";
         Text[ polish ] = "Pol~e jest puste";
         Text[ portuguese_brazilian ] = "O conte�do do campo � ~NULL";
@@ -190,6 +194,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮השדה ריק‬";
         Text[ hindi ] = "क्षेत्र का वि~षय NULL";
         Text[ slovak ] = "Obsah poľa je ~NULL";
+        Text[ hungarian ] = "A ~mező tartalma NULL";
+        Text[ slovenian ] = "Vsebina polja je ~NIČ";
     };
     RadioButton RB_SEARCHFORNOTNULL
     {
@@ -205,7 +211,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ french ] = "Contenu de champ est diff�rent de ~NULL";
         Text[ spanish ] = "Contenido del campo no es N~ULL";
         Text[ italian ] = "Il contenuto di campo non � N~ULL";
-        Text[ danish ] = "Feltindhold er forskellig fra NULL";
+        Text[ danish ] = "Feltindhold er ikke NU~LL";
         Text[ swedish ] = "F�ltinneh�ll �r inte NULL";
         Text[ polish ] = "Pole jest ~niepuste";
         Text[ portuguese_brazilian ] = "~O conte�do do campo n�o � NULL";
@@ -222,6 +228,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮השדה אינו ריק‬";
         Text[ hindi ] = "क्षेत्र का विष~य NULL नहीं";
         Text[ slovak ] = "Obsah poľa nie je NU~LL";
+        Text[ hungarian ] = "A mező tartalma nem NU~LL";
+        Text[ slovenian ] = "Vsebina polja ni N~IČ";
     };
     ComboBox CMB_SEARCHTEXT
     {
@@ -242,7 +250,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Area";
         Text[ portuguese_brazilian ] = "Onde pesquisar";
         Text[ portuguese ] = "Sec��o";
-        Text[ danish ] = "Omr�de";
+        Text[ danish ] = "S�geomr�de";
         Text[ french ] = "Domaine";
         Text[ swedish ] = "Omr�de";
         Text[ dutch ] = "Bereik";
@@ -265,6 +273,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮היכן לחפש‬";
         Text[ hindi ] = "कहाँ पर खोज करना है";
         Text[ slovak ] = "Kde hľadať";
+        Text[ hungarian ] = "A keresés helye";
+        Text[ slovenian ] = "Kje iskati";
     };
     FixedText FT_FORM
     {
@@ -280,7 +290,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Formulario";
         Text[ finnish ] = "Lomake";
         Text[ italian ] = "Formulario";
-        Text[ danish ] = "~Formular";
+        Text[ danish ] = "Formular";
         Text[ swedish ] = "~Formul�r";
         Text[ polish ] = "Formularz";
         Text[ portuguese_brazilian ] = "Formul�rio";
@@ -296,6 +306,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮טופס‬";
         Text[ hindi ] = "फ़ॉर्म";
         Text[ slovak ] = "Formulár";
+        Text[ hungarian ] = "Űrlap";
+        Text[ slovenian ] = "Obrazec";
     };
     ListBox LB_FORM
     {
@@ -339,6 +351,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮כל השדות‬";
         Text[ hindi ] = "सब क्षेत्र";
         Text[ slovak ] = "Všetky polia";
+        Text[ hungarian ] = "Minden mező";
+        Text[ slovenian ] = "Vsa polja";
     };
     RadioButton RB_SINGLEFIELD
     {
@@ -354,7 +368,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "~Campo individual";
         Text[ finnish ] = "Yksitt�inen kentt�";
         Text[ italian ] = "Campo singolo";
-        Text[ danish ] = "En~kelt felt";
+        Text[ danish ] = "Enkelt felt";
         Text[ swedish ] = "~Enskilt f�lt";
         Text[ polish ] = "Pojedyncze pole";
         Text[ portuguese_brazilian ] = "Campo individual";
@@ -370,6 +384,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮שדה בודד‬";
         Text[ hindi ] = "अकेला क्षेत्र";
         Text[ slovak ] = "Samostatné pole";
+        Text[ hungarian ] = "Egy mező";
+        Text[ slovenian ] = "Eno polje";
     };
     ListBox LB_FIELD
     {
@@ -412,6 +428,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     FixedText FT_POSITION
     {
@@ -427,7 +445,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "Posici�n";
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
-        Text[ danish ] = "~Placering";
+        Text[ danish ] = "Placering";
         Text[ swedish ] = "~Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Posi��o";
@@ -443,6 +461,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
         Text[ slovak ] = "Umiestnenie";
+        Text[ hungarian ] = "Pozíció";
+        Text[ slovenian ] = "Položaj";
     };
     ListBox LB_POSITION
     {
@@ -487,6 +507,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮יישום עיצוב שדה‬";
         Text[ hindi ] = "क्षेत्र रचना लागू करो";
         Text[ slovak ] = "Použiť formát poľa";
+        Text[ hungarian ] = "Mezőformátum alkalmazása";
+        Text[ slovenian ] = "Uporabi obliko polja";
     };
     CheckBox CB_CASE
     {
@@ -499,7 +521,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Ricerca esatta";
         Text[ portuguese_brazilian ] = "Diferenciar Mai�sculas/Min�sculas";
         Text[ portuguese ] = "Procura e~xacta";
-        Text[ danish ] = "S�g eksakt";
+        Text[ danish ] = "STORE og sm� bogstaver";
         Text[ french ] = "Respecter la casse";
         Text[ swedish ] = "E~xakt s�kning";
         Text[ dutch ] = "E~xact dezelfde tekens";
@@ -522,6 +544,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮התאמת אותיות גדולות קטנות‬";
         Text[ hindi ] = "केस् तुलना करो";
         Text[ slovak ] = "Rozlišovať veľkosť";
+        Text[ hungarian ] = "Kis- és nagybetű megkülönböztetése";
+        Text[ slovenian ] = "Razlikuj velike in male črke";
     };
     CheckBox CB_BACKWARD
     {
@@ -557,6 +581,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮חיפוש אחורה‬";
         Text[ hindi ] = "पीछे की ओर खोज";
         Text[ slovak ] = "Spätné vyhľadávanie";
+        Text[ hungarian ] = "Keresés visszafelé";
+        Text[ slovenian ] = "Išči nazaj";
     };
     CheckBox CB_STARTOVER
     {
@@ -592,6 +618,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮חיפוש מהתחלה‬";
         Text[ hindi ] = "प्रारंभ से";
         Text[ slovak ] = "Od začiatku";
+        Text[ hungarian ] = "Az elejétől";
+        Text[ slovenian ] = "Od začetka";
     };
     CheckBox CB_WILDCARD
     {
@@ -604,7 +632,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Espressione wildcard";
         Text[ portuguese_brazilian ] = "Express�o com caracteres-coringas";
         Text[ portuguese ] = "~Express�o polivalente";
-        Text[ danish ] = "Pladsholder-udtryk";
+        Text[ danish ] = "Jokertegnsudtryk";
         Text[ french ] = "E~xpression substituante";
         Text[ swedish ] = "~Jokerteckenuttryck";
         Text[ dutch ] = "P~laatsvervangende tekst";
@@ -627,6 +655,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮ביטוי כוכביות‬";
         Text[ hindi ] = "वैल्डकार्ड वर्णन";
         Text[ slovak ] = "Výraz so zástupnými znakmi";
+        Text[ hungarian ] = "Helyettesítő karakteres kifejezés";
+        Text[ slovenian ] = "Izraz z nadomestnimi znaki";
     };
     CheckBox CB_REGULAR
     {
@@ -642,7 +672,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ danish ] = "Regul�rt udtryk";
         Text[ french ] = "Caract�re g�n�rique";
         Text[ swedish ] = "Re~gulj�rt uttryck";
-        Text[ dutch ] = "Gangbare ~uitdrukking";
+        Text[ dutch ] = "Reguliere e~xpressie";
         Text[ spanish ] = "Expresi�n ~regular";
         Text[ english_us ] = "Regular expression";
         Text[ chinese_simplified ] = "常规表达";
@@ -662,6 +692,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮ביטויים רגולרוום‬";
         Text[ hindi ] = "नियमित वर्णन";
         Text[ slovak ] = "Regulárny výraz";
+        Text[ hungarian ] = "Reguláris kifejezés";
+        Text[ slovenian ] = "Regularni izraz";
     };
     CheckBox CB_APPROX
     {
@@ -697,6 +729,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮חפוש על בסיס דמיון‬";
         Text[ hindi ] = "तुल्यता खोज";
         Text[ slovak ] = "Hľadanie synoným";
+        Text[ hungarian ] = "Hasonló hangzásúak is";
+        Text[ slovenian ] = "Iskanje podobnosti";
     };
     PushButton PB_APPROXSETTINGS
     {
@@ -732,6 +766,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ thai ] = "...";
         Text[ hindi ] = "...";
         Text[ slovak ] = "...";
+        Text[ hungarian ] = "...";
+        Text[ slovenian ] = "...";
     };
     CheckBox CB_HALFFULLFORMS
     {
@@ -749,7 +785,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ spanish ] = "Considerar ancho de car�cter";
         Text[ finnish ] = "T�sm�yt� puoli- ja t�ysleve�t muodot";
         Text[ italian ] = "Considera la larghezza dei caratteri";
-        Text[ danish ] = "Halv-/normalbrede former";
+        Text[ danish ] = "Samme tegnbredde";
         Text[ swedish ] = "Ta h�nsyn till teckenbredd";
         Text[ polish ] = "Uwzgl�dniaj szeroko�� znak�w";
         Text[ portuguese_brazilian ] = "Coincidir com a largura do caracter";
@@ -765,6 +801,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮חיפוש לפי רוחב תו‬";
         Text[ hindi ] = "अक्षर विस्तार की तुलना करो";
         Text[ slovak ] = "Porovnať šírku znaku";
+        Text[ hungarian ] = "Karakterszélesség egyeztetése";
+        Text[ slovenian ] = "Razlikuj širine znakov";
     };
     CheckBox CB_SOUNDSLIKECJK
     {
@@ -798,6 +836,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮נשמע כמו (יפנית)‬";
         Text[ hindi ] = "के समान (जपानीस)";
         Text[ slovak ] = "Znie ako (japončina)";
+        Text[ hungarian ] = "(Japánnak) tűnik/hangzik";
+        Text[ slovenian ] = "Zveni kot (Japonščina)";
     };
     PushButton PB_SOUNDSLIKESETTINGS
     {
@@ -831,6 +871,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ thai ] = "...";
         Text[ hindi ] = "...";
         Text[ slovak ] = "...";
+        Text[ hungarian ] = "...";
+        Text[ slovenian ] = "...";
     };
     FixedLine FL_STATE
     {
@@ -841,7 +883,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Stato";
         Text[ portuguese_brazilian ] = "Estado";
         Text[ portuguese ] = "Estado";
-        Text[ danish ] = "Status";
+        Text[ danish ] = "Tilstand";
         Text[ french ] = "Statut";
         Text[ swedish ] = "Status";
         Text[ dutch ] = "Status";
@@ -864,6 +906,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮מדינה‬";
         Text[ hindi ] = "वस्तुस्थिति";
         Text[ slovak ] = "Štát";
+        Text[ hungarian ] = "Állapot";
+        Text[ slovenian ] = "Zvezna država";
     };
     FixedText FT_RECORDLABEL
     {
@@ -897,6 +941,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮רשומה: ‬";
         Text[ hindi ] = "लेखा :";
         Text[ slovak ] = "Záznam:";
+        Text[ hungarian ] = "Rekord:";
+        Text[ slovenian ] = "Zapis :";
     };
     FixedText FT_RECORD
     {
@@ -944,6 +990,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "खोज";
         Text[ slovak ] = "Hľadať";
+        Text[ hungarian ] = "Keresés";
+        Text[ slovenian ] = "Išči";
     };
     CancelButton 1
     {
@@ -956,7 +1004,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Chiudi";
         Text[ portuguese_brazilian ] = "~Fechar";
         Text[ portuguese ] = "~Fechar";
-        Text[ danish ] = "L~uk";
+        Text[ danish ] = "~Luk";
         Text[ french ] = "Fermer";
         Text[ swedish ] = "~St�ng";
         Text[ dutch ] = "S~luiten";
@@ -979,6 +1027,8 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     HelpButton 1
     {
@@ -1013,12 +1063,16 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ hebrew ] = "‮עזרה‬";
         Text[ hindi ] = "~सहायता";
         Text[ slovak ] = "~Pomocník";
+        Text[ hungarian ] = "~Súgó";
+        Text[ slovenian ] = "~Pomoč";
     };
     Text[ thai ] = "ระเบียนค้นหา";
     Text[ czech ] = "Hledání záznamu";
     Text[ hebrew ] = "‮חיפוש רשומות‬";
     Text[ hindi ] = "लेखा खोज करो";
     Text[ slovak ] = "Hľadanie záznamu";
+    Text[ hungarian ] = "Rekordkeresés...";
+    Text[ slovenian ] = "Iskanje zapisov";
 };
 
 String RID_STR_RECORDSEARCH_METHODS
@@ -1028,7 +1082,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ italian ] = "a piacere sul campo;all'inizio del campo;alla fine del campo;l'intero campo";
     Text[ portuguese_brazilian ] = "em qualquer posi��o dentro do campo; no in�cio do campo; no fim do campo; no campo inteiro";
     Text[ portuguese ] = "qualquer posi��o dentro do campo; no in�cio do campo; no fim do campo; no campo inteiro";
-    Text[ danish ] = "vilk�rlig i feltet;ved feltets begyndelse;ved feltets slutning;hele feltet";
+    Text[ danish ] = "hvorsomhelst i feltet;ved feltets begyndelse;ved feltets slutning;hele feltet";
     Text[ french ] = "� un endroit quelconque du champ;en d�but de champ;en fin de champ;le champ entier";
     Text[ swedish ] = "var du vill i f�ltet;i f�ltets b�rjan;i f�ltets slut;i hela f�ltet";
     Text[ dutch ] = "willekeurige plaats in veld;aan veldeinde;aan veldbegin;compleet veld";
@@ -1051,6 +1105,8 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ hebrew ] = "‮בכל מקום בשדה;תחילת שדה;סוף שדה;השדה כולו‬";
     Text[ hindi ] = "क्षेत्र की किसी न किसी स्थान में;क्षेत्र की प्रारंभ में;क्षेत्र की अंत में;संपूर्ण क्षेत्र";
     Text[ slovak ] = "kdekoľvek v poli;začiatok poľa;koniec poľa;celé pole";
+    Text[ hungarian ] = "a mezőben bárhol;a mező eleje;a mező vége;az egész mező";
+    Text[ slovenian ] = "kjerkoli v polju;na začetku polja;na koncu polja;celo polje";
 };
 
 String RID_STR_RECORDSEARCH_BUTTONS
@@ -1084,6 +1140,8 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ hebrew ] = "‮מלמעלה;מלמטה;חיפוש;ביטול‬";
     Text[ hindi ] = "ऊपर से;नीचे से;खोज;रद्द करो";
     Text[ slovak ] = "Zhora;Zdola;Hľadať;Zrušiť";
+    Text[ hungarian ] = "Tetejétől;Aljától;Keresés;Mégsem";
+    Text[ slovenian ] = "Od zgoraj;Od spodaj;Išči;Prekliči";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
@@ -1117,6 +1175,8 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ hebrew ] = "‮לא אותרו רשומות מתאימות לנתונים!‬";
     Message[ hindi ] = "आपके ड़ॉटा केलिए कोई उचित लेखा नहीं मिला!";
     Message[ slovak ] = "Neboli nájdené žiadne zodpovedajúce záznamy!";
+    Message[ hungarian ] = "Nincs az adatainak megfelelő rekord!";
+    Message[ slovenian ] = "Nobeni zapisi, ki bi ustrezali vašim podatkom, niso bili najdeni";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
@@ -1150,6 +1210,8 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ hebrew ] = "‮ארעה שגיאה לא מוכרת. לא ניתן לסיים את החיפוש!‬";
     Message[ hindi ] = "एक अज्ञात गलती घटित हुआ । खोज को समाप्त नहीं कर सकते है !";
     Message[ slovak ] = "Nastala neznáma chyba. Hľadanie nemožno ukončiť!";
+    Message[ hungarian ] = "Ismeretlen hiba történt. A keresés nem fejeződött be.";
+    Message[ slovenian ] = "Prišlo je do neznane napake. Iskanja ni bilo možno končati!";
 };
 
 String RID_STR_SEARCH_OVERFLOW
@@ -1159,7 +1221,7 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ italian ] = "Overflow, la ricerca � stata proseguita dall'inizio;Overflow, la ricerca � stata proseguita dalla fine";
     Text[ portuguese_brazilian ] = "Transbordo, a pesquisa continuou pelo in�cio;Transbordo, a pesquisa continuou pelo final.";
     Text[ portuguese ] = "Transbordo - Localizar continua pelo in�cio;Transbordo - Localizar continua pelo final.";
-    Text[ danish ] = "\"Overl�b, s�gning fortsat ved start;Overl�b, s�gning fortsat ved slutning\"";
+    Text[ danish ] = "Overl�b, s�gning fortsatte fra begyndelsen;Overl�b, s�gning fortsatte fra slutningen";
     Text[ french ] = "D�bordement - la recherche a continu� au d�but;D�bordement - la recherche a continu� � la fin";
     Text[ swedish ] = "Spill, s�kningen fortsatte fr�n b�rjan;spill, s�kningen fortsatte fr�n slutet";
     Text[ dutch ] = "Overloop, zoekactie is aan begin hervat;Overloop, zoekactie is aan einde hervat";
@@ -1182,6 +1244,8 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ hebrew ] = "‮הצפה, החיפש ממשיך מההתחלה; הצפה, החיפוש ממשיך מהסוף‬";
     Text[ hindi ] = "अधिकता, खोज को प्रारंभ से जारी रखा है;अधिकता, खोज को अंत से जारी रखा है";
     Text[ slovak ] = "Dookola, hľadanie pokračuje na začiatku;Dookola, hľadanie pokračuje na konci";
+    Text[ hungarian ] = "A végére értünk, a keresés az elejétől újraindul;Az elejére értünk, a keresés újraindul a végétől.";
+    Text[ slovenian ] = "Prekoračitev, iskanje se nadaljuje na začetku;Prekoračitev, iskanje se nadaljuje na koncu";
 };
 
 String RID_STR_SEARCH_COUNTING
@@ -1214,7 +1278,11 @@ String RID_STR_SEARCH_COUNTING
     Text[ hebrew ] = "‮ספירת רשומות‬";
     Text[ hindi ] = "लेखाओं को गिनना";
     Text[ slovak ] = "počítať záznamy";
+    Text[ hungarian ] = "rekordok számlálása";
+    Text[ slovenian ] = "štetje zapisov";
 };
+
+
 
 
 
