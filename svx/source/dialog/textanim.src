@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:41:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Lauftext Effekte" ;
         Text [ ENGLISH ] = "Text Animation Effects" ;
         Text [ english_us ] = "Text animation effects" ;
-        Text[ portuguese ] = "Text Animation Effects";
+        Text[ portuguese ] = "Efeitos de animação de texto";
         Text[ russian ] = "İôôåêòû áåãóùåé ñòğîêè";
         Text[ greek ] = "Text Animation Effects";
         Text[ dutch ] = "Text Animation Effects";
@@ -135,12 +135,12 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ italian ] = "Effetto animazione";
         Text[ danish ] = "Text Animation Effects";
         Text[ swedish ] = "Effekter animerad text";
-        Text[ polish ] = "Efekty animowanego tekstu";
+        Text[ polish ] = "Efekty: animacja tekstu";
         Text[ portuguese_brazilian ] = "Text Animation Effects";
         Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚ÌŒø‰Ê";
-        Text[ korean ] = "Text Animation Effects";
+        Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ÅÀÌ¼Ç È¿°ú";
         Text[ chinese_simplified ] = "»î¶¯ÎÄ×ÖµÄĞ§¹û";
-        Text[ chinese_traditional ] = "¬¡°Ê¤å¦rªº®ÄªG";
+        Text[ chinese_traditional ] = "°ÊºA¤å¦rªº®ÄªG";
         Text[ turkish ] = "Text Animation Effects";
         Text[ arabic ] = "Text Animation Effects";
         Text[ catalan ] = "Text Animation Effects";
@@ -154,7 +154,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "E~ffekt" ;
         Text [ ENGLISH ] = "~Effect" ;
         Text [ english_us ] = "E~ffect" ;
-        Text[ portuguese ] = "Effect";
+        Text[ portuguese ] = "E~feito";
         Text[ russian ] = "İôôåêò";
         Text[ greek ] = "Effect";
         Text[ dutch ] = "Effect";
@@ -166,10 +166,10 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ swedish ] = "E~ffekt";
         Text[ polish ] = "Efekt";
         Text[ portuguese_brazilian ] = "Effect";
-        Text[ japanese ] = "Œø‰Ê";
-        Text[ korean ] = "Effect";
-        Text[ chinese_simplified ] = "Ğ§¹û";
-        Text[ chinese_traditional ] = "®ÄªG";
+        Text[ japanese ] = "Œø‰Ê(~F)";
+        Text[ korean ] = "È¿°ú(~F)";
+        Text[ chinese_simplified ] = "Ğ§¹û(~F)";
+        Text[ chinese_traditional ] = "®ÄªG(~F)";
         Text[ turkish ] = "Effect";
         Text[ arabic ] = "Effect";
         Text[ catalan ] = "Effect";
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Laufrichtung" ;
         Text [ ENGLISH ] = "Direction" ;
         Text [ english_us ] = "Direction" ;
-        Text[ portuguese ] = "Direction";
+        Text[ portuguese ] = "Orientação";
         Text[ russian ] = "Íàïğàâëåíèå";
         Text[ greek ] = "Direction";
         Text[ dutch ] = "Direction";
@@ -390,7 +390,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ polish ] = "Orientacja";
         Text[ portuguese_brazilian ] = "Direction";
         Text[ japanese ] = "•ûŒü";
-        Text[ korean ] = "Direction";
+        Text[ korean ] = "¹æÇâ";
         Text[ chinese_simplified ] = "·½Ïò";
         Text[ chinese_traditional ] = "¤è¦V";
         Text[ turkish ] = "Direction";
@@ -529,7 +529,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Eigenschaften" ;
         Text [ ENGLISH ] = "Properties" ;
         Text [ english_us ] = "Properties" ;
-        Text[ portuguese ] = "Properties";
+        Text[ portuguese ] = "Propriedades";
         Text[ russian ] = "Ñâîéñòâà";
         Text[ greek ] = "Properties";
         Text[ dutch ] = "Properties";
@@ -542,7 +542,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ polish ] = "W³aœciwoœci";
         Text[ portuguese_brazilian ] = "Properties";
         Text[ japanese ] = "‘®«";
-        Text[ korean ] = "Properties";
+        Text[ korean ] = "µî·ÏÁ¤º¸";
         Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Properties";
@@ -625,7 +625,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "Antal" ;
         Text [ danish ] = "Antal" ;
         Text [ portuguese_brazilian ] = "Anzahl" ;
-        Text [ portuguese ] = "Quantidade" ;
+        Text [ portuguese ] = "Ciclos de animação" ;
         Text[ chinese_simplified ] = "ÊıÄ¿";
         Text[ russian ] = "Êîëè÷åñòâî ïğîáåãîâ";
         Text[ polish ] = "Animacje";
@@ -660,7 +660,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ russian ] = "Áåñêîíå÷íî";
         Text[ polish ] = "Bez koñca";
         Text[ japanese ] = "´İÄŞÚ½‚É‘±‚¯‚é(~C)";
-        Text[ chinese_traditional ] = "«ùÄò(~C)";
+        Text[ chinese_traditional ] = "¤£¶¡Â_(~C)";
         Text[ greek ] = "Óõíå÷Şò";
         Text[ korean ] = "¿¬¼Ó(~C)";
         Text[ arabic ] = "ÈáÇ äåÇíÉ";
@@ -774,7 +774,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text [ swedish ] = "Fördröjning" ;
         Text [ danish ] = "Forsinkelse" ;
         Text [ portuguese_brazilian ] = "Verzögerung" ;
-        Text [ portuguese ] = "Atraso" ;
+        Text [ portuguese ] = "Retardar" ;
         Text[ chinese_simplified ] = "ÑÓ³Ù";
         Text[ russian ] = "Çàäåğæêà øàãà";
         Text[ polish ] = "OpóŸnienie";
@@ -840,7 +840,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
     Text[ japanese ] = "±ÆÒ°¼®İÃ·½Ä";
     Text[ chinese_traditional ] = "°ÊºA¤å¦r";
     Text[ greek ] = "Åöİ êßíçóçò êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
+    Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç";
     Text[ arabic ] = "ÊÃËíÑÇÊ ãÊÍÑßÉ";
     Text[ turkish ] = "Metin canlandırma";
     Text[ language_user1 ] = " ";
@@ -921,7 +921,7 @@ TabDialog RID_SVXDLG_TEXT
                 Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
                 Text[ chinese_traditional ] = "°ÊºA¤å¦r";
                 Text[ greek ] = "Êéíïıìåíï êåßìåíï";
-                Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç ÅØ½ºÆ®";
+                Text[ korean ] = "ÅØ½ºÆ® ¾Ö´Ï¸ŞÀÌ¼Ç";
                 Text[ arabic ] = "äÕ ãÊÍÑß";
                 Text[ turkish ] = "Metin canlandırma";
                 Text[ language_user1 ] = " ";
@@ -944,6 +944,7 @@ TabDialog RID_SVXDLG_TEXT
     Text[ finnish ] = "Teksti";
 };
  // ******************************************************************* EOF
+
 
 
 
