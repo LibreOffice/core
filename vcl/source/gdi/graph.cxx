@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 13:54:00 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,25 @@
 #endif
 #include <graph.hxx>
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
+#include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+
 // -----------------------
 // - Compression defines -
 // -----------------------
@@ -80,6 +99,8 @@
 #define RLE_4                       ( 2UL )
 #define BITFIELDS                   ( 3UL )
 #define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
+
+using namespace ::com::sun::star;
 
 // -----------------------
 // - Default-Drawmethode -
@@ -283,6 +304,30 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
 
 // ------------------------------------------------------------------------
 
+Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
+{
+    uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
+    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
+    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
+                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
+                                                          NULL );
+
+    if( pGraphic )
+    {
+        if( pGraphic->IsAnimated() )
+            mpImpGraphic = new ImpGraphic( *pGraphic->mpImpGraphic );
+        else
+        {
+            mpImpGraphic = pGraphic->mpImpGraphic;
+            mpImpGraphic->mnRefCount++;
+        }
+    }
+    else
+        mpImpGraphic = new ImpGraphic;
+}
+
+// ------------------------------------------------------------------------
+
 Graphic::~Graphic()
 {
     if( mpImpGraphic->mnRefCount == 1UL )
@@ -480,6 +525,38 @@ Animation Graphic::GetAnimation() const
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
+}
+
+// ------------------------------------------------------------------------
+
+uno::Reference< graphic::XGraphic > Graphic::GetXGraphic() const
+{
+    uno::Reference< graphic::XGraphic > xRet;
+
+    if( GetType() != GRAPHIC_NONE )
+    {
+        uno::Reference < lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+
+        if( xMSF.is() )
+        {
+            uno::Reference< graphic::XGraphicProvider > xProv( xMSF->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.graphic.GraphicProvider" ) ) ),
+                uno::UNO_QUERY );
+
+            if( xProv.is() )
+            {
+                uno::Sequence< beans::PropertyValue >   aLoadProps( 1 );
+                ::rtl::OUString                         aURL( RTL_CONSTASCII_USTRINGPARAM( "private:memorygraphic/" ) );
+
+                aLoadProps[ 0 ].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aLoadProps[ 0 ].Value <<= ( aURL += ::rtl::OUString::valueOf( reinterpret_cast< sal_Int64 >( this ) ) );
+
+                xRet = xProv->queryGraphic( aLoadProps );
+            }
+        }
+    }
+
+    return xRet;
 }
 
 // ------------------------------------------------------------------------
