@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:46 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,8 @@
 #ifndef _TXTFRM_HXX
 #include "txtfrm.hxx"
 #endif
+
+#include <vcl/window.hxx>
 
 // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
 FASTBOOL SwCrsrShell::GotoNextNum()
@@ -1143,6 +1145,17 @@ FASTBOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, TRUE );
                 bRet = TRUE;
             }
+        }
+        // #i23726#
+        else if( pTxtNd &&
+                 SwContentAtPos::SW_NUMLABEL & rCntntAtPos.eCntntAtPos)
+        {
+            bRet = aTmpState.bInNumPortion;
+            rCntntAtPos.aFnd.pNode = pTxtNd;
+
+            Size aSizeLogic(aTmpState.nInNumPostionOffset, 0);
+            Size aSizePixel = GetWin()->LogicToPixel(aSizeLogic);
+            rCntntAtPos.nDist = aSizePixel.Width();
         }
         else if( bCrsrFoundExact && pTxtNd )
         {
