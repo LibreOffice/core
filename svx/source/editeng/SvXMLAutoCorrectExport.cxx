@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-05 13:53:00 $
+ *  last change: $Author: mtg $ $Date: 2001-07-10 16:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,18 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport( const SvxAutocorrWordList *  pNe
 : pAutocorr_List ( pNewAutocorr_List),
   SvXMLExport(rFileName, rHandler)
 {
-    _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, GetXMLToken ( XML_NP_BLOCK_LIST) ,
-                                  GetXMLToken ( XML_N_BLOCK_LIST ) , XML_NAMESPACE_BLOCKLIST );
+    _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST),
+                            GetXMLToken ( XML_N_BLOCK_LIST ),
+                            XML_NAMESPACE_BLOCKLIST );
 }
 
 sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum eClass)
 {
     GetDocHandler()->startDocument();
 
-    sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_BLOCKLIST );
-    AddAttribute ( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
-                              _GetNamespaceMap().GetNameByIndex ( nPos ) );
+    AddAttribute ( XML_NAMESPACE_NONE,
+                   _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+                   _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, sal_True, sal_True);
         sal_uInt16 nBlocks= pAutocorr_List->Count();
@@ -115,17 +116,18 @@ SvXMLExceptionListExport::SvXMLExceptionListExport( const SvStringsISortDtor &rN
 : rList ( rNewList),
   SvXMLExport(rFileName, rHandler)
 {
-    _GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, GetXMLToken ( XML_NP_BLOCK_LIST ),
-                                  GetXMLToken ( XML_N_BLOCK_LIST ), XML_NAMESPACE_BLOCKLIST );
+    _GetNamespaceMap().Add( GetXMLToken ( XML_NP_BLOCK_LIST ),
+                            GetXMLToken ( XML_N_BLOCK_LIST ),
+                            XML_NAMESPACE_BLOCKLIST );
 }
 
 sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum eClass)
 {
     GetDocHandler()->startDocument();
 
-    sal_uInt16 nPos = _GetNamespaceMap().GetIndexByKey( XML_NAMESPACE_BLOCKLIST );
-    AddAttribute ( XML_NAMESPACE_NONE, _GetNamespaceMap().GetAttrNameByIndex ( nPos ),
-                              _GetNamespaceMap().GetNameByIndex ( nPos ) );
+    AddAttribute ( XML_NAMESPACE_NONE,
+                   _GetNamespaceMap().GetAttrNameByKey ( XML_NAMESPACE_BLOCKLIST ),
+                   _GetNamespaceMap().GetNameByKey ( XML_NAMESPACE_BLOCKLIST ) );
     {
         SvXMLElementExport aRoot (*this, XML_NAMESPACE_BLOCKLIST, XML_BLOCK_LIST, sal_True, sal_True);
         sal_uInt16 nBlocks= rList.Count();
