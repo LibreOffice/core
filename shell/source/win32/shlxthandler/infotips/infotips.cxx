@@ -2,9 +2,9 @@
  *
  *  $RCSfile: infotips.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:32:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,19 @@ DWORD getSizeOfFile( char* FileName )
 */
 std::wstring formatSizeOfFile( DWORD dwSize )
 {
-    char *buffer;
+    if ( dwSize < 1000 )
+    {
+        char buffer[3];
+        int dFileSize = dwSize;
+
+        _itoa( dFileSize, buffer, 10 );
+        return StringToWString( buffer ).append(StringToWString("B"));
+    }
+
+    char *buffer=NULL;
     int  decimal, sign;
     double dFileSize = (double)dwSize/(double)KB;
+
     buffer = _fcvt( dFileSize, 1, &decimal, &sign );
 
     ::std::wstring wsTemp = StringToWString( buffer );
