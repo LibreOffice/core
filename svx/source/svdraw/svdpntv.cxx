@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:56:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,12 +127,17 @@
 #include <goodies/grfmgr.hxx>
 #endif
 
+// #i38135#
 #ifndef _SDR_CONTACT_OBJECTCONTACT_HXX
 #include <svx/sdr/contact/objectcontact.hxx>
 #endif
 
 #ifndef _SDR_ANIMATION_OBJECTANIMATOR_HXX
 #include <svx/sdr/animation/objectanimator.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
 #endif
 
 using namespace ::rtl;
@@ -1936,6 +1941,28 @@ void SdrPaintView::SetPagePaintingAllowed(sal_Bool bNew)
 // empty implementation, nothing known about handles here
 void SdrPaintView::ForceInvalidateMarkHandles()
 {
+}
+
+// #i38135# Sets the timer for Object animations and restarts.
+void SdrPaintView::SetAnimationTimer(sal_uInt32 nTime)
+{
+    SdrPageView* pPageView = GetPageViewPvNum(0);
+
+    if(pPageView)
+    {
+        // first, reset all timers at all windows to 0L
+        for(sal_uInt32 a(0L); a < pPageView->WindowCount(); a++)
+        {
+            const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(a);
+            sdr::contact::ObjectContact& rObjectContact = rPageViewWindow.GetObjectContact();
+
+            if(rObjectContact.HasObjectAnimator())
+            {
+                sdr::animation::ObjectAnimator& rAnimator = rObjectContact.GetObjectAnimator();
+                rAnimator.SetTime(nTime);
+            }
+        }
+    }
 }
 
 // eof
