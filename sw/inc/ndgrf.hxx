@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:02:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 
 #ifndef _LNKBASE_HXX //autogen
-#include <so3/lnkbase.hxx>
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _GRFMGR_HXX //autogen
 #include <goodies/grfmgr.hxx>
@@ -86,7 +86,7 @@ class SwGrfNode: public SwNoTxtNode
     friend class SwGrfFrm;
 
     GraphicObject aGrfObj;
-    ::so3::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
+    ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
     Size nGrfSize;
 //  String aStrmName;           // SW3: Name des Storage-Streams fuer Embedded
     String aNewStrmName;        // SW3/XML: new stream name (either SW3 stream
@@ -196,7 +196,7 @@ public:
     BOOL IsGrfLink() const                  { return refLink.Is(); }
     inline BOOL IsLinkedFile() const;
     inline BOOL IsLinkedDDE() const;
-    ::so3::SvBaseLinkRef GetLink() const    { return refLink; }
+    ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
     BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
