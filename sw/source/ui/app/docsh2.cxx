@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:11:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-29 12:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,6 +1087,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwDoc* pSmryDoc = new SwDoc();
                 SfxObjectShellRef xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
+
+                /*TODO #111050# call public made method of sfx (which was protected before!)
+                  to force missing event OnNew ... */
+                xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
+
                 BOOL bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
                 pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
