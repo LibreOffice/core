@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneTreeNode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:58:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "TaskPaneTreeNode.hxx"
+#include "taskpane/TaskPaneTreeNode.hxx"
 
 #include "ControlContainer.hxx"
 #include "TitledControl.hxx"
