@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 10:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,11 +238,13 @@ SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                     const Reference < XPropertySet > & rPropSet )
 {
+    sal_Bool bCache = sal_False;
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
+        bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
@@ -262,7 +264,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
 
-    if( xPropStates.size() > 0L )
+    if( xPropStates.size() > 0L || bCache )
     {
         Reference< XPropertySetInfo > xPropSetInfo =
             rPropSet->getPropertySetInfo();
@@ -321,10 +323,28 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
             ; // section styles have no parents
             break;
         }
+        if( xPropStates.size() > 0 )
+        {
+            if( bCache )
+            {
+                GetAutoStylePool().AddAndCache( nFamily, sParent, xPropStates );
+                if( sCondParent.getLength() && sParent != sCondParent )
+                    GetAutoStylePool().AddAndCache( nFamily, sCondParent, xPropStates );
+            }
+            else
+            {
+                GetAutoStylePool().Add( nFamily, sParent, xPropStates );
+                if( sCondParent.getLength() && sParent != sCondParent )
+                    GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
+            }
+        }
+        else if( bCache )
+        {
+            GetAutoStylePool().AddAndCache( nFamily, sParent );
+            if( sCondParent.getLength() && sParent != sCondParent )
+                GetAutoStylePool().AddAndCache( nFamily, sCondParent );
+        }
 
-        GetAutoStylePool().Add( nFamily, sParent, xPropStates );
-        if( sCondParent.getLength() && sParent != sCondParent )
-            GetAutoStylePool().Add( nFamily, sCondParent, xPropStates );
     }
 }
 
@@ -333,12 +353,14 @@ OUString XMLTextParagraphExport::Find(
            const Reference < XPropertySet > & rPropSet,
         const OUString& rParent ) const
 {
+    sal_Bool bCache = sal_False;
     OUString sName( rParent );
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
         xPropMapper = GetParaPropMapper();
+        bCache = sal_True;
         break;
     case XML_STYLE_FAMILY_TEXT_TEXT:
         xPropMapper = GetTextPropMapper();
@@ -353,12 +375,24 @@ OUString XMLTextParagraphExport::Find(
         xPropMapper = GetRubyPropMapper();
         break;
     }
+    OUString sCachedName;
+    if( bCache )
+    {
+        sCachedName = GetAutoStylePool().FindAndRemoveCached( nFamily );
+#ifdef PRODUCT
+        if( sCachedName.getLength() )
+            return sCachedName;
+#endif
+    }
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
+
+    DBG_ASSERT( !bCache || !sCachedName.getLength() || sCachedName == sName,
+                "cache error" );
 
     return sName;
 }
