@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:04:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
