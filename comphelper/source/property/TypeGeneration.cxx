@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 20:40:11 $
+ *  last change: $Author: jp $ $Date: 2001-10-24 18:44:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,7 @@ namespace comphelper
             case CPPUTYPE_TABLEBORDER:  pType = &::getCppuType( (table::TableBorder*)0 ); break;
             case CPPUTYPE_GRFCROP:      pType = &::getCppuType( (text::GraphicCrop*)0 ); break;
             case CPPUTYPE_SECTFILELNK:  pType = &::getCppuType( (text::SectionFileLink*)0 ); break;
+            case CPPUTYPE_PAGENUMTYPE:  pType = &::getCppuType( (text::PageNumberType*)0); break;
             case CPPUTYPE_DATETIME:     pType = &::getCppuType( (util::DateTime*)0 ); break;
             case CPPUTYPE_DATE:         pType = &::getCppuType( (util::Date*)0 ); break;
 
