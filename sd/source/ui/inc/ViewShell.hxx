@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:15:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ public:
         ST_OUTLINE,
         ST_SLIDE,         // Old slide view shell
         ST_SLIDE_SORTER,  // New Slide sorter.
-        ST_PREVIEW,
         ST_PRESENTATION,
         ST_TASK_PANE
     };
@@ -280,7 +279,11 @@ public:
                         const Point& rWinPos, BOOL bUpdate = FALSE);
     void    InvalidateWindows();
     void    UpdateWindows();
-    virtual void    UpdatePreview( SdPage* pPage, BOOL bInit = FALSE );
+    /** This method is still used by the OutlineViewShell to update the
+        model according to the content of the outline view.  This in turn
+        updates the previews in the slide sorter.
+    */
+     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
     ObjectBarManager& GetObjectBarManager (void) const;
 
@@ -371,11 +374,6 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
-
-    /** makes the SdPreviewChildWindow visible or invisible
-        @param bVisible if set to true, the preview is shown, if set to false, the preview is hidden
-    */
-    void SetPreview( bool bVisible );
 
     void SetWinViewPos(const Point& rWinPos, bool bUpdate);
     Point GetWinViewPos() const;
@@ -478,8 +476,7 @@ public:
         <p>When this method is not called before a view shell is taken from
         a stack then the Deactivate() call from the SFX as a response to
         RemoveSubShell() comes to late when the view shell is not on the
-        stack anymore.  The closing of a preview window, with its
-        FuSlideShow instance calls the wrong bindings and crashes.</p>
+        stack anymore.</p>
     */
     virtual void Shutdown (void);
 
