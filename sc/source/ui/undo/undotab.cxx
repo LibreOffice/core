@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:45:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ TYPEINIT1(ScUndoProtect,        SfxUndoAction);
 TYPEINIT1(ScUndoPrintRange,     SfxUndoAction);
 TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
+TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -1502,6 +1503,65 @@ void ScUndoRenameObject::Repeat(SfxRepeatTarget& rTarget)
 BOOL ScUndoRenameObject::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return FALSE;
+}
+
+// -----------------------------------------------------------------------
+//
+//      Switch sheet between left-to-right and right-to-left
+//
+
+ScUndoLayoutRTL::ScUndoLayoutRTL( ScDocShell* pShell, USHORT nNewTab, BOOL bNewRTL ) :
+    ScSimpleUndo( pShell ),
+    nTab( nNewTab ),
+    bRTL( bNewRTL )
+{
+}
+
+__EXPORT ScUndoLayoutRTL::~ScUndoLayoutRTL()
+{
+}
+
+void ScUndoLayoutRTL::DoChange( BOOL bNew )
+{
+    pDocShell->SetInUndo( TRUE );
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    pDoc->SetLayoutRTL( nTab, bNew );
+
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+    if (pViewShell)
+        pViewShell->SetTabNo(nTab,TRUE);
+
+    pDocShell->SetDocumentModified();
+
+    pDocShell->SetInUndo( FALSE );
+}
+
+void __EXPORT ScUndoLayoutRTL::Undo()
+{
+    DoChange(!bRTL);
+}
+
+void __EXPORT ScUndoLayoutRTL::Redo()
+{
+    DoChange(bRTL);
+}
+
+void __EXPORT ScUndoLayoutRTL::Repeat(SfxRepeatTarget& rTarget)
+{
+    if (rTarget.ISA(ScTabViewTarget))
+        ((ScTabViewTarget&)rTarget).GetViewShell()->GetViewData()->GetDispatcher().
+            Execute( FID_TAB_RTL, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+}
+
+BOOL __EXPORT ScUndoLayoutRTL::CanRepeat(SfxRepeatTarget& rTarget) const
+{
+    return (rTarget.ISA(ScTabViewTarget));
+}
+
+String __EXPORT ScUndoLayoutRTL::GetComment() const
+{
+    return ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
 }
 
 
