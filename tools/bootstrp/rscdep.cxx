@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-08 10:56:35 $
+ *  last change: $Author: hjs $ $Date: 2001-06-13 13:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,12 @@ main( int argc, char **argv )
     for ( ULONG j=0; j<nCount; j++ )
     {
         ByteString *pStr = pLst->GetObject(j);
+#ifdef UNX
+        pStr->SearchAndReplaceAll('\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+#endif
+#ifdef WNT
+        pStr->SearchAndReplaceAll('/', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));
+#endif
         if ( j != (nCount-1) )
             *pStr += ByteString( "\\" );
         aOutStream.WriteLine( *pStr );
