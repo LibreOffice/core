@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:54:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ ModalDialog DLG_INS_ROW_COL
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
         Text[ danish ] = "Stilling";
-        Text[ swedish ] = "Befattning";
+        Text[ swedish ] = "Position";
         Text[ polish ] = "Pozycja";
         Text[ portuguese_brazilian ] = "Position";
         Text[ japanese ] = "ˆÊ’u";
@@ -331,6 +331,7 @@ ModalDialog DLG_INS_ROW_COL
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar";
 };
+
 
 
 
