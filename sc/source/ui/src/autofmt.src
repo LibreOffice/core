@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:32:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ norwegian ] = "~Format" ;
         Text [ italian ] = "Formato" ;
         Text [ portuguese_brazilian ] = "~Formato" ;
-        Text [ portuguese ] = "Fo~rmatar" ;
+        Text [ portuguese ] = "Fo~rmato" ;
         Text [ finnish ] = "~Muotoile" ;
         Text [ danish ] = "Forma~ter" ;
         Text [ french ] = "Forma~t" ;
@@ -323,7 +323,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ norwegian ] = "Formats" ;
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
-        Text [ portuguese ] = "Formatar" ;
+        Text [ portuguese ] = "Formato" ;
         Text [ finnish ] = "Muotoilu" ;
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Formatage" ;
@@ -840,4 +840,5 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato";
 };
+
 
