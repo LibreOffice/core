@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 11:07:12 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,10 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         String aName( aDispatchRequest.aURL );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
 
-        aName = GetURL_Impl(aName);
+        if (aName.CompareToAscii("vnd.sun.star.script"  , 19) != COMPARE_EQUAL)
+        {
+            aName = GetURL_Impl(aName);
+        }
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO )
@@ -274,7 +277,8 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         if(
             ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
             ( aName.CompareToAscii( "slot:" , 5 ) == COMPARE_EQUAL )  ||
-            ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
+            ( aName.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )  ||
+            ( aName.CompareToAscii("vnd.sun.star.script", 19) == COMPARE_EQUAL)
           )
         {
             // Attention: URL must be parsed full. Otherwise some detections on it will fail!
