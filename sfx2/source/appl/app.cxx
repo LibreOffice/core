@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:01:24 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,29 +648,6 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
 
     if ( pFrame != pViewFrame )
     {
-        if ( !pFrame && !bDowning )
-        {
-            // activate any frame to avoid CurrentViewFrame == NULL
-            SfxFrameArr_Impl& rArr = *pAppData_Impl->pTopFrames;
-            for( sal_uInt16 nPos = rArr.Count(); nPos--; )
-            {
-                SfxFrame* pCurFrame = rArr[ nPos ];
-                SfxViewFrame* pView = pCurFrame->GetCurrentViewFrame();
-                if ( pView && pView != pViewFrame )
-                {
-                    if ( !pView->GetViewShell() )
-                    {
-                        DBG_ERROR("Attention: this bug is very hard to reproduce. Please try to remember how you triggered it!");
-                    }
-                    else
-                    {
-                        pFrame = pView;
-                        break;
-                    }
-                }
-            }
-        }
-
         // get the containerframes ( if one of the frames is an InPlaceFrame )
         SfxViewFrame *pOldContainerFrame = pViewFrame;
         while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
