@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userdat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:17:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ public:
 class ScDrawObjData : public SdrObjUserData
 {
     virtual SdrObjUserData* Clone(SdrObject* pObj) const;
-    virtual void WriteData(SvStream& rOut);
-    virtual void ReadData(SvStream& rIn);
+//BFS01 virtual void WriteData(SvStream& rOut);
+//BFS01 virtual void ReadData(SvStream& rIn);
 public:
     ScAddress aStt, aEnd;
     BOOL bValidStart, bValidEnd;
@@ -126,8 +126,8 @@ public:
 
     virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
 
-    virtual void WriteData( SvStream& rOStm );
-    virtual void ReadData( SvStream& rIStm );
+//BFS01 virtual void WriteData( SvStream& rOStm );
+//BFS01 virtual void ReadData( SvStream& rIStm );
 
     void    SetImageMap( const ImageMap& rIMap )    { aImageMap = rIMap; }
     const ImageMap& GetImageMap() const             { return aImageMap; }
