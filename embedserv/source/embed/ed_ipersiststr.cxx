@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-19 08:35:37 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XUrlTransformer.hpp>
+#endif
+
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -103,6 +107,8 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
+#include <string.h>
 
 using namespace ::com::sun::star;
 
@@ -226,6 +232,7 @@ EmbedDocument_Impl::EmbedDocument_Impl( const uno::Reference< lang::XMultiServic
 , m_guid( *guid )
 , m_bIsDirty( sal_False )
 , m_nAdviseNum( 0 )
+//, m_bLoadedFromFile( sal_False )
 {
     m_pDocHolder = new DocumentHolder( xFactory );
     m_pDocHolder->acquire();
@@ -238,27 +245,50 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
     m_pDocHolder->release();
 }
 
-uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode )
+uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD nStreamMode, LPCOLESTR pFilePath )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 4 : 3 );
-    rtl::OUString sDocUrl = getTestFileURLFromGUID_Impl( &m_guid ); // REMOVE
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
 
-    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
+    aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
+    aArgs[1].Value <<= ( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
-    if ( xStream.is() ) //REMOVE
-        aArgs[0].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
-    else //REMOVE
-        aArgs[0].Value <<= sDocUrl; //REMOVE
-
-    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
-    aArgs[1].Value <<= getFilterNameFromGUID_Impl( &m_guid );
-    aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
-    aArgs[2].Value <<= ( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
-
-    if ( xStream.is() ) //REMOVE
+    if ( xStream.is() )
     {
-        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
-        aArgs[3].Value <<= xStream;
+        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+        aArgs[2].Value <<= xStream;
+        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[3].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+    }
+    else
+    {
+        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "AsTemplate" ) );
+        aArgs[2].Value <<= sal_True;
+        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+
+        rtl::OUString sDocUrl;
+        if ( pFilePath )
+        {
+
+            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.util.URLTransformer" ) );
+            uno::Reference< util::XURLTransformer > aTransformer( m_xFactory->createInstance( aServiceName ),
+                                                                    uno::UNO_QUERY );
+            if ( aTransformer.is() )
+            {
+                util::URL aURL;
+
+                USES_CONVERSION;
+                aURL.Complete = ::rtl::OUString( OLE2CW( pFilePath ) );
+
+                if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) )
+                    sDocUrl = aURL.Complete;
+            }
+        }
+        else // REMOVE
+            sDocUrl = getTestFileURLFromGUID_Impl( &m_guid ); // REMOVE
+
+        aArgs[3].Value <<= sDocUrl;
     }
 
     return aArgs;
@@ -266,12 +296,16 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForStoring_Impl( uno::Reference< io::XOutputStream > xStream)
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 2 );
+    uno::Sequence< beans::PropertyValue > aArgs( xStream.is() ? 2 : 1 );
 
     aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
     aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
-    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
-    aArgs[1].Value <<= xStream;
+
+    if ( xStream.is() )
+    {
+        aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        aArgs[1].Value <<= xStream;
+    }
 
     return aArgs;
 }
@@ -323,6 +357,12 @@ STDMETHODIMP EmbedDocument_Impl::QueryInterface( REFIID riid, void FAR* FAR* ppv
     {
         AddRef();
         *ppv = (IOleObject*) this;
+        return S_OK;
+    }
+    else if (IsEqualIID(riid, IID_IPersistFile))
+    {
+        AddRef();
+        *ppv = (IPersistFile*) this;
         return S_OK;
     }
 
@@ -440,7 +480,6 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
 STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 {
-
     if ( m_pDocHolder->GetDocument().is() )
         return CO_E_ALREADYINITIALIZED;
 
@@ -523,9 +562,9 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
         if ( FAILED( hr ) ) return E_FAIL;
 
         DWORD nStreamMode = aStat.grfMode;
-        hr = pStgSave->OpenStream( aOfficeEmbedStreamName,
-                                 0,
-                                 STGM_WRITE | ( nStreamMode & 0x73 ),
+        hr = pStgSave->CreateStream( aOfficeEmbedStreamName,
+                                 STGM_CREATE | ( nStreamMode & 0x73 ),
+                                0,
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
@@ -610,4 +649,140 @@ STDMETHODIMP EmbedDocument_Impl::HandsOffStorage()
     return S_OK;
 }
 
+//-------------------------------------------------------------------------------
+// IPersistFile
+
+STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
+{
+    if ( m_pDocHolder->GetDocument().is() )
+        return CO_E_ALREADYINITIALIZED;
+
+    if ( !m_xFactory.is() )
+        return E_FAIL;
+
+    DWORD nStreamMode = STGM_CREATE | STGM_READWRITE | STGM_DELETEONRELEASE | STGM_SHARE_EXCLUSIVE;
+    HRESULT hr = StgCreateDocfile( NULL,
+                                     nStreamMode ,
+                                     0,
+                                     &m_pMasterStorage );
+
+    if ( FAILED( hr ) || !m_pMasterStorage ) return E_FAIL;
+
+    ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+    CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
+    hr = WriteFmtUserTypeStg( m_pMasterStorage,
+                            cf,                         // ???
+                            ( sal_Unicode* )aCurType.getStr() );
+    if ( FAILED( hr ) ) return E_FAIL;
+
+    hr = m_pMasterStorage->SetClass( m_guid );
+    if ( FAILED( hr ) ) return E_FAIL;
+
+    hr = m_pMasterStorage->CreateStream( aOfficeEmbedStreamName,
+                            STGM_CREATE | ( nStreamMode & 0x73 ),
+                            0,
+                            0,
+                            &m_pOwnStream );
+    if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
+
+    uno::Reference< frame::XModel > aDocument(
+                    m_xFactory->createInstance( getServiceNameFromGUID_Impl( &m_guid ) ),
+                    uno::UNO_QUERY );
+    if ( aDocument.is() )
+    {
+        m_pDocHolder->SetDocument( aDocument );
+
+        uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+        if( xLoadable.is() )
+        {
+            try
+            {
+                xLoadable->load( fillArgsForLoading_Impl( uno::Reference< io::XInputStream >(),
+                                                            STGM_READWRITE,
+                                                            pszFileName ) );
+                hr = S_OK;
+
+                USES_CONVERSION;
+                m_aFileName = ::rtl::OUString( OLE2CW( pszFileName ) );
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+
+        if ( hr == S_OK )
+        {
+            ::rtl::OUString aCurType = getServiceNameFromGUID_Impl( &m_guid ); // ???
+            CLIPFORMAT cf = RegisterClipboardFormatA( "Embedded Object" );
+            hr = WriteFmtUserTypeStg( m_pMasterStorage,
+                                    cf,                         // ???
+                                    ( sal_Unicode* )aCurType.getStr() );
+
+            if ( hr == S_OK )
+            {
+                m_bIsDirty = sal_True;
+            }
+            else
+                hr = E_FAIL;
+        }
+
+        if ( hr != S_OK )
+        {
+            m_pDocHolder->CloseDocument();
+            m_pOwnStream = NULL;
+            m_pMasterStorage = NULL;
+        }
+    }
+
+    return hr;
+}
+
+STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
+{
+    if ( !m_pDocHolder->GetDocument().is() || !m_xFactory.is() )
+        return E_FAIL;
+
+    USES_CONVERSION;
+    ::rtl::OUString aTargetName = pszFileName ? ::rtl::OUString( OLE2CW( pszFileName ) ) : m_aFileName;
+    if ( !aTargetName.getLength() )
+        return E_FAIL;
+
+    uno::Reference< frame::XStorable > xStorable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
+    if( xStorable.is() )
+    {
+        try
+        {
+            xStorable->storeToURL( aTargetName, fillArgsForStoring_Impl( uno::Reference< io::XOutputStream >() ) );
+
+            m_aFileName = ::rtl::OUString();
+
+            if ( !pszFileName || fRemember )
+                m_bIsDirty = sal_False;
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+
+    return E_FAIL;
+}
+
+STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
+{
+    m_aFileName = ::rtl::OUString( OLE2CW( pszFileName ) );
+    return S_OK;
+}
+
+STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
+{
+    CComPtr<IMalloc> pMalloc;
+
+    HRESULT hr = CoGetMalloc( 1, &pMalloc );
+    if ( FAILED( hr ) || !pMalloc ) return E_FAIL;
+
+    *ppszFileName = (LPOLESTR)( pMalloc->Alloc( sizeof( sal_Unicode ) * ( m_aFileName.getLength() + 1 ) ) );
+    wcsncpy( *ppszFileName, m_aFileName.getStr(), m_aFileName.getLength() + 1 );
+
+    return m_aFileName.getLength() ? S_OK : S_FALSE;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-12 15:38:00 $
+ *  last change: $Author: mav $ $Date: 2003-03-25 08:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,13 @@ class GDIMetaFile;
 class EmbedDocument_Impl : public IPersistStorage
                          , public IDataObject
                          , public IOleObject
+                         , public IPersistFile
 {
 protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                 fillArgsForLoading_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xStream,
-                                         DWORD nStreamMode );
+                                         DWORD nStreamMode,
+                                         LPCOLESTR pFilePath = NULL );
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                 fillArgsForStoring_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xStream );
 
@@ -151,12 +153,19 @@ public:
     STDMETHOD(GetMiscStatus) ( DWORD dwAspect, DWORD *pdwStatus );
     STDMETHOD(SetColorScheme) ( LOGPALETTE *pLogpal );
 
+    /* IPersistFile methods */
+    STDMETHOD(Load) ( LPCOLESTR pszFileName, DWORD dwMode );
+    STDMETHOD(Save) ( LPCOLESTR pszFileName, BOOL fRemember );
+    STDMETHOD(SaveCompleted) ( LPCOLESTR pszFileName );
+    STDMETHOD(GetCurFile) ( LPOLESTR *ppszFileName );
+
 protected:
     oslInterlockedCount                 m_refCount;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     DocumentHolder*                     m_pDocHolder;
+    ::rtl::OUString                     m_aFileName;
 
     CComPtr< IStorage >                 m_pMasterStorage;
     CComPtr< IStream >                  m_pOwnStream;
