@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:32:10 $
+ *  last change: $Author: sj $ $Date: 2000-12-21 17:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                                             sal_uInt32 nAtomInstance, TextRuleEntry* pTextRule, SvStream& rExtBu );
-        void                ImplWriteAny( EscherPropertyContainer& rPropOpt, sal_uInt32 nFlags, sal_Bool bBezier, Polygon* pPolygon = NULL );
         void                ImplWritePage( SolverContainer& rSolver, PageType ePageType, sal_Bool bMaster, int nPageNumber = 0 );
         sal_Bool            ImplIsAutoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
@@ -983,6 +982,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
 
         ::com::sun::star::awt::Point        ImplMapPoint( const ::com::sun::star::awt::Point& );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& );
+        Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
 
         sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
         void                                ImplWriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
