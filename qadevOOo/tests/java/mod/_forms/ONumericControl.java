@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ONumericControl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:03 $
+ *  last change:$Date: 2003-02-25 11:07:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,9 +185,7 @@ public class ONumericControl extends TestCase {
      *      component. </li>
      * </ul>
      */
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object anotherCtrl = null ;
         XWindowPeer the_win = null;
@@ -253,6 +251,8 @@ public class ONumericControl extends TestCase {
             UnoRuntime.queryInterface(XTextComponent.class, oObj);
         textComp.addTextListener(listener);
         tEnv.addObjRelation("TestTextListener", listener);
+
+        tEnv.addObjRelation("XTextComponent.onlyNumbers", new Boolean(true));
 
         return tEnv;
     } // finish method getTestEnvironment
