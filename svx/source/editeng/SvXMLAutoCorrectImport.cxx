@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-09 17:58:43 $
+ *  last change: $Author: mtg $ $Date: 2001-02-16 09:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@ using namespace ::rtl;
 
 sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
 
-SvXMLAutoCorrectImport::SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect)
-: pAutocorr_List (pNewAutocorr_List), rAutoCorrect ( rNewAutoCorrect )
+SvXMLAutoCorrectImport::SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect, SvStorageRef &rNewStorage)
+: pAutocorr_List (pNewAutocorr_List), rAutoCorrect ( rNewAutoCorrect ), rStorage ( rNewStorage )
 {
     GetNamespaceMap().AddAtIndex( XML_NAMESPACE_BLOCKLIST_IDX, sXML_np__block_list,
                                      sXML_n_block_list, XML_NAMESPACE_BLOCKLIST );
@@ -163,7 +163,7 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
     /*
-     * GetLongText always returns false anyway ? *confusion* - mtg
+     * GetLongText always returns false anyway ? *confusion* - mtg*/
     const International& rInter = Application::GetAppInternational();
     BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     if( !bOnlyTxt )
@@ -176,8 +176,7 @@ SvXMLWordContext::SvXMLWordContext(
             bOnlyTxt = TRUE;
         }
     }
-    */
-    BOOL bOnlyTxt = TRUE;
+    /*BOOL bOnlyTxt = TRUE;*/
     SvxAutocorrWordPtr pNew = new SvxAutocorrWord( sWrong, sRight, bOnlyTxt );
 
     if( !rLocalRef.pAutocorr_List->Insert( pNew ) )
