@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 15:12:15 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 07:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,21 +2008,16 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             // load the row set
             {
                 FormErrorHelper aNoticeErrors(this);
+
                 if (xLoadable->isLoaded())
                     // reload does not work if not already loaded
                     xLoadable->reload();
                 else
                     xLoadable->load();
 
-                sal_Bool bLoadSuccess = !errorOccured();
                 // initialize the model
                 InitializeGridModel(getFormComponent());
-                // reload ...
-                // TODO: why this reload ... me thinks the GridModel can't handle beeing initialized when the form
-                // is already loaded, but I'm not sure ...
-                // have to change this, reloading is much too expensive ...
-                if (xLoadable->isLoaded() && bLoadSuccess)
-                    xLoadable->reload();
+
                 FormLoaded(sal_True);
             }
             // set the title of the beamer
@@ -2597,9 +2592,6 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
                                 xLoadable->load();
                             // initialize the model
                             InitializeGridModel(getFormComponent());
-                            Reference< ::com::sun::star::form::XLoadable >  xLoadable(getRowSet(),UNO_QUERY);
-                            if (xLoadable->isLoaded() && !errorOccured())
-                                xLoadable->reload();
                         }
 
                         FormLoaded(sal_True);
