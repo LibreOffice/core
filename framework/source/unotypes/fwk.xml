@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name> fwk </module-name>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.Frame </name>
+        <description>
+            A frame support influencing of his subtree, find of subframes, activate- and deactivate-mechanism as well as
+            set/get of a frame window, component or controller.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.Frame </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.Task </name>
+        <description>
+            Specifies a separate task within a desktop environment.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.Task </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.PlugInFrame </name>
+        <description>
+            Extend a task for using in a browser plugin environment.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.mozilla.Plugin </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.Desktop </name>
+        <description>
+            A desktop environment contains tasks with one or more frames in which components can be loaded.
+            The desktop himself is the root of the frame hierarchy.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.frame.Desktop </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.DocumentProperties </name>
+        <description>
+            This service grants access to document-specific information, like
+            the author, creation date and user fields, directly from document
+            files without loading the whole document.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.document.StandaloneDocumentInfo </supported-service>
+    </component-description>
+
+    <component-description>
+        <author> Andreas Schluens </author>
+        <name> com.sun.star.comp.framework.URLTransformer </name>
+        <description>
+            Helps to split up a string containing a URL into its
+            structural parts and assembles the parts into a single string.
+        </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.util.URLTransformer </supported-service>
+    </component-description>
+
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  comphelper  </project-build-dependency>
+    <project-build-dependency>  vos         </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>  tools       </project-build-dependency>
+    <project-build-dependency>  svtools     </project-build-dependency>
+    <project-build-dependency>  toolkit     </project-build-dependency>
+    <project-build-dependency>  sv          </project-build-dependency>
+    <project-build-dependency>  sot         </project-build-dependency>
+
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> comphelp2   </runtime-module-dependency>
+    <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> tl          </runtime-module-dependency>
+    <runtime-module-dependency> svt         </runtime-module-dependency>
+    <runtime-module-dependency> svl         </runtime-module-dependency>
+    <runtime-module-dependency> tk          </runtime-module-dependency>
+    <runtime-module-dependency> sot         </runtime-module-dependency>
+
+</module-description>
