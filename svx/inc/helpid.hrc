@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-28 14:19:08 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 10:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,10 @@
 #define HID_EDITENG_SPELLER_WORDLANGUAGE        (HID_SVX_EXT0_START + 5)
 #define HID_EDITENG_SPELLER_PARALANGUAGE        (HID_SVX_EXT0_START + 6)
 #define HID_OPTIONS_COLORCONFIG_NAME_SCHEME     (HID_SVX_EXT0_START + 7)
+#define HID_OPTIONS_PATHS_SELECTFOLDER          (HID_SVX_EXT0_START + 8)
+#define HID_GALLERY_NEWTHEME_FINDFILES          (HID_SVX_EXT0_START + 9)
+#define HID_GALLERY_NEWTHEME_ADDFILES           (HID_SVX_EXT0_START + 10)
+#define HID_NUMBERINGOPT_SEL_GRF_FROM_FILE      (HID_SVX_EXT0_START + 11)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
@@ -519,7 +523,7 @@
 
 // overrun check 2
 
-#define ACT_SVX_HID_END2 HID_OPTIONS_COLORCONFIG_NAME_SCHEME
+#define ACT_SVX_HID_END2 HID_NUMBERINGOPT_SEL_GRF_FROM_FILE
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
