@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:36:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "लेखक";
+        Text[ slovak ] = "Autor";
     };
     FixedText FT_LASTEDIT
     {
@@ -156,6 +157,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
+        Text[ slovak ] = "~Text";
     };
     MultiLineEdit ED_EDIT
     {
@@ -198,6 +200,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Obsah";
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयसूची";
+        Text[ slovak ] = "Obsah";
     };
     OKButton BTN_POST_OK
     {
@@ -257,6 +260,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~Insert";
+        Text[ slovak ] = "Vlož~iť";
     };
     PushButton BTN_AUTHOR
     {
@@ -289,6 +293,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Autor";
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~लेखक";
+        Text[ slovak ] = "~Autor";
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
@@ -320,6 +325,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Upravit poznámku";
         Text[ hebrew ] = "‮עריכת הערה‬";
         Text[ hindi ] = "टिप्पणी संपादन";
+        Text[ slovak ] = "Upraviť poznámku";
     };
     String STR_NOTIZ_INSERT
     {
@@ -352,6 +358,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ czech ] = "Vložit poznámku";
         Text[ hebrew ] = "‮הכנסת הערה‬";
         Text[ hindi ] = "टिप्पणी जोड़ो";
+        Text[ slovak ] = "Vložiť poznámku";
     };
     Text[ chinese_simplified ] = "备注";
     Text[ russian ] = "����������";
@@ -367,8 +374,11 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ czech ] = "Poznámka";
     Text[ hebrew ] = "‮הערה‬";
     Text[ hindi ] = "टिप्पणी";
+    Text[ slovak ] = "Poznámka";
 };
  // ********************************************************************** EOF
+
+
 
 
 
