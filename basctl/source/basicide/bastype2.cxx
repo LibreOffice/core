@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:18:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-02 13:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( SfxObjectShell* pShell, Image& rImag
         if ( xMSF.is() )
         {
             xModuleManager.set( xMSF->createInstance( ::rtl::OUString::createFromAscii(
-                "drafts.com.sun.star.frame.ModuleManager" ) ) , UNO_QUERY );
+                "com.sun.star.frame.ModuleManager" ) ) , UNO_QUERY );
         }
         if ( xModuleManager.is() )
         {
