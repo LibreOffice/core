@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-21 15:02:06 $
+ *  last change: $Author: fs $ $Date: 2001-01-04 11:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType)
         case DST_ADABAS:
         case DST_JDBC:
         case DST_ODBC:
+        case DST_ADO:
             return sal_True;
             break;
         case DST_DBASE:
@@ -198,6 +199,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
         return DST_DBASE;
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:ado:", 0, nSeparator))
+        return DST_ADO;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
         return DST_TEXT;
 
@@ -375,6 +378,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/21 15:02:06  oj
+ *  #80549# wrong dsn for text
+ *
  *  Revision 1.3  2000/10/30 07:59:18  fs
  *  + hasAuthentification(DATASOURCE_TYPE)
  *
