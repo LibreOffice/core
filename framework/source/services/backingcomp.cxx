@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:04:17 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 
 #ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
+#endif
+
+#ifndef _FRAMEWORK_HELPID_HRC
+#include <helpid.hrc>
 #endif
 
 //_______________________________________________
@@ -652,6 +656,8 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 
     // establish listening for key accelerators
     m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
+
+    pWindow->SetHelpId(HID_BACKINGWINDOW);
 
     aWriteLock.unlock();
     /* } SAFE */
