@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String STR_SVT_CALENDAR_DAY
     Text [ dutch ] = "Dag" ;
     Text [ swedish ] = "Dag" ;
     Text [ danish ] = "Dag" ;
-    Text [ portuguese_brazilian ] = "Tag" ;
+    Text [ portuguese_brazilian ] = "Dia" ;
     Text [ portuguese ] = "Dia" ;
     Text[ chinese_simplified ] = "天";
     Text[ russian ] = "����";
@@ -88,6 +88,9 @@ String STR_SVT_CALENDAR_DAY
     Text[ catalan ] = "Dia";
     Text[ finnish ] = "P�iv�";
     Text[ thai ] = "วัน";
+    Text[ czech ] = "Den";
+    Text[ hebrew ] = "‮יום‬";
+    Text[ hindi ] = "दिन";
 };
 String STR_SVT_CALENDAR_WEEK
 {
@@ -101,7 +104,7 @@ String STR_SVT_CALENDAR_WEEK
     Text [ swedish ] = "Vecka" ;
     Text [ danish ] = "Uge" ;
     Text [ portuguese ] = "Semana" ;
-    Text [ portuguese_brazilian ] = "Woche" ;
+    Text [ portuguese_brazilian ] = "Semana" ;
     Text[ chinese_simplified ] = "周";
     Text[ russian ] = "������";
     Text[ polish ] = "tydzie�";
@@ -117,6 +120,9 @@ String STR_SVT_CALENDAR_WEEK
     Text[ catalan ] = "Setmana";
     Text[ finnish ] = "Viikko";
     Text[ thai ] = "สัปดาห์";
+    Text[ czech ] = "Týden";
+    Text[ hebrew ] = "‮שבוע‬";
+    Text[ hindi ] = "सप्ताह";
 };
 String STR_SVT_CALENDAR_TODAY
 {
@@ -124,7 +130,7 @@ String STR_SVT_CALENDAR_TODAY
     Text [ ENGLISH ] = "Today" ;
     Text [ portuguese ] = "Hoje" ;
     Text [ english_us ] = "Today" ;
-    Text [ portuguese_brazilian ] = "Heute" ;
+    Text [ portuguese_brazilian ] = "Hoje" ;
     Text [ swedish ] = "Idag" ;
     Text [ danish ] = "I dag" ;
     Text [ italian ] = "Oggi" ;
@@ -146,6 +152,9 @@ String STR_SVT_CALENDAR_TODAY
     Text[ catalan ] = "Avui";
     Text[ finnish ] = "T�n��n";
     Text[ thai ] = "วันนี้";
+    Text[ czech ] = "Dnes";
+    Text[ hebrew ] = "‮היום‬";
+    Text[ hindi ] = "आज का दिन";
 };
 String STR_SVT_CALENDAR_NONE
 {
@@ -153,7 +162,7 @@ String STR_SVT_CALENDAR_NONE
     Text [ ENGLISH ] = "None" ;
     Text [ portuguese ] = "Nenhum" ;
     Text [ english_us ] = "None" ;
-    Text [ portuguese_brazilian ] = "Keines" ;
+    Text [ portuguese_brazilian ] = "Nenhum" ;
     Text [ swedish ] = "Ingen" ;
     Text [ danish ] = "Ingen" ;
     Text [ italian ] = "Senza" ;
@@ -175,7 +184,19 @@ String STR_SVT_CALENDAR_NONE
     Text[ catalan ] = "Cap";
     Text[ finnish ] = "Ei mit��n";
     Text[ thai ] = "ไม่มี";
+    Text[ czech ] = "Nic";
+    Text[ hebrew ] = "‮ללא‬";
+    Text[ hindi ] = "कोई नहीं";
 };
+
+
+
+
+
+
+
+
+
 
 
 
