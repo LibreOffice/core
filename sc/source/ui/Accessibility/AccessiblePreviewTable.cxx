@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
+ *  last change: $Author: sab $ $Date: 2002-09-05 07:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (u
 rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sal_Int32 nRow )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    // is not supported or specified so not implemented
+/*  ScUnoGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -234,15 +235,16 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
         }
     }
     else
-        throw lang::IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();*/
 
-    return sName;
+    return rtl::OUString();
 }
 
 rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
+    // is not supported or specified so not implemented
+/*  ScUnoGuard aGuard;
     IsObjectValid();
 
     FillTableInfo();
@@ -264,9 +266,9 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription(
         }
     }
     else
-        throw lang::IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();*/
 
-    return sName;
+    return rtl::OUString();
 }
 
 sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
