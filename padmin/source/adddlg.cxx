@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-22 13:44:31 $
+ *  last change: $Author: pl $ $Date: 2001-06-07 07:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,15 +840,15 @@ void AddPrinterDialog::advance()
     }
     else if( m_pCurrentPage == m_pChooseDriverPage )
     {
-        if( ! m_pCommandPage )
-            m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
-        m_pCurrentPage = m_pCommandPage;
-    }
-    else if( m_pCurrentPage == m_pCommandPage )
-    {
         if( ! m_pNamePage )
             m_pNamePage = new APNamePage( this, m_aPrinter.m_aPrinterName, DeviceKind::Printer );
         m_pCurrentPage = m_pNamePage;
+    }
+    else if( m_pCurrentPage == m_pNamePage )
+    {
+        if( ! m_pCommandPage )
+            m_pCommandPage = new APCommandPage( this, DeviceKind::Printer );
+        m_pCurrentPage = m_pCommandPage;
         m_aFinishPB.Enable( TRUE );
         m_aNextPB.Enable( FALSE );
     }
@@ -924,12 +924,12 @@ void AddPrinterDialog::back()
     }
     else if( m_pCurrentPage == m_pNamePage )
     {
-        m_pCurrentPage = m_pCommandPage;
+        m_pCurrentPage = m_pChooseDriverPage;
         m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pCommandPage )
     {
-        m_pCurrentPage = m_pChooseDriverPage;
+        m_pCurrentPage = m_pNamePage;
     }
     else if( m_pCurrentPage == m_pOldPrinterPage )
     {
