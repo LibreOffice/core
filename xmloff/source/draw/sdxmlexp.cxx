@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-29 14:31:35 $
+ *  last change: $Author: bm $ $Date: 2000-11-29 16:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2487,7 +2487,9 @@ void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
 
         if( xChartDoc.is() )
         {
-            rExp.GetChartExport()->exportChart( xChartDoc, sal_False );
+            // export chart data if the flag is not set (default)
+            sal_Bool bExportOwnData = (( nFeatures & SEF_EXPORT_NO_CHART_DATA ) == 0 );
+            rExp.GetChartExport()->exportChart( xChartDoc, bExportOwnData );
         }
         else
         {
