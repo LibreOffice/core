@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:59:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,6 @@ class ViewShell : public Ring
 
     inline void ResetInvalidRect();
 
-    void SetSubsLines();
-
     void Reformat();            //Invalidert das ges. Layout (ApplyViewOption)
 
     void PaintDesktop( const SwRect & );        // sammeln der Werte fuers
@@ -301,7 +299,6 @@ public:
     // 2. GetWin:      Available if we not printing
     // 4. GetOut:      Printer, Window or Virtual device
     SfxPrinter* GetPrt( sal_Bool bCreate = sal_False ) const;
-    VirtualDevice* GetVirDev( sal_Bool bCreate = sal_False ) const;
     OutputDevice& GetRefDev() const;
     inline Window* GetWin()    const { return pWin; }
     inline OutputDevice* GetOut()     const { return pOut; }
@@ -351,10 +348,6 @@ public:
     // compatible behaviour of tabs
     sal_Bool IsTabCompat() const;
     void SetTabCompat( sal_Bool bNew );
-
-    // alternative calculation of fly anchor offset
-    sal_Bool IsAddFlyOffsets()const;
-    void SetAddFlyOffsets( sal_Bool bNew );
 
     // font metric attribute "External Leading" should be considered
     sal_Bool IsAddExtLeading()const;
