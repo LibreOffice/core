@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:50:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::ucb;
 using namespace ::ucb;
-using namespace rtl;
+using rtl::OUString;
 typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
@@ -239,7 +239,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         {
             aFile = ::ucb::Content(getURL(),Reference< ::com::sun::star::ucb::XCommandEnvironment >());
         }
-        catch(ContentCreationException&e)
+        catch(ContentCreationException& e)
         {
             throwUrlNotValid(getURL(),e.Message);
         }
