@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:03:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,8 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
     {
         Reference< XCloneable > xColCloneable;
 
-        const OInterfaceArray::const_iterator pColumnStart = m_aItems.begin();
-        const OInterfaceArray::const_iterator pColumnEnd = m_aItems.end();
+        const OInterfaceArray::const_iterator pColumnStart = _pOriginalContainer->m_aItems.begin();
+        const OInterfaceArray::const_iterator pColumnEnd = _pOriginalContainer->m_aItems.end();
         for ( OInterfaceArray::const_iterator pColumn = pColumnStart; pColumn != pColumnEnd; ++pColumn )
         {
             // ask the col for a factory for the clone
