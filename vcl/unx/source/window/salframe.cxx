@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-14 17:07:16 $
+ *  last change: $Author: vg $ $Date: 2001-08-15 14:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         XSetWMProtocols( GetXDisplay(), XtWindow( hShell_ ), a, n );
     }
 
-    XFlush( GetXDisplay() );
+    XSync( GetXDisplay(), False );
 
     int nDecoFlags = WMAdaptor::decoration_All;
     if( nStyle_ & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE)
