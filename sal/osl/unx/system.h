@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2002-01-02 10:24:12 $
+ *  last change: $Author: mh $ $Date: 2002-08-12 10:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,8 +396,9 @@ extern char *strdup(const char *);
 #   include <machine/endian.h>
 #   include <sys/time.h>
 #   include <sys/semaphore.h>
+/* fixme are premac and postmac still needed here? */
 #   include <premac.h>
-#   include <CoreFoundation/CoreFoundation.h>
+#   include <mach-o/dyld.h>
 #   include <postmac.h>
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
@@ -408,8 +409,8 @@ extern char *strdup(const char *);
 #   endif
 #   define  IOCHANNEL_TRANSFER_BSD_RENO
 #   define  NO_PTHREAD_RTL
-#   define  CMD_ARG_PRG                 __progname
-#   define  CMD_ARG_ENV                 environ
+/* for NSGetArgc/Argv/Environ */
+#       include <crt_externs.h>
 #endif
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
