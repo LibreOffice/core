@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XBitmap.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:31:43 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_XBitmap_idl__
+#define __com_sun_star_rendering_XBitmap_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_geometry_IntegerSize2D_idl__
+#include <com/sun/star/geometry/IntegerSize2D.idl>
+#endif
+#ifndef __com_sun_star_geometry_RealSize2D_idl__
+#include <com/sun/star/geometry/RealSize2D.idl>
+#endif
+#ifndef __com_sun_star_rendering_VolatileContentDestroyedException_idl__
+#include <com/sun/star/rendering/VolatileContentDestroyedException.idl>
+#endif
+
+module com { module sun { module star { module rendering {
+
+interface XBitmapCanvas;
+
+/** This is a generic interface to a bitmap.<p>
+
+    This interface contains the generic functionality to be used on
+    every <type>XCanvas</type> bitmap object. More format-specific
+    methods can be found at the <type>XIntegerBitmap</type>,
+    <type>XIeeeDoubleBitmap</type>, <type>XIeeeFloatBitmap</type> and
+    <type>XHalfFloatBitmap</type> interfaces.<p>
+
+    @since #110496#
+ */
+interface XBitmap : ::com::sun::star::uno::XInterface
+{
+    /** Query the size of the bitmap.<p>
+
+        This method queries the bitmap size in pixel.<p>
+
+        @return the bitmap size in pixel.
+      */
+    ::com::sun::star::geometry::IntegerSize2D   getSize();
+
+    //-------------------------------------------------------------------------
+
+    /** Query a canvas interface for this bitmap.<p>
+
+        This method queries a canvas interface for this bitmap, to
+        which draw operations can then be issued. Please note that
+        concurrent draw operations on that <type>XBitmapCanvas</type>
+        interface and modifying operations on this bitmap interface
+        might cause undesired effects. Although the implementations
+        are required to not crash in this case, the result of such
+        concurrent operations are <em>undefined</em> (i.e. anything
+        else, including corruption of the bitmap data, or deadlocking,
+        might actually happen). Thus, it is highly recommended to
+        externally serialize the access here.<p>
+
+        @returns an <type>XBitmapCanvas</type> interface, whose
+        rendering operations are directed into the bitmap.
+     */
+    XBitmapCanvas                   queryBitmapCanvas();
+
+    //-------------------------------------------------------------------------
+
+    /** Query a scaled version of the original bitmap.
+
+        @param newSize
+        Requested size of the new bitmap. Both of the two size
+        components must be greater than zero.
+
+        @param beFast
+        When set to true, this parameter advises getScaledBitmap to
+        use the fastest available algorithm to scale the bitmap, which
+        might cause visible artifacts.
+
+        @returns the new scaled bitmap.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        if the size components are outside the specified range.
+
+        @throws VolatileContentDestroyedException
+        if the contents of a volatile bitmap have been destroyed, and
+        thus cannot be read to generate the scaled bitmap.
+     */
+    XBitmap                         getScaledBitmap( [in] ::com::sun::star::geometry::RealSize2D newSize, [in] boolean beFast )
+        raises (com::sun::star::lang::IllegalArgumentException,
+                VolatileContentDestroyedException);
+};
+
+}; }; }; };
+
+#endif
