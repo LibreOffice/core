@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2000-11-03 17:56:02 $
+ *  last change: $Author: er $ $Date: 2000-11-03 20:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,22 @@ ULONG SvNumberFormatter::ImpGenerateCL(LanguageType eLnge)
     ULONG CLOffset = ImpGetCLOffset(ActLnge);
     if (CLOffset > MaxCLOffset)                     // CL noch nicht da
     {
+#ifndef PRODUCT
+        Locale aLoadedLocale = pLocaleData->getLoadedLocale();
+        if ( aLoadedLocale.Language != aLocale.Language || aLoadedLocale.Country != aLocale.Country )
+        {
+            ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "Locales don't match:\n" ) );
+            aMsg += ByteString( String( aLocale.Language ), RTL_TEXTENCODING_UTF8 );
+            aMsg += '_';
+            aMsg += ByteString( String( aLocale.Country ), RTL_TEXTENCODING_UTF8 );
+            aMsg.Append( RTL_CONSTASCII_STRINGPARAM( " requested\n" ) );
+            aMsg += ByteString( String( aLoadedLocale.Language ), RTL_TEXTENCODING_UTF8 );
+            aMsg += '_';
+            aMsg += ByteString( String( aLoadedLocale.Country ), RTL_TEXTENCODING_UTF8 );
+            aMsg.Append( RTL_CONSTASCII_STRINGPARAM( " loaded" ) );
+            DBG_ERRORFILE( aMsg.GetBuffer() );
+        }
+#endif
         MaxCLOffset += SV_COUNTRY_LANGUAGE_OFFSET;
         ImpGenerateFormats(MaxCLOffset);
         CLOffset = MaxCLOffset;
