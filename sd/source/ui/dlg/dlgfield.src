@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:05:32 $
+ *  last change: $Author: cl $ $Date: 2001-12-19 11:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,20 +87,20 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ chinese_simplified ] = "ε­—ζ®µη±»ε‹";
         Text[ russian ] = "Òθο οξλÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎγ®η¨®ι΅";
+        Text[ japanese ] = "γƒ•γ‚£γƒΌγƒ«γƒ‰γ®η¨®ι΅";
         Text[ chinese_traditional ] = "ζ¬„δ½ι΅ε‹";
         Text[ arabic ] = "δζΪ ΗαΝήα";
         Text[ greek ] = "Τύπος πεδίου";
         Text[ korean ] = "ν•„λ“ μ ν•";
         Text[ turkish ] = "Alan tipi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo de campo";
+        Text[ catalan ] = "Tipus de camp";
         Text[ finnish ] = "Kenttδtyyppi";
     };
     RadioButton RBT_FIX
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
         Text = "~fix" ;
         Text [ ENGLISH ] = "~fix" ;
         TabStop = TRUE ;
@@ -123,13 +123,13 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ korean ] = "κ³ μ •(~F)";
         Text[ turkish ] = "Sabit";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~fijo";
+        Text[ catalan ] = "~Fix";
         Text[ finnish ] = "~Kiinteδ";
     };
     RadioButton RBT_VAR
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 64 , 10 ) ;
         Text = "~variabel" ;
         Text [ ENGLISH ] = "~variable" ;
         TabStop = TRUE ;
@@ -165,7 +165,7 @@ ModalDialog DLG_FIELD_MODIFY
     FixedText FT_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 49 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "F~ormat" ;
         Text [ ENGLISH ] = "F~ormat" ;
         Text [ english_us ] = "F~ormat" ;
@@ -184,10 +184,10 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ chinese_traditional ] = "ζ ΌεΌ(~O)";
         Text[ arabic ] = "ΚδΣνή";
         Text[ greek ] = "Μ~ορφή";
-        Text[ korean ] = "ν¬λ§·(~O)";
+        Text[ korean ] = "μ„μ‹(~O)";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ormato";
+        Text[ catalan ] = "F~ormat";
         Text[ finnish ] = "~Muotoile";
     };
     OKButton BTN_OK
@@ -221,23 +221,14 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ chinese_simplified ] = "ηΌ–θΎ‘ε­—ζ®µζ‡δ»¤";
     Text[ russian ] = "Οπΰβκΰ οξλÿ";
     Text[ polish ] = "Edytuj pole";
-    Text[ japanese ] = "οΎο½¨ο½°οΎ™οΎ„οΎο½ΊοΎοΎοΎ„οΎγ®η·¨ι›†";
+    Text[ japanese ] = "γƒ•γ‚£γƒΌγƒ«γƒ‰γ‚³γƒγƒ³γƒ‰γ®η·¨ι›†";
     Text[ chinese_traditional ] = "η·¨θΌ―ζ¬„δ½ζ‡δ»¤";
     Text[ arabic ] = "ΚΝΡνΡ ΗαΝήα";
     Text[ greek ] = "Επεξεργασία εντολής πεδίου";
     Text[ korean ] = "ν•„λ“λª…λ Ή νΈμ§‘";
     Text[ turkish ] = "Alan φπesini dόzenle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editar campo";
+    Text[ catalan ] = "Edita el camp";
     Text[ finnish ] = "Muokkaa kenttδδ";
 };
-
-
-
-
-
-
-
-
-
 
