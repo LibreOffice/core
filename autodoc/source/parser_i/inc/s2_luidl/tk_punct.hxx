@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_punct.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,18 +83,20 @@ class TokPunctuation : public Token
     enum E_TokenId
     {
         e_none = 0,
-        BracketOpen =  1,           // "("
-        BracketClose = 2,           // ")"
-        ArrayBracketOpen = 3,       // "["
-        ArrayBracketClose = 4,      // "]"
-        CurledBracketOpen = 5,      // "{"
-        CurledBracketClose = 6,     // "}"
-        Semicolon = 7,              // ";"
-        Colon = 8,                  // ":"
-        DoubleColon = 9,            // "::"
-        Comma = 10,                 // ","
-        Minus = 11,                 // "-"
-        Fullstop = 12               // "."
+        BracketOpen =  1,           // (
+        BracketClose = 2,           // )
+        ArrayBracketOpen = 3,       // [
+        ArrayBracketClose = 4,      // ]
+        CurledBracketOpen = 5,      // {
+        CurledBracketClose = 6,     // }
+        Semicolon = 7,              // ;
+        Colon = 8,                  // :
+        DoubleColon = 9,            // ::
+        Comma = 10,                 // ,
+        Minus = 11,                 // -
+        Fullstop = 12,              // .
+        Lesser = 13,                // <
+        Greater = 14                // >
     };
     typedef lux::Enum<E_TokenId> EV_TokenId;
 
