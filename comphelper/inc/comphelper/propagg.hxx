@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 14:40:24 $
+ *  last change: $Author: fs $ $Date: 2002-10-18 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,8 +197,29 @@ public:
     virtual sal_Bool SAL_CALL fillAggregatePropertyInfoByHandle(::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle,
                                                    sal_Int32 _nHandle) const;
 
+
+    enum PropertyOrigin
+    {
+        AGGREGATE_PROPERTY,
+        DELEGATOR_PROPERTY,
+        UNKNOWN_PROPERTY
+    };
+    /** prefer this one over the XPropertySetInfo of the aggregate!
+
+        <p>The reason is that OPropertyArrayAggregationHelper is the only instance which really knows
+        which properties of the aggregate are to be exposed. <br/>
+
+        For instance, some derivee of OPropertySetAggregationHelper may decide to create an
+        OPropertyArrayAggregationHelper which contains only a subset of the aggregate properties. This way,
+        some of the aggregate properties may be hidded to the public.<br/>
+
+        When using the XPropertySetInfo of the aggregate set to determine the existence of a property, then this
+        would return false positives.</p>
+    */
+    PropertyOrigin  classifyProperty( const ::rtl::OUString& _rName );
+
 protected:
-    ::com::sun::star::beans::Property* findPropertyByName(const ::rtl::OUString& _rName) const;
+    const ::com::sun::star::beans::Property* findPropertyByName(const ::rtl::OUString& _rName) const;
 };
 
 //==================================================================
