@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-21 12:17:55 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,8 +1136,8 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
 
     // was man so "ofters braucht, merkt man sich (spart Code und Laufzeit)
     SfxApplication *pSfxApp = SFX_APP();
-    SfxImageManager *pImgMgr = SFX_IMAGEMANAGER();
-    SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+    SfxImageManager *pImgMgr = GetBindings().GetImageManager();
+    SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
     // die Modi bestimmen, die im Kontext gelten
     // Geht InPlace nur bein internem InPlace, was aber egal ist, da bei
@@ -1550,7 +1550,7 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
     if ( aStatBar.bTemp != bSet )
     {
         BOOL bOn = FALSE;
-        SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+        SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
         FASTBOOL bIsFullScreen = FALSE;
         Window* pSysWin = GetTopWindow();
         if ( pSysWin )
@@ -1592,11 +1592,30 @@ void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 }
 
 //------------------------------------------------------------------------
+SfxStatusBarManager* SfxWorkWindow::MakeStatusBarManager_Impl( BOOL )
+{
+    SfxStatusBarManager* pStatusBar = NULL;
+    if ( aStatBar.nId )
+    {
+        if ( aStatBar.pStatusBar && aStatBar.nId == aStatBar.pStatusBar->GetType() )
+            aStatBar.pStatusBar->StoreConfig();
+
+        pStatusBar = new SfxStatusBarManager(
+            GetWindow(),
+            *aStatBar.pBindings,
+            aStatBar.pShell,
+            aStatBar.pBindings->GetConfigManager( aStatBar.nId ),
+            aStatBar.nId, NULL );
+    }
+
+    return pStatusBar;
+}
+
 void SfxWorkWindow::UpdateStatusBar_Impl()
 {
     // Die aktuelle Statusleiste
     StatusBar *pBar = NULL;
-    SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
+    SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
     // Falls schon eine StatusBar existiert: ist es die gew"unschte?
     USHORT nActId = 0;
@@ -1638,7 +1657,8 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
                 GetWindow(),
                 *aStatBar.pBindings,
                 aStatBar.pShell,
-                aStatBar.nId, pBar, pConfigShell );
+                aStatBar.pBindings->GetConfigManager( aStatBar.nId ),
+                aStatBar.nId, pBar );
 
             if ( !pBar )
             {
