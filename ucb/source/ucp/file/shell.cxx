@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 13:42:44 $
+ *  last change: $Author: hro $ $Date: 2001-07-24 13:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2344,7 +2344,8 @@ shell::getv(
     sal_Int32 n_Mask;
     getMaskFromProperties( n_Mask,properties );
 
-    osl::FileStatus aFileStatus( n_Mask );
+    // Always retrieve the target URL if item is a link
+    osl::FileStatus aFileStatus( n_Mask | FileStatusMask_LinkTargetURL );
     aDirItem.getFileStatus( aFileStatus );
 
 #ifdef TF_FILEURL
@@ -2352,7 +2353,31 @@ shell::getv(
 #else
     aUnqPath = aFileStatus.getFilePath();
 #endif
-    aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
+
+    // If the directory item type is a link retrieve the type of the target
+
+    if ( aFileStatus.getFileType() == osl::FileStatus::Link )
+    {
+        osl::FileBase::RC   result = osl::FileBase::E_INVAL;    // Assume failure
+
+        osl::DirectoryItem  aTargetItem;
+
+        osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
+
+
+        if ( aTargetItem.is() )
+        {
+            osl::FileStatus aTargetStatus( FileStatusMask_Type );
+
+            if ( osl::FileBase::E_None == ( result = aTargetItem.getFileStatus( aTargetStatus ) ) )
+                aIsRegular = aTargetStatus.getFileType() == osl::FileStatus::Regular;
+        }
+
+        // FIXME: aIsRegular undefined in error case. Don't know how to transport error
+        OSL_ENSURE( osl::FileBase::E_None == result, "shell::getv: Link target can't be retrieved. Missing error handling !!!" );
+    }
+    else
+        aIsRegular = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
     registerNotifier( aUnqPath,pNotifier );
     insertDefaultProperties( aUnqPath );
