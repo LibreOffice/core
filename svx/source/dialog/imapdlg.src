@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:13:50 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Aç...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Obre...";
-                Text[ finnish ] = "Avaa";
+                Text[ finnish ] = "Avaa...";
                 Text[ thai ] = "à¹€à¸›à¸´à¸”...";
             };
             ToolBoxItem
@@ -204,7 +204,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Seçim";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Selecciona";
-                Text[ finnish ] = "Valitse";
+                Text[ finnish ] = "Valintatyökalu";
                 Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
             };
             ToolBoxItem
@@ -297,7 +297,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Çokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polígon";
-                Text[ finnish ] = "Polygoni";
+                Text[ finnish ] = "Monikulmio";
                 Text[ thai ] = "à¸«à¸¥à¸²à¸¢à¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡";
             };
             ToolBoxItem
@@ -328,7 +328,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Serbest çokgen";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Polígon a mà alçada";
-                Text[ finnish ] = "Vapaamuotoinen polygoni";
+                Text[ finnish ] = "Vapaamuotoinen monikulmio";
                 Text[ thai ] = "à¸£à¸¹à¸›à¸«à¸¥à¸²à¸¢à¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡à¹à¸šà¸šà¸­à¸´à¸ªà¸£à¸°";
             };
             ToolBoxItem
@@ -353,7 +353,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ english_us ] = "Edit Points" ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "ç¼–è¾‘æ¥ç‚¹";
-                Text[ russian ] = "Ïğàâêà òî÷åê";
+                Text[ russian ] = "Èçìåíåíèå ãåîìåòğèè";
                 Text[ polish ] = "Edytuj punkty";
                 Text[ japanese ] = "åˆ¶å¾¡ç‚¹ã®ç·¨é›†";
                 Text[ chinese_traditional ] = "ç·¨è¼¯æ¥é»";
@@ -385,7 +385,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "ç§»åŠ¨ç‚¹";
-                Text[ russian ] = "Ïåğåìåñòèòü òî÷êè";
+                Text[ russian ] = "Ïåğåìåñòèòü óçëû";
                 Text[ polish ] = "Przenieœ punkty";
                 Text[ japanese ] = "åˆ¶å¾¡ç‚¹ã®ç§»å‹•";
                 Text[ chinese_traditional ] = "ç§»å‹•é»";
@@ -419,7 +419,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text[ chinese_simplified ] = "æ’å…¥æ¥ç‚¹";
-                Text[ russian ] = "Âñòàâèòü òî÷êè";
+                Text[ russian ] = "Âñòàâèòü óçëû";
                 Text[ polish ] = "Wstaw punkty";
                 Text[ japanese ] = "åˆ¶å¾¡ç‚¹ã®æŒ¿å…¥";
                 Text[ chinese_traditional ] = "æ’å…¥æ¥é»";
@@ -451,7 +451,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ spanish ] = "Eliminar puntos" ;
                 Text [ english_us ] = "Delete Points" ;
                 Text[ chinese_simplified ] = "åˆ é™¤ç‚¹";
-                Text[ russian ] = "Óäàëèòü òî÷êè";
+                Text[ russian ] = "Óäàëèòü óçëû";
                 Text[ polish ] = "Usuñ punkty";
                 Text[ japanese ] = "åˆ¶å¾¡ç‚¹ã®å‰Šé™¤";
                 Text[ chinese_traditional ] = "åˆªé™¤æ¥é»";
@@ -477,15 +477,15 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
-                Text [ finnish ] = "Peruuta" ;
+                Text [ finnish ] = "Kumoa " ;
                 Text [ danish ] = "Fortryd " ;
                 Text [ french ] = "Annuler " ;
                 Text [ swedish ] = "Ångra  " ;
-                Text [ dutch ] = "Ongedaan " ;
+                Text [ dutch ] = "Ongedaan maken" ;
                 Text [ spanish ] = "Deshacer  " ;
                 Text [ english_us ] = "Undo " ;
                 Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ ";
-                Text[ russian ] = "Îòìåíèòü ";
+                Text[ russian ] = "Îòìåíèòü";
                 Text[ polish ] = "Cofnij ";
                 Text[ japanese ] = "å…ƒã«æˆ»ã™ ";
                 Text[ chinese_traditional ] = "å¾©åŸ ";
@@ -511,9 +511,9 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ italian ] = "Ripristina  " ;
                 Text [ spanish ] = "Restaurar  " ;
                 Text [ french ] = "Restaurer " ;
-                Text [ dutch ] = "Herstellen  " ;
+                Text [ dutch ] = "Herstellen" ;
                 Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ ";
-                Text[ russian ] = "Âåğíóòü ";
+                Text[ russian ] = "Âåğíóòü";
                 Text[ polish ] = "Przywróæ ";
                 Text[ japanese ] = "ã‚„ã‚Šç›´ã— ";
                 Text[ chinese_traditional ] = "æ¢å¾© ";
@@ -523,7 +523,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Restaura  ";
-                Text[ finnish ] = "Toista ";
+                Text[ finnish ] = "Toista";
                 Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
             };
             ToolBoxItem
@@ -546,7 +546,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text [ portuguese ] = "Activo" ;
                 Text [ portuguese_brazilian ] = "Aktiv" ;
                 Text[ chinese_simplified ] = "ä½¿ç”¨ä¸­";
-                Text[ russian ] = "Â àêòèâíîì ğåæèìå";
+                Text[ russian ] = "Àêòèâíûé";
                 Text[ polish ] = "Aktywny";
                 Text[ japanese ] = "ã‚¢ã‚¯ãƒ†ã‚£ãƒ–";
                 Text[ chinese_traditional ] = "ä½¿ç”¨ä¸­";
@@ -585,7 +585,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Makro...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Macro...";
-                Text[ finnish ] = "Makro...";
+                Text[ finnish ] = "Makrot...";
                 Text[ thai ] = "à¸¡à¸²à¹‚à¸„à¸£...";
             };
             ToolBoxItem
@@ -614,7 +614,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 Text[ turkish ] = "Özellikler...";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Propietats...";
-                Text[ finnish ] = "Ominaisuudet";
+                Text[ finnish ] = "Ominaisuudet...";
                 Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
             };
         };
@@ -684,7 +684,7 @@ ModelessDialog RID_SVXDLG_IMAP
         Text [ french ] = "Texte :" ;
         Text [ dutch ] = "Tekst:" ;
         Text [ swedish ] = "Text:" ;
-        Text [ danish ] = "Tekst:" ;
+        Text [ danish ] = "T~ekst:" ;
         Text [ portuguese_brazilian ] = "Text:" ;
         Text [ portuguese ] = "Texto:" ;
         Text[ chinese_simplified ] = "æ–‡å­—ï¼š";
@@ -872,7 +872,7 @@ Menu RID_SVXMN_IMAP
             Text [ portuguese_brazilian ] = "~Aktiv" ;
             Text [ portuguese ] = "~Activo" ;
             Text[ chinese_simplified ] = "ä½¿ç”¨";
-            Text[ russian ] = "Â àêòèâíîì ğåæèìå";
+            Text[ russian ] = "Àêòèâíûé";
             Text[ polish ] = "Aktywny";
             Text[ japanese ] = "ã‚¢ã‚¯ãƒ†ã‚£ãƒ–";
             Text[ chinese_traditional ] = "å•Ÿå‹•";
@@ -922,11 +922,11 @@ Menu RID_SVXMN_IMAP
                         Text [ danish ] = "~Placer forrest" ;
                         Text [ french ] = "Tout à l'~avant" ;
                         Text [ swedish ] = "Längst ~fram" ;
-                        Text [ dutch ] = "Helemaal ~vooraan" ;
+                        Text [ dutch ] = "~Vooraan" ;
                         Text [ spanish ] = "Traer al ~frente" ;
                         Text [ english_us ] = "Bring to Front" ;
                         Text[ chinese_simplified ] = "ç§»åŠ¨åˆ°æœ€ä¸Šé¢";
-                        Text[ russian ] = "Íà ~ïåğåäíèé ïëàí";
+                        Text[ russian ] = "Âûíåñòè íà ~ïåğåäíèé ïëàí";
                         Text[ polish ] = "~Wysuñ na wierzch";
                         Text[ japanese ] = "æœ€å‰é¢ã¸ç§»å‹•";
                         Text[ chinese_traditional ] = "ç§»å‹•åˆ°æœ€ä¸Šé¢";
@@ -1005,11 +1005,11 @@ Menu RID_SVXMN_IMAP
                         Text [ italian ] = "Porta in fondo" ;
                         Text [ portuguese_brazilian ] = "Enviar para o ?ltimo ~Plano" ;
                         Text [ portuguese ] = "Enviar para ~trás" ;
-                        Text [ finnish ] = "~Vie taakse" ;
+                        Text [ finnish ] = "Vie ~taakse" ;
                         Text [ danish ] = "Placer ~bagest" ;
                         Text [ french ] = "Tout à l'a~rrière" ;
                         Text [ swedish ] = "Längst ~bak" ;
-                        Text [ dutch ] = "Helemaal~achteraan" ;
+                        Text [ dutch ] = "~Achteraan" ;
                         Text [ spanish ] = "Enviar al ~fondo" ;
                         Text [ english_us ] = "~Send to Back" ;
                         Text[ chinese_simplified ] = "ç§»åˆ°åº•å±‚(~S)";
@@ -1028,7 +1028,7 @@ Menu RID_SVXMN_IMAP
                 };
             };
             Text[ chinese_simplified ] = "æ’åº";
-            Text[ russian ] = "Ğàñïîëîæåíèå";
+            Text[ russian ] = "Ğàñïîëîæèòü";
             Text[ polish ] = "Rozmieszczenie";
             Text[ japanese ] = "æ•´åˆ—";
             Text[ chinese_traditional ] = "æ’åº";
@@ -1055,7 +1055,7 @@ Menu RID_SVXMN_IMAP
             Text [ italian ] = "Seleziona tutto" ;
             Text [ portuguese_brazilian ] = "Selecionar Tudo" ;
             Text [ portuguese ] = "Seleccionar t~udo" ;
-            Text [ finnish ] = "Valitse ~kaikki" ;
+            Text [ finnish ] = "~Valitse kaikki" ;
             Text [ danish ] = "Marker alt" ;
             Text [ french ] = "S~électionner tout" ;
             Text [ swedish ] = "~Välj ut allt" ;
@@ -1142,7 +1142,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text [ portuguese_brazilian ] = "Alternativtext:" ;
         Text [ portuguese ] = "Te~xto facultativo" ;
         Text[ chinese_simplified ] = "æ›¿ä»£æ–‡å­—(~T)";
-        Text[ russian ] = "Àëüòåğíàòèâíûé òåêñò";
+        Text[ russian ] = "Âàğèàíò òåêñòà";
         Text[ polish ] = "Tekst opcjonalny:";
         Text[ japanese ] = "ä»£ç”¨ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
         Text[ chinese_traditional ] = "æ›¿ä»£æ–‡å­—(~T)";
@@ -1341,7 +1341,7 @@ String STR_IMAPDLG_SAVE
     Text [ English ] = "The ImageMap has been modified.\nDo you want to save your changes?" ;
     Text[ english_us ] = "The ImageMap has been modified.\nDo you want to save the changes?";
     Text[ chinese_simplified ] = "å›¾åƒæ˜ å°„å·²ç»è¢«æ”¹åŠ¨ã€‚\næ‚¨è¦å­˜ç›˜æ›´æ”¹å—ï¼Ÿ";
-    Text[ russian ] = "Image Map èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
+    Text[ russian ] = "Ñåíñîğíîå èçîáğàæåíèå èçìåíåíî.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
     Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒãƒƒãƒ—ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "å½±åƒæ˜ å°„å·²ç¶“è¢«è®Šæ›´ã€‚\næ‚¨è¦å„²å­˜è®Šæ›´ï¼Ÿ";
@@ -1349,7 +1349,7 @@ String STR_IMAPDLG_SAVE
     Text [ italian ] = "L'ImageMap è stata cambiata.\nSalvare le modifiche?" ;
     Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar los cambios?" ;
     Text [ french ] = "L'Image Map a été modifiée.\nEnregistrer les modifications?" ;
-    Text [ dutch ] = "De ImageMap werd gewijzigd.\nWilt u de wijzigingen opslaan?" ;
+    Text [ dutch ] = "De ImageMap is gewijzigd.\nWilt u de wijzigingen opslaan?" ;
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die nderungen gespeichert werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die nderungen gespeichert werden? */
     Text = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
@@ -1362,7 +1362,7 @@ String STR_IMAPDLG_SAVE
     Text[ turkish ] = "Resim eşlem değiştirildi.\nDeğişiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha modificat el mapa d'imatge.\nVoleu desar-ne els canvis?";
-    Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
+    Text[ finnish ] = "Kuvakarttaa on muutettu.\nTallennetaanko muutokset?";
     Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸ à¸²à¸à¹à¸œà¸™à¸—à¸µà¹ˆà¹à¸¥à¹‰à¸§\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_IMAPDLG_MODIFY
@@ -1377,11 +1377,11 @@ String STR_IMAPDLG_MODIFY
     Text [ italian ] = "La ImageMap è stata cambiata.\nAccettare le modifiche?" ;
     Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?" ;
     Text [ french ] = "L'Image Map a été modifiée.\nAppliquer les modifications ?" ;
-    Text [ dutch ] = "De ImageMap werd gewijzigd.\nWilt u de wijzigingen overnemen?" ;
+    Text [ dutch ] = "De ImageMap is gewijzigd.\nWilt u de wijzigingen overnemen?" ;
     Text [ portuguese_brazilian ] = "Die ImageMap wurde ge?ndert.\nSollen die ?nderungen ?ernommen werden?" ;
     Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja aplicar as modificações?" ;
     Text[ chinese_simplified ] = "å›¾åƒæ˜ å°„å·²ç»è¢«æ”¹åŠ¨ã€‚\næ‚¨è¦æ¥å—æ›´æ”¹å—ï¼Ÿ";
-    Text[ russian ] = "Image Map èçìåíåí.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
+    Text[ russian ] = "Ñåíñîğíîå èçîáğàæåíèå èçìåíåíî.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
     Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
     Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸ãƒãƒƒãƒ—ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "å½±åƒæ˜ å°„å·²ç¶“è¢«è®Šæ›´ã€‚\næ‚¨è¦æ¥å—è®Šæ›´ï¹–";
@@ -1391,7 +1391,7 @@ String STR_IMAPDLG_MODIFY
     Text[ turkish ] = "Resim eşlem değiştirildi.\nDeğişiklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "S'ha modificat el mapa d'imatge.\nVoleu desar-ne els canvis?";
-    Text[ finnish ] = "Kuvakarttaa on muokattu.\nTallennetaanko muutokset?";
+    Text[ finnish ] = "Kuvakarttaa on muutettu.\nTallennetaanko muutokset?";
     Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸ à¸²à¸à¹à¸œà¸™à¸—à¸µà¹ˆà¹à¸¥à¹‰à¸§\nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 /******************************************************************************/
