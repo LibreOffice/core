@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-27 10:12:41 $
+ *  last change: $Author: mfe $ $Date: 2001-01-19 16:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,6 +1263,22 @@ void OAcceptorSocket::close()
 {
     if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
+        rtl::OUString Buffer;
+        Buffer = rtl::OUString::createFromAscii("127.0.0.1");
+        OInetSocketAddr aAddr(Buffer, getLocalPort());
+        OConnectorSocket aConnSocket;
+
+        if ((oslSocketAddr)aAddr != NULL)
+        {
+            // mfe : connect to self to wake up
+            //       on Linux with pthreads accept won't
+            //       return if the accept socket is closed
+            //       we are doing the hard way
+            if (aConnSocket.connect(aAddr) == ISocketTypes::TResult_Ok)
+            {
+            }
+        }
+
         // shutdown() needed only on some systems to unblock accept
         osl_shutdownSocket((*m_pSockRef)(), osl_Socket_DirReadWrite);
         osl_destroySocket((*m_pSockRef)());
@@ -1296,16 +1312,23 @@ OSocket::TResult OAcceptorSocket::acceptConnection(OStreamSocket& connection)
         return TResult_TimedOut;
 
     VOS_ASSERT(m_pSockRef && (*m_pSockRef)());
+    OStreamSocket aSocket;
 
     if ( m_pSockRef && (*m_pSockRef)() )
     {
-        connection= osl_acceptConnectionOnSocket((*m_pSockRef)(), 0);
+        aSocket = osl_acceptConnectionOnSocket((*m_pSockRef)(), 0);
     }
 
-    if(connection.isValid())
+    if( aSocket.isValid() )
+    {
+        connection = aSocket;
         return TResult_Ok;
+    }
     else
+    {
         return TResult_Error;
+    }
+
 }
 
 /*****************************************************************************/
