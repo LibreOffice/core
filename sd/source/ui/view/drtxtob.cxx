@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: aw $ $Date: 2002-01-07 12:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,10 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
                     List* pList = pOLV->CreateSelectionList();
                     Paragraph* pPara = (Paragraph*) pList->First();
 
-                    if ( pOutl->GetAbsPos(pPara) > 0 && pView->GetDoc()->GetSdPageCount( PK_STANDARD ) > 1 )
+                    // #96250# and #78665#
+                    // allow move up if position is 2 or greater OR it
+                    // is a title object (and thus depth==0)
+                    if(pOutl->GetAbsPos(pPara) > 1 || (1 == pOutl->GetAbsPos(pPara) && 0 == pOutl->GetDepth(1)))
                     {
                         // Nicht ganz oben
                         bDisableUp = FALSE;
