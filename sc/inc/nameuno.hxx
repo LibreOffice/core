@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nameuno.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 18:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,6 @@
 #include "global.hxx"   // ScRange
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGE_HPP_
-#include <com/sun/star/sheet/XSheetCellRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XFORMULAQUERY_HPP_
-#include <com/sun/star/sheet/XFormulaQuery.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
 #include <com/sun/star/sheet/XLabelRange.hpp>
 #endif
@@ -85,35 +79,14 @@
 #ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XUSEDAREACURSOR_HPP_
-#include <com/sun/star/sheet/XUsedAreaCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETOPERATION_HPP_
-#include <com/sun/star/sheet/XSheetOperation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XFILLACROSSSHEET_HPP_
-#include <com/sun/star/sheet/XFillAcrossSheet.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGES_HPP_
-#include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLCURSOR_HPP_
-#include <com/sun/star/sheet/XSheetCellCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLFORMATRANGESSUPPLIER_HPP_
-#include <com/sun/star/sheet/XCellFormatRangesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
-#include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
