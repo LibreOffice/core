@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-29 16:41:49 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:13:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=tcv
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+TARGET = typeconverter.uno
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = tcv
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ SHL1STDLIBS= \
         $(SALLIB)
 
 SHL1DEPN=
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = tcv.map
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
