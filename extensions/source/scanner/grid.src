@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:45:57 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ ModalDialog GRID_DIALOG
         Text[ czech ] = "Nastavit";
         Text[ hebrew ] = "Setzen";
         Text[ hindi ] = "सेट्ट करो";
+        Text[ slovak ] = "Nastaviť";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -150,6 +151,7 @@ ModalDialog GRID_DIALOG
         Text[ czech ] = "Lineárně stoupající";
         Text[ hebrew ] = "Linear steigend";
         Text[ hindi ] = "संकुचित आरोहण क्रम";
+        Text[ slovak ] = "Lineárne stúpajúci";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
@@ -179,6 +181,7 @@ ModalDialog GRID_DIALOG
         Text[ czech ] = "Lineárně klesající";
         Text[ hebrew ] = "Linear fallend";
         Text[ hindi ] = "संकुचित अवरोहण";
+        Text[ slovak ] = "Lineárne klesajúci";
     };
     String RESET_TYPE_RESET
     {
@@ -208,6 +211,7 @@ ModalDialog GRID_DIALOG
         Text[ czech ] = "Původní hodnoty";
         Text[ hebrew ] = "Originalwerte";
         Text[ hindi ] = "यथार्थ मूल्य";
+        Text[ slovak ] = "Pôvodné hodnoty";
     };
     String RESET_TYPE_EXPONENTIAL
     {
@@ -237,8 +241,11 @@ ModalDialog GRID_DIALOG
         Text[ czech ] = "Exponenciálně rostoucí";
         Text[ hebrew ] = "Exponentiell wachsend";
         Text[ hindi ] = "ऐक्स्पोनेश्यल प्रकार से बढना";
+        Text[ slovak ] = "Exponenciálne rastúci";
     };
 };
+
+
 
 
 
