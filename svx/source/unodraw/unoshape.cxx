@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:27:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1651,11 +1651,11 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             sal_Int32 nNewOrdNum;
             if(rVal >>= nNewOrdNum)
             {
-                SdrPage * pPage = pObj->GetPage();
-                if( pPage )
+                SdrObjList* pObjList = pObj->GetObjList();
+                if( pObjList )
                 {
                     SdrObject* pCheck =
-                        pPage->SetObjectOrdNum( pObj->GetOrdNum(), (ULONG)nNewOrdNum );
+                        pObjList->SetObjectOrdNum( pObj->GetOrdNum(), (ULONG)nNewOrdNum );
                     DBG_ASSERT( pCheck == pObj, "GetOrdNum() failed!" );
                     return;
                 }
