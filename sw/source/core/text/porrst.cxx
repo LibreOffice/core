@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:50:16 $
+ *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,14 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     return sal_True;
 }
 
+#ifdef VERTICAL_LAYOUT
+SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
+                              sal_Bool bBG, sal_Bool bGK ) :
+    nKern( nKrn ), bBackground( bBG ), bGridKern( bGK )
+#else
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG ) :
     nKern( nKrn ), bBackground( bBG )
+#endif
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
@@ -278,13 +284,13 @@ SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn, sal_Bool bBG 
 }
 
 #ifdef VERTICAL_LAYOUT
-SwKernPortion::SwKernPortion( const SwLinePortion& rPortion )
+SwKernPortion::SwKernPortion( const SwLinePortion& rPortion ) :
+    nKern( 0 ), bBackground( sal_False ), bGridKern( sal_True )
 {
     Height( rPortion.Height() );
     SetAscent( rPortion.GetAscent() );
 
     nLineLength = 0;
-    bBackground = sal_False;
     SetWhichPor( POR_KERN );
 }
 #endif
@@ -319,6 +325,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
 void SwKernPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
+#ifdef VERTICAL_LAYOUT
+    if ( bGridKern )
+        return;
+#endif
+
     if( rInf.GetLast() == this )
         rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
     if( nKern < 0 )

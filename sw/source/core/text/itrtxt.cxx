@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:47:34 $
+ *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,16 +166,18 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
     USHORT nGridHeight = pFrm->GetGridDist( sal_False );
     if ( nGridHeight )
     {
-        USHORT i = 1;
+        long i = 100;
 
         const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
         if ( pSpace && SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
-            i = pSpace->GetPropLineSpace() / 100;
+            i = pSpace->GetPropLineSpace();
 
-        while ( nLineHeight > i * nGridHeight )
-            ++i;
+        long nTmpLineHeight = 100 * nLineHeight;
 
-        USHORT nTmpHeight = i * nGridHeight;
+        while ( nTmpLineHeight > i * nGridHeight )
+            i += 100;
+
+        USHORT nTmpHeight = i * nGridHeight / 100;
 
         pCurr->SetLineDescent( ( nTmpHeight - pCurr->Height() ) / 2 );
         pCurr->SetRealHeight( nTmpHeight );

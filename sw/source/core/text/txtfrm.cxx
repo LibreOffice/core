@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:55:21 $
+ *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     return aTmp.Y();
 }
 
-USHORT SwTxtFrm::GetGridDist( sal_Bool bRow ) const
+USHORT SwTxtFrm::GetGridDist( sal_Bool bInRow ) const
 {
 #ifndef GRID_MODE
     return 0;
@@ -344,7 +344,9 @@ USHORT SwTxtFrm::GetGridDist( sal_Bool bRow ) const
     SwPageDesc* pDesc = ((SwPageFrm*)pPageFrm)->FindPageDesc();
 
     if( pDesc )
-        return bRow ? pDesc->GetRegHeight() : pDesc->GetRegHeight();
+        return ( ( bInRow && ! IsVertical() ) || ( ! bInRow && IsVertical() ) ) ?
+                pDesc->GetRegHeight() :
+                pDesc->GetRegHeight();
 
     return 0;
 }

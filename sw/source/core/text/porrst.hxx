@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:50:52 $
+ *  last change: $Author: fme $ $Date: 2002-01-16 09:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,12 +111,28 @@ class SwKernPortion : public SwLinePortion
 {
     short nKern;
     sal_Bool bBackground;
-public:
-    SwKernPortion( SwLinePortion &rPortion, short nKrn,
-                   sal_Bool bBG = sal_False );
 
 #ifdef VERTICAL_LAYOUT
+    sal_Bool bGridKern;
+#endif
+
+public:
+
+#ifdef VERTICAL_LAYOUT
+    // This constructor automatically appends the portion to rPortion
+    // bBG indicates, that the background of the kerning portion has to
+    // be painted, e.g., if the portion if positioned between to fields.
+    // bGridKern indicates, that the kerning portion is used to provide
+    // additional space in grid mode.
+    SwKernPortion( SwLinePortion &rPortion, short nKrn,
+                   sal_Bool bBG = sal_False, sal_Bool bGridKern = sal_False );
+
+    // This constructor only sets the height and ascent to the values
+    // of rPortion. It is only used for kerning portions for grid mode
     SwKernPortion( const SwLinePortion &rPortion );
+#else
+    SwKernPortion( SwLinePortion &rPortion, short nKrn,
+                   sal_Bool bBG = sal_False );
 #endif
 
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
