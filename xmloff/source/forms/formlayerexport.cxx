@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:02:38 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 07:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,12 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OFormLayerXMLExport::exportAutoStyles()
+    {
+        m_pImpl->exportAutoStyles();
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLExport::excludeFromExport( const Reference< XControlModel > _rxControl )
     {
         m_pImpl->excludeFromExport( _rxControl );
@@ -220,6 +226,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/09/25 12:02:38  fs
+ *  #103597# +excludeFromExport
+ *
  *  Revision 1.11  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *
