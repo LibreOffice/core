@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 12:03:05 $
+ *  last change: $Author: ok $ $Date: 2001-09-14 10:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVTDEMO_HXX //autogen
-#include <svtools/svtdemo.hxx>
 #endif
 #ifndef _PVER_HXX //autogen
 #include <svtools/pver.hxx>
@@ -182,7 +179,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // ggf. Spezial Version
     String aStr = aVersionText.GetText();
     String aMinor;
-    USHORT nDemo = SvDemo::GetDemoKind( Application::GetAppName() );
     USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
     String aVersion( String::CreateFromInt32( nProductVersion / 10 ) );
     aVersion += 0x002E ; // 2Eh ^= '.'

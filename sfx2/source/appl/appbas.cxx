@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-10 11:26:05 $
+ *  last change: $Author: ok $ $Date: 2001-09-14 10:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _SVTDEMO_HXX //autogen
-#include <svtools/svtdemo.hxx>
 #endif
 #ifndef _REGCODE_HXX
 //#include <tools/regcode.hxx>
@@ -1020,22 +1017,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             PlayMacro_Impl( rReq, GetBasic() );
             break;
 
-        case SID_OFFICE_PALK:
-        {
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
-            if ( pStringItem )
-            {
-                String aPALK = pStringItem->GetValue();
-                sal_Bool bCheck = SvDemo::CheckPALK(aPALK, String());
-                rReq.SetReturnValue(SfxBoolItem(nSID, bCheck ));
-                if( aPALK.Len() && bCheck )
-                    SvDemo::SetAuthorizedState(Application::GetAppName(), aPALK );
-            }
-            else
-                SbxBase::SetError( SbxERR_WRONG_ARGS );
-            break;
-        }
-
 #if SUPD<613//MUSTINI
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
@@ -1287,19 +1268,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 sVersionString += Application::IsRemoteServer() ? '1' : '0';
                 rSet.Put(SfxStringItem(nSID, sVersionString));
 
-            }
-            break;
-
-            case  SID_OFFICE_PLK:
-            {
-                String sPLK(SvDemo::GetPLK());
-                rSet.Put(SfxStringItem(nSID, sPLK));
-            }
-            break;
-
-            case SID_OLD_PALK:
-            {
-                rSet.Put(SfxStringItem(nSID, SvDemo::GetOldPALK()));
             }
             break;
 
