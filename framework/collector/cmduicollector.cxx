@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 13:36:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,10 @@ const unsigned short TOOLBAR_BRW_QUERYDESIGN_TOOLBOX    = 19203;
 const unsigned short TOOLBAR_BRW_REALTIONDESIGN_TOOLBOX = 19204;
 const unsigned short TOOLBAR_fontworkobjectbar          = 10987;
 const unsigned short TOOLBAR_extrusionobjectbar         = 10986;
+const unsigned short TOOLBAR_writerviewerbar            = 23310;
+const unsigned short TOOLBAR_calcviewerbar              = 25000;
+const unsigned short TOOLBAR_impressviewerbar           = 23023;
+const unsigned short TOOLBAR_drawviewerbar              = 23024;
 
 // Sub-Toolbars
 const unsigned short RID_LIB_START                      = 10000;
@@ -452,6 +456,10 @@ ResourceToModule TBResourceModule_Mapping[] =
 //    { TOOLBAR_QRY_TOOLBOX_SQL               ,"dbquerysqlbar",               MODULE_DBACCESS      , false        },
     { TOOLBAR_BRW_QUERYDESIGN_TOOLBOX       ,"dbquerydesignbar",            MODULE_DBACCESS      , false        },
     { TOOLBAR_BRW_REALTIONDESIGN_TOOLBOX    ,"dbrelationbrowsebar",         MODULE_DBACCESS      , false        },
+    { TOOLBAR_writerviewerbar               ,"writerviewerbar",             MODULE_WRITER        , false        },
+    { TOOLBAR_calcviewerbar                 ,"calcviewerbar",               MODULE_CALC          , false        },
+    { TOOLBAR_impressviewerbar              ,"impressviewerbar",            MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawviewerbar                 ,"drawviewerbar",               MODULE_DRAWIMPRESS   , false        },
     { 0                                     ,"",                            MODULE_GLOBAL        , false        }
 };
 
