@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2001-02-08 15:12:41 $
+#   last change: $Author: ganaya $ $Date: 2001-02-22 03:49:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,11 @@ SLOFILES =  \
         $(SLO)$/newhelp.obj \
         $(SLO)$/helpinterceptor.obj
 
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbappl.obj
+.ENDIF
+
 EXCEPTIONSFILES=\
         $(SLO)$/appmain.obj		\
         $(SLO)$/appmisc.obj		\
@@ -141,7 +146,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/rmacceptor.obj	\
         $(SLO)$/appcfg.obj		\
         $(SLO)$/helpinterceptor.obj \
-        $(SLO)$/newhelp.obj
+        $(SLO)$/newhelp.obj \
 
 .IF "$(GUI)" == "MAC"
 SLOFILES +=\
