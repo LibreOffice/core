@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-06 17:57:12 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 09:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 /* PLEASE DON'T DELETE ANY COMMENT LINES, ALSO IT'S UNNECESSARY. */
 
 #include "cmtree.hxx"
