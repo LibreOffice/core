@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 14:41:07 $
+ *  last change: $Author: os $ $Date: 2001-10-31 12:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,3 +879,28 @@
 #define HID_BUSINESS_FMT_PAGE_SHEET             (HID_BASE + 2154 )
 #define HID_BUSINESS_FMT_PAGE_BRAND             (HID_BASE + 2155 )
 #define HID_BUSINESS_FMT_PAGE_TYPE              (HID_BASE + 2156 )
+#define HID_SEND_MASTER_DIALOG                      (HID_BASE + 2157 )
+#define HID_SEND_MASTER_CTRL_PUSHBUTTON_OK          (HID_BASE + 2158 )
+#define HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL      (HID_BASE + 2159 )
+#define HID_SEND_MASTER_CTRL_LISTBOX_FILTER         (HID_BASE + 2160 )
+#define HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW       (HID_BASE + 2161 )
+#define HID_SEND_MASTER_CTRL_EDIT_FILEURL           (HID_BASE + 2162 )
+#define HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION (HID_BASE + 2163 )
+#define HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE       (HID_BASE + 2164 )
+#define HID_SEND_MASTER_CTRL_DUMMY                  (HID_BASE + 2165 )
+
+#define HID_SEND_HTML_DIALOG                        (HID_BASE + 2166 )
+#define HID_SEND_HTML_CTRL_PUSHBUTTON_OK            (HID_BASE + 2167 )
+#define HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL        (HID_BASE + 2168 )
+#define HID_SEND_HTML_CTRL_LISTBOX_FILTER           (HID_BASE + 2169 )
+#define HID_SEND_HTML_CTRL_CONTROL_FILEVIEW         (HID_BASE + 2170 )
+#define HID_SEND_HTML_CTRL_EDIT_FILEURL             (HID_BASE + 2171 )
+#define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   (HID_BASE + 2172 )
+#define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         (HID_BASE + 2173 )
+#define HID_SEND_HTML_CTRL_DUMMY                    (HID_BASE + 2174 )
+
+
+
+
+
+

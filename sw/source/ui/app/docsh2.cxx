@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-10 16:09:29 $
+ *  last change: $Author: os $ $Date: 2001-10-31 12:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,6 +293,10 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#endif
+
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
@@ -1228,17 +1232,40 @@ void SwDocShell::Execute(SfxRequest& rReq)
         case FN_NEW_GLOBAL_DOC:
             {
                 bDone = FALSE;
+                BOOL bCreateHtml = FN_NEW_HTML_DOC == nWhich;
                 String aFileName, sTemplateName;
 
                 const SwTxtFmtColl* pSplitColl = 0;
 
                 FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
+                //set HelpIds
+                const sal_Int16 nControlIds[] = {
+                    CommonFilePickerElementIds::PUSHBUTTON_OK,
+                    CommonFilePickerElementIds::PUSHBUTTON_CANCEL,
+                    CommonFilePickerElementIds::LISTBOX_FILTER,
+                    CommonFilePickerElementIds::CONTROL_FILEVIEW,
+                    CommonFilePickerElementIds::EDIT_FILEURL,
+                    ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION,
+                    ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                    0
+                };
+                sal_Int32 nHelpIds[8];
+                sal_Int32 nStartHelpId =
+                    bCreateHtml ?
+                        HID_SEND_HTML_CTRL_PUSHBUTTON_OK : HID_SEND_MASTER_CTRL_PUSHBUTTON_OK ;
+                for(int nHelp = 0; nHelp < 7; nHelp++)
+                    nHelpIds[nHelp] = nStartHelpId++;
+                nHelpIds[7] = 0;
+
+                aDlgHelper.SetControlHelpIds( nControlIds, nHelpIds );
+                aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
+
                 Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                 const SfxFilter* pFlt;
                 USHORT nStrId;
 
-                if( FN_NEW_HTML_DOC == nWhich )
+                if( bCreateHtml )
                 {
                     // fuer HTML gibts es nur einen Filter!!
                     pFlt = SwIoSystem::GetFilterOfFormat(
@@ -1329,7 +1356,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( aFileName.Len() )
                 {
                     if( PrepareClose( FALSE ) &&
-                        ( FN_NEW_HTML_DOC == nWhich
+                        ( bCreateHtml
                             ? pWrtShell->GenerateHTMLDoc( aFileName, pSplitColl )
                             : pWrtShell->GenerateGlobalDoc( aFileName, pSplitColl )) )
                     {

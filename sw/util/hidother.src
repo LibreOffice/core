@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 14:41:07 $
+ *  last change: $Author: os $ $Date: 2001-10-31 12:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,22 @@ hidspecial HID_BUSINESS_FMT_PAGE_SHEET   { HelpId = HID_BUSINESS_FMT_PAGE_SHEET 
 hidspecial HID_BUSINESS_FMT_PAGE_BRAND   { HelpId = HID_BUSINESS_FMT_PAGE_BRAND ;};
 hidspecial HID_BUSINESS_FMT_PAGE_TYPE    { HelpId = HID_BUSINESS_FMT_PAGE_TYPE  ;};
 
+hidspecial HID_SEND_MASTER_DIALOG                          { HelpId = HID_SEND_MASTER_DIALOG                      ;};
+hidspecial HID_SEND_MASTER_CTRL_PUSHBUTTON_OK              { HelpId = HID_SEND_MASTER_CTRL_PUSHBUTTON_OK          ;};
+hidspecial HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL          { HelpId = HID_SEND_MASTER_CTRL_PUSHBUTTON_CANCEL      ;};
+hidspecial HID_SEND_MASTER_CTRL_LISTBOX_FILTER             { HelpId = HID_SEND_MASTER_CTRL_LISTBOX_FILTER         ;};
+hidspecial HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW           { HelpId = HID_SEND_MASTER_CTRL_CONTROL_FILEVIEW       ;};
+hidspecial HID_SEND_MASTER_CTRL_EDIT_FILEURL               { HelpId = HID_SEND_MASTER_CTRL_EDIT_FILEURL           ;};
+hidspecial HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION     { HelpId = HID_SEND_MASTER_CTRL_CHECKBOX_AUTOEXTENSION ;};
+hidspecial HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE           { HelpId = HID_SEND_MASTER_CTRL_LISTBOX_TEMPLATE       ;};
+hidspecial HID_SEND_HTML_DIALOG                            { HelpId = HID_SEND_HTML_DIALOG                        ;};
+hidspecial HID_SEND_HTML_CTRL_PUSHBUTTON_OK                { HelpId = HID_SEND_HTML_CTRL_PUSHBUTTON_OK            ;};
+hidspecial HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL            { HelpId = HID_SEND_HTML_CTRL_PUSHBUTTON_CANCEL        ;};
+hidspecial HID_SEND_HTML_CTRL_LISTBOX_FILTER               { HelpId = HID_SEND_HTML_CTRL_LISTBOX_FILTER           ;};
+hidspecial HID_SEND_HTML_CTRL_CONTROL_FILEVIEW             { HelpId = HID_SEND_HTML_CTRL_CONTROL_FILEVIEW         ;};
+hidspecial HID_SEND_HTML_CTRL_EDIT_FILEURL                 { HelpId = HID_SEND_HTML_CTRL_EDIT_FILEURL             ;};
+hidspecial HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION       { HelpId = HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   ;};
+hidspecial HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE             { HelpId = HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         ;};
 
 
 
