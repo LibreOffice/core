@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_file2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:07:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ class PE_File : public UnoIDL_PE,
 {
   public:
                         PE_File(
-                            TokenDistributor &  i_rTokenAdmin );
+                            TokenDistributor &  i_rTokenAdmin,
+                            const ParserInfo &  i_parseInfo );
     virtual void        EstablishContacts(
                             UnoIDL_PE *         io_pParentPE,
                             ary::n22::Repository &  io_rRepository,
@@ -144,6 +145,8 @@ class PE_File : public UnoIDL_PE,
     virtual UnoIDL_PE & MyPE();
     virtual const ary::idl::Module &
                         CurNamespace() const;
+    virtual const ParserInfo &
+                        ParseInfo() const;
     // DATA
     TokenDistributor *  pTokenAdmin;
     Dyn<PE_Service>     pPE_Service;
@@ -157,6 +160,7 @@ class PE_File : public UnoIDL_PE,
 
     const ary::idl::Module *
                         pCurNamespace;
+    const ParserInfo *  pParseInfo;
 
     E_State             eState;
     uintt               nBracketCount_inDefMode;
