@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:05 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,8 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::lang;
 
-    OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView,
-                                                 const Reference< XAccessible >& _xParent)
-        :OAccessibleBase(_pTableView,_xParent)
+    OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView)
+        :VCLXAccessibleComponent(_pTableView->GetComponentInterface().is() ? _pTableView->GetWindowPeer() : NULL)
         ,m_pTableView(_pTableView)
     {
     }
@@ -152,6 +151,19 @@ namespace dbaui
         return AccessibleRole::VIEW_PORT;
     }
     // -----------------------------------------------------------------------------
+    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return this;
+    }
+    // -----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
+    // XInterface
+    // -----------------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XINTERFACE2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
+    // -----------------------------------------------------------------------------
+    // XTypeProvider
+    // -----------------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XTYPEPROVIDER2( OJoinDesignViewAccess, VCLXAccessibleComponent, OJoinDesignViewAccess_BASE )
 }
 
 // -----------------------------------------------------------------------------
