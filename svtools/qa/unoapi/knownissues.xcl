@@ -1,14 +1,23 @@
+### #i27523 ###
+svtools.AccessibleIconChoiceCtrlEntry::com::sun::star::accessibility::XAccessibleText
+### #i30697 ###
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtendedComponent
+
+### #i30702 ###
+svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
 ### 108309 ###
 svtools.AccessibleBrowseBox::com::sun::star::accessibility::XAccessibleContext
 
-### 111645 ###
+### i26674 ###
 svtools.AccessibleIconChoiceCtrl::com::sun::star::accessibility::XAccessibleSelection
 
-### 111661 ###
+### i27523 ###
+svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleText
 svtools.AccessibleIconChoiceCtrlEntry::com::sun::star::accessibility::XAccessibleText
 
-### no bug id yet ###
-svtools.AccessibleTabBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
-svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleEventBroadcaster
-svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleSelection
-svtools.AccessibleTreeListBoxEntry::com::sun::star::accessibility::XAccessibleSelection
+### i30697 ###
+svtools.AccessibleTabBarPage::com::sun::star::accessibility::XAccessibleExtendedComponent
+
+### i30702 ###
+svtools.AccessibleTreeListBox::com::sun::star::accessibility::XAccessibleEventBroadcaster
