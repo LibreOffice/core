@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-15 11:23:59 $
+ *  last change: $Author: thb $ $Date: 2002-09-11 11:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,6 +838,14 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                     pViewShell->GetFrameView()->SetDrawMode( nOutputMode );
                     pViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
+                }
+
+                // #103100# Overwrite window color for OutlineView
+                if( pViewShell->ISA( SdOutlineViewShell ) )
+                {
+                    svx::ColorConfig aColorConfig;
+                    const Color aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+                    SetBackground( Wallpaper( aDocColor ) );
                 }
 
                 SfxRequest aReq( nPreviewSlot, 0, pViewShell->GetDocSh()->GetDoc()->GetItemPool() );
