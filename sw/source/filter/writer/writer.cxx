@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-23 16:19:39 $
+ *  last change: $Author: cmc $ $Date: 2002-04-08 12:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,7 @@ void Writer::CreateBookmarkTbl()
 
 
 // search alle Bookmarks in the range and return it in the Array
+// this is exclusive of bookmarks on the end point of the range
 USHORT Writer::GetBookmarks( const SwCntntNode& rNd, xub_StrLen nStt,
                              xub_StrLen nEnd, SvPtrarr& rArr )
 {
@@ -597,31 +598,23 @@ USHORT Writer::GetBookmarks( const SwCntntNode& rNd, xub_StrLen nStt,
     SvPtrarr* pArr = pImpl->pBkmkNodePos ? pImpl->pBkmkNodePos->Get( nNd ) : 0;
     if( pArr )
     {
-        // there exist some bookmarks, search now all which is in the range
-        if( !nStt && nEnd == rNd.Len() )
-            // all
-            rArr.Insert( pArr, 0 );
-        else
+        for( USHORT n = 0; n < pArr->Count(); ++n )
         {
-            USHORT n;
             xub_StrLen nCntnt;
-            for( n = 0; n < pArr->Count(); ++n )
+            void* p = (*pArr)[ n ];
+            const SwBookmark& rBkmk = *(SwBookmark*)p;
+            if( rBkmk.GetPos().nNode == nNd &&
+                (nCntnt = rBkmk.GetPos().nContent.GetIndex() ) >= nStt &&
+                nCntnt < nEnd )
             {
-                void* p = (*pArr)[ n ];
-                const SwBookmark& rBkmk = *(SwBookmark*)p;
-                if( rBkmk.GetPos().nNode == nNd &&
-                    (nCntnt = rBkmk.GetPos().nContent.GetIndex() ) >= nStt &&
+                rArr.Insert( p, rArr.Count() );
+            }
+            else if( rBkmk.GetOtherPos() && nNd ==
+                    rBkmk.GetOtherPos()->nNode.GetIndex() && (nCntnt =
+                    rBkmk.GetOtherPos()->nContent.GetIndex() ) >= nStt &&
                     nCntnt < nEnd )
-                {
-                    rArr.Insert( p, rArr.Count() );
-                }
-                else if( rBkmk.GetOtherPos() && nNd ==
-                        rBkmk.GetOtherPos()->nNode.GetIndex() && (nCntnt =
-                        rBkmk.GetOtherPos()->nContent.GetIndex() ) >= nStt &&
-                        nCntnt < nEnd )
-                {
-                    rArr.Insert( p, rArr.Count() );
-                }
+            {
+                rArr.Insert( p, rArr.Count() );
             }
         }
     }
