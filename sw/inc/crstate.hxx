@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 14:33:06 $
+ *  last change: $Author: fme $ $Date: 2002-02-27 17:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,48 @@ struct Sw2LinesPos
     BYTE nMultiType;        // Multiportion type
 };
 
+/**
+ *  SwSpecialPos. This structure is used to pass some additional information
+ *  during the call of SwTxtFrm::GetCharRect(). An SwSpecialPos defines a position
+ *  inside a portion which does not have a representation in the core string or
+ *  which is only represented by one position,  e.g., field portions,
+ *  number portions, ergo sum and quo vadis portions.
+ *
+ *  nCharOfst       - The offset inside the special portion. Fields and its
+ *                    follow fields are treated as one long special portion.
+ *  nLineOfst       - The number of lines between the beginning of the special
+ *                    portion and nCharOfst. A line offset required to be
+ *                    nCharOfst relative to the beginning of the line.
+ *  nExtendRange    - Setting this identifies portions which are in front or
+ *                    behind the core string (number portion, quo vadis)
+ *
+ *  Examples 1)
+ *
+ *      Get the position of the second character inside a number portion:
+ *          nCharOfst = 2; nLineOfst = 0; nExtendRange = SP_EXTEND_RANGE_BEFORE;
+ *          Call SwTxtFrm:::GetCharRect with core string position 0.
+ *
+ *  Example 2)
+ *
+ *      Field A - Length = 5
+ *      Follow field B - Length = 9
+ *      Get the position of the third character in follow field B, core position
+ *      of field A is 33.
+ *          nCharOfst = 7; nLineOfst = 0; nExtendRange = SP_EXTEND_RANGE_NONE;
+ *          Call SwTxtFrm:::GetCharRect with core string position 33.
+ */
+
+#define SP_EXTEND_RANGE_NONE    0
+#define SP_EXTEND_RANGE_BEFORE  1
+#define SP_EXTEND_RANGE_BEHIND  2
+
+struct SwSpecialPos
+{
+    xub_StrLen nCharOfst;
+    USHORT nLineOfst;
+    BYTE nExtendRange;
+};
+
 // CrsrTravelling-Staties (fuer GetCrsrOfst)
 enum CrsrMoveState
 {
@@ -126,6 +168,7 @@ struct SwCrsrMoveState
 {
     SwFillCrsrPos   *pFill;     // fuer das automatische Auffuellen mit Tabs etc.
     Sw2LinesPos     *p2Lines;   // for selections inside/around 2line portions
+    SwSpecialPos*   pSpecialPos; // for positions inside fields
     Point aRealHeight;          // enthaelt dann die Position/Hoehe des Cursors
     CrsrMoveState eState;
     BOOL bStop          :1;
@@ -145,6 +188,7 @@ struct SwCrsrMoveState
     SwCrsrMoveState( CrsrMoveState eSt = MV_NONE ) :
         pFill( NULL ),
         p2Lines( NULL ),
+        pSpecialPos( NULL ),
         eState( eSt ),
         bStop( FALSE ),
         bRealHeight( FALSE ),
@@ -159,6 +203,7 @@ struct SwCrsrMoveState
     {}
     SwCrsrMoveState( SwFillCrsrPos *pInitFill ) :
         pFill( pInitFill ),
+        pSpecialPos( NULL ),
         eState( MV_SETONLYTEXT ),
         bStop( FALSE ),
         bRealHeight( FALSE ),

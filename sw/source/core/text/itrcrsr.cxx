@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-15 14:46:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-27 17:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,84 @@
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
 
+extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
+                       const SwScriptInfo* pSI );
+
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
 sal_Bool SwTxtCursor::bRightMargin = sal_False;
+
+
+/*************************************************************************
+ *                    lcl_GetPositionInsideField
+ *
+ * After calculating the position of a character during GetCharRect
+ * this function allows to find the coordinates of a position (defined
+ * in pCMS->pSpecialPos) inside a special portion (e.g., a field)
+ *************************************************************************/
+void lcl_GetPositionInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
+                                 const SwCrsrMoveState& rCMS,
+                                 const SwLinePortion& rPor )
+{
+    ASSERT( rCMS.pSpecialPos, "Information about special pos missing" )
+
+    const USHORT nCharOfst = rCMS.pSpecialPos->nCharOfst;
+    USHORT nFldIdx = 0;
+    USHORT nFldLen = 0;
+
+    const XubString* pString = 0;
+    const SwLinePortion* pPor = &rPor;
+    do
+    {
+        if ( pPor->InFldGrp() )
+        {
+            pString = &((SwFldPortion*)pPor)->GetExp();
+            nFldLen = pString->Len();
+        }
+        else
+        {
+            pString = 0;
+            nFldLen = 0;
+        }
+
+        if ( ! pPor->GetPortion() || nFldIdx + nFldLen > nCharOfst )
+            break;
+
+        nFldIdx += nFldLen;
+        rOrig.Pos().X() += pPor->Width();
+        pPor = pPor->GetPortion();
+
+    } while ( TRUE );
+
+    ASSERT( nCharOfst >= nFldIdx, "Request of position inside field failed" )
+    USHORT nLen = nCharOfst - nFldIdx + 1;
+
+    if ( pString )
+    {
+        // get script for field portion
+        rInf.GetFont()->SetActual( WhichFont( 0, pString, 0 ) );
+
+        xub_StrLen nOldLen = pPor->GetLen();
+        ((SwLinePortion*)pPor)->SetLen( nLen - 1 );
+        const SwTwips nX1 = pPor->GetLen() ?
+                            pPor->GetTxtSize( rInf ).Width() :
+                            0;
+
+        SwTwips nX2 = 0;
+        if ( rCMS.bRealWidth )
+        {
+            ((SwLinePortion*)pPor)->SetLen( nLen );
+            nX2 = pPor->GetTxtSize( rInf ).Width();
+        }
+
+        ((SwLinePortion*)pPor)->SetLen( nOldLen );
+
+        rOrig.Pos().X() += nX1;
+        rOrig.Width( ( nX2 > nX1 ) ?
+                     ( nX2 - nX1 ) :
+                       1 );
+    }
+}
 
 /*************************************************************************
  *                SwTxtMargin::CtorInit()
@@ -366,6 +441,15 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
     const Point aCharPos;
     pOrig->Pos( aCharPos );
     pOrig->SSize( aCharSize );
+
+    // If we are looking for a position inside a field which covers
+    // more than one line we may not skip any "empty portions" at the
+    // beginning of a line
+    const sal_Bool bInsideFirstField = pCMS && pCMS->pSpecialPos &&
+                                       ( pCMS->pSpecialPos->nLineOfst ||
+                                         SP_EXTEND_RANGE_BEFORE ==
+                                         pCMS->pSpecialPos->nExtendRange );
+
     sal_Bool bWidth = pCMS && pCMS->bRealWidth;
     if( !pCurr->GetLen() && !pCurr->Width() )
     {
@@ -396,7 +480,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         // 8477: aber auch die einzige Textportion einer leeren Zeile mit
         // Right/Center-Adjustment! Also nicht nur pPor->GetExpandPortion() ...
 
-        while( pPor && !pPor->GetLen() )
+        while( pPor && !pPor->GetLen() && ! bInsideFirstField )
         {
             nX += pPor->Width();
             if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -538,6 +622,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             }
                             else if( ((SwMultiPortion*)pPor)->IsDouble() )
                                 pCMS->p2Lines->nMultiType = MT_TWOLINE;
+#ifdef BIDI
+                            else if( ((SwMultiPortion*)pPor)->IsBidi() )
+                                pCMS->p2Lines->nMultiType = MT_BIDI;
+#endif
                             else
                                 pCMS->p2Lines->nMultiType = MT_RUBY;
                             SwTwips nTmpWidth = pPor->Width();
@@ -693,7 +781,15 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         else
                         {
                             pOrig->Pos().Y() += aOldPos.Y();
+#ifdef BIDI
+                            if ( ((SwMultiPortion*)pPor)->IsBidi() )
+                                pOrig->Pos().X() = nX + pPor->Width() -
+                                                   pOrig->Pos().X();
+                            else
+                                pOrig->Pos().X() += nX;
+#else
                             pOrig->Pos().X() += nX;
+#endif
                             if( ((SwMultiPortion*)pPor)->HasBrackets() )
                                 pOrig->Pos().X() +=
                                     ((SwDoubleLinePortion*)pPor)->PreWidth();
@@ -771,9 +867,9 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 }
             }
             // 8513: Felder im Blocksatz, ueberspringen
-            while( pPor && !pPor->GetLen() && ( pPor->IsFlyPortion() ||
-                   pPor->IsKernPortion() ||
-                   ( !bEmptyFld && pPor->InFldGrp() ) ) )
+            while( pPor && !pPor->GetLen() && ! bInsideFirstField &&
+                   ( pPor->IsFlyPortion() || pPor->IsKernPortion() ||
+                     ( !bEmptyFld && pPor->InFldGrp() ) ) )
             {
                 if ( pPor->InSpaceGrp() && nSpaceAdd )
                     nX += pPor->PrtWidth() +
@@ -892,6 +988,14 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     }
                     pOrig->Width( nTmp );
                 }
+
+                // travel inside field portion?
+                if ( pCMS->pSpecialPos )
+                {
+                    // apply attributes to font
+                    Seek( nOfst );
+                    lcl_GetPositionInsideField( aInf, *pOrig, *pCMS, *pPor );
+                }
             }
         }
         pOrig->Pos().X() += nX;
@@ -925,13 +1029,35 @@ sal_Bool SwTxtCursor::GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 {
     CharCrsrToLine(nOfst);
 
+    // Indicates that a position inside a special portion (field, number portion)
+    // is requested.
+    const sal_Bool bSpecialPos = pCMS && pCMS->pSpecialPos;
+    xub_StrLen nFindOfst = nOfst;
+
+    if ( bSpecialPos )
+    {
+        xub_StrLen nLineOfst = pCMS->pSpecialPos->nLineOfst;
+        BYTE nExtendRange = pCMS->pSpecialPos->nExtendRange;
+
+        ASSERT( ! nLineOfst || SP_EXTEND_RANGE_BEFORE != nExtendRange,
+                "LineOffset AND Number Portion?" )
+
+        // portions which are behind the string
+        if ( SP_EXTEND_RANGE_BEHIND == nExtendRange )
+            ++nFindOfst;
+
+        // skip lines for fields which cover more than one line
+        for ( USHORT i = 0; i < pCMS->pSpecialPos->nLineOfst; i++ )
+            Next();
+    }
+
     // Adjustierung ggf. nachholen
     GetAdjusted();
 
     const Point aCharPos( GetTopLeft() );
     sal_Bool bRet = sal_True;
 
-    _GetCharRect( pOrig, nOfst, pCMS );
+    _GetCharRect( pOrig, nFindOfst, pCMS );
 
     const SwTwips nRight = Right() - 12;
 
@@ -1276,6 +1402,11 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nTmpY = 0;
                 nX = (KSHORT)nTmpY;
             }
+#ifdef BIDI
+            else if( ((SwMultiPortion*)pPor)->IsBidi() )
+                nX = pPor->Width() - nX;
+#endif
+
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
             {
                 USHORT nPreWidth = ((SwDoubleLinePortion*)pPor)->PreWidth();
