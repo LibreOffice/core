@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.8 $
+#*  $Revision: 1.9 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-03-26 13:40:06 $
+#*  last change: $Author: er $ $Date: 2002-03-28 03:05:06 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -93,14 +93,6 @@ LIB1DEPN=	$(MISC)$/$(LIB1TARGET).flt
 
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
-.IF "$(OS)"=="WNT"
-ICUI18NLIB= icuin.lib icuuc.lib
-.ELSE
-ICUI18NLIB= -licui18n -licuuc -licudata
-.IF "$(OS)"=="SOLARIS"
-ICUI18NLIB+= -lCstd
-.ENDIF
-.ENDIF
 
 SHL1STDLIBS=\
         $(TOOLSLIB)				\
