@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:32:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ english_us ] = "~Password" ;
         Text [ italian ] = "Password" ;
         Text [ spanish ] = "~Contraseña" ;
-        Text [ french ] = "Mot de ~passe" ;
+        Text [ french ] = "Mot de passe" ;
         Text [ dutch ] = "~Wachtwoord" ;
         Text [ swedish ] = "~Lösenord" ;
         Text [ danish ] = "Adgangskode" ;
@@ -118,14 +118,14 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ english_us ] = "Old password" ;
         Text [ italian ] = "Vecchia password" ;
         Text [ spanish ] = "Anterior" ;
-        Text [ french ] = "~Ancien" ;
+        Text [ french ] = "Ancien" ;
         Text [ dutch ] = "Oud" ;
         Text [ swedish ] = "Gammalt lösenord" ;
         Text [ danish ] = "Gammel" ;
         Text [ portuguese_brazilian ] = "Alt" ;
-        Text [ portuguese ] = "Antigo" ;
+        Text [ portuguese ] = "Antiga" ;
         Text[ chinese_simplified ] = "¾ÉÃÜÂë";
-        Text[ russian ] = "Ñòàğûé";
+        Text[ russian ] = "Ñòàğûé ïàğîëü";
         Text[ polish ] = "Stare has³o";
         Text[ japanese ] = "‹ŒÊß½Ü°ÄŞ";
         Text[ chinese_traditional ] = "ÂÂ±K½X";
@@ -146,7 +146,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ english_us ] = "Pa~ssword" ;
         Text [ italian ] = "Password" ;
         Text [ spanish ] = "Co~ntraseña" ;
-        Text [ french ] = "M~ot de passe" ;
+        Text [ french ] = "Mot de passe" ;
         Text [ dutch ] = "W~achtwoord" ;
         Text [ swedish ] = "Lös~enord" ;
         Text [ danish ] = "Adgangskode" ;
@@ -179,11 +179,11 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text = "~Bestätigen" ;
         Text [ English ] = "~Confirm" ;
         Text[ english_us ] = "Confi~rm";
-        Text[ portuguese ] = "~Refazer";
-        Text[ russian ] = "Ïîâòîğèòü";
+        Text[ portuguese ] = "~Confirmar";
+        Text[ russian ] = "Ïîäòâåğäèòü";
         Text[ greek ] = "ÅğáíÜëçøç";
         Text[ dutch ] = "~Herhalen";
-        Text[ french ] = "~Répéter";
+        Text[ french ] = "Confirmation";
         Text[ spanish ] = "~Repetir";
         Text[ finnish ] = "~Toista";
         Text[ italian ] = "Ripeti";
@@ -193,8 +193,8 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text[ portuguese_brazilian ] = "~Wiederholen";
         Text[ japanese ] = "Šm”F—pÊß½Ü°ÄŞ(~R)";
         Text[ korean ] = "½ÇÇà ¹İº¹(~R)";
-        Text[ chinese_simplified ] = "ÖØ¸´ÊäÈë";
-        Text[ chinese_traditional ] = "­«´_¿é¤J(~R)";
+        Text[ chinese_simplified ] = "È·ÈÏ(~R)";
+        Text[ chinese_traditional ] = "½T»{(~R)";
         Text[ turkish ] = "~Yinele";
         Text[ arabic ] = "ÅÚÇÏÉ";
         Text[ catalan ] = "~Repetir";
@@ -215,14 +215,14 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ english_us ] = "New password" ;
         Text [ italian ] = "Nuova password" ;
         Text [ spanish ] = "Nueva" ;
-        Text [ french ] = "Nou~veau" ;
+        Text [ french ] = "Nouveau" ;
         Text [ dutch ] = "Nieuw" ;
         Text [ swedish ] = "Nytt lösenord" ;
         Text [ danish ] = "Ny" ;
         Text [ portuguese_brazilian ] = "Neu" ;
-        Text [ portuguese ] = "Novo" ;
+        Text [ portuguese ] = "Nova" ;
         Text[ chinese_simplified ] = "ĞÂÃÜÂë";
-        Text[ russian ] = "Íîâûé";
+        Text[ russian ] = "Íîâûé ïàğîëü";
         Text[ polish ] = "Nowe has³o";
         Text[ japanese ] = "V‚µ‚¢Êß½Ü°ÄŞ";
         Text[ chinese_traditional ] = "·s±K½X";
@@ -285,7 +285,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ english_us ] = "Passwords do not match" ;
         Text [ italian ] = "Le password non sono uguali" ;
         Text [ spanish ] = "Las contraseñas no coinciden" ;
-        Text [ french ] = "Les mots de passe ne concordent pas" ;
+        Text [ french ] = "Les mots de passe ne concordent pas." ;
         Text [ swedish ] = "Lösenord stämmer inte överens" ;
         Text [ danish ] = "Adgangskode passer ikke" ;
         Text [ portuguese ] = "As senhas não combinam." ;
@@ -326,6 +326,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text[ finnish ] = "Muuta salasana";
 };
  // ********************************************************************** EOF
+
 
 
 
