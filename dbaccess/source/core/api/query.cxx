@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:42:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,12 @@
 #ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
 
 using namespace dbaccess;
 using namespace ::com::sun::star::uno;
@@ -125,54 +131,53 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
-using namespace ::utl;
-
-#define AGG_PROPERTY(handle, propname_out)  \
-    static_cast< ::comphelper::OPropertyArrayAggregationHelper* >(const_cast< OQuery* >(this)->getArrayHelper())->fillAggregatePropertyInfoByHandle(&propname_out, NULL, handle)
 
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
-    //=====================================================================
-    //= helper
-    //=====================================================================
-    struct TRelease : ::std::unary_function< OQuery::TNameColumnMap::value_type ,void>
-    {
-        inline void operator()(const OQuery::TNameColumnMap::value_type& _aType)
-        {
-            _aType.second->release();
-        }
-    };
-
 //==========================================================================
 //= OQuery
 //==========================================================================
 DBG_NAME(OQuery)
 //--------------------------------------------------------------------------
-OQuery::OQuery(const Reference< XPropertySet >& _rxCommandDefinition, const Reference< XConnection >& _rxConn)
-    :OConfigurationFlushable(m_aMutex)
-    ,OQueryDescriptor(_rxCommandDefinition)
+OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
+               ,const Reference< XConnection >& _rxConn
+               ,const Reference< XMultiServiceFactory >& _xORB)
+    :OQueryDescriptor_Base(m_aMutex,*this)
+    ,ODataSettings(m_aBHelper)
+    ,OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,m_bCaseSensitiv(sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_eDoingCurrently(NONE)
     ,m_xConnection(_rxConn)
     ,m_pWarnings( NULL )
+    ,m_pMediator(NULL)
 {
     DBG_CTOR(OQuery, NULL);
+    registerProperties();
+    ODataSettings::registerProperties(this);
 
+    osl_incrementInterlockedCount(&m_refCount);
     DBG_ASSERT(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
-    if (m_xCommandDefinition.is())
+    if ( m_xCommandDefinition.is() )
     {
+        try
+        {
+            ::comphelper::copyProperties(_rxCommandDefinition,this);
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "OQueryDescriptor_Base::OQueryDescriptor_Base: caught an exception!");
+        }
+
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
         //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
-
-        // TODO : be a listener on the configuration node which is responsible for my properties not belonging
-        // to the CommandDefinition
     }
     DBG_ASSERT(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
+    osl_decrementInterlockedCount(&m_refCount);
 }
 
 //--------------------------------------------------------------------------
@@ -180,38 +185,10 @@ OQuery::~OQuery()
 {
     DBG_DTOR(OQuery, NULL);
 }
-
-//--------------------------------------------------------------------------
-void SAL_CALL OQuery::acquire(  ) throw()
-{
-    OQueryDescriptor::acquire();
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL OQuery::release(  ) throw()
-{
-    OQueryDescriptor::release();
-}
-
-// XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OQuery::getTypes() throw (RuntimeException)
-{
-    return ::comphelper::concatSequences(OQueryDescriptor::getTypes(), OQuery_Base::getTypes(), OConfigurationFlushable::getTypes());
-}
-
-// XInterface
-//--------------------------------------------------------------------------
-Any SAL_CALL OQuery::queryInterface( const Type& _rType ) throw(RuntimeException)
-{
-    Any aReturn = OQuery_Base::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OQueryDescriptor::queryInterface(_rType);
-    if (!aReturn.hasValue())
-        aReturn = OConfigurationFlushable::queryInterface(_rType);
-    return aReturn;
-}
-
+// -----------------------------------------------------------------------------
+IMPLEMENT_IMPLEMENTATION_ID(OQuery);
+IMPLEMENT_GETTYPES3(OQuery,OQueryDescriptor_Base,ODataSettings,OContentHelper);
+IMPLEMENT_FORWARD_XINTERFACE3( OQuery,OContentHelper,OQueryDescriptor_Base,ODataSettings)
 //--------------------------------------------------------------------------
 void OQuery::implCollectColumns( )
 {
@@ -219,6 +196,19 @@ void OQuery::implCollectColumns( )
     {
         // empty the target container
         clearColumns( );
+        m_pMediator = NULL;
+        m_xColumnMediator = NULL;
+
+        Reference<XColumnsSupplier> xColSup(m_xCommandDefinition,UNO_QUERY);
+        if ( xColSup.is() )
+        {
+            Reference< XNameAccess > xColumnDefinitions = xColSup->getColumns();
+            if ( xColumnDefinitions.is() )
+            {
+                m_pMediator = new OContainerMediator(m_pColumns,xColumnDefinitions,sal_False);
+                m_xColumnMediator = m_pMediator;
+            }
+        }
 
         // fill the columns with columns from the statement
         Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
@@ -249,11 +239,16 @@ void OQuery::implCollectColumns( )
                 const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
                 for ( ;pBegin != pEnd; ++pBegin)
                 {
-                    Reference<XPropertySet> xSource;
-                    xColumns->getByName( *pBegin ) >>= xSource;
+                    Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
                     OTableColumn* pColumn = new OTableColumn( xSource );
+                    Reference<XChild> xChild(*pColumn,UNO_QUERY);
+                    if ( xChild.is() )
+                        xChild->setParent(*this);
 
                     implAppendColumn( *pBegin, pColumn );
+                    Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
+                    if ( m_pMediator )
+                        m_pMediator->notifyElementCreated(*pBegin,xDest);
                 }
             }
         }
@@ -309,7 +304,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
         {
             Property aOwnProp = getArrayHelper()->getPropertyByName(_rSource.PropertyName);
             nOwnHandle = aOwnProp.Handle;
-            OQueryDescriptor::setFastPropertyValue_NoBroadcast(nOwnHandle, _rSource.NewValue);
+            ODataSettings::setFastPropertyValue_NoBroadcast(nOwnHandle, _rSource.NewValue);
                 // don't use our own setFastPropertyValue_NoBroadcast, this would forward it to the CommandSettings,
                 // again
                 // and don't use the "real" setPropertyValue, this is to expensive and not sure to succeed
@@ -342,43 +337,18 @@ Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(Runtim
     return new OQueryDescriptor(*this);
 }
 
-// OQueryDescriptor
-//--------------------------------------------------------------------------
-void OQuery::storeTo( const ::utl::OConfigurationNode& _rConfigLocation )
-{
-    OQueryDescriptor::storeTo( _rConfigLocation, getDataSourceNumberFormats( m_xConnection ) );
-}
-
-//--------------------------------------------------------------------------
-void OQuery::loadFrom( const OConfigurationNode& _rConfigLocation )
-{
-    OQueryDescriptor::loadFrom( _rConfigLocation, getDataSourceNumberFormats( m_xConnection ) );
-
-    m_aConfigurationNode = _rConfigLocation.cloneAsRoot();
-}
-
-// OConfigurationFlushable
-//--------------------------------------------------------------------------
-void OQuery::flush_NoBroadcast_NoCommit()
-{
-    if (!m_aConfigurationNode.isValid())
-        throw DisposedException();
-
-    storeTo( m_aConfigurationNode );
-}
-
 // pseudo-XComponent
 //--------------------------------------------------------------------------
-void SAL_CALL OQuery::dispose()
+void SAL_CALL OQuery::disposing()
 {
     MutexGuard aGuard(m_aMutex);
+    m_xColumnMediator = NULL;
     if (m_xCommandDefinition.is())
     {
         m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);
         m_xCommandDefinition = NULL;
     }
-    m_aConfigurationNode.clear();
-    OQueryDescriptor::dispose();
+    disposeColumns();
 
     m_pWarnings = NULL;
 }
@@ -386,7 +356,7 @@ void SAL_CALL OQuery::dispose()
 //--------------------------------------------------------------------------
 void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
 {
-    OQueryDescriptor::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
+    ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     ::rtl::OUString sAggPropName;
     sal_Int16 nAttr = 0;
     if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
@@ -430,12 +400,6 @@ OColumn* OQuery::createColumn(const ::rtl::OUString& _rName) const
 {
     return NULL;
 }
-
-// -----------------------------------------------------------------------------
-::utl::OConfigurationNode OQuery::getObjectLocation() const
-{
-    return m_aConfigurationNode;
-}
 // -----------------------------------------------------------------------------
 void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
@@ -444,6 +408,32 @@ void SAL_CALL OQuery::rename( const ::rtl::OUString& newName ) throw (SQLExcepti
     OSL_ENSURE(xRename.is(),"No XRename interface!");
     if(xRename.is())
         xRename->rename(newName);
+}
+// -----------------------------------------------------------------------------
+void OQuery::registerProperties()
+{
+    // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
+    // a OPropertyStateContainer)
+    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND|PropertyAttribute::CONSTRAINED,
+                    &m_sElementName, ::getCppuType(&m_sElementName));
+
+    registerProperty(PROPERTY_COMMAND, PROPERTY_ID_COMMAND, PropertyAttribute::BOUND,
+                    &m_sCommand, ::getCppuType(&m_sCommand));
+
+    registerProperty(PROPERTY_USE_ESCAPE_PROCESSING, PROPERTY_ID_USE_ESCAPE_PROCESSING, PropertyAttribute::BOUND,
+                    &m_bEscapeProcessing, ::getBooleanCppuType());
+
+    registerProperty(PROPERTY_UPDATE_TABLENAME, PROPERTY_ID_UPDATE_TABLENAME, PropertyAttribute::BOUND,
+                    &m_sUpdateTableName, ::getCppuType(&m_sUpdateTableName));
+
+    registerProperty(PROPERTY_UPDATE_SCHEMANAME, PROPERTY_ID_UPDATE_SCHEMANAME, PropertyAttribute::BOUND,
+                    &m_sUpdateSchemaName, ::getCppuType(&m_sUpdateSchemaName));
+
+    registerProperty(PROPERTY_UPDATE_CATALOGNAME, PROPERTY_ID_UPDATE_CATALOGNAME, PropertyAttribute::BOUND,
+                    &m_sUpdateCatalogName, ::getCppuType(&m_sUpdateCatalogName));
+
+    registerProperty(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, PropertyAttribute::BOUND,
+                    &m_aLayoutInformation, ::getCppuType(&m_aLayoutInformation));
 }
 
 // -----------------------------------------------------------------------------
