@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_Security.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2003-12-11 12:31:54 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    //printf( "#printBool# " );
-    ( sal_True == bOk ) ? printf( "TRUE!\n" ): printf( "FALSE!\n" );
+    //t_print("#printBool# " );
+    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -89,9 +89,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    //printf( "#printUString_u# " );
+    //t_print("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
+    t_print("%s\n", aString.getStr( ) );
 }
 
 
@@ -319,6 +319,52 @@ namespace osl_Security
     }; // class getHandle
 
 
+    class UserProfile : public CppUnit::TestFixture
+    {
+    public:
+
+        void loadUserProfile( )
+            {
+                ::osl::Security aSec;
+                sal_Bool bValue = osl_loadUserProfile(aSec.getHandle());
+
+                CPPUNIT_ASSERT_MESSAGE( "empty function.", bValue == sal_False );
+            }
+
+        void unloadUserProfile( )
+            {
+                ::osl::Security aSec;
+                osl_unloadUserProfile(aSec.getHandle());
+                CPPUNIT_ASSERT_MESSAGE( "empty function.", sal_True );
+            }
+
+        CPPUNIT_TEST_SUITE( UserProfile );
+        CPPUNIT_TEST( loadUserProfile );
+        CPPUNIT_TEST( unloadUserProfile );
+        CPPUNIT_TEST_SUITE_END( );
+    }; // class UserProfile
+
+    class loginUserOnFileServer : public CppUnit::TestFixture
+    {
+    public:
+
+        void loginUserOnFileServer_001( )
+            {
+                rtl::OUString suUserName;
+                rtl::OUString suPassword;
+                rtl::OUString suFileServer;
+                ::osl::Security aSec;
+                oslSecurity *pSec = aSec.getHandle();
+
+                oslSecurityError erg = osl_loginUserOnFileServer(suUserName.pData, suPassword.pData, suFileServer.pData, pSec);
+
+                CPPUNIT_ASSERT_MESSAGE( "empty function.", erg == osl_Security_E_UserUnknown );
+            }
+
+        CPPUNIT_TEST_SUITE( loginUserOnFileServer );
+        CPPUNIT_TEST( loginUserOnFileServer_001 );
+        CPPUNIT_TEST_SUITE_END( );
+    }; // class loginUserOnFileServer
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::ctors, "osl_Security");
@@ -329,6 +375,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHomeDir, "osl_Security");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getConfigDir, "osl_Security");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::isAdministrator, "osl_Security");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHandle, "osl_Security");
+
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::UserProfile, "osl_Security");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::loginUserOnFileServer, "osl_Security");
+
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Security
@@ -346,12 +396,12 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHandle, "osl_Security");
 void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 {
     /// start message
-    printf( "#Initializing ...\n" );
-    printf( "#\n#logonUser function need root/Administrator account to test.\n" );
-    printf( "#You can test by login with root/Administrator, and excute:\n" );
-    printf( "#testshl2 -forward \"username password\" ../../../wntmsci9/bin/Security.dll\n" );
-    printf( "#      where username and password are forwarded account info.\n" );
-    printf( "#if no text forwarded, this function will be skipped.\n" );
+    t_print("#Initializing ...\n" );
+    t_print("#\n#logonUser function need root/Administrator account to test.\n" );
+    t_print("#You can test by login with root/Administrator, and excute:\n" );
+    t_print("#testshl2 -forward \"username password\" ../../../wntmsci9/bin/Security.dll\n" );
+    t_print("#      where username and password are forwarded account info.\n" );
+    t_print("#if no text forwarded, this function will be skipped.\n" );
 
     /// get system information
 #if ( defined UNX ) || ( defined OS2 )
@@ -580,43 +630,43 @@ void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 #endif
 
     /// print the information.
-    printf("#\n#Retrived system information is below:\n");
+    t_print("#\n#Retrived system information is below:\n");
 
-    printf("# Computer Name:              ");
+    t_print("Computer Name:              ");
     if ( strComputerName == aNullURL )
-        printf( " Not retrived\n" );
+        t_print(" Not retrived\n" );
     else
         printUString( strComputerName );
 
-    printf("# Current User Name:          ");
+    t_print("Current User Name:          ");
     if ( strUserName == aNullURL )
-        printf( " Not retrived\n" );
+        t_print(" Not retrived\n" );
     else
         printUString( strUserName );
 
-    printf("# Current User Home Directory:");
+    t_print("Current User Home Directory:");
     if ( strHomeDirectory == aNullURL )
-        printf( " Not retrived\n" );
+        t_print(" Not retrived\n" );
     else
         printUString( strHomeDirectory );
 
-    printf("# Current Config Directory:   ");
+    t_print("Current Config Directory:   ");
     if ( strConfigDirectory == aNullURL )
-        printf( " Not retrived\n" );
+        t_print(" Not retrived\n" );
     else
         printUString( strConfigDirectory );
 
-    printf("# Current UserID:             ");
+    t_print("Current UserID:             ");
     if ( strUserID == aNullURL )
-        printf( " Not retrived\n" );
+        t_print(" Not retrived\n" );
     else
         printUString( strUserID );
 
-    printf("# Current User is");
+    t_print("Current User is");
     if ( isAdmin == sal_False )
-        printf( " NOT Administrator.\n" );
+        t_print(" NOT Administrator.\n" );
     else
-        printf( " Administrator.\n" );
+        t_print(" Administrator.\n" );
 
 
     /// get and display forwarded text if available.
@@ -629,33 +679,33 @@ void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
         /// only forwarded two parameters, username and password.
         {
             aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            printf( "\n#Forwarded username: ");
+            t_print("\n#Forwarded username: ");
             printUString( aLogonUser);
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, aStringForward.getLength( ) - 1 );
-            printf( "#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, printf("*") );
-            printf( "\n" );
+            t_print("#Forwarded password: ");
+            for ( int i = nFirstSpacePoint +1; i <= aStringForward.getLength( ) - 1; i++, t_print("*") );
+            t_print("\n" );
         }
         else
         /// forwarded three parameters, username, password and fileserver.
         {
             aLogonUser = aStringForward.copy( 0, nFirstSpacePoint );
-            printf( "#Forwarded username: ");
+            t_print("#Forwarded username: ");
             printUString( aLogonUser);
 
             aLogonPasswd = aStringForward.copy( nFirstSpacePoint +1, nLastSpacePoint );
-            printf( "#Forwarded password: ");
-            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, printf("*") );
-            printf( "\n" );
+            t_print("#Forwarded password: ");
+            for ( int i = nFirstSpacePoint +1; i <= nLastSpacePoint; i++, t_print("*") );
+            t_print("\n" );
 
             aFileServer = aStringForward.copy( nLastSpacePoint +1, aStringForward.getLength( ) - 1 );
-            printf( "#Forwarded FileServer: ");
+            t_print("#Forwarded FileServer: ");
             printUString( aFileServer );
 
         }
     }
 
-    printf( "#\n#Initialization Done.\n" );
+    t_print("#\n#Initialization Done.\n" );
 
 }
