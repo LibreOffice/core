@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:30:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ Window FLT_NAVIGATOR
                 Text[ russian ] = " ‡‡Ì‰‡¯";
                 Text[ polish ] = "Kredka";
                 Text[ japanese ] = "Õﬂ›";
-                Text[ chinese_traditional ] = "µß";
+                Text[ chinese_traditional ] = "µeµß";
                 Text[ arabic ] = "ﬁ·„";
                 Text[ greek ] = "–›Ì·";
                 Text[ korean ] = "∆˜¿Œ≈Õ";
@@ -371,5 +371,6 @@ Window FLT_NAVIGATOR
         QuickHelpText[ finnish ] = "Asiakirjat";
     };
 };
+
 
 
