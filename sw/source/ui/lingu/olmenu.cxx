@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-09-04 14:00:07 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-21 14:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,15 +139,16 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-#ifndef _TEMPAUTO_HXX
-#include <tempauto.hxx>     // temporaere Autokorrektur
-#endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
 #endif
 
 #ifndef _OLMENU_HRC
 #include <olmenu.hrc>
+#endif
+
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -346,10 +347,9 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
             }
 
             pSh->Insert( aTmp );
-            pSh->EndAction();
-            pSh->EndUndo(UIUNDO_REPLACE);
-
-            pSh->SetInsMode( bOldIns );
+            /* #102505# EndAction/EndUndo moved down since insertion
+               of temporary auto correction is now undoable two and
+               must reside in the same undo group.*/
 
 
             // nur aufnehmen, wenn es NICHT schon in der Autokorrektur vorhanden ist
@@ -364,25 +364,32 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
             else
                 aNewWord = aOrigWord;
             SvxPrepareAutoCorrect( aOrigWord, aNewWord );
+
+            /* #102505# Temporary auto correction is now handled by
+               the document itself. Thus we no longer have to build,
+               insert and remove the correction here but call the
+               appropriate methods of SwDoc. */
             if( bAutoCorr )
             {
                 pACorr->PutText( aOrigWord, aNewWord, eLanguage );
-                if( pTempAuto )
-                    pTempAuto->Delete( aOrigWord );
+                pSh->GetDoc()->RemoveTmpCorr(aOrigWord);
             }
             else
             {
                 SvxAutocorrWord aAWord( aOrigWord, aEmptyStr );
                 if( !pACorr->GetAutocorrWordList(eLanguage)->Seek_Entry( &aAWord ))
                 {
-                    SwCorrection* pCorr = new SwCorrection( aAWord.GetShort() );
-                    pCorr->Correct() = aNewWord;
-                    if( !pTempAuto )
-                        pTempAuto = new SwTempAuto();
-                    pTempAuto->Insert( pCorr );
+                    pSh->GetDoc()->AppendTmpCorr(aAWord.GetShort(), aNewWord);
                 }
             }
 
+            /* #102505# EndAction/EndUndo moved down since insertion
+               of temporary auto correction is now undoable two and
+               must reside in the same undo group.*/
+            pSh->EndAction();
+            pSh->EndUndo(UIUNDO_REPLACE);
+
+            pSh->SetInsMode( bOldIns );
         }
         else
             switch( nRet )
