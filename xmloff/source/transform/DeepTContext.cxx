@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeepTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:47:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,22 @@ XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
                     (*aIter).second.GetQNamePrefixFromParam1(),
                     (*aIter).second.GetQNameTokenFromParam1(),
                        static_cast< sal_uInt16 >( (*aIter).second.m_nParam2 ) );
+            break;
+        case XML_ETACTION_RENAME_ELEM_ADD_PROC_ATTR:
+            {
+                XMLPersMixedContentTContext *pMC =
+                    new XMLPersMixedContentTContext( GetTransformer(), rQName,
+                        (*aIter).second.GetQNamePrefixFromParam1(),
+                        (*aIter).second.GetQNameTokenFromParam1(),
+                        static_cast< sal_uInt16 >(
+                            (*aIter).second.m_nParam3  >> 16 ) );
+                pMC->AddAttribute(
+                    (*aIter).second.GetQNamePrefixFromParam2(),
+                    (*aIter).second.GetQNameTokenFromParam2(),
+                       static_cast< ::xmloff::token::XMLTokenEnum >(
+                        (*aIter).second.m_nParam3 & 0xffff ) );
+                pContext = pMC;
+            }
             break;
         case XML_ETACTION_PROC_ATTRS:
             pContext = new XMLPersMixedContentTContext( GetTransformer(), rQName,
