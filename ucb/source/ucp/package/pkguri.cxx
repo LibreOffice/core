@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-28 14:20:41 $
+ *  last change: $Author: kso $ $Date: 2000-11-30 11:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,26 @@ using namespace rtl;
 //=========================================================================
 //=========================================================================
 
+static void normalize( OUString& rURL )
+{
+    sal_Int32 nPos = 0;
+    do
+    {
+        nPos = rURL.indexOf( '%', nPos );
+        if ( nPos != -1 )
+        {
+            if ( nPos < ( rURL.getLength() - 2 ) )
+            {
+                OUString aTmp = rURL.copy( nPos + 1, 2 );
+                rURL = rURL.replaceAt( nPos + 1, 2, aTmp.toUpperCase() );
+                nPos++;
+            }
+        }
+    }
+    while ( nPos != -1 );
+}
+
+//=========================================================================
 void PackageUri::init() const
 {
     // Already inited?
@@ -112,9 +132,8 @@ void PackageUri::init() const
             {
                 // root folder.
 
-                // Note: toLowerCase needs no locale, because the string is
-                //       escaped and does never contain special chars.
-                OUString aNormPackage = m_aUri.copy( nStart ).toLowerCase();
+                OUString aNormPackage = m_aUri.copy( nStart );
+                normalize( aNormPackage );
 
                 m_aUri = m_aUri.replaceAt(
                             nStart, m_aUri.getLength() - nStart, aNormPackage );
@@ -123,10 +142,8 @@ void PackageUri::init() const
             }
             else
             {
-                // Note: toLowerCase needs no locale, because the string is
-                //       escaped and does never contain special chars.
-                OUString aNormPackage
-                    = m_aUri.copy( nStart, nEnd - nStart ).toLowerCase();
+                OUString aNormPackage = m_aUri.copy( nStart, nEnd - nStart );
+                normalize( aNormPackage );
 
                 m_aUri = m_aUri.replaceAt(
                             nStart, nEnd - nStart, aNormPackage );

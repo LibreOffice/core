@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 14:56:35 $
+ *  last change: $Author: kso $ $Date: 2000-11-30 11:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,8 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
                           ContentProvider* pProvider,
                           const Reference< XContentIdentifier >& Identifier )
 {
-    PackageUri aURI( Identifier->getContentIdentifier() );
+    OUString aURL = Identifier->getContentIdentifier();
+    PackageUri aURI( aURL );
     ContentProperties aProps;
     Reference< XHierarchicalNameAccess > xPackage;
 
@@ -175,20 +176,16 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         // resource exists
 
-        Reference< XContentIdentifier > xId = Identifier;
-        OUString aURL = xId->getContentIdentifier();
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
         {
             // Client explicitely requested a folder!
             if ( !aProps.bIsFolder )
                 return 0;
-
-            // Note: Internally ids have no trailing slash.
-            aURL = aURL.copy( 0, nLastSlash );
-            xId = new ::ucb::ContentIdentifier( rxSMgr, aURL );
         }
 
+        Reference< XContentIdentifier > xId
+            = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
         return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aProps );
     }
     else
@@ -197,19 +194,14 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
 
         sal_Bool bFolder = sal_False;
 
-        Reference< XContentIdentifier > xId = Identifier;
-        OUString aURL = xId->getContentIdentifier();
+        // Guess type according to URI.
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
-        {
             bFolder = sal_True;
 
-            // Note: Internally ids have no trailing slash.
-            aURL = aURL.copy( 0, nLastSlash );
-            xId = new ::ucb::ContentIdentifier( rxSMgr, aURL );
-        }
+        Reference< XContentIdentifier > xId
+            = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
 
-        // Guess type according to URI.
         ContentInfo aInfo;
         if ( bFolder )
             aInfo.Type = OUString::createFromAscii(
@@ -250,7 +242,9 @@ Content* Content::create( const Reference< XMultiServiceFactory >& rxSMgr,
     xPackage = pProvider->createPackage( aURI.getPackage() );
 #endif
 
-    return new Content( rxSMgr, pProvider, Identifier, xPackage, aURI, Info );
+    Reference< XContentIdentifier > xId
+        = new ::ucb::ContentIdentifier( rxSMgr, aURI.getUri() );
+    return new Content( rxSMgr, pProvider, xId, xPackage, aURI, Info );
 }
 
 //=========================================================================
@@ -1177,11 +1171,7 @@ void Content::insert(
         // Required: Title
 
         if ( !m_aProps.aTitle.getLength() )
-        {
-            VOS_ENSURE( sal_False,
-                        "Content::insert - property value missing!" );
-            throw CommandAbortedException();
-        }
+            m_aProps.aTitle = m_aUri.getName();
     }
     else
     {
@@ -1197,11 +1187,7 @@ void Content::insert(
         // Required: Title
 
         if ( !m_aProps.aTitle.getLength() )
-        {
-            VOS_ENSURE( sal_False,
-                        "Content::insert - property value missing!" );
-            throw CommandAbortedException();
-        }
+            m_aProps.aTitle = m_aUri.getName();
     }
 
     OUString aNewURL = m_aUri.getParentUri();
