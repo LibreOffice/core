@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,12 @@
  *
  ************************************************************************/
 
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 // include ---------------------------------------------------------------
+
 #ifndef _SVX_SIZEITEM_HXX //autogen
 #define ITEMID_SIZE 0
 #include <sizeitem.hxx>
