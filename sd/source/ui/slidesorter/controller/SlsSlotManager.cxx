@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:21:56 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_DELETE_PAGE:
         case SID_DELETE_MASTER_PAGE:
+        case SID_DELETE: // we need SID_CUT to handle the delete key
+                      // (DEL -> accelerator -> SID_CUT).
              if (mrController.GetModel().GetPageCount() > 1
                  && QueryBox (
                      mrController.GetView().GetWindow(),
@@ -334,10 +336,6 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
     {
         rShell.GetActualFunction()->Activate();
     }
-
-    rShell.Invalidate (SID_CUT);
-    rShell.Invalidate (SID_COPY);
-    rShell.Invalidate (SID_PASTE);
 }
 
 
@@ -411,6 +409,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_CUT:
         case SID_COPY:
         case SID_PASTE:
+        case SID_DELETE:
             mrController.GetClipboard().HandleSlotCall(rRequest);
             break;
 
@@ -441,10 +440,6 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         default:
             break;
     }
-
-    rShell.Invalidate(SID_CUT);
-    rShell.Invalidate(SID_COPY);
-    rShell.Invalidate(SID_PASTE);
 }
 
 
@@ -804,6 +799,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     // Cut, copy, and delete page are disabled when there is no selection.
     if (rSet.GetItemState(SID_CUT) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_COPY)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_DELETE) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SFX_ITEM_AVAILABLE)
     {
