@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:50:30 $
+ *  last change: $Author: ab $ $Date: 2001-04-26 07:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,8 +226,8 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
     }
 
     // Only for bFindLineEnd
-    sal_Unicode cLineEndChar1 = 0x13;
-    sal_Unicode cLineEndChar2 = 0x10;
+    sal_Unicode cLineEndChar1 = 0x0D;
+    sal_Unicode cLineEndChar2 = 0x0A;
 
     sal_Int32 nBufferReadPos = 0;
     sal_Int32 nCopyLen = 0;
@@ -248,107 +248,6 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
             // No, so read new characters
             if( !implReadNext() )
                 break;
-
-            /*
-            sal_Int32 nFreeBufferSize = mnBufferSize - nBufferReadPos;
-            if( nFreeBufferSize < READ_BYTE_COUNT )
-                implResizeBuffer();
-
-            try
-            {
-                Sequence< sal_Int8 > aData;
-                sal_Int32 nBytesToRead = READ_BYTE_COUNT;
-                sal_Int32 nRead = mxStream->readSomeBytes( aData, nBytesToRead );
-                if( nRead < nBytesToRead )
-                    bEOF = sal_True;
-
-                // Try to convert
-                sal_uInt32 uiInfo;
-                sal_Size nSrcCvtBytes = 0;
-                sal_Size nTargetCount = 0;
-                sal_Size nSourceCount = 0;
-                while( sal_True )
-                {
-                    const sal_Int8 *pbSource = aData.getConstArray();
-
-                    //// the whole source size
-                    //sal_Int32 nSourceSize = seqText.getLength() + m_seqSource.getLength();
-                    //Sequence<sal_Unicode>     seqUnicode ( nSourceSize );
-//
-                    //const sal_Int8 *pbSource = seqText.getConstArray();
-                    //sal_Int8 *pbTempMem = 0;
-//
-                    //if( m_seqSource.getLength() ) {
-                        //// put old rest and new byte sequence into one array
-                        //pbTempMem = new sal_Int8[ nSourceSize ];
-                        //memcpy( pbTempMem , m_seqSource.getConstArray() , m_seqSource.getLength() );
-                        //memcpy( &(pbTempMem[ m_seqSource.getLength() ]) , seqText.getConstArray() , seqText.getLength() );
-                        //pbSource = pbTempMem;
-//
-                        //// set to zero again
-                        //m_seqSource = Sequence< sal_Int8 >();
-                    //}
-
-                    // All invalid characters are transformed to the unicode undefined char
-                    nTargetCount += rtl_convertTextToUnicode(
-                                        mConvText2Unicode,
-                                        mContextText2Unicode,
-                                        (const sal_Char*) &( pbSource[nSourceCount] ),
-                                        nRead - nSourceCount,
-                                        mpBuffer + nBufferReadPos + nTargetCount,
-                                        mnBufferSize - nBufferReadPos - nTargetCount,
-                                        RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT   |
-                                        RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                        RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT,
-                                        &uiInfo,
-                                        &nSrcCvtBytes );
-                    nSourceCount += nSrcCvtBytes;
-
-                    sal_Bool bCont = sal_False;
-                    if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL )
-                    {
-                        implResizeBuffer();
-                        bCont = sal_True;
-                    }
-
-                    if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL )
-                    {
-                        // read next byte
-                        static Sequence< sal_Int8 > aOneByteSeq( 1 );
-                        sal_Int32 nRead = mxStream->readSomeBytes( aData, 1 );
-                        if( nRead == 0 )
-                        {
-                            bEOF = sal_True;
-
-                            // return what we have
-                            // TODO
-                        }
-                        sal_Int32 nOldLen = aData.getLength();
-                        aData.realloc( nOldLen + 1 );
-                        aData.getArray()[ nOldLen ] = aOneByteSeq.getConstArray()[ 0 ];
-                        pbSource = aData.getConstArray();
-                        bCont = sal_True;
-                    }
-
-                    if( bCont )
-                        continue;
-                    break;
-                }
-
-                mnCharsInBuffer += nTargetCount;
-            }
-            catch( NotConnectedException& e1 )
-            {
-                e1;
-                throw IOException();
-                //throw IOException( L"OTextInputStream::implReadString failed" );
-            }
-            catch( BufferSizeExceededException& e2 )
-            {
-                e2;
-                throw IOException();
-            }
-            */
         }
 
         // Now there should be characters available
@@ -391,6 +290,10 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
         }
     }
 
+    // Nothing found? Return all
+    if( !nCopyLen && !bFound && mbReachedEOF )
+        nCopyLen = nBufferReadPos;
+
     // Create string
     if( nCopyLen )
         aRetStr = OUString( mpBuffer, nCopyLen );
@@ -428,24 +331,6 @@ sal_Int32 OTextInputStream::implReadNext()
         while( sal_True )
         {
             const sal_Int8 *pbSource = aData.getConstArray();
-
-            //// the whole source size
-            //sal_Int32 nSourceSize = seqText.getLength() + m_seqSource.getLength();
-            //Sequence<sal_Unicode>     seqUnicode ( nSourceSize );
-//
-            //const sal_Int8 *pbSource = seqText.getConstArray();
-            //sal_Int8 *pbTempMem = 0;
-//
-            //if( m_seqSource.getLength() ) {
-                //// put old rest and new byte sequence into one array
-                //pbTempMem = new sal_Int8[ nSourceSize ];
-                //memcpy( pbTempMem , m_seqSource.getConstArray() , m_seqSource.getLength() );
-                //memcpy( &(pbTempMem[ m_seqSource.getLength() ]) , seqText.getConstArray() , seqText.getLength() );
-                //pbSource = pbTempMem;
-//
-                //// set to zero again
-                //m_seqSource = Sequence< sal_Int8 >();
-            //}
 
             // All invalid characters are transformed to the unicode undefined char
             nTargetCount += rtl_convertTextToUnicode(
@@ -507,74 +392,6 @@ sal_Int32 OTextInputStream::implReadNext()
     }
 }
 
-
-/*
-OUString OTextInputStream::implConvert( const Sequence<sal_Int8> &seqText )
-{
-    sal_uInt32 uiInfo;
-    sal_Size nSrcCvtBytes   = 0;
-    sal_Size nTargetCount   = 0;
-    sal_Size nSourceCount   = 0;
-
-    // the whole source size
-    sal_Int32 nSourceSize = seqText.getLength() + m_seqSource.getLength();
-    Sequence<sal_Unicode>   seqUnicode ( nSourceSize );
-
-    const sal_Int8 *pbSource = seqText.getConstArray();
-    sal_Int8 *pbTempMem = 0;
-
-    if( m_seqSource.getLength() ) {
-        // put old rest and new byte sequence into one array
-        pbTempMem = new sal_Int8[ nSourceSize ];
-        memcpy( pbTempMem , m_seqSource.getConstArray() , m_seqSource.getLength() );
-        memcpy( &(pbTempMem[ m_seqSource.getLength() ]) , seqText.getConstArray() , seqText.getLength() );
-        pbSource = pbTempMem;
-
-        // set to zero again
-        m_seqSource = Sequence< sal_Int8 >();
-    }
-
-    while( sal_True ) {
-
-        // All invalid characters are transformed to the unicode undefined char
-        nTargetCount +=     rtl_convertTextToUnicode(
-                                    m_convText2Unicode,
-                                    m_contextText2Unicode,
-                                    ( const sal_Char * ) &( pbSource[nSourceCount] ),
-                                    nSourceSize - nSourceCount ,
-                                    &( seqUnicode.getArray()[ nTargetCount ] ),
-                                    seqUnicode.getLength() - nTargetCount,
-                                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT   |
-                                    RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
-                                    RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT,
-                                    &uiInfo,
-                                    &nSrcCvtBytes );
-        nSourceCount += nSrcCvtBytes;
-
-        if( uiInfo & RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOSMALL ) {
-            // save necessary bytes for next conversion
-            seqUnicode.realloc( seqUnicode.getLength() * 2 );
-            continue;
-        }
-        break;
-    }
-    if( uiInfo & RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL ) {
-        m_seqSource.realloc( nSourceSize - nSourceCount );
-        memcpy( m_seqSource.getArray() , &(pbSource[nSourceCount]) , nSourceSize-nSourceCount );
-    }
-
-
-    if( pbTempMem ) {
-        delete pbTempMem;
-    }
-
-    // set to correct unicode size
-    seqUnicode.realloc( nTargetCount );
-
-    return seqUnicode;
-}
-*/
-
 void OTextInputStream::setEncoding( const OUString& Encoding )
     throw(RuntimeException)
 {
@@ -621,8 +438,6 @@ void OTextInputStream::closeInput(  )
 {
     mxStream->closeInput();
 }
-
-
 
 
 //===========================================================================
