@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 18:11:52 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,10 +239,19 @@ public:
     void    SetRestoreActions(USHORT nSet){nRestoreActions = nSet;}
     USHORT  GetRestoreActions() const{return nRestoreActions;}
 
-    inline sal_Bool IsAccessible() const { return pAccMap != 0; }
+    // Is this view accessible?
+    sal_Bool IsAccessible() const { return pAccMap != 0; }
+
+    inline SwAccessibleMap& GetAccessibleMap();
+
+    // Update (this) accessible view
     void UpdateAccessible();
-    inline SwAccessibleMap *GetAccessibleMapPtr() { return pAccMap; }
-    SwAccessibleMap &GetAccessibleMap();
+
+    // Remove a frame from the accessible view
+    void DisposeAccessibleFrm( const SwFrm *pFrm );
+
+    // Move a frame's position in the accessible view
+    void MoveAccessibleFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 };
 
 //Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder

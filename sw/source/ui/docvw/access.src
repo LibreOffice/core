@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:10:18 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,5 +95,25 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
     Text = "‹berschrift Nummer $(ARG2): $(ARG1)" ;
     Text [ english ] = "Heading number $(ARG2): $(ARG1)" ;
+};
+String STR_ACCESS_HEADER_NAME
+{
+    Text = "Kopfzeile $(ARG1)" ;
+    Text [ english ] = "Header $(ARG1)" ;
+};
+String STR_ACCESS_HEADER_DESC
+{
+    Text = "Kopfzeile Seite $(ARG1)" ;
+    Text [ english ] = "Header page $(ARG1)" ;
+};
+String STR_ACCESS_FOOTER_NAME
+{
+    Text = "Fuﬂzeile $(ARG1)" ;
+    Text [ english ] = "Footer $(ARG1)" ;
+};
+String STR_ACCESS_FOOTER_DESC
+{
+    Text = "Fuﬂzeile Seite $(ARG1)" ;
+    Text [ english ] = "Footer page $(ARG1)" ;
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #ifndef _ACCPARA_HXX
 #include <accpara.hxx>
 #endif
+#ifndef _ACCHEADERFOOTER_HXX
+#include <accheaderfooter.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -98,6 +101,9 @@
 #endif
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
+#endif
+#ifndef _HFFRM_HXX
+#include <hffrm.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -196,9 +202,21 @@ Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
 
         if( !xAcc.is() && bCreate )
         {
-            if( pFrm->IsTxtFrm() )
+            switch( pFrm->GetType() )
+            {
+            case FRM_TXT:
                 xAcc = new SwAccessibleParagraph( this, nPara++,
                                                   (const SwTxtFrm *)pFrm );
+                break;
+            case FRM_HEADER:
+                xAcc = new SwAccessibleHeaderFooter( this,
+                                                  (const SwHeaderFrm *)pFrm );
+                break;
+            case FRM_FOOTER:
+                xAcc = new SwAccessibleHeaderFooter( this,
+                                                  (const SwFooterFrm *)pFrm );
+                break;
+            }
 
             ASSERT( xAcc.is(), "unknown frame type" );
             if( xAcc.is() )
@@ -252,7 +270,7 @@ void SwAccessibleMap::RemoveContext( SwAccessibleContext *pAcc )
 
 void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
 {
-    if( SwAccessibleContext::IsAccessible( pFrm ) )
+    if( pFrm->IsAccessibleFrm() )
     {
         vos::OGuard aGuard( aMutex );
 
@@ -271,7 +289,7 @@ void SwAccessibleMap::DisposeFrm( const SwFrm *pFrm )
 
 void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
 {
-    if( SwAccessibleContext::IsAccessible( pFrm ) )
+    if( pFrm->IsAccessibleFrm() )
     {
         vos::OGuard aGuard( aMutex );
 
@@ -290,7 +308,7 @@ void SwAccessibleMap::MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm )
                 // Otherwise we look if the parent is accessible.
                 // If not, there is nothing to do.
                 const SwLayoutFrm *pUpper = pFrm->GetUpper();
-                while( pUpper && !SwAccessibleContext::IsAccessible( pUpper ) )
+                while( pUpper && !pUpper->IsAccessibleFrm() )
                     pUpper = pUpper->GetUpper();
 
                 if( pUpper )

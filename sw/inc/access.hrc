@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-04 14:09:21 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,16 @@
 #define STR_ACCESS_HEADING_NAME             (RC_ACCESS_BEGIN + 5)
 #define STR_ACCESS_HEADING_DESC             (RC_ACCESS_BEGIN + 6)
 #define STR_ACCESS_HEADING_WITH_NUM_DESC    (RC_ACCESS_BEGIN + 7)
+#define STR_ACCESS_HEADER_NAME              (RC_ACCESS_BEGIN + 8)
+#define STR_ACCESS_HEADER_DESC              (RC_ACCESS_BEGIN + 9)
+#define STR_ACCESS_FOOTER_NAME              (RC_ACCESS_BEGIN + 10)
+#define STR_ACCESS_FOOTER_DESC              (RC_ACCESS_BEGIN + 11)
+#define STR_ACCESS_FOOTNOTE_NAME            (RC_ACCESS_BEGIN + 12)
+#define STR_ACCESS_FOOTNOTE_DESC            (RC_ACCESS_BEGIN + 13)
+#define STR_ACCESS_ENDNOTE_NAME             (RC_ACCESS_BEGIN + 14)
+#define STR_ACCESS_ENDNOTE_DESC             (RC_ACCESS_BEGIN + 15)
 
-#define ACCESS_ACT_END  STR_ACCESS_HEADING_WITH_NUM_DESC
+#define ACCESS_ACT_END  STR_ACCESS_ENDNOTE_DESC
 
 #if ACCESS_ACT_END > RC_ACCESS_END
 #error Resource-Id Ueberlauf in #file, #line

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dvo $ $Date: 2002-02-19 19:11:48 $
+#   last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES =	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
         $(SLO)$/accframe.obj \
+        $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj
@@ -98,6 +99,7 @@ EXCEPTIONSFILES=	\
         $(SLO)$/acccontext.obj \
         $(SLO)$/accdoc.obj \
         $(SLO)$/accframe.obj \
+        $(SLO)$/accheaderfooter.obj \
         $(SLO)$/accmap.obj \
         $(SLO)$/accpara.obj \
         $(SLO)$/accportions.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 12:58:03 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:29:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ struct SwCrsrMoveState;
 #define FRM_LAYOUT      0x3FFF
 #define FRM_CNTNT       0xC000
 #define FRM_FTNBOSS     0x0006
+#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_TXT|FRM_ROOT)
 
         //Weils so schon ist das ganze als Bitfeld....
 //0000 0000 0000 0001   ROOT
@@ -812,6 +813,7 @@ public:
                                         //stehen.
     inline BOOL IsRetoucheFrm() const;  //Frms die Retouchefaehig sind bzw. die
                                         //u.U. hinter sich Retouchieren muessen.
+    inline BOOL IsAccessibleFrm() const;
 
     void PrepareCrsr();                 //Die CrsrShell darf.
 
@@ -1185,6 +1187,10 @@ inline BOOL SwFrm::IsFlowFrm() const
 inline BOOL SwFrm::IsRetoucheFrm() const
 {
     return GetType() & 0xCA40 ? TRUE : FALSE;   //TabFrm, CntntFrm, SectionFrm, Ftnfrm
+}
+inline BOOL SwFrm::IsAccessibleFrm() const
+{
+    return GetType() & FRM_ACCESSIBLE ? TRUE : FALSE;
 }
 
 #endif

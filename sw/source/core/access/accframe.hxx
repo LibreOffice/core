@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <frame.hxx>
 #endif
 
+#define FRM_ACCESSIBLE (FRM_HEADER|FRM_FOOTER|FRM_TXT|FRM_ROOT)
 
 class SwAccessibleFrame
 {
@@ -89,6 +90,10 @@ class SwAccessibleFrame
     static const SwFrm *GetChildAt( const Rectangle& rVisArea,
                                     const SwFrm *pFrm,
                                     const Point& rPos );
+
+    static void MergeLowerBounds( SwRect& rBounds,
+                                  const Rectangle& rVisArea,
+                                  const SwFrm *pFrm );
 protected:
 
     // A child has been added while setting the vis area
@@ -118,9 +123,6 @@ public:
     SwAccessibleFrame( const Rectangle& rVisArea,
                        const SwFrm *pFrm );
     virtual ~SwAccessibleFrame();
-
-    // Does a frame of theis type may have an accessible?
-    inline static sal_Bool IsAccessible( const SwFrm *pFrm );
 
     // Return the SwFrm this context is attached to.
     const SwFrm *GetFrm() const { return pFrm; };
@@ -185,11 +187,6 @@ inline sal_Int32 SwAccessibleFrame::GetChildIndex( const SwFrm *pChild ) const
 inline const SwFrm *SwAccessibleFrame::GetChildAt( const Point& rPos ) const
 {
     return GetChildAt( aVisArea, pFrm, rPos );
-}
-
-inline sal_Bool SwAccessibleFrame::IsAccessible( const SwFrm *pFrm )
-{
-    return pFrm->IsTxtFrm() || pFrm->IsRootFrm();
 }
 
 inline void SwAccessibleFrame::SetVisArea( const Rectangle& rNewVisArea )

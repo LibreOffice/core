@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ class SwAccessibleContext :
 
 protected:
     void SetName( const ::rtl::OUString& rName ) { sName = rName; }
+    sal_Int16 GetRole() const { return nRole; }
 
     inline void SetParent( SwAccessibleContext *pParent );
 

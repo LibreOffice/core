@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:31 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,8 @@ SwAccessibleParagraph::SwAccessibleParagraph(
     SwAccessibleContext( pMap, AccessibleRole::PARAGRAPH, pTxtFrm ),
     pPortionData( NULL )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
     sal_uInt16 nResId = (pTxtNd->GetOutlineNum() && !pTxtNd->GetNum())
                             ? STR_ACCESS_HEADING_NAME

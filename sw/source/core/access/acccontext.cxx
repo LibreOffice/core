@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:56 $
+ *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,8 @@ void SwAccessibleContext::AccessibleEvent( AccessibleEventObject& rEvent )
 void SwAccessibleContext::SetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     // DEFUNC and SHOWING
     if( GetFrm() && GetMap() )
     {
@@ -720,16 +722,28 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pUpper = GetParent();
-    ASSERT( pUpper, "no upper found" );
+    const SwFrm *pParent = GetParent();
+    ASSERT( pParent, "no Parent found" );
     Window *pWin = GetWindow();
 
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pUpper )
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
 
     Rectangle aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Point aUpperLogPos( GetBounds( pUpper ).TopLeft() ); // twip rel to doc root
+    Rectangle aPixBounds;
+    if( pParent->IsRootFrm() )
+    {
+        aPixBounds = pWin->LogicToPixel( aLogBounds );
+    }
+    else
+    {
+        Point aParentLogPos( GetBounds( pParent ).TopLeft() ); // twip rel to doc root
+        MapMode aMapMode( pWin->GetMapMode() );
+        aParentLogPos.X() *= -1;
+        aParentLogPos.Y() *= -1;
+        aMapMode.SetOrigin( aParentLogPos );
+        aPixBounds = pWin->LogicToPixel( aLogBounds, aMapMode );
+    }
 
-    Rectangle aPixBounds( pWin->LogicToPixel( aLogBounds ) );
     awt::Rectangle aBox( aPixBounds.Left(), aPixBounds.Top(),
                          aPixBounds.GetWidth(), aPixBounds.GetHeight() );
 
@@ -744,16 +758,27 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     CHECK_FOR_DEFUNC( XAccessibleComponent )
 
-    const SwFrm *pUpper = GetParent();
-    ASSERT( pUpper, "no upper found" );
+    const SwFrm *pParent = GetParent();
+    ASSERT( pParent, "no parent found" );
     Window *pWin = GetWindow();
 
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pUpper )
+    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
 
     Point aLogPos( GetBounds( GetFrm() ).TopLeft() ); // twip rel to doc root
-    Point aUpperLogPos( GetBounds( pUpper ).TopLeft() ); // twip rel to doc root
-
-    Point aPixPos( pWin->LogicToPixel( aLogPos ) );
+    Point aPixPos;
+    if( pParent->IsRootFrm() )
+    {
+        aPixPos = pWin->LogicToPixel( aLogPos );
+    }
+    else
+    {
+        Point aParentLogPos( GetBounds( pParent ).TopLeft() ); // twip rel to doc root
+        MapMode aMapMode( pWin->GetMapMode() );
+        aParentLogPos.X() *= -1;
+        aParentLogPos.Y() *= -1;
+        aMapMode.SetOrigin( aParentLogPos );
+        aPixPos = pWin->LogicToPixel( aLogPos, aMapMode );
+    }
     awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
 
     return aLoc;
