@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:06 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,18 @@ inline sal_Bool Reference< interface_type >::set(
 {
     return set( iquery( rRef.get() ), SAL_NO_ACQUIRE );
 }
+
+//______________________________________________________________________________
+template< class interface_type >
+inline bool Reference< interface_type >::set(
+    Any const & rAny, UnoReference_Query )
+{
+    return set( iquery(
+                    rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
+                    ? reinterpret_cast< XInterface * >( rAny.pReserved ) : 0 ),
+                SAL_NO_ACQUIRE );
+}
+
 #ifndef EXCEPTIONS_OFF
 //__________________________________________________________________________________________________
 template< class interface_type >
@@ -291,6 +303,18 @@ inline void Reference< interface_type >::set(
 {
     set( iquery_throw( rRef.get() ), SAL_NO_ACQUIRE );
 }
+
+//______________________________________________________________________________
+template< class interface_type >
+inline void Reference< interface_type >::set(
+    Any const & rAny, UnoReference_QueryThrow )
+{
+    set( iquery_throw(
+             rAny.pType->eTypeClass == typelib_TypeClass_INTERFACE
+             ? reinterpret_cast< XInterface * >( rAny.pReserved ) : 0 ),
+         SAL_NO_ACQUIRE );
+}
+
 #endif
 
 //__________________________________________________________________________________________________
