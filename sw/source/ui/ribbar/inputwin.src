@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:40:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ToolBox RID_TBX_FORMULA
             Text [ English ] = "Formula" ;
             Text [ norwegian ] = "Formel" ;
             Text [ italian ] = "Formula" ;
-            Text [ portuguese_brazilian ] = "Fórmula" ;
+            Text [ portuguese_brazilian ] = "F?mula" ;
             Text [ portuguese ] = "Fórmula" ;
             Text [ finnish ] = "Kaava" ;
             Text [ danish ] = "Formel" ;
@@ -202,7 +202,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Sum" ;
             Text [ norwegian ] = "~Sum" ;
             Text [ italian ] = "~Somma" ;
-            Text [ portuguese_brazilian ] = "~Somatório" ;
+            Text [ portuguese_brazilian ] = "~Somat?io" ;
             Text [ portuguese ] = "~Soma" ;
             Text [ finnish ] = "Summa" ;
             Text [ danish ] = "Sum" ;
@@ -322,7 +322,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Power" ;
             Text [ norwegian ] = "Po~tens" ;
             Text [ italian ] = "Elevare a potenza" ;
-            Text [ portuguese_brazilian ] = "Po~tência" ;
+            Text [ portuguese_brazilian ] = "Po~t?ncia" ;
             Text [ portuguese ] = "Elevar a po~tência" ;
             Text [ finnish ] = "Potenssi" ;
             Text [ danish ] = "Opløft i potens" ;
@@ -433,7 +433,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Not Equal" ;
                         Text [ norwegian ] = "~Ulik" ;
                         Text [ italian ] = "Non uguale" ;
-                        Text [ portuguese_brazilian ] = "~Não Igual" ;
+                        Text [ portuguese_brazilian ] = "~N?o Igual" ;
                         Text [ portuguese ] = "~Desigual" ;
                         Text [ finnish ] = "Ei yhtäsuuri" ;
                         Text [ danish ] = "Forskellig fra" ;
@@ -589,7 +589,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Or" ;
                         Text [ norwegian ] = "Logisk ~Eller" ;
                         Text [ italian ] = "Logica ~O" ;
-                        Text [ portuguese_brazilian ] = "Ou lógico ~" ;
+                        Text [ portuguese_brazilian ] = "Ou l?ico ~" ;
                         Text [ portuguese ] = "~OU lógico" ;
                         Text [ finnish ] = "Boolen ehto Or (tai)" ;
                         Text [ danish ] = "Logisk ELLER" ;
@@ -619,7 +619,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Xor" ;
                         Text [ norwegian ] = "Logisk ~Xeller" ;
                         Text [ italian ] = "Logica O esclusiva" ;
-                        Text [ portuguese_brazilian ] = "Xou lógico" ;
+                        Text [ portuguese_brazilian ] = "Xou l?ico" ;
                         Text [ portuguese ] = "OU lógico e~xclusivo" ;
                         Text [ finnish ] = "Boolen ehto Xor (xtai)" ;
                         Text [ danish ] = "Logisk eksklusiv ELLER" ;
@@ -649,7 +649,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean And" ;
                         Text [ norwegian ] = "Logisk ~Og" ;
                         Text [ italian ] = "Logica ~E" ;
-                        Text [ portuguese_brazilian ] = "E ~lógico" ;
+                        Text [ portuguese_brazilian ] = "E ~l?ico" ;
                         Text [ portuguese ] = "~E lógico" ;
                         Text [ finnish ] = "Boolen ehto And (ja)" ;
                         Text [ danish ] = "Logisk OG" ;
@@ -679,7 +679,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Boolean Not" ;
                         Text [ norwegian ] = "Log~isk Ikke" ;
                         Text [ italian ] = "Logica Non" ;
-                        Text [ portuguese_brazilian ] = "Não Lóg~ico" ;
+                        Text [ portuguese_brazilian ] = "N?o L?~ico" ;
                         Text [ portuguese ] = "~NÃO lógico" ;
                         Text [ finnish ] = "Boolen ehto Not (ei)" ;
                         Text [ danish ] = "Logisk IKKE" ;
@@ -724,7 +724,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Statistical Functions" ;
             Text [ norwegian ] = "S~tatistiske Funksjoner" ;
             Text [ italian ] = "Funzioni statistiche" ;
-            Text [ portuguese_brazilian ] = "Funç~oes Estatísticas" ;
+            Text [ portuguese_brazilian ] = "Fun?~oes Estat?sticas" ;
             Text [ portuguese ] = "Funções e~statísticas" ;
             Text [ finnish ] = "Tilastofunktiot" ;
             Text [ danish ] = "Statistiske funktioner" ;
@@ -745,7 +745,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Mean" ;
                         Text [ norwegian ] = "Gjennomsnitt" ;
                         Text [ italian ] = "Valore medio" ;
-                        Text [ portuguese_brazilian ] = "Média" ;
+                        Text [ portuguese_brazilian ] = "M?dia" ;
                         Text [ portuguese ] = "~Média" ;
                         Text [ finnish ] = "Keskiarvo" ;
                         Text [ danish ] = "Middel" ;
@@ -753,7 +753,7 @@ Menu MN_CALC_POPUP
                         Text [ swedish ] = "M~edelvärde" ;
                         Text[ chinese_simplified ] = "Æ½¾ùÖµ(~M)";
                         Text[ russian ] = "Ñðåäíåå çíà÷åíèå";
-                        Text[ polish ] = "Œrednia wartoœæ";
+                        Text[ polish ] = "?rednia warto?æ";
                         Text[ japanese ] = "•½‹Ï’l";
                         Text[ chinese_traditional ] = "¥­§¡­È(~M)";
                         Text[ arabic ] = "ÇáãÚÏá";
@@ -775,7 +775,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Minimum" ;
                         Text [ norwegian ] = "Minimum" ;
                         Text [ italian ] = "Valore minimo" ;
-                        Text [ portuguese_brazilian ] = "Mínimo" ;
+                        Text [ portuguese_brazilian ] = "M?nimo" ;
                         Text [ portuguese ] = "Valor mí~nimo" ;
                         Text [ finnish ] = "Minimi" ;
                         Text [ danish ] = "Minimumværdi" ;
@@ -805,7 +805,7 @@ Menu MN_CALC_POPUP
                         Text [ english_us ] = "Maximum" ;
                         Text [ norwegian ] = "Maksimum" ;
                         Text [ italian ] = "Valore massimo" ;
-                        Text [ portuguese_brazilian ] = "Máximo" ;
+                        Text [ portuguese_brazilian ] = "M?ximo" ;
                         Text [ portuguese ] = "Valor má~ximo" ;
                         Text [ finnish ] = "Maksimi" ;
                         Text [ danish ] = "Maksimumværdi" ;
@@ -850,7 +850,7 @@ Menu MN_CALC_POPUP
             Text [ english_us ] = "Functions" ;
             Text [ norwegian ] = "~Funksjoner" ;
             Text [ italian ] = "Funzioni" ;
-            Text [ portuguese_brazilian ] = "~Funções" ;
+            Text [ portuguese_brazilian ] = "~Fun??s" ;
             Text [ portuguese ] = "~Funções" ;
             Text [ finnish ] = "Toiminnot" ;
             Text [ danish ] = "Funktioner" ;
@@ -1061,7 +1061,7 @@ String STR_FORMULA
     Text [ english_us ] = "Text formula" ;
     Text [ norwegian ] = "Tekstformel" ;
     Text [ italian ] = "Formula testo" ;
-    Text [ portuguese_brazilian ] = "Fórmula do Texto" ;
+    Text [ portuguese_brazilian ] = "F?mula do Texto" ;
     Text [ portuguese ] = "Fórmula do texto" ;
     Text [ finnish ] = "Tekstikaava" ;
     Text [ danish ] = "Tekstformel" ;
@@ -1090,7 +1090,7 @@ String STR_FORMULA
         Text [ English ] = "Formula" ; \
         Text [ norwegian ] = "Formel" ; \
         Text [ italian ] = "Formula" ; \
-        Text [ portuguese_brazilian ] = "Fórmula" ; \
+        Text [ portuguese_brazilian ] = "F?mula" ; \
         Text [ portuguese ] = "Fórmula" ; \
         Text [ finnish ] = "Kaava" ; \
         Text [ danish ] = "Formel" ; \
