@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-02 07:34:23 $
+ *  last change: $Author: fs $ $Date: 2002-05-22 13:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,9 +782,9 @@ void OGenericUnoController::EmptyWindow()
 void OGenericUnoController::AddSupportedFeatures()
 {
     // add all supported features
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/copyContent")] = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/cutContent")] = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/pasteContent")] = ID_BROWSER_PASTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")] = ID_BROWSER_COPY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")] = ID_BROWSER_CUT;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")] = ID_BROWSER_PASTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBSlots/EditDoc")] = ID_BROWSER_EDITDOC;
 }
 
