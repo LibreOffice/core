@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-24 07:18:40 $
+ *  last change: $Author: tra $ $Date: 2001-10-04 13:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
 #define RES_NAME svt
 
-// because the label of a listbox is
-// a control itself (static text) we
-// have defined a control id for this
-// label which is the listbox control
-// id + 100
-#define LB_LABEL_OFFSET 100
-
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
 
@@ -139,9 +132,9 @@ _Entry CtrlIdToResIdTable[] = {
     { CHECKBOX_LINK,                            STR_SVT_FILEPICKER_INSERT_AS_LINK },
     { CHECKBOX_PREVIEW,                         STR_SVT_FILEPICKER_SHOW_PREVIEW },
     { PUSHBUTTON_PLAY,                          STR_SVT_FILEPICKER_PLAY },
-    { LISTBOX_VERSION + LB_LABEL_OFFSET,        STR_SVT_FILEPICKER_VERSION },
-    { LISTBOX_TEMPLATE + LB_LABEL_OFFSET,       STR_SVT_FILEPICKER_TEMPLATES },
-    { LISTBOX_IMAGE_TEMPLATE + LB_LABEL_OFFSET, STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
+    { LISTBOX_VERSION_LABEL,                    STR_SVT_FILEPICKER_VERSION },
+    { LISTBOX_TEMPLATE_LABEL,                   STR_SVT_FILEPICKER_TEMPLATES },
+    { LISTBOX_IMAGE_TEMPLATE_LABEL,             STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
     { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
     { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
     { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION }
