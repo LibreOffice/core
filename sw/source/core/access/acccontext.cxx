@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
+ *  last change: $Author: vg $ $Date: 2002-05-21 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         case SCROLLED:
                         case SCROLLED_WITHIN:
                             xAccImpl->ViewForwarderChanged(
-                                accessibility::IAccessibleViewForwarderListener::ChangeType::VISIBLE_AREA,
+                                accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                 GetMap() );
                             break;
                         case SCROLLED_IN:
@@ -326,7 +326,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                         case SCROLLED_OUT:
                             {
                                 xAccImpl->ViewForwarderChanged(
-                                    accessibility::IAccessibleViewForwarderListener::ChangeType::VISIBLE_AREA,
+                                    accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA,
                                     GetMap() );
                                 DisposeShape( rLower.GetSdrObject(),
                                               xAccImpl.getBodyPtr() );
