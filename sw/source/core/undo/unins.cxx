@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-22 10:37:51 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 17:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ BOOL SwUndoInsert::CanGrouping( const SwPosition& rPos )
                     if( pIReg == (pIdx = &pRedl->End()->nContent)->GetIdxReg() &&
                         nCntnt == pIdx->GetIndex() )
                     {
-                        if( !pRedl->HasMark() ||
+                        if( !pRedl->HasMark() || !pRedlData ||
                             *pRedl != *pRedlData || *pRedl != aRData )
                         {
                             bRet = FALSE;
@@ -1036,11 +1036,14 @@ void SwUndoInsertLabel::SetDrawObj( const Point& rPos, BYTE nLId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.4 2000-12-22 10:37:51 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unins.cxx,v 1.5 2001-03-02 17:53:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/12/22 10:37:51  jp
+      SetAndSave: set pSelFmt at the UndoIter
+
       Revision 1.3  2000/11/28 20:36:53  jp
       task #80795#: ReRead and InsertGrafik with GraphicObject
 
