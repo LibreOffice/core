@@ -2,9 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.6 $
- *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:08:24 $
+ *  $Revision: 1.7 $
+ *  last change: $Author: obo $ $Date: 2004-07-08 16:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +200,9 @@ OUString LanguageSelection::getLanguageString()
         } else {
             // last resort
             // don't save
-            // what's this ?????
-//            return (LanguageType) SvtPathOptions().SubstituteVariable(
-//                String::CreateFromAscii("$(langid)")).ToInt32();
+            return ConvertLanguageToIsoString((LanguageType) SvtPathOptions().SubstituteVariable(
+                String::CreateFromAscii("$(langid)")).ToInt32()) ;
+            /*
             ::com::sun::star::lang::Locale aLocale;
             OUString aLocString( aLocale.Language );
             if ( aLocale.Country.getLength() != 0 )
@@ -217,6 +216,7 @@ OUString LanguageSelection::getLanguageString()
                 }
             }
             return aLocString;
+            */
         }
     }
 }
@@ -290,8 +290,7 @@ IsoList LanguageSelection::getInstalledIsoLanguages()
     try{
         OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
         OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
-        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/");
-        OUString sLocales = OUString::createFromAscii("ooSetupLocales");
+        OUString sConfigURL = OUString::createFromAscii("org.openoffice.Setup/Office/InstalledLocales");
 
         // get configuration provider
         Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
@@ -309,15 +308,10 @@ IsoList LanguageSelection::getInstalledIsoLanguages()
         //check access
         if (!theNameAccess.is()) return aList;
 
-        Any aResult = theNameAccess->getByName( sLocales );
-        Sequence< OUString > aLangSeq;
+        Sequence< OUString > aLangSeq = theNameAccess->getElementNames();
 
-        // unpack result from Any type
-        if (aResult >>= aLangSeq)
-        {
-            for (int i=0; i<aLangSeq.getLength(); i++)
-                aList.push_back(aLangSeq[i]);
-        }
+        for (int i=0; i<aLangSeq.getLength(); i++)
+               aList.push_back(aLangSeq[i]);
     } catch (com::sun::star::uno::RuntimeException)
     {
         // didn't work - return empty list
