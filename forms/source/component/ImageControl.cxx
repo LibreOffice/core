@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-14 15:08:43 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 18:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ OImageControlModel::OImageControlModel(const staruno::Reference<starlang::XMulti
                     ,m_bReadOnly(sal_False)
 {
     DBG_CTOR(OImageControlModel,NULL);
+    m_nClassId = starform::FormComponentType::IMAGECONTROL;
 
     m_xImageProducer = m_pImageProducer;
 
