@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:37:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,12 +152,6 @@
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
 #endif
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
-#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
-#include "PreviewChildWindow.hxx"
-#endif
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
@@ -215,24 +209,6 @@ void DrawViewShell::Activate(BOOL bIsMDIActivate)
     if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
         rObjectBarManager.SwitchObjectBar (
             rObjectBarManager.GetDefaultObjectBarId());
-
-    if (bIsMDIActivate)
-    {
-        BOOL bPreview = FALSE;
-
-        // Only for the Draw application we look whether we have to show a
-        // preview.  For all Impress related view shells no preview is
-        // shown.
-        if (GetShellType() == ST_DRAW)
-            if (eEditMode == EM_PAGE)
-                bPreview = pFrameView->IsShowPreviewInPageMode() != 0;
-            else
-                bPreview = pFrameView->IsShowPreviewInMasterPageMode() != 0;
-
-        SfxBoolItem aItem(SID_PREVIEW_WIN, bPreview);
-        GetViewFrame()->GetDispatcher()->Execute(
-            SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L);
-    }
 }
 
 void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
@@ -427,8 +403,6 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     if ( ViewShell::PrepareClose(bUI, bForBrowsing) != TRUE )
         return FALSE;
 
-    SfxChildWindow* pPreviewChild = GetViewFrame()->GetChildWindow(
-        PreviewChildWindow::GetChildWindowId() );
     BOOL            bRet = TRUE;
 
 /*
@@ -436,22 +410,6 @@ USHORT DrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     {
         pFuSlideShow->Terminate();
         bRet = FALSE;
-    }
-*/
-
-/*
-    if( pPreviewChild && pPreviewChild->GetWindow() )
-    {
-        PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-            pPreviewChild->GetWindow());
-        FuSlideShow* pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
-
-        if( pPreviewWin->GetDoc() == GetDoc() && pShow && pShow->IsInputLocked() )
-        {
-            //          pShow->Terminate();
-            //          bRet = FALSE;
-            pShow->Destroy ();
-        }
     }
 */
 
@@ -558,10 +516,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             aTabControl.SetCurPageId(nActualPageNum + 1);
 
             SwitchPage(nActualPageNum);
-
-            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInPageMode() != 0 );
-            GetViewFrame()->GetDispatcher()->Execute(
-                SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
         else
         {
@@ -576,8 +530,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 // Sofern es keine pActualPage gibt, wird die erste genommen
                 pActualPage = GetDoc()->GetSdPage(0, ePageKind);
             }
-
-            SdPage* pPreviewPage = pActualPage;
 
             aTabControl.Clear();
             USHORT nActualMasterPageNum = 0;
@@ -599,10 +551,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
             aTabControl.SetCurPageId(nActualMasterPageNum + 1);
             SwitchPage(nActualMasterPageNum);
-
-            SfxBoolItem aItem(SID_PREVIEW_WIN, pFrameView->IsShowPreviewInMasterPageMode() != 0 );
-            GetViewFrame()->GetDispatcher()->Execute(
-                SID_PREVIEW_WIN, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
         }
 
         // If the master view toolbar is to be shown we turn it on after the
@@ -639,7 +587,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
-        Invalidate(SID_PREVIEW_WIN);
     }
 }
 
