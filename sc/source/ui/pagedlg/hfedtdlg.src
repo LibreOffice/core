@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:03:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,7 +498,7 @@ TabPage RID_HFBASE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 */
@@ -514,7 +514,7 @@ TabPage RID_HFBASE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 */
@@ -530,10 +530,36 @@ TabPage RID_HFBASE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 */
+    FixedText FT_HF_DEFINED
+    {
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text [ de ] = "~Kopfzeile" ;
+        Text [ en-US ] = "Hea~der" ;
+    };
+
+    ListBox LB_DEFINED
+    {
+        Border = TRUE ;
+                Pos = MAP_APPFONT ( 66 , 100 ) ;
+                Size = MAP_APPFONT ( 130 , 80 ) ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    FixedText FT_HF_CUSTOM
+    {
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+                Text [ de ]  = "Benutzerdefiniert" ;
+        Text [ en-US ] = "Custom header" ;
+        Text [ x-comment ] = "German text shortened." ;
+    };
+
     ImageButton BTN_TEXT
     {
         HelpId = HID_SC_HF_TEXT ;
@@ -737,7 +763,7 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
         HelpId = HID_SC_HF_HLL ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
@@ -745,7 +771,7 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
         HelpId = HID_SC_HF_HLC ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
@@ -753,7 +779,7 @@ TabPage RID_SCPAGE_HFED_HL < RID_HFBASE
         HelpId = HID_SC_HF_HLR ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 };
@@ -766,7 +792,7 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
         HelpId = HID_SC_HF_HRL ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
@@ -774,7 +800,7 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
         HelpId = HID_SC_HF_HRC ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
@@ -782,7 +808,7 @@ TabPage RID_SCPAGE_HFED_HR < RID_HFBASE
         HelpId = HID_SC_HF_HRR ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 };
@@ -795,7 +821,7 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
         HelpId = HID_SC_HF_FLL ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
@@ -803,7 +829,7 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
         HelpId = HID_SC_HF_FLC ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
@@ -811,7 +837,7 @@ TabPage RID_SCPAGE_HFED_FL < RID_HFBASE
         HelpId = HID_SC_HF_FLR ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 };
@@ -824,7 +850,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         HelpId = HID_SC_HF_FRL ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 6 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_CENTER
@@ -832,7 +858,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         HelpId = HID_SC_HF_FRC ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 90 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
     Control WND_RIGHT
@@ -840,7 +866,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         HelpId = HID_SC_HF_FRR ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 174 , 18 ) ;
-        Size = MAP_APPFONT ( 80 , 97 ) ;
+        Size = MAP_APPFONT ( 80 , 72 ) ;
         TabStop = TRUE ;
     };
 };
