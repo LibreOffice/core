@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedFieldModel.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:43 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 //=============================================================================
 
-/** specifies the standard model of an formatted control
+/** specifies the standard model of an <type>UnoControlFormattedField </type>.
  */
 service UnoControlFormattedFieldModel
 {
@@ -89,6 +89,7 @@ service UnoControlFormattedFieldModel
     //-------------------------------------------------------------------------
 
     /** specifies the alignment of the text in the control.
+
         <pre>
         0: left
         1: center
@@ -106,6 +107,7 @@ service UnoControlFormattedFieldModel
     //-------------------------------------------------------------------------
 
     /** specifies the border style of the control.
+
         <pre>
         0: No border
         1: 3D border
@@ -116,45 +118,43 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the service name of the default control for this model.
-     */
-    [property] string DefaultControl;
+    /** specifies the default value of the formatted field.
 
-    //-------------------------------------------------------------------------
-
-    /** specifies the default value of the field
-        <p>This may be a numeric value (double) or a string, depending on the formatting of the field.</p>
+        <p>This may be a numeric value (double) or a string, depending on
+        the formatting of the field.</p>
      */
     [property] any EffectiveDefault;
 
-
     //-------------------------------------------------------------------------
 
-    /** specifies the maximal value of the field.
-        <p>This property is ignored if the format of the field is no numeric format.</p>
+    /** specifies the maximum value that can be entered.
+
+        <p>This property is ignored if the format of the field is no numeric
+        format.</p>
      */
     [property] double EffectiveMax;
 
-
     //-------------------------------------------------------------------------
 
-    /** specifies the minimal value of the field.
-        <p>This property is ignored if the format of the field is no numeric format.</p>
+    /** specifies the minimum value that can be entered.
+
+        <p>This property is ignored if the format of the field is no numeric
+        format.</p>
      */
     [property] double EffectiveMin;
 
-
     //-------------------------------------------------------------------------
 
-    /** specifies the current value of the field.
-        <p>This may be a numeric value (double) or a string, depending on the formatting of the field.</p>
+    /** specifies the current value of the formatted field.
+
+        <p>This may be a numeric value (double) or a string, depending on
+        the formatting of the field.</p>
      */
     [property] double EffectiveValue;
 
-
     //-------------------------------------------------------------------------
 
-    /** determines whether a control is enabled or disabled.
+    /** determines whether the control is enabled or disabled.
      */
     [property] boolean Enabled;
 
@@ -166,8 +166,25 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the format to be used when formatting the field input and output
-        <p>This value is meaningful relative to the FormatsSupplier property only.</p>
+    /** specifies the <type scope="com::sun::star::text">FontEmphasis</type>
+        value of the text in the control.
+     */
+    [property] short FontEmphasisMark;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the <type scope="com::sun::star::text">FontRelief</type>
+        value of the text in the control.
+     */
+    [property] short FontRelief;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the format to be used when formatting the field input
+        and output.
+
+        <p>This value is meaningful relative to the FormatsSupplier property
+        only.</p>
      */
     [property] long FormatKey;
 
@@ -179,7 +196,21 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the maximum character count; 0 means no limit.
+    /** specifies the help text of the control.
+     */
+    [property] string HelpText;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the help URL of the control.
+     */
+    [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the maximum character count.
+
+        <p>There's no limitation, if set to 0.</p>
      */
     [property] short MaxTextLen;
 
@@ -191,7 +222,8 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the content of the control cannot be modified by the user.
+    /** specifies that the content of the control cannot be modified by the
+        user.
      */
     [property] boolean ReadOnly;
 
@@ -203,22 +235,23 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the text is checked during the input.
+    /** specifies that the text is checked during the user input.
 
-        <p>This property is optional - not every component implementing this service is required to
-        provide it, as real-time input checking on a formatted field may be pretty expensive.</p>
+        <p>This property is optional - not every component implementing this
+        service is required to provide it, as real-time input checking on a
+        formatted field may be pretty expensive.</p>
      */
     [optional, property] boolean StrictFormat;
 
     //-------------------------------------------------------------------------
 
-    /** specifies that the control can be reached with the tabulator key.
+    /** specifies that the control can be reached with the TAB key.
      */
     [property] boolean Tabstop;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the text that is displayed in the control.
+    /** specifies the text displayed in the control.
      */
     [property] string Text;
 
@@ -230,15 +263,15 @@ service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help text of the control.
+    /** specifies the text line color (RGB) of the control.
      */
-    [property] string HelpText;
+    [property] long TextLineColor;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the help id of the control.
+    /** specifies that the text is treated as a number.
      */
-    [property] string HelpURL;
+    [property] boolean TreatAsNumber;
 
 };
 
