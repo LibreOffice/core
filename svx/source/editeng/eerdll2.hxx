@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: mt $ $Date: 2001-03-09 18:09:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _EERDLL2_HXX
 #define _EERDLL2_HXX
 
+#include <forbiddencharacterstable.hxx>
+#include <vos/ref.hxx>
+
 class SfxPoolItem;
 class SvxAutoCorrect;
 
@@ -73,6 +76,8 @@ private:
 
     Link            aGetAutoCorrectHdl;
 
+    vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
+
 public:
                     GlobalEditData();
                     ~GlobalEditData();
@@ -82,6 +87,9 @@ public:
 
     void            SetGetAutoCorrectHdl( const Link& rHdl ) { aGetAutoCorrectHdl = rHdl; }
     SvxAutoCorrect* GetAutoCorrect() const { return (SvxAutoCorrect*) aGetAutoCorrectHdl.Call( NULL ); }
+
+    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable();
+    void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
 };
 
 
