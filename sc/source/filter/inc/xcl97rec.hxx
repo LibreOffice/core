@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-27 15:24:45 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ class XclSupbook : public ExcRecord, private List
 private:
     UINT16                      nTables;
     String                      sDocName;
-    XclRawUnicodeString         sEncoded;
+    XclUnicodeString            sEncoded;
     UINT32                      nLen;
     BOOL                        bSelf;
 
@@ -218,7 +218,9 @@ public:
                                 XclSupbook( const String& rDocName );   // ext book
     virtual                     ~XclSupbook();
 
-    inline const String&        GetName() const     { return sDocName; }
+    inline const String&        GetName() const         { return sDocName; }
+    inline const XclUnicodeString& GetEncName() const   { return sEncoded; }
+    const XclUnicodeString*     GetTableName( UINT16 nIndex ) const;
 
     UINT16                      AddTableName( const String& rTabName );
     void                        StoreCellRange( RootData& rRoot, const ScRange& rRange,
@@ -253,6 +255,11 @@ private:
 public:
                                 XclSupbookList( RootData* pRoot );
     virtual                     ~XclSupbookList();
+
+                                // get external document name - expects Excel tabnums
+    const XclUnicodeString*     GetDocumentName( UINT16 nExcTab );
+                                // get external table name - expects Excel tabnums
+    const XclUnicodeString*     GetTableName( UINT16 nExcTab );
 
     void                        StoreCellRange( const ScRange& rRange );
 
@@ -291,8 +298,8 @@ class XclExternsheetList : public ExcRecord, ExcRoot, private List
 private:
     XclSupbookList              aSupbookList;
 
-    XclXti*                     _First()    { return (XclXti*) List::First(); }
-    XclXti*                     _Next()     { return (XclXti*) List::Next(); }
+    inline XclXti*              _First()    { return (XclXti*) List::First(); }
+    inline XclXti*              _Next()     { return (XclXti*) List::Next(); }
 
     static inline UINT16        GetVal16( UINT32 nVal )
                                     { return (nVal <= 0xFFFF) ? (UINT16) nVal : 0xFFFF; }
@@ -311,6 +318,12 @@ public:
 
                                 // add new XclXti if not found - expects Excel tabnums
     UINT16                      Find( UINT16 nTabFirst, UINT16 nTabLast );
+                                // get external document name - expects Excel tabnums
+    inline const XclUnicodeString* GetDocumentName( UINT16 nExcTab )
+                                    { return aSupbookList.GetDocumentName( nExcTab ); }
+                                // get external table name - expects Excel tabnums
+    inline const XclUnicodeString* GetTableName( UINT16 nExcTab )
+                                    { return aSupbookList.GetTableName( nExcTab ); }
 
                                 // cell contents -> CRN - expects SC tabnums
     void                        StoreCellCont( const SingleRefData& rRef );
@@ -829,23 +842,6 @@ private:
 
 public:
                                 ExcBundlesheet8( const String &rNewName );
-
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
-};
-
-
-// --- class ExcTabid8 -----------------------------------------------
-
-class ExcTabid8 : public ExcRecord
-{
-private:
-        UINT16              nTabs;
-
-            void                SaveCont( SvStream& );
-
-public:
-                                ExcTabid8( UINT16 nTabsP ) : nTabs( nTabsP ) {}
 
     virtual UINT16              GetNum() const;
     virtual UINT16              GetLen() const;
