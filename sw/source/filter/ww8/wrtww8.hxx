@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:25:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,11 @@
 #ifndef SW_WRITERHELPER
 #include "writerhelper.hxx"
 #endif
+
+#ifndef SW_MS_MSFILTER_HXX
+#include "../inc/msfilter.hxx"
+#endif
+
 
 // einige Forward Deklarationen
 class BitmapPalette;
@@ -415,6 +420,11 @@ typedef ::std::pair<String, ULONG> aPair;
 typedef std::vector<aPair> SwImplBookmarks;
 typedef std::vector<aPair>::iterator SwImplBookmarksIter;
 
+class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
+{
+    public:
+    virtual void Write(Writer &rWrt);
+};
 
 // der WW8-Writer
 class SwWW8Writer: public StgWriter
