@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:18:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
-
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -105,28 +107,27 @@ namespace dbaccess
 //........................................................................
 
 //==========================================================================
-//= OQueryDescriptor - a query descriptor (as the name suggests :)
+//= OQueryDescriptor_Base - a query descriptor (as the name suggests :)
 //==========================================================================
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::ImplHelper3<
         ::com::sun::star::sdbcx::XColumnsSupplier,
         ::com::sun::star::lang::XUnoTunnel,
-        ::com::sun::star::lang::XServiceInfo >  OQueryDescriptor_Base;
+        ::com::sun::star::lang::XServiceInfo >  OQueryDescriptor_BASE;
 
-class OQueryDescriptor
-        :public OQueryDescriptor_Base
-        ,public comphelper::OMutexAndBroadcastHelper
-        ,public ODataSettings
+class OQueryDescriptor_Base
+        :public OQueryDescriptor_BASE
         ,public OCommandBase
-        ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor >
         ,public IColumnFactory
         ,public ::connectivity::sdbcx::IRefreshableColumns
 {
 private:
     sal_Bool        m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
-    OColumns*       m_pColumns;                 // our column descriptions
+    ::osl::Mutex&   m_rMutex;
 
 protected:
-    ~OQueryDescriptor();
+    OColumns*       m_pColumns;                 // our column descriptions
+    ::rtl::OUString m_sElementName;
+    virtual ~OQueryDescriptor_Base();
 
     void        setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
     sal_Bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
@@ -137,81 +138,73 @@ protected:
     void        implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn );
 
 public:
-    OQueryDescriptor();
+    OQueryDescriptor_Base(::osl::Mutex& _rMutex,::cppu::OWeakObject& _rMySelf);
     /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
         won't have any column informations (the column container will be empty)
     */
-    OQueryDescriptor(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForeignDescriptor);
-    OQueryDescriptor(const OQueryDescriptor& _rSource);
-
-// ::com::sun::star::uno::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::uno::XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw();
-    virtual void SAL_CALL release(  ) throw();
-
-// ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+    OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf);
 
 // ::com::sun::star::sdbcx::XColumnsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-    static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+    DECLARE_IMPLEMENTATION_ID( );
 
 // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-// persistence
-    /** store all configuration relevant informations under the given configuration node
-        @param _rxConfigLocation
-            the configuration node. must not be readonly
-    */
-    void    storeTo(
-        const ::utl::OConfigurationNode& _rConfigLocation,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats
-    );
-
-    /** initialize with the informations stored under the given configuration node
-        @param _rxConfigLocation
-            the configuration node.
-    */
-    void    loadFrom(
-        const ::utl::OConfigurationNode& _rConfigLocation,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats
-    );
-
-// pseudo-XComponent
-    virtual void SAL_CALL dispose();
-
 protected:
-// OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+    virtual void columnDropped(const ::rtl::OUString& _sName) {}
 
     // called (after some preparations) from inside refreshColumns. Never overload refreshColumns directly!
     virtual void rebuildColumns( );
 
-    virtual ::utl::OConfigurationNode getObjectLocation() const;
-
+    virtual void disposeColumns();
 private:
     virtual void refreshColumns();
 
-    // helper
-    void registerProperties();
 };
 
+class OQueryDescriptor : public comphelper::OMutexAndBroadcastHelper
+                        ,public ::cppu::OWeakObject
+                        ,public OQueryDescriptor_Base
+                        ,public ::comphelper::OPropertyArrayUsageHelper< OQueryDescriptor_Base >
+                        ,public ODataSettings
+{
+    // helper
+    void registerProperties();
+protected:
+    // OPropertyArrayUsageHelper
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+    // OPropertySetHelper
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+public:
+    OQueryDescriptor();
+    /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
+        won't have any column informations (the column container will be empty)
+    */
+    OQueryDescriptor(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForeignDescriptor);
+    OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
+
+    // com::sun::star::lang::XTypeProvider
+    DECLARE_TYPEPROVIDER( );
+
+// ::com::sun::star::uno::XInterface
+    DECLARE_XINTERFACE( )
+
+    // ::com::sun::star::beans::XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+};
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
