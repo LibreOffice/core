@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:31:03 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #ifndef _SFX_OBJSH_HXX
@@ -139,6 +146,10 @@
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
+
+using ::rtl::OUString;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::i18n::XBreakIterator;
 
 // Export progress bar ========================================================
 
@@ -274,7 +285,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 
 bool XclExpHyperlinkHelper::HasLinkRecord() const
 {
-    return !mbMultipleUrls && mxLinkRec;
+    return !mbMultipleUrls && mxLinkRec.is();
 }
 
 XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
@@ -288,6 +299,70 @@ XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()
 
 namespace {
 
+/** Creates a new formatted string from the passed string.
+    @descr  Creates a Unicode string or a byte string, depending on the current
+            BIFF version contained in the passed XclExpRoot object. May create a
+            formatted string object, if the text contains different script types.
+    @param nFlags  Modifiers for string export.
+    @param nMaxLen  The maximum number of characters to store in this string.
+    @return  The new string object. */
+XclExpStringRef lclCreateFormattedString(
+        const XclExpRoot& rRoot, const String& rText, const ScPatternAttr* pCellAttr,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    /*  Create an empty Excel string object with correctly initialized BIFF mode,
+        because this function only uses Append() functions that require this. */
+    XclExpStringRef xString = XclExpStringHelper::CreateString( rRoot, EMPTY_STRING, nFlags, nMaxLen );
+
+    // font handling
+    XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
+    sal_uInt16 nLastXclFont = EXC_FONT_APP;
+
+    // script type handling
+    Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    sal_Int16 nLastScript = ApiScriptType::WEAK;
+
+    // cell item set
+    const SfxItemSet& rItemSet = pCellAttr ? pCellAttr->GetItemSet() : rRoot.GetDoc().GetDefPattern()->GetItemSet();
+
+    // process all script portions
+    OUString aOUText( rText );
+    sal_Int32 nPortionPos = 0;
+    sal_Int32 nTextLen = aOUText.getLength();
+    while( nPortionPos < nTextLen )
+    {
+        // get script type and position of next script portion
+        sal_Int16 nScript = xBreakIt->getScriptType( aOUText, nPortionPos );
+        sal_Int32 nPortionEnd = xBreakIt->endOfScript( aOUText, nPortionPos, nScript );
+
+        // construct font from current text portion
+        if( nScript == ApiScriptType::WEAK )
+            nScript = nLastScript;
+        SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( rItemSet, nScript ) );
+        nLastScript = nScript;
+
+        // Excel start position of this portion
+        sal_uInt16 nXclPortionStart = xString->Len();
+        // add portion text to Excel string
+        XclExpStringHelper::AppendString( *xString, rRoot, aOUText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
+
+        // insert font into buffer
+        sal_uInt16 nXclFont = rFontBuffer.Insert( aFont );
+        // current portion font differs from last? -> insert into format run vector
+        if( (nXclPortionStart == 0) || ((nXclFont != nLastXclFont) && (nXclPortionStart < xString->Len())) )
+        {
+            xString->AppendFormat( nXclPortionStart, nXclFont );
+            nLastXclFont = nXclFont;
+        }
+
+        // go to next script portion
+        nPortionPos = nPortionEnd;
+    }
+
+    return xString;
+}
+
 /** Creates a new formatted string from an edit engine text object.
     @descr  Creates a Unicode string or a byte string, depending on the current
             BIFF version contained in the passed XclExpRoot object.
@@ -295,7 +370,7 @@ namespace {
     @param nFlags  Modifiers for string export.
     @param nMaxLen  The maximum number of characters to store in this string.
     @return  The new string object. */
-XclExpStringRef lclCreateString(
+XclExpStringRef lclCreateFormattedString(
         const XclExpRoot& rRoot, EditEngine& rEE, XclExpHyperlinkHelper* pLinkHelper,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
@@ -308,7 +383,12 @@ XclExpStringRef lclCreateString(
 
     // font handling
     XclExpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
-    sal_uInt16 nLastXclFont = 0;
+    sal_uInt16 nLastXclFont = EXC_FONT_APP;
+
+    // script type handling
+    Reference< XBreakIterator > xBreakIt = rRoot.GetDoc().GetBreakIterator();
+    namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
+    sal_Int16 nLastScript = ApiScriptType::WEAK;
 
     // process all paragraphs
     sal_uInt16 nParaCount = rEE.GetParagraphCount();
@@ -318,7 +398,6 @@ XclExpStringRef lclCreateString(
         String aParaText( rEE.GetText( nPara ) );
         if( aParaText.Len() )
         {
-            String aXclParaText;
             SvUShorts aPosList;
             rEE.GetPortions( nPara, aPosList );
 
@@ -329,14 +408,15 @@ XclExpStringRef lclCreateString(
                 aSel.nEndPos = static_cast< xub_StrLen >( aPosList.GetObject( nPos ) );
                 String aXclPortionText( aParaText, aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
-                // construct font from current edit engine text portion
-                SvxFont aFont;
                 aItemSet.ClearItem();
                 SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
-                ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );
+
+                // get escapement value
+                short nEsc = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT ).GetEsc();
 
                 // process text fields
+                bool bIsHyperlink = false;
                 if( aSel.nStartPos + 1 == aSel.nEndPos )
                 {
                     // test if the character is a text field
@@ -350,27 +430,37 @@ XclExpStringRef lclCreateString(
                             aXclPortionText = pLinkHelper ?
                                 pLinkHelper->ProcessUrlField( *pUrlField ) :
                                 lclGetUrlRepresentation( *pUrlField );
-
-                            // modify font (TODO: correct font attributes?)
-                            aFont.SetColor( Color( COL_LIGHTBLUE ) );
-                            aFont.SetUnderline( UNDERLINE_SINGLE );
+                            bIsHyperlink = true;
                         }
                         else
                         {
-                            DBG_ERRORFILE( "lclCreateString - unknown text field" );
+                            DBG_ERRORFILE( "lclCreateFormattedString - unknown text field" );
                             aXclPortionText.Erase();
                         }
                     }
                 }
 
-                // test if this portion is escaped
-                const SvxEscapementItem& rEscapeItem = GETITEM( aEditSet, SvxEscapementItem, EE_CHAR_ESCAPEMENT );
-                aFont.SetEscapement( rEscapeItem.GetEsc() );
-
                 // Excel start position of this portion
                 sal_uInt16 nXclPortionStart = xString->Len();
                 // add portion text to Excel string
                 XclExpStringHelper::AppendString( *xString, rRoot, aXclPortionText );
+
+                /*  Construct font from current edit engine text portion. Edit engine
+                    creates different portions for different script types, no need to loop. */
+                sal_Int16 nScript = xBreakIt->getScriptType( aXclPortionText, 0 );
+                if( nScript == ApiScriptType::WEAK )
+                    nScript = nLastScript;
+                SvxFont aFont( XclExpFontBuffer::GetFontFromItemSet( aItemSet, nScript ) );
+                nLastScript = nScript;
+
+                // add escapement
+                aFont.SetEscapement( nEsc );
+                // modify font for hyperlinks (TODO: correct font attributes?)
+                if( bIsHyperlink )
+                {
+                    aFont.SetColor( Color( COL_LIGHTBLUE ) );
+                    aFont.SetUnderline( UNDERLINE_SINGLE );
+                }
 
                 // insert font into buffer
                 sal_uInt16 nXclFont = rFontBuffer.Insert( aFont );
@@ -423,14 +513,23 @@ void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot&
         rXclString.AppendByte( cChar, rRoot.GetCharSet() );
 }
 
-XclExpStringRef XclExpStringHelper::CreateString(
+XclExpStringRef XclExpStringHelper::CreateCellString(
+        const XclExpRoot& rRoot, const ScStringCell& rStringCell, const ScPatternAttr* pCellAttr,
+        XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    String aCellText;
+    rStringCell.GetString( aCellText );
+    return lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
+}
+
+XclExpStringRef XclExpStringHelper::CreateCellString(
         const XclExpRoot& rRoot, const ScEditCell& rEditCell, const ScPatternAttr* pCellAttr,
         XclExpHyperlinkHelper& rLinkHelper, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     XclExpStringRef xString;
     if( const EditTextObject* pEditObj = rEditCell.GetData() )
     {
-        // formatted string
+        // formatted cell
         ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
         BOOL bOldUpdateMode = rEE.GetUpdateMode();
         rEE.SetUpdateMode( TRUE );
@@ -441,15 +540,15 @@ XclExpStringRef XclExpStringHelper::CreateString(
         rEE.SetDefaults( pEEItemSet );      // edit engine takes ownership
         // create the string
         rEE.SetText( *pEditObj );
-        xString = lclCreateString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
+        xString = lclCreateFormattedString( rRoot, rEE, &rLinkHelper, nFlags, nMaxLen );
         rEE.SetUpdateMode( bOldUpdateMode );
     }
     else
     {
-        // unformatted string
+        // unformatted cell
         String aCellText;
         rEditCell.GetString( aCellText );
-        xString = CreateString( rRoot, aCellText, nFlags, nMaxLen );
+        xString = lclCreateFormattedString( rRoot, aCellText, pCellAttr, nFlags, nMaxLen );
     }
     return xString;
 }
@@ -466,7 +565,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
         rEE.SetUpdateMode( TRUE );
         // create the string
         rEE.SetText( pParaObj->GetTextObject() );
-        xString = lclCreateString( rRoot, rEE, 0, nFlags, nMaxLen );
+        xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
         rEE.SetUpdateMode( bOldUpdateMode );
         // limit formats - TODO: BIFF dependent
         if( !xString->IsEmpty() )
@@ -488,19 +587,20 @@ XclExpStringRef XclExpStringHelper::CreateString(
         const XclExpRoot& rRoot, const EditTextObject& rEditObj,
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    XclExpStringRef pString;
+    XclExpStringRef xString;
     EditEngine& rEE = rRoot.GetDrawEditEngine();
     BOOL bOldUpdateMode = rEE.GetUpdateMode();
     rEE.SetUpdateMode( TRUE );
-    rEE.SetText( rEditObj);
-    pString = lclCreateString( rRoot, rEE, 0, nFlags, nMaxLen );
+    rEE.SetText( rEditObj );
+    xString = lclCreateFormattedString( rRoot, rEE, 0, nFlags, nMaxLen );
     rEE.SetUpdateMode( bOldUpdateMode );
-    if( !pString->IsEmpty() )
+    // limit formats - TODO: BIFF dependent
+    if( !xString->IsEmpty() )
     {
-        pString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
-        pString->AppendFormat( pString->Len(), EXC_FONT_APP );
+        xString->LimitFormatCount( EXC_MAXRECSIZE_BIFF8 / 8 - 1 );
+        xString->AppendFormat( xString->Len(), EXC_FONT_APP );
     }
-    return pString;
+    return xString;
 }
 
 // Header/footer conversion ===================================================
