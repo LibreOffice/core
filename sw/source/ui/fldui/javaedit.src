@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:52:14 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:37:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog DLG_JAVAEDIT
         Text [ spanish ] = "Tipo de script" ;
         Text [ french ] = "T~ype de script" ;
         Text [ dutch ] = "Scriptt~ype" ;
-        Text [ portuguese ] = "~Tipo de Script" ;
+        Text [ portuguese ] = "~Tipo de script" ;
         Text[ chinese_simplified ] = "Ω≈±æ¿‡–Õ";
         Text[ russian ] = "“ËÔ ÒÍËÔÚ‡";
         Text[ polish ] = "Typ skryptu";
