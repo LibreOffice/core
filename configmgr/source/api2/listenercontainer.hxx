@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 16:10:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,7 +651,7 @@ namespace configmgr
             KeyList aKeys;
             if (m_aMapper.findKeysForIndex(_aFinder, nIndex,aKeys))
             {
-                for(KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
+                for(typename KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
                 {
                     if (ListenerContainer* pContainer = m_aSpecialHelper.aLC.getContainer(*it))
                     {
