@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:40:07 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,7 +1197,7 @@ SfxSlotInfo FN_EDIT_FORMULA
     SlotName[ portuguese_brazilian ] = "Inserir F�rmula";
     SlotName[ japanese ] = "数式バー";
     SlotName[ korean ] = "수식 표시줄";
-    SlotName[ chinese_simplified ] = "编辑栏";
+    SlotName[ chinese_simplified ] = "公式编辑栏";
     SlotName[ chinese_traditional ] = "編輯列";
     SlotName[ turkish ] = "Form�l �ubu�u";
     SlotName[ arabic ] = "����� ����";
@@ -11860,7 +11860,7 @@ SfxSlotInfo FN_TO_FOOTNOTE_AREA
     SlotName[ portuguese_brazilian ] = "Editar notas de rodap� / notas de fim";
     SlotName[ japanese ] = "脚注と文末脚注の編集";
     SlotName[ korean ] = "각주 및 미주 편집";
-    SlotName[ chinese_simplified ] = "编辑注脚/尾注";
+    SlotName[ chinese_simplified ] = "编辑脚注/尾注";
     SlotName[ chinese_traditional ] = "編輯註腳/頁尾";
     SlotName[ turkish ] = "Altbilgi/Dipnot D�zenle";
     SlotName[ arabic ] = "Edit Footnote/Endnote";
@@ -11910,5 +11910,6 @@ SfxSlotInfo FN_TABLE_ROW_SPLIT
 {
     SlotName = "Am Seiten- und Spaltenende aufbrechen";
     SlotName[ english_us ] = "Break across page and columns";
+    SlotName[ chinese_simplified ] = "跨页断行";
 };
 
