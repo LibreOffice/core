@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _TextGraphicObject.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:14:00 $
+ *  last change:$Date: 2004-03-19 14:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,18 @@
  *
  *
  ************************************************************************/
-
 package ifc.text;
+
+import com.sun.star.awt.Point;
+import com.sun.star.container.XIndexContainer;
+import com.sun.star.uno.UnoRuntime;
 
 import java.util.Random;
 
 import lib.MultiPropertyTest;
+
 import util.utils;
 
-import com.sun.star.awt.Point;
-import com.sun.star.container.XIndexContainer;
 
 /**
  * Testing <code>com.sun.star.text.TextGraphicObject</code>
@@ -106,7 +108,6 @@ import com.sun.star.container.XIndexContainer;
  * @see com.sun.star.text.TextGraphicObject
  */
 public class _TextGraphicObject extends MultiPropertyTest {
-
     public Random rdm = new Random();
 
     /**
@@ -115,19 +116,21 @@ public class _TextGraphicObject extends MultiPropertyTest {
      */
     protected PropertyTester PointTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue)
-                throws java.lang.IllegalArgumentException {
-            if (utils.isVoid(oldValue))
-                return newPoint(); else
+                              throws java.lang.IllegalArgumentException {
+            if (utils.isVoid(oldValue)) {
+                return newPoint();
+            } else {
                 return changePoint((Point[][]) oldValue);
+            }
         }
-    } ;
+    };
 
     /**
      * Tested with custom <code>PointTester</code>.
      */
     public void _ContourPolyPolygon() {
-        log.println("Testing with custom Property tester") ;
-        testProperty("ContourPolyPolygon", PointTester) ;
+        log.println("Testing with custom Property tester");
+        testProperty("ContourPolyPolygon", PointTester);
     }
 
     /**
@@ -140,21 +143,30 @@ public class _TextGraphicObject extends MultiPropertyTest {
      * collection is greater than in old one.
      */
     public void _ImageMap() {
-        try {
-            XIndexContainer imgMap = (XIndexContainer)
-                oObj.getPropertyValue("ImageMap");
-            int previous = imgMap.getCount();
-            log.println("Count (previous) "+previous);
-            Object im = tEnv.getObjRelation("IMGMAP");
-            imgMap.insertByIndex(0,im);
-            oObj.setPropertyValue("ImageMap",imgMap);
-            imgMap = (XIndexContainer) oObj.getPropertyValue("ImageMap");
-            int after = imgMap.getCount();
-            log.println("Count (after) "+after);
-            tRes.tested("ImageMap",previous < after);
-        }
-        catch (Exception ex) {}
+        boolean result = true;
 
+        try {
+            XIndexContainer imgMap = (XIndexContainer) UnoRuntime.queryInterface(
+                                             XIndexContainer.class,
+                                             oObj.getPropertyValue("ImageMap"));
+            int previous = imgMap.getCount();
+            log.println("Count (previous) " + previous);
+
+            Object im = tEnv.getObjRelation("IMGMAP");
+            imgMap.insertByIndex(0, im);
+            oObj.setPropertyValue("ImageMap", imgMap);
+            imgMap = (XIndexContainer) UnoRuntime.queryInterface(
+                             XIndexContainer.class,
+                             oObj.getPropertyValue("ImageMap"));
+
+            int after = imgMap.getCount();
+            log.println("Count (after) " + after);
+            result = previous < after;
+        } catch (Exception ex) {
+            result = false;
+        }
+
+        tRes.tested("ImageMap", result);
     }
 
     /**
@@ -162,11 +174,14 @@ public class _TextGraphicObject extends MultiPropertyTest {
      */
     public Point[][] newPoint() {
         Point[][] res = new Point[1][185];
-        for (int i=0; i<res[0].length; i++) {
+
+        for (int i = 0; i < res[0].length; i++) {
             res[0][i] = new Point();
-            res[0][i].X = rd()*rd()*rd();
-            res[0][i].Y = rd()*rd()*rd();;
+            res[0][i].X = rd() * rd() * rd();
+            res[0][i].Y = rd() * rd() * rd();
+            ;
         }
+
         return res;
     }
 
@@ -179,13 +194,12 @@ public class _TextGraphicObject extends MultiPropertyTest {
      */
     public Point[][] changePoint(Point[][] oldPoint) {
         Point[][] res = oldPoint;
-        for (int i=0; i<res[0].length; i++) {
+
+        for (int i = 0; i < res[0].length; i++) {
             res[0][i].X += 1;
             res[0][i].Y += 1;
         }
+
         return res;
     }
-
-}  // finish class _TextGraphicObject
-
-
+} // finish class _TextGraphicObject
