@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:37:36 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ published service DatabaseRange
 
     /** specifies whether the AutoFilter is enabled or not.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional, property] boolean AutoFilter;
 
@@ -151,7 +151,7 @@ published service DatabaseRange
 
     /** specifies whether the filter criteria should be taken from a CellRange.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional, property] boolean UseFilterCriteriaSource;
 
@@ -160,7 +160,7 @@ published service DatabaseRange
     /** specifies the range where the filter can find the filter criterias.
         <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
@@ -168,7 +168,7 @@ published service DatabaseRange
 
     /** specifies the time between two refresh actions in seconds.
 
-        @since #76694#
+        @since OOo 2.0.0
      */
     [optional, property] long RefreshPeriod;
 
@@ -176,7 +176,7 @@ published service DatabaseRange
 
     /** specifies whether the imported data is only a selection of the database.
 
-        @since #76694#
+        @since OOo 2.0.0
 
      */
     [optional, property] boolean FromSelection;
