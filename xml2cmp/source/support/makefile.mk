@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: np $ $Date: 2002-11-14 14:03:29 $
+#   last change: $Author: rt $ $Date: 2002-12-11 14:36:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,8 @@ OBJFILES= \
     $(OBJ)$/cmdline.obj		\
     $(OBJ)$/heap.obj        \
     $(OBJ)$/sistr.obj		\
-    $(OBJ)$/syshelp.obj
+    $(OBJ)$/syshelp.obj		\
+    $(OBJ)$/badcast.obj
 
 
 
