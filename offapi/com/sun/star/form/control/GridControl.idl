@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ *  $RCSfile: GridControl.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-04-19 10:53:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_control_GridControl_idl__
+#define __com_sun_star_form_control_GridControl_idl__
+
+#ifndef __com_sun_star_awt_UnoControl_idl__
+#include <com/sun/star/awt/UnoControl.idl>
+#endif
+
+#ifndef __com_sun_star_form_XGrid_idl__
+#include <com/sun/star/form/XGrid.idl>
+#endif
+
+#ifndef __com_sun_star_form_XBoundComponent_idl__
+#include <com/sun/star/form/XBoundComponent.idl>
+#endif
+
+#ifndef __com_sun_star_form_XGridFieldDataSupplier_idl__
+#include <com/sun/star/form/XGridFieldDataSupplier.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#endif
+
+#ifndef __com_sun_star_util_XModeSelector_idl__
+#include <com/sun/star/util/XModeSelector.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef __com_sun_star_container_XContainer_idl__
+#include <com/sun/star/container/XContainer.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDispatchProviderInterception_idl__
+#include <com/sun/star/frame/XDispatchProviderInterception.idl>
+#endif
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module control {
+
+//=============================================================================
+
+/** describes a table-like control for displaying data.
+    <p>The control is usually used together with a model implementing the
+    <service scope="com.sun.star.form.component">GridControl</service> service.</p>
+*/
+service GridControl
+{
+    service com::sun::star::awt::UnoControl;
+
+    /** allows committing the content of the active cell of the control.
+    */
+    interface com::sun::star::form::XBoundComponent;
+
+    /** allows access to the active cell within the grid.
+        <p>Only the column position can be modified using this interface, as the row position within
+        a table control bound to a data source is given implicitly (by the cursor position of the data source).</p>
+    */
+    interface com::sun::star::form::XGrid;
+
+    /** used to broadcast modifications made by the user (within the active cell)
+    */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+    /** allows access to the field data of the grid's current row in different formats
+    */
+    [optional] interface com::sun::star::form::XGridFieldDataSupplier;
+
+    /** allows access to objects wrapping a single column
+    */
+    interface com::sun::star::container::XIndexAccess;
+
+    /** allows creation of an enumeration for the column objects
+    */
+    interface com::sun::star::container::XEnumerationAccess;
+
+    interface com::sun::star::container::XContainer;
+
+    /** is used to switch the operating modes of the control.
+        <p>Besides the normal opreration mode (which is used to display the database form's data) the control may
+        for instance support a filter mode.</p>
+    */
+    [optional] interface com::sun::star::util::XModeSelector;
+
+    /** allows external components to register dispatchers for some common form actions.
+        <p>A grid control can contain own UI elements for traveling within the database form it belongs to (This
+        concept seems to make sense, as a grid control - in opposite to other data aware controls - displayes
+        not only one record at a time, but a larger number of records of the database form.)<br/>
+        With the help of this interface, external components which wish to handle such travelings themself can
+        register interceptors for the actions in question.</p>
+        <p>Usual URLs to use include
+            <ul>
+                <li><em>.uno:FormSlots/moveToFirst</em>: move the cursor to the first record</li>
+                <li><em>.uno:FormSlots/moveToPrev</em>: move the cursor to the previous record</li>
+                <li><em>.uno:FormSlots/moveToNext</em>: move the cursor to the next record</li>
+                <li><em>.uno:FormSlots/moveToLast</em>: move the cursor to the last record</li>
+                <li><em>.uno:FormSlots/moveToNew</em>: move the cursor to the (one and only) <em>new</em> record</li>
+                <li><em>.uno:FormSlots/undoRecord</em>: undo the changes done so far in the current record</li>
+            </ul>
+        </p>
+        <p>A concrete implementation of this service may offer more or less URLs, but if it offers some of the URLs
+        above, it must stick to the meanings defined above.</p>
+    */
+    [optional] interface com::sun::star::frame::XDispatchProviderInterception;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+/*=============================================================================
+
+    $Log: not supported by cvs2svn $
+
+=============================================================================*/
+
+#endif
