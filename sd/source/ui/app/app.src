@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2004-04-05 12:59:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 00:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,124 +410,29 @@
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc_out.bmp";
-        File[ ENGLISH ] = "sc_out01.bmp";
-        File[ DANISH ] = "sc_out45.bmp";
-        File[ ENGLISH_US ] = "sc_out01.bmp";
-        File[ SPANISH ] = "sc_out34.bmp";
-        File[ FRENCH ] = "sc_out33.bmp";
-        File[ ITALIAN ] = "sc_out39.bmp";
-        File[ DUTCH ] = "sc_out31.bmp";
-        File[ SWEDISH ] = "sc_out46.bmp";
-        File[ RUSSIAN ] = "sc_out07.bmp";
-        File[ POLISH ] = "sc_out48.bmp";
-        File[ GREEK ] = "sc_out30.bmp";
-        File[ JAPANESE ] = "sc_out81.bmp";
-        File[ PORTUGUESE ] = "sc_out03.bmp" ;
-        File[ portuguese_brazilian ] = "sc_out55.bmp" ;
-        File[ turkish ] = "sc_out90.bmp" ;
-        File[ chinese_simplified ] = "sc_out86.bmp" ;
-        File[ chinese_traditional ] = "sc_out88.bmp" ;
-        File[ japanese ] = "sc_out81.bmp" ;
-        File[ korean ] = "sc_out82.bmp" ;
-        File[ arabic ] = "sc_out96.bmp" ;
-
-    };
+    Prefix = "sc";
     MaskColor = IMAGE_MASK_STDCOLOR ;
     IMAGE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lc_out.bmp";
-        File[ ENGLISH ] = "lc_out01.bmp";
-        File[ DANISH ] = "lc_out45.bmp";
-        File[ ENGLISH_US ] = "lc_out01.bmp";
-        File[ SPANISH ] = "lc_out34.bmp";
-        File[ FRENCH ] = "lc_out33.bmp";
-        File[ ITALIAN ] = "lc_out39.bmp";
-        File[ DUTCH ] = "lc_out31.bmp";
-        File[ SWEDISH ] = "lc_out46.bmp";
-        File[ RUSSIAN ] = "lc_out07.bmp";
-        File[ POLISH ] = "lc_out48.bmp";
-        File[ GREEK ] = "lc_out30.bmp";
-        File[ JAPANESE ] = "lc_out81.bmp";
-        File[ PORTUGUESE ] = "lc_out03.bmp" ;
-        File[ portuguese_brazilian ] = "lc_out55.bmp" ;
-        File[ turkish ] = "lc_out90.bmp" ;
-        File[ chinese_simplified ] = "lc_out86.bmp" ;
-        File[ chinese_traditional ] = "lc_out88.bmp" ;
-        File[ japanese ] = "lc_out81.bmp" ;
-        File[ korean ] = "lc_out82.bmp" ;
-        File[ arabic ] = "lc_out96.bmp" ;
-    };
+    Prefix = "lc";
     MaskColor = IMAGE_MASK_STDCOLOR;
     IMAGE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_SCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sch_out.bmp";
-        File[ ENGLISH ] = "sch_out01.bmp";
-        File[ DANISH ] = "sch_out45.bmp";
-        File[ ENGLISH_US ] = "sch_out01.bmp";
-        File[ SPANISH ] = "sch_out34.bmp";
-        File[ FRENCH ] = "sch_out33.bmp";
-        File[ ITALIAN ] = "sch_out39.bmp";
-        File[ DUTCH ] = "sch_out31.bmp";
-        File[ SWEDISH ] = "sch_out46.bmp";
-        File[ RUSSIAN ] = "sch_out07.bmp";
-        File[ POLISH ] = "sch_out48.bmp";
-        File[ GREEK ] = "sch_out30.bmp";
-        File[ JAPANESE ] = "sch_out81.bmp";
-        File[ PORTUGUESE ] = "sch_out03.bmp" ;
-        File[ portuguese_brazilian ] = "sch_out55.bmp" ;
-        File[ turkish ] = "sch_out90.bmp" ;
-        File[ chinese_simplified ] = "sch_out86.bmp" ;
-        File[ chinese_traditional ] = "sch_out88.bmp" ;
-        File[ japanese ] = "sch_out81.bmp" ;
-        File[ korean ] = "sch_out82.bmp" ;
-        File[ arabic ] = "sch_out96.bmp" ;
-
-    };
+    Prefix = "sch";
     MaskColor = IMAGE_MASK_STDCOLOR_HC ;
     IMAGE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LCH
 {
-    ImageBitmap = Bitmap
-    {
-        File = "lch_out.bmp";
-        File[ ENGLISH ] = "lch_out01.bmp";
-        File[ DANISH ] = "lch_out45.bmp";
-        File[ ENGLISH_US ] = "lch_out01.bmp";
-        File[ SPANISH ] = "lch_out34.bmp";
-        File[ FRENCH ] = "lch_out33.bmp";
-        File[ ITALIAN ] = "lch_out39.bmp";
-        File[ DUTCH ] = "lch_out31.bmp";
-        File[ SWEDISH ] = "lch_out46.bmp";
-        File[ RUSSIAN ] = "lch_out07.bmp";
-        File[ POLISH ] = "lch_out48.bmp";
-        File[ GREEK ] = "lch_out30.bmp";
-        File[ JAPANESE ] = "lch_out81.bmp";
-        File[ PORTUGUESE ] = "lch_out03.bmp" ;
-        File[ portuguese_brazilian ] = "lch_out55.bmp" ;
-        File[ turkish ] = "lch_out90.bmp" ;
-        File[ chinese_simplified ] = "lch_out86.bmp" ;
-        File[ chinese_traditional ] = "lch_out88.bmp" ;
-        File[ japanese ] = "lch_out81.bmp" ;
-        File[ korean ] = "lch_out82.bmp" ;
-        File[ arabic ] = "lch_out96.bmp" ;
-    };
+    Prefix = "lch";
     MaskColor = IMAGE_MASK_STDCOLOR_HC;
     IMAGE_ID_LIST
 };
-
 
