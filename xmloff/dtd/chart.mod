@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.8 2000-12-04 09:44:22 bm Exp $
+	$Id: chart.mod,v 1.9 2000-12-13 17:03:09 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -202,11 +202,14 @@
 
 <!ATTLIST style:properties
 		  chart:mean-value %boolean; #IMPLIED
+		  chart:error-category (none|variance|standard-deviation|percentage|error-margin|constant) "none"
+		  chart:error-percentage %float; #IMPLIED
 		  chart:error-margin %float; #IMPLIED
 		  chart:error-lower-limit %float; #IMPLIED
 		  chart:error-upper-limit %float; #IMPLIED
 		  chart:error-upper-indicator %boolean; #IMPLIED
-		  chart:error-lower-indicator %boolean; #IMPLIED >
+		  chart:error-lower-indicator %boolean; #IMPLIED
+		  chart:regression-type (none|linear|logarithmic|exponential|power) "none" >
 
 <!-- data label properties -->
 
