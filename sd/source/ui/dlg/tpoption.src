@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:23:20 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ TabPage TP_OPTIONS_SNAP
         Text [ ITALIAN ] = "Alle linee di cattura" ;
         Text [ DUTCH ] = "Aan ~vanglijnen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "An Hilfslinien" ;
-        Text [ SWEDISH ] = "Vid ~stödlinjerna" ;
+        Text [ SWEDISH ] = "Vid ~stödlinjer" ;
         Text [ PORTUGUESE ] = "Nas linhas auxiliares" ;
         Text[ chinese_simplified ] = "×ø±êÏß(~O)";
         Text[ russian ] = "Ê ëèíèÿì ïðèâÿçêè";
