@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 10:54:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 08:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,8 @@ namespace dbtools
                             ::rtl::OUString& _rComposedName,
                             sal_Bool _bQuote);
 
+    sal_Int32 getSearchColumnFlag( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
+                                    sal_Int32 _nDataType);
 
 //.........................................................................
 }   // namespace dbtools

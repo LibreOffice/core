@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-07 13:14:33 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 08:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps; \
         describeProperties(aProps);                                 \
         changePropertyAttributte(aProps);                           \
-        return new ::cppu::OPropertyArrayHelper(aProps);                \
+        return new ::cppu::OPropertyArrayHelper(aProps);            \
     }                                                               \
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() \
     {                                                               \

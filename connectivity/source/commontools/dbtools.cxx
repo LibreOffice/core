@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 15:34:01 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 08:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
 #endif
 
 
@@ -559,11 +562,11 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
     {
         Reference< XPropertySet> xConnParentProps(xConnAsChild->getParent(), UNO_QUERY);
         if (xConnParentProps.is() && hasProperty(sPropFormatsSupplier, xConnParentProps))
-        {
-            Any aSupplier( xConnParentProps->getPropertyValue(sPropFormatsSupplier) );
-            if (aSupplier.getValueType().getTypeClass() == TypeClass_INTERFACE)
-                xReturn = Reference< XNumberFormatsSupplier>(*(Reference< XInterface >*)aSupplier.getValue(), UNO_QUERY);
-        }
+            xConnParentProps->getPropertyValue(sPropFormatsSupplier) >>= xReturn;
+    }
+    else if(_bAlloweDefault && _rxFactory.is())
+    {
+        xReturn = Reference< XNumberFormatsSupplier>(_rxFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier")),UNO_QUERY);
     }
     return xReturn;
 }
@@ -1053,7 +1056,25 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
         QUOTE(_rComposedName);
     }
 }
-
+// -----------------------------------------------------------------------------
+sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 _nDataType)
+{
+    sal_Int32 nSearchFlag = 0;
+    Reference<XResultSet> xSet = _rxConn->getMetaData()->getTypeInfo();
+    if(xSet.is())
+    {
+        Reference<XRow> xRow(xSet,UNO_QUERY);
+        while(xSet->next())
+        {
+            if(xRow->getInt(2) == _nDataType)
+            {
+                nSearchFlag = xRow->getInt(9);
+                break;
+            }
+        }
+    }
+    return nSearchFlag;
+}
 
 //.........................................................................
 }   // namespace dbtools
@@ -1063,6 +1084,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/11/08 15:34:01  fs
+ *  composeTableName corrected
+ *
  *  Revision 1.5  2000/11/03 13:30:31  oj
  *  use stream for any
  *

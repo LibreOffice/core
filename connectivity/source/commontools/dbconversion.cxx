@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 09:28:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-09 08:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,15 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
+#ifndef _INC_STDIO
+#include <stdio.h>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 
 #define MAX_DAYS    3636532
@@ -106,8 +115,10 @@ using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::script;
 
 //------------------------------------------------------------------------------
 Date DBTypeConversion::STANDARD_DB_DATE(1, 1, 1900);
@@ -643,6 +654,130 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 
     return STANDARD_DB_DATE;
 }
+//------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::toDateString(const Date& rDate)
+{
+    sal_Char s[11];
+    sprintf(s,"%04d-%02d-%02d",
+                (int)rDate.Year,
+                (int)rDate.Month,
+                (int)rDate.Day);
+    s[10] = 0;
+    return ::rtl::OUString::createFromAscii(s);
+}
+//------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::toTimeString(const Time& rTime)
+{
+    sal_Char s[9];
+    sprintf(s,"%02d:%02d:%02d",
+            (int)rTime.Hours,
+            (int)rTime.Minutes,
+            (int)rTime.Seconds);
+    s[8] = 0;
+    return ::rtl::OUString::createFromAscii(s);
+}
+
+//------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::toDateTimeString(const DateTime& _rDateTime)
+{
+    Date aDate(_rDateTime.Day,_rDateTime.Month,_rDateTime.Year);
+    ::rtl::OUString aTemp(toDateString(aDate));
+    aTemp += ::rtl::OUString::createFromAscii(" ");
+    Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
+    aTemp += toTimeString(aTime);
+    return  aTemp;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
+                                              const Reference< XTypeConverter >&  _rxTypeConverter)
+{
+    ::rtl::OUString aRet;
+    if (_rVal.hasValue())
+    {
+        try
+        {
+            switch (eType)
+            {
+                case DataType::INTEGER:
+                case DataType::BIT:
+                case DataType::TINYINT:
+                case DataType::SMALLINT:
+                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_BOOLEAN)
+                    {
+                        if (::cppu::any2bool(_rVal))
+                            aRet = ::rtl::OUString::createFromAscii("1");
+                        else
+                            aRet = ::rtl::OUString::createFromAscii("0");
+                    }
+                    else
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                    break;
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                    if (bQuote)
+                        aRet += ::rtl::OUString::createFromAscii("'");
+                    {
+                        ::rtl::OUString aTemp;
+                        _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aTemp;
+                        aRet += aTemp;
+                    }
+                    if (bQuote)
+                        aRet += ::rtl::OUString::createFromAscii("'");
+                    break;
+                case DataType::REAL:
+                case DataType::DOUBLE:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+                    break;
+                case DataType::TIMESTAMP:
+                {
+                    DateTime aDateTime;
+
+                    // check if this is really a timestamp or only a date
+                    if ((_rVal >>= aDateTime) &&
+                        (aDateTime.Hours || aDateTime.Minutes || aDateTime.Seconds || aDateTime.HundredthSeconds))
+                    {
+                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("{TS '");
+                        aRet += DBTypeConversion::toDateTimeString(aDateTime);
+                        if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                        break;
+                    }
+                    // else continue
+                }
+                case DataType::DATE:
+                {
+                    Date aDate;
+                    sal_Bool bRet = _rVal >>= aDate;
+                    OSL_ENSHURE(bRet,"DBTypeConversion::toSQLString: _rVal is not date!");
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{D '");
+                    aRet += DBTypeConversion::toDateString(aDate);;
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                }   break;
+                case DataType::TIME:
+                {
+                    Time aTime;
+                    sal_Bool bRet = _rVal >>= aTime;
+                    OSL_ENSHURE(bRet,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("{T '");
+                    aRet += DBTypeConversion::toTimeString(aTime);
+                    if (bQuote) aRet += ::rtl::OUString::createFromAscii("'}");
+                } break;
+                default:
+                    _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
+            }
+        }
+        catch ( ... )
+        {
+            OSL_ENSHURE(0,"TypeConversion Error");
+        }
+    }
+    else
+        aRet = ::rtl::OUString::createFromAscii(" NULL ");
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+
 
 //.........................................................................
 }   // namespace dbtools
@@ -652,6 +787,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/11/08 09:28:45  oj
+ *  forget assignment of return value
+ *
  *  Revision 1.5  2000/10/27 07:04:22  fs
  *  corrected the starutil namespace
  *
