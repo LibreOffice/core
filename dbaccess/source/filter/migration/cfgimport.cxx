@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:38:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 11:00:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,7 +640,6 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
             aURL.setExtension(sExtension);
             sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
         }
-
         m_xModel->attachResource(sFileName,Sequence<PropertyValue>());
     }
     catch(Exception&)
@@ -878,7 +877,8 @@ void SAL_CALL  OCfgImport::endNode()
                     Reference<XNameContainer> xTables(xSupplier->getTables(),UNO_QUERY);
                     ::rtl::OUString sName;
                     m_xCurrentObject->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    xTables->insertByName(sName,makeAny(m_xCurrentObject));
+                    if ( !xTables->hasByName(sName) )
+                        xTables->insertByName(sName,makeAny(m_xCurrentObject));
                     m_xCurrentObject = NULL;
                 }
                 break;
