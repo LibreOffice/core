@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:56:37 $
+ *  last change: $Author: vg $ $Date: 2001-10-02 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
 #ifndef SVX_LIGHT
 
 ///
-SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc )
+SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc ) throw()
 : mpDoc( pDoc )
 {
 }
