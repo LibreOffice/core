@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:41:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:41:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,12 +189,12 @@ private:
     BOOL                bBlockNeg;              // wird Markierung aufgehoben?
     BOOL                bBlockCols;             // werden ganze Spalten markiert?
     BOOL                bBlockRows;             // werden ganze Zeilen markiert?
-    USHORT              nBlockStartX;
-    USHORT              nBlockEndX;
-    USHORT              nBlockStartY;
-    USHORT              nBlockEndY;
-    USHORT              nBlockStartZ;
-    USHORT              nBlockEndZ;
+    SCCOL               nBlockStartX;
+    SCCOL               nBlockEndX;
+    SCROW               nBlockStartY;
+    SCROW               nBlockEndY;
+    SCTAB               nBlockStartZ;
+    SCTAB               nBlockEndZ;
 
     SvxZoomType         eZoomType;
     BOOL                bMinimized;
@@ -220,7 +220,7 @@ private:
     DECL_LINK(      TimerHdl, Timer* );
 
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
-                                        const USHORT* pPosY = NULL );
+                                        const SCROW* pPosY = NULL );
     void            UpdateVarZoom();
 
     static void     SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL );
@@ -312,10 +312,10 @@ public:
 
     void            UpdateInputLine();
 
-    void            InitRefMode( USHORT nCurX, USHORT nCurY, USHORT nCurZ, ScRefType eType,
+    void            InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType,
                                     BOOL bPaint = TRUE );
     void            DoneRefMode( BOOL bContinue = FALSE );
-    void            UpdateRef( USHORT nCurX, USHORT nCurY, USHORT nCurZ );
+    void            UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ );
     void            StopRefMode();
 
     void            EndSelection();
@@ -335,9 +335,9 @@ public:
     void            ActiveReleaseMouse();
     Point           ActivePixelToLogic( const Point& rDevicePoint );
 
-    void            ClickCursor( USHORT nPosX, USHORT nPosY, BOOL bControl );
+    void            ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl );
 
-    void            SetCursor( USHORT nPosX, USHORT nPosY, BOOL bNew = FALSE );
+    void            SetCursor( SCCOL nPosX, SCROW nPosY, BOOL bNew = FALSE );
 
     void            CellContentChanged();
     void            SelectionChanged();
@@ -358,14 +358,14 @@ public:
     void            HideAllCursors();
     void            ShowAllCursors();
 
-    void            AlignToCursor( short nCurX, short nCurY, ScFollowMode eMode,
+    void            AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                     const ScSplitPos* pWhich = NULL );
 
     SvxZoomType     GetZoomType() const             { return eZoomType; }
     void            SetZoomType( SvxZoomType eNew ) { eZoomType = eNew; }
     USHORT          CalcZoom( SvxZoomType eType, USHORT nOldZoom );
 
-//  void            CalcZoom( SvxZoomType eType, USHORT& rZoom, USHORT& rCol, USHORT& rRow );
+//  void            CalcZoom( SvxZoomType eType, USHORT& rZoom, SCCOL& rCol, SCROW& rRow );
 
     void            StartDataSelect();
 
@@ -375,18 +375,18 @@ public:
                     //  MoveCursorArea      - Datenblock
                     //  MoveCursorEnd       - links oben / benutzter Bereich
 
-    void            MoveCursorAbs( short nCurX, short nCurY, ScFollowMode eMode,
+    void            MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bControl,
                                     BOOL bKeepOld = FALSE, BOOL bKeepSel = FALSE );
-    void            MoveCursorRel( short nMovX, short nMovY, ScFollowMode eMode,
+    void            MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bKeepSel = FALSE );
-    void            MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode,
+    void            MoveCursorPage( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bKeepSel = FALSE );
-    void            MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode,
+    void            MoveCursorArea( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bKeepSel = FALSE );
-    void            MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode,
+    void            MoveCursorEnd( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bKeepSel = FALSE );
-    void            MoveCursorScreen( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
+    void            MoveCursorScreen( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode, BOOL bShift );
 
     void            MoveCursorEnter( BOOL bShift );     // Shift fuer Richtung (kein Markieren)
 
@@ -396,7 +396,7 @@ public:
 
     void            SetNewStartIfMarking();
 
-    void            SetTabNo( USHORT nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );
@@ -417,24 +417,24 @@ public:
 
                                     // Zeichnen
 
-    void            InvertBlockMark(USHORT nBlockStartX, USHORT nBlockStartY,
-                                USHORT nBlockEndX, USHORT nBlockEndY);
+    void            InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
+                                SCCOL nBlockEndX, SCROW nBlockEndY);
 
-    void            DrawDragRect( USHORT nStartX, USHORT nStartY, USHORT nEndX, USHORT nEndY,
+    void            DrawDragRect( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SCROW nEndY,
                                     ScSplitPos ePos );
 
-    void            PaintCell( USHORT nCol, USHORT nRow, USHORT nTab );
-    void            PaintArea( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+    void            PaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
+    void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                         ScUpdateMode eMode = SC_UPDATE_ALL );
 
     void            PaintGrid();
 
-    void            PaintTopCol( USHORT nCol );
-    void            PaintTopArea( USHORT nStartCol, USHORT nEndCol );
+    void            PaintTopCol( SCCOL nCol );
+    void            PaintTopArea( SCCOL nStartCol, SCCOL nEndCol );
     void            PaintTop();
 
-    void            PaintLeftRow( USHORT nRow );
-    void            PaintLeftArea( USHORT nStartRow, USHORT nEndRow );
+    void            PaintLeftRow( SCROW nRow );
+    void            PaintLeftArea( SCROW nStartRow, SCROW nEndRow );
     void            PaintLeft();
 
     BOOL            PaintExtras();
@@ -461,7 +461,7 @@ public:
 
     void            InvalidateAttribs();
 
-    void            MakeEditView( ScEditEngineDefaulter* pEngine, USHORT nCol, USHORT nRow );
+    void            MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW nRow );
     void            KillEditView( BOOL bNoPaint );
     void            UpdateEditView();
 
@@ -471,9 +471,9 @@ public:
     void            SelectAll( BOOL bContinue = FALSE );
     void            SelectAllTables();
 
-    void            MarkCursor( USHORT nCurX, USHORT nCurY, USHORT nCurZ,
+    void            MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                     BOOL bCols = FALSE, BOOL bRows = FALSE );
-    void            InitBlockMode( USHORT nCurX, USHORT nCurY, USHORT nCurZ,
+    void            InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                     BOOL bTestNeg = FALSE,
                                     BOOL bCols = FALSE, BOOL bRows = FALSE );
     void            InitOwnBlockMode();
@@ -489,9 +489,9 @@ public:
 
     void            MarkRange( const ScRange& rRange, BOOL bSetCursor = TRUE, BOOL bContinue = FALSE );
 
-    BOOL            IsMarking( USHORT nCol, USHORT nRow, USHORT nTab ) const;
+    BOOL            IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
 
-    void            PaintMarks( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow );
+    void            PaintMarks( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void            PaintBlock( BOOL bReset = FALSE );
 
     void            LockModifiers( USHORT nModifiers );
