@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-11 22:45:10 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ String STR_FILEDLG_OVERWRITE
     Text[ chinese_traditional ] = "ÀÉ®×¦s¦b¡C \n±z­nÂĞ¼gÀÉ®×¡H";
     Text[ arabic ] = "åĞÇ Çáãáİ ãæÌæÏ ãÓÈŞÇğ.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ greek ] = "Ôï áñ÷åßï áõôü õğÜñ÷åé Şäç. \nÍá áíôéêáôáóôáèåß;";
-    Text[ korean ] = "ÀÌ ÆÄÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. \n µ¤¾î ¾²½Ã°Ú½À´Ï±î ?";
+    Text[ korean ] = "ÀÌ ÆÄÀÏÀº ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. \n µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "Dosya mevcut. \nÜzerine yazılsın mı?";
     Text[ language_user1 ] = " ";
 };
