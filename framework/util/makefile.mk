@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-22 13:43:45 $
+#   last change: $Author: as $ $Date: 2001-07-02 13:40:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,8 +120,6 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/asyncquit.obj				\
-                $(SLO)$/odesktopdispatcher.obj		\
-                $(SLO)$/ointerceptionhelper.obj		\
                 $(SLO)$/oframes.obj					\
                 $(SLO)$/opluginframedispatcher.obj	\
                 $(SLO)$/ostatusindicatorfactory.obj	\
@@ -130,15 +128,20 @@ SHL1OBJS=		$(SLO)$/registerservices.obj		\
                 $(SLO)$/ostatusindicator.obj		\
                 $(SLO)$/otasksenumeration.obj		\
                 $(SLO)$/ocomponentenumeration.obj	\
-                $(SLO)$/odispatchprovider.obj		\
-                $(SLO)$/omenudispatcher.obj			\
-                 $(SLO)$/timerhelper.obj				\
+                $(SLO)$/interceptionhelper.obj		\
+                $(SLO)$/dispatchprovider.obj		\
+                $(SLO)$/basedispatcher.obj			\
+                $(SLO)$/blankdispatcher.obj			\
+                $(SLO)$/selfdispatcher.obj			\
+                $(SLO)$/menudispatcher.obj			\
+                $(SLO)$/mailtodispatcher.obj		\
                 $(SLO)$/helpagentdispatcher.obj		\
+                 $(SLO)$/timerhelper.obj				\
                 $(SLO)$/menumanager.obj				\
                 $(SLO)$/xmldocproperties.obj		\
                 $(SLO)$/fltdlg.obj                  \
-                $(SLO)$/omailtodispatcher.obj		\
-                $(SLO)$/droptargetlistener.obj
+                $(SLO)$/droptargetlistener.obj		\
+                $(SLO)$/soundhandler.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -171,6 +174,7 @@ SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/mediatypedetectionhelper.obj\
                 $(SLO)$/frameloaderfactory.obj		\
+                $(SLO)$/contenthandlerfactory.obj	\
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/typedetection.obj			\
                 $(SLO)$/filtercachedata.obj			\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-06-12 06:38:15 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,20 +67,16 @@
 #include <services/desktop.hxx>
 #endif
 
-//#ifndef __FRAMEWORK_FRAME_HXX_
-//#include <services/frame.hxx>
-//#endif
-
-#ifndef __FRAMEWORK_OTASKSACCESS_HXX_
+#ifndef __FRAMEWORK_HELPER_OTASKSACCESS_HXX_
 #include <helper/otasksaccess.hxx>
 #endif
 
-#ifndef __FRAMEWORK_OCOMPONENTACCESS_HXX_
+#ifndef __FRAMEWORK_HELPER_OCOMPONENTACCESS_HXX_
 #include <helper/ocomponentaccess.hxx>
 #endif
 
-#ifndef __FRAMEWORK_ODESKTOPDISPATCHER_HXX_
-#include <helper/odesktopdispatcher.hxx>
+#ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
+#include <dispatch/dispatchprovider.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -291,11 +287,16 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
     // Safe impossible cases
     // We can't work without this helper!
     LOG_ASSERT( !(m_xFramesHelper.is()==sal_False), "Desktop::Desktop()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n")
-
+/*OBSOLETE
     // Create a new helper to dispatch "_blank" in a correctly way.
     ODesktopDispatcher* pDispatchHelper = new ODesktopDispatcher( m_xFactory, this );
     m_xDispatchHelper = Reference< XDispatch >( (OWeakObject*)pDispatchHelper, UNO_QUERY );
     LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Desktop::Desktop()\nDispatchHelper is not valid. XDispatch will not work correctly for \"_blank\"!\n")
+*/
+    // Create a new helper to handle dispatches like: "_blank" ...
+    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
+    m_xDispatchHelper = Reference< XDispatchProvider >( (OWeakObject*)pDispatchHelper, UNO_QUERY );
+    LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Desktop::Desktop()\nDispatchHelper is not valid. XDispatch will not work correctly!\n")
 
     // I'am the desktop - and use my frame container in a special mode.
     // If last child task is removed I must die!
@@ -785,30 +786,7 @@ Reference< XDispatch > SAL_CALL Desktop::queryDispatch( const   URL&        aURL
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT( impldbg_checkParameter_queryDispatch( aURL, sTargetFrameName, nSearchFlags ), "Desktop::queryDispatch()\nInvalid parameter detected!\n" )
-    LOG_PARAMETER_QUERYDISPATCH( "Desktop", m_sName, aURL, sTargetFrameName, nSearchFlags )
-
-    // Set default return value.
-    Reference< XDispatch > xDispatcher;
-
-    if( sTargetFrameName == SPECIALTARGET_BLANK )
-    {
-        xDispatcher = m_xDispatchHelper;
-    }
-    else
-    {
-        Reference< XFrame > xTarget = findFrame( sTargetFrameName, nSearchFlags );
-        if( xTarget.is() == sal_True )
-        {
-            xDispatcher = Reference< XDispatchProvider >( xTarget, UNO_QUERY )->queryDispatch( aURL, SPECIALTARGET_SELF, FrameSearchFlag::SELF );
-        }
-    }
-
-    LOG_RESULT_QUERYDISPATCH( "Desktop", m_sName, xDispatcher )
-    // Return dispatcher for given URL.
-    return xDispatcher;
+    return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
 }
 
 //*****************************************************************************************************************
@@ -818,54 +796,7 @@ Sequence< Reference< XDispatch > > SAL_CALL Desktop::queryDispatches( const Sequ
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
-
-    // Set default return value if no dispatcher will be found.
-    Sequence< Reference< XDispatch > > seqDispatcher;
-
-    // Get count of all given discriptors ...
-    sal_Int32 nDescriptorCount = seqDescripts.getLength();
-    if ( nDescriptorCount > 0 )
-    {
-        // ... to get enough memory for expected dispatcher.
-        // We can't get more dispatcher as descriptors exist!
-        Reference< XDispatch >* pDispatcher = new Reference< XDispatch >[nDescriptorCount];
-        // Safe first position in "dynamic memory list" for later access!
-        Reference< XDispatch >* pAnchor     = pDispatcher;
-        // We must count all getted dispatcher to create return sequence.
-        // There can't be more but fewer dispatcher then given descriptors!
-        sal_Int32               nDispatcher = 0;
-        // This is a helper variable to hold current returned dispatcher of query.
-        Reference< XDispatch >  xDispatcher;
-
-        // Step over all descriptors and try to get any dispatcher for it.
-        for ( sal_Int32 nPosition=0; nPosition<nDescriptorCount; ++nPosition )
-        {
-            xDispatcher = queryDispatch(    seqDescripts[nPosition].FeatureURL  ,
-                                            seqDescripts[nPosition].FrameName   ,
-                                            seqDescripts[nPosition].SearchFlags );
-            // If any dispatcher for given parameters found ...
-            if ( xDispatcher.is() == sal_True )
-            {
-                // ... safe it temporaly in "memory list" ...
-                *pDispatcher = xDispatcher;
-                // .. actualize position in these list ...
-                ++pDispatcher;
-                // ... and count of found dispatcher.
-                ++nDispatcher;
-            }
-        }
-
-        // Safe impossible cases.
-        // If we have more dispatcher then descriptors => we have a problem in algorithm!
-        LOG_ASSERT( !(nDispatcher>nDescriptorCount), "Desktop::queryDispatch()\nAlgorithm error. There are more dispatcher as reserved fields in memory!\n" )
-
-        // Copy "memory list" to return sequence.
-        // We copy all valid dispatcher to return sequence! (nDispatcher is count of these objects!)
-        seqDispatcher = Sequence< Reference< XDispatch > >( pDispatcher, nDispatcher );
-    }
-
-    // Return result of this operation.
-    return seqDispatcher;
+    return m_xDispatchHelper->queryDispatches( seqDescripts );
 }
 
 //*****************************************************************************************************************
@@ -992,12 +923,8 @@ Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetF
     Reference< XFrame > xSearchedFrame;
 
     // Ask helper for right decision for given parameter.
-    sal_Bool bCreationAllowed = sal_False;
-    ETargetClass eResult = TargetFinder::classify(  E_DESKTOP                           ,
-                                                    sTargetFrameName                    ,
-                                                    nSearchFlags                        ,
-                                                    bCreationAllowed                    ,
-                                                    m_aChildTaskContainer.hasElements() );
+    TargetInfo   aInfo   ( sTargetFrameName, nSearchFlags, E_DESKTOP, m_aChildTaskContainer.hasElements(), sal_False, ::rtl::OUString(), ::rtl::OUString() );
+    ETargetClass eResult = TargetFinder::classifyFindFrame( aInfo );
     switch( eResult )
     {
         case E_CREATETASK   :   {
@@ -1016,16 +943,21 @@ Reference< XFrame > SAL_CALL Desktop::findFrame(    const   OUString&   sTargetF
                                     xSearchedFrame = m_aChildTaskContainer.searchFlatDown( sTargetFrameName );
                                 }
                                 break;
+        #ifdef ENABLE_WARNINGS
         default             :   {
-                                    LOG_WARNING( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+                                    if( eResult != E_UNKNOWN )
+                                    {
+                                        LOG_ERROR( "Desktop::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+                                    }
                                 }
                                 break;
+        #endif
     }
 
     // If no right target could be found - but CREATE flag was set ... do it; create a new task.
     if  (
-            ( xSearchedFrame.is()   ==  sal_False   )   &&
-            ( bCreationAllowed      ==  sal_True    )
+            ( xSearchedFrame.is()    ==  sal_False )   &&
+            ( aInfo.bCreationAllowed ==  sal_True  )
         )
     {
         xSearchedFrame = m_aTaskCreator.createNewSystemTask( sTargetFrameName );
@@ -1185,7 +1117,7 @@ void SAL_CALL Desktop::dispose() throw( RuntimeException )
         m_xLastFrame        = Reference< XFrame >();
         m_xFactory          = Reference< XMultiServiceFactory >();
         m_xFramesHelper     = Reference< XFrames >();
-        m_xDispatchHelper   = Reference< XDispatch >();
+        m_xDispatchHelper   = Reference< XDispatchProvider >();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-22 10:39:28 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 #include <services/frame.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_ODISPATCHPROVIDER_HXX_
-#include <helper/odispatchprovider.hxx>
+#ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
+#include <dispatch/dispatchprovider.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OINTERCEPTIONHELPER_HXX_
-#include <helper/ointerceptionhelper.hxx>
+#ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
+#include <dispatch/interceptionhelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
@@ -337,21 +337,21 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 
     /*TODO
         a) Implement all helper as listener for disposing()!
-        b) Don't create ODispatchProvider here ... do it in OInterceptionHelper!
+        b) Don't create ODispatchProvider here ... do it in InterceptionHelper!
      */
 
     //-------------------------------------------------------------------------------------------------------------
     // Initialize a new dispatchhelper-object to handle dispatches for "SELF" private and fast.
     // We use these helper as slave for our interceptor helper ... not directly!
 
-    ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this );
+    DispatchProvider* pDispatchHelper = new DispatchProvider( m_xFactory, this );
 
     //-------------------------------------------------------------------------------------------------------------
     // Initialize a new interception helper object to handle dispatches and interceptor mechanism.
     // We hold member as reference ... not as pointer!
-    OInterceptionHelper* pInterceptionHelper = new OInterceptionHelper( this,
-                                                                        css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY )
-                                                                      );
+    InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this,
+                                                                      css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY )
+                                                                    );
     m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
     //-------------------------------------------------------------------------------------------------------------
@@ -818,15 +818,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
 
     // Use helper to classify search direction.
     // Attention: If he return ...BOTH -> please search down first ... and upper direction then!
-    sal_Bool bCreationAllowed = sal_False;
-    ETargetClass eResult = TargetFinder::classify(  E_FRAME             ,
-                                                    sTargetFrameName    ,
-                                                    nSearchFlags        ,
-                                                    bCreationAllowed    ,
-                                                    bChildrenExist      ,
-                                                    sMyName             ,
-                                                    bParentExist        ,
-                                                    sParentName         );
+    TargetInfo   aInfo   ( sTargetFrameName, nSearchFlags, E_FRAME, bChildrenExist, bParentExist, sMyName, sParentName );
+    ETargetClass eResult = TargetFinder::classifyFindFrame( aInfo );
     switch( eResult )
     {
         case E_SELF         :   {
@@ -865,8 +858,15 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
                                     }
                                 }
                                 break;
-        default:    LOG_WARNING( "Frame::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
-                    break;
+        #ifdef ENABLE_WARNINGS
+        default             :   {
+                                    if( eResult != E_UNKNOWN )
+                                    {
+                                        LOG_ERROR( "Frame::findFrame()", "Unexpected result of TargetFinder::classify() detected!" )
+                                    }
+                                }
+                                break;
+        #endif
     }
     LOG_RESULT_FINDFRAME( "Frame", sMyName, xSearchedFrame )
     // Return result of operation.

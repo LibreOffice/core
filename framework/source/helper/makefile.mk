@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: cd $ $Date: 2001-06-13 06:02:04 $
+#   last change: $Author: as $ $Date: 2001-07-02 13:40:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,23 +81,17 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			$(SLO)$/timerhelper.obj	 						\
-                    $(SLO)$/helpagentdispatcher.obj	 				\
                     $(SLO)$/otasksaccess.obj	 					\
                     $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/otasksenumeration.obj					\
                     $(SLO)$/ocomponentaccess.obj 					\
                     $(SLO)$/ocomponentenumeration.obj				\
-                    $(SLO)$/odispatchprovider.obj					\
-                    $(SLO)$/odesktopdispatcher.obj					\
                     $(SLO)$/oframes.obj								\
                     $(SLO)$/opluginframedispatcher.obj				\
                     $(SLO)$/ostatusindicatorfactory.obj				\
                     $(SLO)$/ostatusindicator.obj					\
-                    $(SLO)$/ointerceptionhelper.obj					\
-                    $(SLO)$/omenudispatcher.obj						\
                     $(SLO)$/imageproducer.obj						\
-                    $(SLO)$/xmldocproperties.obj					\
-                    $(SLO)$/omailtodispatcher.obj
+                    $(SLO)$/xmldocproperties.obj
 
 # --- Targets ------------------------------------------------------
 

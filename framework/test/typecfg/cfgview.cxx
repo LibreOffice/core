@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:49:15 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,46 +141,48 @@
 //  const
 //_________________________________________________________________________________________________________________
 
-#define RDBFILE                         DECLARE_ASCII("typecfg.rdb" )
-#define ARGUMENT_DIRNAME                DECLARE_ASCII("-dir="       )           // argument for output directory
-#define ARGUMENT_VERSION                DECLARE_ASCII("-ver="       )           // argument for file version to read    [1|2|3]
-#define ARGUMENTLENGTH                  5                                       // same length for all arguemnts make it easier to detect it :-)
-#define ARGUMENTFOUND                   0                                       // OUString::compareTo returns 0 if searched string match given one
+#define RDBFILE                                     DECLARE_ASCII("typecfg.rdb" )
+#define ARGUMENT_DIRNAME                            DECLARE_ASCII("-dir="       )           // argument for output directory
+#define ARGUMENT_VERSION                            DECLARE_ASCII("-ver="       )           // argument for file version to read    [1|2|3]
+#define ARGUMENTLENGTH                              5                                       // same length for all arguemnts make it easier to detect it :-)
+#define ARGUMENTFOUND                               0                                       // OUString::compareTo returns 0 if searched string match given one
 
-#define MENU_HTML                       "menu.html"
-#define BLANK_HTML                      "blank.html"
+#define MENU_HTML                                   "menu.html"
+#define BLANK_HTML                                  "blank.html"
 
-#define FRAMESET_START_HTML             "index.html"
-#define FRAMESET_TYPES_HTML             "fs_types.html"
-#define FRAMESET_FILTERS_HTML           "fs_filters.html"
-#define FRAMESET_MODULFILTERS_HTML      "fs_modulfilters.html"
-#define FRAMESET_DETECTORS_HTML         "fs_detectors.html"
-#define FRAMESET_LOADERS_HTML           "fs_loaders.html"
-#define FRAMESET_INVALIDFILTERS_HTML    "fs_invalidfilters.html"
-#define FRAMESET_INVALIDDETECTORS_HTML  "fs_invaliddetectors.html"
-#define FRAMESET_INVALIDLOADERS_HTML    "fs_invalidloaders.html"
+#define FRAMESET_START_HTML                         "index.html"
+#define FRAMESET_TYPES_HTML                         "fs_types.html"
+#define FRAMESET_FILTERS_HTML                       "fs_filters.html"
+#define FRAMESET_MODULFILTERS_HTML                  "fs_modulfilters.html"
+#define FRAMESET_DETECTORS_HTML                     "fs_detectors.html"
+#define FRAMESET_LOADERS_HTML                       "fs_loaders.html"
+#define FRAMESET_INVALIDFILTERS_HTML                "fs_invalidfilters.html"
+#define FRAMESET_INVALIDDETECTORS_HTML              "fs_invaliddetectors.html"
+#define FRAMESET_INVALIDLOADERS_HTML                "fs_invalidloaders.html"
+#define FRAMESET_DOUBLEFILTERUINAMES_HTML           "fs_doublefilteruinames.html"
 
-#define ALLTYPES_HTML                   "alltypes.html"
-#define ALLFILTERS_HTML                 "allfilters.html"
-#define ALLDETECTORS_HTML               "alldetectors.html"
-#define ALLLOADERS_HTML                 "allloaders.html"
+#define ALLTYPES_HTML                               "alltypes.html"
+#define ALLFILTERS_HTML                             "allfilters.html"
+#define ALLDETECTORS_HTML                           "alldetectors.html"
+#define ALLLOADERS_HTML                             "allloaders.html"
 
-#define TYPEPROPERTIES_HTML             "typeproperties.html"
-#define FILTERPROPERTIES_HTML           "filterproperties.html"
-#define DETECTORPROPERTIES_HTML         "detectorproperties.html"
-#define LOADERPROPERTIES_HTML           "loaderproperties.html"
+#define TYPEPROPERTIES_HTML                         "typeproperties.html"
+#define FILTERPROPERTIES_HTML                       "filterproperties.html"
+#define DETECTORPROPERTIES_HTML                     "detectorproperties.html"
+#define LOADERPROPERTIES_HTML                       "loaderproperties.html"
 
-#define INVALIDFILTERS_HTML             "invalidfilters.html"
-#define INVALIDDETECTORS_HTML           "invaliddetectors.html"
-#define INVALIDLOADERS_HTML             "invalidloaders.html"
+#define INVALIDFILTERS_HTML                         "invalidfilters.html"
+#define INVALIDDETECTORS_HTML                       "invaliddetectors.html"
+#define INVALIDLOADERS_HTML                         "invalidloaders.html"
 
-#define FILTERFLAGS_HTML                "filterflags.html"
-#define MODULFILTERS_HTML               "modulfilters.html"
+#define FILTERFLAGS_HTML                            "filterflags.html"
+#define MODULFILTERS_HTML                           "modulfilters.html"
+#define DOUBLEFILTERUINAMES_HTML                    "doublefilteruinames.html"
 
-#define TARGET_MENU                     "menu"
-#define TARGET_VIEW                     "view"
-#define TARGET_LIST                     "list"
-#define TARGET_PROPERTIES               "properties"
+#define TARGET_MENU                                 "menu"
+#define TARGET_VIEW                                 "view"
+#define TARGET_LIST                                 "list"
+#define TARGET_PROPERTIES                           "properties"
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -222,24 +224,25 @@ class CFGView : public Application
 
     //*************************************************************************************************************
     private:
-        void impl_parseCommandLine              ( AppMember& rMember );
-        void impl_generateHTMLView              ();
+        void impl_parseCommandLine                  ( AppMember& rMember );
+        void impl_generateHTMLView                  ();
 
     //*************************************************************************************************************
     private:
-        void impl_printCopyright                ();
-        void impl_printSyntax                   ();
-        void impl_generateTypeListHTML          ();
-        void impl_generateFilterListHTML        ();
-        void impl_generateFilterModulListHTML   ();
-        void impl_generateDetectorListHTML      ();
-        void impl_generateLoaderListHTML        ();
-        void impl_generateInvalidFiltersHTML    ();
-        void impl_generateInvalidDetectorsHTML  ();
-        void impl_generateInvalidLoadersHTML    ();
-        void impl_generateFilterFlagsHTML       ();
-        void impl_generateDefaultFiltersHTML    ();
-        void impl_writeFile                     ( const ::rtl::OString& sFile, const ::rtl::OString& sContent );
+        void impl_printCopyright                    ();
+        void impl_printSyntax                       ();
+        void impl_generateTypeListHTML              ();
+        void impl_generateFilterListHTML            ();
+        void impl_generateFilterModulListHTML       ();
+        void impl_generateDetectorListHTML          ();
+        void impl_generateLoaderListHTML            ();
+        void impl_generateInvalidFiltersHTML        ();
+        void impl_generateInvalidDetectorsHTML      ();
+        void impl_generateInvalidLoadersHTML        ();
+        void impl_generateFilterFlagsHTML           ();
+        void impl_generateDefaultFiltersHTML        ();
+        void impl_generateDoubleFilterUINamesHTML   ();
+        void impl_writeFile                         ( const ::rtl::OString& sFile, const ::rtl::OString& sContent );
 
     //*************************************************************************************************************
     private:
@@ -396,46 +399,61 @@ void CFGView::impl_generateHTMLView()
 
     sMenuHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tMenu\n\t\t</title>\n\t</head>\n\t<body>\n"             );  // open html
     sMenuHTML.appendAscii( "\t\t<ul>\n"                                                                                 );  // open list
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Types"
     sMenuHTML.appendAscii( FRAMESET_TYPES_HTML                                                                          );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Types</a></li>\n"                                                                    );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Filters"
     sMenuHTML.appendAscii( FRAMESET_FILTERS_HTML                                                                        );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Filters</a></li>\n"                                                                  );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Filters sorted by modules"
     sMenuHTML.appendAscii( FRAMESET_MODULFILTERS_HTML                                                                   );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Filters by Moduls</a></li>\n"                                                            );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Detectors"
     sMenuHTML.appendAscii( FRAMESET_DETECTORS_HTML                                                                      );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Detector Services</a></li>\n"                                                        );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "All Loaders"
     sMenuHTML.appendAscii( FRAMESET_LOADERS_HTML                                                                        );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">All Loader Services</a></li>\n"                                                          );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Invalid Filter"
     sMenuHTML.appendAscii( FRAMESET_INVALIDFILTERS_HTML                                                                 );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Invalid Filter</a></li>\n"                                                               );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Invalid Detect Services"
     sMenuHTML.appendAscii( FRAMESET_INVALIDDETECTORS_HTML                                                               );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Invalid Detect Services</a></li>\n"                                                      );
+
+    sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Double Filter UINames"
+    sMenuHTML.appendAscii( FRAMESET_DOUBLEFILTERUINAMES_HTML                                                            );
+    sMenuHTML.appendAscii( "\" target=\""                                                                               );
+    sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
+    sMenuHTML.appendAscii( "\">Double Filter UINames</a></li>\n"                                                        );
+
     sMenuHTML.appendAscii( "\t\t<li><a href=\""                                                                         );  // list entry for "Show Filter Flags"
     sMenuHTML.appendAscii( FILTERFLAGS_HTML                                                                             );
     sMenuHTML.appendAscii( "\" target=\""                                                                               );
     sMenuHTML.appendAscii( TARGET_VIEW                                                                                  );
     sMenuHTML.appendAscii( "\">Show Filter Flags</a></li>\n"                                                            );
+
     sMenuHTML.appendAscii( "\t\t</ul>\n"                                                                                );  // close list
     sMenuHTML.appendAscii( "\t</body>\n</html>\n"                                                                       );  // close html
 
@@ -450,6 +468,7 @@ void CFGView::impl_generateHTMLView()
     impl_generateInvalidDetectorsHTML   ();
     impl_generateInvalidLoadersHTML     ();
     impl_generateFilterFlagsHTML        ();
+    impl_generateDoubleFilterUINamesHTML();
 }
 
 //*****************************************************************************************************************
@@ -1457,6 +1476,99 @@ void CFGView::impl_generateFilterFlagsHTML()
 //*****************************************************************************************************************
 void CFGView::impl_generateDefaultFiltersHTML()
 {
+}
+
+//*****************************************************************************************************************
+void CFGView::impl_generateDoubleFilterUINamesHTML()
+{
+    //-------------------------------------------------------------------------------------------------------------
+    // generate frameset for double UINames
+    OUStringBuffer sFrameSet( 10000 );
+
+    sFrameSet.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tFrameset: Search doubl UINames\n\t\t</title>\n\t</head>\n" );  // open html
+    sFrameSet.appendAscii( "\t\t<frameset cols=\"40%,60%\">\n"                                                              );  // open frameset for cols
+    sFrameSet.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "list"
+    sFrameSet.appendAscii( TARGET_LIST                                                                                      );
+    sFrameSet.appendAscii( "\" src=\""                                                                                      );
+    sFrameSet.appendAscii( DOUBLEFILTERUINAMES_HTML                                                                         );
+    sFrameSet.appendAscii( "\" title=\"Double UINames\">\n"                                                                 );
+    sFrameSet.appendAscii( "\t\t\t<frame name=\""                                                                           );  // generate frame "properties"
+    sFrameSet.appendAscii( TARGET_PROPERTIES                                                                                );
+    sFrameSet.appendAscii( "\" src=\""                                                                                      );
+    sFrameSet.appendAscii( FILTERPROPERTIES_HTML                                                                            );
+    sFrameSet.appendAscii( "\" title=\"Properties\">\n"                                                                     );
+    sFrameSet.appendAscii( "\t\t</frameset>\n"                                                                              );  // close frameset cols
+    sFrameSet.appendAscii( "</html>\n"                                                                                      );  // close html
+
+    impl_writeFile( FRAMESET_DOUBLEFILTERUINAMES_HTML, U2B(sFrameSet.makeStringAndClear()) );
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Search invalid registered detect services!
+    OUStringBuffer sHTML( 10000 );
+
+    sHTML.appendAscii( "<html>\n\t<head>\n\t\t<title>\n\t\t\tDouble Filter UINames\n\t\t</title>\n\t</head>\n\t<body>\n"    );  // open html
+    sHTML.appendAscii( "\t\tPlease check follow filter entries in configuration. Her UINames are registered twice!<p>\n"    );  // write "Note"
+    sHTML.appendAscii( "\t\t<table border=0>\n"                                                                             );  // open table
+    sHTML.appendAscii( "\t<tr><td bgcolor=#ff8040><strong>Nr.</strong></td>\n"                                              );  // generate table header
+    sHTML.appendAscii( "\t\t<td bgcolor=#ff8040><strong>UIName</strong></td>\n"                                             );
+    sHTML.appendAscii( "\t\t<td bgcolor=#ff8040><strong>Filters</strong></td>\n"                                            );
+    sHTML.appendAscii( "\t</tr>\n"                                                                                          );
+
+    StringHash                            lUINames                                          ;
+    css::uno::Sequence< ::rtl::OUString > lFilters     = m_aData.pCache->getAllFilterNames();
+    sal_Int32                             nFilterCount = lFilters.getLength()               ;
+    Filter                                aFilter                                           ;
+    ::rtl::OUStringBuffer                 sBuffer                                           ;
+    ::rtl::OUString                       sUIName                                           ;
+
+    for( sal_Int32 nFilter=0; nFilter<nFilterCount; ++nFilter )
+    {
+        aFilter = m_aData.pCache->getFilter( lFilters[nFilter] );
+        for( ConstStringHashIterator pUIName=aFilter.lUINames.begin(); pUIName!= aFilter.lUINames.end(); ++pUIName )
+        {
+            // Build key value by using localized UIName to register filter name
+            sBuffer.appendAscii( "["             );
+            sBuffer.append     ( pUIName->first  );
+            sBuffer.appendAscii( "] \""          );
+            sBuffer.append     ( pUIName->second );
+            sBuffer.appendAscii( "\""            );
+            sUIName = sBuffer.makeStringAndClear();
+
+            // insert filter into hash table
+            sBuffer.append     ( lUINames[ sUIName ]     );
+            sBuffer.appendAscii ( "<a href=\""           );
+            sBuffer.appendAscii ( FILTERPROPERTIES_HTML  );
+            sBuffer.appendAscii ( "#"                    );
+            sBuffer.append      ( aFilter.sName          );
+            sBuffer.appendAscii ( "\" target=\""         );
+            sBuffer.appendAscii ( TARGET_PROPERTIES      );
+            sBuffer.appendAscii ( "\">"                  );
+            sBuffer.append      ( aFilter.sName          );
+            sBuffer.appendAscii ( "\"</a><br>\n"         );
+            lUINames[ sUIName ] = sBuffer.makeStringAndClear();
+        }
+    }
+
+    nFilter = 1;
+    for( ConstStringHashIterator pIterator=lUINames.begin(); pIterator!=lUINames.end(); ++pIterator )
+    {
+        if( pIterator->second.indexOf( '\n' ) != pIterator->second.lastIndexOf( '\n' ) )
+        {
+            sHTML.appendAscii ( "\t<tr><td bgcolor=#ff0000 color=#00ffff valign=top>"   );  // generate row for uiname->filter entry
+            sHTML.append      ( OUString::valueOf( nFilter )                            );
+            sHTML.appendAscii ( "</td><td valign=top>"                                  );
+            sHTML.append      ( pIterator->first                                        );
+            sHTML.appendAscii ( "</td><td bgcolor=#f0f0f0 valign=top>"                  );
+            sHTML.append      ( pIterator->second                                       );
+            sHTML.appendAscii ( "</td></tr>\n"                                          );
+
+            ++nFilter;
+        }
+    }
+
+    sHTML.appendAscii( "</table>\n"           );  // close table
+    sHTML.appendAscii( "</body>\n</html>\n"   );  // close html
+    impl_writeFile( DOUBLEFILTERUINAMES_HTML, U2B(sHTML.makeStringAndClear()) );
 }
 
 //*****************************************************************************************************************

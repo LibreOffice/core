@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-06-15 13:58:00 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,31 +183,34 @@ using namespace ::framework ;
 /*-***************************************************************************************************************/
 struct AppMember
 {
-        FilterCache*                pFilterCache          ; // pointer to configuration
-        StringHash                  aOldFilterNamesHash   ; // converter tabel to restaurate old filter names
-        EFilterPackage              ePackage              ; // specify which package should be used => specify using of file name and buffer too!
-        ::rtl::OUString             sFileNameStandard     ; // file name of our standard filter cfg
-        ::rtl::OUString             sFileNameAdditional   ; // file name of our additional filter cfg
-        ::rtl::OUString             sPackageStandard      ; // package name of our standard filter cfg
-        ::rtl::OUString             sPackageAdditional    ; // package name of our additional filter cfg
-        ::rtl::OUStringBuffer       sBufferStandard       ; // buffer of our standard filter cfg
-        ::rtl::OUStringBuffer       sBufferAdditional     ; // buffer of our standard filter cfg
-        ::rtl::OUStringBuffer       sStandardFilterList   ;
-        ::rtl::OUStringBuffer       sAdditionalFilterList ;
-        ::rtl::OUStringBuffer       sStandardTypeList     ;
-        ::rtl::OUStringBuffer       sAdditionalTypeList   ;
-        sal_Bool                    bWriteable            ; // enable/disable writable configuration items
-        sal_Int32                   nVersionInput         ; // format version of input xml file
-        sal_Int32                   nVersionOutput        ; // format version of output xcd file
+        FilterCache*                pFilterCache                ; // pointer to configuration
+        StringHash                  aOldFilterNamesHash         ; // converter tabel to restaurate old filter names
+        EFilterPackage              ePackage                    ; // specify which package should be used => specify using of file name and buffer too!
+        ::rtl::OUString             sFileNameStandard           ; // file name of our standard filter cfg
+        ::rtl::OUString             sFileNameAdditional         ; // file name of our additional filter cfg
+        ::rtl::OUString             sPackageStandard            ; // package name of our standard filter cfg
+        ::rtl::OUString             sPackageAdditional          ; // package name of our additional filter cfg
+        ::rtl::OUStringBuffer       sBufferStandard             ; // buffer of our standard filter cfg
+        ::rtl::OUStringBuffer       sBufferAdditional           ; // buffer of our standard filter cfg
+        ::rtl::OUStringBuffer       sStandardFilterList         ;
+        ::rtl::OUStringBuffer       sAdditionalFilterList       ;
+        ::rtl::OUStringBuffer       sStandardTypeList           ;
+        ::rtl::OUStringBuffer       sAdditionalTypeList         ;
+        sal_Bool                    bWriteable                  ; // enable/disable writable configuration items
+        sal_Int32                   nVersionInput               ; // format version of input xml file
+        sal_Int32                   nVersionOutput              ; // format version of output xcd file
 
-        sal_Int32                   nOriginalTypes        ;
-        sal_Int32                   nOriginalFilters      ;
-        sal_Int32                   nOriginalDetectors    ;
-        sal_Int32                   nOriginalLoaders      ;
-        sal_Int32                   nWrittenTypes         ;
-        sal_Int32                   nWrittenFilters       ;
-        sal_Int32                   nWrittenDetectors     ;
-        sal_Int32                   nWrittenLoaders       ;
+        sal_Int32                   nOriginalTypes              ;
+        sal_Int32                   nOriginalFilters            ;
+        sal_Int32                   nOriginalDetectors          ;
+        sal_Int32                   nOriginalLoaders            ;
+        sal_Int32                   nOriginalContentHandlers    ;
+
+        sal_Int32                   nWrittenTypes               ;
+        sal_Int32                   nWrittenFilters             ;
+        sal_Int32                   nWrittenDetectors           ;
+        sal_Int32                   nWrittenLoaders             ;
+        sal_Int32                   nWrittenContentHandlers     ;
 };
 
 /*-***************************************************************************************************************/
@@ -219,57 +222,54 @@ class XCDGenerator : public Application
 
     //*************************************************************************************************************
     private:
-        void                    impl_printCopyright             (                                                                                       ); // print copyright to stdout :-)
-        void                    impl_printSyntax                (                                                                                       ); // print help to stout for user
-        void                    impl_parseCommandLine           (           AppMember&                              rMember                             ); // parse command line arguments and fill given struct
+        void                    impl_printCopyright                     (                                                                                       ); // print copyright to stdout :-)
+        void                    impl_printSyntax                        (                                                                                       ); // print help to stout for user
+        void                    impl_parseCommandLine                   (           AppMember&                              rMember                             ); // parse command line arguments and fill given struct
 
-        void                    impl_generateXCD                (                                                                                       ); // generate all xcd files by using current configuration
-        void                    impl_generateCopyright          (                                                                                       ); // generate copyrights
-        void                    impl_generateTypeTemplate       (                                                                                       ); // generate templates ...
-        void                    impl_generateFilterTemplate     (                                                                                       );
-        void                    impl_generateDetectorTemplate   (                                                                                       );
-        void                    impl_generateLoaderTemplate     (                                                                                       );
-        void                    impl_generateTypeSet            (                                                                                       ); // generate sets
-        void                    impl_generateFilterSet          (                                                                                       );
-        void                    impl_generateDetectorSet        (                                                                                       );
-        void                    impl_generateLoaderSet          (                                                                                       );
-        void                    impl_generateDefaults           (                                                                                       ); // generate defaults
-        #ifdef DRAFT_I
-        void                    impl_generateHandlerTemplate    (                                                                                       );
-        void                    impl_generateHandlerSet         (                                                                                       );
-        #endif
+        void                    impl_generateXCD                        (                                                                                       ); // generate all xcd files by using current configuration
+        void                    impl_generateCopyright                  (                                                                                       ); // generate copyrights
+        void                    impl_generateTypeTemplate               (                                                                                       ); // generate templates ...
+        void                    impl_generateFilterTemplate             (                                                                                       );
+        void                    impl_generateDetectorTemplate           (                                                                                       );
+        void                    impl_generateLoaderTemplate             (                                                                                       );
+        void                    impl_generateTypeSet                    (                                                                                       ); // generate sets
+        void                    impl_generateFilterSet                  (                                                                                       );
+        void                    impl_generateDetectorSet                (                                                                                       );
+        void                    impl_generateLoaderSet                  (                                                                                       );
+        void                    impl_generateDefaults                   (                                                                                       ); // generate defaults
+        void                    impl_generateContentHandlerTemplate     (                                                                                       );
+        void                    impl_generateContentHandlerSet          (                                                                                       );
+        void                    impl_generateFilterFlagTemplate         (   const   ::rtl::OUString&                        sName                               ,  // helper to write atomic elements
+                                                                                    sal_Int32                               nValue                              ,
+                                                                            const   ::rtl::OString&                         sDescription = ::rtl::OString()     );
+        void                    impl_generateIntProperty                (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                            const   ::rtl::OUString&                        sName                               ,
+                                                                                    sal_Int32                               nValue                              );
+        void                    impl_generateBoolProperty               (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                            const   ::rtl::OUString&                        sName                               ,
+                                                                                    sal_Bool                                bValue                              );
+        void                    impl_generateStringProperty             (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                            const   ::rtl::OUString&                        sName                               ,
+                                                                            const   ::rtl::OUString&                        sValue                              );
+        void                    impl_generateStringListProperty         (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                            const   ::rtl::OUString&                        sName                               ,
+                                                                            const   ::framework::StringList&                lValue                              );
+        void                    impl_generateUINamesProperty            (           ::rtl::OUStringBuffer&                  sXCD                                ,
+                                                                            const   ::rtl::OUString&                        sName                               ,
+                                                                            const   StringHash&                             lUINames                            );
+        ::rtl::OUString         impl_getOldFilterName                   (   const   ::rtl::OUString&                        sNewName                            ); // convert filter names to old format
 
-        void                    impl_generateFilterFlagTemplate (   const   ::rtl::OUString&                        sName                               ,  // helper to write atomic elements
-                                                                            sal_Int32                               nValue                              ,
-                                                                    const   ::rtl::OString&                         sDescription = ::rtl::OString()     );
-        void                    impl_generateIntProperty        (           ::rtl::OUStringBuffer&                  sXCD                                ,
-                                                                    const   ::rtl::OUString&                        sName                               ,
-                                                                            sal_Int32                               nValue                              );
-        void                    impl_generateBoolProperty       (           ::rtl::OUStringBuffer&                  sXCD                                ,
-                                                                    const   ::rtl::OUString&                        sName                               ,
-                                                                            sal_Bool                                bValue                              );
-        void                    impl_generateStringProperty     (           ::rtl::OUStringBuffer&                  sXCD                                ,
-                                                                    const   ::rtl::OUString&                        sName                               ,
-                                                                    const   ::rtl::OUString&                        sValue                              );
-        void                    impl_generateStringListProperty (           ::rtl::OUStringBuffer&                  sXCD                                ,
-                                                                    const   ::rtl::OUString&                        sName                               ,
-                                                                    const   ::framework::StringList&                lValue                              );
-        void                    impl_generateUINamesProperty    (           ::rtl::OUStringBuffer&                  sXCD                                ,
-                                                                    const   ::rtl::OUString&                        sName                               ,
-                                                                    const   StringHash&                             lUINames                            );
-        ::rtl::OUString         impl_getOldFilterName           (   const   ::rtl::OUString&                        sNewName                            ); // convert filter names to old format
-
-        static void             impl_classifyType               (   const   AppMember&                              rData                               ,
-                                                                    const   ::rtl::OUString&                        sTypeName                           ,
-                                                                            EFilterPackage&                         ePackage                            ); // classify type as STANDARD or ADDITIONAL one
-        static void             impl_classifyFilter             (   const   AppMember&                              rData                               ,
-                                                                    const   ::rtl::OUString&                        sFilterName                         ,
-                                                                            EFilterPackage&                         ePackage                            ,
-                                                                            sal_Int32&                              nOrder                              ); // classify filter as STANDARD or ADDITIONAL filter, set order of standard filter too
-        static ::rtl::OUString  impl_filterSpecialSigns         (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
-        static sal_Unicode      impl_defineSeperator            (   const   ::framework::StringList&                lList                               ); // search seperator for lists
-        static void             impl_initFilterHashNew2Old      (           StringHash&                             aHash                               ); // initialize converter table to restaurate old filter names
-        static void             impl_orderAlphabetical          (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files everytime in the same way
+        static void             impl_classifyType                       (   const   AppMember&                              rData                               ,
+                                                                            const   ::rtl::OUString&                        sTypeName                           ,
+                                                                                    EFilterPackage&                         ePackage                            ); // classify type as STANDARD or ADDITIONAL one
+        static void             impl_classifyFilter                     (   const   AppMember&                              rData                               ,
+                                                                            const   ::rtl::OUString&                        sFilterName                         ,
+                                                                                    EFilterPackage&                         ePackage                            ,
+                                                                                    sal_Int32&                              nOrder                              ); // classify filter as STANDARD or ADDITIONAL filter, set order of standard filter too
+        static ::rtl::OUString  impl_filterSpecialSigns                 (   const   ::rtl::OUString&                        sValue                              ); // encode strings for xml
+        static sal_Unicode      impl_defineSeperator                    (   const   ::framework::StringList&                lList                               ); // search seperator for lists
+        static void             impl_initFilterHashNew2Old              (           StringHash&                             aHash                               ); // initialize converter table to restaurate old filter names
+        static void             impl_orderAlphabetical                  (           css::uno::Sequence< ::rtl::OUString >&  lList                               ); // sort stringlist of internal type-, filter- ... names in alphabetical order to generate xcd files everytime in the same way
 
     //*************************************************************************************************************
     private:
@@ -316,6 +316,10 @@ void XCDGenerator::Main()
     m_aData.nOriginalFilters   = m_aData.pFilterCache->getAllFilterNames().getLength()   ;
     m_aData.nOriginalDetectors = m_aData.pFilterCache->getAllDetectorNames().getLength() ;
     m_aData.nOriginalLoaders   = m_aData.pFilterCache->getAllLoaderNames().getLength()   ;
+    if( m_aData.nVersionInput >= 5 )
+    {
+        m_aData.nOriginalContentHandlers  = m_aData.pFilterCache->getAllContentHandlerNames().getLength()  ;
+    }
 
     // Start generation of xcd file(s).
     impl_generateXCD();
@@ -513,9 +517,10 @@ void XCDGenerator::impl_generateXCD()
     impl_generateTypeTemplate    ();
     impl_generateFilterTemplate  ();
     impl_generateDetectorTemplate();
-    #ifdef DRAFT_I
-    impl_generateHandlerTemplate ();
-    #endif
+    if( m_aData.nVersionOutput >= 5 )
+    {
+        impl_generateContentHandlerTemplate ();
+    }
     impl_generateLoaderTemplate  ();
 
     m_aData.sBufferStandard.appendAscii     ( "\t</schema:templates>\n"                     );
@@ -528,9 +533,10 @@ void XCDGenerator::impl_generateXCD()
     impl_generateTypeSet         ();
     impl_generateFilterSet       ();
     impl_generateDetectorSet     ();
-    #ifdef DRAFT_I
-    impl_generateHandlerSet      ();
-    #endif
+    if( m_aData.nVersionInput >= 5 )
+    {
+        impl_generateContentHandlerSet  ();
+    }
     impl_generateLoaderSet       ();
     impl_generateDefaults        ();
 
@@ -1293,11 +1299,10 @@ void XCDGenerator::impl_generateDefaults()
     m_aData.sBufferStandard.appendAscii( "\t</schema:group>\n" );
 }
 
-#ifdef DRAFT_I
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateHandlerTemplate()
+void XCDGenerator::impl_generateContentHandlerTemplate()
 {
-    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Handler\">\n"                                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"ContentHandler\">\n"                                                            );
     m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
     m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                     );
     m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
@@ -1308,12 +1313,46 @@ void XCDGenerator::impl_generateHandlerTemplate()
 }
 
 //*****************************************************************************************************************
-void XCDGenerator::impl_generateHandlerSet()
+void XCDGenerator::impl_generateContentHandlerSet()
 {
-    // write empty handler set!
-    m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Handlers\" cfg:element-type=\"Handler\"/>\n" );
+    if( m_aData.pFilterCache->hasContentHandlers() == sal_False )
+    {
+        // write empty handler set!
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"ContentHandlers\" cfg:element-type=\"ContentHandler\"/>\n" );
+    }
+    else
+    {
+        // open set
+        m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"ContentHandlers\" cfg:element-type=\"ContentHandler\">\n" );
+
+        css::uno::Sequence< ::rtl::OUString > lNames = m_aData.pFilterCache->getAllContentHandlerNames();
+        sal_Int32                             nCount = lNames.getLength()                               ;
+
+        XCDGenerator::impl_orderAlphabetical( lNames );
+
+        for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
+        {
+            ::rtl::OUString sName = lNames[nItem]                                   ;
+            ContentHandler  aItem = m_aData.pFilterCache->getContentHandler( sName );
+
+            ++m_aData.nWrittenContentHandlers;
+
+            // open set node by using name
+            m_aData.sBufferStandard.appendAscii( "\t\t<default:group cfg:name=\""  );
+            m_aData.sBufferStandard.append     ( sName                             );
+            m_aData.sBufferStandard.appendAscii( "\">\n"                           );
+
+            // write properties
+            impl_generateStringListProperty( m_aData.sBufferStandard, SUBKEY_TYPES, aItem.lTypes );
+
+            // close set node
+            m_aData.sBufferStandard.appendAscii( "\t\t</default:group>\n" );
+        }
+
+        // close set
+        m_aData.sBufferStandard.appendAscii( "\t</schema:set>\n" );
+    }
 }
-#endif
 
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD        ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:14 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,16 +107,22 @@
 #include <services/typedetection.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_CONTENTHANDLERFACTORY_HXX_
+#include <services/contenthandlerfactory.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
                         COMPONENTINFO( ::framework::FrameLoaderFactory          )
                         COMPONENTINFO( ::framework::FilterFactory               )
                         COMPONENTINFO( ::framework::TypeDetection               )
+                        COMPONENTINFO( ::framework::ContentHandlerFactory       )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
                         IFFACTORY( ::framework::FrameLoaderFactory              )   else
                         IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
+                        IFFACTORY( ::framework::TypeDetection                   )   else
+                        IFFACTORY( ::framework::ContentHandlerFactory           )
                     )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,22 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_MOZILLA_XPLUGININSTANCE_HPP_
+#include <com/sun/star/mozilla/XPluginInstance.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -89,10 +105,6 @@
 
 namespace framework{
 
-using namespace ::rtl                       ;
-using namespace ::com::sun::star::uno       ;
-using namespace ::com::sun::star::frame     ;
-
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
@@ -105,75 +117,361 @@ using namespace ::com::sun::star::frame     ;
 //  definitions
 //_________________________________________________________________________________________________________________
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
-TargetFinder::TargetFinder()
+/*-************************************************************************************************************//**
+    @short      create new target info with valid values
+    @descr      If you wish to call TargetFinder::classify...() methods you must give him
+                a lot of informations about currently set environment of a frame.
+                But ... sometimes you have all informations ... and sometimes you need a helper
+                to get it. These ctor implementations do both things for you.
+                You should call it with ALL or with NOTHING.
+                He use your values (at ALL) or try to get this informations by himself (at NOTHING).
+                After that you can use this filled target info to call you classify...().
+
+    @seealso    method TargetFinder::classify...()
+
+    @param      "xFrame"    , reference to frame which should be detected  [MUST    ]
+    @param      "sTarget"   , name of searched target                      [MUST    ]
+    @param      "nFlags"    , search flags                                 [MUST    ]
+    @param      "eType"     , type of frame                                [OPTIONAL]
+    @param      "bChildrens", Is children search possible?                 [OPTIONAL]
+    @param      "bParent"   , Is parent search possible?                   [OPTIONAL]
+    @param      "sFrame"    , name of frame for self-search                [OPTIONAL]
+    @param      "sParent"   , parent name for parent-search                [OPTIONAL]
+    @return     -
+
+    @onerror    No error should occure ... if incoming parameters are correct :-)
+    @threadsafe No
+*//*-*************************************************************************************************************/
+TargetInfo::TargetInfo( const ::rtl::OUString&                           sTarget     ,
+                              sal_Int32                                  nFlags      ,
+                              EFrameType                                 eType       ,
+                              sal_Bool                                   bChildrens  ,
+                              sal_Bool                                   bParent     ,
+                        const ::rtl::OUString&                           sFrame      ,
+                        const ::rtl::OUString&                           sParent     )
 {
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_ctor( sTarget, nFlags, eType, bChildrens, bParent, sFrame, sParent ), "TargetInfo::TargetInfo( 2 )", "Invalid parameter detected!" )
+
+    // Set given values on internal member.
+    sTargetName      = sTarget                            ;
+    nSearchFlags     = nFlags                             ;
+    eFrameType       = eType                              ;
+    bChildrenExist   = bChildrens                         ;
+    bParentExist     = bParent                            ;
+    sFrameName       = sFrame                             ;
+    sParentName      = sParent                            ;
+    bCreationAllowed = impl_getCreateFlag( nSearchFlags ) ;
 }
 
 //*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
-TargetFinder::~TargetFinder()
+TargetInfo::TargetInfo( const css::uno::Reference< css::frame::XFrame >& xFrame  ,
+                        const ::rtl::OUString&                           sTarget ,
+                              sal_Int32                                  nFlags  )
 {
-}
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_ctor( xFrame, sTarget, nFlags ), "TargetInfo::TargetInfo( 1 )", "Invalid parameter detected!" )
 
-//*****************************************************************************************************************
-//  interface
-//*****************************************************************************************************************
-ETargetClass TargetFinder::classify(            EFrameType      eFrameType          ,
-                                        const   OUString&       sTargetName         ,
-                                                   sal_Int32        nSearchFlags        ,
-                                                sal_Bool&       bCreationAllowed    ,
-                                                sal_Bool        bChildrenExist      ,
-                                        const   OUString&       sFrameName          ,
-                                                sal_Bool        bParentExist        ,
-                                        const   OUString&       sParentName         )
-{
-    // Check incoming parameter
-    LOG_ASSERT2( implcp_classify( eFrameType, sTargetName, nSearchFlags, bCreationAllowed, bChildrenExist, sFrameName, bParentExist, sParentName ), "TargetFinder::classify()", "Invalid parameter detected!" )
+    // Set default values!
+    // So we must reset it to valid values only.
+    bChildrenExist = sal_False        ;
+    bParentExist   = sal_False        ;
+    sFrameName     = ::rtl::OUString();
+    sParentName    = ::rtl::OUString();
 
-    // Initialize start values.
-    ETargetClass    eResult             =   E_UNKNOWN                                                               ;   // default result of method
-                    bCreationAllowed    =   (( nSearchFlags & FrameSearchFlag::CREATE ) == FrameSearchFlag::CREATE );   // if search failed we must caller allow to create new task/frame
+    // Take given values into internal variables.
+    sTargetName  = sTarget;
+    nSearchFlags = nFlags ;
 
-    // Use some helper methods for different classes of tree nodes to get the result.
+    // Try to analyze environment of given frame to set all other member!
+    eFrameType = getFrameType( xFrame );
     switch( eFrameType )
     {
-        case E_DESKTOP      :   eResult = impl_classifyForDesktop( bChildrenExist, sTargetName, nSearchFlags );
+        //case E_DESKTOP    :   // Nothing to do .. because: Desktop has no parent, no name ... Use default values!
+                                // But - values for children info is set later ...
+        case E_PLUGINFRAME  :
+        case E_TASK         :
+        case E_FRAME        :   {
+                                    css::uno::Reference< css::frame::XFrame > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+                                    bParentExist = xParent.is();
+                                    if( xParent.is() == sal_True )
+                                        sParentName = xParent->getName();
+                                    sFrameName = xFrame->getName();
+                                }
                                 break;
-        case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+    }
+
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier  ( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrames >         xChildrens ;
+    if( xSupplier.is() == sal_True )
+    {
+        xChildrens = xSupplier->getFrames();
+        if( xChildrens.is() == sal_True )
+        {
+            bChildrenExist = xChildrens->hasElements();
+        }
+    }
+
+    bCreationAllowed = impl_getCreateFlag( nSearchFlags );
+}
+
+/*-************************************************************************************************************//**
+    @short      get an enum, which represent type of given frame
+    @descr      This value can be used by calling following classify...() methods.
+                It regulate searching of targets.
+                Why we don't detect this type internal?
+                Mostly this helper is called from a frame or task implmentation directly and detection will be superflous.
+                But sometimes this information isn't available ... so we should support a generaly implementation
+                of this search algorithm :-)
+
+    @seealso    method classify...()
+
+    @param      "xFrame", reference to frame which should be detected
+    @return     An enum value to classify the frame type.
+
+    @onerror    No error should occure ... if incoming parameters are correct :-)
+    @threadsafe No
+*//*-*************************************************************************************************************/
+EFrameType TargetInfo::getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    // Check incoming parameter.
+    LOG_ASSERT2( implcp_getFrameType( xFrame ), "TargetFinder::getFrameType()", "Invalid parameter detected!" )
+
+    // Try to cast it to right interfaces to get informations about right frame type.
+    css::uno::Reference< css::frame::XDesktop >           xDesktopCheck( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::mozilla::XPluginInstance >  xPlugInCheck ( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XTask >              xTaskCheck   ( xFrame, css::uno::UNO_QUERY );
+    css::uno::Reference< css::frame::XFrame >             xFrameCheck  ( xFrame, css::uno::UNO_QUERY );
+
+    EFrameType eType;
+
+    if( xDesktopCheck.is() == sal_True ) { eType = E_DESKTOP    ; } else
+    if( xPlugInCheck.is () == sal_True ) { eType = E_PLUGINFRAME; } else
+    if( xTaskCheck.is   () == sal_True ) { eType = E_TASK       ; } else
+    if( xFrameCheck.is  () == sal_True ) { eType = E_FRAME      ; }
+    #ifdef ENABLE_WARNINGS
+    else LOG_WARNING( "TargetFinder::getFrameType()", "Unknown frame implementation detected!" )
+    #endif
+
+    return eType;
+}
+
+/*-************************************************************************************************************//**
+    @short      get state of create flag
+    @descr      These flag allow user to create a new frame if no one could be found!
+
+    @attention  Ignore it, if it is the only setted flag.
+                Why? Otherwise creation of frames by using same name without search for already existing frames
+                will be possible! This case produce more then one frame by using same name ... and it's not clear, which frame would be found
+                at further searches! It's better to ignore this case and disable creation.
+
+    @seealso    ctor
+
+    @param      "nSearchFlags", collection of setted flags
+    @return     true , for setted flag
+                false, if CREATE flag the only one or isn't set
+
+    @onerror    We return false.
+*//*-*************************************************************************************************************/
+sal_Bool TargetInfo::impl_getCreateFlag( sal_Int32 nSearchFlags )
+{
+    bCreationAllowed = sal_False;
+    if( nSearchFlags != css::frame::FrameSearchFlag::CREATE )
+    {
+        bCreationAllowed = (( nSearchFlags & css::frame::FrameSearchFlag::CREATE ) == css::frame::FrameSearchFlag::CREATE );
+    }
+    return bCreationAllowed;
+}
+
+/*-************************************************************************************************************//**
+    @short      get a recommendation for searching right target
+    @descr      Our caller search for a target which match with given parameter.
+                Give him a direction to find the right one.
+                These method never create or return a tree node! Thats your job!
+                We say: go up, go down or give you the permission to create new frame if search will fail!
+
+    @attention  XFrame::findFrame() and XDispatchProvider::queryDispatch() should understand
+                target names and searchflags ... but not in the same way. findFrame() can create
+                a new frame, if it is missing - queryDispatch() couldn't do that! Only the combination with a successfuly
+                dispatch() call should do that!
+                Another reason - there exist some "virtual" targets ... like "_helpagent", "_menubar".
+                These targets couldn't be handled by findFrame(); but by a queryDispatch().
+                Thats why we implement different classify methods for different mechanism!
+
+    @seealso    method XFrame::findFrame()
+    @seealso    method XDispatcher::queryDispatch()
+    @seealso    struct TargetInfo
+
+    @param      "aInfo", information about search environment
+    @return     An enum value to classify the direction for searching.
+
+    @onerror    E_UNKNOWN is returned.
+*//*-*************************************************************************************************************/
+ETargetClass TargetFinder::classifyFindFrame( TargetInfo& aInfo )
+{
+    // Check incoming parameter
+    LOG_ASSERT2( implcp_classifyFindFrame( aInfo ), "TargetFinder::classifyFindFrame()", "Invalid parameter detected!" )
+
+    ETargetClass eResult = E_UNKNOWN;
+
+    // Use some helper methods for different classes of tree nodes to get the result.
+    switch( aInfo.eFrameType )
+    {
+        case E_DESKTOP      :   eResult = impl_classifyForDesktop_findFrame( aInfo.bChildrenExist, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
-        case E_TASK         :   eResult = impl_classifyForTask( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+        case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
-        case E_FRAME        :   eResult = impl_classifyForFrame( bParentExist, bChildrenExist, sFrameName, sParentName, sTargetName, nSearchFlags );
+        case E_TASK         :   eResult = impl_classifyForTask_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
+                                break;
+        case E_FRAME        :   eResult = impl_classifyForFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sParentName, aInfo.sTargetName, aInfo.nSearchFlags );
                                 break;
     }
 
     // It doesnt matter if CREATE flag is set or not ...
     // If follow results are returned by our helper methods - the result will be clear!
     // In these cases we dont can allow (or must!) creation of new frames/tasks...
+    LOG_ASSERT2( eResult==E_MENUBAR || eResult==E_HELPAGENT, "TargetFinder::classifyFindFrame()", "Invalid search result found!")
     if  (
-            (   eResult ==  E_UNKNOWN       )   ||
             (   eResult ==  E_CREATETASK    )   ||
             (   eResult ==  E_SELF          )   ||
             (   eResult ==  E_PARENT        )   ||
             (   eResult ==  E_BEAMER        )
         )
     {
-        bCreationAllowed = sal_False;
+        aInfo.bCreationAllowed = sal_False;
     }
 
     return eResult;
 }
 
 //*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildrenExist  ,
-                                                    const   OUString&   sTargetName     ,
-                                                            sal_Int32   nSearchFlags    )
+ETargetClass TargetFinder::classifyQueryDispatch( TargetInfo& aInfo )
+{
+    // Check incoming parameter
+    LOG_ASSERT2( implcp_classifyQueryDispatch( aInfo ), "TargetFinder::classifyQueryDispatch()", "Invalid parameter detected!" )
+
+    ETargetClass eResult = E_UNKNOWN;
+
+    //*************************************************************************************************************
+    // I ) handle "_menubar"
+    // II) handle "_helpagent"
+    //      DESKTOP             =>  Could not be handled by our desktop ...
+    //                              because: Its a supported property of a task ... but which one should be used, if call comes from the top?!
+    //      TASK & PLUGINFRAME  =>  Supported! return SELF
+    //      FRAME               =>  Not supported ... but search for tasks ... if flags allow this search.
+    //*************************************************************************************************************
+    if( aInfo.sTargetName == SPECIALTARGET_MENUBAR )
+    {
+        switch( aInfo.eFrameType )
+        {
+            case E_PLUGINFRAME  :
+            case E_TASK         :   eResult = E_MENUBAR;
+                                    break;
+            case E_FRAME        :   if( aInfo.bParentExist == sal_True )
+                                    {
+                                        eResult = E_FORWARD_UP;
+                                    }
+                                    break;
+        }
+    }
+    else
+    if( aInfo.sTargetName == SPECIALTARGET_HELPAGENT )
+    {
+        switch( aInfo.eFrameType )
+        {
+            case E_PLUGINFRAME  :
+            case E_TASK         :   eResult = E_HELPAGENT;
+                                    break;
+            case E_FRAME        :   if( aInfo.bParentExist == sal_True )
+                                    {
+                                        eResult = E_FORWARD_UP;
+                                    }
+                                    break;
+        }
+    }
+    //*************************************************************************************************************
+    // III ) handle "_blank"
+    //          DESKTOP     =>  Only the desktop can create new tasks ... he has a special dispatch helper to do that!
+    //                          return CREATETASK
+    //          TASK
+    //          PLUGINFRAME
+    //          FRAME       =>  They couldn't create any new task => They must forward it to the desktop dispatch helper!
+    //                          return FORWARD_UP
+    //*************************************************************************************************************
+    else
+    if( aInfo.sTargetName == SPECIALTARGET_BLANK )
+    {
+        switch( aInfo.eFrameType )
+        {
+            case E_DESKTOP      :   eResult = E_CREATETASK;
+                                    break;
+            case E_PLUGINFRAME  :
+            case E_TASK         :
+            case E_FRAME        :   if( aInfo.bParentExist == sal_True )
+                                    {
+                                        eResult = E_FORWARD_UP;
+                                    }
+                                    break;
+        }
+    }
+    //*************************************************************************************************************
+    // IV) There exist no other special targets or flag combinations ...
+    //     I think we can use helper for normal findFrame() classify here!
+    //*************************************************************************************************************
+    else
+    {
+        switch( aInfo.eFrameType )
+        {
+            case E_DESKTOP      :   eResult = impl_classifyForDesktop_findFrame( aInfo.bChildrenExist, aInfo.sTargetName, aInfo.nSearchFlags );
+                                    break;
+            case E_PLUGINFRAME  :   eResult = impl_classifyForPlugInFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
+                                    break;
+            case E_TASK         :   eResult = impl_classifyForTask_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sTargetName, aInfo.nSearchFlags );
+                                    break;
+            case E_FRAME        :   eResult = impl_classifyForFrame_findFrame( aInfo.bParentExist, aInfo.bChildrenExist, aInfo.sFrameName, aInfo.sParentName, aInfo.sTargetName, aInfo.nSearchFlags );
+                                    break;
+        }
+    }
+
+    // It doesnt matter if CREATE flag is set or not ...
+    // If follow results are returned by our helper methods - the result will be clear!
+    // In these cases we dont can allow (or must!) creation of new frames/tasks...
+    if  (
+            (   eResult ==  E_CREATETASK    )   ||
+            (   eResult ==  E_SELF          )   ||
+            (   eResult ==  E_PARENT        )   ||
+            (   eResult ==  E_BEAMER        )   ||
+            (   eResult ==  E_MENUBAR       )   ||
+            (   eResult ==  E_HELPAGENT     )
+        )
+    {
+        aInfo.bCreationAllowed = sal_False;
+    }
+
+    return eResult;
+}
+
+/*-************************************************************************************************************//**
+    @short      helper methods for classify...()
+    @descr      Every tree node (desktop, frame, task ...) has another preference shares to search a target.
+                With these helper methods we differ between these search algorithm!
+
+    @seealso    method classify...()
+
+    @param      "bParentExist"      set if a parent exist for caller tree node
+    @param      "bChildrenExist"    set if some children exist for caller tree node
+    @param      "sFrameName"        name of current tree node (used for SELF flag to break search earlier!)
+    @param      "sParentName"       name of current tree node (used for PARENT flag to break search earlier!)
+    @param      "sTargetName"       name of searched target tree node
+    @param      "nSearchFlags"      flags to regulate search in tree
+    @param      "bTopFrame"         used to break upper searches at a top frame if search outside current task isnt allowed!
+    @return     A decision about valid search direction.
+
+    @onerror    E_UNKNOWN is returned.
+*//*-*************************************************************************************************************/
+ETargetClass TargetFinder::impl_classifyForDesktop_findFrame(       sal_Bool         bChildrenExist  ,
+                                                              const ::rtl::OUString& sTargetName     ,
+                                                                    sal_Int32        nSearchFlags    )
 {
     ETargetClass eResult = E_UNKNOWN;
 
@@ -206,12 +504,12 @@ ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildre
         //              if no existing one can be found.
         //*********************************************************************************************************
         if  (
-                ( nSearchFlags & FrameSearchFlag::TASKS )   &&
+                ( nSearchFlags & css::frame::FrameSearchFlag::TASKS )   &&
                 (
-                    !( nSearchFlags & FrameSearchFlag::CHILDREN )   &&
-                    !( nSearchFlags & FrameSearchFlag::SIBLINGS )   &&
-                    !( nSearchFlags & FrameSearchFlag::PARENT   )   &&
-                    !( nSearchFlags & FrameSearchFlag::SELF     )
+                    !( nSearchFlags & css::frame::FrameSearchFlag::CHILDREN )   &&
+                    !( nSearchFlags & css::frame::FrameSearchFlag::SIBLINGS )   &&
+                    !( nSearchFlags & css::frame::FrameSearchFlag::PARENT   )   &&
+                    !( nSearchFlags & css::frame::FrameSearchFlag::SELF     )
                 )
             )
         {
@@ -224,8 +522,8 @@ ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildre
             //          Ignore flag if no childrens exist!
             //*****************************************************************************************************
             if  (
-                    ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
-                    ( bChildrenExist    ==  sal_True                    )
+                    ( nSearchFlags      &   css::frame::FrameSearchFlag::CHILDREN   )   &&
+                    ( bChildrenExist    ==  sal_True                                )
                 )
             {
                 eResult = E_DEEP_DOWN;
@@ -236,7 +534,7 @@ ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildre
             //          These change a deep to a flat search!
             //          Otherwise ... flag can be ignored - because the desktop has no siblings!
             //*****************************************************************************************************
-            if( nSearchFlags & FrameSearchFlag::SIBLINGS )
+            if( nSearchFlags & css::frame::FrameSearchFlag::SIBLINGS )
             {
                 switch( eResult )
                 {
@@ -259,29 +557,25 @@ ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildre
 }
 
 //*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-ETargetClass TargetFinder::impl_classifyForPlugInFrame  (           sal_Bool    bParentExist    ,
-                                                                    sal_Bool    bChildrenExist  ,
-                                                            const   OUString&   sFrameName      ,
-                                                            const   OUString&   sTargetName     ,
-                                                                       sal_Int32    nSearchFlags    )
+ETargetClass TargetFinder::impl_classifyForPlugInFrame_findFrame(         sal_Bool           bParentExist    ,
+                                                                          sal_Bool           bChildrenExist  ,
+                                                                    const ::rtl::OUString&   sFrameName      ,
+                                                                    const ::rtl::OUString&   sTargetName     ,
+                                                                          sal_Int32          nSearchFlags    )
 {
     // At the moment a PlugInFrame is a special task ... but we can use the same search algorithm!
-    return impl_classifyForTask( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
+    return impl_classifyForTask_findFrame( bParentExist, bChildrenExist, sFrameName, sTargetName, nSearchFlags );
 }
 
 //*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentExist    ,
-                                                            sal_Bool    bChildrenExist  ,
-                                                    const   OUString&   sFrameName      ,
-                                                    const   OUString&   sTargetName     ,
-                                                               sal_Int32    nSearchFlags    )
+ETargetClass TargetFinder::impl_classifyForTask_findFrame(        sal_Bool          bParentExist    ,
+                                                                  sal_Bool          bChildrenExist  ,
+                                                            const ::rtl::OUString&  sFrameName      ,
+                                                            const ::rtl::OUString&  sTargetName     ,
+                                                                  sal_Int32         nSearchFlags    )
 {
-    ETargetClass    eResult     =   E_UNKNOWN                                                               ;
-    sal_Bool        bLeaveTask  =   (( nSearchFlags & FrameSearchFlag::TASKS  ) == FrameSearchFlag::TASKS  );   // we must know if we can search outside current task
+    ETargetClass    eResult     =   E_UNKNOWN                                                                                       ;
+    sal_Bool        bLeaveTask  =   (( nSearchFlags & css::frame::FrameSearchFlag::TASKS  ) == css::frame::FrameSearchFlag::TASKS  );   // we must know if we can search outside current task
 
     //*************************************************************************************************************
     //  I)      Handle special target names.
@@ -341,8 +635,8 @@ ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentE
         //          Use given frame name to do that. It couldn't be empty(!) - because this was handled in step I.II).
         //*********************************************************************************************************
         if  (
-                ( nSearchFlags  &   FrameSearchFlag::SELF   )   &&
-                ( sTargetName   ==  sFrameName              )
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::SELF   )   &&
+                ( sTargetName   ==  sFrameName                          )
             )
         {
             eResult = E_SELF;
@@ -354,10 +648,10 @@ ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentE
         //          Don't check name of parent here - otherwise we return the desktop as result ...
         //*********************************************************************************************************
         if  (
-                ( eResult       !=  E_SELF                  )   &&
-                ( nSearchFlags  &   FrameSearchFlag::PARENT )   &&
-                ( bParentExist  ==  sal_True                )   &&
-                ( bLeaveTask    ==  sal_True                )
+                ( eResult       !=  E_SELF                              )   &&
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::PARENT )   &&
+                ( bParentExist  ==  sal_True                            )   &&
+                ( bLeaveTask    ==  sal_True                            )
             )
         {
             eResult = E_FORWARD_UP;
@@ -368,9 +662,9 @@ ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentE
         //          Ignore flag if no childrens exist!
         //*********************************************************************************************************
         if  (
-                ( eResult           !=  E_SELF                      )   &&
-                ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
-                ( bChildrenExist    ==  sal_True                    )
+                ( eResult           !=  E_SELF                                  )   &&
+                ( nSearchFlags      &   css::frame::FrameSearchFlag::CHILDREN   )   &&
+                ( bChildrenExist    ==  sal_True                                )
             )
         {
             switch( eResult )
@@ -387,8 +681,8 @@ ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentE
         //          These change a deep to a flat search!
         //*********************************************************************************************************
         if  (
-                ( eResult       !=  E_SELF                      )   &&
-                   ( nSearchFlags   &   FrameSearchFlag::SIBLINGS   )
+                ( eResult       !=  E_SELF                                  )   &&
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::SIBLINGS   )
             )
         {
             switch( eResult )
@@ -416,14 +710,12 @@ ETargetClass TargetFinder::impl_classifyForTask(            sal_Bool    bParentE
 }
 
 //*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentExist    ,
-                                                            sal_Bool    bChildrenExist  ,
-                                                    const   OUString&   sFrameName      ,
-                                                    const   OUString&   sParentName     ,
-                                                    const   OUString&   sTargetName     ,
-                                                            sal_Int32   nSearchFlags    )
+ETargetClass TargetFinder::impl_classifyForFrame_findFrame(         sal_Bool           bParentExist    ,
+                                                                    sal_Bool           bChildrenExist  ,
+                                                            const   ::rtl::OUString&   sFrameName      ,
+                                                            const   ::rtl::OUString&   sParentName     ,
+                                                            const   ::rtl::OUString&   sTargetName     ,
+                                                                    sal_Int32          nSearchFlags    )
 {
     ETargetClass eResult = E_UNKNOWN;
 
@@ -509,8 +801,8 @@ ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentE
         //          Use given frame name to do that. It couldn't be empty(!) - because this was handled in step I.II).
         //*********************************************************************************************************
         if  (
-                ( nSearchFlags  &   FrameSearchFlag::SELF   )   &&
-                ( sTargetName   ==  sFrameName              )
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::SELF   )   &&
+                ( sTargetName   ==  sFrameName                          )
             )
         {
             eResult = E_SELF;
@@ -522,9 +814,9 @@ ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentE
         //          Ignore flag if we are a top frame and search outside current task isnt allowed.
         //*********************************************************************************************************
         if  (
-                ( eResult       !=  E_SELF                  )   &&
-                ( nSearchFlags  &   FrameSearchFlag::PARENT )   &&
-                ( bParentExist  ==  sal_True                )
+                ( eResult       !=  E_SELF                              )   &&
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::PARENT )   &&
+                ( bParentExist  ==  sal_True                            )
             )
         {
             if( sParentName == sTargetName )
@@ -542,10 +834,10 @@ ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentE
         //          Ignore flag if no childrens exist! Combine it with already set decisions!
         //*********************************************************************************************************
         if  (
-                ( eResult           !=  E_SELF                      )   &&
-                ( eResult           !=  E_PARENT                    )   &&
-                ( nSearchFlags      &   FrameSearchFlag::CHILDREN   )   &&
-                ( bChildrenExist    ==  sal_True                    )
+                ( eResult           !=  E_SELF                                  )   &&
+                ( eResult           !=  E_PARENT                                )   &&
+                ( nSearchFlags      &   css::frame::FrameSearchFlag::CHILDREN   )   &&
+                ( bChildrenExist    ==  sal_True                                )
             )
         {
             switch( eResult )
@@ -562,9 +854,9 @@ ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentE
         //          These change a deep to a flat search!
         //*********************************************************************************************************
         if  (
-                ( eResult       !=  E_SELF                      )   &&
-                ( eResult       !=  E_PARENT                    )   &&
-                   ( nSearchFlags   &   FrameSearchFlag::SIBLINGS   )
+                ( eResult       !=  E_SELF                                  )   &&
+                ( eResult       !=  E_PARENT                                )   &&
+                ( nSearchFlags  &   css::frame::FrameSearchFlag::SIBLINGS   )
             )
         {
             switch( eResult )
@@ -590,5 +882,84 @@ ETargetClass TargetFinder::impl_classifyForFrame(           sal_Bool    bParentE
     //*************************************************************************************************************
     return eResult;
 }
+
+/*-****************************************************************************************************//**
+    @short      debug-methods to check incoming parameter of some other mehods of this class
+    @descr      The follow methods are used to check parameters for other methods
+                of this class. The return value is used directly for an ASSERT(...).
+                This mechanism is active in debug version only!
+
+    @seealso    FRAMEWORK_ASSERT in implementation!
+
+    @param      references to checking variables
+    @return     sal_False on invalid parameter
+    @return     sal_True otherwise
+
+    @onerror    -
+*//*-*****************************************************************************************************/
+
+#ifdef ENABLE_ASSERTIONS
+
+//*****************************************************************************************************************
+sal_Bool TargetInfo::implcp_ctor( const ::rtl::OUString& sTarget    ,
+                                        sal_Int32        nFlags     ,
+                                        EFrameType       eType      ,
+                                        sal_Bool         bChildrens ,
+                                        sal_Bool         bParent    ,
+                                  const ::rtl::OUString& sFrame     ,
+                                  const ::rtl::OUString& sParent    )
+{
+    return(
+            ( &sTarget       == NULL            )   ||
+            ( eType          == E_UNKNOWNFRAME  )   ||
+            (
+                ( bChildrens != sal_True        )   &&
+                ( bChildrens != sal_False       )
+            )                                       ||
+            (
+                ( bParent    != sal_True        )   &&
+                ( bParent    != sal_False       )
+            )                                       ||
+            ( &sFrame        == NULL            )   ||
+            ( &sParent       == NULL            )
+          );
+}
+
+//*****************************************************************************************************************
+// Attention: - empty "sTarget" is allowed! => equal to "_self"
+//            - there exist no test for flags!
+sal_Bool TargetInfo::implcp_ctor( const css::uno::Reference< css::frame::XFrame >& xFrame  ,
+                                  const ::rtl::OUString&                           sTarget ,
+                                        sal_Int32                                  nFlags  )
+{
+    return(
+            ( &xFrame     == NULL      )    ||
+            ( xFrame.is() == sal_False )    ||
+            ( &sTarget    == NULL      )
+          );
+}
+
+//*****************************************************************************************************************
+sal_Bool TargetInfo::implcp_getFrameType( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    return(
+            ( &xFrame     == NULL      )  ||
+            ( xFrame.is() == sal_False )
+          );
+}
+
+//*****************************************************************************************************************
+sal_Bool TargetFinder::implcp_classifyFindFrame( const TargetInfo& aInfo )
+{
+    return( &aInfo == NULL );
+}
+
+//*****************************************************************************************************************
+sal_Bool TargetFinder::implcp_classifyQueryDispatch( const TargetInfo& aInfo )
+{
+    return( &aInfo == NULL );
+}
+
+#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-02-16 12:20:19 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #include <services/frame.hxx>
 #endif
 
+#ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
+#include <dispatch/soundhandler.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              )
@@ -126,6 +130,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::Task                        )
                         COMPONENTINFO( ::framework::Frame                       )
                         COMPONENTINFO( ::framework::DocumentProperties          )
+                        COMPONENTINFO( ::framework::SoundHandler                )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -133,5 +138,6 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::Desktop                         )   else
                         IFFACTORY( ::framework::Task                            )   else
                         IFFACTORY( ::framework::Frame                           )   else
-                        IFFACTORY( ::framework::DocumentProperties              )
+                        IFFACTORY( ::framework::DocumentProperties              )   else
+                        IFFACTORY( ::framework::SoundHandler                    )
                     )
