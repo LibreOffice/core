@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:30 $
+ *  last change: $Author: mtg $ $Date: 2001-02-28 11:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         sal_Bool bEndnote);
+
+    virtual ~XMLFootnoteConfigurationImportContext();
 
     /// parse attributes
     virtual void StartElement(
