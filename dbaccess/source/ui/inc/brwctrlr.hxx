@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:44:55 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 18:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ namespace dbaui
         ::cppu::OBroadcastHelper    m_aPropertyBroadcastHelper;
 
     protected:
-        DECLARE_STL_MAP(::rtl::OUString,sal_Int32, comphelper::UStringMixEqual, SupportedFeatures);
+        DECLARE_STL_MAP(::rtl::OUString, sal_Int32, ::std::less< ::rtl::OUString >, SupportedFeatures);
         SupportedFeatures                                                                   m_aSupportedFeatures;
         ::osl::Mutex                                                                        m_aPropertyMutex;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                 m_xCurrentFrame;        // the frame we're residing in
@@ -515,6 +515,9 @@ namespace dbaui
             // So for error recognition the above methods may be used.
         // init the formatter if form changes
         void initFormatter();
+
+        // gets the URL which the given id is assigned to
+        ::com::sun::star::util::URL getURLForId(sal_Int32 _nId) const;
 
     private:
         // invalidate features - implementation
