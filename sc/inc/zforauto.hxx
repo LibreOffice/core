@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforauto.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:28:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 19:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,9 @@ class ScNumFormatAbbrev
 public:
     ScNumFormatAbbrev();
     ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat);
-    ScNumFormatAbbrev(SvStream& rStream);
     ScNumFormatAbbrev(ULONG nFormat, SvNumberFormatter& rFormatter);
-    void Load( SvStream& rStream );         // Laden der Zahlenformate
-    void Save( SvStream& rStream ) const;   // Speichern der Zahlenformate
+    void Load( SvStream& rStream, CharSet eByteStrSet );            // Laden der Zahlenformate
+    void Save( SvStream& rStream, CharSet eByteStrSet ) const;   // Speichern der Zahlenformate
     void PutFormatIndex(ULONG nFormat, SvNumberFormatter& rFormatter);
     ULONG GetFormatIndex( SvNumberFormatter& rFormatter);
     inline int operator==(const ScNumFormatAbbrev& rNumFormat) const
