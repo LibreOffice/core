@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.10 $
+*  $Revision: 1.11 $
 *
-*  last change: $Author: hr $ $Date: 2004-05-10 13:05:38 $
+*  last change: $Author: kz $ $Date: 2004-05-19 16:51:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -142,6 +142,22 @@ File gid_File_Basic_Webwiz
     Name = "basicsrvweb.zip";
 End
 
+File gid_File_Basic_Tutorials
+    Dir = gid_Dir_Basic_Tutorials;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtutorials.zip";
+End
+
+#ifdef UNX
+
+File gid_File_Bin_Getstylegnome
+    BIN_FILE_BODY;
+    Name = "getstyle-gnome";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+End
+
+#endif
 
 #ifdef UNX
 
@@ -536,12 +552,6 @@ STD_JAR_FILE( gid_File_Jar_Classes, classes )
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Common, common )
-
-#endif
-
-#ifdef SOLAR_JAVA
-
 File gid_File_Jar_Java_Uno
     TXT_FILE_BODY;
     Name = JARFILENAME(java_uno);
@@ -605,10 +615,29 @@ End
 
 #endif
 
+
 #ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Report, report )
+#endif
 
-UNO_JAR_FILE( gid_File_Jar_Report, report )
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Letter, letter )
+#endif
 
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Web, web )
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Query, query )
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Commonwizards, commonwizards )
+#endif
+
+#ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Tutorial, tutorial )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1206,6 +1235,20 @@ File gid_File_Oo_Office_Writer_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Writer.xcu";
+End
+
+File gid_File_Oo_Office_WebWizard_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/WebWizard.xcs";
+End
+
+File gid_File_Oo_Office_WebWizard_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/WebWizard.xcu";
 End
 
 File gid_File_Oo_Office_Writerweb_Xcs
