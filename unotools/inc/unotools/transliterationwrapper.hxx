@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 14:59:04 $
+ *  last change: $Author: er $ $Date: 2001-08-08 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,13 @@ public:
                         xub_StrLen nStart, xub_StrLen nEnd,
                         ::com::sun::star::uno::Sequence <long>* pOffset );
 
-    /** Does not only return true if the two strings are equal per this
-        translation but also if one string matches the start of the other, i.e.
+    /** If two strings are equal per this transliteration.
+        Returns the number of matched code points in any case, even if strings
+        are not equal, for example:
         equals( "a", 0, 1, nMatch1, "aaa", 0, 3, nMatch2 )
-        returns true and nMatch:=1 and nMatch2:=3
+        returns false and nMatch:=1 and nMatch2:=1
         equals( "aab", 0, 3, nMatch1, "aaa", 0, 3, nMatch2 )
-        returns true and nMatch:=2 and nMatch2:=3
+        returns false and nMatch:=2 and nMatch2:=2
      */
     sal_Bool equals(
         const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
