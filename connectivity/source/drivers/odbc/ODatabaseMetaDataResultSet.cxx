@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-08 14:18:58 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 08:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,18 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
         throw DisposedException();
 
     columnIndex = mapColumn(columnIndex);
-    return getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,sal_Int8(0));
+
+    sal_Bool bRet = sal_False;
+    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
+    switch(nType)
+    {
+        case DataType::BIT:
+            bRet = sal_Int8(getValue(m_aStatementHandle,columnIndex,SQL_C_BIT,m_bWasNull,**this,sal_Int8(0))) != 0;
+            break;
+        default:
+            bRet = getInt(columnIndex) != 0;
+    }
+    return bRet;
 }
 // -------------------------------------------------------------------------
 
@@ -228,7 +239,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     sal_Int8  nVal = getValue(m_aStatementHandle,columnIndex,SQL_C_CHAR,m_bWasNull,**this,sal_Int8(0));
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)nVal];
+        return sal_Int8((*m_aValueRangeIter).second[(sal_Int32)nVal]);
     return nVal;
 }
 // -------------------------------------------------------------------------
@@ -404,7 +415,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     sal_Int16 nVal = getValue(m_aStatementHandle,columnIndex,SQL_C_SHORT,m_bWasNull,**this,sal_Int16(0));
 
     if(m_aValueRange.size() && (m_aValueRangeIter = m_aValueRange.find(columnIndex)) != m_aValueRange.end())
-        return (*m_aValueRangeIter).second[(sal_Int32)nVal];
+        return sal_Int16((*m_aValueRangeIter).second[(sal_Int32)nVal]);
     return nVal;
 }
 // -------------------------------------------------------------------------
