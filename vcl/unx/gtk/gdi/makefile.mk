@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:52:47 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:51:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ TARGET=gtkgdi
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -83,7 +81,10 @@ dummy:
 
 .IF "$(ENABLE_GTK)" != ""
 
-CFLAGS+=`pkg-config --cflags gtk+-2.0`
+PKGCONFIG_MODULES=gtk+-2.0
+.INCLUDE : pkg_config.mk
+
+CFLAGS+=$(PKGCONFIG_CFLAGS)
 
 SLOFILES=\
             $(SLO)$/salnativewidgets-gtk.obj
