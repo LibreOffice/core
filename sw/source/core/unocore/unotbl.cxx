@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:59:50 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTDATACHANGEEVENT_HPP_
 #include <com/sun/star/chart/ChartDataChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TABLE_CELLCONTENTTYPE_HPP_
+#include <com/sun/star/table/CellContentType.hpp>
 #endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
@@ -998,8 +1001,20 @@ void SwXCell::setValue(double rValue) throw( uno::RuntimeException )
   -----------------------------------------------------------------------*/
 table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
-    return  (table::CellContentType)0;
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    table::CellContentType nRes = table::CellContentType_EMPTY;
+    sal_uInt32 nNdPos = pBox->IsFormulaOrValueBox();
+    switch (nNdPos)
+    {
+        case 0 :                    nRes = table::CellContentType_TEXT; break;
+        case USHRT_MAX :            nRes = table::CellContentType_EMPTY; break;
+        case RES_BOXATR_VALUE :     nRes = table::CellContentType_VALUE; break;
+        case RES_BOXATR_FORMULA :   nRes = table::CellContentType_FORMULA; break;
+        default :
+            DBG_ERROR( "unexpected case" );
+    }
+    return  nRes;
 }
 /* -----------------27.04.99 12:06-------------------
  *
