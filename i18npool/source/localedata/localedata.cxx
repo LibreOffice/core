@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-15 20:09:32 $
+ *  last change: $Author: bustamam $ $Date: 2002-03-19 00:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star;
+using namespace rtl;
 
 static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
 static sal_Char charBuffer[256];
