@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-01 05:33:27 $
+ *  last change: $Author: os $ $Date: 2002-08-06 13:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3442,7 +3442,7 @@
 							<value>0</value>
 							<info>
 								<desc xml:lang="en-US">Specifies, if a preview graphic should be exported together with the Encapsulated PostScript file.
-													   Due to the fact that most programs can't render eps graphics, it is sometimes useful to 
+													   Due to the fact that most programs can't render eps graphics, it is sometimes useful to
 													   provide a preview that can be display as replacement. The preview graphic will also be
 													   printed if the printer is not capable of Postscript.</desc>
 								<label xml:lang="en-US">Preview - Picture preview (TIFF) / Interchange (EPSI)</label>
@@ -3461,14 +3461,14 @@
 								</enumeration>
 								<enumeration oor:value="2">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported together with a Interchange (EPSI) preview graphic, which 
-															   has a color resolution of 1 bit. EPS graphics containing an EPSI preview 
+										<desc xml:lang="en-US">Graphics are exported together with a Interchange (EPSI) preview graphic, which
+															   has a color resolution of 1 bit. EPS graphics containing an EPSI preview
 															   graphic remain editable as standard text file.</desc>
 									</info>
 								</enumeration>
 								<enumeration oor:value="3">
 									<info>
-										<desc xml:lang="en-US">Graphics are exported together with a TIFF- and EPSI preview graphic. 
+										<desc xml:lang="en-US">Graphics are exported together with a TIFF- and EPSI preview graphic.
 															   The created eps won't be editable as standard text file.</desc>
 									</info>
 								</enumeration>
@@ -3897,7 +3897,7 @@
 							<!-- UIHints: File  Export  Filetype  PNG-Portable Network Graphic -->
 							<value>6</value>
 							<info>
-								<desc xml:lang="en-US">Specifies export compression settings which ranges from 0 (no compression) to 
+								<desc xml:lang="en-US">Specifies export compression settings which ranges from 0 (no compression) to
 													   9 (maximum compression). The calculating time increases with an ascending
 													   compression value.</desc>
 							</info>
@@ -4524,7 +4524,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 		</group>
 		<group oor:name="Accessibility">
 			<prop oor:name="IsForDrawings" oor:type="xs:boolean">
-				<!-- Responsible: AF -->
+                <!-- Responsible: AF -->
 				<value>true</value>
 				<info>
 					<desc xml:lang="en-US">Indicates whether to use high contrast mode, when
@@ -4533,7 +4533,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsForBorders" oor:type="xs:boolean">
-				<!-- Responsible: -->
+                <!-- Responsible: OS-->
 				<value>true</value>
 				<info>
 					<desc xml:lang="en-US">This option defaults the new contrast mode of borders, when high contrast mode is "active".</desc>
@@ -4541,7 +4541,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsForPagePreviews" oor:type="xs:boolean">
-				<!-- Responsible: -->
+                <!-- Responsible: OS-->
 				<value>false</value>
 				<info>
 					<desc xml:lang="en-US">This option enables the use of high contrast colors, instead of displaying the normal/original WYSIWYG colors (like the document will be printed).</desc>
@@ -4549,7 +4549,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsHelpTipsDisappear" oor:type="xs:boolean">
-				<!-- Responsible: -->
+                <!-- Responsible: OS -->
 				<value>true</value>
 				<info>
 					<desc xml:lang="en-US">This enables/disables the automatic time out of Helptips. Duration (n) could be chosen from 1 to 99 seconds. If option is disabled the Helptip will not expire automatically (Loosing focus or ESC key if automatic time out is inactive.)</desc>
@@ -4557,7 +4557,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="HelpTipSeconds" oor:type="xs:short">
-				<!-- Responsible:-->
+                <!-- Responsible: OS-->
 				<value>4</value>
 				<info>
 					<desc xml:lang="en-US">This enables/disables the automatic time out of Helptips. Duration (n) could be chosen from 1 to 99 seconds. If option is disabled the Helptip will not expire automatically (Loosing focus or ESC key if automatic time out is inactive.)</desc>
@@ -4569,7 +4569,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</constraints>
 			</prop>
 			<prop oor:name="IsAllowAnimatedGraphics" oor:type="xs:boolean">
-				<!-- Responsible: AF -->
+                <!-- Responsible: AF -->
 				<value>true</value>
 				<info>
 					<desc xml:lang="en-US">Indicates whether to allow the graphical
@@ -4580,7 +4580,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsAllowAnimatedText" oor:type="xs:boolean">
-				<!-- Responsible: AF -->
+                <!-- Responsible: AF -->
 				<value>true</value>
 				<info>
 					<desc xml:lang="en-US">Indicates whether to all textual animation like blinking and
@@ -4589,7 +4589,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsAutomaticFontColor" oor:type="xs:boolean">
-				<!-- Responsible: -->
+                <!-- Responsible: OS -->
 				<value>false</value>
 				<info>
 					<desc xml:lang="en-US">This option overrides all text color attributes set in a SO/OO document for display only.</desc>
@@ -4597,7 +4597,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				</info>
 			</prop>
 			<prop oor:name="IsSystemFont" oor:type="xs:boolean">
-				<!-- Responsible: -->
+                <!-- Responsible: OS -->
 				<value>false</value>
 				<info>
 					<desc xml:lang="en-US">This option allows to change the UI font from our own to the system one.</desc>
