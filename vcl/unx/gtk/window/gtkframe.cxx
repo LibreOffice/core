@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:52:21 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,9 +432,6 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
         bGetAcceptFocusFn = false;
         OUString aSym( RTL_CONSTASCII_USTRINGPARAM( "gtk_window_set_accept_focus" ) );
         p_gtk_window_set_accept_focus = (void(*)(GtkWindow*,gboolean))osl_getSymbol( GetSalData()->m_pPlugin, aSym.pData );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "gtk_window_set_accept_focus %s\n", p_gtk_window_set_accept_focus ? "found" : "not found" );
-#endif
     }
     if( p_gtk_window_set_accept_focus && bBeforeRealize )
         p_gtk_window_set_accept_focus( pWindow, bAccept );
@@ -519,7 +516,10 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
         if( (nStyle & SAL_FRAME_STYLE_INTRO) )
             gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_SPLASHSCREEN );
         else if( (nStyle & SAL_FRAME_STYLE_TOOLWINDOW ) )
+        {
             gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_UTILITY );
+            gtk_window_set_skip_taskbar_hint( m_pWindow, true );
+        }
         else if( (nStyle & SAL_FRAME_STYLE_OWNERDRAWDECORATION) )
         {
             gtk_window_set_type_hint( m_pWindow, GDK_WINDOW_TYPE_HINT_TOOLBAR );
@@ -729,7 +729,9 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
 
     for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(USHORT); nIndex++ )
     {
-        BitmapEx aIcon( ResId(nOffsets[nIndex] + nIcon, ImplGetResMgr()));
+        // #i44723# workaround gcc temporary problem
+        ResId aResId( nOffsets[nIndex] + nIcon, ImplGetResMgr() );
+        BitmapEx aIcon( aResId );
 
         ImpBitmap *pIconImpBitmap = aIcon.ImplGetBitmapImpBitmap();
         ImpBitmap *pIconImpMask   = aIcon.ImplGetMaskImpBitmap();
@@ -1068,7 +1070,31 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
     if( ! m_pWindow || ! pState || (m_nStyle & SAL_FRAME_STYLE_CHILD) )
         return;
 
-    if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y | SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT ) )
+    const ULONG nMaxGeometryMask =
+        SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
+        SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT |
+        SAL_FRAMESTATE_MASK_MAXIMIZED_X | SAL_FRAMESTATE_MASK_MAXIMIZED_Y |
+        SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH | SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
+
+    if( (pState->mnMask & SAL_FRAMESTATE_MASK_STATE) &&
+        (pState->mnState & SAL_FRAMESTATE_MAXIMIZED) &&
+        (pState->mnMask & nMaxGeometryMask) == nMaxGeometryMask )
+    {
+        gtk_window_resize( m_pWindow, pState->mnWidth, pState->mnHeight );
+        gtk_window_move( m_pWindow, pState->mnX, pState->mnY );
+        m_bDefaultPos = m_bDefaultSize = false;
+
+        maGeometry.nX       = pState->mnMaximizedX;
+        maGeometry.nY       = pState->mnMaximizedY;
+        maGeometry.nWidth   = pState->mnMaximizedWidth;
+        maGeometry.nHeight  = pState->mnMaximizedHeight;
+
+        m_nState = GdkWindowState( m_nState | GDK_WINDOW_STATE_MAXIMIZED );
+        m_aRestorePosSize = Rectangle( Point( pState->mnX, pState->mnY ),
+                                       Size( pState->mnWidth, pState->mnHeight ) );
+    }
+    else if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_Y |
+                               SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT ) )
     {
         USHORT nPosSizeFlags = 0;
         long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
@@ -1118,35 +1144,38 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
 BOOL GtkSalFrame::GetWindowState( SalFrameState* pState )
 {
     pState->mnState = SAL_FRAMESTATE_NORMAL;
+    pState->mnMask  = SAL_FRAMESTATE_MASK_STATE;
+    // rollup ? gtk 2.2 does not seem to support the shaded state
     if( (m_nState & GDK_WINDOW_STATE_ICONIFIED) )
         pState->mnState |= SAL_FRAMESTATE_MINIMIZED;
     if( m_nState & GDK_WINDOW_STATE_MAXIMIZED )
+    {
         pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
-    // rollup ? gtk 2.2 does not seem to support the shaded state
-
-    pState->mnX         = maGeometry.nX;
-    pState->mnY         = maGeometry.nY;
-    pState->mnWidth     = maGeometry.nWidth;
-    pState->mnHeight    = maGeometry.nHeight;
-    pState->mnMask      =
-        SAL_FRAMESTATE_MASK_X           |
-        SAL_FRAMESTATE_MASK_Y           |
-        SAL_FRAMESTATE_MASK_WIDTH       |
-        SAL_FRAMESTATE_MASK_HEIGHT      |
-        SAL_FRAMESTATE_MASK_STATE;
-
-#if OSL_DEBUG_LEVEL > 1
-    if( std::abs( maGeometry.nX ) > 2000 || std::abs( maGeometry.nY ) > 2000 )
-    {
-        fprintf( stderr, "bad pos in GetWindowState: %d, %d\n", maGeometry.nX, maGeometry.nY );
-        abort();
+        pState->mnX                 = m_aRestorePosSize.Left();
+        pState->mnY                 = m_aRestorePosSize.Top();
+        pState->mnWidth             = m_aRestorePosSize.GetWidth();
+        pState->mnHeight            = m_aRestorePosSize.GetHeight();
+        pState->mnMaximizedX        = maGeometry.nX;
+        pState->mnMaximizedY        = maGeometry.nY;
+        pState->mnMaximizedWidth    = maGeometry.nWidth;
+        pState->mnMaximizedHeight   = maGeometry.nHeight;
+        pState->mnMask  |= SAL_FRAMESTATE_MASK_MAXIMIZED_X          |
+                           SAL_FRAMESTATE_MASK_MAXIMIZED_Y          |
+                           SAL_FRAMESTATE_MASK_MAXIMIZED_WIDTH      |
+                           SAL_FRAMESTATE_MASK_MAXIMIZED_HEIGHT;
     }
-    if( maGeometry.nWidth < 2 || maGeometry.nWidth > 2000 || maGeometry.nHeight < 2 || maGeometry.nHeight > 2000 )
+    else
     {
-        fprintf( stderr, "bad size in GetWindowState: %d, %d\n", maGeometry.nWidth, maGeometry.nHeight );
-        abort();
+
+        pState->mnX         = maGeometry.nX;
+        pState->mnY         = maGeometry.nY;
+        pState->mnWidth     = maGeometry.nWidth;
+        pState->mnHeight    = maGeometry.nHeight;
     }
-#endif
+    pState->mnMask  |= SAL_FRAMESTATE_MASK_X            |
+                       SAL_FRAMESTATE_MASK_Y            |
+                       SAL_FRAMESTATE_MASK_WIDTH        |
+                       SAL_FRAMESTATE_MASK_HEIGHT;
 
     return TRUE;
 }
@@ -1863,8 +1892,7 @@ gboolean GtkSalFrame::signalFocus( GtkWidget* pWidget, GdkEventFocus* pEvent, gp
     GTK_YIELD_GRAB();
 
     // check if printers have changed (analogous to salframe focus handler)
-    if( static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
-        vcl_sal::PrinterUpdate::update();
+    vcl_sal::PrinterUpdate::update();
 
     if( !pEvent->in )
     {
@@ -2229,6 +2257,13 @@ gboolean GtkSalFrame::signalState( GtkWidget* pWidget, GdkEvent* pEvent, gpointe
     if( (pThis->m_nState & GDK_WINDOW_STATE_ICONIFIED) != (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_ICONIFIED ) )
         pThis->getDisplay()->SendInternalEvent( pThis, NULL, SALEVENT_RESIZE );
 
+    if(   (pEvent->window_state.new_window_state & GDK_WINDOW_STATE_MAXIMIZED) &&
+        ! (pThis->m_nState & GDK_WINDOW_STATE_MAXIMIZED) )
+    {
+        pThis->m_aRestorePosSize =
+            Rectangle( Point( pThis->maGeometry.nX, pThis->maGeometry.nY ),
+                       Size( pThis->maGeometry.nWidth, pThis->maGeometry.nHeight ) );
+    }
     pThis->m_nState = pEvent->window_state.new_window_state;
 
     return FALSE;
