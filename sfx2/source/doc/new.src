@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:06:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,14 +156,14 @@ ModalDialog DLG_NEW_FILE
         Text [ spanish ] = "P~lantillas" ;
         Text [ english_us ] = "T~emplates" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÑùÊ½(~T)";
+        Text[ chinese_simplified ] = "ÑùÊ½(~E)";
         Text[ russian ] = "Øàáëîíû";
         Text[ polish ] = "Szablony";
-        Text[ japanese ] = "ÃÝÌßÚ°Ä(~T)";
-        Text[ chinese_traditional ] = "¼Ë¦¡(~T)";
+        Text[ japanese ] = "ÃÝÌßÚ°Ä(~E)";
+        Text[ chinese_traditional ] = "¼Ë¦¡(~E)";
         Text[ arabic ] = "ÞæÇáÈ";
         Text[ greek ] = "Ðñüôõðá";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ(~T)";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ(~E)";
         Text[ turkish ] = "~Þablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~lantillas";
@@ -285,7 +285,7 @@ ModalDialog DLG_NEW_FILE
         Text [ english_us ] = "Te~xt" ;
         Text [ italian ] = "Testo" ;
         Text [ spanish ] = "Te~xto" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text [ dutch ] = "~Tekst" ;
         Text [ swedish ] = "Te~xt" ;
         Text [ danish ] = "Tekst" ;
@@ -313,17 +313,17 @@ ModalDialog DLG_NEW_FILE
         Text [ english_us ] = "~Frame" ;
         Text [ italian ] = "Co~rnice" ;
         Text [ spanish ] = "~Marco" ;
-        Text [ french ] = "~Cadres" ;
+        Text [ french ] = "Cadre" ;
         Text [ dutch ] = "~Kader" ;
         Text [ swedish ] = "~Ram" ;
         Text [ danish ] = "Ramme" ;
         Text [ portuguese_brazilian ] = "Rahmen" ;
         Text [ portuguese ] = "Mol~dura" ;
-        Text[ chinese_simplified ] = "¿ò(~T)";
+        Text[ chinese_simplified ] = "¿ò(~F)";
         Text[ russian ] = "Ðàìêà";
         Text[ polish ] = "Ramka";
-        Text[ japanese ] = "˜g(~T)";
-        Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
+        Text[ japanese ] = "˜g(~F)";
+        Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~F)";
         Text[ arabic ] = "ßÇÏÑ";
         Text[ greek ] = "Ðåñßãñáììá";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~F)";
@@ -341,8 +341,8 @@ ModalDialog DLG_NEW_FILE
         Text [ english_us ] = "~Pages" ;
         Text [ italian ] = "Pagine" ;
         Text [ spanish ] = "Págin~as" ;
-        Text [ french ] = "~Pages" ;
-        Text [ dutch ] = "~pagina's" ;
+        Text [ french ] = "Pages" ;
+        Text [ dutch ] = "~Pagina's" ;
         Text [ swedish ] = "~Sidor" ;
         Text [ danish ] = "Sider" ;
         Text [ portuguese ] = "~Páginas" ;
@@ -373,7 +373,7 @@ ModalDialog DLG_NEW_FILE
         Text [ danish ] = "Nummerering" ;
         Text [ italian ] = "N~umerazione" ;
         Text [ spanish ] = "Nu~meración" ;
-        Text [ french ] = "N~umérotation" ;
+        Text [ french ] = "Numérotation" ;
         Text [ dutch ] = "~Nummering" ;
         Text[ chinese_simplified ] = "±àºÅ(~U)";
         Text[ russian ] = "Íóìåðàöèÿ";
@@ -398,7 +398,7 @@ ModalDialog DLG_NEW_FILE
         Text [ english_us ] = "~Overwrite" ;
         Text [ italian ] = "Sovrascrivi" ;
         Text [ spanish ] = "So~brescribir" ;
-        Text [ french ] = "~Écraser" ;
+        Text [ french ] = "Écraser" ;
         Text [ swedish ] = "Skri~v över" ;
         Text [ danish ] = "Overskriv" ;
         Text [ portuguese ] = "~Substituir" ;
@@ -424,10 +424,10 @@ ModalDialog DLG_NEW_FILE
         Text [ English ] = "From file..." ;
         Text[ english_us ] = "From File...";
         Text[ portuguese ] = "Do ficheiro...";
-        Text[ russian ] = "From file...";
+        Text[ russian ] = "Èç ôàéëà...";
         Text[ greek ] = "From file...";
         Text[ dutch ] = "From file...";
-        Text[ french ] = "From file...";
+        Text[ french ] = "À partir d'un fichier...";
         Text[ spanish ] = "De archivo...";
         Text[ finnish ] = "From file...";
         Text[ italian ] = "Da file...";
@@ -447,10 +447,10 @@ ModalDialog DLG_NEW_FILE
     {
         Text = "Vorlagen laden" ;
         Text [ English ] = "Load templates" ;
-        Text [ english_us ] = "Load templates" ;
+        Text [ english_us ] = "Load Styles & Templates" ;
         Text [ italian ] = "Carica modelli" ;
         Text [ spanish ] = "Cargar plantillas" ;
-        Text [ french ] = "Chargement de styles" ;
+        Text [ french ] = "Charger les styles" ;
         Text [ dutch ] = "Opmaakprofielen laden" ;
         Text [ swedish ] = "Ladda mallar" ;
         Text [ danish ] = "Indlæs typografier" ;
@@ -641,4 +641,5 @@ ModalDialog DLG_NEW_FILE
     Text[ catalan ] = "Nuevo";
 };
  // ********************************************************************** EOF
+
 
