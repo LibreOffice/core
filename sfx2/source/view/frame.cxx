@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:16:54 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,47 +185,6 @@ SfxCancelManager* SfxFrame::GetCancelManager() const
 
 //--------------------------------------------------------------------
 
-void SfxFrame::Lock_Impl( sal_Bool bLock )
-{
-    SfxFrame *pParent = pParentFrame; // this kann kaputt gehen!
-
-    if ( bLock )
-    {
-        // erstes Lock?
-        if ( 1 == ++pImp->nLocks )
-            SvFactory::IncAliveCount();
-    }
-    else
-    {
-        // letztes Lock?
-        if ( !--pImp->nLocks )
-        {
-            if ( pImp->bCloseOnUnlock )
-                DoClose();
-            SvFactory::DecAliveCount();
-        }
-    }
-
-    if ( pParent )
-        pParent->Lock_Impl(bLock);
-}
-
-//--------------------------------------------------------------------
-
-sal_uInt16 SfxFrame::GetLockCount_Impl() const
-{
-    return pImp->nLocks;
-}
-
-//--------------------------------------------------------------------
-
-void SfxFrame::CloseOnUnlock_Impl()
-{
-    pImp->bCloseOnUnlock = sal_True;
-}
-
-//--------------------------------------------------------------------
-
 SfxFrame::~SfxFrame()
 {
     pFramesArr_Impl->Remove( pFramesArr_Impl->GetPos( this ) );
@@ -234,22 +193,6 @@ SfxFrame::~SfxFrame()
     {
         pParentFrame->RemoveChildFrame_Impl( this );
         pParentFrame = 0;
-    }
-
-    for ( sal_uInt32 n=0; n<pImp->aHistory.Count(); n++ )
-    {
-        SfxFramePickEntry_Impl *pEntry = pImp->aHistory.GetObject(n);
-        delete pEntry;
-    }
-
-    if ( pImp->pHistory )
-    {
-        for ( sal_uInt32 n=0; n<pImp->pHistory->Count(); n++ )
-        {
-            SfxFramePickEntry_Impl *pEntry = pImp->pHistory->GetObject(n);
-            delete pEntry;
-        }
-        delete pImp->pHistory;
     }
 
     // Nur TopLevel-Frames verwalten ihren Descriptor selbst, bei den anderen
@@ -274,13 +217,6 @@ sal_Bool SfxFrame::DoClose()
     {
         pImp->bClosing = sal_True;
         CancelTransfers();
-
-        // wenn jetzt gelockt, dann sp"ater wiederholen
-        if ( IsLocked_Impl() )
-        {
-            CloseOnUnlock_Impl();
-            return sal_False;
-        }
 
         // now close frame; it will be deleted if this call is successful, so don't use any members after that!
         bRet = TRUE;
@@ -645,24 +581,10 @@ sal_uInt16 SfxFrame::GetChildFrameCount() const
 }
 
 sal_Bool SfxFrame::InsertDocument( SfxObjectShell *pDoc )
-/*  [Beschreibung]
-
-    Mu\s von abgeleiteten Klassen gerufen werden, liefert ggf. auch sal_False!
-    */
-
-    {
-        // am drucken oder so?
-        if ( IsLocked_Impl() )
-            return sal_False;
-
-        // Falls die aktuelle ::com::sun::star::sdbcx::View oder die TopFrame-::com::sun::star::sdbcx::View parent eines
-        // ModalDialogs ist, darf sie nicht entfernt werden
-        SfxObjectShell* pCur = GetCurrentDocument();
-        if ( pCur && ( pCur->IsInModalMode() || pCur->IsInPrepareClose() ) )
-            return sal_False;
-        DocumentInserted( pDoc );
-        return sal_True;
-    }
+{
+    DocumentInserted( pDoc );
+    return sal_True;
+}
 
 void SfxFrame::SetLoadEnvironment_Impl( LoadEnvironment_Impl* pEnv )
 {
@@ -1169,79 +1091,6 @@ void SfxFrame::RemoveTopFrame_Impl( SfxFrame* pFrame )
     SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
     rArr.Remove( rArr.GetPos( pFrame ) );
 }
-
-//========================================================================
-
-SfxFramePickEntry_Impl::SfxFramePickEntry_Impl()
-:   pDescriptor( NULL ),
-    pBrowserCfg( 0 ),
-    nHasBrowser( SFX_BEAMER_OFF )
-{
-}
-
-//-------------------------------------------------------------------------
-void SfxFrame::ActivatePickEntry_Impl( SfxFramePickEntry_Impl* pEntry, sal_uInt16 nMode, SfxFrameDescriptor *pDesc )
-{
-}
-
-void SfxFramePickEntry_Impl::Initialize( SfxFrame* pFrameP, sal_Bool bBrowserCfg,
-        const SfxObjectShell *pDocShell, const String* pURL, const String* pTitle )
-{
-    if ( pTitle )
-        aName = *pTitle;
-    else
-    {
-        aName = pURL ? *pURL : pDocShell->GetMedium()->GetOrigURL();
-    }
-
-    String aMark( pDocShell->GetLastMark_Impl() );
-    if ( aMark.Len() )
-    {
-        aName += '#';
-        aName += aMark;
-    }
-
-    pDescriptor = pFrameP->GetDescriptor()->Clone();
-    SfxItemSet *pSet = pDescriptor->GetArgs();
-    pSet->Put( SfxStringItem( SID_DOCINFO_TITLE, pDocShell->GetTitle( SFX_TITLE_CAPTION ) ) );
-}
-
-void SfxFramePickEntry_Impl::Update( SfxFrame* pFrame, const SfxPoolItem* pItem )
-{
-    // Zuerst den Descriptor des Frames auf den Stand bringen;
-    SfxFrameDescriptor *pD = pFrame->GetDescriptor();
-    SfxObjectShell *pDoc = pFrame->GetCurrentDocument();
-    if ( pDoc )
-    {
-        pFrame->UpdateDescriptor( pDoc );
-        if ( pItem )
-            pFrame->GetDescriptor()->GetArgs()->Put( *pItem );
-        else
-            pFrame->GetViewData_Impl();
-    }
-
-    // Dann den Descriptor kopieren
-    delete pDescriptor;
-    pDescriptor = pFrame->GetDescriptor()->Clone();
-}
-
-SfxFramePickEntry_Impl* SfxFramePickEntry_Impl::Clone() const
-{
-    // Achtung: Browser-Config kann momentan nicht kopiert werden!
-    SfxFramePickEntry_Impl* pEntry = new SfxFramePickEntry_Impl;
-    pEntry->aName = aName;
-    if ( pDescriptor )
-        pEntry->pDescriptor = pDescriptor->Clone();
-    return pEntry;
-}
-
-//-------------------------------------------------------------------------
-
-SfxFramePickEntry_Impl::~SfxFramePickEntry_Impl()
-{
-    delete pDescriptor;
-}
-
 
 SfxFrameItem::SfxFrameItem( sal_uInt16 nWhich, SfxViewFrame *p )
     : SfxPoolItem( nWhich ), pFrame( p ? p->GetFrame() : NULL )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: mba $ $Date: 2002-10-24 12:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,59 +102,9 @@ class SfxExplorerBrowserConfig;
 #define FRAME_SEARCH_CREATE     0x00000008
 #endif
 
-class SfxDummyController_Impl : public ::com::sun::star::frame::XController, public ::com::sun::star::lang::XTypeProvider, public ::cppu::OWeakObject
-{
-friend class SfxDummyCtrl_Impl;
-    SfxDummyCtrl_Impl*          pImp;
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >                  xWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                     xFrame;
-
-public:
-                                SfxDummyController_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & xComponent );
-                                ~SfxDummyController_Impl();
-
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
-
-                                // ::com::sun::star::frame::XController
-    virtual void   SAL_CALL             attachFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool   SAL_CALL                 attachModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual sal_Bool   SAL_CALL                 suspend( sal_Bool bSuspend ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Any    SAL_CALL                      getViewData() throw ( ::com::sun::star::uno::RuntimeException );
-    void             SAL_CALL               restoreViewData( const ::com::sun::star::uno::Any& Value ) throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >      SAL_CALL                   getFrame() throw ( ::com::sun::star::uno::RuntimeException );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >      SAL_CALL                   getModel() throw ( ::com::sun::star::uno::RuntimeException );
-
-                                // ::com::sun::star::lang::XComponent
-    virtual void           SAL_CALL         dispose() throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void           SAL_CALL         addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void           SAL_CALL         removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > & aListener ) throw ( ::com::sun::star::uno::RuntimeException );
-};
-
-struct SfxFramePickEntry_Impl
-{
-    String                      aName;          // schneller Zugriff JScript
-    SfxFrameDescriptor*         pDescriptor;
-    SfxExplorerBrowserConfig*   pBrowserCfg;
-    sal_uInt16                  nHasBrowser;
-
-    SfxFramePickEntry_Impl();
-    ~SfxFramePickEntry_Impl();
-    SfxFramePickEntry_Impl*     Clone() const;
-    void                        Update( SfxFrame*, const SfxPoolItem* pViewData = NULL );
-    void                        Initialize( SfxFrame* pFrame, sal_Bool bBrowserCfg,
-                                            const SfxObjectShell*, const String* pURL = 0, const String* pTitle = 0 );
-};
-
-DECLARE_LIST(SfxFrameHistory_Impl,SfxFramePickEntry_Impl*);
-
-class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase,
-                              public SfxListener
+class SfxFrame_Impl : public SfxBroadcaster, public SvCompatWeakBase, public SfxListener
 {
 friend class SfxFrame;
-friend class SfxUnoFrame;
-friend struct SfxFramePickEntry_Impl;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                     xFrame;
     String                  aFrameIdName;
@@ -163,8 +113,6 @@ friend struct SfxFramePickEntry_Impl;
     SfxViewFrame*           pCurrentViewFrame;
     SfxObjectShell*         pCurrentObjectShell;
     LoadEnvironment_Impl*   pLoadEnv;
-    SfxFrameHistory_Impl*   pHistory;
-    SfxFrameHistory_Impl    aHistory;
     SfxFrameDescriptor*     pDescr;
     SfxExplorerBrowserConfig* pBrowserCfg;
     sal_uInt16              nFrameId;
@@ -195,7 +143,6 @@ friend struct SfxFramePickEntry_Impl;
                                 pLoadEnv( NULL ),
                                 pCurrentObjectShell( NULL ),
                                 pCurrentViewFrame( NULL ),
-                                pHistory( NULL ),
                                 bInCancelTransfers( sal_False ),
                                 bCloseOnUnlock( sal_False ),
                                 bOwnsBindings( sal_False ),
@@ -213,7 +160,6 @@ friend struct SfxFramePickEntry_Impl;
 
                             ~SfxFrame_Impl() { delete pCancelMgr;
                                                delete pLoadCancellable; }
-    void                    AppendPickEntry( SfxFramePickEntry_Impl* pEntry);
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
