@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:55:01 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 21:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "½ºÅ©¸³Æ®  À¯Çü";
         Text[ turkish ] = "Script tipi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo de script";
     };
     Edit ED_TYPE
     {
@@ -134,6 +135,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "URL";
         Text[ turkish ] = "URL";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "URL";
     };
     Edit ED_URL
     {
@@ -178,6 +180,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "ÅØ½ºÆ®(~T)";
         Text[ turkish ] = "~Metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Texto";
     };
     MultiLineEdit ED_EDIT
     {
@@ -217,6 +220,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "³»¿ë";
         Text[ turkish ] = "Ýçerik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contenido";
     };
     OKButton BTN_POST_OK
     {
@@ -270,6 +274,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "½ºÅ©¸³Æ® ÆíÁý";
         Text[ turkish ] = "Script bearbeiten";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Editar script";
     };
     String STR_JAVA_INSERT
     {
@@ -295,6 +300,7 @@ ModalDialog DLG_JAVAEDIT
         Text[ korean ] = "½ºÅ©¸³Æ® »ðÀÔ";
         Text[ turkish ] = "Script einfügen";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar script";
     };
     Text [ english_us ] = "Edit Script" ;
     Text [ portuguese_brazilian ] = "Script bearbeiten" ;
@@ -315,5 +321,6 @@ ModalDialog DLG_JAVAEDIT
     Text[ korean ] = "½ºÅ©¸³Æ® ÆíÁý";
     Text[ turkish ] = "Script'i düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar script";
 };
  // ********************************************************************** EOF
