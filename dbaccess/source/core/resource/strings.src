@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:04:30 $
+ *  last change: $Author: oj $ $Date: 2001-04-19 09:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,3 +89,10 @@ String RID_STR_CONNECTION_INVALID
     Text = "Es konnte keine Verbindung erstellt werden!";
     Text [ english ] = "Not possible to create a connection!";
 };
+
+String RID_STR_TABLE_IS_FILTERED
+{
+    Text = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
+    Text [ english ] = "the table $name$ already exists. She is only filtered!";
+};
+
