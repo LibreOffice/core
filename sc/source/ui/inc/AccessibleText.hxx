@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:15:04 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 15:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
+class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
 
@@ -150,7 +151,7 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
-    ScViewForwarder* mpViewForwarder;
+    ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
 
     // prevent the using of this method of the base class
@@ -163,7 +164,7 @@ class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleTextData
 {
 public:
                         ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-                            const String& rText);
+                            const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader);
     virtual             ~ScAccessiblePreviewHeaderCellTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -176,9 +177,11 @@ public:
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
-    ScViewForwarder* mpViewForwarder;
+    ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
     String          maText;
+    sal_Bool        mbColHeader;
+    sal_Bool        mbRowHeader;
 
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }

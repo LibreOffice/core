@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-21 07:16:09 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef SC_DOCSHELL_HXX
 #include "docsh.hxx"
+#endif
+#ifndef SC_PREVLOC_HXX
+#include "prevloc.hxx"
 #endif
 
 #ifndef _SVX_UNOFORED_HXX
@@ -174,6 +177,110 @@ Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
     else
         DBG_ERROR("this ViewForwarder is not valid");
     return Point();
+}
+
+class ScPreviewViewForwarder : public SvxViewForwarder
+{
+    ScPreviewShell*     mpViewShell;
+    mutable ScPreviewTableInfo* mpTableInfo;
+public:
+                        ScPreviewViewForwarder(ScPreviewShell* pViewShell);
+    virtual             ~ScPreviewViewForwarder();
+
+    virtual BOOL        IsValid() const;
+    virtual Rectangle   GetVisArea() const;
+    virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+
+    void FillTableInfo() const;
+};
+
+ScPreviewViewForwarder::ScPreviewViewForwarder(ScPreviewShell* pViewShell)
+    :
+    mpViewShell(pViewShell),
+    mpTableInfo(NULL)
+{
+}
+
+ScPreviewViewForwarder::~ScPreviewViewForwarder()
+{
+    delete mpTableInfo;
+}
+
+BOOL ScPreviewViewForwarder::IsValid() const
+{
+    return mpViewShell != NULL;
+}
+
+Rectangle ScPreviewViewForwarder::GetVisArea() const
+{
+    Rectangle aVisArea;
+    if (mpViewShell)
+    {
+        FillTableInfo();
+
+        Rectangle aRect;
+        if ( mpTableInfo )
+        {
+            USHORT nColumns = mpTableInfo->GetCols();
+            USHORT nRows = mpTableInfo->GetRows();
+            if ( nColumns > 0 && nRows > 0 )
+            {
+                const ScPreviewColRowInfo* pColInfo = mpTableInfo->GetColInfo();
+                const ScPreviewColRowInfo* pRowInfo = mpTableInfo->GetRowInfo();
+
+                aRect = Rectangle( pColInfo[0].nPixelStart,
+                                   pRowInfo[0].nPixelStart,
+                                   pColInfo[nColumns-1].nPixelEnd,
+                                   pRowInfo[nRows-1].nPixelEnd );
+            }
+        }
+    }
+    else
+        DBG_ERROR("this ViewForwarder is not valid");
+    return aVisArea;
+}
+
+Point ScPreviewViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+            return pWindow->LogicToPixel( rPoint, rMapMode );
+    }
+    else
+        DBG_ERROR("this ViewForwarder is not valid");
+    return Point();
+}
+
+Point ScPreviewViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+            return pWindow->PixelToLogic( rPoint, rMapMode );
+    }
+    else
+        DBG_ERROR("this ViewForwarder is not valid");
+    return Point();
+}
+
+void ScPreviewViewForwarder::FillTableInfo() const
+{
+    if ( mpViewShell && !mpTableInfo )
+    {
+        Size aOutputSize;
+        Window* pWindow = mpViewShell->GetWindow();
+        if ( pWindow )
+            aOutputSize = pWindow->GetOutputSizePixel();
+        Point aPoint;
+        Rectangle aVisRect( aPoint, aOutputSize );
+
+        mpTableInfo = new ScPreviewTableInfo;
+        mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );
+    }
 }
 
 class ScEditViewForwarder : public SvxEditViewForwarder
@@ -463,7 +570,21 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 
     if (pEditEngine)
+    {
+        sal_Int32 nSizeX, nSizeY;
+        mpViewShell->GetViewData()->GetMergeSizePixel(
+            aCellPos.Col(), aCellPos.Row(), nSizeX, nSizeY);
+
+        Size aSize(nSizeX, nSizeY);
+
+        Window* pWin = mpViewShell->GetWindowByPos(meSplitPos);
+        if (pWin)
+            pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+
+        pEditEngine->SetPaperSize(aSize);
+
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
+    }
 
     return pForwarder;
 }
@@ -498,8 +619,8 @@ IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 {
     ScDocShell* pDocSh = NULL;
-    if (pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetDocument())
-        pDocSh = (ScDocShell*) pViewShell->GetViewData()->GetDocument()->GetDocumentShell();
+    if (pViewShell)
+        pDocSh = pViewShell->GetViewData()->GetDocShell();
     return pDocSh;
 }
 
@@ -539,7 +660,18 @@ ScAccessibleTextData* ScAccessiblePreviewCellTextData::Clone() const
 
 SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
 {
+    sal_Bool bEditEngineBefore(pEditEngine != NULL);
+
     ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
+
+    if (!bEditEngineBefore && pEditEngine)
+    {
+        Size aSize(mpViewShell->GetLocationData().GetCellOutputRect(aCellPos).GetSize());
+        Window* pWin = mpViewShell->GetWindow();
+        if (pWin)
+            pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+        pEditEngine->SetPaperSize(aSize);
+    }
 
     if (pEditEngine)
         pEditEngine->SetNotifyHdl( LINK(this, ScAccessibleCellTextData, NotifyHdl) );
@@ -549,8 +681,8 @@ SvxTextForwarder* ScAccessiblePreviewCellTextData::GetTextForwarder()
 
 SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
 {
-//  if (!mpViewForwarder)
-//      mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
+    if (!mpViewForwarder)
+        mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
     return mpViewForwarder;
 }
 
@@ -573,11 +705,13 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
-            const String& rText)
-    : ScAccessibleTextData(GetDocShell(pViewShell), ScAddress()),
+            const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
+    : ScAccessibleTextData(GetDocShell(pViewShell), rP),
     mpViewShell(pViewShell),
     mpViewForwarder(NULL),
-    maText(rText)
+    maText(rText),
+    mbColHeader(bColHeader),
+    mbRowHeader(bRowHeader)
 {
 }
 
@@ -602,7 +736,7 @@ void ScAccessiblePreviewHeaderCellTextData::Notify( SfxBroadcaster& rBC, const S
 
 ScAccessibleTextData* ScAccessiblePreviewHeaderCellTextData::Clone() const
 {
-    return new ScAccessiblePreviewHeaderCellTextData(mpViewShell, maText);
+    return new ScAccessiblePreviewHeaderCellTextData(mpViewShell, maText, aCellPos, mbColHeader, mbRowHeader);
 }
 
 SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
@@ -636,8 +770,25 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
     if (bDataValid)
         return pForwarder;
 
-    if (maText.Len())
+    if (maText.Len() && pEditEngine)
+    {
+
+        if ( mpViewShell  )
+        {
+            Size aOutputSize;
+            Window* pWindow = mpViewShell->GetWindow();
+            if ( pWindow )
+                aOutputSize = pWindow->GetOutputSizePixel();
+            Point aPoint;
+            Rectangle aVisRect( aPoint, aOutputSize );
+            Size aSize(mpViewShell->GetLocationData().GetHeaderCellOutputRect(aVisRect, aCellPos, mbColHeader).GetSize());
+            Window* pWin = mpViewShell->GetWindow();
+            if (pWin)
+                pWin->PixelToLogic(aSize, pEditEngine->GetRefMapMode());
+            pEditEngine->SetPaperSize(aSize);
+        }
         pEditEngine->SetText( maText );
+    }
 
     bDataValid = TRUE;
 
@@ -649,8 +800,8 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
 
 SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
 {
-//  if (!mpViewForwarder)
-//      mpViewForwarder = new ScViewForwarder(mpViewShell, meSplitPos, aCellPos);
+    if (!mpViewForwarder)
+        mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
     return mpViewForwarder;
 }
 

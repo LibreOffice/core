@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,9 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
 {
     ScUnoGuard aGuard;
 
-    sal_Int32 nRet = 0;
+    sal_Int32 nRet(0);
 
-    //! ...
+    // find out how many regions (left,center, right) are with content
 
     return nRet;
 }

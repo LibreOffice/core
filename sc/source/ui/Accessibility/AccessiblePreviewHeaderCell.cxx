@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 16:31:13 $
+ *  last change: $Author: sab $ $Date: 2002-04-08 15:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ void ScAccessiblePreviewHeaderCell::CreateTextHelper()
     if (!mpTextHelper)
     {
         ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewHeaderCellTextData
-            (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, String(getAccessibleName())));
+            (new ScAccessiblePreviewHeaderCellTextData(mpViewShell, String(getAccessibleName()), maCellPos, mbColumnHeader, mbRowHeader));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewHeaderCellTextData));
 
         mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
