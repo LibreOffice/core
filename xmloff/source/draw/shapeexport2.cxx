@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:00:25 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -1389,14 +1393,14 @@ void XMLShapeExport::ImpExportConnectorShape(
     aStr = sStringBuffer.makeStringAndClear();
     rExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
-    uno::Reference< drawing::XShape > xTempShape;
+    uno::Reference< uno::XInterface > xRef;
 
     // export start connection
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) );
-    if( aAny >>= xTempShape )
+    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) ) >>= xRef;
+    if( xRef.is() )
     {
-        sal_Int32 nShapeId = rExport.GetShapeExport()->getShapeId( xTempShape );
-        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_SHAPE, OUString::valueOf( nShapeId ));
+        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")) );
         sal_Int32 nGluePointId;
@@ -1410,12 +1414,11 @@ void XMLShapeExport::ImpExportConnectorShape(
     }
 
     // export end connection
-    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) );
-    if( aAny >>= xTempShape )
+    xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) ) >>= xRef;
+    if( xRef.is() )
     {
-
-        sal_Int32 nShapeId = rExport.GetShapeExport()->getShapeId( xTempShape );
-        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_SHAPE, OUString::valueOf( nShapeId ));
+        const OUString& rShapeId = rExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
+        rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_SHAPE, rShapeId);
 
         aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")) );
         sal_Int32 nGluePointId;
