@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-28 15:21:01 $
+ *  last change: $Author: mav $ $Date: 2002-09-12 09:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1780,30 +1780,15 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         // restore BaseURL
         INetURLObject::SetBaseURL( aOldURL );
 
-        ByteString aKey;
-        if ( IsOwnStorageFormat_Impl( *pMediumTmp ) )
-            aKey = pMediumTmp->GetStorage()->GetKey();
-
         pMediumTmp->GetItemSet()->ClearItem( SID_INTERACTIONHANDLER );
 
-        // retransfer parameters to original itemset
-        if( pSet )
-            pSet->Put( *pMediumTmp->GetItemSet() );
-
-        // copy back version list to "old" medium, because the "old" medium will stay the objectshells' medium,
-        // the temporary medium was only used in between
-        pMedium->TransferVersionList_Impl( *pMediumTmp );
         SetError(pMediumTmp->GetErrorCode());
-
-        // remove temporary medium and reconnect to original one
-        pMediumTmp->Close();
-        delete pMediumTmp;
 
         if ( !IsHandsOff() )
             DoHandsOff();
-        sal_Bool bOpen = DoSaveCompleted(pMedium);
-        if (  bOpen && aKey.Len() )
-            pMedium->GetStorage()->SetKey( aKey );
+        pMediumTmp->Close();
+
+        sal_Bool bOpen = DoSaveCompleted(pMediumTmp);
         DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
     }
     else

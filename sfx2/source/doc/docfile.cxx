@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-09 11:11:55 $
+ *  last change: $Author: mav $ $Date: 2002-09-12 09:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,7 +1333,7 @@ void SfxMedium::Transfer_Impl()
 
                         // without a TempFile the physical and logical name should be the same
                         ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
-                        return;
+                         return;
                 }
         }
     }
@@ -1386,7 +1386,7 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    bSuccess = aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_MOVE, aFileName, nNameClash );
+                    bSuccess = aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_COPY, aFileName, nNameClash );
                 }
                 catch ( ::com::sun::star::ucb::CommandAbortedException& )
                 {
@@ -1412,19 +1412,7 @@ void SfxMedium::Transfer_Impl()
                     eError = ERRCODE_IO_GENERAL;
                 }
 
-            if ( bSuccess && !::utl::UCBContentHelper::IsDocument( pImp->pTempFile->GetURL() ) )
-            {
-                    // if the transfer was done by a direct move, the source file is gone
-                    // so we have to destroy the TempFile object that points to it
-                    pImp->pTempFile->EnableKillingFile( sal_False );
-                    delete pImp->pTempFile;
-                    pImp->pTempFile = NULL;
-
-                    // without a TempFile the physical and logical name should be the same
-                    ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
-                    return;
-            }
-
+                // do not switch from temporary file in case of nonfile protocol
         }
     }
 
