@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 08:52:28 $
+ *  last change: $Author: os $ $Date: 2000-11-08 15:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4622,7 +4622,7 @@ uno::Any SwXParagraph::getPropertyValue(const OUString& rPropertyName)
         {
             SwParaSelection aParaSel(pUnoCrsr);
             SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-            SwAttrSet* pAttrSet = ((SwTxtNode&)rTxtNode).GetpSwAttrSet();
+            SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
 
             String aPropertyName(rPropertyName);
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
@@ -4631,9 +4631,9 @@ uno::Any SwXParagraph::getPropertyValue(const OUString& rPropertyName)
             if(pMap)
             {
                 PropertyState eTemp;
-                bDone = lcl_getCrsrPropertyValue(pMap, *pUnoCrsr, *pAttrSet, aAny, eTemp );
+                bDone = lcl_getCrsrPropertyValue(pMap, *pUnoCrsr, rAttrSet, aAny, eTemp );
                 if(!bDone)
-                    aAny = aPropSet.getPropertyValue(aPropertyName, *pAttrSet);
+                    aAny = aPropSet.getPropertyValue(aPropertyName, rAttrSet);
             }
             else
                 throw UnknownPropertyException();
