@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-22 13:28:28 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "AlineaciÛn de texto";
         Text[ finnish ] = "Tekstin tasaus";
         Text[ italian ] = "Allineamento testo";
-        Text[ danish ] = "Text alignment";
+        Text[ danish ] = "Tekstjustering";
         Text[ swedish ] = "Textjustering";
         Text[ polish ] = "WyrÛwnanie tekstu";
         Text[ portuguese_brazilian ] = "Text alignment";
@@ -132,7 +132,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Horizontal";
         Text[ finnish ] = "Vaaka~taso";
         Text[ italian ] = "~Orizzontale";
-        Text[ danish ] = "Vandret";
+        Text[ danish ] = "Va~ndret";
         Text[ swedish ] = "H~orisontell";
         Text[ polish ] = "Poziomo";
         Text[ portuguese_brazilian ] = "H~orizontal";
@@ -250,11 +250,11 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
         StringList [ danish ] =
         {
-            < "Normal" ; ALIGNDLG_HORALIGN_STD ; > ;
+            < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
             < "VENSTRE" ; ALIGNDLG_HORALIGN_LEFT ; > ;
             < "Centreret" ; ALIGNDLG_HORALIGN_CENTER ; > ;
-            < "Til h¯jre" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
-            < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+            < "H¯jre" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+            < "Lige margener" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
         };
         StringList [ swedish ] =
         {
@@ -353,7 +353,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ English ] = "~Indent" ;
         Text [ english_us ] = "I~ndent" ;
         Text [ swedish ] = "Indra~g" ;
-        Text [ danish ] = "Indrykning" ;
+        Text [ danish ] = "Indryknin~g" ;
         Text [ italian ] = "Rientro" ;
         Text [ spanish ] = "SangrÌa" ;
         Text [ french ] = "Retrait" ;
@@ -403,7 +403,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Vertical";
         Text[ finnish ] = "~Pystytaso";
         Text[ italian ] = "Verticale";
-        Text[ danish ] = "~Vertical";
+        Text[ danish ] = "~Lodret";
         Text[ swedish ] = "~Vertikal";
         Text[ polish ] = "Pionowo";
         Text[ portuguese_brazilian ] = "~Vertical";
@@ -509,10 +509,10 @@ TabPage RID_SVXPAGE_ALIGNMENT
         };
         StringList [ danish ] =
         {
-            < "Normal" ; ALIGNDLG_VERALIGN_STD ; > ;
-            < "ÿverst" ; ALIGNDLG_VERALIGN_TOP ; > ;
-            < "Midte" ; ALIGNDLG_VERALIGN_MID ; > ;
-            < "Nederst" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+            < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
+            < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ;
+            < "Centreret" ; ALIGNDLG_VERALIGN_MID ; > ;
+            < "Bund" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
         };
         StringList [ swedish ] =
         {
@@ -658,7 +658,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~¡ngulo";
         Text[ finnish ] = "~Asteet";
         Text[ italian ] = "~Gradi";
-        Text[ danish ] = "grader";
+        Text[ danish ] = "~Vinkel";
         Text[ swedish ] = "~Vinkel";
         Text[ polish ] = "Kπt";
         Text[ portuguese_brazilian ] = "Gra~d";
@@ -1014,7 +1014,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ swedish ] = "Rad~brytning" ;
         Text [ dutch ] = "~Regelafbreking" ;
         Text [ spanish ] = "Salto de ~lÌnea" ;
-        Text [ english_us ] = "Line break" ;
+        Text [ english_us ] = "Automatic ~line break" ;
         Text[ chinese_simplified ] = "Êç¢Ë°å";
         Text[ russian ] = "–‡Á˚‚ ÒÚÓÍË";
         Text[ polish ] = "Podzia≥ wierszy";
@@ -1045,7 +1045,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~SeparaciÛn sil·bica activa";
         Text[ finnish ] = "Tavutus k‰ytˆss‰";
         Text[ italian ] = "Funzione di sillabazione attiva";
-        Text[ danish ] = "Hyphenation active";
+        Text[ danish ] = "Orddeling ~aktiveret";
         Text[ swedish ] = "Avs~tavning aktiv";
         Text[ polish ] = "Dzielenie wyrazÛw aktywne";
         Text[ portuguese_brazilian ] = "Hyphenation active";
