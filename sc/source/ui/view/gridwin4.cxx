@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 14:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,16 +1207,13 @@ void ScGridWindow::DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                     long nPosX = aScrPos.X();
                     long nPosY = aScrPos.Y();
 
-                    SetLineColor( COL_WHITE );
+                    SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
                     DrawLine( Point(nPosX,nPosY), Point(nPosX,nPosY+nSizeY-1) );
                     DrawLine( Point(nPosX,nPosY), Point(nPosX+nSizeX-1,nPosY) );
-//                  SetLineColor( SC_SMALL3DSHADOW );
-                    SetLineColor( COL_GRAY );
+                    SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
                     DrawLine( Point(nPosX,nPosY+nSizeY-1), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
                     DrawLine( Point(nPosX+nSizeX-1,nPosY), Point(nPosX+nSizeX-1,nPosY+nSizeY-1) );
                     SetLineColor( COL_BLACK );
-//                  SetFillColor();
-//                  DrawRect( Rectangle( nPosX-1,nPosY-1, nPosX+nSizeX-1,nPosY+nSizeY-1 ) );
                 }
             }
         }
