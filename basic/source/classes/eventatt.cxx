@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 16:19:45 $
+ *  last change: $Author: ab $ $Date: 2001-03-19 12:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::rtl;
@@ -517,8 +518,8 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
-    Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
-    if( !xSMgr.is() )
+    Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
+    if( !xMSF.is() )
         return;
 
     // We need at least 2 parameters
@@ -555,25 +556,29 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     // Get dialog name
     String aDialogName = rPar.Get( 2 )->GetString();
 
+    // Create new uno dialog
+    Reference< XNameContainer > xDialogModel( xMSF->createInstance
+        ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ),
+            UNO_QUERY );
+
     // Get dialog data
     Any aElement = xNameAccess->getByName( aDialogName );
-    Sequence< sal_Int8 > aDialogsSeq;
-    aElement >>= aDialogsSeq;
+    Reference< XInputStreamProvider > xISP;
+    aElement >>= xISP;
 
     // Create a DialogModel
-    Sequence< Reference< XNameContainer > > aModelSeq;
-    xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
-    Reference< XNameContainer > xDialogModel = aModelSeq.getConstArray()[0];
+    Reference< XInputStream > xInput( xISP->createInputStream() );
+    ::xmlscript::importDialogModel( xInput, xDialogModel );
     if( !xDialogModel.is() )
         return;
 
     // Create a "living" Dialog
-    Reference< XControl > xDlg( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
+    Reference< XControl > xDlg( xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
     Reference< XControlModel > xDlgMod( xDialogModel, UNO_QUERY );
     xDlg->setModel( xDlgMod );
     Reference< XWindow > xW( xDlg, UNO_QUERY );
     xW->setVisible( sal_False );
-    Reference< XToolkit > xToolkit( xSMgr->createInstance(
+    Reference< XToolkit > xToolkit( xMSF->createInstance(
         OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
     xDlg->createPeer( xToolkit, NULL );
     attachDialogEvents( pBasic, xDlg );
