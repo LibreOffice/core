@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:28:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #include "imaprect.hxx"
 #include "imapcirc.hxx"
 #include "imappoly.hxx"
+#include "urihelper.hxx"
 
 #ifndef RTL_CONSTASCII_STRINGPARAM
 #define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1
@@ -590,6 +591,7 @@ SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor,
 }
 
 SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
+                                      const String& rBaseURL,
                                       const ImageMap& rIMap,
                                       const String& rName,
                                       const HTMLOutEvent *pEventTable,
@@ -698,7 +700,8 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 String aURL( pObj->GetURL() );
                 if( aURL.Len() && pObj->IsActive() )
                 {
-                    aURL = INetURLObject::AbsToRel( aURL );
+                    aURL = URIHelper::simpleNormalizedMakeRelative(
+                        rBaseURL, aURL );
                     (sOut = sHTML_O_href) += "=\"";
                     rStream << sOut.GetBuffer();
                     Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ) << '\"';
@@ -751,6 +754,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 }
 
 SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
+                                   const String& rBaseURL,
                                    const String& rLanguage,
                                    ScriptType eScriptType,
                                    const String& rSrc,
@@ -780,7 +784,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm, const String& rSource,
     {
         ((sOut += ' ') += sHTML_O_src) += "=\"";
         rStrm << sOut.GetBuffer();
-        Out_String( rStrm, INetURLObject::AbsToRel(rSrc), eDestEnc, pNonConvertableChars );
+        Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc), eDestEnc, pNonConvertableChars );
         sOut = '\"';
     }
 
