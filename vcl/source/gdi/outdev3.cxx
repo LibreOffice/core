@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 13:03:17 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8369,3 +8369,39 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------
+
+BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
+{
+    rFontCharMap.ImplSetDefaultRanges();
+
+#ifndef REMOTE_APPSERVER
+    // we need a graphics
+    if ( !mpGraphics )
+    {
+        if ( !((OutputDevice*)this)->ImplGetGraphics() )
+            return FALSE;
+    }
+#else
+    // Da wegen Clipping hier NULL zurueckkommen kann, koennen wir nicht
+    // den Rueckgabewert nehmen
+    ((OutputDevice*)this)->ImplGetServerGraphics();
+#endif
+
+    if ( mbNewFont )
+        ((OutputDevice*)this)->ImplNewFont();
+    if ( mbInitFont )
+        ((OutputDevice*)this)->ImplInitFont();
+
+    ULONG nPairs = mpGraphics->GetFontCodeRanges( NULL );
+    if( !nPairs )
+        return FALSE;
+
+    sal_UCS4* pCodes = new sal_UCS4[ 2 * nPairs ];
+    mpGraphics->GetFontCodeRanges( pCodes );
+    rFontCharMap.ImplSetRanges( nPairs, pCodes );
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
