@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-27 12:11:08 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,25 +82,23 @@ class XLineEndList;
 // SvxLineStyleController:
 //========================================================================
 
-class SvxLineStyleToolBoxControl : public SfxToolBoxControl, public SfxListener
+class SvxLineStyleToolBoxControl : public SfxToolBoxControl
 {
 private:
     XLineStyleItem*     pStyleItem;
     XLineDashItem*      pDashItem;
 
-    SfxStatusForwarder  aDashForwarder;
     BOOL                bUpdate;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineStyleToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SvxLineStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineStyleToolBoxControl();
 
     virtual void        StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
+    void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
@@ -108,18 +106,16 @@ public:
 // SvxLineWidthController:
 //========================================================================
 
-class SvxLineWidthToolBoxControl : public SfxToolBoxControl, public SfxListener
+class SvxLineWidthToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineWidthToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SvxLineWidthToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineWidthToolBoxControl();
 
     virtual void        StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
@@ -127,25 +123,24 @@ public:
 // SvxLineColorController:
 //========================================================================
 
-class SvxLineColorToolBoxControl : public SfxToolBoxControl, public SfxListener
+class SvxLineColorToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineColorToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind );
+    SvxLineColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineColorToolBoxControl();
 
     virtual void        StateChanged( USHORT nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                const SfxHint& rHint, const TypeId& rHintType );
+    void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
 //========================================================================
 // class SvxLineEndWindow
 //========================================================================
-class SvxLineEndWindow : public SfxPopupWindow, public SfxListener
+class SvxLineEndWindow : public SfxPopupWindow
 {
 private:
     XLineEndList*   pLineEndList;
@@ -156,6 +151,8 @@ private:
     Size            aBmpSize;
     BOOL            bPopupMode;
     bool            mbInResize;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
+
 
     DECL_LINK( SelectHdl, void * );
     void            FillValueSet();
@@ -174,14 +171,15 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    SvxLineEndWindow( USHORT nId, const String& rWndTitle,
-                      SfxBindings& rBindings );
+    SvxLineEndWindow( USHORT nId,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                      const String& rWndTitle );
     ~SvxLineEndWindow();
 
     void            StartSelection();
 
-    virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType );
+    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+                                  const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
 };
 
@@ -193,7 +191,7 @@ class SvxLineEndToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxLineEndToolBoxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings );
+    SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
     ~SvxLineEndToolBoxControl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
