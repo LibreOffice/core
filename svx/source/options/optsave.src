@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:46:37 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 16:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,16 +160,25 @@ TabPage RID_SFXPAGE_SAVE
         Text [ en-US ] = "Size optimization for XML format" ;
     };
 
+    CheckBox BTN_WARNALIENFORMAT
+    {
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 248 , 16 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Immer warnen, wenn nicht im OpenDocument oder im Standardformat gespeichert werden soll" ;
+        Text [ en-US ] = "Warn when not saving in OpenDocument or default format" ;
+    };
+
     FixedLine GB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 107 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "URLs relativ speichern" ;
         Text [ en-US ] = "Save URLs relative to" ;
     };
     CheckBox BTN_RELATIVE_FSYS
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Text [ de ] = "im Da~teisystem" ;
         Text [ en-US ] = "~File system" ;
@@ -178,37 +187,38 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 136 , 110 ) ;
+        Pos = MAP_APPFONT ( 136 , 118 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ de ] = "im Int~ernet" ;
         Text [ en-US ] = "~Internet" ;
     };
     FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 6 , 126 ) ;
+        Pos = MAP_APPFONT ( 6 , 130 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Standard Dateiformat" ;
         Text [ en-US ] = "Default file format";
     };
     FixedText FT_APP
     {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "~Dokumenttyp" ;
         Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 137 ) ;
+        Pos = MAP_APPFONT ( 136 , 141 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text [ de ] = "Immer spei~chern als" ;
         Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
     {
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 108 , 32 ) ;
+        Pos = MAP_APPFONT ( 12 , 151 ) ;
+        Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
+        DropDown = TRUE;
         StringList [ de ] =
         {
             < "Textdokument" ;     APP_WRITER    ; > ;
@@ -232,17 +242,25 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedImage FI_FILTER
     {
-        Pos = MAP_APPFONT ( 129, 150 ) ;
+        Pos = MAP_APPFONT ( 129, 154 ) ;
         Size = MAP_APPFONT ( 6 , 6 ) ;
         Hide = TRUE;
     };
     ListBox LB_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 147 ) ;
+        Pos = MAP_APPFONT ( 136 , 151 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
         DropDown = TRUE;
+    };
+    FixedText FT_WARN
+    {
+        Pos = MAP_APPFONT ( 12 , 166 ) ;
+        Size = MAP_APPFONT ( 250 , 16 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Hinweis: Wenn Sie nicht OpenDocument als Standardformat verwenden, kann dies zum Verlust von Formatierungen oder Inhalten führen." ;
+        Text [ en-US ] = "Note: Not using OpenDocument as the default format may cause formatting or content to be lost.";
     };
 };
 ModalDialog RID_SVXDLG_FILTER_WARNING
