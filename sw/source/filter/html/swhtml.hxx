@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: mtg $ $Date: 2001-02-22 16:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ class SwFmtINetFmt;
 class SwField;
 class _HTMLTableContext;
 class SwHTMLForm_Impl;
-class SwHTMLApplet_Impl;
+class SwApplet_Impl;
 struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
 struct SwPendingStack;
@@ -439,7 +439,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwHTMLFrmFmts   aMoveFlyFrms;// Fly-Frames, deren Anker verschoben wird
     SvXub_StrLens   aMoveFlyCnts;// und deren Content-Positionen
 
-    SwHTMLApplet_Impl *pAppletImpl; // das aktuelle Applet
+    SwApplet_Impl *pAppletImpl; // das aktuelle Applet
 
     SwCSS1Parser    *pCSS1Parser;   // der Style-Sheet-Parser
     SwHTMLNumRuleInfo *pNumRuleInfo;
