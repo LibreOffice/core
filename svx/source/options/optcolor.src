@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 14:51:46 $
+ *  last change: $Author: os $ $Date: 2002-05-21 14:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_DRAW               {Pos = MAP_APPFONT ( 14 ,       31 * _LINE_HEIGHT ) ; Size = MAP_APPFONT ( _FT_WIDTH , 8 ) ;Text = "Zeichnung / Presentation" ;Text [ ENGLISH ] = "Drawing / Presentation" ; };
 
-            CheckBox CB_DRAWGRID            {Pos = MAP_APPFONT ( _CB_XPOS , 32 * _LINE_HEIGHT ) ;Size = MAP_APPFONT ( _CB_WIDTH , 10 ) ;Text = "Raster" ;Text [ ENGLISH ] = "Grid" ;};
+            FixedText FT_DRAWGRID           {Pos = MAP_APPFONT ( _FT_XPOS , 32 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _FT_WIDTH , 10 ) ;Text = "Raster" ;Text [ ENGLISH ] = "Grid" ;};
             ListBox LB_DRAWGRID             {Pos = MAP_APPFONT ( _LB_XPOS , 32 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _LB_WIDTH , 50 ) ;DropDown = TRUE;};
             Window WN_DRAWGRID              {Pos = MAP_APPFONT ( _WN_XPOS , 32 *_LINE_HEIGHT ) ;Size = MAP_APPFONT ( _WN_WIDTH, _WN_HEIGHT  ) ;Border = TRUE;};
 
