@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:29:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,9 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Common" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
-		<desc >Contains common settings which are potentially shared by other components.</desc>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Common" oor:package="org.openoffice.Office" xml:lang="en-US">
+    <info>
+		<desc>Contains common settings which are potentially shared by other components.</desc>
 	</info>
 	<templates>
 		<group oor:name="Passwordstorage">
@@ -845,6 +846,41 @@
 				</info>
 			</prop>
 		</group>
+		<group oor:name="ApplicationControlLayout">
+			<info>
+				<author>FS</author>
+				<desc>specifies, on a per-application-type basis, certain defaults for layouting form controls</desc>
+			</info>
+			<prop oor:name="VisualEffect" oor:type="xs:string" oor:nillable="true">
+				<info>
+					<desc>specifies the default visual effect for form controls</desc>
+				</info>
+				<constraints>
+					<enumeration oor:value="none">
+						<info>
+							<desc>specifies no special visual effect</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="flat">
+						<info>
+							<desc>specifies a flat appearance</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="3D">
+						<info>
+							<desc>specifies a 3D appearance</desc>
+						</info>
+					</enumeration>
+				</constraints>
+			</prop>
+			<prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
+				<info>
+					<desc>specifies whether the controls should use dynamic border coloring, if possible.
+Dymamic border coloring means that when the mouse is hovered over a control, and when a control receives the focus, this is indicated with special border colors.</desc>
+				</info>
+				<value>false</value>
+			</prop>
+		</group>
 	</templates>
 	<component>
 		<group oor:name="InternalMSExport">
@@ -1216,7 +1252,7 @@
 				<prop oor:name="OfficeInstall" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
 					<info>
-                        <deprecated/>
+						<deprecated/>
 						<author>MBA</author>
 						<desc>Contains the Office installation path.</desc>
 					</info>
@@ -1226,7 +1262,7 @@
 				<prop oor:name="OfficeInstallURL" oor:type="xs:string">
 					<!-- OldLocation:NEW-->
 					<info>
-                        <deprecated/>
+						<deprecated/>
 						<author>MBA</author>
 						<desc>Contains the Office installation path in URL notation. Must match the UCB configuration.</desc>
 					</info>
@@ -1350,7 +1386,7 @@
 						<author>MBA</author>
 						<desc>Specifies the directory in which the plugins are saved.</desc>
 					</info>
-                    <value oor:separator=":">$(progpath)/plugin</value>
+					<value oor:separator=":">$(progpath)/plugin</value>
 				</prop>
 				<prop oor:name="Storage" oor:type="xs:string">
 					<info>
@@ -1508,7 +1544,7 @@
 					<info>
 						<desc>Specifies the default directory where the Office plugins are located.</desc>
 					</info>
-                    <value oor:separator=":">$(progpath)/plugin</value>
+					<value oor:separator=":">$(progpath)/plugin</value>
 				</prop>
 				<prop oor:name="Temp" oor:type="xs:string">
 					<info>
@@ -2039,7 +2075,7 @@
 						<author>MBA</author>
 						<desc>Lists all trustworthy URLs: file: All scripts from the local file system including a LAN; private:explorer: Scripts from the Explorer; private:help: Scripts in the help system; private:newmenu: Scripts that are executed by the commands File-New and AutoPilot; private:schedule: Scripts of the scheduler; private:searchfolder: Scripts of the searchfolder; private:user: Scripts that are entered in the URL field.</desc>
 					</info>
-					<value></value>
+					<value/>
 				</prop>
 				<prop oor:name="OfficeBasic" oor:type="xs:int">
 					<!-- OldPath: Security/StarBASIC -->
@@ -4904,6 +4940,13 @@
 				</info>
 				<value>true</value>
 			</prop>
+            <prop oor:name="ShowExperimentalFormControlProperties" oor:type="xs:boolean">
+                <info>
+                    <author>FS</author>
+                    <desc>Enables or disables the property browser's access to form/control properties which are not officially supported.</desc>
+                </info>
+                <value>false</value>
+            </prop>
 			<prop oor:name="FirstRun" oor:type="xs:boolean">
 				<info>
 					<author>MBA</author>
@@ -4912,6 +4955,52 @@
 				</info>
 				<value>true</value>
 			</prop>
+		</group>
+		<group oor:name="Forms">
+			<info>
+				<author>FS</author>
+				<desc>contains settings for the form layer of the applications.</desc>
+			</info>
+			<group oor:name="ControlLayout">
+				<info>
+					<desc>specifies certain default layout settings for form controls. All those settings can be overruled in concrete documents, they specify creation-time defaults only.</desc>
+				</info>
+				<node-ref oor:name="TextDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in text documents</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="WebDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in web pages</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="SpreadsheetDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in spreadsheet documents</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="DrawingDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in drawing documents</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="PresentationDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in presentation documents</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="XMLFormDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in XML form documents</desc>
+					</info>
+				</node-ref>
+				<node-ref oor:name="DatabaseFormDocument" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in database form documents</desc>
+					</info>
+				</node-ref>
+			</group>
 		</group>
 		<group oor:name="AsianLayout">
 			<info>
@@ -5470,7 +5559,7 @@
 				</prop>
 				<prop oor:name="UIMirroring" oor:type="xs:boolean">
 					<info>
-					    <author>SSA</author>
+						<author>SSA</author>
 						<desc> Specifies whether the whole user interface (UI) will be mirrored. If true, the UI will be right-to-left. If false, the UI will be left-to-right. If nil (the default), the UI will be mirrored depending on the office locale. </desc>
 					</info>
 				</prop>
@@ -5497,24 +5586,3 @@
 		</group>
 	</component>
 </oor:component-schema>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
