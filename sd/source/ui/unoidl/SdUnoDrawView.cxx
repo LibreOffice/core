@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-08 09:52:47 $
+ *  last change: $Author: cl $ $Date: 2002-05-24 09:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <vector>
+
 #include "SdUnoDrawView.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
@@ -92,6 +94,7 @@
 #include "prvwshll.hxx"
 #include "sdpage.hxx"
 
+using namespace ::std;
 using namespace ::rtl;
 using namespace ::vos;
 using namespace ::cppu;
@@ -397,36 +400,29 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    SdrPageView *pPV = mpView->GetPageViewPvNum(0);
+    vector<SdrObject*> aObjects;
 
-    if(pPV == NULL)
-        return sal_False;
-
-    // first deselect all
-    mpView->UnmarkAllObj( pPV );
-
-    // if the any is empty, just deselect all
-    if( !aSelection.hasValue() )
-        return sal_True;
+    SdrPage* pSdrPage = NULL;
 
     Reference< drawing::XShape > xShape;
     aSelection >>= xShape;
 
-    // if the any is a shape, select it
+    bool bOk = true;
+
     if(xShape.is())
     {
         SvxShape* pShape = SvxShape::getImplementation( xShape );
-        if( pShape && pShape->GetSdrObject() )
+        if( pShape && (pShape->GetSdrObject() != NULL) )
         {
-            SdrObject *pObj = pShape->GetSdrObject();
-            if(pObj && pObj->GetPage() == pPV->GetPage())
-            {
-                mpView->MarkObj( pObj, pPV );
-                return sal_True;
-            }
+            SdrObject* pObj = pShape->GetSdrObject();
+            pSdrPage = pObj->GetPage();
+            aObjects.push_back( pObj );
+        }
+        else
+        {
+            bOk = false;
         }
     }
-    // else it must be a XShapes collection
     else
     {
         Reference< drawing::XShapes > xShapes;
@@ -440,23 +436,61 @@ sal_Bool SAL_CALL SdUnoDrawView::select( const Any& aSelection )
                 if( xShape.is() )
                 {
                     SvxShape* pShape = SvxShape::getImplementation(xShape);
-                    if( pShape )
+                    if( (pShape == NULL) || (pShape->GetSdrObject() == NULL) )
                     {
-                        SdrObject *pObj = pShape->GetSdrObject();
-                        if(pObj && pObj->GetPage() == pPV->GetPage())
-                        {
-                            mpView->MarkObj( pObj, pPV );
-                        }
+                        bOk = false;
+                        break;
                     }
+
+                    SdrObject* pObj = pShape->GetSdrObject();
+
+                    if( pSdrPage == NULL )
+                    {
+                        pSdrPage = pObj->GetPage();
+                    }
+                    else if( pSdrPage != pObj->GetPage() )
+                    {
+                        bOk = false;
+                        break;
+                    }
+
+                    aObjects.push_back( pObj );
                 }
             }
-
-            return sal_True;
         }
     }
 
-    // todo: add selections for text ranges
-    return sal_False;
+    if( bOk )
+    {
+        if( pSdrPage )
+        {
+            setMasterPageMode( pSdrPage->IsMasterPage() );
+            mpViewSh->SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+            mpViewSh->WriteFrameViewData();
+        }
+
+        SdrPageView *pPV = mpView->GetPageViewPvNum(0);
+
+        if(pPV)
+        {
+            // first deselect all
+            mpView->UnmarkAllObj( pPV );
+
+            vector<SdrObject*>::iterator aIter( aObjects.begin() );
+            const vector<SdrObject*>::iterator aEnd( aObjects.end() );
+            while( aIter != aEnd )
+            {
+                SdrObject* pObj = (*aIter++);
+                mpView->MarkObj( pObj, pPV );
+            }
+        }
+        else
+        {
+            bOk = false;
+        }
+    }
+
+    return bOk;
 }
 
 //----------------------------------------------------------------------
@@ -817,6 +851,7 @@ void SAL_CALL SdUnoDrawView::setCurrentPage( const Reference< drawing::XDrawPage
         {
             setMasterPageMode( pSdrPage->IsMasterPage() );
             mpViewSh->SwitchPage( (pSdrPage->GetPageNum() - 1) >> 1 );
+            mpViewSh->WriteFrameViewData();
         }
     }
 }
