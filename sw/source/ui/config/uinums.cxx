@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:32:44 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ void  SwBaseNumRules::Init()
         pNumRules[i] = 0;
 
     String sNm( sFileName );
-    if( SFX_INIMANAGER()->SearchFile( sNm, SFX_KEY_USERCONFIG_PATH ))
+    SvtPathOptions aOpt;
+    if( aOpt.SearchFile( sNm, SvtPathOptions::PATH_USERCONFIG ))
     {
         SfxMedium aStrm( sNm, STREAM_STD_READ, TRUE );
         Load( *aStrm.GetInStream() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:04:00 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,6 @@
 #endif
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
@@ -911,6 +908,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/11/06 09:04:00  jp
+    must changes: GlossaryPath -> AutoTextPath
+
     Revision 1.4  2000/10/31 10:13:27  kso
     Fixed: Typo in XContentAccess::queryContentIdentifierString() - the
            second 'i' was missing ( SUPD>611 ).

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:46 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,8 @@ String lcl_GetLabelsIni()
 {
     String sRet( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                     "labels.ini" )));
-    if( !SFX_INIMANAGER()->SearchFile( sRet, SFX_KEY_USERCONFIG_PATH ))
+    SvtPathOptions aOpt;
+    if( !aOpt.SearchFile( sRet, SvtPathOptions::PATH_USERCONFIG ))
     {
         sRet.Insert( INET_PATH_TOKEN, 0 );
         SvtPathOptions aPathOpt;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 09:07:20 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 10:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX //autogen
@@ -338,7 +341,8 @@ HTMLReader::HTMLReader()
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".vor") );
 #endif
 
-    if( SFX_INIMANAGER()->SearchFile( sTemplate, SFX_KEY_TEMPLATE_PATH ))
+    SvtPathOptions aOpt;
+    if( aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE ))
         SetTemplateName( sTemplate );
 #ifndef PRODUCT
     else
@@ -5239,6 +5243,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/31 09:07:20  mib
+      #79777#: Oboslete assert removed
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 
