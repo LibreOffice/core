@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDateField.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-25 10:39:54 $
+ *  last change:$Date: 2003-09-08 10:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.awt;
 
 
-import com.sun.star.awt.XDateField;
 import lib.MultiMethodTest;
+
+import com.sun.star.awt.XDateField;
 
 /**
 * Testing <code>com.sun.star.awt.XDateField</code>
