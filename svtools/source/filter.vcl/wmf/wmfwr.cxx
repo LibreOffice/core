@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 14:05:52 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <vcl/salbtype.hxx>
 #include "wmfwr.hxx"
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
 
 //====================== MS-Windows-defines ===============================
 
@@ -526,33 +529,82 @@ void WMFWriter::WMFRecord_Ellipse(const Rectangle & rRect)
     WriteRectangle(rRect);
 }
 
-
-void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rString, const long * pDXAry )
+bool IsStarSymbol(const String &rStr)
 {
-    sal_uInt16  nOriginalTextLen, nNewTextLen, i;
-    sal_Int32   j;
-    nOriginalTextLen = rString.Len();
+    return rStr.EqualsIgnoreCaseAscii("starsymbol") ||
+        rStr.EqualsIgnoreCaseAscii("opensymbol");
+}
 
-    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-    ByteString aByteString( rString, eChrSet );
+void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
+    const String & rString, const long * pDXAry )
+{
+    sal_uInt16 nOriginalTextLen = rString.Len();
 
-    if ( ( nOriginalTextLen <= 1 ) || ( pDXAry == NULL ) )
+    if ( (nOriginalTextLen <= 1) || (pDXAry == NULL) )
     {
-        WMFRecord_TextOut( rPoint, aByteString );
+        WMFRecord_TextOut(rPoint, rString);
         return;
     }
+
+    if (IsStarSymbol(aSrcFont.GetName()))
+    {
+        if (!pConvert)
+            pConvert = CreateStarSymbolToMSMultiFont();
+
+        xub_StrLen nIndex = 0;
+        String sEditable(rString);
+        Point aPoint(rPoint);
+        while (nIndex < sEditable.Len())
+        {
+            ByteString aString;
+            xub_StrLen nOldIndex = nIndex;
+            String sFont = pConvert->ConvertString(sEditable, nIndex);
+            if (sFont.Len())
+            {
+                aSrcFont.SetName(sFont);
+                SetAllAttr();
+                for (xub_StrLen i=nOldIndex; i < nIndex; i++)
+                    aString.Append(static_cast<sal_Char>(sEditable.GetChar(i)));
+            }
+            else
+            {
+                aSrcFont.SetName(String::CreateFromAscii("Times New Roman"));
+                SetAllAttr();
+                aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
+                    gsl_getSystemTextEncoding());
+            }
+            TrueExtTextOut(aPoint, String(sEditable, nOldIndex,
+                nIndex-nOldIndex), aString, pDXAry+nOldIndex);
+            for (xub_StrLen nI=nOldIndex;nI < nIndex;nI++)
+                aPoint.X() += pDXAry[nI];
+        }
+    }
+    else
+    {
+        SetAllAttr();
+        rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
+        ByteString aByteString(rString, eChrSet);
+        TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
+    }
+}
+
+void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
+    const ByteString & rByteString, const long * pDXAry )
+{
     WriteRecordHeader( 0, W_META_EXTTEXTOUT );
     WritePointYX( rPoint );
-    nNewTextLen = aByteString.Len();
+    sal_uInt16 nNewTextLen = rByteString.Len();
     *pWMF << nNewTextLen << (sal_uInt16)0;
 
+    sal_uInt16 i;
     for ( i = 0; i < nNewTextLen; i++ )
-        *pWMF << (sal_uInt8)aByteString.GetChar( i );
+        *pWMF << (sal_uInt8)rByteString.GetChar( i );
     if ( nNewTextLen & 1 )
         *pWMF << (sal_uInt8)0;
 
+    sal_uInt16 nOriginalTextLen = rString.Len();
     sal_Int16* pConvertedDXAry = new sal_Int16[ nOriginalTextLen ];
-    j = 0;
+    sal_Int32 j = 0;
     pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ 0 ] );
     for ( i = 1; i < ( nOriginalTextLen - 1 ); i++ )
         pConvertedDXAry[ j++ ] = (sal_Int16)ScaleWidth( pDXAry[ i ] - pDXAry[ i - 1 ] );
@@ -564,7 +616,7 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rStri
         *pWMF << nDx;
         if ( nOriginalTextLen < nNewTextLen )
         {
-            ByteString aTemp( rString.GetChar( i ), eChrSet );
+            ByteString aTemp( rString.GetChar( i ), aSrcFont.GetCharSet());
             j = aTemp.Len();
             while ( --j > 0 )
                 *pWMF << (sal_uInt16)0;
@@ -829,7 +881,56 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 }
 
 
-void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const ByteString & rString)
+void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
+{
+    if (IsStarSymbol(aSrcFont.GetName()))
+    {
+        if (!pConvert)
+            pConvert = CreateStarSymbolToMSMultiFont();
+
+        long *pDXAry = new long[rStr.Len()];
+        pVirDev->SetFont(aSrcFont);
+        pVirDev->GetTextArray(rStr, pDXAry);
+
+        xub_StrLen nIndex = 0;
+        String sEditable(rStr);
+        Point aPoint(rPoint);
+        while (nIndex < sEditable.Len())
+        {
+            ByteString aString;
+            xub_StrLen nOldIndex = nIndex;
+            String sFont = pConvert->ConvertString(sEditable, nIndex);
+            if (sFont.Len())
+            {
+                aSrcFont.SetName(sFont);
+                SetAllAttr();
+                for (xub_StrLen i=nOldIndex; i < nIndex; i++)
+                    aString.Append(static_cast<sal_Char>(sEditable.GetChar(i)));
+            }
+            else
+            {
+                aSrcFont.SetName(String::CreateFromAscii("Times New Roman"));
+                SetAllAttr();
+                aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
+                    gsl_getSystemTextEncoding());
+            }
+            TrueTextOut(aPoint, aString);
+            for (xub_StrLen nI=nOldIndex;nI < nIndex;nI++)
+                aPoint.X() += pDXAry[nI];
+        }
+        delete[] pDXAry;
+        return;
+    }
+    else
+    {
+        SetAllAttr();
+        rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
+        ByteString aString( rStr, eChrSet );
+        TrueTextOut(rPoint, aString);
+    }
+}
+
+void WMFWriter::TrueTextOut(const Point & rPoint, const ByteString& rString)
 {
     USHORT nLen,i;
 
@@ -842,7 +943,6 @@ void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const ByteString & rStri
     WritePointYX(rPoint);
     UpdateRecordHeader();
 }
-
 
 void WMFWriter::WMFRecord_EndOfFile()
 {
@@ -1118,10 +1218,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-                    ByteString aStr( aTemp, eChrSet );
-                    SetAllAttr();
-                    WMFRecord_TextOut( pA->GetPoint(), aStr );
+                    WMFRecord_TextOut( pA->GetPoint(), aTemp );
                 }
                 break;
 
@@ -1130,7 +1227,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    SetAllAttr();
                     WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
                 }
                 break;
@@ -1139,7 +1235,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    SetAllAttr();
                     WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetWidth() );
                 }
                 break;
@@ -1603,6 +1698,7 @@ BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
     WMFWriterAttrStackMember * pAt;
 
     bStatus=TRUE;
+    pConvert = 0;
     pVirDev = new VirtualDevice;
     pCallback=pcallback;
     pCallerData=pcallerdata;
@@ -1698,6 +1794,7 @@ BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
     }
 
     delete pVirDev;
+    delete pConvert;
 
     return bStatus;
 }

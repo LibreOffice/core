@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-06 17:11:51 $
+ *  last change: $Author: cmc $ $Date: 2002-06-10 13:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ struct WMFWriterAttrStackMember
 // - WMFWriter -
 // -------------
 
+class StarSymbolToMSMultiFont;
 class WMFWriter
 {
 private:
@@ -106,6 +107,7 @@ private:
 
     SvStream*       pWMF;
     VirtualDevice*  pVirDev;
+    StarSymbolToMSMultiFont *pConvert;
     MapMode         aTargetMapMode;
     Size            aTargetSize;
     USHORT          nTargetDivisor;
@@ -185,6 +187,10 @@ private:
     void WMFRecord_Ellipse(const Rectangle & rRect);
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const long * pDXAry);
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, ULONG nWidth);
+
+    void TrueExtTextOut(const Point & rPoint, const String & rString,
+        const ByteString & rByteString, const long * pDXAry);
+    void TrueTextOut(const Point & rPoint, const ByteString& rString);
     void WMFRecord_LineTo(const Point & rPoint);
     void WMFRecord_MoveTo(const Point & rPoint);
     void WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
@@ -206,7 +212,7 @@ private:
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
     void WMFRecord_StretchDIB(const Point & rPoint, const Size & rSize, const Bitmap & rBitmap, ULONG nROP = 0UL );
-    void WMFRecord_TextOut(const Point & rPoint, const ByteString & rString);
+    void WMFRecord_TextOut(const Point & rPoint, const String & rString);
     void WMFRecord_EndOfFile();
     void WMFRecord_IntersectClipRect( const Rectangle& rRect);
 
