@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base14.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:55 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,7 +605,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Symbol", // family name
-  "Bold", // style
+  "Normal", // style
   "Symbol", // PSName
   1010, -293, // ascend, descend
   FAMILY_DONTKNOW, // family style
@@ -650,7 +650,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "ZapfDingbats", // family name
-  "Bold Italic", // style
+  "Normal", // style
   "ZapfDingbats", // PSName
   820, -143, // ascend, descend
   FAMILY_DONTKNOW, // family style
