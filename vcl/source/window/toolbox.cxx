@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-26 15:08:57 $
+ *  last change: $Author: ssa $ $Date: 2002-03-26 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2694,7 +2694,7 @@ void ToolBox::ImplDrawSelectionBackground( const Rectangle& rRect, USHORT highli
     Color oldLineCol = GetLineColor();
 
     if( bDrawBorder )
-        SetLineColor( bDark ? COL_WHITE : ( bBright ? COL_BLACK : aSelectionBorderCol ) );
+        SetLineColor( bDark ? Color(COL_WHITE) : ( bBright ? Color(COL_BLACK) : aSelectionBorderCol ) );
     else
         SetLineColor();
 
