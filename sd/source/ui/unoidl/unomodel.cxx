@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:04:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,10 +1220,13 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames() throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( 2 );
+    uno::Sequence< OUString > aSeq( 4 );
     OUString* pServices = aSeq.getArray();
 
+    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.OfficeDocument"));
+    *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GenericDrawingDocument"));
     *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentFactory"));
+
     if( mbImpressDoc )
         *pServices++ = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PresentationDocument"));
     else
