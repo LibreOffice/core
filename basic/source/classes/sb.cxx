@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,8 +382,13 @@ void StarBASIC::operator delete( void* p )
 
 SbModule* StarBASIC::MakeModule( const String& rName, const String& rSrc )
 {
+    return MakeModule32( rName, rSrc );
+}
+
+SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& rSrc )
+{
     SbModule* p = new SbModule( rName );
-    p->SetSource( rSrc );
+    p->SetSource32( rSrc );
     p->SetParent( this );
     pModules->Insert( p, pModules->Count() );
     SetModified( TRUE );
