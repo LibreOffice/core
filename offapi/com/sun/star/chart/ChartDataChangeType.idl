@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataChangeType.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** specifies the type of change that was applied to the data.
  */
-enum ChartDataChangeType
+published enum ChartDataChangeType
 {
     //-------------------------------------------------------------------------
 
