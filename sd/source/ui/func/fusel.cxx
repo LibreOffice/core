@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-17 09:36:40 $
+ *  last change: $Author: cl $ $Date: 2002-06-07 13:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
     pHdl = NULL;
     BOOL bReturn = FuDraw::MouseButtonDown(rMEvt);
     BOOL bWaterCan = SD_MOD()->GetWaterCan();
+    const bool bReadOnly = pDocSh->IsReadOnly();
 
     bMBDown = TRUE;
     bSelectionChanged = FALSE;
@@ -255,7 +256,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         SdrViewEvent aVEvt;
         SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
 
-        if ( pViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
+        if ( !bReadOnly && pViewShell->GetFrameView()->IsQuickEdit() && eHit == SDRHIT_TEXTEDITOBJ )
         {
             bTextEdit = TRUE;
         }
@@ -353,7 +354,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                             if (pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
-                        else if(rMEvt.GetClicks() == 2)
+                        else if( !bReadOnly && rMEvt.GetClicks() == 2)
                         {
                             // Neu: Doppelklick auf selektiertes Gruppenobjekt
                             // Gruppe betreten
@@ -384,7 +385,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 bReturn = TRUE;
                 BOOL bDeactivateOLE = FALSE;
 
-                if ( !rMEvt.IsShift() && !rMEvt.IsMod2() )
+                if ( !bReadOnly && !rMEvt.IsShift() && !rMEvt.IsMod2() )
                 {
                     SdClient* pIPClient = (SdClient*) pViewShell->GetIPClient();
 
@@ -399,7 +400,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 BOOL bMarked = FALSE;
 
-                if (!rMEvt.IsMod1() && !bDeactivateOLE)
+                if ( !bReadOnly && !rMEvt.IsMod1() && !bDeactivateOLE)
                 {
                     if ( rMEvt.IsMod2() )
                     {
@@ -419,29 +420,32 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     }
                 }
 
-                if (bMarked                                                   &&
-                    (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)) &&
-                    !pDocSh->IsReadOnly())
+                if( !bReadOnly )
                 {
-                    /**********************************************************
-                    * Objekt verschieben
-                    **********************************************************/
-                    aDragTimer.Start();
+                    if (bMarked                                                   &&
+                        (!rMEvt.IsShift() || pView->IsMarkedHit(aMDPos, nHitLog)) &&
+                        !pDocSh->IsReadOnly())
+                    {
+                        /**********************************************************
+                        * Objekt verschieben
+                        **********************************************************/
+                        aDragTimer.Start();
 
-                    pHdl=pView->HitHandle(aMDPos, *pWindow);
-                    pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
-                }
-                else
-                {
-                    /**********************************************************
-                    * Objekt selektieren
-                    **********************************************************/
-                    pView->BegMarkObj(aMDPos);
+                        pHdl=pView->HitHandle(aMDPos, *pWindow);
+                        pView->BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
+                    }
+                    else
+                    {
+                        /**********************************************************
+                        * Objekt selektieren
+                        **********************************************************/
+                        pView->BegMarkObj(aMDPos);
+                    }
                 }
             }
         }
     }
-    else if (rMEvt.IsLeft() && !pView->IsAction())
+    else if ( !bReadOnly && rMEvt.IsLeft() && !pView->IsAction())
     {
         /**********************************************************************
         * BEZIER-EDITOR
