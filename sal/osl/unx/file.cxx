@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:26:55 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,6 +1179,24 @@ oslFileError osl_getFilePos( oslFileHandle Handle, sal_uInt64* pPos )
 
     *pPos=nOffset;
 
+    return osl_File_E_None;
+}
+
+/****************************************************************************
+ *  osl_getFileSize
+ ****************************************************************************/
+
+oslFileError osl_getFileSize( oslFileHandle Handle, sal_uInt64* pSize )
+{
+    oslFileHandleImpl* pHandleImpl=(oslFileHandleImpl*) Handle;
+    if (pHandleImpl == 0)
+        return osl_File_E_INVAL;
+
+    struct stat file_stat;
+    if (fstat(pHandleImpl->fd, &file_stat) == -1)
+        return oslTranslateFileError(OSL_FET_ERROR, errno);
+
+    *pSize = file_stat.st_size;
     return osl_File_E_None;
 }
 
