@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:42:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 using namespace ::comphelper;
 
 using namespace ::cppu;
+using namespace connectivity;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -121,7 +122,7 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
     sal_Int32 nLen = _rName.indexOf('.');
@@ -142,7 +143,7 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(sStmt);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -177,8 +178,7 @@ void OViews::disposing(void)
 Reference< XPropertySet > OViews::createEmptyObject()
 {
     Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
-    connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
-    return pNew;
+    return new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
 }
 // -------------------------------------------------------------------------
 // XAppend
@@ -274,13 +274,6 @@ void OViews::appendNew(const ::rtl::OUString& _rsNewTable)
     OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OViews::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
