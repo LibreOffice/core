@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-05 12:24:09 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 16:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ namespace pcr
         SetUpdateMode( sal_False);
 
         if (m_sStandardString.getLength()>0)
-            InsertEntry(m_sStandardString);
+            InsertEntry(m_sStandardString, 0);
 
         SetUpdateMode( sal_True );
         SelectEntryPos(0);
@@ -1246,6 +1246,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/05 12:24:09  tbe
+ *  get standard color table if SID_COLOR_TABLE item not available
+ *
  *  Revision 1.2  2001/01/24 14:12:53  fs
  *  recognize and tolerate a missing SID_COLOR_TABLE item
  *
