@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-26 09:05:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,7 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
 {
     if ( rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
     {
-        uno::Reference<uno::XInterface> xInterface;
-        rAny >>= xInterface;
-        return xInterface;
+        return uno::Reference<uno::XInterface>(rAny, uno::UNO_QUERY);
     }
     return uno::Reference<uno::XInterface>();   //! Exception?
 }
@@ -104,7 +102,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPrope
     {
         try
         {
-            uno::Any aAny = xProp->getPropertyValue( rName );
+            uno::Any aAny(xProp->getPropertyValue( rName ));
             //! type conversion???
             //  operator >>= shouldn't be used for bool (?)
             if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
@@ -130,9 +128,8 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     {
         try
         {
-            uno::Any aAny = xProp->getPropertyValue( rName );
             //! type conversion???
-            aAny >>= nRet;
+            xProp->getPropertyValue( rName ) >>= nRet;
         }
         catch(uno::Exception&)
         {
@@ -151,7 +148,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
     {
         try
         {
-            uno::Any aAny = xProp->getPropertyValue( rName );
+            uno::Any aAny(xProp->getPropertyValue( rName ));
 
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
