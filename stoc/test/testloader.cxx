@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:17:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
 #ifndef _OSL_MODULE_H_
 #include <osl/module.hxx>
 #endif
@@ -114,11 +115,7 @@ public:
 };
 
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     Reference<XInterface> xIFace;
 
