@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-10 09:22:42 $
+ *  last change: $Author: pb $ $Date: 2001-08-23 10:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,6 +1336,8 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* _pParent, SelectOn
     pImpl->bSelectNoOpen = sal_True;
 }
 
+// ------------------------------------------------------------------------
+
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
     ModalDialog( pParent, SvtResId( DLG_DOCTEMPLATE ) ),
@@ -1353,6 +1355,7 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 }
 
 // ------------------------------------------------------------------------
+
 void SvtDocumentTemplateDialog::InitImpl( )
 {
     pImpl = new SvtTmplDlg_Impl( this );
@@ -1385,20 +1388,28 @@ void SvtDocumentTemplateDialog::InitImpl( )
     pImpl->aUpdateTimer.Start();
 }
 
+// ------------------------------------------------------------------------
+
 SvtDocumentTemplateDialog::~SvtDocumentTemplateDialog()
 {
     delete pImpl;
 }
+
+// ------------------------------------------------------------------------
 
 sal_Bool SvtDocumentTemplateDialog::IsFileSelected( ) const
 {
     return pImpl->pWin->IsFileSelected();
 }
 
+// ------------------------------------------------------------------------
+
 String SvtDocumentTemplateDialog::GetSelectedFileURL( ) const
 {
     return pImpl->pWin->GetSelectedFile();
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
@@ -1408,14 +1419,18 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMP
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
+    EndDialog( RET_OK );
+
     if ( !pImpl->bSelectNoOpen )
         pImpl->pWin->OpenFile( !pImpl->pWin->IsTemplateFolderOpen() );
-
-    EndDialog( RET_OK );
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
@@ -1427,6 +1442,8 @@ IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, 
     SelectHdl_Impl( NULL );
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtDocumentTemplateDialog , SendFocusHdl_Impl, SvtTemplateWindow *, EMPTYARG )
 {
@@ -1445,16 +1462,21 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SendFocusHdl_Impl, SvtTemplateWindow *, 
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 {
     if ( pImpl->pWin->IsFileSelected() )
     {
+        EndDialog( RET_OK );
+
         if ( !pImpl->bSelectNoOpen )
             pImpl->pWin->OpenFile( &aEditBtn == pBtn );
-        EndDialog( RET_OK );
     }
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
 {
@@ -1488,12 +1510,16 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, pBtn )
     return 0;
 }
 
+// ------------------------------------------------------------------------
+
 IMPL_LINK ( SvtDocumentTemplateDialog , UpdateHdl_Impl, Timer *, EMPTYARG )
 {
     pImpl->pWin->SetFocus( sal_False );
     UpdateDocumentTemplates_Impl();
     return 0;
 }
+
+// ------------------------------------------------------------------------
 
 void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
 {
@@ -1506,6 +1532,8 @@ void SvtDocumentTemplateDialog::UpdateDocumentTemplates_Impl()
         xTemplates->update();
     }
 }
+
+// ------------------------------------------------------------------------
 
 long SvtDocumentTemplateDialog::PreNotify( NotifyEvent& rNEvt )
 {
