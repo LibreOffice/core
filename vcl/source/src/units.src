@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:05:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ ItemList [ language_user1 ] =
         < "twips" ; FUNIT_TWIP ; > ;
         < "twip" ; FUNIT_TWIP ; > ;
         < "pt" ; FUNIT_POINT ; > ;
-        < "PI" ; FUNIT_PICA ; > ;
+        < "ðé" ; FUNIT_PICA ; > ;
         < "\"" ; FUNIT_INCH ; > ;
         < "in" ; FUNIT_INCH ; > ;
         < "ºíôóá" ; FUNIT_INCH ; > ;
@@ -634,7 +634,32 @@ ItemList [ language_user1 ] =
         < "mile" ; FUNIT_MILE ; > ;
         < "%" ; FUNIT_PERCENT ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twipy" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "palec" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "stopa" ; FUNIT_FOOT ; > ;
+        < "stÃ´p" ; FUNIT_FOOT ; > ;
+        < "mÃ­le" ; FUNIT_MILE ; > ;
+        < "mÃ­Ä¾a" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
     };
+    };
+
+
+
+
 
 
 
