@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 10:34:47 $
+ *  last change: $Author: mt $ $Date: 2001-08-01 11:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,6 +1338,7 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
                 else
                 {
                     if( nStartPara == nStart )
+                    {
                         // die Einrueckebene des Startabsatzes bleibt
                         // immer erhalten (leere Absaetze bekommen
                         // die Absatzattribute des eingefuegten Absatzes,
@@ -1345,10 +1346,16 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
                         // d.h. es muesste dann ggf. der ParagraphIndenting
                         // Handler gerufen werden (also u.U. vor UND nach
                         // dem Paste)
-                        pPara->SetDepth( nPrevDepth );
-                    else if( (!nStartPara && pPara->GetDepth()) ||
-                             (pPara->GetDepth() < nMinDepth) )
+
+                        // MT 08/01: Changed the behavior a little bit: Only reset Depth when it was 0,
+                        // because a page would be deleted, but to late to ask the user.
+                        if ( nPrevDepth == 0 )
+                            pPara->SetDepth( 0 );
+                    }
+                    else if( (!nStartPara && pPara->GetDepth()) || (pPara->GetDepth() < nMinDepth) )
+                    {
                         pPara->SetDepth( nMinDepth );
+                    }
 
                     if( pPara->GetDepth() != nPrevDepth )
                     {
@@ -1360,7 +1367,9 @@ void Outliner::ImpTextPasted( ULONG nStartPara, USHORT nCount )
                 ImplInitDepth( (USHORT)nStartPara, pPara->GetDepth(), FALSE );
             }
             else if( nStartPara == nStart )
+            {
                 ImplInitDepth( (USHORT)nStartPara, pPara->GetDepth(), FALSE );
+            }
         }
         else // EditEngine-Modus
         {
