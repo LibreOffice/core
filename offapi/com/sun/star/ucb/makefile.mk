@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kso $ $Date: 2001-04-27 08:19:20 $
+#   last change: $Author: abi $ $Date: 2001-04-27 09:25:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,8 +80,8 @@ IDLFILES=\
     CachedDynamicResultSet.idl\
     CachedDynamicResultSetStub.idl\
     CHAOSProgressStart.idl\
-    ChaosContent.idl
-    ChaosContentProvider.idl
+    ChaosContent.idl\
+    ChaosContentProvider.idl\
     Command.idl\
     CommandAbortedException.idl\
     CommandInfo.idl\
@@ -115,6 +115,8 @@ IDLFILES=\
     ExportStreamInfo.idl\
     FetchError.idl\
     FetchResult.idl\
+    FileContentProvider.idl\
+    FileContent.idl\
     FileSystemNotation.idl\
     FolderList.idl\
     FolderListCommand.idl\
