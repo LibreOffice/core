@@ -1,4 +1,4 @@
-rg	registry	:	store NULL
+rg	registry	:	salhelper store NULL
 rg	registry								usr1	-	all	rg_mkout NULL
 rg	registry\inc							get		-	all	rg_inc NULL
 rg	registry\jobs							get		-	all	rg_jobs NULL
