@@ -1,0 +1,305 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fltlst.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: as $ $Date: 2001-10-24 10:19:19 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "fltlst.hxx"
+
+//*****************************************************************************************************************
+//  includes
+//*****************************************************************************************************************
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include "sfxuno.hxx"
+
+//*****************************************************************************************************************
+//  namespaces
+//*****************************************************************************************************************
+using namespace ::com::sun::star;
+
+//*****************************************************************************************************************
+//  definitions
+//*****************************************************************************************************************
+
+/*-************************************************************************************************************//**
+    @short          ctor
+    @descr          These initialize an instance of a SfxFilterListener class. Created object listen automaticly
+                    on right FilterFactory-Service for all changes and synchronize right SfxFilterContainer with
+                    corresponding framework-cache.
+                    We use given "sFactory" value to decide which query must be used to fill "pContainer" with new values.
+                    Given "pContainer" hold us alive as uno reference and we use it to syschronize it with framework caches.
+                    We will die, if he die! see dtor for further informations.
+
+    @seealso        dtor
+    @seealso        class framework::FilterCache
+    @seealso        service ::document::FilterFactory
+
+    @param          "sFactory"  , short name of module which contains filter container
+    @param          "pContainer", pointer to filter container which will be informed
+    @return         -
+
+    @onerror        We show some assertions in non product version.
+                    Otherwise we do nothing!
+    @threadsafe     yes
+
+    @last_change    17.10.2001 10:27
+*//*-*************************************************************************************************************/
+SfxFilterListener::SfxFilterListener( const ::rtl::OUString&    sFactory   ,
+                                            SfxFilterContainer* pContainer )
+    :   m_aMutex    (            )
+    ,   m_pContainer( pContainer )
+{
+    OSL_ENSURE( !implcp_ctor( sFactory, pContainer ), "SfxFilterListener::SfxFilterListener()\nInvalid parameter detected!\n" );
+
+    // search for right factory long name by using given shortname.
+    // These value is neccessary for "ReadExternalFilter()" call during our "flushed()" function.
+    m_sFactory = ::rtl::OUString();
+    if( sFactory == DEFINE_CONST_OUSTRING("swriter") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.TextDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("swriter/web") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.WebDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("swriter/GlobalDocument") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.text.GlobalDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("schart") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.chart.ChartDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("scalc") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.sheet.SpreadsheetDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("sdraw") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.drawing.DrawingDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("simpress") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.presentation.PresentationDocument");
+    else
+    if( sFactory == DEFINE_CONST_OUSTRING("smath") )
+        m_sFactory = DEFINE_CONST_OUSTRING("com.sun.star.formula.FormulaProperties");
+
+    OSL_ENSURE( !(m_sFactory.getLength()<1), "SfxFilterListener::SfxFilterListener()\nUnknown factory found! Can't listen for nothing ...\n" );
+
+    // Start listening on framework filter cache only, if factory is valid!
+    if( m_sFactory.getLength() > 0 )
+    {
+        uno::Reference< lang::XMultiServiceFactory > xSmgr = ::comphelper::getProcessServiceFactory();
+        if( xSmgr.is() == sal_True )
+        {
+            uno::Reference< util::XFlushable > xNotifier( xSmgr->createInstance( DEFINE_CONST_OUSTRING("com.sun.star.document.FilterFactory") ), uno::UNO_QUERY );
+            if( xNotifier.is() == sal_True )
+            {
+                m_xCache = xNotifier;
+                m_xCache->addFlushListener( this );
+            }
+        }
+    }
+}
+
+/*-************************************************************************************************************//**
+    @short          dtor
+    @descr          These deinitialize instance. If our corresponding SfxFilterContainer will die - he release our
+                    reference. Normaly it should be the only one - so we can die too.
+
+    @seealso        ctor
+    @seealso        method diposing()
+
+    @param          -
+    @return         -
+
+    @onerror        -
+    @threadsafe     yes
+
+    @last_change    16.10.2001 14:26
+*//*-*************************************************************************************************************/
+SfxFilterListener::~SfxFilterListener()
+{
+    if( m_xCache.is() == sal_True )
+    {
+        m_xCache->removeFlushListener( this );
+        m_xCache     = uno::Reference< util::XFlushable >();
+        m_sFactory   = ::rtl::OUString();
+        m_pContainer = NULL;
+    }
+}
+
+/*-************************************************************************************************************//**
+    @short          callback from framework FilterCache
+    @descr          If some filter was changed in framework cache - we are notified by FilterFactory service
+                    by calling this method. We have to get all neccessary informations about changes and
+                    sysnchronize our internal set SfxFilterContainer with it.
+                    In the moment we don't support selective changes - we reload ALL filters for current factory!
+
+    @seealso        interface XFlushable
+    @seealso        interface XFlushListener
+    @seealso        service ::document::FilterFactory
+
+    @param          "aEvent", describe source of event
+    @return         -
+
+    @onerror        We ignore call!
+    @threadsafe     yes
+
+    @last_change    17.10.2001 10:28
+*//*-*************************************************************************************************************/
+void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    OSL_ENSURE( !implcp_flushed( aSource ), "SfxFilterListener::flushed()\nInvalid parameter detected!\n" );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+
+    if( m_pContainer != NULL )
+    {
+        uno::Reference< util::XFlushable > xFilterContainer( aSource.Source, uno::UNO_QUERY );
+        if(
+            ( xFilterContainer.is()  == sal_True )   &&
+            ( xFilterContainer       == m_xCache )   &&
+            ( m_sFactory.getLength() >  0        )
+          )
+        {
+            m_pContainer->ReadExternalFilters( m_sFactory );
+        }
+    }
+}
+
+/*-************************************************************************************************************//**
+    @short          deinitialize object
+    @descr          If our framework filter cache will die BEFORE SfxFilterContainer will do that ...
+                    we get this disposing message. So we should cancel all further work ...
+
+    @seealso        dtor
+
+    @param          "aSource", source of event
+    @return         -
+
+    @onerror        -
+    @threadsafe     yes
+
+    @last_change    16.10.2001 14:30
+*//*-*************************************************************************************************************/
+void SAL_CALL SfxFilterListener::disposing( const lang::EventObject& aSource ) throw( uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    OSL_ENSURE( !implcp_disposing( aSource ), "SfxFilterListener::disposing()\nInvalid parameter detected!\n" );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+
+    uno::Reference< util::XFlushable > xNotifier( aSource.Source, uno::UNO_QUERY );
+    if(
+        ( xNotifier.is() == sal_True )  &&
+        ( xNotifier      == m_xCache )
+      )
+    {
+        m_xCache->removeFlushListener( this );
+        m_xCache     = uno::Reference< util::XFlushable >();
+        m_sFactory   = ::rtl::OUString();
+        m_pContainer = NULL;
+    }
+}
+
+/*-************************************************************************************************************//**
+    @descr          These debug methods are active for product versions only.
+                    They test incoming paramater of public interface methods to
+                    and her result is directly used to warn programmer by showing
+                    an assertion!
+*//*-*************************************************************************************************************/
+#ifdef DEBUG
+//-----------------------------------------------------------------------------------------------------------------
+sal_Bool SfxFilterListener::implcp_ctor( const ::rtl::OUString&    sFactory   ,
+                                         const SfxFilterContainer* pContainer )
+{
+    return(
+            ( &sFactory            == NULL )    ||
+            ( sFactory.getLength() <  1    )    ||
+            ( pContainer           == NULL )
+          );
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+sal_Bool SfxFilterListener::implcp_flushed( const lang::EventObject& aSource )
+{
+    return(
+            ( &aSource            == NULL      )    ||
+            ( aSource.Source.is() == sal_False )
+          );
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+sal_Bool SfxFilterListener::implcp_disposing( const lang::EventObject& aSource )
+{
+    return(
+            ( &aSource            == NULL      )    ||
+            ( aSource.Source.is() == sal_False )
+          );
+}
+
+#endif // DEBUG
