@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 15:36:20 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,9 +299,10 @@ TEParaPortions::~TEParaPortions()
 
 void TEParaPortions::Reset()
 {
-    for ( ULONG nPortion = 0; nPortion < Count(); nPortion++ )
-        delete GetObject( nPortion );
-    Clear();
+    TEParaPortions::iterator aIter( begin() );
+    while ( aIter != end() )
+        delete *aIter++;
+    clear();
 }
 
 // -------------------------------------------------------------------------
@@ -318,17 +319,22 @@ IdleFormatter::~IdleFormatter()
     mpView = 0;
 }
 
-void IdleFormatter::DoIdleFormat( TextView* pV )
+void IdleFormatter::DoIdleFormat( TextView* pV, USHORT nMaxRestarts )
 {
     mpView = pV;
 
     if ( IsActive() )
         mnRestarts++;
 
-    if ( mnRestarts > 4 )
-        ForceTimeout();
+    if ( mnRestarts > nMaxRestarts )
+    {
+        mnRestarts = 0;
+        ((Link&)GetTimeoutHdl()).Call( this );
+    }
     else
+    {
         Start();
+    }
 }
 
 void IdleFormatter::ForceTimeout()
@@ -336,6 +342,7 @@ void IdleFormatter::ForceTimeout()
     if ( IsActive() )
     {
         Stop();
+        mnRestarts = 0;
         ((Link&)GetTimeoutHdl()).Call( this );
     }
 }
