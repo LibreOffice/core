@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ private:
     List                    aColLevelList;
     List                    aRowLevelList;
     ScSubTotalFunc          eDataFunctions[SC_DAPI_MAXFIELDS];
+    BOOL                    bResultOverflow;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
@@ -701,6 +702,8 @@ public:
 
     virtual long            getCount() const;
     virtual ScDPMember*     getByIndex(long nIndex) const;
+
+    long                    getMinMembers() const;
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<

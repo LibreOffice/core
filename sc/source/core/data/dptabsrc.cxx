@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 17:45:25 $
+ *  last change: $Author: nn $ $Date: 2001-03-08 14:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
+#define SC_MINCOUNT_LIMIT   1000000
+
+// -----------------------------------------------------------------------
+
 SC_SIMPLE_SERVICE_INFO( ScDPSource,      "ScDPSource",      "com.sun.star.sheet.DataPilotSource" )
 SC_SIMPLE_SERVICE_INFO( ScDPDimensions,  "ScDPDimensions",  "com.sun.star.sheet.DataPilotSourceDimensions" )
 SC_SIMPLE_SERVICE_INFO( ScDPDimension,   "ScDPDimension",   "com.sun.star.sheet.DataPilotSourceDimension" )
@@ -136,6 +140,7 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     nDataDimCount( 0 ),
     nPageDimCount( 0 ),
     nDupCount( 0 ),
+    bResultOverflow( FALSE ),
     pResData( NULL ),
     pColResRoot( NULL ),
     pRowResRoot( NULL ),
@@ -378,6 +383,12 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
 {
     CreateRes_Impl();       // create pColResRoot and pRowResRoot
 
+    if ( bResultOverflow )      // set in CreateRes_Impl
+    {
+        //  no results available
+        throw uno::RuntimeException();
+    }
+
     long nColCount = pColResRoot->GetSize(pResData->GetColStartMeasure());
     long nRowCount = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
 
@@ -504,6 +515,68 @@ void ScDPSource::disposeData()
     nColDimCount = nRowDimCount = nDataDimCount = nPageDimCount = 0;
 
     pData->DisposeData();   // cached entries etc.
+    bResultOverflow = FALSE;
+}
+
+long lcl_CountMinMembers( ScDPDimension** ppDim, ScDPLevel** ppLevel, long nLevels )
+{
+    //  Calculate the product of the member count for those consecutive levels that
+    //  have the "show all" flag, one following level, and the data layout dimension.
+
+    long nTotal = 1;
+    long nDataCount = 1;
+    BOOL bWasShowAll = TRUE;
+    long nPos = nLevels;
+    while ( nPos > 0 )
+    {
+        --nPos;
+
+        if ( nPos < nLevels && ppDim[nPos] == ppDim[nPos+1] )
+        {
+            DBG_ERROR("lcl_CountMinMembers: multiple levels from one dimension not implemented");
+            return 0;
+        }
+
+        BOOL bDo = FALSE;
+        if ( ppDim[nPos]->getIsDataLayoutDimension() )
+        {
+            //  data layout dim doesn't interfere with "show all" flags
+            nDataCount = ppLevel[nPos]->GetMembersObject()->getCount();
+            if ( nDataCount == 0 )
+                nDataCount = 1;
+        }
+        else if ( bWasShowAll )     // "show all" set for all following levels?
+        {
+            bDo = TRUE;
+            if ( !ppLevel[nPos]->getShowEmpty() )
+            {
+                //  this level is counted, following ones are not
+                bWasShowAll = FALSE;
+            }
+        }
+        if ( bDo )
+        {
+            long nThisCount = ppLevel[nPos]->GetMembersObject()->getMinMembers();
+            if ( nThisCount == 0 )
+            {
+                nTotal = 1;         //  empty level -> start counting from here
+                                    //! start with visible elements in this level?
+            }
+            else
+            {
+                if ( nTotal >= LONG_MAX / nThisCount )
+                    return LONG_MAX;                        //  overflow
+                nTotal *= nThisCount;
+            }
+        }
+    }
+
+    //  always include data layout dim, even after restarting
+    if ( nTotal >= LONG_MAX / nDataCount )
+        return LONG_MAX;                        //  overflow
+    nTotal *= nDataCount;
+
+    return nTotal;
 }
 
 void ScDPSource::CreateRes_Impl()
@@ -628,31 +701,46 @@ void ScDPSource::CreateRes_Impl()
         pRowResRoot->InitFrom( ppRowDim, ppRowLevel );
         pRowResRoot->SetHasElements();
 
-        ScDPItemData aColData[SC_DAPI_MAXFIELDS];
-        ScDPItemData aRowData[SC_DAPI_MAXFIELDS];
-        ScDPValueData aValues[SC_DAPI_MAXFIELDS];
+        //  pre-check: calculate minimum number of result columns / rows from
+        //  levels that have the "show all" flag set
 
-        ScDPTableIteratorParam aIterPar(
-                    nColLevelCount,  nColLevelDims,  aColData,
-                    nRowLevelCount,  nRowLevelDims,  aRowData,
-                    nDataDimCount, nDataSrcCols, aValues );
-
-        pData->ResetIterator();
-        while ( pData->GetNextRow( aIterPar ) )
+        long nMinColMembers = lcl_CountMinMembers( ppColDim, ppColLevel, nColLevelCount );
+        long nMinRowMembers = lcl_CountMinMembers( ppRowDim, ppRowLevel, nRowLevelCount );
+        if ( nMinColMembers > SC_MINCOUNT_LIMIT || nMinRowMembers > SC_MINCOUNT_LIMIT )
         {
-            pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
-            pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
+            //  resulting table is too big -> abort before calculating
+            //  (this relies on late init, so no members are allocated in InitFrom above)
 
-            //  test for filtered entries
-            //! test child dimensions for null !!!
-            if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
-                 ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
+            bResultOverflow = TRUE;
+        }
+        else
+        {
+            ScDPItemData aColData[SC_DAPI_MAXFIELDS];
+            ScDPItemData aRowData[SC_DAPI_MAXFIELDS];
+            ScDPValueData aValues[SC_DAPI_MAXFIELDS];
+
+            ScDPTableIteratorParam aIterPar(
+                        nColLevelCount,  nColLevelDims,  aColData,
+                        nRowLevelCount,  nRowLevelDims,  aRowData,
+                        nDataDimCount, nDataSrcCols, aValues );
+
+            pData->ResetIterator();
+            while ( pData->GetNextRow( aIterPar ) )
             {
-                //! single process method with ColMembers, RowMembers and data !!!
-                if (pColResRoot->GetChildDimension())
-                    pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
+                pColResRoot->LateInitFrom( ppColDim, ppColLevel, aColData );
+                pRowResRoot->LateInitFrom( ppRowDim, ppRowLevel, aRowData );
 
-                pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
+                //  test for filtered entries
+                //! test child dimensions for null !!!
+                if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
+                     ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
+                {
+                    //! single process method with ColMembers, RowMembers and data !!!
+                    if (pColResRoot->GetChildDimension())
+                        pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
+
+                    pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
+                }
             }
         }
     }
@@ -715,6 +803,13 @@ void ScDPSource::FillMemberResults()
     if ( !pColResults && !pRowResults )
     {
         CreateRes_Impl();
+
+        if ( bResultOverflow )      // set in CreateRes_Impl
+        {
+            //  no results available -> abort (leave empty)
+            //  exception is thrown in ScDPSource::getResults
+            return;
+        }
 
         FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
         long nColLevelCount = aColLevelList.Count();
@@ -1810,6 +1905,27 @@ sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException)
 long ScDPMembers::getCount() const
 {
     return nMbrCount;
+}
+
+long ScDPMembers::getMinMembers() const
+{
+    // used in lcl_CountMinMembers
+
+    long nVisCount = 0;
+    if ( ppMbrs )
+    {
+        for (long i=0; i<nMbrCount; i++)
+        {
+            //  count only visible with details (default is true for both)
+            const ScDPMember* pMbr = ppMbrs[i];
+            if ( !pMbr || ( pMbr->getIsVisible() && pMbr->getShowDetails() ) )
+                ++nVisCount;
+        }
+    }
+    else
+        nVisCount = nMbrCount;      // default for all
+
+    return nVisCount;
 }
 
 ScDPMember* ScDPMembers::getByIndex(long nIndex) const
