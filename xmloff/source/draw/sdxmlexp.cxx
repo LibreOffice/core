@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:21:20 $
+ *  last change: $Author: cl $ $Date: 2000-12-05 23:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1905,7 +1905,7 @@ void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
         if(!bIsEmptyPresObj)
         {
             uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-            if( xText.is() )
+            if( xText.is() && xText->getString().getLength() )
                 rExp.GetTextParagraphExport()->exportText( xText );
         }
     }
@@ -1995,7 +1995,7 @@ void SdXMLExport::ImpExportRectangleShape(SvXMLExport& rExp,
 
         // export text
         uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-        if( xText.is() )
+        if( xText.is() && xText->getString().getLength() )
             rExp.GetTextParagraphExport()->exportText( xText );
     }
 }
@@ -2090,7 +2090,7 @@ void SdXMLExport::ImpExportLineShape(SvXMLExport& rExp,
 
         // export text
         uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-        if( xText.is() )
+        if( xText.is() && xText->getString().getLength() )
             rExp.GetTextParagraphExport()->exportText( xText );
     }
 }
@@ -2160,7 +2160,7 @@ void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
 
             // export text
             uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-            if( xText.is() )
+            if( xText.is() && xText->getString().getLength() )
                 rExp.GetTextParagraphExport()->exportText( xText );
         }
         else
@@ -2180,7 +2180,7 @@ void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
 
             // export text
             uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-            if( xText.is() )
+            if( xText.is() && xText->getString().getLength() )
                 rExp.GetTextParagraphExport()->exportText( xText );
         }
     }
@@ -2296,7 +2296,7 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
 
                 // export text
                 uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-                if( xText.is() )
+                if( xText.is() && xText->getString().getLength() )
                     rExp.GetTextParagraphExport()->exportText( xText );
             }
         }
@@ -2330,7 +2330,7 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
 
                     // export text
                     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-                    if( xText.is() )
+                    if( xText.is() && xText->getString().getLength() )
                         rExp.GetTextParagraphExport()->exportText( xText );
                 }
                 else
@@ -2361,7 +2361,7 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
 
                     // export text
                     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-                    if( xText.is() )
+                    if( xText.is() && xText->getString().getLength() )
                         rExp.GetTextParagraphExport()->exportText( xText );
                 }
             }
@@ -2739,7 +2739,7 @@ void SdXMLExport::ImpExportConnectorShape(SvXMLExport& rExp,
 
     // export text
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() )
+    if( xText.is() && xText->getString().getLength() )
         rExp.GetTextParagraphExport()->exportText( xText );
 }
 
@@ -2797,7 +2797,7 @@ void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
 
     // export text
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() )
+    if( xText.is() && xText->getString().getLength() )
         rExp.GetTextParagraphExport()->exportText( xText );
 }
 
@@ -2869,7 +2869,7 @@ void SdXMLExport::ImpExportCaptionShape(SvXMLExport& rExp,
 
     // export text
     uno::Reference< text::XText > xText( xShape, uno::UNO_QUERY );
-    if( xText.is() )
+    if( xText.is() && xText->getString().getLength() )
         rExp.GetTextParagraphExport()->exportText( xText );
 }
 
@@ -3767,20 +3767,10 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
 
             if(!bIsEmptyPresObj)
             {
-                if( !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.ChartShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.GraphicObjectShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.ControlShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.PageShape")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSceneObject")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DCubeObject")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DSphereObject")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DLatheObject")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Shape3DExtrudeObject")) &&
-                    !aShapeType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.PageShape")) )
+                OUString aTxt( xText->getString() );
+                if( aTxt.getLength() )
                 {
+                    // only collect text auto styles if there is text
                     GetTextParagraphExport()->collectTextAutoStyles( xText );
                 }
             }
