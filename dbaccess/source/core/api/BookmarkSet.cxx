@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:37 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,14 +84,16 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
     if(!xUpdRow.is())
         throw SQLException();
 
-    sal_Int32 i = 1;
-    for(connectivity::ORowVector< ORowSetValue > ::const_iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
-        updateColumn(i,xUpdRow,*aIter);
-
-
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
     if(xUpd.is())
+    {
+        xUpd->moveToInsertRow();
+        sal_Int32 i = 1;
+        for(connectivity::ORowVector< ORowSetValue > ::const_iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+            updateColumn(i,xUpdRow,*aIter);
         xUpd->insertRow();
+        (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
+    }
     else
         throw SQLException();
 }
@@ -104,8 +106,11 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
         throw SQLException();
 
     sal_Int32 i = 1;
+    connectivity::ORowVector< ORowSetValue > ::const_iterator aOrgIter = _rOrginalRow->begin()+1;
     for(connectivity::ORowVector< ORowSetValue > ::const_iterator aIter = _rInsertRow->begin()+1;aIter != _rInsertRow->end();++aIter,++i)
+    {
         updateColumn(i,xUpdRow,*aIter);
+    }
 
 
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
@@ -117,7 +122,9 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
 {
-    OCacheSet::deleteRow(_rDeleteRow,_xTable);
+    Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
+
+    xUpd->deleteRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
@@ -126,6 +133,9 @@ void SAL_CALL OBookmarkSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
+    Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
+    if(xUpd.is())
+        xUpd->moveToInsertRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OBookmarkSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
@@ -141,48 +151,54 @@ void OBookmarkSet::fillValueRow(ORowSetRow& _rRow)
 // -------------------------------------------------------------------------
 void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParameter,const ORowSetValue& _rValue)
 {
-    if(!_rValue.isNull())
+    if(_rValue.isBound() && _rValue.isModified())
     {
-        switch(_rValue.getTypeKind())
+        if(_rValue.isNull())
+            _xParameter->updateNull(nPos);
+        else
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                _xParameter->updateString(nPos,_rValue);
-                break;
-            case DataType::BIT:
-                _xParameter->updateBoolean(nPos,_rValue);
-                break;
-            case DataType::TINYINT:
-                _xParameter->updateByte(nPos,_rValue);
-                break;
-            case DataType::SMALLINT:
-                _xParameter->updateShort(nPos,_rValue);
-                break;
-            case DataType::INTEGER:
-                _xParameter->updateInt(nPos,_rValue);
-                break;
-            case DataType::DOUBLE:
-            case DataType::FLOAT:
-            case DataType::REAL:
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                _xParameter->updateDouble(nPos,_rValue);
-                break;
-            case DataType::DATE:
-                _xParameter->updateDate(nPos,_rValue);
-                break;
-            case DataType::TIME:
-                _xParameter->updateTime(nPos,_rValue);
-                break;
-            case DataType::TIMESTAMP:
-                _xParameter->updateTimestamp(nPos,_rValue);
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-                _xParameter->updateBytes(nPos,_rValue);
-                break;
 
+            switch(_rValue.getTypeKind())
+            {
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                    _xParameter->updateString(nPos,_rValue);
+                    break;
+                case DataType::BIT:
+                    _xParameter->updateBoolean(nPos,_rValue);
+                    break;
+                case DataType::TINYINT:
+                    _xParameter->updateByte(nPos,_rValue);
+                    break;
+                case DataType::SMALLINT:
+                    _xParameter->updateShort(nPos,_rValue);
+                    break;
+                case DataType::INTEGER:
+                    _xParameter->updateInt(nPos,_rValue);
+                    break;
+                case DataType::DOUBLE:
+                case DataType::FLOAT:
+                case DataType::REAL:
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    _xParameter->updateDouble(nPos,_rValue);
+                    break;
+                case DataType::DATE:
+                    _xParameter->updateDate(nPos,_rValue);
+                    break;
+                case DataType::TIME:
+                    _xParameter->updateTime(nPos,_rValue);
+                    break;
+                case DataType::TIMESTAMP:
+                    _xParameter->updateTimestamp(nPos,_rValue);
+                    break;
+                case DataType::BINARY:
+                case DataType::VARBINARY:
+                case DataType::LONGVARBINARY:
+                    _xParameter->updateBytes(nPos,_rValue);
+                    break;
+
+            }
         }
     }
 }
@@ -191,6 +207,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:15:37  hr
+    initial import
+
     Revision 1.3  2000/09/18 14:52:45  willem.vandorp
     OpenOffice header added.
 

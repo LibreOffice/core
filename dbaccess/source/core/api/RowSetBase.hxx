@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@
 
 
 namespace connectivity { class OSQLParseTreeIterator; }
+namespace com { namespace sun { namespace star { namespace sdb { struct RowChangeEvent; } } } }
 
 namespace dbaccess
 {
@@ -136,19 +137,21 @@ namespace dbaccess
                                                 m_aColumnsMutex;
 
         ::cppu::OInterfaceContainerHelper       m_aListeners,
-                                                m_aApproveListeners; // when clone -> they are empty
+                                                m_aApproveListeners;// when clone -> they are empty
 
         ::com::sun::star::uno::Any              m_aBookmark;
+        ORowSetMatrix::iterator                 m_aCurrentRow;      // contains the actual fetched row
 
-        ::cppu::OWeakObject*                    m_pMySelf;      // set by derived classes
+        ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
 
         connectivity::OSQLParseTreeIterator*    m_pIterator;
-        ORowSetCache*                           m_pCache;       // the cache is used by the rowset and his clone (shared)
-        ORowSetDataColumns*                     m_pColumns;     // represent the select columns
-        ::cppu::OBroadcastHelper&               m_rBHelper;     // must be set from the derived classes
+        ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)
+        ORowSetDataColumns*                     m_pColumns;         // represent the select columns
+        ::cppu::OBroadcastHelper&               m_rBHelper;         // must be set from the derived classes
 
-        sal_Int32                               m_nRowCount;    // contains the current count of rows which have been fetched
-        sal_Bool                                m_bClone;       // I'm clone or not
+        sal_Int32                               m_nRowCount;        // contains the current count of rows which have been fetched
+        sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
+        sal_Bool                                m_bClone;           // I'm clone or not
         sal_Bool                                m_bRowCountFinal;
         sal_Bool                                m_bBeforeFirst  : 1;
         sal_Bool                                m_bAfterLast    : 1;
@@ -158,6 +161,20 @@ namespace dbaccess
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
+        virtual void fireRowcount()
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // fire if rowcount changed
+        virtual void notifyAllListenersRowBeforeChange(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify before row will change
+        virtual void notifyAllListenersRowChanged(const ::com::sun::star::sdb::RowChangeEvent &rEvt)
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify row changed
+        virtual void notifyAllListenersCursorBeforeMove()
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify before cursor will move
+        virtual void notifyAllListenersCursorMoved()
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify cursor moved
+        virtual void notifyAllListeners()
+        {OSL_ASSERT("fireRowcount() not allowed for clone!");}      // notify all that rowset changed
+        // check if the insert must be canceled
+        virtual void checkInsert() = 0;
 
     // OSimplePropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
@@ -253,76 +270,15 @@ namespace dbaccess
         {   // when not implemented by derived classes then throw
             throw ::com::sun::star::sdbc::SQLException();
         }
-        virtual void SAL_CALL addRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL addRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException)
+        {   // when not implemented by derived classes then throw
+            throw ::com::sun::star::sdbc::SQLException();
+        }
+        virtual void SAL_CALL removeRowSetListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >& listener ) throw(::com::sun::star::uno::RuntimeException)
+        {   // when not implemented by derived classes then throw
+            throw ::com::sun::star::sdbc::SQLException();
+        }
     };
-
-// ============== some defines for notification ==============
-// -------------------------------------------------------------------------
-#define NOTIFY_ALL_LISTENERS()                                                  \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    OInterfaceIteratorHelper aIter(m_aListeners);                               \
-    while (aIter.hasMoreElements())                                             \
-        ((XRowSetListener*)aIter.next())->rowSetChanged(aEvt);                  \
-}
-// -------------------------------------------------------------------------
-#define NOTIFY_ALL_LISTENERS_CURSOR_MOVED()                                     \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    EventObject aEvt(*m_pMySelf);                                               \
-    OInterfaceIteratorHelper aIter(m_aListeners);                               \
-    while (aIter.hasMoreElements())                                             \
-        ((XRowSetListener*)aIter.next())->cursorMoved(aEvt);                    \
-}
-// -------------------------------------------------------------------------
-#define NOTIFY_ALL_LISTENERS_ROW_CHANGED()                                      \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    OInterfaceIteratorHelper aIter(m_aListeners);                               \
-    while (aIter.hasMoreElements())                                             \
-        ((XRowSetListener*)aIter.next())->rowChanged(aEvt);                     \
-}
-// -------------------------------------------------------------------------
-#define NOTIFY_ALL_LISTENERS_CURSOR_BEFOREMOVE()                                \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    EventObject aEvt(*m_pMySelf);                                               \
-    OInterfaceIteratorHelper aIter(m_aApproveListeners);                        \
-    while (aIter.hasMoreElements())                                             \
-        ((XRowSetApproveListener*)aIter.next())->approveCursorMove(aEvt);       \
-}
-// -------------------------------------------------------------------------
-#define NOTIFY_ALL_LISTENERS_ROW_BEFORECHANGE()                                 \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    OInterfaceIteratorHelper aIter(m_aApproveListeners);                        \
-    while (aIter.hasMoreElements())                                             \
-        ((XRowSetApproveListener*)aIter.next())->approveRowChange(aEvt);        \
-}
-// -------------------------------------------------------------------------
-#define FIRE_ROWCOUNT()                                                         \
-if(!m_bClone)                                                                   \
-{                                                                               \
-    if(m_nRowCount != m_pCache->m_nRowCount)                                    \
-    {                                                                           \
-        sal_Int32 nHandle = PROPERTY_ID_ROWCOUNT;                               \
-        Any aNew,aOld;                                                          \
-        aNew <<= m_pCache->m_nRowCount;aOld <<= m_nRowCount;                    \
-        fire(&nHandle,&aNew,&aOld,1,sal_False);                                 \
-        m_nRowCount = m_pCache->m_nRowCount;                                    \
-    }                                                                           \
-    if(!m_bRowCountFinal && m_bRowCountFinal != m_pCache->m_bRowCountFinal)     \
-    {                                                                           \
-        sal_Int32 nHandle = PROPERTY_ID_ISROWCOUNTFINAL;                        \
-        Any aNew,aOld;                                                          \
-        aNew <<= bool2any(m_pCache->m_bRowCountFinal);                          \
-        aOld <<= bool2any(m_bRowCountFinal);                                    \
-        fire(&nHandle,&aNew,&aOld,1,sal_False);                                 \
-        m_bRowCountFinal = m_pCache->m_bRowCountFinal;                          \
-    }                                                                           \
-}
-// -------------------------------------------------------------------------
 } // end of namespace
 
 #endif // DBACCESS_CORE_API_ROWSETBASE_HXX

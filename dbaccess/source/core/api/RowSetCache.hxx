@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:38 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,11 @@ namespace dbaccess
         ORowSetMatrix*                  m_pMatrix;              // represent the table struct
         ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
         ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
-        ORowSetRow                      m_aInsertRow;           // present the row that should be inserted
-        //  const connectivity::OSQLParseTreeIterator* m_pIterator; // the parseiterator from RowSet
+
+        ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
+        ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
+
+        //  ORowSetRow                      m_aInsertRow;           // present the row that should be inserted
         sal_Int32                       m_nLastColumnIndex;     // the last column ask for, used for wasNull()
 
         connectivity::OSQLTable         m_aUpdateTable;         // used for updates/deletes and inserts
@@ -217,8 +220,6 @@ namespace dbaccess
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarable ;
         sal_Bool                    m_bNew ;
-        sal_Bool                    m_bClone; // is set when I'm a clone
-
 
         sal_Bool fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
@@ -228,11 +229,8 @@ namespace dbaccess
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
-
-        ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
-                     const connectivity::OSQLTable& _aUpdateTable,
-                     OCacheSet* _pCacheSet,
-                     sal_Int32 _nPrivileges); // use by createClone
+        // is called when after a moveToInsertRow a movement (next, etc) was called
+        void cancelInsert();
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const connectivity::OSQLParseTreeIterator* _pIterator,
@@ -240,12 +238,8 @@ namespace dbaccess
         ~ORowSetCache();
 
 
-        // is used by ORowSetClone
-        ORowSetCache* createClone();
-
         // sets the size of the matrix
         void setMaxRowSize(sal_Int32 _nSize);
-
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -361,6 +355,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:15:38  hr
+    initial import
+
     Revision 1.2  2000/09/18 14:52:47  willem.vandorp
     OpenOffice header added.
 

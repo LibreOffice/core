@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinformation.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,20 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include <connectivity/CommonTools.hxx>
+#endif
 
+using namespace ::utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -112,33 +118,11 @@ UserInformation::UserInformation(::com::sun::star::uno::Reference< ::com::sun::s
 //--------------------------------------------------------------------------
 Locale UserInformation::getUserLanguage() const
 {
-    Locale aReturn;
-    if (!isValid())
-        return aReturn;
-
-    LanguageType eLanguage = LANGUAGE_ENGLISH_US;       // default
-    try
-    {
-        Reference< XRegistryKey > xLanguage = m_xUserConfigKey->openKey(::rtl::OUString::createFromAscii("Language"));
-        if (xLanguage.is())
-        {
-            String sLanguage = xLanguage->getStringValue();
-            eLanguage = (LanguageType)sLanguage.ToInt32();
-        }
-    }
-    catch(InvalidRegistryException&)
-    {
-    }
-    catch(InvalidValueException&)
-    {
-    }
-
+    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+    LanguageType eLanguage = ConvertIsoStringToLanguage(connectivity::getString(aValue),'_');
     UniString sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
-    aReturn.Language = sLanguage;
-    aReturn.Country = sCountry;
-
-    return aReturn;
+    return Locale(sLanguage,sCountry,::rtl::OUString());
 }
 
 

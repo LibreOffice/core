@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 15:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,12 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
+//#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
+//#include <com/sun/star/registry/XSimpleRegistry.hpp>
+//#endif
+//#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
+//#include <com/sun/star/registry/XRegistryKey.hpp>
+//#endif
 #ifndef _UTL_SEQUENCE_HXX_
 #include <unotools/sequence.hxx>
 #endif
@@ -91,6 +91,12 @@
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 
 using namespace dbaccess;
@@ -104,7 +110,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace ::com::sun::star::registry;
+using namespace ::utl;
+//  using namespace ::com::sun::star::registry;
 
 #define STR_SELECT      String::CreateFromAscii("SELECT ")
 #define STR_FROM        String::CreateFromAscii(" FROM ")
@@ -134,26 +141,9 @@ OQueryComposer::OQueryComposer(const Reference< XNameAccess>& _xTableSupplier,
     OSL_ENSHURE(_xConnection.is()," Connection cant be null!");
     OSL_ENSHURE(_xTableSupplier.is(),"TableSupplier cant be null!");
 
-    try
-    {
-        Reference< XSimpleRegistry > xIni(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY);
-
-        if ( xIni.is() )
-        {
-            sal_Int32 nValue;
-            {
-                Reference< XRegistryKey > xRootKey  = xIni->getRootKey () ;
-                Reference< XRegistryKey > xEntryKey = xRootKey->openKey(::rtl::OUString::createFromAscii("User/Language"));
-                nValue = xEntryKey->getStringValue().toInt32();
-            }
-
-            LanguageType eLanguage = (LanguageType)((sal_uInt16)nValue);
-            m_aInternational = International( eLanguage, eLanguage );
-        }
-    }
-    catch(...) // we dont want to fail here
-    {
-    }
+    Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
+    LanguageType eLanguage = ConvertIsoStringToLanguage(utl::getString(aValue),'_');
+    m_aInternational = International( eLanguage );
 }
 // -------------------------------------------------------------------------
 OQueryComposer::~OQueryComposer()
