@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:16:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,37 +348,37 @@ FASTBOOL SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const 
     return aRect.IsInside(rPnt);
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrGluePoint& rGP)
-{
-    if (rOut.GetError()!=0) return rOut;
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrGluePoint");
-#endif
-    rOut<<rGP.aPos;
-    rOut<<rGP.nEscDir;
-    rOut<<rGP.nId;
-    rOut<<rGP.nAlign;
-    BOOL bTmp=rGP.bNoPercent; // ueber bTmp, weil sonst (beim casting) im Falle
-    rOut<<bTmp;               // TRUE nicht 01 sondern FF geschrieben wird.
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrGluePoint& rGP)
+//BFS01{
+//BFS01 if (rOut.GetError()!=0) return rOut;
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrGluePoint");
+//BFS01#endif
+//BFS01 rOut<<rGP.aPos;
+//BFS01 rOut<<rGP.nEscDir;
+//BFS01 rOut<<rGP.nId;
+//BFS01 rOut<<rGP.nAlign;
+//BFS01 BOOL bTmp=rGP.bNoPercent; // ueber bTmp, weil sonst (beim casting) im Falle
+//BFS01 rOut<<bTmp;               // TRUE nicht 01 sondern FF geschrieben wird.
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrGluePoint& rGP)
-{
-    if (rIn.GetError()!=0) return rIn;
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrGluePoint");
-#endif
-    BOOL bTmpBool;
-    rIn>>rGP.aPos;
-    rIn>>rGP.nEscDir;
-    rIn>>rGP.nId;
-    rIn>>rGP.nAlign;
-    rIn>>bTmpBool; rGP.bNoPercent=(bTmpBool!=0);
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrGluePoint& rGP)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrGluePoint");
+//BFS01#endif
+//BFS01 BOOL bTmpBool;
+//BFS01 rIn>>rGP.aPos;
+//BFS01 rIn>>rGP.nEscDir;
+//BFS01 rIn>>rGP.nId;
+//BFS01 rIn>>rGP.nAlign;
+//BFS01 rIn>>bTmpBool; rGP.bNoPercent=(bTmpBool!=0);
+//BFS01 return rIn;
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -570,36 +570,37 @@ void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, FASTBOOL 
     }
 }
 
-SvStream& operator<<(SvStream& rOut, const SdrGluePointList& rGPL)
-{
-    if (rOut.GetError()!=0) return rOut;
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrGluePointList");
-#endif
-    UINT16 nAnz=rGPL.GetCount();
-    rOut<<(UINT16)nAnz;
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
-        rOut<<rGPL[nNum];
-    }
-    return rOut;
-}
+//BFS01SvStream& operator<<(SvStream& rOut, const SdrGluePointList& rGPL)
+//BFS01{
+//BFS01 if (rOut.GetError()!=0) return rOut;
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrGluePointList");
+//BFS01#endif
+//BFS01 UINT16 nAnz=rGPL.GetCount();
+//BFS01 rOut<<(UINT16)nAnz;
+//BFS01 for (USHORT nNum=0; nNum<nAnz; nNum++) {
+//BFS01     rOut<<rGPL[nNum];
+//BFS01 }
+//BFS01 return rOut;
+//BFS01}
 
-SvStream& operator>>(SvStream& rIn, SdrGluePointList& rGPL)
-{
-    if (rIn.GetError()!=0) return rIn;
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrGluePointList");
-#endif
-    rGPL.Clear();
-    UINT16 nAnz=0;
-    rIn>>nAnz;
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
-        SdrGluePoint aGP;
-        rIn>>aGP;
-        rGPL.Insert(aGP);
-    }
-    return rIn;
-}
+//BFS01SvStream& operator>>(SvStream& rIn, SdrGluePointList& rGPL)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return rIn;
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrGluePointList");
+//BFS01#endif
+//BFS01 rGPL.Clear();
+//BFS01 UINT16 nAnz=0;
+//BFS01 rIn>>nAnz;
+//BFS01 for (USHORT nNum=0; nNum<nAnz; nNum++) {
+//BFS01     SdrGluePoint aGP;
+//BFS01     rIn>>aGP;
+//BFS01     rGPL.Insert(aGP);
+//BFS01 }
+//BFS01 return rIn;
+//BFS01}
 
+// eof
