@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-06 07:56:07 $
+ *  last change: $Author: os $ $Date: 2002-05-27 11:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "유형";
                 Text[ turkish ] = "Tip";
                 Text[ catalan ] = "Tipo";
+                Text[ thai ] = "ชนิด";
             };
             PageItem
             {
@@ -142,6 +143,7 @@ TabDialog DLG_FRM_STD
                 Text[ turkish ] = "Se�enekler";
                 Text[ catalan ] = "Opciones";
                 Text[ finnish ] = "Asetukset";
+                Text[ thai ] = "ตัวเลือก";
             };
             PageItem
             {
@@ -170,6 +172,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "순환";
                 Text[ turkish ] = "Metin da��l�m�";
                 Text[ catalan ] = "Ajuste";
+                Text[ thai ] = "ตัด";
             };
             PageItem
             {
@@ -197,6 +200,7 @@ TabDialog DLG_FRM_STD
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
                 Text[ finnish ] = "Hyperlinkki";
+                Text[ thai ] = "เชื่อมโยงหลายมิติ";
             };
             PageItem
             {
@@ -225,6 +229,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "테두리";
                 Text[ turkish ] = "Kenarl�k";
                 Text[ catalan ] = "Borde";
+                Text[ thai ] = "เส้นขอบ";
             };
             PageItem
             {
@@ -253,6 +258,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "배경";
                 Text[ turkish ] = "Artalan";
                 Text[ catalan ] = "Fondo";
+                Text[ thai ] = "พื้นหลัง";
             };
             PageItem
             {
@@ -281,6 +287,7 @@ TabDialog DLG_FRM_STD
                 Text[ korean ] = "단";
                 Text[ turkish ] = "S�tun";
                 Text[ catalan ] = "Columnas";
+                Text[ thai ] = "คอลัมน์";
             };
             PageItem
             {
@@ -307,6 +314,7 @@ TabDialog DLG_FRM_STD
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
                 Text[ finnish ] = "Makro";
+                Text[ thai ] = "มาโคร";
             };
         };
     };
@@ -320,6 +328,7 @@ TabDialog DLG_FRM_STD
     Text[ korean ] = "프레임";
     Text[ turkish ] = "�er�eve";
     Text[ catalan ] = "Marco";
+    Text[ thai ] = "กรอบ";
 };
 TabDialog DLG_FRM_GRF
 {
@@ -370,6 +379,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "유형";
                 Text[ turkish ] = "Tip";
                 Text[ catalan ] = "Tipo";
+                Text[ thai ] = "ชนิด";
             };
             PageItem
             {
@@ -397,6 +407,7 @@ TabDialog DLG_FRM_GRF
                 Text[ turkish ] = "Se�enekler";
                 Text[ catalan ] = "Opciones";
                 Text[ finnish ] = "Asetukset";
+                Text[ thai ] = "ตัวเลือก";
             };
             PageItem
             {
@@ -425,6 +436,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "순환";
                 Text[ turkish ] = "Metin da��l�m�";
                 Text[ catalan ] = "Ajuste";
+                Text[ thai ] = "ตัด";
             };
             PageItem
             {
@@ -452,6 +464,7 @@ TabDialog DLG_FRM_GRF
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
                 Text[ finnish ] = "Hyperlinkki";
+                Text[ thai ] = "เชื่อมโยงหลายมิติ";
             };
             PageItem
             {
@@ -480,6 +493,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "그래픽";
                 Text[ turkish ] = "Grafik";
                 Text[ catalan ] = "Imagen";
+                Text[ thai ] = "กราฟิค";
             };
             PageItem
             {
@@ -507,6 +521,7 @@ TabDialog DLG_FRM_GRF
                 Text[ turkish ] = "K�rpma";
                 Text[ catalan ] = "Recortar";
                 Text[ finnish ] = "Rajaa";
+                Text[ thai ] = "ครอบตัด";
             };
             PageItem
             {
@@ -535,6 +550,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "테두리";
                 Text[ turkish ] = "Kenarl�k";
                 Text[ catalan ] = "Borde";
+                Text[ thai ] = "เส้นขอบ";
             };
             PageItem
             {
@@ -563,6 +579,7 @@ TabDialog DLG_FRM_GRF
                 Text[ korean ] = "배경";
                 Text[ turkish ] = "Artalan";
                 Text[ catalan ] = "Fondo";
+                Text[ thai ] = "พื้นหลัง";
             };
             PageItem
             {
@@ -589,6 +606,7 @@ TabDialog DLG_FRM_GRF
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
                 Text[ finnish ] = "Makro";
+                Text[ thai ] = "มาโคร";
             };
         };
     };
@@ -602,6 +620,7 @@ TabDialog DLG_FRM_GRF
     Text[ korean ] = "그래픽";
     Text[ turkish ] = "Grafik";
     Text[ catalan ] = "Imagen";
+    Text[ thai ] = "กราฟิค";
 };
 TabDialog DLG_FRM_OLE
 {
@@ -663,6 +682,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "유형";
                 Text[ turkish ] = "Tip";
                 Text[ catalan ] = "Tipo";
+                Text[ thai ] = "ชนิด";
             };
             PageItem
             {
@@ -690,6 +710,7 @@ TabDialog DLG_FRM_OLE
                 Text[ turkish ] = "Se�enekler";
                 Text[ catalan ] = "Opciones";
                 Text[ finnish ] = "Asetukset";
+                Text[ thai ] = "ตัวเลือก";
             };
             PageItem
             {
@@ -718,6 +739,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "순환";
                 Text[ turkish ] = "Metin da��l�m�";
                 Text[ catalan ] = "Ajuste";
+                Text[ thai ] = "ตัด";
             };
             PageItem
             {
@@ -745,6 +767,7 @@ TabDialog DLG_FRM_OLE
                 Text[ turkish ] = "Hyperlink";
                 Text[ catalan ] = "Hiperenlace";
                 Text[ finnish ] = "Hyperlinkki";
+                Text[ thai ] = "เชื่อมโยงหลายมิติ";
             };
             PageItem
             {
@@ -773,6 +796,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "테두리";
                 Text[ turkish ] = "Kenarl�k";
                 Text[ catalan ] = "Borde";
+                Text[ thai ] = "เส้นขอบ";
             };
             PageItem
             {
@@ -801,6 +825,7 @@ TabDialog DLG_FRM_OLE
                 Text[ korean ] = "배경";
                 Text[ turkish ] = "Artalan";
                 Text[ catalan ] = "Fondo";
+                Text[ thai ] = "พื้นหลัง";
             };
             /*
             PageItem  {
@@ -846,9 +871,11 @@ TabDialog DLG_FRM_OLE
                 Text[ turkish ] = "Makro";
                 Text[ catalan ] = "Macro";
                 Text[ finnish ] = "Makro";
+                Text[ thai ] = "มาโคร";
             };
         };
     };
+    Text[ thai ] = "วัตถุ";
 };
 TabPage TP_FRM_STD
 {
@@ -885,6 +912,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "너비(~W)";
         Text[ turkish ] = "~Geni�lik";
         Text[ catalan ] = "A~ncho";
+        Text[ thai ] = "ความ~กว้าง";
     };
     MetricField ED_WIDTH
     {
@@ -931,6 +959,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "~G�receli";
         Text[ catalan ] = "R~elativo";
         Text[ finnish ] = "~Suhteellinen";
+        Text[ thai ] = "สัม~พัทธ์";
     };
     FixedText FT_HEIGHT
     {
@@ -960,6 +989,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "높이(~E)";
         Text[ turkish ] = "~Y�ks.";
         Text[ catalan ] = "A~ltura";
+        Text[ thai ] = "ความสู~ง";
     };
     MetricField ED_HEIGHT
     {
@@ -1005,6 +1035,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "G~�receli";
         Text[ catalan ] = "Rela~tivo";
         Text[ finnish ] = "~Suhteellinen";
+        Text[ thai ] = "สัม~พัทธ์";
     };
     CheckBox CB_FIXEDRATIO
     {
@@ -1033,34 +1064,15 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "Orant~�";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "Prop~orcional";
+        Text[ thai ] = "~รักษาสัดส่วน";
     };
     CheckBox CB_AUTOHEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
         TabStop = TRUE ;
-        Text = "Au~tomatische H�he" ;
-        Text [ ENGLISH ] = "Automatic hei~ght" ;
-        Text[ english_us ] = "AutoHei~ght";
-        Text[ portuguese ] = "Alt~ura autom�tica";
-        Text[ russian ] = "�����. ������";
-        Text[ greek ] = "�������� ����";
-        Text[ dutch ] = "Automatische h~oogte";
-        Text[ french ] = "Hauteur automatique";
-        Text[ spanish ] = "Altura autom�tica";
-        Text[ finnish ] = "~Automaattinen korkeus";
-        Text[ italian ] = "Altezza. ~auto";
-        Text[ danish ] = "Auto. h�jde";
-        Text[ swedish ] = "Au~tomatisk h�jd";
-        Text[ polish ] = "~Autom. wysoko��";
-        Text[ portuguese_brazilian ] = "Altura autom?tica";
-        Text[ japanese ] = "高さ自動調整(~G)";
-        Text[ korean ] = "자동 높이 조절(~G)";
-        Text[ chinese_simplified ] = "自动调整高度(~G)";
-        Text[ chinese_traditional ] = "自動調整高度(~G)";
-        Text[ turkish ] = "otom. ~y�ksekl.";
-        Text[ arabic ] = "������ ������";
-        Text[ catalan ] = "Altura auto~m.";
+        Text = "Au~tom. Gr��e" ;
+        Text[ english_us ] = "A~utoSize";
     };
     PushButton BT_REALSIZE
     {
@@ -1091,6 +1103,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "원래 크기(~O)";
         Text[ turkish ] = "�lk b~oyut";
         Text[ catalan ] = "Ta~ma�o original";
+        Text[ thai ] = "ขนาด~ต้นฉบับ";
     };
     FixedLine FL_SIZE
     {
@@ -1119,6 +1132,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "크기";
         Text[ turkish ] = "Boyut";
         Text[ catalan ] = "Tama�o";
+        Text[ thai ] = "ขนาด";
     };
     FixedLine FL_TYPE_SEP
     {
@@ -1152,6 +1166,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "A la p�~gina";
         Text[ finnish ] = "Sivulle";
+        Text[ thai ] = "ไปยัง~หน้า";
     };
     RadioButton RB_ANCHOR_PARA
     {
@@ -1179,6 +1194,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "Al ~p�rrafo";
         Text[ finnish ] = "Kappaleeseen";
+        Text[ thai ] = "ไปยังย่อ~หน้า";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
@@ -1206,6 +1222,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "��� �����";
         Text[ catalan ] = "Al car�~cter";
         Text[ finnish ] = "Merkkiin";
+        Text[ thai ] = "ไปยังตัวอัก~ขระ";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
@@ -1234,6 +1251,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "karakter o~larak";
         Text[ catalan ] = "Como ~car�cter";
         Text[ finnish ] = "~Merkkin�";
+        Text[ thai ] = "เ~ป็นตัวอักขระ";
     };
     RadioButton RB_ANCHOR_FRAME
     {
@@ -1261,6 +1279,7 @@ TabPage TP_FRM_STD
         Text[ arabic ] = "��� ������";
         Text[ catalan ] = "~Al marco";
         Text[ finnish ] = "Kehykseen";
+        Text[ thai ] = "ไปยัง~กรอบ";
     };
     FixedLine FL_TYPE
     {
@@ -1289,6 +1308,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "고정";
         Text[ turkish ] = "Sabitleme";
         Text[ catalan ] = "Anclaje";
+        Text[ thai ] = "สมอ";
     };
     Window WN_BSP
     {
@@ -1323,6 +1343,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "수평(~Z)";
         Text[ turkish ] = "Ya~tay";
         Text[ catalan ] = "Hori~zontal";
+        Text[ thai ] = "แนวน~อน";
     };
     ListBox DLB_HORIZONTAL
     {
@@ -1359,6 +1380,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "간격(~Y)";
         Text[ turkish ] = "g~rnt.";
         Text[ catalan ] = "a";
+        Text[ thai ] = "โด~ย";
     };
     MetricField ED_AT_HORZ_POS
     {
@@ -1405,6 +1427,7 @@ TabPage TP_FRM_STD
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
         Text[ finnish ] = "kohde";
+        Text[ thai ] = "~ถึง";
     };
     ListBox LB_HORI_RELATION
     {
@@ -1440,6 +1463,7 @@ TabPage TP_FRM_STD
         Text[ turkish ] = "�ift numaral� sayfalarda ya~ns�t";
         Text[ catalan ] = "Reflejar en ~p�ginas pares";
         Text[ finnish ] = "~Peilaa parillisilla sivuilla";
+        Text[ thai ] = "~ส่องบนหน้าเดียวกัน";
     };
     FixedText FT_VERTICAL
     {
@@ -1469,6 +1493,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "수직(~V)";
         Text[ turkish ] = "Di~key";
         Text[ catalan ] = "~Vertical";
+        Text[ thai ] = "แนว~ตั้ง";
     };
     ListBox DLB_VERTICAL
     {
@@ -1505,6 +1530,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "간격";
         Text[ turkish ] = "gr~nt.";
         Text[ catalan ] = "a";
+        Text[ thai ] = "โดย";
     };
     MetricField ED_AT_VERT_POS
     {
@@ -1551,6 +1577,7 @@ TabPage TP_FRM_STD
         Text[ language_user1 ] = "\"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
         Text[ catalan ] = "a";
         Text[ finnish ] = "kohde";
+        Text[ thai ] = "ถึ~ง";
     };
     ListBox LB_VERT_RELATION
     {
@@ -1586,6 +1613,7 @@ TabPage TP_FRM_STD
         Text[ korean ] = "위치";
         Text[ turkish ] = "Konum";
         Text[ catalan ] = "Posici�n";
+        Text[ thai ] = "ตำแหน่ง";
     };
 };
 TabPage TP_GRF_EXT
@@ -1626,6 +1654,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "연결";
         Text[ turkish ] = "Ba�lant�";
         Text[ catalan ] = "V�nculo";
+        Text[ thai ] = "เชื่อมโยง";
     };
     FixedText FT_CONNECT
     {
@@ -1653,6 +1682,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "D~osya ad�";
         Text[ catalan ] = "~Nombre de archivo";
         Text[ finnish ] = "~Tiedoston nimi";
+        Text[ thai ] = "ชื่อแ~ฟ้ม";
     };
     Edit ED_CONNECT
     {
@@ -1685,6 +1715,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "[없음]";
         Text[ turkish ] = "[Bo�]";
         Text[ catalan ] = "[Ninguno]";
+        Text[ thai ] = "[ไม่มี]";
     };
     PushButton PB_BROWSE
     {
@@ -1714,6 +1745,7 @@ TabPage TP_GRF_EXT
         Text[ turkish ] = "~...";
         Text[ catalan ] = "~...";
         Text[ finnish ] = "~...";
+        Text[ thai ] = "...";
     };
     CheckBox CB_VERT
     {
@@ -1744,6 +1776,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "수직(~V)";
         Text[ turkish ] = "d~ikey";
         Text[ catalan ] = "~vertical";
+        Text[ thai ] = "แนว~ตั้ง";
     };
     CheckBox CB_HOR
     {
@@ -1772,6 +1805,7 @@ TabPage TP_GRF_EXT
         Text[ arabic ] = "����";
         Text[ catalan ] = "~horizontal";
         Text[ finnish ] = "vaaka~taso";
+        Text[ thai ] = "แนวน~อน";
     };
     RadioButton RB_MIRROR_ALL_PAGES
     {
@@ -1800,6 +1834,7 @@ TabPage TP_GRF_EXT
         Text[ arabic ] = "��� �� �������";
         Text[ catalan ] = "en todas las p�ginas";
         Text[ finnish ] = "kaikilla sivuilla";
+        Text[ thai ] = "ในหน้าทั้งหมด";
     };
     RadioButton RB_MIRROR_LEFT_PAGES
     {
@@ -1828,6 +1863,7 @@ TabPage TP_GRF_EXT
         Text[ arabic ] = "��� ������� �������";
         Text[ catalan ] = "en p�ginas izquierdas";
         Text[ finnish ] = "parillisilla sivuilla";
+        Text[ thai ] = "ในหน้าคู่";
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
     {
@@ -1856,6 +1892,7 @@ TabPage TP_GRF_EXT
         Text[ arabic ] = "��� ������� �������";
         Text[ catalan ] = "en p�ginas derechas";
         Text[ finnish ] = "parittomilla sivuilla";
+        Text[ thai ] = "ในหน้าคี่";
     };
     Window WN_BMP
     {
@@ -1889,6 +1926,7 @@ TabPage TP_GRF_EXT
         Text[ korean ] = "대칭";
         Text[ turkish ] = "Yans�t";
         Text[ catalan ] = "Reflejar";
+        Text[ thai ] = "พลิก";
     };
 };
 String STR_EDIT_GRF
@@ -1916,6 +1954,7 @@ String STR_EDIT_GRF
     TEXT[ korean ] = "연결";
     TEXT[ turkish ] = "Ba�la";
     TEXT[ catalan ] = "Vincular";
+    TEXT[ thai ] = "เชื่อมโยง";
 };
 
 TabPage TP_FRM_URL
@@ -1951,6 +1990,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "U~RL";
         Text[ catalan ] = "~URL";
         Text[ finnish ] = "~URL-osoite";
+        Text[ thai ] = "~URL";
     };
     Edit ED_URL
     {
@@ -1986,6 +2026,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~ชื่อ";
     };
     Edit ED_NAME
     {
@@ -2021,6 +2062,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "~Frame";
         Text[ catalan ] = "Frame";
         Text[ finnish ] = "Kehys";
+        Text[ thai ] = "กรอบ";
     };
     ComboBox CB_FRAME
     {
@@ -2057,6 +2099,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "~Se�...";
         Text[ catalan ] = "Selecc~ionar...";
         Text[ finnish ] = "~Selaa";
+        Text[ thai ] = "เ~รียกดู...";
     };
     FixedLine FL_HYPERLINK
     {
@@ -2084,6 +2127,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "Hyperlink";
         Text[ arabic ] = "Hyperlink";
         Text[ catalan ] = "Hyperlink";
+        Text[ thai ] = "เชื่อมโยงไปยัง";
     };
     CheckBox CB_SERVER
     {
@@ -2111,6 +2155,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "~Sunucu";
         Text[ arabic ] = "�������";
         Text[ catalan ] = "~Servidor";
+        Text[ thai ] = "แผนที่ภาพไซท์เ~ซิร์ฟเวอร์";
     };
     CheckBox CB_CLIENT
     {
@@ -2138,6 +2183,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "~�stemci";
         Text[ arabic ] = "������";
         Text[ catalan ] = "~Cliente";
+        Text[ thai ] = "ภาพแผนที่ไซท์ไ~คลเอ็นท์";
     };
     FixedLine FL_IMAGE
     {
@@ -2165,6 +2211,7 @@ TabPage TP_FRM_URL
         Text[ turkish ] = "Resim e�lem";
         Text[ catalan ] = "Image Map";
         Text[ finnish ] = "Kuvakartta";
+        Text[ thai ] = "ภาพแผนที่";
     };
 };
 TabPage TP_FRM_ADD
@@ -2200,6 +2247,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "~Nombre";
         Text[ finnish ] = "~Nimi";
+        Text[ thai ] = "~ชื่อ";
     };
     Edit ED_NAME
     {
@@ -2234,6 +2282,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~Alternatif metin";
         Text[ catalan ] = "Te~xto alternativo";
         Text[ finnish ] = "~Vaihtoehtoinen (vain teksti)";
+        Text[ thai ] = "~ทดแทน (ข้อความอย่างเดียว)";
     };
     Edit ED_ALT_NAME
     {
@@ -2268,6 +2317,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~�nceki";
         Text[ catalan ] = "~Anterior";
         Text[ finnish ] = "~Edellinen linkki";
+        Text[ thai ] = "เชื่อมโยงอัน~ก่อน";
     };
     Edit ED_PREV
     {
@@ -2303,6 +2353,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "S~onraki";
         Text[ catalan ] = "~V�nculo siguiente";
         Text[ finnish ] = "~Seuraava linkki";
+        Text[ thai ] = "เชื่อมโยงอัน~ถัดไป";
     };
     Edit ED_NEXT
     {
@@ -2338,6 +2389,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "Ad";
         Text[ catalan ] = "Nombres";
         Text[ finnish ] = "Nimet";
+        Text[ thai ] = "ชื่อ";
     };
     CheckBox CB_PROTECT_CONTENT
     {
@@ -2366,6 +2418,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~��erik";
         Text[ catalan ] = "~Contenido";
         Text[ finnish ] = "~Sis�lt�";
+        Text[ thai ] = "เ~นื้อหา";
     };
     CheckBox CB_PROTECT_FRAME
     {
@@ -2394,6 +2447,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "K~onum";
         Text[ catalan ] = "P~osici�n";
         Text[ finnish ] = "~Sijainti";
+        Text[ thai ] = "ตำแ~หน่ง";
     };
     CheckBox CB_PROTECT_SIZE
     {
@@ -2422,6 +2476,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~Boyut";
         Text[ catalan ] = "~Tama�o";
         Text[ finnish ] = "~Koko";
+        Text[ thai ] = "~ขนาด";
     };
     FixedLine FL_PROTECT
     {
@@ -2449,6 +2504,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "Koru";
         Text[ catalan ] = "Proteger";
         Text[ finnish ] = "Suojaa";
+        Text[ thai ] = "ป้องกัน";
     };
     CheckBox CB_EDIT_IN_READONLY
     {
@@ -2477,6 +2533,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "Salt okunur belge i�inde d�zenlenebilir";
         Text[ catalan ] = "Se puede editar en documentos de solo lectura";
         Text[ finnish ] = "~Muokattavissa vain luku -asiakirjassa";
+        Text[ thai ] = "สามารถแ~ก้ไขในเอกสารแบบอย่างเดียว";
     };
     CheckBox CB_PRINT_FRAME
     {
@@ -2506,6 +2563,7 @@ TabPage TP_FRM_ADD
         Text[ korean ] = "인쇄(~T)";
         Text[ turkish ] = "~Yazd�r";
         Text[ catalan ] = "Im~primir";
+        Text[ thai ] = "พิ~มพ์";
     };
     FixedLine FL_EXT
     {
@@ -2533,6 +2591,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "Additional Setting";
         Text[ arabic ] = "Additional Setting";
         Text[ catalan ] = "Additional Setting";
+        Text[ thai ] = "คุณสมบัติ";
     };
 
     FixedText FT_TEXTFLOW
@@ -2543,7 +2602,6 @@ TabPage TP_FRM_ADD
         Hide = TRUE ;
         Text = "~Textfluss" ;
         Text [ ENGLISH ] = "~Text flow" ;
-        Text[ language_user1 ] = "ZL : this should be \"direction of text\"";
         Text[ english_us ] = "~Text direction";
         Text[ portuguese ] = "~Text flow";
         Text[ russian ] = "~Text flow";
@@ -2564,6 +2622,7 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "~Text flow";
         Text[ arabic ] = "~Text flow";
         Text[ catalan ] = "~Text flow";
+        Text[ thai ] = "~Text flow";
     };
     ListBox LB_TEXTFLOW
     {
@@ -2591,7 +2650,7 @@ TabPage TP_FRM_ADD
     StringList [ language_user1 ] =
     {
          < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
+        < "Rechts nach links (vertikal)" ; 2; > ;
         < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
     };
     StringList [ english_us ] =
@@ -2633,7 +2692,7 @@ TabPage TP_FRM_ADD
     StringList [ spanish ] =
     {
          < "De izquierda a derecha (horizontal)" ; 0; > ;
-        < "Derecha-hacia-izquierda (vertical)" ; 2; > ;
+        < "De derecha a izquierda (vertical)" ; 2; > ;
         < "Utilizar la configuraci�n del objeto superior " ; 4; > ;
     };
     StringList [ finnish ] =
@@ -2714,16 +2773,12 @@ TabPage TP_FRM_ADD
         < "Rechts-nach-links (vertikal)" ; 2; > ;
         < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
     };
+    StringList [ thai ] =
+    {
+         < "Horizontal von links" ; 0; > ;
+        < "Vertikal von rechts" ; 2; > ;
+        < "Wie die Umgebung" ; 4; > ;
+    };
     };
 };
-
-
-
-
-
-
-
-
-
-
 
