@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE statusbar:statusbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "statusbar.dtd">
+<statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <statusbar:statusbaritem xlink:href=".uno:DBStatusType" statusbar:align="left" statusbar:autosize="true" statusbar:width="50" statusbar:helpid="helpid:12308"/>
+ <statusbar:statusbaritem xlink:href=".uno:DBStatusDBName" statusbar:align="left" statusbar:autosize="true" statusbar:width="70" statusbar:helpid="helpid:12309"/>
+ <statusbar:statusbaritem xlink:href=".uno:DBStatusUserName" statusbar:align="left" statusbar:autosize="true" statusbar:width="70" statusbar:helpid="helpid:12310"/>
+ <statusbar:statusbaritem xlink:href=".uno:DBStatusHostName" statusbar:align="left" statusbar:autosize="true" statusbar:width="70" statusbar:helpid="helpid:12311"/>
+</statusbar:statusbar>
