@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:StyleApply" toolbar:helpid="helpid:5552" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:helpid="helpid:10007" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:helpid="helpid:10015" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:helpid="helpid:10009" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:helpid="helpid:10008" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:helpid="helpid:10014" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:helpid="helpid:26648" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="helpid:10017" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="helpid:26371" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="helpid:26373" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:26372" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:helpid="helpid:26374" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="helpid:10907" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="helpid:10908" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatCurrency" toolbar:helpid="helpid:26045" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatPercent" toolbar:helpid="helpid:26046" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDate" toolbar:helpid="helpid:26053" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatScientific" toolbar:helpid="helpid:26055" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatStandard" toolbar:helpid="helpid:26052" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatIncDecimals" toolbar:helpid="helpid:26057" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:NumberFormatDecDecimals" toolbar:helpid="helpid:26058" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DecrementIndent" toolbar:helpid="helpid:10461" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:IncrementIndent" toolbar:helpid="helpid:10462" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="helpid:10187" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:helpid="helpid:10185" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:helpid="helpid:26375" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignVCenter" toolbar:helpid="helpid:26377" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:helpid="helpid:26376" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:helpid="helpid:26267" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:26268" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:helpid="helpid:26236" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:helpid="helpid:26237" toolbar:text="" toolbar:visible="false" />
+</toolbar:toolbar>
