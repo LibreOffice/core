@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-16 13:53:54 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 10:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,9 @@
 #include <offmgr/osplcfg.hxx>
 #endif
 #include "sdoutl.hxx"
-#include <unotools/processfactory.hxx>
-#else
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif#else
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
 #endif
@@ -708,7 +709,7 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 
         SdOutliner* pOutl = GetInternalOutliner(TRUE);
 
-        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                             uno::UNO_QUERY );

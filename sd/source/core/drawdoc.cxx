@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-15 10:44:50 $
+ *  last change: $Author: cl $ $Date: 2000-11-17 10:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,10 @@
 #include <tools/isolang.hxx>
 #endif
 #include <unotools/charclass.hxx>
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #include <svtools/pathoptions.hxx>
-
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -372,7 +373,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
     try
     {
-        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                             uno::UNO_QUERY );
@@ -413,7 +414,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     pHitTestOutliner->SetCalcFieldValueHdl( LINK(SFX_APP(), SdModule, CalcFieldValueHdl) );
     try
     {
-        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
                                                             uno::UNO_QUERY );
