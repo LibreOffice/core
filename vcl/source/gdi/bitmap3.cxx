@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2001-08-14 10:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,8 +827,11 @@ BOOL Bitmap::ImplConvertDown( USHORT nBitCount, Color* pExtColor )
                 }
 
                 // letztes ZeilenPixel
-                cIndex = (BYTE) aColorMap.GetBestPaletteIndex( pQLine1[ nWidth1 ].ImplGetColor() );
-                pWriteAcc->SetPixel( nY, nX, cIndex );
+                if( nX < nWidth )
+                {
+                    cIndex = (BYTE) aColorMap.GetBestPaletteIndex( pQLine1[ nWidth1 ].ImplGetColor() );
+                    pWriteAcc->SetPixel( nY, nX, cIndex );
+                }
 
                 // Zeilenpuffer neu fuellen/kopieren
                 pQLine1 = pQLine2;
@@ -1818,7 +1821,7 @@ BOOL Bitmap::ImplReducePopular( USHORT nColCount )
             for( nR = 0, nIndex = 0; nR < 256; nR += nColorOffset )
                 for( nG = 0; nG < 256; nG += nColorOffset )
                     for( nB = 0; nB < 256; nB += nColorOffset )
-                        pIndexMap[ nIndex++ ] = aNewPal.GetBestIndex( BitmapColor( (BYTE) nR, (BYTE) nG, (BYTE) nB ) );
+                        pIndexMap[ nIndex++ ] = (BYTE) aNewPal.GetBestIndex( BitmapColor( (BYTE) nR, (BYTE) nG, (BYTE) nB ) );
 
             if( pRAcc->HasPalette() )
             {
