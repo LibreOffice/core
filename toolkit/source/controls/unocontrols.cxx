@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 10:32:56 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 16:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,12 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 }
 
+uno::Any UnoControlButtonModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XImageProducer*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlModel::queryAggregation( rType ));
+}
+
 ::rtl::OUString UnoControlButtonModel::getServiceName() const
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlButtonModel );
@@ -1211,7 +1217,39 @@ uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetI
     return xInfo;
 }
 
+void UnoControlButtonModel::addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.push_back( xConsumer );
+}
 
+void UnoControlButtonModel::removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException)
+{
+    maListeners.remove( xConsumer );
+}
+
+void UnoControlButtonModel::startProduction(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aArg = getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) );
+    rtl::OUString aURL;
+    aArg >>= aURL;
+    if ( aURL.getLength() )
+    {
+        uno::Sequence<uno::Any> aArgs(1);
+        aArgs.getArray()[0] = aArg;
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference< awt::XImageProducer > xImageProducer( xMSF->createInstanceWithArguments( ::rtl::OUString::createFromAscii( "com.sun.star.awt.ImageProducer" ), aArgs ), uno::UNO_QUERY );
+        if ( xImageProducer.is() )
+        {
+            std::list< uno::Reference< awt::XImageConsumer > >::iterator aIter( maListeners.begin() );
+            while ( aIter != maListeners.end() )
+            {
+                xImageProducer->addConsumer( *aIter );
+                aIter++;
+            }
+            xImageProducer->startProduction();
+        }
+    }
+}
 
 //  ----------------------------------------------------
 //  class UnoButtonControl
@@ -1264,6 +1302,29 @@ void UnoButtonControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
 }
+
+void UnoButtonControl::ImplSetPeerProperty( const ::rtl::OUString& rPropName, const uno::Any& rVal )
+{
+    sal_uInt16 nType = GetPropertyId( rPropName );
+    if ( mxPeer.is() && nType == BASEPROPERTY_IMAGEURL )
+    {
+        uno::Reference < awt::XImageProducer > xImgProd( getModel(), uno::UNO_QUERY );
+        uno::Reference < awt::XImageConsumer > xImgCons( mxPeer, uno::UNO_QUERY );
+
+        uno::Reference < awt::XImageConsumer > xTest1( (awt::XImageConsumer*)this, uno::UNO_QUERY );
+        uno::Reference < awt::XImageProducer > xTest2( (awt::XImageConsumer*)this, uno::UNO_QUERY );
+
+        if ( xImgProd.is() && xImgCons.is() )
+        {
+            xImgProd->addConsumer( xImgCons );
+            xImgProd->startProduction();
+            xImgProd->removeConsumer( xImgCons );
+        }
+    }
+    else
+        UnoControl::ImplSetPeerProperty( rPropName, rVal );
+}
+
 
 void UnoButtonControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
 {
@@ -1365,10 +1426,9 @@ void UnoButtonControl::startProduction() throw(uno::RuntimeException)
 {
     if ( mxImageProducer.is() )
     {
-        UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
-        (*pStrm) << maBitmap;
-
-        uno::Reference < io::XInputStream >  xIn = pStrm;
+//      UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
+//      (*pStrm) << maBitmap;
+//      uno::Reference < io::XInputStream >  xIn = pStrm;
 //      mxImageProducer->setImage( xIn );
         mxImageProducer->startProduction();
     }
@@ -1553,11 +1613,10 @@ void UnoImageControlControl::startProduction() throw(uno::RuntimeException)
 {
     if ( mxImageProducer.is() )
     {
-        UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
-        (*pStrm) << maBitmap;
-
-        uno::Reference < io::XInputStream >  xIn = pStrm;
-//      mxImageProducer->setImage( xIn );
+        // UnoMemoryStream* pStrm = new UnoMemoryStream( 0x3FFF, 0x3FFF );
+        // (*pStrm) << maBitmap;
+        // uno::Reference < io::XInputStream >  xIn = pStrm;
+        // mxImageProducer->setImage( xIn );
         mxImageProducer->startProduction();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-04 09:26:17 $
+ *  last change: $Author: mt $ $Date: 2001-04-04 16:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@
 
 #include <vcl/imgcons.hxx>
 #include <vcl/bitmapex.hxx>
+
+#include <list>
 
 struct UnoControlModelHolder;
 class UnoControlModelHolderList;
@@ -435,11 +437,19 @@ public:
 //  ----------------------------------------------------
 //  class UnoControlButtonModel
 //  ----------------------------------------------------
-class UnoControlButtonModel :   public UnoControlModel
+class UnoControlButtonModel :   public ::com::sun::star::awt::XImageProducer,
+                                public UnoControlModel
 {
+private:
+//  ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > mxImageProducer;
+
+    std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer > > maListeners;
+
 protected:
     ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > ImplGetImageProducer();
 
 public:
                         UnoControlButtonModel();
@@ -449,6 +459,18 @@ public:
 
     ::rtl::OUString     getServiceName() const;
 
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::release(); }
+
+    // ::com::sun::star::awt::XImageProducer
+    void SAL_CALL addConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeConsumer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer >& xConsumer ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL startProduction(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::cppu::OPropertySetHelper
+    // void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -481,6 +503,7 @@ public:
 
                         UnoButtonControl();
     ::rtl::OUString     GetComponentServiceName();
+    void                        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
