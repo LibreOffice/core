@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 17:08:25 $
+ *  last change: $Author: cd $ $Date: 2002-05-16 14:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,6 +813,8 @@ String SfxTopViewFrame::UpdateTitle()
     aTitle += String::CreateFromAscii( " - " );
     aTitle += Application::GetDisplayName();
 
+    GetBindings().Invalidate( SID_NEWDOCDIRECT );
+
     if ( GetFrame()->GetWindow().GetText() != aTitle )
     {
         GetFrame()->GetWindow().SetText( aTitle );
@@ -1175,9 +1177,12 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
             {
             case SID_NEWDOCDIRECT :
             {
-                String aFact = String::CreateFromAscii("private:factory/");
-                aFact += String::CreateFromAscii( pImp->pFactoryName );
-                rSet.Put( SfxStringItem( nWhich, aFact ) );
+                if ( pImp->pFactoryName )
+                {
+                    String aFact = String::CreateFromAscii("private:factory/");
+                    aFact += String::CreateFromAscii( pImp->pFactoryName );
+                    rSet.Put( SfxStringItem( nWhich, aFact ) );
+                }
                 break;
             }
 
