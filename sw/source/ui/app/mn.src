@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 22:41:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ String MN_DRAWFORM_POPUPMENU
     Text [ spanish ] = "Campo de control" ;
     Text [ french ] = "Contrôle" ;
     Text [ dutch ] = "Controleveld" ;
-    Text [ portuguese ] = "Campo de controlo" ;
+    Text [ portuguese ] = "Controlo" ;
     Text[ chinese_simplified ] = "¿ØÖÆ";
     Text[ russian ] = "İëåìåíò óïğàâëåíèÿ";
     Text[ polish ] = "Pole kontrolne";
@@ -487,7 +487,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ chinese_traditional ] = "Ã¸¹Ïª«¥ó ¤å¦r";
     Text[ arabic ] = "äÕ ßÇÆä ÑÓæãí";
     Text[ greek ] = "Êåßìåíï áíôéêåéìİíïõ ó÷åäßáóçò";
-    Text[ korean ] = "±×¸®±â °³Ã¼ ÅØ½ºÆ®";
+    Text[ korean ] = "¹®ÀÚ °³Ã¼ ÅØ½ºÆ®";
     Text[ turkish ] = "Çizim nesnesi metni";
     Text[ catalan ] = "Texto del objeto de dibujo";
     Text[ finnish ] = "Piirrosobjektin teksti";
@@ -597,13 +597,13 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ portuguese ] = "Opções de impressão";
             Text[ danish ] = "Udskriftsindstillinger";
             Text[ french ] = "Options d'impression";
-            Text[ swedish ] = "Skrivaralternativ";
+            Text[ swedish ] = "Utskriftsalternativ";
             Text[ dutch ] = "Afdrukopties";
             Text[ spanish ] = "Opciones de impresión";
             Text[ english_us ] = "Print Options";
             Text[ chinese_simplified ] = "´òÓ¡Ñ¡Ïî";
             Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
-            Text[ polish ] = "Opcje druku";
+            Text[ polish ] = "Opcje wydruku";
             Text[ japanese ] = "ˆóüµÌß¼®İ";
             Text[ chinese_traditional ] = "¦C¦L¿ï¶µ";
             Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
@@ -621,5 +621,6 @@ Menu MN_PPREVIEW_POPUPMENU
         };
     };
 };
+
 
 
