@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:11:42 $
+ *  last change: $Author: oj $ $Date: 2002-06-24 07:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ namespace dbaui
         // window override
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void GetFocus();
+        virtual void LoseFocus();
         virtual void KeyInput( const KeyEvent& rEvt );
         // Accessibility
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -300,6 +301,8 @@ namespace dbaui
         BOOL isMovementAllowed(const Point& _rPoint,const Size& _rSize);
 
         Size getRealOutputSize() const { return m_aOutputSize; }
+
+
 
         virtual void EnsureVisible(const OTableWindow* _pWin);
         virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);

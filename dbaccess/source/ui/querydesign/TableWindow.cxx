@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 07:06:39 $
+ *  last change: $Author: oj $ $Date: 2002-06-24 07:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,66 @@ void OTableWindow::Draw3DBorder(const Rectangle& rRect)
     DrawLine( rRect.BottomLeft()+Point(1,-2), rRect.TopLeft() + aEHvector );
     DrawLine( rRect.TopLeft() + aEHvector, rRect.TopRight()+Point(-2,1) );
 }
+// -----------------------------------------------------------------------------
+Rectangle OTableWindow::getSizingRect(const Point& _rPos,const Size& _rOutputSize) const
+{
+    Rectangle aSizingRect = Rectangle( GetPosPixel(), GetSizePixel() );
+    UINT16 nSizingFlags = GetSizingFlags();
 
+    if( nSizingFlags & SIZING_TOP )
+    {
+        if( _rPos.Y() < 0 )
+            aSizingRect.Top() = 0;
+        else
+            aSizingRect.Top() = _rPos.Y();
+    }
+
+    if( nSizingFlags & SIZING_BOTTOM )
+    {
+        if( _rPos.Y() > _rOutputSize.Height() )
+            aSizingRect.Bottom() = _rOutputSize.Height();
+        else
+            aSizingRect.Bottom() = _rPos.Y();
+    }
+
+
+    if( nSizingFlags & SIZING_RIGHT )
+    {
+        if( _rPos.X() > _rOutputSize.Width() )
+            aSizingRect.Right() = _rOutputSize.Width();
+        else
+            aSizingRect.Right() = _rPos.X();
+    }
+
+    if( nSizingFlags & SIZING_LEFT )
+    {
+        if( _rPos.X() < 0 )
+            aSizingRect.Left() = 0;
+        else
+            aSizingRect.Left() = _rPos.X();
+    }
+    return aSizingRect;
+}
+// -----------------------------------------------------------------------------
+void OTableWindow::setSizingFlag(const Point& _rPos)
+{
+    Size    aOutSize = GetOutputSizePixel();
+    //////////////////////////////////////////////////////////////////////
+    // Flags anpassen, wenn Mauszeiger in sizingArea
+    m_nSizingFlags = SIZING_NONE;
+
+    if( _rPos.X() < TABWIN_SIZING_AREA )
+        m_nSizingFlags |= SIZING_LEFT;
+
+    if( _rPos.Y() < TABWIN_SIZING_AREA )
+        m_nSizingFlags |= SIZING_TOP;
+
+    if( _rPos.X() > aOutSize.Width()-TABWIN_SIZING_AREA )
+        m_nSizingFlags |= SIZING_RIGHT;
+
+    if( _rPos.Y() > aOutSize.Height()-TABWIN_SIZING_AREA )
+        m_nSizingFlags |= SIZING_BOTTOM;
+}
 //------------------------------------------------------------------------------
 void OTableWindow::MouseMove( const MouseEvent& rEvt )
 {
@@ -457,24 +516,9 @@ void OTableWindow::MouseMove( const MouseEvent& rEvt )
         return;
 
     Point   aPos = rEvt.GetPosPixel();
-    Size    aOutSize = GetOutputSizePixel();
+    setSizingFlag(aPos);
     Pointer aPointer;
 
-    //////////////////////////////////////////////////////////////////////
-    // Flags anpassen, wenn Mauszeiger in sizingArea
-    m_nSizingFlags = SIZING_NONE;
-
-    if( aPos.X() < TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_LEFT;
-
-    if( aPos.Y() < TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_TOP;
-
-    if( aPos.X() > aOutSize.Width()-TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_RIGHT;
-
-    if( aPos.Y() > aOutSize.Height()-TABWIN_SIZING_AREA )
-        m_nSizingFlags |= SIZING_BOTTOM;
 
     //////////////////////////////////////////////////////////////////////
     // Mauszeiger anpassen, wenn Mauszeiger in sizingArea
@@ -714,6 +758,9 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
     {
         case EVENT_KEYINPUT:
         {
+            if ( getDesignView()->getController()->isReadOnly() )
+                break;
+
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const KeyCode& rCode = pKeyEvent->GetKeyCode();
             if ( rCode.IsMod1() )
@@ -748,17 +795,25 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 {
                     if ( rCode.IsShift() )
                     {
-//                      OJoinTableView* pView = getTableView();
-//                      Size aNewSize(aStartPoint.X(),aStartPoint.Y());
-//                      if ( pView->isMovementAllowed(GetData()->GetPosition(), aNewSize) )
-//                      {
-//                          Size aOldSize = GetData()->GetSize();
-//                          SetSizePixel(aNewSize);
-//                          pView->EnsureVisible(GetData()->GetPosition(), GetData()->GetSize());
-//                          pView->TabWinSized(this,GetData()->GetPosition(),aOldSize);
-//                          Invalidate(INVALIDATE_NOCHILDREN);
-//                          getDesignView()->getController()->setModified( sal_True );
-//                      }
+                        OJoinTableView* pView = getTableView();
+                        Point ptOld = GetPosPixel();
+                        Size aSize = pView->getRealOutputSize();
+                        Size aNewSize(aStartPoint.X(),aStartPoint.Y());
+                        if (   ((ptOld.X() + aNewSize.Width())  <= aSize.Width())
+                            && ((ptOld.Y() + aNewSize.Height()) <= aSize.Height()) )
+                        {
+                            if ( aNewSize.Width() < TABWIN_WIDTH_MIN )
+                                aNewSize.Width() = TABWIN_WIDTH_MIN;
+                            if ( aNewSize.Height() < TABWIN_HEIGHT_MIN )
+                                aNewSize.Height() = TABWIN_HEIGHT_MIN;
+
+                            Size szOld = GetSizePixel();
+
+                            aNewSize = Size(pView->CalcZoom(aNewSize.Width()),pView->CalcZoom(aNewSize.Height()));
+                            SetPosSizePixel( ptOld, aNewSize );
+                            pView->TabWinSized(this, ptOld, szOld);
+                            Invalidate( INVALIDATE_NOCHILDREN );
+                        }
                     }
                     else
                     {
@@ -796,6 +851,7 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
                             m_nMoveIncrement    = 1;
                         }
                     }
+                    resetSizingFlag();
                 }
                 else
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 11:11:48 $
+ *  last change: $Author: oj $ $Date: 2002-06-24 07:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,18 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    GetTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
 
         UINT16                      GetSizingFlags() const { return m_nSizingFlags; }
+        /** set the sizing flag to the direction
+            @param  _rPos
+                The EndPosition after resizing.
+        */
+        void                        setSizingFlag(const Point& _rPos);
+        /** set the rsizing flag to NONE.
+        */
+        void                        resetSizingFlag() { m_nSizingFlags = SIZING_NONE; }
+
+        /** returns the new sizing
+        */
+        Rectangle getSizingRect(const Point& _rPos,const Size& _rOutputSize) const;
 
         // window override
         virtual void                StateChanged( StateChangedType nStateChange );
