@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:02:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-09 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #ifndef _SVX_DRAWITEM_HXX //autogen
 #include <svx/drawitem.hxx>
 #endif
+#ifndef _SVX_SRCHDLG_HXX
+#include <svx/srchdlg.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -188,7 +191,8 @@ using namespace sd;
 
 SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 {
-    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
+    SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
+        SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_INSERT);
 }
 
 
@@ -220,8 +224,10 @@ SFX_IMPL_OBJECTFACTORY(
     simpress,
     SvGlobalName(SO3_SIMPRESS_CLASSID) )
 {
-    SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
+    DrawDocShell::Factory().SetCreateNewSlotId( SID_SD_AUTOPILOT );
+    DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+    DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
+    DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
 }
 
 
