@@ -68,7 +68,7 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
 
     java.awt.EventQueue eventQueue = null;
 
-    public Window(java.awt.Frame owner, XAccessibleComponent xAccessibleComponent) {
+    public Window(java.awt.Window owner, XAccessibleComponent xAccessibleComponent) {
         super(owner);
         initialize(xAccessibleComponent);
     }
@@ -87,6 +87,9 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
     java.awt.Component initialComponent = null;
 
     public java.awt.Component getInitialComponent() {
+        if (Build.DEBUG) {
+            System.err.println("returning initial component object of class: " + initialComponent.getClass().getName());
+        }
         return initialComponent;
     }
 
@@ -200,19 +203,14 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         // The only expected state changes are ACTIVE and VISIBLE
         protected void setComponentState(short state, boolean enable) {
             switch (state) {
-                case AccessibleStateType.ACTIVE:
-                    postWindowEvent(enable ?
-                        java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS :
-                        java.awt.event.WindowEvent.WINDOW_LOST_FOCUS);
-                    break;
                 case AccessibleStateType.ICONIFIED:
-                    Window.this.postWindowEvent(enable ?
+                    postWindowEvent(enable ?
                         java.awt.event.WindowEvent.WINDOW_ICONIFIED :
                         java.awt.event.WindowEvent.WINDOW_DEICONIFIED);
                     break;
                 case AccessibleStateType.SHOWING:
                 case AccessibleStateType.VISIBLE:
-                    Window.this.setVisible(enable);
+                    setVisible(enable);
                     break;
                 default:
                     if (Build.DEBUG) {
@@ -258,40 +256,6 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
             }
         }
 
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildRemovedEvent(Object any) {
-            try {
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any));
-                if (c != null) {
-                    Window.this.remove(c);
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
-            }
-        }
-
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildAddedEvent(Object any) {
-            try {
-                XAccessible xAccessible = (XAccessible) AnyConverter.toObject(Container.XAccessibleType, any);
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(xAccessible);
-                if (c != null) {
-                    // Seems to be already in child list
-                    if (this.equals(c.getParent()))
-                        return;
-                } else {
-                    c = AccessibleObjectFactory.createAccessibleComponent(xAccessible);
-                }
-                if (c != null) {
-                    Window.this.add(c, xAccessible.getAccessibleContext().
-                        getAccessibleIndexInParent());
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
-            }
-        }
-
         /** Fires a visible data property change event */
         protected void handleVisibleDataEvent() {
             javax.accessibility.AccessibleContext ac = accessibleContext;
@@ -319,9 +283,9 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
                     break;
                 case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
                     if (AnyConverter.isObject(event.OldValue)) {
-                        handleChildRemovedEvent(event.OldValue);
+                        AccessibleObjectFactory.removeChild(Window.this, event.OldValue);
                     } else if (AnyConverter.isObject(event.NewValue)) {
-                        handleChildAddedEvent(event.NewValue);
+                        AccessibleObjectFactory.addChild(Window.this, event.NewValue);
                     }
                     break;
                 case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
@@ -383,25 +347,6 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
             }
         } // inner class AccessibleComponentHandler
 
-        protected java.awt.event.WindowFocusListener accessibleWindowFocusHandler = null;
-
-        /**
-        * Fire PropertyChange listener, if one is registered,
-        * when focus events happen
-        */
-        protected class AccessibleWindowFocusHandler implements java.awt.event.WindowFocusListener {
-            public void windowGainedFocus(java.awt.event.WindowEvent e) {
-                AccessibleWindow.this.firePropertyChange(
-                    javax.accessibility.AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
-                    null, javax.accessibility.AccessibleState.ACTIVE);
-            }
-            public void windowLostFocus(java.awt.event.WindowEvent e) {
-                AccessibleWindow.this.firePropertyChange(
-                    javax.accessibility.AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
-                    javax.accessibility.AccessibleState.ACTIVE, null);
-            }
-        } // inner class AccessibleFocusHandler
-
         protected java.awt.event.ContainerListener accessibleContainerHandler = null;
 
         /**
@@ -437,9 +382,6 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
         */
         public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
             if (propertyChangeListenerCount++ == 0) {
-                accessibleWindowFocusHandler = new AccessibleWindowFocusHandler();
-                Window.this.addWindowFocusListener(accessibleWindowFocusHandler);
-
                 accessibleContainerHandler = new AccessibleContainerHandler();
                 Window.this.addContainerListener(accessibleContainerHandler);
 
@@ -463,9 +405,6 @@ public class Window extends java.awt.Window implements javax.accessibility.Acces
 
                 Window.this.removeContainerListener(accessibleContainerHandler);
                 accessibleContainerHandler = null;
-
-                Window.this.removeWindowFocusListener(accessibleWindowFocusHandler);
-                accessibleWindowFocusHandler = null;
             }
             super.removePropertyChangeListener(listener);
         }
