@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:34:13 $
+ *  last change: $Author: vg $ $Date: 2002-08-06 20:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "분할";
         TEXT[ turkish ] = "Da��l�m";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Distribuci�n";
+        TEXT[ catalan ] = "Distribuci�";
         TEXT[ finnish ] = "Jakauma";
         TEXT[ thai ] = "การแจกแจง";
     };
@@ -132,7 +132,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "행(~W)";
         TEXT[ turkish ] = "Sa~t�r";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Filas";
+        TEXT[ catalan ] = "Fi~les";
         TEXT[ finnish ] = "~Rivit";
         TEXT[ thai ] = "แถ~ว";
     };
@@ -179,7 +179,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "열(~C)";
         TEXT[ turkish ] = "~S�tun";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Columnas";
+        TEXT[ catalan ] = "~Columnes";
         TEXT[ finnish ] = "~Sarakkeet";
         TEXT[ thai ] = "~คอลัมน์";
     };
@@ -226,7 +226,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "외곽선";
         TEXT[ turkish ] = "Kenarlar";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "M�rgenes";
+        TEXT[ catalan ] = "Marges";
         TEXT[ finnish ] = "Reunat";
         TEXT[ thai ] = "ระยะขอบ";
     };
@@ -258,7 +258,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "왼쪽(~E)";
         TEXT[ turkish ] = "S~ol";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Izquierda";
+        TEXT[ catalan ] = "E~squerra";
         TEXT[ finnish ] = "~Vasen";
         TEXT[ thai ] = "ซ้า~ย";
     };
@@ -306,7 +306,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "오른쪽(~R)";
         TEXT[ turkish ] = "Sa~�";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Derecha";
+        TEXT[ catalan ] = "~Dreta";
         TEXT[ finnish ] = "~Oikea";
         TEXT[ thai ] = "~ขวา";
     };
@@ -354,7 +354,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "위(~T)";
         TEXT[ turkish ] = "~�st";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "A~rriba";
+        TEXT[ catalan ] = "~Superior";
         TEXT[ finnish ] = "~Yl�osa";
         TEXT[ thai ] = "~บน";
     };
@@ -402,7 +402,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "아래(~B)";
         TEXT[ turkish ] = "~Alt";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "A~bajo";
+        TEXT[ catalan ] = "~Part inferior";
         TEXT[ finnish ] = "~Alaosa";
         TEXT[ thai ] = "~ล่าง";
     };
@@ -450,7 +450,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "간격";
         TEXT[ turkish ] = "Aral�k";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "Espacio";
+        TEXT[ catalan ] = "Espaiat";
         TEXT[ finnish ] = "Objektiv�lit";
         TEXT[ thai ] = "ระยะห่าง";
     };
@@ -482,7 +482,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "수평(~Z)";
         TEXT[ turkish ] = "~Yatay";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Horizontal";
+        TEXT[ catalan ] = "Hori~tzontal";
         TEXT[ finnish ] = "Vaaka~taso";
         TEXT[ thai ] = "แนวน~อน";
     };
@@ -531,7 +531,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "수직(~V)";
         TEXT[ turkish ] = "~Dikey";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Vertical";
+        TEXT[ catalan ] = "~Verticalment";
         TEXT[ finnish ] = "~Pystytaso";
         TEXT[ thai ] = "แนว~ตั้ง";
     };
@@ -612,7 +612,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "가로(~L)";
         TEXT[ turkish ] = "Ya~tay";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Horizontal";
+        TEXT[ catalan ] = "A~pa�sat";
         TEXT[ finnish ] = "~Vaaka";
         TEXT[ thai ] = "~แนวนอน";
     };
@@ -643,7 +643,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "세로(~O)";
         TEXT[ turkish ] = "Di~key";
         TEXT[ language_user1 ] = " ";
-        TEXT[ catalan ] = "~Vertical";
+        TEXT[ catalan ] = "V~ertical";
         TEXT[ finnish ] = "~Pysty";
         TEXT[ thai ] = "แนวตั้~ง";
     };
@@ -700,7 +700,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ greek ] = "����������";
         TEXT[ korean ] = "기본 값(~D)";
         TEXT[ turkish ] = "Standar~t";
-        TEXT[ catalan ] = "~Predeterminado";
+        TEXT[ catalan ] = "~Per defecte";
         TEXT[ finnish ] = "~Oletusarvo";
         TEXT[ thai ] = "~ค่าเริ่มต้น";
     };
@@ -725,7 +725,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ korean ] = "인쇄 옵션";
     TEXT[ turkish ] = "Yazd�rma se�enekleri";
     TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Opciones de impresi�n";
+    TEXT[ catalan ] = "Opcions d'impressi�";
     TEXT[ finnish ] = "Tulostusasetukset";
     TEXT[ thai ] = "ตัวเลือกการพิมพ์";
 };
@@ -780,7 +780,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ korean ] = "열(~C)";
         Text[ turkish ] = "~S�tun";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Columnas";
+        Text[ catalan ] = "~Columnes";
         Text[ thai ] = "~คอลัมน์";
     };
     FixedText FT_ROW
@@ -813,7 +813,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ korean ] = "행(~R)";
         Text[ turkish ] = "S~at�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Filas";
+        Text[ catalan ] = "~Files";
         Text[ thai ] = "แ~ถว";
     };
     NumericField ED_COL
@@ -877,7 +877,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ korean ] = "확대/축소";
     Text[ turkish ] = "Yak�nla�t�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Escala";
+    Text[ catalan ] = "Zoom";
     Text[ thai ] = "ย่อ/ขยาย";
 };
 String RID_PVIEW_TOOLBOX
@@ -905,7 +905,7 @@ String RID_PVIEW_TOOLBOX
     Text[ korean ] = "인쇄 미리보기";
     Text[ turkish ] = "Sayfa �nizleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Vista preliminar";
+    Text[ catalan ] = "Visualitzaci� pr�via de la p�gina";
     Text[ finnish ] = "Sivun esikatselu";
     Text[ thai ] = "แสดงตัวอย่างหน้า";
 };
