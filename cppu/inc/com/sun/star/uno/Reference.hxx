@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:15:32 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ inline sal_Bool Reference< interface_type >::set(
     interface_type * pInterface ) SAL_THROW( () )
 {
     if (pInterface)
-        pInterface->acquire();
+        reinterpret_cast< XInterface * >(pInterface)->acquire();
     if (_pInterface)
         _pInterface->release();
     _pInterface = reinterpret_cast< XInterface * >(pInterface);
