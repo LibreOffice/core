@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-11 12:05:10 $
+ *  last change: $Author: os $ $Date: 2002-11-08 14:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ struct SwTextPortion
 };
 
 #define MAX_SYNTAX_HIGHLIGHT 20
+#define MAX_HIGHLIGHTTIME 200
+#define SYNTAX_HIGHLIGHT_TIMEOUT 200
 
 SV_DECL_VARARR(SwTextPortions, SwTextPortion,16,16)
 
@@ -602,7 +604,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pOutWin->SetFont( aFont );
     pTextEngine->SetFont( aFont );
 
-    aSyntaxIdleTimer.SetTimeout( 200 );
+    aSyntaxIdleTimer.SetTimeout( SYNTAX_HIGHLIGHT_TIMEOUT );
     aSyntaxIdleTimer.SetTimeoutHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
     pTextEngine->EnableUndo( TRUE );
@@ -686,6 +688,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
+    Time aSyntaxCheckStart;
     DBG_ASSERT( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
     pTextEngine->SetUpdateMode( FALSE );
 
@@ -710,6 +713,11 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
                 nCount++;
                 if(!aSyntaxLineTable.Count())
                     break;
+                if((Time().GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
+                {
+                    pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
+                    break;
+                }
             }
         }
 
@@ -723,6 +731,11 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         p = aSyntaxLineTable.Next();
         aSyntaxLineTable.Remove(nCur);
         nCount ++;
+        if(Time().GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
+        {
+            pTimer->SetTimeout( 2 * SYNTAX_HIGHLIGHT_TIMEOUT );
+            break;
+        }
     }
     // os: #43050# hier wird ein TextView-Problem umpopelt:
     // waehrend des Highlightings funktionierte das Scrolling nicht
