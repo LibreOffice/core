@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:23:15 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,17 +114,6 @@ protected:
 
     static DtIntegratorList aIntegratorList;
     static String           aHomeDir;
-
-    // executes pCommand and parses its output
-    // to get system look information
-    // different DtIntegrators can rely
-    // on native programs to query system settings
-    // pass NULL as command to read the VCL_SYSTEM_SETTINGS property
-    void GetSystemLook( const char* pCommand, AllSettings& rSettings );
-    bool StartSystemLookProcess( const char* pCommand );
-
-    Color parseColor( const ByteString& );
-    Font parseFont( const ByteString& );
 
 public:
     static DtIntegrator* CreateDtIntegrator();
