@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Factories.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:52:20 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,20 @@
         </prop>
         <prop oor:name="FactoryImplementation">
             <value>com.sun.star.comp.framework.AddonsToolBarFactory</value>
+        </prop>
+      </node>
+      <node oor:name="statusbar_factory" oor:op="replace">
+        <prop oor:name="Type">
+            <value>statusbar</value>
+        </prop>
+        <prop oor:name="Name">
+            <value/>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+            <value>com.sun.star.comp.framework.StatusBarFactory</value>
         </prop>
       </node>
     </node>
