@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:34:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,9 +1707,6 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mpData->maDropdownTimer.SetTimeout( 250 );
     mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
 
-    mpData->maResetAutoSizeTriesTimer.SetTimeout( 500 );
-    mpData->maResetAutoSizeTriesTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplResetAutoSizeTriesHdl ) );
-
     DockingWindow::ImplInit( pParent, nStyle & ~(WB_BORDER) );
 
 
@@ -2455,38 +2452,15 @@ void ToolBox::ImplFormat( BOOL bResize )
     else
         bMustFullPaint = FALSE;
 
-    // during interactive resizes, check in which direction the window was resized
-    //  and try to keep the other dimension unchanged
-    // but do this only if the delta is smaller than the whole window
-    //  which means it was just showed the first time and the delta is useless
-    if ( ImplIsFloatingMode() && (mpData->m_nDeltaSizeY != mnDY || mpData->m_nDeltaSizeX != mnDX) )
+
+    // calculate new size during interactive resize or
+    // set computed size when formatting only
+    if ( ImplIsFloatingMode() )
     {
         if ( bResize )
-        {
-            if( mpData->m_nDeltaSizeY != mnDY || mpData->m_nDeltaSizeX != mnDX )
-            {
-                if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
-                {
-                    // favour window height
-                    mnFloatLines = ImplCalcLines( this, mpData->maFloatingSize.Height() );
-                }
-                else
-                {
-                    // favour window width
-                    int nBorderX = 2*TB_BORDER_OFFSET1 + mnLeftBorder + mnRightBorder + 2*mnBorderX;
-                    mnFloatLines = ImplCalcBreaks( mpData->maFloatingSize.Width()-nBorderX, NULL, mbHorz );
-                }
-            }
-        }
+            mnFloatLines = ImplCalcLines( this, mnDY );
         else
-        {
-            ImplSetMinMaxFloatSize( this );
-
-            if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
-                SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_FAVOURHEIGHT ) );
-            else
-                SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_FAVOURWIDTH ) );
-        }
+            SetOutputSizePixel( ImplGetOptimalFloatingSize( FSMODE_AUTO ) );
     }
 
     // Horizontal
@@ -2501,19 +2475,7 @@ void ToolBox::ImplFormat( BOOL bResize )
         if ( mbScroll )
         {
             nMax        = mnDX;
-
-            // limit layout to current window size (mnDX,mnDY)
-            // or number of lines while resizing
-            if( ImplIsFloatingMode() && bResize )
-            {
-                mnVisLines = mnFloatLines;
-                if( mpData->m_nDeltaSizeY > mpData->m_nDeltaSizeX )
-                    // set window width to optimal value for this height
-                    // this will trigger proper repaint during resizing of the height
-                    nMax = ImplCalcFloatSize( this, mnFloatLines ).Width();
-            }
-            else
-                mnVisLines  = ImplCalcLines( this, mnDY );
+            mnVisLines  = ImplCalcLines( this, mnDY );
         }
         else
         {
@@ -3003,50 +2965,12 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, pThis )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplResetAutoSizeTriesHdl, void*, EMPTYARG )
-{
-    // #i31756# always reset autosizetries after some timeout
-    // otherwise calling SetSizePixel a few times and thereby incrementing
-    // the counter will result in no proper repaint
-    mpData->m_nUpdateAutoSizeTries = 0;
-    return 0;
-}
-
 IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    PointerState aState = GetPointerState();
-    if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
-    {
-        mbFormat = TRUE;
-        ImplFormat( TRUE );
-        maTimer.Start();
-        mpData->m_nUpdateAutoSizeTries = 0;
-    }
-    /*  #i30930# auto sizing will on some desktops result in a too small
-        window size in the window manager's opinion. This will result
-        in being resized back to a larger size again by the WM ...
-        which will in turn trigger autosize -> endless resizing loop.
-        The problem is that it is indistinguishable whether the WM sized
-        our window or the user did. So the only thing we can do is limit
-        the loop.
-     */
-    else if( mpData->m_nUpdateAutoSizeTries < 3 )
-    {
-        mbFormat = TRUE;
-        if ( ImplIsFloatingMode() && mpData->m_nDeltaSizeY == mnDY && mpData->m_nDeltaSizeX == mnDX )
-        {
-            // an initial and perhaps wrong floating size was set per API
-            // adjust it to an optimal size to make sure no items will be clipped
-            SetSizePixel( ImplGetOptimalFloatingSize( FSMODE_AUTO ) );
-        }
+    if( mbFormat )
         ImplFormat();
-        mpData->m_nUpdateAutoSizeTries++;
-        mpData->maResetAutoSizeTriesTimer.Start();
-    }
-    else
-        mpData->m_nUpdateAutoSizeTries = 0;
 
     return 0;
 }
@@ -4852,17 +4776,6 @@ void ToolBox::Resize()
     long nOldDY = mnDY;
     mnDX = aSize.Width();
     mnDY = aSize.Height();
-    if( ImplIsFloatingMode() && IsReallyVisible() )
-    {
-        mpData->m_nDeltaSizeX = abs( mpData->maFloatingSize.Width() - mnDX );
-        mpData->m_nDeltaSizeY = abs( mpData->maFloatingSize.Height() - mnDY );
-        mpData->maFloatingSize = aSize;
-    }
-    else
-    {
-        // reset floating size to avoid automatic resizing
-        mpData->maFloatingSize = Size();
-    }
 
     mnLastResizeDY = 0;
 
@@ -4874,15 +4787,9 @@ void ToolBox::Resize()
     {
         if ( !mbFormat )
         {
-            if( ImplIsFloatingMode() )
-            {
-                // force reformatting once as the user might have
-                // released the mouse button before the timer elapsed
-                // which would result in no reformatting at all
-                mbFormat = TRUE;
-                ImplFormat( TRUE ); // indicate resize
-            }
-            maTimer.Start();
+            mbFormat = TRUE;
+            if( IsReallyVisible() )
+                ImplFormat( TRUE );
         }
     }
 
