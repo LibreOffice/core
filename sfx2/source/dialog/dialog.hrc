@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: fs $ $Date: 2000-10-23 11:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@
 #define RID_STR_CLOSE_BTN_SEND          ( RC_DIALOG_BEGIN + 84 )
 #define RID_STR_CLOSE_BTN_REJECT        ( RC_DIALOG_BEGIN + 85 )
 #define RID_STR_CLOSE_BTN_BACKTOMSG     ( RC_DIALOG_BEGIN + 86 )
+
+#define STR_APPLY                       ( RC_DIALOG_BEGIN + 87 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 

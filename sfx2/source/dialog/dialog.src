@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: fs $ $Date: 2000-10-23 11:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,12 @@ String STR_RESET
     TEXT[ korean ] = "원래대로(~R)";
     TEXT[ turkish ] = "~Geri";
     TEXT[ language_user1 ] = " ";
+};
+String STR_APPLY
+{
+    Text = "Anwenden";
+    Text [ english ] = "Apply";
+    Text [ english_us ] = "Apply";
 };
 String STR_INTERNET
 {
