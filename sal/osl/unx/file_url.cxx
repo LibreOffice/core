@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-05 11:31:28 $
+ *  last change: $Author: tra $ $Date: 2002-12-06 08:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
 }
 
 /****************************************************************************
- * _osl_getSystemPathFromFileURL - helper function
+ * osl_getSystemPathFromFileURL_Ex - helper function
  * clients may specify if they want to accept relative
  * URLs or not
  ****************************************************************************/
@@ -861,6 +861,31 @@ namespace /* private */
 
      ********************************************/
 
+    sal_Unicode* osl_realpath_impl_(const sal_Unicode* path, sal_Unicode* resolved_path)
+    {
+        char urp[PATH_MAX];
+        if (!UnicodeToText(urp, sizeof(urp), path, rtl_ustr_getLength(path)))
+        {
+            errno = ENAMETOOLONG;
+            return NULL;
+        }
+
+        char rp[PATH_MAX];
+        sal_Unicode* prp = NULL;
+
+        if (realpath(urp, rp))
+        {
+            TextToUnicode(rp, strlen(rp) + 1, resolved_path, PATH_MAX);
+            prp = resolved_path;
+        }
+
+        return prp;
+    }
+
+    /*********************************************
+
+     ********************************************/
+
     struct Path
     {
         const sal_Unicode* begin_;
@@ -1036,11 +1061,16 @@ oslFileError osl_searchFileURL(rtl_uString* ustrFilePath, rtl_uString* ustrSearc
         find_in_PATH(file_path, result) ||
         find_in_CWD(file_path, result))
     {
-        rtl::OUString fpf(result, rtl_ustr_getLength(result));
-        oslFileError osl_error = osl_getFileURLFromSystemPath(fpf.pData, pustrURL);
-        OSL_ASSERT(osl_File_E_None == osl_error);
+        sal_Unicode rp[PATH_MAX];
 
-        bfound = true;
+        if (osl_realpath_impl_(result, rp))
+        {
+            rtl::OUString fpf(rp, rtl_ustr_getLength(rp));
+            oslFileError osl_error = osl_getFileURLFromSystemPath(fpf.pData, pustrURL);
+            OSL_ASSERT(osl_File_E_None == osl_error);
+
+            bfound = true;
+        }
     }
     return bfound ? osl_File_E_None : osl_File_E_NOENT;
 }
