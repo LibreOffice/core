@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:28:54 $
+#   last change: $Author: hr $ $Date: 2003-06-30 15:57:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ AUTOSEG=true
 
 CXXFILES = \
         changedb.cxx \
+        DropDownFieldDialog.cxx\
         flddb.cxx \
         flddinf.cxx \
         flddok.cxx \
@@ -93,6 +94,7 @@ CXXFILES = \
 
 SRCFILES =  \
         changedb.src \
+        DropDownFieldDialog.src\
         flddb.src \
         flddinf.src \
         flddok.src \
@@ -106,6 +108,7 @@ SRCFILES =  \
 
 SLOFILES =  \
         $(SLO)$/changedb.obj \
+        $(SLO)$/DropDownFieldDialog.obj \
         $(SLO)$/flddb.obj \
         $(SLO)$/flddinf.obj \
         $(SLO)$/flddok.obj \
