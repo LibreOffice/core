@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2002-03-06 11:26:49 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 17:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if !( defined(FREEBSD) || defined(NETBSD) )
+#if !( defined(FREEBSD) || defined(NETBSD) || defined(MACOSX) )
 #include <alloca.h>
 #endif
 
