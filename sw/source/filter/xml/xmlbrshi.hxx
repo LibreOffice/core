@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrshi.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2001-06-25 11:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,14 @@ class SvXMLUnitConverter;
 class SvxBrushItem;
 
 namespace rtl { class OUString; }
+namespace com { namespace sun { namespace star {
+    namespace io { class XOutputStream; }
+} } }
 
 class SwXMLBrushItemImportContext : public SvXMLImportContext
 {
 private:
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xBase64Stream;
     SvxBrushItem                *pItem;
 
     void ProcessAttrs(
@@ -104,6 +108,13 @@ public:
             sal_uInt16 nWhich   );
 
     virtual ~SwXMLBrushItemImportContext();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                const ::rtl::OUString& rLocalName,
+                 const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual void EndElement();
 
     const SvxBrushItem& GetItem() const { return *pItem; }
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
+ *  last change: $Author: mib $ $Date: 2001-06-25 11:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,17 @@
 #include "hintids.hxx"
 #include <tools/debug.hxx>
 
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include <xmloff/XMLBase64ImportContext.hxx>
+#endif
 
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
@@ -156,6 +163,42 @@ void SwXMLBrushItemImportContext::ProcessAttrs(
         }
     }
 
+}
+
+SvXMLImportContext *SwXMLBrushItemImportContext::CreateChildContext(
+        sal_uInt16 nPrefix, const OUString& rLocalName,
+        const Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext;
+    if( xmloff::token::IsXMLToken( rLocalName,
+                                        xmloff::token::XML_BINARY_DATA ) )
+    {
+        if( !(pItem->GetGraphicLink() || pItem->GetGraphic() ) && !xBase64Stream.is() )
+        {
+            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( xBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    xBase64Stream );
+        }
+    }
+    if( !pContext )
+    {
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return pContext;
+}
+
+void SwXMLBrushItemImportContext::EndElement()
+{
+    if( xBase64Stream.is() )
+    {
+        OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream ) );
+        xBase64Stream = 0;
+        pItem->importXML( sURL, MID_GRAPHIC_LINK, GetImport().GetMM100UnitConverter() );
+    }
+
     if( !(pItem->GetGraphicLink() || pItem->GetGraphic() ) )
         pItem->SetGraphicPos( GPOS_NONE );
     else if( GPOS_NONE == pItem->GetGraphicPos() )
@@ -203,19 +246,23 @@ SwXMLBrushItemExport::~SwXMLBrushItemExport()
 {
 }
 
+
 void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 {
     GetExport().CheckAttrList();
 
-    OUString sValue;
+    OUString sValue, sURL;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetTwipUnitConverter();
-    if( rItem.exportXML( sValue, MID_GRAPHIC_LINK, rUnitConv ) )
+    if( rItem.exportXML( sURL, MID_GRAPHIC_LINK, rUnitConv ) )
     {
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                        GetExport().AddEmbeddedGraphicObject( sValue ) );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-//      AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, ACP2WS(sXML_embed) );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        sValue = GetExport().AddEmbeddedGraphicObject( sURL );
+        if( sValue.getLength() )
+        {
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sValue );
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+    //      AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, ACP2WS(sXML_embed) );
+            GetExport().AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+        }
 
         if( rItem.exportXML( sValue, MID_GRAPHIC_POSITION, rUnitConv ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_POSITION, sValue );
@@ -227,19 +274,32 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_FILTER_NAME, sValue );
     }
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
-                              sal_True, sal_True );
+    {
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_BACKGROUND_IMAGE,
+                                  sal_True, sal_True );
+        if( sURL.getLength() )
+        {
+            // optional office:binary-data
+            GetExport().AddEmbeddedGraphicObjectAsBase64( sURL );
+        }
+    }
 }
 
 /*************************************************************************
 
       Source Code Control ::com::sun::star::chaos::System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.4 2001-06-18 17:27:51 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.5 2001-06-25 11:02:24 mib Exp $
 
       Source Code Control ::com::sun::star::chaos::System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/06/18 17:27:51  dvo
+      #86004#
+      - changed SvXMLItemMaps to use XMLTokenEnum
+      - removed remaining xmlkywd.hxx inclusions and usages
+      -> sw is now xmlkywd.hxx-free!
+
       Revision 1.3  2001/06/15 17:16:59  dvo
       #86004# changed SvXMLTokenMap to use XML tokens
 
