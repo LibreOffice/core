@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:00:32 $
+ *  last change: $Author: kz $ $Date: 2004-03-01 13:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,7 +650,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
     aHiddenChg.Remove( 0, aHiddenChg.Count() );
     USHORT nHiddenIdx = 0;
-    for( USHORT i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
+    USHORT i = 0;
+    for( i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
         const Range& rRange = aHiddenMulti.GetRange( i );
         const xub_StrLen nStart = (xub_StrLen)rRange.Min();
@@ -1037,7 +1038,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // check kashida data
     long nTmpKashidaPos = -1;
     sal_Bool bWrongKash = sal_False;
-    for ( USHORT i = 0; i < aKashida.Count(); ++i )
+    for (i = 0; i < aKashida.Count(); ++i )
     {
         long nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
