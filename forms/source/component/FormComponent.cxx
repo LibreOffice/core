@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:50:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2179,28 +2179,32 @@ void SAL_CALL OBoundControlModel::reloaded( const EventObject& _rEvent ) throw(R
 //------------------------------------------------------------------------------
 void OBoundControlModel::setControlValue( const Any& _rValue, ValueChangeInstigator _eInstigator )
 {
-    OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
-        "OBoundControlModel::setControlValue: invalid aggregate !" );
-    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
-        "OBoundControlModel::setControlValue: please override if you have own value property handling!" );
-
     m_eControlValueChangeInstigator = _eInstigator;
-    {
-        // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease( m_aMutex );
-        if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
-        {
-            m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
-        }
-        else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
-        {
-            m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
-        }
-    }
+    doSetControlValue( _rValue );
     m_eControlValueChangeInstigator = eOther;
+}
+
+//------------------------------------------------------------------------------
+void OBoundControlModel::doSetControlValue( const Any& _rValue )
+{
+    OSL_PRECOND( m_xAggregateFastSet.is() && m_xAggregateSet.is(),
+        "OBoundControlModel::doSetControlValue: invalid aggregate !" );
+    OSL_PRECOND( m_sValuePropertyName.getLength() || ( m_nValuePropertyAggregateHandle != -1 ),
+        "OBoundControlModel::doSetControlValue: please override if you have own value property handling!" );
+
+    // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
+    // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
+    // our own mutex locked
+    // #72451# / 2000-01-31 / frank.schoenheit@sun.com
+    MutexRelease aRelease( m_aMutex );
+    if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
+    {
+        m_xAggregateFastSet->setFastPropertyValue( m_nValuePropertyAggregateHandle, _rValue );
+    }
+    else if ( m_sValuePropertyName.getLength() && m_xAggregateSet.is() )
+    {
+        m_xAggregateSet->setPropertyValue( m_sValuePropertyName, _rValue );
+    }
 }
 
 //------------------------------------------------------------------------------
