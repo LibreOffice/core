@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 11:58:56 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ LayerMergeHandler::LayerMergeHandler( MergedComponentData & _rData, OUString con
 , m_aContext(static_cast<backenduno::XLayerHandler*>(this))
 , m_aFactory()
 , m_aLocale(_aLocale)
+, m_pProperty(NULL)
 {
     OSL_ENSURE( m_rData.hasSchema(), "Creating layer merger without default data" );
 }
@@ -120,7 +121,6 @@ LayerMergeHandler::LayerMergeHandler( MergedComponentData & _rData, OUString con
 
 LayerMergeHandler::~LayerMergeHandler(  )
 {
-
 }
 // -----------------------------------------------------------------------------
 
@@ -235,6 +235,34 @@ node::Attributes LayerMergeHandler::makePropertyAttributes(sal_Int16 aSchemaAttr
 }
 // -----------------------------------------------------------------------------
 
+void LayerMergeHandler::checkPropertyType(uno::Type const & _aType)
+    CFG_UNO_THROW1( beans::IllegalTypeException )
+{
+    OSL_ASSERT(m_pProperty);
+
+    if (ValueNode * pValue = m_pProperty->asValueNode())
+    {
+        if (_aType == uno::Type()) // VOID
+            m_aContext.raiseIllegalTypeException("Layer merging: Illegal property type: VOID");
+
+        if (pValue->getValueType() != _aType)
+        {
+            if (pValue->getValueType().getTypeClass() == uno::TypeClass_ANY)
+            {
+                OSL_ENSURE( pValue->isNull(), "Layer merging: Non-null 'any' value" );
+
+                // TODO:
+                // pValue->setValueType(_aType);
+            }
+            else
+                m_aContext.raiseIllegalTypeException("Layer merging: Cannot merge property value: type does not match");
+        }
+    }
+    // TODO: validation for localized properties
+
+}
+// -----------------------------------------------------------------------------
+
 void LayerMergeHandler::setValueAndCheck(ValueNode& _rValueNode, uno::Any const & _aValue)
     CFG_UNO_THROW1( beans::IllegalTypeException )
 {
@@ -287,43 +315,47 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
 }
 // -----------------------------------------------------------------------------
 
-void LayerMergeHandler::applyPropertyValue(INode * pProperty, uno::Any const & _aValue)
+void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue)
     CFG_UNO_THROW1( beans::IllegalTypeException )
 {
-    if (ValueNode * pValue = pProperty->asValueNode())
+    OSL_ASSERT(m_pProperty);
+
+    if (ValueNode * pValue = m_pProperty->asValueNode())
     {
         setValueAndCheck(*pValue,_aValue);
     }
 
-    else if (ISubtree * pLocalizedCont = pProperty->asISubtree())
+    else if (ISubtree * pLocalizedCont = m_pProperty->asISubtree())
     {
         setLocalizedValue(pLocalizedCont,_aValue,m_aLocale);
     }
 
     else
-        OSL_ENSURE(false, "Layer merging: Unknown node type");
+        OSL_ENSURE(false, "Layer merging: Unknown node type for property");
 }
 // -----------------------------------------------------------------------------
 
-void LayerMergeHandler::applyPropertyValue(INode * pProperty, uno::Any const & _aValue, OUString const & _aLocale)
+void LayerMergeHandler::applyPropertyValue(uno::Any const & _aValue, OUString const & _aLocale)
     CFG_UNO_THROW2( beans::IllegalTypeException, lang::IllegalArgumentException )
 {
+    OSL_ASSERT(m_pProperty);
+
     if (_aLocale.getLength() == 0)
         m_aContext.raiseIllegalArgumentException("Locale string is empty");
 
-    if (ISubtree * pLocalizedCont = pProperty->asISubtree())
+    if (ISubtree * pLocalizedCont = m_pProperty->asISubtree())
     {
         setLocalizedValue(pLocalizedCont,_aValue, _aLocale);
     }
 
-    else if (ValueNode * pValue = pProperty->asValueNode())
+    else if (ValueNode * pValue = m_pProperty->asValueNode())
     {
         OSL_ENSURE(false, "Layer merging: Got locale-dependent value for non localized node");
         setValueAndCheck(*pValue,_aValue);
     }
 
     else
-        OSL_ENSURE(false, "Layer merging: Unknown node type for localized node");
+        OSL_ENSURE(false, "Layer merging: Unknown node type for localized property");
 }
 // -----------------------------------------------------------------------------
 
@@ -414,6 +446,8 @@ void SAL_CALL LayerMergeHandler::startLayer( )
         throw uno::RuntimeException(OUString::createFromAscii("Layer merging: No data to merge with"),*this);
 
     m_aContext.startActiveComponent(pSchema->getName());
+
+    m_pProperty = NULL;
 
     OSL_POSTCOND( m_aContext.hasActiveComponent(),  "Layer merging: could not set active component");
     OSL_POSTCOND( m_aContext.isDone(),              "Layer merging: newly started component is not empty");
@@ -547,25 +581,7 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerMergeHandler::overridePropertyValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
-{
-    if (INode * pProp = m_aContext.findProperty(aName))
-    {
-        ensureUnchanged(pProp);
-
-        startOverride(pProp);
-
-        applyPropertyValue(pProp,aValue);
-
-        applyAttributes(pProp,aAttributes);
-    }
-    else
-        m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
-}
-// -----------------------------------------------------------------------------
-
-void SAL_CALL LayerMergeHandler::overridePropertyAttributes( const OUString& aName, sal_Int16 aAttributes )
+void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
     throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (INode * pProp = m_aContext.findProperty(aName))
@@ -575,23 +591,26 @@ void SAL_CALL LayerMergeHandler::overridePropertyAttributes( const OUString& aNa
         startOverride(pProp);
 
         applyAttributes(pProp,aAttributes);
+
+        m_pProperty = pProp;
+
+        checkPropertyType(aType);
     }
     else
         m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
 }
 // -----------------------------------------------------------------------------
 
-void SAL_CALL LayerMergeHandler::overridePropertyValueForLocale( const OUString& aName, OUString const & aLocale, const uno::Any& aValue )
-    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+void SAL_CALL LayerMergeHandler::endProperty( )
+    throw (MalformedDataException, uno::RuntimeException)
 {
-    if (INode * pProp = m_aContext.findProperty(aName))
-    {
-        startOverride(pProp);
+    if (!m_pProperty)
+        m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Ending a property that wasn't started.");
 
-        applyPropertyValue(pProp,aValue,aLocale);
-    }
-    else
-        m_aContext.raiseUnknownPropertyException("Layer merging: The property to be overridden does not exist.",aName);
+    if (ISubtree * pLocalizedSet = m_pProperty->asISubtree())
+        this->propagateAttributes(*pLocalizedSet);
+
+    m_pProperty = NULL;
 }
 // -----------------------------------------------------------------------------
 
@@ -621,6 +640,26 @@ void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sa
     applyAttributes(aPropertyValue.get(),aAttributes & NodeAttribute::MASK);
 
     m_aContext.addPropertyToCurrent(aPropertyValue);
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL LayerMergeHandler::setPropertyValue( const uno::Any& aValue )
+    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    if (!m_pProperty)
+        m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a value without a property.");
+
+    applyPropertyValue(aValue);
+}
+// -----------------------------------------------------------------------------
+
+void SAL_CALL LayerMergeHandler::setPropertyValueForLocale( const uno::Any& aValue, OUString const & aLocale )
+    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException)
+{
+    if (!m_pProperty)
+        m_aContext.raiseMalformedDataException("Layer merging: Invalid data: Overriding a (localized) value without a property.");
+
+    applyPropertyValue(aValue,aLocale);
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

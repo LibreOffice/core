@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:56:07 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ namespace configmgr
             MergedComponentData &       result();
             MergedComponentData const & result() const;
 
-        // XUpdateHandler
+        // XLayerHandler
         public:
             virtual void SAL_CALL
                 startLayer(  )
@@ -139,15 +139,7 @@ namespace configmgr
                     throw (MalformedDataException, container::NoSuchElementException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
-                overridePropertyValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
-                    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
-
-            virtual void SAL_CALL
-                overridePropertyAttributes( const OUString& aName, sal_Int16 aAttributes )
-                    throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
-
-            virtual void SAL_CALL
-                overridePropertyValueForLocale( const OUString& aName, const OUString & aLocale, const uno::Any& aValue )
+                overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
                     throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
 
             virtual void SAL_CALL
@@ -158,16 +150,31 @@ namespace configmgr
                 addPropertyWithValue( const OUString& aName, sal_Int16 aAttributes, const uno::Any& aValue )
                     throw (MalformedDataException, beans::PropertyExistException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
+            virtual void SAL_CALL
+                endProperty(  )
+                    throw (MalformedDataException, uno::RuntimeException);
+
+            virtual void SAL_CALL
+                setPropertyValue( const uno::Any& aValue )
+                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+
+            virtual void SAL_CALL
+                setPropertyValueForLocale( const uno::Any& aValue, const OUString & aLocale )
+                    throw (MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
+
         private:
             void propagateAttributes(ISubtree & _rParent);
 
             node::Attributes makePropertyAttributes(sal_Int16 aSchemaAttributes)
                 CFG_UNO_THROW1( lang::IllegalArgumentException );
 
-            void applyPropertyValue(INode * pProperty, uno::Any const & _aValue)
+            void checkPropertyType(uno::Type const & _aType)
                 CFG_UNO_THROW1( beans::IllegalTypeException );
 
-            void applyPropertyValue(INode * pProperty, uno::Any const & _aValue, OUString const & _aLocale)
+            void applyPropertyValue(uno::Any const & _aValue)
+                CFG_UNO_THROW1( beans::IllegalTypeException );
+
+            void applyPropertyValue(uno::Any const & _aValue, OUString const & _aLocale)
                 CFG_UNO_THROW2( beans::IllegalTypeException, lang::IllegalArgumentException );
 
             void applyAttributes(INode * pNode, sal_Int16 aNodeAttributes)
@@ -195,6 +202,7 @@ namespace configmgr
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
             OUString                m_aLocale;
+            INode *                 m_pProperty;
         };
 // -----------------------------------------------------------------------------
 

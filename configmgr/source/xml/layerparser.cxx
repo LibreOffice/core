@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 10:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,10 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
     {
     case Operation::none:
     case Operation::modify:
+        m_xHandler->overrideProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+        OSL_ASSERT(!m_bNewProp);
+        break;
+
     case Operation::replace:
         // defer to later
         m_bNewProp = true;
@@ -245,6 +249,7 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
     case Operation::unknown:
         this->raiseParseException("Layer parser: Invalid Data: unknown operation");
     }
+    OSL_POSTCOND(this->isInUnhandledProperty(),"Error: Property not reckognized as unhandled");
 }
 // -----------------------------------------------------------------------------
 
@@ -254,28 +259,20 @@ void LayerParser::endProperty()
 
     if (m_bNewProp)
     {
-        OSL_ASSERT(this->isEmptyNode());
-
-        ElementInfo const & aInfo = getActiveNodeInfo();
-        switch (aInfo.op)
+        if (this->isInUnhandledProperty())
         {
-        case Operation::none:
-        case Operation::modify:
-            OSL_ENSURE(aInfo.flags,"Warning: Empty property modification (and without attributes) in Layer");
-            m_xHandler->overridePropertyAttributes(aInfo.name,aInfo.flags);
-            break;
+            ElementInfo const & aInfo = getActiveNodeInfo();
+            OSL_ASSERT(aInfo.op == Operation::replace);
 
-        case Operation::replace:
             m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
-            break;
-
-        default:
-            OSL_ASSERT(false);
         }
         m_bNewProp = false;
     }
     else
-        OSL_ASSERT(!this->isEmptyNode());
+    {
+        OSL_ASSERT(getActiveNodeInfo().op != Operation::replace);
+        m_xHandler->endProperty();
+    }
 
     BasicParser::endProperty();
 }
@@ -293,32 +290,33 @@ void LayerParser::endValueData()
 {
     uno::Any aValue = this->getCurrentValue();
 
-    ElementInfo const & aInfo = this->getActiveNodeInfo();
-
-    if (this->isValueDataLocalized())
+    if (m_bNewProp)
     {
-        OUString aLocale = this->getValueDataLocale();
+        OSL_ENSURE(!isValueDataLocalized(),"Layer parser: Invalid Data: 'lang' ignored for newly added property.");
 
-        if (m_bNewProp && aInfo.op == Operation::replace)
-            m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+        ElementInfo const & aInfo = this->getActiveNodeInfo();
 
-        m_xHandler->overridePropertyValueForLocale(aInfo.name,aLocale,aValue);
-    }
-    else
-    {
-        if (aInfo.op != Operation::replace)
-            m_xHandler->overridePropertyValue(aInfo.name,aInfo.flags,aValue);
+        OSL_ASSERT( aInfo.op == Operation::replace );
 
-        else if (aValue.hasValue())
+        if (aValue.hasValue())
             m_xHandler->addPropertyWithValue(aInfo.name,aInfo.flags,aValue);
-
         else
             m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
     }
+    else if (this->isValueDataLocalized())
+    {
+        OUString aLocale = this->getValueDataLocale();
 
-    m_bNewProp = false;
+        m_xHandler->setPropertyValueForLocale(aValue,aLocale);
+    }
+    else
+    {
+        m_xHandler->setPropertyValue(aValue);
+    }
 
     BasicParser::endValueData();
+
+    OSL_POSTCOND(!this->isInUnhandledProperty(),"Error: Property not reckognized as unhandled");
 }
 // -----------------------------------------------------------------------------
 
