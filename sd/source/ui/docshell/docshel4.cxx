@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-24 11:42:48 $
+ *  last change: $Author: ka $ $Date: 2001-02-11 14:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,6 +611,9 @@ BOOL SdDrawDocShell::Save()
 
     if( bRet )
     {
+        if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+
 //-/        pDoc->PrepareStore();
         pDoc->PreSave();
 
@@ -763,6 +766,9 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
 
     if (bRet)
     {
+        if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
+            pDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
+
 //-/        pDoc->PrepareStore();
         pDoc->PreSave();
 
