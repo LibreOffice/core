@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:46:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include "ftools.hxx"
 #endif
 
-class SvStorage;
+class SotStorage;
 
 class ScBaseCell;
 class ScRangeList;
