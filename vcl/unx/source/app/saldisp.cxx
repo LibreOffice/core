@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-10 11:53:02 $
+ *  last change: $Author: cp $ $Date: 2001-09-21 15:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1532,35 +1532,47 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         case KEY_DELETE:
             nKeySym = XK_Delete;
             break;
-        case KEY_OPEN:
-            nKeySym = XK_L7;
-            break;
-        case KEY_CUT:
-            nKeySym = XK_L10;
-            break;
-        case KEY_COPY:
-            nKeySym = XK_L6;
-            break;
-        case KEY_PASTE:
-            nKeySym = XK_L8;
-            break;
-        case KEY_UNDO:
-            nKeySym = XK_L4; // XK_Undo; ???
-            break;
+
+        #if !defined (SunXK_Undo)
+            #define SunXK_Undo      0x0000FF65  // XK_Undo
+            #define SunXK_Again     0x0000FF66  // XK_Redo
+            #define SunXK_Find      0x0000FF68  // XK_Find
+            #define SunXK_Stop      0x0000FF69  // XK_Cancel
+            #define SunXK_Props     0x1005FF70
+            #define SunXK_Front     0x1005FF71
+            #define SunXK_Copy      0x1005FF72
+            #define SunXK_Open      0x1005FF73
+            #define SunXK_Paste     0x1005FF74
+            #define SunXK_Cut       0x1005FF75
+        #endif
+
         case KEY_REPEAT:
-//            nKeySym = XK_L2; // XK_Redo; ???
-            nKeySym = XK_Redo;
-            break;
-        case KEY_FIND:
-            nKeySym = XK_L9; // XK_Find; ???
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Again : XK_L2;
             break;
         case KEY_PROPERTIES:
-            nKeySym = XK_L3;
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Props : XK_L3;
+            break;
+        case KEY_UNDO:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Undo  : XK_L4;
             break;
         case KEY_FRONT:
-            nKeySym = XK_L5;
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Front : XK_L5;
             break;
-
+        case KEY_COPY:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Copy  : XK_L6;
+            break;
+        case KEY_OPEN:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Open  : XK_L7;
+            break;
+        case KEY_PASTE:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Paste : XK_L8;
+            break;
+        case KEY_FIND:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Find  : XK_L9;
+            break;
+        case KEY_CUT:
+            nKeySym = GetServerVendor() == vendor_sun ? SunXK_Cut   : XK_L10;
+            break;
         case KEY_ADD:
             nKeySym = XK_plus;
             break;

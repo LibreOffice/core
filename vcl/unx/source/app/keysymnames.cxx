@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: cp $ $Date: 2001-09-21 15:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,19 @@
 #include <saldisp.hxx>
 #include <X11/keysym.h>
 
+#if !defined (SunXK_Undo)
+#define SunXK_Undo      0x0000FF65  // XK_Undo
+#define SunXK_Again     0x0000FF66  // XK_Redo
+#define SunXK_Find      0x0000FF68  // XK_Find
+#define SunXK_Stop      0x0000FF69  // XK_Cancel
+#define SunXK_Props     0x1005FF70
+#define SunXK_Front     0x1005FF71
+#define SunXK_Copy      0x1005FF72
+#define SunXK_Open      0x1005FF73
+#define SunXK_Paste     0x1005FF74
+#define SunXK_Cut       0x1005FF75
+#endif
+
 #ifdef SOLARIS
 #include <sys/types.h>
 #include <sys/ioctl.h>
@@ -122,7 +135,17 @@ namespace vcl_sal {
         { XK_BackSpace, "Rückschritt" },
         { XK_Return, "Eingabe" },
         { XK_slash, "Schrägstrich" },
-        { XK_space, "Leertaste" }
+        { XK_space, "Leertaste" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Wiederholen" },
+        { SunXK_Props, "Eigenschaften" },
+        { SunXK_Undo,  "Zurücknehmen" },
+        { SunXK_Front, "Vordergrund" },
+        { SunXK_Copy,  "Kopieren" },
+        { SunXK_Open,  "Öffnen" },
+        { SunXK_Paste, "Einsetzen" },
+        { SunXK_Find,  "Suchen" },
+        { SunXK_Cut,   "Ausschneiden" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_French[] =
@@ -142,7 +165,17 @@ namespace vcl_sal {
         { XK_Down, "Bas" },
         { XK_BackSpace, "Ret. Arr" },
         { XK_Return, "Retour" },
-        { XK_KP_Enter, "Entrée" }
+        { XK_KP_Enter, "Entrée" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Encore" },
+        { SunXK_Props, "Props" },
+        { SunXK_Undo,  "Annuler" },
+        { SunXK_Front, "Devant" },
+        { SunXK_Copy,  "Copy" },
+        { SunXK_Open,  "Ouvrir" },
+        { SunXK_Paste, "Coller" },
+        { SunXK_Find,  "Cher." },
+        { SunXK_Cut,   "Couper" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Italian[] =
@@ -161,7 +194,17 @@ namespace vcl_sal {
         { XK_Down, "Sposta verso il basso" },
         { XK_BackSpace, "Backspace" },
         { XK_Return, "Invio" },
-        { XK_space, "Spaziatrice" }
+        { XK_space, "Spaziatrice" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Ancora" },
+        { SunXK_Props, "Proprietà" },
+        { SunXK_Undo,  "Annulla" },
+        { SunXK_Front, "Davanti" },
+        { SunXK_Copy,  "Copia" },
+        { SunXK_Open,  "Apri" },
+        { SunXK_Paste, "Incolla" },
+        { SunXK_Find,  "Trova" },
+        { SunXK_Cut,   "Taglia" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Dutch[] =
@@ -175,7 +218,17 @@ namespace vcl_sal {
         { XK_Down, "Onder" },
         { XK_BackSpace, "Backspace" },
         { XK_Return, "Return" },
-        { XK_space, "Spatiebalk" }
+        { XK_space, "Spatiebalk" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Again" },
+        { SunXK_Props, "Props" },
+        { SunXK_Undo,  "Undo" },
+        { SunXK_Front, "Front" },
+        { SunXK_Copy,  "Copy" },
+        { SunXK_Open,  "Open" },
+        { SunXK_Paste, "Paste" },
+        { SunXK_Find,  "Find" },
+        { SunXK_Cut,   "Cut" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
@@ -190,7 +243,17 @@ namespace vcl_sal {
         { XK_Up, "Opp" },
         { XK_Down, "Ned" },
         { XK_BackSpace, "Tilbake" },
-        { XK_Return, "Enter" }
+        { XK_Return, "Enter" },
+        { SunXK_Stop,  "Avbryt" },
+        { SunXK_Again, "Gjenta" },
+        { SunXK_Props, "Egenskaper" },
+        { SunXK_Undo,  "Angre" },
+        { SunXK_Front, "Front" },
+        { SunXK_Copy,  "Kopi" },
+        { SunXK_Open,  "Åpne" },
+        { SunXK_Paste, "Lim" },
+        { SunXK_Find,  "Søk" },
+        { SunXK_Cut,   "Klipp" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Swedish[] =
@@ -206,7 +269,17 @@ namespace vcl_sal {
         { XK_Down, "Ned" },
         { XK_BackSpace, "Backsteg" },
         { XK_Return, "Retur" },
-        { XK_space, "Blank" }
+        { XK_space, "Blank" },
+        { SunXK_Stop,  "Avbryt" },
+        { SunXK_Again, "Upprepa" },
+        { SunXK_Props, "Egenskaper" },
+        { SunXK_Undo,  "Ångra" },
+        { SunXK_Front, "Fram" },
+        { SunXK_Copy,  "Kopiera" },
+        { SunXK_Open,  "Öppna" },
+        { SunXK_Paste, "Klistra in" },
+        { SunXK_Find,  "Sök" },
+        { SunXK_Cut,   "Klipp ut" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Portuguese[] =
@@ -220,7 +293,17 @@ namespace vcl_sal {
         { XK_Down, "Abaixo" },
         { XK_BackSpace, "Rückschritt" },
         { XK_Return, "Eingabe" },
-        { XK_slash, "Schrägstrich" }
+        { XK_slash, "Schrägstrich" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Again" },
+        { SunXK_Props, "Props" },
+        { SunXK_Undo,  "Undo" },
+        { SunXK_Front, "Front" },
+        { SunXK_Copy,  "Copy" },
+        { SunXK_Open,  "Open" },
+        { SunXK_Paste, "Paste" },
+        { SunXK_Find,  "Find" },
+        { SunXK_Cut,   "Cut" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Spanish[] =
@@ -240,7 +323,17 @@ namespace vcl_sal {
         { XK_BackSpace, "Ret" },
         { XK_Return, "Entrada" },
         { XK_space, "Espacio" },
-        { XK_KP_Enter, "Intro" }
+        { XK_KP_Enter, "Intro" },
+        { SunXK_Stop,  "Stop" },
+        { SunXK_Again, "Repetir" },
+        { SunXK_Props, "Props" },
+        { SunXK_Undo,  "Anular" },
+        { SunXK_Front, "Delante" },
+        { SunXK_Copy,  "Copiar" },
+        { SunXK_Open,  "Abrir" },
+        { SunXK_Paste, "Pegar" },
+        { SunXK_Find,  "Buscar" },
+        { SunXK_Cut,   "Cortar" }
     };
 
     static const struct KeyboardReplacements aKeyboards[] =
