@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-08 10:27:02 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,9 @@
 #ifndef _SVX_BRKITEM_HXX //autogen
 #include <svx/brkitem.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -139,6 +141,9 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
+#endif
+#ifndef _FMTANCHR_HXX //autogen
+#include <fmtanchr.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -1447,9 +1452,56 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutSection = bOldOutSection;
 }
 
-
 void GetRTFWriter( const String& rFltName, WriterRef& xRet )
 {
     xRet = new SwRTFWriter( rFltName );
 }
 
+short SwRTFWriter::GetCurrentPageDirection() const
+{
+    const SwFrmFmt  &rFmt = pAktPageDesc
+                    ? pAktPageDesc->GetMaster()
+                    : pDoc->GetPageDesc(0).GetMaster();
+    const SvxFrameDirectionItem* pItem = &rFmt.GetFrmDir();
+
+    if (!pItem)
+    {
+        pItem = (const SvxFrameDirectionItem*)
+            &pDoc->GetAttrPool().GetDefaultItem(RES_FRAMEDIR);
+    }
+    return pItem->GetValue();
+}
+
+short SwRTFWriter::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
+{
+    const SwFrmFmt *pFlyFmt = &rFlyFmt;
+    const SvxFrameDirectionItem* pItem = 0;
+    while (pFlyFmt)
+    {
+        pItem = &pFlyFmt->GetFrmDir();
+        if (FRMDIR_ENVIRONMENT == pItem->GetValue())
+        {
+            pItem = 0;
+            const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
+            if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                pAnchor->GetCntntAnchor() )
+            {
+                pFlyFmt = pAnchor->GetCntntAnchor()->nNode.
+                                    GetNode().GetFlyFmt();
+            }
+            else
+                pFlyFmt = 0;
+        }
+        else
+            pFlyFmt = 0;
+    }
+
+    short nRet;
+    if (pItem)
+        nRet = pItem->GetValue();
+    else
+        nRet = GetCurrentPageDirection();
+
+    ASSERT(nRet != FRMDIR_ENVIRONMENT, "leaving with environment direction");
+    return nRet;
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-30 11:42:37 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,6 +1099,7 @@ void SwRTFParser::ReadDocControls( int nToken )
     UseOnPage eUseOn;
     USHORT nPgStart = USHRT_MAX;
 
+    SvxFrameDirectionItem aFrmDir;
     if( bFirstDocControl )
     {
         // RTF-Defaults setzen
@@ -1109,6 +1110,8 @@ void SwRTFParser::ReadDocControls( int nToken )
         eUseOn = UseOnPage(PD_ALL | PD_HEADERSHARE | PD_FOOTERSHARE);
         aFtnInfo.ePos = FTNPOS_CHAPTER; aFtnInfo.eNum = FTNNUM_DOC;
         bFirstDocControl = FALSE;
+
+        aFrmDir.SetValue(FRMDIR_HORI_LEFT_TOP);
     }
     else
     {
@@ -1121,6 +1124,8 @@ void SwRTFParser::ReadDocControls( int nToken )
 
         aEndInfo = pDoc->GetEndNoteInfo();
         aFtnInfo = pDoc->GetFtnInfo();
+
+        aFrmDir = rStdPgDsc.GetMaster().GetFrmDir();
     }
 
     BOOL bEndInfoChgd = FALSE, bFtnInfoChgd = FALSE;
@@ -1133,6 +1138,13 @@ void SwRTFParser::ReadDocControls( int nToken )
         case '{':       ++nOpenBrakets; nToken = RTF_DOCFMT; break;
         case RTF_IGNOREFLAG:            nToken = RTF_DOCFMT; break;
 */
+
+        case RTF_RTLDOC:
+            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+            break;
+        case RTF_LTRDOC:
+            aFrmDir.SetValue(FRMDIR_HORI_LEFT_TOP);
+            break;
         case RTF_PAPERW:
             if( 0 < nTokenValue )
                 aFrmSize.SetWidth( nTokenValue );
@@ -1283,6 +1295,7 @@ void SwRTFParser::ReadDocControls( int nToken )
             rFmt1.SetAttr( aFrmSize );  rFmt2.SetAttr( aFrmSize );
             rFmt1.SetAttr( aLR );       rFmt2.SetAttr( aLR );
             rFmt1.SetAttr( aUL );       rFmt2.SetAttr( aUL );
+            rFmt1.SetAttr( aFrmDir );   rFmt2.SetAttr( aFrmDir );
 
             // StartNummer der Seiten setzen
             if( USHRT_MAX != nPgStart )
@@ -1519,6 +1532,7 @@ void SwRTFParser::ReadSectControls( int nToken )
     BOOL bFirstCall = 1 == pDoc->GetPageDescCnt();
     BOOL bHeaderUL = FALSE, bHeaderLR = FALSE,
         bFooterUL = FALSE, bFooterLR = FALSE;
+    bool bIsRTL=false;
 
     USHORT nLastPageDesc = nAktPageDesc,
             nLastFirstPageDesc = nAktFirstPageDesc;
@@ -1593,7 +1607,7 @@ void SwRTFParser::ReadSectControls( int nToken )
     USHORT nPgStart = USHRT_MAX;
     SvxNumberType aNumType;
 
-    SvxFrameDirectionItem aFrmDir( pAkt->GetMaster().GetFrmDir() );
+    SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP);
 
     do {
         BOOL bIsSectToken = FALSE;
@@ -1871,6 +1885,16 @@ void SwRTFParser::ReadSectControls( int nToken )
             }
             break;
 
+        case RTF_RTLSECT:
+            bIsRTL=true;
+            bPgDescChgd = TRUE;
+            break;
+
+        case RTF_LTRSECT:
+            bIsRTL=false;
+            bPgDescChgd = TRUE;
+            break;
+
         case '{':
             {
                 short nSkip = 0;
@@ -2014,7 +2038,7 @@ void SwRTFParser::ReadSectControls( int nToken )
 
     pFmt = &pAkt->GetMaster();
 
-    if( bInsPageDesc )
+    if (bInsPageDesc)
     {
         if( bHeaderUL )
         {
@@ -2058,8 +2082,10 @@ void SwRTFParser::ReadSectControls( int nToken )
         pFmt->SetAttr( aLR );
         pFmt->SetAttr( aUL );
 
-        if( !( aFrmDir == pFmt->GetAttr( RES_FRAMEDIR )) )
-            pFmt->SetAttr( aFrmDir );
+        if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
+            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+
+        pFmt->SetAttr( aFrmDir );
 
         pAkt->SetNumType( aNumType );
         if( pFirst )
@@ -2166,7 +2192,7 @@ void SwRTFParser::ReadSectControls( int nToken )
         // Spaltigkeit in den Set uebernehmen
         SfxItemSet* pSet = 0;
         const SfxPoolItem* pItem;
-        SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_COLUMNBALANCE );
+        SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_FRAMEDIR );
         if( SFX_ITEM_SET == pAkt->GetMaster().GetItemState(
                                             RES_COL, FALSE, &pItem )
             && 1 < ((SwFmtCol*)pItem)->GetColumns().Count() )
@@ -2178,12 +2204,16 @@ void SwRTFParser::ReadSectControls( int nToken )
                 pFirst->GetMaster().ResetAttr( RES_COL );
         }
 
+        if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
+            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+        aSet.Put(aFrmDir);
+
         pDoc->ChgPageDesc( nAktPageDesc, *pAkt );
 
         if( pSet )
         {
             SwSection aSect( CONTENT_SECTION, pDoc->GetUniqueSectionName() );
-            SwSection* pSect = pDoc->Insert( *pPam, aSect, pSet );
+            SwSection* pSect = pDoc->Insert( *pPam, aSect, &aSet);
             pPam->DeleteMark();
 
             SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode( TRUE );
@@ -2237,7 +2267,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             // Spaltigkeit in den Set uebernehmen
             SfxItemSet* pSet = 0;
             const SfxPoolItem* pItem;
-            SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_COLUMNBALANCE);
+            SfxItemSet aSet( pDoc->GetAttrPool(), RES_COL, RES_FRAMEDIR);
             if( SFX_ITEM_SET == pAkt->GetMaster().GetItemState(
                                                 RES_COL, FALSE, &pItem )
                 && 1 < ((SwFmtCol*)pItem)->GetColumns().Count() )
@@ -2252,10 +2282,14 @@ void SwRTFParser::ReadSectControls( int nToken )
                 pSet = &aSet;
             }
 
+            if (bIsRTL && aFrmDir.GetValue() == FRMDIR_HORI_LEFT_TOP)
+                aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+            aSet.Put(aFrmDir);
+
             if( !bFirstCall || pSet )
             {
                 SwSection aSect( CONTENT_SECTION, pDoc->GetUniqueSectionName() );
-                SwSection* pSect = pDoc->Insert( *pPam, aSect, pSet );
+                SwSection* pSect = pDoc->Insert( *pPam, aSect, &aSet );
                 pPam->DeleteMark();
 
                 SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode( TRUE );
@@ -2347,6 +2381,8 @@ void SwRTFParser::ReadPageDescTbl()
     SwFmtFrmSize aSz( ATT_FIX_SIZE, 11905, 16837 );     // DIN A4 defaulten
     SwFmtFrmSize aFSz( ATT_MIN_SIZE ), aHSz( ATT_MIN_SIZE );
 
+    SvxFrameDirectionItem aFrmDir(FRMDIR_HORI_LEFT_TOP);
+
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
     SvUShorts aColumns;
 
@@ -2362,6 +2398,7 @@ void SwRTFParser::ReadPageDescTbl()
             if( 1 == --nOpenBrakets )
             {
                 // PageDesc ist fertig, setze am Doc
+                pPgFmt->SetAttr( aFrmDir );
                 pPgFmt->SetAttr( aLR );
                 pPgFmt->SetAttr( aUL );
                 pPgFmt->SetAttr( aSz );
@@ -2459,6 +2496,14 @@ void SwRTFParser::ReadPageDescTbl()
             aHSz.SetSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
             break;
 #endif
+
+        case RTF_RTLSECT:
+            aFrmDir.SetValue(FRMDIR_HORI_RIGHT_TOP);
+            break;
+
+        case RTF_LTRSECT:
+            aFrmDir.SetValue(FRMDIR_HORI_LEFT_TOP);
+            break;
 
         // alt: LI/RI/SA/SB, neu: MARG?SXN
         case RTF_MARGLSXN:

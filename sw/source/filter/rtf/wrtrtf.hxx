@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,9 @@ public:
 
     void SetCurrScriptType( USHORT n )      { nCurScript = n; }
     USHORT GetCurrScriptType() const        { return nCurScript; }
+
+    short TrueFrameDirection(const SwFrmFmt &rFlyFmt) const;
+    short GetCurrentPageDirection() const;
 };
 
 

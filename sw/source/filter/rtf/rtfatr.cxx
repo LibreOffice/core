@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-26 11:57:21 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,8 @@ Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr )
 void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
                         BOOL bDeep )
 {
+    bool bFrameDirOut=false;
+    bool bAdjustOut=false;
     // erst die eigenen Attribute ausgeben
     SvPtrarr aAsian( 0, 5 ), aCmplx( 0, 5 ), aLatin( 0, 5 );
 
@@ -510,19 +512,33 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
                 aCmplx.Insert( pVoidItem, aCmplx.Count() );
                 pOut = 0;
                 break;
+
+            case RES_FRAMEDIR:
+                bFrameDirOut=true;
+                break;
+            case RES_PARATR_ADJUST:
+                bAdjustOut=true;
+                break;
             }
         }
 
-        if( pOut )
+        if (pOut)
             (*pOut)( rWrt, *pItem );
         nWhich = aIter.NextWhich();
+    }
+
+    //If rtlpar set and no following alignment. And alignment is not rtl then
+    //output alignment
+    if (bFrameDirOut && !bAdjustOut && !rWrt.pFlyFmt && !rWrt.bOutPageDesc)
+    {
+        if (pOut = aRTFAttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN])
+            (*pOut)(rWrt, rSet.Get(RES_PARATR_ADJUST));
     }
 
     if( aAsian.Count() || aCmplx.Count() ||aLatin.Count() )
     {
         SvPtrarr* aArr[ 3 ];
-        USHORT nScriptType = rWrt.GetCurrScriptType();
-        switch( nScriptType )
+        switch (rWrt.GetCurrScriptType())
         {
         case ::com::sun::star::i18n::ScriptType::LATIN:
             aArr[ 0 ] = &aCmplx;
@@ -1197,6 +1213,27 @@ const SfxPoolItem& SwRTFWriter::GetItem( USHORT nWhich ) const
     return pDoc->GetAttrPool().GetDefaultItem( nWhich );
 }
 
+void OutRTF_SwRTL(SwRTFWriter& rWrt, const SwTxtNode *pNd)
+{
+    if (!pNd)
+        return;
+    const SwFmt& rFmt = pNd->GetAnyFmtColl();
+    const SvxFrameDirectionItem* pItem = (const SvxFrameDirectionItem*)
+        pNd->GetSwAttrSet().GetItem(RES_FRAMEDIR);
+    if (!pItem || pItem->GetValue() == FRMDIR_ENVIRONMENT)
+    {
+        SwPosition aPos(*pNd);
+        if (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(aPos))
+        {
+            SfxItemSet aSet( *rFmt.GetAttrSet().GetPool(),
+                rFmt.GetAttrSet().GetRanges() );
+            aSet.SetParent( &rFmt.GetAttrSet() );
+            aSet.Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP));
+            OutRTF_SfxItemSet( rWrt, aSet, TRUE );
+        }
+    }
+}
+
 static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 {
     SwTxtNode * pNd = &((SwTxtNode&)rNode);
@@ -1271,11 +1308,14 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         }
 
         rRTFWrt.OutListNum( *pNd );
+        OutRTF_SwRTL(rRTFWrt, pNd);
         OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
     }
     else if( !rRTFWrt.bWriteAll && rRTFWrt.bFirstLine )
+    {
+        OutRTF_SwRTL(rRTFWrt, pNd);
         OutRTF_SwFmt( rRTFWrt, pNd->GetAnyFmtColl() );
-
+    }
 
     // gibt es harte Attributierung ?
     if( bNewFmts && ( pNd->GetpSwAttrSet() || pNd->GetNum() ))
@@ -1888,7 +1928,9 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
         rWrt.Strm() << sRTF_COLS << '1';
         rRTFWrt.bOutFmtAttr = TRUE;
         const SfxPoolItem* pItem;
-        const SfxItemSet& rSet = rSect.GetFmt()->GetAttrSet();
+        const SwFrmFmt *pFmt = rSect.GetFmt();
+        ASSERT(pFmt, "Impossible");
+        const SfxItemSet& rSet = pFmt->GetAttrSet();
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COL, FALSE, &pItem ))
             OutRTF_SwFmtCol( rWrt, *pItem );
         else
@@ -1897,6 +1939,11 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE,
             FALSE, &pItem ) && ((SwFmtNoBalancedColumns*)pItem)->GetValue() )
             OutComment( rWrt, sRTF_BALANCEDCOLUMN ) << '}';
+
+        if (FRMDIR_HORI_RIGHT_TOP == rRTFWrt.TrueFrameDirection(*pFmt))
+            rWrt.Strm() << sRTF_RTLSECT;
+        else
+            rWrt.Strm() << sRTF_LTRSECT;
 
         rWrt.Strm() << SwRTFWriter::sNewLine;
     }
@@ -3526,12 +3573,25 @@ static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
     const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
     USHORT nVal = 0;
     const sal_Char* pStr = 0;
+    bool bRTL = false;
 
     switch( rItem.GetValue() )
     {
-    case FRMDIR_VERT_TOP_RIGHT:     nVal = 1; pStr = sRTF_FRMTXTBRLV; break;
-    case FRMDIR_HORI_RIGHT_TOP:     nVal = 3; pStr = sRTF_FRMTXTBRL; break;
-    case FRMDIR_VERT_TOP_LEFT:      nVal = 4; pStr = sRTF_FRMTXLRTBV; break;
+        case FRMDIR_VERT_TOP_RIGHT:
+            nVal = 1;
+            pStr = sRTF_FRMTXTBRLV;
+            break;
+        case FRMDIR_HORI_RIGHT_TOP:
+            bRTL = true;
+//          nVal = 3;
+//          A val of three isn't working as expected in word :-( so leave it
+//          as normal ltr 0 textflow with rtl sect property
+            pStr = sRTF_FRMTXTBRL;
+            break;
+        case FRMDIR_VERT_TOP_LEFT:
+            nVal = 4;
+            pStr = sRTF_FRMTXLRTBV;
+            break;
     }
 
     if( rRTFWrt.pFlyFmt && rRTFWrt.bRTFFlySyntax && pStr )
@@ -3539,10 +3599,20 @@ static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm() << pStr;
         ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
     }
-    else if( rRTFWrt.bOutPageDesc && nVal )
+    else if( rRTFWrt.bOutPageDesc)
     {
-        rWrt.Strm() << sRTF_STEXTFLOW;
-        rWrt.OutULong( nVal );
+        if (nVal)
+        {
+            rWrt.Strm() << sRTF_STEXTFLOW;
+            rWrt.OutULong( nVal );
+        }
+        if (bRTL)
+            rWrt.Strm() << sRTF_RTLSECT;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    else if (!rRTFWrt.pFlyFmt && !rRTFWrt.bOutPageDesc)
+    {
+        rWrt.Strm() << (bRTL ? sRTF_RTLPAR : sRTF_LTRPAR);
         ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
     }
     return rWrt;
@@ -3939,7 +4009,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_FRMATR_DUMMY4 */             0, // Dummy:
 /* RES_FRMATR_DUMMY5 */             0, // Dummy:
 /* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRMDIR */                    OutRTF_SvxFrmDir, // Dummy:
+/* RES_FRAMEDIR*/                   OutRTF_SvxFrmDir,
 /* RES_FRMATR_DUMMY8 */             0, // Dummy:
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
 
