@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 13:41:46 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ namespace pcr
     //------------------------------------------------------------------------
     ::rtl::OUString OPropertyBrowserController::getImplementationName_Static(  ) throw(RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.extensions.pcr.OPropertyBrowserController");
+        return ::rtl::OUString::createFromAscii("org.openoffice.comp.form.ui.OPropertyBrowserController");
     }
 
     //------------------------------------------------------------------------
@@ -1047,6 +1047,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/05/30 13:41:46  fs
+ *  #86838# be a focus listener on the container window, forward the focus to the property box
+ *
  *  Revision 1.12  2001/03/22 10:04:09  fs
  *  when binding to a new object, _first_ destroy the view, _then_ stop listening
  *
