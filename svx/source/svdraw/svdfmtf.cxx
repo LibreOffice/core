@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-22 17:47:09 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 13:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,12 +182,22 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     ULONG nInsPos,
     SvdProgressInfo *pProgrInfo)
 {
-    pPage=rOL.GetPage();
+    pPage = rOL.GetPage();
     GDIMetaFile* pTmpMtf=NULL;
     GDIMetaFile* pMtf = (GDIMetaFile*) &rMtf;
     ULONG nActionAnz=pMtf->GetActionCount();
+    sal_Bool bError = sal_False;
 
-    BOOL bError = FALSE;
+    fScaleX = fScaleY = 1.0;
+    Size aMtfSize( pMtf->GetPrefSize() );
+    if ( aMtfSize.Width() & aMtfSize.Height() && ( aScaleRect.IsEmpty() == sal_False ) )
+    {
+        if ( aMtfSize.Width() != ( aScaleRect.GetWidth() - 1 ) )
+            fScaleX = (double)( aScaleRect.GetWidth() - 1 ) / (double)aMtfSize.Width();
+        if ( aMtfSize.Height() != ( aScaleRect.GetHeight() - 1 ) )
+            fScaleY = (double)( aScaleRect.GetHeight() - 1 ) / (double)aMtfSize.Height();
+    }
+
     if(65000 < nActionAnz)
     {
         nActionAnz = 65000;
@@ -269,29 +279,35 @@ ULONG ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
     // hinzugefuegt werden.
     nActionsToReport = (pMtf->GetActionCount() - nAnz)*2;
 
-    if (!aScaleRect.IsEmpty()) {
-        Point aOfs=aScaleRect.TopLeft();
-        Size aMtfSize(pMtf->GetPrefSize());
-        Fraction aScaleX(1,1);
-        Fraction aScaleY(1,1);
-        if (aMtfSize.Width()!=0) aScaleX=Fraction(aScaleRect.GetWidth()-1,aMtfSize.Width());
-        if (aMtfSize.Height()!=0) aScaleY=Fraction(aScaleRect.GetHeight()-1,aMtfSize.Height());
-        FASTBOOL bMov=aOfs.X()!=0 || aOfs.Y()!=0;
-        FASTBOOL bSiz=aScaleX.GetNumerator()!=1 || aScaleX.GetDenominator()!=1 || aScaleY.GetNumerator()!=1 || aScaleY.GetDenominator()!=1;
+    if ( !aScaleRect.IsEmpty() )
+    {
+        Point aOfs = aScaleRect.TopLeft();
+        Size aMtfSize( pMtf->GetPrefSize() );
 
-        if (bMov || bSiz) {
+        sal_Bool bMov = aOfs.X()!=0 || aOfs.Y()!=0;
+        sal_Bool bSize = sal_False;
+
+        Fraction aScaleX( 1, 1 );
+        Fraction aScaleY( 1, 1 );
+        if ( aMtfSize.Width() != ( aScaleRect.GetWidth() - 1 ) )
+        {
+            aScaleX = Fraction( aScaleRect.GetWidth() - 1, aMtfSize.Width() );
+            bSize = sal_True;
+        }
+        if ( aMtfSize.Height() != ( aScaleRect.GetHeight() - 1 ) )
+        {
+            aScaleY = Fraction( aScaleRect.GetHeight() - 1, aMtfSize.Height() );
+            bSize = sal_True;
+        }
+        if ( bMov || bSize )
+        {
             for (ULONG i=0; i<nAnz; i++)
             {
                 SdrObject* pObj=aTmpList.GetObj(i);
-                if (bSiz)
-                {
-                    pObj->NbcResize(Point(),aScaleX,aScaleY);
-                }
-                if (bMov)
-                {
-                    pObj->NbcMove(Size(aOfs.X(),aOfs.Y()));
-                }
-
+                if ( bSize )
+                    pObj->NbcResize( Point(), aScaleX, aScaleY );
+                if ( bMov )
+                    pObj->NbcMove( Size( aOfs.X(), aOfs.Y() ) );
                 if(pProgrInfo != NULL)
                 {
                     nActionsToReport++;
@@ -382,13 +398,14 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
     else
         bNoFill=TRUE;
 
-    if (bText && bFntDirty)
+    if ( bText && bFntDirty )
     {
         Font aFnt(aVD.GetFont());
         pTextAttr->Put(SvxFontItem(aFnt.GetFamily(),aFnt.GetName(),aFnt.GetStyleName(),aFnt.GetPitch(),aFnt.GetCharSet()));
         pTextAttr->Put(SvxPostureItem(aFnt.GetItalic()));
         pTextAttr->Put(SvxWeightItem(aFnt.GetWeight()));
-        pTextAttr->Put(SvxFontHeightItem((ULONG)aFnt.GetSize().Height()));
+        double fHeight = (double)( aFnt.GetSize().Height() ) * fScaleY;
+        pTextAttr->Put(SvxFontHeightItem( (sal_uInt32)fHeight) );
         pTextAttr->Put(SvxCharScaleWidthItem(100));
         pTextAttr->Put(SvxUnderlineItem(aFnt.GetUnderline()));
         pTextAttr->Put(SvxCrossedOutItem(aFnt.GetStrikeout()));
@@ -624,13 +641,16 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
 void ImpSdrGDIMetaFileImport::ImportText(const Point& rPos, const XubString& rStr)
 {
     // calc text box size, add 5% to make it fit safely
-    Size aSize((aVD.GetTextWidth(rStr) * 105L) / 100L, aVD.GetTextHeight());
+    double fTextWidth = (double)aVD.GetTextWidth( rStr ) * 1.05 * fScaleX;
+    double fTextHeight = (double)aVD.GetTextHeight() * fScaleY;
+
     FontMetric aFontMetric(aVD.GetFontMetric());
     Font aFnt(aVD.GetFont());
     FontAlign eAlg(aFnt.GetAlign());
 
     // calc rectangle for new object, rPos is on Baseline
-    Rectangle aTextRect(rPos + Point(0, -aFontMetric.GetAscent()), aSize);
+    Size aSize( (sal_Int32)fTextWidth, (sal_Int32)fTextHeight );
+    Rectangle aTextRect( rPos + Point( 0, -aFontMetric.GetAscent() ), aSize );
 
     // correct aTextRect when eAlg != ALIGN_BASELINE
     if ( ALIGN_BASELINE != eAlg )
@@ -796,22 +816,20 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaMapModeAction& rAct)
 
 void ImpSdrGDIMetaFileImport::MapScaling()
 {
-    ULONG nAnz=aTmpList.GetObjCount();
-    const MapMode& rMap=aVD.GetMapMode();
-    Point aMapOrg(rMap.GetOrigin());
-    Fraction aMapScaleX(rMap.GetScaleX());
-    Fraction aMapScaleY(rMap.GetScaleX());
-    FASTBOOL bMov=aMapOrg.X()!=0 || aMapOrg.Y()!=0;
-    FASTBOOL bSiz=aMapScaleX.GetNumerator()!=1 || aMapScaleX.GetDenominator()!=1 || aMapScaleY.GetNumerator()!=1 || aMapScaleY.GetDenominator()!=1;
-    if (bMov || bSiz) {
-        for (ULONG i=nMapScalingOfs; i<nAnz; i++) {
-            SdrObject* pObj=aTmpList.GetObj(i);
-            if (bMov) {
-                pObj->NbcMove(Size(aMapOrg.X(),aMapOrg.Y()));
-            }
+    sal_uInt32 i, nAnz = aTmpList.GetObjCount();
+    const MapMode& rMap = aVD.GetMapMode();
+    Point aMapOrg( rMap.GetOrigin() );
+    sal_Bool bMov = aMapOrg.X() != 0 || aMapOrg.Y() != 0;
+    if ( bMov )
+    {
+        for ( i = nMapScalingOfs; i < nAnz; i++ )
+        {
+            SdrObject* pObj = aTmpList.GetObj(i);
+            if ( bMov )
+                pObj->NbcMove( Size( aMapOrg.X(), aMapOrg.Y() ) );
         }
     }
-    nMapScalingOfs=nAnz;
+    nMapScalingOfs = nAnz;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

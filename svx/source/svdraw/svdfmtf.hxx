@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:31 $
+ *  last change: $Author: sj $ $Date: 2001-10-18 13:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,17 +123,21 @@ protected:
     SdrPage*                    pPage;
     SdrModel*                   pModel;
     SdrLayerID                  nLayer;
-    FASTBOOL                    bPenDirty;
-    FASTBOOL                    bBrsDirty;
-    FASTBOOL                    bFntDirty;
+
+    double                      fScaleX;
+    double                      fScaleY;
+
+    sal_Bool                    bPenDirty;
+    sal_Bool                    bBrsDirty;
+    sal_Bool                    bFntDirty;
 
     // fuer Optimierung von (PenNULL,Brush,DrawPoly),(Pen,BrushNULL,DrawPoly) -> aus 2 mach ein
-    FASTBOOL                    bLastObjWasPolyWithoutLine;
-    FASTBOOL                    bNoLine;
-    FASTBOOL                    bNoFill;
+    sal_Bool                    bLastObjWasPolyWithoutLine;
+    sal_Bool                    bNoLine;
+    sal_Bool                    bNoFill;
 
     // fuer Optimierung mehrerer Linien zu einer Polyline
-    FASTBOOL                    bLastObjWasLine;
+    sal_Bool                    bLastObjWasLine;
 
 protected:
     void DoAction(MetaPixelAction           & rAct);
