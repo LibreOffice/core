@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:28:33 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1048,7 +1048,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             sal_Int32 nIndex = aCommand.SearchAscii("slot:");
             if ( !nIndex )
             {
-                USHORT nSlotId =  String( aCommand, 5, aCommand.Len()-5 ).ToInt32();
+                USHORT nSlotId = (USHORT) String( aCommand, 5, aCommand.Len()-5 ).ToInt32();
                 if ( nSlotId == SID_OPENDOC )
                     pFileNameItem = NULL;
             }
@@ -1156,6 +1156,45 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
     if ( pRefererItem )
         aReferer = pRefererItem->GetValue();
+
+    SFX_REQUEST_ARG( rReq, pFileFlagsItem, SfxStringItem, SID_OPTIONS, FALSE);
+    if ( pFileFlagsItem )
+    {
+        String aFileFlags = pFileFlagsItem->GetValue();
+        aFileFlags.ToUpperAscii();
+        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0054 ) )               // T = 54h
+        {
+            rReq.RemoveItem( SID_TEMPLATE );
+            rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, TRUE ) );
+        }
+
+        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0048 ) )               // H = 48h
+        {
+            rReq.RemoveItem( SID_HIDDEN );
+            rReq.AppendItem( SfxBoolItem( SID_HIDDEN, TRUE ) );
+        }
+
+        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0052 ) )               // R = 52h
+        {
+            rReq.RemoveItem( SID_DOC_READONLY );
+            rReq.AppendItem( SfxBoolItem( SID_DOC_READONLY, TRUE ) );
+        }
+
+        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0042 ) )               // B = 42h
+        {
+            rReq.RemoveItem( SID_PREVIEW );
+            rReq.AppendItem( SfxBoolItem( SID_PREVIEW, TRUE ) );
+        }
+
+        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0053 ) )               // S = 53h
+        {
+            // not supported anymore
+            //rReq.RemoveItem( SID_SILENT );
+            //rReq.AppendItem( SfxBoolItem( SID_SILENT, TRUE ) );
+        }
+
+        rReq.RemoveItem( SID_OPTIONS );
+    }
 
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
@@ -1331,6 +1370,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     // check if caller has set a callback
     SFX_REQUEST_ARG(rReq, pLinkItem, SfxLinkItem, SID_DONELINK, FALSE );
 
+    // remove from Itemset, because it confuses the parameter transformation
+    if ( pLinkItem )
+        pLinkItem = (SfxLinkItem*) pLinkItem->Clone();
+
+    rReq.RemoveItem( SID_DONELINK );
+
     // check if caller wants to create a view
     BOOL bCreateView = TRUE;
     SFX_REQUEST_ARG( rReq, pCreateViewItem, SfxBoolItem, SID_VIEW, FALSE );
@@ -1347,7 +1392,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     if ( pHidItem )
         bHidden = pHidItem->GetValue();
 
-    // This request is an UI call. We have to set the right values inside the MediaDescriptor
+    // This request is n UI call. We have to set the right values inside the MediaDescriptor
     // for: InteractionHandler, StatusIndicator, MacroExecutionMode and DocTemplate.
     // But we have to look for already existing values or for real hidden requests.
     SFX_REQUEST_ARG(rReq, pPreviewItem, SfxBoolItem, SID_PREVIEW, FALSE);
@@ -1385,134 +1430,74 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aTarget = String::CreateFromAscii("_blank" );
     }
 
-    BOOL bIsBlankTarget = ( aTarget.compareToAscii( "_blank" ) == COMPARE_EQUAL || aTarget.compareToAscii( "_default" ) == COMPARE_EQUAL );
-    Reference < XController > xController;
-    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
+    if ( bHidden )
+        aTarget = String::CreateFromAscii("_blank");
+
+    // if a frame is given, it must be used for the starting point of the targeting mechanism
+    Reference < XFrame > xFrame;
+    if ( pFrame )
+        xFrame = pFrame->GetFrameInterface();
+    else
+        xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+
+    if( aFileName.Len() && aFileName.GetChar(0) == '#' )
     {
-        if ( bHidden )
-            aTarget = String::CreateFromAscii("_blank");
-
-        // if a frame is given, it must be used for the starting point of the targetting mechanism
-        // this code is also used if asynchron loading is possible, because loadComponent always is synchron
-        Reference < XFrame > xFrame;
-        if ( pFrame )
-            xFrame = pFrame->GetFrameInterface();
-        else
-            xFrame = Reference < XFrame >( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-
-        // make URL ready
-        URL aURL;
-        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-        String aFileName = pFileNameItem->GetValue();
-
-        INetURLObject aObj;
-        SfxObjectShell* pCur = pFrame ? pFrame->GetCurrentDocument() : 0;
-        if ( !pCur )
-            pCur = SfxObjectShell::Current();
-        if( aFileName.Len() && aFileName.GetChar(0) == '#' ) // Mark without URL
-        {
-            SfxViewFrame *pView = pFrame ? pFrame->GetCurrentViewFrame() : 0;
-            if ( !pView )
-                pView = SfxViewFrame::Current();
-            pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
-            rReq.SetReturnValue( SfxViewFrameItem( 0, pView ) );
-            return;
-        }
-
-        aURL.Complete = aFileName;
-        Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-        xTrans->parseStrict( aURL );
-
-        // load document using dispatch framework
-        if( !pLinkItem && rReq.IsSynchronCall() )
-        {
-            // if loading must be done synchron, we must wait for completion to get a return value
-            // find frame by myself; I must konw the exact frame to get the controller for the return value from it
-            if( aTarget.getLength() )
-                xFrame = xFrame->findFrame( aTarget, FrameSearchFlag::ALL );
-
-            // targeting has been resolved, so target name must not be used in queryDispatch
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, ::rtl::OUString(), 0 ) : Reference < XDispatch >();
-            if ( xDisp.is() )
-            {
-                Reference < XNotifyingDispatch > xNot( xDisp, UNO_QUERY );
-                if ( xNot.is() )
-                {
-                    // create listener for notification of load success or fail
-                    SfxOpenDocStatusListener_Impl* pListener = new SfxOpenDocStatusListener_Impl();
-                    pListener->acquire();
-                    xNot->dispatchWithNotification( aURL, aArgs, pListener );
-
-                    // stay on the stack until result has been notified
-                    while ( !pListener->bFinished )
-                        Application::Yield();
-
-                    if ( pListener->bSuccess )
-                        // successful loading, get loaded controller
-                        xController = xFrame->getController();
-
-                    pListener->release();
-                }
-            }
-
-            if ( !xController.is() && bIsBlankTarget )
-                // a blank frame would have been created in findFrame; in this case I am the owner and I must delete it
-                xFrame->dispose();
-        }
-        else
-        {
-            // otherwise we just dispatch and that's it
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-            Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, aTarget, FrameSearchFlag::ALL ) : Reference < XDispatch >();;
-            if ( xDisp.is() )
-                xDisp->dispatch( aURL, aArgs );
-        }
+        // Mark without URL
+        SfxViewFrame *pView = pFrame ? pFrame->GetCurrentViewFrame() : 0;
+        if ( !pView )
+            pView = SfxViewFrame::Current();
+        pView->GetViewShell()->JumpToMark( aFileName.Copy(1) );
+        rReq.SetReturnValue( SfxViewFrameItem( 0, pView ) );
     }
     else
     {
-        // synchron loading without a given frame or as blank frame
-        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-        Reference < XModel > xModel( xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs ), UNO_QUERY );
-        if ( xModel.is() )
-            xController = xModel->getCurrentController();
+        // evaluate target name
+        try
+        {
+            Reference < XComponentLoader > xLoader( xFrame, UNO_QUERY );
+            Reference < XModel > xModel( xLoader->loadComponentFromURL( aFileName, aTarget, FrameSearchFlag::GLOBAL|FrameSearchFlag::CREATE, aArgs ), UNO_QUERY );
+            Reference < XController > xController;
+            if ( xModel.is() )
+                xController = xModel->getCurrentController();
+
+            if ( xController.is() )
+            {
+                // try to find the SfxFrame for the controller
+                SfxFrame* pFrame = NULL;
+                for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, FALSE ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, FALSE ) )
+                {
+                    if ( pShell->GetController() == xController )
+                    {
+                        pFrame = pShell->GetViewFrame()->GetFrame();
+                        break;
+                    }
+                }
+
+                if ( pFrame )
+                {
+                    SfxObjectShell* pSh = pFrame->GetCurrentDocument();
+                    DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
+
+                    if ( bCreateView )
+                        rReq.SetReturnValue( SfxViewFrameItem( 0, pFrame->GetCurrentViewFrame() ) );
+                    else
+                        rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
+
+                    if( ( bHidden || !bCreateView ) )
+                        pSh->RestoreNoDelete();
+                }
+            }
+        }
+        catch (com::sun::star::uno::Exception&)
+        {
+        }
     }
 
-    if ( xController.is() )
+    if ( pLinkItem )
     {
-        // try to find the SfxFrame for the controller
-        SfxFrame* pFrame = NULL;
-        for ( SfxViewShell* pShell = SfxViewShell::GetFirst( 0, FALSE ); pShell; pShell = SfxViewShell::GetNext( *pShell, 0, FALSE ) )
-        {
-            if ( pShell->GetController() == xController )
-            {
-                pFrame = pShell->GetViewFrame()->GetFrame();
-                break;
-            }
-        }
-
-        if ( pFrame )
-        {
-            SfxObjectShell* pSh = pFrame->GetCurrentDocument();
-            DBG_ASSERT( pSh, "Controller without ObjectShell ?!" );
-
-            if ( bCreateView )
-                rReq.SetReturnValue( SfxViewFrameItem( 0, pFrame->GetCurrentViewFrame() ) );
-            else
-                rReq.SetReturnValue( SfxObjectItem( 0, pSh ) );
-
-            SFX_REQUEST_ARG(rReq, pExecItem, SfxExecuteItem, SID_AFTEROPENEVENT, FALSE );
-            if( pExecItem )
-                pFrame->GetDispatcher_Impl()->Execute( *pExecItem );
-
-            if( ( bHidden || !bCreateView ) )
-            {
-                pSh->RestoreNoDelete();
-                // Locking is now done in LoadEnvironment_Impl, otherwise it would be too late!
-//                pSh->OwnerLock( TRUE );
-            }
-        }
+        SfxPoolItem* pRet = rReq.GetReturnValue()->Clone();
+        pLinkItem->GetValue().Call(pRet);
+        delete pLinkItem;
     }
 }
 
