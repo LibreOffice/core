@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-06 22:00:07 $
+ *  last change: $Author: iha $ $Date: 2003-12-08 17:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,37 @@ bool isDoubleClick( const MouseEvent& rMEvt )
         !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift();
 }
 
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+bool lcl_isResizeableObject( const rtl::OUString& rClassifiedIdentifier )
+{
+    ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
+    switch( eObjectType )
+    {
+        case OBJECTTYPE_DIAGRAM:
+        case OBJECTTYPE_DIAGRAM_WALL:
+            return true;
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool lcl_isRotateableObject( const rtl::OUString& rSelectedObjectCID, const uno::Reference< frame::XModel >& xChartModel )
+{
+    if( rSelectedObjectCID.indexOf(C2U("Diagram"))==-1 )
+        return false;
+
+    rtl::OUString aDummy;
+    sal_Int32 nDimensionCount = ChartModelHelper::getDimensionAndFirstChartType(
+        ChartModelHelper::findDiagram( xChartModel ), aDummy );
+    if( nDimensionCount == 3 )
+        return true;
+    return false;
+}
+
 class RotateDiagramDragMethod : public SdrDragMethod
 {
 public:
@@ -565,6 +596,10 @@ void RotateDiagramDragMethod::DrawXor(ExtOutputDevice& rXOut, FASTBOOL bFull) co
         }
     }
 }
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
 
 //------------------------------------------------------------------------
 
@@ -607,37 +642,46 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if( isDoubleClick(rMEvt) ) //do not change selection if double click
         return;//double click is handled further in mousebutton up
 
+    SdrHdl* pHitSelectionHdl = 0;
+    //switch from move to resize if handle is hit on a resizeable object
+    if( lcl_isResizeableObject( m_aSelectedObjectCID ) )
+        pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos, *pWindow );
     bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper );
-    if( !bClickedTwiceOnDragableObject ) //do not change selection if clicked twice on a dragable object
+    //do not change selection if clicked twice on a dragable object
+    //or if selection handles are hit
+    if( !pHitSelectionHdl && !bClickedTwiceOnDragableObject )
     {
         SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID
                                 , *pDrawViewWrapper
                                 , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
 
-        if( !ObjectIdentifier::isRotateableObject( m_aSelectedObjectCID ) )
+        if( !lcl_isRotateableObject( m_aSelectedObjectCID, m_aModel->getModel() ) )
                 pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
     }
     if( bClickedTwiceOnDragableObject
         || ObjectIdentifier::isDragableObject( m_aSelectedObjectCID ) )
     {
-        //@todo ... cleanup
-
         //start drag
-
-        //@todo change selection to according group object ?...
-        SdrHdl* pHdl = NULL;//pDrawViewWrapper->PickHandle( aMPos, *pWindow );
         USHORT  nDrgLog = (USHORT)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
         SdrDragMethod* pDragMethod = NULL;
+
+        //@todo ... cleanup
+        //change selection to 3D scene if 3D object
         if(pDrawViewWrapper->getSelectedObject()->ISA(E3dObject))
         {
-            pDrawViewWrapper->SetDragMode(SDRDRAG_ROTATE);
             E3dObject* pE3dObject = (E3dObject*)pDrawViewWrapper->getSelectedObject();
             E3dScene* pScene = pE3dObject->GetScene();
             pDrawViewWrapper->UnmarkAll();
             pDrawViewWrapper->MarkObject(pScene);
-            pDragMethod = new RotateDiagramDragMethod( *pDrawViewWrapper );
+            pHitSelectionHdl = pDrawViewWrapper->PickHandle( aMPos, *pWindow );//get new handle as selection has changed
+
+            SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
+            if( SDRDRAG_ROTATE==eDragMode )
+                pDragMethod = new RotateDiagramDragMethod( *pDrawViewWrapper );
+            else
+                pDrawViewWrapper->SetDragMode(eDragMode);
         }
-        pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHdl, nDrgLog, pDragMethod);
+        pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHitSelectionHdl, nDrgLog, pDragMethod);
     }
 }
 
@@ -855,12 +899,12 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         else //mouse wasn't moved while dragging
         {
             bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper );
-            bool bIsRotateable = ObjectIdentifier::isRotateableObject( m_aSelectedObjectCID );
+            bool bIsRotateable = lcl_isRotateableObject( m_aSelectedObjectCID, m_aModel->getModel() );
 
             //toogle between move and rotate
             SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
             if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==eDragMode )
-                eDragMode=SDRDRAG_MOVE;//eDragMode=SDRDRAG_ROTATE;//@todo ...
+                eDragMode=SDRDRAG_ROTATE;
             else
                 eDragMode=SDRDRAG_MOVE;
             pDrawViewWrapper->SetDragMode(eDragMode);
@@ -870,6 +914,16 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper, true );
             if( !aPreviousSelectedObjectCID.equals(m_aSelectedObjectCID) )
                 pDrawViewWrapper->SetDragMode(SDRDRAG_MOVE);
+
+            //change selection to 3D scene if 3D object
+            SdrObject* pObj = pDrawViewWrapper->getSelectedObject();
+            if(pObj && pObj->ISA(E3dObject))
+            {
+                E3dObject* pE3dObject = (E3dObject*)pObj;
+                E3dScene* pScene = pE3dObject->GetScene();
+                pDrawViewWrapper->UnmarkAll();
+                pDrawViewWrapper->MarkObject(pScene);
+            }
         }
     }
     else if( isDoubleClick(rMEvt) )
