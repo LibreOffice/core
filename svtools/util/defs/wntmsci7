@@ -9612,3 +9612,4 @@ _real@8@3ffeccccccccccccd000
 ?s_cd@?$WeakImplHelper6@VXFilePickerControlAccess@dialogs@ui@star@sun@com@@VXFilePickerNotifier@23456@VXFilePreview@23456@VXFilterManager@23456@VXInitialization@lang@456@VXServiceInfo@lang@456@@cppu@@0Uclass_data6@2@A
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFolderPicker@dialogs@ui@star@sun@com@@@2345@@Z
 ?s_cd@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@0Uclass_data2@2@A
+?IsExpanded@SvListView@@QBEEPAVSvListEntry@@@Z
