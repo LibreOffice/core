@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-14 16:41:59 $
+ *  last change: $Author: dbo $ $Date: 2001-03-16 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ MyApp aMyApp;
 
 void MyApp::Main()
 {
-    if( GetCommandLineParamCount() < 1)
+    if (GetCommandLineParamCount() < 1)
     {
         OSL_ENSURE( 0, "usage: imexp inputfile [outputfile]\n" );
         return;
@@ -304,7 +304,9 @@ void MyApp::Main()
     try
     {
         ::comphelper::setProcessServiceFactory( xMSF );
+#if SUPD < 626
         InitExtVclToolkit();
+#endif
         Application::RegisterUnoServices();
 
         Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
