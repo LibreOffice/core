@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 12:09:18 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 12:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,8 @@ SV_IMPL_VARARR_SORT( ScHTMLColOffset, ULONG );
 //------------------------------------------------------------------------
 
 ScHTMLTableData::ScHTMLTableData(
-        const String& rTabName,
-        USHORT _nFirstCol, USHORT _nFirstRow,
-        USHORT _nColSpan, USHORT _nRowSpan ) :
+        const String& rTabName, USHORT _nFirstCol, USHORT _nFirstRow,
+        USHORT _nColSpan, USHORT _nRowSpan, BOOL bBorder ) :
     aTableName( rTabName ),
     nFirstCol( _nFirstCol ),
     nFirstRow( _nFirstRow ),
@@ -133,6 +132,7 @@ ScHTMLTableData::ScHTMLTableData(
     nRowSpan( _nRowSpan ),
     nDocCol( _nFirstCol ),
     nDocRow( _nFirstRow ),
+    bBorderOn( bBorder ),
     pNestedTables( NULL )
 {
 }
@@ -193,12 +193,12 @@ void ScHTMLTableData::SetMaxCount( Table& rDataTab, ULONG nIndex, USHORT nCount 
 }
 
 ScHTMLTableData* ScHTMLTableData::InsertNestedTable(
-        ULONG nTab, const String& rTabName,
-        USHORT _nFirstCol, USHORT _nFirstRow, USHORT _nColSpan, USHORT _nRowSpan )
+        ULONG nTab, const String& rTabName, USHORT _nFirstCol, USHORT _nFirstRow,
+        USHORT _nColSpan, USHORT _nRowSpan, BOOL bBorder )
 {
     if( !pNestedTables )
         pNestedTables = new ScHTMLTableDataTable;
-    return pNestedTables->InsertTable( nTab, rTabName, _nFirstCol, _nFirstRow, _nColSpan, _nRowSpan );
+    return pNestedTables->InsertTable( nTab, rTabName, _nFirstCol, _nFirstRow, _nColSpan, _nRowSpan, bBorder );
 }
 
 void ScHTMLTableData::ChangeDocCoord( short nColDiff, short nRowDiff )
@@ -251,36 +251,39 @@ void ScHTMLTableData::RecalcSize()
 
 void ScHTMLTableData::SetCellBorders( ScDocument* pDoc, const ScAddress& rFirstPos )
 {
-    const USHORT nOuterLine = DEF_LINE_WIDTH_2;
-    const USHORT nInnerLine = DEF_LINE_WIDTH_0;
-    SvxBorderLine aOuterLine, aInnerLine;
-    aOuterLine.SetColor( Color( COL_BLACK ) );
-    aOuterLine.SetOutWidth( nOuterLine );
-    aInnerLine.SetColor( Color( COL_BLACK ) );
-    aInnerLine.SetOutWidth( nInnerLine );
-    SvxBoxItem aBorderItem;
-
-    for( USHORT nCol = nFirstCol; nCol <= nLastCol; nCol++ )
+    if( bBorderOn )
     {
-        SvxBorderLine* pLeftLine = (nCol == nFirstCol) ? &aOuterLine : &aInnerLine;
-        SvxBorderLine* pRightLine = (nCol == nLastCol) ? &aOuterLine : &aInnerLine;
-        USHORT nCellCol1 = CalcDocCol( nCol ) + rFirstPos.Col();
-        USHORT nCellCol2 = nCellCol1 + GetCount( aColCount, nCol ) - 1;
-        for( USHORT nRow = nFirstRow; nRow <= nLastRow; nRow++ )
+        const USHORT nOuterLine = DEF_LINE_WIDTH_2;
+        const USHORT nInnerLine = DEF_LINE_WIDTH_0;
+        SvxBorderLine aOuterLine, aInnerLine;
+        aOuterLine.SetColor( Color( COL_BLACK ) );
+        aOuterLine.SetOutWidth( nOuterLine );
+        aInnerLine.SetColor( Color( COL_BLACK ) );
+        aInnerLine.SetOutWidth( nInnerLine );
+        SvxBoxItem aBorderItem;
+
+        for( USHORT nCol = nFirstCol; nCol <= nLastCol; nCol++ )
         {
-            SvxBorderLine* pTopLine = (nRow == nFirstRow) ? &aOuterLine : &aInnerLine;
-            SvxBorderLine* pBottomLine = (nRow == nLastRow) ? &aOuterLine : &aInnerLine;
-            USHORT nCellRow1 = CalcDocRow( nRow ) + rFirstPos.Row();
-            USHORT nCellRow2 = nCellRow1 + GetCount( aRowCount, nRow ) - 1;
-            for( USHORT nCellCol = nCellCol1; nCellCol <= nCellCol2; nCellCol++ )
+            SvxBorderLine* pLeftLine = (nCol == nFirstCol) ? &aOuterLine : &aInnerLine;
+            SvxBorderLine* pRightLine = (nCol == nLastCol) ? &aOuterLine : &aInnerLine;
+            USHORT nCellCol1 = CalcDocCol( nCol ) + rFirstPos.Col();
+            USHORT nCellCol2 = nCellCol1 + GetCount( aColCount, nCol ) - 1;
+            for( USHORT nRow = nFirstRow; nRow <= nLastRow; nRow++ )
             {
-                aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : NULL, BOX_LINE_LEFT );
-                aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : NULL, BOX_LINE_RIGHT );
-                for( USHORT nCellRow = nCellRow1; nCellRow <= nCellRow2; nCellRow++ )
+                SvxBorderLine* pTopLine = (nRow == nFirstRow) ? &aOuterLine : &aInnerLine;
+                SvxBorderLine* pBottomLine = (nRow == nLastRow) ? &aOuterLine : &aInnerLine;
+                USHORT nCellRow1 = CalcDocRow( nRow ) + rFirstPos.Row();
+                USHORT nCellRow2 = nCellRow1 + GetCount( aRowCount, nRow ) - 1;
+                for( USHORT nCellCol = nCellCol1; nCellCol <= nCellCol2; nCellCol++ )
                 {
-                    aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : NULL, BOX_LINE_TOP );
-                    aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : NULL, BOX_LINE_BOTTOM );
-                    pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
+                    aBorderItem.SetLine( (nCellCol == nCellCol1) ? pLeftLine : NULL, BOX_LINE_LEFT );
+                    aBorderItem.SetLine( (nCellCol == nCellCol2) ? pRightLine : NULL, BOX_LINE_RIGHT );
+                    for( USHORT nCellRow = nCellRow1; nCellRow <= nCellRow2; nCellRow++ )
+                    {
+                        aBorderItem.SetLine( (nCellRow == nCellRow1) ? pTopLine : NULL, BOX_LINE_TOP );
+                        aBorderItem.SetLine( (nCellRow == nCellRow2) ? pBottomLine : NULL, BOX_LINE_BOTTOM );
+                        pDoc->ApplyAttr( nCellCol, nCellRow, rFirstPos.Tab(), aBorderItem );
+                    }
                 }
             }
         }
@@ -377,7 +380,7 @@ USHORT ScHTMLTableDataTable::GetNextFreeRow( ULONG nTab )
 
 ScHTMLTableData* ScHTMLTableDataTable::InsertTable(
         ULONG nTab, const String& rTabName, USHORT nFirstCol, USHORT nFirstRow,
-        USHORT nColSpan, USHORT nRowSpan, ULONG nNestedIn )
+        USHORT nColSpan, USHORT nRowSpan, BOOL bBorder, ULONG nNestedIn )
 {
     ScHTMLTableData* pTable = GetTable( nTab );
     // table already exists
@@ -389,13 +392,15 @@ ScHTMLTableData* ScHTMLTableDataTable::InsertTable(
         pTable = GetTable( nNestedIn );
         if( pTable )
         {
-            ScHTMLTableData* pNewTab = pTable->InsertNestedTable( nTab, rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan );
+            ScHTMLTableData* pNewTab = pTable->InsertNestedTable(
+                nTab, rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan, bBorder );
             SetCurrTable( nTab, pNewTab );
             return pNewTab;
         }
     }
     // insert in this table
-    _Insert( nTab, pTable = new ScHTMLTableData( rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan ) );
+    _Insert( nTab, pTable = new ScHTMLTableData(
+        rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan, bBorder ) );
     SetCurrTable( nTab, pTable );
     return pTable;
 }
@@ -1408,6 +1413,8 @@ void ScHTMLParser::TableDataOn( ImportInfo* pInfo )
 void ScHTMLParser::TableOn( ImportInfo* pInfo )
 {
     String aTabName;
+    BOOL bBorderOn = FALSE;
+
     if ( ++nTableLevel > 1 )
     {   // Table in Table
         USHORT nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
@@ -1438,10 +1445,11 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                         nTableWidth = GetWidthPixel( pOption );
                     }
                     break;
+                    case HTML_O_BORDER:
+                        bBorderOn = TRUE;
+                    break;
                     case HTML_O_ID:
-                    {
                         aTabName.Assign( pOption->GetString() );
-                    }
                     break;
                 }
             }
@@ -1462,7 +1470,7 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
 
         if( pTableData )
             pTableData->InsertTable( nMaxTable + 1, aTabName, pActEntry->nCol, pActEntry->nRow,
-                pActEntry->nColOverlap, pActEntry->nRowOverlap, nTable );
+                pActEntry->nColOverlap, pActEntry->nRowOverlap, bBorderOn, nTable );
 
         ScEEParseEntry* pE = pList->Last();
         NewActEntry( pE );      // neuer freifliegender pActEntry
@@ -1496,17 +1504,18 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                         nTableWidth = GetWidthPixel( pOption );
                     }
                     break;
+                    case HTML_O_BORDER:
+                        bBorderOn = TRUE;
+                    break;
                     case HTML_O_ID:
-                    {
                         aTabName.Assign( pOption->GetString() );
-                    }
                     break;
                 }
             }
         }
 
         if( pTableData )
-            pTableData->InsertTable( nMaxTable + 1, aTabName, nColCnt, nRowCnt, 1, 1 );
+            pTableData->InsertTable( nMaxTable + 1, aTabName, nColCnt, nRowCnt, 1, 1, bBorderOn );
     }
     nTable = ++nMaxTable;
     bFirstRow = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-06 12:08:56 $
+ *  last change: $Author: dr $ $Date: 2001-04-06 12:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ private:
     USHORT                      nRowSpan;       // row spanning of the parent cell
     USHORT                      nDocCol;        // resulting position in ScDoc
     USHORT                      nDocRow;        // resulting position in ScDoc
+    BOOL                        bBorderOn;      // table borders
 
     ScHTMLTableDataTable*       pNestedTables;  // table of nested HTML tables
 
@@ -166,7 +167,8 @@ public:
                                 ScHTMLTableData(
                                     const String& rTabName,
                                     USHORT _nFirstCol, USHORT _nFirstRow,
-                                    USHORT _nColSpan, USHORT _nRowSpan );
+                                    USHORT _nColSpan, USHORT _nRowSpan,
+                                    BOOL bBorder );
                                 ~ScHTMLTableData();
 
     inline USHORT               GetFirstCol() const     { return nFirstCol; }
@@ -199,7 +201,8 @@ public:
     ScHTMLTableData*            InsertNestedTable(
                                     ULONG nTab, const String& rTabName,
                                     USHORT _nFirstCol, USHORT _nFirstRow,
-                                    USHORT _nColSpan, USHORT _nRowSpan );
+                                    USHORT _nColSpan, USHORT _nRowSpan,
+                                    BOOL bBorder );
     inline void                 SetCellCoord( USHORT nCol, USHORT nRow );
     void                        SetDocCoord( USHORT nCol, USHORT nRow );
 
@@ -249,7 +252,7 @@ public:
                                     ULONG nTab, const String& rTabName,
                                     USHORT nFirstCol, USHORT nFirstRow,
                                     USHORT nColSpan, USHORT nRowSpan,
-                                    ULONG nNestedIn = 0 );
+                                    BOOL bBorder, ULONG nNestedIn = 0 );
     void                        SetCellCoord( ULONG nTab, USHORT nCol, USHORT nRow );
     void                        RecalcSizes();
 
