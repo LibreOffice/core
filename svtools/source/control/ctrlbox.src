@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-10 05:09:51 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 05:41:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,13 +100,13 @@ String STR_SVT_AUTOMATIC_COLOR
     Text[ polish ] = "Automatycznie";
     Text[ portuguese_brazilian ] = "Automatic";
     Text[ japanese ] = "©“®";
-    Text[ korean ] = "Automatic";
+    Text[ korean ] = "ÀÚµ¿";
     Text[ chinese_simplified ] = "×Ô¶¯";
     Text[ chinese_traditional ] = "¦Û°Ê";
     Text[ turkish ] = "Automatic";
     Text[ arabic ] = "ÊáŞÇÆí";
     Text[ catalan ] = "Automatic";
-    Text[ finnish ] = "Automatisch";
+    Text[ finnish ] = "Automaattinen";
 };
 
 /*
@@ -131,13 +131,13 @@ String STR_SVT_COLLATE_NORMAL
     Text[ polish ] = "Normalny";
     Text[ portuguese_brazilian ] = "Normal";
     Text[ japanese ] = "’ÊíÌ«İÄ";
-    Text[ korean ] = "Normal";
+    Text[ korean ] = "Á¤»ó";
     Text[ chinese_simplified ] = "Ò»°ã";
     Text[ chinese_traditional ] = "¤@¯ë";
     Text[ turkish ] = "Normal";
     Text[ arabic ] = "ÚÇÏí";
     Text[ catalan ] = "Normal";
-    Text[ finnish ] = "Normal";
+    Text[ finnish ] = "tavallinen";
 };
 
 String STR_SVT_COLLATE_CHARSET
@@ -158,7 +158,7 @@ String STR_SVT_COLLATE_CHARSET
     Text[ polish ] = "Zbiór znaków";
     Text[ portuguese_brazilian ] = "Character Set";
     Text[ japanese ] = "•¶ší‚Ì•ÏŠ·";
-    Text[ korean ] = "Character Set";
+    Text[ korean ] = "¹®ÀÚ ÁıÇÕ";
     Text[ chinese_simplified ] = "×ÖÌå";
     Text[ chinese_traditional ] = "¦r«¬";
     Text[ turkish ] = "Character Set";
@@ -185,7 +185,7 @@ String STR_SVT_COLLATE_DICTIONARY
     Text[ polish ] = "S³ownik";
     Text[ portuguese_brazilian ] = "Dictionary";
     Text[ japanese ] = "«‘";
-    Text[ korean ] = "Dictionary";
+    Text[ korean ] = "»çÀü";
     Text[ chinese_simplified ] = "×Öµä";
     Text[ chinese_traditional ] = "¦r¨å";
     Text[ turkish ] = "Dictionary";
@@ -239,7 +239,7 @@ String STR_SVT_COLLATE_STROKE
     Text[ polish ] = "Stroke";
     Text[ portuguese_brazilian ] = "Stroke";
     Text[ japanese ] = "‘‰æ”";
-    Text[ korean ] = "Stroke";
+    Text[ korean ] = "½ºÆ®·ÎÅ©";
     Text[ chinese_simplified ] = "±Ê»­";
     Text[ chinese_traditional ] = "µ§µe";
     Text[ turkish ] = "Stroke";
@@ -266,7 +266,7 @@ String STR_SVT_COLLATE_RADICAL
     Text[ polish ] = "Radical";
     Text[ portuguese_brazilian ] = "Radical";
     Text[ japanese ] = "Š¿š‚Ì•”ñ";
-    Text[ korean ] = "Radical";
+    Text[ korean ] = "±Ø´Ü";
     Text[ chinese_simplified ] = "²¿Ê×";
     Text[ chinese_traditional ] = "³¡­º";
     Text[ turkish ] = "Radical";
