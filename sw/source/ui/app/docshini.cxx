@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:26:22 $
+ *  last change: $Author: os $ $Date: 2002-06-24 09:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,21 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         SfxPrinter* pPrt = pDoc->GetPrt();
 
         String sEntry;
-        for(USHORT i = 0; i < 2; i++)
+        USHORT aFontWhich[] =
+        {   RES_CHRATR_FONT,
+            RES_CHRATR_CJK_FONT,
+            RES_CHRATR_CTL_FONT
+        };
+        USHORT aFontIds[] =
         {
-            USHORT nFontWhich = i ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
-            USHORT nFontId = i ? FONT_STANDARD_CJK : FONT_STANDARD;
+            FONT_STANDARD,
+            FONT_STANDARD_CJK,
+            FONT_STANDARD_CTL
+        };
+        for(USHORT i = 0; i < 3; i++)
+        {
+            USHORT nFontWhich = aFontWhich[i];
+            USHORT nFontId = aFontIds[i];
             SvxFontItem* pFontItem = 0;
             if(!pStdFont->IsFontDefault(nFontId))
             {
