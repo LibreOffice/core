@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:17:27 $
+ *  last change: $Author: er $ $Date: 2001-08-23 19:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,9 +459,14 @@ void ScCompiler::CheckTabQuotes( String& rString )
         {
             rString.Insert( '\'', 0 );
             rString += '\'';
-            break;
+            return ;
         }
         p++;
+    }
+    if ( CharClass::isAsciiNumeric( rString ) )
+    {
+        rString.Insert( '\'', 0 );
+        rString += '\'';
     }
 }
 
@@ -976,43 +981,44 @@ BOOL ScCompiler::IsString()
 
 BOOL ScCompiler::IsReference( const String& rName )
 {
-    // wird jetzt vor IsValue aufgerufen, kein #REF! aus Zahlen machen
-    // numerischer Tabellenname muss allerdings durchgehen
-    // englisches 1.E2 oder 1.E+2 ist wiederum Zahl 100, 1.E-2 ist 0,01
+    // Has to be called before IsValue
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( pSymbolTable == pSymbolTableEnglish ? '.' :
         ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
     if ( ch1 == cDecSep )
         return FALSE;
-    BOOL bMyAlpha;
-    sal_Unicode ch2;
-    xub_StrLen nPos = rName.Search( '.' );
-    const sal_Unicode* pTabSep = (nPos == STRING_NOTFOUND ? NULL :
-        rName.GetBuffer() + nPos);
-    if ( pTabSep )
-    {
-        ch2 = pTabSep[1];       // vielleicht Col-Bezeichner
-        bMyAlpha = CharClass::isAsciiAlpha( rName.GetChar( nPos+1 ) ) || ch2 == '$';
-    }
-    else
-    {
-        ch2 = 0;
-        bMyAlpha = FALSE;
-    }
-    // welcher Hirni hat bloss den . zum Tabellenseparator gemacht!?!
-    BOOL bDigit1 = CharClass::isAsciiNumeric( ch1 );
-    if ( cDecSep == '.' )
-    {
-        if ( ( bDigit1 && ( pTabSep ?
-                (!bMyAlpha || ((ch2 == 'E' || ch2 == 'e')   // E + - digit
-                    && (GetCharTableFlags( pTabSep[2] ) & SC_COMPILER_C_VALUE_EXP))) :
-                TRUE ) ) )
+    // Who was that imbecile introducing '.' as the sheet name separator!?!
+    if ( cDecSep == '.' && CharClass::isAsciiNumeric( ch1 ) )
+    {   // Numerical sheet name is valid.
+        // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
+        // Don't create a #REF! of those values.
+        const xub_StrLen nPos = rName.Search( '.' );
+        if ( nPos == STRING_NOTFOUND )
             return FALSE;
-    }
-    else
-    {
-        if ( bDigit1 && (pTabSep ? !bMyAlpha : TRUE) )
+        sal_Unicode const * const pTabSep = rName.GetBuffer() + nPos;
+        sal_Unicode ch2 = pTabSep[1];   // maybe a column identifier
+        if ( !(ch2 == '$' || CharClass::isAsciiAlpha( ch2 )) )
             return FALSE;
+        if ( (ch2 == 'E' || ch2 == 'e')   // E + - digit
+                && (GetCharTableFlags( pTabSep[2] ) & SC_COMPILER_C_VALUE_EXP) )
+        {   // #91053#
+            // If it is an 1.E2 expression check if "1" is an existent sheet
+            // name. If so, a desired value 1.E2 would have to be entered as
+            // 1E2 or 1.0E2 or 1.E+2, sorry. Another possibility would be to
+            // require numerical sheet names always being entered quoted, which
+            // is not desirable (too many 1999, 2000, 2001 sheets in use).
+            // Furthermore, XML files created with versions prior to SRC640e
+            // wouldn't contain the quotes added by MakeTabStr()/CheckTabQuotes()
+            // and would produce wrong formulas if the conditions here are met.
+            // If you can live with these restrictions you may remove the
+            // check and return an unconditional FALSE.
+            String aTabName( rName.Copy( 0, nPos ) );
+            USHORT nTab;
+            if ( !pDoc->GetTable( aTabName, nTab ) )
+                return FALSE;
+            // If sheet "1" exists and the expression is 1.E+2 continue as
+            // usual, the ScRange/ScAddress parser will take care of it.
+        }
     }
     ScRange aRange( aPos, aPos );
     USHORT nFlags = aRange.Parse( rName, pDoc );
