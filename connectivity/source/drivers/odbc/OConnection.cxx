@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 15:04:36 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 17:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,11 @@ OConnection::~OConnection()
 {
     if(!isClosed(  ))
         close();
+
+    if ( SQL_NULL_HANDLE != m_aConnectionHandle )
+        N3SQLFreeHandle( SQL_HANDLE_DBC, m_aConnectionHandle );
+    m_aConnectionHandle = SQL_NULL_HANDLE;
+
     m_pDriver->release();
     m_pDriver = NULL;
     ModuleContext::ReleaseRef();
