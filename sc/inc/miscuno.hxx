@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:17:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #define SC_SIMPLE_SERVICE_INFO( ClassName, ClassNameAscii, ServiceAscii )            \
 ::rtl::OUString SAL_CALL ClassName::getImplementationName()                      \
@@ -322,7 +325,7 @@ public:
 class ScUnoHelpFunctions
 {
 public:
-    static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
+    SC_DLLPUBLIC static com::sun::star::uno::Reference<com::sun::star::uno::XInterface>
                             AnyToInterface( const com::sun::star::uno::Any& rAny );
     static sal_Bool         GetBoolProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
