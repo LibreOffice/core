@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-08 12:07:30 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:01:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
 NO_SHL_DESCRIPTION=TRUE
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -74,8 +75,6 @@ NO_SHL_DESCRIPTION=TRUE
 .INCLUDE :  use_perl.mk
 
 # --- Files --------------------------------------------------------
-
-#DEPOBJFILES=$(SLO)$/GenInfoParser.obj
 
 OBJFILES=\
     $(OBJ)$/gen_info.obj	\
@@ -88,23 +87,6 @@ SLOFILES=\
     $(SLO)$/gi_list.obj	    \
     $(SLO)$/gi_parse.obj    \
     $(SLO)$/st_gilrw.obj
-
-#SHL1TARGET=     GenInfoParser
-#SHL1LIBS=       $(SLB)$/soltools_support.lib $(SLB)$/soltools_giparser.lib
-#SHL1IMPLIB=     i$(TARGET)
-#SHL1DEF=	    $(MISC)$/$(SHL1TARGET).def
-#SHL1OBJS=       $(SLO)$/GenInfoParser.obj
-##perl libraries not in LD_LIBRARY_PATH
-#SHL1NOCHECK=TRUE
-
-#.IF "$(GUI)"=="WNT"
-#SHL1STDLIBS=    msvcirt.lib $(PERLLIB)
-#.ENDIF
-
-#DEF1NAME=	    $(SHL1TARGET)
-#DEF1DEPN=	    makefile.mk
-#DEF1DES=        GenInfoParser
-#DEF1EXPORTFILE= geninfoparser.dxp
 
 # --- Targets ------------------------------------------------------
 
