@@ -43,6 +43,11 @@ int bText=0;
 
 %%
 
+\<[^\>]*"xml:lang="\""x-no-translate"\"[^\<]*\/\>	{
+	bText = 0;
+	WorkOnTokenSet( CFG_TOKEN_NO_TRANSLATE, yytext );
+}
+
 \<.*\/\> {
 	bText = 0;
 	WorkOnTokenSet( ANYTOKEN, yytext );
