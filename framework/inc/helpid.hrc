@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:11:35 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // Help-Ids -----------------------------------------------------------------
 
 #define HID_BACKINGWINDOW                           (HID_FRAMEWORK_START + 0)
+#define HID_LICENSEDIALOG                           (HID_FRAMEWORK_START + 1)
 
 #define ACT_FRAMEWORK_HID_END HID_BACKINGWINDOW
 
