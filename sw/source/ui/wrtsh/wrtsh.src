@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2001-06-08 23:01:34 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ String STR_TEXTTOTABLE_UNDO
     TEXT [ portuguese ] = "Converter texto -> tabela" ;
     TEXT [ finnish ] = "Muunna teksti -> taulukko" ;
     TEXT [ danish ] = "Konverter tekst til tabel" ;
-    TEXT [ french ] = "Convertir texte en tableau" ;
+    TEXT [ french ] = "Conversion de texte en tableau" ;
     TEXT [ swedish ] = "Konvertera text till tabell" ;
     TEXT [ dutch ] = "Tekst naar tabel converteren" ;
     TEXT [ spanish ] = "Convertir texto en tabla" ;
@@ -892,7 +892,7 @@ String STR_INSERT_CHART
     Text[ dutch ] = "%PRODUCTNAME Chart invoegen";
     Text[ chinese_simplified ] = "²åÈë %PRODUCTNAME Í¼±í";
     Text[ greek ] = "ĞñïóèŞêç %PRODUCTNAME Chart";
-    Text[ korean ] = "%PRODUCTNAMEChart  »ğÀÔ";
+    Text[ korean ] = "%PRODUCTNAMEChart »ğÀÔ";
     Text[ turkish ] = "%PRODUCTNAME Chart ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar %PRODUCTNAME Chart";
@@ -1381,7 +1381,7 @@ String STR_NUMORNONUM
     Text[ dutch ] = "Nummer aan/uit";
     Text[ chinese_simplified ] = "ÏÔÊ¾/ÒşÈë±àºÅ";
     Text[ greek ] = "Áñéèìüò Íáé/¼÷é";
-    Text[ korean ] = "¹øÈ£  Àû¿ë/ÇØÁ¦";
+    Text[ korean ] = "¹øÈ£ Àû¿ë/ÇØÁ¦";
     Text[ turkish ] = "Numara açık/kapalı";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número activado/desactivado";
@@ -2499,7 +2499,7 @@ String STR_UNDO_SETRUBYATTR
     Text[ dutch ] = "Fonetische symbolen invoegen";
     Text[ french ] = "Attribut Ruby";
     Text[ spanish ] = "Aplicar símbolos fonéticos";
-    Text[ italian ] = "Applica testo ruby";
+    Text[ italian ] = "Applica testo Ruby";
     Text[ danish ] = "Set phonetic Symbols";
     Text[ swedish ] = "Sätt fonetiska symboler";
     Text[ polish ] = "OsadŸ znaki diakrytyczne";
@@ -2674,7 +2674,7 @@ String STR_DDEERROR_APP2
     TEXT[ dutch ] = "] reageert niet";
     TEXT[ chinese_simplified ] = "] Ã»ÓĞ»ØÓ¦¡£";
     TEXT[ greek ] = "] äåí áíôáğïêñßíåôáé.";
-    TEXT[ korean ] = "]  ÀÀ´äÇÏÁö ¾ÊÀ½.";
+    TEXT[ korean ] = "] ÀÀ´äÇÏÁö ¾ÊÀ½.";
     TEXT[ turkish ] = "] cevap vermiyor";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no responde";
@@ -2789,4 +2789,5 @@ String STR_DDEERROR_LINK2
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "] no se puede establecer";
 };
+
 
