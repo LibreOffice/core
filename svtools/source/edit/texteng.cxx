@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:20:55 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 10:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1330,8 +1330,10 @@ void TextEngine::SeekCursor( ULONG nPara, USHORT nPos, Font& rFont )
             rFont.SetUnderline( UNDERLINE_DOTTED );
         else if ( nAttr & EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE )
             rFont.SetUnderline( UNDERLINE_DOTTED );
-        else if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
+        if ( nAttr & EXTTEXTINPUT_ATTR_REDTEXT )
             rFont.SetColor( Color( COL_RED ) );
+        else if ( nAttr & EXTTEXTINPUT_ATTR_HALFTONETEXT )
+            rFont.SetColor( Color( COL_LIGHTGRAY ) );
         if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();

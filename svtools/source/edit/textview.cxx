@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 10:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,7 @@ void TextView::Command( const CommandEvent& rCEvt )
         DeleteSelected();
         delete mpTextEngine->mpIMEInfos;
         mpTextEngine->mpIMEInfos = new TEIMEInfos( GetSelection().GetEnd() );
+        mpTextEngine->mpIMEInfos->bWasCursorOverwrite = !IsInsertMode();
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
@@ -753,10 +754,14 @@ void TextView::Command( const CommandEvent& rCEvt )
             TEParaPortion* pPortion = mpTextEngine->mpTEParaPortions->GetObject( mpTextEngine->mpIMEInfos->aPos.GetPara() );
             pPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
 
+            BOOL bInsertMode = !mpTextEngine->mpIMEInfos->bWasCursorOverwrite;
+
             delete mpTextEngine->mpIMEInfos;
             mpTextEngine->mpIMEInfos = NULL;
 
             mpTextEngine->FormatAndUpdate( this );
+
+            SetInsertMode( bInsertMode );
         }
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
@@ -787,39 +792,43 @@ void TextView::Command( const CommandEvent& rCEvt )
             pPPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
             mpTextEngine->FormatAndUpdate( this );
 
-            aSel.GetStart() = aSel.GetEnd();
-            SetSelection( aSel );
+            TextSelection aNewSel = TextPaM( mpTextEngine->mpIMEInfos->aPos.GetPara(), mpTextEngine->mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
+            SetSelection( aNewSel );
+            SetInsertMode( !pData->IsCursorOverwrite() );
+
+            if ( pData->IsCursorVisible() )
+                ShowCursor();
+            else
+                HideCursor();
         }
     }
-    else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
+    else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
         if ( mpTextEngine->mpIMEInfos && mpTextEngine->mpIMEInfos->nLen )
         {
-            const CommandExtTextInputPosData* pData = rCEvt.GetExtTextInputPosData();
+            TextPaM aPaM( GetSelection().GetEnd() );
+            Rectangle aR1 = mpTextEngine->PaMtoEditCursor( aPaM );
 
-            USHORT nChars = pData->GetChars();
-            USHORT nStart = mpTextEngine->mpIMEInfos->aPos.GetIndex() + pData->GetFirstPos();
+            USHORT nInputEnd = mpTextEngine->mpIMEInfos->aPos.GetIndex() + mpTextEngine->mpIMEInfos->nLen;
 
-            TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
-            Rectangle* pRects = new Rectangle[ nChars ];
-            for ( USHORT n = 0; n < nChars; n++ )
-            {
-                aPaM.GetIndex() = nStart+n;
-                Rectangle aR1 = mpTextEngine->PaMtoEditCursor( aPaM, 0 );
-                aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
-                aPaM.GetIndex()++;
-                Rectangle aR2 = mpTextEngine->PaMtoEditCursor( aPaM );
-                aR2.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
+            if ( !mpTextEngine->IsFormatted() )
+                mpTextEngine->FormatDoc();
 
-                pRects[n] = aR1;
-                pRects[n].Right() = aR2.Left();
+            TEParaPortion* pParaPortion = mpTextEngine->mpTEParaPortions->GetObject( aPaM.GetPara() );
+            USHORT nLine = pParaPortion->GetLineNumber( aPaM.GetIndex(), sal_True );
+            TextLine* pLine = pParaPortion->GetLines().GetObject( nLine );
+            if ( pLine && ( nInputEnd > pLine->GetEnd() ) )
+                nInputEnd = pLine->GetEnd();
+            Rectangle aR2 = mpTextEngine->PaMtoEditCursor( TextPaM( aPaM.GetPara(), nInputEnd ) );
 
-            }
-            GetWindow()->SetExtTextInputPos( pData->GetFirstPos(), pData->GetChars(), pRects );
-            delete pRects;
+            long nWidth = aR2.Left()-aR1.Right();
+            aR1.Move( -GetStartDocPos().X(), -GetStartDocPos().Y() );
+            GetWindow()->SetCursorRect( &aR1, nWidth );
         }
         else
-            GetWindow()->SetExtTextInputPos( 0, 0, NULL );
+        {
+            GetWindow()->SetCursorRect();
+        }
     }
     else
     {

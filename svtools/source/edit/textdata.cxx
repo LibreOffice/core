@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 10:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ TEIMEInfos::TEIMEInfos( const TextPaM& rPos )
     nLen = 0;
     bCursor = TRUE;
     pAttribs = NULL;
+    bWasCursorOverwrite = FALSE;
 }
 
 TEIMEInfos::~TEIMEInfos()

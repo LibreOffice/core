@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-13 09:55:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-08 10:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,7 +840,7 @@ void TextWindow::GetFocus()
         }
         mpExtTextView->SetPaintSelection( TRUE );
         mpExtTextView->ShowCursor( bGotoCursor );
-        SetInputContext( InputContext( GetFont(), TRUE ) );
+        SetInputContext( InputContext( GetFont(), !mpExtTextView->IsReadOnly() ? INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT : 0 ) );
     }
 }
 
