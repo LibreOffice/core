@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:40:15 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3316,6 +3316,7 @@ StackVar ScInterpreter::Interpret()
                     case ocDecimal          : ScDecimal();                  break;
                     case ocConvert          : ScConvert();                  break;
                     case ocRoman            : ScRoman();                    break;
+                    case ocArabic           : ScArabic();                   break;
                     case ocAnswer           : ScAnswer();                   break;
                     case ocTeam             : ScCalcTeam();                 break;
                     case ocTTT              : ScTTT();                      break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:36:52 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ enum OpCodeEnum
         ocErrorType         = SC_OPCODE_ERROR_TYPE,
         ocErrCell           = SC_OPCODE_ERR_CELL,
         ocFormula           = SC_OPCODE_FORMULA,
+        ocArabic            = SC_OPCODE_ARABIC,
         ocEnd1Par           = SC_OPCODE_END_1_PAR,
     // Funktionen mit mehreren Parametern
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:38:27 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ void ScIsValue();
 void ScIsFormula();
 void ScFormula();
 void ScRoman();
+void ScArabic();
 void ScIsNV();
 void ScIsErr();
 void ScIsError();

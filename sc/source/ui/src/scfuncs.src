@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:43:09 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -44470,6 +44470,31 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         {
             Text = "Je höher dieser Wert ist, desto mehr wird die römische Zahl vereinfacht. Der Wert muß im Bereich 0 - 4 liegen." ;
             Text [ english ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4." ;
+        };
+    };
+     // -=*# Resource for function ARABISCH #*=-
+    Resource SC_OPCODE_ARABIC
+    {
+        String 1 // Description
+        {
+            Text = "Berechnet den Wert einer römischen Zahl." ;
+            Text [ english ] = "Calculates the value of a roman number." ;
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_ARABISCH );
+            1;  0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text = "Text" ;
+            Text [ english ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text = "Der Text, der eine römische Zahl darstellt." ;
+            Text [ english ] = "The text that represents a roman number." ;
         };
     };
 };

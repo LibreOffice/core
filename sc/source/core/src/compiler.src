@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:39:08 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2110,6 +2110,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ arabic ] = "FORMULA";
         Text[ turkish ] = "FORMULA";
         Text[ language_user1 ] = " ";
+    };
+    String SC_OPCODE_ARABIC
+    {
+        Text = "ARABISCH" ;
+        Text [ english ] = "ARABIC" ;
     };
     String SC_OPCODE_ARC_TAN_2
     {
@@ -7411,4 +7416,6 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_BASE { Text = "BASE" ; };
     String SC_OPCODE_DECIMAL { Text = "DECIMAL" ; };
     String SC_OPCODE_CONVERT { Text = "CONVERT" ; };
+    String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
+    String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
 };

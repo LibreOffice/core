@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:40:15 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2032,5 +2032,77 @@ void ScInterpreter::ScRoman()
     }
 }
 
+
+BOOL lcl_GetArabicValue( sal_Unicode cChar, USHORT& rnValue, BOOL& rbIsDec )
+{
+    switch( cChar )
+    {
+        case 'M':   rnValue = 1000; rbIsDec = TRUE;     break;
+        case 'D':   rnValue = 500;  rbIsDec = FALSE;    break;
+        case 'C':   rnValue = 100;  rbIsDec = TRUE;     break;
+        case 'L':   rnValue = 50;   rbIsDec = FALSE;    break;
+        case 'X':   rnValue = 10;   rbIsDec = TRUE;     break;
+        case 'V':   rnValue = 5;    rbIsDec = FALSE;    break;
+        case 'I':   rnValue = 1;    rbIsDec = TRUE;     break;
+        default:    return FALSE;
+    }
+    return TRUE;
+}
+
+
+void ScInterpreter::ScArabic()
+{
+    String aRoman( GetString() );
+    if( nGlobalError )
+        SetIllegalParameter();
+    else
+    {
+        aRoman.ToUpperAscii();
+
+        USHORT nValue = 0;
+        USHORT nValidRest = 3999;
+        USHORT nCharIndex = 0;
+        USHORT nCharCount = aRoman.Len();
+        BOOL bValid = TRUE;
+
+        while( bValid && (nCharIndex < nCharCount) )
+        {
+            USHORT nDigit1 = 0;
+            USHORT nDigit2 = 0;
+            BOOL bIsDec1 = FALSE;
+            BOOL bIsDec2 = FALSE;
+            bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex ), nDigit1, bIsDec1 );
+            if( bValid && (nCharIndex + 1 < nCharCount) )
+                bValid = lcl_GetArabicValue( aRoman.GetChar( nCharIndex + 1 ), nDigit2, bIsDec2 );
+            if( bValid )
+            {
+                if( nDigit1 >= nDigit2 )
+                {
+                    nValue += nDigit1;
+                    nValidRest %= (nDigit1 * (bIsDec1 ? 5 : 2));
+                    bValid = (nValidRest >= nDigit1);
+                    if( bValid )
+                        nValidRest -= nDigit1;
+                    nCharIndex++;
+                }
+                else if( nDigit1 * 2 != nDigit2 )
+                {
+                    USHORT nDiff = nDigit2 - nDigit1;
+                    nValue += nDiff;
+                    bValid = (nValidRest >= nDiff);
+                    if( bValid )
+                        nValidRest = nDigit1 - 1;
+                    nCharIndex += 2;
+                }
+                else
+                    bValid = FALSE;
+            }
+        }
+        if( bValid )
+            PushInt( nValue );
+        else
+            SetIllegalArgument();
+    }
+}
 
 

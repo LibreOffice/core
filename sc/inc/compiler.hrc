@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-28 16:36:52 $
+ *  last change: $Author: dr $ $Date: 2001-03-01 15:33:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@
 #define SC_OPCODE_ERROR_TYPE        128
 #define SC_OPCODE_ERR_CELL          129
 #define SC_OPCODE_FORMULA           130
+#define SC_OPCODE_ARABIC            131
 #define SC_OPCODE_END_1_PAR         200
 
 /*** Funktionen mit mehreren Parametern ***/
