@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:34:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,7 +879,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
             //m_pData->m_pObjectShellLock = SfxObjectShellLock();
         }
 
-        //pShellLock = SfxObjectShellLock();
         SfxObjectShellClose_Impl( 0, (void*) pShell );
     }
 
@@ -3530,27 +3529,25 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
 
-    Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
-
-#if 0
-    Window* pWindow = NULL;
-    SfxViewFrame* pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-
-    if ( pWindow )
+    SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False );
+    if ( pViewFrm && m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !pViewFrm->GetFrame()->IsInPlace() )
     {
-        MapMode aInternalMapMode( pViewFrm->GetWindow().GetMapMode() );
-        MapMode aExternalMapMode( m_pData->m_pObjectShell->GetMapUnit() );
-
-        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aInternalMapMode, aExternalMapMode );
-        aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
-        aTmpRect = OutputDevice::LogicToLogic( aTmpRect, aExternalMapMode, aInternalMapMode );
+        Window* pWindow = VCLUnoHelper::GetWindow( pViewFrm->GetFrame()->GetFrameInterface()->getContainerWindow() );
+        Size aWinSize = pWindow->GetSizePixel();
+        awt::Size aCurrent = getVisualAreaSize( nAspect );
+        Size aDiff( aSize.Width-aCurrent.Width, aSize.Height-aCurrent.Height );
+        Size aWrongDiff = OutputDevice::LogicToLogic( aDiff , m_pData->m_pObjectShell->GetMapUnit(), pWindow->GetMapMode() );
+        aDiff = pViewFrm->GetViewShell()->GetWindow()->LogicToPixel( aDiff );
+        aWinSize.Width() += aDiff.Width();
+        aWinSize.Height() += aDiff.Height();
+        pWindow->SetSizePixel( aWinSize );
     }
     else
-#endif
+    {
+        Rectangle aTmpRect = m_pData->m_pObjectShell->GetVisArea( ASPECT_CONTENT );
         aTmpRect.SetSize( Size( aSize.Width, aSize.Height ) );
-
-    m_pData->m_pObjectShell->SetVisArea( aTmpRect );
+        m_pData->m_pObjectShell->SetVisArea( aTmpRect );
+    }
 }
 
 awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 nAspect )
