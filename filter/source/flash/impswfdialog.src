@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:02 $
+ *  last change: $Author: cl $ $Date: 2002-12-04 14:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ ModalDialog DLG_OPTIONS
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Flash Optionen" ;
+    Text = "Macromedia Flash (SWF) Optionen" ;
     Text [ ENGLISH ] = "Flash Optionen" ;
     Text [ english_us ] = "Flash Options" ;
 
