@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:36:00 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ class DrawViewShell
 {
 public:
     static const int SLOTARRAY_COUNT = 24;
+    static const int MASTERENUMCOMMANDS = 6;
 
     TYPEINFO();
 
@@ -438,6 +439,7 @@ protected:
     BOOL            bReadOnly;
     BOOL            bInEffectAssignment;
     USHORT*         pSlotArray;
+    String          aCurrShapeEnumCommand[MASTERENUMCOMMANDS];
 
     static BOOL     bPipette;
 
