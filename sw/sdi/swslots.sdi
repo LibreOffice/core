@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:31:48 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-import "ofa.ilb"
+import "svxslots.ilb"
 
 module
 "9F76B581-23DD-101C-80B6-000024021835"
