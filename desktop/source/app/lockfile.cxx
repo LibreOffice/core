@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:44:42 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,10 @@
 #include <osl/socket.hxx>
 #include <osl/security.hxx>
 #include <unotools/bootstrap.hxx>
-#include <vcl/msgbox.hxx>
 #include <tools/string.hxx>
 #include <tools/config.hxx>
 
-
-#include "desktopresid.hxx"
 #include "lockfile.hxx"
-#include "desktop.hrc"
 
 
 using namespace ::osl;
@@ -96,10 +92,12 @@ namespace desktop {
     const ByteString Lockfile::m_aHostkey( "Host" );
     const ByteString Lockfile::m_aStampkey( "Stamp" );
     const ByteString Lockfile::m_aTimekey( "Time" );
+    const ByteString Lockfile::m_aIPCkey( "IPCServer" );
 
-    Lockfile::Lockfile(void)
+    Lockfile::Lockfile( bool bIPCserver )
     :m_bRemove(sal_False)
     ,m_bIsLocked(sal_False)
+    ,m_bIPCserver(bIPCserver)
     {
         // build the file-url to use for the lock
         OUString aUserPath;
@@ -141,12 +139,13 @@ namespace desktop {
         }
     }
 
-    sal_Bool Lockfile::check( void )
+    sal_Bool Lockfile::check( fpExecWarning execWarning )
     {
 
         if (m_bIsLocked) {
             // lock existed, ask user what to do
-            if (isStale() || execWarning( ) == RET_YES) {
+            if (isStale() ||
+                (execWarning != 0 && (*execWarning)( this ))) {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
@@ -174,10 +173,13 @@ namespace desktop {
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(m_aGroup);
+        ByteString aIPCserver  = aConfig.ReadKey( m_aIPCkey );
+        if (! aIPCserver.EqualsIgnoreCaseAscii( "true" ))
+            return false;
+
         ByteString aHost  = aConfig.ReadKey( m_aHostkey );
         ByteString aUser  = aConfig.ReadKey( m_aUserkey );
         // lockfile from same host?
-        oslSocketResult sRes;
         ByteString myHost;
 #ifdef WNT
         /*
@@ -192,6 +194,7 @@ namespace desktop {
             myHost = OString("UNKNOWN");
         delete[] szHost;
 #else
+        oslSocketResult sRes;
         myHost  = OUStringToOString(
             SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
 #endif
@@ -214,7 +217,6 @@ namespace desktop {
         aConfig.SetGroup(m_aGroup);
 
         // get information
-        oslSocketResult sRes;
         ByteString aHost;
 #ifdef WNT
         /*
@@ -229,6 +231,7 @@ namespace desktop {
             aHost = OString("UNKNOWN");
         delete[] szHost;
 #else
+        oslSocketResult sRes;
         aHost  = OUStringToOString(
             SocketAddr::getLocalHostname( &sRes ), RTL_TEXTENCODING_ASCII_US );
 #endif
@@ -244,33 +247,10 @@ namespace desktop {
         aConfig.WriteKey( m_aHostkey,  aHost );
         aConfig.WriteKey( m_aStampkey, aStamp );
         aConfig.WriteKey( m_aTimekey,  aTime );
+        aConfig.WriteKey(
+            m_aIPCkey,
+            m_bIPCserver ? ByteString("true") : ByteString("false") );
         aConfig.Flush( );
-    }
-
-    short Lockfile::execWarning(void) const
-    {
-        // read information from lock
-        String aLockname = m_aLockname;
-        Config aConfig(aLockname);
-        aConfig.SetGroup(m_aGroup);
-        ByteString aHost  = aConfig.ReadKey( m_aHostkey );
-        ByteString aUser  = aConfig.ReadKey( m_aUserkey );
-        ByteString aStamp = aConfig.ReadKey( m_aStampkey );
-        ByteString aTime  = aConfig.ReadKey( m_aTimekey );
-
-        // display warning and return response
-        QueryBox aBox( NULL, DesktopResId( QBX_USERDATALOCKED ) );
-        // set box title
-        String aTitle = String( DesktopResId( STR_TITLE_USERDATALOCKED ));
-        aBox.SetText( aTitle );
-        // insert values...
-        String aMsgText = aBox.GetMessText( );
-        aMsgText.SearchAndReplaceAscii( "$u", String( aUser, RTL_TEXTENCODING_ASCII_US) );
-        aMsgText.SearchAndReplaceAscii( "$h", String( aHost, RTL_TEXTENCODING_ASCII_US) );
-        aMsgText.SearchAndReplaceAscii( "$t", String( aTime, RTL_TEXTENCODING_ASCII_US) );
-        aBox.SetMessText(aMsgText);
-        // do it
-        return aBox.Execute( );
     }
 
     void Lockfile::clean( void )
