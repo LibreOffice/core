@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:44:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // for the CreateSdrOLEFromStorage we need the information, how we handle
 // convert able OLE-Objects - this ist stored in
 #define OLE_STARMATH_2_MATHTYPE             0x0001
@@ -76,7 +80,7 @@ class SotStorage;
 
 #include <svtools/embedhlp.hxx>
 
-class SvxMSExportOLEObjects
+class SVX_DLLPUBLIC SvxMSExportOLEObjects
 {
     UINT32 nConvertFlags;
 public:
