@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergedcomponentdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:17:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ namespace configmgr
 
             OUString getTemplateAccessor (TemplateIdentifier const & _aTemplateName) const;
 
-            ISubtree const * getSchemaTree() const;
+            ISubtree const * getSchemaTree() const     { return m_pSchemaTree.get(); }
+            ISubtree const * getTemplatesTree() const  { return m_pTemplatesTree.get(); }
             ISubtree const * findTemplate(OUString const & _aTemplateName) const;
 
             ISubtree * getSchemaTree()      { return m_pSchemaTree.get(); }
@@ -115,6 +116,7 @@ namespace configmgr
 
             ISubtree  * setSchemaRoot(std::auto_ptr<ISubtree>  _aSchemaRoot);
             ISubtree  * addTemplate(std::auto_ptr<ISubtree>  _aNode, TemplateIdentifier const & aTemplate);
+            void  setTemplatesTree(std::auto_ptr<ISubtree>  _aTemplateTree);
 
             std::auto_ptr<ISubtree> extractSchemaTree();
             std::auto_ptr<ISubtree> extractTemplatesTree();
