@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-14 12:45:42 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ SwTxtAttr *SwAttrIter::GetAttr( const xub_StrLen nPos ) const
  *                        SwAttrIter::SeekAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice *pOut )
+sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice* pOut )
 {
     sal_Bool bChg = nStartIndex && nNewPos == nPos ? pFnt->IsFntChg() : Seek( nNewPos );
     if ( pLastOut != pOut )
@@ -268,7 +268,7 @@ sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice *pOut )
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
-        pFnt->ChgPhysFnt( pShell, pOut );
+        pFnt->ChgPhysFnt( pShell, *pOut );
     }
     return bChg;
 }
@@ -286,7 +286,7 @@ sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
  *                        SwAttrIter::SeekStartAndChg()
  *************************************************************************/
 
-sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFont )
+sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice* pOut, const sal_Bool bParaFont )
 {
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
@@ -335,7 +335,7 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
-        pFnt->ChgPhysFnt( pShell, pOut );
+        pFnt->ChgPhysFnt( pShell, *pOut );
     }
     return bChg;
 }
@@ -471,7 +471,8 @@ void SwAttrIter::Dump( SvStream &rOS ) const
 class SwMinMaxArgs
 {
 public:
-    OutputDevice *pOut;
+    OutputDevice* pOut;
+    ViewShell* pSh;
     ULONG &rMin;
     ULONG &rMax;
     ULONG &rAbsMin;
@@ -479,8 +480,8 @@ public:
     long nWordWidth;
     long nWordAdd;
     xub_StrLen nNoLineBreak;
-    SwMinMaxArgs( OutputDevice *pOutI, ULONG& rMinI, ULONG &rMaxI, ULONG &rAbsI )
-        : pOut( pOutI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
+    SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, ULONG& rMinI, ULONG &rMaxI, ULONG &rAbsI )
+        : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
     void Minimum( long nNew ) { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
@@ -522,7 +523,7 @@ sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rT
             }
         }
 
-        SwDrawTextInfo aDrawInf( 0, *rArg.pOut, 0, rTxt, nIdx, nStop - nIdx );
+        SwDrawTextInfo aDrawInf( rArg.pSh, *rArg.pOut, 0, rTxt, nIdx, nStop - nIdx );
         long nAktWidth = pFnt->_GetTxtSize( aDrawInf ).Width();
         rArg.nRowWidth += nAktWidth;
         if( bClear )
@@ -704,10 +705,12 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
                                ULONG& rAbsMin, OutputDevice* pOut ) const
 {
+    ViewShell* pSh = 0;
+    GetDoc()->GetEditShell( &pSh );
     if( !pOut )
     {
-        ViewShell* pSh;
-        GetDoc()->GetEditShell( &pSh );
+//      ViewShell* pSh;
+//      GetDoc()->GetEditShell( &pSh );
         if( pSh )
             pOut = pSh->GetWin();
         if( !pOut )
@@ -764,7 +767,7 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     xub_StrLen nLen = aText.Len();
     long nAktWidth = 0;
     MSHORT nAdd = 0;
-    SwMinMaxArgs aArg( pOut, rMin, rMax, rAbsMin );
+    SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
     while( nIdx < nLen )
     {
         xub_StrLen nNextChg = aIter.GetNextAttr();
