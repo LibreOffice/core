@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FWS.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ WMSupportsFWS (Display *display, int screen)
         propItems != 1 ||
         propBytesAfter != 0)
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         fprintf (stderr, "Bad FWS_COMM_WINDOW property on root window.\n");
         #endif
         XFree (propData);
@@ -155,7 +155,7 @@ WMSupportsFWS (Display *display, int screen)
     }
 
     fwsCommWindow = *(Window *) propData;
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "Using fwsCommWindow = 0x%lx.\n", fwsCommWindow);
     #endif
     XFree (propData);
@@ -173,7 +173,7 @@ WMSupportsFWS (Display *display, int screen)
     if (propFormat     != 32 ||
         propBytesAfter != 0)
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         fprintf (stderr, "Bad FWS_PROTOCOLS property on root window.\n");
         #endif
         XFree (propData);
@@ -186,7 +186,7 @@ WMSupportsFWS (Display *display, int screen)
         if (protocol == FWS_STACK_UNDER)
         {
             fwsStackUnder = True;
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsStackUnder.\n");
             #endif
         }
@@ -194,7 +194,7 @@ WMSupportsFWS (Display *display, int screen)
         if (protocol == FWS_PARK_ICONS)
         {
             fwsParkIcons = True;
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsParkIcons.\n");
             #endif
         }
@@ -202,7 +202,7 @@ WMSupportsFWS (Display *display, int screen)
         if (protocol == FWS_PASSES_INPUT)
         {
             fwsPassesInput = True;
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsPassesInput.\n");
             #endif
         }
@@ -210,7 +210,7 @@ WMSupportsFWS (Display *display, int screen)
         if (protocol == FWS_HANDLES_FOCUS)
         {
             fwsHandlesFocus = True;
-            #ifdef DEBUG
+            #if OSL_DEBUG_LEVEL > 1
             fprintf (stderr, "Using fwsHandlesFocus.\n");
             #endif
         }
@@ -279,7 +279,7 @@ RegisterFwsWindow (Display *display, Window window)
     XSync (display, False);
 
     XSetErrorHandler (oldHandler);
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
     if (badWindowFound)
         fprintf (stderr, "No FWS client window to register with.\n");
     #endif
