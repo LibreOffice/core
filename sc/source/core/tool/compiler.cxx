@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-06 15:43:48 $
+ *  last change: $Author: er $ $Date: 2001-10-09 11:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2537,8 +2537,7 @@ void ScCompiler::MulDivLine()
 void ScCompiler::AddSubLine()
 {
     MulDivLine();
-    while (pToken->GetOpCode() == ocAdd || pToken->GetOpCode() == ocSub
-                                || pToken->GetOpCode() == ocAmpersand)
+    while (pToken->GetOpCode() == ocAdd || pToken->GetOpCode() == ocSub)
     {
         ScTokenRef p = pToken;
         NextToken();
@@ -2549,14 +2548,28 @@ void ScCompiler::AddSubLine()
 
 //---------------------------------------------------------------------------
 
-void ScCompiler::CompareLine()
+void ScCompiler::ConcatLine()
 {
     AddSubLine();
-    while (pToken->GetOpCode() >= ocEqual && pToken->GetOpCode() <= ocGreaterEqual)
+    while (pToken->GetOpCode() == ocAmpersand)
     {
         ScTokenRef p = pToken;
         NextToken();
         AddSubLine();
+        PutCode(p);
+    }
+}
+
+//---------------------------------------------------------------------------
+
+void ScCompiler::CompareLine()
+{
+    ConcatLine();
+    while (pToken->GetOpCode() >= ocEqual && pToken->GetOpCode() <= ocGreaterEqual)
+    {
+        ScTokenRef p = pToken;
+        NextToken();
+        ConcatLine();
         PutCode(p);
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-10-08 18:33:32 $
+ *  last change: $Author: er $ $Date: 2001-10-09 11:43:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,7 @@ private:
     void PowLine();
     void MulDivLine();
     void AddSubLine();
+    void ConcatLine();
     void CompareLine();
     void NotLine();
     OpCode Expression();
