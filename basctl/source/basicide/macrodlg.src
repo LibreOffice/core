@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-15 20:04:54 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,9 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Macros ~in ";
         Text[ dutch ] = "Macros ~in ";
         Text[ french ] = "Macros existantes dans :";
-        Text[ spanish ] = "Macros ~in ";
+        Text[ spanish ] = "Macros existentes ~en:";
         Text[ finnish ] = "Macros ~in ";
-        Text[ italian ] = "Macros ~in ";
+        Text[ italian ] = "Macro presenti in:";
         Text[ danish ] = "Macros ~in ";
         Text[ swedish ] = "Existerande makron ~i:";
         Text[ polish ] = "Macros ~in ";
@@ -208,7 +208,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "Save m~acros in";
         Text[ dutch ] = "Save m~acros in";
         Text[ french ] = "Enregistrer la macro dans";
-        Text[ spanish ] = "Save m~acros in";
+        Text[ spanish ] = "Guardar la m~acro en";
         Text[ finnish ] = "Save m~acros in";
         Text[ italian ] = "Registra macro in";
         Text[ danish ] = "Save m~acros in";
@@ -388,7 +388,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "New ~libary";
         Text[ dutch ] = "New ~libary";
         Text[ french ] = "Nouvelle bibliothèque";
-        Text[ spanish ] = "New ~libary";
+        Text[ spanish ] = "Nueva ~biblioteca";
         Text[ finnish ] = "New ~libary";
         Text[ italian ] = "Nuova library";
         Text[ danish ] = "New ~libary";
@@ -416,7 +416,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ greek ] = "New m~odule";
         Text[ dutch ] = "New m~odule";
         Text[ french ] = "Nouveau module";
-        Text[ spanish ] = "New m~odule";
+        Text[ spanish ] = "Nuevo m~ódulo";
         Text[ finnish ] = "New m~odule";
         Text[ italian ] = "Nuovo modulo";
         Text[ danish ] = "New m~odule";
@@ -699,7 +699,7 @@ String RID_STR_RECORD
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "~Spara" ;
     Text [ dutch ] = "~Opnemen" ;
-    Text [ spanish ] = "~Grabar" ;
+    Text [ spanish ] = "~Guardar" ;
     Text [ english_us ] = "~Save" ;
     Text[ chinese_simplified ] = "å­˜ç›˜(~S)";
     Text[ russian ] = "Çàïèñûâàòü";
