@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:53:48 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,6 @@ class ScIndexMap;
 class ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
-    static INT8     nIterMode;              // Markiert cirk. Iteration
     String          aErgString;
     double          nErgValue;
     ScTokenArray*   pCode;                  // das neue Token-Array
@@ -284,6 +283,7 @@ private:
     ULONG           nFormatIndex;       // durch Berechnung gesetztes Format
     SCCOL           nMatCols;           // wenn MM_FORMULA Matrixzelle
     SCROW           nMatRows;           // belegte Area
+    USHORT          nSeenInIteration;   // Iteration cycle in which the cell was last encountered
     short           nFormatType;
     BOOL            bIsValue    : 1;    // Result is numerical, not textual
     BOOL            bDirty      : 1;    // Must be (re)calculated
@@ -296,6 +296,14 @@ private:
     BOOL            bTableOpDirty : 1;  // Dirty flag for TableOp
     BOOL            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
     BYTE            cMatrixFlag;        // 1 = links oben, 2 = Restmatrix, 0 = keine
+
+                    enum ScInterpretTailParameter
+                    {
+                        SCITP_NORMAL,
+                        SCITP_FROM_ITERATION,
+                        SCITP_CLOSE_ITERATION_CIRCLE
+                    };
+    void            InterpretTail( ScInterpretTailParameter );
 
 public:
 
@@ -335,7 +343,7 @@ public:
     inline void     SetDirtyVar() { bDirty = TRUE; }
     inline void     ResetTableOpDirtyVar() { bTableOpDirty = FALSE; }
     void            SetTableOpDirty();
-    BOOL            IsDirtyOrInTableOpDirty();
+    BOOL            IsDirtyOrInTableOpDirty() const;
     BOOL            GetDirty() const { return bDirty; }
     BOOL            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( BOOL bVar ) { bNeedListening = bVar; }
@@ -344,6 +352,8 @@ public:
     void            CompileXML( ScProgress& rProgress );        // compile temporary string tokens
     void            CalcAfterLoad();
     void            Interpret();
+    inline BOOL     IsIterCell() const { return bIsIterCell; }
+    inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }
 
     BOOL            HasOneReference( ScRange& r ) const;
     BOOL            HasRelNameReference() const;
@@ -466,15 +476,19 @@ public:
 //      ScBaseCell
 
 inline ScBaseCell::ScBaseCell( CellType eNewType ) :
-    eCellType( eNewType ),
     pNote( NULL ),
-    pBroadcaster( NULL ), nTextWidth( TEXTWIDTH_DIRTY ), nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+    pBroadcaster( NULL ),
+    nTextWidth( TEXTWIDTH_DIRTY ),
+    eCellType( eNewType ),
+    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
 }
 
 inline ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc ) :
+    pBroadcaster( NULL ),
+    nTextWidth( rBaseCell.nTextWidth ),
     eCellType( rBaseCell.eCellType ),
-    pBroadcaster( NULL ), nTextWidth( rBaseCell.nTextWidth ), nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
     if (rBaseCell.pNote)
         pNote = new ScPostIt( *rBaseCell.pNote, pDoc );
