@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:40:49 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ Resource RID_SW_SHELLRES
         TEXT[ italian ] = "Bibliografia";
         TEXT[ danish ] = "Litteraturliste";
         TEXT[ swedish ] = "Litteraturfˆrteckning";
-        TEXT[ polish ] = "Spis literatury";
+        TEXT[ polish ] = "Bibliografia";
         TEXT[ portuguese_brazilian ] = "Table of authorities";
         TEXT[ japanese ] = "éQçlï∂å£ï\\";
         TEXT[ korean ] = "¬¸∞ÌπÆ«Â";
@@ -900,7 +900,7 @@ Resource RID_SW_SHELLRES
         TEXT [ norwegian ] = "Laget" ;
         TEXT [ italian ] = "Creato" ;
         TEXT [ portuguese_brazilian ] = "Criado" ;
-        TEXT [ portuguese ] = "Criado" ;
+        TEXT [ portuguese ] = "Criar" ;
         TEXT [ finnish ] = "Luotu" ;
         TEXT [ danish ] = "Oprettet" ;
         TEXT [ french ] = "CrÈation" ;
@@ -927,7 +927,7 @@ Resource RID_SW_SHELLRES
         TEXT [ norwegian ] = "Endret" ;
         TEXT [ italian ] = "Modifica" ;
         TEXT [ portuguese_brazilian ] = "Modificado" ;
-        TEXT [ portuguese ] = "ModificaÁ„o" ;
+        TEXT [ portuguese ] = "Modificar" ;
         TEXT [ finnish ] = "Muokattu" ;
         TEXT [ danish ] = "∆ndring" ;
         TEXT [ french ] = "Modification" ;
