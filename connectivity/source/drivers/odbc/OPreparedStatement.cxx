@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "connectivity/FValue.hxx"
 #endif
 
 using namespace ::comphelper;
@@ -446,10 +449,16 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 aVal ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
 {
-    float x = (float)aVal;
-    setParameter(parameterIndex,DataType::BIGINT,sizeof(float),&x);
+    try
+    {
+        setParameter(parameterIndex,DataType::BIGINT,sizeof(sal_Int64),&x);
+    }
+    catch(SQLException&)
+    {
+        setString(parameterIndex,ORowSetValue(x));
+    }
 }
 // -------------------------------------------------------------------------
 

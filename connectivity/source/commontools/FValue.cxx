@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:34 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 case DataType::NUMERIC:
                     (*this) = getString();
                     break;
+                case DataType::BIGINT:
+                    (*this) = getLong();
+                    break;
                 case DataType::LONGVARCHAR:
                     (*this) = getSequence();
                     break;
@@ -212,6 +215,10 @@ void ORowSetValue::free()
                 OSL_ENSURE(m_aValue.m_pString,"String pointer is null!");
                 rtl_uString_release(m_aValue.m_pString);
                 m_aValue.m_pString = NULL;
+                break;
+            case DataType::BIGINT:
+                delete (sal_Int64*)m_aValue.m_pValue;
+                m_aValue.m_pValue = NULL;
                 break;
             case DataType::FLOAT:
                 delete (float*)m_aValue.m_pValue;
@@ -273,6 +280,9 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
                 m_aValue.m_pString = _rRH.m_aValue.m_pString;
                 rtl_uString_acquire(m_aValue.m_pString);
                 break;
+            case DataType::BIGINT:
+                m_aValue.m_pValue   = new sal_Int64(*(sal_Int64*)_rRH.m_aValue.m_pValue);
+                break;
             case DataType::FLOAT:
                 m_aValue.m_pValue   = new float(*(float*)_rRH.m_aValue.m_pValue);
                 break;
@@ -316,6 +326,9 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 (*this) = ::rtl::OUString(_rRH.m_aValue.m_pString);
+                break;
+            case DataType::BIGINT:
+                (*this) = *(sal_Int64*)_rRH.m_aValue.m_pValue;
                 break;
             case DataType::FLOAT:
                 (*this) = *(float*)_rRH.m_aValue.m_pValue;
@@ -516,7 +529,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Bool _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 {
-    if (DataType::DOUBLE != m_eTypeKind)
+    if (DataType::BIGINT != m_eTypeKind)
         free();
 
     if(m_bNull)
@@ -524,7 +537,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
     else
         *static_cast<sal_Int64*>(m_aValue.m_pValue) = _rRH;
 
-    m_eTypeKind = DataType::DOUBLE;
+    m_eTypeKind = DataType::BIGINT;
     m_bNull = sal_False;
 
     return *this;
@@ -606,6 +619,9 @@ ORowSetValue::operator==(const ORowSetValue& _rRH) const
                 bRet = aVal1 == aVal2;
                 break;
             }
+            case DataType::BIGINT:
+                bRet = *(sal_Int64*)m_aValue.m_pValue == *(sal_Int64*)_rRH.m_aValue.m_pValue;
+                break;
             case DataType::LONGVARCHAR:
                 bRet = *(Sequence<sal_Int8>*)m_aValue.m_pValue == *(Sequence<sal_Int8>*)_rRH.m_aValue.m_pValue;
                 break;
@@ -660,8 +676,12 @@ Any ORowSetValue::makeAny() const
             case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                OSL_ENSURE(m_aValue.m_pString,"Value is null!");
                 rValue <<= (::rtl::OUString)m_aValue.m_pString;
+                break;
+            case DataType::BIGINT:
+                OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
+                rValue <<= *(sal_Int64*)m_aValue.m_pValue;
                 break;
             case DataType::FLOAT:
                 OSL_ENSURE(m_aValue.m_pValue,"Value is null!");
@@ -725,6 +745,9 @@ Any ORowSetValue::makeAny() const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 aRet = m_aValue.m_pString;
+                break;
+            case DataType::BIGINT:
+                aRet = ::rtl::OUString::valueOf((sal_Int64)*this);
                 break;
             case DataType::LONGVARCHAR:
                 {
@@ -793,6 +816,9 @@ sal_Bool ORowSetValue::getBool()    const
             case DataType::NUMERIC:
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
+            case DataType::BIGINT:
+                bRet = *(sal_Int64*)m_aValue.m_pValue != 0.0;
+                break;
             case DataType::LONGVARCHAR:
                 bRet = getString().toInt32() != 0;
                 break;
@@ -842,6 +868,9 @@ sal_Int8 ORowSetValue::getInt8()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 nRet = sal_Int8(::rtl::OUString(m_aValue.m_pString).toInt32());
+                break;
+            case DataType::BIGINT:
+                nRet = sal_Int8(*(sal_Int64*)m_aValue.m_pValue);
                 break;
             case DataType::LONGVARCHAR:
                 nRet = sal_Int8(getString().toInt32());
@@ -893,6 +922,9 @@ sal_Int16 ORowSetValue::getInt16()  const
             case DataType::NUMERIC:
                 nRet = sal_Int16(::rtl::OUString(m_aValue.m_pString).toInt32());
                 break;
+            case DataType::BIGINT:
+                nRet = sal_Int16(*(sal_Int64*)m_aValue.m_pValue);
+                break;
             case DataType::LONGVARCHAR:
                 nRet = sal_Int16(getString().toInt32());
                 break;
@@ -930,8 +962,6 @@ sal_Int16 ORowSetValue::getInt16()  const
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetValue::getInt32()  const
 {
-
-
     sal_Int32 nRet = 0;
     if(!m_bNull)
     {
@@ -943,6 +973,9 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::NUMERIC:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toInt32();
                 break;
+            case DataType::BIGINT:
+                nRet = sal_Int32(*(sal_Int64*)m_aValue.m_pValue);
+                break;
             case DataType::LONGVARCHAR:
                 nRet = getString().toInt32();
                 break;
@@ -952,6 +985,59 @@ sal_Int32 ORowSetValue::getInt32()  const
             case DataType::DOUBLE:
             case DataType::REAL:
                 nRet = sal_Int32(*(double*)m_aValue.m_pValue);
+                break;
+            case DataType::DATE:
+                nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
+                break;
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            case DataType::BINARY:
+            case DataType::VARBINARY:
+            case DataType::LONGVARBINARY:
+                OSL_ASSERT("getInt32() for this type is not allowed!");
+                break;
+            case DataType::BIT:
+                nRet = m_aValue.m_bBool;
+                break;
+            case DataType::TINYINT:
+                nRet = m_aValue.m_nInt8;
+                break;
+            case DataType::SMALLINT:
+                nRet = m_aValue.m_nInt16;
+                break;
+            case DataType::INTEGER:
+                nRet = m_aValue.m_nInt32;
+                break;
+        }
+    }
+    return nRet;
+}
+// -------------------------------------------------------------------------
+sal_Int64 ORowSetValue::getLong()   const
+{
+    sal_Int64 nRet = 0;
+    if(!m_bNull)
+    {
+        switch(getTypeKind())
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                nRet = ::rtl::OUString(m_aValue.m_pString).toInt64();
+                break;
+            case DataType::BIGINT:
+                nRet = *(sal_Int64*)m_aValue.m_pValue;
+                break;
+            case DataType::LONGVARCHAR:
+                nRet = getString().toInt64();
+                break;
+            case DataType::FLOAT:
+                nRet = sal_Int64(*(float*)m_aValue.m_pValue);
+                break;
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                nRet = sal_Int64(*(double*)m_aValue.m_pValue);
                 break;
             case DataType::DATE:
                 nRet = dbtools::DBTypeConversion::toDays(*(::com::sun::star::util::Date*)m_aValue.m_pValue);
@@ -992,6 +1078,9 @@ float ORowSetValue::getFloat()  const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toFloat();
+                break;
+            case DataType::BIGINT:
+                nRet = float(*(sal_Int64*)m_aValue.m_pValue);
                 break;
             case DataType::LONGVARCHAR:
                 nRet = getString().toFloat();
@@ -1048,6 +1137,9 @@ double ORowSetValue::getDouble()    const
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 nRet = ::rtl::OUString(m_aValue.m_pString).toDouble();
+                break;
+            case DataType::BIGINT:
+                nRet = double(*(sal_Int64*)m_aValue.m_pValue);
                 break;
             case DataType::LONGVARCHAR:
                 nRet = getString().toDouble();
@@ -1106,6 +1198,9 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
                 m_aValue.m_pString = aVal.pData;
                 rtl_uString_acquire(m_aValue.m_pString);
             }
+            break;
+        case DataType::BIGINT:
+            m_aValue.m_pValue = new sal_Int64((sal_Int64)_rVal);
             break;
         case DataType::LONGVARCHAR:
             {

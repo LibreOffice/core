@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:36:17 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1518,6 +1518,16 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
             case DataType::NUMERIC:
                 _xParams->setString(parameterIndex,::comphelper::getString(x));
                 break;
+            case DataType::BIGINT:
+                {
+                    sal_Int64 nValue;
+                    if(x >>= nValue)
+                    {
+                        _xParams->setLong(parameterIndex,nValue);
+                        break;
+                    }
+                }
+                break;
 
             case DataType::FLOAT:
             case DataType::REAL:
@@ -1695,6 +1705,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2001/08/28 14:36:17  fs
+ *  encountered during #74241#: prependContextInfo uses a const SQLException& now
+ *
  *  Revision 1.39  2001/08/24 06:02:18  oj
  *  #90015# code corrcetions for some speedup's
  *

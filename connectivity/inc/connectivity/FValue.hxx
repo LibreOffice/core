@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:12:20 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,14 @@ namespace connectivity
             m_aValue.m_pString = NULL;
             operator=(_rRH);
         }
+        ORowSetValue(const sal_Int64& _rRH) :
+            m_eTypeKind(::com::sun::star::sdbc::DataType::BIGINT)
+            ,m_bBound(sal_True)
+            ,m_bNull(sal_True)
+        {
+            m_aValue.m_pString = NULL;
+            operator=(_rRH);
+        }
 
         ORowSetValue(const sal_Bool& _rRH) :
              m_eTypeKind(::com::sun::star::sdbc::DataType::BIT)
@@ -264,6 +272,7 @@ namespace connectivity
         operator sal_Int8() const   {   return isNull() ? 0         : getInt8();    }
         operator sal_Int16() const  {   return isNull() ? 0         : getInt16();   }
         operator sal_Int32() const  {   return isNull() ? 0         : getInt32();   }
+        operator sal_Int64() const  {   return isNull() ? 0         : getLong();    }
         operator float() const      {   return isNull() ? (float)0.0: getFloat();   }
         operator double() const     {   return isNull() ? 0.0       : getDouble();  }
 
@@ -292,11 +301,6 @@ namespace connectivity
             return isNull() ? ::com::sun::star::uno::Sequence<sal_Int8>() : getSequence();
         }
 
-        operator sal_Int64() const
-        {
-            return isNull() ? sal_Int64() : *(sal_Int64*)getValue();
-        }
-
         operator==(const ORowSetValue& _rRH) const;
 
         sal_Bool    isNull() const
@@ -321,11 +325,12 @@ namespace connectivity
 
         // before calling one of this methods, be sure that the value is not null
         void*           getValue()  const               { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_pValue;              }
-        sal_Bool        getBool()   const;//                { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_bBool;               }
-        sal_Int8        getInt8()   const;//                { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_nInt8;               }
-        sal_Int16       getInt16()  const;//                { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_nInt16;              }
-        sal_Int32       getInt32()  const;//                { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_nInt32;              }
-        double          getDouble() const;//                { OSL_ENSURE(m_bBound,"Value is not bound!");return *(double*)m_aValue.m_pValue;    }
+        sal_Bool        getBool()   const;
+        sal_Int8        getInt8()   const;
+        sal_Int16       getInt16()  const;
+        sal_Int32       getInt32()  const;
+        sal_Int64       getLong()   const;
+        double          getDouble() const;
         float           getFloat() const;
         // convert the double to the type _nDataType
         void            setFromDouble(const double& _rVal,sal_Int32 _nDatatype);

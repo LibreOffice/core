@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateConversion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-06 06:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ using namespace ::com::sun::star::util;
                 case DataType::DOUBLE:
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
+                case DataType::BIGINT:
                     _rxTypeConverter->convertToSimpleType(_rVal, TypeClass_STRING) >>= aRet;
                     break;
                 case DataType::TIMESTAMP:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,13 +129,14 @@ void OTools::bindParameter( OConnection* _pConnection,
     SQLSMALLINT nDecimalDigits=0;
     SQLSMALLINT nNullable=0;
 
-    OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fSqlType,fCType,nColumnSize,nDecimalDigits);
+    OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nJDBCtype,fCType,fSqlType,nColumnSize,nDecimalDigits);
 
     OTools::bindData(fSqlType,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding);
     if(fSqlType == SQL_LONGVARCHAR || fSqlType == SQL_LONGVARBINARY)
         memcpy(pDataBuffer,&nPos,sizeof(nPos));
 
-    nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
+    // 20.09.2001 OJ: Problems with mysql. mysql returns only CHAR as parameter type
+    //  nRetcode = (*(T3SQLDescribeParam)_pConnection->getOdbcFunction(ODBC3SQLDescribeParam))(_hStmt,(SQLUSMALLINT)nPos,&fSqlType,&nColumnSize,&nDecimalDigits,&nNullable);
 
     nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
                   (SQLUSMALLINT)nPos,
@@ -181,6 +182,9 @@ void OTools::bindData(  SWORD fSqlType,
             }   break;
 
         case SQL_BIGINT:
+            *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
+            *pLen = sizeof(sal_Int64);
+            break;
         case SQL_DECIMAL:
         case SQL_NUMERIC:
             if(_bUseWChar)
@@ -336,7 +340,7 @@ void OTools::bindValue( OConnection* _pConnection,
                                         fSqlType    = SQL_SMALLINT; break;
         case SQL_INTEGER:               fCType      = SQL_C_LONG;
                                         fSqlType    = SQL_INTEGER; break;
-        case SQL_BIGINT:                fCType      = SQL_C_CHAR;//GetODBCConnection()->m_bUserWChar ? SQL_C_WCHAR : SQL_C_CHAR;
+        case SQL_BIGINT:                fCType      = SQL_C_SBIGINT;//GetODBCConnection()->m_bUserWChar ? SQL_C_WCHAR : SQL_C_CHAR;
                                         fSqlType    = SQL_BIGINT; break;
         case SQL_REAL:                  fCType      = SQL_C_FLOAT;
                                         fSqlType    = SQL_REAL; break;
@@ -428,6 +432,9 @@ void OTools::bindValue( OConnection* _pConnection,
                     _pData = (void*)aString.getStr();
                 }   break;
                 case SQL_BIGINT:
+                    *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
+                    *pLen = sizeof(sal_Int64);
+                    break;
                 case SQL_DECIMAL:
                 case SQL_NUMERIC:
                 //if(GetODBCConnection()->m_bUserWChar)
@@ -979,7 +986,7 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,
                                     fSqlType    = SQL_SMALLINT; break;
         case SQL_INTEGER:           fCType      = SQL_C_LONG;
                                     fSqlType    = SQL_INTEGER; break;
-        case SQL_BIGINT:            fCType      = _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
+        case SQL_BIGINT:            fCType      = SQL_C_SBIGINT;
                                     fSqlType    = SQL_BIGINT; break;
         case SQL_FLOAT:             fCType      = SQL_C_FLOAT;
                                     fSqlType    = SQL_FLOAT; break;

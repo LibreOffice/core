@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,9 +230,11 @@ void OResultSet::allocBuffer()
             case DataType::VARCHAR:
                 m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
+            case DataType::BIGINT:
+                m_aBindVector.push_back((sal_Int64)new sal_Int64());
+                break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-            case DataType::BIGINT:
                 m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
             case DataType::REAL:
@@ -293,9 +295,11 @@ void OResultSet::releaseBuffer()
             case DataType::VARCHAR:
                 delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
+            case DataType::BIGINT:
+                delete static_cast< sal_Int64* >((void*)*pValue);
+                break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-            case DataType::BIGINT:
                 delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
             case DataType::REAL:
@@ -528,7 +532,17 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
 
 sal_Int64 SAL_CALL OResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    return sal_Int64();
+    sal_Int64 nRet(0);
+    try
+    {
+        const ORowSetValue& aValue = getValue(columnIndex,SQL_C_SBIGINT,&nRet,sizeof nRet);
+        return (&aValue == &m_aEmptyValue) ? nRet : (sal_Int64)aValue;
+    }
+    catch(SQLException&)
+    {
+        nRet = getString(columnIndex).toInt64();
+    }
+    return nRet;
 }
 // -------------------------------------------------------------------------
 
@@ -1389,8 +1403,10 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 break;
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-            case DataType::BIGINT:
                 *pColumn = getString(nColumn);
+                break;
+            case DataType::BIGINT:
+                *pColumn = getLong(nColumn);
                 break;
             case DataType::REAL:
             case DataType::DOUBLE:
@@ -1401,7 +1417,6 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 break;
             case DataType::LONGVARBINARY:
                 *pColumn = getBytes(nColumn);
-                pColumn->setTypeKind(nType);
                 break;
             case DataType::DATE:
                 *pColumn = getDate(nColumn);
@@ -1430,12 +1445,15 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::BINARY:
             case DataType::VARBINARY:
                 *pColumn = getBytes(nColumn);
-                pColumn->setTypeKind(nType);
                 break;
         }
 
         if(wasNull())
             pColumn->setNull();
+        if(nType != pColumn->getTypeKind())
+        {
+            pColumn->setTypeKind(nType);
+        }
     }
     m_nLastColumnPos = _nToColumn;
     m_bFetchData = sal_True;
