@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:23:17 $
+ *  last change: $Author: os $ $Date: 2000-10-10 08:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,35 +113,6 @@ void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
     bNotLoadLayout = rCopy.IsTest1();       // MD Layout lesen
 #endif
 }
-
-/*
-void  SwMasterUsrPref::UseDefault()
-{
-    nUIOptions =    VIEWOPT_2_EXECHYPERLINKS;
-    nCore2Options = VIEWOPT_CORE2_CRSR_IN_PROT| VIEWOPT_CORE2_INDEX_BACKGROUND|
-
-    eZoom = 0;
-    nTblDest = TBL_DEST_CELL;
-
-    sSymbolFont = aEmptyStr;
-
-    aShdwCrsrCol.SetColor( COL_BLUE );
-    nShdwCrsrFillMode = FILL_TAB;
-
-    aIdxBackgrndCol.SetColor( RGB_COLORDATA( 0xF0, 0xF0, 0xF0 ) );
-
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-
-    sal_Bool bVal;
-    bVal = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_AUTO) ).getValue() : sal_False;
-    SetOnlineSpell( bVal );
-    bVal = xProp.is() ?
-            *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_SPELL_HIDE) ).getValue() : sal_False;
-    SetHideSpell( bVal );
-    SfxConfigItem::UseDefault();
-}
-*/
 
 SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     aContentConfig(bWeb, *this),
@@ -266,7 +237,6 @@ void SwContentViewConfig::Load()
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
             if(pValues[nProp].hasValue())
             {
                 sal_Bool bSet = nProp != 17 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
@@ -404,7 +374,6 @@ void SwLayoutViewConfig::Load()
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
             if(pValues[nProp].hasValue())
             {
                 sal_Bool bSet = nProp < 11 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
