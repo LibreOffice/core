@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 17:21:09 $
+#   last change: $Author: vg $ $Date: 2005-03-07 17:30:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -267,6 +267,8 @@ DOCUFILES+= \
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
+    $(DESTDIR)$/config.guess \
+    $(DESTDIR)$/config.sub \
     $(DESTDIR)$/configure \
     $(DESTDIR)$/configure.pl \
     $(DESTDIR)$/setsdkenv_unix \
