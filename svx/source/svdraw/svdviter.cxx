@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdviter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
     if (pPage!=NULL) {
         FASTBOOL bMaster=pPage->IsMasterPage();
-        USHORT nPageNum=pPage->GetPageNum();
         SdrPage* pPg=pPV->GetPage();
         if (pPg==pPage) {
             if (pObject!=NULL) {
@@ -137,27 +136,34 @@ FASTBOOL SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 return TRUE;
             }
         } else {
-            if (!bNoMasterPage && bMaster && (pObject==NULL || !pObject->IsNotVisibleAsMaster())) {
-                USHORT nMasterPageAnz=pPg->GetMasterPageCount();
-                USHORT nMasterPagePos=0;
-                while (nMasterPagePos<nMasterPageAnz) {
-                    if (nPageNum==pPg->GetMasterPageNum(nMasterPagePos)) {
+            if (!bNoMasterPage && bMaster && (pObject==NULL || !pObject->IsNotVisibleAsMaster()))
+            {
+                if(pPg->TRG_HasMasterPage())
+                {
+                    SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
+
+                    if(&rMasterPage == pPage)
+                    {
                         // Aha, die gewuenschte Page ist also MasterPage in dieser PageView
-                        if (pObject!=NULL) {
+                        if(pObject)
+                        {
                             // Objekt gewuenscht? Na dann erstmal sehen, ob
                             // das Obj in dieser PageView auch sichtbar ist.
                             SetOfByte aObjLay;
                             pObject->GetLayer(aObjLay);
-                            aObjLay&=pPV->GetVisibleLayers();
-                            aObjLay&=pPg->GetMasterPageVisibleLayers(nMasterPagePos);
-                            if (!aObjLay.IsEmpty()) {
+                            aObjLay &= pPV->GetVisibleLayers();
+                            aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
+
+                            if(!aObjLay.IsEmpty())
+                            {
                                 return TRUE;
                             } // ansonsten die naechste MasterPage der Page ansehen...
-                        } else {
+                        }
+                        else
+                        {
                             return TRUE;
                         }
                     }
-                    nMasterPagePos++;
                 }
             }
             // MasterPage nicht erlaubt oder keine passende gefunden
