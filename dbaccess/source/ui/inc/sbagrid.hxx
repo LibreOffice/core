@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-09 09:51:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,16 +193,6 @@ namespace dbaui
         // ::com::sun::star::frame::XDispatchProvider
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException );
 
-        // ::com::sun::star::view::XSelectionChangeListener
-        virtual void SAL_CALL selectionChanged(const ::com::sun::star::lang::EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException);
-
-        // ::com::sun::star::beans::XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-
-        // FmXGridPeer overridables
-        virtual void addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
-        virtual void removeColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol);
-
         // ::com::sun::star::lang::XComponent
         virtual void SAL_CALL dispose(void) throw( ::com::sun::star::uno::RuntimeException );
 
@@ -249,9 +239,6 @@ namespace dbaui
         SbaGridHeader(BrowseBox* pParent, WinBits nWinBits = WB_STDHEADERBAR | WB_DRAG);
 
     protected:
-        // Window overridables
-        virtual void Command( const CommandEvent& rCEvt );
-        virtual void Select();
 
         // FmGridHeader overridables
         virtual void    PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMenu);
@@ -264,8 +251,6 @@ namespace dbaui
         // Window overridables
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
 
-
-        void ImplSelect(sal_uInt16 nId);
         sal_Bool ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMousePos);
     };
 
@@ -296,7 +281,6 @@ namespace dbaui
     protected:
         ::svx::ODataAccessDescriptor                                                    m_aDataDescriptor;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;    // for DnD we need a composed query ...
-        long        m_nCurrentSelectedColumn;   // this is the column model (not the view) posisition ...
         SbaGridListener*    m_pMasterListener;
         sal_Int32           m_nAsyncDropEvent;
         sal_uInt16          m_nLastColId;
@@ -306,17 +290,17 @@ namespace dbaui
             // ui actions (e.g. a context menu) may be performed on columns which aren't the current one
             // and aren't selected, so we have to track this column id
 
-        sal_Bool    m_bSelecting;
-
         sal_Bool    m_bActivatingForDrop;
     // Attribute Access
     public:
-        long    GetSelectedColumn() const       { return m_nCurrentSelectedColumn; }
         sal_uInt16  GetCurrentActionColumn() const  { return m_nCurrentActionColId; }
 
     public:
         SbaGridControl(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >,Window* pParent, FmXGridPeer* _pPeer, WinBits nBits = WB_TABSTOP);
         virtual ~SbaGridControl();
+
+        virtual void Command( const CommandEvent& rCEvt );
+        virtual void Select();
 
         void SetMasterListener(SbaGridListener* pListener)  { m_pMasterListener = pListener; }
 
@@ -346,11 +330,7 @@ namespace dbaui
         // DragSourceHelper overridables
         virtual void StartDrag( sal_Int8 _nAction, const Point& _rPosPixel );
 
-        // Window overridables
-        virtual void Command(const CommandEvent& rEvt);
-
         // BrowseBox overridables
-        virtual void    Select();
         virtual void    CursorMoved();
         virtual sal_Int8 AcceptDrop( const BrowserAcceptDropEvent& rEvt );
         virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-28 08:06:46 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,56 +840,10 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< ::com::sun::star:
 void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
-    if (!pCont)
-
-    pCont->removeInterface(xControl);
+    if ( !pCont )
+        pCont->removeInterface(xControl);
 }
 
-//---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::selectionChanged(const EventObject& aEvent) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    FmXGridPeer::selectionChanged(aEvent);
-
-    SbaGridControl* pGrid = (SbaGridControl*) GetWindow();
-    if (pGrid)
-    {
-        Reference< XIndexContainer >  xColumns = getColumns();
-        Reference< XSelectionSupplier >  xSelSupplier(aEvent.Source, UNO_QUERY);
-        Reference< XPropertySet >  xSelection;
-        ::cppu::extractInterface(xSelection,xSelSupplier->getSelection());
-
-        sal_uInt16 nSelectedCol = (sal_uInt16)-1;
-        if (xSelection.is())
-        {
-            Reference< XPropertySet >  xCol;
-            for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
-            {
-                ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
-                if (xCol == xSelection)
-                {
-                    nSelectedCol = (sal_uInt16)i;
-                    break;
-                }
-            }
-        }
-
-        // fuer das VCL-Control muessen die Columns 1-basiert sein
-        // die Selektion an das VCL-Control weiterreichen, wenn noetig
-        if (nSelectedCol != pGrid->GetSelectedColumn())
-        {   // (wenn das nicht greift, wurde das selectionChanged implizit von dem Control selber ausgeloest
-            if (nSelectedCol != (sal_uInt16)-1)
-            {
-                pGrid->SelectColumnPos(pGrid->GetViewColumnPos(pGrid->GetColumnIdFromModelPos(nSelectedCol)) + 1, sal_True);
-                // SelectColumnPos hat wieder zu einem impliziten ActivateCell gefuehrt
-                if (pGrid->IsEditing())
-                    pGrid->DeactivateCell();
-            }
-            else
-                pGrid->SetNoSelection();
-        }
-    }
-}
 //---------------------------------------------------------------------------------------
 const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
 {
@@ -939,27 +893,9 @@ SbaXGridPeer* SbaXGridPeer::getImplementation(const Reference< XInterface >& _rx
 }
 
 //---------------------------------------------------------------------------------------
-void SAL_CALL SbaXGridPeer::propertyChange(const PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException)
-{
-    FmXGridPeer::propertyChange(evt);
-}
-
-//---------------------------------------------------------------------------------------
-void SbaXGridPeer::addColumnListeners(const Reference< XPropertySet > & xCol)
-{
-    FmXGridPeer::addColumnListeners(xCol);
-}
-
-//---------------------------------------------------------------------------------------
-void SbaXGridPeer::removeColumnListeners(const Reference< XPropertySet > & xCol)
-{
-    FmXGridPeer::removeColumnListeners(xCol);
-}
-
-//---------------------------------------------------------------------------------------
 FmGridControl* SbaXGridPeer::imp_CreateControl(Window* pParent, WinBits nStyle)
 {
-        return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
+    return new SbaGridControl(m_xServiceFactory, pParent, this, nStyle);
 }
 
 //==================================================================
@@ -980,21 +916,6 @@ void SbaGridHeader::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // in the new DnD API, the solar mutex is not locked when StartDrag get's called
 
     ImplStartColumnDrag( _nAction, _rPosPixel );
-}
-
-//---------------------------------------------------------------------------------------
-void SbaGridHeader::ImplSelect(sal_uInt16 nId)
-{
-    sal_uInt16 nPos = GetModelColumnPos(nId);
-    Reference< XIndexAccess >  xColumns(((SbaGridControl*)GetParent())->GetPeer()->getColumns(), UNO_QUERY);
-    if (nPos < xColumns->getCount())
-    {
-        Reference< XPropertySet >  xColumn;
-        ::cppu::extractInterface(xColumn,xColumns->getByIndex(nPos));
-        Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
-        if (xSelSupplier.is())
-            xSelSupplier->select(makeAny(xColumn));
-    }
 }
 
 //---------------------------------------------------------------------------------------
@@ -1035,7 +956,7 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMo
         // because we have 3d-buttons the select handler is called from MouseButtonUp, but StartDrag
         // occures earlier (while the mouse button is down)
         // so for optical reasons we select the column before really starting the drag operation.
-        ImplSelect(nId);
+        notifyColumnSelect(nId);
 
         static_cast<SbaGridControl*>(GetParent())->StartDrag(_nAction,
                 Point(
@@ -1047,22 +968,6 @@ sal_Bool SbaGridHeader::ImplStartColumnDrag(sal_Int8 _nAction, const Point& _rMo
     }
 
     return sal_False;
-}
-
-//---------------------------------------------------------------------------------------
-void SbaGridHeader::Command( const CommandEvent& rEvt )
-{
-    FmGridHeader::Command(rEvt);
-}
-
-//---------------------------------------------------------------------------------------
-void SbaGridHeader::Select()
-{
-    EditBrowserHeader::Select();
-    if (!((FmGridControl*)GetParent())->IsDesignMode())
-    {   // in design mode the base class does the same ...
-        ImplSelect(GetCurItemId());
-    }
 }
 
 //---------------------------------------------------------------------------------------
@@ -1170,9 +1075,7 @@ SbaGridControl::SbaGridControl(Reference< XMultiServiceFactory > _rM,
     :FmGridControl(_rM,pParent, _pPeer, nBits)
     ,m_nLastColId(-1)
     ,m_nLastRowId(-1)
-    ,m_nCurrentSelectedColumn(-1)
     ,m_nCurrentActionColId(-1)
-    ,m_bSelecting(sal_False)
     ,m_pMasterListener(NULL)
     ,m_bActivatingForDrop(sal_False)
     ,m_nAsyncDropEvent(0)
@@ -1395,58 +1298,6 @@ void SbaGridControl::Select()
 {
     // irgendeine Selektion hat sich geaendert ....
     FmGridControl::Select();
-
-    // ... betrifft das unsere Spalten ?
-    const MultiSelection* pColumnSelection = GetColumnSelection();
-
-    long nSelectedColumn =
-        pColumnSelection && pColumnSelection->GetSelectCount()
-            ? ((MultiSelection*)pColumnSelection)->FirstSelected()
-            : -1L;
-    // die HandleColumn wird nicht selektiert
-    switch (nSelectedColumn)
-    {
-        case -1 : break;    // no selection
-        case  0 : nSelectedColumn = -1; break;  // handle col can't be seledted
-        default :
-            // get the model col pos instead of the view col pos
-            nSelectedColumn = GetModelColumnPos(GetColumnIdFromViewPos(nSelectedColumn - 1));
-            break;
-    }
-
-    if (nSelectedColumn != m_nCurrentSelectedColumn)
-    {
-        // VOR dem Aufruf des select am SelectionSupplier !
-        m_nCurrentSelectedColumn = nSelectedColumn;
-
-        if (!m_bSelecting)
-        {
-            m_bSelecting = sal_True;
-
-            try
-            {
-                Reference< XIndexAccess >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
-                Reference< XSelectionSupplier >  xSelSupplier(xColumns, UNO_QUERY);
-                if (xSelSupplier.is())
-                    if (nSelectedColumn != -1)
-                    {
-                        Reference< XPropertySet >  xColumn;
-                        ::cppu::extractInterface(xColumn,xColumns->getByIndex(nSelectedColumn));
-                        xSelSupplier->select(makeAny(xColumn));
-                    }
-                    else
-                    {
-                        xSelSupplier->select(Any());
-                    }
-            }
-            catch(Exception&)
-            {
-            }
-
-
-            m_bSelecting = sal_False;
-        }
-    }
 
     if (m_pMasterListener)
         m_pMasterListener->SelectionChanged();
