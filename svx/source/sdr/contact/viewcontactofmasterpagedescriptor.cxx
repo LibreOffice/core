@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:07:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,14 @@
 
 #ifndef _SDR_CONTACT_VOCBITMAPBUFFER_HXX
 #include <svx/sdr/contact/vocbitmapbuffer.hxx>
+#endif
+
+#ifndef _SDR_CONTACT_VOCOFMASTERPAGEDESCRIPTOR_HXX
+#include <svx/sdr/contact/vocofmasterpagedescriptor.hxx>
+#endif
+
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -241,6 +249,257 @@ namespace sdr
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////
+// MasterPageBuffer
+
+// keep used buffers for 30 cycles (5 minutes max)
+#define MASTERPAGE_USAGE_COUNT          (30L)
+// cycle is 10 seconds
+#define MASTERPAGE_TIMEOUT              (10000L)
+// maximum count of buffered MasterPages
+#define MASTERPAGE_MAXIMUM_COUNT        (8L)
+
+namespace
+{
+    class MasterPageBufferEntry
+    {
+        sal_uInt32                                      mnMPUsageCount;
+        Bitmap                                          maBitmap;
+        MapMode                                         maMapMode;
+        SdrPage*                                        mpMasterPage;
+        SdrPage*                                        mpPage;
+        SdrObject*                                      mpBackgroundObject;
+
+    public:
+        MasterPageBufferEntry(
+            const Bitmap& rBitmap,
+            const MapMode& rMapMode,
+            SdrPage* pMasterPage,
+            SdrPage* pPage,
+            SdrObject* pBackgroundObect)
+        :   mnMPUsageCount(MASTERPAGE_USAGE_COUNT),
+            maBitmap(rBitmap),
+            maMapMode(rMapMode),
+            mpMasterPage(pMasterPage),
+            mpPage(pPage),
+            mpBackgroundObject(pBackgroundObect)
+        {
+        }
+
+        const Bitmap& GetBitmap() const { return maBitmap; }
+        const MapMode& GetMapMode() const { return maMapMode; }
+        SdrPage* GetMasterPage() const { return mpMasterPage; }
+        SdrPage* GetPage() const { return mpPage; }
+        SdrObject* GetBackgroundObject() const { return mpBackgroundObject; }
+
+        sal_uInt32 GetMPUsageCount() const { return mnMPUsageCount; }
+        void SetMPUsageCount(sal_uInt32 nNew) { mnMPUsageCount = nNew; }
+    };
+
+    class MasterPageBuffer : public Timer
+    {
+        ::std::vector< MasterPageBufferEntry >          maEntries;
+
+        bool DecrementUsageCounts();
+        void ClearUnusedBufferData();
+
+    public:
+        MasterPageBuffer();
+        ~MasterPageBuffer();
+
+        // The timer when it is triggered; from class Timer
+        virtual void Timeout();
+
+        void OfferMasterPageData(const MasterPageBufferEntry& rEntry);
+        Bitmap FindCandidate(
+            const SdrPage& rMasterPage, const SdrPage& rPage,
+            const MapMode& rMapMode, const SdrObject* pBackgroundObect);
+        void ForgetMasterPageData(const SdrPage& rMasterPage, const SdrPage& rPage);
+    };
+
+    MasterPageBuffer::MasterPageBuffer()
+    {
+        SetTimeout(MASTERPAGE_TIMEOUT);
+        Stop();
+    }
+
+    MasterPageBuffer::~MasterPageBuffer()
+    {
+        Stop();
+    }
+
+    void MasterPageBuffer::Timeout()
+    {
+        if(DecrementUsageCounts())
+        {
+            ClearUnusedBufferData();
+        }
+
+        if(maEntries.size())
+        {
+            Start();
+        }
+    }
+
+    bool MasterPageBuffer::DecrementUsageCounts()
+    {
+        ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+        bool bMemberReacedZero(false);
+
+        // set all timeout entries for this page to 0L
+        while(aCandidate != maEntries.end())
+        {
+            if(aCandidate->GetMPUsageCount())
+            {
+                aCandidate->SetMPUsageCount(aCandidate->GetMPUsageCount() - 1L);
+
+                if(!aCandidate->GetMPUsageCount())
+                {
+                    bMemberReacedZero = true;
+                }
+            }
+
+            aCandidate++;
+        }
+
+        return bMemberReacedZero;
+    }
+
+    void MasterPageBuffer::OfferMasterPageData(const MasterPageBufferEntry& rEntry)
+    {
+        ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+
+        // search for existing entry for that MasterPage, Page and BackgroundObject
+        while(aCandidate != maEntries.end()
+            && (aCandidate->GetMasterPage() != rEntry.GetMasterPage()
+                || aCandidate->GetPage() != rEntry.GetPage()
+                || aCandidate->GetBackgroundObject() != rEntry.GetBackgroundObject()))
+        {
+            aCandidate++;
+        }
+
+        if(aCandidate == maEntries.end())
+        {
+            // not found, add new combination of MasterPage, Page and BackgroundObject
+            maEntries.push_back(rEntry);
+
+            // reduce member count if getting too big
+            if(maEntries.size() > MASTERPAGE_MAXIMUM_COUNT)
+            {
+                ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+                ::std::vector< MasterPageBufferEntry >::iterator aSmallest = maEntries.begin();
+
+                // search for existing entry with smallest UsageCount
+                while(aCandidate != maEntries.end())
+                {
+                    if(aCandidate->GetMPUsageCount() < aSmallest->GetMPUsageCount())
+                    {
+                        aSmallest = aCandidate;
+                    }
+
+                    aCandidate++;
+                }
+
+                if(aSmallest != maEntries.end())
+                {
+                    aSmallest->SetMPUsageCount(0L);
+                    ClearUnusedBufferData();
+                }
+            }
+
+            // start the timer
+            if(maEntries.size())
+            {
+                Start();
+            }
+        }
+        else
+        {
+            // found, replace in vector
+            *aCandidate = rEntry;
+        }
+    }
+
+    Bitmap MasterPageBuffer::FindCandidate(
+        const SdrPage& rMasterPage, const SdrPage& rPage,
+        const MapMode& rMapMode, const SdrObject* pBackgroundObect)
+    {
+        ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+
+        // search for existing entry for that MasterPage
+        while(aCandidate != maEntries.end()
+            && (aCandidate->GetMasterPage() != &rMasterPage
+                || aCandidate->GetPage() != &rPage
+                || aCandidate->GetMapMode() != rMapMode
+                || aCandidate->GetBackgroundObject() != pBackgroundObect))
+        {
+            aCandidate++;
+        }
+
+        if(aCandidate != maEntries.end())
+        {
+            // found
+            aCandidate->SetMPUsageCount(MASTERPAGE_USAGE_COUNT);
+            return Bitmap(aCandidate->GetBitmap());
+        }
+
+        return Bitmap();
+    }
+
+    void MasterPageBuffer::ForgetMasterPageData(const SdrPage& rMasterPage, const SdrPage& rPage)
+    {
+        ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+        bool bNeedsClear(false);
+
+        // set all timeout entries for this page to 0L
+        while(aCandidate != maEntries.end())
+        {
+            if(aCandidate->GetMasterPage() == &rMasterPage
+                || aCandidate->GetPage() == &rPage)
+            {
+                aCandidate->SetMPUsageCount(0L);
+                bNeedsClear = true;
+            }
+
+            aCandidate++;
+        }
+
+        if(bNeedsClear)
+        {
+            ClearUnusedBufferData();
+
+            if(!maEntries.size())
+            {
+                Stop();
+            }
+        }
+    }
+
+    void MasterPageBuffer::ClearUnusedBufferData()
+    {
+        ::std::vector< MasterPageBufferEntry > maFilteredEntries;
+        ::std::vector< MasterPageBufferEntry >::iterator aCandidate = maEntries.begin();
+
+        // copy entries not for this masterpage to new vector
+        while(aCandidate != maEntries.end())
+        {
+            if(aCandidate->GetMPUsageCount())
+            {
+                maFilteredEntries.push_back(*aCandidate);
+            }
+
+            aCandidate++;
+        }
+
+        // copy new vector on old one, this will destroy the old one
+        // and the not copied entries
+        maEntries = maFilteredEntries;
+    }
+
+    // declare the global buffer here
+    MasterPageBuffer aMasterPageBuffer;
+} // end of anonymous namespace
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
@@ -302,8 +561,10 @@ namespace sdr
 
             if(rObjectContact.IsMasterPageBufferingAllowed())
             {
-                // buffered
-                pRetval = new VOCBitmapBuffer(rObjectContact, *this);
+                // buffered, but no alpha-channel
+//              pRetval = new VOCBitmapBuffer_old(rObjectContact, *this, false);
+//              pRetval = new VOCBitmapBuffer(rObjectContact, *this);
+                pRetval = new VOCOfMasterPageDescriptor(rObjectContact, *this);
             }
             else
             {
@@ -401,10 +662,28 @@ namespace sdr
             // Draw the MasterPage content
             Rectangle aSecondRectangle;
 
+            // #i31397#
+            // In OwnMasterPagePainter, use the same ViewObjectContactRedirector as
+            // in the view we are painted in
+            ViewObjectContactRedirector* pParentRedirector = rAssociatedVOC.GetObjectContact().GetViewObjectContactRedirector();
+            ViewObjectContactRedirector* pLocalRedirector = mpMasterPagePainter->GetViewObjectContactRedirector();
+
+            if(pParentRedirector)
+            {
+                // set ViewObjectContactRedirector of view we are painted in
+                mpMasterPagePainter->SetViewObjectContactRedirector(pParentRedirector);
+            }
+
             if(mpMasterPagePainter->PaintIt(rDisplayInfo, aSecondRectangle))
             {
                 bRetval = sal_True;
                 rPaintRectangle.Union(aSecondRectangle);
+            }
+
+            if(pParentRedirector)
+            {
+                // reset ViewObjectContactRedirector to local one
+                mpMasterPagePainter->SetViewObjectContactRedirector(pLocalRedirector);
             }
 
             return bRetval;
@@ -413,6 +692,44 @@ namespace sdr
         ViewContact* ViewContactOfMasterPageDescriptor::GetParentContact() const
         {
             return &(GetMasterPageDescriptor().GetUsedPage().GetViewContact());
+        }
+
+        // React on changes of the object of this ViewContact
+        void ViewContactOfMasterPageDescriptor::ActionChanged()
+        {
+            // get rid of all MasterPage buffer entries concerning this page
+            SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
+            SdrPage& rPage = GetMasterPageDescriptor().GetOwnerPage();
+            aMasterPageBuffer.ForgetMasterPageData(rMasterPage, rPage);
+
+            // call parent
+            ViewContact::ActionChanged();
+        }
+
+        // Interface method for receiving buffered MasterPage render data from
+        // VOCOfMasterPageDescriptor. Called from instances of VOCOfMasterPageDescriptor.
+        void ViewContactOfMasterPageDescriptor::OfferBufferedData(const Bitmap& rBitmap, const MapMode& rMapMode)
+        {
+            // set global data
+            SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
+            SdrPage& rPage = GetMasterPageDescriptor().GetOwnerPage();
+            SdrObject* pBackgroundObject = GetBackgroundObject();
+            MasterPageBufferEntry aData(rBitmap, rMapMode, &rMasterPage, &rPage, pBackgroundObject);
+            aMasterPageBuffer.OfferMasterPageData(aData);
+        }
+
+        // Interface method for VOCOfMasterPageDescriptor to ask for buffered data. If
+        // the page is the sane and the MapMode is the same, return the Bitmap.
+        Bitmap ViewContactOfMasterPageDescriptor::RequestBufferedData(const MapMode& rMapMode)
+        {
+            // request global data
+            Bitmap aRetval;
+            SdrPage& rMasterPage = GetMasterPageDescriptor().GetUsedPage();
+            SdrPage& rPage = GetMasterPageDescriptor().GetOwnerPage();
+            SdrObject* pBackgroundObject = GetBackgroundObject();
+            aRetval = aMasterPageBuffer.FindCandidate(rMasterPage, rPage, rMapMode, pBackgroundObject);
+
+            return aRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr
