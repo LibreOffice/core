@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:07:30 $
+ *  last change: $Author: kz $ $Date: 2004-09-07 10:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ public:
     void        EndListening( SvtListener& rLst, SCROW nRow );
     void        MoveListeners( SvtBroadcaster& rSource, SCROW nDestRow );
     void        StartAllListeners();
-    void        StartNameListeners( BOOL bOnlyRelNames );
+    void        StartNeededListeners(); // only for cells where NeedsListening()==TRUE
     void        SetRelNameDirty();
 
     void        CompileDBFormula();
