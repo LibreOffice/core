@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String RID_SVXSTR_ALL_FILES
     Text [ swedish ] = "<Alla filer>" ;
     Text [ danish ] = "<Alle filer>" ;
     Text [ portuguese ] = "<Ficheiros todos>" ;
-    Text [ portuguese_brazilian ] = "<Alle Dateien>" ;
+    Text [ portuguese_brazilian ] = "<Todos os arquivos>" ;
     Text[ chinese_simplified ] = "<æ‰€æœ‰çš„æ–‡ä»¶>";
     Text[ russian ] = "<Âñå ôàéëû>";
     Text[ polish ] = "<Wszystkie pliki>";
@@ -90,6 +90,9 @@ String RID_SVXSTR_ALL_FILES
     Text[ catalan ] = "<Tots els fitxers>";
     Text[ finnish ] = "<Kaikki tiedostot>";
     Text[ thai ] = "<à¹à¸Ÿà¹‰à¸¡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”>";
+    Text[ czech ] = "<VÅ¡echny soubory>";
+    Text[ hebrew ] = "<Alle Dateien>";
+    Text[ hindi ] = "<à¤¸à¤¬ à¤«à¤¾à¤‡à¤²à¥‡à¤‚>";
 };
 Resource RID_SVXRES_IMPORTGRAPHIC
 {
@@ -120,6 +123,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<Tots els formats>";
         Text[ thai ] = "<à¸£à¸¹à¸›à¹à¸šà¸šà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”>";
+        Text[ czech ] = "<VÅ¡echny formÃ¡ty>";
+        Text[ hebrew ] = "<Alle Formate>";
+        Text[ hindi ] = "<à¤¸à¤¬ à¤°à¤šà¤¨à¤¾à¤à¤>";
     };
     String STR_UNKNOWN_FORMAT
     {
@@ -127,7 +133,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "Unknown file format!" ;
         Text [ norwegian ] = "Unknown file format!" ;
         Text [ italian ] = "Formato file sconosciuto!" ;
-        Text [ portuguese_brazilian ] = "Formato de arquivo desconhecido!" ;
+        Text [ portuguese_brazilian ] = "O formato do arquivo é desconhecido!" ;
         Text [ portuguese ] = "Formato de ficheiro desconhecido!" ;
         Text [ finnish ] = "Tuntematon tiedostomuoto" ;
         Text [ danish ] = "Ukendt filformat!" ;
@@ -143,11 +149,14 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼ä¸æ˜";
         Text[ arabic ] = "ÊäÓíŞ ãáİ ÛíÑ ãÚÑæİ!";
         Text[ greek ] = "¢ãíùóôç ìïñöŞ áñ÷åßïõ!";
-        Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” íŒŒì¼ ì„œì‹";
+        Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” íŒŒì¼ í˜•ì‹";
         Text[ turkish ] = "Bilinmeyen dosya formatı!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El format del fitxer és desconegut!";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡!";
+        Text[ czech ] = "NeznÃ¡mÃ½ formÃ¡t souboru!";
+        Text[ hebrew ] = "Unbekanntes Dateiformat";
+        Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤ à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾!";
     };
     String STR_PATH_NOT_FOUND1
     {
@@ -155,7 +164,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "The directory '" ;
         Text [ norwegian ] = "The directory '" ;
         Text [ italian ] = "La cartella '" ;
-        Text [ portuguese_brazilian ] = "O diret?io" ;
+        Text [ portuguese_brazilian ] = "O diretório" ;
         Text [ portuguese ] = "O directório '" ;
         Text [ finnish ] = "Hakemistoa" ;
         Text [ danish ] = "Biblioteket '" ;
@@ -166,7 +175,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "The directory '" ;
         Text[ chinese_simplified ] = "è¿™ä¸ªç›®å½• '";
         Text[ russian ] = "Êàòàëîã '";
-        Text[ polish ] = "Katalog";
+        Text[ polish ] = "Katalog '";
         Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª'";
         Text[ chinese_traditional ] = "é€™å€‹ç›®éŒ„<";
         Text[ arabic ] = "ÇáÏáíá '";
@@ -176,6 +185,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El directori ";
         Text[ thai ] = "à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ '";
+        Text[ czech ] = "AdresÃ¡Å™ '";
+        Text[ hebrew ] = "Das Verzeichnis '";
+        Text[ hindi ] = "à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ '";
     };
     String STR_PATH_NOT_FOUND2
     {
@@ -183,7 +195,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "' does not exist." ;
         Text [ norwegian ] = "' does not exist." ;
         Text [ italian ] = "' non esiste." ;
-        Text [ portuguese_brazilian ] = "' n?o existe." ;
+        Text [ portuguese_brazilian ] = " não existe." ;
         Text [ portuguese ] = "' não existe." ;
         Text [ finnish ] = "' ei ole olemassa." ;
         Text [ danish ] = "' findes ikke." ;
@@ -194,7 +206,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "' does not exist" ;
         Text[ chinese_simplified ] = "' ä¸å­˜åœ¨ã€‚";
         Text[ russian ] = " íå ñóùåñòâóåò";
-        Text[ polish ] = "nie istnieje.";
+        Text[ polish ] = "' nie istnieje.";
         Text[ japanese ] = "'ã¯å­˜åœ¨ã—ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = ">ä¸å­˜åœ¨ã€‚";
         Text[ arabic ] = "' ÛíÑ ãæÌæÏ";
@@ -204,6 +216,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = " no existeix";
         Text[ thai ] = "' à¹„à¸¡à¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "' neexistuje";
+        Text[ hebrew ] = "' existiert nicht.";
+        Text[ hindi ] = "' à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
     };
     String STR_FLT_BMP
     {
@@ -227,7 +242,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Can't open graphic file" ;
         TEXT [ norwegian ] = "Can't open graphic file" ;
         TEXT [ italian ] = "Impossibile aprire il file grafico" ;
-        TEXT [ portuguese_brazilian ] = "N?o consigo abrir arquivo gr?fico" ;
+        TEXT [ portuguese_brazilian ] = "Não foi possível abrir o arquivo da figura" ;
         TEXT [ portuguese ] = "Impossível abrir ficheiro gráfico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
         TEXT [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
@@ -238,7 +253,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ english_us ] = "Graphics file cannot be opened" ;
         TEXT[ chinese_simplified ] = "æ— æ³•æ‰“å¼€å›¾å½¢æ–‡ä»¶";
         TEXT[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íå óäàåòñÿ";
-        TEXT[ polish ] = "Pliku graficznego nie mo¿na otworzyæ";
+        TEXT[ polish ] = "Nie mo¿na otworzyæ pliku graficznego";
         TEXT[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿåœ–å½¢æª”æ¡ˆ";
         TEXT[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
@@ -248,6 +263,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No és possible obrir el fitxer gràfic";
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„à¹„à¸”à¹‰";
+        TEXT[ czech ] = "NenÃ­ moÅ¾nÃ© otevÅ™Ã­t grafickÃ½ soubor";
+        TEXT[ hebrew ] = "Grafikdatei kann nicht geÃ¶ffnet werden";
+        TEXT[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤–à¥‹à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String STR_GRFILTER_IOERROR
     {
@@ -255,7 +273,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Can't read graphic file" ;
         TEXT [ norwegian ] = "Can't read graphic file" ;
         TEXT [ italian ] = "Impossibile leggere il file grafico" ;
-        TEXT [ portuguese_brazilian ] = "N?o consigo ler arquivo gr?fico" ;
+        TEXT [ portuguese_brazilian ] = "Não foi possível ler o arquivo da figura" ;
         TEXT [ portuguese ] = "Impossível ler ficheiro gráfico" ;
         TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
         TEXT [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
@@ -266,7 +284,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ english_us ] = "Graphics file cannot be read" ;
         TEXT[ chinese_simplified ] = "æ— æ³•è¯»å‡ºå›¾å½¢æ–‡ä»¶";
         TEXT[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íå óäàåòñÿ";
-        TEXT[ polish ] = "Pliku graficznego nie mo¿na otworzyæ";
+        TEXT[ polish ] = "Nie mo¿na odczytaæ pliku graficznego";
         TEXT[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã¯èª­ã‚ã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "ç„¡æ³•è®€å‡ºåœ–å½¢æª”æ¡ˆ";
         TEXT[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
@@ -276,6 +294,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No és possible llegir el fitxer gràfic";
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„à¹„à¸”à¹‰";
+        TEXT[ czech ] = "NenÃ­ moÅ¾nÃ© naÄÃ­st grafickÃ½ soubor";
+        TEXT[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
+        TEXT[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤ªà¤¢à¤¼ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String STR_GRFILTER_FORMATERROR
     {
@@ -283,7 +304,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Unknown graphic format" ;
         TEXT [ norwegian ] = "Unknown graphic format" ;
         TEXT [ italian ] = "Formato grafico sconosciuto" ;
-        TEXT [ portuguese_brazilian ] = "Formato gr?fico desconhecido" ;
+        TEXT [ portuguese_brazilian ] = "Formato da figura desconhecido" ;
         TEXT [ portuguese ] = "Formato gráfico desconhecido" ;
         TEXT [ finnish ] = "Tuntematon grafiikkamuoto" ;
         TEXT [ danish ] = "Ukendt grafikformat" ;
@@ -304,6 +325,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "El format de la imatge és desconegut";
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸£à¸¹à¸›à¹à¸šà¸šà¸à¸£à¸²à¸Ÿà¸´à¸„";
+        TEXT[ czech ] = "NeznÃ¡mÃ½ grafickÃ½ formÃ¡t";
+        TEXT[ hebrew ] = "Unbekanntes Grafikformat";
+        TEXT[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤ à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤°à¤šà¤¨à¤¾";
     };
     String STR_GRFILTER_VERSIONERROR
     {
@@ -311,7 +335,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Version of graphic file not supported" ;
         TEXT [ norwegian ] = "Version of graphic file not supported" ;
         TEXT [ italian ] = "Versione del file grafico non supportata" ;
-        TEXT [ portuguese_brazilian ] = "Vers?o de arquivo gr?fico n?o suportada" ;
+        TEXT [ portuguese_brazilian ] = "A versão do arquivo da figura não é suportada" ;
         TEXT [ portuguese ] = "Versão do ficheiro gráfico não tem suporte" ;
         TEXT [ finnish ] = "Grafiikkatiedoston versiota ei tueta." ;
         TEXT [ danish ] = "Grafikfilens version understøttes ikke" ;
@@ -322,7 +346,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ english_us ] = "Cannot support version of graphic file" ;
         TEXT[ chinese_simplified ] = "ä¸æ”¯æŒè¿™ä¸ªå›¾å½¢æ–‡ä»¶ç‰ˆæœ¬";
         TEXT[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
-        TEXT[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
+        TEXT[ polish ] = "Nieobs³ugiwana wersja pliku graficznego";
         TEXT[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "ä¸æ”¯æŒé€™å€‹åœ–å½¢æª”æ¡ˆç‰ˆæœ¬";
         TEXT[ arabic ] = "áä íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
@@ -332,6 +356,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No se suporta aquesta versió del fitxer gràfic";
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¸‚à¸­à¸‡à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„";
+        TEXT[ czech ] = "NepodporovanÃ¡ verze obrÃ¡zku";
+        TEXT[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt";
+        TEXT[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤•à¤¾ à¤†à¤µà¥ƒà¤¤à¥à¤¤à¤¿ à¤•à¥‹ à¤¸à¤®à¤°à¥à¤¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ";
     };
     String STR_GRFILTER_FILTERERROR
     {
@@ -339,7 +366,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Graphic filter not found" ;
         TEXT [ norwegian ] = "Graphic filter not found" ;
         TEXT [ italian ] = "Filtro grafico non trovato" ;
-        TEXT [ portuguese_brazilian ] = "Filtro gr?fico n?o encontrado" ;
+        TEXT [ portuguese_brazilian ] = "O filtro da figura não foi encontrado" ;
         TEXT [ portuguese ] = "Filtro gráfico não encontrado" ;
         TEXT [ finnish ] = "Grafiikkasuodatinta ei löytynyt." ;
         TEXT [ danish ] = "Grafikfilter blev ikke fundet" ;
@@ -350,7 +377,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ english_us ] = "Graphics filter not found" ;
         TEXT[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å›¾å½¢è¿‡æ»¤å™¨";
         TEXT[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
-        TEXT[ polish ] = "Filtru graficznego nie znaleziono";
+        TEXT[ polish ] = "Nie znaleziono filtru grafiki";
         TEXT[ japanese ] = "ç”»åƒãƒ•ã‚£ãƒ«ã‚¿ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°åœ–å½¢éæ¿¾å™¨";
         TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
@@ -360,6 +387,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No s'ha trobat el filtre d'imatges";
         TEXT[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸à¸£à¸²à¸Ÿà¸´à¸„";
+        TEXT[ czech ] = "GrafickÃ½ filtr nebyl nalezen";
+        TEXT[ hebrew ] = "Grafikfilter nicht gefunden";
+        TEXT[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤° à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾";
     };
     String STR_GRFILTER_TOOBIG
     {
@@ -367,7 +397,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ English ] = "Not enough memory to insert graphic" ;
         TEXT [ norwegian ] = "Not enough memory to insert graphic" ;
         TEXT [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
-        TEXT [ portuguese_brazilian ] = "Mem?ia insuficiente para inserir o gr?fico" ;
+        TEXT [ portuguese_brazilian ] = "Não há memória suficiente para inserir a imagem" ;
         TEXT [ portuguese ] = "Memória insuficiente para inserir a imagem." ;
         TEXT [ finnish ] = "Muisti ei riitä kuvan lisäämiseen." ;
         TEXT [ danish ] = "Ikke tilstrækkelig hukommelse til at indsætte grafik" ;
@@ -378,7 +408,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT [ english_us ] = "Not enough memory to insert graphic" ;
         TEXT[ chinese_simplified ] = "å†…å­˜ä¸è¶³ï¼Œæ— æ³•æ’å…¥å›¾å½¢";
         TEXT[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ãğàôè÷åñêîãî îáúåêòà";
-        TEXT[ polish ] = "Brakuje pamiêci do wstawienia grafiki";
+        TEXT[ polish ] = "Za ma³o pamiêci, aby wstawiæ grafikê";
         TEXT[ japanese ] = "å›³ã®æŒ¿å…¥ã«å¿…è¦ãªãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
         TEXT[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³ï¹ç„¡æ³•æ’å…¥åœ–å½¢";
         TEXT[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
@@ -388,6 +418,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "No hi ha prou memòria per poder inserir aquesta imatge";
         TEXT[ thai ] = "à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³à¹„à¸¡à¹ˆà¸à¸­à¸—à¸µà¹ˆà¸ˆà¸°à¹à¸—à¸£à¸à¸à¸£à¸²à¸Ÿà¸´à¸„";
+        TEXT[ czech ] = "Nedostatek pamÄ›ti pro vloÅ¾enÃ­ obrÃ¡zku";
+        TEXT[ hebrew ] = "Nicht genug Speicher zum EinfÃ¼gen der Grafik";
+        TEXT[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤ªà¤°à¥à¤¯à¤¾à¤ªà¥à¤¤ à¤®à¥‡à¤®à¤°à¥€";
     };
     String STR_PROPERTIES
     {
@@ -406,7 +439,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "~Properties..." ;
         Text[ chinese_simplified ] = "å±æ€§(~P)...";
         Text[ russian ] = "Ñâîéñòâà...";
-        Text[ polish ] = "W³aœciwoœci...";
+        Text[ polish ] = "~W³aœciwoœci...";
         Text[ japanese ] = "ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£(~P)...";
         Text[ chinese_traditional ] = "å±¬æ€§(~P)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
@@ -416,6 +449,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propietats...";
         Text[ thai ] = "~à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´...";
+        Text[ czech ] = "Vlastnosti...";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×...â€¬";
+        Text[ hindi ] = "~à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚...";
     };
     String STR_HOME
     {
@@ -423,7 +459,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "H~ome" ;
         Text [ norwegian ] = "H~ome" ;
         Text [ italian ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "C~asa" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
         Text [ portuguese ] = "~Padrão" ;
         Text [ finnish ] = "Vakio" ;
         Text [ danish ] = "Standard" ;
@@ -434,7 +470,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "Standard" ;
         Text[ chinese_simplified ] = "æ ‡å‡†";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Standardowy";
         Text[ japanese ] = "æ¨™æº–";
         Text[ chinese_traditional ] = "æ¨™æº–";
         Text[ arabic ] = "ŞíÇÓí";
@@ -444,6 +480,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminat";
         Text[ thai ] = "à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
+        Text[ czech ] = "StandardnÃ­";
+        Text[ hebrew ] = "~Standard";
+        Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡";
     };
     String STR_LINK
     {
@@ -451,7 +490,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "~Link" ;
         Text [ norwegian ] = "~Link" ;
         Text [ italian ] = "~Collega" ;
-        Text [ portuguese_brazilian ] = "~Liga??o" ;
+        Text [ portuguese_brazilian ] = "~Vincular" ;
         Text [ portuguese ] = "~Ligar" ;
         Text [ finnish ] = "~Linkitä" ;
         Text [ danish ] = "Kæd" ;
@@ -462,7 +501,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "~Link" ;
         Text[ chinese_simplified ] = "é“¾æ¥(~L)";
         Text[ russian ] = "Ñâÿçàòü";
-        Text[ polish ] = "Po³¹cz";
+        Text[ polish ] = "Po³¹~cz";
         Text[ japanese ] = "ãƒªãƒ³ã‚¯(~L)";
         Text[ chinese_traditional ] = "é€£çµ(~L)";
         Text[ arabic ] = "ÑÈØ";
@@ -472,6 +511,9 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Enllaça";
         Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
+        Text[ czech ] = "Odkaz";
+        Text[ hebrew ] = "~VerknÃ¼pfen";
+        Text[ hindi ] = "~à¤²à¤¿à¤‚à¤•";
     };
     String STR_PREVIEW
     {
@@ -479,7 +521,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ English ] = "Pr~eview" ;
         Text [ norwegian ] = "Pr~eview" ;
         Text [ italian ] = "Ante~prima" ;
-        Text [ portuguese_brazilian ] = "Ex~aminar" ;
+        Text [ portuguese_brazilian ] = "Vi~sualizar" ;
         Text [ portuguese ] = "~Visualizar" ;
         Text [ finnish ] = "Esi~katselu" ;
         Text [ danish ] = "Eksempel" ;
@@ -490,16 +532,19 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ english_us ] = "Pr~eview" ;
         Text[ chinese_simplified ] = "é¢„è§ˆ(~E)";
         Text[ russian ] = "Ïğîñìîòğ";
-        Text[ polish ] = "Podgl¹d";
+        Text[ polish ] = "Po~dgl¹d";
         Text[ japanese ] = "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼(~E)";
         Text[ chinese_traditional ] = "é è¦½(~E)";
         Text[ arabic ] = "ãÚÇíäÉ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
-        Text[ korean ] = "ë¯¸ë¦¬ë³´ê¸°(~E)";
+        Text[ korean ] = "ë¯¸ë¦¬ ë³´ê¸°(~E)";
         Text[ turkish ] = "Ö~nizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Previsualització";
         Text[ thai ] = "à¹à¸ª~à¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
+        Text[ czech ] = "NÃ¡hled";
+        Text[ hebrew ] = "V~orschau";
+        Text[ hindi ] = "à¤ªà¥‚à¤°à¥à¤µ~à¤¦à¥ƒà¤¶à¥à¤¯";
     };
     String STR_FILTER
     {
@@ -512,11 +557,11 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ dutch ] = "~Filter..." ;
         Text [ swedish ] = "Fi~lter..." ;
         Text [ danish ] = "Filter..." ;
-        Text [ portuguese_brazilian ] = "~Filter..." ;
+        Text [ portuguese_brazilian ] = "~Filtro..." ;
         Text [ portuguese ] = "~Filtro..." ;
         Text[ chinese_simplified ] = "ç­›é€‰(~F)...";
         Text[ russian ] = "Ôèëüòğ...";
-        Text[ polish ] = "Filtr...";
+        Text[ polish ] = "~Filtr...";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿(~F)...";
         Text[ chinese_traditional ] = "ç¯©é¸(~F)...";
         Text[ arabic ] = "İáÊÑ...";
@@ -527,9 +572,21 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ catalan ] = "~Filtre...";
         Text[ finnish ] = "~Suodatus...";
         Text[ thai ] = "~à¸•à¸±à¸§à¸à¸£à¸­à¸‡...";
+        Text[ czech ] = "Filtr...";
+        Text[ hebrew ] = "â€®×¡×™× ×•×Ÿâ€¬";
+        Text[ hindi ] = "~à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤°...";
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
