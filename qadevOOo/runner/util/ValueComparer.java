@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueComparer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:17:54 $
+ *  last change:$Date: 2004-01-28 19:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package util;
 
+import com.sun.star.beans.PropertyValue;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -70,6 +71,7 @@ import com.sun.star.uno.Enum;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import java.util.HashMap;
 
 
 public class ValueComparer {
@@ -111,7 +113,31 @@ public class ValueComparer {
         return eq;
     } // end of equalValue
 
+    static boolean compareArrayOfPropertyValue(PropertyValue[] pv1, PropertyValue[] pv2){
+        if ( pv1.length != pv2.length) {
+            return  false;
+        }
+        HashMap hm1 = new HashMap();
+        boolean result = true;
+        int i = 0;
+
+        for (i = 0; i < pv1.length; i++){
+            hm1.put(pv1[i].Name, pv1[i].Value);
+        }
+
+        i = 0;
+        while (i < pv2.length && result) {
+            result &= equalValue(hm1.get(pv2[i].Name),pv2[i].Value);
+            i++;
+        }
+        return result;
+    }
+
     static boolean compareArrays(Object op1, Object op2) throws Exception {
+
+        if (op1 instanceof PropertyValue[] && op2 instanceof PropertyValue[]) {
+           return compareArrayOfPropertyValue((PropertyValue[])op1,(PropertyValue[])op2);
+       }
         boolean result = true;
         if((op1.getClass().getComponentType() == op2.getClass().getComponentType())
            && (Array.getLength(op1) == Array.getLength(op2)))
