@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 14:56:52 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 15:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1362,7 +1362,7 @@ uno::Reference< container::XNameAccess > SAL_CALL SdXImpressDocument::getStyleFa
 
 // XAnyCompareFactory
 uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::createAnyCompareByName( const OUString& PropertyName )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (uno::RuntimeException)
 {
     return SvxCreateNumRuleCompare();
 }
@@ -1404,7 +1404,7 @@ sal_Int32 SAL_CALL SdXImpressDocument::getRendererCount( const uno::Any& rSelect
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( sal_Int32 nRenderer, const uno::Any& rSelection,
                                                                                 const uno::Sequence< beans::PropertyValue >& rxOptions )
-    throw (uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
