@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TSortIndex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:15:37 $
+ *  last change: $Author: oj $ $Date: 2002-07-04 06:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,24 @@ sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
         return 0;
     }
     return m_aKeyValues[nPos-1].first;
+}
+// -----------------------------------------------------------------------------
+OKeyValue::OKeyValue()
+{
+}
+// -----------------------------------------------------------------------------
+OKeyValue::OKeyValue(sal_Int32 nVal)
+: m_nValue(nVal)
+{
+}
+// -----------------------------------------------------------------------------
+OKeyValue::~OKeyValue()
+{
+}
+// -----------------------------------------------------------------------------
+OKeyValue* OKeyValue::createKeyValue(sal_Int32 _nVal)
+{
+    return new OKeyValue(_nVal);
 }
 // -----------------------------------------------------------------------------
 
