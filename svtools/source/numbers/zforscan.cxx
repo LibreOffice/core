@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: er $ $Date: 2002-01-09 10:34:07 $
+ *  last change: $Author: er $ $Date: 2002-02-28 19:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,6 +1065,7 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
     xub_StrLen nPos = 0;
     USHORT i = 0;
     short eNewType;
+    BOOL bMatchBracket = FALSE;
 
     SkipStrings(i, nPos);
     while (i < nAnzStrings)
@@ -1177,12 +1178,14 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
                             sStrArray[i+1].GetChar(0) == '$' )
                     {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
                         eNewType = NUMBERFORMAT_CURRENCY;
+                        bMatchBracket = TRUE;
                     }
                     else if ( i < nAnzStrings-1 &&
                             nTypeArray[i+1] == SYMBOLTYPE_STRING &&
                             sStrArray[i+1].GetChar(0) == '~' )
                     {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
                         eNewType = NUMBERFORMAT_DATE;
+                        bMatchBracket = TRUE;
                     }
                     else
                     {
@@ -1335,6 +1338,19 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String& rString)
         }
         nPos += sStrArray[i].Len();         // Korrekturposition
         i++;
+        if ( bMatchBracket )
+        {   // no type detection inside of matching brackets if [$...], [~...]
+            while ( bMatchBracket && i < nAnzStrings )
+            {
+                if ( nTypeArray[i] == SYMBOLTYPE_DEL
+                        && sStrArray[i].GetChar(0) == ']' )
+                    bMatchBracket = FALSE;
+                nPos += sStrArray[i].Len();
+                i++;
+            }
+            if ( bMatchBracket )
+                return nPos;    // missing closing bracket at end of code
+        }
         SkipStrings(i, nPos);
     }
 
