@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventattacher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 16:28:42 $
+ *  last change: $Author: hr $ $Date: 2001-09-11 15:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ public:
     virtual void SAL_CALL removeListener(const Reference< XInterface >& xObject,
             const OUString& ListenerType, const OUString& AddListenerParam,
             const Reference< XEventListener >& aToRemoveListener)
-        throw( IllegalArgumentException, ServiceNotRegisteredException, IntrospectionException, RuntimeException );
+        throw( IllegalArgumentException, IntrospectionException, RuntimeException );
 
     // used by FilterAllListener_Impl
     Reference< XTypeConverter > getConverter() throw( Exception );
@@ -801,7 +801,7 @@ void EventAttacherImpl::removeListener
     const OUString& AddListenerParam,
     const Reference< XEventListener >& aToRemoveListener
 )
-    throw( IllegalArgumentException, ServiceNotRegisteredException, IntrospectionException, RuntimeException )
+    throw( IllegalArgumentException, IntrospectionException, RuntimeException )
 {
     if( !xObject.is() || !aToRemoveListener.is() )
         throw IllegalArgumentException();
@@ -809,7 +809,7 @@ void EventAttacherImpl::removeListener
     // Listener-Klasse per Reflection besorgen
     Reference< XIdlReflection > xReflection = getReflection();
     if( !xReflection.is() )
-        throw ServiceNotRegisteredException();
+        throw IntrospectionException();
 
     // Abmelden, dazu passende removeListener-Methode aufrufen
     // Zunaechst ueber Introspection gehen, da die Methoden in der gleichen
@@ -820,7 +820,7 @@ void EventAttacherImpl::removeListener
     // Introspection-Service holen
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
-        throw ServiceNotRegisteredException();
+        throw IntrospectionException();
 
     // und inspecten
     Any aObjAny( &xObject, ::getCppuType( (const Reference< XInterface > *)0) );
