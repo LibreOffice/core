@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-15 17:50:54 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,26 +336,22 @@ ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 void ScXMLTableRowCellContext::SetCursorOnTextImport()
 {
     com::sun::star::table::CellAddress aCellPos = GetScImport().GetTables().GetRealCellPos();
-    uno::Reference<sheet::XSpreadsheet> xTable = GetScImport().GetTables().GetCurrentXSheet();
-    if (xTable.is())
+    uno::Reference<table::XCellRange> xCellRange = GetScImport().GetTables().GetCurrentXCellRange();
+    if (xCellRange.is())
     {
-        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
-        if (xCellRange.is())
+        if (aCellPos.Column > MAXCOL)
+            aCellPos.Column = MAXCOL;
+        if (aCellPos.Row > MAXROW)
+            aCellPos.Row = MAXROW;
+        uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+        if (xCell.is())
         {
-            if (aCellPos.Column > MAXCOL)
-                aCellPos.Column = MAXCOL;
-            if (aCellPos.Row > MAXROW)
-                aCellPos.Row = MAXROW;
-            uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-            if (xCell.is())
+            uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
+            if (xText.is())
             {
-                uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
-                if (xText.is())
-                {
-                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                    if (xTextCursor.is())
-                        GetScImport().GetTextImport()->SetCursor(xTextCursor);
-                }
+                uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                if (xTextCursor.is())
+                    GetScImport().GetTextImport()->SetCursor(xTextCursor);
             }
         }
     }
@@ -375,9 +371,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     {
     case XML_TOK_TABLE_ROW_CELL_P:
         {
-/*          bHasTextImport = sal_True;
-            pContext = new ScXMLContentContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList, sOUCurrentText );*/
             bIsEmpty = sal_False;
             bTextP = sal_True;
             if (nCellType == util::NumberFormat::TEXT)
@@ -388,8 +381,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                     bIsFirstTextImport = sal_True;
                     bHasTextImport = sal_True;
                     pContext = new ScXMLTextPContext(GetScImport(), nPrefix, rLName, xAttrList, this);
-//                  pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-//                          GetScImport(), nPrefix, rLName, xAttrList);
                 }
                 else
                 {
@@ -504,8 +495,7 @@ sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellR
 void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress& aCellPos,
                  const sal_Int32 nCols, const sal_Int32 nRows)
 {
-    uno::Reference<sheet::XSpreadsheet> xTable = GetScImport().GetTables().GetCurrentXSheet();
-    uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
+    uno::Reference<table::XCellRange> xCellRange = GetScImport().GetTables().GetCurrentXCellRange();
     if ( xCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
@@ -731,22 +721,24 @@ void ScXMLTableRowCellContext::EndElement()
         table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
         if (aCellPos.Column > 0 && nRepeatedRows > 1)
             aCellPos.Row -= (nRepeatedRows - 1);
-        uno::Reference<sheet::XSpreadsheet> xTable = rXMLImport.GetTables().GetCurrentXSheet();
-        if (xTable.is())
+        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        if (xCellRange.is())
         {
-            uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
             if (aCellPos.Column > MAXCOL)
                 aCellPos.Column = MAXCOL - nCellsRepeated + 1;
             if (aCellPos.Row > MAXROW)
                 aCellPos.Row = MAXROW - nRepeatedRows + 1;
-            uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-            uno::Reference <text::XText> xTempText (xTempCell, uno::UNO_QUERY);
-            if (xTempText.is())
-                sOUText=xTempText->getString();
             if (bIsMerged)
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !bIsFormula )
             {
+                uno::Reference <table::XCell> xTempCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                if(nCellType == util::NumberFormat::TEXT)
+                {
+                    uno::Reference <text::XText> xTempText (xTempCell, uno::UNO_QUERY);
+                    if (xTempText.is())
+                        sOUText=xTempText->getString();
+                }
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 for (sal_Int32 i = 0; i < nCellsRepeated; i++)
@@ -818,12 +810,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     break;
                                 default:
                                     {
-                                        uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
-                                        if (xText.is())
-                                        {
-                                            if (i > 0)
-                                                xText->setString(sOUText);
-                                        }
+                                        DBG_ERROR("no cell type given");
                                     }
                                     break;
                                 }

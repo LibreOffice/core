@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,10 +2016,9 @@ void ScXMLImport::SetType(uno::Reference <beans::XPropertySet>& rProperties, con
 void ScXMLImport::SetStyleToRange(const ScRange& rRange, const rtl::OUString& rStyleName,
         const sal_Int16 nCellType, const rtl::OUString& rCurrency)
 {
-    uno::Reference<sheet::XSpreadsheet> xTable = GetTables().GetCurrentXSheet();
-    if (xTable.is())
+    uno::Reference<table::XCellRange> xCellRange = GetTables().GetCurrentXCellRange();
+    if (xCellRange.is())
     {
-        uno::Reference<table::XCellRange> xCellRange ( xTable, uno::UNO_QUERY );
         uno::Reference <table::XCellRange> xPropCellRange = xCellRange->getCellRangeByPosition(
             rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
         if (xPropCellRange.is())

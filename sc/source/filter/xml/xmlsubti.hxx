@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 11:57:48 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ private:
     ScMyShapeResizer                    aResizeShapes;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > xCurrentCellRange;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShapes > xShapes;
     rtl::OUString                       sCurrentSheetName;
@@ -198,6 +199,8 @@ public:
     sal_Int32                           GetCurrentRow() const { return aTableVec[nTableCount - 1]->GetRow(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                                         GetCurrentXSheet()  { return xCurrentSheet; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
+                                        GetCurrentXCellRange()  { return xCurrentCellRange; }
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

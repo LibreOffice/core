@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 11:57:48 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                 uno::Any aSheet = xIndex->getByIndex(nCurrentSheet);
                 if ( aSheet >>= xCurrentSheet )
                 {
+                    xCurrentCellRange = uno::Reference<table::XCellRange>(xCurrentSheet, uno::UNO_QUERY);
                     if (!(nCurrentSheet > 0))
                     {
                         uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
@@ -359,15 +360,14 @@ sal_Bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRa
 
 void ScMyTables::UnMerge()
 {
-    uno::Reference<table::XCellRange> xCellRange ( xCurrentSheet, uno::UNO_QUERY );
-    if ( xCellRange.is() )
+    if ( xCurrentCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
+        if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
         {
             //unmerge
             uno::Reference <table::XCellRange> xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow);
             uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
             if (xMergeable.is())
@@ -378,15 +378,14 @@ void ScMyTables::UnMerge()
 
 void ScMyTables::DoMerge(sal_Int32 nCount)
 {
-    uno::Reference<table::XCellRange> xCellRange ( xCurrentSheet, uno::UNO_QUERY );
-    if ( xCellRange.is() )
+    if ( xCurrentCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
+        if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
         {
             //unmerge
             uno::Reference <table::XCellRange> xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow);
             uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
             if (xMergeable.is())
@@ -397,14 +396,14 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
         uno::Reference <table::XCellRange> xMergeCellRange;
         if (nCount == -1)
             xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn
                                                     + aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()) - 1,
                                                     aCellAddress.EndRow
                                                     + aTableVec[nTableCount - 1]->GetRowsPerRow(aTableVec[nTableCount - 1]->GetRow()) - 1);
         else
             xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.StartColumn
                                                     + nCount - 1,
                                                     aCellAddress.EndRow);
@@ -416,18 +415,17 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
 
 void ScMyTables::InsertRow()
 {
-    uno::Reference<table::XCellRange> xCellRange ( xCurrentSheet, uno::UNO_QUERY );
-    if ( xCellRange.is() )
+    if ( xCurrentCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nRow(GetRealCellPos().Row);
         for (sal_Int32 j = 0; j < GetRealCellPos().Column - aTableVec[nTableCount - 1]->GetColumn() - 1; j++)
         {
-            if (IsMerged(xCellRange, j, nRow - 1, aCellAddress))
+            if (IsMerged(xCurrentCellRange, j, nRow - 1, aCellAddress))
             {
                 //unmerge
                 uno::Reference <table::XCellRange> xMergeCellRange =
-                    xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                    xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn, aCellAddress.EndRow);
                 uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
                 if (xMergeable.is())
@@ -436,7 +434,7 @@ void ScMyTables::InsertRow()
 
             //merge
             uno::Reference <table::XCellRange> xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn, aCellAddress.EndRow + 1);
             uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
             if (xMergeable.is())
@@ -502,19 +500,18 @@ void ScMyTables::CloseRow()
 
 void ScMyTables::InsertColumn()
 {
-    uno::Reference<table::XCellRange> xCellRange ( xCurrentSheet, uno::UNO_QUERY );
-    if ( xCellRange.is() )
+    if ( xCurrentCellRange.is() )
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nCol(GetRealCellPos().Column);
         for (sal_Int32 j = 0; j <= GetRealCellPos().Row - aTableVec[nTableCount - 1]->GetRow() - 1; j++)
         {
             table::CellRangeAddress aTempCellAddress;
-            if (IsMerged(xCellRange, nCol - 1, j, aCellAddress))
+            if (IsMerged(xCurrentCellRange, nCol - 1, j, aCellAddress))
             {
                 //unmerge
                 uno::Reference <table::XCellRange> xMergeCellRange =
-                    xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                    xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn, aCellAddress.EndRow);
                 uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
                 if (xMergeable.is())
@@ -537,7 +534,7 @@ void ScMyTables::InsertColumn()
 
             //merge
             uno::Reference <table::XCellRange> xMergeCellRange =
-                xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                         aCellAddress.EndColumn + 1, aCellAddress.EndRow);
             uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
             if (xMergeable.is())

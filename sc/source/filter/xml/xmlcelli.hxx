@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-15 15:51:22 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,13 +140,6 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-//  sal_Int16 GetCellType(const sal_Int32 nNumberFormat, sal_Bool& bIsStandard);
-
-//  void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCellRange>& xCellRange,
-//                                              const com::sun::star::table::CellAddress& aCellAddress);
-//  void SetType(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
-//  sal_Int32 SetCurrencySymbol(sal_Int32 nKey);
 
     sal_Int16 GetCellType(const rtl::OUString& sOUValue) const;
 
