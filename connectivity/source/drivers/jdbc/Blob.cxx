@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Blob.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-03 12:39:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,15 @@ using namespace connectivity;
 //**************************************************************
 
 jclass java_sql_Blob::theClass = 0;
-
+java_sql_Blob::java_sql_Blob( JNIEnv * pEnv, jobject myObj )
+    : java_lang_Object( pEnv, myObj )
+{
+    SDBThreadAttach::addRef();
+}
 java_sql_Blob::~java_sql_Blob()
-{}
+{
+    SDBThreadAttach::releaseRef();
+}
 
 jclass java_sql_Blob::getMyClass()
 {
@@ -111,10 +117,12 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        char * cSignature = "()J";
-        char * cMethodName = "length";
+        static char * cSignature = "()J";
+        static char * cMethodName = "length";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallLongMethod( object, mID );
             ThrowSQLException(t.pEnv,*this);
@@ -130,10 +138,12 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "(JI)[B";
-        char * cMethodName = "getBytes";
+        static char * cSignature = "(JI)[B";
+        static char * cMethodName = "getBytes";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jbyteArray out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID,pos,length);
             ThrowSQLException(t.pEnv,*this);
@@ -157,10 +167,12 @@ sal_Int64 SAL_CALL java_sql_Blob::length(  ) throw(::com::sun::star::sdbc::SQLEx
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/io/InputStream;";
-        char * cMethodName = "getBinaryStream";
+        static char * cSignature = "()Ljava/io/InputStream;";
+        static char * cMethodName = "getBinaryStream";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,*this);
@@ -176,20 +188,20 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
-        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
-        args[0].l = pByteArray;
         // temporaere Variable initialisieren
-        char * cSignature = "([BI)J";
-        char * cMethodName = "position";
+        static char * cSignature = "([BI)J";
+        static char * cMethodName = "position";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
+            // Parameter konvertieren
+            jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
+            t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),(jbyte*)pattern.getConstArray());
+            out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
+            t.pEnv->DeleteLocalRef(pByteArray);
             ThrowSQLException(t.pEnv,*this);
-            t.pEnv->DeleteLocalRef((jbyteArray)args[0].l);
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -202,16 +214,15 @@ sal_Int64 SAL_CALL java_sql_Blob::positionOfBlob( const ::com::sun::star::uno::R
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
-        jvalue args[1];
-        // Parameter konvertieren
-        args[0].l = 0;
         // temporaere Variable initialisieren
-        char * cSignature = "(Ljava/sql/Blob;I)J";
-        char * cMethodName = "positionOfBlob";
+        static char * cSignature = "(Ljava/sql/Blob;I)J";
+        static char * cMethodName = "positionOfBlob";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID,args[0].l,start );
+            out = t.pEnv->CallLongMethod( object, mID,0,start );
             ThrowSQLException(t.pEnv,*this);
             // und aufraeumen
         } //mID
