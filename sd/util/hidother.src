@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-24 09:16:04 $
+ *  last change: $Author: cl $ $Date: 2002-11-01 15:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,3 +157,7 @@ hidspecial HID_SD_UNDODELETEWARNING_DLG { HelpId = HID_SD_UNDODELETEWARNING_DLG;
 hidspecial HID_SD_UNDODELETEWARNING_CBX { HelpId = HID_SD_UNDODELETEWARNING_CBX; };
 
 hidspecial HID_SD_PAGEOBJSTLB           { HelpId = HID_SD_PAGEOBJSTLB; };
+
+hidspecial HID_SD_NAMEDIALOG_OBJECT     { HelpId = HID_SD_NAMEDIALOG_OBJECT; };
+hidspecial HID_SD_NAMEDIALOG_PAGE       { HelpId = HID_SD_NAMEDIALOG_PAGE; };
+hidspecial HID_SD_NAMEDIALOG_LINEEND    { HelpId = HID_SD_NAMEDIALOG_LINEEND; };
