@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:56:35 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
 #define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
 #define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
+#define RID_TP_DLGS                     ( RID_BASICIDE_START + 39 )
 #define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
 #define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
 #define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
@@ -133,6 +134,7 @@
 #define RID_STR_STDJAVAMODULENAME       ( RID_BASICIDE_START + 56 )
 #define RID_STR_NEWLIB                  ( RID_BASICIDE_START + 57 )
 #define RID_STR_NEWMOD                  ( RID_BASICIDE_START + 58 )
+#define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 118 )
 #define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
 #define RID_STR_LIBNAMETOLONG           ( RID_BASICIDE_START + 60 )
 #define RID_STR_ERRORCHOOSEMACRO        ( RID_BASICIDE_START + 61 )
