@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:17:39 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "Zuschneiden";
         Text[ hindi ] = "क्रॉप";
         Text[ slovak ] = "Orezať";
+        Text[ hungarian ] = "Levágás";
+        Text[ slovenian ] = "Obreži";
     };
     FixedText FT_LEFT
     {
@@ -121,7 +123,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ spanish ] = "~Izquierda" ;
         Text [ french ] = "� gauche" ;
         Text [ swedish ] = "~V�nster" ;
-        Text [ danish ] = "Venstre" ;
+        Text [ danish ] = "~Venstre" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text[ chinese_simplified ] = "左(~L)";
@@ -140,6 +142,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "~Links";
         Text[ hindi ] = "~बायाँ";
         Text[ slovak ] = "Vľ~avo";
+        Text[ hungarian ] = "~Bal";
+        Text[ slovenian ] = "~Levo";
     };
     MetricField MF_LEFT
     {
@@ -172,7 +176,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ french ] = "� droite" ;
         Text [ dutch ] = "~Rechts" ;
         Text [ swedish ] = "H�ge~r" ;
-        Text [ danish ] = "H�jre" ;
+        Text [ danish ] = "~H�jre" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text[ chinese_simplified ] = "右(~R)";
@@ -191,6 +195,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "~Rechts";
         Text[ hindi ] = "~दाहिना";
         Text[ slovak ] = "Vp~ravo";
+        Text[ hungarian ] = "~jobb";
+        Text[ slovenian ] = "~Desno";
     };
     MetricField MF_RIGHT
     {
@@ -221,7 +227,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ french ] = "En haut" ;
         Text [ dutch ] = "~Boven" ;
         Text [ swedish ] = "~Uppe" ;
-        Text [ danish ] = "�verst" ;
+        Text [ danish ] = "~Top" ;
         Text [ portuguese_brazilian ] = "Em ~Cima" ;
         Text [ portuguese ] = "Em ~cima" ;
         Text[ chinese_simplified ] = "上(~T)";
@@ -240,6 +246,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "~Oben";
         Text[ hindi ] = "~ऊपर";
         Text[ slovak ] = "~Navrchu";
+        Text[ hungarian ] = "~Felül";
+        Text[ slovenian ] = "~Zgoraj";
     };
     MetricField MF_TOP
     {
@@ -272,7 +280,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ spanish ] = "A~bajo" ;
         Text [ french ] = "En bas" ;
         Text [ swedish ] = "~Nere" ;
-        Text [ danish ] = "Nederst" ;
+        Text [ danish ] = "~Bund" ;
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ portuguese_brazilian ] = "Em ~Baixo" ;
         Text[ chinese_simplified ] = "下(~B)";
@@ -291,6 +299,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "~Unten";
         Text[ hindi ] = "~तल";
         Text[ slovak ] = "Na~spodku";
+        Text[ hungarian ] = "~Alul";
+        Text[ slovenian ] = "~Spodaj";
     };
     MetricField MF_BOTTOM
     {
@@ -340,6 +350,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "Bildgröße beibehal~ten";
         Text[ hindi ] = "चित्र परि~माण रखो";
         Text[ slovak ] = "~Zachovať veľkosť obrázku";
+        Text[ hungarian ] = "Abszolút ~méret megtartása";
+        Text[ slovenian ] = "Obdrži ve~likost podobe";
     };
     RadioButton RB_ZOOMCONST
     {
@@ -373,6 +385,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "~Skalierung beibehalten";
         Text[ hindi ] = "~स्केल रखो";
         Text[ slovak ] = "Zachovať š~kálu";
+        Text[ hungarian ] = "~Arányok megtartása";
+        Text[ slovenian ] = "Obdrži ~merilo";
     };
     Window WN_BSP
     {
@@ -411,6 +425,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "‮התאמת גודל‬";
         Text[ hindi ] = "स्केल";
         Text[ slovak ] = "Škála";
+        Text[ hungarian ] = "Arányok";
+        Text[ slovenian ] = "Merilo";
     };
     FixedText FT_WIDTHZOOM
     {
@@ -424,7 +440,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "Br~edd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -445,6 +461,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~चौड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "~Szélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField MF_WIDTHZOOM
     {
@@ -477,7 +495,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "K~orkeus" ;
-        Text [ danish ] = "H�jde" ;
+        Text [ danish ] = "H~�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H~�jd" ;
         Text [ dutch ] = "H~oogte" ;
@@ -499,6 +517,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "Vi~šina";
     };
     MetricField MF_HEIGHTZOOM
     {
@@ -551,6 +571,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "Bildgröße";
         Text[ hindi ] = "चित्र परिमाण";
         Text[ slovak ] = "Veľkosť obrázku";
+        Text[ hungarian ] = "Kép mérete";
+        Text[ slovenian ] = "Velikost slike";
     };
     FixedText FT_WIDTH
     {
@@ -564,7 +586,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -585,6 +607,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
         Text[ slovak ] = "Ší~rka";
+        Text[ hungarian ] = "~Szélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField MF_WIDTH
     {
@@ -616,7 +640,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ portuguese_brazilian ] = "A~ltura" ;
         Text [ portuguese ] = "A~ltura" ;
         Text [ finnish ] = "K~orkeus" ;
-        Text [ danish ] = "H�jde" ;
+        Text [ danish ] = "H~�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H�j~d" ;
         Text [ dutch ] = "H~oogte" ;
@@ -637,6 +661,8 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "M~agasság";
+        Text[ slovenian ] = "Vi~šina";
     };
     MetricField MF_HEIGHT
     {
@@ -673,7 +699,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ french ] = "Taille d'~origine" ;
         Text [ dutch ] = "Re�le gr~ootte" ;
         Text [ swedish ] = "Ori~ginalstorlek" ;
-        Text [ danish ] = "Oprindelig st." ;
+        Text [ danish ] = "~Oprindelig st�rrelse" ;
         Text [ portuguese_brazilian ] = "Tamanho ~Original" ;
         Text [ portuguese ] = "Tamanho ~original" ;
         Text[ chinese_simplified ] = "原件大小(~O)";
@@ -692,8 +718,11 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ hebrew ] = "Ori~ginalgröße";
         Text[ hindi ] = "~यथार्थ परिमाण";
         Text[ slovak ] = "~Pôvodná veľkosť";
+        Text[ hungarian ] = "~Eredeti méret";
+        Text[ slovenian ] = "~Izvirna velikost";
     };
 };
+
 
 
 
