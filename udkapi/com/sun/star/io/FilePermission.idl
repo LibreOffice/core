@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePermission.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ module com {  module sun {  module star {  module io {
     granting read and especially write access to various files and directories.
     The <code>"&lt;&lt;ALL FILES&gt;&gt;"</code> permission with write action is
     especially dangerous.  This grants permission to write to the entire file system.
+
+    @since #107627#
 */
 struct FilePermission
 {
