@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcreator.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-28 17:26:54 $
+ *  last change: $Author: mav $ $Date: 2003-12-01 08:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,30 +98,10 @@
 
 using namespace ::com::sun::star;
 
-//-------------------------------------------------------------------------
+
 ::rtl::OUString GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName,
-                                            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-{
-    ::rtl::OUString aDocServiceName;
+                                            const uno::Reference< lang::XMultiServiceFactory >& xFactory );
 
-    uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
-            uno::UNO_QUERY );
-
-    if ( !xFilterFactory.is() )
-        throw uno::RuntimeException(); // TODO
-
-    uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
-    uno::Sequence< beans::PropertyValue > aFilterData;
-    if ( aFilterAnyData >>= aFilterData )
-    {
-        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-            if ( aFilterData[nInd].Name.equalsAscii( "DocumentService" ) )
-                aFilterData[nInd].Value >>= aDocServiceName;
-    }
-
-    return ConvertServiceToImplementationName( aDocServiceName );
-}
 
 //-------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL UNOEmbeddedObjectCreator::impl_staticGetSupportedServiceNames()

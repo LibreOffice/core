@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 16:44:04 $
+ *  last change: $Author: mav $ $Date: 2003-12-01 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,30 @@ const sal_Int32 n_ConstBufferSize = 32000;
 
 uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
+{
+    // TODO: must be removed and used from another library
+
+    uno::Sequence< sal_Int8 > aResult( 16 );
+    aResult[0] = n1 >> 24;
+    aResult[1] = ( n1 << 8 ) >> 24;
+    aResult[2] = ( n1 << 16 ) >> 24;
+    aResult[3] = ( n1 << 24 ) >> 24;
+    aResult[4] = n2 >> 8;
+    aResult[5] = ( n2 << 8 ) >> 8;
+    aResult[6] = n3 >> 8;
+    aResult[7] = ( n3 << 8 ) >> 8;
+    aResult[8] = b8;
+    aResult[9] = b9;
+    aResult[10] = b10;
+    aResult[11] = b11;
+    aResult[12] = b12;
+    aResult[13] = b13;
+    aResult[14] = b14;
+    aResult[15] = b15;
+
+    return aResult;
+}
 
 //----------------------------------------------
 STDAPI StarObject_SwitchDisplayAspect(IUnknown *pObj, LPDWORD pdwCurAspect

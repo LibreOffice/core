@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mav $ $Date: 2003-11-28 18:04:05 $
+#   last change: $Author: mav $ $Date: 2003-12-01 08:41:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,22 +81,13 @@ SHL1OBJS= \
         $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
         $(SLO)$/visobj.obj\
+        $(SLO)$/xcreator.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/register.obj\
         $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/intercept.obj
-
-SHL1OBJS+= \
-        $(SLO)$/olecomponent.obj\
-        $(SLO)$/olepersist.obj\
-        $(SLO)$/oleembed.obj\
-        $(SLO)$/olevisual.obj\
-        $(SLO)$/olemisc.obj\
-        $(SLO)$/olewrapclient.obj\
-        $(SLO)$/advisesink.obj
-
 
 SHL1STDLIBS=\
     $(SALLIB)\
