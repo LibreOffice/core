@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-12 11:24:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 
 #include <svtools/intitem.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "templdlg.hxx"
 #include "bindings.hxx"
@@ -122,7 +124,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
             }
             BOOL bDisable = eState == SFX_ITEM_DISABLED;
             // Familie Disablen
-            USHORT nFamily;
+            USHORT nFamily = 0;
             switch( GetId())
             {
                 case SID_STYLE_FAMILY1:
