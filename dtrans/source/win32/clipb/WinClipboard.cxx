@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-07 11:23:10 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,10 @@ void SAL_CALL CWinClipboard::notifyAllClipboardListener( )
                 Reference< XClipboardListener > xCBListener( iter.next( ), UNO_QUERY );
                 if ( xCBListener.is( ) )
                     xCBListener->changedContents( aClipbEvent );
+            }
+            catch( RuntimeException& )
+            {
+                OSL_ENSURE( false, "RuntimeException caught" );
             }
             catch( ... )
             {
