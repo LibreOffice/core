@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-24 14:15:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,19 +367,24 @@ uno::Sequence< beans::Property > Content::getProperties(
     typedef std::set< rtl::OUString > StringSet;
     StringSet aPropSet;
 
-    // Obtain all properties supported for this resource from server.
-    try
+    // No server access for just created (not yet committed) objects.
+    // Only a minimal set of properties supported at this stage.
+    if ( !m_bTransient )
     {
-        std::vector< DAVResourceInfo > props;
-        m_xResAccess->PROPFIND( ZERO, props, xEnv );
+        // Obtain all properties supported for this resource from server.
+        try
+        {
+            std::vector< DAVResourceInfo > props;
+            m_xResAccess->PROPFIND( ZERO, props, xEnv );
 
-        // Note: vector always contains exactly one resource info, because
-        //       we used a depth of ZERO for PROPFIND.
-        aPropSet.insert( (*props.begin()).properties.begin(),
-                         (*props.begin()).properties.end() );
-    }
-    catch ( DAVException const & )
-    {
+            // Note: vector always contains exactly one resource info, because
+            //       we used a depth of ZERO for PROPFIND.
+            aPropSet.insert( (*props.begin()).properties.begin(),
+                             (*props.begin()).properties.end() );
+        }
+        catch ( DAVException const & )
+        {
+        }
     }
 
     // Add DAV properties, map DAV properties to UCB properties.
