@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2000-11-03 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             if( pDispatcher )
             {
                 pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+                pCurFrame = SfxViewFrame::Current();
+                pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
                 pDispatcher->Execute( SID_BASICIDE_EDITMACRO, SFX_CALLMODE_ASYNCHRON, &aInfoItem, 0L );
             }
             EndDialog( MACRO_EDIT );
