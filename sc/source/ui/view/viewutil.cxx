@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:07:16 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,12 @@
 #include "scitems.hxx"
 #include <svx/charmap.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/itemset.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/system.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -101,6 +103,36 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
         rShellSet.Put( *pI, nWhichId );
     else
         rShellSet.InvalidateItem( nWhichId );
+}
+
+//  static
+USHORT ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
+{
+    //  used for thesaurus
+
+    BYTE nScript = pDoc->GetScriptType( rPos.Col(), rPos.Row(), rPos.Tab() );
+    USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
+                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
+    const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
+    SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
+    LanguageType eLnge;
+    if (pLangIt)
+    {
+        eLnge = (LanguageType) pLangIt->GetValue();
+        if (eLnge == LANGUAGE_DONTKNOW)                 //! can this happen?
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            pDoc->GetLanguage( eLatin, eCjk, eCtl );
+            eLnge = ( nScript == SCRIPTTYPE_ASIAN ) ? eCjk :
+                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? eCtl : eLatin );
+        }
+    }
+    else
+        eLnge = LANGUAGE_ENGLISH_US;
+    if ( eLnge == LANGUAGE_SYSTEM )
+        eLnge = System::GetLanguage();      // never use SYSTEM for spelling
+
+    return eLnge;
 }
 
 //  static

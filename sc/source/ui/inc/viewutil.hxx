@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-24 20:06:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ class SvxFontItem;
 class ScChangeAction;
 class ScChangeViewSettings;
 class ScDocument;
+class ScAddress;
 
 
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
@@ -93,6 +94,8 @@ public:
 
     static void PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSet,
                                 USHORT nWhichId, USHORT nScript );
+
+    static USHORT GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 };
 
 // ---------------------------------------------------------------------------
