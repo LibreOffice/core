@@ -257,9 +257,9 @@ sub make_path_absolute
 
     if ( $installer::globals::iswin )
     {
-        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" ))
+        if ( $^O =~ /cygwin/i )
         {
-            if (!($$pathref =~ /^\s*\//))   # this is a relative POSIX path
+            if ( $$pathref !~ /^\s*\// && $$pathref !~ /^\s*\w\:/ ) # not an absolute POSIX or DOS path
             {
                 $$pathref = cwd() . $installer::globals::separator . $$pathref;
             }
@@ -271,6 +271,7 @@ sub make_path_absolute
                 $p = $1;
                 $q = $2;
             }
+            $p =~ s/\\/\\\\/g;
             chomp( $p = qx{cygpath -w "$p"} );
             $$pathref = $p.$q;
             # Use windows paths, but with '/'s.
@@ -300,7 +301,7 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /wntmsci/ ) { $installer::globals::iswindowsbuild = 1; }
 
-    if (( $installer::globals::compiler =~ /unxsols/ ) || ( $installer::globals::compiler =~ /unxsoli/ ))
+    if ( $installer::globals::compiler =~ /unxso[lg][si]/ )
     {
         $installer::globals::issolarisbuild = 1;
         if ( $installer::globals::packageformat eq "pkg" )
@@ -310,9 +311,9 @@ sub setglobalvariables
         }
     }
 
-    if ( $installer::globals::compiler =~ /unxsols/ ) { $installer::globals::issolarissparcbuild = 1; }
+    if ( $installer::globals::compiler =~ /unxso[lg]s/ ) { $installer::globals::issolarissparcbuild = 1; }
 
-    if ( $installer::globals::compiler =~ /unxsoli/ ) { $installer::globals::issolarisx86build = 1; }
+    if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
 
     if (( $installer::globals::compiler =~ /unx/ ) && ( $installer::globals::addpackagelist )) { $installer::globals::is_unix_multi = 1; }
 
@@ -396,12 +397,6 @@ sub setglobalvariables
 
 sub set_childproductnames
 {
-    if ( $installer::globals::iswindowsbuild )
-    {
-        $installer::globals::adafilename = "adabasd1201";       # Adabas is a complete directory
-        $installer::globals::javafilename = "jre-1_5_0_01-windows-i586-p.exe";
-        # $installer::globals::javafilename = 'Java 2 Runtime Environment, SE v1.4.2.msi';
-    }
 
     if ( $installer::globals::islinuxrpmbuild )
     {
