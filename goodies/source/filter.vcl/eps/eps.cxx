@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: svesik $ $Date: 2001-08-09 12:44:21 $
+ *  last change: $Author: sj $ $Date: 2001-08-21 15:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -958,7 +958,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf )
                     aClipRegion = pA->GetRect();
                 else
                     aClipRegion.Intersect( pA->GetRect() );
-                bRegionChanged = FALSE;
+                bRegionChanged = TRUE;
                 ImplSetClipRegion();
             }
             break;
