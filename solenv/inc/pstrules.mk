@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 18:14:29 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -267,10 +267,10 @@ $(PAR)$/%.par :
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 $(UNOUCROUT)$/%.hpp : $(UNOUCRDEP)
-    +cppumaker $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
+    +$(CPPUMAKER) $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
 
 $(UNOUCROUT)$/%.hdl : $(UNOUCRDEP)
-    +cppumaker $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
+    +$(CPPUMAKER) $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) -T{$(subst,$/,. $(subst,$(UNOUCROUT)$/, $(@:db)))}  $(UNOUCRRDB)
 
 
 .IF "$(TESTDIR)"!=""

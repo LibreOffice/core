@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:15:36 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1217,6 +1217,7 @@ SVXLIBS=svxitems dialogs editeng svrtf svdraw outliner xout si basicide \
 
 IDLC*=idlc
 REGMERGE*=regmerge
+CPPUMAKER*=cppumaker
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

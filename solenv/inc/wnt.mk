@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:15:36 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -529,11 +529,10 @@ RCSETVERSION=
 
 DLLPOSTFIX=mi
 
-.IF "$(USE_SHELL)"=="4nt"
-IDLC=idlc
-.ELSE			# "$(USE_SHELL)"=="4nt"
+.IF "$(USE_SHELL)"!="4nt"
 IDLC=idlc_w
 REGMERGE=regmerge_w
+CPPUMAKER=cppumaker_w
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"

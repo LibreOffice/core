@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.109 $
+#   $Revision: 1.110 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-27 16:26:41 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2058,7 +2058,7 @@ TARGETDEPS+=$(ADDOPTTARGET)
 .ENDIF
 .ENDIF
 
-# -Gc breaks the dependency chain and causes indefinite nummbers of cppumaker
+# -Gc breaks the dependency chain and causes indefinite nummbers of $(CPPUMAKER)
 # calls...
 .IF "$(GUI)"=="WNT"
 CPPUMAKERFLAGS*=-L
@@ -2087,7 +2087,7 @@ $(UNOUCRTARGET) : $(UNOUCRDEP)
 .IF "$(XML2MK_FILES)"!=""
     @+-$(RM) $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
 .ENDIF			# "$(XML2MK_FILES)"!=""
-    +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
+    +$(CPPUMAKER) @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
 
