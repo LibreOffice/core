@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2000-11-10 19:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,9 @@ OUString PathRep::toString() const
 
         while(++cur != stop)
             sRet += sDelimiter.concat( cur->toString() );
+
+        if ((--cur)->isEmpty()) // special behavior for root & friends
+            sRet += sDelimiter;
     }
     return sRet;
 }
@@ -430,17 +433,14 @@ AbsolutePath::AbsolutePath(OUString const& aString, NoValidate)
 
 AbsolutePath AbsolutePath::root()
 {
-    Components aRep;
-    aRep.push_back(Name());
+    Components aRep(1);
     return AbsolutePath(aRep);
 }
 //-----------------------------------------------------------------------------
 
 AbsolutePath AbsolutePath::detachedRoot()
 {
-    Components aRep;
-    aRep.push_back(Name());
-    aRep.push_back(Name(OUString(RTL_CONSTASCII_USTRINGPARAM("*")),Name::NoValidate()));
+    Components aRep(2);
     return AbsolutePath(aRep);
 }
 //-----------------------------------------------------------------------------
