@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:40:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,11 +195,6 @@ get_font_set( Display *p_display )
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
         maContext( (XIC)NULL ),
-        mpAttributes( NULL ),
-        mpStatusAttributes( NULL ),
-        mpPreeditAttributes( NULL ),
-        mnStatusStyle( 0 ),
-        mnPreeditStyle( 0 ),
         mnSupportedStatusStyle(
                                XIMStatusCallbacks   |
                                XIMStatusNothing     |
@@ -210,6 +205,11 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                                 XIMPreeditNothing   |
                                 XIMPreeditNone
                                 ),
+        mnStatusStyle( 0 ),
+        mnPreeditStyle( 0 ),
+        mpAttributes( NULL ),
+        mpStatusAttributes( NULL ),
+        mpPreeditAttributes( NULL ),
         mpFocusFrame( NULL )
 {
 #ifdef SOLARIS
@@ -770,7 +770,6 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 void
 SalI18N_InputContext::SetPreeditState(Bool aPreeditState)
 {
-#if XlibSpecificationRelease >= 6
     XIMPreeditState preedit_state = XIMPreeditUnKnown;
     XVaNestedList preedit_attr;
 
@@ -791,7 +790,6 @@ SalI18N_InputContext::SetPreeditState(Bool aPreeditState)
     }
 
     XFree(preedit_attr);
-#endif
 
     return;
 }
@@ -808,7 +806,6 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
 {
     if ( mbUseable && (maContext != NULL) )
     {
-#if XlibSpecificationRelease >= 6
         // restore conversion state after resetting XIC
         XIMPreeditState preedit_state = XIMPreeditUnKnown;
         XVaNestedList preedit_attr;
@@ -823,13 +820,11 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
             is_preedit_state = True;
         }
         XFree(preedit_attr);
-#endif
 
         char *pPendingChars = XmbResetIC( maContext );
         if (pPendingChars == NULL && CallDoneAfterResetIC() )
             PreeditDoneCallback (maContext, (char*)&maClientData, NULL);
 
-#if XlibSpecificationRelease >= 6
         preedit_attr = XVaCreateNestedList(0,
                                            XNPreeditState, preedit_state,
                                            0);
@@ -840,7 +835,6 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
                          NULL);
         }
         XFree(preedit_attr);
-#endif
         // text is unicode
         if ( (pPendingChars != NULL)
              && (nFlags & SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE) )
