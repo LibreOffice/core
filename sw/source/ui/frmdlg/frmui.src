@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:13:40 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 23:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_TOP
     TEXT[ chinese_traditional ] = "¤W(~T)";
     TEXT[ arabic ] = "ÃÚáì";
     TEXT[ greek ] = "ĞÜíù";
-    TEXT[ korean ] = "À§(~T)";
+    TEXT[ korean ] = "À§";
     TEXT[ turkish ] = "~Üst";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Arriba";
@@ -112,7 +112,7 @@ String STR_BOTTOM
     TEXT[ chinese_traditional ] = "¤U(~B)";
     TEXT[ arabic ] = "ÃÓİá";
     TEXT[ greek ] = "ÊÜôù";
-    TEXT[ korean ] = "¾Æ·¡(~B)";
+    TEXT[ korean ] = "¾Æ·¡";
     TEXT[ turkish ] = "A~ltta";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "A~bajo";
@@ -139,7 +139,7 @@ String STR_CENTER_HORI
     TEXT[ chinese_traditional ] = "¸m¤¤(~C)";
     TEXT[ arabic ] = "ÊæÓíØ";
     TEXT[ greek ] = "Êåíôñáñéóìİíá";
-    TEXT[ korean ] = "°¡¿îµ¥(~C)";
+    TEXT[ korean ] = "°¡¿îµ¥";
     TEXT[ turkish ] = "~Ortala";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "~Centrado";
@@ -353,7 +353,7 @@ String STR_CENTER_VERT
     Text[ chinese_traditional ] = "¸m¤¤(~E)";
     Text[ arabic ] = "ÇáæÓØ";
     Text[ greek ] = "Êİíôñï";
-    Text[ korean ] = "°¡¿îµ¥(~E)";
+    Text[ korean ] = "Áß°£";
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Centro";
@@ -933,7 +933,7 @@ String STR_REL_PG_FRAME
     Text[ chinese_traditional ] = "¾ã­¶";
     Text[ arabic ] = "ÇáÕİÍÉ ÈÃßãáåÇ";
     Text[ greek ] = "Ïëüêëçñç óåëßäá";
-    Text[ korean ] = "ÀüÃ¼ ÂÊ";
+    Text[ korean ] = "ÀüÃ¼ ÆäÀÌÁö";
     Text[ turkish ] = "Sayfanın tümü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Página entera";
@@ -1069,7 +1069,7 @@ String STR_TOP_BASE
     Text[ chinese_traditional ] = "°ò½u¤W¤è(~T)";
     Text[ arabic ] = "ÃÚáì ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - Üíù";
-    Text[ korean ] = "±âÁØ¼± À§(~T)";
+    Text[ korean ] = "±âÁØ¼± À§";
     Text[ turkish ] = "Taban çizgisi ~üstü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea de base ~encima";
@@ -1095,7 +1095,7 @@ String STR_BOTTOM_BASE
     Text[ chinese_traditional ] = "°ò½u¤U¤è(~B)";
     Text[ arabic ] = "ÃÓİá ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êÜôù";
-    Text[ korean ] = "±âÁØ¼± ¾Æ·¡(~B)";
+    Text[ korean ] = "±âÁØ¼± ¾Æ·¡";
     Text[ turkish ] = "Alt ~taban çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base a~bajo";
@@ -1121,7 +1121,7 @@ String STR_CENTER_BASE
     Text[ chinese_traditional ] = "°ò½u¸m¤¤(~C)";
     Text[ arabic ] = "æÓØ ÇáÎØ ÇáÃÓÇÓí";
     Text[ greek ] = "ÂáóéêŞ ãñáììŞ - êåíôñáñéóìİíá";
-    Text[ korean ] = "±âÁØ¼± °¡¿îµ¥(~C)";
+    Text[ korean ] = "±âÁØ¼± °¡¿îµ¥";
     Text[ turkish ] = "Taban çizgisini ~ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base ~centro";
@@ -1476,5 +1476,6 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas.";
 };
+
 
 
