@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-03 15:35:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-06 12:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2121,7 +2121,7 @@ static inline long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
     return aResult;
 }
 
-static inline Rectangle & lcl_CorrectRectangle(Rectangle & rRect,
+static inline void lcl_CorrectRectangle(Rectangle & rRect,
                                         const Rectangle & rSource,
                                         const Rectangle & rInGrid)
 {
