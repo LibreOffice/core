@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-11-19 12:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@ class SwTxtNode;
 class SwRedlineItr;
 class ViewShell;
 
+#ifdef VERTICAL_LAYOUT
+class SwTxtFrm;
+#endif
+
 /*************************************************************************
  *                      class SwAttrIter
  *************************************************************************/
@@ -116,7 +120,11 @@ private:
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
+#ifdef VERTICAL_LAYOUT
     void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm = 0 );
+#else
+    void CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf );
+#endif
     inline SwAttrIter()
         : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0){}
 
