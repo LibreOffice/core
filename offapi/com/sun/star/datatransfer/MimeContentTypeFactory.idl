@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MimeContentTypeFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-10 07:32:09 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 15:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ interface XMimeContentTypeFactory;
 service MimeContentTypeFactory
 {
     //-------------------------------------------------------------------------
-    /** creates mime contenttypes from strings.
+    /** creates mime content types from strings.
     */
     interface XMimeContentTypeFactory;
 

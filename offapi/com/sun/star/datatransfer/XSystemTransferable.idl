@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemTransferable.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-15 06:49:09 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 15:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ interface XSystemTransferable: com::sun::star::uno::XInterface
         The process ID can be obtained by the C function rtl_getGlobalProcessId
         (rtl/process.h).
         The interface implementation must ensure that the system data object can be
-        used in that process. If the data object is not valid in the caller' process
-        than the returned any must be empty.
+        used in that process. If the data object is not valid in the caller process
+        then the returned any must be empty.
 
         Windows: The returned any contains an unsigned long which represents a pointer to
         an IDataObject interface. The caller of getData has to release the data
