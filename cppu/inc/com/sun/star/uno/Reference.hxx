@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-05 11:54:21 $
+ *  last change: $Author: dbo $ $Date: 2001-02-16 16:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ inline sal_Bool BaseReference::operator == ( const BaseReference & rRef ) const 
     return (x1.get() == x2.get());
 }
 //__________________________________________________________________________________________________
-inline void BaseReference::set( XInterface * pInterface ) throw ()
+inline sal_Bool BaseReference::set( XInterface * pInterface ) throw ()
 {
     if (pInterface != _pInterface)
     {
@@ -135,6 +135,7 @@ inline void BaseReference::set( XInterface * pInterface ) throw ()
             _pInterface->release();
         _pInterface = pInterface;
     }
+    return (pInterface != 0);
 }
 //__________________________________________________________________________________________________
 inline sal_Bool BaseReference::set( XInterface * pInterface, __UnoReference_NoAcquire ) throw ()
@@ -167,8 +168,18 @@ template< class interface_type >
 inline XInterface * Reference< interface_type >::__query(
     XInterface * pInterface ) throw (RuntimeException)
 {
-    const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
-    return reinterpret_cast< XInterface * >( cpp_queryInterface( pInterface, rType.getTypeLibType() ) );
+    if (pInterface)
+    {
+        const Type & rType = ::getCppuType( (const Reference< interface_type > *)0 );
+        Any aRet( pInterface->queryInterface( rType ) );
+        if (aRet.hasValue())
+        {
+            XInterface * pRet = * reinterpret_cast< XInterface * const * >( aRet.getValue() );
+            pRet->acquire();
+            return pRet;
+        }
+    }
+    return 0;
 }
 
 }

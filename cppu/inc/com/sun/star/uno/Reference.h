@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-05 11:54:21 $
+ *  last change: $Author: dbo $ $Date: 2001-02-16 16:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,19 @@ protected:
     */
     inline ~BaseReference() throw ();
 
+    /** Sets interface pointer. An interface already set will be released.
+        <br>
+        @param pInterface an interface pointer
+        @return true, if non-null interface was set
+    */
+    inline sal_Bool SAL_CALL set( XInterface * pInterface ) throw ();
+    /** Sets interface pointer without acquiring it.
+        An interface already set will be released.
+        <br>
+        @param pInterface an interface pointer
+    */
+    inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_NoAcquire ) throw ();
+
 public:
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize ) throw ()
@@ -148,17 +161,6 @@ public:
     inline static void SAL_CALL operator delete( void *, void * ) throw ()
         {}
 
-    /** Sets interface pointer. An interface already set will be released.
-        <br>
-        @param pInterface an interface pointer
-    */
-    inline void SAL_CALL set( XInterface * pInterface ) throw ();
-    /** Sets interface pointer without acquiring it.
-        An interface already set will be released.
-        <br>
-        @param pInterface an interface pointer
-    */
-    inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_NoAcquire ) throw ();
     /** Clears reference, i.e. releases interface.
         Reference is null after clear() call.
         <br>
@@ -222,6 +224,11 @@ enum __UnoReference_Query
 template< class interface_type >
 class Reference : public BaseReference
 {
+    /** Queries given interface reference for type <b>interface_type</b>.
+        <br>
+        @param pInterface interface pointer
+        @return interface of demanded type (may be null)
+    */
     inline static XInterface * SAL_CALL __query( XInterface * pInterface ) throw (RuntimeException);
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -292,6 +299,7 @@ public:
         An interface already set will be released.
         <br>
         @param pInterface an interface pointer
+        @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( XInterface * pInterface, __UnoReference_Query ) throw (RuntimeException)
         { return BaseReference::set( __query( pInterface ), UNO_REF_NO_ACQUIRE ); }
@@ -300,6 +308,7 @@ public:
         An interface already set will be released.
         <br>
         @param rRef another reference
+        @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const BaseReference & rRef, __UnoReference_Query ) throw (RuntimeException)
         { return BaseReference::set( __query( rRef.get() ), UNO_REF_NO_ACQUIRE ); }
@@ -308,16 +317,18 @@ public:
         An interface already set will be released.
         <br>
         @param rRef another reference
+        @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const Reference< interface_type > & rRef ) throw ()
-        { BaseReference::set( rRef.get() );  return is(); }
+        { return BaseReference::set( rRef.get() ); }
     /** Sets the given interface.
         An interface already set will be released.
         <br>
         @param pInterface another interface
+        @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( interface_type * pInterface ) throw ()
-        { BaseReference::set( pInterface );  return is(); }
+        { return BaseReference::set( pInterface ); }
 
     /** Assignment operator:
         Acquires given interface pointer and sets reference.
