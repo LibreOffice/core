@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:57:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,8 @@
 #ifndef SD_FRAME_VIEW_HXX
 #include "FrameView.hxx"
 #endif
-#include "prntopts.hxx"
-#include "printdlg.hxx"
+//CHINA001 #include "prntopts.hxx"
+//CHINA001 #include "printdlg.hxx"
 #include "optsitem.hxx"
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
