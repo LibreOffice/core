@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-26 16:41:37 $
+ *  last change: $Author: hdu $ $Date: 2002-07-30 10:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 
 #define GLYPH_INC               (512UL)
 #define MAX_POLYCOUNT           (2048UL)
-#define CHECKPOINTS( _def_nPnt )    \
-    if( (_def_nPnt) >= nPtSize )    \
-        nPtSize = ImplIncreaseArrays( nPtSize, &pPoints, &pFlags, GLYPH_INC )
 
 // -----------
 // - Inlines -
@@ -1577,138 +1574,9 @@ void SalGraphics::DrawTextArray( long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-static ULONG ImplIncreaseArrays( ULONG nSize, SalPoint** ppPoints, BYTE** ppFlags, ULONG nIncSize )
-{
-    const ULONG nOldSize = nSize;
-    SalPoint*   pNewPoints = new SalPoint[ nSize += nIncSize ];
-    BYTE*       pNewFlags = new BYTE[ nSize ];
-
-    if( *ppPoints )
-    {
-        memcpy( pNewPoints, *ppPoints, nOldSize * sizeof( SalPoint ) );
-        memset( pNewPoints + nOldSize, 0, nIncSize * sizeof( SalPoint ) );
-        delete[] *ppPoints;
-    }
-    else
-        memset( pNewPoints, 0, nSize * sizeof( SalPoint ) );
-
-    if( *ppFlags )
-    {
-        memcpy( pNewFlags, *ppFlags, nOldSize );
-        memset( pNewFlags + nOldSize, 0, nIncSize );
-        delete[] *ppFlags;
-    }
-    else
-        memset( pNewFlags, 0, nSize );
-
-    *ppPoints = pNewPoints;
-    *ppFlags = pNewFlags;
-
-    return nSize;
-}
-
-// -----------------------------------------------------------------------
-
-static void ImplGetFamilyAndAscents( HDC hDC, BYTE& rPitch, long& rAscent )
-{
-    rPitch = 0;
-    rAscent = 0;
-
-    if ( aSalShlData.mbWNT )
-    {
-        TEXTMETRICW aTextMetricW;
-        if ( GetTextMetricsW( hDC, &aTextMetricW ) )
-        {
-            rPitch = aTextMetricW.tmPitchAndFamily;
-            rAscent = aTextMetricW.tmAscent;
-        }
-    }
-    else
-    {
-        TEXTMETRICA aTextMetricA;
-        if ( GetTextMetricsA( hDC, &aTextMetricA ) )
-        {
-            rPitch = aTextMetricA.tmPitchAndFamily;
-            rAscent = aTextMetricA.tmAscent;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-static BOOL ImplGetGlyphChar( SalGraphicsData* pData, sal_Unicode c,
-                              WORD& rByteChar, HFONT& rOldFont )
-{
-    rOldFont = 0;
-
-    if ( !pData->mnFontCharSetCount )
-        ImplGetAllFontCharSets( pData );
-
-    // Try at first the current charset
-    CHARSETINFO aInfo;
-    char        aDestBuf[2];
-    int         nLen = 0;
-    WIN_BOOL    bDefault;
-    if ( TranslateCharsetInfo( (DWORD*)(ULONG)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
-    {
-        bDefault = FALSE;
-        nLen = WideCharToMultiByte( aInfo.ciACP,
-                                    WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-                                    &c, 1,
-                                    aDestBuf, sizeof( aDestBuf ),
-                                    NULL, &bDefault );
-    }
-
-    // Try all possible charsets
-    if ( (nLen != 1) || bDefault )
-    {
-        // Query All Kerning Pairs from all possible CharSets
-        for ( BYTE i = 0; i < pData->mnFontCharSetCount; i++ )
-        {
-            if ( TranslateCharsetInfo( (DWORD*)(ULONG)pData->mpFontCharSets[i], &aInfo, TCI_SRCCHARSET ) )
-            {
-                bDefault = FALSE;
-                nLen = WideCharToMultiByte( aInfo.ciACP,
-                                            WC_COMPOSITECHECK | WC_DISCARDNS | WC_DEFAULTCHAR,
-                                            &c, 1,
-                                            aDestBuf, sizeof( aDestBuf ),
-                                            NULL, &bDefault );
-                if ( (nLen == 1) && !bDefault )
-                {
-                    pData->mpLogFont->lfCharSet = pData->mpFontCharSets[i];
-                    HFONT hNewFont = CreateFontIndirectA( pData->mpLogFont );
-                    rOldFont = SelectFont( pData->mhDC, hNewFont );
-                    break;
-                }
-            }
-        }
-    }
-
-    // GetGlyphOutline() only works for characters < 256. For all characters
-    // greater than 256 we use the default mechanismn in VCL to scan
-    // the printed Glyph
-    if ( (nLen == 1) && !bDefault )
-    {
-        rByteChar = (unsigned char)aDestBuf[0];
-        return TRUE;
-    }
-
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
 BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle& rRect )
 {
     HDC hDC = maGraphicsData.mhDC;
-
-/* TODO: remove
-    long nAscent;
-    BYTE nPitchAndFamily;
-    ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
-    if ( !(nPitchAndFamily & TMPF_TRUETYPE) )
-        return FALSE;
-*/
 
     // use unity matrix
     MAT2 aMat;
@@ -1722,7 +1590,7 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, bool bIsGlyphIndex, Rectangle&
         nGGOFlags |= GGO_GLYPH_INDEX;
 
     GLYPHMETRICS aGM;
-    DWORD nSize = 0;
+    DWORD nSize = GDI_ERROR;
     if ( aSalShlData.mbWNT )
         nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
     else if( bIsGlyphIndex || (nIndex <= 255) )
@@ -1746,14 +1614,6 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
     BOOL bRet = FALSE;
     HDC  hDC = maGraphicsData.mhDC;
 
-/* TODO: remove
-    BYTE nPitchAndFamily;
-    long nAscent;
-    ImplGetFamilyAndAscents( hDC, nPitchAndFamily, nAscent );
-    if( !(nPitchAndFamily & TMPF_TRUETYPE) )
-        return FALSE;
-*/
-
     // use unity matrix
     MAT2 aMat;
     aMat.eM11 = FixedFromDouble( 1.0 );
@@ -1761,12 +1621,12 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
     aMat.eM21 = FixedFromDouble( 0.0 );
     aMat.eM22 = FixedFromDouble( 1.0 );
 
-    UINT nGGOFlags = GGO_METRICS;
+    UINT nGGOFlags = GGO_NATIVE;
     if( bIsGlyphIndex )
         nGGOFlags |= GGO_GLYPH_INDEX;
 
     GLYPHMETRICS aGlyphMetrics;
-    DWORD nSize1 = 0;
+    DWORD nSize1 = GDI_ERROR;
     if ( aSalShlData.mbWNT )
         nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
     else if( bIsGlyphIndex || (nIndex <= 255) )
@@ -1799,7 +1659,7 @@ BOOL SalGraphics::GetGlyphOutline( long nIndex, bool bIsGlyphIndex, PolyPolygon&
             {
                 // only outline data is interesting
                 if( pHeader->dwType != TT_POLYGON_TYPE )
-                    continue;
+                    break;
 
                 // get start point; next start points are end points
                 // of previous segment
