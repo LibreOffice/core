@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2001-12-11 11:24:42 $
+ *  last change: $Author: os $ $Date: 2002-04-11 11:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,7 +886,15 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                 bRet = FALSE;
             }
 
-            if( pSh->Prt( rOpt, rProgress ) )
+            if(rOpt.IsPrintProspect())
+            {
+                if( pPrt->StartJob( rOpt.GetJobName() ))
+                {
+                    pSh->PrintProspect( rOpt, rProgress );
+                    bRet = TRUE;
+                }
+            }
+            else if( pSh->Prt( rOpt, rProgress ) )
                 bRet = TRUE;
 
             if( !pPrt->IsJobActive() )
