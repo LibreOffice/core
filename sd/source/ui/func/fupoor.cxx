@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-18 15:20:33 $
+ *  last change: $Author: ka $ $Date: 2002-03-21 16:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SV_SELENG_HXX //autogen
 #include <vcl/seleng.hxx>
@@ -369,13 +372,24 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
             }
             else
             {
+                // #98255# activate OLE object on RETURN for selected object
                 // #98198# activate text edit on RETURN for selected object
                 const SdrMarkList& rMarkList = pView->GetMarkList();
 
-                if(!pView->IsTextEdit() && 1 == rMarkList.GetMarkCount())
+                if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute(
-                        SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+
+                    if( pObj && pObj->ISA( SdrOle2Obj ) && !pDocSh->IsUIActive() )
+                    {
+                        pView->HideMarkHdl(NULL);
+                        pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+                    }
+                    else
+                    {
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute(
+                            SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON);
+                    }
 
                     // consumed
                     bReturn = TRUE;
