@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:15:33 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 07:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                 xRecorder = xSupplier->getDispatchRecorder();
 
             if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
-                rReq.Record_Impl( rShell, rSlot, xRecorder );
+                rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
         }
 
         // ggf. die Bindings locken (MI: warum?)
@@ -1056,6 +1056,8 @@ void SfxDispatcher::_Execute
             {
                 if ( &rShell == pDispat->pImp->aStack.Top(n) )
                 {
+                    if ( eCallMode & SFX_CALLMODE_RECORD )
+                        rReq.AllowRecording( TRUE );
                     pDispat->pImp->xPoster->Post(new SfxRequest(rReq));
 //                    pDispat->pImp->xPoster->Post(new Executer(new SfxRequest(rReq), &rSlot, n ));
                     return;
@@ -1547,7 +1549,7 @@ IMPL_LINK( SfxDispatcher, PostMsgHandler, SfxRequest*, pReq )
                 // Wenn pSlot ein "Pseudoslot" f"ur Macros oder Verben ist, kann
                 // er im Call_Impl zerst"ort werden, also nicht mehr benutzen!
                 pReq->SetSynchronCall( sal_False );
-                Call_Impl( *pSh, *pSlot, *pReq, sal_True ); //! woher bRecord?
+                Call_Impl( *pSh, *pSlot, *pReq, pReq->AllowsRecording() ); //! woher bRecord?
 //                Call_Impl( *pShell, *pExec->pSlot, *pReq, sal_True ); //! woher bRecord?
                 DBG( pSfxApp->LeaveAsynchronCall_Impl() );
             }

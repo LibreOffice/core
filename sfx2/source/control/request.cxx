@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-06-14 07:35:55 $ $Revision: 1.9 $
+// $Author: mba $ $Date: 2002-06-27 07:57:41 $ $Revision: 1.10 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -65,7 +65,7 @@ struct SfxRequest_Impl: public SfxListener
     String              aTarget;     // ggf. von App gesetztes Zielobjekt
     SfxItemPool*        pPool;       // ItemSet mit diesem Pool bauen
     SfxPoolItem*        pRetVal;     // R"uckgabewert geh"ort sich selbst
-    const SfxShell*     pShell;      // ausgef"uhrt an dieser Shell
+    SfxShell*           pShell;      // ausgef"uhrt an dieser Shell
     const SfxSlot*      pSlot;       // ausgef"uhrter Slot
     USHORT              nModifier;   // welche Modifier waren gedrueckt?
     BOOL                bDone;       // "uberhaupt ausgef"uhrt
@@ -73,14 +73,16 @@ struct SfxRequest_Impl: public SfxListener
     BOOL                bCancelled;  // nicht mehr zustellen
     BOOL                bUseTarget;  // aTarget wurde von Applikation gesetzt
     USHORT              nCallMode;   // Synch/Asynch/API/Record
+    BOOL                bAllowRecording;
     SfxAllItemSet*      pInternalArgs;
+    SfxViewFrame*       pViewFrame;
 
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
                         SfxRequest_Impl( SfxRequest *pOwner )
                         : pAnti( pOwner), bCancelled(FALSE),
                           nCallMode( SFX_CALLMODE_SYNCHRON ), nModifier(0),
-                          pPool(0), pInternalArgs( 0 )
+                          pPool(0), pInternalArgs( 0 ), bAllowRecording( FALSE ), pViewFrame(0)
                         {}
     ~SfxRequest_Impl() { delete pInternalArgs; }
 
@@ -144,6 +146,7 @@ SfxRequest::SfxRequest
 {
     DBG_MEMTEST();
 
+    pImp->bAllowRecording = rOrig.pImp->bAllowRecording;
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
     pImp->pRetVal = 0;
@@ -164,8 +167,8 @@ SfxRequest::SfxRequest
 
 SfxRequest::SfxRequest
 (
-    const SfxShell& rShell,     // die <SfxShell>, die wieder ausf"uhren kann
-    USHORT          nSlotId     // die beim Playing auszu"fuhrende <Slot-Id>
+    SfxViewFrame*   pViewFrame,
+    USHORT          nSlotId
 
 )
 
@@ -186,19 +189,23 @@ SfxRequest::SfxRequest
 
     pImp->bDone = FALSE;
     pImp->bIgnored = FALSE;
-    pImp->SetPool( &rShell.GetPool() );
+    pImp->SetPool( &pViewFrame->GetPool() );
     pImp->pRetVal = 0;
     pImp->pShell = 0;
     pImp->nCallMode = SFX_CALLMODE_SYNCHRON;
     pImp->bUseTarget = FALSE;
-    pImp->pSlot = rShell.GetInterface()->GetSlot(nSlotId);
-    if ( pImp->pSlot )
-        Record_Impl( rShell, *pImp->pSlot, SfxRequest::GetMacroRecorder() );
+    pImp->pViewFrame = pViewFrame;
+    if( pImp->pViewFrame->GetDispatcher()->GetShellAndSlot_Impl( nSlotId, &pImp->pShell, &pImp->pSlot, TRUE, TRUE ) )
+    {
+        pImp->SetPool( &pImp->pShell->GetPool() );
+        pImp->xRecorder = SfxRequest::GetMacroRecorder( pViewFrame );
+        pImp->aTarget = pImp->pShell->GetName();
+    }
 #ifdef DBG_UTIL
     else
     {
-        ByteString aStr( "Recording slot unsupported by shell: ");
-        aStr += ByteString::CreateFromInt32( rShell.GetPool().GetSlotId(nSlotId) );
+        ByteString aStr( "Recording unsupported slot: ");
+        aStr += ByteString::CreateFromInt32( pImp->pPool->GetSlotId(nSlotId) );
         DBG_ERROR( aStr.GetBuffer() );
     }
 #endif
@@ -338,9 +345,10 @@ void SfxRequest_Impl::Record
 
 void SfxRequest::Record_Impl
 (
-    const SfxShell& rSh,    // die <SfxShell>, die den Request ausgef"uhrt hat
+    SfxShell& rSh,    // die <SfxShell>, die den Request ausgef"uhrt hat
     const SfxSlot&  rSlot,  // der <SfxSlot>, der den Request ausgef"uhrt hat
-    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder  // der Recorder, mit dem aufgezeichnet wird
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder,  // der Recorder, mit dem aufgezeichnet wird
+    SfxViewFrame* pViewFrame
 )
 
 /*  [Beschreibung]
@@ -358,6 +366,7 @@ void SfxRequest::Record_Impl
     pImp->pSlot = &rSlot;
     pImp->xRecorder = xRecorder;
     pImp->aTarget = rSh.GetName();
+    pImp->pViewFrame = pViewFrame;
 }
 
 //--------------------------------------------------------------------
@@ -714,7 +723,7 @@ void SfxRequest::Done_Impl
                 }
 
                 // einen Sub-Request recorden
-                SfxRequest aReq( *pImp->pShell, nSlotId );
+                SfxRequest aReq( pImp->pViewFrame, nSlotId );
                 aReq.AppendItem( *pItem );
                 aReq.Done();
             }
@@ -763,13 +772,12 @@ SfxMacro* SfxRequest::GetRecordingMacro()
 */
 
 {
-//    return SfxViewFrame::Current()->GetRecordingMacro_Impl();
     return NULL;
 }
 
 //--------------------------------------------------------------------
 
-com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder()
+com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder( SfxViewFrame* pView )
 
 /*  [Beschreibung]
 
@@ -783,7 +791,7 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
 
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
-        SfxViewFrame::Current()->GetFrame()->GetFrameInterface(),
+        (pView ? pView : SfxViewFrame::Current())->GetFrame()->GetFrameInterface(),
         com::sun::star::uno::UNO_QUERY);
 
     if(xSet.is())
@@ -797,6 +805,12 @@ com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRe
 
     return xRecorder;
 }
+
+BOOL SfxRequest::HasMacroRecorder( SfxViewFrame* pView )
+{
+    return GetMacroRecorder( pView ).is();
+}
+
 
 //--------------------------------------------------------------------
 
@@ -827,11 +841,8 @@ FASTBOOL SfxRequest::IsRecording() const
 */
 
 {
-    return ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
-           ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) ) &&
-           0 != GetRecordingMacro();
+    return ( AllowsRecording() && GetMacroRecorder().is() );
 }
-
 
 //--------------------------------------------------------------------
 void SfxRequest::SetModifier( USHORT nModi )
@@ -871,60 +882,16 @@ void SfxRequest::SetTarget( const String &rTarget )
     pImp->bUseTarget = TRUE;
 }
 
-/*------------------------------------------------------------------------
+void SfxRequest::AllowRecording( BOOL bSet )
+{
+    pImp->bAllowRecording = bSet;
+}
 
-    $Log: not supported by cvs2svn $
-    Revision 1.8  2002/06/10 16:57:11  mba
-    #100024#: better assertion
-
-    Revision 1.7  2002/06/07 08:42:29  mba
-    #99966#: better error message
-
-    Revision 1.6  2002/05/27 13:52:19  mba
-    #98405#: more debugging code for macro recording
-
-    Revision 1.5  2002/04/22 16:56:18  mba
-    #98405#: new macro recording functionality
-
-    Revision 1.4  2002/04/11 08:05:49  mba
-    #98405#: support macro recorder
-
-    Revision 1.3  2002/04/05 11:32:19  mba
-    #98405#: support macro recording
-
-    Revision 1.79  2000/04/28 07:35:53  as
-    unicode changes
-
-    Revision 1.78  2000/04/19 13:05:16  mba
-    UNO583 cleanup
-
-    Revision 1.77  1999/09/08 08:04:07  sb
-    #66082# Adapted to DeleteOnIdle() changes.
-
-    Revision 1.76  1999/04/23 06:00:00  MH
-    chg: header
-
-
-      Rev 1.75   23 Apr 1999 08:00:00   MH
-   chg: header
-
-      Rev 1.74   20 Jan 1998 13:14:00   PB
-   chg: includes
-
-      Rev 1.73   14 Jul 1997 10:06:30   MH
-   chg: header
-
-      Rev 1.72   08 Jul 1997 12:30:48   TLX
-   Dispatch mit internalargs und Pfaduebernahme nach Neu im Ordner
-
-      Rev 1.71   26 May 1997 10:47:04   MI
-   GPF weil Events an tote Shells zugestellt wurden
-
-      Rev 1.70   22 Mar 1997 13:20:02   MI
-   #38093# GPF bei Eigenschaften/FTP oder Bookmark
-
-      Rev 1.69   17 Mar 1997 16:43:04   MI
-   #37740# Datei/Neu/aus Vorlage ging nicht mehr
-
-------------------------------------------------------------------------*/
-
+BOOL SfxRequest::AllowsRecording() const
+{
+    BOOL bAllow = pImp->bAllowRecording;
+    if( !bAllow )
+        bAllow = ( SFX_CALLMODE_API != ( SFX_CALLMODE_API & pImp->nCallMode ) ) &&
+                 ( SFX_CALLMODE_RECORD == ( SFX_CALLMODE_RECORD & pImp->nCallMode ) );
+    return bAllow;
+}
