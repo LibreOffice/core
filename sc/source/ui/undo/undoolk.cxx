@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoolk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 08:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,31 +64,6 @@
 #endif
 
 #pragma hdrstop
-
-//------------------------------------------------------------------
-
-//sfx
-//#define _BASEDLGS_HXX //*
-#define _DLGCFG_HXX
-#define _SFXBASIC_HXX
-#define _MODALDLG_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXTBXCTRL_HXX
-#define _PASSWD_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXREQUEST_HXX
-#define _SFXOBJFACE_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSG_HXX
-#define _INTRO_HXX
-#define _SFX_PRNMON_HXX
 
 // INCLUDE ---------------------------------------------------------------
 
