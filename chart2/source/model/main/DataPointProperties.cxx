@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-13 12:43:54 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 12:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,13 @@ void DataPointProperties::AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::NumberFormat * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "ReferenceDiagramSize" ),
+                  PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void DataPointProperties::AddDefaultsToMap(
@@ -368,6 +375,11 @@ void DataPointProperties::AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_NUMBER_FORMAT ));
     rOutMap[ PROP_DATAPOINT_NUMBER_FORMAT ] =
         uno::makeAny( aFormat );
+
+    // todo: default is just for testing. should be void
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE ));
+    rOutMap[ PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE ] =
+        uno::makeAny( awt::Size( 20000, 15000 ) );
 }
 
 } //  namespace chart

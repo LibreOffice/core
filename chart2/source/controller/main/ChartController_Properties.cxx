@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:52 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 12:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,10 @@ private:
             case OBJECTTYPE_DATA_LABEL:
             case OBJECTTYPE_DATA_POINT:
             {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+
                 wrapper::GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
                     wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT;
 
@@ -268,7 +272,7 @@ private:
                 */
                 pItemConverter =  new wrapper::DataPointItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
-                                        pNumberFormatterWrapper, eMapTo );
+                                        pNumberFormatterWrapper, eMapTo, pRefSize );
                     break;
             }
             case OBJECTTYPE_DATA_ERRORS:

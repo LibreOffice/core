@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 10:45:02 $
+ *  last change: $Author: bm $ $Date: 2003-11-26 12:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ public:
         PROP_DATAPOINT_SYMBOL_PROP,
         PROP_DATAPOINT_OFFSET,
         PROP_DATAPOINT_DATA_CAPTION,
-        PROP_DATAPOINT_NUMBER_FORMAT
+        PROP_DATAPOINT_NUMBER_FORMAT,
+        PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE
     };
 
     static void AddPropertiesToVector(
