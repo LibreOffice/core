@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:33:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,8 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("no accessible child with index ") + nIndex,
+            ::rtl::OUString::createFromAscii ("no accessible child with index ")
+            + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 }
 
