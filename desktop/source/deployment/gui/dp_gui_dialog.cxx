@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
 #include "unotools/configmgr.hxx"
+#include "comphelper/anytostring.hxx"
 #include "tools/isolang.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "vcl/wintypes.hxx"
@@ -292,26 +293,22 @@ DialogImpl::DialogImpl(
             UNO_QUERY_THROW );
         that->m_xDesktop->addTerminateListener( that.get() );
 
-        if (0)
-        {
         ::ucb::Content ucb_tdocRoot( OUSTR("vnd.sun.star.tdoc:/"), 0 );
         that->m_xTdocRoot.set( ucb_tdocRoot.get() );
 
-        // scan for open documents:
-        Reference<sdbc::XResultSet> xResultSet(
-            ucb_tdocRoot.createCursor( Sequence<OUString>(),
-                                       ::ucb::INCLUDE_FOLDERS_ONLY ) );
-        while (xResultSet->next())
-        {
-            that->contentEvent(
-                ContentEvent( that->m_xTdocRoot,
-                              ContentAction::INSERTED,
-                              Reference<XContentAccess>(
-                                  xResultSet, UNO_QUERY_THROW )->queryContent(),
-                              that->m_xTdocRoot->getIdentifier() ) );
-        }
-        that->m_xTdocRoot->addContentEventListener( that.get() );
-        }
+//         // scan for open documents:
+//         Reference<sdbc::XResultSet> xResultSet(
+//             ucb_tdocRoot.createCursor( Sequence<OUString>(),
+//                                        ::ucb::INCLUDE_FOLDERS_ONLY ) );
+//         while (xResultSet->next()) {
+//             that->contentEvent(
+//                 ContentEvent( that->m_xTdocRoot,
+//                               ContentAction::INSERTED,
+//                               Reference<XContentAccess>(
+//                                   xResultSet, UNO_QUERY_THROW )->queryContent(),
+//                               that->m_xTdocRoot->getIdentifier() ) );
+//         }
+//         that->m_xTdocRoot->addContentEventListener( that.get() );
     }
 
     that->m_treelb->SetUpdateMode(TRUE);
@@ -436,8 +433,7 @@ IMPL_LINK( DialogImpl, headbar_dragEnd, HeaderBar *, pBar )
         sal_Int32 nPos = 0;
         USHORT nTabs = m_headerBar->GetItemCount();
         OSL_ASSERT( m_treelb->TabCount() == nTabs );
-        for ( USHORT i = 1; i < nTabs; ++i )
-        {
+        for ( USHORT i = 1; i < nTabs; ++i ) {
             nPos += m_headerBar->GetItemSize( i );
             m_treelb->SetTab( i, nPos, MAP_PIXEL );
         }
@@ -458,8 +454,7 @@ void DialogImpl::updateButtonStates()
     for ( SvLBoxEntry * entry = m_treelb->FirstSelected();
           entry != 0; entry = m_treelb->NextSelected(entry) )
     {
-        if (!m_allowSharedLayerModification && allowModification)
-        {
+        if (!m_allowSharedLayerModification && allowModification) {
             allowModification &=
                 !m_treelb->getContext( entry ).equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("shared") );
@@ -472,8 +467,7 @@ void DialogImpl::updateButtonStates()
             ++nSelectedPackages;
             if (m_treelb->isFirstLevelChild( entry ))
             {
-                switch (getPackageState( xPackage ))
-                {
+                switch (getPackageState( xPackage )) {
                 case REGISTERED:
                     bEnable = false;
                     break;
@@ -488,14 +482,12 @@ void DialogImpl::updateButtonStates()
                     break;
                 }
             }
-            else
-            {
+            else {
                 // export still possible:
                 bEnable = bDisable = bRemove = false;
             }
         }
-        else // selected non-package entry:
-        {
+        else { // selected non-package entry:
             bExport = bEnable = bDisable = bRemove = false;
         }
     }
@@ -569,8 +561,7 @@ void DialogImpl::clickAdd( USHORT )
         xPackageManager->createAbortChannel() );
 
     for ( sal_Int32 pos = files.getLength() > 1 ? 1 : 0;
-          !currentCmdEnv->isAborted() && pos < files.getLength();
-          ++pos )
+          !currentCmdEnv->isAborted() && pos < files.getLength(); ++pos )
     {
         OUString file;
         if (files.getLength() > 1)
@@ -581,16 +572,14 @@ void DialogImpl::clickAdd( USHORT )
             extract_throw<OUString>(
                 ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
                     OUSTR("Title") ) ), xAbortChannel );
-        try
-        {
+        try {
             Reference< deployment::XPackage > xPackage(
                 xPackageManager->addPackage(
                     file, OUString() /* detect media-type */,
                     xAbortChannel, currentCmdEnv.get() ) );
             OSL_ASSERT( xPackage.is() );
         }
-        catch (CommandAbortedException &)
-        {
+        catch (CommandAbortedException &) {
             break;
         }
     }
@@ -624,20 +613,17 @@ void DialogImpl::clickRemove( USHORT )
         new ProgressCommandEnv( this, m_strRemovingPackages ) );
     currentCmdEnv->showProgress( to_be_removed.size() );
     for ( ::std::size_t pos = 0;
-          !currentCmdEnv->isAborted() && pos < to_be_removed.size();
-          ++pos )
+          !currentCmdEnv->isAborted() && pos < to_be_removed.size(); ++pos )
     {
         t_item const & item = to_be_removed[ pos ];
         Reference<task::XAbortChannel> xAbortChannel(
             item.first->createAbortChannel() );
         currentCmdEnv->progressSection( item.second, xAbortChannel );
-        try
-        {
+        try {
             item.first->removePackage(
                 item.second, xAbortChannel, currentCmdEnv.get() );
         }
-        catch (CommandAbortedException &)
-        {
+        catch (CommandAbortedException &) {
             break;
         }
     }
@@ -656,16 +642,14 @@ void DialogImpl::clickEnableDisable( USHORT id )
                                 : m_strDisablingPackages ) );
     currentCmdEnv->showProgress( selection.getLength() );
     for ( sal_Int32 pos = 0;
-          !currentCmdEnv->isAborted() && pos < selection.getLength();
-          ++pos )
+          !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
     {
         Reference<deployment::XPackage> const & xPackage = selection[ pos ];
         Reference<task::XAbortChannel> xAbortChannel(
             xPackage->createAbortChannel() );
         currentCmdEnv->progressSection( xPackage->getDisplayName(),
                                         xAbortChannel );
-        try
-        {
+        try {
             if (id == RID_BTN_ENABLE)
                 xPackage->registerPackage( xAbortChannel,
                                            currentCmdEnv.get() );
@@ -673,8 +657,7 @@ void DialogImpl::clickEnableDisable( USHORT id )
                 xPackage->revokePackage( xAbortChannel,
                                          currentCmdEnv.get() );
         }
-        catch (CommandAbortedException &)
-        {
+        catch (CommandAbortedException &) {
             break;
         }
     }
@@ -689,8 +672,11 @@ void DialogImpl::clickExport( USHORT )
     if (selection.getLength() == 0)
         return;
 
-    if (selection.getLength() > 1) // raise folder picker
+    OUString destFolder, newTitle;
+    sal_Int32 nameClashAction = NameClash::ASK;
+    if (selection.getLength() > 1)
     {
+        // raise folder picker:
         Reference<ui::dialogs::XFolderPicker> xFolderPicker(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithContext(
@@ -699,31 +685,9 @@ void DialogImpl::clickExport( USHORT )
         xFolderPicker->setTitle( m_strExportPackages );
         if (xFolderPicker->execute() !=ui::dialogs::ExecutableDialogResults::OK)
             return; // cancelled
-        OUString folder( xFolderPicker->getDirectory() );
-        OSL_ASSERT( folder.getLength() > 0 );
-
-        ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-            new ProgressCommandEnv( this, m_strExportingPackages ) );
-        currentCmdEnv->showProgress( selection.getLength() );
-
-        ::ucb::Content destFolder( folder, currentCmdEnv.get() );
-        for ( sal_Int32 pos = 0;
-              !currentCmdEnv->isAborted() && pos < selection.getLength();
-              ++pos )
-        {
-            ::ucb::Content sourceContent(
-                selection[ pos ]->getURL(), currentCmdEnv.get() );
-            currentCmdEnv->progressSection(
-                extract_throw<OUString>(
-                    sourceContent.getPropertyValue( OUSTR("Title") ) ) );
-            if (! destFolder.transferContent(
-                    sourceContent, ::ucb::InsertOperation_COPY,
-                    OUString(), NameClash::ASK ))
-                throw RuntimeException(
-                    OUSTR("UCB transferContent() failed!"), 0 );
-        }
+        destFolder = xFolderPicker->getDirectory();
     }
-    else
+    else // single item selected
     {
         Any mode(
             makeAny(
@@ -740,34 +704,43 @@ void DialogImpl::clickExport( USHORT )
 
         ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
             new ProgressCommandEnv( this, m_strExportPackage ) );
-        ::ucb::Content sourceContent( selection[ 0 ]->getURL(),
-                                      currentCmdEnv.get() );
+        OSL_ASSERT( selection.getLength() == 1 );
+        Reference<deployment::XPackage> const & xPackage = selection[ 0 ];
+        ::ucb::Content sourceContent( xPackage->getURL(), currentCmdEnv.get() );
         xFilePicker->setDefaultName(
             extract_throw<OUString>( sourceContent.getPropertyValue(
                                          OUSTR("Title") ) ) );
-        if (xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK)
-        {
-            Sequence<OUString> files( xFilePicker->getFiles() );
-            OSL_ASSERT( files.getLength() == 1 );
-            OUString const & url = files[ 0 ];
-            ::ucb::Content ucbChild( url, currentCmdEnv.get() );
-            Reference<container::XChild> xChild(
-                ucbChild.get(), UNO_QUERY_THROW );
-            ::ucb::Content destFolder(
-                Reference<XContent>( xChild->getParent(), UNO_QUERY_THROW ),
-                currentCmdEnv.get() );
+        if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
+            return; // cancelled
 
-            OUString newTitle(
-                ::rtl::Uri::decode(
-                    url.copy( url.lastIndexOf( '/' ) + 1 ),
-                    rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 ) );
-            if (! destFolder.transferContent(
-                    sourceContent, ::ucb::InsertOperation_COPY,
-                    newTitle, NameClash::OVERWRITE /* no ASK, because FilePicker
-                                                      has already asked */))
-                throw RuntimeException(
-                    OUSTR("UCB transferContent() failed!"), 0 );
-        }
+        Sequence<OUString> files( xFilePicker->getFiles() );
+        OSL_ASSERT( files.getLength() == 1 );
+        OUString const & url = files[ 0 ];
+        ::ucb::Content childContent( url, currentCmdEnv.get() );
+        Reference<container::XChild> xChild( childContent.get(),
+                                             UNO_QUERY_THROW );
+        ::ucb::Content destFolderContent(
+            Reference<XContent>( xChild->getParent(), UNO_QUERY_THROW ),
+            currentCmdEnv.get() );
+        destFolder = destFolderContent.getURL();
+        newTitle = ::rtl::Uri::decode( url.copy( url.lastIndexOf( '/' ) + 1 ),
+                                       rtl_UriDecodeWithCharset,
+                                       RTL_TEXTENCODING_UTF8 );
+        nameClashAction = NameClash::OVERWRITE; /* overwrite, because FilePicker
+                                                   has already asked */
+    }
+
+    ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
+        new ProgressCommandEnv( this, m_strExportingPackages ) );
+    currentCmdEnv->showProgress( selection.getLength() );
+    for ( sal_Int32 pos = 0;
+          !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
+    {
+        Reference<deployment::XPackage> const & xPackage = selection[ pos ];
+        currentCmdEnv->progressSection( xPackage->getDisplayName() );
+        OSL_ASSERT( destFolder.getLength() > 0 );
+        xPackage->exportTo( destFolder, newTitle, nameClashAction,
+                            currentCmdEnv.get() );
     }
 }
 
@@ -776,15 +749,13 @@ void DialogImpl::errbox( Any const & exc )
 {
     OUString msg;
     deployment::DeploymentException dpExc;
-    if (exc >>= dpExc)
-    {
+    if ((exc >>= dpExc) &&
+        dpExc.Cause.getValueTypeClass() == TypeClass_EXCEPTION) {
         msg = reinterpret_cast<Exception const *>(
-            dpExc.Cause.getValue())->Message;
-        if (msg.getLength() == 0)
-            msg = dpExc.Cause.getValueType().getTypeName();
+            dpExc.Cause.getValue() )->Message;
     }
-    else
-        msg = reinterpret_cast<Exception const *>(exc.getValue())->Message;
+    if (msg.getLength() == 0) // fallback for debugging purposes
+        msg = ::comphelper::anyToString(exc);
 
     ::vos::OGuard guard( Application::GetSolarMutex() );
     ::std::auto_ptr<ErrorBox> box( new ErrorBox( this, WB_OK, msg ) );
@@ -795,28 +766,15 @@ void DialogImpl::errbox( Any const & exc )
 //##############################################################################
 
 //______________________________________________________________________________
-DialogImpl::ThreadedPushButton::~ThreadedPushButton()
+void DialogImpl::SyncPushButton::Click()
 {
-    if (m_thread != 0)
-    {
-        osl_joinWithThread( m_thread );
-        osl_destroyThread( m_thread );
-    }
-}
-
-//______________________________________________________________________________
-void DialogImpl::ThreadedPushButton::action()
-{
-    try
-    {
+    try {
         (m_dialog->*m_clickCallback)( m_id );
     }
-    catch (CommandFailedException &)
-    {
+    catch (CommandFailedException &) {
         // already handled by UUI handler
     }
-    catch (Exception &)
-    {
+    catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
         m_dialog->errbox( exc );
     }
@@ -829,15 +787,14 @@ static void SAL_CALL ThreadedPushButton_callback( void * p )
 {
     DialogImpl::ThreadedPushButton * that =
         static_cast<DialogImpl::ThreadedPushButton *>(p);
-    that->action();
+    that->DialogImpl::SyncPushButton::Click();
 }
 }
 
 //______________________________________________________________________________
 void DialogImpl::ThreadedPushButton::Click()
 {
-    if (m_thread != 0)
-    {
+    if (m_thread != 0) {
         osl_joinWithThread( m_thread );
         osl_destroyThread( m_thread );
     }
@@ -846,12 +803,20 @@ void DialogImpl::ThreadedPushButton::Click()
     osl_resumeThread( m_thread );
 }
 
+//______________________________________________________________________________
+DialogImpl::ThreadedPushButton::~ThreadedPushButton()
+{
+    if (m_thread != 0) {
+        osl_joinWithThread( m_thread );
+        osl_destroyThread( m_thread );
+    }
+}
+
 //==============================================================================
 static ResMgr * getResMgr()
 {
     static ResMgr * s_pResMgr = 0;
-    if (s_pResMgr == 0)
-    {
+    if (s_pResMgr == 0) {
         s_pResMgr = ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
         OSL_ASSERT( s_pResMgr != 0 );
     }
