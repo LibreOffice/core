@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ ScMyTableData::~ScMyTableData()
 void ScMyTableData::AddRow()
 {
     aTableCellPos.Row++;
-    if (aTableCellPos.Row >= nRowsPerRow.size())
+    if (static_cast<sal_uInt32>(aTableCellPos.Row) >= nRowsPerRow.size())
     {
         nRowsPerRow.resize(nRowsPerRow.size() + nDefaultRowCount, 1);
         nRealRows.resize(nRowsPerRow.size() + nDefaultRowCount + 1, 0);
@@ -155,7 +155,7 @@ void ScMyTableData::AddRow()
 void ScMyTableData::AddColumn()
 {
     aTableCellPos.Column++;
-    if (aTableCellPos.Column >= nColsPerCol.size())
+    if (static_cast<sal_uInt32>(aTableCellPos.Column) >= nColsPerCol.size())
     {
         nColsPerCol.resize(nColsPerCol.size() + nDefaultColCount, 1);
         nRealCols.resize(nColsPerCol.size() + nDefaultColCount + 1, 0);
@@ -596,7 +596,7 @@ void ScMyTables::AddColumn(sal_Bool bIsCovered)
 void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 {
     nTableCount++;
-    if (nTableCount >= aTableVec.size())
+    if (static_cast<sal_uInt32>(nTableCount) >= aTableVec.size())
         aTableVec.resize(aTableVec.size() + nDefaultTabCount);
     ScMyTableData* aTable = new ScMyTableData(nCurrentSheet);
     if (nTableCount > 1)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void ScXMLTableScenarioContext::EndElement()
     if( !bCopyFormulas )
         nFlags |= SC_SCENARIO_VALUE;
     pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-    for( sal_Int32 i = 0; i < aScenarioRanges.Count(); i++ )
+    for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); i++ )
     {
         ScRange* pRange = aScenarioRanges.GetObject( i );
         if( pRange )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ void ScXMLTableColsContext::EndElement()
             ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
             ScOutlineArray* pColArray = pOutlineTable->GetColArray();
             sal_Bool bResized;
-            pColArray->Insert(nGroupStartCol, nGroupEndCol, bResized, !bGroupDisplay, sal_True);
+            pColArray->Insert(static_cast<USHORT>(nGroupStartCol), static_cast<USHORT>(nGroupEndCol), bResized, !bGroupDisplay, sal_True);
         }
     }
 }

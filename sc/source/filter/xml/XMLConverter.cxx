@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ void ScXMLConverter::GetStringFromAddress(
         sal_Bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
-    ScAddress aScAddress( rAddress.Column, rAddress.Row, rAddress.Sheet );
+    ScAddress aScAddress( static_cast<USHORT>(rAddress.Column), static_cast<USHORT>(rAddress.Row), rAddress.Sheet );
     GetStringFromAddress( rString, aScAddress, pDocument, bAppendStr, nFormatFlags );
 }
 
@@ -423,8 +423,8 @@ void ScXMLConverter::GetStringFromRange(
         sal_Bool bAppendStr,
         sal_uInt16 nFormatFlags )
 {
-    ScRange aScRange( rRange.StartColumn, rRange.StartRow, rRange.Sheet,
-        rRange.EndColumn, rRange.EndRow, rRange.Sheet );
+    ScRange aScRange( static_cast<USHORT>(rRange.StartColumn), static_cast<USHORT>(rRange.StartRow), rRange.Sheet,
+        static_cast<USHORT>(rRange.EndColumn), static_cast<USHORT>(rRange.EndRow), rRange.Sheet );
     GetStringFromRange( rString, aScRange, pDocument, bAppendStr, nFormatFlags );
 }
 

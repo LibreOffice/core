@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,11 +209,12 @@ void ScXMLDDELinkContext::EndElement()
     if (nPosition > -1 && nColumns && nRows)
     {
         ScMatrix* pMatrix;
-        if (GetScImport().GetDocument()->CreateDdeLinkResultDimension(nPosition, nColumns, nRows, pMatrix))
+        if (GetScImport().GetDocument()->CreateDdeLinkResultDimension(static_cast<USHORT>(nPosition),
+            static_cast<USHORT>(nColumns), static_cast<USHORT>(nRows), pMatrix))
         {
             if (pMatrix)
             {
-                DBG_ASSERT(nColumns * nRows == aDDELinkTable.size(), "there is a wrong cells count");
+                DBG_ASSERT(static_cast<sal_uInt32>(nColumns * nRows) == aDDELinkTable.size(), "there is a wrong cells count");
                 sal_Int32 nCol(0);
                 sal_Int32 nRow(-1);
                 sal_Int32 nIndex(0);
@@ -227,9 +228,8 @@ void ScXMLDDELinkContext::EndElement()
                     else
                         nCol++;
                     String sValue(aItr->sValue);
-                    GetScImport().GetDocument()->SetDdeLinkResult(pMatrix, nCol, nRow, sValue,
-                        aItr->fValue, aItr->bString,
-                        aItr->bEmpty);
+                    GetScImport().GetDocument()->SetDdeLinkResult(pMatrix, static_cast<USHORT>(nCol), static_cast<USHORT>(nRow),
+                        sValue, aItr->fValue, aItr->bString, aItr->bEmpty);
                     nIndex++;
                 }
             }

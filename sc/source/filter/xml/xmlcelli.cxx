@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,8 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             if (aCellPos.Row > MAXROW)
                 aCellPos.Row = MAXROW;
             ScDocument* pDoc = GetScImport().GetDocument();
-            Rectangle aRec = pDoc->GetMMRect(aCellPos.Column, aCellPos.Row, aCellPos.Column, aCellPos.Row, aCellPos.Sheet);
+            Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aCellPos.Column), static_cast<USHORT>(aCellPos.Row),
+                static_cast<USHORT>(aCellPos.Column), static_cast<USHORT>(aCellPos.Row), aCellPos.Sheet);
             awt::Point aPoint;
             aPoint.X = aRec.Left();
             aPoint.Y = aRec.Top();
@@ -918,7 +919,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
             pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
             ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
             aNote.SetShown(aMyAnnotation.bDisplay);
-            pDoc->SetNote(aCellAddress.Column, aCellAddress.Row, aCellAddress.Sheet, aNote);
+            pDoc->SetNote(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet, aNote);
         }
     }
 }
@@ -951,7 +952,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
 {
     if( aCellRangeSource.bHas )
     {
-        ScRange aDestRange( rPosition.Column, rPosition.Row, rPosition.Sheet,
+        ScRange aDestRange( static_cast<USHORT>(rPosition.Column), static_cast<USHORT>(rPosition.Row), rPosition.Sheet,
             rPosition.Column + aCellRangeSource.nColumns - 1,
             rPosition.Row + aCellRangeSource.nRows - 1, rPosition.Sheet );
         String sFilterName( aCellRangeSource.sFilterName );

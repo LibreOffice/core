@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,14 +249,14 @@ void ScXMLTableContext::EndElement()
         sal_Int32 nDepth = pColArray->GetDepth();
         for (sal_Int32 i = 0; i < nDepth; i++)
         {
-            sal_Int32 nCount = pColArray->GetCount(i);
+            sal_Int32 nCount = pColArray->GetCount(static_cast<USHORT>(i));
             sal_Bool bChanged(sal_False);
             for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
             {
-                ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
+                ScOutlineEntry* pEntry = pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
                 if (pEntry->IsHidden())
                 {
-                    pColArray->SetVisibleBelow(i, j, sal_False);
+                    pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
                     bChanged = sal_True;
                 }
             }
@@ -265,14 +265,14 @@ void ScXMLTableContext::EndElement()
         nDepth = pRowArray->GetDepth();
         for (i = 0; i < nDepth; i++)
         {
-            sal_Int32 nCount = pRowArray->GetCount(i);
+            sal_Int32 nCount = pRowArray->GetCount(static_cast<USHORT>(i));
             sal_Bool bChanged(sal_False);
             for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
             {
-                ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
+                ScOutlineEntry* pEntry = pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j));
                 if (pEntry->IsHidden())
                 {
-                    pRowArray->SetVisibleBelow(i, j, sal_False);
+                    pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
                     bChanged = sal_True;
                 }
             }

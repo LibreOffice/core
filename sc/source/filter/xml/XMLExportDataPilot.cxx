@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 13:56:21 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         sal_Int16 nEntries(0);
         for (sal_Int32 j = 1; (j < nQueryEntryCount) && bHasEntries; j++)
         {
-            ScQueryEntry aEntry = aQueryParam.GetEntry(j);
+            ScQueryEntry aEntry = aQueryParam.GetEntry(static_cast<USHORT>(j));
             if (aEntry.bDoQuery)
             {
                 nEntries++;
@@ -268,7 +268,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
                 for (j = 0; j < nQueryEntryCount; j++)
                 {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                    WriteDPCondition(aQueryParam.GetEntry(static_cast<USHORT>(j)), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
             }
             else if (bAnd && !bOr)
@@ -276,7 +276,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, sXML_filter_and, sal_True, sal_True);
                 for (j = 0; j < nQueryEntryCount; j++)
                 {
-                    WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
+                    WriteDPCondition(aQueryParam.GetEntry(static_cast<USHORT>(j)), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
             }
             else if (nQueryEntryCount  == 1)
@@ -301,17 +301,17 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                     bOpenAndElement = sal_False;
                 for (j = 1; j < nQueryEntryCount; j++)
                 {
-                    if (aConnection != aQueryParam.GetEntry(j).eConnect)
+                    if (aConnection != aQueryParam.GetEntry(static_cast<USHORT>(j)).eConnect)
                     {
-                        aConnection = aQueryParam.GetEntry(j).eConnect;
-                        if (aQueryParam.GetEntry(j).eConnect == SC_AND)
+                        aConnection = aQueryParam.GetEntry(static_cast<USHORT>(j)).eConnect;
+                        if (aQueryParam.GetEntry(static_cast<USHORT>(j)).eConnect == SC_AND)
                         {
                             rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
                             rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList());
                             rExport.ClearAttrList();
                             bOpenAndElement = sal_True;
                             WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
+                            aPrevFilterField = aQueryParam.GetEntry(static_cast<USHORT>(j));
                             if (j == nQueryEntryCount - 1)
                             {
                                 WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
@@ -323,7 +323,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                         else
                         {
                             WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                            aPrevFilterField = aQueryParam.GetEntry(j);
+                            aPrevFilterField = aQueryParam.GetEntry(static_cast<USHORT>(j));
                             if (bOpenAndElement)
                             {
                                 rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
@@ -339,7 +339,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                     else
                     {
                         WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
-                        aPrevFilterField = aQueryParam.GetEntry(j);
+                        aPrevFilterField = aQueryParam.GetEntry(static_cast<USHORT>(j));
                         if (j == nQueryEntryCount - 1)
                             WriteDPCondition(aPrevFilterField, aQueryParam.bCaseSens, aQueryParam.bRegExp);
                     }
@@ -381,7 +381,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                             ScMergeFlagAttr& rItem = (ScMergeFlagAttr&)pAttr->GetItem(ATTR_MERGE_FLAG);
                             if (rItem.HasButton())
                             {
-                                for (sal_Int32 nButtonRow = nRow1; nButtonRow <= nRow2; nButtonRow++)
+                                for (sal_uInt16 nButtonRow = nRow1; nButtonRow <= nRow2; nButtonRow++)
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
                                     ScXMLConverter::GetStringFromAddress(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-14 09:38:22 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ void XMLTableShapeImportHelper::finishShape(
             if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_cell_address) == 0)
             {
                 ScXMLConverter::GetAddressFromString(aAddress, rValue, rImport.GetDocument());
-                pRect = new Rectangle(rImport.GetDocument()->GetMMRect( aAddress.Column, aAddress.Row, aAddress.Column, aAddress.Row, aAddress.Sheet ));
+                pRect = new Rectangle(rImport.GetDocument()->GetMMRect( static_cast<USHORT>(aAddress.Column), static_cast<USHORT>(aAddress.Row),
+                    static_cast<USHORT>(aAddress.Column), static_cast<USHORT>(aAddress.Row), aAddress.Sheet ));
             }
             else if (nPrefix = XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_end_x) == 0)
                 rImport.GetMM100UnitConverter().convertMeasure(X, rValue);

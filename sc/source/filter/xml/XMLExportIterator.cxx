@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,11 +644,11 @@ void ScMyNotEmptyCellsIterator::SetCurrentTable(const sal_Int32 nTable)
 {
     if (nCurrentTable != nTable)
     {
-        nCurrentTable = nTable;
+        nCurrentTable = static_cast<sal_Int16>(nTable);
         if (pCellItr)
             delete pCellItr;
         pCellItr = new ScHorizontalCellIterator(rExport.GetDocument(), nCurrentTable, 0, 0,
-            rExport.GetLastColumn(nCurrentTable), rExport.GetLastRow(nCurrentTable));
+            static_cast<USHORT>(rExport.GetLastColumn(nCurrentTable)), static_cast<USHORT>(rExport.GetLastRow(nCurrentTable)));
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rExport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-21 16:28:20 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
     sal_Int32 nColCount;
     ScMatrix* pMatrix = NULL;
     sal_uInt16 nuRow, nuCol;
-    if (rExport.GetDocument()->GetDdeLinkResultDimension(nPos, nuCol, nuRow, pMatrix))
+    if (rExport.GetDocument()->GetDdeLinkResultDimension(static_cast<USHORT>(nPos), nuCol, nuRow, pMatrix))
     {
         nRowCount = nuRow;
         nColCount = nuCol;
@@ -182,13 +182,15 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
             {
                 if (nColumn == 0)
-                    bPrevEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sPrevValue, fPrevValue, bPrevString);
+                    bPrevEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow),
+                                                                        sPrevValue, fPrevValue, bPrevString);
                 else
                 {
                     double fValue;
                     String sValue;
                     sal_Bool bString(sal_True);
-                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, nColumn, nRow, sValue, fValue, bString);
+                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow),
+                                                                        sValue, fValue, bString);
                     if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
                                 bEmpty, bString, sValue, fValue))
                         nRepeatColsCount++;
@@ -221,7 +223,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
             if (nCount)
             {
                 SvXMLElementExport aElemDDEs(rExport, XML_NAMESPACE_TABLE, sXML_dde_links, sal_True, sal_True);
-                for (sal_Int32 nDDELink = 0; nDDELink < nCount; nDDELink++)
+                for (sal_uInt16 nDDELink = 0; nDDELink < nCount; nDDELink++)
                 {
                     uno::Any aDDELink = xIndex->getByIndex(nDDELink);
                     uno::Reference<sheet::XDDELink> xDDELink;

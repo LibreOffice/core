@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
         {
             bEnabledUserList = sal_True;
             sTemp = sDataType.copy(8);
-            nUserListIndex = sTemp.toInt32();
+            nUserListIndex = static_cast<sal_Int16>(sTemp.toInt32());
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 19:43:05 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ void ScXMLTableRowsContext::EndElement()
             ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
             ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
             sal_Bool bResized;
-            pRowArray->Insert(nGroupStartRow, nGroupEndRow, bResized, !bGroupDisplay, sal_True);
+            pRowArray->Insert(static_cast<USHORT>(nGroupStartRow), static_cast<USHORT>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
         }
     }
 }

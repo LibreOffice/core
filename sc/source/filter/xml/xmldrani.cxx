@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 13:07:47 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,8 +364,8 @@ void ScXMLDatabaseRangeContext::EndElement()
                 pDBData->SetImportSelection(bIsSelection);
                 pDBData->SetAutoFilter(bAutoFilter);
                 if (bAutoFilter)
-                    pDoc->ApplyFlagsTab( aCellRangeAddress.StartColumn, aCellRangeAddress.StartRow,
-                                            aCellRangeAddress.EndColumn, aCellRangeAddress.StartRow,
+                    pDoc->ApplyFlagsTab( static_cast<USHORT>(aCellRangeAddress.StartColumn), static_cast<USHORT>(aCellRangeAddress.StartRow),
+                                            static_cast<USHORT>(aCellRangeAddress.EndColumn), static_cast<USHORT>(aCellRangeAddress.StartRow),
                                             aCellRangeAddress.Sheet, SC_MF_AUTO );
                 ScImportParam aImportParam;
                 ScImportDescriptor::FillImportParam(aImportParam, aImportDescriptor);
@@ -736,7 +736,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                     {
                         pDatabaseRangeContext->SetSubTotalsEnabledUserList(sal_True);
                         sTemp = sValue.copy(8);
-                        pDatabaseRangeContext->SetSubTotalsUserListIndex(sTemp.toInt32());
+                        pDatabaseRangeContext->SetSubTotalsUserListIndex(static_cast<sal_Int16>(sTemp.toInt32()));
                     }
                     else
                     {
@@ -813,7 +813,7 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
         {
             case XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER :
             {
-                pDatabaseRangeContext->SetSubTotalRuleGroupFieldNumber(sValue.toInt32());
+                pDatabaseRangeContext->SetSubTotalRuleGroupFieldNumber(static_cast<sal_Int16>(sValue.toInt32()));
             }
             break;
         }

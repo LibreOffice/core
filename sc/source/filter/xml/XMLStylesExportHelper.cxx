@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,7 @@ rtl::OUString ScMyValidationsContainer::GetCondition(const ScMyValidation& aVali
 rtl::OUString ScMyValidationsContainer::GetBaseCellAddress(ScDocument* pDoc, const table::CellAddress& aCell)
 {
     rtl::OUString sAddress;
-    ScAddress aAddress(aCell.Column, aCell.Row, aCell.Sheet);
-    ScXMLConverter::GetStringFromAddress( sAddress, aAddress, pDoc );
+    ScXMLConverter::GetStringFromAddress( sAddress, aCell, pDoc );
     return sAddress;
 }
 
@@ -443,7 +442,7 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 
 const rtl::OUString& ScMyValidationsContainer::GetValidationName(const sal_Int32 nIndex)
 {
-    DBG_ASSERT( nIndex < aValidationVec.size(), "out of range" );
+    DBG_ASSERT( static_cast<sal_uInt32>(nIndex) < aValidationVec.size(), "out of range" );
     return aValidationVec[nIndex].sName;
 }
 
@@ -604,7 +603,7 @@ sal_Int32 ScFormatRangeStyles::AddStyleName(rtl::OUString* pString, const sal_Bo
 
 sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix, sal_Bool& bIsAutoStyle)
 {
-    sal_Int16 nPrefixLength = rPrefix.getLength();
+    sal_Int32 nPrefixLength = rPrefix.getLength();
     rtl::OUString sTemp = rString.copy(nPrefixLength);
     sal_Int32 nIndex = sTemp.toInt32();
     if (aAutoStyleNames.at(nIndex - 1)->equals(rString))
@@ -616,7 +615,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     {
         sal_Int32 i = 0;
         sal_Bool bFound(sal_False);
-        while (!bFound && i < aStyleNames.size())
+        while (!bFound && static_cast<sal_uInt32>(i) < aStyleNames.size())
         {
             if (aStyleNames[i]->equals(rString))
                 bFound = sal_True;
@@ -631,7 +630,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
         else
         {
             i = 0;
-            while (!bFound && i < aAutoStyleNames.size())
+            while (!bFound && static_cast<sal_uInt32>(i) < aAutoStyleNames.size())
             {
                 if (aAutoStyleNames[i]->equals(rString))
                     bFound = sal_True;
@@ -823,7 +822,7 @@ sal_Int32 ScColumnRowStyles::AddStyleName(rtl::OUString* pString)
 
 sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
 {
-    sal_Int16 nPrefixLength = rPrefix.getLength();
+    sal_Int32 nPrefixLength = rPrefix.getLength();
     rtl::OUString sTemp = rString.copy(nPrefixLength);
     sal_Int32 nIndex = sTemp.toInt32();
     if (aStyleNames.at(nIndex - 1)->equals(rString))
@@ -832,7 +831,7 @@ sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, c
     {
         sal_Int32 i = 0;
         sal_Bool bFound(sal_False);
-        while (!bFound && i < aStyleNames.size())
+        while (!bFound && static_cast<sal_uInt32>(i) < aStyleNames.size())
         {
             if (aStyleNames.at(i)->equals(rString))
                 bFound = sal_True;
@@ -848,7 +847,7 @@ sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, c
 
 sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
 {
-    if (nField < aTables[nTable].size())
+    if (static_cast<sal_uInt32>(nField) < aTables[nTable].size())
         return aTables[nTable][nField];
     else
         return aTables[nTable][aTables[nTable].size() - 1];
@@ -856,7 +855,7 @@ sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal
 
 void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
 {
-    DBG_ASSERT(aTables[nTable].size() > nField, "wrong field index");
+    DBG_ASSERT(aTables[nTable].size() > static_cast<sal_uInt32>(nField), "wrong field index");
     aTables[nTable][nField] = nStringIndex;
 }
 

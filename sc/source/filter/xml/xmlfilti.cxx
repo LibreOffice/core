@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,7 @@ void ScXMLDPConditionContext::EndElement()
     double dVal;
     getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
-    aFilterField.nField = nField;
+    aFilterField.nField = static_cast<USHORT>(nField);
     if (sDataType.compareToAscii(sXML_number) == 0)
     {
         aFilterField.nVal = sConditionValue.toDouble();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-14 09:38:22 $
+ *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                             if (aAny >>= nHeight)
                             {
                                 pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
-                                    aItr->aCell.Column, aItr->aCell.Row, aItr->aCell.Column, aItr->aCell.Row, aItr->aCell.Sheet ));
+                                    static_cast<USHORT>(aItr->aCell.Column), static_cast<USHORT>(aItr->aCell.Row),
+                                    static_cast<USHORT>(aItr->aCell.Column), static_cast<USHORT>(aItr->aCell.Row), aItr->aCell.Sheet ));
                                 sal_Int32 Y (nHeight - aItr->nY);
                                 Y = pRect->Bottom() - Y;
                                 awt::Point aPoint = aItr->xShape->getPosition();
