@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-08 11:42:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ inline ::com::sun::star::awt::Rectangle AWTRectangle( const Rectangle& rVCLRect 
 
 inline Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRect )
 {
-    return Rectangle( rAWTRect.X, rAWTRect.Y, rAWTRect.X+rAWTRect.Width, rAWTRect.Y+rAWTRect.Height );
+    return Rectangle( Point( rAWTRect.X, rAWTRect.Y ), Size( rAWTRect.Width, rAWTRect.Height ) );
 }
 
 
