@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-16 12:52:33 $
+#   last change: $Author: mh $ $Date: 2001-08-01 07:42:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 .IF "$(BUILD_SOSL)" == ""
         CDEFS += "-DTIMEBOMB"
 .ELSE
+        CDEFS += "-DBUILD_SOSL"
 .ENDIF
 
 # --- Files --------------------------------------------------------

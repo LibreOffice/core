@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-30 15:28:30 $
+ *  last change: $Author: mh $ $Date: 2001-08-01 07:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ char const INSTALLER_INITFILENAME[] = "initialize.ini";
 
 void InitTestToolLib()
 {
+#ifndef BUILD_SOSL
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::InitTestToolLib" );
 
     OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
@@ -227,10 +228,12 @@ void InitTestToolLib()
                 (*(pfunc_CreateRemoteControl)pInitFunc)();
         }
     }
+#endif
 }
 
 void DeInitTestToolLib()
 {
+#ifndef BUILD_SOSL
     if ( aTestToolModule )
     {
         OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
@@ -241,6 +244,7 @@ void DeInitTestToolLib()
 
         osl_unloadModule( aTestToolModule );
     }
+#endif
 }
 
 ResMgr* Desktop::GetDesktopResManager()
