@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:28:17 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:12:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=goodies
 TARGET=ipcd
 DEPTARGET=vipcd
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -87,7 +82,7 @@ SLOFILES =  $(SLO)$/ipcd.obj
 
 SHL1TARGET=     icd$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     ipcd
-SHL1STDLIBS=    $(TOOLSLIB) $(SVTOOLLIB) $(SVLIB) $(CPPULIB) $(SALLIB)
+SHL1STDLIBS=    $(SVTOOLLIB) $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1DEPN=       $(LB)$/ipcd.lib
 SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
 
@@ -95,21 +90,11 @@ SHL1LIBS=       $(SLB)$/ipcd.lib # $(LB)$/rtftoken.lib
 SHL1OBJS=       $(SLO)$/ipcd.obj
 .ENDIF
 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
+
+# ==========================================================================
 
 .INCLUDE :  target.mk
-
-
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk 
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-    @echo LIBRARY     $(DLLNAME)                   >$@
-    @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-    @echo DATA                READ WRITE NONSHARED >>$@
-    @echo EXPORTS                                  >>$@
-    @echo     GraphicImport                        >>$@
-
-.ENDIF
