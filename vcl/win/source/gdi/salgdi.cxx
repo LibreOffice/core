@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-03 14:47:04 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,6 @@
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
 #endif
-#define _SV_SALGDI_CXX
-
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
@@ -82,8 +80,8 @@
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
 #endif
-#ifndef _SV_POLY_HXX
-#include "poly.hxx"
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 // =======================================================================
