@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-16 15:41:32 $
+ *  last change: $Author: bm $ $Date: 2001-10-10 12:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2794,7 +2794,13 @@ sal_Bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 {
     ::com::sun::star::drawing::FillStyle eFS;
     if(!(rVal >>= eFS))
-        return sal_False;
+    {
+        // also try an int (for Basic)
+        sal_Int32 nFS;
+        if(!(rVal >>= nFS))
+            return sal_False;
+        eFS = (::com::sun::star::drawing::FillStyle)nFS;
+    }
 
     SetValue( (XFillStyle)eFS );
 
