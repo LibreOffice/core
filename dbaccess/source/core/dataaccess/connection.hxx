@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:08:25 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,17 @@
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XUSERSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XGROUPSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE11_HXX_
+#include <cppuhelper/implbase11.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -114,7 +120,7 @@ namespace dbaccess
 
 //==========================================================================
 //==========================================================================
-typedef ::cppu::ImplHelper9 <   ::com::sun::star::container::XChild
+typedef ::cppu::ImplHelper11<   ::com::sun::star::container::XChild
                             ,   ::com::sun::star::sdbcx::XTablesSupplier
                             ,   ::com::sun::star::sdbcx::XViewsSupplier
                             ,   ::com::sun::star::sdbc::XConnection
@@ -123,6 +129,8 @@ typedef ::cppu::ImplHelper9 <   ::com::sun::star::container::XChild
                             ,   ::com::sun::star::sdb::XCommandPreparation
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::lang::XMultiServiceFactory
+                            ,   ::com::sun::star::sdbcx::XUsersSupplier
+                            ,   ::com::sun::star::sdbcx::XGroupsSupplier
                             >   OConnection_Base;
 
 class ODatabaseSource;
@@ -154,6 +162,8 @@ protected:
     OViewContainer*             m_pViews;
     ::com::sun::star::uno::Any  m_aAdditionalWarnings;  // own warnings (appended to the ones got by the master connection)
     sal_Bool                    m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
+    sal_Bool                    m_bSupportsUsers;
+    sal_Bool                    m_bSupportsGroups;
 
 protected:
     virtual ~OConnection();
@@ -229,6 +239,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // XUsersSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getUsers(  ) throw(::com::sun::star::uno::RuntimeException);
+    // XGroupsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getGroups(  ) throw(::com::sun::star::uno::RuntimeException);
+
     // IRefreshListener
     virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
 protected:
@@ -245,6 +260,8 @@ protected:
         if ( rBHelper.bDisposed || !m_xConnection.is() )
             throw ::com::sun::star::lang::DisposedException();
     }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > getMasterTables();
 };
 
 //........................................................................
