@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Boundary.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ module com {  module sun {  module star {  module i18n {
 
 /** Start and end position of a word.
  */
-struct Boundary
+published struct Boundary
 {
     /// Start position of a word, <b>inclusive</b>
     long startPos ;
