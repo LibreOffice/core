@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unx.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mh $ $Date: 2000-10-30 06:00:05 $
+#   last change: $Author: svesik $ $Date: 2000-11-08 18:47:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,6 +139,10 @@ OLE2DEF=-DOLE2
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDI"
 .INCLUDE : unxbsdi.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
+.INCLUDE : unxbsds.mk
 .ENDIF
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCFREEBSDI"
