@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-06 12:46:37 $
+ *  last change: $Author: os $ $Date: 2002-11-15 09:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #ifndef _HTMLOUT_HXX
 #include <svtools/htmlout.hxx>
 #endif
+#ifndef _SVX_HLNKITEM_HXX
+#include <svx/hlnkitem.hxx>
+#endif
 #ifndef _INETIMG_HXX
 #include <svtools/inetimg.hxx>
 #endif
@@ -262,6 +265,9 @@
 #endif
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
+#endif
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -2346,91 +2352,103 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
     int nRet = SwTransferable::_PasteGrf( rData, rSh, nFmt, nAction,
                                             pPt, nActionFlags, bMsg );
 
-        // oder doch als Dokument einfuegen!
     if( !nRet )
     {
         String sFile, sDesc;
         if( rData.GetString( nFmt, sFile ) && sFile.Len() )
         {
-            BOOL bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
-
-            //Eigenes FileFormat? -->Einfuegen, nicht fuer StarWriter/Web
-            const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
-                    ? 0 : SwIoSystem::GetFileFilter( sFile, aEmptyStr );
-            if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
-/*
-JP 02.07.98: warum nur fuer die Formate ??
-                && ( pFlt->GetUserData() == FILTER_SW5 ||
-                pFlt->GetUserData() == FILTER_SW4 ||
-                pFlt->GetUserData() == FILTER_SW3 ||
-                pFlt->GetUserData() == FILTER_SWG )
-*/
-                )
+            if(Sound::IsSoundFile( sFile ))
             {
-// und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
-                SwSection* pSect = new SwSection( FILE_LINK_SECTION,
-                                rSh.GetDoc()->GetUniqueSectionName() );
-                pSect->SetLinkFileName( URIHelper::SmartRelToAbs( sFile ) );
-                pSect->SetProtect( TRUE );
+                SvxHyperlinkItem aHyperLink( SID_HYPERLINK_SETLINK, sFile, sFile,
+                                aEmptyStr, aEmptyStr,
+                                SW_PASTESDR_INSERT == nAction ? HLINK_BUTTON : HLINK_FIELD);
+                SwView& rView = rSh.GetView();
+                rView.GetViewFrame()->GetDispatcher()->Execute(
+                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON,
+                                &aHyperLink,0L);
+            }
+            else
+            {
+                BOOL bIsURLFile = SwTransferable::_CheckForURLOrLNKFile( rData, sFile, &sDesc );
 
-                Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
-                                            InsertRegionDialog ), pSect );
-                nRet = 1;
-#if 0
-                if( rSh.InsertSection( aSect ) )
+                //Eigenes FileFormat? -->Einfuegen, nicht fuer StarWriter/Web
+                const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
+                        ? 0 : SwIoSystem::GetFileFilter( sFile, aEmptyStr );
+                if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
+    /*
+    JP 02.07.98: warum nur fuer die Formate ??
+                    && ( pFlt->GetUserData() == FILTER_SW5 ||
+                    pFlt->GetUserData() == FILTER_SW4 ||
+                    pFlt->GetUserData() == FILTER_SW3 ||
+                    pFlt->GetUserData() == FILTER_SWG )
+    */
+                    )
                 {
-                    if( SW_PASTESDR_SETATTR != nAction )
+    // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
+                    SwSection* pSect = new SwSection( FILE_LINK_SECTION,
+                                    rSh.GetDoc()->GetUniqueSectionName() );
+                    pSect->SetLinkFileName( URIHelper::SmartRelToAbs( sFile ) );
+                    pSect->SetProtect( TRUE );
+
+                    Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
+                                                InsertRegionDialog ), pSect );
+                    nRet = 1;
+    #if 0
+                    if( rSh.InsertSection( aSect ) )
                     {
-                        aSect.SetType( CONTENT_SECTION );
-                        aSect.SetProtect( FALSE );
-                        for( USHORT i = rSh.GetSectionFmtCount(); i; )
-                            if( aNm == rSh.GetSectionFmt( --i ).
-                                                GetSection()->GetName())
-                            {
-                                rSh.ChgSection( i, aSect );
-                                break;
-                            }
+                        if( SW_PASTESDR_SETATTR != nAction )
+                        {
+                            aSect.SetType( CONTENT_SECTION );
+                            aSect.SetProtect( FALSE );
+                            for( USHORT i = rSh.GetSectionFmtCount(); i; )
+                                if( aNm == rSh.GetSectionFmt( --i ).
+                                                    GetSection()->GetName())
+                                {
+                                    rSh.ChgSection( i, aSect );
+                                    break;
+                                }
+                        }
+                        nRet = TRUE;
+                    }
+    #endif
+                }
+                else if( SW_PASTESDR_SETATTR == nAction ||
+                        ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
+                {
+                    //Fremde Files koennen wir immerhin noch als Links
+                    //Einfuegen.
+
+                    //#41801# ersteinmal die URL absolut machen
+                    INetURLObject aURL;
+                    aURL.SetSmartProtocol( INET_PROT_FILE );
+                    aURL.SetSmartURL( sFile );
+                    sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+                    switch( rSh.GetObjCntTypeOfSelection() )
+                    {
+                    case OBJCNT_FLY:
+                    case OBJCNT_GRF:
+                    case OBJCNT_OLE:
+                        {
+                            SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
+                            rSh.GetFlyFrmAttr( aSet );
+                            SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
+                            aURL.SetURL( sFile, FALSE );
+                            if( !aURL.GetName().Len() )
+                                aURL.SetName( sFile );
+                            aSet.Put( aURL );
+                            rSh.SetFlyFrmAttr( aSet );
+                        }
+                        break;
+
+                    default:
+                        {
+                            rSh.InsertURL( SwFmtINetFmt( sFile, aEmptyStr ),
+                                            sDesc.Len() ? sDesc : sFile );
+                        }
                     }
                     nRet = TRUE;
                 }
-#endif
-            }
-            else if( SW_PASTESDR_SETATTR == nAction ||
-                    ( bIsURLFile && SW_PASTESDR_INSERT == nAction ))
-            {
-                //Fremde Files koennen wir immerhin noch als Links
-                //Einfuegen.
-
-                //#41801# ersteinmal die URL absolut machen
-                INetURLObject aURL;
-                aURL.SetSmartProtocol( INET_PROT_FILE );
-                aURL.SetSmartURL( sFile );
-                sFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
-
-                switch( rSh.GetObjCntTypeOfSelection() )
-                {
-                case OBJCNT_FLY:
-                case OBJCNT_GRF:
-                case OBJCNT_OLE:
-                    {
-                        SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
-                        rSh.GetFlyFrmAttr( aSet );
-                        SwFmtURL aURL( (SwFmtURL&)aSet.Get( RES_URL ) );
-                        aURL.SetURL( sFile, FALSE );
-                        if( !aURL.GetName().Len() )
-                            aURL.SetName( sFile );
-                        aSet.Put( aURL );
-                        rSh.SetFlyFrmAttr( aSet );
-                    }
-                    break;
-
-                default:
-                    {
-                        rSh.InsertURL( SwFmtINetFmt( sFile, aEmptyStr ),
-                                        sDesc.Len() ? sDesc : sFile );
-                    }
-                }
-                nRet = TRUE;
             }
         }
     }
