@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module i18n {
     old Attic version </a> for OOo1.0/SO6.0). </p>
  */
 
-interface XLocaleData: com::sun::star::uno::XInterface
+published interface XLocaleData: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** returns the LC_INFO locale information.
