@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2000-10-30 10:53:55 $
+#   last change: $Author: hjs $ $Date: 2000-11-13 11:59:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -665,13 +665,12 @@ OUTCXX=$(OUT)$/cxx
 
 .IF "$(PACKAGE)"!=""
 IDLPACKAGE=$(PACKAGE)
-.IF "$(GUI)"!="MAC"
-.IF "$(GUI)"!="OS2"
+.IF "$(GUI)"=="UNX"
 IDLPACKAGENAME:=$(shell, +echo $(IDLPACKAGE) | $(SED) 's/\\/\//g' )
-.ELSE
-IDLPACKAGENAME:=$(shell, +echo $(IDLPACKAGE) | $(SED) "s/\\/\//g" )
-.ENDIF
-.ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
+.IF "$(GUI)"=="WNT"
+IDLPACKAGENAME:=$(shell, +echo $(IDLPACKAGE) | $(SED) s/\\/\//g )
+.ENDIF			# "$(GUI)"=="WNT"
 .ELSE
 IDLPACKAGE=$(PRJNAME)
 IDLPACKAGENAME=$(PRJNAME)
