@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hro $ $Date: 2001-07-30 16:10:01 $
+ *  last change: $Author: hro $ $Date: 2001-08-17 17:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ typedef enum {
     osl_File_E_MULTIHOP,
     osl_File_E_USERS,
     osl_File_E_OVERFLOW,
+    osl_File_E_NOTREADY,
     osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;

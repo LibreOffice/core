@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-07 13:15:56 $
+ *  last change: $Author: hro $ $Date: 2001-08-17 17:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ public:
         E_MULTIHOP     = osl_File_E_MULTIHOP,
         E_USERS        = osl_File_E_USERS,
         E_OVERFLOW     = osl_File_E_OVERFLOW,
+        E_NOTREADY     = osl_File_E_NOTREADY,
         E_invalidError = osl_File_E_invalidError    /* unmapped error: always last entry in enum! */
     };
 
