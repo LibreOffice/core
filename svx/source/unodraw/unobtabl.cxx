@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 17:30:33 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 09:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ public:
     virtual ~SvxUnoBitmapTable() throw();
 
     virtual NameOrIndex* createItem() const throw();
+    virtual bool isValid( const NameOrIndex* pItem ) const;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
@@ -118,6 +119,21 @@ SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
 
 SvxUnoBitmapTable::~SvxUnoBitmapTable() throw()
 {
+}
+
+bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
+{
+    if( SvxUnoNameItemTable::isValid( pItem ) )
+    {
+        const XFillBitmapItem* pBitmapItem = dynamic_cast< const XFillBitmapItem* >( pItem );
+        if( pBitmapItem )
+        {
+            const GraphicObject& rGraphic = pBitmapItem->GetValue().GetGraphicObject();
+            return rGraphic.GetSizeBytes() > 0;
+        }
+    }
+
+    return false;
 }
 
 OUString SAL_CALL SvxUnoBitmapTable::getImplementationName() throw( uno::RuntimeException )
