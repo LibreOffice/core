@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:02:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ namespace svx
         };
         // MUST be sorted !!
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         PropertyMapEntry* pLoop = s_aDesriptorProperties;
         if (pLoop->mpName)
         {
@@ -331,7 +331,7 @@ namespace svx
         aReturn.Value   = _rPos->second;
         aReturn.State   = PropertyState_DIRECT_VALUE;
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         // check for type consistency
         if (TypeClass_INTERFACE == pProp->mpType->getTypeClass())
         {
