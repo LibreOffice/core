@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:44:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@
 // Hilfsmethoden von ScPivot
 //--------------------------------------------------------------------------------------------------
 
-void ScPivot::SetFrame(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nWidth)
+void ScPivot::SetFrame(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nWidth)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -119,7 +119,7 @@ void ScPivot::SetFrame(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, U
     }
 }
 
-void ScPivot::SetFrameHor(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetFrameHor(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -138,7 +138,7 @@ void ScPivot::SetFrameHor(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
     }
 }
 
-void ScPivot::SetFrameVer(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetFrameVer(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -157,7 +157,7 @@ void ScPivot::SetFrameVer(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
     }
 }
 
-void ScPivot::SetFontBold(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetFontBold(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -167,7 +167,7 @@ void ScPivot::SetFontBold(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
     }
 }
 
-void ScPivot::SetJustifyLeft(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetJustifyLeft(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -177,7 +177,7 @@ void ScPivot::SetJustifyLeft(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nR
     }
 }
 
-void ScPivot::SetJustifyRight(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetJustifyRight(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -187,7 +187,7 @@ void ScPivot::SetJustifyRight(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT n
     }
 }
 
-void ScPivot::SetButton(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
+void ScPivot::SetButton(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     if (pDoc->pTab[nDestTab])
     {
@@ -197,7 +197,7 @@ void ScPivot::SetButton(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2)
     }
 }
 
-void ScPivot::SetStyle(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, USHORT nId)
+void ScPivot::SetStyle(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nId)
 {
     if ( nCol1 > nCol2 || nRow1 > nRow2 )
         return;                                 //  Falls Bereiche leer sind
@@ -236,7 +236,7 @@ void ScPivot::SetStyle(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2, U
     pDoc->pTab[nDestTab]->ApplyStyleArea( nCol1, nRow1, nCol2, nRow2, *pStyle );
 }
 
-void ScPivot::SetValue(USHORT nCol, USHORT nRow, const SubTotal& rTotal, USHORT nFunc)
+void ScPivot::SetValue(SCCOL nCol, SCROW nRow, const SubTotal& rTotal, USHORT nFunc)
 {
     if ( rTotal.Valid( nFunc ) == 1)
         pDoc->SetValue(nCol, nRow, nDestTab, rTotal.Result( nFunc ));
@@ -248,17 +248,18 @@ void ScPivot::SetValue(USHORT nCol, USHORT nRow, const SubTotal& rTotal, USHORT 
 
 void ScPivot::GetParam( ScPivotParam& rParam, ScQueryParam& rQuery, ScArea& rSrcArea ) const
 {
-    short nCount;
-    USHORT nDummy;
-    GetDestArea( rParam.nCol,rParam.nRow, nDummy,nDummy, rParam.nTab );
+    SCSIZE nCount;
+    SCCOL nDummyCol;
+    SCROW nDummyRow;
+    GetDestArea( rParam.nCol,rParam.nRow, nDummyCol,nDummyRow, rParam.nTab );
 
     // Row und Col in der Bedeutung vertauscht:
     GetRowFields( rParam.aColArr, nCount );
-    rParam.nColCount = (USHORT) nCount;
+    rParam.nColCount = nCount;
     GetColFields( rParam.aRowArr, nCount );
-    rParam.nRowCount = (USHORT) nCount;
+    rParam.nRowCount = nCount;
     GetDataFields( rParam.aDataArr, nCount );
-    rParam.nDataCount = (USHORT) nCount;
+    rParam.nDataCount = nCount;
 
     rParam.bIgnoreEmptyRows  = GetIgnoreEmpty();
     rParam.bDetectCategories = GetDetectCat();
@@ -343,12 +344,12 @@ short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
     return nResult;
 }
 
-short PivotStrCollection::GetIndex(TypedStrData* pData) const
+USHORT PivotStrCollection::GetIndex(TypedStrData* pData) const
 {
     USHORT nIndex = 0;
     if (!Search(pData, nIndex))
         nIndex = 0;
-    return (short)nIndex;
+    return nIndex;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -374,7 +375,7 @@ String ScPivotCollection::CreateNewName( USHORT nMin ) const
     return String();                    // sollte nicht vorkommen
 }
 
-ScPivot* ScPivotCollection::GetPivotAtCursor(USHORT nCol, USHORT nRow, USHORT nTab) const
+ScPivot* ScPivotCollection::GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (pItems)
     {
@@ -433,18 +434,18 @@ BOOL ScPivotCollection::Store(SvStream& rStream) const
 }
 
 void ScPivotCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
-                                USHORT nCol1, USHORT nRow1, USHORT nTab1,
-                                USHORT nCol2, USHORT nRow2, USHORT nTab2,
-                                short nDx, short nDy, short nDz )
+                                SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                                SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
+                                SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for (USHORT i=0; i<nCount; i++)
     {
-        USHORT theCol1;
-        USHORT theRow1;
-        USHORT theTab1;
-        USHORT theCol2;
-        USHORT theRow2;
-        USHORT theTab2;
+        SCCOL theCol1;
+        SCROW theRow1;
+        SCTAB theTab1;
+        SCCOL theCol2;
+        SCROW theRow2;
+        SCTAB theTab2;
         ScRefUpdateRes eRes;
         ScPivot* pPivot = (ScPivot*)pItems[i];
 
@@ -474,7 +475,7 @@ void ScPivotCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScPivotCollection::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY )
+void ScPivotCollection::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 {
     //  nur Quell-Bereich
 
