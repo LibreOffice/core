@@ -419,6 +419,16 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
     }
 
     /**
+     *  This method is meant to return the value of the formula cell. However
+     *  in minicalc this value is not used so hence the stubbed function
+     *
+     *  @return the value fo the formula cell
+     */
+    public String getCellValue() {
+        return null;
+    }
+
+    /**
      *  <p>This method takes a formula and parses it into
      *  StarOffice XML formula format.</p>
      *
@@ -449,6 +459,7 @@ final class MinicalcDecoder extends SpreadsheetDecoder {
 
         return formula;
     }
+
     /**
      *  <p>This method returns the type of the data in the current cell.</p>
      *
