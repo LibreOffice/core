@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:04:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,7 +1303,7 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
     SQLExceptionInfo aInfo(aEvent.Reason);
-    if (aInfo.isValid())
+    if ( aInfo.isValid() )
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
         OSQLMessageBox aDlg(getBrowserView(), aInfo);
@@ -2888,6 +2888,20 @@ void SbaXDataBrowserController::setCurrentColumnPosition(sal_uInt16 _nPos)
             xGrid->setCurrentColumnPosition(_nPos);
     }
     catch(Exception&) {}
+}
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::BeforeDrop()
+{
+    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    if (xFormError.is())
+        xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+}
+// -----------------------------------------------------------------------------
+void SbaXDataBrowserController::AfterDrop()
+{
+    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    if (xFormError.is())
+        xFormError->addSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
 }
 //..................................................................
 }   // namespace dbaui
