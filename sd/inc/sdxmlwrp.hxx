@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:43:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _SDXMLWRP_HXX
 #define _SDXMLWRP_HXX
 
+#include <tools/errcode.hxx>
 #include "sdfilter.hxx"
 
 // ---------------
@@ -85,8 +86,8 @@ public:
         ULONG nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter (void);
 
-    virtual sal_Bool        Import();
-    virtual sal_Bool        Export();
+    sal_Bool        Import( ErrCode& nError );
+    sal_Bool        Export();
 
 private:
     SdXMLFilterMode meFilterMode;
