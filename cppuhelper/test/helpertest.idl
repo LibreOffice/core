@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpertest.idl,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2001-03-21 13:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,44 +68,36 @@
 module test
 {
 
-
-[ uik(a6121273-3462-11d3-87A400A0-24494732), ident("A", 1.0) ]
 interface A : com::sun::star::uno::XInterface
 {
     string a();
 };
 
-[ uik(b227a3A0-33d6-11d1-aabe02a0-249d5590), ident("BA", 1.0) ]
 interface BA : A
 {
     string ba();
 };
 
-[ uik(ca27a3A0-33d6-11d1-aabe02a0-249d5590), ident("CA", 1.0) ]
 interface CA : A
 {
     string ca();
 };
 
-[ uik(dba7a3A0-33d6-11d1-aabe02a0-249d5590), ident("DBA", 1.0) ]
 interface DBA : BA
 {
     string dba();
 };
 
-[ uik(e227a3A0-33d6-11d1-aabe02a0-249d5590), ident("E", 1.0) ]
 interface E : com::sun::star::uno::XInterface
 {
     string e();
 };
 
-[ uik(fe27a3A0-33d6-11d1-aabe02a0-249d5590), ident("FE", 1.0) ]
 interface FE : E
 {
     string fe();
 };
 
-[ uik(0227a3A0-33d6-11d1-aabe02a0-249d5590), ident("G", 1.0) ]
 interface G : com::sun::star::uno::XInterface
 {
     string g();
