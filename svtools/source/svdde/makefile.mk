@@ -1,10 +1,10 @@
-*************************************************************************
+#*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-07 14:51:03 $
+#   last change: $Author: hjs $ $Date: 2002-03-07 15:08:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
