@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,12 +785,12 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
                 pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
                 ScPostIt aNote(String(pMyAnnotation->sText), sDate, String(pMyAnnotation->sAuthor));
                 aNote.SetShown(pMyAnnotation->bDisplay);
-                pDoc->SetNote(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet, aNote);
+                pDoc->SetNote(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), aCellAddress.Sheet, aNote);
                 if (pMyAnnotation->bDisplay)
                 {
                     uno::Reference < drawing::XShapes > xShapes (rXMLImport.GetTables().GetCurrentXShapes());   // make draw page
                     ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
-                    aDetFunc.ShowComment(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), sal_False);
+                    aDetFunc.ShowComment(static_cast<SCCOL>(aCellAddress.Column), static_cast<SCROW>(aCellAddress.Row), sal_False);
                     uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
                     if (xShapesIndex.is())
                     {
@@ -838,9 +838,9 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
         if (pDoc)
         {
             LockSolarMutex();
-            ScRange aDestRange( static_cast<USHORT>(rPosition.Column), static_cast<USHORT>(rPosition.Row), rPosition.Sheet,
-                rPosition.Column + pCellRangeSource->nColumns - 1,
-                rPosition.Row + pCellRangeSource->nRows - 1, rPosition.Sheet );
+            ScRange aDestRange( static_cast<SCCOL>(rPosition.Column), static_cast<SCROW>(rPosition.Row), rPosition.Sheet,
+                static_cast<SCCOL>(rPosition.Column + pCellRangeSource->nColumns - 1),
+                static_cast<SCROW>(rPosition.Row + pCellRangeSource->nRows - 1), rPosition.Sheet );
             String sFilterName( pCellRangeSource->sFilterName );
             String sSourceStr( pCellRangeSource->sSourceStr );
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
@@ -1055,10 +1055,10 @@ void ScXMLTableRowCellContext::EndElement()
                 {
                     SetCellProperties(xCellRange, aCellPos); // set now only the validation for the complete range with the given cell as start cell
                     //SetType(xCellRange, aCellPos);
-                    USHORT nStartCol(aCellPos.Column < MAXCOL ? aCellPos.Column : MAXCOL);
-                    USHORT nStartRow(aCellPos.Row < MAXROW ? aCellPos.Row : MAXROW);
-                    USHORT nEndCol(aCellPos.Column + nCellsRepeated - 1 < MAXCOL ? aCellPos.Column + nCellsRepeated - 1 : MAXCOL);
-                    USHORT nEndRow(aCellPos.Row + nRepeatedRows - 1 < MAXROW ? aCellPos.Row + nRepeatedRows - 1 : MAXROW);
+                    SCCOL nStartCol(aCellPos.Column < MAXCOL ? static_cast<SCCOL>(aCellPos.Column) : MAXCOL);
+                    SCROW nStartRow(aCellPos.Row < MAXROW ? static_cast<SCROW>(aCellPos.Row) : MAXROW);
+                    SCCOL nEndCol(aCellPos.Column + nCellsRepeated - 1 < MAXCOL ? static_cast<SCCOL>(aCellPos.Column + nCellsRepeated - 1) : MAXCOL);
+                    SCROW nEndRow(aCellPos.Row + nRepeatedRows - 1 < MAXROW ? static_cast<SCROW>(aCellPos.Row + nRepeatedRows - 1) : MAXROW);
                     ScRange aScRange( nStartCol, nStartRow, aCellPos.Sheet,
                         nEndCol, nEndRow, aCellPos.Sheet );
                     rXMLImport.GetStylesImportHelper()->AddRange(aScRange);
