@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyuri.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:13:55 $
+ *  last change: $Author: kso $ $Date: 2001-07-03 15:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,16 +99,32 @@ void HierarchyUri::init() const
         // Note: Maybe it's a re-init, setUri only resets m_aPath!
         m_aService = m_aParentUri = m_aName = rtl::OUString();
 
-        // URI must match at least: <sheme>:/
-        if ( ( m_aUri.getLength() >= HIERARCHY_URL_SCHEME_LENGTH + 2 ) &&
-             ( m_aUri.compareToAscii( HIERARCHY_URL_SCHEME ":/",
-                                      HIERARCHY_URL_SCHEME_LENGTH + 2 ) == 0 ) )
+        // URI must match at least: <sheme>:
+        if ( ( m_aUri.getLength() >= HIERARCHY_URL_SCHEME_LENGTH + 1 ) &&
+             ( m_aUri.compareToAscii( HIERARCHY_URL_SCHEME ":",
+                                      HIERARCHY_URL_SCHEME_LENGTH + 1 ) == 0 ) )
         {
             sal_Int32 nPos = 0;
 
             // If the URI has no service specifier, insert default service.
             // This is for backward compatibility and for convenience.
-            if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 2 )
+
+            if ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 1 )
+            {
+                // root folder URI without path and service specifier.
+                m_aUri += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "//" DEFAULT_DATA_SOURCE_SERVICE "/" ) );
+                m_aService
+                    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            DEFAULT_DATA_SOURCE_SERVICE ) );
+
+                nPos = m_aUri.getLength() - 1;
+//              nPos = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
+            }
+            else if ( ( m_aUri.getLength() == HIERARCHY_URL_SCHEME_LENGTH + 2 )
+                      &&
+                      ( m_aUri.getStr()[ HIERARCHY_URL_SCHEME_LENGTH + 1 ]
+                                                    == sal_Unicode( '/' ) ) )
             {
                 // root folder URI without service specifier.
                 m_aUri += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -120,8 +136,10 @@ void HierarchyUri::init() const
                 nPos = m_aUri.getLength() - 1;
 //              nPos = HIERARCHY_URL_SCHEME_LENGTH + 3 + m_aService.getLength();
             }
-            else if ( m_aUri.getStr()[ HIERARCHY_URL_SCHEME_LENGTH + 2 ]
-                                                    != sal_Unicode( '/' ) )
+            else if ( ( m_aUri.getLength() > HIERARCHY_URL_SCHEME_LENGTH + 2 )
+                      &&
+                      ( m_aUri.getStr()[ HIERARCHY_URL_SCHEME_LENGTH + 2 ]
+                                                    != sal_Unicode( '/' ) ) )
             {
                 // other (no root folder) URI without service specifier.
                 m_aUri = m_aUri.replaceAt(
@@ -139,7 +157,36 @@ void HierarchyUri::init() const
             {
                 // URI with service specifier.
                 sal_Int32 nStart = HIERARCHY_URL_SCHEME_LENGTH + 3;
-                sal_Int32 nEnd   = m_aUri.indexOf( '/', nStart );
+
+                // Here: - m_aUri has at least the form "<scheme>://"
+                //       - nStart points to char after <scheme>://
+
+                // Only <scheme>:// ?
+                if ( nStart == m_aUri.getLength() )
+                {
+                    // error, but remember that we did a init().
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    return;
+                }
+
+                // Empty path segments?
+                if ( m_aUri.indexOf(
+                        rtl::OUString::createFromAscii( "//" ), nStart ) != -1 )
+                {
+                    // error, but remember that we did a init().
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    return;
+                }
+
+                sal_Int32 nEnd = m_aUri.indexOf( '/', nStart );
+
+                // Only <scheme>:/// ?
+                if ( nEnd == nStart )
+                {
+                    // error, but remember that we did a init().
+                    m_aPath = rtl::OUString::createFromAscii( "/" );
+                    return;
+                }
 
                 if ( nEnd == -1 )
                 {
@@ -155,9 +202,9 @@ void HierarchyUri::init() const
             }
 
             // Here: - m_aUri has at least the form "<scheme>://<service>/"
-            //       - path not checked yet
-            //       - nPos points to slash after service specifier
             //       - m_aService was set
+            //       - m_aPath, m_aParentPath, m_aName not yet set
+            //       - nPos points to slash after service specifier
 
             // Remove trailing slash, if not a root folder URI.
             sal_Int32 nEnd = m_aUri.lastIndexOf( '/' );
