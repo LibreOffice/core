@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.6 $
+#*  $Revision: 1.7 $
 #*
-#*  last change: $Author: vg $ $Date: 2005-02-25 10:08:26 $
+#*  last change: $Author: vg $ $Date: 2005-03-23 10:51:00 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -74,13 +74,13 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 # grab all .txt files under data directory, which are breakiterator rule files.
-MY_BRK_TXTFILES=$(shell ls data/*.txt)
+MY_BRK_TXTFILES:=$(shell ls data/*.txt)
 
 # insert "OpenOffice" as icu package name in front of the  name of each rule file for searching on application provided data
-MY_BRK_BRKFILES=$(subst,data/,$(MISC)$/OpenOffice_ $(MY_BRK_TXTFILES:s/.txt/.brk/))
+MY_BRK_BRKFILES:=$(subst,data/,$(MISC)$/OpenOffice_ $(MY_BRK_TXTFILES:s/.txt/.brk/))
 
 # OpenOffice_icu_dat.c is a generated file from the rule file list by gencmn
-MY_MISC_CXXFILES = \
+MY_MISC_CXXFILES := \
         $(MISC)$/OpenOffice_icu_dat.c \
         $(MY_BRK_BRKFILES:s/.brk/_brk.c/)
 
