@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-11 12:37:57 $
+ *  last change: $Author: cl $ $Date: 2002-08-06 09:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,8 +1592,15 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             String aTmpStr(aURL);
             ByteString aUniqueID( aTmpStr, RTL_TEXTENCODING_UTF8 );
             GraphicObject aGrafObj( aUniqueID );
-            ((SdrGrafObj*)pObj)->ReleaseGraphicLink();
-            ((SdrGrafObj*)pObj)->SetGraphicObject( aGrafObj );
+
+            // #101808# since loading a graphic can cause a reschedule of the office
+            //          it is possible that our shape is removed while where in this
+            //          method.
+            if( pObj )
+            {
+                ((SdrGrafObj*)pObj)->ReleaseGraphicLink();
+                ((SdrGrafObj*)pObj)->SetGraphicObject( aGrafObj );
+            }
         }
         else if( aURL.compareToAscii( UNO_NAME_GRAPHOBJ_URLPKGPREFIX, RTL_CONSTASCII_LENGTH( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ) != 0 )
         {
@@ -1625,7 +1632,11 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             else
                 aFilterName = pSfxFilter->GetFilterName();
 
-            ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
+            // #101808# since loading a graphic can cause a reschedule of the office
+            //          it is possible that our shape is removed while where in this
+            //          method.
+            if( pObj )
+                ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }
         else
         {
