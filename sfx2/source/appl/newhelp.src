@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-01-19 20:25:56 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ TabPage TP_HELP_INDEX
         Text[ japanese ] = "åüçı∑∞(~S)";
         Text[ korean ] = "~Suchbegriff";
         Text[ chinese_simplified ] = "À——∞◊÷¥ (~S)";
-        Text[ chinese_traditional ] = "∑j¥M¶rµ¸(~S)";
+        Text[ chinese_traditional ] = "∑j¥M∂µ•ÿ(~S)";
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
     };
@@ -248,7 +248,7 @@ TabPage TP_HELP_SEARCH
         Text[ japanese ] = "åüçı∑∞(~E)";
         Text[ korean ] = "~Suchbegriff";
         Text[ chinese_simplified ] = "À——∞◊÷¥ (~S)";
-        Text[ chinese_traditional ] = "∑j¥M¶rµ¸(~E)";
+        Text[ chinese_traditional ] = "∑j¥M∂µ•ÿ(~E)";
         Text[ turkish ] = "~Suchbegriff";
         Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
     };
