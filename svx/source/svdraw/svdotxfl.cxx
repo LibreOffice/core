@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxfl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,16 @@
 #include "svdfield.hxx"
 #include "svdotext.hxx"
 
+static BOOL bInit = FALSE;
+
 // Do not remove this, it is still used in src536a!
 void SdrRegisterFieldClasses()
 {
-    SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SdrMeasureField);
+    if ( !bInit )
+    {
+        SvxFieldItem::GetClassManager().SV_CLASS_REGISTER(SdrMeasureField);
+        bInit = TRUE;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////// */
