@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 10:39:11 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ using namespace com::sun::star::uno;
 using com::sun::star::lang::IllegalArgumentException;
 using ::rtl::OUString;
 
-XFileStream::XFileStream( com::sun::star::packages::zip::ZipEntry & rEntry,
+XFileStream::XFileStream( ZipEntry & rEntry,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                            com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
                            const vos::ORef < EncryptionData > &rData,
@@ -111,7 +111,7 @@ XFileStream::XFileStream( com::sun::star::packages::zip::ZipEntry & rEntry,
         mnZipSize = maEntry.nSize;
         mnZipEnd = maEntry.nMethod == DEFLATED ? maEntry.nOffset + maEntry.nCompressedSize : maEntry.nOffset + maEntry.nSize;
     }
-    if ( rData->aSalt.getLength() )
+    if ( !rData.isEmpty() && rData->aSalt.getLength() )
         ZipFile::StaticGetCipher ( rData, maCipher );
 }
 
