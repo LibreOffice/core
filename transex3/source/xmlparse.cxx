@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 16:05:30 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 12:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@
 #endif
 
 #include "xmlparse.hxx"
-
-
 
 //
 // class XMLChildNode
@@ -308,17 +306,25 @@ BOOL XMLFile::Write( String &rFileName )
 /*****************************************************************************/
 {
     if ( rFileName.Len()) {
-        //Sigfunc* hOldHandler = signal( SIGINT, &::Signal_handler );
-        //signal(SIGINT,SIG_IGN);   // Disable Ctrl+C
         signal( SIGINT, &::Signal_handler );
-        SvFileStream aStream( rFileName, STREAM_STD_WRITE | STREAM_TRUNC );
 
+        // -- Multithreading bug in SvStream ? Retry one time if creation fails
+        SvFileStream aStreamTest( rFileName, STREAM_STD_WRITE | STREAM_TRUNC );
+        ByteString sFileName( rFileName , RTL_TEXTENCODING_ASCII_US );
+        if( aStreamTest.IsOpen() ) aStreamTest.Close();
+        //else printf("Prozess ID = %d -> Can't create file %s\nRetrying ....\n" , getpid() , sFileName.GetBuffer() );
+        // -- --
+
+        SvFileStream aStream( rFileName, STREAM_STD_WRITE | STREAM_TRUNC );
         if ( aStream.IsOpen()) {
             BOOL bReturn = Write( aStream );
             aStream.Close();
-            //signal(SIGINT,hOldHandler);
             signal(SIGINT,SIG_DFL); // Enable Ctrl+C
             return bReturn;
+        }else{
+            printf("ERROR: Can't create file %s\n" , ByteString( rFileName , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            signal(SIGINT,SIG_DFL); // Enable Ctrl+C
+            exit( -1 );
         }
         signal(SIGINT,SIG_DFL); // Enable Ctrl+C
     }
