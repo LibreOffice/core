@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 11:13:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-19 12:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(::com::sun::star::uno::Runtim
     ::vos::OGuard aGuard( GetMutex() );
 
     MultiLineEdit* pMultiLineEdit = (MultiLineEdit*) GetWindow();
-    return pMultiLineEdit ? pMultiLineEdit->GetMaxTextLen() : 0;
+    return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
 }
 
 ::rtl::OUString VCLXMultiLineEdit::getTextLines() throw(::com::sun::star::uno::RuntimeException)
@@ -899,8 +899,20 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             case BASEPROPERTY_VALUE_DOUBLE:
             {
                 const ::com::sun::star::uno::TypeClass rTC = Value.getValueType().getTypeClass();
-                if ((rTC != ::com::sun::star::uno::TypeClass_VOID) && (rTC != ::com::sun::star::uno::TypeClass_STRING) && (rTC != ::com::sun::star::uno::TypeClass_DOUBLE))
-                    throw ::com::sun::star::lang::IllegalArgumentException();
+                if (rTC != ::com::sun::star::uno::TypeClass_STRING)
+                    // no string
+                    if (rTC != ::com::sun::star::uno::TypeClass_DOUBLE)
+                        // no double
+                        if (Value.hasValue())
+                        {   // but a value
+                            // try if it is something converitble
+                            sal_Int32 nValue;
+                            if (!(Value >>= nValue))
+                                throw ::com::sun::star::lang::IllegalArgumentException();
+                            SetValue(::com::sun::star::uno::makeAny((double)nValue));
+                            break;
+                        }
+
                 SetValue(Value);
             }
             break;
@@ -921,7 +933,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             {
                 sal_Int32 n;
                 if ( Value >>= n )
-                     pField->SetDecimalDigits( n );
+                     pField->SetDecimalDigits( (sal_uInt16)n );
             }
             break;
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
