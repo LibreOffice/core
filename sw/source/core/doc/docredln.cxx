@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 16:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                 case REDLINE_INSERT:
                     if( pRedl->IsOwnRedline( *pNewRedl ) )
                     {
+                        bool bDelete = false;
+
                         // ggfs. verschmelzen?
                         if( (( POS_BEHIND == eCmpPos &&
                                IsPrevPos( *pREnd, *pStt ) ) ||
@@ -343,6 +345,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 pRedlineTbl->Remove( n );
                                 pRedlineTbl->Insert( pRedl );
                             }
+
+                            bDelete = true;
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
                                     IsPrevPos( *pEnd, *pRStt ) ) ||
@@ -356,20 +360,35 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             // neu einsortieren
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl );
+
+                            bDelete = true;
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
                         {
                             // #107164# own insert-over-insert
                             // redlines: just scrap the inside ones
                             pRedlineTbl->Remove( n );
-                            n--;
-                            break;
-                        }
-                        else if( POS_INSIDE != eCmpPos && POS_EQUAL != eCmpPos)
-                            break;
+                            pRedlineTbl->Insert( pRedl );
 
-                        delete pNewRedl, pNewRedl = 0;
-                        bCompress = TRUE;
+                            bDelete = true;
+                        }
+                        // <- #107164#
+                        else if( POS_OVERLAP_BEHIND == eCmpPos )
+                        {
+                            *pStt = *pREnd;
+                        }
+                        else if( POS_OVERLAP_BEFORE == eCmpPos )
+                        {
+                            *pEnd = *pRStt;
+                        }
+                        else if( POS_INSIDE == eCmpPos || POS_EQUAL == eCmpPos)
+                            bDelete = true;
+
+                        if( bDelete )
+                        {
+                            delete pNewRedl, pNewRedl = 0;
+                            bCompress = TRUE;
+                        }
                     }
                     else if( POS_INSIDE == eCmpPos )
                     {
@@ -1332,7 +1351,8 @@ const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
                     ? *pStt == rPos
                     : ( *pStt <= rPos && rPos < *pEnd ) )
             {
-                while( nM && *pStt == *(*pRedlineTbl)[ nM - 1 ]->Start() )
+                /* #107318# returned wrong redline */
+                while( nM && rPos <= *(*pRedlineTbl)[ nM - 1 ]->End() )
                 {
                     --nM;
                     pRedl = (*pRedlineTbl)[ nM ];
@@ -3200,6 +3220,16 @@ void SwRedline::CopyToSection()
     }
 }
 
+static bool lcl_PamIsFullPara(const SwPaM & rPam)
+{
+    const SwPosition* pStt = rPam.Start(),
+        * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark() :
+        rPam.GetPoint();
+
+    return pStt->nNode != pEnd->nNode && pStt->nContent.GetIndex() == 0 &&
+        pEnd->nContent.GetIndex() == 0;
+}
+
 void SwRedline::DelCopyOfSection()
 {
     if( pCntntSect )
@@ -3351,10 +3381,12 @@ void SwRedline::MoveFromSection()
             if( bDelLastPara && *aPam.GetPoint() == *aPam.GetMark() )
             {
                 aPos.nNode--;
+
                 pDoc->AppendTxtNode( aPos );
             }
             else
                 pDoc->Move( aPam, aPos, DOC_MOVEALLFLYS );
+
             SetMark();
             *GetPoint() = aPos;
             GetMark()->nNode = aNdIdx.GetIndex() + 1;
