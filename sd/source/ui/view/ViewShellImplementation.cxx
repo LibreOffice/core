@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:35:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include "Window.hxx"
 #include "optsitem.hxx"
 #include "DrawDocShell.hxx"
-#include "PreviewChildWindow.hxx"
-#include "PreviewWindow.hxx"
 #include "FactoryIds.hxx"
 #include "slideshow.hxx"
 #include "TaskPaneViewShell.hxx"
@@ -427,9 +425,6 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
         case ViewShell::ST_SLIDE:
         case ViewShell::ST_SLIDE_SORTER:
             return SLIDE_SORTER_FACTORY_ID;
-
-        case ViewShell::ST_PREVIEW:
-            return PREVIEW_FACTORY_ID;
 
         case ViewShell::ST_PRESENTATION:
             return PRESENTATION_FACTORY_ID;
