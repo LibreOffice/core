@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:52:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#ifndef _OFF_OFAITEM_HXX //autogen
-#include <offmgr/ofaitem.hxx>
-#endif
+
+#include <svx/ofaitem.hxx>
+
 #ifndef _SVXERR_HXX
 #include <svx/svxerr.hxx>
 #endif
@@ -95,12 +95,6 @@
 #endif
 #ifdef _OUTLINER_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef _OFA_OSPLCFG_HXX
-#include <offmgr/osplcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
