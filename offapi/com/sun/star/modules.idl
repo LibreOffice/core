@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modules.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:32:25 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 09:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ module formula {};
 
 /// Desktop environment framework interfaces.
 module frame {};
+
+/// Interfaces for graphic handling
+module graphic {};
 
 /// Interface for internationalization (deprecated draft).
 module i18n {};
