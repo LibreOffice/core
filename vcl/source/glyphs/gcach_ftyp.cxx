@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.20 $
- *  last change: $Author: hdu $ $Date: 2001-03-15 15:14:18 $
+ *  $Revision: 1.21 $
+ *  last change: $Author: vg $ $Date: 2001-03-15 18:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,6 +977,8 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
 
 bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 {
+    if( !FT_IS_SFNT( maFaceFT ) )
+        return false;
     SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
     if( !pSFNT )
         return false;
