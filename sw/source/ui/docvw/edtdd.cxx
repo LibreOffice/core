@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:26:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+
+#include "dbgoutsw.hxx"
 
 
 extern BOOL bNoInterrupt;
@@ -421,48 +423,39 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    //Ein bischen scrollen?
     Point aPixPt( rEvt.maPosPixel );
+
+    // If the cursor is near the inner boundary
+    // we attempt to scroll towards the desired direction.
     Point aPoint;
-    Rectangle aWin( aPoint, GetOutputSizePixel() );
-    Rectangle aWin2( aWin );
-    aWin.Left()  += 10;
-    aWin.Top()   += 10;
-    aWin.Right() -= 10;
-    aWin.Bottom()-= 10;
-
-    if ( !aWin.IsInside( aPixPt ) )
-    {
-        if ( !bOldIdleSet )
-        {
-            bOldIdle = rSh.GetViewOptions()->IsIdle();
-            ((SwViewOption *)rSh.GetViewOptions())->SetIdle(FALSE);
-            bOldIdleSet = TRUE;
+    Rectangle aWin(aPoint,GetOutputSizePixel());
+    const int nMargin = 10;
+    aWin.Left() += nMargin;
+    aWin.Top() += nMargin;
+    aWin.Right() -= nMargin;
+    aWin.Bottom() -= nMargin;
+    if(!aWin.IsInside(aPixPt)) {
+        static ULONG last_tick = 0;
+        ULONG current_tick = Time::GetSystemTicks();
+        if((current_tick-last_tick) > 500) {
+            last_tick = current_tick;
+            if(!bOldIdleSet) {
+                bOldIdle = rSh.GetViewOptions()->IsIdle();
+                ((SwViewOption *)rSh.GetViewOptions())->SetIdle(FALSE);
+                bOldIdleSet = TRUE;
+            }
+            CleanupDropUserMarker();
+            if(aPixPt.X() > aWin.Right()) aPixPt.X() += nMargin;
+            if(aPixPt.X() < aWin.Left()) aPixPt.X() -= nMargin;
+            if(aPixPt.Y() > aWin.Bottom()) aPixPt.Y() += nMargin;
+            if(aPixPt.Y() < aWin.Top()) aPixPt.Y() -= nMargin;
+            Point aDocPt(PixelToLogic(aPixPt));
+            SwRect rect(aDocPt,Size(1,1));
+            rSh.MakeVisible(rect);
         }
-        CleanupDropUserMarker();
-
-        aWin2.Left()  += 5;
-        aWin2.Top()   += 5;
-        aWin2.Right() -= 5;
-        aWin2.Bottom()-= 5;
-
-        long x = 0;
-        if ( aPixPt.Y() < aWin2.Top() )
-            x = aPixPt.Y() = -5;
-        else if ( aPixPt.Y() > aWin2.Bottom() )
-            x = aPixPt.Y() += 10;
-        if ( aPixPt.X() < aWin2.Left() )
-            x = aPixPt.X() = -5;
-        else if ( aPixPt.X() > aWin2.Right() )
-            x = aPixPt.X() += 10;
-        Point aDocPt( PixelToLogic( aPixPt ) );
-        aDocPt = rSh.GetCntntPos( aDocPt, x > 0 );
-        rSh.SwCrsrShell::SetVisCrsr( aDocPt );
-        return TRUE;
     }
 
-    if ( bOldIdleSet )
-    {
+    if(bOldIdleSet) {
         ((SwViewOption *)rSh.GetViewOptions())->SetIdle( bOldIdle );
         bOldIdleSet = FALSE;
     }
@@ -547,7 +540,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             EXCHG_DEST_SWDOC_FREE_AREA == nDropDestination )
         {
             CleanupDropUserMarker();
-            rSh.SwCrsrShell::SetVisCrsr( aDocPt );
+            //rSh.SwCrsrShell::SetVisCrsr( aDocPt );
         }
         else
         {
