@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:44:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1);
-    SFX_DECL_OBJECTFACTORY_DLL(SmDocShell, SM_MOD());
+    SFX_DECL_OBJECTFACTORY(SmDocShell);
 
                 SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     virtual     ~SmDocShell();
