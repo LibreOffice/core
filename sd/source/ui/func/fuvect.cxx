@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuvect.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:49:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ FuVectorize::FuVectorize (
     SfxRequest& rReq)
     : FuPoor (pViewSh, pWin, pView, pDoc, rReq)
 {
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() == 1 )
     {
@@ -133,7 +133,7 @@ FuVectorize::FuVectorize (
                 if( pPageView && rMtf.GetActionCount() )
                 {
                     SdrGrafObj* pVectObj = (SdrGrafObj*) pObj->Clone();
-                    String      aStr( pView->GetMarkDescription() );
+                    String      aStr( pView->GetDescriptionOfMarkedObjects() );
 
                     aStr.Append( sal_Unicode(' ') );
                     aStr.Append( String( SdResId( STR_UNDO_VECTORIZE ) ) );
