@@ -10,7 +10,7 @@ mkdir: %_DEST%\pck%_EXT%
 
 
 
-#touch: ..\%__SRC%\misc\wizards.hid %_DEST%\bin%_EXT%\wizards.hid
+touch: ..\%__SRC%\misc\wizards.hid %_DEST%\bin%_EXT%\wizards.hid
 
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
