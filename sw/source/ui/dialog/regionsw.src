@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-05-30 07:35:37 $
+ *  last change: $Author: vg $ $Date: 2001-06-01 19:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ QueryBox QB_CONNECT
     Message [ portuguese_brazilian ] = "Eine Dateiverbindung l?cht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
     Message[ chinese_simplified ] = "Ê¹ÓÃÎÄ¼şÁ¬½Ó»áÉ¾³ıµ±Ç°ÇøÓòÄÚµÄÄÚÈİ¡£Äú»¹ÊÇÒªÖ´ĞĞÁ¬½ÓÃüÁî£¿";
     Message[ russian ] = "Ñâÿçü ôàéëîâ óäàëèò òåêóùåå ñîäåğæèìîå îáëàñòè. Ñâÿçàòü íåñìîòğÿ íà ıòî ?";
-    Message[ polish ] = "Po³¹czenie pliku usunie aktualn¹ zawarto?æ obszaru. Mimo to po³¹czyæ?";
+    Message[ polish ] = "Po³¹czenie pliku usunie aktualn¹ zawartoœæ obszaru. Mimo to po³¹czyæ?";
     Message[ japanese ] = "Ì§²Ù‚ÌÚ‘±‚ÍŒ»İ‚Ì”ÍˆÍ“à—e‚ğíœ‚µ‚Ü‚·BÚ‘±‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
     Message[ chinese_traditional ] = "¨Ï¥ÎÀÉ®×³sµ²·|§R°£°Ï°ì¤º·í«eªº¤º®e¡C±zÁÙ¬O­n°õ¦æ³sµ²¡H";
     Message[ arabic ] = "ÓíÄÏí ÇÊÕÇá Çáãáİ Åáì ÍĞİ ÇáãÍÊæíÇÊ ÇáÍÇáíÉ. åá ÊÑíÏ ÇáÇÊÕÇá Úáì ÇáÑÛã ãä Ğáß¿";
