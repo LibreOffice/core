@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:30:52 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,157 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
+#ifndef _SDPROPLS_HXX
+#include "sdpropls.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////////
+
+class SdXMLDrawingPagePropertySetContext : public SvXMLPropertySetContext
+{
+public:
+
+    TYPEINFO();
+
+    SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+                const ::rtl::OUString& rLName,
+                 const ::com::sun::star::uno::Reference<
+                         ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const UniReference < SvXMLImportPropertyMapper > &rMap );
+
+    virtual ~SdXMLDrawingPagePropertySetContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                                   ::std::vector< XMLPropertyState > &rProperties,
+                                   const XMLPropertyState& rProp);
+};
+
+TYPEINIT1( SdXMLDrawingPagePropertySetContext, SvXMLPropertySetContext );
+
+SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
+                 SvXMLImport& rImport, sal_uInt16 nPrfx,
+                 const OUString& rLName,
+                 const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+                 ::std::vector< XMLPropertyState > &rProps,
+                 const UniReference < SvXMLImportPropertyMapper > &rMap ) :
+    SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, rProps, rMap )
+{
+}
+
+SdXMLDrawingPagePropertySetContext::~SdXMLDrawingPagePropertySetContext()
+{
+}
+
+SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
+                   sal_uInt16 nPrefix,
+                   const OUString& rLocalName,
+                   const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+                   ::std::vector< XMLPropertyState > &rProperties,
+                   const XMLPropertyState& rProp )
+{
+    SvXMLImportContext *pContext = 0;
+
+    switch( xMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
+    {
+    case CTF_PAGE_SOUND_URL:
+    {
+        const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for(sal_Int16 i=0; i < nAttrCount; i++)
+        {
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(xAttrList->getNameByIndex(i), &aLocalName);
+
+            if( (nPrefix == XML_NAMESPACE_XLINK) && aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sXML_href ) ) )
+            {
+                uno::Any aAny;
+                aAny <<= xAttrList->getValueByIndex(i);
+                XMLPropertyState aPropState( rProp.mnIndex, aAny );
+                rProperties.push_back( aPropState );
+            }
+        }
+        break;
+    }
+    }
+
+    if( !pContext )
+        pContext = SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName,
+                                                            xAttrList,
+                                                            rProperties, rProp );
+
+    return pContext;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
+{
+public:
+    TYPEINFO();
+
+    SdXMLDrawingPageStyleContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const rtl::OUString& rLName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
+        SvXMLStylesContext& rStyles,
+        sal_uInt16 nFamily = XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID);
+    virtual ~SdXMLDrawingPageStyleContext();
+
+    SvXMLImportContext * CreateChildContext(
+        sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+};
+
+TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );
+
+SdXMLDrawingPageStyleContext::SdXMLDrawingPageStyleContext(
+    SvXMLImport& rImport,
+    sal_uInt16 nPrfx,
+    const OUString& rLName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    SvXMLStylesContext& rStyles,
+    sal_uInt16 nFamily)
+:   XMLPropStyleContext(rImport, nPrfx, rLName, xAttrList, rStyles, nFamily )
+{
+}
+
+SdXMLDrawingPageStyleContext::~SdXMLDrawingPageStyleContext()
+{
+}
+
+SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( XML_NAMESPACE_STYLE == nPrefix &&
+        rLocalName.compareToAscii( sXML_properties ) == 0 )
+    {
+        UniReference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new SdXMLDrawingPagePropertySetContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    GetProperties(),
+                                                    xImpPrMap );
+    }
+
+    if( !pContext )
+        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
+                                                          xAttrList );
+
+    return pContext;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1( SdXMLPageMasterStyleContext, SvXMLStyleContext );
@@ -873,15 +1020,12 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
 {
     SvXMLStyleContext* pContext = 0;
 
-//  if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_POOL_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID == nFamily)
-//  {
-//      // style:style inside office:automatic-styles context
-//      pContext = new XMLShapeStyleContext(
-//          GetSdImport(), nPrefix, rLocalName, xAttrList, *this, nFamily);
-//  }
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
+        pContext = new SdXMLDrawingPageStyleContext(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
+        break;
+    }
 
     // call base class
     if(!pContext)

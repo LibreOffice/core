@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:17:16 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,26 +116,24 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_PRESPAGE_STYLE                  (XML_SD_TYPES_START +  2)
 #define XML_SD_TYPE_PRESPAGE_SPEED                  (XML_SD_TYPES_START +  3)
 #define XML_SD_TYPE_PRESPAGE_DURATION               (XML_SD_TYPES_START +  4)
-// still missing:
-//#define   XML_SD_TYPE_PRESPAGE_VISIBILITY             (XML_SD_TYPES_START +  5)
-//#define   XML_SD_TYPE_PRESPAGE_SOUND                  (XML_SD_TYPES_START +  6)
-#define XML_SD_TYPE_DASHARRAY                       (XML_SD_TYPES_START + 7 )
-#define XML_SD_TYPE_MARKER                          (XML_SD_TYPES_START + 8 )
-#define XML_SD_TYPE_OPACITY                         (XML_SD_TYPES_START + 9 )
-#define XML_SD_TYPE_LINEJOIN                        (XML_SD_TYPES_START + 10 )
-#define XML_SD_TYPE_FILLSTYLE                       (XML_SD_TYPES_START + 11 )
-#define XML_SD_TYPE_GRADIENT                        (XML_SD_TYPES_START + 12 )
-#define XML_SD_TYPE_GRADIENT_STEPCOUNT              (XML_SD_TYPES_START + 13 )
-#define XML_SD_TYPE_SHADOW                          (XML_SD_TYPES_START + 14 )
-#define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
-#define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 17 )
-#define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 18 )
-#define XML_SD_TYPE_BITMAP_MODE                     (XML_SD_TYPES_START + 19 )
-#define XML_SD_TYPE_BITMAPREPOFFSETX                (XML_SD_TYPES_START + 20 )
-#define XML_SD_TYPE_BITMAPREPOFFSETY                (XML_SD_TYPES_START + 21 )
-#define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 22 )
-#define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 23 )
-#define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 24 )
+#define XML_SD_TYPE_PRESPAGE_VISIBILITY             (XML_SD_TYPES_START +  5)
+#define XML_SD_TYPE_DASHARRAY                       (XML_SD_TYPES_START +  6 )
+#define XML_SD_TYPE_MARKER                          (XML_SD_TYPES_START +  7 )
+#define XML_SD_TYPE_OPACITY                         (XML_SD_TYPES_START +  8 )
+#define XML_SD_TYPE_LINEJOIN                        (XML_SD_TYPES_START +  9 )
+#define XML_SD_TYPE_FILLSTYLE                       (XML_SD_TYPES_START + 10 )
+#define XML_SD_TYPE_GRADIENT                        (XML_SD_TYPES_START + 11 )
+#define XML_SD_TYPE_GRADIENT_STEPCOUNT              (XML_SD_TYPES_START + 12 )
+#define XML_SD_TYPE_SHADOW                          (XML_SD_TYPES_START + 13 )
+#define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 14 )
+#define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 15 )
+#define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 16 )
+#define XML_SD_TYPE_BITMAP_MODE                     (XML_SD_TYPES_START + 17 )
+#define XML_SD_TYPE_BITMAPREPOFFSETX                (XML_SD_TYPES_START + 18 )
+#define XML_SD_TYPE_BITMAPREPOFFSETY                (XML_SD_TYPES_START + 19 )
+#define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 20 )
+#define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 21 )
+#define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 22 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
@@ -153,6 +151,12 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_WRITINGMODE             1002
 #define CTF_REPEAT_OFFSET_X         1003
 #define CTF_REPEAT_OFFSET_Y         1004
+#define CTF_PAGE_SOUND_URL          1005
+#define CTF_PAGE_VISIBLE            1006
+#define CTF_PAGE_TRANS_TYPE         1007
+#define CTF_PAGE_TRANS_STYLE        1008
+#define CTF_PAGE_TRANS_SPEED        1009
+#define CTF_PAGE_TRANS_DURATION     1010
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
@@ -213,6 +217,42 @@ public:
                             ) const;
 
     void SetAutoStyles( sal_Bool bIsInAutoStyles ) { mbIsInAutoStyles = bIsInAutoStyles; }
+};
+
+class XMLPagePropertySetMapper : public XMLPropertySetMapper
+{
+public:
+    XMLPagePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef);
+    ~XMLPagePropertySetMapper();
+};
+
+class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
+{
+private:
+    SvXMLExport& mrExport;
+
+    const rtl::OUString msCDATA;
+    const rtl::OUString msTrue;
+    const rtl::OUString msFalse;
+
+protected:
+    virtual void ContextFilter(
+        ::std::vector< XMLPropertyState >& rProperties,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > rPropSet ) const;
+public:
+    XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport );
+    virtual ~XMLPageExportPropertyMapper();
+
+    virtual void        handleElementItem(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& rHandler,
+                            const XMLPropertyState& rProperty,
+                            const SvXMLUnitConverter& rUnitConverter,
+                            const SvXMLNamespaceMap& rNamespaceMap,
+                            sal_uInt16 nFlags,
+                            const ::std::vector< XMLPropertyState >* pProperties = 0,
+                            sal_uInt32 nIdx = 0
+                            ) const;
 };
 
 #endif  //  _SDPROPLS_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-20 16:17:16 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,13 +352,12 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
-    { "Change", XML_NAMESPACE_PRESENTATION, "transition-type", XML_SD_TYPE_PRESPAGE_TYPE, 0 },
-    { "Effect", XML_NAMESPACE_PRESENTATION, "transition-style", XML_SD_TYPE_PRESPAGE_STYLE, 0 },
-    { "Speed", XML_NAMESPACE_PRESENTATION, "transition-speed", XML_SD_TYPE_PRESPAGE_SPEED, 0 },
-    { "Duration", XML_NAMESPACE_PRESENTATION, "duration", XML_SD_TYPE_PRESPAGE_DURATION, 0 },
-// still missing:
-//  { "", XML_NAMESPACE_PRESENTATION, "visibility", XML_SD_TYPE_PRESPAGE_VISIBILITY, 0 },
-//  { "", XML_NAMESPACE_PRESENTATION, "sound", XML_SD_TYPE_PRESPAGE_SOUND, 0 },
+    { "Change",             XML_NAMESPACE_PRESENTATION, "transition-type",  XML_SD_TYPE_PRESPAGE_TYPE, CTF_PAGE_TRANS_TYPE },
+    { "Effect",             XML_NAMESPACE_PRESENTATION, "transition-style", XML_SD_TYPE_PRESPAGE_STYLE, CTF_PAGE_TRANS_STYLE },
+    { "Speed",              XML_NAMESPACE_PRESENTATION, "transition-speed", XML_SD_TYPE_PRESPAGE_SPEED, CTF_PAGE_TRANS_SPEED },
+    { "Duration",           XML_NAMESPACE_PRESENTATION, "duration",         XML_SD_TYPE_PRESPAGE_DURATION, CTF_PAGE_TRANS_DURATION },
+    { "Visible",            XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
+    { "Sound",              XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
 
     { "FillStyle",                  XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",                  XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },
@@ -422,9 +421,9 @@ SvXMLEnumMapEntry aXML_PresChange_EnumMap[] =
 
 SvXMLEnumMapEntry aXML_TransSpeed_EnumMap[] =
 {
-    { sXML_slow,      presentation::AnimationSpeed_FAST },
-    { sXML_medium,    presentation::AnimationSpeed_MEDIUM },
     { sXML_fast,      presentation::AnimationSpeed_FAST },
+    { sXML_medium,    presentation::AnimationSpeed_MEDIUM },
+    { sXML_slow,      presentation::AnimationSpeed_SLOW },
     { NULL, 0 }
 };
 
@@ -642,15 +641,13 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
                 break;
             }
-// still missing:
-//          case XML_SD_TYPE_PRESPAGE_VISIBILITY :
-//          {
-//              break;
-//          }
-//          case XML_SD_TYPE_PRESPAGE_SOUND :
-//          {
-//              break;
-//          }
+            case XML_SD_TYPE_PRESPAGE_VISIBILITY :
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_visible) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_hidden) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
 
             //////////////////////////////////////////////////////////////////
             // 3D Properties
@@ -858,6 +855,141 @@ void XMLShapeExportPropertyMapper::handleElementItem(
                     uno::Reference< container::XIndexReplace > xNumRule;
                     if( rProperty.maValue >>= xNumRule )
                         ((XMLShapeExportPropertyMapper*)this)->maNumRuleExp.exportNumberingRule( sName, xNumRule );
+                }
+            }
+            break;
+        default:
+            SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
+            break;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+XMLPagePropertySetMapper::XMLPagePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
+: XMLPropertySetMapper( aXMLSDPresPageProps, rFactoryRef )
+{
+}
+
+XMLPagePropertySetMapper::~XMLPagePropertySetMapper()
+{
+}
+
+// ----------------------------------------
+
+XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
+        SvXMLExportPropertyMapper( rMapper ),
+        mrExport( rExport ),
+        msCDATA( rtl::OUString::createFromAscii( sXML_CDATA ))
+{
+}
+
+XMLPageExportPropertyMapper::~XMLPageExportPropertyMapper()
+{
+}
+
+void XMLPageExportPropertyMapper::ContextFilter(
+    std::vector< XMLPropertyState >& rProperties,
+    uno::Reference< beans::XPropertySet > rPropSet ) const
+{
+    XMLPropertyState* pRepeatOffsetX = NULL;
+    XMLPropertyState* pRepeatOffsetY = NULL;
+    XMLPropertyState* pTransType = NULL;
+    XMLPropertyState* pTransDuration = NULL;
+
+    // filter properties
+    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+         property != rProperties.end();
+         property++ )
+    {
+        // find properties with context
+        // to prevent writing this property set mnIndex member to -1
+        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
+        {
+
+            case CTF_REPEAT_OFFSET_X:
+                pRepeatOffsetX = property;
+                break;
+
+            case CTF_REPEAT_OFFSET_Y:
+                pRepeatOffsetY = property;
+                break;
+            case CTF_PAGE_TRANS_TYPE:
+                pTransType = property;
+                break;
+            case CTF_PAGE_TRANS_STYLE:
+                {
+                    presentation::FadeEffect aEnum;
+                    if( ((*property).maValue >>= aEnum) && aEnum == presentation::FadeEffect_NONE )
+                        (*property).mnIndex = -1;
+                }
+                break;
+            case CTF_PAGE_TRANS_SPEED:
+                {
+                    presentation::AnimationSpeed aEnum;
+                    if( ((*property).maValue >>= aEnum) && aEnum == presentation::AnimationSpeed_MEDIUM )
+                        (*property).mnIndex = -1;
+                }
+                break;
+            case CTF_PAGE_VISIBLE:
+                {
+                    sal_Bool bVisible;
+                    (*property).maValue >>= bVisible;
+                    if( bVisible )
+                        (*property).mnIndex = -1;
+                }
+                break;
+            case CTF_PAGE_TRANS_DURATION:
+                pTransDuration = property;
+                break;
+        }
+    }
+
+    if( pRepeatOffsetX && pRepeatOffsetY )
+    {
+        sal_Int32 nOffset;
+        if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
+            pRepeatOffsetX->mnIndex = -1;
+        else
+            pRepeatOffsetY->mnIndex = -1;
+    }
+
+    if( pTransType && pTransDuration )
+    {
+        sal_Int32 nChange = 0;
+        pTransType->maValue >>= nChange;
+
+        // only export duration for automatic
+        if( nChange != 1 )
+            pTransDuration->mnIndex = -1;
+
+        // do not export default transition change
+        if( nChange == 0 )
+            pTransType->mnIndex = -1;
+    }
+
+    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
+}
+
+void XMLPageExportPropertyMapper::handleElementItem(
+    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
+    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx) const
+{
+    switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
+    {
+        case CTF_PAGE_SOUND_URL:
+            {
+                OUString aSoundURL;
+                if( (rProperty.maValue >>= aSoundURL) && aSoundURL.getLength() != 0 )
+                {
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aSoundURL );
+                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type, sXML_simple );
+                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_show, sXML_new );
+                    mrExport.AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate, sXML_onRequest );
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, sXML_sound, sal_True, sal_True );
                 }
             }
             break;

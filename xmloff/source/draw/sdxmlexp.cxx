@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:13:12 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,121 +271,6 @@ using namespace ::com::sun::star::presentation;
 inline sal_Int32 FRound( double fVal )
 {
     return( fVal > 0.0 ? (sal_Int32) ( fVal + 0.5 ) : -(sal_Int32) ( -fVal + 0.5 ) );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-// wrapper to have control for virtual function calls to handle all kinds
-// of possible item specialities
-
-class ImpPresPageDrawStylePropMapper : public SvXMLExportPropertyMapper
-{
-    /** this method is called for every item that has the MID_FLAG_NO_ITEM_EXPORT flag set */
-    virtual void handleNoItem(
-        SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const;
-
-    /** this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set */
-    virtual void handleElementItem(
-        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
-        const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const;
-
-    /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
-    virtual void handleSpecialItem(
-        SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const;
-
-public:
-    ImpPresPageDrawStylePropMapper( const UniReference< XMLPropertySetMapper >& rMapper );
-    virtual ~ImpPresPageDrawStylePropMapper();
-
-    void ContextFilter( std::vector< XMLPropertyState >& rProperties, uno::Reference< beans::XPropertySet > rPropSet ) const;
-};
-
-ImpPresPageDrawStylePropMapper::ImpPresPageDrawStylePropMapper(
-    const UniReference< XMLPropertySetMapper >& rMapper )
-:   SvXMLExportPropertyMapper( rMapper )
-{
-}
-
-ImpPresPageDrawStylePropMapper::~ImpPresPageDrawStylePropMapper()
-{
-}
-
-void ImpPresPageDrawStylePropMapper::handleNoItem(
-    SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
-    const ::std::vector< XMLPropertyState > *pProperties,
-    sal_uInt32 nIdx ) const
-{
-    // call parent
-    SvXMLExportPropertyMapper::handleNoItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
-}
-
-void ImpPresPageDrawStylePropMapper::handleElementItem(
-    const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-    const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
-    const ::std::vector< XMLPropertyState > *pProperties,
-    sal_uInt32 nIdx) const
-{
-    // call parent
-    SvXMLExportPropertyMapper::handleElementItem(rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
-}
-
-void ImpPresPageDrawStylePropMapper::handleSpecialItem(
-    SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
-    const ::std::vector< XMLPropertyState > *pProperties,
-    sal_uInt32 nIdx ) const
-{
-    // call parent
-    SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
-}
-
-
-void ImpPresPageDrawStylePropMapper::ContextFilter(
-    std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-    XMLPropertyState* pRepeatOffsetX = NULL;
-    XMLPropertyState* pRepeatOffsetY = NULL;
-
-    // filter properties
-    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-         property != rProperties.end();
-         property++ )
-    {
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
-        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
-        {
-            case CTF_REPEAT_OFFSET_X:
-                pRepeatOffsetX = property;
-                break;
-
-            case CTF_REPEAT_OFFSET_Y:
-                pRepeatOffsetY = property;
-                break;
-        }
-    }
-
-    if( pRepeatOffsetX && pRepeatOffsetY )
-    {
-        sal_Int32 nOffset;
-        if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
-            pRepeatOffsetX->mnIndex = -1;
-        else
-            pRepeatOffsetY->mnIndex = -1;
-    }
-
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -713,7 +598,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         // construct PresPagePropsMapper
         xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, aFactoryRef);
 
-        mpPresPagePropsMapper = new ImpPresPageDrawStylePropMapper( xMapper );
+        mpPresPagePropsMapper = new XMLPageExportPropertyMapper( xMapper, *this  );
         if(mpPresPagePropsMapper)
         {
             // set lock to avoid deletion

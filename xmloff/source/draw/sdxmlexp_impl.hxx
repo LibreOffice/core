@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:13:12 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ class SvXMLAutoStylePoolP;
 class XMLSdPropHdlFactory;
 class ImpXMLShapeStyleInfo;
 class XMLShapeExportPropertyMapper;
+class XMLPageExportPropertyMapper;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -194,7 +195,7 @@ class SdXMLExport : public SvXMLExport
 
     XMLSdPropHdlFactory*                mpSdPropHdlFactory;
     XMLShapeExportPropertyMapper*       mpPropertySetMapper;
-    ImpPresPageDrawStylePropMapper*     mpPresPagePropsMapper;
+    XMLPageExportPropertyMapper*        mpPresPagePropsMapper;
 
     sal_Bool                    mbIsDraw;
     sal_Bool                    mbFamilyGraphicUsed;
@@ -298,7 +299,7 @@ public:
     // get factories and mappers
     XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
-    ImpPresPageDrawStylePropMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
+    XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
 
     BOOL IsDraw() const { return mbIsDraw; }
     BOOL IsImpress() const { return !mbIsDraw; }

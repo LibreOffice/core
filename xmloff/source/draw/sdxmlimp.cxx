@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:13:13 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  sXML_page_master,               XML_TOK_STYLES_PAGE_MASTER              },
     { XML_NAMESPACE_STYLE,  sXML_presentation_page_layout,  XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
+    { XML_NAMESPACE_STYLE,  sXML_style,                     XML_TOK_STYLES_STYLE    },
     XML_TOKEN_MAP_END
 };
 
