@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAnyCompare.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 /** compares two <atom>any</atom>s.
 */
 
-interface XAnyCompare: com::sun::star::uno::XInterface
+published interface XAnyCompare: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** allows comparision of two <atom>any</atom>s.
