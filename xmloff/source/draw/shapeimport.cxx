@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 13:07:42 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 08:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,71 @@
 #include "ximpgrp.hxx"
 #endif
 
+#include <map>
+#include <vector>
+
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+struct ltint32
+{
+  bool operator()(const sal_Int32 p, sal_Int32 q) const
+  {
+    return p < q;
+  }
+};
+
+typedef std::map<sal_Int32,com::sun::star::uno::Reference< com::sun::star::drawing::XShape >,ltint32> IdShapeMap;
+
+struct ConnectionHint
+{
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxConnector;
+    sal_Bool  bStart;
+    sal_Int32 nDestShapeId;
+    sal_Int32 nDestGlueId;
+};
+
+struct XShapeCompareHelper
+{
+  bool operator()(com::sun::star::uno::Reference < com::sun::star::drawing::XShape > x1,
+                  com::sun::star::uno::Reference < com::sun::star::drawing::XShape > x2 ) const
+  {
+    return x1.get() < x2.get();
+  }
+};
+
+/** this map store all glue point id mappings for shapes that had user defined glue points. This
+    is needed because on insertion the glue points will get a new and unique id */
+/*
+typedef std::map< com::sun::star::uno::Reference < com::sun::star::drawing::XShape >, std::pair< sal_Int32, sal_Int32 >, XShapeCompareHelper > GluePointsIdMap;
+*/
+
+/** this struct is created for each startPage() call and stores information that is needed during
+    import of shapes for one page. Since pages could be nested ( notes pages inside impress ) there
+    is a pointer so one can build up a stack of this structs */
+struct XMLShapeImportPageContextImpl
+{
+/*
+    GluePointsIdMap     maGluePointsIdMap;
+*/
+    uno::Reference < drawing::XShapes > mxShapes;
+
+    struct XMLShapeImportPageContextImpl* mpNext;
+};
+
+/** this class is to enable adding members to the XMLShapeImportHelper without getting incompatible */
+struct XMLShapeImportHelperImpl
+{
+    // context for sorting shapes
+    ShapeSortContext*           mpSortContext;
+
+    IdShapeMap                  maShapeIds;
+
+    std::vector<ConnectionHint> maConnections;
+};
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -125,6 +187,8 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImportPropertyMapper *pExtMapper )
 :   mxModel(rModel),
     mrImporter( rImporter ),
+    mpPageContext(NULL),
+
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mpStylesContext(0L),
@@ -149,13 +213,15 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpPageShapeAttrTokenMap(0L),
     mpGraphicObjectShapeAttrTokenMap(0L),
 */
-    mpSortContext(0L),
     msStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape")),
     msEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape")),
     msStartGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")),
     msEndGluePointIndex(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex"))
-
 {
+    mpImpl = new XMLShapeImportHelperImpl();
+    mpImpl->mpSortContext = 0;
+
+
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel );
 
     // set lock to avoid deletion
@@ -196,7 +262,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
 XMLShapeImportHelper::~XMLShapeImportHelper()
 {
-    DBG_ASSERT( maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
+    DBG_ASSERT( mpImpl->maConnections.empty(), "XMLShapeImportHelper::restoreConnections() was not called!" );
 
     // cleanup factory, decrease refcount. Should lead to destruction.
     if(mpSdPropHdlFactory)
@@ -252,6 +318,8 @@ XMLShapeImportHelper::~XMLShapeImportHelper()
         mpAutoStylesContext->Clear();
         mpAutoStylesContext->ReleaseRef();
     }
+
+    delete mpImpl;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -942,21 +1010,21 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
 
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
 {
-    mpSortContext = new ShapeSortContext( rShapes, mpSortContext );
+    mpImpl->mpSortContext = new ShapeSortContext( rShapes, mpImpl->mpSortContext );
 }
 
 void XMLShapeImportHelper::popGroupAndSort()
 {
-    DBG_ASSERT( mpSortContext, "No context to sort!" );
-    if( mpSortContext == NULL )
+    DBG_ASSERT( mpImpl->mpSortContext, "No context to sort!" );
+    if( mpImpl->mpSortContext == NULL )
         return;
 
     // sort shapes
-    list<ZOrderHint>& rZList = mpSortContext->maZOrderList;
+    list<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
     if( !rZList.empty() )
     {
         // only do something if we have shapes to sort
-        list<ZOrderHint>& rUnsortedList = mpSortContext->maUnsortedList;
+        list<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
 
         // sort z ordered shapes
         rZList.sort();
@@ -973,11 +1041,11 @@ void XMLShapeImportHelper::popGroupAndSort()
                 ZOrderHint aGapHint( *rUnsortedList.begin() );
                 rUnsortedList.pop_front();
 
-                mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
+                mpImpl->mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
             }
 
             if( (*aIter).nIs != nIndex )
-                mpSortContext->moveShape( (*aIter).nIs, nIndex );
+                mpImpl->mpSortContext->moveShape( (*aIter).nIs, nIndex );
 
             rZList.pop_front();
             nIndex++;
@@ -985,17 +1053,17 @@ void XMLShapeImportHelper::popGroupAndSort()
     }
 
     // put parent on top and delete current context, were done
-    ShapeSortContext* pContext = mpSortContext;
-    mpSortContext = pContext->mpParentContext;
+    ShapeSortContext* pContext = mpImpl->mpSortContext;
+    mpImpl->mpSortContext = pContext->mpParentContext;
     delete pContext;
 }
 
 void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& rShape, sal_Int32 nZIndex )
 {
-    if( mpSortContext )
+    if( mpImpl->mpSortContext )
     {
         ZOrderHint aNewHint;
-        aNewHint.nIs = mpSortContext->mnCurrentZ++;
+        aNewHint.nIs = mpImpl->mpSortContext->mnCurrentZ++;
         aNewHint.nShould = nZIndex;
 
         sal_Int32 nInsertIndex = 0;
@@ -1003,26 +1071,26 @@ void XMLShapeImportHelper::shapeWithZIndexAdded( com::sun::star::uno::Reference<
         if( nZIndex == -1 )
         {
             // don't care, so add to unsorted list
-            mpSortContext->maUnsortedList.push_back(aNewHint);
+            mpImpl->mpSortContext->maUnsortedList.push_back(aNewHint);
         }
         else
         {
             // insert into sort list
-            mpSortContext->maZOrderList.push_back(aNewHint);
+            mpImpl->mpSortContext->maZOrderList.push_back(aNewHint);
         }
     }
 }
 
 void XMLShapeImportHelper::createShapeId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nId )
 {
-    DBG_ASSERT( maShapeIds.find(nId) == maShapeIds.end(), "draw:id imported twice!" );
-    maShapeIds[nId] = xShape;
+    DBG_ASSERT( mpImpl->maShapeIds.find(nId) == mpImpl->maShapeIds.end(), "draw:id imported twice!" );
+    mpImpl->maShapeIds[nId] = xShape;
 }
 
 uno::Reference< drawing::XShape > XMLShapeImportHelper::getShapeFromId( sal_Int32 nId )
 {
-    IdShapeMap::iterator aShapeIter( maShapeIds.find( nId ) );
-    if( aShapeIter != maShapeIds.end() )
+    IdShapeMap::iterator aShapeIter( mpImpl->maShapeIds.find( nId ) );
+    if( aShapeIter != mpImpl->maShapeIds.end() )
     {
         return (*aShapeIter).second;
     }
@@ -1045,19 +1113,19 @@ void XMLShapeImportHelper::addShapeConnection( com::sun::star::uno::Reference< c
     aHint.nDestShapeId = nDestShapeId;
     aHint.nDestGlueId = nDestGlueId;
 
-    maConnections.push_back( aHint );
+    mpImpl->maConnections.push_back( aHint );
 }
 
 void XMLShapeImportHelper::restoreConnections()
 {
-    if( !maConnections.empty() )
+    if( !mpImpl->maConnections.empty() )
     {
         uno::Any aAny;
 
-        const vector<ConnectionHint>::size_type nCount = maConnections.size();
+        const vector<ConnectionHint>::size_type nCount = mpImpl->maConnections.size();
         for( vector<ConnectionHint>::size_type i = 0; i < nCount; i++ )
         {
-            ConnectionHint& rHint = maConnections[i];
+            ConnectionHint& rHint = mpImpl->maConnections[i];
             uno::Reference< beans::XPropertySet > xConnector( rHint.mxConnector, uno::UNO_QUERY );
             if( xConnector.is() )
             {
@@ -1091,7 +1159,7 @@ void XMLShapeImportHelper::restoreConnections()
                 xConnector->setPropertyValue(aStr3, aLine3Delta );
             }
         }
-        maConnections.clear();
+        mpImpl->maConnections.clear();
     }
 }
 
@@ -1104,4 +1172,39 @@ SvXMLImportPropertyMapper* XMLShapeImportHelper::CreateShapePropMapper( const un
     // chain text attributes
     pResult->ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper() );
     return pResult;
+}
+
+/** adds a mapping for a glue point identifier from an xml file to the identifier created after inserting
+    the new glue point into the core. The saved mappings can be retrieved by getGluePointId() */
+void XMLShapeImportHelper::addGluePointMapping( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape,
+                          sal_Int32 nSourceId, sal_Int32 nDestinnationId )
+{
+}
+
+/** retrieves a mapping for a glue point identifier from the current xml file to the identifier created after
+    inserting the new glue point into the core. The mapping must be initialized first with addGluePointMapping() */
+sal_Int32 XMLShapeImportHelper::getGluePointId( com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape, sal_Int32 nSourceId )
+{
+    return -1;
+}
+
+/** this method must be calling before the first shape is imported for the given page */
+void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+{
+    XMLShapeImportPageContextImpl* pOldContext = mpPageContext;
+    mpPageContext = new XMLShapeImportPageContextImpl();
+    mpPageContext->mpNext = pOldContext;
+    mpPageContext->mxShapes = rShapes;
+}
+
+/** this method must be calling after the last shape is imported for the given page */
+void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
+{
+    DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
+    if( NULL == mpPageContext )
+        return;
+
+    XMLShapeImportPageContextImpl* pNextContext = mpPageContext->mpNext;
+    delete mpPageContext;
+    mpPageContext = pNextContext;
 }
