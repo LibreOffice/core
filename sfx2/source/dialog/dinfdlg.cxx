@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-11 07:58:26 $
+ *  last change: $Author: mba $ $Date: 2002-04-08 16:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,249 @@ int SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 BOOL SfxDocumentInfoItem::IsOwnFormat() const
 {
      return bOwnFormat;
+}
+
+sal_Bool SfxDocumentInfoItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    String aValue;
+    sal_Int32 nValue = 0;
+    BOOL bField = FALSE;
+    BOOL bIsInt = FALSE;
+    switch ( nMemberId )
+    {
+        case MID_DOCINFO_FILENAME:
+            aValue = GetValue();
+            break;
+
+        case MID_DOCINFO_AUTHOR:
+            aValue = aDocInfo.GetCreated().GetName();
+            break;
+
+        case MID_DOCINFO_CREATIONDATE:
+            nValue = aDocInfo.GetCreated().GetTime().GetDate();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_CREATIONTIME:
+            nValue = aDocInfo.GetCreated().GetTime().GetTime();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_REVISION:
+            nValue = aDocInfo.GetDocumentNumber();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_EDITTIME:
+            nValue = aDocInfo.GetTime();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_MODIFICATIONAUTHOR:
+            aValue = aDocInfo.GetChanged().GetName();
+            break;
+
+        case MID_DOCINFO_MODIFICATIONDATE:
+            nValue = aDocInfo.GetChanged().GetTime().GetDate();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_MODIFICATIONTIME:
+            nValue = aDocInfo.GetChanged().GetTime().GetTime();
+            bIsInt = TRUE;
+            break;
+
+        case MID_DOCINFO_DESCRIPTION:
+            aValue = aDocInfo.GetComment();
+            break;
+
+        case MID_DOCINFO_KEYWORDS:
+            aValue = aDocInfo.GetKeywords();
+            break;
+
+        case MID_DOCINFO_SUBJECT:
+            aValue = aDocInfo.GetTheme();
+            break;
+
+        case MID_DOCINFO_TEMPLATE:
+            aValue = aDocInfo.GetTemplateName();
+            break;
+
+        case MID_DOCINFO_TITLE:
+            aValue = aDocInfo.GetTitle();
+            break;
+
+        case MID_DOCINFO_FIELD1:
+        case MID_DOCINFO_FIELD2:
+        case MID_DOCINFO_FIELD3:
+        case MID_DOCINFO_FIELD4:
+            bField = TRUE;
+            // fehlendes break beabsichtigt
+        case MID_DOCINFO_FIELD1TITLE:
+        case MID_DOCINFO_FIELD2TITLE:
+        case MID_DOCINFO_FIELD3TITLE:
+        case MID_DOCINFO_FIELD4TITLE:
+        {
+            USHORT nSub = MID_DOCINFO_FIELD1TITLE;
+            if ( bField )
+            {
+                nSub = MID_DOCINFO_FIELD1;
+            }
+            const SfxDocUserKey &rOld = aDocInfo.GetUserKey( nMemberId - nSub );
+            if ( bField )
+            {
+                DBG_ASSERT( nMemberId == MID_DOCINFO_FIELD1 ||
+                            nMemberId == MID_DOCINFO_FIELD2 ||
+                            nMemberId == MID_DOCINFO_FIELD3 ||
+                            nMemberId == MID_DOCINFO_FIELD4,
+                            "SfxDocumentInfoItem:Anpassungsfehler" );
+                aValue = rOld.GetWord();
+            }
+            else
+            {
+                DBG_ASSERT( nMemberId == MID_DOCINFO_FIELD1TITLE ||
+                            nMemberId == MID_DOCINFO_FIELD2TITLE ||
+                            nMemberId == MID_DOCINFO_FIELD3TITLE ||
+                            nMemberId == MID_DOCINFO_FIELD4TITLE,
+                            "SfxDocumentInfoItem:Anpassungsfehler" );
+                aValue = rOld.GetTitle();
+            }
+            break;
+        }
+        default:
+           return sal_False;
+     }
+
+    rVal <<= ::rtl::OUString( aValue );
+    return sal_True;
+}
+
+sal_Bool SfxDocumentInfoItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    ::rtl::OUString aValue;
+    sal_Int32 nValue=0;
+    sal_Bool bIsString = ( rVal >>= aValue );
+    sal_Bool bIsInt = !bIsString && ( rVal >>= nValue );
+    if ( !bIsString && !bIsInt )
+        return sal_False;
+
+    switch ( nMemberId )
+    {
+        case MID_DOCINFO_FILENAME:
+            SetValue( aValue );
+            break;
+
+        case MID_DOCINFO_AUTHOR:
+        {
+            TimeStamp aStamp = aDocInfo.GetCreated();
+            aStamp.SetName( aValue );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_CREATIONDATE:
+        {
+            TimeStamp aStamp = aDocInfo.GetCreated();
+            DateTime aDT = aStamp.GetTime();
+            aDT.SetDate( nValue );
+            aStamp.SetTime( aDT );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_CREATIONTIME:
+        {
+            TimeStamp aStamp = aDocInfo.GetCreated();
+            DateTime aDT = aStamp.GetTime();
+            aDT.SetTime( nValue );
+            aStamp.SetTime( aDT );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_REVISION:
+            aDocInfo.SetDocumentNumber( (USHORT) nValue );
+            break;
+
+        case MID_DOCINFO_EDITTIME:
+            aDocInfo.SetTime( nValue );
+            break;
+
+        case MID_DOCINFO_MODIFICATIONAUTHOR:
+        {
+            TimeStamp aStamp = aDocInfo.GetChanged();
+            aStamp.SetName( aValue );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_MODIFICATIONDATE:
+        {
+            TimeStamp aStamp = aDocInfo.GetChanged();
+            DateTime aDT = aStamp.GetTime();
+            aDT.SetDate( nValue );
+            aStamp.SetTime( aDT );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_MODIFICATIONTIME:
+        {
+            TimeStamp aStamp = aDocInfo.GetChanged();
+            DateTime aDT = aStamp.GetTime();
+            aDT.SetTime( nValue );
+            aStamp.SetTime( aDT );
+            aDocInfo.SetChanged( aStamp );
+            break;
+        }
+
+        case MID_DOCINFO_DESCRIPTION:
+            aDocInfo.SetComment(aValue);
+            break;
+
+        case MID_DOCINFO_KEYWORDS:
+            aDocInfo.SetKeywords(aValue);
+            break;
+
+        case MID_DOCINFO_SUBJECT:
+            aDocInfo.SetTheme(aValue);
+            break;
+
+        case MID_DOCINFO_TEMPLATE:
+            aDocInfo.SetTemplateName(aValue);
+            break;
+
+        case MID_DOCINFO_TITLE:
+            aDocInfo.SetTitle(aValue);
+            break;
+
+        case MID_DOCINFO_FIELD1TITLE:
+        case MID_DOCINFO_FIELD2TITLE:
+        case MID_DOCINFO_FIELD3TITLE:
+        case MID_DOCINFO_FIELD4TITLE:
+        {
+            const SfxDocUserKey &rOld = aDocInfo.GetUserKey(nMemberId-MID_DOCINFO_FIELD1TITLE);
+            SfxDocUserKey aNew( aValue, rOld.GetWord() );
+            aDocInfo.SetUserKey( aNew, nMemberId-MID_DOCINFO_FIELD1TITLE );
+            break;
+        }
+
+        case MID_DOCINFO_FIELD1:
+        case MID_DOCINFO_FIELD2:
+        case MID_DOCINFO_FIELD3:
+        case MID_DOCINFO_FIELD4:
+        {
+            const SfxDocUserKey &rOld = aDocInfo.GetUserKey(nMemberId-MID_DOCINFO_FIELD1);
+            SfxDocUserKey aNew( rOld.GetTitle(), aValue );
+            aDocInfo.SetUserKey( aNew, nMemberId-MID_DOCINFO_FIELD1 );
+            break;
+        }
+
+        default:
+            return sal_False;
+    }
+
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -955,5 +1198,3 @@ void SfxDocumentInfoDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
     if ( TP_DOCINFODOC == nId )
         ( (SfxDocumentPage&)rPage ).EnableUseUserData();
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: mba $ $Date: 2002-04-08 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,4 +395,59 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }
 
+BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    switch(nMemberId)
+    {
+        case MID_HLINK_NAME   :
+            rVal <<= ::rtl::OUString(sName.GetBuffer());
+        break;
+        case MID_HLINK_URL:
+            rVal <<= ::rtl::OUString(sURL.GetBuffer());
+        break;
+        case MID_HLINK_TARGET:
+            rVal <<= ::rtl::OUString(sTarget.GetBuffer());
+        break;
+        case MID_HLINK_TYPE:
+            rVal <<= (sal_Int32) eType;
+        break;
+        default:
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    ::rtl::OUString aStr;
+    sal_Int32 nVal;
+    switch(nMemberId)
+    {
+        case MID_HLINK_NAME   :
+            if(!(rVal >>= aStr))
+                return sal_False;
+            sName = aStr.getStr();
+        break;
+        case MID_HLINK_URL:
+            if(!(rVal >>= aStr))
+                return sal_False;
+            sURL = aStr.getStr();
+        break;
+        case MID_HLINK_TARGET:
+            if(!(rVal >>= aStr))
+                return sal_False;
+            sTarget = aStr.getStr();
+        break;
+        case MID_HLINK_TYPE:
+            if(!(rVal >>= nVal))
+                return sal_False;
+            eType = (SvxLinkInsertMode) (sal_uInt16) nVal;
+        break;
+        default:
+            return FALSE;
+    }
+
+    return TRUE;
+}
 

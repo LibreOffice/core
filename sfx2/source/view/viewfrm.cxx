@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+ *  last change: $Author: mba $ $Date: 2002-04-08 16:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,51 +1098,6 @@ void SfxViewFrame::StateHistory_Impl( SfxItemSet &rSet )
     }
     else
         rSet.DisableItem( SID_REPEAT );
-}
-
-//--------------------------------------------------------------------
-
-void SfxViewFrame::PropState_Impl( SfxItemSet &rSet )
-{
-    GetDispatcher()->Flush();
-    const sal_uInt16 *pRanges = rSet.GetRanges();
-    DBG_ASSERT(pRanges, "Set ohne Bereich");
-    while ( *pRanges )
-    {
-        for ( sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich )
-        {
-            switch(nWhich)
-            {
-                case SID_SELECTION:
-                    break;
-                case SID_TOPWINDOW:
-                    rSet.Put( SfxObjectItem( SID_TOPWINDOW, GetTopViewFrame() ) );
-                    break;
-                case SID_PARENTFRAME:
-                    rSet.Put( SfxObjectItem( nWhich, GetParentViewFrame() ) );
-                    break;
-                case SID_DOCUMENT:
-                    if ( GetObjectShell() )
-                        rSet.Put( SfxObjectItem( SID_DOCUMENT, GetObjectShell() ) );
-                    break;
-                case SID_ACTIVEWINDOW:
-                {
-                    SfxViewFrame* pActFrame = this;
-                    while ( pActFrame->GetActiveChildFrame_Impl() )
-                            pActFrame = pActFrame->GetActiveChildFrame_Impl();
-                    rSet.Put( SfxObjectItem( SID_ACTIVEWINDOW, pActFrame ) );
-                    break;
-                }
-                case SID_FRAMECOUNT:
-                    rSet.Put( SfxUInt16Item( SID_FRAMECOUNT, GetFrame()->GetChildFrameCount() ) );
-                    break;
-                case SID_ISTOP:
-                    rSet.Put( SfxBoolItem( SID_ISTOP, GetFrame()->GetTopFrame() == GetFrame() ) );
-                    break;
-            }
-        }
-        ++pRanges;
-    }
 }
 
 //--------------------------------------------------------------------

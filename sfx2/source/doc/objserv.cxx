@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+ *  last change: $Author: mba $ $Date: 2002-04-08 16:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1428,18 +1428,6 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
             case SID_CLOSING:
             {
                 rSet.Put( SfxBoolItem( SID_CLOSING, Get_Impl()->bInCloseEvent ) );
-                break;
-            }
-
-            case SID_THISDOCUMENT:
-            {
-                rSet.Put( SfxObjectItem( SID_THISDOCUMENT, this ) );
-                break;
-            }
-
-            case SID_THISWINDOW:
-            {
-                rSet.Put( SfxObjectItem( SID_THISWINDOW, SfxViewFrame::GetFirst(this) ) );
                 break;
             }
 

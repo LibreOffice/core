@@ -2,7 +2,7 @@
     shell SfxMDIFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-04-05 09:56:27 $ $Revision: 1.4 $
+    $Author: mba $ $Date: 2002-04-08 16:48:37 $ $Revision: 1.5 $
     $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
 =========================================================================*/
 
@@ -84,12 +84,6 @@ interface Task : Object
         StateMethod = State_Impl ;
     ]
     //---------------------------------------------------------------------
-    SID_INSERT_TASKFRAME
-    [
-        ExecMethod = Exec_Impl ;
-        StateMethod = State_Impl ;
-    ]
-    //---------------------------------------------------------------------
     SID_TASK_ALWAYSVISIBLE
     [
         ExecMethod = Exec_Impl ;
@@ -116,11 +110,6 @@ interface Task : Object
         StateMethod = State_Impl ;
     ]
 
-    SID_ACTIVEWINDOW
-    [
-        StateMethod = State_Impl;
-    ]
-
     SID_CLOSETASK
     [
         ExecMethod = Exec_Impl ;
@@ -133,11 +122,6 @@ interface TaskPartWindow : TopWindow
     uuid = "A5EEDEF0-9CA3-11D1-AA41-00A0249D57BE";
 ]
 {
-    // Window.Task
-    SID_TASK
-    [
-        StateMethod = GetState_Impl;
-    ]
 }
 
  //=========================================================================
@@ -214,6 +198,9 @@ shell SfxTask
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/04/05 09:56:27  mba
+    #98405#: support macro recording
+
     Revision 1.3  2002/03/11 16:33:15  mba
     #97063#: SID_NEXT/PREVWINDOW removed
 

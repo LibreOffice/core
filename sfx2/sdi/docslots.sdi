@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Author: mba $ $Date: 2002-04-08 16:48:37 $ $Revision: 1.2 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -326,23 +326,7 @@ shell SfxObjectShell
 {
                 import OfficeDocument [Automation];
                 import DocumentInfo ".DocumentInfo";
-     //---------------------------------------------------------------------
-    SID_THISDOCUMENT // ole(no) api(no)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_THISWINDOW // ole(no) api(no)
-    [
-        ExecMethod = ExecProps_Impl ;
-        StateMethod = StateProps_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_FILE_NAME // ole(no) api(final/play/rec)
-    [
-        StateMethod = GetState_Impl ;
-    ]
+
     SID_DOCINFO_TITLE // ole(no) api(final/play/rec)
     [
         StateMethod = GetState_Impl ;
@@ -352,6 +336,9 @@ shell SfxObjectShell
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:52:25  hr
+    initial import
+
     Revision 1.82  2000/07/26 19:10:04  mba
     LoadLibrary only in App
 
