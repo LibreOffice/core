@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DumpType.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-05 10:27:35 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,71 +67,69 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.registry.XImplementationRegistration;
 
-
-import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-import com.sun.star.lib.uno.typedesc.MethodDescription;
+import com.sun.star.uno.Type;
 
 public class DumpType {
-    static public void dumpType(String typeName) throws Exception {
-        TypeDescription typeDescription = TypeDescription.getTypeDescription(typeName);
+    static private final String[] __typeClassToTypeName = new String[]{
+        "void",
+        "char",
+        "boolean",
+        "byte",
+        "short",
+        "unsigned short",
+        "long",
+        "unsigned long",
+        "hyper",
+        "unsigned hyper",
+        "float",
+        "double",
+        "string",
+        "type",
+        "any",
+        "enum",
+        "typedef",
+        "struct",
+        "union",
+        "exception",
+        "sequence",
+        "array",
+        "interface",
+        "service",
+        "module",
+        "interface_method",
+        "interface_attribute",
+        "unknown"
+    };
 
-        System.err.println("TypeName:" + typeDescription.getTypeName());
-        System.err.println("ArrayTypeName:" + typeDescription.getArrayTypeName());
-        System.err.println("SuperType:" + typeDescription.getSuperType());
-        System.err.println("TypeClass:" + typeDescription.getTypeClass());
-        System.err.println("ComponentType:" + typeDescription.getComponentType());
-        System.err.println("Class:" + typeDescription.getZClass());
+    static public void dumpType(Type type) throws Exception {
+        System.err.println("uno type name:" + type.getTypeName());
+        System.err.println("description:" + type.getTypeDescription());
+        System.err.println("java class:" + type.getZClass());
 
-        System.err.println("Methods:");
-        MethodDescription methodDescriptions[] = typeDescription.getMethodDescriptions();
-        if(methodDescriptions != null)
-            for(int i = 0; i < methodDescriptions.length; ++ i) {
-                System.err.print("Name: " + methodDescriptions[i].getName());
-                System.err.print(" index: " + methodDescriptions[i].getIndex());
-                System.err.print(" isOneyWay: " + methodDescriptions[i].isOneway());
-                System.err.print(" isConst: " + methodDescriptions[i].isConst());
-                System.err.print(" isUnsigned: " + methodDescriptions[i].isUnsigned());
-                System.err.print(" isAny: " + methodDescriptions[i].isAny());
-                System.err.println("\tisInterface: " + methodDescriptions[i].isInterface());
-
-                System.err.print("\tgetInSignature: ");
-                TypeDescription in_sig[] = methodDescriptions[i].getInSignature();
-                for(int j = 0; j < in_sig.length; ++ j)
-                    System.err.print("\t\t" + in_sig[j]);
-                System.err.println();
-
-                System.err.print("\tgetOutSignature: ");
-                TypeDescription out_sig[] = methodDescriptions[i].getOutSignature();
-                for(int j = 0; j < out_sig.length; ++ j)
-                    System.err.print("\t\t" + out_sig[j]);
-                System.err.println();
-
-                System.err.println("\tgetReturnSig: " + methodDescriptions[i].getReturnSig());
-                System.err.println("\tgetMethod:" + methodDescriptions[i].getMethod());
-            }
-        System.err.println();
-
-        System.err.println("Members:");
-        MemberTypeInfo memberTypeInfos[] = typeDescription.getMemberTypeInfos();
-        if(memberTypeInfos != null)
-            for(int i = 0; i < memberTypeInfos.length; ++ i)
-                System.err.println("\tMember: " + memberTypeInfos[i].getName()
-                                   + " unsigned: " + memberTypeInfos[i].isUnsigned()
-                                   + " any: " + memberTypeInfos[i].isAny()
-                                   + " interface: " + memberTypeInfos[i].isInterface());
-
-
-
-
+        System.err.println("type class:" + __typeClassToTypeName[type.getTypeClass().getValue()]);
     }
 
     static public void main(String args[]) throws Exception {
         if(args.length == 0)
-            System.err.println("usage: [<type name>]*");
-        else
-            for(int i = 0; i < args.length; ++ i)
-                dumpType(args[i]);
+            System.err.println("usage: [uno <type name>]|[java <class name>]*");
+
+        else {
+            int i = 0;
+            while(i < args.length) {
+                Type type = null;
+
+                if(args[i].equals("uno"))
+                    type = new Type(args[i + 1]);
+
+                else
+                    type = new Type(Class.forName(args[i + 1]));
+
+                i += 2;
+
+
+                dumpType(type);
+            }
+        }
     }
 }
 
