@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:23:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ void SfxObjectShell::SetTitle
 
 //--------------------------------------------------------------------
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 String X(const String &rRet)
 {
     if ( !rRet.Len() )
