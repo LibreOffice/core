@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:41:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ using ::comphelper::ImplementationReference;
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 
 namespace sd
 {
