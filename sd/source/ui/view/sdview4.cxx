@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 12:29:52 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 15:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,10 +316,15 @@ IMPL_LINK( SdView, DropInsertFileHdl, Timer*, pTimer )
 
         if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
         {
-            SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nAction, aDropPos, NULL, NULL );
+            sal_Int8    nTempAction = ( aIter == aDropFileVector.begin() ) ? nAction : 0;
+            SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, aDropPos, NULL, NULL );
 
             if( pGrafObj )
                 pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
+
+            // return action from first inserted graphic
+            if( aIter == aDropFileVector.begin() )
+                nAction = nTempAction;
 
             bOK = TRUE;
         }
