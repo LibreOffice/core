@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-23 09:53:43 $
+ *  last change: $Author: sab $ $Date: 2001-04-04 04:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,14 +1414,13 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
 
 // XPropertyState
 
-USHORT lcl_GetPropertyWhich( const String& rName )
+USHORT lcl_GetPropertyWhich(const String& rName)
 {
     //  Which-ID des betroffenen Items, auch wenn das Item die Property
     //  nicht alleine behandeln kann
 
-    USHORT nWhich = 0;
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetCellsPropertyMap(), rName );
+    USHORT nWhich(0);
+    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(lcl_GetCellsPropertyMap(), rName );
     if ( pMap && pMap->nWID )
         nWhich = pMap->nWID;
     else if ( rName.EqualsAscii( SC_UNONAME_TBLBORD ) )
@@ -1435,6 +1434,70 @@ USHORT lcl_GetPropertyWhich( const String& rName )
     return nWhich;
 }
 
+const SfxItemPropertyMap* lcl_GetPropertyWhich(const SfxItemPropertyMap* pMap, const String& rName, USHORT& nWhich )
+{
+    //  Which-ID des betroffenen Items, auch wenn das Item die Property
+    //  nicht alleine behandeln kann
+
+    const SfxItemPropertyMap* pRetMap = SfxItemPropertyMap::GetByName(pMap, rName );
+    if ( pRetMap && pRetMap->nWID )
+        nWhich = pRetMap->nWID;
+    else if ( rName.EqualsAscii( SC_UNONAME_TBLBORD ) )
+        nWhich = ATTR_BORDER;
+    else if ( rName.EqualsAscii( SC_UNONAME_CONDFMT ) || rName.EqualsAscii( SC_UNONAME_CONDLOC ) ||
+              rName.EqualsAscii( SC_UNONAME_CONDXML ) )
+        nWhich = ATTR_CONDITIONAL;
+    else if ( rName.EqualsAscii( SC_UNONAME_VALIDAT ) || rName.EqualsAscii( SC_UNONAME_VALILOC ) ||
+              rName.EqualsAscii( SC_UNONAME_VALIXML ) )
+        nWhich = ATTR_VALIDDATA;
+    return pRetMap;
+}
+
+beans::PropertyState SAL_CALL ScCellRangesBase::GetPropertyState(USHORT nWhich, const String& aNameString)
+{
+    beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
+    if ( nWhich )           // irgendwie zustandegekommene Which-ID
+    {
+        //! Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
+        //! wird hier evtl. zu oft "Ambiguous" zurueckgegeben
+
+        //  for PropertyState, don't look at styles
+        const ScPatternAttr* pPattern = GetCurrentAttrsFlat();
+        if ( pPattern )
+        {
+            SfxItemState eState = pPattern->GetItemSet().GetItemState( nWhich, FALSE );
+
+            //  if no rotate value is set, look at orientation
+            //! also for a fixed value of 0 (in case orientation is ambiguous)?
+            if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
+                eState = pPattern->GetItemSet().GetItemState( ATTR_ORIENTATION, FALSE );
+
+            if ( eState == SFX_ITEM_SET )
+                eRet = beans::PropertyState_DIRECT_VALUE;
+            else if ( eState == SFX_ITEM_DEFAULT )
+                eRet = beans::PropertyState_DEFAULT_VALUE;
+            else if ( eState == SFX_ITEM_DONTCARE )
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+            else
+                DBG_ERROR("unbekannter ItemState");
+        }
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CHCOLHDR ) || aNameString.EqualsAscii( SC_UNONAME_CHROWHDR ) )
+        eRet = beans::PropertyState_DIRECT_VALUE;
+    else if ( aNameString.EqualsAscii( SC_UNONAME_CELLSTYL ) )
+    {
+        //  a style is always set, there's no default state
+        ScMarkData aMark;
+        aMark.MarkFromRangeList( aRanges, FALSE );
+        const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(aMark);
+        if (pStyle)
+            eRet = beans::PropertyState_DIRECT_VALUE;
+        else
+            eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+    }
+    return eRet;
+}
+
 beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const rtl::OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -1445,48 +1508,11 @@ beans::PropertyState SAL_CALL ScCellRangesBase::getPropertyState( const rtl::OUS
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
     if ( pDocShell )
     {
-        String aNameString = aPropertyName;
-        USHORT nWhich = lcl_GetPropertyWhich( aNameString );
-
-        if ( nWhich )           // irgendwie zustandegekommene Which-ID
-        {
-            //! Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
-            //! wird hier evtl. zu oft "Ambiguous" zurueckgegeben
-
-            //  for PropertyState, don't look at styles
-            const ScPatternAttr* pPattern = GetCurrentAttrsFlat();
-            if ( pPattern )
-            {
-                SfxItemState eState = pPattern->GetItemSet().GetItemState( nWhich, FALSE );
-
-                //  if no rotate value is set, look at orientation
-                //! also for a fixed value of 0 (in case orientation is ambiguous)?
-                if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
-                    eState = pPattern->GetItemSet().GetItemState( ATTR_ORIENTATION, FALSE );
-
-                if ( eState == SFX_ITEM_SET )
-                    eRet = beans::PropertyState_DIRECT_VALUE;
-                else if ( eState == SFX_ITEM_DEFAULT )
-                    eRet = beans::PropertyState_DEFAULT_VALUE;
-                else if ( eState == SFX_ITEM_DONTCARE )
-                    eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-                else
-                    DBG_ERROR("unbekannter ItemState");
-            }
-        }
-        else if ( aNameString.EqualsAscii( SC_UNONAME_CHCOLHDR ) || aNameString.EqualsAscii( SC_UNONAME_CHROWHDR ) )
-            eRet = beans::PropertyState_DIRECT_VALUE;
-        else if ( aNameString.EqualsAscii( SC_UNONAME_CELLSTYL ) )
-        {
-            //  a style is always set, there's no default state
-            ScMarkData aMark;
-            aMark.MarkFromRangeList( aRanges, FALSE );
-            const ScStyleSheet* pStyle = pDocShell->GetDocument()->GetSelectionStyle(aMark);
-            if (pStyle)
-                eRet = beans::PropertyState_DIRECT_VALUE;
-            else
-                eRet = beans::PropertyState_AMBIGUOUS_VALUE;
-        }
+        String aNameString (aPropertyName);
+        const SfxItemPropertyMap* pMap = lcl_GetCellsPropertyMap();
+        USHORT nWhich(0);
+        pMap = lcl_GetPropertyWhich(pMap, aNameString, nWhich);
+        GetPropertyState(nWhich, aPropertyName);
     }
 
     return eRet;
@@ -1503,8 +1529,16 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
     const rtl::OUString* pNames = aPropertyNames.getConstArray();
     uno::Sequence<beans::PropertyState> aRet(aPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
+    const SfxItemPropertyMap* pMap = lcl_GetCellsPropertyMap();
     for(INT32 i = 0; i < aPropertyNames.getLength(); i++)
-        pStates[i] = getPropertyState(pNames[i]);
+    {
+        USHORT nWhich(0);
+        String aNameString(aPropertyNames[i]);
+        pMap = lcl_GetPropertyWhich(pMap, aNameString, nWhich);
+        pStates[i] = GetPropertyState(nWhich, aNameString);
+        if (!pMap)
+            pMap = lcl_GetCellsPropertyMap();
+    }
     return aRet;
 }
 

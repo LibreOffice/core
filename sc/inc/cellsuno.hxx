@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-18 19:28:07 $
+ *  last change: $Author: sab $ $Date: 2001-04-04 04:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,10 @@ private:
                             Find_Impl(const com::sun::star::uno::Reference<
                                         com::sun::star::util::XSearchDescriptor>& xDesc,
                                     const ScAddress* pLastPos);
+
+    ::com::sun::star::beans::PropertyState SAL_CALL GetPropertyState(
+                                    USHORT nWhich,
+                                    const String& PropertyName );
 
 public:
                             ScCellRangesBase();     // fuer SMART_REFLECTION Krempel
