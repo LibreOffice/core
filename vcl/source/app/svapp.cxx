@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:42:59 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,33 @@ struct ImplEventHook
     void*                   mpUserData;
     VCLEventHookProc        mpProc;
 };
+
+// =======================================================================
+
+// ---------------------
+// - ImplPostEventData -
+// ---------------------
+
+struct ImplPostEventData
+{
+    ULONG           mnEvent;
+    const Window*   mpWin;
+    ULONG           mnEventId;
+    KeyEvent        maKeyEvent;
+    MouseEvent      maMouseEvent;
+
+
+       ImplPostEventData( ULONG nEvent, const Window* pWin, const KeyEvent& rKeyEvent ) :
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maKeyEvent( rKeyEvent ) {}
+       ImplPostEventData( ULONG nEvent, const Window* pWin, const MouseEvent& rMouseEvent ) :
+        mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maMouseEvent( rMouseEvent ) {}
+
+    ~ImplPostEventData() {}
+};
+
+typedef ::std::pair< Window*, ImplPostEventData* > ImplPostEventPair;
+
+static ::std::list< ImplPostEventPair > aPostedEventList;
 
 // =======================================================================
 
@@ -923,23 +950,153 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
     return bProcessed;
 }
 
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-void Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
+ULONG Application::PostKeyEvent( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
 {
-    switch( nEvent )
+    const ::vos::OGuard aGuard( GetSolarMutex() );
+    ULONG               nEventId = 0;
+
+    if( pWin && pKeyEvent )
     {
+        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, *pKeyEvent );
+
+        PostUserEvent( nEventId,
+                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       pPostEventData );
+
+        if( nEventId )
+        {
+            pPostEventData->mnEventId = nEventId;
+            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+        }
+        else
+            delete pPostEventData;
+    }
+
+    return nEventId;
+}
+
+// -----------------------------------------------------------------------------
+
+ULONG Application::PostMouseEvent( ULONG nEvent, Window *pWin, MouseEvent* pMouseEvent )
+{
+    const ::vos::OGuard aGuard( GetSolarMutex() );
+    ULONG               nEventId = 0;
+
+    if( pWin && pMouseEvent )
+    {
+        Point aTransformedPos( pMouseEvent->GetPosPixel() );
+
+        aTransformedPos.X() += pWin->mnOutOffX;
+        aTransformedPos.Y() += pWin->mnOutOffY;
+
+        const MouseEvent aTransformedEvent( aTransformedPos, pMouseEvent->GetClicks(), pMouseEvent->GetMode(),
+                                            pMouseEvent->GetButtons(), pMouseEvent->GetModifier() );
+
+        ImplPostEventData* pPostEventData = new ImplPostEventData( nEvent, pWin, aTransformedEvent );
+
+        PostUserEvent( nEventId,
+                       STATIC_LINK( NULL, Application, PostEventHandler ),
+                       pPostEventData );
+
+        if( nEventId )
+        {
+            pPostEventData->mnEventId = nEventId;
+            aPostedEventList.push_back( ImplPostEventPair( pWin, pPostEventData ) );
+        }
+        else
+            delete pPostEventData;
+    }
+
+    return nEventId;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData )
+{
+    const ::vos::OGuard aGuard( GetSolarMutex() );
+    ImplPostEventData*  pData = static_cast< ImplPostEventData * >( pCallData );
+    const void*         pEventData;
+    ULONG               nEvent;
+    const ULONG         nEventId = pData->mnEventId;
+
+    switch( pData->mnEvent )
+    {
+        case VCLEVENT_WINDOW_MOUSEMOVE:
+            nEvent = SALEVENT_EXTERNALMOUSEMOVE;
+            pEventData = &pData->maMouseEvent;
+        break;
+
+        case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+            nEvent = SALEVENT_EXTERNALMOUSEBUTTONDOWN;
+            pEventData = &pData->maMouseEvent;
+        break;
+
+        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+            nEvent = SALEVENT_EXTERNALMOUSEBUTTONUP;
+            pEventData = &pData->maMouseEvent;
+        break;
+
         case VCLEVENT_WINDOW_KEYINPUT:
             nEvent = SALEVENT_EXTERNALKEYINPUT;
-            break;
+            pEventData = &pData->maKeyEvent;
+        break;
+
         case VCLEVENT_WINDOW_KEYUP:
             nEvent = SALEVENT_EXTERNALKEYUP;
-            break;
+            pEventData = &pData->maKeyEvent;
+        break;
+
         default:
-            // unknown key event
-            return;
+            nEvent = 0;
+            pEventData = NULL;
+        break;
     };
-    ImplWindowFrameProc( (void*) pWin, NULL, (USHORT) nEvent, (const void*) pKeyEvent );
+
+    if( pData->mpWin && pData->mpWin->mpFrameWindow && pEventData )
+        ImplWindowFrameProc( (void*) pData->mpWin->mpFrameWindow, NULL, (USHORT) nEvent, pEventData );
+
+    // remove this event from list of posted events, watch for destruction of internal data
+    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+
+    while( aIter != aPostedEventList.end() )
+    {
+        if( nEventId == (*aIter).second->mnEventId )
+        {
+            delete (*aIter).second;
+            aIter = aPostedEventList.erase( aIter );
+        }
+        else
+            ++aIter;
+    }
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+void Application::RemoveMouseAndKeyEvents( Window* pWin )
+{
+    const ::vos::OGuard aGuard( GetSolarMutex() );
+
+    // remove all events for specific window, watch for destruction of internal data
+    ::std::list< ImplPostEventPair >::iterator aIter( aPostedEventList.begin() );
+
+    while( aIter != aPostedEventList.end() )
+    {
+        if( pWin == (*aIter).first )
+        {
+            if( (*aIter).second->mnEventId )
+                RemoveUserEvent( (*aIter).second->mnEventId );
+
+            delete (*aIter).second;
+            aIter = aPostedEventList.erase( aIter );
+        }
+        else
+            ++aIter;
+    }
 }
 
 // -----------------------------------------------------------------------
