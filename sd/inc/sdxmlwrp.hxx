@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:19:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ public:
         SfxMedium& rMedium,
         ::sd::DrawDocShell& rDocShell,
         sal_Bool bShowProgress,
-        SdXMLFilterMode eFilterMode = SDXMLMODE_Normal);
+        SdXMLFilterMode eFilterMode = SDXMLMODE_Normal,
+        ULONG nStoreVer = SOFFICE_FILEFORMAT_8 );
     virtual ~SdXMLFilter (void);
 
     virtual sal_Bool        Import();
@@ -89,6 +90,7 @@ public:
 
 private:
     SdXMLFilterMode meFilterMode;
+    ULONG mnStoreVer;
 };
 
 #endif  // _SDXMLWRP_HXX
