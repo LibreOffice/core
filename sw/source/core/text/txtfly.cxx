@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 16:08:15 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,10 +148,6 @@
 
 #ifndef PRODUCT
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
-#endif
-
-#ifdef VERTICAL_LAYOUT
-SV_IMPL_VARARR( SwRotRectList, SwRect )
 #endif
 
 /*****************************************************************************
@@ -336,8 +332,12 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             else
             {
 #ifdef VERTICAL_LAYOUT
+                Point aBase( aTmpInf.GetPos() );
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aBase );
+
                 ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(),
-                    aTmpInf.GetPos(), nTmpAscent, nTmpDescent, nFlyAsc,
+                    aBase, nTmpAscent, nTmpDescent, nFlyAsc,
                     nFlyDesc, nFlags );
 #else
                 ((SwFlyCntPortion*)pPos)->SetBase( aTmpInf.GetPos(), nTmpAscent,
@@ -418,12 +418,21 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
                                                    nFlyAsc, nFlyDesc );
             else
             {
-                const Point aBase( ( (SwFlyCntPortion*)pPos)->GetRefPoint().X(),
-                                   nBaseLine );
 #ifdef VERTICAL_LAYOUT
+                Point aBase;
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                {
+                    nBaseLine = GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( nBaseLine );
+                    aBase = Point( nBaseLine, ((SwFlyCntPortion*)pPos)->GetRefPoint().Y() );
+                }
+                else
+                    aBase = Point( ((SwFlyCntPortion*)pPos)->GetRefPoint().X(), nBaseLine );
+
                 ((SwFlyCntPortion*)pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
                     nFlyAsc, nFlyDesc, nFlags );
 #else
+                const Point aBase( ( (SwFlyCntPortion*)pPos)->GetRefPoint().X(),
+                                   nBaseLine );
                 ((SwFlyCntPortion*)pPos)->SetBase( aBase, nTmpAscent, nTmpDescent,
                     nFlyAsc, nFlyDesc, nFlags );
 #endif
@@ -747,11 +756,21 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     // nach unten zu rutschen und dabei ein Repaint in einem Bereich ausloesen,
     // indem er niemals wirklich war.
     KSHORT nAscent;
+#ifdef VERTICAL_LAYOUT
+    if ( IsQuick() || !pFly || !pFly->GetValidPosFlag() ||
+        ( GetInfo().GetTxtFrm()->IsVertical() ?
+          ( ! pFly->GetRefPoint().X() ||
+            ( nAscent = Abs( int( pFly->GetRelPos().X() ) ) ) ) :
+          ( ! pFly->GetRefPoint().Y() ||
+            ( nAscent = Abs( int( pFly->GetRelPos().Y() ) ) ) ) ) )
+        nAscent = rInf.GetLast()->GetAscent();
+#else
     if ( IsQuick() || !pFly || !pFly->GetValidPosFlag() ||
             !pFly->GetRefPoint().Y() ||
             ( nAscent = Abs( int( pFly->GetRelPos().Y() ) ) )
             < rInf.GetLast()->GetAscent() )
         nAscent = rInf.GetLast()->GetAscent();
+#endif
     else if( nAscent > nFlyAsc )
         nFlyAsc = nAscent;
 
@@ -767,8 +786,12 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     if( pFly )
     {
 #ifdef VERTICAL_LAYOUT
-        pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aBase, nTmpAscent, nTmpDescent,
-                        nFlyAsc, nFlyDesc, nMode );
+        Point aTmpBase( aBase );
+        if ( GetInfo().GetTxtFrm()->IsVertical() )
+            GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+
+        pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aTmpBase,
+                                    nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
 #else
         pRet = new SwFlyCntPortion( pFly, aBase, nTmpAscent, nTmpDescent,
                         nFlyAsc, nFlyDesc, nMode );
@@ -785,8 +808,12 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
             nMode |= SETBASE_ULSPACE;
             if( !rInf.IsTest() )
 #ifdef VERTICAL_LAYOUT
-                pRet->SetBase( *rInf.GetTxtFrm(), aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc,
-                               nMode );
+                Point aTmpBase( aBase );
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+
+                pRet->SetBase( *rInf.GetTxtFrm(), aTmpBase, nTmpAscent,
+                               nTmpDescent, nFlyAsc, nFlyDesc, nMode );
 #else
                 pRet->SetBase( aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc,
                                nMode );
@@ -796,8 +823,12 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     else
     {
 #ifdef VERTICAL_LAYOUT
+        Point aTmpBase( aBase );
+        if ( GetInfo().GetTxtFrm()->IsVertical() )
+            GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+
         pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
-           aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+           aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
 #else
         pRet = new SwFlyCntPortion( (SwDrawContact*)pFrmFmt->FindContactObj(),
            aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );

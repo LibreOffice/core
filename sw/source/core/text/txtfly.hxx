@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 15:54:16 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 14:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,6 @@ class Color;
 typedef MSHORT _FlyCntnt;
 
 SV_DECL_PTRARR( SwFlyList, SdrObject*, 10, 10 )
-
-#ifdef VERTICAL_LAYOUT
-SV_DECL_VARARR( SwRotRectList, SwRect, 10, 10 )
-#endif
 
 /*************************************************************************
  *                      class SwFlyIter
@@ -265,6 +261,9 @@ inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/12/06 15:54:16  fme
+      Chg: Vertical Formatting - Changed argument order for CalcBoundRect
+
       Revision 1.3  2001/10/12 08:11:40  fme
       Fix #93009#: Frames anchored at page should not affect text in footer or header
 
