@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:26:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ struct SwSendMailDialog_Impl
         // shutdown of the mail dispatcher thread.
         // 'join' with the mail dispatcher thread leads to a
         // deadlock (SolarMutex).
-        if(!xMailDispatcher->isShutdownRequested() )
+        if( xMailDispatcher.is() && !xMailDispatcher->isShutdownRequested() )
             xMailDispatcher->shutdown();
     }
     const SwMailDescriptor* GetNextDescriptor();
