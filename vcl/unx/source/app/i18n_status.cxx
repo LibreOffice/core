@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
+ *  last change: $Author: pl $ $Date: 2001-11-14 14:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,8 @@ void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
         )
         return;
 
+    if( bShow && ! IsVisible() )
+        m_pResetFocus = I18NStatus::get().getParent();
     Show( bShow );
 }
 
