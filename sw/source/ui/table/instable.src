@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:02:12 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ english_us ] = "Size";
         Text[ portuguese ] = "Tamanho da tabela";
         Text[ russian ] = "Πΰημεπ ςΰαλθφϋ";
-        Text[ greek ] = "Size";
+        Text[ greek ] = "Μέγεθος";
         Text[ dutch ] = "Tabelgrootte";
         Text[ french ] = "Taille";
         Text[ spanish ] = "Tamaρo de la tabla";
@@ -416,7 +416,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ japanese ] = "γ‚ªγƒΌγƒγƒ•γ‚©γƒΌγƒγƒƒγƒ(~F)...";
         Text[ chinese_traditional ] = "θ‡ªε‹•ζ ΌεΌ(~F)...";
         Text[ arabic ] = "ΚδΣνή ΚαήΗΖν...";
-        Text[ greek ] = "~ΑυτοΜορφή...";
+        Text[ greek ] = "~Αυτόμ. μορφοπ....";
         Text[ korean ] = "μλ™ μ„μ‹(~F)...";
         Text[ turkish ] = "~Otomatik formatlama...";
         Text[ language_user1 ] = " ";
@@ -496,6 +496,7 @@ ModalDialog DLG_INSERT_TABLE
     Text[ hindi ] = "ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤ΰ¥‹ΰ¤΅ΰ¤Όΰ¥‹";
     Text[ slovak ] = "VloΕΎiΕ¥ tabuΔΎku";
 };
+
 
 
 
