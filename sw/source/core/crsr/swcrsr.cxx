@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:05:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1161,7 +1161,48 @@ short SwCursor::MaxReplaceArived()
     return RET_YES;
 }
 
+
 FASTBOOL SwCursor::IsStartWord() const
+{
+    return IsStartWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::IsEndWord() const
+{
+    return IsEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::IsInWord() const
+{
+    return IsEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::GoStartWord()
+{
+    return GoStartWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::GoEndWord()
+{
+    return GoEndWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::GoNextWord()
+{
+    return GoNextWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::GoPrevWord()
+{
+    return GoPrevWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
+}
+
+FASTBOOL SwCursor::SelectWord( const Point* pPt )
+{
+    return SelectWordWT( WordType::ANYWORD_IGNOREWHITESPACES, pPt );
+}
+
+FASTBOOL SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1171,12 +1212,12 @@ FASTBOOL SwCursor::IsStartWord() const
         bRet = pBreakIt->xBreak->isBeginWord(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
-                            WordType::ANYWORD_IGNOREWHITESPACES );
+                            nWordType );
     }
     return bRet;
 }
 
-FASTBOOL SwCursor::IsEndWord() const
+FASTBOOL SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1186,13 +1227,13 @@ FASTBOOL SwCursor::IsEndWord() const
         bRet = pBreakIt->xBreak->isEndWord(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANYWORD_IGNOREWHITESPACES );
+                            nWordType );
 
     }
     return bRet;
 }
 
-FASTBOOL SwCursor::IsInWord() const
+FASTBOOL SwCursor::IsInWordWT( sal_Int16 nWordType ) const
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1202,7 +1243,7 @@ FASTBOOL SwCursor::IsInWord() const
         Boundary aBoundary = pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANYWORD_IGNOREWHITESPACES,
+                            nWordType,
                             TRUE );
 
         bRet = aBoundary.startPos != aBoundary.endPos &&
@@ -1217,7 +1258,7 @@ FASTBOOL SwCursor::IsInWord() const
     return bRet;
 }
 
-FASTBOOL SwCursor::GoStartWord()
+FASTBOOL SwCursor::GoStartWordWT( sal_Int16 nWordType )
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1228,7 +1269,7 @@ FASTBOOL SwCursor::GoStartWord()
         nPtPos = (xub_StrLen)pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANYWORD_IGNOREWHITESPACES,
+                            nWordType,
                             FALSE ).startPos;
 
         if( nPtPos < pTxtNd->GetTxt().Len() )
@@ -1241,7 +1282,7 @@ FASTBOOL SwCursor::GoStartWord()
     return bRet;
 }
 
-FASTBOOL SwCursor::GoEndWord()
+FASTBOOL SwCursor::GoEndWordWT( sal_Int16 nWordType )
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1252,7 +1293,7 @@ FASTBOOL SwCursor::GoEndWord()
         nPtPos = (xub_StrLen)pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANYWORD_IGNOREWHITESPACES,
+                            nWordType,
                             TRUE ).endPos;
 
         if( nPtPos <= pTxtNd->GetTxt().Len() &&
@@ -1266,7 +1307,7 @@ FASTBOOL SwCursor::GoEndWord()
     return bRet;
 }
 
-FASTBOOL SwCursor::GoNextWord()
+FASTBOOL SwCursor::GoNextWordWT( sal_Int16 nWordType )
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1278,7 +1319,7 @@ FASTBOOL SwCursor::GoNextWord()
         nPtPos = (xub_StrLen)pBreakIt->xBreak->nextWord(
                                 pTxtNd->GetTxt(), nPtPos,
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
-                    WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
+                    nWordType ).startPos;
 
         if( nPtPos < pTxtNd->GetTxt().Len() )
         {
@@ -1290,7 +1331,7 @@ FASTBOOL SwCursor::GoNextWord()
     return bRet;
 }
 
-FASTBOOL SwCursor::GoPrevWord()
+FASTBOOL SwCursor::GoPrevWordWT( sal_Int16 nWordType )
 {
     FASTBOOL bRet = FALSE;
     const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
@@ -1305,7 +1346,7 @@ FASTBOOL SwCursor::GoPrevWord()
         nPtPos = (xub_StrLen)pBreakIt->xBreak->previousWord(
                                 pTxtNd->GetTxt(), nPtStart,
             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos, 1 ) ),
-                    WordType::ANYWORD_IGNOREWHITESPACES ).startPos;
+                    nWordType ).startPos;
 
         if( nPtPos < pTxtNd->GetTxt().Len() )
         {
@@ -1317,7 +1358,7 @@ FASTBOOL SwCursor::GoPrevWord()
     return bRet;
 }
 
-FASTBOOL SwCursor::SelectWord( const Point* pPt )
+FASTBOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
 {
     SwCrsrSaveState aSave( *this );
 
@@ -1339,7 +1380,7 @@ FASTBOOL SwCursor::SelectWord( const Point* pPt )
         Boundary aBndry( pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANYWORD_IGNOREWHITESPACES,
+                            nWordType,
                             bForward ));
 
         if( aBndry.startPos != aBndry.endPos )
