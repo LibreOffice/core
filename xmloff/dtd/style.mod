@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.39 2001-06-20 06:08:35 mib Exp $
+	$Id: style.mod,v 1.40 2001-06-26 12:59:23 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -403,7 +403,9 @@
 <!ELEMENT style:header %hd-ft-content;>
 <!ELEMENT style:footer %hd-ft-content;>
 <!ELEMENT style:header-left %hd-ft-content;>
+<!ATTLIST style:header-left style:display %boolean; "true">
 <!ELEMENT style:footer-left %hd-ft-content;>
+<!ATTLIST style:footer-left style:display %boolean; "true">
 
 <!ENTITY % region-content "(text:p*)">
 <!ELEMENT style:region-left %region-content;>
