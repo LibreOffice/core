@@ -1,4 +1,4 @@
-/* RCS  $Id: sysintf.c,v 1.2 2001-02-13 12:43:28 hjs Exp $
+/* RCS  $Id: sysintf.c,v 1.3 2001-02-19 16:08:04 hjs Exp $
 --
 -- SYNOPSIS
 --      System independent interface
@@ -450,7 +450,7 @@ PUBLIC FILE*
 Get_temp(path, suff, op)
 char **path;
 char *suff;
-long  op;
+int  op;
 {
    extern char *tempnam();
 
