@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-07 10:54:27 $
+ *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,66 +439,9 @@ eCutT WW8PLCFx_PCD::AktPieceFc2Cp( long& rStartPos, long& rEndPos,
     //No point going anywhere with this
     if ((rStartPos == LONG_MAX) && (rEndPos == LONG_MAX))
         return eRet;
-#ifndef CRUEL_CUT
+
     rStartPos = pSBase->WW8Fc2Cp( rStartPos );
     rEndPos = pSBase->WW8Fc2Cp( rEndPos );
-#else
-    /*
-    ##502##,##517##,##516##,##503##
-    I am not convinced that we should do this cutting, if there truly are
-    problems with property runs that span a piece break then I do not think
-    they should be handled by munging the start and end property locations,
-    that just causes all sorts of problems, I suspect that the solution is
-    worse than the problem.
-    */
-    WW8_CP nCpStart, nCpEnd;
-    void* pData;
-
-    if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) ){
-        ASSERT( !this, "AktPieceFc2Cp() - Fehler" );
-        rStartPos = rEndPos = LONG_MAX;
-        return CUT_BOTH;
-    }
-
-    BOOL bIsUnicode = FALSE;
-    INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
-    if( !bVer67 )
-        nFcStart = WW8PLCFx_PCD::TransformPieceAddress(nFcStart, bIsUnicode);
-
-    INT32 nUnicodeFactor = bIsUnicode ? 2 : 1;
-        if( rStartPos < nFcStart )
-    {
-        rStartPos = nFcStart;
-        eRet = (eCutT)( eRet | CUT_START );
-    }
-    if( rStartPos >= nFcStart + (nCpEnd - nCpStart)  * nUnicodeFactor )
-    {
-        rStartPos = nFcStart + (nCpEnd - nCpStart - 1) * nUnicodeFactor;
-        eRet = (eCutT)( eRet | CUT_START );
-    }
-    // jetzt CP berechnen
-    rStartPos = nCpStart + (rStartPos - nFcStart) / nUnicodeFactor;
-
-    if( rEndPos < nFcStart )
-    {
-        rEndPos = nFcStart;
-        eRet = (eCutT)( eRet | CUT_END );
-    }
-    if( rEndPos > nFcStart + (nCpEnd - nCpStart) * nUnicodeFactor )
-    {
-        rEndPos = nFcStart + (nCpEnd - nCpStart) * nUnicodeFactor;
-        eRet = (eCutT)( eRet | CUT_END );
-    }
-    // jetzt CP berechnen
-    rEndPos = nCpStart + (rEndPos - nFcStart) / nUnicodeFactor;
-#ifdef DEBUG
-    if (0 > rStartPos)
-    {
-        BOOL i = 5;
-    }
-    ASSERT( (0 <= rStartPos), "AktPieceFc2Cp() - rStartPos kleiner Null!" );
-#endif
-#endif
     return eRet;
 }
 
@@ -577,6 +520,7 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
     if( nFcPos == LONG_MAX )
         return nFallBackCpEnd;
 
+    BOOL bIsUnicode = FALSE;
     if( pPieceIter )
     {                               // Complex File ?
         ULONG nOldPos = pPieceIter->GetIdx();
@@ -591,7 +535,6 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
                 ASSERT( !this, "PLCFpcd-WW8Fc2Cp() ging schief" );
                 break;
             }
-            BOOL bIsUnicode = FALSE;
             INT32 nFcStart  = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
             if( 8 <= pWw8Fib->nVersion )
                 nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart,
@@ -630,7 +573,9 @@ WW8_CP WW8ScannerBase::WW8Fc2Cp( WW8_FC nFcPos ) const
         return nFallBackCpEnd;
     }
     // No complex file
-    return nFcPos - pWw8Fib->fcMin;
+    if (pWw8Fib->fExtChar)
+        bIsUnicode=TRUE;
+    return ((nFcPos - pWw8Fib->fcMin) / (bIsUnicode ? 2 : 1));
 }
 
 WW8_FC WW8ScannerBase::WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode,
@@ -640,6 +585,10 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode,
         *pTestFlag = TRUE;
     if( LONG_MAX == nCpPos )
         return LONG_MAX;
+
+    BOOL bIsUnicode;
+    if( !pIsUnicode )
+        pIsUnicode = &bIsUnicode;
 
     if( pPieceIter )
     {   // Complex File
@@ -666,9 +615,6 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode,
         }
         if( pNextPieceCp )
             *pNextPieceCp = nCpEnd;
-        BOOL bIsUnicode;
-        if( !pIsUnicode )
-            pIsUnicode = &bIsUnicode;
 
         WW8_FC nRet = SVBT32ToLong( ((WW8_PCD*)pData)->fc );
         if( 8 > pWw8Fib->nVersion )
@@ -683,9 +629,11 @@ WW8_FC WW8ScannerBase::WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode,
     }
 
     // No complex file
-    if( pIsUnicode )
+    if (pWw8Fib->fExtChar)
+        *pIsUnicode = TRUE;
+    else
         *pIsUnicode = FALSE;
-    return nCpPos + pWw8Fib->fcMin;
+    return pWw8Fib->fcMin + nCpPos * (*pIsUnicode ? 2 : 1);
 }
 
 //-----------------------------------------
@@ -2427,8 +2375,8 @@ void WW8PLCFx_Cp_FKP::GetSprms( WW8PLCFxDesc* p )
     }
     else        // KEINE Piece-Table !!!
     {
-        p->nStartPos = rSBase.WW8Fc2Cp( p->nStartPos/*,TRUE*/ );
-        p->nEndPos   = rSBase.WW8Fc2Cp( p->nEndPos/*,TRUE*/ );
+        p->nStartPos = rSBase.WW8Fc2Cp( p->nStartPos );
+        p->nEndPos   = rSBase.WW8Fc2Cp( p->nEndPos );
         p->bRealLineEnd = ePLCF == PAP;
     }
 }
@@ -5889,6 +5837,8 @@ static SprmInfo aWwSprmTab[] = {
      109, 2, L_FIX, // "sprmCHpsMul", // chp.hps percentage to grow hps short
 
      110, 2, L_FIX, // "sprmCCondHyhen", // chp.ysri ysri short
+     111, 2, L_FIX, // unknown
+     112, 2, L_FIX, // unknown
      117, 1, L_FIX, //  "sprmCFSpec", // chp.fSpec  1 or 0 bit
      118, 1, L_FIX, //  "sprmCFObj", // chp.fObj 1 or 0 bit
      119, 1, L_FIX, // "sprmPicBrcl", // pic.brcl brcl (see PIC structure definition) byte

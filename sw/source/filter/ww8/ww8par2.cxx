@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
+ *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1783,7 +1783,11 @@ void WW8TabDesc::CreateSwTable()
         pFrmFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSwWidth ) );//FIX
     }
 
-    if(HORI_LEFT_AND_WIDTH == eOri)
+    //If bApo is set, then this table is being placed in a floating frame, and
+    //the frame matches the left and right *lines* of the table, so the space
+    //to the left of the table isn't to be used inside the frame, in word the
+    //dialog involved greys out the ability to set the margin.
+    if ((HORI_LEFT_AND_WIDTH == eOri) && (!pIo->bApo))
     {
         SvxLRSpaceItem aL;
         aL.SetLeft( nMinLeft );
@@ -3298,11 +3302,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.20 2001-07-30 09:18:10 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.21 2001-08-08 11:05:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/07/30 09:18:10  cmc
+      #i1353# Import Vertical Cell Alignment
+
       Revision 1.19  2001/07/26 19:23:34  jp
       Bug #88107#: use correct StarSymbol characters
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 14:36:39 $
+ *  last change: $Author: cmc $ $Date: 2001-08-08 11:05:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1788,7 +1788,9 @@ SFX612MI! SfxObjectShell::DoLoad(class SfxMedium *) + 3576 bytes
 
 long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
 {
+#if 0
     long nOld = pStrm->Tell();
+#endif
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
@@ -1842,6 +1844,7 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
         }
     }
 
+#if 0
     if( bVer8 || nSkipChars || aRes.nSprmId == 260 )
         // Feld oder Piece
         // um nSkipChars bewegen bei Feldern und Pieces
@@ -1851,6 +1854,9 @@ long SwWW8ImplReader::ReadTextAttr( long& rTxtPos, BOOL& rbStartLine )
         // sonst alte Pos wiederherstellen und Unicode-Flag ermitteln
         pStrm->Seek( nOld );
     }
+#else
+    pStrm->Seek(pSBase->WW8Cp2Fc( pPlcxMan->GetCpOfs() + rTxtPos, &bIsUnicode));
+#endif
 
     // Find next Attr position (and Skip attributes of field contents if needed)
     if( nSkipChars && !bIgnoreText )
@@ -2794,7 +2800,7 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
     {
     case 6:
     case 7:
-            if( 0xa5dc != nMagic )
+            if ( (0xa5dc != nMagic) && (0xa699 != nMagic) )
             {
                 //JP 06.05.99: teste auf eigenen 97-Fake!
                 if( pStg && 0xa5ec == nMagic )
@@ -3068,11 +3074,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.27 2001-07-17 14:36:39 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.28 2001-08-08 11:05:29 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.27  2001/07/17 14:36:39  cmc
+      #89811# Annotations initials import not upgraded from preunicode time correctly
+
       Revision 1.26  2001/07/17 13:28:26  cmc
       #89808# ##1192## Retain blank pages before explicit section breaks
 
