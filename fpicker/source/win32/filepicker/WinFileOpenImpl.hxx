@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:04:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ private:
     inline void SAL_CALL appendFilterGroupSeparator( );
 
     inline sal_Bool SAL_CALL IsCustomControlHelpRequested(LPHELPINFO lphi) const;
+
+    void EnlargeStdControlLabels() const;
 
     // initialize all controls from cache
     void SAL_CALL InitControlLabel( HWND hWnd );
