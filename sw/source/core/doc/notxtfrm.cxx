@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:36:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,7 +1139,52 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         FASTBOOL bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
-        xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+
+        // #114233#
+        const sal_Bool bOutToPrinter(OUTDEV_PRINTER == pOut->GetOutDevType());
+        const sal_Bool bOutToRecordingMetaFile(pOut->GetConnectMetaFile()
+            && pOut->GetConnectMetaFile()->IsRecord() && !pOut->GetConnectMetaFile()->IsPause());
+        sal_Bool bBufferOLEOutput(!bOutToPrinter && !bOutToRecordingMetaFile);
+
+        if(bBufferOLEOutput)
+        {
+            // needs to be buffered to a VirtualDevice
+            Point aPosition(aAlignedGrfArea.Pos());
+            Size aSize(aAlignedGrfArea.SSize());
+            VirtualDevice aBufferDevice(*pOut, 0L, 0L);
+
+            // calulate PixelSize
+            Rectangle aRectPixel(aPosition, aSize);
+            aRectPixel = pOut->LogicToPixel(aRectPixel);
+
+            // Prepare MapMode for BufferDevice
+            MapMode aMapMode(pOut->GetMapMode());
+            const Point aNegativeMapModeOffset(-aPosition.X(), -aPosition.Y());
+            aMapMode.SetOrigin(aNegativeMapModeOffset);
+
+            // Set OutputSize and MapMode
+            aBufferDevice.SetOutputSizePixel(aRectPixel.GetSize());
+            aBufferDevice.SetMapMode(aMapMode);
+
+            // draw to VDev
+            xRef->DoDraw( &aBufferDevice, aPosition, aSize, *pJobSetup );
+
+            // draw VDev to pOut
+            const sal_Bool bWasEnabled(pOut->IsMapModeEnabled());
+            pOut->EnableMapMode(sal_False);
+            aBufferDevice.EnableMapMode(sal_False);
+
+            pOut->DrawOutDev(
+                aRectPixel.TopLeft(), aRectPixel.GetSize(),
+                Point(), aRectPixel.GetSize(), aBufferDevice);
+
+            pOut->EnableMapMode(bWasEnabled);
+        }
+        else
+        {
+            xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
+        }
+
         if( bDummyJobSetup )
             delete pJobSetup;  // ... und raeumen wieder auf.
 
