@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ class SwToolbarConfigItem;
 class SwAttrPool;
 namespace svtools{ class ColorConfig;}
 class SvtAccessibilityOptions;
+class SvtCTLOptions;
 
 struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
@@ -137,6 +138,7 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwDBConfig*         pDBConfig;
     svtools::ColorConfig*   pColorConfig;
     SvtAccessibilityOptions* pAccessibilityOptions;
+    SvtCTLOptions*      pCTLOptions;
 
     SfxErrorHandler*    pErrorHdl;
 
@@ -225,6 +227,7 @@ public:
     SwDBConfig*         GetDBConfig();
     svtools::ColorConfig&   GetColorConfig();
     SvtAccessibilityOptions&    GetAccessibilityOptions();
+    SvtCTLOptions&      GetCTLOptions();
 
     // Ueber Sichten iterieren
     static SwView*      GetFirstView();
