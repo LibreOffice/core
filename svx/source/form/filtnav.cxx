@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 10:06:13 $
+ *  last change: $Author: oj $ $Date: 2002-11-05 10:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2074,12 +2074,6 @@ void FmFilterNavigator::DeleteSelection()
     m_pModel->CheckIntegrity(m_pModel);
 }
 // -----------------------------------------------------------------------------
-void FmFilterNavigator::LoseFocus()
-{
-    if ( IsEditingActive() )
-        EndEditing();
-    SvTreeListBox::LoseFocus();
-}
 
 //========================================================================
 // class FmFilterNavigatorWin
