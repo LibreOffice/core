@@ -1,6 +1,6 @@
 # This file contain a list of todos for testshl2 automated tests.
 # 
-# $Id: libs2test.txt,v 1.9 2004-01-05 21:19:23 obo Exp $
+# $Id: libs2test.txt,v 1.10 2004-03-19 14:45:42 obo Exp $
 #
 # Legend:
 # there exist 2 formats
@@ -28,7 +28,7 @@ rtl/ostring; rtl_OString2
 
 osl/file      ; File
 # LLA: temporaly removed, there are lot of problems with our environment
-# osl/socket    ; Socket
+osl/socket    ; Socket
 osl/mutex     ; Mutex
 osl/pipe      ; Pipe
 osl/semaphore ; Semaphore
