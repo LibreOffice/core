@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-11-21 16:20:47 $
+ *  last change: $Author: er $ $Date: 2002-12-10 19:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void CharClass::getComponentInstance()
 
 void CharClass::setLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
-    ::utl::ReadWriteGuard aGuard( aMutex, ::utl::ReadWriteGuardMode::nCriticalChange );
+    ::osl::MutexGuard aGuard( aMutex );
     aLocale.Language = rLocale.Language;
     aLocale.Country = rLocale.Country;
     aLocale.Variant = rLocale.Variant;
@@ -165,7 +165,7 @@ void CharClass::setLocale( const ::com::sun::star::lang::Locale& rLocale )
 
 const ::com::sun::star::lang::Locale& CharClass::getLocale() const
 {
-    ::utl::ReadWriteGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( aMutex );
     return aLocale;
 }
 

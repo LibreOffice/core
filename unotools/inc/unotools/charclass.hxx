@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-07-05 14:58:36 $
+ *  last change: $Author: er $ $Date: 2002-12-10 19:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ class CharClass
     ::com::sun::star::lang::Locale  aLocale;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    mutable ::utl::ReadWriteMutex   aMutex;
+    mutable ::osl::Mutex        aMutex;
 
                                 // not implemented, prevent usage
                                 CharClass( const CharClass& );
