@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:17:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,13 +379,18 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
         else if ( rCommandURL.equalsIgnoreAsciiCaseAscii( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))
             return makeAny( m_aCommandMirrorImageList );
         else
-            return Any();
+            throw NoSuchElementException();
     }
     else
     {
         // SAFE
         ++nRequests;
-        return getInfoFromCommand( rCommandURL );
+        Any a = getInfoFromCommand( rCommandURL );
+
+        if ( !a.hasValue() )
+            throw NoSuchElementException();
+
+        return a;
     }
 }
 
