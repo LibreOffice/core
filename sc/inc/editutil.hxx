@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:09:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:24:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef SC_EDITUTIL_HXX
 #define SC_EDITUTIL_HXX
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
@@ -161,7 +164,7 @@ protected:
 };
 
 
-class ScEditEngineDefaulter : public ScEnginePoolHelper, public EditEngine
+class SC_DLLPUBLIC ScEditEngineDefaulter : public ScEnginePoolHelper, public EditEngine
 {
 public:
                     /// bDeleteEnginePool: Engine becomes the owner of the pool
