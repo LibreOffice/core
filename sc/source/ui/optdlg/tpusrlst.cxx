@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpusrlst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:28:45 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@
 #include "tpusrlst.hxx"
 #undef _TPUSRLST_CXX
 
+//CHINA001 #include "scui_def.hxx" //CHINA001
+//CHINA001 #include "scresid.hxx" //add by CHINA001
+//CHINA001 #include "miscdlgs.hrc"  //add by CHINA001
+//CHINA001
+//CHINA001 #include "scabstdlg.hxx" //CHINA001
 // STATIC DATA -----------------------------------------------------------
 
 #define CR  (sal_Unicode)13
@@ -467,7 +472,16 @@ void ScTpUserLists::CopyListFromArea( const ScRefTripel& rStartPos,
     BOOL    bValueIgnored   = FALSE;
 
     if ( (nStartCol != nEndCol) && (nStartRow != nEndRow) )
+    {
         nCellDir = ScColOrRowDlg( this, aStrCopyList, aStrCopyFrom ).Execute();
+//CHINA001      ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+//CHINA001      DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+//CHINA001
+//CHINA001      VclAbstractDialog* pDlg = pFact->CreateScColOrRowDlg( this, aStrCopyList, aStrCopyFrom,ResId(RID_SCDLG_COLORROW) );
+//CHINA001      DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
+//CHINA001      nCellDir = pDlg->Execute();
+//CHINA001      delete pDlg; //CHINA001
+    }
     else if ( nStartCol != nEndCol )
         nCellDir = SCRET_ROWS;
     else
@@ -536,6 +550,7 @@ void ScTpUserLists::CopyListFromArea( const ScRefTripel& rStartPos,
     //----------------------------------------------------------
 
     bCopyDone = TRUE;
+
 }
 
 // -----------------------------------------------------------------------
