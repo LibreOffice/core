@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-16 11:44:39 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 11:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3349,16 +3349,8 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
 
 const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 {
-    // Wenn Outliner1, dann immer OUTLLR
-    // Wenn Outliner2, dann nur, wenn kein LRSpace
-    if ( aStatus.IsOutliner() ||
-         ( aStatus.IsOutliner2() && !pNode->GetContentAttribs().HasItem( EE_PARA_LRSPACE ) ) )
-    {
-        return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( EE_PARA_OUTLLRSPACE );
-    }
-    return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( EE_PARA_LRSPACE );
+    return (const SvxLRSpaceItem&)pNode->GetContentAttribs().GetItem( aStatus.IsOutliner() ? EE_PARA_OUTLLRSPACE : EE_PARA_LRSPACE );
 }
-
 
 Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:22:46 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 11:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,18 +758,7 @@ BOOL ImpEditEngine::HasParaAttrib( USHORT nPara, USHORT nWhich ) const
     ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node nicht gefunden: HasParaAttrib" );
 
-    // LRSPACE kann ggf. auch OUTLLRSPACE sein!
-
-    BOOL bHasItem = pNode->GetContentAttribs().HasItem( nWhich );
-    if ( nWhich == EE_PARA_LRSPACE )
-    {
-        if ( aStatus.IsOutliner() ||
-             ( aStatus.IsOutliner2() && !pNode->GetContentAttribs().HasItem( EE_PARA_LRSPACE ) ) )
-        {
-            bHasItem = pNode->GetContentAttribs().HasItem( EE_PARA_OUTLLRSPACE );
-        }
-    }
-    return bHasItem;
+    return pNode->GetContentAttribs().HasItem( nWhich );
 }
 
 const SfxPoolItem& ImpEditEngine::GetParaAttrib( USHORT nPara, USHORT nWhich )
@@ -777,11 +766,7 @@ const SfxPoolItem& ImpEditEngine::GetParaAttrib( USHORT nPara, USHORT nWhich )
     ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node nicht gefunden: GetParaAttrib" );
 
-    // LRSPACE kann ggf. auch OUTLLRSPACE sein!
-    if ( nWhich != EE_PARA_LRSPACE )
-        return pNode->GetContentAttribs().GetItem( nWhich );
-    else
-        return GetLRSpaceItem( pNode );
+    return pNode->GetContentAttribs().GetItem( nWhich );
 }
 
 void ImpEditEngine::GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const
