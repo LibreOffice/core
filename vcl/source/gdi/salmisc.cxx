@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:04:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #endif
 #include <bmpacc.hxx>
 #include <salbtype.hxx>
+#include <bmpfast.hxx>
 
 // -----------
 // - Defines -
@@ -317,6 +318,8 @@ static void ImplTCToPAL( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffe
     delete[] pColToPalMap;
 }
 
+// -----------------------------------------------------------------------------
+
 // ---------------------
 // - StretchAndConvert -
 // ---------------------
@@ -327,16 +330,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     FncGetPixel     pFncGetPixel;
     FncSetPixel     pFncSetPixel;
     BitmapBuffer*   pDstBuffer = new BitmapBuffer;
-    const ULONG     nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
-    const long      nSrcX = rTwoRect.mnSrcX, nSrcY = rTwoRect.mnSrcY;
-    const long      nSrcDX = rTwoRect.mnSrcWidth, nSrcDY = rTwoRect.mnSrcHeight;
-    const long      nDstDX = rTwoRect.mnDestWidth, nDstDY = rTwoRect.mnDestHeight;
-    Scanline*       pSrcScan = new Scanline[ rSrcBuffer.mnHeight ];
-    Scanline*       pDstScan = new Scanline[ nDstDY ];
-    long*           pMapX = new long[ nDstDX ];
-    long*           pMapY = new long[ nDstDY ];
-    Scanline        pTmpScan;
-    long            i, nTmp, nOffset;
+    long            i;
 
     // set function for getting pixels
     switch( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) )
@@ -368,6 +362,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     }
 
     // set function for setting pixels
+    const ULONG nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
     switch( nDstScanlineFormat )
     {
         IMPL_CASE_SET_FORMAT( _1BIT_MSB_PAL, 1 );
@@ -399,11 +394,10 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
 
     // fill destination buffer
     pDstBuffer->mnFormat = nDstBitmapFormat;
-    pDstBuffer->mnWidth = nDstDX;
-    pDstBuffer->mnHeight = nDstDY;
-    pDstBuffer->mnScanlineSize = AlignedWidth4Bytes( pDstBuffer->mnBitCount * nDstDX );
-    pDstBuffer->mpBits = new BYTE[ pDstBuffer->mnScanlineSize * nDstDY ];
-    rtl_zeroMemory( pDstBuffer->mpBits, pDstBuffer->mnScanlineSize * nDstDY );
+    pDstBuffer->mnWidth = rTwoRect.mnDestWidth;
+    pDstBuffer->mnHeight = rTwoRect.mnDestHeight;
+    pDstBuffer->mnScanlineSize = AlignedWidth4Bytes( pDstBuffer->mnBitCount * pDstBuffer->mnWidth );
+    pDstBuffer->mpBits = new BYTE[ pDstBuffer->mnScanlineSize * pDstBuffer->mnHeight ];
 
     // do we need a destination palette or color mask?
     if( ( nDstScanlineFormat == BMP_FORMAT_1BIT_MSB_PAL ) ||
@@ -424,6 +418,20 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         DBG_ASSERT( pDstMask, "destination buffer requires color mask" );
         pDstBuffer->maColorMask = *pDstMask;
     }
+
+    // short circuit the most important conversions
+    bool bFastConvert = ImplFastBitmapConversion( *pDstBuffer, rSrcBuffer, rTwoRect );
+    if( bFastConvert )
+        return pDstBuffer;
+
+    const long      nSrcX = rTwoRect.mnSrcX, nSrcY = rTwoRect.mnSrcY;
+    const long      nSrcDX = rTwoRect.mnSrcWidth, nSrcDY = rTwoRect.mnSrcHeight;
+    const long      nDstDX = rTwoRect.mnDestWidth, nDstDY = rTwoRect.mnDestHeight;
+    Scanline*       pSrcScan = new Scanline[ rSrcBuffer.mnHeight ];
+    Scanline*       pDstScan = new Scanline[ nDstDY ];
+    long*           pMapX = new long[ nDstDX ];
+    long*           pMapY = new long[ nDstDY ];
+    long            nTmp, nOffset;
 
     // horizontal mapping table
     if( nDstDX != nSrcDX )
@@ -454,6 +462,7 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
     }
 
     // source scanline buffer
+    Scanline pTmpScan;
     if( BMP_SCANLINE_ADJUSTMENT( rSrcBuffer.mnFormat ) == BMP_FORMAT_TOP_DOWN )
         pTmpScan = rSrcBuffer.mpBits, nOffset = rSrcBuffer.mnScanlineSize;
     else
