@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:25:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,14 +543,14 @@ String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
 
 // -----------------------------------------------------------------------------
 
-Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 nIndex)
+Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
 {
-    DBG_ASSERT(_nColumnId >= 0 && _nColumnId <= USHRT_MAX, "GalleryListView::GetFieldCharacterBounds: _nColumnId overflow");
+    DBG_ASSERT(_nColumnPos >= 0 && _nColumnPos <= USHRT_MAX, "GalleryListView::GetFieldCharacterBounds: _nColumnId overflow");
     Rectangle aRect;
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(_nColumnId)) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>( GetColumnId( _nColumnPos ) ) ) );
 
         // get the bounds inside the string
         aStringWrap.GetCharacterBounds(nIndex, aRect);
@@ -562,14 +562,14 @@ Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nC
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
-    DBG_ASSERT(_nColumnId >= 0 && _nColumnId <= USHRT_MAX, "GalleryListView::GetFieldIndexAtPoint: _nColumnId overflow");
+    DBG_ASSERT(_nColumnPos >= 0 && _nColumnPos <= USHRT_MAX, "GalleryListView::GetFieldIndexAtPoint: _nColumnId overflow");
     sal_Int32 nRet = -1;
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(_nColumnId)) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, static_cast<USHORT>(GetColumnId(_nColumnPos))) );
         nRet = aStringWrap.GetIndexAtPoint(_rPoint);
     }
     return nRet;
