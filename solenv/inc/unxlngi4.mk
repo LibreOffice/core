@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 14:50:41 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 15:27:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ cc=gcc
 .IF "$(BUILD_SOSL)"!=""
 CFLAGS=
 .ENDIF
-CFLAGS+=-w -fmessage-length=0 -c $(INCLUDE)
+CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 # flags for the C++ Compiler
 CFLAGSCC= -pipe -mcpu=pentiumpro 
 # Flags for enabling exception handling
@@ -128,6 +128,10 @@ CFLAGSOPT=-O2
 CFLAGSNOOPT=-O
 # Compiler flags for discibing the output path
 CFLAGSOUTOBJ=-o
+# Enable all warnings
+CFLAGSWALL=-Wall
+# Set default warn level
+CFLAGSDFLTWARN=-w
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 13:03:25 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 15:27:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1400,6 +1400,8 @@ CDEFS+=-D$(WORK_STAMP)
 
 .IF "$(COMPILER_WARN_ALL)"!=""
 CFLAGSAPPEND+=$(CFLAGSWALL)
+.ELSE           # "$(WARN_ALL)"!=""
+CFLAGSAPPEND+=$(CFLAGSDFLTWARN)
 .ENDIF          # "$(WARN_ALL)"!=""
 
 CDEFS+= $(ENVCDEFS)
