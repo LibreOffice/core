@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:56:49 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,7 +1163,7 @@ void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
     SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
 
-    sal_Bool bWaitUntilEnd = sal_False;
+    sal_Bool bWaitUntilEnd = sal_True;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
         // get Property-Value from options
