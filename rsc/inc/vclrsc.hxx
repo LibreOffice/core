@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:41:35 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ typedef sal_Int64 WinBits;
 #define WB_DEF_RETRY            ((WinBits)0x08000000)
 #define WB_DEF_YES              ((WinBits)0x10000000)
 #define WB_DEF_NO               ((WinBits)0x20000000)
+#define WB_ABORT_RETRY_IGNORE  ((WinBits)SAL_CONST_INT64(0x1000000000))
+#define WB_DEF_IGNORE          ((WinBits)SAL_CONST_INT64(0x2000000000))
 
 // Standard-WinBits
 #define WB_STDWORK              (WB_SIZEMOVE | WB_CLOSEABLE)
