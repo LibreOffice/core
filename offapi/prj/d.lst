@@ -7,6 +7,7 @@ mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\frame
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration
 mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend
+mkdir: %_DEST%\idl%_EXT%\drafts\com\sun\star\auth
 mkdir: %_DEST%\idl%_EXT%\com
 mkdir: %_DEST%\idl%_EXT%\com\sun
 mkdir: %_DEST%\idl%_EXT%\com\sun\star
@@ -113,6 +114,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 ..\drafts\com\sun\star\frame\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\frame\*.idl
 ..\drafts\com\sun\star\accessibility\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\accessibility\*.idl
 ..\drafts\com\sun\star\configuration\backend\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\configuration\backend\*.idl
+..\drafts\com\sun\star\auth\*.idl %_DEST%\idl%_EXT%\drafts\com\sun\star\auth\*.idl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
