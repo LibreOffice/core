@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 10:50:12 $
+ *  last change: $Author: th $ $Date: 2001-08-28 11:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     aTokenStr = rStr.GetToken( 0, ';', nIndex );
     if ( aTokenStr.Len() )
     {
-        rData.SetState( (ULONG)aTokenStr.ToInt32() );
+        // 91625 - ignore Minimize
+        ULONG nState = (ULONG)aTokenStr.ToInt32();
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+        rData.SetState( nState );
         nValidMask |= WINDOWSTATE_MASK_STATE;
     }
     else
@@ -489,7 +492,12 @@ static void ImplWindowStateToStr( const WindowStateData& rData, ByteString& rStr
         rStr.Append( ByteString::CreateFromInt32( rData.GetHeight() ) );
     rStr.Append( ';' );
     if ( nValidMask & WINDOWSTATE_MASK_STATE )
-        rStr.Append( ByteString::CreateFromInt32( (long)rData.GetState() ) );
+    {
+        // 91625 - ignore Minimize
+        ULONG nState = rData.GetState();
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
+        rStr.Append( ByteString::CreateFromInt32( (long)nState ) );
+    }
     rStr.Append( ';' );
 }
 
@@ -518,6 +526,8 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnY      = rData.GetY();
         aState.mnWidth  = rData.GetWidth();
         aState.mnHeight = rData.GetHeight();
+        // 91625 - ignore Minimize
+        nState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
         aState.mnState  = nState & SAL_FRAMESTATE_SYSTEMMASK;
         mpFrame->SetWindowState( &aState );
 #else
@@ -546,14 +556,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
             nPosSize |= WINDOW_POSSIZE_HEIGHT;
         SetPosSizePixel( rData.GetX(), rData.GetY(), rData.GetWidth(), rData.GetHeight(), nPosSize );
 
-        if ( nValidMask & WINDOWSTATE_MASK_STATE )
-        {
-            ULONG nState = rData.GetState();
-            if ( nState & WINDOWSTATE_STATE_ROLLUP )
-                RollUp();
-            else
-                RollDown();
-        }
+        // 91625 - ignore Minimize
+        // if ( nValidMask & WINDOWSTATE_MASK_STATE )
+        // {
+        //     ULONG nState = rData.GetState();
+        //     if ( nState & WINDOWSTATE_STATE_ROLLUP )
+        //         RollUp();
+        //     else
+        //         RollDown();
+        // }
     }
 }
 
@@ -588,7 +599,11 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
             if ( nValidMask & WINDOWSTATE_MASK_HEIGHT )
                 rData.SetHeight( aState.mnHeight );
             if ( nValidMask & WINDOWSTATE_MASK_STATE )
+            {
+                // 91625 - ignore Minimize
+                aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED | WINDOWSTATE_STATE_ROLLUP);
                 rData.SetState( aState.mnState );
+            }
         }
         else
             rData.SetMask( 0 );
@@ -606,8 +621,9 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         Size    aSize = GetSizePixel();
         ULONG   nState = 0;
 
-        if ( IsRollUp() )
-            nState |= WINDOWSTATE_STATE_ROLLUP;
+        // 91625 - ignore Minimize
+        // if ( IsRollUp() )
+        //    nState |= WINDOWSTATE_STATE_ROLLUP;
 
         if ( nValidMask & WINDOWSTATE_MASK_X )
             rData.SetX( aPos.X() );
