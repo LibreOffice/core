@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:34:46 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,14 @@ SfxTemplateDialog::~SfxTemplateDialog()
 ISfxTemplateCommon* SfxTemplateDialog::GetISfxTemplateCommon()
 {
     return pImpl->GetISfxTemplateCommon();
+}
+
+void SfxTemplateDialog::SetParagraphFamily()
+{
+    // first select the paragraph family
+    pImpl->FamilySelect( SFX_STYLE_FAMILY_PARA );
+    // then select the automatic filter
+    pImpl->SetAutomaticFilter();
 }
 
 // ------------------------------------------------------------------------
@@ -440,6 +448,12 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParent,
 
     pWin->Initialize( pInfo );
     pWin->SetMinOutputSizePixel(pWin->pImpl->GetMinOutputSizePixel());
+}
+
+void SfxTemplateDialogWrapper::SetParagraphFamily()
+{
+    // forward to SfxTemplateDialog, because SfxTemplateDialog isn't exported
+    static_cast< SfxTemplateDialog* >( GetWindow() )->SetParagraphFamily();
 }
 
 //=========================================================================
@@ -1060,6 +1074,23 @@ USHORT SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( USHORT nFamily )
     }
 }
 
+void SfxCommonTemplateDialog_Impl::SetAutomaticFilter()
+{
+    USHORT nCount = aFilterLb.GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        ULONG nFlags = (ULONG)aFilterLb.GetEntryData(i);
+        if ( SFXSTYLEBIT_AUTO == nFlags )
+        {
+            // automatic entry found -> select it
+            aFilterLb.SelectEntryPos(i);
+            // then call the handler to filter the styles
+            FilterSelect( i - 1 );
+            break;
+        }
+    }
+}
+
 //-------------------------------------------------------------------------
 
 // Hilfsfunktion: Zugriff auf aktuelles Family-Item
@@ -1282,10 +1313,15 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             aFilterLb.SetUpdateMode(FALSE);
             aFilterLb.Clear();
             //insert hierarchical at the beginning
-            aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
+            USHORT nPos = aFilterLb.InsertEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)), 0);
+            aFilterLb.SetEntryData( nPos, (void*)(ULONG)SFXSTYLEBIT_ALL );
             const SfxStyleFilter& rFilter = pItem->GetFilterList();
             for(USHORT i = 0; i < rFilter.Count(); ++i)
-                aFilterLb.InsertEntry(rFilter.GetObject(i)->aName);
+            {
+                ULONG nFlags = rFilter.GetObject(i)->nFlags;
+                nPos = aFilterLb.InsertEntry( rFilter.GetObject(i)->aName );
+                aFilterLb.SetEntryData( nPos, (void*)nFlags );
+            }
             if(nActFilter < aFilterLb.GetEntryCount() - 1)
                 aFilterLb.SelectEntryPos(nActFilter + 1);
             else
