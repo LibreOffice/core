@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:37:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,11 @@
 #endif
 
 #include <svx/dialogs.hrc>
-#include <offmgr/ofaids.hrc>
 
 #define ITEMID_LANGUAGE     SID_ATTR_LANGUAGE
 #include <svx/langitem.hxx>
 #include <svx/editdata.hxx>
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
