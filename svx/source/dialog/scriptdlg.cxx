@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:48:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "dialogs.hrc"
@@ -77,15 +81,15 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
-#include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
-#include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
-#include <drafts/com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
-#include <drafts/com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
+#include <com/sun/star/script/provider/ScriptErrorRaisedException.hpp>
+#include <com/sun/star/script/provider/ScriptExceptionRaisedException.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
-#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -104,7 +108,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 
 void ShowErrorDialog( const Any& aException )
 {
@@ -224,8 +228,8 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
-            rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
+                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
         }
         catch( Exception& e )
         {
@@ -450,7 +454,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     return langNode;
 }
 
-void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& node )
+void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node )
 {
     OSL_TRACE("RequestSubEntries ");
     if (! node.is() )
@@ -702,6 +706,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
         m_renameErrStr( ResId ( RID_SVXSTR_RENAMEFAILED ) ),
         m_renameErrTitleStr( ResId( RID_SVXSTR_RENAMEFAILED_TITLE ) )
 {
+
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
@@ -1765,6 +1770,7 @@ SvxScriptErrorDialog::SvxScriptErrorDialog(
     Window* parent, ::com::sun::star::uno::Any aException )
     : m_sMessage()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_sMessage = GetErrorMessage( aException );
 }
 
