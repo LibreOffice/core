@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleIconChoiceCtrl.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:21 $ 
+'*  last change:$Date: 2003-05-27 12:17:48 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -103,7 +103,7 @@ On Error Goto ErrHndl
         wait(1000)
         oWin = tk.getActiveTopWindow()
         xRoot = utils.at_getAccessibleObject(oWin)
-        closeButton = utils.at_getAccessibleObjectForRole(xRoot, 35, "Close")
+        closeButton = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON, "Close")
         oObj = utils.at_getAccessibleObjectForRole(xRoot, 53)
         Out.Log("Implementation Name: "+oObj.getImplementationName())
         multiSelection = false
@@ -121,7 +121,7 @@ Sub DisposeObj()
         closeButton.doAccessibleAction(0)
         wait(1000)
     End If
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
