@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:04:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ ModalDialog DLG_MORPH
         Text [ swedish ] = "Steg" ;
         Text [ danish ] = "Trin" ;
         Text [ portuguese ] = "Passos" ;
-        Text [ portuguese_brazilian ] = "Incrementos" ;
+        Text [ portuguese_brazilian ] = "Incremento" ;
         Text[ chinese_simplified ] = "渐增";
         Text[ russian ] = "����";
         Text[ polish ] = "Przyrosty";
@@ -271,6 +271,7 @@ ModalDialog DLG_MORPH
     Text[ hindi ] = "क्रॉस-फ़ेड करना";
     Text[ slovak ] = "Zatmavenie";
 };
+
 
 
 
