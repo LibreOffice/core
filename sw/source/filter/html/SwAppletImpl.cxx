@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:24:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,7 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2
 
 void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
                                       BOOL bMayScript, const String& rCodeBase,
-                                      const String& rBaseURL )
-                                      //const String& rAlt )
+                                      const String& rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
     ::rtl::OUString aName;
@@ -183,39 +182,21 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
     // create Applet; it will be in running state
     xApplet = aCnt.CreateEmbeddedObject( SvGlobalName( SO3_APPLET_CLASSID ).GetByteSequence(), aName );
 
-    String sCodeBase;
-    if( rCodeBase.Len() )
-    {
-        INetURLObject aTmpURL;
+    INetURLObject aUrlBase(rDocumentBaseURL);
+    aUrlBase.removeSegment();
 
-        INetProtocol eProt = aTmpURL.CompareProtocolScheme( rCodeBase );
-        if( eProt==INET_PROT_NOT_VALID &&
-            rCodeBase.Search( ':' ) != STRING_NOTFOUND  )
-        {
-            // The codebase contains an unknown protocol rather than
-            // a relative URL.
-            sCodeBase = rCodeBase;
-        }
-        else
-        {
-            sCodeBase = URIHelper::SmartRel2Abs(INetURLObject( rBaseURL ), rCodeBase );
-        }
-    }
-    else
-    {
-        INetURLObject aTmpURL( rBaseURL );
-        sCodeBase = aTmpURL.GetPartBeforeLastName();
-    }
-
+    String sDocBase = aUrlBase.GetMainURL(INetURLObject::NO_DECODE);
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCode"), uno::makeAny( ::rtl::OUString( rCode ) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( sCodeBase ) ) );
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletName"), uno::makeAny( ::rtl::OUString( rName ) ) );
         xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletIsScript"), uno::makeAny( sal_Bool(bMayScript) ) );
-        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletDocBase"), uno::makeAny( ::rtl::OUString(
-                 ) ) );
+        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletDocBase"), uno::makeAny( ::rtl::OUString(sDocBase) ) );
+        if ( rCodeBase.Len() )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( rCodeBase ) ) );
+        else
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), uno::makeAny( ::rtl::OUString( sDocBase ) ) );
     }
 }
 #ifdef SOLAR_JAVA
@@ -232,7 +213,7 @@ sal_Bool SwApplet_Impl::CreateApplet( const String& rBaseURL )
         if( rName.EqualsIgnoreCaseAscii( sHTML_O_code ) )
             aCode = rArg.GetArgument();
         else if( rName.EqualsIgnoreCaseAscii( sHTML_O_codebase ) )
-            aCodeBase = rArg.GetArgument();
+            aCodeBase = INetURLObject::GetAbsURL( rBaseURL, rArg.GetArgument() );
         else if( rName.EqualsIgnoreCaseAscii( sHTML_O_name ) )
             aName = rArg.GetArgument();
         else if( rName.EqualsIgnoreCaseAscii( sHTML_O_mayscript ) )
