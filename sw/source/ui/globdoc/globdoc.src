@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:56:05 $
+ *  last change: $Author: os $ $Date: 2002-04-19 09:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,5 +122,9 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ finnish ] = "%PRODUCTNAME 6.0 Global Dokument";
 };
 
+#define MN_SW_GLOBAL
+#include "swmn.hrc"
+#define MN_SW_PORTAL
+#include "swmn.hrc"
 
 
