@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,6 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
-#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -1204,26 +1200,7 @@ void Edit::ImplCopyToSelectionClipboard()
 
 void Edit::ImplCopy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
 {
-    if ( rxClipboard.is() )
-    {
-        ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( GetSelected() );
-
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-
-        try
-        {
-            rxClipboard->setContents( pDataObj, NULL );
-
-            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( rxClipboard, uno::UNO_QUERY );
-            if( xFlushableClipboard.is() )
-                xFlushableClipboard->flushClipboard();
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-
-        Application::AcquireSolarMutex( nRef );
-    }
+    ::vcl::unohelper::TextDataObject::CopyStringTo( GetSelected(), rxClipboard );
 }
 
 // -----------------------------------------------------------------------
