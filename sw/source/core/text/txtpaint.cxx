@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "rootfrm.hxx"
 
 /*************************************************************************
- *                      SwSaveClip::_ChgClip()
+ *                      SwSaveClip::Reset()
  *************************************************************************/
 
 void SwSaveClip::Reset()
@@ -97,7 +97,7 @@ void SwSaveClip::Reset()
  *************************************************************************/
 
 #ifdef VERTICAL_LAYOUT
-void SwSaveClip::_ChgClip( const SwRect &rRect, SwTxtFrm* pFrm )
+void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm )
 #else
 void SwSaveClip::_ChgClip( const SwRect &rRect )
 #endif

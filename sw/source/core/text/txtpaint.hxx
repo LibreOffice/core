@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class SwSaveClip
 protected:
     OutputDevice *pOut;
 #ifdef VERTICAL_LAYOUT
-    void _ChgClip( const SwRect &rRect, SwTxtFrm* pFrm = 0 );
+    void _ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0 );
 #else
     void _ChgClip( const SwRect &rRect );
 #endif
@@ -97,7 +97,8 @@ public:
     inline SwSaveClip( OutputDevice *pOut );
     inline ~SwSaveClip();
 #ifdef VERTICAL_LAYOUT
-    inline void ChgClip( const SwRect &rRect, SwTxtFrm* pFrm = 0 ) { if( pOut ) _ChgClip( rRect, pFrm ); }
+    inline void ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm = 0 )
+             { if( pOut ) _ChgClip( rRect, pFrm ); }
 #else
     inline void ChgClip( const SwRect &rRect ) { if( pOut ) _ChgClip( rRect ); }
 #endif
