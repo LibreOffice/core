@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:29 $
+ *  last change: $Author: pl $ $Date: 2001-08-24 15:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,8 +444,8 @@ void I18NStatus::setParent( SalFrame* pParent )
     m_pParent = pParent;
     if( m_pStatusWindow )
         m_pStatusWindow->setPosition( m_pParent );
-    if( m_pParent )
-        toTop();
+//     if( m_pParent )
+//         toTop();
 }
 
 // --------------------------------------------------------------------------
