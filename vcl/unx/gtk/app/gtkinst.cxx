@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-02 14:53:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,13 @@ GtkInstance::~GtkInstance()
 SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
 {
     return new GtkSalFrame( pParent, nStyle );
+}
+
+SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nStyle )
+{
+    SalFrame* pFrame = new GtkSalFrame( pParentData );
+
+    return pFrame;
 }
 
 SalObject* GtkInstance::CreateObject( SalFrame* pParent )
