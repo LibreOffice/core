@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,7 +917,7 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
 
     CharClass& rCC = GetCharClass( rNd.GetSwAttrSet().GetLanguage().GetLanguage() );
 
-    while( nPos < rTxt.Len() )
+    while( nPos < rTxt.Len() && nDigitLvl < MAXLEVEL - 1)
     {
         if( '0' <= rTxt.GetChar( nPos ) &&  '9' >= rTxt.GetChar( nPos ))
         {
@@ -1140,7 +1140,7 @@ CHECK_ROMAN_5:
         (*pPreFix += (sal_Unicode)1) += String::CreateFromInt32( nStart );
 
     rPos = nPos;
-    return nDigitLvl;       // von 0 .. 5
+    return nDigitLvl;       // 0 .. 9 (MAXLEVEL - 1)
 }
 
 
