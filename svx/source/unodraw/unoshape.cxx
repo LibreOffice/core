@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 17:05:21 $
+ *  last change: $Author: cl $ $Date: 2001-11-16 15:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1765,6 +1765,11 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
 
         switch( pMap->nWID )
         {
+            case OWN_ATTR_HASLEVELS:
+            {
+                aAny <<= SvxTextEditSource::hasLevels( pObj );
+                break;
+            }
             case OWN_ATTR_CAPTION_POINT:
             {
                 Point aVclPoint = ((SdrCaptionObj*)pObj)->GetTailPos();

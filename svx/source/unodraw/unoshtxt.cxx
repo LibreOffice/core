@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 13:58:43 $
+ *  last change: $Author: cl $ $Date: 2001-11-16 14:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _SFXHINT_HXX //autogen
 #include <svtools/hint.hxx>
 #endif
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
 #ifndef _SVDMODEL_HXX //autogen
 #include <svdmodel.hxx>
 #endif
@@ -109,6 +112,9 @@
 #include "svdotext.hxx"
 #include "svdpage.hxx"
 #include "editeng.hxx"
+#ifndef _EDITOBJ_HXX
+#include "editobj.hxx"
+#endif
 
 #include "unotext.hxx"
 
@@ -503,3 +509,55 @@ void SvxTextEditSource::unlock()
         mpImpl->unlock();
 }
 
+/** this method returns true if the outliner para object of the given shape has
+    a paragraph with a level > 0 or if there is a paragraph with the EE_PARA_BULLETSTATE
+    set to true. This is needed for xml export to decide if we need to export the
+    level information.
+*/
+sal_Bool SvxTextEditSource::hasLevels( const SdrObject* pObject )
+{
+    OutlinerParaObject* pOutlinerParaObject = pObject->GetOutlinerParaObject();
+    if( NULL == pOutlinerParaObject )
+        return sal_False;
+
+    USHORT nParaCount = (USHORT)pOutlinerParaObject->Count();
+    USHORT nPara;
+    for( nPara = 0; nPara < nParaCount; nPara++ )
+    {
+        if( pOutlinerParaObject->GetDepth( nPara ) > 0 )
+            return sal_True;
+    }
+
+    sal_Bool bHadBulletStateOnEachPara = sal_True;
+
+    const EditTextObject& rEditTextObject = pOutlinerParaObject->GetTextObject();
+    const SfxPoolItem* pItem;
+
+    for( nPara = 0; nPara < nParaCount; nPara++ )
+    {
+        SfxItemSet aSet = rEditTextObject.GetParaAttribs( nPara );
+        if( aSet.GetItemState(EE_PARA_BULLETSTATE, sal_False, &pItem) == SFX_ITEM_SET )
+        {
+            if( ((const SfxUInt16Item*) pItem)->GetValue() )
+                return sal_True;
+        }
+        else
+        {
+            bHadBulletStateOnEachPara = sal_False;
+        }
+    }
+
+    // if there was at least one paragraph without a bullet state item we
+    // also need to check the stylesheet for a bullet state item
+    if( !bHadBulletStateOnEachPara && pObject->GetStyleSheet() )
+    {
+        const SfxItemSet& rSet = pObject->GetStyleSheet()->GetItemSet();
+        if( rSet.GetItemState(EE_PARA_BULLETSTATE, sal_False, &pItem) == SFX_ITEM_SET )
+        {
+            if( ((const SfxUInt16Item*)pItem)->GetValue() )
+                return sal_True;
+        }
+    }
+
+    return sal_False;
+}
