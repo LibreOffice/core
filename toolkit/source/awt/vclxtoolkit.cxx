@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-27 09:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 11:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,6 +830,17 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_RADIOBUTTON:
                 pNewWindow = new RadioButton( pParent, nWinBits );
                 *ppNewComp = new VCLXRadioButton;
+
+                // by default, disable RadioCheck
+                // Since the VCLXRadioButton really cares for it's RadioCheck settings, this is important:
+                // if we enable it, the VCLXRadioButton will use RadioButton::Check instead of RadioButton::SetState
+                // This leads to a strange behaviour if the control is newly created: when settings the initial
+                // state to "checked", the RadioButton::Check (called because RadioCheck=TRUE) will uncheck
+                // _all_other_ radio buttons in the same group. However, at this moment the grouping of the controls
+                // is not really valid: the controls are grouped after they have been created, but we're still in
+                // the creation process, so the RadioButton::Check relies on invalid grouping information.
+                // 07.08.2001 - #87254# - frank.schoenheit@sun.com
+                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( FALSE );
             break;
             case WINDOW_SCROLLBAR:
                 pNewWindow = new ScrollBar( pParent, nWinBits );
