@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:29:45 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,18 +97,10 @@ namespace basegfx
         */
         void checkClosed(B2DPolygon& rCandidate);
 
-        // Get index of outmost point (e.g. biggest X and biggest Y)
-        sal_uInt32 getIndexOfOutmostPoint(const B2DPolygon& rCandidate);
-
         // Get successor and predecessor indices. Returning the same index means there
         // is none. Same for successor.
         sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
         sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
-
-        // Get index of first different predecessor. Returning the same index means there
-        // is none. Same for successor.
-        sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
-        sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const B2DPolygon& rCandidate);
 
         // Get orientation of Polygon
         B2VectorOrientation getOrientation(const B2DPolygon& rCandidate);
@@ -120,6 +112,9 @@ namespace basegfx
 
         // get size of polygon. Control vectors are included in that ranges.
         B2DRange getRange(const B2DPolygon& rCandidate);
+
+        // get signed area of polygon
+        double getSignedArea(const B2DPolygon& rCandidate);
 
         // get area of polygon
         double getArea(const B2DPolygon& rCandidate);
@@ -140,11 +135,23 @@ namespace basegfx
         // using getLength(...)
         B2DPoint getPositionRelative(const B2DPolygon& rCandidate, double fDistance, double fLength = 0.0);
 
-        // get orientation at given polygon point
-        B2VectorOrientation getPointOrientation(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+        // get a snippet from given polygon for absolute distances. The polygon is assumed
+        // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. fLength], where
+        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
+        // if 0.0 it is calculated using getLength(...)
+        B2DPolygon getSnippetAbsolute(const B2DPolygon& rCandidate, double fFrom, double fTo, double fLength = 0.0);
+
+        // get a snippet from given polygon for relative distances. The polygon is assumed
+        // to be opened (not closed). fFrom and fTo need to be in range [0.0 .. 1.0], where
+        // fTo >= fFrom. If length is given, it is assumed the correct polygon length,
+        // if 0.0 it is calculated using getLength(...)
+        B2DPolygon getSnippetRelative(const B2DPolygon& rCandidate, double fFrom = 0.0, double fTo = 1.0, double fLength = 0.0);
 
         // Continuity check for point with given index
         B2VectorContinuity getContinuityInPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+        //BFS08
+        B2DPolyPolygon removeIntersections(const B2DPolygon& rCandidate, bool bKeepOrientations = true);
 
         // Subdivide all contained curves. Use distanceBound value if given.
         B2DPolygon adaptiveSubdivideByDistance(const B2DPolygon& rCandidate, double fDistanceBound = 0.0);
@@ -202,7 +209,7 @@ namespace basegfx
         // which are inserted as single polygons into the result.
         // If fFullDashDotLen is not given it will be calculated from the given
         // raDashDotArray.
-        ::basegfx::B2DPolyPolygon applyLineDashing(const ::basegfx::B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
+        B2DPolyPolygon applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& raDashDotArray, double fFullDashDotLen = 0.0);
 
         // test if point is inside epsilon-range around an edge defined
         // by the two given points. Can be used for HitTesting. The epsilon-range
