@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obr $ $Date: 2002-08-08 14:10:18 $
+#   last change: $Author: obr $ $Date: 2002-08-14 12:14:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ USE_JAVAVER:=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(JAVAVER:s/.//)" >= "130" 
+.IF "$(JAVAVER:s/.//)" >= "140" 
 JARFILES = sandbox.jar jurt.jar unoil.jar ridl.jar 
 JAVAFILES := $(shell +ls *.java)
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
