@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-20 15:46:25 $
+ *  last change: $Author: cl $ $Date: 2001-07-17 08:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,14 +107,14 @@ SvxTextEditSource::SvxTextEditSource( SdrObject* pObject ) :
 {
     DBG_ASSERT( pObj, "invalid pObject!" );
 
-    if( pObj )
+    if( pObj && pObj->GetModel() )
         StartListening( *pObj->GetModel() );
 }
 
 //------------------------------------------------------------------------
 SvxTextEditSource::~SvxTextEditSource()
 {
-    if( pObj )
+    if( pObj && pObj->GetModel() )
         EndListening( *pObj->GetModel() );
 
     delete pTextForwarder;
