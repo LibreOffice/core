@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-09-26 14:28:11 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ ULONG SwReader::Read( const Reader& rOptions )
         po->SetReadUTF8( FALSE );
         po->SetBlockMode( FALSE );
         po->SetOrganizerMode( FALSE );
+        po->SetIgnoreHTMLComments( FALSE );
         return ERR_SWG_FILE_FORMAT_ERROR;
     }
 
@@ -490,6 +491,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );
     po->SetOrganizerMode( FALSE );
+    po->SetIgnoreHTMLComments( FALSE );
     return nError;
 }
 
@@ -571,7 +573,7 @@ Reader::Reader()
     : pStrm(0), pStg(0), pMedium(0), pTemplate(0),
     bTmplBrowseMode( FALSE ), bInsertMode( FALSE ),
     bReadUTF8( FALSE ), bBlockMode( FALSE ), bOrganizerMode( FALSE ),
-    bHasAskTemplateName( FALSE )
+    bHasAskTemplateName( FALSE ), bIgnoreHTMLComments( FALSE )
 {
 }
 
