@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChXChartDataArray.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:19:46 $
+ *  last change:$Date: 2003-09-08 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,17 @@
  ************************************************************************/
 
 package mod._sch;
-import com.sun.star.chart.XChartData;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.chart.XChartDocument;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.chart.XChartData;
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.lang.XMultiServiceFactory;
 
 /**
 * Test for object which is represented by service
