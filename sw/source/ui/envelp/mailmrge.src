@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:24:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,7 +985,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 205 , 97 ) ;
     Moveable = TRUE ;
-    HelpID = HID_MAIL_MERGE_CREATE_FROM;
+    HelpID = HID_MAIL_MERGE_INSERT_FIELDS;
     Text = "Datenquellen-Verbindung" ;
     Text [ english_us ] = "Data Source Connection" ;
     FixedLine FL_CONNECTIONS
