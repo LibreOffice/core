@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:49:36 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include <tools/ref.hxx>
 #ifndef _HINTIDS_HXX
@@ -195,7 +192,7 @@
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
-void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
+static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 {
     USHORT nResId = 0;
     switch( rRedl.GetType() )
@@ -303,7 +300,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 break;
 
             case SwContentAtPos::SW_REDLINE:
-                ::lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl, sTxt, bBalloon );
+                lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl, sTxt, bBalloon );
                 break;
 
             case SwContentAtPos::SW_TOXMARK:
@@ -381,7 +378,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
                         if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
-                            ::lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
+                            lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
                                                     sTxt, bBalloon );
                     }
                 }
