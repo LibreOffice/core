@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-27 13:28:31 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 10:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,16 +107,35 @@
 #ifndef  _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 
+#ifndef _VECTOR_
 #include <vector>
+#endif
+#ifndef _ALGORITHM_
 #include <algorithm>
+#endif
 
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
+#endif
+#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
+#endif
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -311,7 +330,7 @@ void AppendDateTime_Impl( const ::com::sun::star::util::DateTime& rDT,
 
 OUString CreateExactSizeText_Impl( sal_Int64 nSize )
 {
-    double fSize( nSize );
+    double fSize( ( double ) nSize );
     int nDec;
 
     ULONG nMega = 1024 * 1024;
@@ -962,6 +981,8 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 
 void SvtFileView::Initialize( const String& rURL, const String& rFilter )
 {
+    WaitObject aWaitCursor( this );
+
     mpImp->maViewURL = rURL;
     mpImp->maCurrentFilter = rFilter;
     mpImp->maCurrentFilter.ToLowerAscii();
@@ -981,6 +1002,8 @@ void SvtFileView::Initialize( const String& rURL, const String& rFilter )
 
 void SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aContents )
 {
+    WaitObject aWaitCursor( this );
+
     mpImp->maViewURL = rURL;
     mpImp->maCurrentFilter = mpImp->maAllFilter;
 
@@ -1018,8 +1041,9 @@ void SvtFileView::SetNoSelection()
 
 // -----------------------------------------------------------------------
 
-void SvtFileView::SetFocusInView()
+void SvtFileView::GetFocus()
 {
+    Control::GetFocus();
     mpImp->mpView->GrabFocus();
 }
 
@@ -1224,8 +1248,10 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         {
             DBG_ERRORFILE( "createCursor: CommandAbortedException" );
         }
-        catch( ::com::sun::star::uno::Exception& )
-        {}
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            e; // make compiler happy
+        }
 
         if ( xResultSet.is() )
         {
