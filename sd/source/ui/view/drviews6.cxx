@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-26 10:56:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "DrawViewShell.hxx"
+
 #ifndef _SV_METAACT_HXX //autogen
 #include <vcl/metaact.hxx>
 #endif
@@ -112,27 +114,52 @@
 
 #include "app.hxx"
 #include "animobjs.hxx"
-#include "navichld.hxx"
-#include "prevchld.hxx"
-#include "efctchld.hxx"
-#include "slidchld.hxx"
-//#include "3dchld.hxx"
-#include "sdresid.hxx"
-#include "fupoor.hxx"
-#include "fusldlg.hxx"
-#include "drawdoc.hxx"
-#include "drviewsh.hxx"
-#include "fuexpand.hxx"
-#include "fusumry.hxx"
-#include "fucushow.hxx"
-#include "drawview.hxx"
-
-#include "preview.hxx"
-#include "frmview.hxx"
-
-#ifndef _SD_SDWINDOW_HXX
-#include "sdwindow.hxx"
+#ifndef SD_ANIMATION_CHILD_WINDOW_HXX
+#include "AnimationChildWindow.hxx"
 #endif
+#ifndef SD_NAVIGATOR_CHILD_WINDOW_HXX
+#include "NavigatorChildWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
+#ifndef SD_EFFECT_CHILD_WINDOW_HXX
+#include "EffectChildWindow.hxx"
+#endif
+#ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
+#include "SlideChangeChildWindow.hxx"
+#endif
+#include "sdresid.hxx"
+#ifndef SD_FU_POOR_HXX
+#include "fupoor.hxx"
+#endif
+#ifndef SD_FU_SLIDE_SHOW_DLG_HXX
+#include "fusldlg.hxx"
+#endif
+#include "drawdoc.hxx"
+#ifndef SD_FU_EXPAND_PAGE_HXX
+#include "fuexpand.hxx"
+#endif
+#ifndef SD_FU_SUMMARY_PAGE_HXX
+#include "fusumry.hxx"
+#endif
+#ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
+#include "fucushow.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_HXX
+#include "drawview.hxx"
+#endif
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -140,7 +167,7 @@
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecFormText(SfxRequest& rReq)
+void DrawViewShell::ExecFormText(SfxRequest& rReq)
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -191,7 +218,7 @@ void SdDrawViewShell::ExecFormText(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetFormTextState(SfxItemSet& rSet)
+void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
     const SdrMarkList& rMarkList = pDrView->GetMarkList();
     const SdrObject* pObj = NULL;
@@ -230,10 +257,10 @@ void SdDrawViewShell::GetFormTextState(SfxItemSet& rSet)
         if ( pDlg )
         {
 //          pDlg->SetActive();
-            pDlg->SetColorTable(pDoc->GetColorTable());
+            pDlg->SetColorTable(GetDoc()->GetColorTable());
         }
 
-        SfxItemSet aSet( pDoc->GetPool() );
+        SfxItemSet aSet( GetDoc()->GetPool() );
         pDrView->GetAttributes( aSet );
         rSet.Set( aSet );
     }
@@ -245,7 +272,7 @@ void SdDrawViewShell::GetFormTextState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecObjPalette( SfxRequest& rReq )
+void DrawViewShell::ExecObjPalette( SfxRequest& rReq )
 {
     // Diese Methode muss erhalten bleiben, bis
     // der/die Slots entfernt wurden;
@@ -258,7 +285,7 @@ void SdDrawViewShell::ExecObjPalette( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetObjPaletteState(SfxItemSet& rSet)
+void DrawViewShell::GetObjPaletteState(SfxItemSet& rSet)
 {
     // Diese Methode muss erhalten bleiben, bis
     // der/die Slots entfernt wurden;
@@ -271,7 +298,7 @@ void SdDrawViewShell::GetObjPaletteState(SfxItemSet& rSet)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecAnimationWin( SfxRequest& rReq )
+void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -287,11 +314,12 @@ void SdDrawViewShell::ExecAnimationWin( SfxRequest& rReq )
         case SID_ANIMATOR_ADD:
         case SID_ANIMATOR_CREATE:
         {
-            SdAnimationWin* pAnimWin;
-            USHORT nId = SdAnimationChildWindow::GetChildWindowId();
+            AnimationWindow* pAnimWin;
+            USHORT nId = AnimationChildWindow::GetChildWindowId();
             //((const SfxUInt16Item&)(rReq.GetArgs()->Get(nSId))).GetValue();
 
-            pAnimWin = (SdAnimationWin*)(GetViewFrame()->GetChildWindow(nId)->GetWindow());
+            pAnimWin = static_cast<AnimationWindow*>(
+                GetViewFrame()->GetChildWindow(nId)->GetWindow());
 
             if ( pAnimWin )
             {
@@ -319,7 +347,7 @@ void SdDrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
+void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 {
     // Hier koennten Buttons etc. disabled werden
     UINT16 nValue;
@@ -362,7 +390,7 @@ void SdDrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::SetChildWindowState( SfxItemSet& rSet )
+void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 {
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FONTWORK ) )
@@ -377,7 +405,7 @@ void SdDrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ANIMATION_OBJECTS ) )
     {
-        USHORT nId = SdAnimationChildWindow::GetChildWindowId();
+        USHORT nId = AnimationChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_ANIMATION_OBJECTS, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAVIGATOR ) )
@@ -402,17 +430,17 @@ void SdDrawViewShell::SetChildWindowState( SfxItemSet& rSet )
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
     {
-        USHORT nId = SdPreviewChildWindow::GetChildWindowId();
+        USHORT nId = PreviewChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_EFFECT_WIN ) )
     {
-        USHORT nId = SdEffectChildWindow::GetChildWindowId();
+        USHORT nId = EffectChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_EFFECT_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SLIDE_CHANGE_WIN ) )
     {
-        USHORT nId = SdSlideChangeChildWindow::GetChildWindowId();
+        USHORT nId = SlideChangeChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_SLIDE_CHANGE_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_3D_WIN ) )
@@ -429,7 +457,7 @@ void SdDrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ExecBmpMask( SfxRequest& rReq )
+void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
     if (pFuActual && pFuActual->GetSlotID() == SID_PRESENTATION)
@@ -506,7 +534,7 @@ void SdDrawViewShell::ExecBmpMask( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
+void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = pDrView->GetMarkList();
     const SdrObject*    pObj = NULL;
@@ -519,7 +547,7 @@ void SdDrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
         pDlg = (SvxBmpMask*) ( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
 
         if ( pDlg->NeedsColorTable() )
-            pDlg->SetColorTable( pDoc->GetColorTable() );
+            pDlg->SetColorTable( GetDoc()->GetColorTable() );
     }
 
     if ( rMarkList.GetMarkCount() == 1 )
@@ -539,7 +567,7 @@ void SdDrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
+void DrawViewShell::FuTemp04(SfxRequest& rReq)
 {
 
     USHORT nSId = rReq.GetSlot();
@@ -617,11 +645,13 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_ANIMATION_OBJECTS:
         {
             if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SdAnimationChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_ANIMATION_OBJECTS))).GetValue());
+                GetViewFrame()->SetChildWindow(
+                    AnimationChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_ANIMATION_OBJECTS))).GetValue());
             else
-                GetViewFrame()->ToggleChildWindow(SdAnimationChildWindow::GetChildWindowId() );
+                GetViewFrame()->ToggleChildWindow(
+                    AnimationChildWindow::GetChildWindowId() );
 
             GetViewFrame()->GetBindings().Invalidate(SID_ANIMATION_OBJECTS);
             Cancel();
@@ -640,7 +670,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
             }
             else
             {
-                USHORT nId = SdPreviewChildWindow::GetChildWindowId();
+                USHORT nId = PreviewChildWindow::GetChildWindowId();
                 bPreview = !SfxBoolItem(SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow(nId)).GetValue();
             }
 
@@ -659,11 +689,13 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_EFFECT_WIN:
         {
             if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SdEffectChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_EFFECT_WIN))).GetValue());
+                GetViewFrame()->SetChildWindow(
+                    EffectChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_EFFECT_WIN))).GetValue());
             else
-                GetViewFrame()->ToggleChildWindow(SdEffectChildWindow::GetChildWindowId() );
+                GetViewFrame()->ToggleChildWindow(
+                    EffectChildWindow::GetChildWindowId() );
 
             GetViewFrame()->GetBindings().Invalidate(SID_EFFECT_WIN);
             Cancel();
@@ -674,11 +706,13 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_SLIDE_CHANGE_WIN:
         {
             if ( rReq.GetArgs() )
-                GetViewFrame()->SetChildWindow(SdSlideChangeChildWindow::GetChildWindowId(),
-                                        ((const SfxBoolItem&) (rReq.GetArgs()->
-                                        Get(SID_SLIDE_CHANGE_WIN))).GetValue());
+                GetViewFrame()->SetChildWindow(
+                    SlideChangeChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_SLIDE_CHANGE_WIN))).GetValue());
             else
-                GetViewFrame()->ToggleChildWindow(SdSlideChangeChildWindow::GetChildWindowId() );
+                GetViewFrame()->ToggleChildWindow(
+                    SlideChangeChildWindow::GetChildWindowId() );
 
             GetViewFrame()->GetBindings().Invalidate(SID_SLIDE_CHANGE_WIN);
             Cancel();
@@ -720,21 +754,21 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
 
         case SID_PRESENTATION_DLG:
         {
-            pFuActual = new FuSlideShowDlg( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuSlideShowDlg( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            pFuActual = new FuCustomShowDlg( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuCustomShowDlg( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_EXPAND_PAGE:
         {
-            pFuActual = new FuExpandPage( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuExpandPage( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -742,7 +776,7 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_SUMMARY_PAGE:
         {
             pDrView->EndTextEdit();
-            pFuActual = new FuSummaryPage( this, pWindow, pDrView, pDoc, rReq );
+            pFuActual = new FuSummaryPage( this, pWindow, pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -757,3 +791,4 @@ void SdDrawViewShell::FuTemp04(SfxRequest& rReq)
     };
 };
 
+} // end of namespace sd
