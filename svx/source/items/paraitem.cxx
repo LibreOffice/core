@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 14:08:24 $
+ *  last change: $Author: os $ $Date: 2000-10-16 07:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,8 +573,13 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
                 eVal = utl::getEnumAsINT32(rVal);
             }
             catch(...) {}
-            if(eVal > 0 && eVal <= 4)
+            if(eVal >= 0 && eVal <= 4)
             {
+                if(MID_LAST_LINE_ADJUST == nMemberId &&
+                    eVal != drawing::TextAdjust_LEFT &&
+                    eVal != drawing::TextAdjust_BLOCK &&
+                    eVal != drawing::TextAdjust_CENTER)
+                        return FALSE;
                 eVal = aUnoToSvxAdjust[eVal];
                 if(eVal < (sal_uInt16)SVX_ADJUST_END)
                     nMemberId == MID_PARA_ADJUST ?
