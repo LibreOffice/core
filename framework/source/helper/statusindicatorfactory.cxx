@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 15:14:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
+#endif
+
+#ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
+#include <comphelper/mediadescriptor.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
@@ -458,27 +462,55 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if (xVisibleCheck.is())
         bIsVisible = xVisibleCheck->isVisible();
 
-    if (!bIsVisible)
-    {
-        if (xParentWindow.is())
-            xParentWindow->setVisible(sal_True);
-        css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
-        if (xParentWindowTop.is())
-            xParentWindowTop->toFront();
-    }
+    if (bIsVisible)
+        return;
 
+    // Ok the window should be made visible ... becuase it isnt currently visible.
+    // BUT ..!
+    // We need a Hack for our applications: They get her progress from the frame directly
+    // on saving documents. Because there is no progress set on the MediaDescriptor.
+    // But that's wrong. In case the document was opened hidden, they shouldnt use any progress .-(
+    // They only possible workaround: dont show the parent window here, if the document was opened hidden.
+    sal_Bool bHiddenDoc = sal_False;
     if (xFrame.is())
     {
-        // use frame layouted progress implementation
-        css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
-        if (xPropSet.is())
+        css::uno::Reference< css::frame::XController > xController;
+        css::uno::Reference< css::frame::XModel >      xModel     ;
+        xController = xFrame->getController();
+        if (xController.is())
+            xModel = xController->getModel();
+        if (xModel.is())
         {
-            css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
-            if (xLayoutManager.is())
-                xLayoutManager->showElement(PROGRESS_RESOURCE);
+            ::comphelper::MediaDescriptor lDocArgs(xModel->getArgs());
+            bHiddenDoc = lDocArgs.getUnpackedValueOrDefault(
+                ::comphelper::MediaDescriptor::PROP_HIDDEN(),
+                (sal_Bool)sal_False);
         }
     }
+
+    if (bHiddenDoc)
+        return;
+
+    // OK: The document was not opened in hidden mode ...
+    // and the window isnt already visible.
+    // Show it and bring it to front.
+    // But before we have to be sure, that our internal used helper progress
+    // is visible too.
+
+    css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
+    if (xPropSet.is())
+    {
+        css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
+        xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
+        if (xLayoutManager.is())
+            xLayoutManager->showElement(PROGRESS_RESOURCE);
+    }
+
+    if (xParentWindow.is())
+        xParentWindow->setVisible(sal_True);
+    css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
+    if (xParentWindowTop.is())
+        xParentWindowTop->toFront();
 }
 
 //-----------------------------------------------
