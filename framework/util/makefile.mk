@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 17:18:49 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:50:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,12 +133,12 @@ SHL1IMPLIB=     ifwi
 
 SHL1LIBS=       $(LIB1TARGET)
 
-SHL1STDLIBS=    $(CPPULIB)                          \
-                $(CPPUHELPERLIB)                    \
-                $(VOSLIB)                           \
-                $(SALLIB)                           \
-                $(TOOLSLIB)                         \
-                $(UNOTOOLSLIB)
+SHL1STDLIBS=    \
+                $(UNOTOOLSLIB)	\
+                $(TOOLSLIB)		\
+                $(VOSLIB)		\
+                $(CPPULIB)		\
+                $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
@@ -164,17 +164,16 @@ SHL2IMPLIB=     ifwe
 
 SHL2LIBS=       $(LIB2TARGET)
 
-SHL2STDLIBS=    $(VCLLIB)                           \
-                $(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(VOSLIB)							\
-                $(SALLIB)							\
-                $(SVLIB)							\
+SHL2STDLIBS=    \
+                $(VCLLIB)                           \
                 $(SVLLIB)							\
+                $(UNOTOOLSLIB)                      \
                 $(TOOLSLIB)							\
                 $(COMPHELPERLIB)					\
-                $(UNOTOOLSLIB)                      \
-                $(FWILIB)
+                $(CPPUHELPERLIB)					\
+                $(CPPULIB)							\
+                $(VOSLIB)							\
+                $(SALLIB)
 
 SHL2DEF=        $(MISC)$/$(SHL2TARGET).def
 
@@ -199,22 +198,22 @@ SHL3OBJS=       $(SLO)$/contenthandlerfactory.obj   \
                 $(SLO)$/substitutepathvars.obj		\
                 $(SLO)$/pathsettings.obj
 
-SHL3STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(COMPHELPERLIB)					\
+SHL3STDLIBS=	\
+                $(FWILIB)							\
+                $(SVLLIB)							\
                 $(UNOTOOLSLIB)						\
                 $(TOOLSLIB) 						\
+                $(CPPUHELPERLIB)					\
+                $(CPPULIB)							\
                 $(VOSLIB)							\
-                $(SVLLIB)							\
-                $(SALLIB)							\
-                $(FWILIB)
+                $(SALLIB)
 
-SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
 SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
-DEF3NAME=		$(SHL3TARGET)
+DEF3NAME=       $(SHL3TARGET)
 
-DEF3EXPORTFILE=	exports.dxp
+SHL3VERSIONMAP= exports.map
 
 # --- services library ----------------------------------------------------
 
@@ -249,7 +248,7 @@ SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
                 $(SLO)$/statusindicatorfactory.obj	\
                 $(SLO)$/targetfinder.obj		  	\
                 $(SLO)$/taskcreator.obj		  		\
-                 $(SLO)$/timerhelper.obj				\
+                $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\
                 $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
@@ -273,28 +272,28 @@ SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
                 $(SLO)$/backingcomp.obj				\
                 $(SLO)$/dispatchhelper.obj
 
-SHL4STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(VOSLIB)							\
-                $(SALLIB)							\
-                $(TOOLSLIB) 						\
+SHL4STDLIBS=	\
+                $(FWELIB)							\
+                $(FWILIB)                           \
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
-                $(SVLIB)							\
-                $(COMPHELPERLIB)					\
-                $(UCBHELPERLIB)						\
-                $(UNOTOOLSLIB)						\
-                $(FWILIB)                           \
-                $(FWELIB)							\
+                $(VCLLIB)							\
                 $(SVLLIB)							\
-                $(SOTLIB)
+                $(SOTLIB)							\
+                $(UNOTOOLSLIB)						\
+                $(TOOLSLIB) 						\
+                $(COMPHELPERLIB)					\
+                $(CPPUHELPERLIB)					\
+                $(CPPULIB)							\
+                $(VOSLIB)							\
+                $(SALLIB)
 
 SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
 SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
 DEF4NAME=		$(SHL4TARGET)
 
-DEF4EXPORTFILE=	exports.dxp
+SHL4VERSIONMAP= exports.map
 
 # --- login service library ----------------------------------------------------
 
@@ -318,7 +317,7 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF5NAME=		$(SHL5TARGET)
 
-DEF5EXPORTFILE=	exports.dxp
+SHL5VERSIONMAP= exports.map
 
 # --- Targets -----------------------------------------------------------------
 
