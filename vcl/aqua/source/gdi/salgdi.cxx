@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.24 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:39:31 $
+ *  $Revision: 1.25 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-12 00:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,20 +147,91 @@ static void CheckRectBounds ( Rect        *rSrcRect,
 // =======================================================================
 
 // =======================================================================
-static unsigned short IndexTo32BitDeviceColor ( long  *rIndexColor ){    unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
+static unsigned long  Compress32BitRGBColor ( const RGBColor *pRGBColor ){   unsigned long nCTableIndex = 0;
 
-    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rIndexColor & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rIndexColor  >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
+    const unsigned short kOneByte  = 8;
+    const unsigned short kTwoBytes = 16;
+           nCTableIndex  = ( pRGBColor->red   >> kOneByte ) << kTwoBytes; nCTableIndex |= ( pRGBColor->green >> kOneByte ) << kOneByte;  nCTableIndex |=   pRGBColor->blue  >> kOneByte;       return nCTableIndex;} // Compress32BitRGBColor    // -----------------------------------------------------------------------
+
+static unsigned long  Compress16BitRGBColor ( const RGBColor *pRGBColor ){    unsigned long nCTableIndex = 0;           const unsigned short kFiveBits   = 5;
+    const unsigned short kTenBits    = 10;
+    const unsigned short kElevenBits = 11;
+           nCTableIndex  = ( pRGBColor->red   >> kElevenBits ) << kTenBits;   nCTableIndex |= ( pRGBColor->green >> kElevenBits ) << kFiveBits;  nCTableIndex |=   pRGBColor->blue  >> kElevenBits;        return nCTableIndex;} // Compress16BitRGBColor    // -----------------------------------------------------------------------
+
+static void CompressRGBColor ( const PixMapPtr   pPixMap,
+                               const RGBColor   *pRGBColor,                               SalColor         *rSalColor
+                             ){
+    const unsigned short k32BitScreenDepth = 32;
+   if ( pPixMap->pixelSize == k32BitScreenDepth ) {      *rSalColor = Compress32BitRGBColor( pRGBColor );   } // if    else   {      *rSalColor = Compress16BitRGBColor( pRGBColor );   } // else} // CompressRGBColor    // -----------------------------------------------------------------------
+
+static unsigned long AbsoluteValue ( const long  nValue ){    unsigned long   nAbsValue = 0;        if ( nValue < 0 )  {      nAbsValue = -nValue;   } // if    else   {      nAbsValue = nValue;    } // else             return nAbsValue;} // AbsoluteValue
 
 // -----------------------------------------------------------------------
 
-static void Index2DirectColor ( long      *rIndexColor,                                RGBColor  *rRGBColor
-                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rIndexColor );    rRGBColor->green = IndexTo32BitDeviceColor ( rIndexColor );    rRGBColor->red   = IndexTo32BitDeviceColor ( rIndexColor );
+static unsigned long  RGBDistance ( const RGBColor  *pRGBColor1,                                    const RGBColor  *pRGBColor2
+                                  ){  unsigned long   nRGBDist    = 0;   long            nDeltaRed   = 0;   long            nDeltaGreen = 0;   long            nDeltaBlue  = 0;          nDeltaRed   = (long)pRGBColor2->red   - (long)pRGBColor1->red; nDeltaGreen = (long)pRGBColor2->green - (long)pRGBColor1->green;   nDeltaBlue  = (long)pRGBColor2->blue  - (long)pRGBColor1->blue;           nRGBDist =   AbsoluteValue(nDeltaRed)         + AbsoluteValue(nDeltaGreen)           + AbsoluteValue(nDeltaBlue);           return nRGBDist;} // RGBDistance
+// -----------------------------------------------------------------------
+
+static BOOL QDColorsMatch ( const RGBColor  *pRGBColor1,                            const RGBColor  *pRGBColor2
+                          ){  if (    ( pRGBColor2->red   == pRGBColor1->red   )          && ( pRGBColor2->green == pRGBColor1->green )      && ( pRGBColor2->blue  == pRGBColor1->blue  )
+           )
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }} // QDColorsMatch
+
+// -----------------------------------------------------------------------
+
+static void GetBestSalColor ( const CTabPtr    pCTable,
+                              const RGBColor  *pRGBColor,                              unsigned long   *pBestSalColor
+                            ){    unsigned short   nCTableSize     = 0;  unsigned long    nCTableIndex    = 0;  unsigned long    nRGBNewDistance = 0;  unsigned long    nRGBMinDistance = UID_MAX;    RGBColor        *pRGBNextColor   = NULL;   BOOL             bRGBColorsMatch = FALSE; *pBestSalColor = 0;           nCTableSize = pCTable->ctSize;        while ( ( nCTableIndex < nCTableSize ) && !( bRGBColorsMatch == FALSE ) )  {      pRGBNextColor = &pCTable->ctTable[nCTableIndex].rgb;
+        bRGBColorsMatch = QDColorsMatch( pRGBColor, pRGBNextColor );
+       if ( bRGBColorsMatch == TRUE )     {          *pBestSalColor= nCTableIndex;      } // if        else       {          nRGBNewDistance = RGBDistance ( pRGBColor, pRGBNextColor );                           if ( nRGBNewDistance < nRGBMinDistance )           {               nRGBMinDistance = nRGBNewDistance;                *pBestSalColor   = nCTableIndex;           } // if                               nCTableIndex++;        } //else   } // while} // GetBestSalColor    // -----------------------------------------------------------------------
+
+static void GetCTableIndex ( const  PixMapPtr   pPixMap,
+                             const RGBColor    *pRGBColor,                             SalColor          *rSalColor
+                           ){ CTabPtr pCTable = NULL;   pCTable = *(*pPixMap).pmTable;
+    if ( pCTable != NULL )
+    {          GetBestSalColor( pCTable, pRGBColor, rSalColor );                                                                 if ( *rSalColor > pCTable->ctSize )        {          *rSalColor = 255;      } // if
+    } // if} // GetCTableIndex    // -----------------------------------------------------------------------
+
+static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      pGDevice  = NULL;   SalColor   nSalColor = 0;                 pGDevice = *GetGDevice ( );
+    if ( pGDevice != NULL )
+    {
+        PixMapPtr  pPixMap = NULL;
+
+        pPixMap = *(*pGDevice).gdPMap;
+
+        if ( pPixMap != NULL )
+        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor ( pPixMap, pRGBColor, &nSalColor );           } // if            else           {              GetCTableIndex ( pPixMap, pRGBColor, &nSalColor );         } // else
+        } // if
+    } // if                   return  nSalColor;} // RGBColor2SALColor// =======================================================================
+// =======================================================================
+static unsigned short IndexTo32BitDeviceColor ( SalColor  *rSalColor ){  unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
+
+    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rSalColor & kByteMask;   nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
+
+// -----------------------------------------------------------------------
+
+static void Index2DirectColor ( SalColor  *rSalColor,                                RGBColor  *rRGBColor
+                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rSalColor );  rRGBColor->green = IndexTo32BitDeviceColor ( rSalColor );  rRGBColor->red   = IndexTo32BitDeviceColor ( rSalColor );
 } // Index2DirectColor     
 // -----------------------------------------------------------------------
 
-static void Index2EightBitColor ( long        *pIndexColor,                                  RGBColor    *rRGBColor,
-                                  const GDPtr  pGDevice
-                                ){    CTabPtr    pRGBCTable     = NULL;  PixMapPtr  pGDevicePixMap = NULL;         pGDevicePixMap = *(*pGDevice).gdPMap;  pRGBCTable     = *(*pGDevicePixMap).pmTable;  if ( *pIndexColor <= pRGBCTable->ctSize )  {      RGBColor  aRGBColor;              aRGBColor        = pRGBCTable->ctTable[*pIndexColor].rgb;      rRGBColor->red   = aRGBColor.red;      rRGBColor->green = aRGBColor.green;        rRGBColor->blue  = aRGBColor.blue; } // if} // Index2EightBitColor
+static void Index2EightBitColor ( SalColor     *pSalColor,                                  RGBColor     *rRGBColor,
+                                  const GDPtr   pGDevice
+                                ){    CTabPtr    pCTable = NULL; PixMapPtr  pPixMap = NULL;        pPixMap = *(*pGDevice).gdPMap;
+
+    if ( pPixMap != NULL )
+    {      pCTable = *(*pPixMap).pmTable;
+
+        if ( pCTable != NULL )
+        {          if ( *pSalColor <= pCTable->ctSize )           {              RGBColor  aRGBColor;                      aRGBColor        = pCTable->ctTable[*pSalColor].rgb;               rRGBColor->red   = aRGBColor.red;              rRGBColor->green = aRGBColor.green;                rRGBColor->blue  = aRGBColor.blue;         } // if
+        } // if
+    } // if} // Index2EightBitColor
 // -----------------------------------------------------------------------
 //
 // Here we will convert index SAL color to either 8-bit or 32-bit color.
@@ -170,12 +241,15 @@ static void Index2EightBitColor ( long        *pIndexColor,                    
 //
 // -----------------------------------------------------------------------
 
-static RGBColor SALColor2RGBColor ( SalColor nSalColor )
+static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 {
-    long       nIndexColor = (long)nSalColor;
+    SalColor   nIndexColor = nSalColor;
     GDPtr      pGDevice    = NULL; RGBColor   aRGBColor;
            memset( &aRGBColor, 0, sizeof(RGBColor) );
-   pGDevice = *GetGDevice();         if ( pGDevice->gdType == directType )  {      Index2DirectColor ( &nIndexColor, &aRGBColor );    } // if    else   {      Index2EightBitColor ( &nIndexColor, &aRGBColor, pGDevice );    } // else
+   pGDevice = *GetGDevice();
+    if ( pGDevice != NULL )
+    {          if ( pGDevice->gdType == directType )      {          Index2DirectColor ( &nIndexColor, &aRGBColor );        } // if        else       {          Index2EightBitColor ( &nIndexColor, &aRGBColor, pGDevice );        } // else
+    }
 
     return aRGBColor;
 } // SALColor2RGBColor
@@ -929,7 +1003,17 @@ SalBitmap* SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 
 SalColor SalGraphics::GetPixel( long nX, long nY )
 {
-}
+    RGBColor  aRGBColor;
+    SalColor  nSalColor       = 0;
+    short     aHorizontalCoor = (short)nX;
+    short     aVerticalCoor   = (short)nY;
+
+    GetCPixel( aHorizontalCoor, aVerticalCoor, &aRGBColor );
+
+    nSalColor = RGBColor2SALColor ( &aRGBColor );
+
+    return nSalColor;
+} // SalGraphics::GetPixel
 
 // -----------------------------------------------------------------------
 
@@ -1006,9 +1090,22 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::DrawText( long nX, long nY,
-                            const xub_Unicode* pStr, xub_StrLen nLen )
+void SalGraphics::DrawText( long                nX,
+                            long                nY,
+                            const xub_Unicode  *pStr,
+                            xub_StrLen          nLen
+                          )
 {
+    if ( ( pStr != NULL ) && ( nLen > 0 ) )
+    {
+        short        nFirstByte = 0;
+        short        nByteCount = nLen;
+        const char  *pTextBuf   = (char *)pStr;
+
+        MoveTo( nX, nY );
+
+        ::MacDrawText( pTextBuf, nFirstByte, nByteCount );
+    } // if
 }
 
 // -----------------------------------------------------------------------
