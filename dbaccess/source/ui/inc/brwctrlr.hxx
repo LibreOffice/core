@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:39:02 $
+ *  last change: $Author: fs $ $Date: 2002-01-29 12:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ namespace dbaui
 
     // ================
     // attribute access
-    public:
+    protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             getRowSet()         const   { return m_xRowSet; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   getColumnsSupplier()const   { return m_xColumnsSupplier; }
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           getLoadable()       const   { return m_xLoadable; }
@@ -222,6 +222,8 @@ namespace dbaui
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
+        void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
+        void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    getParser() const { return m_xParser; }
