@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:47:02 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 07:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,7 +629,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_simplified ] = "ΔϊΥζÒªΙΎ³ύΧΤ¶―ΈρΚ½ # ?";
         Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ΰβςξτξπμΰς #?";
         Text[ polish ] = "Chcesz na pewno skasowaζ autoformatowanie #?";
-        Text[ japanese ] = "# µ°ΔΜ«°Ο―Δ‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
+        Text[ japanese ] = "µ°ΔΜ«°Ο―Δ # ‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
         Text[ chinese_traditional ] = "±z―u­n§R°£¦Ϋ°Κ®ζ¦΅ # ?";
         Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ ΗαΚδΣνή ΗαΚαήΗΖν #Ώ";
         Text[ greek ] = "Θέλετε πραγματικά να διαγραφεί η ΑυτοΜορφή #;";
