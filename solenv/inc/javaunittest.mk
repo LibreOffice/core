@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javaunittest.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 15:10:42 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:15:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,7 @@ $(TESTS): $(JAVACLASSFILES)
 .ENDIF
 
 %.test .PHONY: %.java
-    java -classpath $(CLASSPATH) org.openoffice.Runner -TestBase java_complex \
+    $(JAVAI) $(JAVACPS) $(CLASSPATH) org.openoffice.Runner -TestBase java_complex \
         -NoOffice yes -o $(subst,$/,. $(subst,.test, $(PACKAGE).$@))
 
 .IF "$(IDLTESTFILES)" != ""
