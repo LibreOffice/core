@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 09:18:15 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:03:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,16 +148,13 @@ EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat &&
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(MWS_BUILD)"!=""
 
-.IF "$(APP$(TNR)HEAP)"==""
-.IF "$(UPDATER)"=="" || "$(link_always)"==""
+.IF "$(link_always)"==""
 $(DEF$(TNR)TARGETN) : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
-.ELSE			# "$(UPDATER)"=="" || "$(link_always)"==""
-$(DEF$(TNR)TARGETN) .PHONY : \
-        $(DEF$(TNR)DEPN) \
-        $(DEF$(TNR)EXPORTFILE)
-.ENDIF			# "$(UPDATER)"=="" || "$(link_always)"==""
+.ELSE			# "$(link_always)"==""
+$(DEF$(TNR)TARGETN) .PHONY :
+.ENDIF			# "$(link_always)"==""
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
@@ -280,7 +277,6 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF
     @+-$(RM) $@
     @+$(RENAME) $@.tmpfile $@
-.ENDIF			# "$(APP$(TNR)HEAP)"==""
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="UNX"
