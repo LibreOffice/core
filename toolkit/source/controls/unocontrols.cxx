@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-17 11:31:26 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,6 +1129,8 @@ UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
     ImplRegisterProperty( BASEPROPERTY_SPIN );
     ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+    ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
 
     uno::Any aTreatAsNumber;
     aTreatAsNumber <<= (sal_Bool) sal_True;
