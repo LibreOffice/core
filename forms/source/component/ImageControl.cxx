@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 11:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,9 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         return;
 
     // SvStream am xInStream setzen
-    INetURLObject aURLObj(getString(rEvt.NewValue));
-    String aPath = INetURLObject::decode(aURLObj.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
+    String aPath = getString(rEvt.NewValue);
+    //  INetURLObject aURLObj(getString(rEvt.NewValue));
+    //  String aPath = INetURLObject::decode(aURLObj.PathToFileName(), '%', INetURLObject::DECODE_UNAMBIGUOUS);
 
     SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream(aPath, STREAM_READ);
     sal_Bool bSetNull = pFileStream==NULL;
@@ -272,6 +273,7 @@ void OImageControlModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         sal_Int32 nSize = (sal_Int32)pFileStream->Tell();
         if (pFileStream->GetBufferSize() < 8192)
             pFileStream->SetBufferSize(8192);
+        pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
         Reference<XInputStream> xInput
             (new ::utl::OInputStreamHelper(new SvLockBytes(pFileStream, sal_True),
@@ -459,15 +461,18 @@ void OImageControlModel::disposing()
 //------------------------------------------------------------------------------
 void OImageControlModel::_reset()
 {
-    Reference<XInputStream>  xDummy;
-    GetImageProducer()->setImage(xDummy);
-    Reference<XImageProducer> xProducer = m_xImageProducer;
-    {   // release our mutex once (it's acquired in the calling method !), as starting the image production may
-        // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
-        // VCLXImageControl, does this locking)
-        // FS - 74438 - 30.03.00
-        MutexRelease aRelease(m_aMutex);
-        xProducer->startProduction();
+    if(m_xField.is()) // only reset when we are connected to a column
+    {
+        Reference<XInputStream>  xDummy;
+        GetImageProducer()->setImage(xDummy);
+        Reference<XImageProducer> xProducer = m_xImageProducer;
+        {   // release our mutex once (it's acquired in the calling method !), as starting the image production may
+            // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
+            // VCLXImageControl, does this locking)
+            // FS - 74438 - 30.03.00
+            MutexRelease aRelease(m_aMutex);
+            xProducer->startProduction();
+        }
     }
 }
 
