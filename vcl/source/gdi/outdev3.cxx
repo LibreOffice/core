@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hdu $ $Date: 2001-06-07 12:16:39 $
+ *  last change: $Author: th $ $Date: 2001-06-21 21:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _SV_BMPACC_HXX
 #include <bmpacc.hxx>
 #endif
+#ifndef _SV_FONTCVT_HXX
+#include <fontcvt.hxx>
+#endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
@@ -175,7 +178,7 @@ using namespace ::rtl;
 #define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
-// -----------------------------------------------------------------------
+// =======================================================================
 
 static void ImplRotatePos( long nOriginX, long nOriginY, long& rX, long& rY,
                            short nOrientation )
@@ -387,9 +390,7 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 
 // -----------------------------------------------------------------------
 
-static void ImplGetEnglishSearchName( String& rName,
-                                      BOOL bDelScript = TRUE,
-                                      BOOL* pbScript = NULL  )
+void ImplGetEnglishSearchFontName( String& rName )
 {
     BOOL        bTranslate = FALSE;
     xub_StrLen  i;
@@ -499,10 +500,58 @@ static void ImplGetEnglishSearchName( String& rName,
     }
 };
 
+// -----------------------------------------------------------------------
+
+String GetFontToken( const String& rStr, xub_StrLen nToken, xub_StrLen& rIndex )
+{
+    const sal_Unicode*  pStr            = rStr.GetBuffer();
+    xub_StrLen          nLen            = (xub_StrLen)rStr.Len();
+    xub_StrLen          nTok            = 0;
+    xub_StrLen          nFirstChar      = rIndex;
+    xub_StrLen          i               = nFirstChar;
+
+    // Bestimme die Token-Position und Laenge
+    pStr += i;
+    while ( i < nLen )
+    {
+        // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+        if ( (*pStr == ';') || (*pStr == ',') )
+        {
+            nTok++;
+
+            if ( nTok == nToken )
+                nFirstChar = i+1;
+            else
+            {
+                if ( nTok > nToken )
+                    break;
+            }
+        }
+
+        pStr++;
+        i++;
+    }
+
+    if ( nTok >= nToken )
+    {
+        if ( i < nLen )
+            rIndex = i+1;
+        else
+            rIndex = STRING_NOTFOUND;
+        return String( rStr, nFirstChar, i-nFirstChar );
+    }
+    else
+    {
+        rIndex = STRING_NOTFOUND;
+        return String();
+    }
+}
+
 // =======================================================================
 
-static const char* const aImplKillTrailingList[] =
+static const char* const aImplKillLeadingList[] =
 {
+    "amt",
     "ms",
     "monotype",
     "mt",
@@ -511,13 +560,16 @@ static const char* const aImplKillTrailingList[] =
     "sun",
     "cg",
     "hg",
+    "fz",
+    "zycjk",
     NULL,
 };
 
 // -----------------------------------------------------------------------
 
-static const char* const aImplKillLeadingList[] =
+static const char* const aImplKillTrailingList[] =
 {
+    "amt",
     "ms",
     "monotype",
     "mt",
@@ -532,6 +584,31 @@ static const char* const aImplKillLeadingList[] =
     "wt",
     "greek",
     "wl",
+    // CJK extensions
+    "pro",
+    "z01",
+    "z02",
+    "z03",
+    "z13",
+    "b01",
+    // Old Printer Fontnames
+    "5cpi",
+    "6cpi",
+    "7cpi",
+    "8cpi",
+    "9cpi",
+    "10cpi",
+    "11cpi",
+    "12cpi",
+    "13cpi",
+    "14cpi",
+    "15cpi",
+    "16cpi",
+    "17cpi",
+    "18cpi",
+    "24cpi",
+    "scale",
+    "ps",
     NULL,
 };
 
@@ -622,8 +699,8 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 #define IMPL_FONT_ATTR_SPECIAL       ((ULONG)0x00000080)
 #define IMPL_FONT_ATTR_CJK           ((ULONG)0x00000100)
 #define IMPL_FONT_ATTR_CJK_JP        ((ULONG)0x00000200)
-#define IMPL_FONT_ATTR_CJK_ZH        ((ULONG)0x00000400)
-#define IMPL_FONT_ATTR_CJK_TW        ((ULONG)0x00000800)
+#define IMPL_FONT_ATTR_CJK_SC        ((ULONG)0x00000400)
+#define IMPL_FONT_ATTR_CJK_TC        ((ULONG)0x00000800)
 #define IMPL_FONT_ATTR_CJK_KR        ((ULONG)0x00001000)
 #define IMPL_FONT_ATTR_ARABIC        ((ULONG)0x00002000)
 #define IMPL_FONT_ATTR_NONELATIN     ((ULONG)0x00004000)
@@ -667,6 +744,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 {   "script",               IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_SCRIPT },
 {   "calligraphy",          IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
 {   "chancery",             IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
+{   "corsiva",              IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_SCRIPT },
 {   "oldstyle",             IMPL_FONT_ATTR_OLDSTYLE },
 {   "oldface",              IMPL_FONT_ATTR_OLDSTYLE },
 {   "old",                  IMPL_FONT_ATTR_OLDSTYLE },
@@ -694,7 +772,7 @@ static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplKillTrailing( String& rName, const char* pStr )
+static BOOL ImplKillLeading( String& rName, const char* pStr )
 {
     const xub_Unicode* pNameStr = rName.GetBuffer();
     while ( (*pNameStr == (xub_Unicode)(unsigned char)*pStr) && *pStr )
@@ -711,7 +789,7 @@ static BOOL ImplKillTrailing( String& rName, const char* pStr )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplKillLeading( String& rName, const char* pStr )
+static BOOL ImplKillTrailing( String& rName, const char* pStr )
 {
     const char* pTempStr = pStr;
     while ( *pTempStr )
@@ -758,20 +836,20 @@ static void ImplGetMapName( const String& rOrgName,
 
     rShortName = rOrgName;
 
-    // Kill trailing vendor names and other unimportant data
-    ppStr = aImplKillTrailingList;
-    while ( *ppStr )
-    {
-        if ( ImplKillTrailing( rShortName, *ppStr ) )
-            break;
-        ppStr++;
-    }
-
     // Kill leading vendor names and other unimportant data
     ppStr = aImplKillLeadingList;
     while ( *ppStr )
     {
         if ( ImplKillLeading( rShortName, *ppStr ) )
+            break;
+        ppStr++;
+    }
+
+    // Kill trailing vendor names and other unimportant data
+    ppStr = aImplKillTrailingList;
+    while ( *ppStr )
+    {
+        if ( ImplKillTrailing( rShortName, *ppStr ) )
             break;
         ppStr++;
     }
@@ -827,21 +905,46 @@ static void ImplGetMapName( const String& rOrgName,
 
 // =======================================================================
 
-static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;roman;lucidaserif;lucidabright;bookman;garamond;timmons;serif";
-static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif";
-static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monospaced";
-static char const aImplSubsSymbol[] = "starbats;wingdings;zapfdingbats;symbol;lucidadingbats;lucidasansdingbats";
-static char const aImplSubsBrushScript[] = "palacescript;arioso;monotypecorsiva;corsiva;zapfchancery;lucidacalligraphy;lucidahandwriting";
-static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;imprint;imprintmtshadow;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
-static char const aImplSubsBroadway[] = "broadway;mtbroadway;latinwide;falstaff;impact";
-static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
-static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed";
 static char const aImplSubsSansUnicode[] = "andalesansui;arialunicodems;lucidaunicode";
-static char const aImplSubsJPGothic[] = "msgothic;mspgothic;andalesansui";
-static char const aImplSubsJPMincho[] = "msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;andalesansui";
-static char const aImplSubsZH[] = "simsun;nsimsun;simhei;andalesansui";
-static char const aImplSubsTW[] = "mingliu;pmingliu;andalesansui";
-static char const aImplSubsKR[] = "batang;batangche;gulim;gulimche;dotum;dotumche;gungsuh;gungsuhche;myeomjo;andalesansui";
+static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;geneva;helmet;sansserif";
+static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;bookman;garamond;garamondmt;palatino";
+static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced";
+static char const aImplSubsSymbol[] = "starsymbol;starbats;wingdings;zapfdingbats;monotypesorts;symbol;lucidadingbats;lucidasansdingbats";
+
+static char const aImplSubsAndaleSans[] = "andalesans;verdana;trebuchetms";
+static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed";
+static char const aImplSubsBroadway[] = "broadway;mtbroadway;broadwaymt";
+static char const aImplSubsComic[] = "comicsansms;kidprint;";
+static char const aImplSubsPalaceScript[] = "palacescript;palacescriptmt;arioso";
+static char const aImplSubsSheffield[] = "sheffield;conga;centurygothic;copperlategothic;felixtitling";
+
+static char const aImplSubsJPGothic[] = "msgothic;mspgothic;hggothic;hggothicb;gothic";
+static char const aImplSubsJPMincho[] = "hgmincholightj;msmincho;mspmincho;hgminchoj;hgminchol;minchol;mincho;heiseimin";
+static char const aImplSubsSCSun[] = "msunglightsc;simsun;nsimsun";
+static char const aImplSubsSCHei[] = "simhei;hei;fzhei";
+static char const aImplSubsSCKai[] = "simkai;kai;fzkai";
+static char const aImplSubsSCSong[] = "song;fzsongyi;shusong;fzshusong";
+static char const aImplSubsSCFangSong[] = "fangsong;fzfangsong";
+static char const aImplSubsTC[] = "msunglighttc;mingliu;pmingliu;ming;kai;hei";
+static char const aImplSubsKRBatang[] = "hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo";
+static char const aImplSubsKRGulim[] = "gulim;gulimche;dotum;dotumche;roundgothic;kodig";
+
+static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;gothic;sheffield;conga";
+static char const aImplSubsNewCenturySchoolbook[] = "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook";
+static char const aImplSubsBookman[] = "bookman;bookmanoldstyle;";
+static char const aImplSubsPalatino[] = "palatino;bookantiqua";
+static char const aImplSubsZapfChancery[] = "zapfchancery;monotypecorsiva;corsiva;lucidacalligraphy;lucidahandwriting";
+
+static char const aImplSubsImprintShadow[] = "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar";
+static char const aImplSubsOutline[] = "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar";
+static char const aImplSubsShadow[] = "imprintmtshadow;imprintshadow;imprint;chevara;;gallia;algerian";
+static char const aImplSubsFalstaff[] = "falstaff;latinwide;impact";
+
+
+static char const aImplMSSubsArial[] = "Arial;Helvetica;Sans";
+static char const aImplMSSubsTimesNewRoman[] = "Times New Roman;Times;Serif";
+static char const aImplMSSubsCourierNew[] = "Courier New;Courier;Monospaced";
+static char const aImplMSSubsArialUnicodeMS[] = "Arial Unicode MS;Andale Sans UI";
 
 // -----------------------------------------------------------------------
 
@@ -851,6 +954,7 @@ struct ImplFontNameAttr
     const char*             mpSubstitution1;
     const char*             mpSubstitution2;
     const char*             mpSubstitution3;
+    const char*             mpMSSubstitution;
     FontWeight              meWeight;
     FontWidth               meWidth;
     ULONG                   mnType;
@@ -859,91 +963,149 @@ struct ImplFontNameAttr
 // List is sorted alphabetic
 static ImplFontNameAttr const aImplFontNameList[] =
 {
-{   "albany",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "algerian",             aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
-{   "almanac",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "andalesansui",         aImplSubsSansUnicode, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "andalewtui",           aImplSubsSansUnicode, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "arialunicode",         aImplSubsSansUnicode,aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_FULL },
-{   "arioso",               aImplSubsBrushScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "batang",               aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "batangche",            aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "bookman",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "bookmanoldstyle",      aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
-{   "broadway",             aImplSubsBroadway, NULL, NULL, WEIGHT_BOLD, WIDTH_NORMAL, IMPL_FONT_ATTR_DECORATIVE },
-{   "castellar",            aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_TITLING },
-{   "century",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "centuryschoolbook",    aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
-{   "cgtimes",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "chevara",              aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "chevaraoutline",       aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
-{   "colonna",              aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE },
-{   "courier",              aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "couriernew",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "cumberland",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
-{   "dotum",                aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "dotumche",             aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "extra",                aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "garamond",             aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "gothic",               aImplSubsJPGothic, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "gulim",                aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gulimche",             aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gungsuh",              aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "gungsuhche",           aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "helmet",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "helmetcondensed",      aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "helvetica",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "helveticanarrow",      aImplSubsSansNarrow, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "holidays",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "imprintmtshadow",      aImplSubsOutline, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE },
-{   "marlett",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "mincho",               aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "minchoj",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "minchol",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "mingliu",              aImplSubsTW, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TW },
-{   "monospace",            aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "monospaced",           aImplSubsFixed, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "myeomjo",              aImplSubsKR, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
-{   "nsimsun",              aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
-{   "ocean",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "omega",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "outlook",              aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "palacescript",         aImplSubsBrushScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
-{   "palatino",             aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "pgothic",              aImplSubsJPGothic, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "pmincho",              aImplSubsJPMincho, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
-{   "pmingliu",             aImplSubsTW, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TW },
-{   "sansserif",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "serif",                aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "sheffield",            aImplSubsSheffield, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL },
-{   "simhei",               aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
-{   "simsun",               aImplSubsZH, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_ZH },
-{   "sorts",                aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "sorts2",               aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starbats",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "starmath",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "symbol",               aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "tahoma",               aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "thorndale",            aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "times",                aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "timesnewroman",        aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
-{   "timmons",              aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
-{   "trebuchet",            aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "univers",              aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
-{   "vacation",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "verdana",              aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "webdings",             aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "webdings2",            aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings",            aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings2",           aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "wingdings3",           aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
-{   "zapfdingbats",         aImplSubsSymbol, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "albany",               aImplSubsSans, aImplSubsSansUnicode, NULL, aImplMSSubsArial, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "algerian",             aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "almanac",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "andalesans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "andalesansui",         aImplSubsSansUnicode, aImplSubsSans, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "andalewtui",           aImplSubsSansUnicode, aImplSubsSans, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "andy",                 aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "arial",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arialnarrow",          aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "arialunicode",         aImplSubsSansUnicode,aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD | IMPL_FONT_ATTR_FULL },
+{   "arioso",               aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "avantgarde",           aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "batang",               aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "batangche",            aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "bookantiqua",          aImplSubsPalatino, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "bookman",              aImplSubsBookman, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
+{   "bookmanoldstyle",      aImplSubsBookman, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_OLDSTYLE },
+{   "broadway",             aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, WEIGHT_BLACK, WIDTH_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "castellar",            aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "century",              aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "centurygothic",        aImplSubsCenturyGothic, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "centuryschoolbook",    aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "cgtimes",              aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "chevara",              aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
+{   "chevaraoutline",       aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_CAPITALS },
+{   "colonna",              aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "colonnamt",            aImplSubsOutline, aImplSubsImprintShadow, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "comicsans",            aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "comicsansms",          aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "conga",                aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "copperlategothic",     aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "corsiva",              aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "courier",              aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "couriernew",           aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "cumberland",           aImplSubsFixed, NULL, NULL, aImplMSSubsCourierNew, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED | IMPL_FONT_ATTR_STANDARD },
+{   "dotum",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "dotumche",             aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "edwardianscript",      aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "extra",                aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "falstaff",             aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "fangsong",             aImplSubsSCFangSong, aImplSubsSCKai, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "felixtitling",         aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "frutiger",             aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "gallia",               aImplSubsShadow, aImplSubsImprintShadow, aImplSubsOutline, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_TITLING },
+{   "garamond",             aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "gothic",               aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gothicb",              aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "gulim",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gulimche",             aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuh",              aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "gungsuhche",           aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "hei",                  aImplSubsSCHei, aImplSubsSansUnicode, aImplSubsSCSun, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "heiseimin",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "helmet",               aImplSubsSans, aImplSubsSansUnicode, NULL, aImplMSSubsArial, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helmetcondensed",      aImplSubsSansNarrow, aImplSubsSans, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "helvetica",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "helveticanarrow",      aImplSubsSansNarrow, aImplSubsSans, NULL, NULL, WEIGHT_NORMAL, WIDTH_CONDENSED, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "hggothic",             aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hggothicb",            aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgminchoj",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgminchol",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "hgmincholightj",       aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "holidays",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "hymyeongjolightk",     aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "impact",               aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "imprint",              aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "imprintmtshadow",      aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "imprintshadow",        aImplSubsImprintShadow, aImplSubsOutline, aImplSubsShadow, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_OUTLINE | IMPL_FONT_ATTR_SHADOW | IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_DECORATIVE },
+{   "informalroman",        aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "kai",                  aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "kidprint",             aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "kodig",                aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "kristen",              aImplSubsComic, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_COMIC | IMPL_FONT_ATTR_ITALIC },
+{   "kunstlerscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "latinwide",            aImplSubsFalstaff, aImplSubsBroadway, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "lucidacalligraphy",    aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "lucidahandwriting",    aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
+{   "marlett",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "mincho",               aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchoj",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "minchol",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "ming",                 aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mingli",               aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mingliu",              aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "monospace",            aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "monospaced",           aImplSubsFixed, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
+{   "msgothic",             aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msmincho",             aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "mspmincho",            aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msuigothic",           aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "msunglightsc",         aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "msunglighttc",         aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "mtbroadway",           aImplSubsBroadway, aImplSubsFalstaff, NULL, NULL, WEIGHT_BLACK, WIDTH_ULTRA_EXPANDED, IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_SPECIAL },
+{   "myeongjo",             aImplSubsKRBatang, aImplSubsSansUnicode, aImplSubsKRGulim, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "newcenturyschlbk",     aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "newcenturyschoolbook", aImplSubsNewCenturySchoolbook, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_SCHOOLBOOK },
+{   "nsimsun",              aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "ocean",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "omega",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "outlook",              aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "palacescript",         aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "palatino",             aImplSubsPalatino, aImplSubsSerif, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "pgothic",              aImplSubsJPGothic, aImplSubsSansUnicode, aImplSubsJPMincho, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pmincho",              aImplSubsJPMincho, aImplSubsSansUnicode, aImplSubsJPGothic, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_JP },
+{   "pmingliu",             aImplSubsTC, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_TC },
+{   "roundgothic",          aImplSubsKRGulim, aImplSubsSansUnicode, aImplSubsKRBatang, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_KR },
+{   "sansserif",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "segoe",                aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "serif",                aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "sheffield",            aImplSubsSheffield, aImplSubsCenturyGothic, aImplSubsSans, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_DECORATIVE | IMPL_FONT_ATTR_CAPITALS },
+{   "shusong",              aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simhei",               aImplSubsSCHei, aImplSubsSansUnicode, aImplSubsSCSun, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simkai",               aImplSubsSCKai, aImplSubsSCFangSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "simsun",               aImplSubsSCSun, aImplSubsSCSong, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "song",                 aImplSubsSCSong, aImplSubsSCSun, aImplSubsSansUnicode, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_CJK | IMPL_FONT_ATTR_CJK_SC },
+{   "sorts",                aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "sorts2",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "sorts3",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starbats",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starmath",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "starsymbol",           aImplSubsSymbol, NULL, NULL, aImplMSSubsArialUnicodeMS, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "symbol",               aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "tahoma",               aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "thorndale",            aImplSubsSerif, NULL, NULL, aImplMSSubsTimesNewRoman, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "times",                aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timesnewroman",        aImplSubsSerif, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF | IMPL_FONT_ATTR_STANDARD },
+{   "timmons",              aImplSubsSerif, NULL, NULL, aImplMSSubsTimesNewRoman, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SERIF },
+{   "trebuchet",            aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "univers",              aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "utah",                 aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF | IMPL_FONT_ATTR_STANDARD },
+{   "vacation",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "verdana",              aImplSubsSans, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
+{   "vivaldi",              aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "vladimirscript",       aImplSubsPalaceScript, aImplSubsZapfChancery, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_BRUSHSCRIPT | IMPL_FONT_ATTR_ITALIC },
+{   "webdings",             aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "webdings2",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "webdings3",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings",            aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings2",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings3",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "wingdings4",           aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
+{   "zapfchancery",         aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
+{   "zapfdingbats",         aImplSubsSymbol, NULL, NULL, NULL, WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 };
 
 // -----------------------------------------------------------------------
@@ -1055,8 +1217,8 @@ void OutputDevice::AddFontSubstitute( const XubString& rFontName,
     pEntry->maSearchReplaceName = rReplaceFontName;
     pEntry->mnFlags             = nFlags;
     pEntry->mpNext              = pSVData->maGDIData.mpFirstFontSubst;
-    ImplGetEnglishSearchName( pEntry->maSearchName );
-    ImplGetEnglishSearchName( pEntry->maSearchReplaceName );
+    ImplGetEnglishSearchFontName( pEntry->maSearchName );
+    ImplGetEnglishSearchFontName( pEntry->maSearchReplaceName );
 
     pSVData->maGDIData.mpFirstFontSubst = pEntry;
     pSVData->maGDIData.mbFontSubChanged = TRUE;
@@ -1137,7 +1299,7 @@ static BOOL ImplFontSubstitute( XubString& rFontName,
 {
 #ifdef DBG_UTIL
     String aTempName = rFontName;
-    ImplGetEnglishSearchName( aTempName );
+    ImplGetEnglishSearchFontName( aTempName );
     DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
 #endif
 
@@ -1162,16 +1324,54 @@ static BOOL ImplFontSubstitute( XubString& rFontName,
 
 static char const aImplDefSansUnicode[] = "Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma";
 static char const aImplDefSansUI[] = "Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif";
-static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Helmet;SansSerif";
-static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;Serif";
-static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monospaced";
-static char const aImplDefSymbol[] = "StarBats;WingDings;Zapf Dingbats;Symbol";
-static char const aImplDef_CJK_JP_Mincho[] = "MS Mincho;HG Mincho J;HG Mincho L;HG Mincho";
-static char const aImplDef_CJK_JP_Gothic[] = "MS Gothic;HG Gothic J;HG Gothic";
-static char const aImplDef_CJK_ZH[] = "SimSun;SimHei";
-static char const aImplDef_CJK_TW[] = "MingLiU";
-static char const aImplDef_CJK_KR_Batang[] = "Batang";
-static char const aImplDef_CJK_KR_Gulim[] = "Gulim";
+static char const aImplDefSans[] = "Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif";
+static char const aImplDefSerif[] = "Thorndale;Times New Roman;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif";
+static char const aImplDefFixed[] = "Cumberland;Courier New;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced";
+static char const aImplDefSymbol[] = "StarSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol";
+static char const aImplDef_CJK_JP_Mincho[] = "HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho";
+static char const aImplDef_CJK_JP_Gothic[] = "HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic";
+static char const aImplDef_CJK_JP_UIGothic[] = "Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic";
+static char const aImplDef_CJK_SC[] = "MSung Light SC;SimSun;Song";
+static char const aImplDef_CJK_TC[] = "MSung Light TC;MingLiU;Ming";
+static char const aImplDef_CJK_KR_Batang[] = "HY MyeongJo Light;Batang;Myeongjo";
+static char const aImplDef_CJK_KR_Gulim[] = "Andale Sans UI;Gulim;Roundgothic";
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplIsFontToken( const String& rName, const String& rToken )
+{
+    BOOL        bRet = FALSE;
+    String      aTempName;
+    xub_StrLen  nIndex = 0;
+    do
+    {
+        aTempName = GetFontToken( rName, 0, nIndex );
+        if ( rToken == aTempName )
+        {
+            bRet = TRUE;
+            break;
+        }
+    }
+    while ( nIndex != STRING_NOTFOUND );
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+static void ImplAddTokenFontName( String& rName, const String& rNewToken )
+{
+    if ( !ImplIsFontToken( rName, rNewToken ) )
+    {
+        if ( rName.Len() )
+        {
+            rName.Append( ';' );
+            rName.Append( rNewToken );
+        }
+        else
+            rName = rNewToken;
+    }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1187,7 +1387,7 @@ static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
             xub_StrLen  nIndex = 0;
             do
             {
-                aTempName = rName.GetToken( 0, ';', nIndex );
+                aTempName = GetFontToken( rName, 0, nIndex );
                 if ( aName == aTempName )
                 {
                     aName.Erase();
@@ -1199,8 +1399,12 @@ static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
             if ( aName.Len() )
             {
                 if ( rName.Len() )
-                    rName += ';';
-                rName += aName;
+                {
+                    rName.Append( ';' );
+                    rName.Append( aName );
+                }
+                else
+                    rName = aName;
             }
 
             if ( !(*pStr) )
@@ -1216,10 +1420,8 @@ static void ImplAddTokenFontNames( String& rName, const char* pFontNames )
 
 // -----------------------------------------------------------------------
 
-Font OutputDevice::GetDefaultFont( USHORT nType,
-                                   LanguageType eLang,
-                                   BOOL bOnlyOne,
-                                   const OutputDevice* pOutDev )
+Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
+                                   BOOL nFlags, const OutputDevice* pOutDev )
 {
     Font            aFont;
     const char*     pSearch1 = NULL;
@@ -1228,70 +1430,71 @@ Font OutputDevice::GetDefaultFont( USHORT nType,
 
     switch ( nType )
     {
-        case FONT_DEFAULT_SANS_UNICODE:
-        case FONT_DEFAULT_UI_SANS:
+        case DEFAULTFONT_SANS_UNICODE:
+        case DEFAULTFONT_UI_SANS:
             pSearch1 = aImplDefSansUnicode;
-            if ( nType == FONT_DEFAULT_UI_SANS )
+            if ( nType == DEFAULTFONT_UI_SANS )
                 pSearch2 = aImplDefSansUI;
             else
                 pSearch2 = aImplDefSans;
             aFont.SetFamily( FAMILY_SWISS );
             break;
 
-        case FONT_DEFAULT_SANS:
-        case FONT_DEFAULT_LATIN_HEADING:
-        case FONT_DEFAULT_LATIN_SPREADSHEET:
-        case FONT_DEFAULT_LATIN_DISPLAY:
+        case DEFAULTFONT_SANS:
+        case DEFAULTFONT_LATIN_HEADING:
+        case DEFAULTFONT_LATIN_SPREADSHEET:
+        case DEFAULTFONT_LATIN_DISPLAY:
             pSearch1 = aImplDefSans;
             pSearch2 = aImplDefSansUnicode;
             aFont.SetFamily( FAMILY_SWISS );
             break;
 
-        case FONT_DEFAULT_SERIF:
-        case FONT_DEFAULT_LATIN_TEXT:
-        case FONT_DEFAULT_LATIN_PRESENTATION:
+        case DEFAULTFONT_SERIF:
+        case DEFAULTFONT_LATIN_TEXT:
+        case DEFAULTFONT_LATIN_PRESENTATION:
             pSearch1 = aImplDefSerif;
             aFont.SetFamily( FAMILY_ROMAN );
             break;
 
-        case FONT_DEFAULT_FIXED:
-        case FONT_DEFAULT_LATIN_FIXED:
-        case FONT_DEFAULT_UI_FIXED:
+        case DEFAULTFONT_FIXED:
+        case DEFAULTFONT_LATIN_FIXED:
+        case DEFAULTFONT_UI_FIXED:
             aFont.SetPitch( PITCH_FIXED );
             aFont.SetFamily( FAMILY_MODERN );
             pSearch1 = aImplDefFixed;
             break;
 
-        case FONT_DEFAULT_SYMBOL:
+        case DEFAULTFONT_SYMBOL:
             aFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
             pSearch1 = aImplDefSymbol;
             break;
 
-        case FONT_DEFAULT_CJK_TEXT:
-        case FONT_DEFAULT_CJK_PRESENTATION:
-        case FONT_DEFAULT_CJK_SPREADSHEET:
-        case FONT_DEFAULT_CJK_HEADING:
-        case FONT_DEFAULT_CJK_DISPLAY:
+        case DEFAULTFONT_CJK_TEXT:
+        case DEFAULTFONT_CJK_PRESENTATION:
+        case DEFAULTFONT_CJK_SPREADSHEET:
+        case DEFAULTFONT_CJK_HEADING:
+        case DEFAULTFONT_CJK_DISPLAY:
             if ( (eLang == LANGUAGE_CHINESE) ||
                  (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
                  (eLang == LANGUAGE_CHINESE_SINGAPORE) )
-                pSearch1 = aImplDef_CJK_ZH;
+                pSearch1 = aImplDef_CJK_SC;
             else if ( (eLang == LANGUAGE_CHINESE_TRADITIONAL) ||
                       (eLang == LANGUAGE_CHINESE_HONGKONG) ||
                       (eLang == LANGUAGE_CHINESE_MACAU) )
-                pSearch1 = aImplDef_CJK_TW;
+                pSearch1 = aImplDef_CJK_TC;
             else if ( eLang == LANGUAGE_KOREAN )
             {
-                if ( nType == FONT_DEFAULT_CJK_DISPLAY )
+                if ( nType == DEFAULTFONT_CJK_DISPLAY )
                     pSearch1 = aImplDef_CJK_KR_Gulim;
                 else
                     pSearch1 = aImplDef_CJK_KR_Batang;
             }
             else
             {
-                if ( (nType == FONT_DEFAULT_CJK_DISPLAY) ||
-                     (nType == FONT_DEFAULT_CJK_SPREADSHEET) ||
-                     (nType == FONT_DEFAULT_CJK_PRESENTATION) )
+                if ( (nType == DEFAULTFONT_CJK_DISPLAY) ||
+                     (nType == DEFAULTFONT_CJK_SPREADSHEET) )
+                    pSearch1 = aImplDef_CJK_JP_UIGothic;
+                else if ( nType == DEFAULTFONT_CJK_PRESENTATION )
                     pSearch1 = aImplDef_CJK_JP_Gothic;
                 else
                     pSearch1 = aImplDef_CJK_JP_Mincho;
@@ -1299,13 +1502,12 @@ Font OutputDevice::GetDefaultFont( USHORT nType,
             pSearch2 = aImplDefSansUnicode;
             break;
 
-        case FONT_DEFAULT_CTL_TEXT:
-        case FONT_DEFAULT_CTL_PRESENTATION:
-        case FONT_DEFAULT_CTL_SPREADSHEET:
-        case FONT_DEFAULT_CTL_HEADING:
-        case FONT_DEFAULT_CTL_DISPLAY:
+        case DEFAULTFONT_CTL_TEXT:
+        case DEFAULTFONT_CTL_PRESENTATION:
+        case DEFAULTFONT_CTL_SPREADSHEET:
+        case DEFAULTFONT_CTL_HEADING:
+        case DEFAULTFONT_CTL_DISPLAY:
             pSearch1 = "Arial Unicode MS";
-            pSearch2 = aImplDefSansUnicode;
             break;
     }
 
@@ -1318,8 +1520,8 @@ Font OutputDevice::GetDefaultFont( USHORT nType,
         if ( aFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
             aFont.SetCharSet( gsl_getSystemTextEncoding() );
 
-        // Should be found the standard font on the given device
-        if ( bOnlyOne && pOutDev )
+        // Should we only return available fonts on the given device
+        if ( pOutDev )
         {
             // Create Token String
             String aNames( pSearch1, RTL_TEXTENCODING_ASCII_US );
@@ -1335,29 +1537,32 @@ Font OutputDevice::GetDefaultFont( USHORT nType,
             }
 
             // Search Font in the FontList
+            String      aName;
             String      aTempName;
             xub_StrLen  nIndex = 0;
             do
             {
-                aTempName = aNames.GetToken( 0, ';', nIndex );
-                ImplGetEnglishSearchName( aTempName );
+                aTempName = GetFontToken( aNames, 0, nIndex );
+                ImplGetEnglishSearchFontName( aTempName );
                 ImplDevFontListData* pFoundData = pOutDev->mpFontList->ImplFind( aTempName );
                 if ( pFoundData )
                 {
-                    aFont.SetName( pFoundData->mpFirst->maName );
-                    break;
+                    ImplAddTokenFontName( aName, pFoundData->mpFirst->maName );
+                    if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
+                        break;
                 }
             }
             while ( nIndex != STRING_NOTFOUND );
+            aFont.SetName( aName );
         }
 
         // No Name, than set all names
         if ( !aFont.GetName().Len() )
         {
-            if ( bOnlyOne )
+            if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
             {
                 const char* pStr = pSearch1;
-                while ( *pStr && (*pStr != '!') )
+                while ( *pStr && (*pStr != ';') )
                     pStr++;
                 String aName( pSearch1, pStr-pSearch1, RTL_TEXTENCODING_ASCII_US );
                 aFont.SetName( aName );
@@ -1375,6 +1580,48 @@ Font OutputDevice::GetDefaultFont( USHORT nType,
     }
 
     return aFont;
+}
+
+// =======================================================================
+
+String GetSubsFontName( const String& rName, ULONG nFlags )
+{
+    String aName;
+    String aOrgName = GetFontToken( rName, 0 );
+    ImplGetEnglishSearchFontName( aOrgName );
+
+    const ImplFontNameAttr* pFontAttr = ImplGetFontNameAttr( aOrgName );
+
+    // Currently we have only SUBSFONT_MS
+    if ( pFontAttr && pFontAttr->mpMSSubstitution )
+    {
+        String aTempName;
+        aTempName.AssignAscii( pFontAttr->mpMSSubstitution );
+
+        if ( nFlags & SUBSFONT_ONLYONE )
+            aTempName = GetFontToken( aName, 0 );
+
+        // Add all names which aren't in the original font name
+        String      aTempToken;
+        xub_StrLen  nIndex = 0;
+        do
+        {
+            aTempToken = GetFontToken( aTempName, 0, nIndex );
+            if ( !ImplIsFontToken( rName, aTempToken ) )
+            {
+                if ( aName.Len() )
+                {
+                    aName.Append( ';' );
+                    aName.Append( aTempToken );
+                }
+                else
+                    aName = aTempToken;
+            }
+        }
+        while ( nIndex != STRING_NOTFOUND );
+    }
+
+    return aName;
 }
 
 // =======================================================================
@@ -1475,7 +1722,7 @@ static StringCompare ImplCompareFontData( const ImplFontData* pEntry1,
 void ImplDevFontList::Add( ImplFontData* pNewData )
 {
     XubString aSearchName = pNewData->maName;
-    ImplGetEnglishSearchName( aSearchName );
+    ImplGetEnglishSearchFontName( aSearchName );
 
     // Add Font
     ULONG                   nIndex;
@@ -1520,8 +1767,8 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
         xub_StrLen  nIndex = 0;
         do
         {
-            aName = pNewData->maMapNames.GetToken( 0, ';', nIndex );
-            ImplGetEnglishSearchName( aName );
+            aName = GetFontToken( pNewData->maMapNames, 0, nIndex );
+            ImplGetEnglishSearchFontName( aName );
             if ( aName != aSearchName )
             {
                 // Test, if Alias exists already
@@ -1529,7 +1776,7 @@ void ImplDevFontList::Add( ImplFontData* pNewData )
                 xub_StrLen  nIndex2 = 0;
                 do
                 {
-                    aTempName = pFoundData->maMapNames.GetToken( 0, ';', nIndex2 );
+                    aTempName = GetFontToken( pFoundData->maMapNames, 0, nIndex2 );
                     if ( aName == aTempName )
                     {
                         aName.Erase();
@@ -1609,7 +1856,7 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
 {
 #ifdef DBG_UTIL
     String aTempName = rFontName;
-    ImplGetEnglishSearchName( aTempName );
+    ImplGetEnglishSearchFontName( aTempName );
     DBG_ASSERT( aTempName == rFontName, "ImplDevFontList::ImplFind() called without a searchname" );
 #endif
 
@@ -1670,7 +1917,7 @@ ImplDevFontListData* ImplDevFontList::ImplFind( const XubString& rFontName, ULON
 ImplDevFontListData* ImplDevFontList::FindFont( const XubString& rFontName ) const
 {
     XubString aName = rFontName;
-    ImplGetEnglishSearchName( aName );
+    ImplGetEnglishSearchFontName( aName );
     return ImplFind( aName );
 }
 
@@ -1803,7 +2050,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     short nOrientation          = rFont.GetOrientation();
     BOOL bVertical              = rFont.IsVertical();
 
-    // Make Orientation positiv and between 0 and 2700
+    // normalize orientation between 0 and 3600
     if ( nOrientation )
     {
         while ( nOrientation < 0 )
@@ -1871,8 +2118,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     do
     {
         nToken++;
-        aSearchName = rName.GetToken( 0, ';', nIndex );
-        ImplGetEnglishSearchName( aSearchName );
+        aSearchName = GetFontToken( rName, 0, nIndex );
+        ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags1, nSubstFlags2 );
         pFoundData = pFontList->ImplFind( aSearchName );
         if ( pFoundData )
@@ -1893,8 +2140,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         {
             if ( nToken > 1 )
             {
-                aSearchName = rName.GetToken( 0, ';', nIndex );
-                ImplGetEnglishSearchName( aSearchName );
+                aSearchName = GetFontToken( rName, 0, nIndex );
+                ImplGetEnglishSearchFontName( aSearchName );
             }
             else
                 nIndex = STRING_NOTFOUND;
@@ -1914,8 +2161,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
         // finden - wir nehmen dazu das erste Token
         if ( nToken > 1 )
         {
-            aSearchName = rName.GetToken( 0, ';', nIndex );
-            ImplGetEnglishSearchName( aSearchName );
+            aSearchName = GetFontToken( rName, 0, nIndex );
+            ImplGetEnglishSearchFontName( aSearchName );
         }
 
         const ImplFontNameAttr* pFontAttr;
@@ -2230,9 +2477,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
     // Daten initialisieren und in die Liste aufnehmen
     pEntry                          = new ImplFontEntry;
-    pEntry->mbInit                  = FALSE;
-    pEntry->mnRefCount              = 1;
     pEntry->mpNext                  = mpFirstEntry;
+    pEntry->mpConversion            = NULL;
     pEntry->mnWidthInit             = 0;
     pEntry->mnWidthAryCount         = 0;
     pEntry->mnWidthArySize          = 0;
@@ -2240,6 +2486,8 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     pEntry->mpKernPairs             = NULL;
     pEntry->mnOwnOrientation        = 0;
     pEntry->mnOrientation           = 0;
+    pEntry->mbInit                  = FALSE;
+    pEntry->mnRefCount              = 1;
     mpFirstEntry                    = pEntry;
 
     // Font-Selection-Daten setzen
@@ -2573,7 +2821,7 @@ int OutputDevice::ImplNewFont()
             else
             {
                 pFontEntry->maMetric.meType     = TYPE_DONTKNOW;
-                pFontEntry->maMetric.maName     = pFontEntry->maFontSelData.maName.GetToken( 0 );
+                pFontEntry->maMetric.maName     = GetFontToken( pFontEntry->maFontSelData.maName, 0 );
                 pFontEntry->maMetric.maStyleName= pFontEntry->maFontSelData.maStyleName;
                 pFontEntry->maMetric.mbDevice   = FALSE;
             }
@@ -2746,8 +2994,9 @@ BOOL OutputDevice::ImplGetCharWidths( sal_Unicode c1, sal_Unicode c2,
 
 long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
 {
-    ImplFontEntry*                  pFontEntry = mpFontEntry;
-    USHORT                          nChar = (USHORT)c;
+    ImplFontEntry* pFontEntry = mpFontEntry;
+
+    USHORT nChar = (USHORT)c;
     if ( nChar < IMPL_WIDTH_CACHE_MAX )
     {
         ULONG   nTestBit = 0;
@@ -3657,7 +3906,8 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         return;
 
     ImplFontEntry*  pFontEntry = mpFontEntry;
-    Color           aTextLineColor = GetTextLineColor();
+    Color           aUnderlineColor = GetTextLineColor();
+    Color           aStrikeoutColor = GetTextColor();
     long            nBaseY = nY;
     long            nLineHeight;
     long            nLinePos;
@@ -3666,7 +3916,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
     BOOL            bNormalLines = TRUE;
 
     if ( !IsTextLineColor() )
-        aTextLineColor = GetTextColor();
+        aUnderlineColor = GetTextColor();
 
     if ( (eUnderline == UNDERLINE_SMALLWAVE) ||
          (eUnderline == UNDERLINE_WAVE) ||
@@ -3716,16 +3966,16 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
                 nLineDY2 = 1;
             nLinePos -= nLineWidthHeight-nLineDY2;
             ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
-                              nLineWidth, mpFontEntry->mnOrientation, aTextLineColor );
+                              nLineWidth, mpFontEntry->mnOrientation, aUnderlineColor );
             nLinePos += nLineWidthHeight+nLineDY;
             ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
-                              nLineWidth, mpFontEntry->mnOrientation, aTextLineColor );
+                              nLineWidth, mpFontEntry->mnOrientation, aUnderlineColor );
         }
         else
         {
             nLinePos -= nLineWidthHeight/2;
             ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
-                              nLineWidth, mpFontEntry->mnOrientation, aTextLineColor );
+                              nLineWidth, mpFontEntry->mnOrientation, aUnderlineColor );
         }
 
         if ( (eStrikeout == STRIKEOUT_NONE) ||
@@ -3739,7 +3989,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         BOOL bOldMap = IsMapModeEnabled();
         EnableMapMode( FALSE );
         Color aOldColor = GetTextColor();
-        SetTextColor( aTextLineColor );
+        SetTextColor( aStrikeoutColor );
         ImplInitTextColor();
         xub_Unicode c;
         if ( eStrikeout == STRIKEOUT_SLASH )
@@ -3783,25 +4033,6 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
     if ( bNormalLines )
     {
-#ifndef REMOTE_APPSERVER
-        if ( mbLineColor || mbInitLineColor )
-        {
-            mpGraphics->SetLineColor();
-            mbInitLineColor = TRUE;
-        }
-        mpGraphics->SetFillColor( ImplColorToSal( aTextLineColor ) );
-        mbInitFillColor = TRUE;
-#else
-        Color aOldLineColor = GetLineColor();
-        Color aOldFillColor = GetFillColor();
-        SetLineColor();
-        SetFillColor( aTextLineColor );
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        if ( mbInitFillColor )
-            ImplInitFillColor();
-#endif
-
         if ( eUnderline > UNDERLINE_LAST )
             eUnderline = UNDERLINE_SINGLE;
 
@@ -3873,6 +4104,25 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
         if ( nLineHeight )
         {
+#ifndef REMOTE_APPSERVER
+            if ( mbLineColor || mbInitLineColor )
+            {
+                mpGraphics->SetLineColor();
+                mbInitLineColor = TRUE;
+            }
+            mpGraphics->SetFillColor( ImplColorToSal( aUnderlineColor ) );
+            mbInitFillColor = TRUE;
+#else
+            Color aOldLineColor = GetLineColor();
+            Color aOldFillColor = GetFillColor();
+            SetLineColor();
+            SetFillColor( aUnderlineColor );
+            if ( mbInitLineColor )
+                ImplInitLineColor();
+            if ( mbInitFillColor )
+                ImplInitFillColor();
+#endif
+
             nLeft = nX;
 
             if ( (eUnderline == UNDERLINE_SINGLE) ||
@@ -4043,6 +4293,25 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
 
         if ( nLineHeight )
         {
+#ifndef REMOTE_APPSERVER
+            if ( mbLineColor || mbInitLineColor )
+            {
+                mpGraphics->SetLineColor();
+                mbInitLineColor = TRUE;
+            }
+            mpGraphics->SetFillColor( ImplColorToSal( aStrikeoutColor ) );
+            mbInitFillColor = TRUE;
+#else
+            Color aOldLineColor = GetLineColor();
+            Color aOldFillColor = GetFillColor();
+            SetLineColor();
+            SetFillColor( aStrikeoutColor );
+            if ( mbInitLineColor )
+                ImplInitLineColor();
+            if ( mbInitFillColor )
+                ImplInitFillColor();
+#endif
+
             nLeft = nX;
 
             if ( (eStrikeout == STRIKEOUT_SINGLE) ||
@@ -4655,12 +4924,12 @@ void OutputDevice::ImplDrawSpecialText( long nX, long nY,
 
         if ( maFont.IsOutline() )
         {
+            ImplDrawTextDirect( nX-1, nY-1, pStr, nLen, pDXAry, mbTextLines );
+            ImplDrawTextDirect( nX+1, nY+1, pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX-1, nY+1, pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX,   nY+1, pStr, nLen, pDXAry, mbTextLines );
-            ImplDrawTextDirect( nX+1, nY+1, pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX-1, nY,   pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX+1, nY,   pStr, nLen, pDXAry, mbTextLines );
-            ImplDrawTextDirect( nX-1, nY-1, pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX,   nY-1, pStr, nLen, pDXAry, mbTextLines );
             ImplDrawTextDirect( nX+1, nY-1, pStr, nLen, pDXAry, mbTextLines );
 
@@ -5219,28 +5488,28 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawText( const Point& rStartPt, const XubString& rStr,
+void OutputDevice::DrawText( const Point& rStartPt, const String& rOrigStr,
                              xub_StrLen nIndex, xub_StrLen nLen )
 {
     DBG_TRACE( "OutputDevice::DrawText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
+        mpMetaFile->AddAction( new MetaTextAction( rStartPt, rOrigStr, nIndex, nLen ) );
 
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    // String-Laenge fuer die Ermittlung der Groesse setzen
-    if ( (ULONG)nLen+nIndex > rStr.Len() )
+    // get string length for calculating extents
+    if ( (ULONG)nLen+nIndex > rOrigStr.Len() )
     {
-        if ( nIndex < rStr.Len() )
-            nLen = rStr.Len()-nIndex;
+        if ( nIndex < rOrigStr.Len() )
+            nLen = rOrigStr.Len() - nIndex;
         else
             nLen = 0;
     }
 
-    // Ist die Ausgabe leer, dann mache nichts
+    // don't bother if there is nothing to do
     if ( !nLen )
         return;
 
@@ -5268,10 +5537,14 @@ void OutputDevice::DrawText( const Point& rStartPt, const XubString& rStr,
     if ( mbInitTextColor )
         ImplInitTextColor();
 
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, nIndex, nLen );
+
     Point aStartPt = ImplLogicToDevicePixel( rStartPt );
 
     // Pointer auf den String-Buffer setzen und um den Index korrigieren
-    const sal_Unicode* pStr = rStr.GetBuffer();
+    const sal_Unicode* pStr = aStr.GetBuffer();
     pStr += nIndex;
 
     if ( mbKerning )
@@ -5300,7 +5573,7 @@ void OutputDevice::DrawText( const Point& rStartPt, const XubString& rStr,
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::GetTextWidth( const XubString& rStr,
+long OutputDevice::GetTextWidth( const String& rOrigStr,
                                  xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_TRACE( "OutputDevice::GetTextWidth()" );
@@ -5315,18 +5588,22 @@ long OutputDevice::GetTextWidth( const XubString& rStr,
     ImplFontEntry*  pFontEntry = mpFontEntry;
     long            nWidth  = 0;
 
-    if ( nIndex < rStr.Len() )
+    if ( nIndex < rOrigStr.Len() )
     {
         // String-Laenge fuer die Ermittlung der Groesse setzen
-        if ( (ULONG)nLen+nIndex > rStr.Len() )
-            nLen = rStr.Len()-nIndex;
+        if ( (ULONG)nLen+nIndex > rOrigStr.Len() )
+            nLen = rOrigStr.Len() - nIndex;
 
         if ( nLen )
         {
+            String aStr = rOrigStr;
+            if( pFontEntry->mpConversion )
+                ImplRecodeString( pFontEntry->mpConversion, aStr, nIndex, nLen );
+
             // Also Fixed-Fonts are calculated char by char, because
             // not every Font or in every CJK Fonts all characters have
             // the same width
-            const sal_Unicode*  pStr = rStr.GetBuffer();
+            const sal_Unicode*  pStr = aStr.GetBuffer();
             const sal_Unicode*  pTempStr;
             xub_StrLen          nTempLen;
             pStr += nIndex;
@@ -5374,7 +5651,7 @@ long OutputDevice::GetTextHeight() const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::DrawTextArray( const Point& rStartPt, const XubString& rStr,
+void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rOrigStr,
                                   const long* pDXAry,
                                   xub_StrLen nIndex, xub_StrLen nLen )
 {
@@ -5382,29 +5659,29 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const XubString& rStr,
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
+        mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rOrigStr, pDXAry, nIndex, nLen ) );
 
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    // String-Laenge fuer die Ermittlung der Groesse setzen
-    if ( (ULONG)nLen+nIndex > rStr.Len() )
+    // get string length for calculating text extents
+    if ( (ULONG)nLen+nIndex > rOrigStr.Len() )
     {
-        if ( nIndex < rStr.Len() )
-            nLen = rStr.Len()-nIndex;
+        if ( nIndex < rOrigStr.Len() )
+            nLen = rOrigStr.Len() - nIndex;
         else
             nLen = 0;
     }
 
-    // Ist die Ausgabe leer, dann mache nichts
+    // don't bother if there is nothing to do
     if ( !nLen )
         return;
 
-    // Bei keinem Pos-Array, DrawText benutzen
+    // use DrawText when there is no position array
     if ( !pDXAry || (nLen < 2) )
     {
-        // hier Aufrufen, damit keine doppelte MetaFile Aufzeichnung
-        DrawText( rStartPt, rStr, nIndex, nLen );
+        // calls here to prevent double recording in metafile
+        DrawText( rStartPt, rOrigStr, nIndex, nLen );
         return;
     }
 
@@ -5435,9 +5712,12 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const XubString& rStr,
     if ( mbInitTextColor )
         ImplInitTextColor();
 
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, nIndex, nLen );
+
     // Pointer auf den String-Buffer setzen und um den Index korrigieren
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    pStr += nIndex;
+    const sal_Unicode* pStr = aStr.GetBuffer() + nIndex;
 
     Point aStartPt = ImplLogicToDevicePixel( rStartPt );
     if ( mbMap )
@@ -5457,20 +5737,20 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const XubString& rStr,
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::GetTextArray( const UniString& rStr, long* pDXAry,
+long OutputDevice::GetTextArray( const String& rOrigStr, long* pDXAry,
                                  xub_StrLen nIndex, xub_StrLen nLen ) const
 {
     DBG_TRACE( "OutputDevice::GetTextArray()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( !pDXAry )
-        return GetTextWidth( rStr, nIndex, nLen );
+        return GetTextWidth( rOrigStr, nIndex, nLen );
 
-    // String-Laenge fuer die Ermittlung der Groesse setzen
-    if ( (ULONG)nLen+nIndex > rStr.Len() )
+    // get string length for calculating text extents
+    if ( (ULONG)nLen+nIndex > rOrigStr.Len() )
     {
-        if ( nIndex < rStr.Len() )
-            nLen = rStr.Len()-nIndex;
+        if ( nIndex < rOrigStr.Len() )
+            nLen = rOrigStr.Len() - nIndex;
         else
             nLen = 0;
     }
@@ -5484,14 +5764,16 @@ long OutputDevice::GetTextArray( const UniString& rStr, long* pDXAry,
             return 0;
     }
 
-    ImplFontEntry*      pFontEntry = mpFontEntry;
-    const sal_Unicode*  pTempStr;
-    const sal_Unicode*  pStr;
+    ImplFontEntry* pFontEntry = mpFontEntry;
+
+    String aStr = rOrigStr;
+    if( pFontEntry->mpConversion )
+        ImplRecodeString( pFontEntry->mpConversion, aStr, nIndex, nLen );
+
+    const sal_Unicode*  pStr = aStr.GetBuffer() + nIndex;
+    const sal_Unicode*  pTempStr = pStr;
     long                nOffset = 0;
     xub_StrLen          i;
-    pStr = rStr.GetBuffer();
-    pStr += nIndex;
-    pTempStr = pStr;
 
     // Breiten ermitteln
     for ( i = 0; i < nLen; i++ )
@@ -5523,23 +5805,23 @@ long OutputDevice::GetTextArray( const UniString& rStr, long* pDXAry,
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
-                                    const UniString& rStr,
+                                    const String& rOrigStr,
                                     xub_StrLen nIndex, xub_StrLen nLen )
 {
     DBG_TRACE( "OutputDevice::DrawStretchText()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaStretchTextAction( rStartPt, nWidth, rStr, nIndex, nLen ) );
+        mpMetaFile->AddAction( new MetaStretchTextAction( rStartPt, nWidth, rOrigStr, nIndex, nLen ) );
 
     if ( !IsDeviceOutputNecessary() )
         return;
 
-    // String-Laenge fuer die Ermittlung der Groesse setzen
-    if ( (ULONG)nLen+nIndex > rStr.Len() )
+    // get string string length
+    if ( (ULONG)nLen+nIndex > rOrigStr.Len() )
     {
-        if ( nIndex < rStr.Len() )
-            nLen = rStr.Len()-nIndex;
+        if ( nIndex < rOrigStr.Len() )
+            nLen = rOrigStr.Len() - nIndex;
         else
             nLen = 0;
     }
@@ -5575,12 +5857,15 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
     if ( mbInitTextColor )
         ImplInitTextColor();
 
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, nIndex, nLen );
+
     Point aStartPt = ImplLogicToDevicePixel( rStartPt );
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
 
     // Pointer auf den String-Buffer setzen und um den Index korrigieren
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    pStr += nIndex;
+    const sal_Unicode* pStr = aStr.GetBuffer() + nIndex;
 
     // Breiten-Array fuer errechnete Werte allocieren und
     // mit den Breiten der einzelnen Character fuellen lassen
@@ -5593,14 +5878,14 @@ void OutputDevice::DrawStretchText( const Point& rStartPt, ULONG nWidth,
 
 // -----------------------------------------------------------------------
 
-xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
+xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
                                        xub_StrLen nIndex, xub_StrLen nLen,
                                        long nCharExtra ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if ( nIndex > rStr.Len() )
+    if ( nIndex > rOrigStr.Len() )
         return 0;
 
     if ( mbNewFont )
@@ -5625,13 +5910,17 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     else
         nTextWidth *= nWidthFactor;
 
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, nIndex, nLen );
+
     // calc last index position
     ULONG nLastIndex = (ULONG)nIndex + nLen;
-    if ( nLastIndex > rStr.Len() )
-        nLastIndex = rStr.Len();
+    if ( nLastIndex > aStr.Len() )
+        nLastIndex = aStr.Len();
 
     long nCalcWidth = 0;
-    const sal_Unicode* pStr = rStr.GetBuffer() + nIndex;
+    const sal_Unicode* pStr = aStr.GetBuffer() + nIndex;
     for(; nIndex < nLastIndex; ++nIndex, ++pStr )
     {
         nCalcWidth += (ImplGetCharWidth(*pStr) * nWidthFactor) / mpFontEntry->mnWidthFactor;
@@ -5650,7 +5939,7 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
 
 // -----------------------------------------------------------------------
 
-xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
+xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
                                        sal_Unicode nExtraChar, xub_StrLen& rExtraCharPos,
                                        xub_StrLen nIndex, xub_StrLen nLen,
                                        long nCharExtra ) const
@@ -5658,7 +5947,7 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    if ( nIndex > rStr.Len() )
+    if ( nIndex > rOrigStr.Len() )
         return 0;
 
     if ( mbNewFont )
@@ -5683,10 +5972,14 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
     else
         nTextWidth *= nWidthFactor;
 
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, nIndex, nLen );
+
     // calc last index position
     ULONG nLastIndex = (ULONG)nIndex + nLen;
-    if ( nLastIndex > rStr.Len() )
-        nLastIndex = rStr.Len();
+    if ( nLastIndex > aStr.Len() )
+        nLastIndex = aStr.Len();
 
     xub_StrLen nIndex2 = STRING_LEN;
     long nTextWidth2 = nTextWidth;
@@ -5696,7 +5989,7 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
         nIndex2 = 0;
 
     long nCalcWidth = 0;
-    const sal_Unicode* pStr = rStr.GetBuffer() + nIndex;
+    const sal_Unicode* pStr = aStr.GetBuffer() + nIndex;
     for(; nIndex < nLastIndex; ++nIndex, ++pStr )
     {
         nCalcWidth += (ImplGetCharWidth(*pStr) * nWidthFactor) / mpFontEntry->mnWidthFactor;
@@ -5742,7 +6035,10 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
     {
         while ( nCharCount )
         {
-            *pWidthAry = ImplDevicePixelToLogicWidth( ImplGetCharWidth( nFirstChar ) ) / mpFontEntry->mnWidthFactor;
+            sal_Unicode c = nFirstChar;
+            if( mpFontEntry->mpConversion )
+                c = ImplRecodeChar( mpFontEntry->mpConversion, c );
+            *pWidthAry = ImplDevicePixelToLogicWidth( ImplGetCharWidth( c ) ) / mpFontEntry->mnWidthFactor;
             pWidthAry++;
             nFirstChar++;
             nCharCount--;
@@ -5752,7 +6048,10 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
     {
         while ( nCharCount )
         {
-            *pWidthAry = ImplGetCharWidth( nFirstChar ) / mpFontEntry->mnWidthFactor;
+            sal_Unicode c = nFirstChar;
+            if( mpFontEntry->mpConversion )
+                c = ImplRecodeChar( mpFontEntry->mpConversion, c );
+            *pWidthAry = ImplGetCharWidth( c ) / mpFontEntry->mnWidthFactor;
             pWidthAry++;
             nFirstChar++;
             nCharCount--;
@@ -5763,19 +6062,18 @@ void OutputDevice::GetCharWidth( sal_Unicode nFirstChar, sal_Unicode nLastChar,
 // -----------------------------------------------------------------------
 
 void OutputDevice::DrawText( const Rectangle& rRect,
-                             const XubString& rStr, USHORT nStyle )
+                             const String& rOrigStr, USHORT nStyle )
 {
     DBG_TRACE( "OutputDevice::DrawText( const Rectangle& )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     if ( mpMetaFile )
-        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rStr, nStyle ) );
+        mpMetaFile->AddAction( new MetaTextRectAction( rRect, rOrigStr, nStyle ) );
 
-    if ( !IsDeviceOutputNecessary() || !rStr.Len() || rRect.IsEmpty() )
+    if ( !IsDeviceOutputNecessary() || !rOrigStr.Len() || rRect.IsEmpty() )
         return;
 
-    // Vorsichtshalber hier auch schon Aufrufen, da ImplDrawMnemonicLine()
-    // dies nicht macht
+    // better call it here because ImplDrawMnemonicLine() won't
 #ifndef REMOTE_APPSERVER
     // we need a graphics
     if ( !mpGraphics )
@@ -5809,7 +6107,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         SetTextColor( GetSettings().GetStyleSettings().GetLightColor() );
         Rectangle aRect = rRect;
         aRect.Move( 1, 1 );
-        DrawText( aRect, rStr, nStyle & ~TEXT_DRAW_DISABLE );
+        DrawText( aRect, rOrigStr, nStyle & ~TEXT_DRAW_DISABLE );
         SetTextColor( GetSettings().GetStyleSettings().GetShadowColor() );
     }
 
@@ -5819,12 +6117,12 @@ void OutputDevice::DrawText( const Rectangle& rRect,
     if ( ((nWidth <= 0) || (nHeight <= 0)) && (nStyle & TEXT_DRAW_CLIP) )
         return;
 
-    XubString   aStr            = rStr;
     Point       aPos            = rRect.TopLeft();
     long        nTextHeight     = GetTextHeight();
     TextAlign   eAlign          = GetTextAlign();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
+    String aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
 
@@ -5916,6 +6214,8 @@ void OutputDevice::DrawText( const Rectangle& rRect,
                         xub_Unicode cMnemonic;
                         Point       aTempPos = LogicToPixel( aPos );
                         cMnemonic  = aStr.GetChar( nMnemonicPos );
+                        if( mpFontEntry->mpConversion )
+                            cMnemonic = ImplRecodeChar( mpFontEntry->mpConversion, cMnemonic );
                         nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, nIndex, nMnemonicPos-nIndex ) );
                         nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
                         ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, cMnemonic );
@@ -5979,9 +6279,11 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             Point aTempPos = LogicToPixel( aPos );
-            cMnemonic  = aStr.GetChar( nMnemonicPos );
             nMnemonicX = mnOutOffX + aTempPos.X() + ImplLogicWidthToDevicePixel( GetTextWidth( aStr, 0, nMnemonicPos ) );
             nMnemonicY = mnOutOffY + aTempPos.Y() + ImplLogicWidthToDevicePixel( GetFontMetric().GetAscent() );
+            cMnemonic  = aStr.GetChar( nMnemonicPos );
+            if( mpFontEntry->mpConversion )
+                cMnemonic = ImplRecodeChar( mpFontEntry->mpConversion, cMnemonic );
         }
 
         if ( nStyle & TEXT_DRAW_CLIP )
@@ -6018,19 +6320,19 @@ void OutputDevice::DrawText( const Rectangle& rRect,
 // -----------------------------------------------------------------------
 
 Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
-                                     const XubString& rStr, USHORT nStyle,
+                                     const String& rOrigStr, USHORT nStyle,
                                      TextRectInfo* pInfo ) const
 {
     DBG_TRACE( "OutputDevice::GetTextRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
     Rectangle           aRect = rRect;
-    XubString           aStr = rStr;
     xub_StrLen          nLines;
     long                nWidth = rRect.GetWidth();
     long                nMaxWidth;
     long                nTextHeight = GetTextHeight();
 
+    String aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
         aStr = GetNonMnemonicString( aStr );
 
@@ -6145,14 +6447,17 @@ static BOOL ImplIsCharIn( xub_Unicode c, const sal_Char* pStr )
 
 // -----------------------------------------------------------------------
 
-XubString OutputDevice::GetEllipsisString( const XubString& rStr, long nMaxWidth,
-                                           USHORT nStyle ) const
+String OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
+                                        USHORT nStyle ) const
 {
     DBG_TRACE( "OutputDevice::GetEllipsisString()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    XubString   aStr = rStr;
-    xub_StrLen  nIndex = GetTextBreak( aStr, nMaxWidth );
+    String aStr = rOrigStr;
+    if( mpFontEntry->mpConversion )
+        ImplRecodeString( mpFontEntry->mpConversion, aStr, 0, STRING_LEN );
+
+    xub_StrLen nIndex = GetTextBreak( aStr, nMaxWidth );
 
     if ( nIndex != STRING_LEN )
     {
@@ -6171,7 +6476,7 @@ XubString OutputDevice::GetEllipsisString( const XubString& rStr, long nMaxWidth
             }
 
             if ( !aStr.Len() && (nStyle & TEXT_DRAW_CLIP) )
-                aStr += rStr.GetChar( 0 );
+                aStr += rOrigStr.GetChar( 0 );
         }
         else if ( nStyle & (TEXT_DRAW_PATHELLIPSIS | TEXT_DRAW_NEWSELLIPSIS) )
         {
@@ -6185,47 +6490,47 @@ XubString OutputDevice::GetEllipsisString( const XubString& rStr, long nMaxWidth
                 pSepChars = aNewsSepChars;
 
             // Letztes Teilstueck ermitteln
-            xub_StrLen nLastContent = rStr.Len();
+            xub_StrLen nLastContent = aStr.Len();
             while ( nLastContent )
             {
                 nLastContent--;
-                if ( ImplIsCharIn( rStr.GetChar( nLastContent ), pSepChars ) )
+                if ( ImplIsCharIn( aStr.GetChar( nLastContent ), pSepChars ) )
                     break;
             }
             while ( nLastContent &&
-                    ImplIsCharIn( rStr.GetChar( nLastContent-1 ), pSepChars ) )
+                    ImplIsCharIn( aStr.GetChar( nLastContent-1 ), pSepChars ) )
                 nLastContent--;
 
-            XubString aLastStr( rStr, nLastContent, rStr.Len() );
+            XubString aLastStr( aStr, nLastContent, aStr.Len() );
             XubString aTempLastStr( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
             aTempLastStr += aLastStr;
             if ( GetTextWidth( aTempLastStr ) > nMaxWidth )
-                aStr = GetEllipsisString( rStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+                aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
             else
             {
                 USHORT nFirstContent = 0;
                 while ( nFirstContent < nLastContent )
                 {
                     nFirstContent++;
-                    if ( ImplIsCharIn( rStr.GetChar( nFirstContent ), pSepChars ) )
+                    if ( ImplIsCharIn( aStr.GetChar( nFirstContent ), pSepChars ) )
                         break;
                 }
                 while ( (nFirstContent < nLastContent) &&
-                        ImplIsCharIn( rStr.GetChar( nFirstContent ), pSepChars ) )
+                        ImplIsCharIn( aStr.GetChar( nFirstContent ), pSepChars ) )
                     nFirstContent++;
 
                 if ( nFirstContent >= nLastContent )
-                    aStr = GetEllipsisString( rStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+                    aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
                 else
                 {
                     if ( nFirstContent > 4 )
                         nFirstContent = 4;
-                    XubString aFirstStr( rStr, 0, nFirstContent );
+                    XubString aFirstStr( aStr, 0, nFirstContent );
                     aFirstStr.AppendAscii( "..." );
                     XubString aTempStr = aFirstStr;
                     aTempStr += aLastStr;
                     if ( GetTextWidth( aTempStr ) > nMaxWidth )
-                        aStr = GetEllipsisString( rStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
+                        aStr = GetEllipsisString( aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS );
                     else
                     {
                         do
@@ -6234,16 +6539,16 @@ XubString OutputDevice::GetEllipsisString( const XubString& rStr, long nMaxWidth
                             while ( nFirstContent < nLastContent )
                             {
                                 nLastContent--;
-                                if ( ImplIsCharIn( rStr.GetChar( nLastContent ), pSepChars ) )
+                                if ( ImplIsCharIn( aStr.GetChar( nLastContent ), pSepChars ) )
                                     break;
                             }
                             while ( (nFirstContent < nLastContent) &&
-                                    ImplIsCharIn( rStr.GetChar( nLastContent-1 ), pSepChars ) )
+                                    ImplIsCharIn( aStr.GetChar( nLastContent-1 ), pSepChars ) )
                                 nLastContent--;
 
                             if ( nFirstContent < nLastContent )
                             {
-                                XubString aTempLastStr( rStr, nLastContent, rStr.Len() );
+                                XubString aTempLastStr( aStr, nLastContent, aStr.Len() );
                                 aTempStr = aFirstStr;
                                 aTempStr += aTempLastStr;
                                 if ( GetTextWidth( aTempStr ) > nMaxWidth )
@@ -6357,7 +6662,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
 
 // -----------------------------------------------------------------------
 
-long OutputDevice::GetCtrlTextWidth( const XubString& rStr,
+long OutputDevice::GetCtrlTextWidth( const String& rStr,
                                      xub_StrLen nIndex, xub_StrLen nLen,
                                      USHORT nStyle ) const
 {
@@ -6384,9 +6689,9 @@ long OutputDevice::GetCtrlTextWidth( const XubString& rStr,
 
 // -----------------------------------------------------------------------
 
-XubString OutputDevice::GetNonMnemonicString( const XubString& rStr, xub_StrLen& rMnemonicPos )
+String OutputDevice::GetNonMnemonicString( const String& rStr, xub_StrLen& rMnemonicPos )
 {
-    XubString   aStr    = rStr;
+    String   aStr    = rStr;
     xub_StrLen  nLen    = aStr.Len();
     xub_StrLen  i       = 0;
 
@@ -6664,6 +6969,9 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
     DBG_TRACE( "OutputDevice::GetGlyphBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
+    if( mpFontEntry->mpConversion )
+        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
+
     BOOL bRet = FALSE;
 
     // #83068#
@@ -6894,6 +7202,9 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 {
     DBG_TRACE( "OutputDevice::GetGlyphOutline()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if( mpFontEntry->mpConversion )
+        cChar = ImplRecodeChar( mpFontEntry->mpConversion, cChar );
 
     BOOL bRet = FALSE;
 
