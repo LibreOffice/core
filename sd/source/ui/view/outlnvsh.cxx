@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:17:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,10 +683,21 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         SvtCJKOptions aCJKOptions;
         if( !aCJKOptions.IsChangeCaseMapEnabled() )
         {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_False );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_False );
             rSet.DisableItem( SID_TRANSLITERATE_HALFWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_FULLWIDTH );
             rSet.DisableItem( SID_TRANSLITERATE_HIRAGANA );
             rSet.DisableItem( SID_TRANSLITERATE_KATAGANA );
+        }
+        else
+        {
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HALFWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_FULLWIDTH, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_HIRAGANA, sal_True );
+            GetViewFrame()->GetBindings().SetVisibleState( SID_TRANSLITERATE_KATAGANA, sal_True );
         }
     }
 }
