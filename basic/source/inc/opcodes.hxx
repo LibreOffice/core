@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opcodes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:07:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,8 @@ enum SbiOpcode {
     _CLOSE,             // (+Kanal/0)
     _PRCHAR,            // (+char)
     // Verwaltung
-    _CLASS,             // Klassennamen testen (+StringId)
+    _SETCLASS,          // Set + Klassennamen testen (+StringId)
+    _TESTCLASS,         // Check TOS class (+StringId)
     _LIB,               // Libnamen fuer Declare-Procs setzen (+StringId)
     _BASED,             // TOS wird um BASE erhoeht, BASE davor gepusht (+base)
     // Typanpassung im Argv
