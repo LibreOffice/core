@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:04:39 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,12 @@ public class FieldSelection {
     public int maxfieldcount = 10000000;
     public String sIncSuffix;
     protected Integer IStep;
+    protected int FirstHelpIndex;
+    protected short curtabindex;
     String[] AllFieldNames;
     public Integer ListBoxWidth;
     public Integer SelListBoxPosX;
-    boolean bisModified;
+    boolean bisModified = false;
     boolean AppendMode = false;
     final int SOCMDMOVESEL = 1;
     final int SOCMDMOVEALL = 2;
@@ -101,7 +103,6 @@ public class FieldSelection {
     int CompPosY;
     int CompHeight;
     int CompWidth;
-    protected int FirstHelpIndex;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener {
 
@@ -194,17 +195,14 @@ public class FieldSelection {
 
     public FieldSelection(UnoDialog CurUnoDialog, int iStep, int CompPosX, int CompPosY, int CompWidth, int CompHeight, String slblFields, String slblSelFields, int _FirstHelpIndex, boolean bshowFourButtons) {
         try {
-            FirstHelpIndex = _FirstHelpIndex;
-            int icurHID = FirstHelpIndex;
-            bisModified = false;
             String AccessTextMoveSelected = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 39);
             String AccessTextRemoveSelected = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 40);
             String AccessTextMoveAll = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 41);
             String AccessTextRemoveAll = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 42);
             String AccessMoveFieldUp = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 43);
             String AccessMoveFieldDown = CurUnoDialog.oResource.getResText(UIConsts.RID_DB_COMMON + 44);
-
-            short curtabindex = UnoDialog.setInitialTabindex(iStep);
+            FirstHelpIndex = _FirstHelpIndex;
+            curtabindex = UnoDialog.setInitialTabindex(iStep);
             int ShiftButtonCount = 2;
             int a = 0;
             this.CurUnoDialog = CurUnoDialog;
@@ -230,7 +228,7 @@ public class FieldSelection {
 
             Integer CmdButtonWidth = new Integer(cmdButtonWidth);
 
-            sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "lblFields");
+            sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "lblFields_");
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblFields" + sIncSuffix,
                                             new String[] { "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
@@ -238,25 +236,25 @@ public class FieldSelection {
 
             xFieldsListBox = CurUnoDialog.insertListBox("lstFields" + sIncSuffix, SOFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "MultiSelection", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { ListBoxHeight, "HID:" + Integer.toString(icurHID++), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth });
+                                            new Object[] { ListBoxHeight, "HID:" + Integer.toString(FirstHelpIndex++), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth });
 
             Object btnmoveselected = CurUnoDialog.insertButton("cmdMoveSelected" + sIncSuffix, SOCMDMOVESEL, new ActionListenerImpl(),
                                             new String[] { "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(icurHID++), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                            new Object[] { Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             if (bshowFourButtons == true)
                 btnmoveall = CurUnoDialog.insertButton("cmdMoveAll" + sIncSuffix, SOCMDMOVEALL, new ActionListenerImpl(),
                                             new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(14), "HID:" + Integer.toString(icurHID++), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                            new Object[] { new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             Object btnremoveselected = CurUnoDialog.insertButton("cmdRemoveSelected" + sIncSuffix, SOCMDREMOVESEL, new ActionListenerImpl(),
                                             new String[] { "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(icurHID++), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                            new Object[] { Boolean.FALSE, new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             if (bshowFourButtons == true)
                 btnremoveall = CurUnoDialog.insertButton("cmdRemoveAll" + sIncSuffix, SOCMDREMOVEALL, new ActionListenerImpl(),
                                             new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(14), "HID:" + Integer.toString(icurHID++), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                            new Object[] { new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             FontDescriptor oFontDesc = new FontDescriptor();
             oFontDesc.Name = "StarSymbol";
@@ -267,15 +265,15 @@ public class FieldSelection {
 
             xSelFieldsListBox = CurUnoDialog.insertListBox("lstSelFields" + sIncSuffix, SOSELFLDSLST, new ActionListenerImpl(), new ItemListenerImpl(),
                                         new String[] { "Height", "HelpURL", "MultiSelection", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { ListBoxHeight, "HID:" + Integer.toString(icurHID++), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, new Short(curtabindex++), ListBoxWidth });
+                                        new Object[] { ListBoxHeight, "HID:" + Integer.toString(FirstHelpIndex++), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, new Short(curtabindex++), ListBoxWidth });
 
             Object btnmoveup = CurUnoDialog.insertButton("cmdMoveUp" + sIncSuffix, SOCMDMOVEUP, new ActionListenerImpl(),
                                     new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                    new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(icurHID++), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                    new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
                                     new String[] { "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                    new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(icurHID++), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth });
+                                    new Object[] { Boolean.FALSE, oFontDesc, new Integer(14), "HID:" + Integer.toString(FirstHelpIndex++), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth });
 
             PeerConfigHelper oselfieldspeerconfig = new PeerConfigHelper(CurUnoDialog.xUnoDialog);
             oselfieldspeerconfig.setPeerProperties(btnmoveselected, new String[] { "AccessibilityName" },new String[] { AccessTextMoveSelected });
@@ -336,7 +334,6 @@ public class FieldSelection {
                 else
                     xFieldSelection.moveItemDown(CurItem);
             }
-
         }
     }
 
@@ -467,13 +464,11 @@ public class FieldSelection {
             xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
             if (!AppendMode){
                 xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
-                xSelFieldsListBox.addItems(this.AllFieldNames, xSelFieldsListBox.getItemCount());
+                xSelFieldsListBox.addItems(AllFieldNames, (short) 0);
             }
-            else{
-                String[] sRightList = JavaTools.removeArrayFields(xSelFieldsListBox.getItems(), SelFieldItems);
-                CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", sRightList);
+            else
                 xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
-            }
+
         } else {
             SelFieldItems = xFieldsListBox.getSelectedItems();
             int MaxSourceSelected = SelFieldItems.length;
@@ -483,8 +478,6 @@ public class FieldSelection {
                 short[] SourceSelList = new short[xFieldsListBox.getSelectedItemsPos().length];
                 SourceSelList = xFieldsListBox.getSelectedItemsPos();
                 int iOldSourceSelect = SourceSelList[0];
-                String[] sRightList = JavaTools.removeArrayFields(xSelFieldsListBox.getItems(), SelFieldItems);
-                CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", sRightList);
                 xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
                 CurUnoDialog.removeSelectedItems(xFieldsListBox);
                 xSelFieldsListBox.selectItemPos((short) 0, xSelFieldsListBox.getSelectedItems().length > 0);
@@ -502,6 +495,7 @@ public class FieldSelection {
         short iOldSelFieldSelected = xSelFieldsListBox.getSelectedItemPos();
         String[] OldSelFieldItems = xSelFieldsListBox.getSelectedItems();
         if (bMoveAll) {
+            OldSelFieldItems = xSelFieldsListBox.getItems();
             xFieldsListBox.removeItems((short) 0, xFieldsListBox.getItemCount());
             xFieldsListBox.addItems(AllFieldNames, (short) 0);
             xSelFieldsListBox.removeItems((short) 0, xSelFieldsListBox.getItemCount());
@@ -536,6 +530,9 @@ public class FieldSelection {
         return xSelFieldsListBox.getItems();
     }
 
+    public void setSelectedFieldNames(String[] _sfieldnames){
+        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+    }
 
     public void setModified(boolean _bModified){
         bisModified = _bModified;
