@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:02:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 #ifndef _CALBCK_HXX
 #include <calbck.hxx>
@@ -307,7 +311,7 @@ class SwFldNames;
 
 DBG_NAMEEX(SwFieldType);
 
-class SwFieldType : public SwModify
+class SW_DLLPUBLIC SwFieldType : public SwModify
 {
     USHORT nWhich;
 
@@ -315,8 +319,10 @@ class SwFieldType : public SwModify
     static  SvStringsDtor*  pFldNames;
 
     static void _GetFldName();          // legt die FldNames an, fldmgr.cxx!
+
 protected:
-    SwFieldType( USHORT nWhichId );
+    // single argument ctors shall be explicit.
+    explicit SwFieldType( USHORT nWhichId );
 
 public:
 
@@ -334,8 +340,6 @@ public:
             USHORT          Which() const { return nWhich; }
 
     inline  void            UpdateFlds() const;
-
-    static inline SvStringsDtor* GetFldNames();
 };
 
 inline void SwFieldType::UpdateFlds() const
@@ -350,17 +354,19 @@ inline void SwFieldType::UpdateFlds() const
                    des Feldes in Erfahrung gebracht.
  --------------------------------------------------------------------*/
 
-class SwField
+class SW_DLLPUBLIC SwField
 {
     USHORT              nLang;  // Immer ueber SetLanguage aendern!
     BOOL                bIsAutomaticLanguage;
     ULONG               nFormat;
 
     SwFieldType*        pType;
+
 protected:
     void                SetFormat(ULONG nSet) {nFormat = nSet;}
 
     SwField(SwFieldType* pTyp, ULONG nFmt = 0, USHORT nLang = LANGUAGE_SYSTEM);
+
 public:
     virtual             ~SwField();
 
@@ -451,7 +457,7 @@ public:
     void            DoubleToString(String &rValue, const double &rVal, ULONG nFmt) const;
 };
 
-class SwValueField : public SwField
+class SW_DLLPUBLIC SwValueField : public SwField
 {
     double fValue;
 //  String sExpand;
@@ -495,13 +501,6 @@ public:
     String                  GetExpandedFormula() const;
 
 };
-
-inline SvStringsDtor* SwFieldType::GetFldNames()
-{
-    if( !SwFieldType::pFldNames )
-        SwFieldType::_GetFldName();
-    return SwFieldType::pFldNames;
-}
 
 #endif  // FIELDIDS_ONLY
 
