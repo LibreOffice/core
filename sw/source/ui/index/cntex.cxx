@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:32:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
         SwXTextDocument* pDoc = (SwXTextDocument*)xDocTunnel->getSomething(SwXTextDocument::getUnoTunnelId());
 
         if( pDoc )
-            pDoc->GetDocShell()->LoadStyles( *rSh.GetView().GetDocShell() );
+            pDoc->GetDocShell()->_LoadStyles( *rSh.GetView().GetDocShell(), TRUE );
 
          uno::Reference< lang::XMultiServiceFactory >  xFact(
                                              xModel, uno::UNO_QUERY);
