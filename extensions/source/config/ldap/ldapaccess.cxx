@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:02:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 14:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,9 @@ static void checkLdapReturnCode(const sal_Char *aOperation,
     message.appendAscii(ldap_err2string(aRetCode)).appendAscii(" (") ;
     sal_Char *stub = NULL ;
 
+#ifndef LDAP_OPT_SIZELIMIT // for use with OpenLDAP
     ldap_get_lderrno(aConnection, NULL, &stub) ;
+#endif
     if (stub != NULL)
     {
         message.appendAscii(stub) ;
@@ -160,11 +162,14 @@ void  LdapConnection::connectSimple()
         ldap_set_option(mConnection,
                         LDAP_OPT_PROTOCOL_VERSION,
                         &version);
+
+#ifdef LDAP_X_OPT_CONNECT_TIMEOUT // OpenLDAP doesn't support this and the func
         /* timeout is specified in milliseconds -> 4 seconds*/
         int timeout = 4000;
         ldap_set_option( mConnection,
                         LDAP_X_OPT_CONNECT_TIMEOUT,
                         &timeout );
+#endif
 
         // Do the bind
         LdapErrCode retCode = ldap_simple_bind_s(mConnection,
