@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:42:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 16:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 // -----------------------------------------------------------------------------
+void ORowSetValue::setTypeKind(sal_Int32 _eType)
+{
+    if ((_eType != m_eTypeKind) && !m_bNull)
+        free();
+
+    m_eTypeKind = _eType;
+}
+
+// -----------------------------------------------------------------------------
 void ORowSetValue::free()
 {
     if(!m_bNull)
@@ -113,7 +122,7 @@ void ORowSetValue::free()
             case ::com::sun::star::sdbc::DataType::VARBINARY:
             case ::com::sun::star::sdbc::DataType::LONGVARBINARY:
             case ::com::sun::star::sdbc::DataType::LONGVARCHAR:
-                delete (::com::sun::star::uno::Sequence<sal_Int8>*)m_aValue.m_pValue;
+                delete (Sequence<sal_Int8>*)m_aValue.m_pValue;
                 m_aValue.m_pValue = NULL;
                 break;
             case ::com::sun::star::sdbc::DataType::OBJECT:
@@ -232,15 +241,16 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 {
     if(m_eTypeKind != DataType::DATE)
         free();
+
     if(m_bNull)
     {
         m_aValue.m_pValue = new Date(_rRH);
         m_eTypeKind = DataType::DATE;
+        m_bNull = sal_False;
     }
     else
         *(Date*)m_aValue.m_pValue = _rRH;
 
-    m_bNull = sal_False;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -248,15 +258,16 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
 {
     if(m_eTypeKind != DataType::TIME)
         free();
+
     if(m_bNull)
     {
         m_aValue.m_pValue = new Time(_rRH);
         m_eTypeKind = DataType::TIME;
+        m_bNull = sal_False;
     }
     else
         *(Time*)m_aValue.m_pValue = _rRH;
 
-    m_bNull = sal_False;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -268,11 +279,10 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
     {
         m_aValue.m_pValue = new DateTime(_rRH);
         m_eTypeKind = DataType::TIMESTAMP;
+        m_bNull = sal_False;
     }
     else
         *(DateTime*)m_aValue.m_pValue = _rRH;
-
-    m_bNull = sal_False;
 
     return *this;
 }
@@ -298,15 +308,16 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 {
     if(m_eTypeKind != DataType::DOUBLE)
         free();
+
     if(m_bNull)
     {
         m_aValue.m_pValue = new double(_rRH);
         m_eTypeKind = DataType::DOUBLE;
+        m_bNull = sal_False;
     }
     else
         *(double*)m_aValue.m_pValue = _rRH;
 
-    m_bNull = sal_False;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -315,9 +326,10 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 {
     if(m_eTypeKind != DataType::TINYINT)
         free();
-    m_bNull = sal_False;
+
     m_aValue.m_nInt8 = _rRH;
     m_eTypeKind = DataType::TINYINT;
+    m_bNull = sal_False;
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -326,9 +338,11 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 {
     if(m_eTypeKind != DataType::SMALLINT)
         free();
-    m_bNull = sal_False;
+
     m_aValue.m_nInt16 = _rRH;
     m_eTypeKind = DataType::SMALLINT;
+    m_bNull = sal_False;
+
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -337,9 +351,11 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 {
     if(m_eTypeKind != DataType::INTEGER)
         free();
-    m_bNull = sal_False;
+
     m_aValue.m_nInt32 = _rRH;
     m_eTypeKind = DataType::INTEGER;
+    m_bNull = sal_False;
+
     return *this;
 }
 // -------------------------------------------------------------------------
@@ -348,22 +364,25 @@ ORowSetValue& ORowSetValue::operator=(const sal_Bool _rRH)
 {
     if(m_eTypeKind != DataType::BIT)
         free();
-    m_bNull = sal_False;
+
     m_aValue.m_bBool = _rRH;
     m_eTypeKind = DataType::BIT;
+    m_bNull = sal_False;
+
     return *this;
 }
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 {
-    free();
+    if (DataType::DOUBLE != m_eTypeKind)
+        free();
+
     if(m_bNull)
-    {
         m_aValue.m_pValue = new sal_Int64(_rRH);
-        m_eTypeKind = DataType::DOUBLE;
-    }
     else
-        *(sal_Int64*)m_aValue.m_pValue = _rRH;
+        *static_cast<sal_Int64*>(m_aValue.m_pValue) = _rRH;
+
+    m_eTypeKind = DataType::DOUBLE;
     m_bNull = sal_False;
 
     return *this;
@@ -371,14 +390,15 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 {
-    free();
-    if(m_bNull)
-    {
-        m_aValue.m_pValue = new Sequence<sal_Int8>(_rRH);
-    }
-    else
-        *(Sequence<sal_Int8>*)m_aValue.m_pValue = _rRH;
+    if (DataType::LONGVARCHAR != m_eTypeKind)
+        free();
 
+    if (m_bNull)
+        m_aValue.m_pValue = new Sequence<sal_Int8>(_rRH);
+    else
+        *static_cast< Sequence< sal_Int8 >* >(m_aValue.m_pValue) = _rRH;
+
+    m_eTypeKind = DataType::LONGVARCHAR;
     m_bNull = sal_False;
 
     return *this;
@@ -386,13 +406,15 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 // -------------------------------------------------------------------------
 ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 {
-    free();
-    m_eTypeKind = DataType::OBJECT;
+    if (DataType::OBJECT != m_eTypeKind)
+        free();
+
     if(m_bNull)
         m_aValue.m_pValue = new Any(_rAny);
     else
-        *(Any*)m_aValue.m_pValue = _rAny;
+        *static_cast<Any*>(m_aValue.m_pValue) = _rAny;
 
+    m_eTypeKind = DataType::OBJECT;
     m_bNull = sal_False;
 
     return *this;
