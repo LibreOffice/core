@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 14:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,20 +241,29 @@ ComponentContext::~ComponentContext()
 //__________________________________________________________________________________________________
 void ComponentContext::disposing()
 {
-    MutexGuard aGuard( m_mutex );
-    for ( t_map::const_iterator iPos( m_map.begin() ); iPos != m_map.end(); ++iPos )
+    // dispose all context objects
+    t_map::const_iterator iPos( m_map.begin() );
+    for ( ; iPos != m_map.end(); ++iPos )
     {
         ContextEntry * pEntry = iPos->second;
         Reference< lang::XComponent > xComp;
-        pEntry->value >>= xComp;
-        delete pEntry;
+
+        if (pEntry->bLateInitService)
+        {
+            // may be in late init
+            MutexGuard aGuard( m_mutex );
+            pEntry->value >>= xComp;
+        }
+        else
+        {
+            pEntry->value >>= xComp;
+        }
 
         if (xComp.is())
         {
             xComp->dispose();
         }
     }
-    m_map.clear();
 
     // dispose service manager
     Reference< lang::XComponent > xComp( m_xSMgr, UNO_QUERY );
@@ -262,6 +271,13 @@ void ComponentContext::disposing()
     {
         xComp->dispose();
     }
+
+    // everything is disposed, hopefully nobody accesses the context anymore...
+    for ( iPos = m_map.begin(); iPos != m_map.end(); ++iPos )
+    {
+        delete iPos->second;
+    }
+    m_map.clear();
 }
 //__________________________________________________________________________________________________
 ComponentContext::ComponentContext(
