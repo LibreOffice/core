@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:27:30 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2497,11 +2497,6 @@ sal_uInt32 EditEngine::RegisterClipboardFormatName()
     if ( !nFormat )
         nFormat = SotExchange::RegisterFormatName( String( RTL_CONSTASCII_USTRINGPARAM( "EditEngineFormat" ) ) );
     return nFormat;
-}
-
-void EditEngine::SetGetAutoCorrectHdl( const Link& rHdl )
-{
-    EE_DLL()->GetGlobalData()->SetGetAutoCorrectHdl( rHdl );
 }
 
 sal_uInt16 EditEngine::GetAvailableSearchOptions()
