@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 13:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ class XMLTableHeaderFooterContext: public SvXMLImportContext
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor > xTextCursor;
     ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextCursor > xOldTextCursor;
+    ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::sheet::XHeaderFooterContent > xHeaderFooterContent;
@@ -123,6 +125,8 @@ class XMLHeaderFooterRegionContext: public SvXMLImportContext
 private:
     ::com::sun::star::uno::Reference <
         ::com::sun::star::text::XTextCursor >& xTextCursor;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::text::XTextCursor > xOldTextCursor;
 
 public:
     TYPEINFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 16:40:47 $
+ *  last change: $Author: sab $ $Date: 2000-11-16 13:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
                 rtl::OUString sEmpty;
                 xText->setString(sEmpty);
                 xTextCursor = xText->createTextCursor();
+                xOldTextCursor = GetImport().GetTextImport()->GetCursor();
                 GetImport().GetTextImport()->SetCursor( xTextCursor );
             }
         }
@@ -239,7 +240,7 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
 
 void XMLTableHeaderFooterContext::EndElement()
 {
-    if( xTextCursor.is() )
+    if( GetImport().GetTextImport()->GetCursor().is() )
     {
         //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
@@ -251,6 +252,8 @@ void XMLTableHeaderFooterContext::EndElement()
         }
         GetImport().GetTextImport()->ResetCursor();
     }
+    if (xOldTextCursor.is())
+        GetImport().GetTextImport()->SetCursor(xOldTextCursor);
     if (xHeaderFooterContent.is())
     {
         Any aAny;
@@ -269,6 +272,7 @@ XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xTextCursor ( xCursor )
 {
+    xOldTextCursor = GetImport().GetTextImport()->GetCursor();
     GetImport().GetTextImport()->SetCursor( xTextCursor );
 }
 
@@ -300,9 +304,9 @@ SvXMLImportContext *XMLHeaderFooterRegionContext::CreateChildContext(
 
 void XMLHeaderFooterRegionContext::EndElement()
 {
-    if( xTextCursor.is() )
+    if( GetImport().GetTextImport()->GetCursor().is() )
     {
-        GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+        //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
             OUString sEmpty;
@@ -312,4 +316,6 @@ void XMLHeaderFooterRegionContext::EndElement()
         }
         GetImport().GetTextImport()->ResetCursor();
     }
+    if (xOldTextCursor.is())
+        GetImport().GetTextImport()->SetCursor(xOldTextCursor);
 }
