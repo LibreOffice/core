@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2002-03-06 14:34:25 $
+ *  last change: $Author: hdu $ $Date: 2002-05-22 12:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,6 +569,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
 
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
+    aFont.SetAlign( ALIGN_TOP );
     int nFontHeight = (aOrigSize.Height() - 5) * 2 / (3 * ROW_COUNT);
     aFont.SetSize( PixelToLogic( Size( 0, nFontHeight ) ) );
     aFont.SetTransparent( TRUE );
@@ -737,6 +738,7 @@ void SvxShowText::SetFont( const Font& rFont )
     long nWinHeight = GetOutputSizePixel().Height();
     Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
+    aFont.SetAlign( ALIGN_TOP );
     aFont.SetSize( PixelToLogic( Size( 0, nWinHeight-6 ) ) );
     aFont.SetTransparent( TRUE );
     Control::SetFont( aFont );
