@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇüÅÂ(~T)";
+        Text[ korean ] = "ÇÊµåÀ¯Çü";
         Text[ turkish ] = "A~lan tipi";
         Text[ language_user1 ] = " ";
     };
@@ -132,7 +132,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¿ï¨ú(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "~Seçim";
         Text[ language_user1 ] = " ";
     };
@@ -212,7 +212,7 @@ TabPage TP_FLD_VAR
         TEXT[ chinese_traditional ] = "Áô¤Jªº";
         TEXT[ arabic ] = "ÛíÑ ãÑÆí";
         TEXT[ greek ] = "Ìç ïñáôÜ";
-        TEXT[ korean ] = "¾Èº¸ÀÓ(~B)";
+        TEXT[ korean ] = "¾Èº¸ÀÓ";
         TEXT[ turkish ] = "Görünmez";
         TEXT[ language_user1 ] = " ";
     };
@@ -239,7 +239,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "«ö³¹½s¸¹";
         Text[ arabic ] = "ÊÑŞíã İÕæá";
         Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
-        Text[ korean ] = "ÀåÀ¸·Î ¹øÈ£¸Å±â±â";
+        Text[ korean ] = "Àåº°·Î ¹øÈ£¸Å±â±â";
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
     };
@@ -266,7 +266,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¯Å(~L)";
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
-        Text[ korean ] = "¼öÁØ(~L)";
+        Text[ korean ] = "¼öÁØ";
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
     };
@@ -386,7 +386,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "³s±µ²Å(~S)";
         Text[ arabic ] = "İÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêü";
-        Text[ korean ] = "±¸ºĞÀÚ(~S)";
+        Text[ korean ] = "±¸ºĞÀÚ";
         Text[ turkish ] = "A~yırma işareti";
         Text[ language_user1 ] = " ";
     };
@@ -422,7 +422,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¦WºÙ(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~M)";
+        Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
     };
@@ -459,7 +459,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª(~V)";
+        Text[ korean ] = "°ª";
         Text[ turkish ] = "De~ğer";
         Text[ language_user1 ] = " ";
     };
@@ -497,7 +497,7 @@ TabPage TP_FLD_VAR
                 Text [ spanish ] = "Aplicar" ;
                 Text [ english_us ] = "Apply" ;
                 Text[ chinese_simplified ] = "Ó¦ÓÃ";
-                Text[ russian ] = "Âûïîëíèòü";
+                Text[ russian ] = "Ïğèìåíèòü";
                 Text[ polish ] = "Zastosuj";
                 Text[ japanese ] = "“K—p";
                 Text[ chinese_traditional ] = "¨Ï¥Î";
