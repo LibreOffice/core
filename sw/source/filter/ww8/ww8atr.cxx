@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 10:33:55 $
+ *  last change: $Author: cmc $ $Date: 2002-06-17 10:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2068,6 +2068,8 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case RES_POSTITFLD:
+        //Sadly only possible for word in main document text
+        if (rWW8Wrt.nTxtTyp == TXT_MAINTEXT)
         {
             const SwPostItField& rPFld = *(SwPostItField*)pFld;
             rWW8Wrt.pAtn->Append( rWW8Wrt.Fc2Cp( rWrt.Strm().Tell() ), rPFld );
