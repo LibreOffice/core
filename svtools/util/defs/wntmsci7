@@ -9415,3 +9415,10 @@ _real@4@3ffdaaaaaaaaaaaaa800
 ?AddRemoveListener@TransferableClipboardListener@@QAEXPAVWindow@@E@Z
 ?changedContents@TransferableClipboardListener@@UAAXABUClipboardEvent@clipboard@datatransfer@star@sun@com@@@Z
 ?disposing@TransferableClipboardListener@@UAAXABUEventObject@lang@star@sun@com@@@Z
+??0QueryDeleteDlg_Impl@svtools@@QAE@PAVWindow@@ABVString@@@Z
+??1QueryDeleteDlg_Impl@svtools@@UAE@XZ
+?ClickLink@QueryDeleteDlg_Impl@svtools@@CAJPAV12@PAVPushButton@@@Z
+?EnableContextMenu@SvtFileView@@QAEXE@Z
+?EnableDelete@SvtFileView@@QAEXE@Z
+?GetName@INetURLObject@@QBE?AVString@@W4DecodeMechanism@1@G@Z
+?replaceAt@OUString@rtl@@QBE?AV12@JJABV12@@Z
