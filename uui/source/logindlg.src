@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:07:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 05:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,22 +366,22 @@ ModalDialog DLG_UUI_LOGIN
     {
         Text = "Bitte geben Sie hier Benutzernamen und Passwort f�r \"%2\" auf %1 ein." ;
         Text [ English ] = "Please enter user name and password here for \"%2\" on %1." ;
-        Text [ portuguese ] = "em  " ;
+        Text [ portuguese ] = "Indique o nome do utilizador e a senha para %2 em %1." ;
         Text [ english_us ] = "Please enter user name and password for \"%2\" on %1 here." ;
         Text [ portuguese_brazilian ] = "auf " ;
-        Text [ swedish ] = "p� " ;
+        Text [ swedish ] = "Mata in anv�ndarnamn och l�senord f�r \"%2\" p� %1 h�r." ;
         Text [ danish ] = "p� " ;
-        Text [ italian ] = "su " ;
+        Text [ italian ] = "Digitate qui il nome dell'utente e la password per \"%2\" su %1." ;
         Text [ spanish ] = "Especifique su nombre de usuario y su contrase�a para \"%2\" en %1." ;
         Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour \"%2\" sur %1." ;
-        Text [ dutch ] = "op    " ;
+        Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor \"%2\" op %1." ;
         Text[ chinese_simplified ] = "请在此为 %1 输入 \"%2\" 的使用名和密码。";
         Text[ russian ] = "������� ��� � ������ ������������ ��� \"%2\" � %1.";
         Text[ polish ] = "na ";
         Text[ japanese ] = "ここに %1 の \"%2\" に必要なﾕｰｻﾞｰ名とﾊﾟｽﾜｰﾄﾞを入力してください。";
-        Text[ chinese_traditional ] = "請在這裡為 %1 輸入 \"%2\" 的使用者名稱和密碼。";
+        Text[ chinese_traditional ] = "請在這裡為 %1 輸入<%2>的使用者名稱和密碼。";
         Text[ greek ] = "��� ";
-        Text[ korean ] = "..에 ";
+        Text[ korean ] = "여기에 %1에 대한 %2의 사용자 이름과 패스워드를 입력하십시오.";
         Text[ arabic ] = "��� ";
         Text[ turkish ] = "yeri ";
         Text[ catalan ] = "en  ";
@@ -408,6 +408,7 @@ ModalDialog DLG_UUI_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contrase�a";
     Text[ finnish ] = "K�ytt�j�tunnus ja salasana pakolliset";
 };
+
 
 
 
