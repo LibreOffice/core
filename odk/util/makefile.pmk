@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 09:59:20 $
+#   last change: $Author: vg $ $Date: 2003-06-10 10:51:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,23 +60,7 @@
 #
 #*************************************************************************
 
-.IF "$(BUILD_SPECIAL)"==""
-PRODUCT_RELEASE=6.1
 PRODUCT_NAME=odk$(UPD)
-OFFICEPRODUCTNAME="StarOffice $(PRODUCT_RELEASE)"
-IDLDOCREFNAME="StarOffice6.1 API Beta"
-TITLE="StarOffice6.1 Beta SDK"
-IDL_CHAPTER_REFS=idl_chapter_refs.txt
-CONVMODE=2
-.ELSE
-PRODUCT_RELEASE=1.1
-PRODUCT_NAME=OpenOffice.org$(PRODUCT_RELEASE)_Beta_SDK
-OFFICEPRODUCTNAME="OpenOffice.org $(PRODUCT_RELEASE)"
-IDLDOCREFNAME="OpenOffice.org $(PRODUCT_RELEASE) API Beta"
-TITLE="OpenOffice.org$(PRODUCT_RELEASE) Beta SDK"
-IDL_CHAPTER_REFS=idl_chapter_refs_oo.txt
-CONVMODE=1
-.ENDIF
 
 PRODUCTZIPFILE=$(PRODUCT_NAME).zip
 PRODUCTTARGZFILE=$(PRODUCT_NAME).tar.gz
@@ -92,6 +76,7 @@ DESTDIRCPPEXAMPLES=$(DESTDIR)$/examples$/cpp
 DESTDIRJAVAEXAMPLES=$(DESTDIR)$/examples$/java
 DESTDIRBASICEXAMPLES=$(DESTDIR)$/examples$/basic
 DESTDIROLEEXAMPLES=$(DESTDIR)$/examples$/OLE
+DESTDIRDEVGUIDEEXAMPLES=$(DESTDIR)$/examples$/DevelopersGuide
 DESTDIRINC=$(DESTDIR)$/include
 DESTDIRCLASSES=$(DESTDIR)$/classes
 DESTDIRDOCU=$(DESTDIR)$/docs
@@ -114,12 +99,6 @@ LIBOUT=$(SOLARLIBDIR)
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 
-CONVERTTAGSCRIPT=$(SOLARENV)$/bin$/converttags.pl
-
-# used in pack/copying and unzip_udk
-DEVGUIDE_DOCU_FLAG=$(MISC)$/devguide_docu_unzipped.txt
-DEVGUIDE_SAMPLES_FLAG=$(MISC)$/devguide_samples_unzipped.txt
-
 .IF "$(GUI)"=="WNT"
 #--------------------
 # WNT ONLY
@@ -134,8 +113,9 @@ MY_DLLOUT=$(OUT)$/bin
 EXEPOSTFIX=.exe
 DLLOUT=$(SOLARBINDIR)
 
-DESTDIRBIN=$(DESTDIR)$/windows$/bin
-DESTDIRLIB=$(DESTDIR)$/windows$/lib
+DESTPLATFROM=windows
+DESTDIRBIN=$(DESTDIR)$/$(DESTPLATFROM)$/bin
+DESTDIRLIB=$(DESTDIR)$/$(DESTPLATFROM)$/lib
 DESTDIRDLL=$(DESTDIRBIN)
 
 .ELSE
@@ -155,50 +135,42 @@ DLLOUT=$(SOLARLIBDIR)
 ##############
 # SOLARIS SPARC
 ##############
-DESTDIRBIN=$(DESTDIR)$/solsparc$/bin
-DESTDIRLIB=$(DESTDIR)$/solsparc$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=solsparc
 
 .ELIF "$(OS)$(CPU)"=="SOLARISI"
 ##########
 # SOLARIS INTEL
 ##########
-DESTDIRBIN=$(DESTDIR)$/solintel$/bin
-DESTDIRLIB=$(DESTDIR)$/solintel$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=solintel
 
 .ELIF "$(OS)"=="LINUX"
 ###########
 # LINUX
 ###########
-DESTDIRBIN=$(DESTDIR)$/linux$/bin
-DESTDIRLIB=$(DESTDIR)$/linux$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=linux
 
 .ELIF "$(OS)"=="NETBSD"
 ###########
 # NETBSD
 ###########
-DESTDIRBIN=$(DESTDIR)$/netbsd$/bin
-DESTDIRLIB=$(DESTDIR)$/netbsd$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=netbsd
 
 .ELIF "$(OS)"=="IRIX "
 ###########
 # IRIX
 ###########
-DESTDIRBIN=$(DESTDIR)$/irix$/bin
-DESTDIRLIB=$(DESTDIR)$/irix$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=irix
 
 .ELIF "$(OS)"=="MACOSX"
 ###########
 # MACOSX
 ###########
-DESTDIRBIN=$(DESTDIR)$/macosx$/bin
-DESTDIRLIB=$(DESTDIR)$/macosx$/lib
-DESTDIRDLL=$(DESTDIRLIB)
+DESTPLATFROM=macosx
 .ENDIF
+
+DESTDIRBIN=$(DESTDIR)$/$(DESTPLATFROM)$/bin
+DESTDIRLIB=$(DESTDIR)$/$(DESTPLATFROM)$/lib
+DESTDIRDLL=$(DESTDIRLIB)
 
 .ENDIF
 
@@ -216,7 +188,8 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)$/uno \
     $(INCOUT)$/cppu \
     $(INCOUT)$/cppuhelper \
-    $(INCOUT)$/bridges
+    $(INCOUT)$/bridges \
+    $(INCOUT)$/stl
 
 .IF "$(GUI)"=="WNT"
 INCLUDETOPDIRLIST += $(INCOUT)$/systools
