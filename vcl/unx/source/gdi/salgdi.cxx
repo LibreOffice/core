@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:00 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,18 @@
 #include <stdlib.h>
 
 #include <prex.h>
+// [ed] 6/15/02 There's a conflicting definition of INT8 within the Xmd.h header
+// and the solar.h OOo header.  So, wrap the X11 header with a bogus #define
+// to use the OOo definition of the symbol for INT8.
+// [fa] 4/12/04 With 64-bit changes, X11 headers also conflict with INT64
+
+#define INT8 blehBlahFooBarINT8
+#define INT64 blehBlahFooBarINT64
+
 #include <X11/Xproto.h>
+
+#undef INT8
+#undef INT64
 #include <postx.h>
 
 #include <salunx.h>
@@ -483,7 +494,7 @@ BOOL X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
+void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     SalDisplay *pDisplay = GetDisplay();
 
@@ -517,7 +528,7 @@ void X11SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
+void X11SalGraphics::GetScreenFontResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
     GetDisplay()->GetScreenFontResolution( rDPIX, rDPIY );
 }
