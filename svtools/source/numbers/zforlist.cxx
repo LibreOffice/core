@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: er $ $Date: 2001-06-26 14:26:13 $
+ *  last change: $Author: er $ $Date: 2001-07-04 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ class SvNumberFormatterRegistry_Impl : public SvtListener
 {
     List                    aFormatters;
     SvtSysLocaleOptions     aSysLocaleOptions;
+    LanguageType            eSysLanguage;
 
 public:
                             SvNumberFormatterRegistry_Impl();
@@ -180,6 +181,7 @@ public:
 
 SvNumberFormatterRegistry_Impl::SvNumberFormatterRegistry_Impl()
 {
+    eSysLanguage = SvNumberFormatter::GetProperLanguage( LANGUAGE_SYSTEM );
     aSysLocaleOptions.AddListener( *this );
 }
 
@@ -193,13 +195,26 @@ SvNumberFormatterRegistry_Impl::~SvNumberFormatterRegistry_Impl()
 void SvNumberFormatterRegistry_Impl::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
 {
     const SfxSimpleHint* p = PTR_CAST( SfxSimpleHint, &rHint );
-    if( p && (p->GetId() & (SYSLOCALEOPTIONS_HINT_CURRENCY)) )
+    if( p )
     {
-        ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
-        for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
-                p; p = (SvNumberFormatter*)aFormatters.Next() )
+        if ( p->GetId() & SYSLOCALEOPTIONS_HINT_LOCALE )
         {
-            p->ResetDefaultSystemCurrency();
+            ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
+            for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
+                    p; p = (SvNumberFormatter*)aFormatters.Next() )
+            {
+                p->ReplaceSystemCL( eSysLanguage );
+            }
+            eSysLanguage = SvNumberFormatter::GetProperLanguage( LANGUAGE_SYSTEM );
+        }
+        if ( p->GetId() & SYSLOCALEOPTIONS_HINT_CURRENCY )
+        {
+            ::osl::MutexGuard aGuard( SvNumberFormatter::GetMutex() );
+            for ( SvNumberFormatter* p = (SvNumberFormatter*)aFormatters.First();
+                    p; p = (SvNumberFormatter*)aFormatters.Next() )
+            {
+                p->ResetDefaultSystemCurrency();
+            }
         }
     }
 }
@@ -270,7 +285,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 {
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = UNKNOWN_SUBSTITUTE;
-    SysLnge = eLang;
+    IniLnge = eLang;
     ActLnge = eLang;
     eEvalDateFormat = NF_EVALDATEFORMAT_INTL;
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -289,8 +304,8 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pStringScanner = new ImpSvNumberInputScan( this );
     pFormatScanner = new ImpSvNumberformatScan( this );
     pFormatTable = NULL;
-    ImpGenerateFormats( 0, FALSE );     // 0 .. 999 for System formats
     MaxCLOffset = 0;
+    ImpGenerateFormats( 0, FALSE );     // 0 .. 999 for initialized language formats
     pMergeTable = new SvULONGTable;
     bNoZero = FALSE;
     pColorLink = NULL;
@@ -417,9 +432,9 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 )
 {
     if (eLnge == LANGUAGE_DONTKNOW)
         eLnge = UNKNOWN_SUBSTITUTE;
-    if (eLnge != SysLnge)
+    if (eLnge != IniLnge)
     {
-        SysLnge = eLnge;
+        IniLnge = eLnge;
         ChangeIntl(eLnge);
         SvNumberformat* pEntry = aFTable.First();
         while (pEntry)                          // delete old formats
@@ -442,6 +457,88 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, BOOL bLoadingSO5 )
         }
     }
 }
+
+
+void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
+{
+    ULONG nCLOffset = ImpGetCLOffset( LANGUAGE_SYSTEM );
+    if ( nCLOffset > MaxCLOffset )
+        return ;    // no SYSTEM entries to replace
+
+    const ULONG nMaxBuiltin = nCLOffset + SV_MAX_ANZ_STANDARD_FORMATE;
+    const ULONG nNextCL = nCLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
+    ULONG nKey;
+
+    // remove old builtin formats
+    aFTable.Seek( nCLOffset );
+    while ( (nKey = aFTable.GetCurKey()) >= nCLOffset && nKey <= nMaxBuiltin && aFTable.Count() )
+    {
+        SvNumberformat* pEntry = (SvNumberformat*) aFTable.Remove( nKey );
+        delete pEntry;
+    }
+
+    // move additional and user defined to temporary table
+    Table aOldTable;
+    while ( (nKey = aFTable.GetCurKey()) >= nCLOffset && nKey < nNextCL && aFTable.Count() )
+    {
+        SvNumberformat* pEntry = (SvNumberformat*) aFTable.Remove( nKey );
+        aOldTable.Insert( nKey, pEntry );
+    }
+
+    // generate new old builtin formats
+    // reset ActLnge otherwise ChangeIntl() wouldn't switch if already LANGUAGE_SYSTEM
+    ActLnge = LANGUAGE_DONTKNOW;
+    ChangeIntl( LANGUAGE_SYSTEM );
+    ImpGenerateFormats( nCLOffset, TRUE );
+
+    // convert additional and user defined from old system to new system
+    SvNumberformat* pStdFormat = (SvNumberformat*) aFTable.Get( nCLOffset + ZF_STANDARD );
+    ULONG nLastKey = nMaxBuiltin;
+    pFormatScanner->SetConvertMode( eOldLanguage, LANGUAGE_SYSTEM, TRUE );
+    aOldTable.First();
+    while ( aOldTable.Count() )
+    {
+        nKey = aOldTable.GetCurKey();
+        if ( nLastKey < nKey )
+            nLastKey = nKey;
+        SvNumberformat* pOldEntry = (SvNumberformat*) aOldTable.Remove( nKey );
+        String aString( pOldEntry->GetFormatstring() );
+        xub_StrLen nCheckPos;
+
+        // Same as PutEntry() but assures key position even if format code is
+        // a duplicate. Also won't mix up any LastInsertKey.
+        ChangeIntl( eOldLanguage );
+        LanguageType eLge = eOldLanguage;   // ConvertMode changes this
+        BOOL bCheck = FALSE;
+        SvNumberformat* pNewEntry = new SvNumberformat( aString, pFormatScanner,
+            pStringScanner, nCheckPos, eLge );
+        if ( nCheckPos != 0 )
+            delete pNewEntry;
+        else
+        {
+            short eCheckType = pNewEntry->GetType();
+            if ( eCheckType != NUMBERFORMAT_UNDEFINED )
+                pNewEntry->SetType( eCheckType | NUMBERFORMAT_DEFINED );
+            else
+                pNewEntry->SetType( NUMBERFORMAT_DEFINED );
+
+            if ( !aFTable.Insert( nKey, pNewEntry ) )
+                delete pNewEntry;
+            else
+                bCheck = TRUE;
+        }
+        DBG_ASSERT( bCheck, "SvNumberFormatter::ReplaceSystemCL: couldn't convert" );
+
+        delete pOldEntry;
+    }
+    pFormatScanner->SetConvertMode(FALSE);
+    pStdFormat->SetLastInsertKey( USHORT(nLastKey - nCLOffset) );
+
+    // append new system additional formats
+    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
+    ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, TRUE );
+}
+
 
 BOOL SvNumberFormatter::IsTextFormat(ULONG F_Index) const
 {
@@ -474,7 +571,7 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
         return FALSE;
     }
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
 
     ChangeIntl(eLnge);                                  // ggfs. austauschen
     LanguageType eLge = eLnge;                          // Umgehung const fuer ConvertMode
@@ -537,7 +634,7 @@ BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
 {
     BOOL bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = SysLnge;
+        eNewLnge = IniLnge;
 
     pFormatScanner->SetConvertMode(eLnge, eNewLnge);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
@@ -555,7 +652,7 @@ BOOL SvNumberFormatter::PutandConvertEntrySystem(String& rString,
 {
     BOOL bRes;
     if (eNewLnge == LANGUAGE_DONTKNOW)
-        eNewLnge = SysLnge;
+        eNewLnge = IniLnge;
 
     pFormatScanner->SetConvertMode(eLnge, eNewLnge, TRUE);
     bRes = PutEntry(rString, nCheckPos, nType, nKey, eLnge);
@@ -796,7 +893,7 @@ BOOL SvNumberFormatter::Save( SvStream& rStream ) const
     ImpSvNumMultipleWriteHeader aHdr( rStream );
     // ab 364i wird gespeichert was SYSTEM wirklich war, vorher hart LANGUAGE_SYSTEM
     rStream << (USHORT) SV_NUMBERFORMATTER_VERSION;
-    rStream << (USHORT) Application::GetSettings().GetLanguage() << (USHORT) SysLnge;
+    rStream << (USHORT) Application::GetSettings().GetLanguage() << (USHORT) IniLnge;
     SvNumberFormatTable* pTable = (SvNumberFormatTable*) &aFTable;
     SvNumberformat* pEntry = (SvNumberformat*) pTable->First();
     while (pEntry)
@@ -925,14 +1022,14 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
 {
     short eTypetmp = eType;
     if (eType == NUMBERFORMAT_ALL)                  // Leere Zelle oder don't care
-        rLnge = SysLnge;
+        rLnge = IniLnge;
     else
     {
         SvNumberformat* pFormat = (SvNumberformat*) aFTable.Get(FIndex);
         if (!pFormat)
         {
 //          DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (1)");
-            rLnge = SysLnge;
+            rLnge = IniLnge;
             eType = NUMBERFORMAT_ALL;
             eTypetmp = eType;
         }
@@ -1066,7 +1163,7 @@ BOOL SvNumberFormatter::IsNumberFormat(const String& sString,
     if (!pFormat)
     {
 //      DBG_ERROR("SvNumberFormatter:: Unbekanntes altes Zahlformat (2)");
-        ChangeIntl(SysLnge);
+        ChangeIntl(IniLnge);
         FType = NUMBERFORMAT_NUMBER;
     }
     else
@@ -1444,7 +1541,7 @@ BOOL SvNumberFormatter::GetPreviewString(const String& sFormatString,
     xub_StrLen nCheckPos;
     ULONG nKey;
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ChangeIntl(eLnge);                          // ggfs. austauschen
     eLnge = ActLnge;
     String sTmpString = sFormatString;
@@ -1482,7 +1579,7 @@ BOOL SvNumberFormatter::GetPreviewStringGuess( const String& sFormatString,
         return FALSE;
 
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
 
     ChangeIntl( eLnge );
     eLnge = ActLnge;
@@ -1575,7 +1672,7 @@ ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
 
     xub_StrLen nCheckPos;
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ChangeIntl(eLnge);                                  // ggfs. austauschen
     eLnge = ActLnge;
     ULONG nRes;
@@ -1771,7 +1868,7 @@ ULONG SvNumberFormatter::GetFormatSpecialInfo( const String& rFormatString,
 {
     xub_StrLen nCheckPos = 0;
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ChangeIntl(eLnge);                                  // ggfs. austauschen
     eLnge = ActLnge;
     String aTmpStr( rFormatString );
@@ -2363,7 +2460,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
                                        USHORT nAnzLeading)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     short eType = GetType(nIndex);
     USHORT i;
     ImpGenerateCL(eLnge);               // ggfs. neu Standard-
@@ -2477,7 +2574,7 @@ BOOL SvNumberFormatter::IsUserDefined(const String& sStr,
                                       LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ULONG CLOffset = ImpGenerateCL(eLnge);              // ggfs. neu Standard-
                                                     // formate anlegen
     eLnge = ActLnge;
@@ -2494,7 +2591,7 @@ ULONG SvNumberFormatter::GetEntryKey(const String& sStr,
                                      LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ULONG CLOffset = ImpGenerateCL(eLnge);              // ggfs. neu Standard-
                                                     // formate anlegen
     return ImpIsEntry(sStr, CLOffset, eLnge);
@@ -2503,7 +2600,7 @@ ULONG SvNumberFormatter::GetEntryKey(const String& sStr,
 ULONG SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
 {
     if (eLnge == LANGUAGE_DONTKNOW)
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     return GetStandardFormat(NUMBERFORMAT_NUMBER, eLnge);
 }
 
@@ -2608,8 +2705,8 @@ ULONG SvNumberFormatter::GetFormatForLanguageIfBuiltIn( ULONG nFormat,
         LanguageType eLnge )
 {
     if ( eLnge == LANGUAGE_DONTKNOW )
-        eLnge = SysLnge;
-    if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLnge == SysLnge )
+        eLnge = IniLnge;
+    if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLnge == IniLnge )
         return nFormat;     // es bleibt wie es ist
     ULONG nOffset = nFormat % SV_COUNTRY_LANGUAGE_OFFSET;       // relativIndex
     if ( nOffset > SV_MAX_ANZ_STANDARD_FORMATE )
@@ -2626,7 +2723,7 @@ ULONG SvNumberFormatter::GetFormatIndex( NfIndexTableOffset nTabOff,
             || theIndexTable[nTabOff] == NUMBERFORMAT_ENTRY_NOT_FOUND )
         return NUMBERFORMAT_ENTRY_NOT_FOUND;
     if ( eLnge == LANGUAGE_DONTKNOW )
-        eLnge = SysLnge;
+        eLnge = IniLnge;
     ULONG nCLOffset = ImpGenerateCL(eLnge);     // ggbf. generieren
     return nCLOffset + theIndexTable[nTabOff];
 }
