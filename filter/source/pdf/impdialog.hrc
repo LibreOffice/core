@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 10:28:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,17 +75,13 @@
 #define FT_QUALITY                  12
 #define NF_QUALITY                  13
 #define CB_REDUCEIMAGERESOLUTION    14
-#define FT_REDUCEIMAGERESOLUTION    15
-#define CO_REDUCEIMAGERESOLUTION    16
-#define FL_GENERAL                  17
-#define CB_TAGGEDPDF                18
-#define FT_TAGGEDPDF                19
-#define CB_EXPORTNOTES              20
-#define FT_EXPORTNOTES              21
-#define CB_TRANSITIONEFFECTS        22
-#define FT_TRANSITIONEFFECTS        23
-#define FT_FORMSFORMAT              24
-#define LB_FORMSFORMAT              25
+#define CO_REDUCEIMAGERESOLUTION    15
+#define FL_GENERAL                  16
+#define CB_TAGGEDPDF                17
+#define CB_EXPORTNOTES              18
+#define CB_TRANSITIONEFFECTS        19
+#define FT_FORMSFORMAT              20
+#define LB_FORMSFORMAT              21
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52
