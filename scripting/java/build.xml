@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-02-21 10:58:39 $
+#   last change: $Author: dfoster $ $Date: 2003-02-25 16:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,8 +81,8 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <!--<pathelement location="${solar.jar}/unoil.jar"/> -->
-    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!-- <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>-->
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
     <pathelement location="${solar.jar}/juh.jar"/>
@@ -216,7 +216,7 @@
 
   <target name="localoffice.jar" depends="localoffice.compile">
     <unjar
-      src="${prj}/../unoil/${inpath}/class/unoil.jar"
+      src="${solar.jar}/unoil.jar"
       dest="${jardir}"/>
     <jar jarfile="${jardir}/localoffice.jar">
       <fileset dir="${jardir}">
