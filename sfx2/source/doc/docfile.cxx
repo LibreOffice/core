@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 16:14:39 $
+ *  last change: $Author: dv $ $Date: 2001-08-28 08:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,13 +1629,24 @@ void SfxMedium::GetMedium_Impl()
             }
             else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED && bIsWritable && bAllowReadOnlyMode )
             {
-                GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                BOOL bIgnoreReadonly = FALSE;
+                StreamMode aOldMode = GetOpenMode();
+
+                if ( pURLObj && ( pURLObj->GetProtocol() == INET_PROT_HTTP ) )
+                    bIgnoreReadonly = TRUE;
+                if ( ! bIgnoreReadonly )
+                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+
                 SetOpenMode(SFX_STREAM_READONLY, sal_False);
                 ResetError();
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
                         GetContent(), aProps, nStorOpenMode, xInteractionHandler, pHandler );
+
+                if ( bIgnoreReadonly )
+                    SetOpenMode( aOldMode, sal_False, sal_True );
+
                 if ( !pHandler && !pImp->bDownloadDone )
                     Done_Impl( pImp->xLockBytes->GetError() );
             }
