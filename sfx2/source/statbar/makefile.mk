@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:59:42 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:16:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,9 +78,7 @@ SRC1FILES =  \
         statbar.src
 
 SLOFILES =						\
-        $(SLO)$/stbmgr.obj		\
-        $(SLO)$/stbitem.obj     \
-        $(SLO)$/progind.obj
+                $(SLO)$/stbitem.obj
 
 # --- Targets -------------------------------------------------------
 
