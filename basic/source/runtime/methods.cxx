@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2001-01-23 16:49:40 $
+ *  last change: $Author: ab $ $Date: 2001-02-05 16:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #include <osl/time.h>
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <tools/isolang.hxx>
 
 #ifdef OS2
@@ -244,10 +245,10 @@ String getFullPath( const String& aRelPath )
 {
     OUString aFileURL;
 
-    // #80204 Try first if it already is a file URL
-    INetURLObject aURLObj( aRelPath );
-    if( aURLObj.GetProtocol() == INET_PROT_FILE )
+    // #80204 Try first if it already is a valid URL
+    if( utl::LocalFileHelper::IsLocalFile( aRelPath ) )
     {
+        INetURLObject aURLObj( aRelPath );
         aFileURL = aURLObj.GetMainURL();
     }
     else
