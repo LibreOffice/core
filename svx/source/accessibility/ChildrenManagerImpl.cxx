@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:21:16 $
+ *  last change: $Author: af $ $Date: 2002-09-24 12:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,13 +230,6 @@ void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
     if (maShapeTreeInfo.GetViewForwarder() == NULL)
         return;
     Rectangle aVisibleArea = maShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
-    {
-    OSL_TRACE ("ChildrenManagerImpl::update called with VisibleArea = %d %d %d %d",
-        aVisibleArea.getX(), aVisibleArea.getY(),
-        aVisibleArea.getWidth(), aVisibleArea.getHeight());
-        OSL_TRACE ("   shape list contains %d children",
-            mxShapeList.is()?mxShapeList->getCount():0);
-    }
 
     // 1. Create a local list of visible shapes.
     ChildDescriptorListType aNewChildList;
@@ -296,8 +289,6 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
                 awt::Rectangle aPixelBBox (xComponent->getBounds());
                 if ((aPixelBBox.Width > 0) && (aPixelBBox.Height > 0))
                     raDescriptorList.push_back (ChildDescriptor (*I));
-                else
-                    OSL_TRACE ("accessible shape %x not visible", *I);
             }
         }
     }
@@ -320,8 +311,6 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
             // the visible area.
             if (aBoundingBox.IsOver (aVisibleArea))
                 raDescriptorList.push_back (ChildDescriptor (xShape));
-            else
-                OSL_TRACE ("shape %x not visible", xShape);
         }
     }
 }
@@ -340,7 +329,6 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     {
         if (find (raNewChildList.begin(), raNewChildList.end(), *I) == raNewChildList.end())
         {
-            OSL_TRACE ("child no longer visible");
             if (I->mxAccessibleShape.is())
             {
                 // Send event that the shape has been removed.
@@ -412,7 +400,6 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
 void ChildrenManagerImpl::CreateAccessibilityObjects (
     ChildDescriptorListType& raNewChildList)
 {
-    OSL_TRACE ("sending events for new shape");
     ChildDescriptorListType::iterator I;
     for (I=raNewChildList.begin(); I!=raNewChildList.end(); I++)
     {
@@ -430,7 +417,6 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
                 uno::Any());
         }
     }
-    OSL_TRACE ("done sending events for new shape");
 }
 
 
@@ -593,11 +579,6 @@ void SAL_CALL
     static const OUString sShapeRemoved (
         RTL_CONSTASCII_USTRINGPARAM("ShapeRemoved"));
 
-#ifdef DBG_UTIL
-    OSL_TRACE ("ChildrenManagerImpl::notifyEvent %s",
-        ::rtl::OUStringToOString(
-            rEventObject.EventName,RTL_TEXTENCODING_ASCII_US).getStr());
-#endif
 
     if (rEventObject.EventName.equals (sShapeInserted)
         || rEventObject.EventName.equals (sShapeRemoved))
@@ -618,7 +599,6 @@ void  SAL_CALL
     ChildrenManagerImpl::selectionChanged (const lang::EventObject& rEvent)
         throw (uno::RuntimeException)
 {
-    OSL_TRACE ("selection changed");
     UpdateSelection ();
 }
 
@@ -757,7 +737,6 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
 */
 void ChildrenManagerImpl::UpdateSelection (void)
 {
-    OSL_TRACE ("ChildrenManagerImpl::UpdateSelection");
     Reference<frame::XController> xController(maShapeTreeInfo.GetController());
     Reference<view::XSelectionSupplier> xSelectionSupplier (
         xController, uno::UNO_QUERY);
@@ -779,20 +758,16 @@ void ChildrenManagerImpl::UpdateSelection (void)
     AccessibleShape* pNewFocusedShape = NULL;
 
     ChildDescriptorListType::iterator I;
-    OSL_TRACE ("  there are %d visible children", maVisibleChildren.size());
     for (I=maVisibleChildren.begin(); I!=maVisibleChildren.end(); I++)
     {
-        OSL_TRACE ("  looking for visible shape");
         AccessibleShape* pAccessibleShape = I->GetAccessibleShape();
         if (I->mxAccessibleShape.is() && I->mxShape.is() && pAccessibleShape!=NULL)
         {
             bool bShapeIsSelected = false;
-            OSL_TRACE ("  shape exists");
 
             // Look up the shape in the (single or multi-) selection.
             if (xSelectedShape.is())
             {
-                OSL_TRACE ("  comparing to single selected shape.");
                 if  (I->mxShape == xSelectedShape)
                 {
                     bShapeIsSelected = true;
@@ -801,7 +776,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
             }
             else if (xSelectedShapeAccess.is())
             {
-                OSL_TRACE ("  comparing to multiple selected shapes.");
                 for (sal_Int32 i=0,nCount=xSelectedShapeAccess->getCount(); i<nCount&&!bShapeIsSelected; i++)
                     if (xSelectedShapeAccess->getByIndex(i) == I->mxShape)
                     {
@@ -812,7 +786,6 @@ void ChildrenManagerImpl::UpdateSelection (void)
                     }
             }
 
-            OSL_TRACE ("  new selection state is %d", bShapeIsSelected?1:0);
             // Set or reset the SELECTED state.
             if (bShapeIsSelected)
                 pAccessibleShape->SetState (AccessibleStateType::SELECTED);
