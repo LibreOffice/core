@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mhu $ $Date: 2002-08-17 17:23:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.5 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.6 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -67,9 +67,7 @@
 #ifndef __UTILITY__
 #include <utility>
 #endif
-#ifndef __HASH_MAP__
 #include <hash_map>
-#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
