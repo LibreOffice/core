@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2000-10-23 07:57:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,10 @@ SwTbxInsertCtrl::SwTbxInsertCtrl( USHORT nId,
                                     ToolBox& rTbx,
                                     SfxBindings& rBind ) :
         SfxToolBoxControl( nId, rTbx, rBind ),
-        nLastSlotId(0)
+        nLastSlotId(FN_INSERT_CTRL == nId ? FN_INSERT_TABLE : SID_INSERT_DIAGRAM)
 {
+    Image aImage = SFX_IMAGEMANAGER()->GetImage( nLastSlotId, SW_MOD() );
+    rTbx.SetItemImage(GetId(), aImage);
 }
 /**********************************************************************
 
@@ -639,200 +641,5 @@ SwNaviImageButton::SwNaviImageButton(Window* pParent) :
     SetQuickHelpText(sQuickText);
     SetImage(aImage);
 }
-
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.62  2000/09/18 16:06:02  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.61  2000/09/07 15:59:27  os
-        change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-        Revision 1.60  2000/07/03 08:54:35  jp
-        must changes for VCL
-
-        Revision 1.59  2000/06/13 09:58:28  os
-        using UCB
-
-        Revision 1.58  2000/05/24 12:36:18  hr
-        conflict between STLPORT and Workshop header
-
-        Revision 1.57  2000/04/18 14:54:44  os
-        UNICODE
-
-        Revision 1.56  2000/03/03 15:17:03  os
-        StarView remainders removed
-
-        Revision 1.55  2000/02/10 10:37:03  os
-        #70359# titles added to AutoText groups
-
-        Revision 1.54  1999/04/01 11:58:32  OS
-        #64278# Zugriff auf Gruppen und Eintraege nur noch ueber Ids
-
-
-      Rev 1.53   01 Apr 1999 13:58:32   OS
-   #64278# Zugriff auf Gruppen und Eintraege nur noch ueber Ids
-
-      Rev 1.52   09 Feb 1999 10:47:44   OS
-   #61205# AutoText-Gruppen koennen beliebige Namen erhalten
-
-      Rev 1.51   05 Feb 1999 15:52:58   MA
-   #61463# Kein Popup fuer Glossary in Readonly
-
-      Rev 1.50   14 Jan 1999 15:49:58   JP
-   Bug #60794#: Fehlererkennung beim Tabellenrechnen und anspringen von Formeln
-
-      Rev 1.49   14 Jan 1999 14:18:46   JP
-   Bug #60794#: Fehlererkennung beim Tabellenrechnen und anspringen von Formeln
-
-      Rev 1.48   03 Dec 1998 10:25:20   OS
-   #59441# Verzeichniseintrag in der Navigation
-
-      Rev 1.47   03 Nov 1998 12:24:56   OS
-   58830# Enter/LeaveRegistrations
-
-      Rev 1.46   12 Oct 1998 08:46:42   OS
-   #52973# GetImage() mit Module* aufrufen
-
-      Rev 1.45   18 Aug 1998 17:28:44   OS
-   GetShortName sollte auf bekannte Gruppe richtig reagieren #55219#
-
-      Rev 1.44   15 Jun 1998 10:39:28   OS
-   WB_NOPOINTERFOCUS
-
-      Rev 1.43   15 Jun 1998 09:36:42   OS
-   AutoText-Popup: Kuerzel mit angeben
-
-      Rev 1.42   24 Feb 1998 12:10:32   OS
-   Navigationstool erweitert
-
-      Rev 1.41   18 Feb 1998 14:45:12   OS
-   ItemBits an der richtigen Position setzen #46669#
-
-      Rev 1.40   16 Feb 1998 08:03:22   OS
-   VIB_NODOUBLECLICK setzen #46669#
-
-      Rev 1.39   07 Feb 1998 11:09:16   OS
-   initiale Groesse berichtigt #47144#
-
-      Rev 1.38   20 Jan 1998 12:27:42   OS
-   Next und Prev im SelectHdl ausfuehren #46669#
-
-      Rev 1.37   28 Nov 1997 20:17:34   MA
-   includes
-
-      Rev 1.36   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.35   17 Oct 1997 09:11:08   OS
-   EndPopup rufen #44773#
-
-      Rev 1.34   19 Sep 1997 12:51:24   PB
-   chg: fuer VCL ToolBox::SetItemDown() eingebaut
-
-      Rev 1.33   18 Sep 1997 13:59:46   OS
-   Pointer::GetPosPixel fuer VCL ersetzt
-
-      Rev 1.32   18 Sep 1997 13:18:08   TJ
-   include
-
-      Rev 1.31   29 Aug 1997 15:45:34   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.30   29 Aug 1997 14:27:06   OS
-   DLL-Umbau
-
-      Rev 1.29   09 Jul 1997 17:36:10   HJS
-   includes
-
-      Rev 1.28   20 Jun 1997 13:52:52   OS
-   Merker und Notizen in der Navigation
-
-      Rev 1.27   07 May 1997 15:30:12   OS
-   Execute mit 0L abschliessen fuer W16
-
-      Rev 1.26   05 May 1997 12:26:24   OS
-   QuickHelpText als Member, MouseButtonDwon: nur linke Taste!
-
-      Rev 1.25   07 Apr 1997 12:36:44   OS
-   HelpId fuer ValueSet
-
-      Rev 1.24   24 Mar 1997 01:43:52   OS
-   Alignment aussen einstellen
-
-      Rev 1.23   23 Mar 1997 23:54:26   OS
-   ToolBoxAlign statt ToolBoxControl uebergeben
-
-      Rev 1.22   25 Feb 1997 13:04:24   OS
-   Spruenge im MouseButtonUp
-
-      Rev 1.21   23 Feb 1997 22:07:40   OS
-   richtige Hilfetexte fuer Prev/Next-Buttons
-
-      Rev 1.20   23 Feb 1997 19:36:52   OS
-   MouseButtonDown im ValueSet erledigt die Spruenge -> kein hakliges Verhalten mehr
-
-      Rev 1.19   22 Feb 1997 20:16:26   OS
-   eigenes Image fuer Button
-
-      Rev 1.18   21 Feb 1997 19:35:42   OS
-   mit Prev/Next-Button
-
-      Rev 1.17   21 Feb 1997 17:04:48   OS
-   fast fertig
-
-      Rev 1.16   20 Feb 1997 16:45:02   OS
-   Navigation funktioniert
-
-      Rev 1.15   19 Feb 1997 20:56:26   HJS
-   auf nicht const gecastet
-
-      Rev 1.14   19 Feb 1997 16:55:16   OS
-   Popup fuer Navigation
-
-      Rev 1.13   17 Feb 1997 10:39:42   OM
-   Neue Feldbefehle im Webmode
-
-      Rev 1.12   06 Feb 1997 14:50:26   OM
-   feldbefehl Seitennummer im html-Mode erlauben
-
-      Rev 1.11   06 Feb 1997 14:32:52   OM
-   Popup-Controller fuer Feldbefehle einfuegen
-
-      Rev 1.10   29 Jan 1997 14:52:24   OM
-   Draw-Toolboxen ins Svx verschoben
-
-      Rev 1.9   11 Nov 1996 11:15:14   MA
-   ResMgr
-
-      Rev 1.8   27 Sep 1996 16:21:26   HJS
-   vertipper
-
-      Rev 1.7   27 Sep 1996 12:56:42   OS
-   PopupMenu wird bei Bedarf angelegt
-
-      Rev 1.6   26 Sep 1996 16:57:00   OS
-   Update der AutoText-Liste
-
-      Rev 1.5   24 Sep 1996 16:45:06   OS
-   View-Wechsel vor jedem Aufruf
-
-      Rev 1.4   23 Sep 1996 13:43:46   OS
-   beschleunigter Zugriff auf den GlosHdl
-
-      Rev 1.3   23 Sep 1996 08:11:42   OS
-   Menu fuer Autotexte
-
-      Rev 1.2   20 Sep 1996 14:44:28   OS
-   Zuerst kommt die Toolbox ohne Timer
-
-      Rev 1.1   19 Sep 1996 19:40:04   HJS
-   fehlende includes
-
-      Rev 1.0   19 Sep 1996 16:02:36   OS
-   Initial revision.
-
-***********************************************************************/
 
 
