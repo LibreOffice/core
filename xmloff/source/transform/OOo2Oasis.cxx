@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:28:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,11 @@ enum XMLUserDefinedTransformerAction
 
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
+
+// BM: a macro to put two tokens into one sal_Int32 for the action
+// XML_ATACTION_RENAME_ATTRIBUTE
+#define RENAME_ENTRY( f, s ) \
+    (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
 static XMLTransformerActionInit aActionTable[] =
 {
@@ -781,6 +786,11 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+    // BM: needed by chart:legend.  The legend needs also the draw actions.  As
+    // there is no merge mechanism, all actions have to be in the same table
+    ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
+            RENAME_ENTRY( XML_LEFT, XML_START ),
+            RENAME_ENTRY( XML_RIGHT, XML_END )),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1390,7 +1400,6 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
     Reference< XAttributeList > xAttrList( rAttrList );
-    XMLMutableAttributeList *pMutableAttrList = 0;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1838,7 +1847,8 @@ OOo2OasisTransformer* OOo2OasisTransformer::getImplementation( Reference< XInter
 {
     Reference< XUnoTunnel > xUT( xInt, UNO_QUERY );
     if( xUT.is() )
-        return (OOo2OasisTransformer*)xUT->getSomething( OOo2OasisTransformer::getUnoTunnelId() );
+        return reinterpret_cast< OOo2OasisTransformer* >(
+            xUT->getSomething( OOo2OasisTransformer::getUnoTunnelId() ));
     else
         return NULL;
 }
@@ -1857,7 +1867,7 @@ sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                         rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return reinterpret_cast< sal_Int64 >( this );
     }
     else
     {
