@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:51:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ String STR_POOLCHR_IDX_MAIN_ENTRY
     Text[ polish ] = "Zestaw hase³ Wpis g³ówny";
     Text[ portuguese_brazilian ] = "Main index entry";
     Text[ japanese ] = "õˆø‚Ìå€–Ú";
-    Text[ korean ] = "Ç¥Á¦¾î»öÀÎ¡¡ÁÖ¡¡Ç×¸ñ";
+    Text[ korean ] = "Å°¿öµå »öÀÎ¡¡ÁÖÇ×¸ñ";
     Text[ chinese_simplified ] = "Ë÷ÒıÖ÷ÌõÄ¿";
     Text[ chinese_traditional ] = "¯Á¤Ş¥Ø¿ı¥D±ø¥Ø";
     Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí İí ÇáİåÑÓ ÇáÃÈÌÏí";
@@ -941,7 +941,7 @@ String STR_POOLFRM_WATERSIGN
     Text[ chinese_traditional ] = "¤ô¦L";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
     Text[ greek ] = "Õäáôüóçìï";
-    Text[ korean ] = "£¨ºÒºû¿¡ºñÃß¾î¾ß¡¡³ªÅ¸³ª´ÂÁ¾ÀÌÀÇ£©Åõ¸í¡¡¹«´Ì";
+    Text[ korean ] = "(ºÒºû¿¡ ºñÃß¾î¾ß ³ªÅ¸³ª´Â Á¾ÀÌµ· µîÀÇ) ¹«´Ì";
     Text[ turkish ] = "Filigran";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca de agua";
@@ -1615,7 +1615,7 @@ String STR_POOLCOLL_NUM_LEVEL1S
     Text[ chinese_traditional ] = "½s¸¹ 1 °_©l";
     Text[ arabic ] = "ÇáÊÑŞíã 1 ÈÏÇíÉ";
     Text[ greek ] = "Áñßèìçóç 1 Áñ÷Ş";
-    Text[ korean ] = "¹øÈ£¸Å±â±â 1 ½ÃÀÛ";
+    Text[ korean ] = "¹øÈ£ 1 ½ÃÀÛ";
     Text[ turkish ] = "Numaralama 1 Başlangıç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Numeración 1 inicio";
