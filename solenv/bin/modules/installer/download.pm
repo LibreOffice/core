@@ -2,9 +2,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: is $ $Date: 2005-02-01 16:19:20 $
+#   last change: $Author: rt $ $Date: 2005-02-09 15:29:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -873,6 +873,9 @@ sub create_download_sets
     print "******************************************\n";
 
     installer::logger::include_header_into_logfile("Creating download installation sets:");
+
+    # special handling for unix multi language installation sets
+    if ( $installer::globals::is_unix_multi ) { $languagestringref = \$installer::globals::unixmultipath; }
 
     my $firstdir = $installationdir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$firstdir);
