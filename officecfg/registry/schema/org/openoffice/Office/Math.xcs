@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:40 $
+ *  last change: $Author: tpf $ $Date: 2002-12-09 08:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,7 @@
 				<info>
 					<deprecated/>
 					<author>TL</author>
+					<desc xml:lang="en-US">If true a warning message will be shown when symbol file used by the formulars is missing.</desc>
 					<label xml:lang="en-US">Missing symbols warning.</label>
 				</info>
 				<value>true</value>
