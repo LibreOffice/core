@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:36:21 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,14 @@
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
 #endif
+#ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
+#include <toolkit/helper/imagealign.hxx>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 
 #ifndef _SV_BUTTON_HXX
@@ -152,6 +158,9 @@
 
 namespace toolkit
 {
+    using ::com::sun::star::uno::Any;
+    using ::com::sun::star::uno::makeAny;
+    using namespace ::com::sun::star::awt::VisualEffect;
     /** sets the "face color" for button like controls (scroll bar, spin button)
     */
     void setButtonLikeFaceColor( Window* _pWindow, const ::com::sun::star::uno::Any& _rColorValue )
@@ -208,15 +217,222 @@ namespace toolkit
         _pWindow->SetSettings( aSettings, TRUE );
     }
 
-    ::com::sun::star::uno::Any  getButtonLikeFaceColor( const Window* _pWindow )
+    Any getButtonLikeFaceColor( const Window* _pWindow )
     {
         sal_Int32 nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
-        return ::com::sun::star::uno::makeAny( nBackgroundColor );
+        return makeAny( nBackgroundColor );
+    }
+
+    static void adjustBooleanWindowStyle( const Any& _rValue, Window* _pWindow, WinBits _nBits, sal_Bool _bInverseSemantics )
+    {
+        WinBits nStyle = _pWindow->GetStyle();
+        sal_Bool bValue( sal_False );
+        OSL_VERIFY( _rValue >>= bValue );
+        if ( bValue != _bInverseSemantics )
+            nStyle |= _nBits;
+        else
+            nStyle &= ~_nBits;
+        _pWindow->SetStyle( nStyle );
+    }
+
+    static void setVisualEffect( const Any& _rValue, Window* _pWindow, void (StyleSettings::*pSetter)( USHORT ), sal_Int16 _nFlatBits, sal_Int16 _n3DBits )
+    {
+        AllSettings aSettings = _pWindow->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+
+        sal_Int16 nStyle = LOOK3D;
+        OSL_VERIFY( _rValue >>= nStyle );
+        switch ( nStyle )
+        {
+        case FLAT:
+            (aStyleSettings.*pSetter)( _nFlatBits );
+            break;
+        case LOOK3D:
+        default:
+            (aStyleSettings.*pSetter)( _n3DBits );
+        }
+        aSettings.SetStyleSettings( aStyleSettings );
+        _pWindow->SetSettings( aSettings );
+    }
+
+    static Any getVisualEffect( Window* _pWindow, USHORT (StyleSettings::*pGetter)( ) const, sal_Int16 _nFlatBits )
+    {
+        Any aEffect;
+
+        StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
+        if ( (aStyleSettings.*pGetter)() == _nFlatBits )
+            aEffect <<= (sal_Int16)FLAT;
+        else
+            aEffect <<= (sal_Int16)LOOK3D;
+        return aEffect;
     }
 }
 
-
 //  ----------------------------------------------------
+//  class VCLXImageConsumer
+//  ----------------------------------------------------
+::com::sun::star::uno::Any SAL_CALL VCLXImageConsumer::queryInterface( const ::com::sun::star::uno::Type & _rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( _rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XImageConsumer*, this ) );
+    return ( aRet.hasValue() ? aRet : VCLXWindow::queryInterface( _rType ) );
+}
+
+IMPL_XTYPEPROVIDER_START( VCLXImageConsumer )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer>* ) NULL ),
+    VCLXWindow::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+void SAL_CALL VCLXImageConsumer::acquire() throw()
+{
+    VCLXWindow::acquire();
+}
+
+void SAL_CALL VCLXImageConsumer::release() throw()
+{
+    VCLXWindow::release();
+}
+
+void VCLXImageConsumer::ImplUpdateImage( sal_Bool bGetNewImage )
+{
+    Button* pButton = static_cast< Button* >( GetWindow() );
+    if ( pButton )
+    {
+        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
+        if ( bOK )
+            pButton->SetModeBitmap( maBitmap );
+    }
+}
+
+void VCLXImageConsumer::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.Init( Width, Height );
+}
+
+void VCLXImageConsumer::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
+}
+
+void VCLXImageConsumer::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
+    ImplUpdateImage( sal_True );
+}
+
+void VCLXImageConsumer::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
+    ImplUpdateImage( sal_True );
+}
+
+void VCLXImageConsumer::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    maImageConsumer.Completed( Status );
+    ImplUpdateImage( sal_True );
+}
+
+void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Button* pButton = static_cast< Button* >( GetWindow() );
+    if ( pButton )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_IMAGEALIGN:
+            {
+                WindowType eType = GetWindow()->GetType();
+                if (  ( eType == WINDOW_PUSHBUTTON )
+                   || ( eType == WINDOW_RADIOBUTTON )
+                   || ( eType == WINDOW_CHECKBOX )
+                   )
+                {
+                    sal_Int16 nAlignment;
+                    if ( Value >>= nAlignment )
+                        pButton->SetImageAlign( static_cast< ImageAlign >( nAlignment ) );
+                }
+            }
+            break;
+            case BASEPROPERTY_IMAGEPOSITION:
+            {
+                WindowType eType = GetWindow()->GetType();
+                if (  ( eType == WINDOW_PUSHBUTTON )
+                   || ( eType == WINDOW_RADIOBUTTON )
+                   || ( eType == WINDOW_CHECKBOX )
+                   )
+                {
+                    sal_Int16 nImagePosition = 2;
+                    OSL_VERIFY( Value >>= nImagePosition );
+                    pButton->SetImageAlign( ::toolkit::translateImagePosition( nImagePosition ) );
+                }
+            }
+            break;
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXImageConsumer::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    Button* pButton = static_cast< Button* >( GetWindow() );
+    if ( pButton )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_IMAGEALIGN:
+            {
+                WindowType eType = GetWindow()->GetType();
+                if (  ( eType == WINDOW_PUSHBUTTON )
+                   || ( eType == WINDOW_RADIOBUTTON )
+                   || ( eType == WINDOW_CHECKBOX )
+                   )
+                {
+                     aProp <<= ::toolkit::getCompatibleImageAlign( pButton->GetImageAlign() );
+                }
+            }
+            break;
+            case BASEPROPERTY_IMAGEPOSITION:
+            {
+                WindowType eType = GetWindow()->GetType();
+                if (  ( eType == WINDOW_PUSHBUTTON )
+                   || ( eType == WINDOW_RADIOBUTTON )
+                   || ( eType == WINDOW_CHECKBOX )
+                   )
+                {
+                    aProp <<= ::toolkit::translateImagePosition( pButton->GetImageAlign() );
+                }
+            }
+            break;
+            default:
+            {
+                aProp <<= VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
+}
+
+//--------------------------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
 VCLXButton::VCLXButton() : maActionListeners( *this )
@@ -227,16 +443,14 @@ VCLXButton::VCLXButton() : maActionListeners( *this )
 ::com::sun::star::uno::Any VCLXButton::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XImageConsumer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXButton )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageConsumer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
-    VCLXWindow::getTypes()
+    VCLXImageConsumer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
@@ -251,18 +465,7 @@ void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aObj );
-    VCLXWindow::dispose();
-}
-
-void VCLXButton::ImplUpdateImage( sal_Bool bGetNewImage )
-{
-    PushButton* pButton = (PushButton*) GetWindow();
-    if ( pButton )
-    {
-        sal_Bool bOK = bGetNewImage ? maImageConsumer.GetData( maBitmap ) : sal_True;
-        if ( bOK )
-            pButton->SetBitmap( maBitmap );
-    }
+    VCLXImageConsumer::dispose();
 }
 
 void VCLXButton::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
@@ -292,49 +495,6 @@ void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com
 
     maActionCommand = rCommand;
 }
-
-void VCLXButton::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Init( Width, Height );
-}
-
-void VCLXButton::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-void VCLXButton::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXButton::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXButton::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & Producer ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Completed( Status );
-
-    // Controls sollen angemeldet bleiben...
-//  Producer->removeConsumer( this );
-
-    ImplUpdateImage( sal_True );
-}
-
 
 ::com::sun::star::awt::Size VCLXButton::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -393,6 +553,14 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_FOCUSONCLICK:
+                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_NOPOINTERFOCUS, sal_True );
+                break;
+
+            case BASEPROPERTY_TOGGLE:
+                ::toolkit::adjustBooleanWindowStyle( Value, pButton, WB_TOGGLE, sal_False );
+                break;
+
             case BASEPROPERTY_DEFAULTBUTTON:
             {
                 WinBits nStyle = pButton->GetStyle() | WB_DEFBUTTON;
@@ -412,19 +580,9 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
             }
             break;
-            case BASEPROPERTY_IMAGEALIGN:
-            {
-                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
-                {
-                    sal_Int16 n;
-                    if ( Value >>= n )
-                        ((PushButton*)pButton)->SetImageAlign( (ImageAlign)n );
-                }
-            }
-            break;
             default:
             {
-                VCLXWindow::setProperty( PropertyName, Value );
+                VCLXImageConsumer::setProperty( PropertyName, Value );
             }
         }
     }
@@ -441,6 +599,14 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_FOCUSONCLICK:
+                aProp <<= (sal_Bool)( ( pButton->GetStyle() & WB_NOPOINTERFOCUS ) == 0 );
+                break;
+
+            case BASEPROPERTY_TOGGLE:
+                aProp <<= (sal_Bool)( ( pButton->GetStyle() & WB_TOGGLE ) != 0 );
+                break;
+
             case BASEPROPERTY_DEFAULTBUTTON:
             {
                 aProp <<= (sal_Bool) ( ( pButton->GetStyle() & WB_DEFBUTTON ) ? sal_True : sal_False );
@@ -454,17 +620,9 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 }
             }
             break;
-            case BASEPROPERTY_IMAGEALIGN:
-            {
-                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
-                {
-                     aProp <<= (sal_Int16)((PushButton*)pButton)->GetImageAlign();
-                }
-            }
-            break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
             }
         }
     }
@@ -494,7 +652,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
 
         default:
-            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -681,14 +839,14 @@ VCLXCheckBox::VCLXCheckBox() : maItemListeners( *this ), maActionListeners( *thi
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XCheckBox*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
-    VCLXWindow::getTypes()
+    VCLXImageConsumer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
@@ -703,7 +861,7 @@ void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aObj );
-    VCLXWindow::dispose();
+    VCLXImageConsumer::dispose();
 }
 
 void VCLXCheckBox::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
@@ -845,6 +1003,10 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_VISUALEFFECT:
+                ::toolkit::setVisualEffect( Value, pCheckBox, &StyleSettings::SetCheckBoxStyle, STYLE_CHECKBOX_MONO, STYLE_CHECKBOX_WIN );
+                break;
+
             case BASEPROPERTY_TRISTATE:
             {
                 sal_Bool b;
@@ -861,7 +1023,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             break;
             default:
             {
-                VCLXWindow::setProperty( PropertyName, Value );
+                VCLXImageConsumer::setProperty( PropertyName, Value );
             }
         }
     }
@@ -878,19 +1040,18 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_VISUALEFFECT:
+                aProp = ::toolkit::getVisualEffect( pCheckBox, &StyleSettings::GetCheckBoxStyle, STYLE_CHECKBOX_MONO );
+                break;
             case BASEPROPERTY_TRISTATE:
-            {
                  aProp <<= (sal_Bool)pCheckBox->IsTriStateEnabled();
-            }
-            break;
+                break;
             case BASEPROPERTY_STATE:
-            {
                  aProp <<= (sal_Int16)pCheckBox->GetState();
-            }
-            break;
+                break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
             }
         }
     }
@@ -932,7 +1093,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
 
         default:
-            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -950,14 +1111,14 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XRadioButton*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRadioButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
-    VCLXWindow::getTypes()
+    VCLXImageConsumer::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
@@ -972,7 +1133,7 @@ void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aObj );
-    VCLXWindow::dispose();
+    VCLXImageConsumer::dispose();
 }
 
 void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
@@ -985,6 +1146,10 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_VISUALEFFECT:
+                ::toolkit::setVisualEffect( Value, pButton, &StyleSettings::SetRadioButtonStyle, STYLE_RADIOBUTTON_MONO, STYLE_RADIOBUTTON_WIN );
+                break;
+
             case BASEPROPERTY_STATE:
             {
                 sal_Int16 n;
@@ -1007,7 +1172,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
             break;
             default:
             {
-                VCLXWindow::setProperty( PropertyName, Value );
+                VCLXImageConsumer::setProperty( PropertyName, Value );
             }
         }
     }
@@ -1024,19 +1189,18 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_VISUALEFFECT:
+                aProp = ::toolkit::getVisualEffect( pButton, &StyleSettings::GetRadioButtonStyle, STYLE_RADIOBUTTON_MONO );
+                break;
             case BASEPROPERTY_STATE:
-            {
                 aProp <<= (sal_Int16) ( pButton->IsChecked() ? 1 : 0 );
-            }
-            break;
+                break;
             case BASEPROPERTY_AUTOTOGGLE:
-            {
                 aProp <<= (sal_Bool) pButton->IsRadioCheckEnabled();
-            }
-            break;
+                break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
             }
         }
     }
@@ -1168,7 +1332,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             break;
 
         default:
-            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -2773,6 +2937,12 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_HIDEINACTIVESELECTION:
+                ::toolkit::adjustBooleanWindowStyle( Value, pEdit, WB_NOHIDESELECTION, sal_True );
+                if ( pEdit->GetSubEdit() )
+                    ::toolkit::adjustBooleanWindowStyle( Value, pEdit->GetSubEdit(), WB_NOHIDESELECTION, sal_True );
+                break;
+
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b;
@@ -2813,24 +2983,21 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_HIDEINACTIVESELECTION:
+                aProp <<= (sal_Bool)( ( pEdit->GetStyle() & WB_NOHIDESELECTION ) == 0 );
+                break;
             case BASEPROPERTY_READONLY:
-            {
                  aProp <<= (sal_Bool) pEdit->IsReadOnly();
-            }
-            break;
+                break;
             case BASEPROPERTY_ECHOCHAR:
-            {
                  aProp <<= (sal_Int16) pEdit->GetEchoChar();
-            }
-            break;
+                break;
             case BASEPROPERTY_MAXTEXTLEN:
-            {
                  aProp <<= (sal_Int16) pEdit->GetMaxTextLen();
-            }
-            break;
+                break;
             default:
             {
-                aProp <<= VCLXWindow::getProperty( PropertyName );
+                aProp = VCLXWindow::getProperty( PropertyName );
             }
         }
     }
