@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@
 #define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
 #define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
 #define RID_DLSTATUS                        (RID_SFX_DOC_START+ 55)
-#define RID_DLSTATUS2                       (RID_SFX_DOC_START+ 56)
 
 #define STR_DOC_LOADING                     (RID_SFX_DOC_START+ 57)
 #define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
