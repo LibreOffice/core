@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XResultSetMetaDataSupplier.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
  module com {  module sun {  module star {  module sdbc {
 
-interface XResultSetMetaData;
+ published interface XResultSetMetaData;
 
 
 // DocMerge from xml: interface com::sun::star::sdbc::XResultSetMetaDataSupplier
@@ -87,7 +87,7 @@ interface XResultSetMetaData;
     method.
     </p>
  */
-interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
+published interface XResultSetMetaDataSupplier: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdbc::XResultSetMetaDataSupplier::getMetaData
