@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-01 09:06:58 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,10 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ swedish ] = "Kriterier";
                 Text[ polish ] = "Kryteria";
                 Text[ portuguese_brazilian ] = "Werte";
-                Text[ japanese ] = "ğŒ";
-                Text[ korean ] = "±âÁØ";
-                Text[ chinese_simplified ] = "Ìõ¼ş";
-                Text[ chinese_traditional ] = "±ø¥ó";
+                Text[ japanese ] = "æ¡ä»¶";
+                Text[ korean ] = "ê¸°ì¤€";
+                Text[ chinese_simplified ] = "æ¡ä»¶";
+                Text[ chinese_traditional ] = "æ¢ä»¶";
                 Text[ turkish ] = "Değerler";
                 Text[ arabic ] = "ÇáŞíã";
                 Text[ catalan ] = "Valores";
@@ -120,14 +120,14 @@ TabDialog TAB_DLG_VALIDATION
                 Text [ dutch ] = "Invoerhulp" ;
                 Text [ portuguese ] = "Ajuda de entrada" ;
                 Text [ portuguese_brazilian ] = "Eingabehilfe" ;
-                Text[ chinese_simplified ] = "ÊäÈë°ïÖú";
+                Text[ chinese_simplified ] = "è¾“å…¥å¸®åŠ©";
                 Text[ russian ] = "Ïîìîùü ââîäà";
                 Text[ polish ] = "Pomoc przy wprow.";
-                Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş";
-                Text[ chinese_traditional ] = "¿é¤J»¡©ú";
+                Text[ japanese ] = "å…¥åŠ›æ™‚ï¾’ï½¯ï½¾ï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "è¼¸å…¥èªªæ˜";
                 Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
                 Text[ greek ] = "ÂïŞèåéá åéóáãùãŞò";
-                Text[ korean ] = "µµ¿ò¸» »ğÀÔ";
+                Text[ korean ] = "ë„ì›€ë§ ì‚½ì…";
                 Text[ turkish ] = "Giriş yardımı";
                 Text[ catalan ] = "Ayuda de entrada";
                 Text[ finnish ] = "Syöttöohje";
@@ -147,14 +147,14 @@ TabDialog TAB_DLG_VALIDATION
                 Text [ dutch ] = "Foutmelding" ;
                 Text [ portuguese ] = "Mensagem de erro" ;
                 Text [ portuguese_brazilian ] = "Fehlermeldung" ;
-                Text[ chinese_simplified ] = "´íÎó±¨¸æ";
+                Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š";
                 Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
                 Text[ polish ] = "Komunikat o b³êdzie";
-                Text[ japanese ] = "´×°Ò¯¾°¼Ş";
-                Text[ chinese_traditional ] = "¿ù»~³ø§i";
+                Text[ japanese ] = "ï½´ï¾—ï½°ï¾’ï½¯ï½¾ï½°ï½¼ï¾";
+                Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š";
                 Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
                 Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-                Text[ korean ] = "¿À·ù ¸Ş½ÃÁö";
+                Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€";
                 Text[ turkish ] = "Hata iletisi";
                 Text[ catalan ] = "Mensaje de error";
                 Text[ finnish ] = "Virhehälytys";
@@ -170,14 +170,14 @@ TabDialog TAB_DLG_VALIDATION
     Text [ dutch ] = "Geldigheid" ;
     Text [ portuguese ] = "Validade" ;
     Text [ portuguese_brazilian ] = "G?tigkeit" ;
-    Text[ chinese_simplified ] = "ÓĞĞ§ĞÔ";
+    Text[ chinese_simplified ] = "æœ‰æ•ˆæ€§";
     Text[ russian ] = "Ïğîâåğêà";
     Text[ polish ] = "Wa¿noœæ";
-    Text[ japanese ] = "ÃŞ°À‚Ì“ü—Í‹K‘¥";
-    Text[ chinese_traditional ] = "¦³®Ä";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã®å…¥åŠ›è¦å‰‡";
+    Text[ chinese_traditional ] = "æœ‰æ•ˆ";
     Text[ arabic ] = "ÇáÕáÇÍíÉ";
     Text[ greek ] = "Éó÷ıò";
-    Text[ korean ] = "À¯È¿¼º";
+    Text[ korean ] = "ìœ íš¨ì„±";
     Text[ turkish ] = "Geçerlilik";
     Text[ catalan ] = "Validez";
     Text[ finnish ] = "Kelpoisuus";
@@ -205,14 +205,14 @@ TabPage TP_VALIDATION_VALUES
         Text [ french ] = "~Autoriser" ;
         Text [ portuguese_brazilian ] = "~Zulassen" ;
         Text [ portuguese ] = "~Permitir" ;
-        Text[ chinese_simplified ] = "ÔÊĞí(~A)";
+        Text[ chinese_simplified ] = "å…è®¸(~A)";
         Text[ russian ] = "Ğàçğåøèòü";
         Text[ polish ] = "Pozwól";
-        Text[ japanese ] = "“ü—Í’l‚Ìí—Ş(~A)";
-        Text[ chinese_traditional ] = "¤¹³\\(~A)";
+        Text[ japanese ] = "å…¥åŠ›å€¤ã®ç¨®é¡(~A)";
+        Text[ chinese_traditional ] = "å…è¨±(~A)";
         Text[ arabic ] = "ÓãÇÍ";
         Text[ greek ] = "Íá åğéôñáğåß";
-        Text[ korean ] = "Çã¿ë(~A)";
+        Text[ korean ] = "í—ˆìš©(~A)";
         Text[ turkish ] = "~Geçerli";
         Text[ catalan ] = "Per~mitir";
         Text[ finnish ] = "~Salli";
@@ -327,12 +327,12 @@ TabPage TP_VALIDATION_VALUES
         };
     StringList [ chinese_simplified ] =
     {
-            < "ËùÓĞµÄÊıÖµ" ; Default ; > ;
-        < "ÕûÊı" ; Default ; > ;
-        < "Ê®½øÖÆ" ; Default ; > ;
-        < "ÈÕÆÚ" ; Default ; > ;
-        < "Ê±¼ä" ; Default ; > ;
-        < "ÎÄ×Ö³¤¶È" ; Default ; > ;
+            < "æ‰€æœ‰çš„æ•°å€¼" ; Default ; > ;
+        < "æ•´æ•°" ; Default ; > ;
+        < "åè¿›åˆ¶" ; Default ; > ;
+        < "æ—¥æœŸ" ; Default ; > ;
+        < "æ—¶é—´" ; Default ; > ;
+        < "æ–‡å­—é•¿åº¦" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -354,21 +354,21 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ japanese ] =
     {
-            < "‚·‚×‚Ä‚Ì’l" ; Default ; > ;
-        < "®”" ; Default ; > ;
-        < "¬”“_”" ; Default ; > ;
-        < "“ú•t" ; Default ; > ;
-        < "" ; Default ; > ;
-        < "Ã·½Ä‚Ì’·‚³" ; Default ; > ;
+            < "ã™ã¹ã¦ã®å€¤" ; Default ; > ;
+        < "æ•´æ•°" ; Default ; > ;
+        < "å°æ•°" ; Default ; > ;
+        < "æ—¥ä»˜" ; Default ; > ;
+        < "æ™‚åˆ»" ; Default ; > ;
+        < "ï¾ƒï½·ï½½ï¾„ã®é•·ã•" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "©Ò¦³ªº¼Æ­È" ; Default ; > ;
-        < "¾ã¼Æ" ; Default ; > ;
-        < "¤Q¶i¦ì" ; Default ; > ;
-        < "¤é´Á" ; Default ; > ;
-        < "®É¶¡" ; Default ; > ;
-        < "¤å¦rªø«×" ; Default ; > ;
+            < "æ‰€æœ‰çš„æ•¸å€¼" ; Default ; > ;
+        < "æ•´æ•¸" ; Default ; > ;
+        < "åé€²ä½" ; Default ; > ;
+        < "æ—¥æœŸ" ; Default ; > ;
+        < "æ™‚é–“" ; Default ; > ;
+        < "æ–‡å­—é•·åº¦" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -390,12 +390,12 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ korean ] =
     {
-            < "¸ğµç °ª" ; Default ; > ;
-        < "ÀüÃ¼ ¼ö" ; Default ; > ;
-        < "¼Ò¼ö" ; Default ; > ;
-        < "³¯Â¥" ; Default ; > ;
-        < "½Ã°£" ; Default ; > ;
-        < "ÅØ½ºÆ® Å©±â" ; Default ; > ;
+            < "ëª¨ë“  ê°’" ; Default ; > ;
+        < "ì „ì²´ ìˆ˜" ; Default ; > ;
+        < "ì†Œìˆ˜" ; Default ; > ;
+        < "ë‚ ì§œ" ; Default ; > ;
+        < "ì‹œê°„" ; Default ; > ;
+        < "í…ìŠ¤íŠ¸ í¬ê¸°" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -449,14 +449,14 @@ TabPage TP_VALIDATION_VALUES
         Text [ dutch ] = "~Gegevens" ;
         Text [ portuguese ] = "~Dados" ;
         Text [ portuguese_brazilian ] = "~Daten" ;
-        Text[ chinese_simplified ] = "Êı¾İ(~D)";
+        Text[ chinese_simplified ] = "æ•°æ®(~D)";
         Text[ russian ] = "Äàííûå";
         Text[ polish ] = "Dane";
-        Text[ japanese ] = "ÃŞ°À(~D)";
-        Text[ chinese_traditional ] = "¸ê®Æ(~D)";
+        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€(~D)";
+        Text[ chinese_traditional ] = "è³‡æ–™(~D)";
         Text[ arabic ] = "ÈíÇäÇÊ";
         Text[ greek ] = "Äåäïìİíá";
-        Text[ korean ] = "µ¥ÀÌÅÍ(~D)";
+        Text[ korean ] = "ë°ì´í„°(~D)";
         Text[ turkish ] = "~Veriler";
         Text[ catalan ] = "~Datos";
         Text[ finnish ] = "~Tiedot";
@@ -594,14 +594,14 @@ TabPage TP_VALIDATION_VALUES
         };
     StringList [ chinese_simplified ] =
     {
-            < "µÈÓÚ" ; Default ; > ;
-        < "Ğ¡ÓÚ" ; Default ; > ;
-        < "´óÓÚ" ; Default ; > ;
-        < "Ğ¡ÓÚ»òµÈÓÚ" ; Default ; > ;
-        < "´óÓÚ»òµÈÓÚ" ; Default ; > ;
-        < "²»µÈÓÚ" ; Default ; > ;
-        < "ÔÚÖ®¼ä" ; Default ; > ;
-        < "²»ÔÚÖ®¼ä" ; Default ; > ;
+            < "ç­‰äº" ; Default ; > ;
+        < "å°äº" ; Default ; > ;
+        < "å¤§äº" ; Default ; > ;
+        < "å°äºæˆ–ç­‰äº" ; Default ; > ;
+        < "å¤§äºæˆ–ç­‰äº" ; Default ; > ;
+        < "ä¸ç­‰äº" ; Default ; > ;
+        < "åœ¨ä¹‹é—´" ; Default ; > ;
+        < "ä¸åœ¨ä¹‹é—´" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -627,25 +627,25 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ japanese ] =
     {
-            < "Ÿ‚Ì’l‚É“™‚µ‚¢" ; Default ; > ;
-        < "Ÿ‚Ì’l‚æ‚è¬‚³‚¢" ; Default ; > ;
-        < "Ÿ‚Ì’l‚æ‚è‘å‚«‚¢" ; Default ; > ;
-        < "Ÿ‚Ì’lˆÈ‰º" ; Default ; > ;
-        < "Ÿ‚Ì’lˆÈã" ; Default ; > ;
-        < "Ÿ‚Ì’l‚É“™‚µ‚­‚È‚¢" ; Default ; > ;
-        < "Ÿ‚Ì’l‚ÌŠÔ" ; Default ; > ;
-        < "Ÿ‚Ì’l‚ÌŠÔ‚Å‚È‚¢" ; Default ; > ;
+            < "æ¬¡ã®å€¤ã«ç­‰ã—ã„" ; Default ; > ;
+        < "æ¬¡ã®å€¤ã‚ˆã‚Šå°ã•ã„" ; Default ; > ;
+        < "æ¬¡ã®å€¤ã‚ˆã‚Šå¤§ãã„" ; Default ; > ;
+        < "æ¬¡ã®å€¤ä»¥ä¸‹" ; Default ; > ;
+        < "æ¬¡ã®å€¤ä»¥ä¸Š" ; Default ; > ;
+        < "æ¬¡ã®å€¤ã«ç­‰ã—ããªã„" ; Default ; > ;
+        < "æ¬¡ã®å€¤ã®é–“" ; Default ; > ;
+        < "æ¬¡ã®å€¤ã®é–“ã§ãªã„" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "µ¥©ó" ; Default ; > ;
-        < "¤p©ó" ; Default ; > ;
-        < "¤j©ó" ; Default ; > ;
-        < "¤p©ó©Îµ¥©ó" ; Default ; > ;
-        < "¤j©ó©Îµ¥©ó" ; Default ; > ;
-        < "¤£µ¥©ó" ; Default ; > ;
-        < "¦b¤§¶¡" ; Default ; > ;
-        < "¤£¦b¤§¶¡" ; Default ; > ;
+            < "ç­‰æ–¼" ; Default ; > ;
+        < "å°æ–¼" ; Default ; > ;
+        < "å¤§æ–¼" ; Default ; > ;
+        < "å°æ–¼æˆ–ç­‰æ–¼" ; Default ; > ;
+        < "å¤§æ–¼æˆ–ç­‰æ–¼" ; Default ; > ;
+        < "ä¸ç­‰æ–¼" ; Default ; > ;
+        < "åœ¨ä¹‹é–“" ; Default ; > ;
+        < "ä¸åœ¨ä¹‹é–“" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -671,14 +671,14 @@ TabPage TP_VALIDATION_VALUES
     };
     StringList [ korean ] =
     {
-            < "´ÙÀ½°ú °°À½" ; Default ; > ;
-        < "..º¸´Ù ÀÛ´Ù" ; Default ; > ;
-        < "..º¸´Ù Å©´Ù" ; Default ; > ;
-        < "ÀÛ°Å³ª °°´Ù" ; Default ; > ;
-        < "Å©°Å³ª µ¿ÀÏ" ; Default ; > ;
-        < "°°Áö ¾ÊÀ½" ; Default ; > ;
-        < "´ÙÀ½ÀÇ »çÀÌÀÓ" ; Default ; > ;
-        < "´ÙÀ½ÀÇ »çÀÌ°¡ ¾Æ´Ô" ; Default ; > ;
+            < "ë‹¤ìŒê³¼ ê°™ìŒ" ; Default ; > ;
+        < "..ë³´ë‹¤ ì‘ë‹¤" ; Default ; > ;
+        < "..ë³´ë‹¤ í¬ë‹¤" ; Default ; > ;
+        < "ì‘ê±°ë‚˜ ê°™ë‹¤" ; Default ; > ;
+        < "í¬ê±°ë‚˜ ë™ì¼" ; Default ; > ;
+        < "ê°™ì§€ ì•ŠìŒ" ; Default ; > ;
+        < "ë‹¤ìŒì˜ ì‚¬ì´ì„" ; Default ; > ;
+        < "ë‹¤ìŒì˜ ì‚¬ì´ê°€ ì•„ë‹˜" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -740,14 +740,14 @@ TabPage TP_VALIDATION_VALUES
         Text [ dutch ] = "~Minimum" ;
         Text [ portuguese ] = "~Mínimo" ;
         Text [ portuguese_brazilian ] = "~Minimum" ;
-        Text[ chinese_simplified ] = "×îĞ¡(~M)";
+        Text[ chinese_simplified ] = "æœ€å°(~M)";
         Text[ russian ] = "Ìèíèìóì";
         Text[ polish ] = "Minimum";
-        Text[ japanese ] = "Å¬’l(~M)";
-        Text[ chinese_traditional ] = "³Ì¤p(~M)";
+        Text[ japanese ] = "æœ€å°å€¤(~M)";
+        Text[ chinese_traditional ] = "æœ€å°(~M)";
         Text[ arabic ] = "ÇáÍÏ ÇáÃÏäì";
         Text[ greek ] = "ÅëÜ÷éóôï";
-        Text[ korean ] = "ÃÖ¼Ò(~M)";
+        Text[ korean ] = "ìµœì†Œ(~M)";
         Text[ turkish ] = "A~sgari";
         Text[ catalan ] = "~Mínimo";
         Text[ finnish ] = "~Vähintään";
@@ -774,14 +774,14 @@ TabPage TP_VALIDATION_VALUES
         Text [ dutch ] = "M~aximum" ;
         Text [ portuguese ] = "M~áximo" ;
         Text [ portuguese_brazilian ] = "M~aximum" ;
-        Text[ chinese_simplified ] = "×î´óÖµ(~X)";
+        Text[ chinese_simplified ] = "æœ€å¤§å€¼(~X)";
         Text[ russian ] = "Ìàêñèìóì";
         Text[ polish ] = "Maksimum";
-        Text[ japanese ] = "Å‘å’l(~X)";
-        Text[ chinese_traditional ] = "³Ì¤j(~X)";
+        Text[ japanese ] = "æœ€å¤§å€¤(~X)";
+        Text[ chinese_traditional ] = "æœ€å¤§(~X)";
         Text[ arabic ] = "ÇáÃŞÕì";
         Text[ greek ] = "Ìİãéóôï";
-        Text[ korean ] = "ÃÖ´ë(~X)";
+        Text[ korean ] = "ìµœëŒ€(~X)";
         Text[ turkish ] = "A~zami";
         Text[ catalan ] = "M~áximo";
         Text[ finnish ] = "~Enintään";
@@ -809,14 +809,14 @@ TabPage TP_VALIDATION_VALUES
         Text [ french ] = "Autoriser ~cellules vides" ;
         Text [ portuguese_brazilian ] = "~Leerzellen zulassen" ;
         Text [ portuguese ] = "~Permitir células vazias" ;
-        Text[ chinese_simplified ] = "ÔÊĞí¿Õµ¥Ôª¸ñ(~B)";
+        Text[ chinese_simplified ] = "å…è®¸ç©ºå•å…ƒæ ¼(~B)";
         Text[ russian ] = "Ïğîïóñê ïóñòûõ ÿ÷ååê";
         Text[ polish ] = "Dopuœæ puste komórki";
-        Text[ japanese ] = "‹ó”’¾Ù‚àg‚¤(~B)";
-        Text[ chinese_traditional ] = "¤¹³\\ªÅ®æ(~B)";
+        Text[ japanese ] = "ç©ºç™½ï½¾ï¾™ã‚‚ä½¿ã†(~B)";
+        Text[ chinese_traditional ] = "å…è¨±ç©ºæ ¼(~B)";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÎáÇíÇ ÇáİÇÑÛÉ";
         Text[ greek ] = "Íá åğéôñáğïıí êåíÜ êåëéÜ";
-        Text[ korean ] = "ºí·©Å© Çã¿ë(~B)";
+        Text[ korean ] = "ë¸”ë­í¬ í—ˆìš©(~B)";
         Text[ turkish ] = "~Boş hücre geçerli";
         Text[ catalan ] = "~Permitir celdas vacías";
         Text[ finnish ] = "~Salli tyhjät merkit";
@@ -830,14 +830,14 @@ TabPage TP_VALIDATION_VALUES
     Text [ french ] = "Valeurs" ;
     Text [ portuguese_brazilian ] = "Werte" ;
     Text [ portuguese ] = "Valores" ;
-    Text[ chinese_simplified ] = "ÊıÖµ";
+    Text[ chinese_simplified ] = "æ•°å€¼";
     Text[ russian ] = "Çíà÷åíèÿ";
     Text[ polish ] = "Wartoœci";
-    Text[ japanese ] = "’l";
-    Text[ chinese_traditional ] = "¼Æ­È";
+    Text[ japanese ] = "å€¤";
+    Text[ chinese_traditional ] = "æ•¸å€¼";
     Text[ arabic ] = "ÇáŞíã";
     Text[ greek ] = "Ôéìİò";
-    Text[ korean ] = "°ª";
+    Text[ korean ] = "ê°’";
     Text[ turkish ] = "Değerler";
     Text[ catalan ] = "Valores";
     Text[ finnish ] = "Arvot";
@@ -865,14 +865,14 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ french ] = "~Aide à la saisie lors de la sélection de cellules" ;
         Text [ portuguese_brazilian ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
         Text [ portuguese ] = "~Mostrar ajuda de entrada quando seleccionar célula" ;
-        Text[ chinese_simplified ] = "ÔÚÑ¡ÖĞµ¥Ôª¸ñÊ±ÏÔÊ¾ÊäÈë°ïÖú(~S)";
+        Text[ chinese_simplified ] = "åœ¨é€‰ä¸­å•å…ƒæ ¼æ—¶æ˜¾ç¤ºè¾“å…¥å¸®åŠ©(~S)";
         Text[ russian ] = "Ïğåäëàãàòü ïîìîùü ââîäà ïğè âûäåëåíèè ÿ÷åéêè";
         Text[ polish ] = "Z~aproponuj pomoc przy wprowadzaniu w przypadku zaznaczonej komórki";
-        Text[ japanese ] = "¾Ù‚Ì‘I‘ğ‚ÉÒ¯¾°¼Ş‚ğ•\\¦‚·‚é(~S)";
-        Text[ chinese_traditional ] = "¦b¿ï¨úÀx¦s®æ®ÉÅã¥Ü¿é¤J»¡©ú(~S)";
+        Text[ japanese ] = "ï½¾ï¾™ã®é¸æŠæ™‚ã«ï¾’ï½¯ï½¾ï½°ï½¼ï¾ã‚’è¡¨ç¤ºã™ã‚‹(~S)";
+        Text[ chinese_traditional ] = "åœ¨é¸å–å„²å­˜æ ¼æ™‚é¡¯ç¤ºè¼¸å…¥èªªæ˜(~S)";
         Text[ arabic ] = "ÅÙåÇÑ ãÓÇÚÏÉ ÇáÅÏÎÇá ÚäÏ ÊÍÏíÏ ÇáÎáíÉ";
         Text[ greek ] = "ÅìöÜí~éóç âïŞèåéáò åéóáãùãŞò êáôÜ ôçí åğéëïãŞ åíüò êåëéïı";
-        Text[ korean ] = "¼¿ ¼±ÅÃ½Ã µµ¿ò¸» ÀÔ·Â Á¦°ø(~S)";
+        Text[ korean ] = "ì…€ ì„ íƒì‹œ ë„ì›€ë§ ì…ë ¥ ì œê³µ(~S)";
         Text[ turkish ] = "Hücre se~çildiğinde giriş yardımı öner";
         Text[ catalan ] = "~Mostrar Ayuda de entrada al seleccionar una celda";
         Text[ finnish ] = "~Näytä syöttöohje, kun solu on valittuna";
@@ -892,14 +892,14 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ dutch ] = "Inhoud" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ portuguese_brazilian ] = "Inhalt" ;
-        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ chinese_simplified ] = "å†…å®¹";
         Text[ russian ] = "Ñîäåğæèìîå";
         Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "“à—e";
-        Text[ chinese_traditional ] = "¤º®e";
+        Text[ japanese ] = "å†…å®¹";
+        Text[ chinese_traditional ] = "å…§å®¹";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "³»¿ë";
+        Text[ korean ] = "ë‚´ìš©";
         Text[ turkish ] = "İçerik";
         Text[ catalan ] = "Contenido";
         Text[ finnish ] = "Sisältö";
@@ -919,14 +919,14 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ dutch ] = "~Titel" ;
         Text [ portuguese ] = "~Título" ;
         Text [ portuguese_brazilian ] = "~Titel" ;
-        Text[ chinese_simplified ] = "±êÌâ(~T)";
+        Text[ chinese_simplified ] = "æ ‡é¢˜(~T)";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
-        Text[ japanese ] = "À²ÄÙ(~T)";
-        Text[ chinese_traditional ] = "¼ĞÃD(~T)";
+        Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™(~T)";
+        Text[ chinese_traditional ] = "æ¨™é¡Œ(~T)";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ greek ] = "~Ôßôëïò";
-        Text[ korean ] = "Á¦¸ñ(~T)";
+        Text[ korean ] = "ì œëª©(~T)";
         Text[ turkish ] = "~Başlık";
         Text[ catalan ] = "~Título";
         Text[ finnish ] = "~Otsikko";
@@ -946,14 +946,14 @@ TabPage TP_VALIDATION_INPUTHELP
         Text [ french ] = "~Aide à la saisie" ;
         Text [ portuguese_brazilian ] = "~Eingabehilfe" ;
         Text [ portuguese ] = "~Ajuda de entradas" ;
-        Text[ chinese_simplified ] = "ÊäÈë°ïÖú(~I)";
+        Text[ chinese_simplified ] = "è¾“å…¥å¸®åŠ©(~I)";
         Text[ russian ] = "Ïîìîùü ââîäà";
         Text[ polish ] = "Pomoc przy wprow.";
-        Text[ japanese ] = "“ü—ÍÒ¯¾°¼Ş(~I)";
-        Text[ chinese_traditional ] = "¿é¤J»¡©ú(~I)";
+        Text[ japanese ] = "å…¥åŠ›æ™‚ï¾’ï½¯ï½¾ï½°ï½¼ï¾(~I)";
+        Text[ chinese_traditional ] = "è¼¸å…¥èªªæ˜(~I)";
         Text[ arabic ] = "ãÓÇÚÏÉ ÇáÅÏÎÇá";
         Text[ greek ] = "ÂïŞèåéá ~åéóáãùãŞò";
-        Text[ korean ] = "µµ¿ò¸» »ğÀÔ(~I)";
+        Text[ korean ] = "ë„ì›€ë§ ì‚½ì…(~I)";
         Text[ turkish ] = "~Giriş yardımı";
         Text[ catalan ] = "Ayuda de ~entrada";
         Text[ finnish ] = "~Syöttöohje";
@@ -998,14 +998,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ dutch ] = "Inhoud" ;
         Text [ portuguese ] = "Conteúdo" ;
         Text [ portuguese_brazilian ] = "Inhalt" ;
-        Text[ chinese_simplified ] = "ÄÚÈİ";
+        Text[ chinese_simplified ] = "å†…å®¹";
         Text[ russian ] = "Ñîäåğæèìîå";
         Text[ polish ] = "Zawartoœæ";
-        Text[ japanese ] = "“à—e";
-        Text[ chinese_traditional ] = "¤º®e";
+        Text[ japanese ] = "å†…å®¹";
+        Text[ chinese_traditional ] = "å…§å®¹";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Ğåñéå÷üìåíá";
-        Text[ korean ] = "³»¿ë";
+        Text[ korean ] = "ë‚´ìš©";
         Text[ turkish ] = "İçerik";
         Text[ catalan ] = "Contenido";
         Text[ finnish ] = "Sisältö";
@@ -1027,14 +1027,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ french ] = "~Message d'erreur en cas de saisie de valeurs incorrectes" ;
         Text [ portuguese_brazilian ] = "~Fehlermeldung bei Eingabe ung?tiger Werte anzeigen" ;
         Text [ portuguese ] = "~Mostrar mensagem de erro ao introduzir valores incorrectos" ;
-        Text[ chinese_simplified ] = "ÊäÈëÎŞĞ§ÊıÖµÊ±ÏÔÊ¾´íÎó±¨¸æ(~M)";
+        Text[ chinese_simplified ] = "è¾“å…¥æ— æ•ˆæ•°å€¼æ—¶æ˜¾ç¤ºé”™è¯¯æŠ¥å‘Š(~M)";
         Text[ russian ] = "Âûäàâàòü ñîîáùåíèå îá îøèáêå ïğè ââîäå íåäîïóñòèìûõ çíà÷åíèé";
         Text[ polish ] = "Poka¿ ko~munikat o b³êdzie po wpisaniu nieprawid³owych wartoœci";
-        Text[ japanese ] = "–³Œø‚È’l‚Ì“ü—Í‚É´×°Ò¯¾°¼Ş‚ğ•\\¦‚·‚é(~M)";
-        Text[ chinese_traditional ] = "¦b¿é¤JµL®Ä¼Æ­È®ÉÅã¥Ü¿ù»~³ø§i(~M)";
+        Text[ japanese ] = "ç„¡åŠ¹ãªå€¤ã®å…¥åŠ›æ™‚ã«ï½´ï¾—ï½°ï¾’ï½¯ï½¾ï½°ï½¼ï¾ã‚’è¡¨ç¤ºã™ã‚‹(~M)";
+        Text[ chinese_traditional ] = "åœ¨è¼¸å…¥ç„¡æ•ˆæ•¸å€¼æ™‚é¡¯ç¤ºéŒ¯èª¤å ±å‘Š(~M)";
         Text[ arabic ] = "ÅÙåÇÑ ÑÓÇáÉ ÎØÃ ÚäÏ ÅÏÎÇá Şíã ÛíÑ ÕÇáÍÉ";
         Text[ greek ] = "Å~ìöÜíéóç ìçíıìáôïò óöÜëìáôïò óå ğåñßğôùóç åéóáãùãŞò ìç İãêõñùí ôéìşí";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ª ÀÔ·Â½Ã ¿À·ù ¸Ş½ÃÁö Ç¥½Ã(~M)";
+        Text[ korean ] = "ìœ íš¨í•˜ì§€ ì•Šì€ ê°’ ì…ë ¥ì‹œ ì˜¤ë¥˜ ë©”ì‹œì§€ í‘œì‹œ(~M)";
         Text[ turkish ] = "~Geçersiz değer girildiğinde hata iletisi görüntüle";
         Text[ catalan ] = "Mostrar mensaje de ~error al entrar valores incorrectos";
         Text[ finnish ] = "~Näytä virhesanoma, kun virheellisiä arvoja syötetään";
@@ -1070,14 +1070,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ dutch ] = "~Foutmelding" ;
         Text [ portuguese ] = "~Mensagem de erro" ;
         Text [ portuguese_brazilian ] = "~Fehlermeldung" ;
-        Text[ chinese_simplified ] = "´íÎó±¨¸æ(~E)";
+        Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š(~E)";
         Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
         Text[ polish ] = "Komunikat o b³êdzie";
-        Text[ japanese ] = "´×°Ò¯¾°¼Ş(~E)";
-        Text[ chinese_traditional ] = "¿ù»~³ø§i(~E)";
+        Text[ japanese ] = "ï½´ï¾—ï½°ï¾’ï½¯ï½¾ï½°ï½¼ï¾(~E)";
+        Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š(~E)";
         Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
         Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-        Text[ korean ] = "¿À·ù ¸Ş½ÃÁö(~E)";
+        Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€(~E)";
         Text[ turkish ] = "~Hata iletisi";
         Text[ catalan ] = "~Mensaje de error";
         Text[ finnish ] = "~Virhesanoma";
@@ -1097,14 +1097,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ dutch ] = "~Titel" ;
         Text [ portuguese ] = "~Título" ;
         Text [ portuguese_brazilian ] = "~Titel" ;
-        Text[ chinese_simplified ] = "±êÌâ(~T)";
+        Text[ chinese_simplified ] = "æ ‡é¢˜(~T)";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
-        Text[ japanese ] = "À²ÄÙ(~T)";
-        Text[ chinese_traditional ] = "¼ĞÃD(~T)";
+        Text[ japanese ] = "ï¾€ï½²ï¾„ï¾™(~T)";
+        Text[ chinese_traditional ] = "æ¨™é¡Œ(~T)";
         Text[ arabic ] = "ÇáÚäæÇä";
         Text[ greek ] = "~Ôßôëïò";
-        Text[ korean ] = "Á¦¸ñ(~T)";
+        Text[ korean ] = "ì œëª©(~T)";
         Text[ turkish ] = "~Başlık";
         Text[ catalan ] = "~Título";
         Text[ finnish ] = "~Otsikko";
@@ -1124,14 +1124,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ dutch ] = "~Activiteit" ;
         Text [ portuguese ] = "~Acção" ;
         Text [ portuguese_brazilian ] = "~Aktion" ;
-        Text[ chinese_simplified ] = "²Ù×÷(~A)";
+        Text[ chinese_simplified ] = "æ“ä½œ(~A)";
         Text[ russian ] = "Äåéñòâèå";
         Text[ polish ] = "Akcja";
-        Text[ japanese ] = "±¸¼®İ(~A)";
-        Text[ chinese_traditional ] = "°Ê§@(~A)";
+        Text[ japanese ] = "ï½±ï½¸ï½¼ï½®ï¾(~A)";
+        Text[ chinese_traditional ] = "å‹•ä½œ(~A)";
         Text[ arabic ] = "ÅÌÑÇÁ";
         Text[ greek ] = "~Åíİñãåéá";
-        Text[ korean ] = "½ÇÇà(~A)";
+        Text[ korean ] = "ì‹¤í–‰(~A)";
         Text[ turkish ] = "~İşlem";
         Text[ catalan ] = "~Acción";
         Text[ finnish ] = "~Toiminto";
@@ -1223,10 +1223,10 @@ TabPage TP_VALIDATION_ERROR
         };
     StringList [ chinese_simplified ] =
     {
-            < "ÔİÍ£" ; Default ; > ;
-        < "¾¯¸æ" ; Default ; > ;
-        < "ĞÅÏ¢" ; Default ; > ;
-        < "ºê" ; Default ; > ;
+            < "æš‚åœ" ; Default ; > ;
+        < "è­¦å‘Š" ; Default ; > ;
+        < "ä¿¡æ¯" ; Default ; > ;
+        < "å®" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -1244,17 +1244,17 @@ TabPage TP_VALIDATION_ERROR
     };
     StringList [ japanese ] =
     {
-            < "’†~" ; Default ; > ;
-        < "Œx" ; Default ; > ;
-        < "î•ñ" ; Default ; > ;
-        < "Ï¸Û" ; Default ; > ;
+            < "ä¸­æ­¢" ; Default ; > ;
+        < "è­¦å‘Š" ; Default ; > ;
+        < "æƒ…å ±" ; Default ; > ;
+        < "ï¾ï½¸ï¾›" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "¼È°±" ; Default ; > ;
-        < "Äµ§i" ; Default ; > ;
-        < "¸ê°T" ; Default ; > ;
-        < "¥¨¶°" ; Default ; > ;
+            < "æš«åœ" ; Default ; > ;
+        < "è­¦å‘Š" ; Default ; > ;
+        < "è³‡è¨Š" ; Default ; > ;
+        < "å·¨é›†" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -1272,10 +1272,10 @@ TabPage TP_VALIDATION_ERROR
     };
     StringList [ korean ] =
     {
-            < "Á¤Áö" ; Default ; > ;
-        < "°æ°í" ; Default ; > ;
-        < "Á¤º¸" ; Default ; > ;
-        < "¸ÅÅ©·Î" ; Default ; > ;
+            < "ì •ì§€" ; Default ; > ;
+        < "ê²½ê³ " ; Default ; > ;
+        < "ì •ë³´" ; Default ; > ;
+        < "ë§¤í¬ë¡œ" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -1322,14 +1322,14 @@ TabPage TP_VALIDATION_ERROR
         Text [ french ] = "~Parcourir..." ;
         Text [ portuguese_brazilian ] = "~Durchsuchen..." ;
         Text [ portuguese ] = "~Pesquisar..." ;
-        Text[ chinese_simplified ] = "ä¯ÀÀ(~B)...";
+        Text[ chinese_simplified ] = "æµè§ˆ(~B)...";
         Text[ russian ] = "Îáçîğ...";
         Text[ polish ] = "Przegl¹~daj...";
-        Text[ japanese ] = "ŒŸõ(~B)...";
-        Text[ chinese_traditional ] = "ÂsÄı(~B)...";
+        Text[ japanese ] = "æ¤œç´¢(~B)...";
+        Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "°Ë»ö(~B)...";
+        Text[ korean ] = "ê²€ìƒ‰(~B)...";
         Text[ turkish ] = "~Tara...";
         Text[ catalan ] = "E~xaminar...";
         Text[ finnish ] = "~Selaa";
@@ -1343,18 +1343,19 @@ TabPage TP_VALIDATION_ERROR
     Text [ french ] = "Message d'erreur" ;
     Text [ portuguese_brazilian ] = "Fehlermeldung" ;
     Text [ portuguese ] = "Mensagem de erro" ;
-    Text[ chinese_simplified ] = "´íÎó±¨¸æ";
+    Text[ chinese_simplified ] = "é”™è¯¯æŠ¥å‘Š";
     Text[ russian ] = "Ñîîáùåíèå îá îøèáêå";
     Text[ polish ] = "Komunikat o b³êdzie";
-    Text[ japanese ] = "´×°Ò¯¾°¼Ş";
-    Text[ chinese_traditional ] = "¿ù»~³ø§i";
+    Text[ japanese ] = "ï½´ï¾—ï½°ï¾’ï½¯ï½¾ï½°ï½¼ï¾";
+    Text[ chinese_traditional ] = "éŒ¯èª¤å ±å‘Š";
     Text[ arabic ] = "ÑÓÇáÉ ÎØÃ";
     Text[ greek ] = "ÌŞíõìá óöÜëìáôïò";
-    Text[ korean ] = "¿À·ù ¸Ş½ÃÁö";
+    Text[ korean ] = "ì˜¤ë¥˜ ë©”ì‹œì§€";
     Text[ turkish ] = "Hata iletisi";
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
 
