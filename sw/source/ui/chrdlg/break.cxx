@@ -2,9 +2,9 @@
  *
  *  $RCSfile: break.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:15:09 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,9 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
     // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
     const USHORT nCount = rSh.GetPageDescCnt();
-    for(USHORT i = 0; i < nCount; ++i)
+    USHORT i;
+
+    for( i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
         ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, 1 );
