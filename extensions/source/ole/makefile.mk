@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 18:57:47 $
+#   last change: $Author: obo $ $Date: 2004-03-17 13:07:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,11 @@ INCPRE+=	$(OUT)$/inc
 
 # -----------------------------------------------------------------
 
+
 PRJNAME=extensions
 TARGET=oleautobridge.uno
+
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
@@ -86,7 +89,6 @@ USE_DEFFILE=TRUE
 INCPRE+= -I$(ATL_INCLUDE)	
 # --- Settings -----------------------------------------------------
 
-ENABLE_EXCEPTIONS=TRUE
 
 
 #----------------------------------------------------------------
@@ -112,6 +114,7 @@ UNOTYPES= \
     com.sun.star.script.XAllListenerAdapterService	\
     com.sun.star.script.XInvocationAdapterFactory	\
     com.sun.star.script.XInvocationAdapterFactory2	\
+    com.sun.star.script.XTypeConverter \
     com.sun.star.registry.InvalidValueException	\
     com.sun.star.registry.RegistryKeyType	\
     com.sun.star.registry.XRegistryKey	\
@@ -119,9 +122,15 @@ UNOTYPES= \
     com.sun.star.registry.InvalidRegistryException	\
     com.sun.star.loader.XImplementationLoader	\
     com.sun.star.loader.CannotActivateFactoryException	\
-    com.sun.star.bridge.XBridgeSupplier	\
     com.sun.star.bridge.XBridgeSupplier2 \
     com.sun.star.bridge.ModelDependent	\
+    com.sun.star.bridge.oleautomation.Date \
+    com.sun.star.bridge.oleautomation.Currency \
+    com.sun.star.bridge.oleautomation.Decimal \
+    com.sun.star.bridge.oleautomation.SCode \
+    com.sun.star.bridge.oleautomation.NamedArgument \
+    com.sun.star.bridge.oleautomation.PropertyPutArgument \
+    com.sun.star.bridge.oleautomation.XAutomationObject \
     com.sun.star.reflection.InvocationTargetException	\
     com.sun.star.beans.UnknownPropertyException	\
     com.sun.star.beans.MethodConcept	\
@@ -133,7 +142,6 @@ UNOTYPES= \
     com.sun.star.uno.XAggregation		\
     com.sun.star.reflection.XIdlReflection
 
-#	com.sun.star.beans.XMaterialHolder	\
 
 
 .IF "$(GUI)"=="WNT"
@@ -149,9 +157,8 @@ SLOFILES= \
             $(SLO)$/olethread.obj	\
             $(SLO)$/oledll.obj		\
         $(SLO)$/jscriptclasses.obj	\
-        $(SLO)$/ole2uno.obj
-
-
+        $(SLO)$/ole2uno.obj		\
+        $(SLO)$/windata.obj		
 
 
 SHL1TARGET=$(TARGET)
@@ -160,7 +167,6 @@ SHL1STDLIBS=\
     $(VOSLIB)	\
     $(CPPULIB)	\
     $(CPPUHELPERLIB)	\
-    $(LIBCIMT) 	\
     ole32.lib 	\
     uuid.lib 	\
     advapi32.lib	\
