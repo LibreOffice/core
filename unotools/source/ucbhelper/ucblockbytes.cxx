@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:20:11 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,25 @@
  *
  ************************************************************************/
 
+#include <unotools/condition.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 
+#ifndef _OSL_THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UCBHELPER_INTERATIONREQUEST_HXX
+#include <ucbhelper/interactionrequest.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVENETWORKCONNECTEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveNetworkConnectException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #endif
@@ -315,71 +331,600 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     }
 }
 
-/**
-    Function for opening UCB contents synchronously
- */
-static sal_Bool UCBOpenContentSync( UcbLockBytesRef xLockBytes,
-                    Reference < XContent > xContent,
-                    const Command& rArg,
-                    Reference < XInterface > xSink,
-                    Reference < XInteractionHandler > xInteract,
-                    Reference < XProgressHandler > xProgress,
-                    UcbLockBytesHandlerRef xHandler )
+
+
+class Moderator
+    : public osl::Thread
 {
-    ::ucb::Content aContent( xContent, new UcbTaskEnvironment( xInteract, xProgress ) );
-    Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
-    ::rtl::OUString aScheme = xIdent->getContentProviderScheme();
+    // usage restriction:
+    // It might be possible, that the call to the interactionhandler and/or
+    // progresshandler is done asynchrounsly, while the 'execute' simply
+    // returns. This would imply that these class must be refcounted !!!
 
-    // http protocol must be handled in a special way: during the opening process the input stream may change
-    // only the last inputstream after notifying the document headers is valid
-    if ( aScheme.compareToAscii("http") != COMPARE_EQUAL )
-        xLockBytes->SetStreamValid_Impl();
+public:
 
-    Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );
-    Reference< XPropertiesChangeNotifier > xProps ( xContent, UNO_QUERY );
-    if ( xProps.is() )
-        xProps->addPropertiesChangeListener( Sequence< ::rtl::OUString >(), xListener );
+    Moderator(
+        Reference < XContent >& xContent,
+        Reference < XInteractionHandler >& xInteract,
+        Reference < XProgressHandler >& xProgress,
+        const Command& rArg);
 
-    Any aResult;
-    bool bException = false;
-    bool bAborted = false;
+    ~Moderator();
+
+
+    enum ResultType {
+        NORESULT,
+
+        INTERACTIONREQUEST,    // reply expected
+
+        PROGRESSPUSH,
+        PROGRESSUPDATE,
+        PROGRESSPOP,
+
+        RESULT,
+        TIMEDOUT,
+        COMMANDABORTED,
+        COMMANDFAILED,
+        INTERACTIVEIO,
+        UNSUPPORTED,
+        GENERAL
+    };
+
+
+    class ConditionRes
+        : public Condition
+    {
+    public:
+
+        ConditionRes(Moderator& aModerator)
+            : m_aModerator(aModerator)
+        {
+        }
+
+    protected:
+
+        bool applies() const {
+            return m_aModerator.m_aResultType != NORESULT;
+        }
+
+    private:
+
+        Moderator& m_aModerator;
+    };
+
+
+    struct Result {
+        ResultType        type;
+        Any               result;
+        sal_Int32         ioErrorCode;
+    };
+
+    Result getResult(const sal_uInt32 milliSec);
+
+
+    enum ReplyType {
+        NOREPLY,
+        EXIT,
+        RETRY,
+        REQUESTHANDLED
+    };
+
+
+    class ConditionRep
+        : public Condition
+    {
+    public:
+
+        ConditionRep(Moderator& aModerator)
+            : m_aModerator(aModerator)
+        {
+        }
+
+    protected:
+
+        bool applies() const {
+            return m_aModerator.m_aReplyType != NOREPLY;
+        }
+
+    private:
+
+        Moderator& m_aModerator;
+    };
+
+    void setReply(ReplyType);
+
+
+    void handle( const Reference<XInteractionRequest >& Request );
+
+    void push( const Any& Status );
+
+    void update( const Any& Status );
+
+    void pop(  );
+
+
+protected:
+
+    virtual void SAL_CALL run();
+
+    virtual void SAL_CALL onTerminated();
+
+private:
+
+    friend class ConditionRes;
+
+    ConditionRes      m_aRes;
+    ResultType        m_aResultType;
+    sal_Int32         m_nIOErrorCode;
+    Any               m_aResult;
+
+    friend class ConditionRep;
+
+    ConditionRep      m_aRep;
+    ReplyType         m_aReplyType;
+
+    Reference < XContent >            m_xContent;
+    bool                              m_bInteract;
+    bool                              m_bProgress;
+    const Command&                    m_rArg;
+};
+
+
+class ModeratorsInteractionHandler
+    : public ::cppu::WeakImplHelper1<XInteractionHandler>
+{
+public:
+
+    ModeratorsInteractionHandler(Moderator &theModerator);
+
+    ~ModeratorsInteractionHandler();
+
+    virtual void SAL_CALL
+    handle( const Reference<XInteractionRequest >& Request )
+        throw (RuntimeException);
+
+private:
+
+    Moderator& m_aModerator;
+};
+
+
+class ModeratorsProgressHandler
+    : public ::cppu::WeakImplHelper1<XProgressHandler>
+{
+public:
+
+    ModeratorsProgressHandler(Moderator &theModerator);
+
+    ~ModeratorsProgressHandler();
+
+    virtual void SAL_CALL push( const Any& Status )
+        throw (
+            RuntimeException);
+
+    virtual void SAL_CALL update( const Any& Status )
+        throw (RuntimeException);
+
+    virtual void SAL_CALL pop(  )
+        throw (RuntimeException);
+
+
+private:
+
+    Moderator& m_aModerator;
+};
+
+
+ModeratorsProgressHandler::ModeratorsProgressHandler(Moderator &theModerator)
+    : m_aModerator(theModerator)
+{
+}
+
+ModeratorsProgressHandler::~ModeratorsProgressHandler()
+{
+}
+
+
+void SAL_CALL ModeratorsProgressHandler::push( const Any& Status )
+    throw (
+        RuntimeException)
+{
+    m_aModerator.push(Status);
+}
+
+
+void SAL_CALL ModeratorsProgressHandler::update( const Any& Status )
+    throw (RuntimeException)
+{
+    m_aModerator.update(Status);
+}
+
+
+void SAL_CALL ModeratorsProgressHandler::pop(  )
+    throw (RuntimeException)
+{
+    m_aModerator.pop();
+}
+
+
+
+
+ModeratorsInteractionHandler::ModeratorsInteractionHandler(
+    Moderator &aModerator)
+    : m_aModerator(aModerator)
+{
+}
+
+
+ModeratorsInteractionHandler::~ModeratorsInteractionHandler()
+{
+}
+
+
+void SAL_CALL
+ModeratorsInteractionHandler::handle(
+    const Reference<XInteractionRequest >& Request
+)
+    throw (
+        RuntimeException
+    )
+{
+    // wakes up the mainthread
+    m_aModerator.handle(Request);
+}
+
+
+
+
+Moderator::Moderator(
+    Reference < XContent >& xContent,
+    Reference < XInteractionHandler >& xInteract,
+    Reference < XProgressHandler >& xProgress,
+    const Command& rArg
+)
+    : m_aRes(*this),
+      m_aResultType(NORESULT),
+      m_aResult(),
+      m_nIOErrorCode(0),
+
+      m_aRep(*this),
+      m_aReplyType(NOREPLY),
+
+      m_xContent(xContent),
+      m_bInteract(xInteract.is()),
+      m_bProgress(xProgress.is()),
+      m_rArg(rArg)
+{
+}
+
+
+Moderator::~Moderator()
+{
+}
+
+
+Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
+{
+    Result ret;
+    try {
+        ConditionWaiter aWaiter(m_aRes,milliSec);
+        ret.type = m_aResultType;
+        ret.result = m_aResult;
+        ret.ioErrorCode = m_nIOErrorCode;
+
+        // reset
+        m_aResultType = NORESULT;
+    }
+    catch(const ConditionWaiter::timedout&)
+    {
+        ret.type = TIMEDOUT;
+    }
+
+    return ret;
+}
+
+
+void Moderator::setReply(ReplyType aReplyType )
+{
+    ConditionModifier aMod(m_aRep);
+    m_aReplyType = aReplyType;
+}
+
+
+void Moderator::handle( const Reference<XInteractionRequest >& Request )
+{
+    ReplyType aReplyType;
+
+    do {
+        {
+            ConditionModifier aMod(m_aRes);
+            m_aResultType = INTERACTIONREQUEST;
+            m_aResult <<= Request;
+        }
+
+        {
+            ConditionWaiter aWait(m_aRep);
+            aReplyType = m_aReplyType;
+
+            // reset
+            m_aReplyType = NOREPLY;
+        }
+
+        if(aReplyType == EXIT) {
+            Sequence<Reference<XInteractionContinuation> > aSeq(
+                Request->getContinuations());
+            for(sal_Int32 i = 0; i < aSeq.getLength(); ++i) {
+                Reference<XInteractionAbort> aRef(aSeq[i],UNO_QUERY);
+                if(aRef.is()) {
+                    aRef->select();
+                }
+            }
+
+            // resignal the exitcondition
+            setReply(EXIT);
+            break;
+        }
+    } while(aReplyType != REQUESTHANDLED);
+}
+
+
+
+void Moderator::push( const Any& Status )
+{
+    ConditionModifier aMod(m_aRes);
+    m_aResultType = PROGRESSPUSH;
+    m_aResult = Status;
+}
+
+
+void Moderator::update( const Any& Status )
+{
+    ConditionModifier aMod(m_aRes);
+    m_aResultType = PROGRESSUPDATE;
+    m_aResult = Status;
+}
+
+
+void Moderator::pop(  )
+{
+    ConditionModifier aMod(m_aRes);
+    m_aResultType = PROGRESSPOP;
+}
+
+
+
+void SAL_CALL Moderator::run()
+{
+    ResultType aResultType;
+    Any        aResult;
+    sal_Int32  nIOErrorCode;
 
     try
     {
-        aResult = aContent.executeCommand( rArg.Name, rArg.Argument );
+        ::ucb::Content aContent(
+            m_xContent,
+            new UcbTaskEnvironment(
+                m_bInteract ? new ModeratorsInteractionHandler(*this) : 0,
+                m_bProgress ? new ModeratorsProgressHandler(*this) : 0
+            )
+        );
+
+        aResult = aContent.executeCommand(m_rArg.Name,m_rArg.Argument);
+        aResultType = RESULT;
     }
     catch ( CommandAbortedException )
     {
-        bAborted = true;
-        xLockBytes->SetError( ERRCODE_ABORT );
+        aResultType = COMMANDABORTED;
     }
     catch ( CommandFailedException )
     {
-        bAborted = true;
-        xLockBytes->SetError( ERRCODE_ABORT );
+        aResultType = COMMANDFAILED;
     }
     catch ( InteractiveIOException& r )
     {
-        bException = true;
-        if ( r.Code == IOErrorCode_ACCESS_DENIED || r.Code == IOErrorCode_LOCKING_VIOLATION )
-            xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
-        else if ( r.Code == IOErrorCode_NOT_EXISTING )
-            xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
-        else if ( r.Code == IOErrorCode_CANT_READ )
-            xLockBytes->SetError( ERRCODE_IO_CANTREAD );
-        else
-            xLockBytes->SetError( ERRCODE_IO_GENERAL );
+        nIOErrorCode = r.Code;
+        aResultType = INTERACTIVEIO;
     }
     catch ( UnsupportedDataSinkException& )
     {
-        bException = true;
-        xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
+        aResultType = UNSUPPORTED;
     }
     catch ( Exception )
     {
-        bException = true;
-        xLockBytes->SetError( ERRCODE_IO_GENERAL );
+        aResultType = GENERAL;
     }
+
+    {
+        ConditionModifier aMod(m_aRes);
+        m_aResultType = aResultType;
+        m_aResult = aResult;
+        m_nIOErrorCode = nIOErrorCode;
+    }
+
+    ConditionWaiter aWaiter(m_aRep);
+}
+
+
+
+void SAL_CALL Moderator::onTerminated()
+{
+     delete this;
+}
+
+
+/**
+   Function for opening UCB contents synchronously,
+   but with handled timeout;
+*/
+
+
+static sal_Bool UCBOpenContentSync(
+    UcbLockBytesRef xLockBytes,
+    Reference < XContent > xContent,
+    const Command& rArg,
+    Reference < XInterface > xSink,
+    Reference < XInteractionHandler > xInteract,
+    Reference < XProgressHandler > xProgress,
+    UcbLockBytesHandlerRef xHandler )
+{
+    // http protocol must be handled in a special way:
+    //        during the opening process the input stream may change
+    //        only the last inputstream after notifying the document
+    //        headers is valid
+
+    Reference<XContentIdentifier> xContId(
+        xContent.is() ? xContent->getIdentifier() : 0 );
+    if (xContId.is() && xContId->getContentProviderScheme().compareToAscii(
+        "http") != COMPARE_EQUAL )
+        xLockBytes->SetStreamValid_Impl();
+
+    Reference< XPropertiesChangeListener > xListener;
+    Reference< XPropertiesChangeNotifier > xProps(xContent,UNO_QUERY);
+    if(xProps.is()) {
+        xListener =
+            new UcbPropertiesChangeListener_Impl(xLockBytes);
+        xProps->addPropertiesChangeListener(
+            Sequence< ::rtl::OUString >(),
+            xListener);
+    }
+
+    Any aResult;
+    bool bException(false);
+    bool bAborted(false);
+
+    Moderator* pMod = new Moderator(xContent,xInteract,xProgress,rArg);
+    pMod->create();
+
+    bool bResultAchieved(false);
+
+    while(!bResultAchieved) {
+
+        // try to get the result for 5000 milli seconds
+        Moderator::Result res = pMod->getResult(5000);
+
+        switch(res.type) {
+            case Moderator::PROGRESSPUSH:
+            {
+                if(xProgress.is())
+                    xProgress->push(res.result);
+                break;
+            }
+            case Moderator::PROGRESSUPDATE:
+            {
+                if(xProgress.is())
+                    xProgress->update(res.result);
+                break;
+            }
+            case Moderator::PROGRESSPOP:
+            {
+                if(xProgress.is())
+                    xProgress->pop();
+                break;
+            }
+            case Moderator::TIMEDOUT:
+            {
+                Reference<XInteractionRetry> xRet;
+                if(xInteract.is()) {
+                    InteractiveNetworkConnectException aExcep;
+                    INetURLObject aURL(
+                        xContId.is() ?
+                        xContId->getContentIdentifier() :
+                        rtl::OUString() );
+                    aExcep.Server = aURL.GetHost();
+                    aExcep.Classification = InteractionClassification_ERROR;
+                    aExcep.Message =
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "server not responding after five seconds"));
+                    Any request;
+                    request <<= aExcep;
+                    ucbhelper::InteractionRequest *ir =
+                        new ucbhelper::InteractionRequest(request);
+                    Reference<XInteractionRequest> xIR(ir);
+                    Sequence<Reference<XInteractionContinuation> > aSeq(2);
+                    ucbhelper::InteractionRetry *retryP =
+                        new ucbhelper::InteractionRetry(ir);
+                    aSeq[0] = retryP;
+                    ucbhelper::InteractionAbort *abortP =
+                        new ucbhelper::InteractionAbort(ir);
+                    aSeq[1] = abortP;
+
+                    ir->setContinuations(aSeq);
+                    xInteract->handle(xIR);
+                    rtl::Reference< ucbhelper::InteractionContinuation > ref
+                        = ir->getSelection();
+                    if(ref.is()) {
+                        Reference<XInterface> xInt(ref.get());
+                        xRet = Reference<XInteractionRetry>(xInt,UNO_QUERY);
+                    }
+                }
+
+                if(!xRet.is()) {
+                    bAborted = true;
+                    xLockBytes->SetError(ERRCODE_ABORT);
+                }
+
+                break;
+            }
+            case Moderator::INTERACTIONREQUEST:
+            {
+                Reference<XInteractionRequest> Request;
+                res.result >>= Request;
+                xInteract->handle(Request);
+                pMod->setReply(Moderator::REQUESTHANDLED);
+                break;
+            }
+            case Moderator::RESULT:
+            {
+                bResultAchieved = true;
+                aResult = res.result;
+                break;
+            }
+            case Moderator::COMMANDABORTED:
+            {
+                bAborted = true;
+                xLockBytes->SetError( ERRCODE_ABORT );
+                break;
+            }
+            case Moderator::COMMANDFAILED:
+            {
+                bAborted = true;
+                xLockBytes->SetError( ERRCODE_ABORT );
+                break;
+            }
+            case Moderator::INTERACTIVEIO:
+            {
+                bException = true;
+                if ( res.ioErrorCode == IOErrorCode_ACCESS_DENIED ||
+                     res.ioErrorCode == IOErrorCode_LOCKING_VIOLATION )
+                    xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
+                else if ( res.ioErrorCode == IOErrorCode_NOT_EXISTING )
+                    xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
+                else if ( res.ioErrorCode == IOErrorCode_CANT_READ )
+                    xLockBytes->SetError( ERRCODE_IO_CANTREAD );
+                else
+                    xLockBytes->SetError( ERRCODE_IO_GENERAL );
+                break;
+            }
+            case Moderator::UNSUPPORTED:
+            {
+                bException = true;
+                xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
+                break;
+            }
+            default:
+            {
+                bException = true;
+                xLockBytes->SetError( ERRCODE_IO_GENERAL );
+                break;
+            }
+        }
+
+        bResultAchieved |= bException;
+        bResultAchieved |= bAborted;
+    }
+
+    pMod->setReply(Moderator::EXIT);
 
     if ( bAborted || bException )
     {
@@ -399,9 +944,10 @@ static sal_Bool UCBOpenContentSync( UcbLockBytesRef xLockBytes,
     if ( xControl.is() )
         xControl->terminate();
 
-
     if ( xProps.is() )
-        xProps->removePropertiesChangeListener( Sequence< ::rtl::OUString >(), xListener );
+        xProps->removePropertiesChangeListener(
+            Sequence< ::rtl::OUString >(),
+            xListener );
 
     return ( bAborted || bException );
 }
