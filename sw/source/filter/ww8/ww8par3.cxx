@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:06:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,10 +638,28 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                         {
                             USHORT nDesired = aLVL.nDxaLeft + aLVL.nDxaLeft1;
 
-                            aLVL.nDxaLeft = (0 < nTabPos) ? (sal_uInt16)nTabPos
-                                : (sal_uInt16)(-nTabPos);
+                            bool bDoAdjust = false;
+                            if (nDesired < aLVL.nDxaLeft)
+                            {
+                                if (nDesired < nTabPos &&
+                                    nTabPos < aLVL.nDxaLeft)
+                                    bDoAdjust = true;
+                            }
+                            else
+                            {
+                                if (aLVL.nDxaLeft < nTabPos &&
+                                    nTabPos < nDesired)
+                                    bDoAdjust = true;
+                            }
 
-                            aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
+                            if (bDoAdjust)
+                            {
+                                aLVL.nDxaLeft =
+                                    (0 < nTabPos) ? (sal_uInt16)nTabPos
+                                    : (sal_uInt16)(-nTabPos);
+
+                                aLVL.nDxaLeft1 = nDesired - aLVL.nDxaLeft;
+                            }
 
                             bDone=true;
                         }
