@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-05 08:39:50 $
+ *  last change: $Author: tl $ $Date: 2002-07-12 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2590,7 +2590,8 @@ Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames(void) throw( Ru
 
   -----------------------------------------------------------------------*/
 SwXTextFieldTypes::SwXTextFieldTypes(SwDoc* pDoc) :
-    SwUnoCollection(pDoc)
+    SwUnoCollection (pDoc),
+    aRefreshCont    ( static_cast< XEnumerationAccess * >(this) )
 {
 }
 /*-- 21.12.98 10:35:16---------------------------------------------------
@@ -2598,6 +2599,14 @@ SwXTextFieldTypes::SwXTextFieldTypes(SwDoc* pDoc) :
   -----------------------------------------------------------------------*/
 SwXTextFieldTypes::~SwXTextFieldTypes()
 {
+}
+/*-- 11.07.02 14:25:00---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXTextFieldTypes::Invalidate()
+{
+    SwUnoCollection::Invalidate();
+    aRefreshCont.Disposing();
 }
 /*-- 21.12.98 10:35:17---------------------------------------------------
 
@@ -2641,6 +2650,9 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
     SwDocStat aDocStat;
     GetDoc()->UpdateDocStat(aDocStat);
     GetDoc()->UpdateFlds(0, sal_False);
+
+    // call refresh listeners
+    aRefreshCont.Refreshed();
 }
 /* -----------------24.02.99 16:19-------------------
  *
@@ -2648,7 +2660,10 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
 void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshListener > & l)
     throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !IsValid() )
+        throw RuntimeException();
+    aRefreshCont.AddListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ));
 }
 /* -----------------24.02.99 16:19-------------------
  *
@@ -2656,7 +2671,9 @@ void SwXTextFieldTypes::addRefreshListener(const uno::Reference< util::XRefreshL
 void SwXTextFieldTypes::removeRefreshListener(const uno::Reference< util::XRefreshListener > & l)
      throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if ( !IsValid() || !aRefreshCont.RemoveListener ( reinterpret_cast < const Reference < lang::XEventListener > &> ( l ) ) )
+        throw RuntimeException();
 }
 /******************************************************************
  * SwXFieldEnumeration

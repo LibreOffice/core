@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-10 11:17:42 $
+ *  last change: $Author: tl $ $Date: 2002-07-12 10:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef _UNOCOLL_HXX
 #include <unocoll.hxx>
+#endif
+#ifndef _REFRESH_LISTENER_CONTAINER_HXX_
+#include <RefreshListenerContainer.hxx>
 #endif
 
 class SwFieldType;
@@ -287,6 +290,8 @@ SwXTextFieldTypesBaseClass;
 class SwXTextFieldTypes : public SwXTextFieldTypesBaseClass,
         public SwUnoCollection
 {
+    SwRefreshListenerContainer      aRefreshCont;
+
 public:
     SwXTextFieldTypes(SwDoc* pDoc);
     virtual ~SwXTextFieldTypes();
@@ -307,6 +312,9 @@ public:
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
+
+    // SwUnoCollection
+    virtual void    Invalidate();
 };
 
 /* -----------------21.12.98 14:49-------------------
