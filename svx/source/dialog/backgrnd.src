@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:18:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
     text[ russian ] = "Íåñâÿçàííàÿ ãğàôèêà";    \
     text[ polish ] = "Nie po³¹czona grafika";   \
     text[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢¸Ş×Ì¨¯¸";    \
-    text[ chinese_traditional ] = "¥¼³sµ²ªº¹Ï¤ù";   \
+    text[ chinese_traditional ] = "¥¼³sµ²ªº¹Ï§Î";   \
     text[ arabic ] = "ÕæÑÉ ÛíÑ ãÑÊÈØÉ"; \
     text[ greek ] = "Ãñáöéêü ÷ùñßò óıíäåóç";    \
     text[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈ";    \
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_BACKGROUND
     StringList [ chinese_traditional ] =
     {
             < "ÃC¦â" ; Default ; > ;
-        < "¹Ï¤ù" ; Default ; > ;
+        < "¹Ï§Î" ; Default ; > ;
     };
     StringList [ arabic ] =
     {
@@ -676,7 +676,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Eksempel" ;
         Text [ portuguese ] = "~Previsualizar" ;
         Text [ portuguese_brazilian ] = "V~orschau" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ(~R)";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ(~R)";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "P~odgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°(~R)";
@@ -860,7 +860,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ russian ] = "Ïğîñìîòğ ãğàôèêè";
         Text[ polish ] = "Podgl¹d grafiki";
         Text[ japanese ] = "¸Ş×Ì¨¯¸ ÌßÚËŞ­°";
-        Text[ chinese_traditional ] = "¹Ï¤ù¹wÄı";
+        Text[ chinese_traditional ] = "¹Ï§Î¹wÄı";
         Text[ arabic ] = "ãÚÇíäÉ ÇáÕæÑÉ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ğñïåğéóêüğçóç";
@@ -880,11 +880,11 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ danish ] = "Søg grafik" ;
         Text [ portuguese_brazilian ] = "Grafik suchen" ;
         Text [ portuguese ] = "Localizar imagem" ;
-        Text[ chinese_simplified ] = "Ñ°ÕÒÍ¼ĞÎ";
+        Text[ chinese_simplified ] = "ËÑÑ°Í¼ĞÎ";
         Text[ russian ] = "Íàéòè ãğàôèêó";
         Text[ polish ] = "Szukaj grafiki";
         Text[ japanese ] = "¸Ş×Ì¨¯¸‚ğŒŸõ";
-        Text[ chinese_traditional ] = "·j´M¹Ï¤ù";
+        Text[ chinese_traditional ] = "·j´M¹Ï§Î";
         Text[ arabic ] = "ÇáÈÍË Úä ÑÓã";
         Text[ greek ] = "ÁíáæŞôçóç ãñáöéêïı";
         Text[ korean ] = "±×·¡ÇÈ Ã£±â";
