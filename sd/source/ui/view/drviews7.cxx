@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:46:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,18 +1595,25 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_BASIC, aCurrShapeEnumCommand[ 0 ] ));
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_SYMBOL, aCurrShapeEnumCommand[ 1 ] ));
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_ARROW, aCurrShapeEnumCommand[ 2 ] ));
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_FLOWCHART, aCurrShapeEnumCommand[ 3 ] ));
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_CALLOUT, aCurrShapeEnumCommand[ 4 ] ));
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
-        rSet.Put(SfxStringItem(SID_DRAWTBX_CS_STAR, aCurrShapeEnumCommand[ 5 ] ));
+    //highlight selected custom shape
+    {
+        USHORT nCurrentSId = 0;
+        if (pFuActual)
+            nCurrentSId = pFuActual->GetSlotID();
+
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_BASIC == nCurrentSId ));
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_SYMBOL, SID_DRAWTBX_CS_SYMBOL == nCurrentSId ));
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_ARROW == nCurrentSId ));
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_FLOWCHART, SID_DRAWTBX_CS_FLOWCHART == nCurrentSId ));
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_CALLOUT,SID_DRAWTBX_CS_CALLOUT == nCurrentSId ));
+        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
+            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_STAR, SID_DRAWTBX_CS_STAR == nCurrentSId ));
+    }
 
     if ( bDisableEditHyperlink || GetDocSh()->IsReadOnly() )
         rSet.DisableItem( SID_EDIT_HYPERLINK );
