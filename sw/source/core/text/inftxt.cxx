@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 08:53:44 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,6 +1173,11 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
 
 #ifdef VERTICAL_LAYOUT
         SwRect aTmpRect( aTmp, aSize );
+
+#ifdef BIDI
+        if ( GetTxtFrm()->IsRightToLeft() )
+            GetTxtFrm()->SwitchLTRtoRTL( aTmpRect );
+#endif
 
         if ( GetTxtFrm()->IsVertical() )
             GetTxtFrm()->SwitchHorizontalToVertical( aTmpRect );
