@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-15 08:38:41 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 VCLXMenu::VCLXMenu() : maMenuListeners( *this )
 {
     mpMenu = NULL;
+}
+
+VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
+{
+    mpMenu = pMenu;
 }
 
 VCLXMenu::~VCLXMenu()
@@ -177,6 +182,8 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 case VCLEVENT_MENU_DEHIGHLIGHT:
                 case VCLEVENT_MENU_DISABLE:
                 case VCLEVENT_MENU_ITEMTEXTCHANGED:
+                case VCLEVENT_MENU_ITEMCHECKED:
+                case VCLEVENT_MENU_ITEMUNCHECKED:
                 break;
 
                 default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
@@ -389,4 +396,60 @@ sal_Int16 VCLXMenu::execute( const ::com::sun::star::uno::Reference< ::com::sun:
 }
 
 
+void SAL_CALL VCLXMenu::setCommand( sal_Int16 nItemId, const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
+    if ( mpMenu )
+        mpMenu->SetItemCommand( nItemId, aCommand );
+}
+
+::rtl::OUString SAL_CALL VCLXMenu::getCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::rtl::OUString aItemCommand;
+    if ( mpMenu )
+        aItemCommand = mpMenu->GetItemCommand( nItemId );
+    return aItemCommand;
+}
+
+void SAL_CALL VCLXMenu::setHelpCommand( sal_Int16 nItemId, const ::rtl::OUString& aHelp ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    if ( mpMenu )
+        mpMenu->SetHelpCommand( nItemId, aHelp );
+}
+
+::rtl::OUString SAL_CALL VCLXMenu::getHelpCommand( sal_Int16 nItemId ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    ::rtl::OUString aHelpCommand;
+    if ( mpMenu )
+        aHelpCommand = mpMenu->GetHelpCommand( nItemId );
+    return aHelpCommand;
+}
+
+//  ----------------------------------------------------
+//  class VCLXMenuBar
+//  ----------------------------------------------------
+
+VCLXMenuBar::VCLXMenuBar()
+{
+    ImplCreateMenu( FALSE );
+}
+
+VCLXMenuBar::VCLXMenuBar( MenuBar* pMenuBar ) : VCLXMenu( (Menu *)pMenuBar )
+{
+}
+
+//  ----------------------------------------------------
+//  class VCLXPopupMenu
+//  ----------------------------------------------------
+
+VCLXPopupMenu::VCLXPopupMenu()
+{
+    ImplCreateMenu( TRUE );
+}
