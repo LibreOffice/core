@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
+#   last change: $Author: dbo $ $Date: 2002-08-22 14:41:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,15 @@ SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
+
+.IF "$(debug)" != ""
+
+# msvc++: no inlining
+.IF "$(COM)" == "MSC"
+CFLAGS += -Ob0
+.ENDIF
+
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-22 12:28:54 $
+ *  last change: $Author: dbo $ $Date: 2002-08-22 14:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <hash_map>
+#include <hash_set>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -138,7 +139,8 @@ struct hash_ptr
     inline size_t operator() ( void * p ) const
         { return (size_t)p; }
 };
-typedef hash_map< void *, uno_Interface *, hash_ptr, equal_to< void * > > t_receiver2adapter_map;
+typedef hash_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
+typedef hash_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
 
 //==================================================================================================
 class FactoryImpl
@@ -159,7 +161,7 @@ public:
     typelib_TypeDescription * m_pConvertToTD;
 
     Mutex m_mutex;
-    t_receiver2adapter_map m_map;
+    t_ptr_map m_receiver2adapters;
 
     FactoryImpl( Reference< XComponentContext > const & xContext ) SAL_THROW( (RuntimeException) );
     virtual ~FactoryImpl() SAL_THROW( () );
@@ -217,14 +219,58 @@ struct AdapterImpl
         void * pDest, typelib_TypeDescriptionReference * pType, uno_Any * pSource )
         SAL_THROW( () );
 
+    inline void acquire()
+        SAL_THROW( () );
+    inline void release()
+        SAL_THROW( () );
+    inline ~AdapterImpl()
+        SAL_THROW( () );
     inline AdapterImpl(
         void * key, Reference< script::XInvocation > const & xReceiver,
         const Sequence< Type > & rTypes,
         FactoryImpl * pFactory )
         SAL_THROW( (RuntimeException) );
-    inline ~AdapterImpl()
-        SAL_THROW( () );
 };
+//__________________________________________________________________________________________________
+inline AdapterImpl::~AdapterImpl()
+    SAL_THROW( () )
+{
+    for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
+    {
+        ::typelib_typedescription_release(
+            (typelib_TypeDescription *)m_pInterfaces[ nPos ].m_pTypeDescr );
+    }
+    delete [] m_pInterfaces;
+    //
+    (*m_pReceiver->release)( m_pReceiver );
+    m_pFactory->release();
+}
+//__________________________________________________________________________________________________
+inline void AdapterImpl::acquire()
+    SAL_THROW( () )
+{
+    ::osl_incrementInterlockedCount( &m_nRef );
+}
+//__________________________________________________________________________________________________
+inline void AdapterImpl::release()
+    SAL_THROW( () )
+{
+    MutexGuard guard( m_pFactory->m_mutex );
+    if (! ::osl_decrementInterlockedCount( &m_nRef ))
+    {
+        t_ptr_map::iterator iFind( m_pFactory->m_receiver2adapters.find( m_key ) );
+        OSL_ASSERT( m_pFactory->m_receiver2adapters.end() != iFind );
+        t_ptr_set & adapter_set = iFind->second;
+        size_t erased = adapter_set.erase( this );
+        OSL_ASSERT( 1 == erased );
+        if (adapter_set.empty())
+        {
+            m_pFactory->m_receiver2adapters.erase( iFind );
+            OSL_ASSERT( 1 == erased );
+        }
+        delete this;
+    }
+}
 
 //--------------------------------------------------------------------------------------------------
 static inline type_equals(
@@ -530,39 +576,18 @@ void AdapterImpl::invoke(
     // cleanup constructed in params
     ::uno_destructData( &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0 );
 }
-//__________________________________________________________________________________________________
-inline AdapterImpl::~AdapterImpl()
-{
-    for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
-    {
-        ::typelib_typedescription_release(
-            (typelib_TypeDescription *)m_pInterfaces[ nPos ].m_pTypeDescr );
-    }
-    delete [] m_pInterfaces;
-    //
-    (*m_pReceiver->release)( m_pReceiver );
-    m_pFactory->release();
-}
 
 extern "C"
 {
 //__________________________________________________________________________________________________
 static void SAL_CALL adapter_acquire( uno_Interface * pUnoI )
 {
-    ::osl_incrementInterlockedCount(
-        &static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->m_nRef );
+    static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->acquire();
 }
 //__________________________________________________________________________________________________
 static void SAL_CALL adapter_release( uno_Interface * pUnoI )
 {
-    AdapterImpl * pThis = static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
-    MutexGuard guard( pThis->m_pFactory->m_mutex );
-    if (! ::osl_decrementInterlockedCount( &pThis->m_nRef ))
-    {
-        size_t erased = pThis->m_pFactory->m_map.erase( pThis->m_key );
-        OSL_ASSERT( 1 == erased );
-        delete pThis;
-    }
+    static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter->release();
 }
 //__________________________________________________________________________________________________
 static void SAL_CALL adapter_dispatch(
@@ -574,20 +599,20 @@ static void SAL_CALL adapter_dispatch(
     {
     case 0: // queryInterface()
     {
-        AdapterImpl * pThis =
+        AdapterImpl * that =
             static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
         *ppException = 0; // no exc
         typelib_TypeDescriptionReference * pDemanded =
             *(typelib_TypeDescriptionReference **)pArgs[0];
         // pInterfaces[0] is XInterface
-        for ( sal_Int32 nPos = 0; nPos < pThis->m_nInterfaces; ++nPos )
+        for ( sal_Int32 nPos = 0; nPos < that->m_nInterfaces; ++nPos )
         {
-            typelib_InterfaceTypeDescription * pTD = pThis->m_pInterfaces[nPos].m_pTypeDescr;
+            typelib_InterfaceTypeDescription * pTD = that->m_pInterfaces[nPos].m_pTypeDescr;
             while (pTD)
             {
                 if (type_equals( ((typelib_TypeDescription *)pTD)->pWeakRef, pDemanded ))
                 {
-                    uno_Interface * pUnoI = &pThis->m_pInterfaces[nPos];
+                    uno_Interface * pUnoI = &that->m_pInterfaces[nPos];
                     ::uno_any_construct(
                         (uno_Any *)pReturn, &pUnoI, (typelib_TypeDescription *)pTD, 0 );
                     return;
@@ -609,18 +634,18 @@ static void SAL_CALL adapter_dispatch(
 
     default:
     {
-        AdapterImpl * pThis =
+        AdapterImpl * that =
             static_cast< InterfaceAdapterImpl * >( pUnoI )->m_pAdapter;
         if (pMemberType->eTypeClass == typelib_TypeClass_INTERFACE_METHOD) // method
         {
-            pThis->invoke( pMemberType, pReturn, pArgs, ppException );
+            that->invoke( pMemberType, pReturn, pArgs, ppException );
         }
         else // attribute
         {
             if (pReturn)
-                pThis->getValue( pMemberType, pReturn, pArgs, ppException );
+                that->getValue( pMemberType, pReturn, pArgs, ppException );
             else
-                pThis->setValue( pMemberType, pReturn, pArgs, ppException );
+                that->setValue( pMemberType, pReturn, pArgs, ppException );
         }
     }
     }
@@ -747,17 +772,57 @@ FactoryImpl::~FactoryImpl() SAL_THROW( () )
 
     (*m_pConverter->release)( m_pConverter );
 
+#ifdef DEBUG
+    OSL_ENSURE( m_receiver2adapters.empty(), "### still adapters out there!?" );
+#endif
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
-// XInvocationAdapterFactory
-//__________________________________________________________________________________________________
-Reference< XInterface > FactoryImpl::createAdapter(
-    const Reference< script::XInvocation > & xReceiver, const Type & rType )
-    throw (RuntimeException)
+
+//--------------------------------------------------------------------------------------------------
+static inline AdapterImpl * lookup_adapter(
+    t_ptr_set ** pp_adapter_set,
+    t_ptr_map & map, void * key, Sequence< Type > const & rTypes )
+    SAL_THROW( () )
 {
-    return createAdapter( xReceiver, Sequence< Type >( &rType, 1 ) );
+    t_ptr_set & adapters_set = map[ key ];
+    *pp_adapter_set = &adapters_set;
+    if (adapters_set.empty())
+        return 0; // shortcut
+    // find matching adapter
+    Type const * pTypes = rTypes.getConstArray();
+    sal_Int32 nTypes = rTypes.getLength();
+    t_ptr_set::const_iterator iPos( adapters_set.begin() );
+    t_ptr_set::const_iterator const iEnd( adapters_set.end() );
+    while (iEnd != iPos)
+    {
+        AdapterImpl * that = reinterpret_cast< AdapterImpl * >( *iPos );
+        // iterate thru all types if that is a matching adapter
+        for ( sal_Int32 nPosTypes = nTypes; nPosTypes--; )
+        {
+            Type const & rType = pTypes[ nPosTypes ];
+            // find in adapter's type list
+            for ( sal_Int32 nPos = that->m_nInterfaces; nPos--; )
+            {
+                if (::typelib_typedescriptionreference_isAssignableFrom(
+                        rType.getTypeLibType(),
+                        ((typelib_TypeDescription *)that->
+                         m_pInterfaces[ nPos ].m_pTypeDescr)->pWeakRef ))
+                {
+                    // found
+                    break;
+                }
+            }
+            if (nPos < 0) // type not found => next adapter
+                break;
+        }
+        if (nPosTypes < 0) // all types found
+            return that;
+        ++iPos;
+    }
+    return 0;
 }
-// XInvocationAdapterFactory2
+
+// XInvocationAdapterFactory2 impl
 //__________________________________________________________________________________________________
 Reference< XInterface > FactoryImpl::createAdapter(
     const Reference< script::XInvocation > & xReceiver, const Sequence< Type > & rTypes )
@@ -766,47 +831,42 @@ Reference< XInterface > FactoryImpl::createAdapter(
     Reference< XInterface > xRet;
     if (xReceiver.is() && rTypes.getLength())
     {
-        uno_Interface * pAdapter;
+        t_ptr_set * adapter_set;
+        AdapterImpl * that;
         Reference< XInterface > xKey( xReceiver, UNO_QUERY );
         {
         ClearableMutexGuard guard( m_mutex );
-        t_receiver2adapter_map::const_iterator const iFind( m_map.find( xKey.get() ) );
-        if (m_map.end() == iFind) // no entry
+        that = lookup_adapter( &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
+        if (0 == that) // no entry
         {
             guard.clear();
-            // create adapter
-            AdapterImpl * that = new AdapterImpl(
-                xKey.get(), xReceiver, rTypes, this ); // already acquired: m_nRef == 1
-            pAdapter = &that->m_pInterfaces[ 0 ];
-
+            // create adapter; already acquired: m_nRef == 1
+            AdapterImpl * pNew = new AdapterImpl( xKey.get(), xReceiver, rTypes, this );
             // lookup again
             ClearableMutexGuard guard( m_mutex );
-            t_receiver2adapter_map::const_iterator const iFind( m_map.find( xKey.get() ) );
-            if (m_map.end() == iFind) // no entry
+            that = lookup_adapter( &adapter_set, m_receiver2adapters, xKey.get(), rTypes );
+            if (0 == that) // again no entry
             {
-                // insert
-                pair< t_receiver2adapter_map::iterator, bool > insertion(
-                    m_map.insert( t_receiver2adapter_map::value_type( xKey.get(), pAdapter ) ) );
+                pair< t_ptr_set::iterator, bool > insertion( adapter_set->insert( pNew ) );
                 OSL_ASSERT( insertion.second );
+                that = pNew;
             }
             else
             {
-                pAdapter = iFind->second;
-                (*pAdapter->acquire)( pAdapter );
+                that->acquire();
                 guard.clear();
-                delete that; // has never been inserted
+                delete pNew; // has never been inserted
             }
         }
-        else // entry found
+        else // found adapter
         {
-            pAdapter = iFind->second;
-            (*pAdapter->acquire)( pAdapter );
+            that->acquire();
         }
         }
-        // map adapter to C++
-        m_aUno2Cpp.mapInterface(
-            (void **)&xRet, pAdapter, ::getCppuType( &xRet ) );
-        (*pAdapter->release)( pAdapter );
+        // map one interface to C++
+        uno_Interface * pUnoI = &that->m_pInterfaces[ 0 ];
+        m_aUno2Cpp.mapInterface( (void **)&xRet, pUnoI, ::getCppuType( &xRet ) );
+        that->release();
         OSL_ASSERT( xRet.is() );
         if (! xRet.is())
         {
@@ -815,6 +875,14 @@ Reference< XInterface > FactoryImpl::createAdapter(
         }
     }
     return xRet;
+}
+// XInvocationAdapterFactory impl
+//__________________________________________________________________________________________________
+Reference< XInterface > FactoryImpl::createAdapter(
+    const Reference< script::XInvocation > & xReceiver, const Type & rType )
+    throw (RuntimeException)
+{
+    return createAdapter( xReceiver, Sequence< Type >( &rType, 1 ) );
 }
 
 // XServiceInfo
