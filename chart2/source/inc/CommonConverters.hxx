@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonConverters.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:29 $
+ *  last change: $Author: iha $ $Date: 2003-11-04 10:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,12 @@ com::sun::star::drawing::Direction3D
 com::sun::star::drawing::Direction3D
                 operator*( const com::sun::star::drawing::Direction3D& rDirection
                            , double fFraction);
+
+//-----------------------------------------------------------------------------
+/** Position3D == Position3D ?
+*/
+bool            operator==( const com::sun::star::drawing::Position3D& rPos1
+                           , const com::sun::star::drawing::Position3D& rPos2);
 
 //-----------------------------------------------------------------------------
 /** Sequence<double> -> Vector3D
