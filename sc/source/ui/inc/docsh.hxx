@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:13:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,18 +165,18 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     void            InitOptions();
     void            ResetDrawObjectShell();
 
-    BOOL            GetTabParam( const SfxItemSet* pArgs, USHORT nId, USHORT& rTab );
+    BOOL            GetTabParam( const SfxItemSet* pArgs, USHORT nId, SCTAB& rTab );
     BOOL            LoadCalc( SvStorage* pStor );
     BOOL            SaveCalc( SvStorage* pStor );
     BOOL            LoadXML( SfxMedium* pMedium, SvStorage* pStor );
     BOOL            SaveXML( SfxMedium* pMedium, SvStorage* pStor );
-    USHORT          GetSaveTab();
+    SCTAB           GetSaveTab();
     void            UpdateAllRowHeights();
 
     void            RemoveUnknownObjects();
 
     ULONG           DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                 BOOL bSimpleColWidth[MAXCOL+1] );
+                                 BOOL bSimpleColWidth[MAXCOLCOUNT] );
     ULONG           DBaseExport( const String& rFullFileName, CharSet eCharSet,
                                  BOOL& bHasMemo );
 
@@ -271,8 +271,8 @@ public:
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet &rSet );
-    void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, USHORT nCurTab );
-    void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, USHORT nCurTab );
+    void            ExecutePageStyle ( SfxViewShell& rCaller, SfxRequest& rReq, SCTAB nCurTab );
+    void            GetStatePageStyle( SfxViewShell& rCaller, SfxItemSet& rSet, SCTAB nCurTab );
 
     void            CompareDocument( ScDocument& rOtherDoc );
     void            MergeDocument( ScDocument& rOtherDoc );
@@ -287,7 +287,7 @@ public:
                     /// password was entered correctly.
     BOOL            ExecuteChangeProtectionDialog( BOOL bJustQueryIfProtected = FALSE );
 
-    void            SetPrintZoom( USHORT nTab, USHORT nScale, USHORT nPages );
+    void            SetPrintZoom( SCTAB nTab, USHORT nScale, USHORT nPages );
     BOOL            AdjustPrintZoom( const ScRange& rRange );
 
     void            LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellStyles, BOOL bPageStyles );
@@ -301,19 +301,19 @@ public:
     void            ErrorMessage( USHORT nGlobStrId );
     BOOL            IsEditable() const;
 
-    BOOL            AdjustRowHeight( USHORT nStartRow, USHORT nEndRow, USHORT nTab );
+    BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
 
     void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
                                     BOOL bRecord = TRUE, BOOL bApi = FALSE );
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
-    void            UseScenario( USHORT nTab, const String& rName, BOOL bRecord = TRUE );
-    USHORT          MakeScenario( USHORT nTab, const String& rName, const String& rComment,
+    void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );
+    SCTAB           MakeScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags,
                                     ScMarkData& rMark, BOOL bRecord = TRUE );
-    void            ModifyScenario( USHORT nTab, const String& rName, const String& rComment,
+    void            ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
                                     const Color& rColor, USHORT nFlags );
-    BOOL            MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bRecord );
+    BOOL            MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRecord );
 
     void            DoRecalc( BOOL bApi );
     void            DoHardRecalc( BOOL bApi );
@@ -326,7 +326,7 @@ public:
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();
 
-    void            DBAreaDeleted( USHORT nTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
+    void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark );
 
     void            UpdateLinks();          // Link-Eintraege aktuallisieren
@@ -334,19 +334,19 @@ public:
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
 
-    void            PostPaint( USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
-                            USHORT nEndCol, USHORT nEndRow, USHORT nEndTab, USHORT nPart,
+    void            PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, USHORT nPart,
                             USHORT nExtFlags = 0 );
     void            PostPaint( const ScRange& rRange, USHORT nPart, USHORT nExtFlags = 0 );
 
-    void            PostPaintCell( USHORT nCol, USHORT nRow, USHORT nTab );
+    void            PostPaintCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            PostPaintGridAll();
     void            PostPaintExtras();
 
     void            PostDataChanged();
 
-    void            UpdatePaintExt( USHORT& rExtFlags, USHORT nStartCol, USHORT nStartRow, USHORT nStartTab,
-                                                       USHORT nEndCol, USHORT nEndRow, USHORT nEndTab );
+    void            UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+                                                       SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab );
     void            UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange );
 
     void            SetDocumentModified( BOOL bIsModified = TRUE );
@@ -374,7 +374,7 @@ public:
     void            CalcOutputFactor();
     double          GetOutputFactor() const;
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
-                                               USHORT            nCurTab,
+                                               SCTAB             nCurTab,
                                                BOOL&             rbHeader,
                                                BOOL&             rbFooter );
 
@@ -404,7 +404,7 @@ public:
     VirtualDevice*  GetVirtualDevice_100th_mm();
 
     static ScViewData* GetViewData();
-    static USHORT      GetCurTab();
+    static SCTAB       GetCurTab();
 
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
