@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-20 13:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,8 @@ sal_Bool OCopyTable::LeavePage()
             {
                 xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xSourceObject;
                 m_pParent->loadData();
+                // #90027#
+                m_pParent->CheckColumns();
             }
             if(!m_pParent->m_xSourceObject.is())
             {
@@ -328,6 +330,8 @@ sal_Bool OCopyTable::LeavePage()
                 {
                     xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xSourceObject;
                     m_pParent->loadData();
+                    // #90027#
+                    m_pParent->CheckColumns();
                 }
 
                 if(!m_pParent->m_xSourceObject.is())
