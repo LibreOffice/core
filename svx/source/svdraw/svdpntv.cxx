@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:33:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,27 +293,12 @@ void FrameAnimator::Invert(OutputDevice* pNewOut) const
 
 SdrViewWinRec::SdrViewWinRec(OutputDevice* pW)
 :   pWin(pW),
-//  pVDev(NULL),
-//  pIAOManager(NULL),
     bXorVisible(FALSE)
 {
-    // is it a window?
-    //if(pW && pW->GetOutDevType() == OUTDEV_WINDOW)
-    //{
-    //  // create B2dIAOManager for this window
-    //  pIAOManager = new B2dIAOManager((Window*)pW);
-    //}
 }
 
 SdrViewWinRec::~SdrViewWinRec()
 {
-//  if (pVDev!=NULL)
-//      delete pVDev;
-
-    // cleanup IAOManager for this window
-    //if(pIAOManager)
-    //  delete pIAOManager;
-    //pIAOManager = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -393,8 +378,6 @@ void SdrPaintView::ImpClearVars()
     mbGrafDraftPrn=FALSE;
     mbTextDraftPrn=FALSE;
 
-    // bObjectPaintIgnoresClipping=FALSE;
-
     eAnimationMode = SDR_ANIMATION_ANIMATE;
     bAnimationPause = FALSE;
 
@@ -404,18 +387,12 @@ void SdrPaintView::ImpClearVars()
     nMinMovLog=0;
     pActualOutDev=NULL;
 
-    // bSaveHiddenPages=FALSE;
     bPageTwice=FALSE;
     pDragWin=NULL;
     bRestoreColors=TRUE;
-    // pDisabledAttr=NULL;
     pDefaultStyleSheet=NULL;
     bEncircle=FALSE;
     bSomeObjChgdFlag=FALSE;
-
-    //(#110094#-5)bMasterBmp=FALSE;
-    //(#110094#-5)pMasterBmp=NULL;
-    //(#110094#-5)nMasterCacheMode = SDR_MASTERPAGECACHE_DEFAULT;
 
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
 
@@ -442,7 +419,6 @@ void SdrPaintView::ImpClearVars()
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
     aPagV(1024,16,16),
-    // aPagHide(1024,16,16),
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
     aUserMarkers(1024,16,16),
@@ -463,7 +439,6 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
     aPagV(1024,16,16),
-    // aPagHide(1024,16,16),
     aAni(*(SdrView*)this),
     aDefaultAttr(pModel1->GetItemPool()),
     aUserMarkers(1024,16,16),
@@ -502,13 +477,6 @@ SdrPaintView::~SdrPaintView()
     if (!bForeignXOut && pXOut!=NULL) {
         delete pXOut;
     }
-    //if (pDisabledAttr!=NULL) {
-    //  delete pDisabledAttr;
-    //}
-//#110094#-7
-//  if (pMasterBmp!=NULL) {
-//      delete pMasterBmp;
-//  }
 #ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) {
         delete pItemBrowser;
@@ -526,8 +494,6 @@ SdrPaintView::~SdrPaintView()
 void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
     BOOL bObjChg=!bSomeObjChgdFlag; // TRUE= auswerten fuer ComeBack-Timer
-    //(#110094#-5)BOOL bMaster=pMasterBmp!=NULL;    // TRUE= auswerten fuer MasterPagePaintCache
-    //(#110094#-5)if (bObjChg || bMaster) {
     if (bObjChg) {
         SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
         if (pSdrHint!=NULL) {
@@ -537,13 +503,6 @@ void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCTyp
                     bSomeObjChgdFlag=TRUE;
                     aComeBackTimer.Start();
                 }
-                // (#110094#-5)
-                //if (bMaster) {
-                //  const SdrPage* pPg=pSdrHint->GetPage();
-                //  if (pPg!=NULL && pPg->IsMasterPage() && pPg->GetPageNum()==pMasterBmp->GetMasterPageNum()) {
-                //      ReleaseMasterPagePaintCache();
-                //  }
-                //}
             }
             if (eKind==HINT_PAGEORDERCHG) {
                 const SdrPage* pPg=pSdrHint->GetPage();
@@ -558,13 +517,7 @@ void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCTyp
                         }
                     }
                 }
-                //(#110094#-5)
-                //if (bMaster) ReleaseMasterPagePaintCache();
             }
-            // (#110094#-5)
-            //if (eKind==HINT_PAGECHG) {
-            //  if (bMaster) ReleaseMasterPagePaintCache();
-            //}
         }
     }
 
@@ -588,77 +541,9 @@ IMPL_LINK_INLINE_START(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
 
 IMPL_LINK_INLINE_END(SdrPaintView,ImpComeBackHdl,Timer*,pTimer)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// #111097#
-//struct ImpAsyncStruct
-//{
-//  const SdrObject*    mpObj;
-//  const OutputDevice* mpOut;
-//  const Rectangle     maRectPix;
-//
-//                      ImpAsyncStruct( const SdrObject* pObj, const OutputDevice* pOut ) :
-//                          mpObj( pObj ), mpOut( pOut ), maRectPix( pOut->LogicToPixel( pObj->GetBoundRect() ) ) {}
-//};
-
-// #111097#
-//void SdrPaintView::ImpAddAsyncObj( const SdrObject* pObj, const OutputDevice* pOut )
-//{
-//  aAsyncPaintList.Insert( new ImpAsyncStruct( pObj, pOut ), LIST_APPEND );
-//}
-
-// #111097#
-//void SdrPaintView::ImpAsyncPaintDone( const SdrObject* pObj )
-//{
-    // #110290# Remove the given object from the
-    // maSwappedInGraphicsStack list, as the object
-    // itself caters for swapout again.
-    //maSwappedInGraphicsStack.remove( (SdrGrafObj*)pObj );
-//}
-
 // #111097#
 IMPL_LINK(SdrPaintView,ImpAfterPaintHdl,Timer*,pTimer)
 {
-//  while( aAsyncPaintList.Count() )
-//  {
-//      Rectangle           aInvRect;
-//      const OutputDevice* pOut = NULL;
-//
-//      for( void* p = aAsyncPaintList.First(); p;  )
-//      {
-//          ImpAsyncStruct* pAsync = (ImpAsyncStruct*) p;
-//          BOOL            bMatch = TRUE;
-//
-//          if( pAsync->mpObj && pAsync->mpObj->ISA( SdrGrafObj) )
-//            {
-//                // #110290# Store swapped-in graphic, such that we can later
-//                // force-swap it out, when this view is cleared.
-//                maSwappedInGraphicsStack.push_front( (SdrGrafObj*) pAsync->mpObj );
-//
-//              ( (SdrGrafObj*) pAsync->mpObj )->ForceSwapIn();
-//            }
-//
-//          if( !pOut )
-//              pOut = pAsync->mpOut;
-//          else if( pOut != pAsync->mpOut )
-//              bMatch = FALSE;
-//
-//          if( bMatch )
-//          {
-//              aInvRect.Union( pAsync->maRectPix );
-//              delete (ImpAsyncStruct*) aAsyncPaintList.Remove();
-//              p = aAsyncPaintList.GetCurObject();
-//          }
-//          else
-//              p = aAsyncPaintList.Next();
-//      }
-//
-//      if( OUTDEV_WINDOW == pOut->GetOutDevType() )
-//          ( (Window*) pOut )->Invalidate( pOut->PixelToLogic( aInvRect ) );
-//  }
-//
-//  ((SdrMarkView*)this)->ImpAfterPaint();
-
     // refresh outside of paint to get the handles displayed correctly. This
     // will be removed and also the AfterPaintTimer as soon as the handles will
     // be handled with the normal paints.
@@ -693,11 +578,6 @@ void SdrPaintView::ModelHasChanged()
         SdrPageView* pPV=GetPageViewPvNum(nv);
         pPV->ModelHasChanged();
     }
-    //nAnz=GetPageHideCount();
-    //for (nv=0; nv<nAnz; nv++) {
-    //  SdrPageView* pPV=GetPageHidePvNum(nv);
-    //  pPV->ModelHasChanged();
-    //}
 #ifndef SVX_LIGHT
     if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
@@ -944,15 +824,6 @@ void SdrPaintView::ClearPageViews()
     aPagV.Clear();
 }
 
-//void SdrPaintView::ClearHideViews()
-//{
-//  for (USHORT nh=0; nh<GetPageHideCount(); nh++) {
-//      SdrPageView* pPV=GetPageHidePvNum(nh);
-//      delete pPV;
-//  }
-//  aPagHide.Clear();
-//}
-
 void SdrPaintView::Clear()
 {
     ClearPageViews();
@@ -961,16 +832,7 @@ void SdrPaintView::Clear()
 
 void SdrPaintView::ClearAll()
 {
-    // #111097#
-    //for( void* p = aAsyncPaintList.First(); p; p = aAsyncPaintList.Next() )
-    //  delete (ImpAsyncStruct*) p;
-    //aAsyncPaintList.Clear();
-
     ClearPageViews();
-    // ClearHideViews();
-
-    // #111097#
-    //ImpForceSwapOut();
 }
 
 SdrPageView* SdrPaintView::ShowPage(SdrPage* pPage, const Point& rOffs)
@@ -980,21 +842,10 @@ SdrPageView* SdrPaintView::ShowPage(SdrPage* pPage, const Point& rOffs)
         SdrPageView* pTmpPV=NULL;
         if (!bPageTwice) pTmpPV=GetPageView(pPage); // Evtl. jede Seite nur einmal!
         if (pTmpPV==NULL) {
-            //USHORT nPos=GetHiddenPV(pPage);   // War die schon mal da?
-            //if (nPos<GetPageHideCount()) {
-            //  pPV=GetPageHidePvNum(nPos);
-            //  aPagHide.Remove(nPos);
-            //  pPV->SetOffset(rOffs);
-            //} else {
-                pPV=new SdrPageView(pPage,rOffs,*((SdrView*)this));
-            //}
+            pPV=new SdrPageView(pPage,rOffs,*((SdrView*)this));
             if (pPV!=NULL) {
                 aPagV.Insert(pPV,CONTAINER_APPEND);
                 pPV->Show();
-
-                // #110290# Swap out graphics when switching pages
-                // #111097#
-                // ImpForceSwapOut();
             }
         }
     }
@@ -1018,11 +869,7 @@ void SdrPaintView::HidePage(SdrPageView* pPV)
         if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
             aPagV.Remove(nPos);
             pPV->Hide();
-            //if (bSaveHiddenPages) {
-            //  aPagHide.Insert(pPV,CONTAINER_APPEND);
-            //} else {
-                delete pPV;
-            //}
+            delete pPV;
         }
     }
 }
@@ -1115,26 +962,6 @@ SdrPageView* SdrPaintView::HitPage(const Point& rPnt) const
     return pHit;
 }
 
-//USHORT SdrPaintView::GetHiddenPV(const SdrPage* pPage) const
-//{
-//  BOOL bWeiter=TRUE;
-//  USHORT i;
-//  for (i=0; i<GetPageHideCount() && bWeiter;) {
-//      SdrPageView* pPV=GetPageHidePvNum(i);
-//      bWeiter=(pPV->GetPage()!=pPage);
-//      if (bWeiter) i++;
-//  }
-//  return i;
-//}
-
-//USHORT SdrPaintView::GetPageHideNum(const SdrPageView* pPV) const
-//{
-//  if (pPV==NULL) return 0xFFFF;
-//  ULONG nNum=aPagHide.GetPos(pPV);
-//  if (nNum==CONTAINER_ENTRY_NOTFOUND) nNum=0xFFFF;
-//  return USHORT(nNum);
-//}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrPaintView::AddWin(OutputDevice* pWin1)
@@ -1183,39 +1010,6 @@ Rectangle SdrPaintView::GetVisibleArea( USHORT nNum )
 
     return Rectangle();
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//#110094#-10
-//TRISTATE SdrPaintView::IsLayerSetVisible(const XubString& rName) const
-//{
-//  TRISTATE nRet=FALSE;
-//  USHORT i=0;
-//  BOOL b1st=TRUE;
-//  while (i<GetPageViewCount() && nRet!=FUZZY) {
-//      SdrPageView* pPV=GetPageViewPvNum(i);
-//      BOOL bOn=pPV->IsLayerSetVisible(rName);
-//      if (b1st) {
-//          nRet=bOn;
-//          b1st=FALSE;
-//      } else {
-//          if (nRet!=bOn) nRet=FUZZY;
-//      }
-//      i++;
-//  }
-//  return nRet;
-//}
-
-//#110094#-10
-//void SdrPaintView::ShowLayerSet(const XubString& rName, BOOL bShow)
-//{
-//  USHORT i;
-//  for (i=0; i<GetPageViewCount(); i++) {
-//      SdrPageView* pPV=GetPageViewPvNum(i);
-//      pPV->ShowLayerSet(rName,bShow);
-//  }
-//  InvalidateAllWin();
-//}
 
 void SdrPaintView::SetLayerVisible(const XubString& rName, BOOL bShow)
 {
@@ -1331,15 +1125,15 @@ void SdrPaintView::SetAllLayersPrintable(BOOL bPrn)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrPaintView::InitRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMode, const Link* pPaintProc)
+void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, USHORT nPaintMode,
+    ::sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     for (USHORT i=0; i<GetPageViewCount(); i++) {
         SdrPageView* pPV=GetPageViewPvNum(i);
-        pPV->InitRedraw(pOut,rReg,nPaintMode,pPaintProc);
+        pPV->CompleteRedraw(pOut, rReg, nPaintMode, pRedirector);
     }
     USHORT nWinNum=aWinList.Find(pOut);
     if (nWinNum!=SDRVIEWWIN_NOTFOUND) {
-        //((SdrMarkView*)this)->AfterInitRedraw(nWinNum);
         if (IsShownXorVisibleWinNum(nWinNum)) { // Durch Invalidate zerstoerte Handles wiederherstellen
             OutputDevice* pOut=GetWin(nWinNum);
             if (pOut!=NULL && pOut->GetOutDevType()!=OUTDEV_PRINTER) {
@@ -1359,8 +1153,6 @@ B2dIAOManager* SdrPaintView::GetIAOManager(OutputDevice* pOut) const
         for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
         {
             SdrPageView* pPageView = GetPageViewPvNum(a);
-            // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
             for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
             {
@@ -1384,12 +1176,9 @@ B2dIAOManager* SdrPaintView::GetFirstIAOManager() const
     if(GetPageViewCount())
     {
         SdrPageView* pPageView = GetPageViewPvNum(0);
-        // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-        // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
         if(pPageView->WindowCount())
         {
-            // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[0];
             const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(0);
             return rPageViewWindow.GetIAOManager();
         }
@@ -1403,12 +1192,9 @@ void SdrPaintView::RefreshAllIAOManagers() const
     for(sal_uInt16 a(0); a < GetPageViewCount(); a++)
     {
         SdrPageView* pPageView = GetPageViewPvNum(a);
-        // const SdrPageViewWinList& rPageViewWinList = pPageView->GetWinList();
-        // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
 
         for(sal_uInt32 b(0L); b < pPageView->WindowCount(); b++)
         {
-            // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
             const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(b);
 
             if(rPageViewWindow.GetIAOManager())
@@ -1424,57 +1210,11 @@ BOOL SdrPaintView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
     return FALSE;
 }
 
-//void SdrPaintView::InitRedraw(USHORT nWinNum, const Region& rReg, USHORT nPaintMode)
-//{
-//  for (USHORT i=0; i<GetPageViewCount(); i++) {
-//      SdrPageView* pPV=GetPageViewPvNum(i);
-//      pPV->InitRedraw(nWinNum,rReg,nPaintMode,NULL);
-//  }
-//  //((SdrMarkView*)this)->AfterInitRedraw(nWinNum);
-//  if (IsShownXorVisibleWinNum(nWinNum)) { // Durch Invalidate zerstoerte Handles wiederherstellen
-//      OutputDevice* pOut=GetWin(nWinNum);
-//      if (pOut!=NULL && pOut->GetOutDevType()!=OUTDEV_PRINTER) {
-//          ToggleShownXor(pOut,&rReg);
-//      }
-//  }
-//
-//  // #111097#
-//  //RestartAfterPaintTimer();
-//}
-
-//void SdrPaintView::PostPaint()
-//{
-//  // refresh with Paint-functionality
-//  RefreshAllIAOManagers();
-//}
-
 // #111097#
 void SdrPaintView::RestartAfterPaintTimer()
 {
     maAfterPaintTimer.Start();
 }
-
-//BOOL SdrPaintView::IsRedrawReady() const
-//{
-//  BOOL bOk=TRUE;
-//  for (USHORT i=0; i<GetPageViewCount() && bOk; i++) {
-//      SdrPageView* pPV=GetPageViewPvNum(i);
-//      bOk=pPV->IsReady();
-//  }
-//  return bOk;
-//}
-
-// #110094#-5
-//BOOL SdrPaintView::RedrawOne(USHORT nBrkEvent)
-//{
-//  return TRUE;
-//}
-
-// #110094#-5
-//BOOL SdrPaintView::RedrawUntilInput(USHORT nBrkEvent)
-//{
-//  return TRUE;
-//}
 
 void SdrPaintView::GlueInvalidate() const
 {
@@ -1577,34 +1317,6 @@ BOOL SdrPaintView::IsGroupEntered() const
     }
     return bRet;
 }
-
-//(#110094#-5)
-//void SdrPaintView::SetMasterPagePaintCaching( BOOL bOn, ULONG nCacheMode )
-//{
-//  bMasterBmp = bOn;
-//
-//  if( bOn )
-//  {
-//      if( SDR_MASTERPAGECACHE_DEFAULT == nCacheMode || SDR_MASTERPAGECACHE_NONE == nCacheMode )
-//          nMasterCacheMode = SDR_MASTERPAGECACHE_FULL;
-//      else
-//          nMasterCacheMode = nCacheMode;
-//
-//      ReleaseMasterPagePaintCache();
-//  }
-//  else
-//      nMasterCacheMode = SDR_MASTERPAGECACHE_NONE;
-//}
-
-//(#110094#-5)
-//// z.B. rufen, wenn Obj der MPg geaendert
-//void SdrPaintView::ReleaseMasterPagePaintCache()
-//{
-//  if (pMasterBmp!=NULL) {
-//      delete pMasterBmp;
-//      pMasterBmp=NULL;
-//  }
-//}
 
 void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll)
 {
@@ -1721,23 +1433,6 @@ BOOL SdrPaintView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHar
     return TRUE;
 }
 
-//void SdrPaintView::SetDisabledAttr(const SfxItemSet* pNewDisabledAttr)
-//{
-//  if (pDisabledAttr!=NULL || pNewDisabledAttr!=NULL) {
-//      if (pDisabledAttr!=NULL) delete pDisabledAttr;
-//      pDisabledAttr=NULL;
-//      if (pNewDisabledAttr!=NULL) {
-//          pDisabledAttr=new SfxItemSet(*pNewDisabledAttr);
-//      }
-//      for (USHORT nv=0; nv<GetPageViewCount(); nv++) {
-//          SdrPageView* pPV=GetPageViewPvNum(nv);
-//          if (pPV->GetEnteredLevel()!=0) {
-//              InvalidateAllWin(pPV->GetPageRect());
-//          }
-//      }
-//  }
-//}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void SdrPaintView::ShowItemBrowser(BOOL bShow)
@@ -1773,12 +1468,6 @@ void SdrPaintView::WriteRecords(SvStream& rOut) const
                 rOut<<*pPV;
             }
         }
-        //for (nv=0; nv<GetPageHideCount(); nv++) {
-        //  SdrPageView* pPV=GetPageHidePvNum(nv);
-        //  if (pPV->GetPage()->IsInserted()) {
-        //      rOut<<*pPV;
-        //  }
-        //}
     } {
         SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWVISIELEM);
         rOut<<BOOL(sal_False /*bLayerSortedRedraw*/);
@@ -1949,13 +1638,6 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
             {
                 VisAreaChanged(*pWindow);
             }
-
-            //// Nur dieses eine OutDev
-            //USHORT nPos = pPV->GetWinList().Find((OutputDevice*) pOut);
-            //if (nPos != SDRPAGEVIEWWIN_NOTFOUND)
-            //{
-            //  VisAreaChanged(pPV->GetWinList()[nPos]);
-            //}
         }
         else
         {
@@ -1965,13 +1647,6 @@ void SdrPaintView::VisAreaChanged(const OutputDevice* pOut)
             {
                 VisAreaChanged(*pPV->GetWindow(a));
             }
-
-            //// Alle OutDevs
-            //USHORT nWinAnz = pPV->GetWinList().GetCount();
-            //for (USHORT nWinNum = 0; nWinNum < nWinAnz; nWinNum++)
-            //{
-            //  VisAreaChanged(pPV->GetWinList()[nWinNum]);
-            //}
         }
     }
 }
@@ -2173,19 +1848,6 @@ Color SdrPaintView::CalcBackgroundColor( const Rectangle& rArea,
 
     return aBackground;
 }
-
-// #111097#
-//void SdrPaintView::ImpForceSwapOut()
-//{
-    // #110290# Force swap out all graphics on this page. There might be
-    // some left, since every graphic that has not received a Draw yet,
-    // but is swapped in, has its swapout handler disabled.
-    //while( !maSwappedInGraphicsStack.empty() )
-    //{
-    //    maSwappedInGraphicsStack.front()->ForceSwapOut();
-    //    maSwappedInGraphicsStack.pop_front();
-    //}
-//}
 
 // #114898#
 sal_Bool SdrPaintView::IsBufferedOutputAllowed() const
