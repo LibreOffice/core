@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHyphenator.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ module com { module sun { module star { module linguistic2 {
     @see    <type scope="com::sun::star::linguistic2">LinguProperties</type>
     @see    <type scope="com::sun::star::linguistic2">XSupportedLocales</type>
 */
-interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
+published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
 {
     //-------------------------------------------------------------------------
     /** tries to find a valid hyphenation position relative
