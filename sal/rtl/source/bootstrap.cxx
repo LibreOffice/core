@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-21 15:06:50 $
+ *  last change: $Author: dbo $ $Date: 2002-10-23 09:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,38 +375,37 @@ static NameValueList s_rtl_bootstrap_set_list;
 
 static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
 {
-    static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
-    static const OUString sysUserHome  (RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
-    static const OUString sysBinDir    (RTL_CONSTASCII_USTRINGPARAM("SYSBINDIR"));
-
     sal_Bool result = sal_True;
 
-    // we have build ins:
-    if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysUserConfig.pData->buffer, sysUserConfig.pData->length))
+    getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
+    if (! *ppValue)
     {
-        oslSecurity security = osl_getCurrentSecurity();
-        osl_getConfigDir(security, ppValue);
-        osl_freeSecurityHandle(security);
-    }
-    else if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysUserHome.pData->buffer, sysUserHome.pData->length))
-    {
-        oslSecurity security = osl_getCurrentSecurity();
-        osl_getHomeDir(security, ppValue);
-        osl_freeSecurityHandle(security);
-    }
-    else if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysBinDir.pData->buffer, sysBinDir.pData->length))
-        getExecutableDirectory(ppValue);
-
-    else
-    {
-        getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
-         if (! *ppValue)
+        getFromCommandLineArgs(ppValue, pName);
+        if(!*ppValue)
         {
-            getFromCommandLineArgs(ppValue, pName);
-            if(!*ppValue)
+            getFromList(pNameValueList, ppValue, pName);
+            if( ! *ppValue )
             {
-                getFromList(pNameValueList, ppValue, pName);
-                if( ! *ppValue )
+                OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+
+                // fallbacks
+                if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
+                {
+                    oslSecurity security = osl_getCurrentSecurity();
+                    osl_getConfigDir(security, ppValue);
+                    osl_freeSecurityHandle(security);
+                }
+                else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME") ))
+                {
+                    oslSecurity security = osl_getCurrentSecurity();
+                    osl_getHomeDir(security, ppValue);
+                    osl_freeSecurityHandle(security);
+                }
+                else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSBINDIR") ))
+                {
+                    getExecutableDirectory(ppValue);
+                }
+                else
                 {
                     getFromEnvironment( ppValue, pName );
                     if( ! *ppValue )
