@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:22:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 #include <pdfwriter_impl.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
@@ -78,17 +81,6 @@
 #include <rtl/crc.h>
 
 #include "implncvt.hxx"
-
-#include <math.h>
-#ifdef WNT
-// Aaarrgh
-#define M_PI 3.14159265
-#endif
-
-#define ENABLE_COMPRESSION
-#if OSL_DEBUG_LEVEL < 2
-#define COMPRESS_PAGES
-#endif
 
 using namespace vcl;
 using namespace rtl;
@@ -349,7 +341,7 @@ void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
     rBuffer.append( ' ' );
     appendDouble( f[3], rBuffer );
     rBuffer.append( ' ' );
-    rPage.appendPoint( Point( f[4], f[5] ), rBuffer );
+    rPage.appendPoint( Point( (long)f[4], (long)f[5] ), rBuffer );
 }
 
 
@@ -384,7 +376,7 @@ void PDFWriterImpl::PDFPage::beginStream()
     aLine.append( " 0 obj\r\n<< /Length " );
     aLine.append( m_nStreamLengthObject );
     aLine.append( " 0 R\r\n" );
-#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
     aLine.append( "   /Filter /FlateDecode\r\n" );
 #endif
     aLine.append( ">>\r\nstream\r\n" );
@@ -395,7 +387,7 @@ void PDFWriterImpl::PDFPage::beginStream()
         osl_closeFile( m_pWriter->m_aFile );
         m_pWriter->m_bOpen = false;
     }
-#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+#if defined ( COMPRESS_PAGES ) && !defined ( DEBUG_DISABLE_PDFCOMPRESSION )
     m_pWriter->beginCompression();
 #endif
 }
@@ -773,7 +765,7 @@ void PDFWriterImpl::emitComment( const OString& rComment )
 
 void PDFWriterImpl::beginCompression()
 {
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     m_pCodec = new ZCodec( 0x4000, 0x4000 );
     m_pMemStream = new SvMemoryStream();
     m_pCodec->BeginCompression();
@@ -782,7 +774,7 @@ void PDFWriterImpl::beginCompression()
 
 void PDFWriterImpl::endCompression()
 {
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     if( m_pCodec )
     {
         m_pCodec->EndCompression();
@@ -1461,7 +1453,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                       "<< /Length " );
         aLine.append( nStreamLengthObject );
         aLine.append( " 0 R\r\n"
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
                       "   /Filter /FlateDecode\r\n"
 #endif
                       "   /Length1 " );
@@ -1822,7 +1814,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
                       "CMapName currentdict /CMap defineresource pop\r\n"
                       "end\r\n"
                       "end\r\n" );
-#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
     pCodec->BeginCompression();
@@ -1835,7 +1827,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
 
     aLine.append( nStream );
     aLine.append( " 0 obj\r\n<< /Length " );
-#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     sal_Int32 nLen = (sal_Int32)aStream.Tell();
     aStream.Seek( 0 );
     aLine.append( nLen );
@@ -1845,7 +1837,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
 #endif
     aLine.append( " >>\r\nstream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-#if defined COMPRESS_PAGES && defined ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     CHECK_RETURN( writeBuffer( aStream.GetData(), nLen ) );
 #else
     CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
@@ -2008,7 +2000,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
                               "<< /Length " );
                 aLine.append( (sal_Int32)nStreamLengthObject );
                 aLine.append( " 0 R\r\n"
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
                               "   /Filter /FlateDecode\r\n"
 #endif
                               "   /Length1 " );
@@ -3199,7 +3191,7 @@ void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
                                       const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     // TODO: pass nWidth as width of this mark
-    long nWidth = 0;
+    // long nWidth = 0;
 
     if ( rPolyPoly.Count() )
     {
@@ -3305,7 +3297,6 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, US
     Point       aPos            = rRect.TopLeft();
 
     long        nTextHeight     = m_pReferenceDevice->GetTextHeight();
-    TextAlign   eAlign          = m_aCurrentPDFState.m_aFont.GetAlign();
     xub_StrLen  nMnemonicPos    = STRING_NOTFOUND;
 
     String aStr = rOrigStr;
@@ -3580,7 +3571,14 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
             case UNDERLINE_WAVE:
             case UNDERLINE_DOUBLEWAVE:
             case UNDERLINE_BOLDWAVE:
-                bNormalLines = false;
+            {
+                bNormalLines = FALSE;
+            }
+            break;
+            default:
+            {
+                ; // No gcc warning
+            }
         }
     }
 
@@ -3772,12 +3770,8 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
             {
                 sal_Int32 nDashLength = 4*nLineHeight;
                 sal_Int32 nVoidLength = 2*nLineHeight;
-                switch( eUnderline )
-                {
-                    case UNDERLINE_LONGDASH:
-                    case UNDERLINE_BOLDLONGDASH:
-                        nDashLength = 8*nLineHeight;
-                }
+                if ( ( eUnderline == UNDERLINE_LONGDASH ) || ( eUnderline == UNDERLINE_BOLDLONGDASH ) )
+                    nDashLength = 8*nLineHeight;
 
                 aLine.append( "[ " );
                 m_aPages.back().appendMappedLength( nDashLength, aLine, false );
@@ -4256,21 +4250,6 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     else
         aLine.append( "f*\r\n" );
 
-#ifdef DEBUG_ARC
-    aLine.append( "0 1 1 RG " );
-    m_aPages.back().appendPoint( rStart, aLine );
-    aLine.append( " m " );
-    m_aPages.back().appendPoint( aCenter, aLine );
-    aLine.append( " l S 1 0 0 RG " );
-    m_aPages.back().appendPoint( aCenter, aLine );
-    aLine.append( " m " );
-    m_aPages.back().appendPoint( rStop, aLine );
-    aLine.append( " l S\r\n" );
-    aLine.append( "0 0 0 RG " );
-    m_aPages.back().appendRect( rRect );
-    aLine.append( " S\r\n" );
-#endif
-
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -4477,7 +4456,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
                   "   /Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\r\n"
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
                   "   /Filter /FlateDecode\r\n"
 #endif
                   ">>\r\n"
@@ -4698,7 +4677,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                   "   /Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\r\n" );
-#ifdef ENABLE_COMPRESSION
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
     aLine.append( "   /Filter /FlateDecode\r\n" );
 #endif
     if( ! bMask )
@@ -5166,6 +5145,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                         aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
                         aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
                         break;
+                    default: ;
                 }
             }
             else
