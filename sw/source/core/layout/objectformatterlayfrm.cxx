@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatterlayfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:27 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,13 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 
         // check, if the anchor frame of the object or the object's anchor
         // isn't on the given page frame
+        // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+        // have to be checked.
+        SwPageFrm* pPageFrmOfAnchor = pAnchoredObj->FindPageFrmOfAnchor();
         if ( pAnchoredObj->GetAnchorFrm()->FindPageFrm() != &rPageFrm ||
-             &pAnchoredObj->GetPageFrmOfAnchor() != &rPageFrm )
+             ( pPageFrmOfAnchor && pPageFrmOfAnchor != &rPageFrm ) )
+        // <--
         {
             // if format of object fails, stop formatting and pass fail to
             // calling method via the return value.
