@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 17:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,97 +59,256 @@
  *
  ************************************************************************/
 
-
+#include "osl/diagnose.h"
 #include "system.h"
 
-#include <osl/diagnose.h>
 
-/*
-    Trace output
-*/
+#ifndef HAVE_DLFCN_H
 
-static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
+#if defined(LINUX) || defined(SOLARIS)
+#define HAVE_DLFCN_H
+#endif  /* LINUX || SOLARIS */
 
-pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc )
+#endif  /* HAVE_DLFCN_H */
+
+
+#ifdef  HAVE_DLFCN_H
+
+#ifndef INCLUDED_DLFCN_H
+#include <dlfcn.h>
+#define INCLUDED_DLFCN_H
+#endif
+
+#endif  /* HAVE_DLFCN_H */
+
+
+#ifndef INCLUDED_PTHREAD_H
+#include <pthread.h>
+#define INCLUDED_PTHREAD_H
+#endif
+
+/************************************************************************/
+/* Internal data structures and functions */
+/************************************************************************/
+
+static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+typedef pfunc_osl_printDebugMessage oslDebugMessageFunc;
+static oslDebugMessageFunc volatile g_pDebugMessageFunc = 0;
+
+static void osl_diagnose_backtrace_Impl (
+    oslDebugMessageFunc f);
+
+static void osl_diagnose_frame_Impl (
+    oslDebugMessageFunc f,
+    int                 depth,
+    void *              pc);
+
+#define OSL_DIAGNOSE_OUTPUTMESSAGE(f, s) \
+((f != 0) ? (*(f))((s)) : (void)fprintf(stderr, "%s", (s)))
+
+/************************************************************************/
+/* osl_diagnose_frame_Impl */
+/************************************************************************/
+static void osl_diagnose_frame_Impl (
+    oslDebugMessageFunc f,
+    int                 depth,
+    void *              pc)
 {
-    pfunc_osl_printDebugMessage pOldFunc = _pPrintDebugMessage;
-    _pPrintDebugMessage = pNewFunc;
+    const char *fname = 0, *sname = 0;
+    void       *fbase = 0, *saddr = 0;
+    ptrdiff_t   offset;
+    char        szMessage[1024];
 
-    return pOldFunc;
+#ifdef INCLUDED_DLFCN_H
+    Dl_info dli;
+    if (dladdr (pc, &dli) != 0)
+    {
+        fname = dli.dli_fname;
+        fbase = dli.dli_fbase;
+        sname = dli.dli_sname;
+        saddr = dli.dli_saddr;
+    }
+#endif /* INCLUDED_DLFCN_H */
+
+    if (saddr)
+        offset = (ptrdiff_t)(pc) - (ptrdiff_t)(saddr);
+    else if (fbase)
+        offset = (ptrdiff_t)(pc) - (ptrdiff_t)(fbase);
+    else
+        offset = (ptrdiff_t)(pc);
+
+    snprintf (szMessage, sizeof(szMessage),
+              "Backtrace: [%d] %s: %s+0x%x\n",
+              depth,
+              fname ? fname : "<unknown>",
+              sname ? sname : "???",
+              offset);
+
+    OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
 }
 
+/************************************************************************/
+/* osl_diagnose_backtrace_Impl */
+/************************************************************************/
+#if defined(LINUX)
 
+#include <execinfo.h>
+
+#define FRAME_COUNT 64
+#define FRAME_OFFSET 1
+
+static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
+{
+    void * ppFrames[FRAME_COUNT];
+    int    i, n;
+
+    n = backtrace (ppFrames, FRAME_COUNT);
+    for (i = FRAME_OFFSET; i < n; i++)
+    {
+        osl_diagnose_frame_Impl (f, (i - FRAME_OFFSET), ppFrames[i]);
+    }
+}
+
+#elif defined(SOLARIS)
+
+#include <pthread.h>
+#include <setjmp.h>
+#include <sys/frame.h>
+
+#if defined(SPARC)
+
+#define FRAME_PTR_OFFSET 1
+#define FRAME_OFFSET 0
+
+#elif defined(INTEL)
+
+#define FRAME_PTR_OFFSET 3
+#define FRAME_OFFSET 1
+
+#endif /* (SPARC || INTEL) */
+
+static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
+{
+    struct frame * fp;
+    jmp_buf        ctx;
+    int            i;
+
+#if defined(SPARC)
+    asm("ta 3");
+#endif /* SPARC */
+    setjmp (ctx);
+    fp = (struct frame*)(((size_t*)(ctx))[FRAME_PTR_OFFSET]);
+
+    for (i = 0; (i < FRAME_OFFSET) && (fp != 0); i++)
+        fp = fp->fr_savfp;
+
+    for (i = 0; fp && fp->fr_savpc; i++)
+    {
+        osl_diagnose_frame_Impl (f, i, (void*)(fp->fr_savpc));
+        fp = fp->fr_savfp;
+    }
+}
+
+#else  /* (LINUX || SOLARIS) */
+
+static void osl_diagnose_backtrace_Impl (oslDebugMessageFunc f)
+{
+    /* not yet implemented */
+}
+
+#endif /* (LINUX || SOLARIS) */
+
+/************************************************************************/
+/* osl_assertFailedLine */
+/************************************************************************/
+sal_Bool SAL_CALL osl_assertFailedLine (
+    const sal_Char* pszFileName,
+    sal_Int32       nLine,
+    const sal_Char* pszMessage)
+{
+    oslDebugMessageFunc f = g_pDebugMessageFunc;
+    char                szMessage[1024];
+
+    /* format message into buffer */
+    if (pszMessage != 0)
+    {
+        snprintf(szMessage, sizeof(szMessage),
+                 "Assertion Failed: File %s, Line %lu: %s\n",
+                 pszFileName, nLine, pszMessage);
+    }
+    else
+    {
+        snprintf(szMessage, sizeof(szMessage),
+                 "Assertion Failed: File %s, Line %lu\n",
+                 pszFileName, nLine);
+    }
+
+    /* acquire lock to serialize output message(s) */
+    pthread_mutex_lock(&g_mutex);
+
+    /* output message buffer */
+    OSL_DIAGNOSE_OUTPUTMESSAGE(f, szMessage);
+
+    /* output backtrace */
+    osl_diagnose_backtrace_Impl(f);
+
+    /* release lock and leave, w/o calling osl_breakDebug() */
+    pthread_mutex_unlock(&g_mutex);
+    return sal_False;
+}
+
+/************************************************************************/
+/* osl_breakDebug */
+/************************************************************************/
 void SAL_CALL osl_breakDebug()
 {
     exit(0);
 }
 
-
-/* Uncomment this define to get profiling time output */
-/* #define OSL_PROFILING */
-
-void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
-{
-    va_list args;
-
-    va_start(args, lpszFormat);
-
-#if defined(OSL_PROFILING)
-    fprintf(stderr, "time : %06lu : ", osl_getGlobalTimer() );
-#else
-    fprintf(stderr,"Trace Message : ");
-#endif
-
-    vfprintf(stderr,lpszFormat, args);
-
-    fprintf(stderr,"\n");
-
-    fflush(stderr);
-
-    va_end(args);
-}
-
-sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nLine, const sal_Char* pszMessage)
-{
-
-    /* get app name or NULL if unknown (don't call assert) */
-    sal_Char* lpszAppName = "OSL";
-
-    if ( _pPrintDebugMessage )
-    {
-        sal_Char szMessage[1024];
-        szMessage[0] = '\0';
-
-        if(pszMessage != 0)
-            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu: %s\n",
-                        lpszAppName, pszFileName, nLine, pszMessage);
-        else
-            sprintf(szMessage, "Assertion Failed: %s: File %s, Line %lu:\n",
-                        lpszAppName, pszFileName, nLine);
-
-        _pPrintDebugMessage( szMessage );
-    }
-    else
-    {
-        /* format message into buffer */
-        if(pszMessage != 0)
-        {
-            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu: %s\n",
-                    lpszAppName, pszFileName, nLine, pszMessage);
-        }
-        else
-        {
-            fprintf(stderr, "Assertion Failed: %s: File %s, Line %lu:\n",
-                    lpszAppName, pszFileName, nLine);
-        }
-    }
-
-    return sal_False;   /* no abort */
-}
-
-sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
+/************************************************************************/
+/* osl_reportError */
+/************************************************************************/
+sal_Int32 SAL_CALL osl_reportError (
+    sal_uInt32      nType,
+    const sal_Char* pszMessage)
 {
     fputs(pszMessage, stderr);
     return 0;
 }
+
+/************************************************************************/
+/* osl_setDebugMessageFunc */
+/************************************************************************/
+oslDebugMessageFunc SAL_CALL osl_setDebugMessageFunc (
+    oslDebugMessageFunc pNewFunc)
+{
+    oslDebugMessageFunc pOldFunc = g_pDebugMessageFunc;
+    g_pDebugMessageFunc = pNewFunc;
+    return pOldFunc;
+}
+
+/************************************************************************/
+/* osl_trace */
+/************************************************************************/
+void SAL_CALL osl_trace (
+    const sal_Char* lpszFormat, ...)
+{
+    va_list args;
+
+#if defined(OSL_PROFILING)
+    fprintf(stderr, "Time: %06lu : ", osl_getGlobalTimer() );
+#else
+    fprintf(stderr, "Trace Message: ");
+#endif
+
+    va_start(args, lpszFormat);
+    vfprintf(stderr, lpszFormat, args);
+    va_end(args);
+
+    fprintf(stderr,"\n");
+    fflush(stderr);
+}
+
+/************************************************************************/
 
