@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-07-23 10:19:55 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,9 @@ void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
         case PARCEL:
             break;
         case SCRIPT:
+        // np adjust logicalName to be equal to function name
+        // as logical name concept has been removed
+        m_ScriptData.logicalname = m_ScriptData.functionname;
             mpv_ScriptDatas->push_back( m_ScriptData );
             m_ScriptData =  ScriptData();
             break;

@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.28 $
-*  last change: $Author: npower $ $Date: 2003-08-19 09:49:50 $
+*  $Revision: 1.29 $
+*  last change: $Author: npower $ $Date: 2003-10-15 08:29:37 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -769,7 +769,15 @@ throw ( lang::IllegalArgumentException,
         RuntimeException )
 {
     ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-
+// format is script:://[function_name]?language=[languge]&location=[location]
+// LogicalName is now not used anymore, further more the ScriptURI class
+// will be retired also and a new UNO service will be used. Additionally the
+// parcel-description will also need to be modified to remove logical name
+// ScriprtMetaDataImporter has been modified to ignore the Logical name
+// definined in the parcel-desc.xml. As an interim temp solution the  Datas_vec
+// structure that is returned from ScriptMetDataImporter sets the logicalname
+// to the function name. ScriptURI class has been changed in the same way.
+//
     Sequence< Reference< storage::XScriptInfo > > results;
     ScriptURI scriptURI( queryURI );
     OSL_TRACE( "getting impl for language %s, function name: %s",
@@ -798,7 +806,7 @@ throw ( lang::IllegalArgumentException,
 
     //find the implementations for the given language
     ScriptFunction_hash::const_iterator it_datas = h_it->second.find(
-        scriptURI.getFunctionName() );
+        scriptURI.getLogicalName() );
     ScriptFunction_hash::const_iterator it_datas_end = h_it->second.end();
 
     if ( it_datas == it_datas_end )

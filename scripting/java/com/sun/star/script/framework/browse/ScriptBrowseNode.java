@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:43 $
+ *  last change: $Author: npower $ $Date: 2003-10-15 08:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,8 @@ public class ScriptBrowseNode extends PropertySet implements XBrowseNode {
     public boolean deletable = false;
 
     public ScriptBrowseNode(ScriptEntry entry, String location) {
-        uri = "script://" + entry.getLogicalName() +
-            "?function=" + entry.getLanguageName() +
-            "&language=" + entry.getLanguage() +
+        uri = "script://" + entry.getFunctionName() +
+            "?" + "language=" + entry.getLanguage() +
             "&location=" + location;
 
         System.out.println("Creating ScriptBrowseNode: " + uri);
