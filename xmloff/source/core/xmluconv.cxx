@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:57:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
                     sal_True));
         if ( a100th.getLength() > 2 )
         {
-            rBuffer.append( sal_Unicode(','));
+            rBuffer.append( sal_Unicode('.'));
             rBuffer.append( a100th.copy( 2 ) );     // strip 0.
         }
     }
@@ -991,7 +991,7 @@ sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
                 nMins = nTemp;
                 nTemp = 0;
             }
-            else if ( c == sal_Unicode(',') )
+            else if ( (c == sal_Unicode(',')) || (c == sal_Unicode('.')) )
             {
                 nSecs = nTemp;
                 nTemp = 0;
@@ -1202,7 +1202,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
                         XML_MAXDIGITSCOUNT_TIME - nCount, '.', sal_True));
             if ( a100th.getLength() > 2 )
             {
-                rBuffer.append( sal_Unicode(','));
+                rBuffer.append( sal_Unicode('.'));
                 rBuffer.append( a100th.copy( 2 ) );     // strip 0.
             }
         }
@@ -1218,6 +1218,8 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
     rtl::OUString aDateStr, aTimeStr, sDoubleStr;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
     sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
+    if (nPos2 < 0)
+        nPos2 = rString.indexOf( (sal_Unicode) '.' );
     if ( nPos >= 0 )
     {
         aDateStr = rString.copy( 0, nPos );
@@ -1346,7 +1348,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         aString += String::CreateFromInt32( rDateTime.Seconds );
         if ( rDateTime.HundredthSeconds > 0)
         {
-            aString += ',';
+            aString += '.';
             if (rDateTime.HundredthSeconds < 10)
                 aString += '0';
             aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
@@ -1365,6 +1367,8 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
     rtl::OUString aDateStr, aTimeStr, sDoubleStr;
     sal_Int32 nPos = rString.indexOf( (sal_Unicode) 'T' );
     sal_Int32 nPos2 = rString.indexOf( (sal_Unicode) ',' );
+    if (nPos2 < 0)
+        nPos2 = rString.indexOf( (sal_Unicode) '.' );
     if ( nPos >= 0 )
     {
         aDateStr = rString.copy( 0, nPos );
