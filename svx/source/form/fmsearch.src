@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:08:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Group = TRUE;
         Text = "~Text";
         Text[ english_us ] = "~Text";
-        Text[ portuguese ] = "~Texto :";
-        Text[ russian ] = "Òåêñò :";
+        Text[ portuguese ] = "~Texto";
+        Text[ russian ] = "Òåêñò";
         Text[ greek ] = "Êåßìåíï :";
         Text[ dutch ] = "~Tekst :";
-        Text[ french ] = "~Texte :";
+        Text[ french ] = "Texte";
         Text[ spanish ] = "~Texto";
         Text[ finnish ] = "~Teksti:";
         Text[ italian ] = "~Testo";
@@ -123,7 +123,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "~Text :";
         Text[ japanese ] = "•¶š—ñ(~T)";
         Text[ korean ] = "ÅØ½ºÆ®(~T):";
-        Text[ chinese_simplified ] = "ÎÄ×Ö";
+        Text[ chinese_simplified ] = "ÎÄ×Ö(~T)";
         Text[ chinese_traditional ] = "¤å¦r(~T)";
         Text[ turkish ] = "Metin:";
         Text[ arabic ] = "ÇáäÕ :";
@@ -176,7 +176,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ polish ] = "Zawartoœæ pola jest nierówna NULL";
         Text[ portuguese_brazilian ] = "Field content is n~ot NULL";
         Text[ japanese ] = "Ì¨°ÙÄŞ“à—e‚ÍNU~LL‚Å‚Í‚È‚¢";
-        Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NULLÀÌ¡¡¾Æ´Ô";
+        Text[ korean ] = "ÇÊµå ³»¿ëÀÌ NU~LLÀÌ ¾Æ´Ô";
         Text[ chinese_simplified ] = "×Ö¶ÎÄÚÈİ²»ÊÇ NU~LL";
         Text[ chinese_traditional ] = "Äæ¦ì¤º®e¤£¬O NU~LL";
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍŞá áÇ ÊÓÇæí ŞíãÉ ÎÇáíÉ (NULL)";
@@ -202,7 +202,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text [ ENGLISH ] = "Bereich";
         Text[ italian ] = "Area";
         Text[ portuguese_brazilian ] = "Bereich";
-        Text[ portuguese ] = "Área";
+        Text[ portuguese ] = "Secção";
         Text[ danish ] = "Område";
         Text[ french ] = "Domaine";
         Text[ swedish ] = "Område";
@@ -228,11 +228,11 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Size = MAP_APPFONT( 87, 10 );
         Text = "~Formular";
         Text[ english_us ] = "Form";
-        Text[ portuguese ] = "~Formulário:";
-        Text[ russian ] = "Ôîğìóëÿğ :";
+        Text[ portuguese ] = "~Formulário";
+        Text[ russian ] = "Ôîğìóëÿğ";
         Text[ greek ] = "Öüñìá:";
         Text[ dutch ] = "~Formulier :";
-        Text[ french ] = "~Formulaire :";
+        Text[ french ] = "Formulaire";
         Text[ spanish ] = "~Formulario";
         Text[ finnish ] = "Lomake:";
         Text[ italian ] = "Formulario";
@@ -292,11 +292,11 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Size = MAP_APPFONT( 75, 10 );
         Text = "Ein~zelnes Feld";
         Text[ english_us ] = "Single field";
-        Text[ portuguese ] = "Campo ú~nico:";
-        Text[ russian ] = "Â îòäåëüíîì ïîëå :";
+        Text[ portuguese ] = "Campo ú~nico";
+        Text[ russian ] = "Â îòäåëüíîì ïîëå";
         Text[ greek ] = "Ìåìïíùìİíï ğåäßï:";
         Text[ dutch ] = "~Een enkel veld :";
-        Text[ french ] = "Champ individuel :";
+        Text[ french ] = "Champ unique";
         Text[ spanish ] = "~Campo individual";
         Text[ finnish ] = "Yksittäinen kenttä:";
         Text[ italian ] = "Campo singolo";
@@ -329,7 +329,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text [ ENGLISH ] = "Einstellungen";
         Text[ italian ] = "Impostazioni";
         Text[ portuguese_brazilian ] = "Einstellungen";
-        Text[ portuguese ] = "Configuração";
+        Text[ portuguese ] = "Definições";
         Text[ danish ] = "Indstillinger";
         Text[ french ] = "Paramètres";
         Text[ swedish ] = "Inställningar";
@@ -356,10 +356,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text = "~Position";
         Text[ english_us ] = "Position";
         Text[ portuguese ] = "~Posição:";
-        Text[ russian ] = "Ïîçèöèÿ :";
+        Text[ russian ] = "Ïîçèöèÿ";
         Text[ greek ] = "Èİóç :";
         Text[ dutch ] = "~Positie :";
-        Text[ french ] = "~Position :";
+        Text[ french ] = "Position";
         Text[ spanish ] = "~Posición";
         Text[ finnish ] = "Sijainti:";
         Text[ italian ] = "~Posizione";
@@ -512,15 +512,15 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text [ ENGLISH ] = "P~latzhalter-Ausdruck";
         TabStop = TRUE;
         HelpId = HID_SEARCH_WILDCARD;
-        Text[ italian ] = "Espressione segnaposto";
+        Text[ italian ] = "Espressione wildcard";
         Text[ portuguese_brazilian ] = "P~latzhalter-Ausdruck";
         Text[ portuguese ] = "~Expressão polivalente";
         Text[ danish ] = "Pladsholder-udtryk";
         Text[ french ] = "E~xpression substituante";
-        Text[ swedish ] = "P~latshållaruttryck";
+        Text[ swedish ] = "~Jokerteckenuttryck";
         Text[ dutch ] = "P~laatsvervangende tekst";
         Text[ spanish ] = "~Expresión comodín";
-        Text[ english_us ] = "Placeholder expression";
+        Text[ english_us ] = "Wildcard expression";
         Text[ chinese_simplified ] = "Í¨Åä·û±í´ï";
         Text[ russian ] = "Âûğàæåíèå ìåñòîçàïîëíèòåëÿ";
         Text[ polish ] = "Wyra¿enie symbolu wieloznacznego";
@@ -528,7 +528,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_traditional ] = "³q°t²Å-ªí¹F";
         Text[ arabic ] = "ÊÚÈíÑ ÚäÕÑ äÇÆÈ";
         Text[ greek ] = "ĞáñÜóôáóç óõìâü~ëïõ êñÜôçóçò èİóçò";
-        Text[ korean ] = "ÇÃ·¹ÀÌ½ºÈ¦´õ¡¡ÀÎ¼â";
+        Text[ korean ] = "ÇÃ·¹ÀÌ½ºÈ¦´õ ÀÎ¼â";
         Text[ turkish ] = "Genel arama terimi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expresión comodín";
@@ -641,10 +641,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
+        Text[ polish ] = "Formy po³owy/zwyk³ej szerokoœci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "‘SŠp‚Æ”¼Šp‚ğ‹æ•Ê";
-        Text[ korean ] = "Match half/full width forms";
+        Text[ korean ] = "¹İ/ÀüÃ¼ ³Êºñ Æû";
         Text[ chinese_simplified ] = "°ë½ÇºÍÈ«½Ç×Ö·û";
         Text[ chinese_traditional ] = "¥b§Î©M¥ş§Î¦r¤¸";
         Text[ turkish ] = "Match half/full width forms";
@@ -669,10 +669,10 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ italian ] = "Ortografia simile (giapponese)";
         Text[ danish ] = "Sounds like (Japanese)";
         Text[ swedish ] = "Likn. skrivsätt (japanska)";
-        Text[ polish ] = "Podobna pisownia (Japoñski)";
+        Text[ polish ] = "Podobna pisownia (japoñski)";
         Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
         Text[ japanese ] = "‚ ‚¢‚Ü‚¢ŒŸõ(“ú–{Œê)";
-        Text[ korean ] = "Sounds like (Japanese)";
+        Text[ korean ] = "À¯»çÇÑ Á¤¼­¹ı(ÀÏº»¾î)";
         Text[ chinese_simplified ] = "ÀàËÆ×Ö·û(ÈÕÎÄ)";
         Text[ chinese_traditional ] = "Ãş¦ü¦r¤¸(¤é¤å)";
         Text[ turkish ] = "Sounds like (Japanese)";
@@ -878,7 +878,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     Text[ portuguese_brazilian ] = "Data record search";
     Text[ japanese ] = "ÃŞ°À Úº°ÄŞ‚ÌŒŸõ";
     Text[ chinese_simplified ] = "ËÑÑ°Êı¾İ×é";
-    Text[ chinese_traditional ] = "·j´M¸ê®Æ¶µ¥Ø";
+    Text[ chinese_traditional ] = "·j´M¸ê®Æ±ø¥Ø";
     Text[ arabic ] = "ÇáÈÍË Úä ÓÌá";
     Text[ greek ] = "ÁíáæŞôçóç åããñáöŞò";
     Text[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå Ã£±â";
@@ -929,11 +929,11 @@ String RID_STR_RECORDSEARCH_BUTTONS
     Text[ dutch ] = "~Vanaf begin;~Vanaf einde;~Zoeken;~Stoppen";
     Text[ spanish ] = "~Desde el principio;~Desde el final;~Buscar;~Cancelar";
     Text[ english_us ] = "From top;From bottom;Search;Cancel";
-    Text[ chinese_simplified ] = "´Ó¿ª¶Ë£»´ÓÎ²¶Ë£»ËÑÑ°£»È¡Ïû";
+    Text[ chinese_simplified ] = "´Ó¿ª¶Ë;´ÓÎ²¶Ë;ËÑÑ°;È¡Ïû";
     Text[ russian ] = "ñ íà÷àëà;~ñ êîíöà;~Íàéòè;~Îòìåíèòü";
     Text[ polish ] = "od koñca;od pocz¹tku;Szukaj;Anuluj";
     Text[ japanese ] = "Å‰‚©‚ç;ÅŒã‚©‚ç;ŒŸõ;·¬İ¾Ù";
-    Text[ chinese_traditional ] = "±q°_©l¡F±qµ²§À¡F·j´M¡F¨ú®ø";
+    Text[ chinese_traditional ] = "±q°_©l;±qµ²§À;·j´M;¨ú®ø";
     Text[ arabic ] = "ãä ÇáÈÏÇíÉº ãä ÇáäåÇíÉº ÈÍËº ÅáÛÇÁ";
     Text[ greek ] = "Áğü ôçí áñ÷Ş;Áğü ôï ôİëïò;ÁíáæŞôç~óç;~Áêıñùóç";
     Text[ korean ] = "Ã³À½ºÎÅÍ;³¡¿¡¼­ ºÎÅÍ;Ã£±â;Ãë¼Ò";
@@ -992,7 +992,7 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message[ chinese_traditional ] = "¥X²{¤@­Ó¤£©úªº¿ù»~¡CµLªkµ²§ô·j´M¡I";
     Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÚÑæİ. ÊÚĞÑ ÅäåÇÁ ÇáÈÍË !";
     Message[ greek ] = "ĞáñïõóéÜóôçêå Üãíùóôï óöÜëìá. Ç áíáæŞôçóç äåí Şôáí äõíáôüí íá ïëïêëçñùèåß!";
-    Message[ korean ] = "¾Ë·ÁÁ®¡¡ÀÖÁö ¾ÊÀº ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. Ã£±â¸¦ Á¾·áÇÏÁö ¸øÇß½À´Ï´Ù!";
+    Message[ korean ] = "¾Ë·ÁÁ® ÀÖÁö ¾ÊÀº ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. °Ë»öÀ» Á¾·áÇÏÁö ¸øÇß½À´Ï´Ù!";
     Message[ turkish ] = "Ayrıntıları bilinmeyen bir hata oluştu. Arama işlemi tamamlanamadı!";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Ha ocurrido un error desconocido. La búsqueda no se pudo completar.";
@@ -1012,12 +1012,12 @@ String RID_STR_SEARCH_OVERFLOW
     Text[ dutch ] = "Overloop, zoeken werd voortgezet aan het begin; Overloop, zoeken werd voortgezet aan het einde";
     Text[ spanish ] = "Desbordamiento; la búsqueda continúa por el principio;Desbordamiento; la búsqueda continúa por el final";
     Text[ english_us ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
-    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø£»ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
+    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø;ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â íà÷àëå;Ïåğåïîëíåíèå, Ïîèñê ïğîäîëæåí â êîíöå";
     Text[ polish ] = "Przepe³nienie, Kontynuuj wyszukiwanie na pocz¹tku;Przepe³nienie, Kontynuuj wyszukiwanie na koñcu";
     Text[ japanese ] = "µ°ÊŞ°ÌÛ°AŒŸõ‚ÍÅ‰‚Å‘±s;µ°ÊŞ°ÌÛ°AŒŸõ‚ÍÅŒã‚Å‘±s";
-    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q°_©l¦ì¸mÄ~Äò¡F·¸­È¡A·j´M±qµ²§À¦ì¸mÄ~Äò";
+    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q°_©l¦ì¸mÄ~Äò;·¸­È¡A·j´M±qµ²§À¦ì¸mÄ~Äò";
     Text[ arabic ] = "İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáÈÏÇíÉ; İÇÆÖ¡ Êã ãæÇÕáÉ ÇáÈÍË ÚäÏ ÇáäåÇíÉ";
     Text[ greek ] = "Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôçí áñ÷Ş,Õğåñ÷åßëéóç, Ç áíáæŞôçóç óõíå÷ßóôçêå áğü ôï ôİëïò";
     Text[ korean ] = "¿À¹öÇÃ·Î- Ã£±â´Â ½ÃÀÛºÎºĞºÎÅÍ ÁøÇàµÇ¾úÀ½;¿À¹öÇÃ·Î-Ã£±â´Â ³¡¿¡¼­ ºÎÅÍ ÁøÇàµÇ¾úÀ½";
@@ -1039,11 +1039,11 @@ String RID_STR_SEARCH_COUNTING
     Text[ dutch ] = "tel records";
     Text[ spanish ] = "contando registros de datos";
     Text[ english_us ] = "counting records";
-    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø£»ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
+    Text[ chinese_simplified ] = "ÒçÖµ£¬ËÑÑ°´ÓÊ×¶Ë¼ÌĞø;ÒçÖµ£¬ËÑÑ°´ÓÎ²¶Ë¼ÌĞø";
     Text[ russian ] = "Ïîäñ÷åò çàïèñåé";
     Text[ polish ] = "Licz rekordy";
     Text[ japanese ] = "Úº°ÄŞ‚ğ”‚¦‚é";
-    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q­ººİÄ~Äò¡F·¸­È¡A·j´M±q§ÀºİÄ~Äò";
+    Text[ chinese_traditional ] = "·¸­È¡A·j´M±q­ººİÄ~Äò;·¸­È¡A·j´M±q§ÀºİÄ~Äò";
     Text[ arabic ] = "ÚÏ ÓÌáÇÊ ÇáÈíÇäÇÊ";
     Text[ greek ] = "áñßèìçóç åããñáöşí";
     Text[ korean ] = "·¹ÄÚµå ¼ö ¼¼±â";
@@ -1052,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
