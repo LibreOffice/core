@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-09-07 19:36:16 $
+ *  last change: $Author: er $ $Date: 2001-10-02 12:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ class StarBASIC;
 #include <tools/solmath.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/zforlist.hxx>
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <unotools/charclass.hxx>
@@ -110,6 +112,7 @@ class StarBASIC;
 #include "htmlimp.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
+#include "scitems.hxx"
 
 #include "impex.hxx"
 
@@ -1206,6 +1209,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
     USHORT nEndRow = aRange.aEnd.Row();
     ULONG nOldPos = rStrm.Tell();
     BOOL bData = BOOL( !bSingle );
+    SvULongs aFormats;
 
     if( !bSingle)
         bOk = StartPaste();
@@ -1229,14 +1233,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                 break;
             const sal_Unicode* p = aLine.GetBuffer();
             sal_Unicode cTag = *p++;
-            if( cTag == 'I' && *p == 'D' )
-            {
-                aLine.Erase( 0, 4 );
-                bMyDoc = aLine.EqualsAscii( "SCALC3" );
-            }
-            else if( cTag == 'E' )                      // Ende
-                break;
-            else if( cTag == 'C' || cTag == 'F' )       // in F kann die Position gesetzt werden
+            if( cTag == 'C' || cTag == 'F' )       // in F kann die Position gesetzt werden
             {
                 if( *p++ != ';' )
                     return FALSE;
@@ -1279,7 +1276,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( *p == '"' )
                             {
                                 bText = TRUE;
-                                aText.Erase();
+                                aText = '\'';       // force string cell
                                 p = lcl_ScanString( p, aText, '"', DQM_ESCAPE );
                             }
                             else
@@ -1338,6 +1335,23 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             delete pCode;   // ctor/InsertMatrixFormula did copy TokenArray
                         }
                         break;
+                        case 'P' :
+                        {   // F;P<n> sets format code of P;P<code> at current position
+                            if ( cTag != 'F' )      // only in 'F'
+                                break;
+                            const sal_Unicode* p0 = p;
+                            while( *p && *p != ';' )
+                                p++;
+                            String aNumber( p0, p - p0 );
+                            USHORT nCode = (USHORT) aNumber.ToInt32();
+                            if ( nCode < aFormats.Count() )
+                            {
+                                ULONG nFormat = aFormats[nCode];
+                                pDoc->ApplyAttr( nCol, nRow, aRange.aStart.Tab(),
+                                    SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat ) );
+                            }
+                        }
+                        break;
                     }
                     while( *p && *p != ';' )
                         p++;
@@ -1345,6 +1359,29 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                         p++;
                 }
             }
+            else if( cTag == 'P' )
+            {
+                if ( *p == ';' && *(p+1) == 'P' )
+                {
+                    String aCode( p+2 );
+                    xub_StrLen nCheckPos;
+                    short nType;
+                    ULONG nKey;
+                    pDoc->GetFormatTable()->PutandConvertEntry(
+                        aCode, nCheckPos, nType, nKey, LANGUAGE_ENGLISH_US,
+                        ScGlobal::eLnge );
+                    if ( nCheckPos )
+                        nKey = 0;
+                    aFormats.Insert( nKey, aFormats.Count() );
+                }
+            }
+            else if( cTag == 'I' && *p == 'D' )
+            {
+                aLine.Erase( 0, 4 );
+                bMyDoc = aLine.EqualsAscii( "SCALC3" );
+            }
+            else if( cTag == 'E' )                      // Ende
+                break;
         }
         if( !bData )
         {
