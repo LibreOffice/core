@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:48:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,11 +345,6 @@ xub_StrLen SwWW8Writer::top_charpropstart() const
 {
     ASSERT(!maCurrentCharPropStarts.empty(), "cannot be empty!");
     return maCurrentCharPropStarts.empty() ? 0 : maCurrentCharPropStarts.top();
-}
-
-bool SwWW8Writer::empty_charpropstart() const
-{
-    return maCurrentCharPropStarts.empty();
 }
 
 class sortswflys :
