@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:06:46 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,8 @@ public:
     /** called only by the slideshow view when the first paint event occurs.
         This actually starts the slideshow. */
     void onFirstPaint();
+
+    ShowWindow* getShowWindow() const { return mpShowWindow; }
 
 private:
     bool startShowImpl(
