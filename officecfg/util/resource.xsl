@@ -3,9 +3,9 @@
  *
  *  $RCSfile: resource.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tpf $ $Date: 2002-08-07 14:57:24 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 10:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 		version="1.0">
 
     <!-- Set correct output format -->
-    <xsl:output method="text" indent="no" encoding="ISO-8859-1"/>
+    <xsl:output method="text" indent="no" encoding="UTF-8"/>
 
     <xsl:param name="locale"/>
     <xsl:param name="fallback-locale">en-US</xsl:param>
