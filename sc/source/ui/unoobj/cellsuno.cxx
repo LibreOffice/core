@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-16 15:15:47 $
+ *  last change: $Author: nn $ $Date: 2001-05-17 09:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3545,6 +3545,17 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
         ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xInterface );
         if ( pRangesImp && pRangesImp->GetDocShell() == pDocSh )
         {
+            //  if explicit name is given and already existing, throw exception
+
+            String aNamStr = aName;
+            if ( aNamStr.Len() )
+            {
+                USHORT nNamedCount = aNamedEntries.Count();
+                for (USHORT n=0; n<nNamedCount; n++)
+                    if ( aNamedEntries[n]->GetName() == aNamStr )
+                        throw container::ElementExistException();
+            }
+
             ScRangeList aNew = GetRangeList();
             const ScRangeList& rAddRanges = pRangesImp->GetRangeList();
             ULONG nAddCount = rAddRanges.Count();
@@ -3557,11 +3568,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
             {
                 //  if a name is given, also insert into list of named entries
                 //  (only possible for a single range)
-
-                String aNamStr = aName;
-
-                //  remove old entry with this name
-                lcl_RemoveNamedEntry( aNamedEntries, aNamStr );
+                //  name is not in aNamedEntries (tested above)
 
                 ScNamedEntry* pEntry = new ScNamedEntry( aNamStr, *rAddRanges.GetObject(0) );
                 aNamedEntries.Insert( pEntry, aNamedEntries.Count() );
