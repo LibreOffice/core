@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PosSize.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** These constants are used to flag the parameters of a rectangle.
  */
-constants PosSize
+published constants PosSize
 {
     //-------------------------------------------------------------------------
 
