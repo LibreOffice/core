@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-14 13:44:10 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             rRuler.UpdateFrame(pItem);
             break;
         }
+        case SID_ATTR_TABSTOP_VERTICAL:
         case SID_ATTR_TABSTOP:
         {
             const SvxTabStopItem *pItem = PTR_CAST(SvxTabStopItem, pState);
@@ -128,6 +129,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             rRuler.Update(pItem);
             break;
         }
+        case SID_ATTR_PARA_LRSPACE_VERTICAL:
         case SID_ATTR_PARA_LRSPACE:
         {
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
@@ -135,6 +137,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             rRuler.UpdatePara(pItem);
             break;
         }
+        case SID_RULER_BORDERS_VERTICAL:
         case SID_RULER_BORDERS:
         {
             const SvxColumnItem *pItem = PTR_CAST(SvxColumnItem, pState);

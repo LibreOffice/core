@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-12-12 09:59:21 $
+ *  last change: $Author: os $ $Date: 2002-02-27 08:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,16 +393,18 @@ SvxRuler::SvxRuler
 
     if((nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS)
     {
-        DBG_ASSERT((nWinStyle & WB_HSCROLL) == WB_HSCROLL,
-                   "kein Tabs im vertikalen Lineal");
-        pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_TABSTOP, *this, rBindings);
+        USHORT nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
+        pCtrlItem[i++] = new SvxRulerItem(nTabStopId, *this, rBindings);
         SetExtraType(RULER_EXTRA_TAB, nDefTabType);
     }
 
-    if((nFlags & SVXRULER_SUPPORT_PARAGRAPH_MARGINS) ==
-       SVXRULER_SUPPORT_PARAGRAPH_MARGINS)
+
+    if(0 != (nFlags & (SVXRULER_SUPPORT_PARAGRAPH_MARGINS |SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL)))
     {
-        pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings);
+        if(bHorz)
+            pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings);
+        else
+            pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE_VERTICAL, *this, rBindings);
         pIndents = new RulerIndent[5+INDENT_GAP];
         memset(pIndents, 0, sizeof(RulerIndent)*(3+INDENT_GAP));
         pIndents[0].nStyle = RULER_STYLE_DONTKNOW;
@@ -417,7 +419,7 @@ SvxRuler::SvxRuler
     }
 
     if((nFlags & SVXRULER_SUPPORT_BORDERS) ==  SVXRULER_SUPPORT_BORDERS)
-        pCtrlItem[i++] = new SvxRulerItem(SID_RULER_BORDERS, *this, rBindings);
+        pCtrlItem[i++] = new SvxRulerItem(bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL, *this, rBindings);
 
     if((nFlags & SVXRULER_SUPPORT_OBJECT) == SVXRULER_SUPPORT_OBJECT)
     {
@@ -702,7 +704,7 @@ void SvxRuler::UpdateFrame
 */
 
 {
-  if(bActive && bHorz)
+  if(bActive)
   {
     delete pLRSpaceItem; pLRSpaceItem = 0;
     if(pItem)
@@ -779,7 +781,11 @@ void SvxRuler::Update
     {
         delete pColumnItem; pColumnItem = 0;
         if(pItem)
+        {
             pColumnItem = new SvxColumnItem(*pItem);
+            if(!bHorz)
+                pColumnItem->SetWhich(SID_RULER_BORDERS_VERTICAL);
+        }
         StartListening_Impl();
     }
 }
@@ -1219,7 +1225,11 @@ void SvxRuler::Update
     {
         delete pTabStopItem; pTabStopItem = 0;
         if(pItem)
+        {
             pTabStopItem = new SvxTabStopItem(*pItem);
+            if(!bHorz)
+                pTabStopItem->SetWhich(SID_ATTR_TABSTOP_VERTICAL);
+        }
         StartListening_Impl();
     }
 }
@@ -1278,10 +1288,11 @@ void SvxRuler::Update()
         UpdateObject();
     else
         UpdateColumns();
-    if(bHorz) {
+
+    if(0 != (nFlags & (SVXRULER_SUPPORT_PARAGRAPH_MARGINS |SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL)))
       UpdatePara();
+    if(0 != (nFlags & SVXRULER_SUPPORT_TABS))
       UpdateTabs();
-    }
 }
 
 
@@ -1438,14 +1449,20 @@ long SvxRuler::GetRightFrameMargin() const
     // gfs. rechten Tabelleneinzug abziehen
     if(pColumnItem && pColumnItem->IsTable())
         l += pColumnItem->GetRight();
-    else if(pLRSpaceItem)
+    else if(bHorz && pLRSpaceItem)
         l += pLRSpaceItem->GetRight();
+    else if(!bHorz && pULSpaceItem)
+        l += pULSpaceItem->GetLower();
 
     if(pParaBorderItem &&
         (!pColumnItem || pColumnItem->IsTable()||IsActLastColumn( TRUE )))
         l += pParaBorderItem->GetRight();
 
-    return pPagePosItem->GetWidth() - l;
+    if(bHorz)
+        l = pPagePosItem->GetWidth() - l;
+    else
+        l = pPagePosItem->GetHeight() - l;
+    return l;
 }
 
 #define NEG_FLAG ( (nFlags & SVXRULER_SUPPORT_NEGATIVE_MARGINS) == \
@@ -2157,7 +2174,7 @@ void SvxRuler::ApplyIndents()
                              pIndents[INDENT_RIGHT_MARGIN].nPos) -
             lAppNullOffset, pParaItem->GetRight()));
 
-    pBindings->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SFX_CALLMODE_RECORD, pParaItem, 0L );
+    pBindings->GetDispatcher()->Execute( pParaItem->Which(), SFX_CALLMODE_RECORD, pParaItem, 0L );
     UpdateTabs();
 }
 
@@ -2213,7 +2230,7 @@ void SvxRuler::ApplyTabs()
         pTabStopItem->Remove(nCoreIdx);
         pTabStopItem->Insert(aTabStop);
     }
-    pBindings->GetDispatcher()->Execute( SID_ATTR_TABSTOP, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
+    pBindings->GetDispatcher()->Execute( pTabStopItem->Which(), SFX_CALLMODE_RECORD, pTabStopItem, 0L );
     UpdateTabs();
 }
 
@@ -2259,7 +2276,7 @@ void SvxRuler::ApplyBorders()
 #endif // DEBUGLIN
     SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY,
                       nDragType & DRAG_OBJECT_ACTLINE_ONLY? TRUE: FALSE);
-    pBindings->GetDispatcher()->Execute( SID_RULER_BORDERS, SFX_CALLMODE_RECORD, pColumnItem, &aFlag, 0L );
+    pBindings->GetDispatcher()->Execute( pColumnItem->Which(), SFX_CALLMODE_RECORD, pColumnItem, &aFlag, 0L );
 }
 
 void SvxRuler::ApplyObject()
@@ -2431,6 +2448,9 @@ void __EXPORT SvxRuler::Click()
         pBindings->Update( SID_RULER_BORDERS );
         pBindings->Update( SID_RULER_OBJECT );
         pBindings->Update( SID_RULER_PROTECT );
+        pBindings->Update( SID_ATTR_PARA_LRSPACE_VERTICAL );
+        pBindings->Update( SID_ATTR_TABSTOP_VERTICAL );
+        pBindings->Update( SID_RULER_BORDERS_VERTICAL );
     }
     if(pTabStopItem &&
        (nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS) {
