@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:16 $
+ *  last change: $Author: oj $ $Date: 2001-06-29 08:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace connectivity
             void readHeader();
             void fillColumns();
             String createTempFile();
-            void copyData(ODbaseTable* _pNewTable);
+            void copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos);
             BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
             BOOL CreateMemoFile(const INetURLObject& aFile);
             BOOL HasMemoFields() const { return m_aHeader.db_typ > dBaseIV;}
