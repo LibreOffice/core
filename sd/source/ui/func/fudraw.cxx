@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 15:28:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <svx/flditem.hxx>
 #ifndef _SVDOGRP_HXX //autogen
 #include <svx/svdogrp.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -1066,7 +1069,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
             if (aHelpText.Len() == 0)
             {
                 // show url if no name is available
-                aHelpText = pIMapObj->GetURL();
+                aHelpText = INetURLObject::decode( pIMapObj->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
             }
         }
     }
@@ -1109,7 +1112,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to object/page
                 aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( pInfo->aBookmark );
+                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
             break;
 
@@ -1118,7 +1121,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to document (object/page)
                 aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( pInfo->aBookmark );
+                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
             break;
 
@@ -1127,7 +1130,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( pInfo->aBookmark );
+                aHelpText.Append( INetURLObject::decode( pInfo->aBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) );
             }
             break;
 
@@ -1173,7 +1176,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
         /**************************************************************
         * URL-Field
         **************************************************************/
-        aHelpText = rVEvt.pURLField->GetURL();
+        aHelpText = INetURLObject::decode( rVEvt.pURLField->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
     }
 
     if (aHelpText.Len())
