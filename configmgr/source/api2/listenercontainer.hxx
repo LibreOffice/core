@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-10-15 15:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,40 +531,55 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
-            osl::MutexGuard aGuard( mutex() );
-            OSL_ENSURE( !isDisposing(), "do not add listeners in the dispose call" );
-            OSL_ENSURE( !isDisposed(), "object is disposed" );
+            osl::ClearableMutexGuard aGuard( mutex() );
 
-            if ( isAlive() )
+            if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
-                if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
+                if ( isAlive() )
                 {
                     if (m_aContainers[nIndex].pContainer == 0)
                         m_aContainers[nIndex].pContainer = new BasicContainerHelper(mutex());
 
                     return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
                 }
-                OSL_ENSURE(false, "Invalid index or interface not set");
+
+                else if (xListener.is())
+                {
+                    lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
+                    aGuard.clear();
+                    xListener->disposing(aEvent);
+                }
+
             }
+            else
+                OSL_ENSURE(false, "Invalid index or interface not set");
+
             return 0;
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw(uno::RuntimeException)
         {
-            osl::MutexGuard aGuard( mutex() );
-            OSL_ENSURE( !isDisposing(), "do not add listeners in the dispose call" );
-            OSL_ENSURE( !isDisposed(), "object is disposed" );
+            osl::ClearableMutexGuard aGuard( mutex() );
 
-            if ( isAlive() )
+            Index nIndex = m_aMapper.findIndexForKey(aKey);
+            if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
-                Index nIndex = m_aMapper.findIndexForKey(aKey);
-                if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
+                if ( isAlive() )
                 {
                     return m_aSpecialHelper.aLC.addInterface(aKey,xListener);
                 }
-                OSL_ENSURE(false, "Invalid index or interface not set");
+
+                else if (xListener.is())
+                {
+                    lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
+                    aGuard.clear();
+                    xListener->disposing(aEvent);
+                }
             }
+            else
+                OSL_ENSURE(false, "Invalid index or interface not set");
+
             return 0;
         }
 //-----------------------------------------------------------------------------
