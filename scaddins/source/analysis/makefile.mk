@@ -1,10 +1,10 @@
 #**************************************************************************
 #
-#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.10 2003-04-15 14:15:44 vg Exp $
+#     $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/scaddins/source/analysis/makefile.mk,v 1.11 2003-06-04 10:32:23 vg Exp $
 #
-#     $Date: 2003-04-15 14:15:44 $
+#     $Date: 2003-06-04 10:32:23 $
 #     $Author: vg $
-#     $Revision: 1.10 $
+#     $Revision: 1.11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -106,9 +106,10 @@ UNOTYPES=\
 # --- Files -------------------------------------
 
 SLOFILES=\
-    $(SLO)$/analysis.obj \
-    $(SLO)$/financial.obj \
-    $(SLO)$/analysishelper.obj
+    $(SLO)$/analysis.obj		\
+    $(SLO)$/financial.obj		\
+    $(SLO)$/analysishelper.obj	\
+    $(SLO)$/bessel.obj
 
 # SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
