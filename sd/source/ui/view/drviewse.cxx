@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -162,25 +164,62 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "drawdoc.hxx"
+#ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
+#endif
+#ifndef SD_FU_TEXT_HXX
 #include "futext.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_RECTANGLE_HXX
 #include "fuconrec.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_UNO_CONTROL_HXX
 #include "fuconuno.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_BEZIER_HXX
 #include "fuconbez.hxx"
+#endif
+#ifndef SD_FU_EDIT_GLUE_POINTS_HXX
 #include "fuediglu.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_ARC_HXX
 #include "fuconarc.hxx"
+#endif
+#ifndef SD_FU_CONSTRUCT_3D_OBJECT_HXX
 #include "fucon3d.hxx"
+#endif
 #include "sdresid.hxx"
+#ifndef SD_FU_SLIDE_SHOW_HXX
 #include "fuslshow.hxx"
-#include "sdoutl.hxx"
-#include "drviewsh.hxx"
-#include "presvish.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_PRESENTATION_VIEW_SHELL_HXX
+#include "PresentationViewShell.hxx"
+#endif
 #include "sdpage.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW
+#include "FrameView.hxx"
+#endif
 #include "zoomlist.hxx"
+#ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
-#include "docshell.hxx"
+#endif
+#include "DrawDocShell.hxx"
 #include "sdattr.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+#ifndef SD_SUB_SHELL_MANAGER_HXX
+#include "SubShellManager.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 
 // #97016#
 #ifndef _SD_OPTSITEM_HXX
@@ -195,6 +234,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+namespace sd {
+
 #ifdef WNT
 #pragma optimize ( "", off )
 #endif
@@ -205,7 +246,7 @@ using namespace ::com::sun::star;
 |*
 \************************************************************************/
 
-void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, SdView* pView)
+void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 {
     // #98198# evtl. feed characters to activated textedit
     const SfxItemSet* pSet = rReq.GetArgs();
@@ -225,7 +266,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, SdView* pView)
             {
                 for(sal_uInt16 a(0); a < aInputString.Len(); a++)
                 {
-                    sal_Char aChar = aInputString.GetChar(a);
+                    sal_Char aChar = (sal_Char)aInputString.GetChar(a);
                     KeyCode aKeyCode;
                     KeyEvent aKeyEvent(aChar, aKeyCode);
 
@@ -237,7 +278,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, SdView* pView)
     }
 }
 
-void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
+void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
     if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
@@ -315,7 +356,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_TEXT_FITTOSIZE:
         case SID_TEXT_FITTOSIZE_VERTICAL:
         {
-            pFuActual = new FuText(this, pWindow, pDrView, pDoc, rReq);
+            pFuActual = new FuText(this, pWindow, pDrView, GetDoc(), rReq);
             ( (FuText*) pFuActual)->DoExecute();
             // Das Setzen des Permanent-Status erfolgt weiter oben!
 
@@ -335,8 +376,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
 
         case SID_FM_CREATE_CONTROL:
         {
-            pFuActual = new FuConstUnoControl(this, pWindow, pDrView, pDoc, rReq);
-            ((FuConstUnoControl*) pFuActual)->SetPermanent(bPermanent);
+            pFuActual = new FuConstructUnoControl(
+                this, pWindow, pDrView, GetDoc(), rReq);
+            static_cast<FuConstructUnoControl*>(pFuActual)
+                ->SetPermanent(bPermanent);
             rReq.Done();
         }
         break;
@@ -345,7 +388,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_FM_CREATE_FIELDCONTROL:
         {
             SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
-            DBG_ASSERT( pDescriptorItem, "SdDrawViewShell::FuPermanent(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+            DBG_ASSERT( pDescriptorItem, "DrawViewShell::FuPermanent(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
 
             if(pDescriptorItem)
             {
@@ -449,7 +492,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             }
 
             pFuActual = new FuSelection(this, pWindow, pDrView,
-                                              pDoc, rReq);
+                                              GetDoc(), rReq);
 
             rReq.Done();
             Invalidate( SID_OBJECT_SELECT );
@@ -510,9 +553,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
         {
-            pFuActual = new FuConstRectangle(this, pWindow, pDrView,
-                                                   pDoc, rReq);
-            ((FuConstRectangle*) pFuActual)->SetPermanent(bPermanent);
+            pFuActual = new FuConstructRectangle(
+                this, pWindow, pDrView, GetDoc(), rReq);
+            static_cast<FuConstructRectangle*>(pFuActual)
+                ->SetPermanent(bPermanent);
 
             rReq.Done();
         }
@@ -527,9 +571,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_BEZIER_FILL:          // BASIC
         case SID_DRAW_BEZIER_NOFILL:        // BASIC
         {
-            pFuActual = new FuConstBezPoly(this, pWindow, pDrView,
-                                                 pDoc, rReq);
-            ((FuConstBezPoly*) pFuActual)->SetPermanent(bPermanent);
+            pFuActual = new FuConstructBezierPolygon(
+                this, pWindow, pDrView, GetDoc(), rReq);
+            static_cast<FuConstructBezierPolygon*>(pFuActual)
+                ->SetPermanent(bPermanent);
             rReq.Done();
         }
         break;
@@ -538,7 +583,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             if (nOldSId != SID_GLUE_EDITMODE)
             {
-                pFuActual = new FuEditGluePoints( this, pWindow, pDrView, pDoc, rReq );
+                pFuActual = new FuEditGluePoints( this, pWindow, pDrView, GetDoc(), rReq );
                 ((FuEditGluePoints*) pFuActual)->SetPermanent(bPermanent);
             }
             else
@@ -561,8 +606,9 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_DRAW_CIRCLECUT:
         case SID_DRAW_CIRCLECUT_NOFILL:
         {
-            pFuActual = new FuConstArc( this, pWindow, pDrView, pDoc, rReq);
-            ((FuConstArc*) pFuActual)->SetPermanent(bPermanent);
+            pFuActual = new FuConstructArc(
+                this, pWindow, pDrView, GetDoc(), rReq);
+            static_cast<FuConstructArc*>(pFuActual)->SetPermanent(bPermanent);
             rReq.Done();
         }
         break;
@@ -576,8 +622,10 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-            pFuActual = new FuConst3dObj(this, pWindow, pDrView, pDoc, rReq);
-            ((FuConst3dObj*) pFuActual)->SetPermanent(bPermanent);
+            pFuActual = new FuConstruct3dObject(
+                this, pWindow, pDrView, GetDoc(), rReq);
+            static_cast<FuConstruct3dObject*>(pFuActual)
+                ->SetPermanent(bPermanent);
             rReq.Done();
         }
         break;
@@ -630,7 +678,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
     {
         // get SdOptions
-        SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
         sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
         sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
 
@@ -676,7 +724,7 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
 
 //////////////////////////////////////////////////////////////////////////////
 // service routine for Undo/Redo implementation
-extern SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShell);
+extern SfxUndoManager* ImpGetUndoManagerFromViewShell(DrawViewShell& rDViewShell);
 
 /*************************************************************************
 |*
@@ -684,10 +732,10 @@ extern SfxUndoManager* ImpGetUndoManagerFromViewShell(SdDrawViewShell& rDViewShe
 |*
 \************************************************************************/
 
-void SdDrawViewShell::FuSupport(SfxRequest& rReq)
+void DrawViewShell::FuSupport(SfxRequest& rReq)
 {
     if( rReq.GetSlot() == SID_STYLE_FAMILY && rReq.GetArgs())
-        pDocSh->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
+        GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
     if (pFuSlideShow && !pFuSlideShow->IsLivePresentation() &&
@@ -722,7 +770,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             USHORT nMappedSlot = GetMappedSlot( nSId );
             if( nMappedSlot > 0 )
             {
-                SfxRequest aReq( nMappedSlot, 0, pDoc->GetItemPool() );
+                SfxRequest aReq( nMappedSlot, 0, GetDoc()->GetItemPool() );
                 ExecuteSlot( aReq );
             }
         }
@@ -737,13 +785,15 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                     pDrView->EndTextEdit();
 
                 SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : pDoc->GetPresFullScreen();
+                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : GetDoc()->GetPresFullScreen();
 
                 if( bFullScreen )
-                    SdPresViewShell::CreateFullScreenShow( this, rReq );
+                    PresentationViewShell::CreateFullScreenShow( this, rReq );
                 else
                 {
-                    pFuSlideShow = new FuSlideShow( this, pWindow, pDrView, pDoc, rReq );
+                    pFrameView->SetPreviousViewShellType(GetShellType());
+                    pFuSlideShow = new FuSlideShow(
+                        this, pWindow, pDrView, GetDoc(), rReq );
                     pFuSlideShow->StartShow();
                     pFuSlideShow->Activate();
                 }
@@ -764,15 +814,22 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                 pFuSlideShow->Destroy();
                 pFuSlideShow = NULL;
 
-                if( ISA( SdPresViewShell ) )
-                    GetViewFrame()->GetDispatcher()->Execute( SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
-                else if( pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0 )
+                if( ISA(PresentationViewShell))
                 {
-                    const USHORT nRestoreViewShellId = pFrameView->GetPresentationViewShellId();
+                    GetViewFrame()->GetDispatcher()->Execute(
+                        SID_CLOSEWIN, SFX_CALLMODE_ASYNCHRON );
+                }
+                else
+                {
+                    ViewShell::ShellType ePreviousType (
+                        pFrameView->GetPreviousViewShellType());
 
                     pFrameView->SetPresentationViewShellId(SID_VIEWSHELL0);
                     pFrameView->SetSlotId(SID_OBJECT_SELECT);
-                    GetViewFrame()->GetDispatcher()->Execute( nRestoreViewShellId, SFX_CALLMODE_ASYNCHRON );
+                    pFrameView->SetPreviousViewShellType(GetShellType());
+
+                    GetViewShellBase().GetSubShellManager()
+                        .RequestMainSubShellChange (ePreviousType);
                 }
             }
 
@@ -804,16 +861,17 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
             * ObjectBar einschalten
             ******************************************************************/
             if (pFuActual &&
-                (pFuActual->ISA(FuSelection) || pFuActual->ISA(FuConstBezPoly)))
+                (pFuActual->ISA(FuSelection)
+                    || pFuActual->ISA(FuConstructBezierPolygon)))
             {
-                USHORT nObjBarId = RID_DRAW_OBJ_TOOLBOX;
+                USHORT nObjectBarId = RID_DRAW_OBJ_TOOLBOX;
 
                 if (pDrView->HasMarkablePoints())
                 {
-                    nObjBarId = RID_BEZIER_TOOLBOX;
+                    nObjectBarId = RID_BEZIER_TOOLBOX;
                 }
 
-                SwitchObjectBar(nObjBarId);
+                GetObjectBarManager().SwitchObjectBar (nObjectBarId);
             }
 
             Invalidate(SID_BEZIER_EDIT);
@@ -1014,7 +1072,28 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
        }
        break;
 
-       case SID_DRAWINGMODE:  // BASIC
+        case SID_NOTESMODE:
+        case SID_HANDOUTMODE:
+            // AutoLayouts have to be ready.
+            GetDoc()->StopWorkStartupDelay();
+
+            // Turn off effects.
+            //            pDrView->SetAnimationMode(FALSE);
+
+            // Fall through to following case statements.
+
+        case SID_DRAWINGMODE:
+        case SID_DIAMODE:
+        case SID_OUTLINEMODE:
+            // Let the sub-shell manager handle the slot handling.
+            GetViewShellBase().GetSubShellManager().HandleSlot (nSId, rReq);
+            //          Invalidate ();
+            rReq.Ignore ();
+            break;
+
+
+
+       /*af       case SID_DRAWINGMODE:  // BASIC
        {
             const SfxItemSet* pReqArgs = rReq.GetArgs();
             BOOL  bIsActive = TRUE;
@@ -1027,9 +1106,8 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ((ePageKind != PK_STANDARD) && bIsActive)
             {
-                pFrameView->SetPageKind(PK_STANDARD);
-                GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL0,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_IMPRESS);
             }
 
             Invalidate ();
@@ -1040,7 +1118,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_NOTESMODE:  // BASIC
         {
             // AutoLayouts muessen fertig sein
-            pDoc->StopWorkStartupDelay();
+            GetDoc()->StopWorkStartupDelay();
 
             // Effekte abschalten
             pDrView->SetAnimationMode(FALSE);
@@ -1056,9 +1134,8 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ((ePageKind != PK_NOTES) && bIsActive)
             {
-                pFrameView->SetPageKind(PK_NOTES);
-                GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL0,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_NOTES);
             }
 
             Invalidate ();
@@ -1069,7 +1146,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_HANDOUTMODE:  // BASIC
         {
             // AutoLayouts muessen fertig sein
-            pDoc->StopWorkStartupDelay();
+            GetDoc()->StopWorkStartupDelay();
 
             // Effekte abschalten
             pDrView->SetAnimationMode(FALSE);
@@ -1085,9 +1162,8 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ((ePageKind != PK_HANDOUT) && bIsActive)
             {
-                pFrameView->SetPageKind(PK_HANDOUT);
-                GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL0,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_HANDOUT);
             }
 
             Invalidate ();
@@ -1101,14 +1177,14 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pReqArgs )
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_DIAMODE, FALSE);
-                if( pIsActive && pIsActive->GetValue ())
-                    GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL1,
-                                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem,
+                    SID_DIAMODE, FALSE);
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_SLIDE);
             }
             else
-                GetViewFrame()->GetDispatcher()->Execute (SID_VIEWSHELL1,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_SLIDE);
 
             Invalidate ();
             rReq.Ignore ();
@@ -1121,18 +1197,22 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if ( pReqArgs )
             {
-                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem, SID_OUTLINEMODE, FALSE);
-                if (pIsActive->GetValue ()) GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL2,
-                                                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                SFX_REQUEST_ARG (rReq, pIsActive, SfxBoolItem,
+                    SID_OUTLINEMODE, FALSE);
+                if (pIsActive->GetValue ())
+                    GetViewShellBase().GetSubShellManager()
+                        .RequestMainSubShellChange (
+                            ViewShell::ST_OUTLINE);
             }
-            else GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL2,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            else
+                GetViewShellBase().GetSubShellManager()
+                    .RequestMainSubShellChange (ViewShell::ST_OUTLINE);
 
             Invalidate ();
             rReq.Ignore ();
         }
         break;
-
+       */
         case SID_MASTERPAGE:          // BASIC
         case SID_SLIDE_MASTERPAGE:    // BASIC
         case SID_TITLE_MASTERPAGE:    // BASIC
@@ -1140,7 +1220,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
             // AutoLayouts muessen fertig sein
-            pDoc->StopWorkStartupDelay();
+            GetDoc()->StopWorkStartupDelay();
 
             const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1162,11 +1242,11 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                     // Gibt es eine Seite mit dem AutoLayout "Titel"?
                     BOOL bFound = FALSE;
                     USHORT i = 0;
-                    USHORT nCount = pDoc->GetSdPageCount(PK_STANDARD);
+                    USHORT nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
 
                     while (i < nCount && !bFound)
                     {
-                        SdPage* pPage = pDoc->GetSdPage(i, PK_STANDARD);
+                        SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
                         if (nSId == SID_TITLE_MASTERPAGE && pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
                         {
@@ -1210,6 +1290,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
                 pFrameView->SetViewShEditMode(EM_MASTERPAGE, pFrameView->GetPageKind());
                 pFrameView->SetLayerMode(bLayerMode);
+                DBG_ASSERT(false, "executing SID_VIEWSHELL0");
                 GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0,
                             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
@@ -1240,7 +1321,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
             if(bOldHasRuler != bHasRuler)
             {
-                SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
+                SdOptions* pOptions = SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType());
 
                 if(pOptions && pOptions->IsRulerVisible() != bHasRuler)
                 {
@@ -1477,10 +1558,10 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            BOOL bOnlineSpell = !pDoc->GetOnlineSpell();
-            pDoc->SetOnlineSpell(bOnlineSpell);
+            BOOL bOnlineSpell = !GetDoc()->GetOnlineSpell();
+            GetDoc()->SetOnlineSpell(bOnlineSpell);
 
-            Outliner* pOL = pDrView->GetTextEditOutliner();
+            ::Outliner* pOL = pDrView->GetTextEditOutliner();
 
             if (pOL)
             {
@@ -1648,7 +1729,7 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
 |*
 \************************************************************************/
 
-void SdDrawViewShell::InsertURLField(const String& rURL, const String& rText,
+void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
                                      const String& rTarget, const Point* pPos)
 {
     SvxURLField aURLField(rURL, rText, SVXURLFORMAT_REPR);
@@ -1670,7 +1751,7 @@ void SdDrawViewShell::InsertURLField(const String& rURL, const String& rText,
     }
     else
     {
-        Outliner* pOutl = pDoc->GetInternalOutliner();
+        Outliner* pOutl = GetDoc()->GetInternalOutliner();
         pOutl->Init( OUTLINERMODE_TEXTOBJECT );
         USHORT nOutlMode = pOutl->GetMode();
         pOutl->QuickInsertField( aURLItem, ESelection() );
@@ -1712,7 +1793,7 @@ void SdDrawViewShell::InsertURLField(const String& rURL, const String& rText,
 |*
 \************************************************************************/
 
-void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
+void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
                                       const String& rTarget, const Point* pPos)
 {
     BOOL bNewObj = TRUE;
@@ -1764,7 +1845,7 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
     if (bNewObj)
     {
         SdrUnoObj* pUnoCtrl = (SdrUnoObj*) SdrObjFactory::MakeNewObject(FmFormInventor, OBJ_FM_BUTTON,
-                                pDrView->GetPageViewPvNum(0)->GetPage(), pDoc);
+                                pDrView->GetPageViewPvNum(0)->GetPage(), GetDoc());
 
         uno::Reference< awt::XControlModel > xControlModel( pUnoCtrl->GetUnoControlModel() );
 
@@ -1818,7 +1899,9 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 
         ULONG nOptions = SDRINSERT_SETDEFLAYER;
 
-        if (GetIPClient() && GetIPClient()->IsInPlaceActive())
+        OSL_ASSERT (GetViewShell()!=NULL);
+        SfxInPlaceClient* pIpClient = GetViewShell()->GetIPClient();
+        if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
         {
             nOptions |= SDRINSERT_DONTMARK;
         }
@@ -1833,7 +1916,7 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 |*
 \************************************************************************/
 
-void SdDrawViewShell::ShowUIControls( sal_Bool bVisible )
+void DrawViewShell::ShowUIControls( sal_Bool bVisible )
 {
     if( bHasRuler )
     {
@@ -1890,4 +1973,4 @@ void SdDrawViewShell::ShowUIControls( sal_Bool bVisible )
 #pragma optimize ( "", on )
 #endif
 
-
+} // end of namespace sd
