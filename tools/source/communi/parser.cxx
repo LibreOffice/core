@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gh $ $Date: 2002-01-21 10:29:47 $
+ *  last change: $Author: gh $ $Date: 2002-05-27 14:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ BOOL InformationParser::Save( SvStream &rOutStream,
               return FALSE;
 
         // wenn vorhanden, bearbeite recursive die Sublisten
-        if (( pGenericInfoList = pGenericInfo->GetSubList() ) != 0) {
+        if (( pGenericInfoList = pGenericInfo->GetSubList() ) != NULL ) {
               // oeffnende Klammer
               sTmpStr = "";
             if ( !bStripped && nLevel )
