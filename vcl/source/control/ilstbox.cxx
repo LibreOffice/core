@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:51:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,14 @@ void ImplInitDropDownButton( PushButton* pButton )
         pButton->SetSymbol( SYMBOL_SPIN_UPDOWN );
     else
         pButton->SetSymbol( SYMBOL_SPIN_DOWN );
+
+    if ( pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+            && ! pButton->IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+        pButton->SetBackground();
 }
 
 // =======================================================================
-
+
 ImplEntryList::ImplEntryList( Window* pWindow )
 {
     mpWindow = pWindow;
@@ -1941,6 +1945,9 @@ ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maLBWindow( this, nWinStyle&(~WB_BORDER) )
 {
+    // for native widget rendering we must be able to detect this window type
+    SetType( WINDOW_LISTBOXWINDOW );
+
     mpVScrollBar    = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
     mpHScrollBar    = new ScrollBar( this, WB_HSCROLL | WB_DRAG );
     mpScrollBarBox  = new ScrollBarBox( this );
@@ -2410,7 +2417,12 @@ XubString ImplListBox::GetMRUEntries( xub_Unicode cSep ) const
 ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
 {
-    SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
+    if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+            && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+        SetBackground();
+    else
+        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFieldColor() ) );
+
     mbInUserDraw = FALSE;
     mbUserDrawEnabled = FALSE;
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
@@ -2468,12 +2480,76 @@ void ImplWin::FillLayoutData() const
 
 // -----------------------------------------------------------------------
 
+long ImplWin::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
+        {
+            // trigger redraw as mouse over state has changed
+            if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+            && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+            {
+                GetParent()->GetWindow( WINDOW_BORDER )->Invalidate( INVALIDATE_NOERASE );
+                GetParent()->GetWindow( WINDOW_BORDER )->Update();
+            }
+        }
+    }
+
+    return nDone ? nDone : Control::PreNotify(rNEvt);
+}
+
+// -----------------------------------------------------------------------
+
 void ImplWin::ImplDraw( bool bLayout )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
+    BOOL bNativeOK = FALSE;
+
     if( ! bLayout )
     {
+        if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
+            && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
+        {
+            // Repaint the (focused) area similarly to
+            // ImplSmallBorderWindowView::DrawWindow() in
+            // vcl/source/window/brdwin.cxx
+            Window *pWin = GetParent();
+
+            ImplControlValue aControlValue;
+            ControlState nState = CTRL_STATE_ENABLED;
+            if ( !pWin->IsEnabled() )
+            nState &= ~CTRL_STATE_ENABLED;
+            if ( pWin->HasFocus() )
+            nState |= CTRL_STATE_FOCUSED;
+
+            // The listbox is painted over the entire control including the
+            // border, but ImplWin does not contain the border => correction
+            // needed.
+            long nLeft, nTop, nRight, nBottom;
+            pWin->GetBorder( nLeft, nTop, nRight, nBottom );
+            Point aPoint( -nLeft, -nTop );
+            Region aCtrlRegion( Rectangle( aPoint - GetPosPixel(), pWin->GetSizePixel() ) );
+
+            BOOL bMouseOver = FALSE;
+            if( GetParent() )
+            {
+                Window *pChild = GetParent()->GetWindow( WINDOW_FIRSTCHILD );
+                while( pChild && !(bMouseOver = pChild->IsMouseOver()) )
+                    pChild = pChild->GetWindow( WINDOW_NEXT );
+            }
+
+            if( bMouseOver )
+                nState |= CTRL_STATE_ROLLOVER;
+
+            bNativeOK = DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                aControlValue, rtl::OUString() );
+        }
+
         if( IsEnabled() )
         {
             if( HasFocus() )
@@ -2488,13 +2564,15 @@ void ImplWin::ImplDraw( bool bLayout )
                 if( IsControlForeground() )
                     aColor = GetControlForeground();
                 SetTextColor( aColor );
-                Erase( maFocusRect );
+                if ( !bNativeOK )
+                    Erase( maFocusRect );
             }
         }
         else // Disabled
         {
             SetTextColor( rStyleSettings.GetDisableColor() );
-            Erase( maFocusRect );
+            if ( !bNativeOK )
+                Erase( maFocusRect );
         }
     }
 
@@ -2614,7 +2692,7 @@ void ImplWin::LoseFocus()
 }
 
 // =======================================================================
-
+
 ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
     PushButton(  pParent, nWinStyle ),
     mbDown  ( FALSE )
