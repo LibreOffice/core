@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-12-19 14:09:49 $
+ *  last change: $Author: ka $ $Date: 2002-01-09 12:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,9 +1068,13 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
         // nie auf eine Masterpage)
         pDoc->SetSelected(pActualPage, TRUE);
 
-        // VisArea zuziehen, um ggf. Objekte zu deaktivieren
-        DisconnectAllClients();
-        VisAreaChanged(Rectangle(Point(), Size(1, 1)));
+        if( !pFuSlideShow || ( pFuSlideShow->GetAnimationMode() != ANIMATIONMODE_SHOW ) )
+        {
+            // VisArea zuziehen, um ggf. Objekte zu deaktivieren
+            // !!! only if we are not in presentation mode (#96279) !!!
+            DisconnectAllClients();
+            VisAreaChanged(Rectangle(Point(), Size(1, 1)));
+        }
 
         if (eEditMode == EM_PAGE)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-11 07:46:20 $
+ *  last change: $Author: ka $ $Date: 2002-01-09 12:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,13 +483,14 @@ void SdDrawViewShell::WriteFrameViewData()
     Rectangle aVisArea = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
     pFrameView->SetVisArea(aVisArea);
 
-    if (ePageKind == PK_HANDOUT)
-    {
+    if( ePageKind == PK_HANDOUT )
         pFrameView->SetSelectedPage(0);
-    }
     else
     {
-        pFrameView->SetSelectedPage(aTabControl.GetCurPageId() - 1);
+        if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
+            pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
+        else
+            pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
     }
 
     pFrameView->SetViewShEditMode(eEditMode, ePageKind);
