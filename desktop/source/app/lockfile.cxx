@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ namespace desktop {
     {
         // this checks whether the lockfile was created on the same
         // host by the same user. Should this be the case it is safe
-        // to assume that it is a stale lookfile which can be overwritten
+        // to assume that it is a stale lockfile which can be overwritten
         String aLockname = m_aLockname;
         Config aConfig(aLockname);
         aConfig.SetGroup(m_aGroup);
