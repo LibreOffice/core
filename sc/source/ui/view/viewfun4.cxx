@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 17:02:17 $
+ *  last change: $Author: er $ $Date: 2001-09-07 19:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void ScViewFunc::PasteRTF( USHORT nStartCol, USHORT nStartRow,
         ScImportExport aImpEx( pDocSh->GetDocument(),
             ScAddress( nStartCol, nStartRow, GetViewData()->GetTabNo() ) );
 
-        String aStr;
+        ::rtl::OUString aStr;
         SotStorageStreamRef xStream;
         if ( aDataHelper.GetSotStorageStream( SOT_FORMAT_RTF, xStream ) && xStream.Is() )
             aImpEx.ImportStream( *xStream, SOT_FORMAT_RTF );

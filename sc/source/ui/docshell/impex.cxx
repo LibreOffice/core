@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-08-06 10:21:02 $
+ *  last change: $Author: er $ $Date: 2001-09-07 19:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,14 +380,14 @@ inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
 }
 
 
-BOOL ScImportExport::ImportString( const String& rText, ULONG nFmt )
+BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
 {
     switch ( nFmt )
     {
         // formats supporting unicode
         case FORMAT_STRING :
         {
-            SvMemoryStream aStrm( (void*)rText.GetBuffer(), rText.Len() * sizeof(sal_Unicode), STREAM_READ );
+            SvMemoryStream aStrm( (void*)rText.getStr(), rText.getLength() * sizeof(sal_Unicode), STREAM_READ );
             aStrm.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
             return ImportStream( aStrm, nFmt );
@@ -397,8 +397,8 @@ BOOL ScImportExport::ImportString( const String& rText, ULONG nFmt )
         default:
         {
             rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
-            ByteString aTmp( rText, eEnc );
-            SvMemoryStream aStrm( (void*)aTmp.GetBuffer(), aTmp.Len() * sizeof(sal_Char), STREAM_READ );
+            ::rtl::OString aTmp( rText.getStr(), rText.getLength(), eEnc );
+            SvMemoryStream aStrm( (void*)aTmp.getStr(), aTmp.getLength() * sizeof(sal_Char), STREAM_READ );
             aStrm.SetStreamCharSet( eEnc );
             SetNoEndianSwap( aStrm );       //! no swapping in memory
             return ImportStream( aStrm, nFmt );

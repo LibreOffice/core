@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-16 08:44:22 $
+ *  last change: $Author: er $ $Date: 2001-09-07 19:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             ScAddress aPos( nPosX, nPosY, GetViewData()->GetTabNo() );
             ScImportExport aObj( GetViewData()->GetDocument(), aPos );
 
-            String aStr;
+            ::rtl::OUString aStr;
             SotStorageStreamRef xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
                 bRet = aObj.ImportStream( *xStream, nFormatId );
