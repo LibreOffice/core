@@ -210,6 +210,7 @@
                     <menu:menuitem menu:id=".uno:DefinePrintArea" menu:helpid="26602" menu:label="" />
                     <menu:menuitem menu:id=".uno:AddPrintArea" menu:helpid="26651" menu:label="" />
                     <menu:menuitem menu:id=".uno:DeletePrintArea" menu:helpid="26603" menu:label="" />
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:EditPrintArea" menu:helpid="26605" menu:label="" />
                 </menu:menupopup>
             </menu:menu>
