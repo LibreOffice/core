@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: as $ $Date: 2002-05-31 13:42:57 $
+ *  last change: $Author: as $ $Date: 2002-07-29 08:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
@@ -302,6 +306,7 @@ class Frame :   // interfaces
                 public  css::awt::XFocusListener                    ,
                 public  css::document::XActionLockable              ,
                 public  css::util::XCloseable                       ,   // => XCloseBroadcaster
+                public  css::frame::XComponentLoader                ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
                 public  ThreadHelpBase                              ,   // helper for own threadsafe code
@@ -328,6 +333,17 @@ class Frame :   // interfaces
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
+
+        //---------------------------------------------------------------------------------------------------------
+        //  XComponentLoader
+        //---------------------------------------------------------------------------------------------------------
+        virtual css::uno::Reference< css::lang::XComponent >        SAL_CALL loadComponentFromURL               ( const ::rtl::OUString&                                                        sURL                ,
+                                                                                                                  const ::rtl::OUString&                                                        sTargetFrameName    ,
+                                                                                                                        sal_Int32                                                               nSearchFlags        ,
+                                                                                                                  const css::uno::Sequence< css::beans::PropertyValue >&                        lArguments          ) throw( css::io::IOException                ,
+                                                                                                                                                                                                                             css::lang::IllegalArgumentException ,
+                                                                                                                                                                                                                             css::uno::RuntimeException          );
+
 
         //---------------------------------------------------------------------------------------------------------
         //  XFramesSupplier

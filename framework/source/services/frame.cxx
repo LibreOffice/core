@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 10:08:02 $
+ *  last change: $Author: as $ $Date: 2002-07-29 08:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_INTERCEPTIONHELPER_HXX_
 #include <dispatch/interceptionhelper.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_COMPONENTLOADER_HXX_
+#include <helper/componentloader.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
@@ -270,7 +274,7 @@ namespace framework{
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_19                (   Frame                                                                   ,
+DEFINE_XINTERFACE_20                (   Frame                                                                   ,
                                         OWeakObject                                                             ,
                                         DIRECT_INTERFACE(css::lang::XTypeProvider                               ),
                                         DIRECT_INTERFACE(css::lang::XServiceInfo                                ),
@@ -290,10 +294,11 @@ DEFINE_XINTERFACE_19                (   Frame                                   
                                         DERIVED_INTERFACE(css::lang::XEventListener, css::awt::XWindowListener  ),
                                         DIRECT_INTERFACE(css::document::XActionLockable                         ),
                                         DIRECT_INTERFACE(css::util::XCloseable                                  ),
-                                        DIRECT_INTERFACE(css::util::XCloseBroadcaster                           )
+                                        DIRECT_INTERFACE(css::util::XCloseBroadcaster                           ),
+                                        DIRECT_INTERFACE(css::frame::XComponentLoader                           )
                                     )
 
-DEFINE_XTYPEPROVIDER_18             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_19             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -311,7 +316,8 @@ DEFINE_XTYPEPROVIDER_18             (   Frame                                   
                                         css::awt::XFocusListener                                                ,
                                         css::lang::XEventListener                                               ,
                                         css::util::XCloseable                                                   ,
-                                        css::util::XCloseBroadcaster
+                                        css::util::XCloseBroadcaster                                            ,
+                                        css::frame::XComponentLoader
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
@@ -432,6 +438,41 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
 Frame::~Frame()
 {
     LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE, "Frame::~Frame()", "Who forgot to dispose this service?" )
+}
+
+/*-************************************************************************************************************//**
+    @interface  XComponentLoader
+    @short      try to load given URL into a task
+    @descr      You can give us some informations about the content, which you will load into a frame.
+                We search or create this target for you, make a type detection of given URL and try to load it.
+                As result of this operation we return the new created component or nothing, if loading failed.
+
+    @seealso    -
+
+    @param      "sURL"              , URL, which represant the content
+    @param      "sTargetFrameName"  , name of target frame or special value like "_self", "_blank" ...
+    @param      "nSearchFlags"      , optional arguments for frame search, if target isn't a special one
+    @param      "lArguments"        , optional arguments for loading
+    @return     A valid component reference, if loading was successfully.
+                A null reference otherwise.
+
+    @onerror    We return a null reference.
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromURL( const ::rtl::OUString&                                 sURL            ,
+                                                                                   const ::rtl::OUString&                                 sTargetFrameName,
+                                                                                         sal_Int32                                        nSearchFlags    ,
+                                                                                   const css::uno::Sequence< css::beans::PropertyValue >& lArguments      ) throw( css::io::IOException                ,
+                                                                                                                                                                   css::lang::IllegalArgumentException ,
+                                                                                                                                                                   css::uno::RuntimeException          )
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    ComponentLoader aLoader(m_xFactory,this);
+    aReadLock.unlock();
+    /* } SAFE */
+
+    return aLoader.loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
 }
 
 /*-****************************************************************************************************//**
@@ -3039,11 +3080,10 @@ void Frame::implts_setIconOnWindow()
             css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
             if( xModel.is() == sal_True )
             {
-                css::uno::Sequence< css::beans::PropertyValue > lLoadArguments = xModel->getArgs();
-                ::rtl::OUString                                 sFilter                           ;
-                ArgumentAnalyzer                                aAnalyzer( lLoadArguments )       ; // Don't set temp. copy of list into analyzer! He works on reference only ...
-
+                ::rtl::OUString  sFilter;
+                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),(sal_uInt32)E_FILTERNAME);
                 aAnalyzer.getArgument( E_FILTERNAME, sFilter );
+
                 if( sFilter.getLength() > 0 )
                 {
                     FilterCache aCacheRef; // Cache use refcount and static impl_data_container! So we can use it so!
