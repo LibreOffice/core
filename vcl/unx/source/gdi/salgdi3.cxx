@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:38:35 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,7 +816,10 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     ServerFont& rFont = rLayout.GetServerFont();
 
     // prepare glyphs and get extent of operation
-    int nXmin, nXmax, nYmin, nYmax;
+    int nXmin = 0;
+    int nXmax = 0;
+    int nYmin = 0;
+    int nYmax = 0;
     int nStart = 0;
     Point aPos;
     sal_Int32 nGlyph;
