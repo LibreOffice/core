@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,6 +231,9 @@
 #endif
 #ifndef _DDEFLD_HXX
 #include <ddefld.hxx>
+#endif
+#ifndef _DATETIME_HXX
+#include <tools/datetime.hxx>
 #endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
@@ -2206,8 +2209,7 @@ void SwXTextField::update(  ) throw (RuntimeException)
         switch(pFld->Which())
         {
             case RES_DATETIMEFLD:
-            ((SwDateTimeField*)pFld)->SetDateTime( Date().GetDate(),
-                                                Time().GetTime() );
+            ((SwDateTimeField*)pFld)->SetDateTime( ::DateTime() );
             break;
 
             case RES_EXTUSERFLD:
