@@ -8008,3 +8008,6 @@ _TI4?AVout_of_range@_STL@@
 ?insert_unique@?$hashtable@U?$pair@$$CBVOUString@rtl@@H@_STL@@VOUString@rtl@@UhashOU@?%O:\SRC641\src\sfx2\source\appl\newhelp.cxx651317081@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@UequalOU@6@V?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@@_STL@@QAE?AU?$pair@U?$_Ht_iterator@U?$pair@$$CBVOUString@rtl@@H@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@VOUString@rtl@@UhashOU@?%O:\SRC641\src\sfx2\source\appl\newhelp.cxx651317081@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@UequalOU@7@V?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@@_STL@@_N@2@ABU?$pair@$$CBVOUString@rtl@@H@2@@Z
 ?resize@?$hashtable@U?$pair@$$CBVOUString@rtl@@H@_STL@@VOUString@rtl@@UhashOU@?%O:\SRC641\src\sfx2\source\appl\newhelp.cxx651317081@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@UequalOU@6@V?$allocator@U?$pair@$$CBVOUString@rtl@@H@_STL@@@2@@_STL@@QAEXI@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2346266@@YAXABVSbxVariableRef@@PAX@Z
+?SetControlHelpIds@FileDialogHelper@sfx2@@QAEXPBFPBJ@Z
+?SetDialogHelpId@FileDialogHelper@sfx2@@QAEXJ@Z
+?set@?$Reference@VXPropertySetInfo@beans@star@sun@com@@@uno@star@sun@com@@QAAEPAVXPropertySetInfo@beans@345@@Z
