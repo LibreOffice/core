@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:44:13 $
+ *  last change: $Author: jp $ $Date: 2001-01-15 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,11 +364,8 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     // und noch alle Bookmarks
                     // ?????
 
-                    INetURLObject aEntry2(rPath);
-                    aEntry2.removeSegment();
-                    String sPath = aEntry2.GetMainURL();
                     utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
-                    sFileName = aTempFile2.GetFileName();
+                    sFileName = aTempFile2.GetURL();
                     SfxMedium* pTmpMed = new SfxMedium( sFileName,
                                                 STREAM_STD_READWRITE, TRUE );
                     pTmpMed->SetFilter( pFilter );

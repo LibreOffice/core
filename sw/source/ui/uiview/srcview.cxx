@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:26:31 $
+ *  last change: $Author: jp $ $Date: 2001-01-15 18:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,7 +1081,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     {
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
-        String sFileURL( aTempFile.GetFileName() ),
+        String sFileURL( aTempFile.GetURL() ),
                sBaseURL( INetURLObject::GetBaseURL() );
         BOOL bIsRemote = pMedium->IsRemote();
         SvtSaveOptions aOpt;

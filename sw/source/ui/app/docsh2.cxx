@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:21:17 $
+ *  last change: $Author: jp $ $Date: 2001-01-15 18:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     {
                         utl::TempFile aTempFile;
                         aTempFile.EnableKillingFile();
-                        pSrcView->SaveContent(aTempFile.GetFileName());
+                        pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = TRUE;
                         SetActualSize(pSrcView->GetEditWin().GetSizePixel());
                         SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
@@ -923,7 +923,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pEvent->ConfigureEvent(SFX_EVENT_CLOSEDOC,      aMac, this);
                         pEvent->ConfigureEvent(SFX_EVENT_ACTIVATEDOC,   aMac, this);
                         pEvent->ConfigureEvent(SFX_EVENT_DEACTIVATEDOC, aMac, this);
-                        ReloadFromHtml(aTempFile.GetFileName(), pSrcView);
+                        ReloadFromHtml(aTempFile.GetURL(), pSrcView);
                         nSlot = 0;
                     }
                     else
@@ -1692,6 +1692,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2000/11/06 09:21:17  jp
+    must changes: tempfile
+
     Revision 1.8  2000/11/01 10:13:28  jp
     new method LoadStyleFromFile for docshell and uno
 
