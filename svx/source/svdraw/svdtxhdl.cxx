@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:37 $
+ *  last change: $Author: aw $ $Date: 2001-01-23 12:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,13 +191,14 @@ void ImpTextPortionHandler::DrawTextToPath(ExtOutputDevice& rXOut, FASTBOOL bDra
 IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
 {
     // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
-    Point aPos(aFormTextBoundRect.TopLeft());
-    aPos+=pInfo->rStartPos;
+    BOOL bIsVertical(rOutliner.IsVertical());
+    Point aPos(aFormTextBoundRect.TopLeft() + pInfo->rStartPos);
+    if(bIsVertical)
+        aPos = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
     Color aColor(pInfo->rFont.GetColor());
     xub_StrLen nCnt = pInfo->rText.Len();
-    long nBase=aPos.Y();
-    long nLeftX=aPos.X();
-
+    long nBase = (bIsVertical) ? aPos.X() : aPos.Y();
+    long nLeft = (bIsVertical) ? aPos.Y() : aPos.X();
     SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetItemPool()));
 
     long nHochTief=pInfo->rFont.GetEscapement();
@@ -219,7 +220,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (bNeg) nHochTief=-nHochTief;
     }
     FontMetric aFontMetric(aVDev.GetFontMetric());
-    aPos.Y()-=aFontMetric.GetAscent()+nHochTief;
+    if(bIsVertical)
+        aPos.X() += nHochTief;
+    else
+        aPos.Y()-=aFontMetric.GetAscent()+nHochTief;
 
     if (pInfo->rFont.IsOutline()) {
         aAttrSet.Put(XLineColorItem(String(),aColor));
@@ -238,12 +242,13 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         // since XOutGetCharOutline() is not yet changed, make a short
         // term solution here
         sal_Unicode aUnicode = (pInfo->rText).GetChar(i);
-        XPolyPolygon aXPP(
-            XOutGetCharOutline(aUnicode, aVDev));
+        XPolyPolygon aXPP(XOutGetCharOutline(aUnicode, aVDev));
+// offset in Y(!)       Rectangle aPolyRect(aXPP.GetBoundRect());
 
         if(aXPP.Count())
         {
             aXPP.Move(aPos.X(), aPos.Y());
+// offset in Y(!)           aPolyRect = aXPP.GetBoundRect();
 
             // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
             // #35825# Rotieren erst nach Resize (wg. FitToSize)
@@ -251,16 +256,17 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
 
             SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
 
-//-/            pObj->NbcSetAttributes(aAttrSet, FALSE);
             pObj->SetItemSet(aAttrSet);
-
             pGroup->GetSubList()->InsertObject(pObj);
         }
 
-        aPos.X() = nLeftX + pInfo->pDXArray[i]; // - nSlant;
+        if(bIsVertical)
+            aPos.Y() = nLeft + pInfo->pDXArray[i]; // - nSlant;
+        else
+            aPos.X() = nLeft + pInfo->pDXArray[i]; // - nSlant;
     }
 
-    long nLineLen=aPos.X()-nLeftX;
+    long nLineLen = (bIsVertical) ? aPos.Y()-nLeft : aPos.X()-nLeft;
     FontUnderline eUndl=pInfo->rFont.GetUnderline();
     FontStrikeout eStrk=pInfo->rFont.GetStrikeout();
     if (eUndl!=UNDERLINE_NONE) {
@@ -296,7 +302,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (bDouble) y-=nDick+nDist;
         y=(y+1)/2;
 
-        aXPP.Move(nLeftX,nBase+y-nHochTief);
+        aXPP.Move(nLeft,nBase+y-nHochTief);
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
@@ -327,7 +333,7 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         if (!bDouble) y-=(nDick+1)/2;
         else y-=nDick+(nDist+1)/2;
 
-        aXPP.Move(nLeftX,nBase+y-nHochTief);
+        aXPP.Move(nLeft,nBase+y-nHochTief);
         // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
         // #35825# Rotieren erst nach Resize (wg. FitToSize)
         //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
