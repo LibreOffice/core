@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:52:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,8 @@ void ScDrawView::Construct()
 
     if (pViewData)
     {
-        USHORT nTab = pViewData->GetTabNo();
-        ShowPagePgNum( nTab, Point() );
+        SCTAB nTab = pViewData->GetTabNo();
+        ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
 
         BOOL bEx = pViewData->GetViewShell()->IsDrawSelMode();
         BOOL bProt = pDoc->IsTabProtected( nTab ) ||
@@ -153,7 +153,7 @@ void ScDrawView::Construct()
         SetSwapAsynchron(TRUE);
     }
     else
-        ShowPagePgNum( nTab, Point() );
+        ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
 
     UpdateUserViewOptions();
     RecalcScale();
@@ -192,22 +192,22 @@ void ScDrawView::AddCustomHdl()
             long nPosX = (long) (aPos.X() / HMM_PER_TWIPS) + nDelta;
             long nPosY = (long) (aPos.Y() / HMM_PER_TWIPS) + nDelta;
 
-            UINT16 nCol;
+            SCCOL nCol;
             INT32 nWidth = 0;
 
             for(nCol=0; nCol<=MAXCOL && nWidth<=nPosX; nCol++)
                 nWidth += pDoc->GetColWidth(nCol,nTab);
 
-            if(nCol)
+            if(nCol > 0)
                 --nCol;
 
-            UINT16 nRow;
+            SCROW nRow;
             INT32 nHeight = 0;
 
             for(nRow=0; nRow<=MAXROW && nHeight<=nPosY; nRow++)
                 nHeight += pDoc->FastGetRowHeight(nRow,nTab);
 
-            if(nRow)
+            if(nRow > 0)
                 --nRow;
 
             ScTabView* pView = pViewData->GetView();
@@ -414,7 +414,7 @@ BOOL ScDrawView::HasMarkedControl() const
 
 void ScDrawView::UpdateWorkArea()
 {
-    SdrPage* pPage = GetModel()->GetPage(nTab);
+    SdrPage* pPage = GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
     if (pPage)
     {
         Point aPos;
@@ -469,8 +469,8 @@ void ScDrawView::RecalcScale()
                                             //! Zoom uebergeben ???
     }
 
-    USHORT nEndCol = 0;
-    USHORT nEndRow = 0;
+    SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
@@ -733,17 +733,17 @@ BOOL ScDrawView::SelectObject( const String& rName )
 {
     UnmarkAll();
 
-    USHORT nObjectTab = 0;
+    SCTAB nObjectTab = 0;
     SdrObject* pFound = NULL;
 
     SfxObjectShell* pShell = pDoc->GetDocumentShell();
     if (pShell)
     {
         SdrModel* pDrawLayer = GetModel();
-        USHORT nTabCount = pDoc->GetTableCount();
-        for (USHORT i=0; i<nTabCount && !pFound; i++)
+        SCTAB nTabCount = pDoc->GetTableCount();
+        for (SCTAB i=0; i<nTabCount && !pFound; i++)
         {
-            SdrPage* pPage = pDrawLayer->GetPage(i);
+            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(i));
             DBG_ASSERT(pPage,"Page ?");
             if (pPage)
             {
