@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 17:06:48 $
+ *  last change: $Author: os $ $Date: 2001-01-25 10:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #include "svxids.hrc"
 #include "fmresids.hrc"
+#include "helpid.hrc"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 
@@ -334,6 +335,7 @@ FloatingWindow RID_SVXTBX_FORM
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
+    HelpId = HID_SVXTBX_FORM;
     Text = "Formularfunktionen" ;
     Text [ English ] = "Form functions" ;
     ToolBox TBX_FORM
