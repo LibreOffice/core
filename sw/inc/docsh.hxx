@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 11:27:26 $
+ *  last change: $Author: os $ $Date: 2001-02-13 14:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_NOW ) const;
+                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
     virtual void    FillRegInfo( SvEmbeddedRegistryInfo * );
 
     virtual SvDataMemberObjectRef CreateSnapshot();
