@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:06:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "RedlineProtectionKey", sizeof("RedlineProtectionKey")-1, 0,
-#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
               new uno::Type(::getCppuType((Sequence<sal_Int8>*)0)),
 #else
               &::getCppuType((Sequence<sal_Int8>*)0),
