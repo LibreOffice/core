@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:23:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include <hintids.hxx>
 #endif
 #ifdef ACCESSIBLE_LAYOUT
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #endif
 
@@ -4400,14 +4400,14 @@ void SwEditWin::SetChainMode( BOOL bOn )
 }
 
 #ifdef ACCESSIBLE_LAYOUT
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
     vos::OGuard aGuard(Application::GetSolarMutex());   // this should have
                                                         // happend already!!!
     SwWrtShell *pSh = rView.GetWrtShellPtr();
     ASSERT( pSh, "no writer shell, no accessible object" );
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+        ::com::sun::star::accessibility::XAccessible > xAcc;
     if( pSh )
         xAcc = pSh->CreateAccessible();
 
