@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 10:18:41 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 12:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1308,11 +1308,12 @@ void SwCntntNode::DelFrms()
         {
             SwFtnFrm *pFtn = pFrm->FindFtnFrm();
             ASSERT( pFtn, "You promised a FtnFrm?" );
-            if( !pFtn->GetFollow() && !pFtn->GetMaster() && pFtn->GetRef() &&
-                pFtn->GetRef()->IsFollow() )
+            SwCntntFrm* pCFrm;
+            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
+                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
             {
-                ASSERT( pFtn->GetRef()->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pFtn->GetRef()->FindMaster())->Prepare( PREP_FTN_GONE );
+                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
+                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
             }
         }
         pFrm->Cut();
