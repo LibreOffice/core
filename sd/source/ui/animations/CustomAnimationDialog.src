@@ -1,0 +1,598 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CustomAnimationDialog.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:04:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "CustomAnimationDialog.hrc"
+#include "CustomAnimation.hrc"
+
+TabDialog DLG_CUSTOMANIMATION
+{
+    Size = MAP_APPFONT ( 239 , 200 ) ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ de ] = "Effektoptionen" ;
+    Text [ en-US ] = "Effect Options";
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 180 , 159 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                PageResID = RID_TP_CUSTOMANIMATION_EFFECT ;
+                Identifier = RID_TP_CUSTOMANIMATION_EFFECT ;
+                Text [ de ] = "Effekte" ;
+                Text [ en-US ] = "Effect" ;
+            };
+
+            PageItem
+            {
+                PageResID = RID_TP_CUSTOMANIMATION_DURATION;
+                Identifier = RID_TP_CUSTOMANIMATION_DURATION;
+                Text [ de ] = "Anzeigedauer";
+                Text [ en-US ] = "Timing";
+            };
+
+            PageItem
+            {
+                PageResID = RID_TP_CUSTOMANIMATION_TEXT;
+                Identifier = RID_TP_CUSTOMANIMATION_TEXT;
+                Text [ de ] = "Textanimation";
+                Text [ en-US ] = "Text Animation";
+            };
+        };
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 10 , 175 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 64 , 175 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 119 , 175 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+};
+
+TabPage RID_TP_CUSTOMANIMATION_EFFECT
+{
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 180 , 159 );
+    Text [ de ] = "Effekte" ;
+    Text [ en-US ] = "Effect";
+
+    FixedLine FL_SETTINGS
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT( 244, 8 );
+        Hide = TRUE;
+
+        Text [ de ] = "Einstellungen";
+        Text [ en-US ] = "Settings";
+    };
+
+    FixedText FT_PROPERTY_1
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+        Hide = TRUE;
+    };
+
+    ListBox LB_PROPERTY_1
+    {
+        Pos = MAP_APPFONT ( 57 , 14  ) ;
+        Size = MAP_APPFONT ( 80, 100 );
+        Hide = TRUE;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        ClipChildren = TRUE;
+    };
+
+    FixedText FT_PROPERTY_2
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 12 , 16  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+        Hide = TRUE;
+    };
+
+    ListBox LB_PROPERTY_2
+    {
+        Pos = MAP_APPFONT ( 57 , 14  ) ;
+        Size = MAP_APPFONT ( 80, 100 );
+        Hide = TRUE;
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    CheckBox CB_SMOOTH_START
+    {
+        Pos = MAP_APPFONT( 12, 14 );
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Hide = TRUE;
+
+        Text [ de ] = "Beschleunigter Start";
+        Text [ en-US ] = "Accelerated start";
+    };
+
+    CheckBox CB_SMOOTH_END
+    {
+        Pos = MAP_APPFONT( 76, 14 );
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Hide = TRUE;
+
+        Text [ de ] = "Verlangsamtes Ende";
+        Text [ en-US ] = "Decelerated end";
+    };
+
+    CheckBox CB_AUTORESTART
+    {
+        Pos = MAP_APPFONT( 12, 14 );
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Hide = TRUE;
+
+        Text [ de ] = "Automatisch umkehren";
+        Text [ en-US ] = "Reverse automatically";
+    };
+
+    FixedLine FL_ENHANCEMENTS
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT( 244, 8 );
+        Hide = TRUE;
+
+        Text [ de ] = "Erweiterungen";
+        Text [ en-US ] = "Enhancement";
+    };
+
+    FixedText FT_SOUND
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 5  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Sound";
+        Text [ en-US ] = "Klang";
+    };
+
+    ListBox LB_SOUND
+    {
+        Pos = MAP_APPFONT ( 51 , 3  ) ;
+        Size = MAP_APPFONT ( 80, 100 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_AFTER_EFFECT
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 20  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Nach der Animation";
+        Text [ en-US ] = "After animation ";
+    };
+
+    ListBox LB_AFTER_EFFECT
+    {
+        Pos = MAP_APPFONT ( 51 , 18  ) ;
+        Size = MAP_APPFONT ( 80, 100 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ de ] =
+        {
+            < "Nicht abblenden" ; > ;
+            < "Mit Farbe abblenden" ; > ;
+            < "Nach Animation ausblenden" ; > ;
+            < "Mit nächster Animation ausblenden" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "Don't dim" ; > ;
+            < "Dim with color" ; > ;
+            < "Hide after animation" ; > ;
+            < "Hide on next animation" ; > ;
+        };
+    };
+
+    FixedText FT_DIMCOLOR
+    {
+        Pos = MAP_APPFONT( 6, 35 );
+        Size = MAP_APPFONT( 42, 8 );
+        Text [ de ] = "Abblendfarbe" ;
+        Text [ en-US ] = "Dimcolor";
+    };
+
+    ListBox CLB_DIMCOLOR
+    {
+        Pos = MAP_APPFONT( 51, 33 );
+        Size = MAP_APPFONT ( 80, 100 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_TEXT_ANIM
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 50  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Text animieren";
+        Text [ en-US ] = "Text animation";
+    };
+
+    ListBox LB_TEXT_ANIM
+    {
+        Pos = MAP_APPFONT ( 51 , 48  ) ;
+        Size = MAP_APPFONT ( 80, 100 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ de ] =
+        {
+            < "Alle gleichzeitig" ; > ;
+            < "Wortweise" ; > ;
+            < "Zeichenweise" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "All at once" ; > ;
+            < "Word by word" ; > ;
+            < "Letter by letter" ; > ;
+        };
+    };
+
+    FixedText FT_TEXT_DELAY
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 51 + 42 + 3, 66  ) ;
+        Size = MAP_APPFONT( 120, 8 );
+
+        Text [ de ] = "verzögerung zwischen Buchstaben";
+        Text [ en-US ] = "delay between characters";
+    };
+
+    MetricField MF_TEXT_DELAY
+    {
+        Pos = MAP_APPFONT ( 51, 64  ) ;
+        Size = MAP_APPFONT ( 42, 12 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 1024 ;
+        DecimalDigits = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ de ] = "%" ;
+        CustomUnitText [ en-US ] = "%";
+        SpinSize = 1 ;
+
+    };
+};
+
+TabPage RID_TP_CUSTOMANIMATION_DURATION
+{
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 180 , 159 );
+    Text [ de ] = "Anzeigedauer" ;
+    Text [ en-US ] = "Timing";
+
+    FixedText FT_START
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 5  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Starten";
+        Text [ en-US ] = "Start";
+    };
+
+    ListBox LB_START
+    {
+        Pos = MAP_APPFONT ( 51 , 3  ) ;
+        Size = MAP_APPFONT ( 80, 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ de ]=
+        {
+            < "Beim Klicken" ; > ;
+            < "Mit Vorheriger" ; > ;
+            < "Nach Vorheriger" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "On click" ; > ;
+            < "With previous" ; > ;
+            < "After previous" ; > ;
+        };
+    };
+
+    FixedText FT_START_DELAY
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 20  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Verzögerung";
+        Text [ en-US ] = "Delay";
+    };
+
+    MetricField MF_START_DELAY
+    {
+        Pos = MAP_APPFONT ( 51 , 18  ) ;
+        Size = MAP_APPFONT ( 42, 12 );
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ de ] = "Sek" ;
+        CustomUnitText [ en-US ] = "sec";
+        SpinSize = 5 ;
+    };
+
+    FixedText FT_DURATION
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 35  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Geschwindigkeit";
+        Text [ en-US ] = "Speed";
+    };
+
+    ComboBox CB_DURATION
+    {
+        Pos = MAP_APPFONT ( 51 , 33  ) ;
+        Size = MAP_APPFONT ( 80, 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    FixedText FT_REPEAT
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 50  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Wiederholen";
+        Text [ en-US ] = "Repeat";
+    };
+
+    ComboBox CB_REPEAT
+    {
+        Pos = MAP_APPFONT ( 51 , 48 ) ;
+        Size = MAP_APPFONT ( 80, 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+
+    CheckBox CBX_REWIND
+    {
+        Pos = MAP_APPFONT ( 6 , 66  ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Nach der Wiedergabe zurückspulen" ;
+        Text [ en-US ] = "Rewind when done playing" ;
+    };
+
+    FixedLine FL_TRIGGER
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 79  ) ;
+        Size = MAP_APPFONT( 168, 8 );
+
+        Text [ de ] = "Auslösen";
+        Text [ en-US ] = "Trigger";
+    };
+
+    RadioButton RB_CLICKSEQUENCE
+    {
+        Pos = MAP_APPFONT ( 12, 92  ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Text [ de ] = "Animation als Teil der Klickreihenfolge" ;
+        Text [ en-US ] = "Animate as part of click sequence" ;
+        TabStop = TRUE ;
+    };
+
+    RadioButton RB_INTERACTIVE
+    {
+        Pos = MAP_APPFONT ( 12, 105  ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Text [ de ] = "Effect starten beim Klicken auf" ;
+        Text [ en-US ] = "Start effect on click of" ;
+        TabStop = TRUE ;
+    };
+
+    ListBox LB_TRIGGER
+    {
+        Pos = MAP_APPFONT ( 24 , 118  );
+        Size = MAP_APPFONT ( 80, 80 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+    };
+};
+
+TabPage RID_TP_CUSTOMANIMATION_TEXT
+{
+    Hide = TRUE;
+    Size = MAP_APPFONT ( 180 , 159 );
+    Text [ de ] = "Textanimation" ;
+    Text [ en-US ] = "Text Animation";
+
+    FixedText FT_GROUP_TEXT
+    {
+        OutputSize = TRUE;
+        Pos = MAP_APPFONT ( 6 , 5  ) ;
+        Size = MAP_APPFONT( 42, 8 );
+
+        Text [ de ] = "Texte gruppieren";
+        Text [ en-US ] = "Group text";
+    };
+
+    ListBox LB_GROUP_TEXT
+    {
+        Pos = MAP_APPFONT ( 45 , 3 ) ;
+        Size = MAP_APPFONT ( 80, 48 );
+        TabStop = TRUE ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+
+        StringList [ de ] =
+        {
+            < "Als einzelnes Objekt" ; > ;
+            < "Alle Absätze auf einmal" ; > ;
+            < "Nach 1. Abschnittsebene" ; > ;
+            < "Nach 2. Abschnittsebene" ; > ;
+            < "Nach 3. Abschnittsebene" ; > ;
+            < "Nach 4. Abschnittsebene" ; > ;
+            < "Nach 5. Abschnittsebene" ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "As one object" ; > ;
+            < "All paragraphs at once" ; > ;
+            < "By 1st level paragraphs" ; > ;
+            < "By 2nd level paragraphs" ; > ;
+            < "By 3rd level paragraphs" ; > ;
+            < "By 4th level paragraphs" ; > ;
+            < "By 5th level paragraphs" ; > ;
+        };
+    };
+
+    Checkbox CBX_GROUP_AUTO
+    {
+        Pos = MAP_APPFONT ( 6 , 20  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Automatisch nach" ;
+        Text [ en-US ] = "Automatically after" ;
+    };
+
+
+    MetricField MF_GROUP_AUTO
+    {
+        Pos = MAP_APPFONT ( 69 , 18 ) ;
+        Size = MAP_APPFONT ( 42, 48 );
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ de ] = "Sek" ;
+        CustomUnitText [ en-US ] = "sec";
+        SpinSize = 5 ;
+    };
+
+    Checkbox CBX_ANIMATE_FORM
+    {
+        Pos = MAP_APPFONT ( 6 , 33  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "Angefügte Form animieren" ;
+        Text [ en-US ] = "Animate attached shape" ;
+    };
+
+    Checkbox CBX_REVERSE
+    {
+        Pos = MAP_APPFONT ( 6 , 46  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ de ] = "In umgekehrter Reihenfolge" ;
+        Text [ en-US ] = "In reverse order" ;
+    };
+};
