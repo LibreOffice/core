@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:01:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ HF_IdlTypeText::Produce_IndexLink( Xml::Element &   o_out,
 
 void
 HF_IdlTypeText::Produce_IndexOwnerLink( Xml::Element &  o_out,
-                                        const client &  i_ce ) const
+                                        const client &  i_owner ) const
 {
     static StringVector aModule_;
     String              sCe;
@@ -312,9 +312,9 @@ HF_IdlTypeText::Produce_IndexOwnerLink( Xml::Element &  o_out,
 
     Out().Enter(o_out);
 
-    if (i_ce.Owner().IsValid())
+    if (i_owner.Owner().IsValid())
     {
-        Env().Data().Get_CeText(aModule_, sCe, sMember, i_ce);
+        Env().Data().Get_CeText(aModule_, sCe, sMember, i_owner);
         produce_IndexLink(aModule_, sCe, sMember, true);
     }
     else
@@ -329,6 +329,23 @@ HF_IdlTypeText::Produce_IndexOwnerLink( Xml::Element &  o_out,
 
     Out().Leave();
 }
+
+void
+HF_IdlTypeText::Produce_IndexSecondEntryLink( Xml::Element &      o_out,
+                                              const client &      i_ce ) const
+{
+    static StringVector aModule_;
+    String              sCe;
+    String              sMember;
+    csv::erase_container(aModule_);
+
+    Out().Enter(o_out);
+
+    Env().Data().Get_CeText(aModule_, sCe, sMember, i_ce);
+    produce_IndexLink(aModule_, sCe, sMember, true);
+    Out().Leave();
+}
+
 
 void
 HF_IdlTypeText::produce_FromStd( const StringVector & i_module,
