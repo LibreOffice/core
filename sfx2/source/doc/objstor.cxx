@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-12 10:29:49 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,10 +453,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     SFX_ITEMSET_ARG( pSet, pBaseItem, SfxStringItem,
                      SID_BASEURL, sal_False);
     String aBaseURL;
-    if( pBaseItem ) aBaseURL = pBaseItem->GetValue();
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+    if( pBaseItem )
+        aBaseURL = pBaseItem->GetValue();
     else
     {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
         if( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
             aBaseURL = INetURLObject::GetBaseURL();
@@ -558,6 +559,24 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
     if ( bOk )
     {
+        GetTitle( SFX_TITLE_DETECT );
+
+        // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
+        if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
+            ( !pMedium->GetFilter() ||
+             pMedium->GetFilter()->UsesStorage() ||
+             pMedium->GetInStream() && pMedium->GetInStream()->GetLockBytes() &&
+             pMedium->GetInStream()->GetLockBytes()->IsSynchronMode() ) )
+            FinishedLoading( SFX_LOADED_MAINDOCUMENT );
+
+        if ( pSalvageItem )
+        {
+            pMedium->SetTemporary( TRUE );
+            pMedium->SetName( pSalvageItem->GetValue(), TRUE );
+            pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
+            pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
+        }
+
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         if ( xModel.is() )
         {
@@ -569,16 +588,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             xModel->attachResource( aURL, aArgs );
         }
-
-        GetTitle( SFX_TITLE_DETECT );
-
-        // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
-        if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
-            ( !pMedium->GetFilter() ||
-             pMedium->GetFilter()->UsesStorage() ||
-             pMedium->GetInStream() && pMedium->GetInStream()->GetLockBytes() &&
-             pMedium->GetInStream()->GetLockBytes()->IsSynchronMode() ) )
-            FinishedLoading( SFX_LOADED_MAINDOCUMENT );
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {
@@ -1775,13 +1784,13 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         pMergedParams->Put( *pParams );
     delete pParams;
 
-    // should be unneccessary - too hot to handle!
-    pMergedParams->ClearItem( SID_DOC_SALVAGE );
-
 #ifdef DBG_UTIL
-    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_AVAILABLE )
+    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
         DBG_ERROR("Salvage item present in Itemset, check the parameters!");
 #endif
+
+    // should be unneccessary - too hot to handle!
+    pMergedParams->ClearItem( SID_DOC_SALVAGE );
 
     // take over the new merged itemset
     pParams = pMergedParams;
@@ -1853,9 +1862,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
         SetError( pNewFile->GetErrorCode() );
 
         // notify the document that saving was done successfully
-        if ( bCopyTo )
-            bOk = DoSaveCompleted( pMedium );
-        else
+        if ( !bCopyTo )
             bOk = DoSaveCompleted( pNewFile );
 
         if( bOk )

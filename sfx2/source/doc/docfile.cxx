@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-11 15:03:42 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ using namespace ::com::sun::star::io;
 
 #pragma hdrstop
 
+#include <comphelper/processfactory.hxx>
 #include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
@@ -738,8 +739,21 @@ Reference < XContent > SfxMedium::GetContent() const
 {
     if ( !pImp->xContent.is() && GetName().Len() )
     {
-        String aURL     = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-        pImp->xContent  = UCB_Helper::CreateContent( aURL );
+/*
+        SFX_ITEMSET_ARG( GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+        Reference < XContent > xContent;
+        if ( pSalvageItem )
+        {
+            String aTemp;
+            ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
+            pImp->xContent = UCB_Helper::CreateContent( aTemp );
+        }
+        else
+ */
+        {
+            String aURL     = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            pImp->xContent  = UCB_Helper::CreateContent( aURL );
+        }
     }
 
     if ( pImp->xContent.is() )
@@ -1298,7 +1312,7 @@ void SfxMedium::Transfer_Impl()
                     String aURL = UCBStorage::GetLinkedFile( *pStream );
                     if ( aURL.Len() )
                         // remove a possibly existing old folder
-                        SfxContentHelper::Kill( aURL );
+                        ::utl::UCBContentHelper::Kill( aURL );
                 }
 
                 DELETEZ( pStream );
@@ -1506,6 +1520,11 @@ void SfxMedium::GetMedium_Impl()
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
+        Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler =
+                Reference< ::com::sun::star::task::XInteractionHandler > (
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+
 //        ::utl::UcbLockBytesRef xLockBytes;
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         INetProtocol eProt = GetURLObject().GetProtocol();
@@ -1571,13 +1590,19 @@ void SfxMedium::GetMedium_Impl()
                     aAny >>= xPostData;
                 }
 
-                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, xPostData, pHandler );
+                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
+                        GetContent(), aProps, xPostData, xInteractionHandler, pHandler );
             }
             else
             {
                 // no callbacks for opening read/write because we might try readonly later
                 pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
-                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, bIsWritable ? NULL : pHandler );
+                if ( pImp->bDontCallDoneLinkOnSharingError )
+                    pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
+                        GetContent(), aProps, nStorOpenMode, Reference < ::com::sun::star::task::XInteractionHandler >() );
+                else
+                    pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
+                        GetContent(), aProps, nStorOpenMode, xInteractionHandler, bIsWritable ? NULL : pHandler );
             }
 
             if ( !pImp->xLockBytes.Is() )
@@ -1585,14 +1610,15 @@ void SfxMedium::GetMedium_Impl()
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 Done_Impl( ERRCODE_IO_NOTEXISTS );
             }
-            else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS && bIsWritable && bAllowReadOnlyMode )
+            else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_ACCESSDENIED && bIsWritable && bAllowReadOnlyMode )
             {
                 GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
                 SetOpenMode(SFX_STREAM_READONLY, sal_False);
                 ResetError();
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
-                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, pHandler );
+                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
+                        GetContent(), aProps, nStorOpenMode, xInteractionHandler, pHandler );
                 if ( !pHandler && !pImp->bDownloadDone )
                     Done_Impl( pImp->xLockBytes->GetError() );
             }
@@ -1768,11 +1794,13 @@ void SfxMedium::Init_Impl()
     // Recover-Files sind immer temp
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if ( pSalvageItem )
-        pImp->bIsTemp = sal_True;
+    {
+//      aLogicName = pSalvageItem->GetValue();
+//        pImp->bIsTemp = sal_True;
+    }
 }
 
 //------------------------------------------------------------------
-
 SfxMedium::SfxMedium()
 :   IMPL_CTOR(),
     bRoot( sal_False ),
@@ -2051,7 +2079,8 @@ SfxMedium::~SfxMedium()
     {
         String aTemp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aTemp );
-        SfxContentHelper::Kill( aTemp );
+        if ( !::utl::UCBContentHelper::Kill( aTemp ) )
+            DBG_ERROR("Couldn't remove temporary file!");
     }
 
     pFilter = 0;
