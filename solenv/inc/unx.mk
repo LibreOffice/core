@@ -7,8 +7,8 @@
 #*                      Fuer WindowsNT-Envrionments
 #*
 #*    Ersterstellung    MH 9.2.96
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-20 14:43:18 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: mh $ $Date: 2000-10-17 18:57:32 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/solar/inc/unx.mkv  $
 #*
@@ -70,6 +70,10 @@ OLE2DEF=-DOLE2
 .INCLUDE : unxlngi3.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXP2REDHAT60" 
+.INCLUDE : unxlngppc.mk 
+.ENDIF 
+ 
 .IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
 .INCLUDE : unxhpxr.mk
 .ENDIF
