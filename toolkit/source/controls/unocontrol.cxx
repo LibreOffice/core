@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:33:24 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,31 @@ Reference< XInterface > UnoControl::getContext(  ) throw(RuntimeException)
     return mxContext;
 }
 
+void UnoControl::peerCreated()
+{
+    Reference< XWindow > xWindow( getPeer(), UNO_QUERY );
+    if ( !xWindow.is() )
+        return;
+
+    if ( maWindowListeners.getLength() )
+        xWindow->addWindowListener( &maWindowListeners );
+
+    if ( maFocusListeners.getLength() )
+        xWindow->addFocusListener( &maFocusListeners );
+
+    if ( maKeyListeners.getLength() )
+        xWindow->addKeyListener( &maKeyListeners );
+
+    if ( maMouseListeners.getLength() )
+        xWindow->addMouseListener( &maMouseListeners );
+
+    if ( maMouseMotionListeners.getLength() )
+        xWindow->addMouseMotionListener( &maMouseMotionListeners );
+
+    if ( maPaintListeners.getLength() )
+        xWindow->addPaintListener( &maPaintListeners );
+}
+
 void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Reference< XWindowPeer >& rParentPeer ) throw(RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -998,9 +1023,10 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         // 82300 - 12/21/00 - FS
         UnoControlComponentInfos aComponentInfos(maComponentInfos);
         sal_Bool bDesignMode(mbDesignMode);
-        Reference< XGraphics > xGraphics( mxGraphics );
-        Reference< XView >  xV(getPeer(), UNO_QUERY);
-        Reference< XWindow >    xW(getPeer(), UNO_QUERY);
+
+        Reference< XGraphics >  xGraphics( mxGraphics           );
+        Reference< XView >      xView    ( getPeer(), UNO_QUERY );
+        Reference< XWindow >    xWindow  ( getPeer(), UNO_QUERY );
 
         aGuard.clear();
 
@@ -1010,36 +1036,20 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
         // 82300 - 12/21/00 - FS
         updateFromModel();
 
-        xV->setZoom( aComponentInfos.nZoomX, aComponentInfos.nZoomY );
+        xView->setZoom( aComponentInfos.nZoomX, aComponentInfos.nZoomY );
 
-        setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, maComponentInfos.nFlags );
+        setPosSize( aComponentInfos.nX, aComponentInfos.nY, aComponentInfos.nWidth, aComponentInfos.nHeight, aComponentInfos.nFlags );
 
         if( aComponentInfos.bVisible && !bDesignMode )
             // Erst nach dem setzen der Daten anzeigen
-            xW->setVisible( aComponentInfos.bVisible );
+            xWindow->setVisible( aComponentInfos.bVisible );
 
         if( !aComponentInfos.bEnable )
-            xW->setEnable( aComponentInfos.bEnable );
+            xWindow->setEnable( aComponentInfos.bEnable );
 
-        if ( maWindowListeners.getLength() )
-            xW->addWindowListener( &maWindowListeners );
+        xView->setGraphics( xGraphics );
 
-        if ( maFocusListeners.getLength() )
-            xW->addFocusListener( &maFocusListeners );
-
-        if ( maKeyListeners.getLength() )
-            xW->addKeyListener( &maKeyListeners );
-
-        if ( maMouseListeners.getLength() )
-            xW->addMouseListener( &maMouseListeners );
-
-        if ( maMouseMotionListeners.getLength() )
-            xW->addMouseMotionListener( &maMouseMotionListeners );
-
-        if ( maPaintListeners.getLength() )
-            xW->addPaintListener( &maPaintListeners );
-
-        xV->setGraphics( xGraphics );
+        peerCreated();
 
         mbCreatingPeer = sal_False;
     }
