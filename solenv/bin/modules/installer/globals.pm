@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.17 $
-#   last change: $Author: kz $ $Date: 2004-10-15 14:54:54 $
+#   $Revision: 1.18 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:52:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,8 @@ BEGIN
     $lastminor = "";
     $compiler = "";
     $pro = 0;
+    $rpm = 0;
+    $debian = 0;
     $dounzip = 1;
     $languages_defined_in_productlist = 0;
     $setupscript_defined_in_productlist = 0;
@@ -96,6 +98,7 @@ BEGIN
     $issolaris = 0;
     $iswindowsbuild = 0;
     $islinuxbuild = 0;
+    $islinuxrpmbuild = 0;
     $issolarisbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
@@ -111,12 +114,15 @@ BEGIN
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
-    $templatefolder = "TemplateFolder";
     $programfilesfolder = "ProgramFilesFolder";
+    $templatefolder = "TemplateFolder";
     $programmenufolder = "ProgramMenuFolder";
     $adafolder = "adabas";
     $listfileproductname = "";
-
+    $encodinglistname = "msi-encodinglist.txt";
+    $msiencoding = "";  # hash reference for msi encodings
+    $msilanguage = "";  # hash reference for msi languages LCID
+    $sofficeiconadded = 0;
     $temppath = "";
     $temppathdefined = 0;
 
@@ -127,6 +133,9 @@ BEGIN
     $packageformat = "";
     $packagename = "";
     $packagelist = "";
+    $addpackagelist = "";
+    $is_unix_multi = 0;
+    $unixmultipath = "";
 
     $strip = 0;
     $solarjava = 0;
@@ -183,12 +192,13 @@ BEGIN
     @packagelistitems = ("module", "solarispackagename", "packagename", "copyright", "vendor", "description" );
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
-
     @selfreglibraries = ("shlxthdl.dll", "ooofilt.dll");                # to be removed after scp changes, see parameter.pm
     @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework", "gid_File_Lib_Qslnkmsi", "gid_File_Lib_Sdqsmsi"); # to be removed after scp changes, see parameter.pm
     @msiassemblyfiles = ("gid_File_Lib_Cli_Basetypes", "gid_File_Lib_Cli_Types_Assembly", "gid_File_Lib_Cli_Cppuhelper_Assembly", "gid_File_Lib_Cli_Ure_Assembly"); # to be removed after scp changes
     @msiassemblynamecontent = ("gid_File_Lib_Cli_Basetypes", "cli_basetypes", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Types_Assembly", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Cppuhelper_Assembly", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "gid_File_Lib_Cli_Ure_Assembly", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
     @add_unocomponent_libraries = ("gid_File_Lib_Gnomevfs");                # to be removed after scp changes
+    @languagepackfeature =();
+    $langpackfilename = "Langpack.mlf";
 
     @removedirs = ();
 
