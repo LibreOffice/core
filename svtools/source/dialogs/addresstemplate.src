@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-20 11:59:19 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 14:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "Source du carnet d'adresses";
         Text[ spanish ] = "Fuente de libreta de direcciones";
         Text[ italian ] = "Sorgente Rubrica";
-        Text[ danish ] = "Address Book Source";
+        Text[ danish ] = "Adressekartotekskilde";
         Text[ swedish ] = "Adressboksk‰lla";
         Text[ polish ] = "èrÛd≥o ksiπøki adresowej";
         Text[ portuguese_brazilian ] = "Address Book Source";
@@ -144,7 +144,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "Source de donnÈes";
         Text[ spanish ] = "Fuente de datos";
         Text[ italian ] = "Sorgente dati";
-        Text[ danish ] = "Datasource";
+        Text[ danish ] = "Datakilde";
         Text[ swedish ] = "Datak‰lla";
         Text[ polish ] = "èrÛd≥o danych";
         Text[ portuguese_brazilian ] = "Datasource";
@@ -182,7 +182,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "~GÈrer ...";
         Text[ spanish ] = "~Administrar ...";
         Text[ italian ] = "~Amministra...";
-        Text[ danish ] = "~Administrate ...";
+        Text[ danish ] = "~Administrer ...";
         Text[ swedish ] = "~Administrera ...";
         Text[ polish ] = "Zarzπdzaj...";
         Text[ portuguese_brazilian ] = "~Administrate ...";
@@ -212,7 +212,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "Table";
         Text[ spanish ] = "Tabla";
         Text[ italian ] = "Tabella";
-        Text[ danish ] = "Table";
+        Text[ danish ] = "Tabel";
         Text[ swedish ] = "Tabell";
         Text[ polish ] = "Tabela";
         Text[ portuguese_brazilian ] = "Table";
@@ -249,7 +249,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "Assignation des champs";
         Text[ spanish ] = "AsignaciÛn de campo";
         Text[ italian ] = "Assegnazione campo";
-        Text[ danish ] = "Field assignment";
+        Text[ danish ] = "Felttildeling";
         Text[ swedish ] = "F‰lttilldelning";
         Text[ polish ] = "Przyporzπdkowanie pÛl";
         Text[ portuguese_brazilian ] = "Field assignment";
@@ -363,7 +363,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ french ] = "<aucun>";
         Text[ spanish ] = "<ninguno>";
         Text[ italian ] = "<nessuno>";
-        Text[ danish ] = "<ingen>";
+        Text[ danish ] = "<intet>";
         Text[ swedish ] = "<ingen>";
         Text[ polish ] = "<brak>";
         Text[ portuguese_brazilian ] = "<none>";
@@ -389,7 +389,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "SociÈtÈ";
     Text[ spanish ] = "Empresa";
     Text[ italian ] = "Azienda";
-    Text[ danish ] = "Company";
+    Text[ danish ] = "F~irma";
     Text[ swedish ] = "Fˆretag";
     Text[ polish ] = "Firma";
     Text[ portuguese_brazilian ] = "Company";
@@ -414,7 +414,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Service";
     Text[ spanish ] = "Departamento";
     Text[ italian ] = "Reparto";
-    Text[ danish ] = "Department";
+    Text[ danish ] = "Afdeli~ng";
     Text[ swedish ] = "Avdelning";
     Text[ polish ] = "Dzia≥";
     Text[ portuguese_brazilian ] = "Department";
@@ -439,7 +439,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "PrÈnom";
     Text[ spanish ] = "Nombre";
     Text[ italian ] = "Nome";
-    Text[ danish ] = "First name";
+    Text[ danish ] = "F~ornavn";
     Text[ swedish ] = "Fˆrnamn";
     Text[ polish ] = "ImiÍ";
     Text[ portuguese_brazilian ] = "First name";
@@ -464,7 +464,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Nom";
     Text[ spanish ] = "Nombre";
     Text[ italian ] = "Cognome";
-    Text[ danish ] = "Last name";
+    Text[ danish ] = "Eft~ernavn";
     Text[ swedish ] = "Efternamn";
     Text[ polish ] = "Nazwisko";
     Text[ portuguese_brazilian ] = "Last name";
@@ -489,7 +489,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Rue";
     Text[ spanish ] = "Calle";
     Text[ italian ] = "Via";
-    Text[ danish ] = "Street";
+    Text[ danish ] = "~Gade";
     Text[ swedish ] = "Gatuadress";
     Text[ polish ] = "Ulica";
     Text[ portuguese_brazilian ] = "Street";
@@ -514,7 +514,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Pays";
     Text[ spanish ] = "PaÌs";
     Text[ italian ] = "Paese";
-    Text[ danish ] = "Country";
+    Text[ danish ] = "~Land";
     Text[ swedish ] = "Land";
     Text[ polish ] = "Kraj";
     Text[ portuguese_brazilian ] = "Country";
@@ -539,7 +539,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "C.P.";
     Text[ spanish ] = "CP";
     Text[ italian ] = "CAP";
-    Text[ danish ] = "ZIP code";
+    Text[ danish ] = "~Postnr.";
     Text[ swedish ] = "Postnr";
     Text[ polish ] = "Kod pocztowy";
     Text[ portuguese_brazilian ] = "ZIP code";
@@ -564,7 +564,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Ville";
     Text[ spanish ] = "Ciudad";
     Text[ italian ] = "Localit‡";
-    Text[ danish ] = "City";
+    Text[ danish ] = "B~y";
     Text[ swedish ] = "Ort";
     Text[ polish ] = "Miejscowo?Ê";
     Text[ portuguese_brazilian ] = "City";
@@ -589,7 +589,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Titre";
     Text[ spanish ] = "TÌtulo";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Title";
+    Text[ danish ] = "Titel";
     Text[ swedish ] = "Titel";
     Text[ polish ] = "Tytu≥";
     Text[ portuguese_brazilian ] = "Title";
@@ -614,7 +614,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Fonction";
     Text[ spanish ] = "PosiciÛn";
     Text[ italian ] = "Posizione";
-    Text[ danish ] = "Placering";
+    Text[ danish ] = "Stilling";
     Text[ swedish ] = "Befattning";
     Text[ polish ] = "Pozycja";
     Text[ portuguese_brazilian ] = "Position";
@@ -639,7 +639,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Appellation";
     Text[ spanish ] = "Tratamiento";
     Text[ italian ] = "Inizio lettera";
-    Text[ danish ] = "Addr. form";
+    Text[ danish ] = "Tiltale";
     Text[ swedish ] = "Tilltal";
     Text[ polish ] = "Zwrot grzeczn.";
     Text[ portuguese_brazilian ] = "Addr. form";
@@ -664,7 +664,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Initiales";
     Text[ spanish ] = "Iniciales";
     Text[ italian ] = "Iniziali";
-    Text[ danish ] = "Initials";
+    Text[ danish ] = "Initialer";
     Text[ swedish ] = "Initialer";
     Text[ polish ] = "Inicja≥y";
     Text[ portuguese_brazilian ] = "Initials";
@@ -689,7 +689,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Formule finale";
     Text[ spanish ] = "Tratamiento";
     Text[ italian ] = "Inizio lettera";
-    Text[ danish ] = "Salutation";
+    Text[ danish ] = "Slut~hilsen";
     Text[ swedish ] = "H‰lsningsfras";
     Text[ polish ] = "Zwrot grzeczn.";
     Text[ portuguese_brazilian ] = "Salutation";
@@ -714,7 +714,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "TÈl. domicile";
     Text[ spanish ] = "TelÈfono privado";
     Text[ italian ] = "Telefono (casa)";
-    Text[ danish ] = "Telephon Home";
+    Text[ danish ] = "Telefon pri~v.";
     Text[ swedish ] = "Telefon priv.";
     Text[ polish ] = "Telefon (pryw.)";
     Text[ portuguese_brazilian ] = "Telephon Home";
@@ -739,7 +739,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "TÈl. bureau 1";
     Text[ spanish ] = "TelÈfono trabajo";
     Text[ italian ] = "Telefono (lavoro)";
-    Text[ danish ] = "Telephon Work";
+    Text[ danish ] = "Telefon ar~b.";
     Text[ swedish ] = "Telefon arb.";
     Text[ polish ] = "Telefon (s≥uøb.)";
     Text[ portuguese_brazilian ] = "Telephon Work";
@@ -764,7 +764,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Fax";
     Text[ spanish ] = "FAX";
     Text[ italian ] = "FAX";
-    Text[ danish ] = "FAX";
+    Text[ danish ] = "FA~X";
     Text[ swedish ] = "FAX";
     Text[ polish ] = "FAKS";
     Text[ portuguese_brazilian ] = "FAX";
@@ -789,7 +789,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "E-mail";
     Text[ spanish ] = "E-mail";
     Text[ italian ] = "eMail";
-    Text[ danish ] = "Fax, E-mail";
+    Text[ danish ] = "E~-mail";
     Text[ swedish ] = "E-post";
     Text[ polish ] = "e-mail";
     Text[ portuguese_brazilian ] = "E-Mail";
@@ -814,7 +814,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "URL";
     Text[ spanish ] = "URL";
     Text[ italian ] = "URL";
-    Text[ danish ] = "URL";
+    Text[ danish ] = "~URL";
     Text[ swedish ] = "URL";
     Text[ polish ] = "URL";
     Text[ portuguese_brazilian ] = "URL";
@@ -864,7 +864,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Utilisateur 1";
     Text[ spanish ] = "Usuario 1";
     Text[ italian ] = "Utente 1";
-    Text[ danish ] = "User 1";
+    Text[ danish ] = "Bruger ~1";
     Text[ swedish ] = "Anv‰ndare 1";
     Text[ polish ] = "Uøytkownik 1";
     Text[ portuguese_brazilian ] = "User 1";
@@ -889,7 +889,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Utilisateur 2";
     Text[ spanish ] = "Usuario 2";
     Text[ italian ] = "Utente 2";
-    Text[ danish ] = "User 2";
+    Text[ danish ] = "Bruger ~2";
     Text[ swedish ] = "Anv‰ndare 2";
     Text[ polish ] = "Uøytkownik 2";
     Text[ portuguese_brazilian ] = "User 2";
@@ -914,7 +914,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Utilisateur 3";
     Text[ spanish ] = "Usuario 3";
     Text[ italian ] = "Utente 3";
-    Text[ danish ] = "User 3";
+    Text[ danish ] = "Bruger ~3";
     Text[ swedish ] = "Anv‰ndare 3";
     Text[ polish ] = "Uøytkownik 3";
     Text[ portuguese_brazilian ] = "User 3";
@@ -939,7 +939,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Utilisateur 4";
     Text[ spanish ] = "Usuario 4";
     Text[ italian ] = "Utente 4";
-    Text[ danish ] = "User 4";
+    Text[ danish ] = "Bruger ~4";
     Text[ swedish ] = "Anv‰ndare 4";
     Text[ polish ] = "Uøytkownik 4";
     Text[ portuguese_brazilian ] = "User 4";
@@ -991,7 +991,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Province";
     Text[ spanish ] = "Provincia";
     Text[ italian ] = "Provincia";
-    Text[ danish ] = "State";
+    Text[ danish ] = "Del~stat";
     Text[ swedish ] = "Delstat";
     Text[ polish ] = "WojewÛdztwo";
     Text[ portuguese_brazilian ] = "State";
@@ -1016,7 +1016,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "TÈl. bureau 2";
     Text[ spanish ] = "TelÈfono trabajo";
     Text[ italian ] = "Telefono (uff.)";
-    Text[ danish ] = "Telephon Office";
+    Text[ danish ] = "Telefon Kontor";
     Text[ swedish ] = "Telefon arbete";
     Text[ polish ] = "Telefon (s≥uøb.)";
     Text[ portuguese_brazilian ] = "Telephon Office";
@@ -1041,7 +1041,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Pager";
     Text[ spanish ] = "RadiotelÈfono";
     Text[ italian ] = "Pager";
-    Text[ danish ] = "Pager";
+    Text[ danish ] = "Telefon Persons¯ger";
     Text[ swedish ] = "Personsˆkare";
     Text[ polish ] = "Telefon (komÛrkowy)";
     Text[ portuguese_brazilian ] = "Pager";
@@ -1066,7 +1066,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "TÈl. portable";
     Text[ spanish ] = "MÛvil";
     Text[ italian ] = "Cellulare";
-    Text[ danish ] = "Mobile";
+    Text[ danish ] = "~Mobil";
     Text[ swedish ] = "Mobil";
     Text[ polish ] = "Telefon komÛrkowy";
     Text[ portuguese_brazilian ] = "Mobile";
@@ -1091,7 +1091,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "TÈl. autre";
     Text[ spanish ] = "TelÈfono (otros)";
     Text[ italian ] = "Telefono (altro)";
-    Text[ danish ] = "Telephon other";
+    Text[ danish ] = "Telefon andre";
     Text[ swedish ] = "Telefon annan";
     Text[ polish ] = "Telefon (inny)";
     Text[ portuguese_brazilian ] = "Telephon other";
@@ -1116,7 +1116,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Calendrier";
     Text[ spanish ] = "Calendario";
     Text[ italian ] = "Calendario";
-    Text[ danish ] = "Calendar";
+    Text[ danish ] = "~Kalender";
     Text[ swedish ] = "Kalender";
     Text[ polish ] = "Kalendarz";
     Text[ portuguese_brazilian ] = "Calendar";
@@ -1141,7 +1141,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ french ] = "Invitation";
     Text[ spanish ] = "Invitar";
     Text[ italian ] = "Invito";
-    Text[ danish ] = "Invite";
+    Text[ danish ] = "Invite~r";
     Text[ swedish ] = "Bjud in";
     Text[ polish ] = "ZaprosiÊ";
     Text[ portuguese_brazilian ] = "Invite";
