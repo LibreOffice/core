@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:13:54 $
+ *  last change: $Author: os $ $Date: 2002-05-24 08:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,13 +799,21 @@ void SwEditWin::FlushInBuffer( SwWrtShell *pSh )
                 aReq.Done();
             }
         }
+
         pSh->Insert( aInBuffer );
         aInBuffer.Erase();
         bFlushCharBuffer = FALSE;
     }
 }
 
-
+#define MOVE_LEFT_SMALL     0
+#define MOVE_UP_SMALL       1
+#define MOVE_RIGHT_BIG      2
+#define MOVE_DOWN_BIG       3
+#define MOVE_LEFT_BIG       4
+#define MOVE_UP_BIG         5
+#define MOVE_RIGHT_SMALL    6
+#define MOVE_DOWN_SMALL     7
 
 void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 {
@@ -816,16 +824,33 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
         SfxItemSet aSet(rSh.GetAttrPool(),
                         RES_FRM_SIZE, RES_FRM_SIZE,
                         RES_VERT_ORIENT, RES_ANCHOR,
-                        RES_COL, RES_COL, 0);
+                        RES_COL, RES_COL,
+                        RES_PROTECT, RES_PROTECT, 0);
         rSh.GetFlyFrmAttr( aSet );
+        const SvxProtectItem& rProtect = ((SvxProtectItem&)aSet.Get(RES_PROTECT));
+        if( rProtect.IsSizeProtected() ||
+            rProtect.IsPosProtected() )
+        {
+            return;
+        }
         RndStdIds eAnchorId = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
-        Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
-        short nDiv = rSh.GetViewOptions()->GetDivisionX();
-        if ( nDiv > 0 )
-            aSnap.Width() = Max( (ULONG)1, (ULONG)aSnap.Width() / nDiv );
-        nDiv = rSh.GetViewOptions()->GetDivisionY();
-        if ( nDiv > 0 )
-            aSnap.Height() = Max( (ULONG)1, (ULONG)aSnap.Height() / nDiv );
+        Size aSnap;
+        if(MOVE_LEFT_SMALL == nDir ||
+            MOVE_UP_SMALL == nDir ||
+            MOVE_RIGHT_SMALL == nDir ||
+            MOVE_DOWN_SMALL == nDir )
+            aSnap = PixelToLogic(Size(1,1));
+        else
+        {
+            aSnap = rSh.GetViewOptions()->GetSnapSize();
+            short nDiv = rSh.GetViewOptions()->GetDivisionX();
+            if ( nDiv > 0 )
+                aSnap.Width() = Max( (ULONG)1, (ULONG)aSnap.Width() / nDiv );
+            nDiv = rSh.GetViewOptions()->GetDivisionY();
+            if ( nDiv > 0 )
+                aSnap.Height() = Max( (ULONG)1, (ULONG)aSnap.Height() / nDiv );
+        }
+
         SwRect aBoundRect;
         Point aRefPoint;
         rSh.CalcBoundRect( aBoundRect, eAnchorId, FRAME, FALSE, &aRefPoint );
@@ -836,28 +861,20 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 
         switch ( nDir )
         {
-            case 4:
-            case 0: aTmp.Left( aTmp.Left() - nLeft ); break;
-            case 5:
-            case 1: aTmp.Top( aTmp.Top() - nUp ); break;
-            case 6: if( aTmp.Width() < aSnap.Width() + MINFLY ) break;
+            case MOVE_LEFT_BIG:
+            case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft ); break;
+            case MOVE_UP_BIG:
+            case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp ); break;
+            case MOVE_RIGHT_SMALL: if( aTmp.Width() < aSnap.Width() + MINFLY ) break;
                     nRight = aSnap.Width(); // kein break
-            case 2: aTmp.Left( aTmp.Left() + nRight ); break;
-            case 7: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
+            case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight ); break;
+            case MOVE_DOWN_SMALL: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
                     nDown = aSnap.Height(); // kein break
-            case 3: aTmp.Top( aTmp.Top() + nDown ); break;
-            case 8: if( aTmp.Width() >= aSnap.Width() + MINFLY )
-                        aTmp.Right( aTmp.Right() - aSnap.Width() );
-                    break;
-            case 9: if( aTmp.Height() >= aSnap.Height() + MINFLY )
-                        aTmp.Height( aTmp.Height() - aSnap.Height() );
-                    break;
-            case 10: aTmp.Width( aTmp.Width() + nRight ); break;
-            case 11: aTmp.Height( aTmp.Height() + nDown ); break;
+            case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
             default: ASSERT( TRUE, "ChangeFly: Unknown direction." );
         }
         BOOL bSet = FALSE;
-        if( nDir < 8 && FLY_IN_CNTNT == eAnchorId && ( nDir % 2 ) )
+        if( FLY_IN_CNTNT == eAnchorId && ( nDir % 2 ) )
         {
             long aDiff = aTmp.Top() - aRefPoint.Y();
             if( aDiff > 0 )
@@ -895,7 +912,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             aSet.Put( aVert );
             bSet = TRUE;
         }
-        if( bWeb && FLY_AT_CNTNT == eAnchorId && ( nDir==0 || nDir==2 ) )
+        if( bWeb && FLY_AT_CNTNT == eAnchorId && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ) )
         {
             SwFmtHoriOrient aHori( (SwFmtHoriOrient&)aSet.Get(RES_HORI_ORIENT) );
             SwHoriOrient eNew;
@@ -903,9 +920,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             switch( eNew )
             {
                 case HORI_RIGHT:
-                    if( !nDir ) eNew = HORI_LEFT; break;
+                    if( nDir==MOVE_LEFT_SMALL )
+                        eNew = HORI_LEFT;
+                break;
                 case HORI_LEFT:
-                    if( nDir ) eNew = HORI_RIGHT; break;
+                    if( nDir==MOVE_RIGHT_BIG )
+                        eNew = HORI_RIGHT;
+                break;
             }
             if( eNew != aHori.GetHoriOrient() )
             {
@@ -914,37 +935,111 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
                 bSet = TRUE;
             }
         }
-        if( nDir > 3 )
-        {
-            SwFmtFrmSize aSize( (SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE) );
-
-            long nMinWidth = MINFLY;
-            // alle Spalten muessen passen
-            if (SFX_ITEM_DEFAULT <= aSet.GetItemState(RES_COL))
-            {
-                const SwFmtCol& rCol = (const SwFmtCol&)aSet.Get(RES_COL);
-                if ( rCol.GetColumns().Count() > 1 )
-                {
-                    for ( USHORT i = 0; i < rCol.GetColumns().Count(); ++i )
-                    {
-                        nMinWidth += rCol.GetColumns()[i]->GetLeft() +
-                                          rCol.GetColumns()[i]->GetRight() +
-                                          MINFLY;
-                    }
-                    nMinWidth -= MINFLY;//einen hatten wir schon mit drin!
-                }
-            }
-
-            aSize.SetSize(Size(Max(aTmp.Width(), nMinWidth), Max(aTmp.Height(), long(MINFLY))));
-            aSet.Put( aSize );
-            bSet = TRUE;
-        }
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrmAttr( aSet );
-        if( !bWeb && nDir < 8 && FLY_IN_CNTNT != eAnchorId )
+        if( !bWeb  && FLY_IN_CNTNT != eAnchorId )
             rSh.SetFlyPos( aTmp.Pos() );
         rSh.EndAllAction();
+    }
+}
+/* -----------------------------23.05.2002 11:35------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwEditWin::ChangeDrawing( BYTE nDir )
+{
+    long nX = 0;
+    long nY = 0;
+    sal_Bool bOnePixel = sal_False;
+    switch(nDir)
+    {
+        case MOVE_LEFT_SMALL:
+            bOnePixel = sal_True;
+            //no break;
+        case MOVE_LEFT_BIG:
+            nX = -1;
+        break;
+        case MOVE_UP_SMALL:
+            bOnePixel = sal_True;
+            //no break;
+        case MOVE_UP_BIG:
+            nY = -1;
+        break;
+        case MOVE_RIGHT_SMALL:
+            bOnePixel = sal_True;
+            //no break;
+        case MOVE_RIGHT_BIG:
+            nX = +1;
+        break;
+        case MOVE_DOWN_SMALL:
+            bOnePixel = sal_True;
+            //no break;
+        case MOVE_DOWN_BIG:
+            nY = +1;
+        break;
+    }
+
+    if(0 != nX || 0 != nY)
+    {
+        SwWrtShell &rSh = rView.GetWrtShell();
+        Size aSnap( rSh.GetViewOptions()->GetSnapSize() );
+        short nDiv = rSh.GetViewOptions()->GetDivisionX();
+        if ( nDiv > 0 )
+            aSnap.Width() = Max( (ULONG)1, (ULONG)aSnap.Width() / nDiv );
+        nDiv = rSh.GetViewOptions()->GetDivisionY();
+        if ( nDiv > 0 )
+            aSnap.Height() = Max( (ULONG)1, (ULONG)aSnap.Height() / nDiv );
+
+        if(bOnePixel)
+            aSnap = PixelToLogic(Size(1,1));
+
+        nX *= aSnap.Width();
+        nY *= aSnap.Height();
+
+        SdrView *pSdrView = rSh.GetDrawView();
+        const SdrHdlList& rHdlList = pSdrView->GetHdlList();
+        SdrHdl* pHdl = rHdlList.GetFocusHdl();
+        if(0L == pHdl)
+        {
+
+            // now move the selected draw objects
+            pSdrView->MoveAllMarked(Size(nX, nY));
+        }
+        else
+        {
+            // move handle with index nHandleIndex
+            if(pHdl && (nX || nY))
+            {
+                // now move the Handle (nX, nY)
+                Point aStartPoint(pHdl->GetPos());
+                Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                const SdrDragStat& rDragStat = pSdrView->GetDragStat();
+
+                // start dragging
+                pSdrView->BegDragObj(aStartPoint, 0, pHdl, 0);
+
+                if(pSdrView->IsDragObj())
+                {
+                    FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                    BOOL bWasSnapEnabled = pSdrView->IsSnapEnabled();
+
+                    // switch snapping off
+                    if(!bWasNoSnap)
+                        ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                    if(bWasSnapEnabled)
+                        pSdrView->SetSnapEnabled(FALSE);
+
+                    pSdrView->MovAction(aEndPoint);
+                    pSdrView->EndDragObj();
+
+                    // restore snap
+                    if(!bWasNoSnap)
+                        ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                    if(bWasSnapEnabled)
+                        pSdrView->SetSnapEnabled(bWasSnapEnabled);
+                }
+            }
+        }
     }
 }
 
@@ -1097,6 +1192,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_NextObject, KS_PrevObject,
                     KS_KeyToView,
                     KS_LaunchOLEObject, KS_GoIntoFly, KS_GoIntoDrawing,
+                    KS_EnterDrawHandleMode,
                     KS_CheckDocReadOnlyKeys,
                     KS_CheckAutoCorrect, KS_EditFormula,
                     KS_ColLeftBig, KS_ColRightBig,
@@ -1118,7 +1214,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     KS_InsDel_CellTopSmall, KS_InsDel_CellBottomSmall,
                     KS_TblColCellInsDel,
 
-                    KS_Fly_Change,
+                    KS_Fly_Change, KS_Draw_Change,
                     KS_AppendNodeInSection,
                     KS_EnterCharCell,
                     KS_Ende };
@@ -1188,13 +1284,13 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 case KEY_RIGHT | KEY_MOD2:
                     eKeyState = KS_ColRightBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = 2;
+                    nDir = MOVE_RIGHT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_LEFT | KEY_MOD2:
                     eKeyState = KS_ColRightSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = 0;
+                    nDir = MOVE_LEFT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT:
                     eKeyState = KS_ColLeftSmall;
@@ -1205,34 +1301,26 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
                 case KEY_RIGHT | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellRightBig;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 10;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_LEFT | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellRightSmall;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 8;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellLeftSmall;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 6;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_LEFT | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellLeftBig;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 4;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2:
                     eKeyState = KS_ColBottomSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = 1;
+                    nDir = MOVE_UP_SMALL;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_DOWN | KEY_MOD2:
                     eKeyState = KS_ColBottomBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = 3;
+                    nDir = MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_UP | KEY_MOD2 | KEY_SHIFT:
                     eKeyState = KS_ColTopBig;
@@ -1243,46 +1331,31 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomSmall;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 9;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_DOWN | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomBig;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 11;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_UP | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellTopBig;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 5;
                     goto KEYINPUT_CHECKTABLE;
                 case KEY_DOWN | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellTopSmall;
-                    eFlyState = KS_Fly_Change;
-                    nDir = 7;
                     goto KEYINPUT_CHECKTABLE;
 
 KEYINPUT_CHECKTABLE:
                     if( rSh.IsTableMode() || !rSh.GetTableFmt() )
                     {
-
-                        if( pFlyFmt && KS_KeyToView != eFlyState )
+                        if(KS_KeyToView != eFlyState)
                         {
-                            const SfxPoolItem* pItem;
-                            if( SFX_ITEM_SET == pFlyFmt->GetItemState(
-                                RES_PROTECT, TRUE, &pItem ) && (
-                                ((SvxProtectItem*)pItem)->IsSizeProtected() ||
-                                ((SvxProtectItem*)pItem)->IsPosProtected() ))
-                            {
-                                //JP 18.01.99: man koennte es noch feiner
-                                // ermitteln (nDir auswerten)
-                                pFlyFmt =  0;
-                            }
+                            if(!pFlyFmt && KS_KeyToView != eFlyState &&
+                                (rSh.GetSelectionType() & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM))  &&
+                                    rSh.GetDrawView()->HasMarkedObj())
+                                eKeyState = KS_Draw_Change;
                         }
 
                         if( pFlyFmt )
                             eKeyState = eFlyState;
-                        else
+                        else if( KS_Draw_Change != eKeyState)
                             eKeyState = KS_EnterCharCell;
                     }
                     break;
@@ -1291,33 +1364,58 @@ KEYINPUT_CHECKTABLE:
 // Insert/Delete
                 case KEY_LEFT:
                 case KEY_LEFT | KEY_MOD1:
+                {
+                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    if(!bMod1)
+                    {
+                        eFlyState = KS_Fly_Change;
+                        nDir = MOVE_LEFT_BIG;
+                    }
                     eTblChgMode = WH_FLAG_INSDEL |
-                            ( rKeyCode.GetModifier() & KEY_MOD1
+                            ( bMod1
                                 ? WH_CELL_LEFT
                                 : WH_COL_LEFT );
                     nTblChgSize = pModOpt->GetTblVInsert();
+                }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
-//              case KEY_RIGHT:
+//                case KEY_RIGHT:
                 case KEY_RIGHT | KEY_MOD1:
+                {
                     eTblChgMode = WH_FLAG_INSDEL | WH_CELL_RIGHT;
                     nTblChgSize = pModOpt->GetTblVInsert();
+                }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
-
                 case KEY_UP:
                 case KEY_UP | KEY_MOD1:
+                {
+                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    if(!bMod1)
+                    {
+                        eFlyState = KS_Fly_Change;
+                        nDir = MOVE_UP_BIG;
+                    }
                     eTblChgMode = WH_FLAG_INSDEL |
-                            ( rKeyCode.GetModifier() & KEY_MOD1
+                            ( bMod1
                                 ? WH_CELL_TOP
                                 : WH_ROW_TOP );
                     nTblChgSize = pModOpt->GetTblHInsert();
+                }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
                 case KEY_DOWN:
                 case KEY_DOWN | KEY_MOD1:
+                {
+                    BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                    if(!bMod1)
+                    {
+                        eFlyState = KS_Fly_Change;
+                        nDir = MOVE_DOWN_BIG;
+                    }
                     eTblChgMode = WH_FLAG_INSDEL |
-                            ( rKeyCode.GetModifier() & KEY_MOD1
+                            ( bMod1
                                 ? WH_CELL_BOTTOM
                                 : WH_ROW_BOTTOM );
                     nTblChgSize = pModOpt->GetTblHInsert();
+                }
                     goto KEYINPUT_CHECKTABLE_INSDEL;
 
 KEYINPUT_CHECKTABLE_INSDEL:
@@ -1325,7 +1423,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         !bTblInsDelMode ||
                         FALSE /* Tabelle geschuetzt */
                             )
+                    {
+                        const int nSelectionType = rSh.GetSelectionType();
+
                         eKeyState = KS_KeyToView;
+                        if(KS_KeyToView != eFlyState)
+                        {
+                            if((nSelectionType & (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM))  &&
+                                    rSh.GetDrawView()->HasMarkedObj())
+                                eKeyState = KS_Draw_Change;
+                            else if(nSelectionType & (SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF))
+                                eKeyState = KS_Fly_Change;
+                        }
+                    }
                     else
                     {
                         if( !bTblIsInsMode )
@@ -1431,6 +1541,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_DontExpand;
                         else
                         {
+                            BOOL bMod1 = 0 != (rKeyCode.GetModifier() & KEY_MOD1);
+                            eFlyState = KS_Fly_Change;
+                            nDir = MOVE_RIGHT_BIG;
                             eTblChgMode = WH_FLAG_INSDEL | WH_COL_RIGHT;
                             nTblChgSize = pModOpt->GetTblVInsert();
                             goto KEYINPUT_CHECKTABLE_INSDEL;
@@ -1457,7 +1570,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 (SwWrtShell::SEL_GRF |
                                     SwWrtShell::SEL_FRM |
                                     SwWrtShell::SEL_OLE |
-                                    SwWrtShell::SEL_DRW))
+                                    SwWrtShell::SEL_DRW |
+                                    SwWrtShell::SEL_DRW_FORM))
 
                             eKeyState = KS_NextObject;
                     else
@@ -1495,7 +1609,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 (SwWrtShell::SEL_GRF |
                                     SwWrtShell::SEL_FRM |
                                     SwWrtShell::SEL_OLE |
-                                    SwWrtShell::SEL_DRW))
+                                    SwWrtShell::SEL_DRW |
+                                    SwWrtShell::SEL_DRW_FORM))
 
                             eKeyState = KS_PrevObject;
                     else
@@ -1527,6 +1642,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         }
                         else if( rSh.GetTableFmt() )
                             eKeyState = KS_InsTab;
+                        else if((rSh.GetSelectionType() &
+                                    (SwWrtShell::SEL_DRW|SwWrtShell::SEL_DRW_FORM|
+                                        SwWrtShell::SEL_FRM|SwWrtShell::SEL_OLE|SwWrtShell::SEL_GRF))  &&
+                                rSh.GetDrawView()->HasMarkedObj())
+                            eKeyState = KS_EnterDrawHandleMode;
                         else if( rSh.IsSttOfPara() )
                         {
                             if( rSh.GetCurNumRule() )
@@ -1551,6 +1671,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                                         bAutoCmpltEndless );
                             eKeyState = KS_NextPrevGlossary;
                         }
+                        else if((rSh.GetSelectionType() & SwWrtShell::SEL_DRW) &&
+                                rSh.GetDrawView()->HasMarkedObj())
+                            eKeyState = KS_EnterDrawHandleMode;
                     break;
                     case KEY_F2 :
                     if( !rSh.HasReadonlySel() )
@@ -1558,9 +1681,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         const int nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & SwWrtShell::SEL_FRM)
                             eKeyState = KS_GoIntoFly;
-                        else if((nSelectionType & SwWrtShell::SEL_DRW) &&
-                                0 == (nSelectionType & SwWrtShell::SEL_DRW_TXT) &&
-                                    rSh.GetDrawView()->GetMarkList().GetMarkCount() == 1)
+                        else if((nSelectionType & SwWrtShell::SEL_DRW))
                             eKeyState = KS_GoIntoDrawing;
                     }
                     break;
@@ -1671,6 +1792,25 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 if ( rView.GetCurShell()->ISA(SwDrawTextShell) )
                     ((SwDrawTextShell*)rView.GetCurShell())->Init();
             }
+            eKeyState = KS_Ende;
+        }
+        break;
+        case KS_EnterDrawHandleMode:
+        {
+            const SdrHdlList& rHdlList = rSh.GetDrawView()->GetHdlList();
+            sal_Bool bForward(!aKeyEvent.GetKeyCode().IsShift());
+
+            ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+
+            // guarantee visibility of focused handle
+/*            SdrHdl* pHdl = rHdlList.GetFocusHdl();
+            if(pHdl)
+            {
+                Point aHdlPosition(pHdl->GetPos());
+                Rectangle aVisRect(aHdlPosition - Point(100, 100), Size(200, 200));
+                pView->MakeVisible(aVisRect, *pWindow);
+            }
+  */
             eKeyState = KS_Ende;
         }
         break;
@@ -1900,10 +2040,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 rSh.SetColRowWidthHeight( eTblChgMode, nTblChgSize );
                 break;
             case KS_Fly_Change:
-                ChangeFly( nDir, rView.ISA( SwWebView ) );
+            {
+                SdrView *pSdrView = rSh.GetDrawView();
+                const SdrHdlList& rHdlList = pSdrView->GetHdlList();
+                if(rHdlList.GetFocusHdl())
+                    ChangeDrawing( nDir );
+                else
+                    ChangeFly( nDir, rView.ISA( SwWebView ) );
+            }
+            break;
+            case KS_Draw_Change :
+                ChangeDrawing( nDir );
                 break;
             }
-
             eKeyState = KS_Ende;
         }
         }
