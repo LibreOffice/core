@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:26:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,10 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, BOOL bApi, BOOL bAlwaysCreat
         BOOL bPathEqual = FALSE;
         if(!bAlwaysCreateNew)
         {
-            const String& sCurPath = URIHelper::SmartRelToAbs(pCurGrp->GetFileName());
-            xub_StrLen nSlashPos = sCurPath.SearchBackward( INET_PATH_TOKEN );
-            const String sCurEntryPath = sCurPath.Copy(0, nSlashPos);
+            INetURLObject aTemp( pCurGrp->GetFileName() );
+            String sCurBase = aTemp.getBase();
+            aTemp.removeSegment();
+            const String sCurEntryPath = aTemp.GetMainURL(INetURLObject::NO_DECODE);
             const SvStrings* pPathArr = rStatGlossaries.GetPathArray();
             USHORT nCurrentPath = USHRT_MAX;
             for(USHORT nPath = 0; nPath < pPathArr->Count(); nPath++)
@@ -255,7 +256,6 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, BOOL bApi, BOOL bAlwaysCreat
             }
             String sPath = sGroup.GetToken(1, GLOS_DELIM);
             USHORT nComparePath = (USHORT)sPath.ToInt32();
-            const String sCurBase = sCurPath.Copy(nSlashPos +  1, sCurPath.Len() - nSlashPos - 5);
             if(nCurrentPath == nComparePath &&
                 sGroup.GetToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = TRUE;
