@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-18 19:07:05 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:48:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ PACKAGE=com$/sun$/star$/bridges$/jni_uno
 
 .INCLUDE :  settings.mk
 
-JARFILES=jurt.jar sandbox.jar ridl.jar
+JARFILES=jurt.jar ridl.jar
 JAVAFILES=$(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
 
 JAVACLASSFILES= \
