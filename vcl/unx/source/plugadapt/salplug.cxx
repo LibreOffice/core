@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:26:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,10 @@ SalInstance *CreateSalInstance()
 
     if( pUsePlugin && *pUsePlugin )
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
+
+    // fallback from kde to gtk because there is a qt->gtk theme engine
+    if( ! pInst && pUsePlugin && ! strncmp( pUsePlugin, "kde", 3 ) )
+        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gtk" ) ) );
 
     // fallback to gen
     if( ! pInst )
