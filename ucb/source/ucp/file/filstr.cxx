@@ -41,7 +41,7 @@ XStream_impl::queryInterface(
 void SAL_CALL
 XStream_impl::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -50,7 +50,7 @@ XStream_impl::acquire(
 void SAL_CALL
 XStream_impl::release(
     void )
-    throw( uno::RuntimeException )
+    throw()
 {
     OWeakObject::release();
 }
