@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:59:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@
 #include <pwd.h>
 
 #include <algorithm>
+
+#include "glyphset.hxx"
 
 using namespace psp ;
 
