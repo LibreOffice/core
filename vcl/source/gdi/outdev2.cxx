@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:20:50 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_OUTDEV2_CXX
 
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -1151,15 +1149,11 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
     {
         Bitmap aAlphaBitmap( mpAlphaVDev->GetBitmap( rSrcPt, rSize ) );
 
-#ifdef DEBUG_ONLYALPHA
-        return BitmapEx( aAlphaBitmap );
-#else
         // ensure 8 bit alpha
         if( aAlphaBitmap.GetBitCount() > 8 )
             aAlphaBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
-#endif
     }
     else
         return GetBitmap( rSrcPt, rSize );
@@ -1641,7 +1635,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             {
                 BOOL bOldMapMode( IsMapModeEnabled() );
                 mpAlphaVDev->EnableMapMode(FALSE);
-                Point aEmptyPoint;
                 Bitmap aBitmap( mpAlphaVDev->GetBitmap( aDstRect.TopLeft(), aDstRect.GetSize() ) );
                 BitmapWriteAccess*  pW = aBitmap.AcquireWriteAccess();
                 BYTE nAlpha;
