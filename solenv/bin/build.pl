@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2002-06-17 11:54:34 $
+#   last change: $Author: vg $ $Date: 2002-06-27 10:24:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.56 $ ';
+$id_str = ' $Revision: 1.57 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -252,6 +252,11 @@ sub BuildAll {
             $PrjDir = &CorrectPath($StandDir.$Prj);
             &get_deps_hash($PrjDir, \%LocalDepsHash);
             &BuildDependent(\%LocalDepsHash);
+            if ($cmd_file) {
+                print "$deliver_commando\n";
+            } else {
+                system ("$deliver_commando") if (!$show);
+            };
             print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
             $no_projects = 0;
@@ -874,9 +879,9 @@ sub start_child {
         $folders_hashes{$child_nick} = $dependencies_hash;
         sleep(1) if ($BuildAllParents);
     } elsif (defined $pid) { # child
-       $child = 1;
-        print "$child_nick\n";
-       &dmake_dir($child_nick);
+        $child = 1;
+        #print "$child_nick\n";
+        &dmake_dir($child_nick);
     };
 };
 
