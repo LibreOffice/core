@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 10:05:43 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Text alignment";
         Text[ arabic ] = "Text alignment";
         Text[ catalan ] = "Text alignment";
+        Text[ thai ] = "จัดตำแหน่งข้อความ";
     };
     FixedText FT_HORALIGN
     {
@@ -142,6 +143,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Yatay";
         Text[ arabic ] = "����";
         Text[ catalan ] = "H~orizontal";
+        Text[ thai ] = "แนว~นอน";
     };
     ListBox LB_HORALIGN
     {
@@ -334,6 +336,14 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Dreta" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
             < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "ค่าเริ่มต้น" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "ซ้าย" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "ตรงกลาง" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+        < "ขวา" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+        < "ชิดขอบ" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+    };
     };
     FixedText FT_INDENT
     {
@@ -344,9 +354,9 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "I~ndent" ;
         Text [ swedish ] = "Indra~g" ;
         Text [ danish ] = "Indrykning" ;
-        Text [ italian ] = "~Rientro" ;
+        Text [ italian ] = "Rientro" ;
         Text [ spanish ] = "Sangr�a" ;
-        Text [ french ] = "~Retrait" ;
+        Text [ french ] = "Retrait" ;
         Text [ dutch ] = "~Inspringing" ;
         Text [ portuguese_brazilian ] = "Einzu~g" ;
         Text [ portuguese ] = "A~van�o" ;
@@ -364,6 +374,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sangr�a";
         Text[ finnish ] = "~Sisennys";
+        Text[ thai ] = "ระยะเ~ยื้อง";
     };
     MetricField ED_INDENT
     {
@@ -388,10 +399,10 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ russian ] = "�� ���������";
         Text[ greek ] = "~Vertical";
         Text[ dutch ] = "~Verticaal";
-        Text[ french ] = "~Vertical";
+        Text[ french ] = "Vertical";
         Text[ spanish ] = "~Vertical";
         Text[ finnish ] = "~Pystytaso";
-        Text[ italian ] = "~Verticale";
+        Text[ italian ] = "Verticale";
         Text[ danish ] = "~Vertical";
         Text[ swedish ] = "~Vertikal";
         Text[ polish ] = "Pionowo";
@@ -403,6 +414,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "~Vertical";
         Text[ arabic ] = "~Vertical";
         Text[ catalan ] = "~Vertical";
+        Text[ thai ] = "แนว~ตั้ง";
     };
     ListBox LB_VERALIGN
     {
@@ -572,6 +584,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
             < "Mig" ; ALIGNDLG_VERALIGN_MID ; > ;
             < "Avall" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
         };
+    StringList [ thai ] =
+    {
+         < "ค่าเริ่มต้น" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "ด้านบน" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "ตรงกลาง" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "ด้านล่าง" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+    };
     };
     FixedLine FL_ORIENTATION
     {
@@ -603,6 +622,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Metin y�n�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Direcci�n de escritura";
+        Text[ thai ] = "ทิศทางข้อความ";
     };
     ImageButton BTN_TXTSTACKED
     {
@@ -634,10 +654,10 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ russian ] = "����";
         Text[ greek ] = "���~���";
         Text[ dutch ] = "Gra~den";
-        Text[ french ] = "~Angle";
+        Text[ french ] = "Angle";
         Text[ spanish ] = "~�ngulo";
         Text[ finnish ] = "~Asteet";
-        Text[ italian ] = "Gra~di";
+        Text[ italian ] = "~Gradi";
         Text[ danish ] = "grader";
         Text[ swedish ] = "~Vinkel";
         Text[ polish ] = "K�t";
@@ -649,6 +669,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "De~rece";
         Text[ arabic ] = "����/�����";
         Text[ catalan ] = "~Grados";
+        Text[ thai ] = "อง~ศา";
     };
     NumericField NF_DEGREES
     {
@@ -670,9 +691,9 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Bezugs~kante" ;
         Text [ swedish ] = "Referens~kant" ;
         Text [ danish ] = "Referencekant" ;
-        Text [ italian ] = "~Bordo di riferimento" ;
+        Text [ italian ] = "Bordo di ri~ferimento" ;
         Text [ spanish ] = "~Aristas de referencia" ;
-        Text [ french ] = "~Bord de r�f�rence" ;
+        Text [ french ] = "Bord de r�f�rence" ;
         Text [ dutch ] = "~Invalshoek" ;
         Text [ portuguese ] = "A~resta de refer�ncia" ;
         Text[ chinese_simplified ] = "引用边(~F)";
@@ -689,6 +710,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aristas de referencia";
         Text[ finnish ] = "~Viitteen reuna";
+        Text[ thai ] = "ขอบการ~อ้างอิง";
     };
     Control CTR_BORDER_LOCK
     {
@@ -706,6 +728,26 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "~Asiatischen, vertikalen Layoutmodus benutzen" ;
         Text [ ENGLISH ] = "Use ~Asian vertical layout mode" ;
         Text [ english_us ] = "Use ~Asian vertical layout mode" ;
+        Text[ portuguese ] = "Use ~Asian vertical layout mode";
+        Text[ russian ] = "Use ~Asian vertical layout mode";
+        Text[ greek ] = "Use ~Asian vertical layout mode";
+        Text[ dutch ] = "Use ~Asian vertical layout mode";
+        Text[ french ] = "Use ~Asian vertical layout mode";
+        Text[ spanish ] = "Use ~Asian vertical layout mode";
+        Text[ finnish ] = "Use ~Asian vertical layout mode";
+        Text[ italian ] = "Use ~Asian vertical layout mode";
+        Text[ danish ] = "Use ~Asian vertical layout mode";
+        Text[ swedish ] = "Use ~Asian vertical layout mode";
+        Text[ polish ] = "Use ~Asian vertical layout mode";
+        Text[ portuguese_brazilian ] = "Use ~Asian vertical layout mode";
+        Text[ japanese ] = "Use ~Asian vertical layout mode";
+        Text[ korean ] = "Use ~Asian vertical layout mode";
+        Text[ chinese_simplified ] = "Use ~Asian vertical layout mode";
+        Text[ chinese_traditional ] = "Use ~Asian vertical layout mode";
+        Text[ turkish ] = "Use ~Asian vertical layout mode";
+        Text[ arabic ] = "Use ~Asian vertical layout mode";
+        Text[ catalan ] = "Use ~Asian vertical layout mode";
+        Text[ thai ] = "Use ~Asian vertical layout mode";
     };
     FixedLine FL_SPACE
     {
@@ -737,6 +779,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "K�lavuz �izgilere uzakl�k";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distancia a la cuadr�cula";
+        Text[ thai ] = "ระยะห่างถึงเส้นตาราง";
     };
     FixedText FT_LEFTSPACE
     {
@@ -750,7 +793,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "E~squerda" ;
         Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
-        Text [ french ] = "~� gauche" ;
+        Text [ french ] = "� gauche" ;
         Text [ swedish ] = "V~�nster" ;
         Text [ dutch ] = "~Links" ;
         Text [ spanish ] = "I~zquierda" ;
@@ -768,6 +811,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~zquierda";
+        Text[ thai ] = "ซ้า~ย";
     };
     MetricField ED_LEFTSPACE
     {
@@ -790,7 +834,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text = "Recht~s" ;
         Text [ ENGLISH ] = "Rig~ht" ;
         Text [ norwegian ] = "Rig~ht" ;
-        Text [ italian ] = "A destra" ;
+        Text [ italian ] = "A ~destra" ;
         Text [ portuguese_brazilian ] = "Dir~eita" ;
         Text [ portuguese ] = "Dir~eita" ;
         Text [ finnish ] = "Oikea" ;
@@ -798,7 +842,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ french ] = "� droite" ;
         Text [ swedish ] = "H~�ger" ;
         Text [ dutch ] = "~Rechts" ;
-        Text [ spanish ] = "Derec~ha" ;
+        Text [ spanish ] = "Derecha" ;
         Text [ english_us ] = "Right" ;
         Text[ chinese_simplified ] = "向右";
         Text[ russian ] = "������";
@@ -813,6 +857,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "~Sa�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Derec~ha";
+        Text[ thai ] = "ขวา";
     };
     MetricField ED_RIGHTSPACE
     {
@@ -840,7 +885,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "Em ~cima" ;
         Text [ finnish ] = "~Yl�osa" ;
         Text [ danish ] = "�verst" ;
-        Text [ french ] = "~En haut" ;
+        Text [ french ] = "En haut" ;
         Text [ swedish ] = "U~ppe" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "Arr~iba" ;
@@ -858,6 +903,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "�~st";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Arr~iba";
+        Text[ thai ] = "บ~น";
     };
     MetricField ED_TOPSPACE
     {
@@ -885,7 +931,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Nederst" ;
-        Text [ french ] = "En ~bas" ;
+        Text [ french ] = "En bas" ;
         Text [ swedish ] = "N~ere" ;
         Text [ dutch ] = "~Onder" ;
         Text [ spanish ] = "Abaj~o" ;
@@ -903,6 +949,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Al~t";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Abaj~o";
+        Text[ thai ] = "ล่า~ง";
     };
     MetricField ED_BOTTOMSPACE
     {
@@ -949,6 +996,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ finnish ] = "Tekstin rivitys";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Flujo del texto";
+        Text[ thai ] = "การไหลของข้อความ";
     };
     TriStateBox BTN_WRAP
     {
@@ -962,7 +1010,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese ] = "Quebra de ~linha" ;
         Text [ finnish ] = "Rivinvaihto" ;
         Text [ danish ] = "Linjeskift" ;
-        Text [ french ] = "R~envoi � la ligne" ;
+        Text [ french ] = "Renvoi � la ligne" ;
         Text [ swedish ] = "Rad~brytning" ;
         Text [ dutch ] = "~Regelafbreking" ;
         Text [ spanish ] = "Salto de ~l�nea" ;
@@ -980,6 +1028,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Sat�r son~u";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Salto de ~l�nea";
+        Text[ thai ] = "ตัวแบ่งบรรทัด";
     };
     TriStateBox BTN_HYPH
     {
@@ -993,7 +1042,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ greek ] = "Hyphenation active";
         Text[ dutch ] = "~Woordafbreking actief";
         Text[ french ] = "Coupure des mots active";
-        Text[ spanish ] = "Separaci�n sil�bica activa";
+        Text[ spanish ] = "~Separaci�n sil�bica activa";
         Text[ finnish ] = "Tavutus k�yt�ss�";
         Text[ italian ] = "Funzione di sillabazione attiva";
         Text[ danish ] = "Hyphenation active";
@@ -1007,6 +1056,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Hyphenation active";
         Text[ arabic ] = "Hyphenation active";
         Text[ catalan ] = "Hyphenation active";
+        Text[ thai ] = "ยัติภังค์ที่ใช้งาน";
     };
     ImageList IL_LOCK_BMPS
     {
@@ -1047,6 +1097,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "H�cre alt kenar�ndan metin geni�lemesi";
         Text[ catalan ] = "Expansi�n del texto a partir del borde inferior de la celda.";
         Text[ finnish ] = "Tekstin laajennus solun alareunasta";
+        Text[ thai ] = "การขยายข้อความจากเส้นขอบล่างเซลล์";
     };
     String STR_TOPLOCK
     {
@@ -1075,6 +1126,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "H�cre �st kenar�ndan metin geni�lemesi.";
         Text[ catalan ] = "Expansi�n del texto a partir del borde superior de la celda.";
         Text[ finnish ] = "Tekstin laajennus solun yl�reunasta";
+        Text[ thai ] = "การขยายข้อความจากเส้นขอบบนเซลล์";
     };
     String STR_CELLLOCK
     {
@@ -1103,6 +1155,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Yaln�zca h�cre i�inde metin geni�lemesi";
         Text[ catalan ] = "Expansi�n del texto solo dentro de la celda.";
         Text[ finnish ] = "Tekstin laajennus solun sis�ll�";
+        Text[ thai ] = "การขยายข้อความภายในเซลล์";
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -1117,6 +1170,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineaci�n";
+    Text[ thai ] = "จัดตำแหน่ง";
 };
  // ********************************************************************** EOF
 
