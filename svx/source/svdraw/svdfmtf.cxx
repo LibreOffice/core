@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-10 17:16:28 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,12 +406,12 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
     if (pObj!=NULL)
     {
         pObj->SetLayer(nLayer);
-        if (bLine) pObj->SetItemSet(*pLineAttr);
-        if (bFill) pObj->SetItemSet(*pFillAttr);
+        if (bLine) pObj->SetMergedItemSet(*pLineAttr);
+        if (bFill) pObj->SetMergedItemSet(*pFillAttr);
         if (bText)
         {
-            pObj->SetItemSet(*pTextAttr);
-            pObj->SetItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_LEFT ) );
+            pObj->SetMergedItemSet(*pTextAttr);
+            pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_LEFT ) );
         }
     }
 }
@@ -490,7 +490,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     if (nRad!=0) {
         SfxItemSet aSet(*pLineAttr->GetPool(),SDRATTR_ECKENRADIUS,SDRATTR_ECKENRADIUS);
         aSet.Put(SdrEckenradiusItem(nRad));
-        pRect->SetItemSet(aSet);
+        pRect->SetMergedItemSet(aSet);
     }
     InsertObj(pRect);
 }
@@ -606,7 +606,7 @@ sal_Bool ImpSdrGDIMetaFileImport::CheckLastPolyLineAndFillMerge( const XPolyPoly
                 SetAttributes(NULL);
                 if (!bNoLine && bNoFill)
                 {
-                    pLastPoly->SetItemSet(*pLineAttr);
+                    pLastPoly->SetMergedItemSet(*pLineAttr);
                     return sal_True;
                 }
             }
@@ -710,12 +710,12 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
 
     if ( aFnt.GetWidth() || ( rAct.GetType() == META_STRETCHTEXT_ACTION ) )
     {
-        pText->ClearItem( SDRATTR_TEXT_AUTOGROWWIDTH );
-        pText->SetItem( SdrTextAutoGrowHeightItem( FALSE ) );
-        pText->SetItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
+        pText->ClearMergedItem( SDRATTR_TEXT_AUTOGROWWIDTH );
+        pText->SetMergedItem( SdrTextAutoGrowHeightItem( FALSE ) );
+        pText->SetMergedItem( SdrTextFitToSizeTypeItem( SDRTEXTFIT_ALLLINES ) );
     }
     else
-        pText->SetItem( SdrTextAutoGrowWidthItem( sal_True ) );
+        pText->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
 
     pText->SetModel( pModel );
     pText->SetLayer( nLayer );
@@ -728,7 +728,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const XubString& rS
         SfxItemSet aAttr(*pFillAttr->GetPool(),XATTR_FILL_FIRST,XATTR_FILL_LAST);
         pFillAttr->Put(XFillStyleItem(XFILL_SOLID));
         pFillAttr->Put(XFillColorItem(String(), aFnt.GetFillColor()));
-        pText->SetItemSet(aAttr);
+        pText->SetMergedItemSet(aAttr);
     }
     sal_uInt32 nWink = aFnt.GetOrientation();
     if ( nWink )
@@ -846,7 +846,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaHatchAction& rAct )
             aHatchAttr.Put( XFillStyleItem( XFILL_HATCH ) );
             aHatchAttr.Put( XFillHatchItem( &pModel->GetItemPool(), XHatch( rHatch.GetColor(), eStyle,
                                                               rHatch.GetDistance(), rHatch.GetAngle() ) ) );
-            pPath->SetItemSet( aHatchAttr );
+            pPath->SetMergedItemSet( aHatchAttr );
             InsertObj( pPath, sal_False );
         }
     }
@@ -938,7 +938,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
                     SetAttributes( pPath );
                     aGradAttr.Put( XFillStyleItem( XFILL_GRADIENT ) );
                     aGradAttr.Put( XFillGradientItem( &pModel->GetItemPool(), aXGradient ) );
-                    pPath->SetItemSet(aGradAttr);
+                    pPath->SetMergedItemSet(aGradAttr);
                     InsertObj(pPath);
                 }
             }
