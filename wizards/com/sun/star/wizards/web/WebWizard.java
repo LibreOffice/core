@@ -25,17 +25,6 @@ public class WebWizard extends WWD_Events{
         super(xmsf);
     }
 
-    public void activate() {
-        try {
-            XTopWindow top = (XTopWindow)UnoRuntime.queryInterface(XTopWindow.class,  xWindow );
-            if (top != null)
-                   top.toFront();
-        }
-        catch (Exception ex) {
-            // do nothing;
-        }
-    }
-
     public static void main(String args[]) {
 
         String ConnectStr =
