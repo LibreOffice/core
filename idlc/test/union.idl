@@ -17,10 +17,10 @@ union UnionTest switch (long) {
 typedef enum E {
   A,
   B
-} E_Alias;
+} EAlias;
 
 // Union with no default label
-union U2 switch(E_Alias) {
+union U2 switch(EAlias) {
   case E::A : long x;
   case E::B : short y;
 };
