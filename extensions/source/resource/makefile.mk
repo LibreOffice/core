@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:56:32 $
+#   last change: $Author: obo $ $Date: 2004-11-16 12:15:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,6 +104,9 @@ SHL1IMPLIB=		ires
 SHL1LIBS=		$(LIB1TARGET)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
+
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
+INCPRE+=$(UNOUCROUT)
 
 UNOTYPES=\
     com.sun.star.uno.XWeak						\
