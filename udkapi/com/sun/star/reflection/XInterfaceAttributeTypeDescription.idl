@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceAttributeTypeDescription.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:55:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
     The type class of this type is TypeClass_INTERFACE_ATTRIBUTE.
 */
-interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
+published interface XInterfaceAttributeTypeDescription: com::sun::star::reflection::XInterfaceMemberTypeDescription
 {
     /** Returns true, if this attribute is read-only.
 
