@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 09:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,10 +257,6 @@ BOOL SbiScanner::NextSym()
                 eScanType = t;
                 pLine++;
                 nCol++;
-#ifdef VBSCRIPT_TEST
-                nCol2 = nCol;
-                GenError( ERRCODE_BASIC_NOT_IN_VBSCRIPT );
-#endif
             }
         }
     }
@@ -353,10 +349,6 @@ BOOL SbiScanner::NextSym()
             eScanType = t;
             pLine++;
             nCol++;
-#ifdef VBSCRIPT_TEST
-            nCol2 = nCol;
-            GenError( ERRCODE_BASIC_NOT_IN_VBSCRIPT );
-#endif
         }
     }
 

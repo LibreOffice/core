@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 09:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,71 +85,70 @@ struct SbiStatement {
     void( SbiParser::*Func )();     // Verarbeitungsroutine
     BOOL  bMain;                    // TRUE: ausserhalb SUBs OK
     BOOL  bSubr;                    // TRUE: in SUBs OK
-    BOOL  bVBScript;                // TRUE: in  OK
 };
 
 #define Y   TRUE
 #define N   FALSE
 
 static SbiStatement StmntTable [] = {
-{ CALL,     &SbiParser::Call,       N, Y, Y, }, // CALL
-{ CLOSE,    &SbiParser::Close,      N, Y, Y, }, // CLOSE
-{ _CONST_,  &SbiParser::Dim,        Y, Y, Y, }, // CONST
-{ DECLARE,  &SbiParser::Declare,    Y, N, N, }, // DECLARE
-{ DEFBOOL,  &SbiParser::DefXXX,     Y, N, N, }, // DEFBOOL
-{ DEFCUR,   &SbiParser::DefXXX,     Y, N, N, }, // DEFCUR
-{ DEFDATE,  &SbiParser::DefXXX,     Y, N, N, }, // DEFDATE
-{ DEFDBL,   &SbiParser::DefXXX,     Y, N, N, }, // DEFDBL
-{ DEFERR,   &SbiParser::DefXXX,     Y, N, N, }, // DEFERR
-{ DEFINT,   &SbiParser::DefXXX,     Y, N, N, }, // DEFINT
-{ DEFLNG,   &SbiParser::DefXXX,     Y, N, N, }, // DEFLNG
-{ DEFOBJ,   &SbiParser::DefXXX,     Y, N, N, }, // DEFOBJ
-{ DEFSNG,   &SbiParser::DefXXX,     Y, N, N, }, // DEFSNG
-{ DEFSTR,   &SbiParser::DefXXX,     Y, N, N, }, // DEFSTR
-{ DEFVAR,   &SbiParser::DefXXX,     Y, N, N, }, // DEFVAR
-{ DIM,      &SbiParser::Dim,        Y, Y, Y, }, // DIM
-{ DO,       &SbiParser::DoLoop,     N, Y, Y, }, // DO
-{ ELSE,     &SbiParser::NoIf,       N, Y, Y, }, // ELSE
-{ ELSEIF,   &SbiParser::NoIf,       N, Y, Y, }, // ELSEIF
-{ ENDIF,    &SbiParser::NoIf,       N, Y, Y, }, // ENDIF
-{ END,      &SbiParser::Stop,       N, Y, N, }, // END
-{ ERASE,    &SbiParser::Erase,      N, Y, Y, }, // ERASE
-{ _ERROR_,  &SbiParser::ErrorStmnt, N, Y, Y, }, // ERROR
-{ EXIT,     &SbiParser::Exit,       N, Y, N, }, // EXIT
-{ FOR,      &SbiParser::For,        N, Y, Y, }, // FOR
-{ FUNCTION, &SbiParser::SubFunc,    Y, N, Y, }, // FUNCTION
-{ GOSUB,    &SbiParser::Goto,       N, Y, N, }, // GOSUB
-{ GLOBAL,   &SbiParser::Dim,        Y, N, Y, }, // GLOBAL
-{ GOTO,     &SbiParser::Goto,       N, Y, N, }, // GOTO
-{ IF,       &SbiParser::If,         N, Y, Y, }, // IF
-{ INPUT,    &SbiParser::Input,      N, Y, Y, }, // INPUT
-{ LET,      &SbiParser::Assign,     N, Y, Y, }, // LET
-{ LINEINPUT,&SbiParser::LineInput,  N, Y, Y, }, // LINE INPUT
-{ LOOP,     &SbiParser::BadBlock,   N, Y, Y, }, // LOOP
-{ LSET,     &SbiParser::LSet,       N, Y, N, }, // LSET
-{ NAME,     &SbiParser::Name,       N, Y, Y, }, // NAME
-{ NEXT,     &SbiParser::BadBlock,   N, Y, Y, }, // NEXT
-{ ON,       &SbiParser::On,         N, Y, N, }, // ON
-{ OPEN,     &SbiParser::Open,       N, Y, Y, }, // OPEN
-{ OPTION,   &SbiParser::Option,     Y, N, N, }, // OPTION
-{ PRINT,    &SbiParser::Print,      N, Y, Y, }, // PRINT
-{ PRIVATE,  &SbiParser::Dim,        Y, N, Y, }, // PRIVATE
-{ PUBLIC,   &SbiParser::Dim,        Y, N, Y, }, // PUBLIC
-{ REDIM,    &SbiParser::ReDim,      N, Y, Y, }, // DIM
-{ RESUME,   &SbiParser::Resume,     N, Y, N, }, // RESUME
-{ RETURN,   &SbiParser::Return,     N, Y, N, }, // RETURN
-{ RSET,     &SbiParser::RSet,       N, Y, N, }, // RSET
-{ SELECT,   &SbiParser::Select,     N, Y, N, }, // SELECT
-{ SET,      &SbiParser::Set,        N, Y, Y, }, // SET
-{ STATIC,   &SbiParser::Static,     Y, Y, Y, }, // STATIC
-{ STOP,     &SbiParser::Stop,       N, Y, N, }, // STOP
-{ SUB,      &SbiParser::SubFunc,    Y, N, Y, }, // SUB
-{ TYPE,     &SbiParser::Type,       Y, N, Y, }, // TYPE
-{ UNTIL,    &SbiParser::BadBlock,   N, Y, Y, }, // UNTIL
-{ WHILE,    &SbiParser::While,      N, Y, Y, }, // WHILE
-{ WEND,     &SbiParser::BadBlock,   N, Y, Y, }, // WEND
-{ WITH,     &SbiParser::With,       N, Y, N, }, // WITH
-{ WRITE,    &SbiParser::Write,      N, Y, Y, }, // WRITE
+{ CALL,     &SbiParser::Call,       N, Y, }, // CALL
+{ CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
+{ _CONST_,  &SbiParser::Dim,        Y, Y, }, // CONST
+{ DECLARE,  &SbiParser::Declare,    Y, N, }, // DECLARE
+{ DEFBOOL,  &SbiParser::DefXXX,     Y, N, }, // DEFBOOL
+{ DEFCUR,   &SbiParser::DefXXX,     Y, N, }, // DEFCUR
+{ DEFDATE,  &SbiParser::DefXXX,     Y, N, }, // DEFDATE
+{ DEFDBL,   &SbiParser::DefXXX,     Y, N, }, // DEFDBL
+{ DEFERR,   &SbiParser::DefXXX,     Y, N, }, // DEFERR
+{ DEFINT,   &SbiParser::DefXXX,     Y, N, }, // DEFINT
+{ DEFLNG,   &SbiParser::DefXXX,     Y, N, }, // DEFLNG
+{ DEFOBJ,   &SbiParser::DefXXX,     Y, N, }, // DEFOBJ
+{ DEFSNG,   &SbiParser::DefXXX,     Y, N, }, // DEFSNG
+{ DEFSTR,   &SbiParser::DefXXX,     Y, N, }, // DEFSTR
+{ DEFVAR,   &SbiParser::DefXXX,     Y, N, }, // DEFVAR
+{ DIM,      &SbiParser::Dim,        Y, Y, }, // DIM
+{ DO,       &SbiParser::DoLoop,     N, Y, }, // DO
+{ ELSE,     &SbiParser::NoIf,       N, Y, }, // ELSE
+{ ELSEIF,   &SbiParser::NoIf,       N, Y, }, // ELSEIF
+{ ENDIF,    &SbiParser::NoIf,       N, Y, }, // ENDIF
+{ END,      &SbiParser::Stop,       N, Y, }, // END
+{ ERASE,    &SbiParser::Erase,      N, Y, }, // ERASE
+{ _ERROR_,  &SbiParser::ErrorStmnt, N, Y, }, // ERROR
+{ EXIT,     &SbiParser::Exit,       N, Y, }, // EXIT
+{ FOR,      &SbiParser::For,        N, Y, }, // FOR
+{ FUNCTION, &SbiParser::SubFunc,    Y, N, }, // FUNCTION
+{ GOSUB,    &SbiParser::Goto,       N, Y, }, // GOSUB
+{ GLOBAL,   &SbiParser::Dim,        Y, N, }, // GLOBAL
+{ GOTO,     &SbiParser::Goto,       N, Y, }, // GOTO
+{ IF,       &SbiParser::If,         N, Y, }, // IF
+{ INPUT,    &SbiParser::Input,      N, Y, }, // INPUT
+{ LET,      &SbiParser::Assign,     N, Y, }, // LET
+{ LINEINPUT,&SbiParser::LineInput,  N, Y, }, // LINE INPUT
+{ LOOP,     &SbiParser::BadBlock,   N, Y, }, // LOOP
+{ LSET,     &SbiParser::LSet,       N, Y, }, // LSET
+{ NAME,     &SbiParser::Name,       N, Y, }, // NAME
+{ NEXT,     &SbiParser::BadBlock,   N, Y, }, // NEXT
+{ ON,       &SbiParser::On,         N, Y, }, // ON
+{ OPEN,     &SbiParser::Open,       N, Y, }, // OPEN
+{ OPTION,   &SbiParser::Option,     Y, N, }, // OPTION
+{ PRINT,    &SbiParser::Print,      N, Y, }, // PRINT
+{ PRIVATE,  &SbiParser::Dim,        Y, N, }, // PRIVATE
+{ PUBLIC,   &SbiParser::Dim,        Y, N, }, // PUBLIC
+{ REDIM,    &SbiParser::ReDim,      N, Y, }, // DIM
+{ RESUME,   &SbiParser::Resume,     N, Y, }, // RESUME
+{ RETURN,   &SbiParser::Return,     N, Y, }, // RETURN
+{ RSET,     &SbiParser::RSet,       N, Y, }, // RSET
+{ SELECT,   &SbiParser::Select,     N, Y, }, // SELECT
+{ SET,      &SbiParser::Set,        N, Y, }, // SET
+{ STATIC,   &SbiParser::Static,     Y, Y, }, // STATIC
+{ STOP,     &SbiParser::Stop,       N, Y, }, // STOP
+{ SUB,      &SbiParser::SubFunc,    Y, N, }, // SUB
+{ TYPE,     &SbiParser::Type,       Y, N, }, // TYPE
+{ UNTIL,    &SbiParser::BadBlock,   N, Y, }, // UNTIL
+{ WHILE,    &SbiParser::While,      N, Y, }, // WHILE
+{ WEND,     &SbiParser::BadBlock,   N, Y, }, // WEND
+{ WITH,     &SbiParser::With,       N, Y, }, // WITH
+{ WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
 
 { NIL }
 };
@@ -417,11 +416,9 @@ BOOL SbiParser::Parse()
     // DOT fuer Zuweisungen im WITH-Block: .A=5
     if( eCurTok == SYMBOL || eCurTok == DOT )
     {
-#ifndef VBSCRIPT_TEST
         if( !pProc )
             Error( SbERR_EXPECTED, SUB );
         else
-#endif
         {
             // Damit Zeile & Spalte stimmen...
             Next();
@@ -442,17 +439,9 @@ BOOL SbiParser::Parse()
                 break;
         if( p->eTok != NIL )
         {
-#ifdef VBSCRIPT_TEST
-            if( !p->bVBScript )
-                Error( ERRCODE_BASIC_NOT_IN_VBSCRIPT );
-            else
-#endif
-#ifndef VBSCRIPT_TEST
             if( !pProc && !p->bMain )
                 Error( SbERR_NOT_IN_MAIN, eCurTok );
-            else
-#endif
-            if( pProc && !p->bSubr )
+            else if( pProc && !p->bSubr )
                 Error( SbERR_NOT_IN_SUBR, eCurTok );
             else
             {

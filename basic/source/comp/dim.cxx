@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-07 16:29:55 $
+ *  last change: $Author: ab $ $Date: 2001-05-17 09:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,6 @@ void SbiParser::TypeDecl( SbiSymDef& rDef )
     short nSize = 0;
     if( Peek() == AS )
     {
-#ifdef VBSCRIPT_TEST
-        Error( ERRCODE_BASIC_NOT_IN_VBSCRIPT );
-#endif
         Next();
         rDef.SetDefinedAs();
         String aType;
