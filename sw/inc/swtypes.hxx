@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:22:22 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,6 @@ const SwTwips lMinBorder = 1134;
 extern UniString aEmptyStr;         // ""
 extern ByteString aEmptyByteStr;    // ""
 extern UniString aDotStr;           // '.'
-
-extern const sal_Char* __FAR_DATA pGlosExt;         // def. Ext. fuer AutoText in glosdoc.cxx
-
 
 //Zum Einfuegen von Beschriftungen (wie bzw. wo soll eingefuegt werden).
 //Hier weil ein eigenes hxx nicht lohnt und es sonst nirgendwo so recht
