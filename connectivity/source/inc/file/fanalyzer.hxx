@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,10 @@ namespace connectivity
             ::std::vector<sal_Int32>* bindResultRow(OValueRow _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
             void bindParameterRow(OValueRow _pRow);             // Anbinden einer Parameterzeile an die Restrictions
 
+            void dispose()
+            {
+                m_aCompiler.dispose();
+            }
             void start(OSQLParseNode* pSQLParseNode);
             void clean();
             BOOL hasRestriction() const {return m_aCompiler.hasCode();}

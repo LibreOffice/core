@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:28:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,10 @@ namespace connectivity
 
         public:
             OOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
+            ~OOperandAttr()
+            {
+                m_xColumn = NULL;
+            }
 
             virtual sal_Bool isIndexed() const {return sal_False;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0) { return NULL;}

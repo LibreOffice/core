@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 08:05:43 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,7 @@ namespace connectivity
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-        class OFileTable :  public OTable_TYPEDEF,
-                            public ::com::sun::star::lang::XUnoTunnel
+        class OFileTable :  public OTable_TYPEDEF
         {
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
@@ -99,6 +98,7 @@ namespace connectivity
             sal_uInt16                                          m_nBufferSize;  // Groesse des ReadBuffer, wenn pBuffer != NULL
             sal_Int32                                           m_nFilePos;                 // aktuelle FilePosition
 
+            virtual void FileClose();
         public:
             virtual void refreshColumns();
             virtual void refreshKeys();

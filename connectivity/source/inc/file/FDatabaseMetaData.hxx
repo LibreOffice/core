@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 11:24:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,31 +62,26 @@
 #ifndef _CONNECTIVITY_FILE_ODATABASEMETADATA_HXX_
 #define _CONNECTIVITY_FILE_ODATABASEMETADATA_HXX_
 
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
-#include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CONNECTIVITY_ODATABASEMETADATABASE_HXX_
+#include "TDatabaseMetaDataBase.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #include "file/FConnection.hxx"
 #endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
+
+
 namespace connectivity
 {
     namespace file
     {
         //**************************************************************
-        //************ Class: java.sql.DatabaseMetaDataDate
+        //************ Class: ODatabaseMetaData
         //**************************************************************
 
-        class ODatabaseMetaData :   public  comphelper::OBaseMutex,
-                                                                        public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData >
+        class ODatabaseMetaData :   public  ODatabaseMetaDataBase
         {
         protected:
-            OConnection*    m_pConnection;
+            OConnection* m_pConnection; // I need the native class not only the interface
         public:
 
             ODatabaseMetaData(OConnection* _pCon);
