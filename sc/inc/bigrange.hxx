@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bigrange.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,28 +163,30 @@ inline BOOL ScBigAddress::IsValid( const ScDocument* pDoc ) const
 
 inline ScAddress ScBigAddress::MakeAddress() const
 {
-    USHORT nColA, nRowA, nTabA;
+    SCCOL nColA;
+    SCROW nRowA;
+    SCTAB nTabA;
 
     if ( nCol < 0 )
         nColA = 0;
     else if ( nCol > MAXCOL )
         nColA = MAXCOL;
     else
-        nColA = (USHORT) nCol;
+        nColA = (SCCOL) nCol;
 
     if ( nRow < 0 )
         nRowA = 0;
     else if ( nRow > MAXROW )
         nRowA = MAXROW;
     else
-        nRowA = (USHORT) nRow;
+        nRowA = (SCROW) nRow;
 
     if ( nTab < 0 )
         nTabA = 0;
     else if ( nTab > MAXTAB )
         nTabA = MAXTAB;
     else
-        nTabA = (USHORT) nTab;
+        nTabA = (SCTAB) nTab;
 
     return ScAddress( nColA, nRowA, nTabA );
 }
