@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:23:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
                         Text[ dutch ] = "Tekstveld";
                         Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
-                        Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+                        Text[ greek ] = "Ğåäßï êåéìİíïõ";
                         Text[ korean ] = "ÅØ½ºÆ® ÇÊµå";
                         Text[ arabic ] = "ÍŞá äÕ";
                         Text[ turkish ] = "Metin alanı";
@@ -299,7 +299,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
                         Text[ russian ] = "Ïîëå äàòû";
                         Text[ polish ] = "Pole daty";
-                        Text[ japanese ] = "“ú•tÌ¨°ÙÄŞ";
+                        Text[ japanese ] = "“ú•tÎŞ¯¸½";
                         Text[ chinese_traditional ] = "¤é´ÁÄæ¦ì";
                         Text[ dutch ] = "Datumveld";
                         Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
@@ -353,7 +353,7 @@ Menu RID_SVXMNU_COLS
                         Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
                         Text[ russian ] = "×èñëîâîå ïîëå";
                         Text[ polish ] = "Pole numeryczne";
-                        Text[ japanese ] = "”Ô†Ì¨°ÙÄŞ";
+                        Text[ japanese ] = "”šÎŞ¯¸½";
                         Text[ chinese_traditional ] = "¼Æ¦rÄæ¦ì";
                         Text[ dutch ] = "Numeriek veld";
                         Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
@@ -496,13 +496,13 @@ Menu RID_SVXMNU_COLS
             Text [ french ] = "~Remplacer par" ;
             Text [ dutch ] = "~Vervangen door" ;
             Text [ portuguese ] = "~Substituir por" ;
-            Text[ chinese_simplified ] = "Ìæ»»Îª(~R)";
+            Text[ chinese_simplified ] = "Ìæ»»³É(~R)";
             Text[ russian ] = "Çàìåíèòü íà";
             Text[ polish ] = "Zmieñ na";
             Text[ japanese ] = "’u‚«Š·‚¦(~R)";
-            Text[ chinese_traditional ] = "´À¥N¥Î(~R)";
+            Text[ chinese_traditional ] = "§ó´À¦¨(~R)";
             Text[ dutch ] = "~Vervangen door";
-            Text[ chinese_simplified ] = "Ìæ»»Îª(~R)";
+            Text[ chinese_simplified ] = "Ìæ»»³É(~R)";
             Text[ greek ] = "ÁíôéêáôÜóôáóç ì~å";
             Text[ korean ] = "¹Ù²Ù±â";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
