@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:19:06 $
+ *  last change: $Author: mib $ $Date: 2001-04-10 09:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1553,6 +1553,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
     case XML_TOK_TEXT_CALCULATION_SETTINGS:
         pContext = new XMLCalculationSettingsContext ( rImport, nPrefix, rLocalName, xAttrList);
+        bContent = sal_False;
     break;
     default:
         if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 16:26:25 $
+ *  last change: $Author: mib $ $Date: 2001-04-10 09:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,6 +773,14 @@ XMLTextFrameContext::XMLTextFrameContext(
         xPropSet->setPropertyValue( sGraphicRotation, aAny );
     }
 
+    // page number (must be set after the frame is inserted, because it
+    // will be overwritten then inserting the frame.
+    if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
+    {
+        aAny <<= nPage;
+        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
+    }
+
     if( XML_TEXT_FRAME_OBJECT != nType  &&
         XML_TEXT_FRAME_OBJECT_OLE != nType  &&
         XML_TEXT_FRAME_APPLET != nType &&
@@ -784,14 +792,6 @@ XMLTextFrameContext::XMLTextFrameContext(
 
         Reference < XShape > xShape( xPropSet, UNO_QUERY );
         GetImport().GetShapeImport()->shapeWithZIndexAdded( xShape, nZIndex );
-    }
-
-    // page number (must be set after the frame is inserted, because it
-    // will be overwritten then inserting the frame.
-    if( TextContentAnchorType_AT_PAGE == eAnchorType && nPage > 0 )
-    {
-        aAny <<= nPage;
-        xPropSet->setPropertyValue( sAnchorPageNo, aAny );
     }
 
     if( XML_TEXT_FRAME_TEXTBOX == nType )
