@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:27:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,15 @@ private:
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
+
+    struct ExecuteInfo
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >     xDispatch;
+        ::com::sun::star::util::URL                                                aTargetURL;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >  aArgs;
+    };
+
+    DECL_STATIC_LINK( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo* );
 
 public:
 
