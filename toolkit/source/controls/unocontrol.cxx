@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@
 #include <comphelper/container.hxx>
 #endif
 
+#include <algorithm>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -232,7 +234,6 @@ UnoControl::UnoControl()
     , maPaintListeners( *this )
     , maModeChangeListeners( GetMutex() )
 {
-    mbUpdatingModel = sal_False;
     mbDisposePeer = sal_True;
     mbRefeshingPeer = sal_False;
     mbCreatingPeer = sal_False;
@@ -407,10 +408,37 @@ sal_Bool UnoControl::requiresNewPeer( const ::rtl::OUString& /* _rPropertyName *
 // XPropertiesChangeListener
 void UnoControl::propertiesChange( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 {
+    Sequence< PropertyChangeEvent > aEvents( rEvents );
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+
+        if ( msPropertyCurrentlyUpdating.getLength() )
+        {
+            // strip the property which we are currently updating (somewhere up the stack)
+            PropertyChangeEvent* pEvents = aEvents.getArray();
+            PropertyChangeEvent* pEventsEnd = pEvents + aEvents.getLength();
+            for ( ; pEvents < pEventsEnd; ++pEvents )
+                if ( pEvents->PropertyName == msPropertyCurrentlyUpdating )
+                {
+                    if ( pEvents != pEventsEnd )
+                        ::std::copy( pEvents + 1, pEventsEnd, pEvents );
+                    --pEventsEnd;
+                }
+            aEvents.realloc( pEventsEnd - aEvents.getConstArray() );
+
+            if ( !aEvents.getLength() )
+                return;
+        }
+    }
+
+    ImplModelPropertiesChanged( aEvents );
+}
+
+void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents )
+{
     ::osl::ClearableGuard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // kommt von xModel
-    if( !IsUpdatingModel() && getPeer().is() )
+    if( getPeer().is() )
     {
         DECLARE_STL_VECTOR( PropertyValue, PropertyValueVector);
         PropertyValueVector     aPeerPropertiesToSet;
