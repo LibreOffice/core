@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,23 +137,23 @@ struct WW8_PCD1
 #  endif
 
 
-USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta );
+USHORT WW8GetSprmId( BYTE nVersion, const BYTE* pSp, BYTE* pDelta );
 
-WW8SprmIter::WW8SprmIter(BYTE* pSprms_,     long nLen_,       BYTE nVersion_ )
+WW8SprmIter::WW8SprmIter(const BYTE* pSprms_, long nLen_, BYTE nVersion_ )
                     :  pSprms( pSprms_), nRemLen( nLen_), nVersion( nVersion_),
                        nDelta( ( 8 > nVersion ) ? 0 : 1 )
 {
     UpdateMyMembers();
 }
 
-void WW8SprmIter::SetSprms(BYTE* pSprms_, long nLen_)
+void WW8SprmIter::SetSprms(const BYTE* pSprms_, long nLen_)
 {
     pSprms  = pSprms_;
     nRemLen = nLen_;
     UpdateMyMembers();
 }
 
-BYTE* WW8SprmIter::operator ++( int )
+const BYTE* WW8SprmIter::operator ++( int )
 {
     if( 0 < nRemLen )
     {
@@ -190,7 +190,8 @@ void WW8SprmIter::UpdateMyMembers()
 // eigenen Iteratoren. Alle sich auf Iteratoren beziehenden Methoden
 // sind deshalb Dummies.
 
-WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase )
+WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD,
+    const WW8ScannerBase* pBase )
 : WW8PLCFx( nVersion, TRUE ),
   pPcd( pPLCFx_PCD ),
   pGrpprls( pBase->pPieceGrpprls ),
@@ -250,7 +251,7 @@ void WW8PLCFx_PCDAttrs::GetSprms( WW8PLCFxDesc* p )
             p->pMemPos = 0;
             return;
         }
-        BYTE* pSprms = pGrpprls[ nSprmIdx ];
+        const BYTE* pSprms = pGrpprls[ nSprmIdx ];
 
         p->nSprmsLen = SVBT16ToShort( pSprms ); // Laenge
         pSprms += 2;
@@ -1490,16 +1491,26 @@ WW8PLCFpcd::WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct )
 
     pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1]; // Pointer auf Inhalts-Array
 
+#if 0
+    //aFC_sort appears to be redundant
     for( INT32 nI = 0; nI < nIMax; nI++ )
     {
+#if 1
+        //If we use this at all it should be this way
+        BOOL bDummy;
+        ULONG nKey = WW8PLCFx_PCD::TransformPieceAddress(
+            ((WW8_PCD1&)pPLCF_Contents[nI * nStru]).fc, bDummy );
+
+#else
         ULONG nKey = (ULONG)(0x8FFFFFFF & ((WW8_PCD1&)pPLCF_Contents[nI * nStru]).fc);
+#endif
         aFC_sort.Insert( nKey, nI );
     }
-
+#endif
     pSt->Seek( nOldPos );
 }
 
-
+#if 0
 ULONG WW8PLCFpcd::FindIdx( WW8_FC nFC ) const
 {
     ULONG nFound;
@@ -1512,6 +1523,7 @@ ULONG WW8PLCFpcd::FindIdx( WW8_FC nFC ) const
     }
     return ULONG_MAX == nFound ? ULONG_MAX : aFC_sort.GetObject( nFound );
 }
+#endif
 
 
 // Bei nStartPos < 0 wird das erste Element des PLCFs genommen
@@ -1777,7 +1789,8 @@ BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::GetLenAndIStdAndSprms(short& rLen)
 }
 
 
-BYTE* WW8FindSprm( USHORT nId, long nLen, BYTE* pSprms, BYTE nVersion )
+const BYTE* WW8FindSprm( USHORT nId, long nLen, const BYTE* pSprms,
+    BYTE nVersion )
 {
     WW8SprmIter aSprmIter( pSprms, nLen, nVersion );
 
@@ -1792,7 +1805,7 @@ BYTE* WW8FindSprm( USHORT nId, long nLen, BYTE* pSprms, BYTE nVersion )
 }
 
 
-BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
+const BYTE* WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm( USHORT nId )
 {
     if( nIdx >= nIMax )
         return 0;
@@ -1912,14 +1925,13 @@ BOOL WW8PLCFx_Fc_FKP::NewFkp()
 
 WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTblSt,
                                  SvStream* pDataSt, WW8Fib& rFib, ePLCFT ePl,
-                                 WW8_FC nStartFcL,
-                                 WW8PLCFx_PCDAttrs* pPLCFx_PCDAttrs_)
+                                 WW8_FC nStartFcL)
     : WW8PLCFx( rFib.nVersion, TRUE ),
     pFKPStrm( pSt ),
     pDataStrm( pDataSt ),
     ePLCF( ePl ),
     pFkp( 0 ),
-    pPCDAttrs( pPLCFx_PCDAttrs_)
+    pPCDAttrs(0)
 {
     SetStartFc( nStartFcL );
     long nLenStruct = (8 > rFib.nVersion) ? 2 : 4;
@@ -1943,6 +1955,7 @@ WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 {
     delete pFkp;
     delete pPLCF;
+    delete pPCDAttrs;
 }
 
 
@@ -2071,12 +2084,24 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
     rDesc.nSprmsLen = 0;
     if( pPCDAttrs )
     {
+#if 1
+        if( !pFkp )
+        {
+            DBG_WARNING(
+                "+Problem: GetPCDSprms: NewFkp necessay (not possible!)" );
+            if( !NewFkp() )
+                return;
+        }
+
+        pPCDAttrs->GetSprms( &rDesc );
+#else
         if( !pFkp )
         {
             DBG_WARNING( "+Problem: GetPCDSprms: NewFkp noetig ( kein const moeglich )" );
             if( !NewFkp() )
                 return;
         }
+
 
         long nFcPos, nEnd;              // FCs
         short nLen;
@@ -2119,11 +2144,12 @@ void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
         }
         pIter->SetIdx( nSaveIdx );
     /**************************************/
+#endif
     }
 }
 
 
-BYTE* WW8PLCFx_Fc_FKP::HasSprm( USHORT nId )
+const BYTE* WW8PLCFx_Fc_FKP::HasSprm( USHORT nId )
 {                                       // const waere schoener, aber dafuer
                                         // muesste NewFkp() ersetzt werden
                                         // oder wegfallen
@@ -2135,7 +2161,7 @@ BYTE* WW8PLCFx_Fc_FKP::HasSprm( USHORT nId )
             return 0;
     }
 
-    BYTE* pRes = pFkp->HasSprm( nId );
+    const BYTE* pRes = pFkp->HasSprm( nId );
 
     if( !pRes )
     {
@@ -2163,23 +2189,27 @@ ULONG WW8PLCFx_Fc_FKP::GetParaHeight() const
 
 //-----------------------------------------
 
-WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
-                                    const WW8ScannerBase& rBase,
-                                    ePLCFT ePl )
+WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTblSt,
+    SvStream* pDataSt, const WW8ScannerBase& rBase, ePLCFT ePl )
     : WW8PLCFx_Fc_FKP( pSt, pTblSt, pDataSt, *rBase.pWw8Fib, ePl,
-                        rBase.WW8Cp2Fc( 0 ),
-                        rBase.pPLCFx_PCDAttrs ),
-    rSBase( rBase ),
-//  nFcMin( rBase.pWrFib.fcMin ),
-    nAttrStart( -1 ), nAttrEnd( -1 ),
-    bLineEnd( FALSE ),
+      rBase.WW8Cp2Fc( 0 )),
+    rSBase( rBase ), nAttrStart( -1 ), nAttrEnd( -1 ), bLineEnd( FALSE ),
     bComplex( (7 < rBase.pWw8Fib->nVersion) || (0 != rBase.pWw8Fib->fComplex) )
 {
     ResetAttrStartEnd();
-    pPcd = rSBase.pPiecePLCF ? new WW8PLCFx_PCD(
-                                rBase.pWw8Fib->nVersion, rBase.pPiecePLCF, 0,
-                                ((6 == GetVersion()) || (7 == GetVersion())) )
-                           : 0;
+    pPcd = rSBase.pPiecePLCF ? new WW8PLCFx_PCD( rBase.pWw8Fib->nVersion,
+        rBase.pPiecePLCF, 0, ((6 == GetVersion()) || (7 == GetVersion())) )
+        : 0;
+
+    //Make a copy of the piece attributes for so that the calls to HasSprm on
+    //a Fc_FKP will be able to take into account the current piece attributes,
+    //despite the fact that such attributes can only be found through a cp
+    //based mechanism.
+    if (pPcd)
+        pPCDAttrs = rSBase.pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
+            rSBase.pWw8Fib->nVersion, pPcd, &rSBase)
+            : 0;
+
     pPieceIter = rSBase.pPieceIter;
 }
 
@@ -2222,6 +2252,9 @@ BOOL WW8PLCFx_Cp_FKP::SeekPos( WW8_CP nCpPos )
     {
         if( !pPcd->SeekPos( nCpPos ) )  // Piece setzen
             return FALSE;
+        if( pPCDAttrs)
+            if( !pPCDAttrs->GetIter()->SeekPos( nCpPos ) )
+                return FALSE;
         return WW8PLCFx_Fc_FKP::SeekPos( pPcd->AktPieceStartCp2Fc( nCpPos ) );
     }
                                     // KEINE Piece-Table !!!
@@ -2623,15 +2656,15 @@ WW8PLCFx& WW8PLCFx_SEPX::operator ++( int )
 }
 
 
-BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId ) const
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId ) const
 {
     return pPLCF ? WW8FindSprm( nId, nSprmSiz, pSprms, GetVersion() )
                  : 0;
 }
 
 
-BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE*  pOtherSprms,
-                                          long   nOtherSprmSiz ) const
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, const BYTE*  pOtherSprms,
+    long nOtherSprmSiz ) const
 {
     return pPLCF ? WW8FindSprm( nId, nOtherSprmSiz, pOtherSprms, GetVersion() )
                  : 0;
@@ -2688,7 +2721,7 @@ BOOL WW8PLCFx_SEPX::Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId
     return bFound;
 }
 
-BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
+const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
 {
     if( !pPLCF ) return 0;
 
@@ -3954,12 +3987,12 @@ WW8PLCFx_FLD* WW8PLCFMan::GetFld() const
     return (WW8PLCFx_FLD*)pFld->pPLCFx;
 }
 
-BYTE* WW8PLCFMan::HasParaSprm( USHORT nId ) const
+const BYTE* WW8PLCFMan::HasParaSprm( USHORT nId ) const
 {
     return ((WW8PLCFx_Cp_FKP*)pPap->pPLCFx)->HasSprm( nId );
 }
 
-BYTE* WW8PLCFMan::HasCharSprm( USHORT nId ) const
+const BYTE* WW8PLCFMan::HasCharSprm( USHORT nId ) const
 {
     return ((WW8PLCFx_Cp_FKP*)pChp->pPLCFx)->HasSprm( nId );
 }
@@ -4021,7 +4054,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
-            aD.nStartPos = LONG_MAX;
+            aD.nStartPos = nStartPos;
             pPLCFx->GetSprms( &aD );
             rSave.nStartCp = aD.nStartPos;
             rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
@@ -6211,7 +6244,7 @@ SprmInfo& WW8GetSprmInfo( USHORT nId )
 //              Sprms
 //-----------------------------------------
 
-static short WW8GetSprmSize0( USHORT nId, BYTE* pSprm, BYTE nDelta)
+static short WW8GetSprmSize0( USHORT nId, const BYTE* pSprm, BYTE nDelta)
 {
     SprmInfo& rSprm = WW8GetSprmInfo( nId );
     short nL = 0;                       // soviel Bytes sind zu lesen
@@ -6255,10 +6288,8 @@ static short WW8GetSprmSize0( USHORT nId, BYTE* pSprm, BYTE nDelta)
 }
 
 
-USHORT WW8CountSprms( BYTE   nVersion,
-                      BYTE*  pSp,
-                      long   nSprmSiz,
-                      const  SvUShortsSort* pIgnoreSprms )
+USHORT WW8CountSprms( BYTE nVersion, const BYTE* pSp, long nSprmSiz,
+    const SvUShortsSort* pIgnoreSprms )
 {
     BYTE nDelta = ( 8 > nVersion ) ? 0 : 1;
     USHORT nMySprms = 0;
@@ -6282,12 +6313,12 @@ USHORT WW8CountSprms( BYTE   nVersion,
     return nMySprms;
 }
 
-BOOL WW8PLCFx_SEPX::CompareSprms( BYTE*  pOtherSprms,
+BOOL WW8PLCFx_SEPX::CompareSprms( const BYTE*  pOtherSprms,
                                   long   nOtherSprmSiz,
                                   const  SvUShortsSort* pIgnoreSprms ) const
 {
     BOOL bRes = FALSE;
-    BYTE* pSp   = pSprms;
+    const BYTE* pSp   = pSprms;
     short i;
     BYTE nDelta = ( 8 > GetVersion()) ? 0 : 1;
 
@@ -6306,7 +6337,8 @@ BOOL WW8PLCFx_SEPX::CompareSprms( BYTE*  pOtherSprms,
 
             if( !pIgnoreSprms || !pIgnoreSprms->Seek_Entry( nSpId ) )
             {
-                BYTE* pOtherSp = HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );
+                const BYTE* pOtherSp =
+                    HasSprm( nSpId, pOtherSprms, nOtherSprmSiz );
 
                 if(    ( !pOtherSp )
                     || (0 != memcmp( pSp + 1 + nDelta + WW8SprmDataOfs( nSpId ),
@@ -6327,7 +6359,7 @@ BOOL WW8PLCFx_SEPX::CompareSprms( BYTE*  pOtherSprms,
 
 
 // ein bzw. zwei Byte am Anfang des Sprm sind die Id
-USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta )
+USHORT WW8GetSprmId( BYTE nVersion, const BYTE* pSp, BYTE* pDelta )
 {
     USHORT nId = 0;
     if( pSp )
@@ -6353,7 +6385,7 @@ USHORT WW8GetSprmId( BYTE nVersion, BYTE* pSp, BYTE* pDelta )
 
 
 // ohne Token und LaengenByte
-short WW8GetSprmSizeNetto( BYTE nVersion, BYTE* pSprm, USHORT* pId )
+short WW8GetSprmSizeNetto( BYTE nVersion, const BYTE* pSprm, USHORT* pId )
 {
     BYTE   nDelta = ( 8 > nVersion ) ? 0 : 1;
     USHORT nId = pId ? *pId : WW8GetSprmId( nVersion, pSprm );
@@ -6362,7 +6394,7 @@ short WW8GetSprmSizeNetto( BYTE nVersion, BYTE* pSprm, USHORT* pId )
 
 
 // mit Token und LaengenByte
-short WW8GetSprmSizeBrutto( BYTE nVersion, BYTE* pSprm, USHORT* pId )
+short WW8GetSprmSizeBrutto( BYTE nVersion, const BYTE* pSprm, USHORT* pId )
 {
     BYTE   nDelta = ( 8 > nVersion ) ? 0 : 1;
     USHORT nId = pId ? *pId : WW8GetSprmId( nVersion, pSprm );
@@ -6380,11 +6412,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.17 2001-06-02 16:06:14 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.18 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/06/02 16:06:14  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.16  2001/05/23 12:58:24  cmc
       #87328# ##931## Bad little endian only cast made xp safe
 

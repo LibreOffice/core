@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:23 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,9 @@ struct WW8FlyPara
 
     WW8FlyPara( BOOL bIsVer67, const WW8FlyPara* pSrc = 0 );
     int operator == ( const WW8FlyPara& rSrc ) const;
-    BOOL Read( BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap );
-    BOOL ReadFull( BYTE* pSprm29, SwWW8ImplReader* pIo );
-    BOOL Read( BYTE* pSprm29, WW8RStyle* pStyle );
+    BOOL Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap );
+    BOOL ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo );
+    BOOL Read( const BYTE* pSprm29, WW8RStyle* pStyle );
 };
 
 struct WW8SwFlyPara
@@ -259,7 +259,7 @@ public:
     WW8RStyle( WW8Fib& rFib, SwWW8ImplReader* pI );
     void Import();
     void RegisterNumFmts();
-    BYTE* HasParaSprm( USHORT nId ) const;
+    const BYTE* HasParaSprm( USHORT nId ) const;
 };
 
 class WW8FlySet: public SfxItemSet
@@ -292,11 +292,14 @@ inline WW8LvlType GetNumType( BYTE nWwLevelNo )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.3 2001-04-23 11:16:23 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.hxx,v 1.4 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/04/23 11:16:23  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.2  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-24 09:43:17 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,10 +195,11 @@ struct WW8TabBandDesc{
     WW8TabBandDesc() {  memset( this, 0, sizeof( *this ) ); };
     WW8TabBandDesc( WW8TabBandDesc& rBand );    // tief kopieren
     ~WW8TabBandDesc() { delete[]( pTCs ); pTCs = 0; delete[]( pSHDs ); };
-    void ReadDef( BOOL bVer67, BYTE* pS );
-    void ProcessSprmTSetBRC( BOOL bVer67, BYTE* pParamsTSetBRC );
-    void ProcessSprmTDxaCol( BOOL bVer67, BYTE* pParamsTDxaCol );
-    void ProcessSprmTDelete( BOOL bVer67, BYTE* pParamsTDelete );
+    void ReadDef( BOOL bVer67, const BYTE* pS );
+    void ProcessSprmTSetBRC( BOOL bVer67, const BYTE* pParamsTSetBRC );
+    void ProcessSprmTDxaCol( BOOL bVer67, const BYTE* pParamsTDxaCol );
+    void ProcessSprmTDelete( BOOL bVer67, const BYTE* pParamsTDelete );
+    void ProcessSprmTInsert( BOOL bVer67, const BYTE* pParamsTDelete );
     void ReadShd( SVBT16* pS );
 };
 
@@ -328,8 +329,8 @@ static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV )
     }
 }
 
-void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE* pTxt,
-                            BOOL bOutline )
+void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV,
+    const BYTE* pTxt, BOOL bOutline )
 {
     BOOL bInsert = FALSE;                       // Default
     CharSet eCharSet = eStructCharSet;
@@ -450,7 +451,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     return pStyles->pStyRule;
 }
 
-void SwWW8ImplReader::Read_ANLevelNo( USHORT, BYTE* pData, short nLen ) // Sprm 13
+void SwWW8ImplReader::Read_ANLevelNo( USHORT, const BYTE* pData, short nLen ) // Sprm 13
 {
     nSwNumLevel = 0xff; // Default: ungueltig
 
@@ -492,7 +493,7 @@ void SwWW8ImplReader::Read_ANLevelNo( USHORT, BYTE* pData, short nLen ) // Sprm 
     }
 }
 
-void SwWW8ImplReader::Read_ANLevelDesc( USHORT, BYTE* pData, short nLen ) // Sprm 12
+void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) // Sprm 12
 {
     if( !pAktColl || nLen <= 0                  // nur bei Styledef
         || !pCollA[nAktColl].bColl              // CharFmt -> ignorieren
@@ -557,7 +558,7 @@ void SwWW8ImplReader::SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel 
 // die an jeder Gliederungszeile haengen, enthalten nur Stuss, also werden die
 // OLSTs waehrend der Section gemerkt, damit die Informationen beim Auftreten
 // von Gliederungsabsaetzen zugreifbar ist.
-void SwWW8ImplReader::Read_OLST( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_OLST( USHORT, const BYTE* pData, short nLen )
 {
     if( nIniFlags & WW8FL_NO_NUMRULE )
         return;
@@ -576,7 +577,7 @@ void SwWW8ImplReader::Read_OLST( USHORT, BYTE* pData, short nLen )
 // StartAnl wird am Anfang eines Zeilenbereichs gerufen,
 //  der Gliederung / Nummerierung / Aufzaehlung enthaelt
 #define MAX_ANLV_NUM 12
-void SwWW8ImplReader::StartAnl( BYTE* pSprm13 )
+void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
 {
     bAktAND_fNumberAcross = FALSE;
 
@@ -587,7 +588,7 @@ void SwWW8ImplReader::StartAnl( BYTE* pSprm13 )
     nWwNumType = nT;
 
     // check for COL numbering:
-    BYTE* pS12 = 0;// sprmAnld
+    const BYTE* pS12 = 0;// sprmAnld
     String sNumRule;
     if( pTableDesc )
     {
@@ -631,7 +632,7 @@ void SwWW8ImplReader::StartAnl( BYTE* pSprm13 )
 
 // NextAnlLine() wird fuer jede Zeile einer
 // Gliederung / Nummerierung / Aufzaehlung einmal gerufen
-void SwWW8ImplReader::NextAnlLine( BYTE* pSprm13, BYTE* pS12 )
+void SwWW8ImplReader::NextAnlLine( const BYTE* pSprm13, const BYTE* pS12 )
 {
     if( !bAnl )
         return;         // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens
@@ -774,7 +775,7 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
 }
 
 // ReadDef liest die Zellenpositionen und ggfs die Umrandungen eines Bandes ein
-void WW8TabBandDesc::ReadDef( BOOL bVer67, BYTE* pS )
+void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
 {
     int i;
 
@@ -789,7 +790,7 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, BYTE* pS )
 
     nWwCols = nCols;
 
-    BYTE* pT = &pS[1];
+    const BYTE* pT = &pS[1];
     nLen --;
     for( i=0; i<=nCols; i++, pT+=2 ){
         nCenter[i] = (INT16)SVBT16ToShort( pT );    // X-Raender
@@ -892,7 +893,8 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, BYTE* pS )
 }
 
 
-void WW8TabBandDesc::ProcessSprmTSetBRC( BOOL bVer67, BYTE* pParamsTSetBRC )
+void WW8TabBandDesc::ProcessSprmTSetBRC( BOOL bVer67,
+    const BYTE* pParamsTSetBRC )
 {
     if( pParamsTSetBRC && pTCs ) // set one or more cell border(s)
     {
@@ -961,7 +963,8 @@ void WW8TabBandDesc::ProcessSprmTSetBRC( BOOL bVer67, BYTE* pParamsTSetBRC )
 }
 
 
-void WW8TabBandDesc::ProcessSprmTDxaCol( BOOL bVer67, BYTE* pParamsTDxaCol )
+void WW8TabBandDesc::ProcessSprmTDxaCol( BOOL bVer67,
+    const BYTE* pParamsTDxaCol )
 {
     // sprmTDxaCol (opcode 0x7623) changes the width of cells
     // whose index is within a certain range to be a certain value.
@@ -974,11 +977,11 @@ void WW8TabBandDesc::ProcessSprmTDxaCol( BOOL bVer67, BYTE* pParamsTDxaCol )
         short nOrgWidth;
         short nDelta;
 
-        for( int i = nitcFirst; i < nitcLim, i < nWwCols; i++ )
+        for( int i = nitcFirst; (i < nitcLim) && (i < nWwCols); i++ )
         {
             nOrgWidth  = nCenter[i+1] - nCenter[i];
             nDelta     = nDxaCol - nOrgWidth;
-            for( int j = i+1; j < nWwCols; j++ )
+            for( int j = i+1; j <= nWwCols; j++ )
             {
                 nCenter[j] += nDelta;
             }
@@ -986,12 +989,61 @@ void WW8TabBandDesc::ProcessSprmTDxaCol( BOOL bVer67, BYTE* pParamsTDxaCol )
     }
 }
 
-
-void WW8TabBandDesc::ProcessSprmTDelete( BOOL bVer67, BYTE* pParamsTDelete )
+void WW8TabBandDesc::ProcessSprmTInsert( BOOL bVer67,
+    const BYTE* pParamsTDelete )
 {
-    // sprmTDxaCol (opcode 0x7623) changes the width of cells
-    // whose index is within a certain range to be a certain value.
+    if( nWwCols && pParamsTDelete )        // set one or more cell length(s)
+    {
+        BYTE nitcInsert = pParamsTDelete[0]; // position at which to insert
+        BYTE nctc  = pParamsTDelete[1];      // number of cells
+        USHORT ndxaCol = SVBT16ToShort( pParamsTDelete+2 );
 
+        short nNewWwCols;
+        if (nitcInsert > nWwCols)
+            nNewWwCols = nitcInsert+nctc;
+        else
+            nNewWwCols = nWwCols+nctc;
+
+        WW8_TCell *pTC2s = new WW8_TCell[nNewWwCols];
+        memset( pTC2s, 0, nNewWwCols * sizeof( WW8_TCell ) );
+
+        if (pTCs)
+        {
+            memcpy( pTC2s, pTCs, nWwCols * sizeof( WW8_TCell ) );
+            delete[] pTCs;
+        }
+        pTCs = pTC2s;
+
+        //If we have to move some cells
+        if (nitcInsert <= nWwCols)
+        {
+            // adjust the left x-position of the dummy at the very end
+            nCenter[nWwCols + nctc] = nCenter[nWwCols]+nctc*ndxaCol;
+            for( int i = nWwCols-1; i >= nitcInsert; i--)
+            {
+                // adjust the left x-position
+                nCenter[i + nctc] = nCenter[i]+nctc*ndxaCol;
+
+                // adjust the cell's borders
+                pTCs[i + nctc] = pTCs[i];
+            }
+        }
+
+        //if itcMac is larger than full size, fill in missing ones first
+        for( int i = nWwCols; i > nitcInsert+nWwCols; i--)
+            nCenter[i] = i ? (nCenter[i - 1]+ndxaCol) : 0;
+
+        //now add in our new cells
+        for( int j = 0;j < nctc; j++)
+            nCenter[j + nitcInsert] = (j + nitcInsert) ? (nCenter[j + nitcInsert -1]+ndxaCol) : 0;
+
+        nWwCols = nNewWwCols;
+    }
+}
+
+void WW8TabBandDesc::ProcessSprmTDelete( BOOL bVer67,
+    const BYTE* pParamsTDelete )
+{
     if( nWwCols && pParamsTDelete )        // set one or more cell length(s)
     {
         BYTE nitcFirst= pParamsTDelete[0]; // first col to be deleted
@@ -1016,20 +1068,6 @@ void WW8TabBandDesc::ProcessSprmTDelete( BOOL bVer67, BYTE* pParamsTDelete )
         nWwCols -= (nitcLim - nitcFirst);
     }
 }
-
-void SwWW8ImplReader::Read_TabCellDelete( USHORT, BYTE* pData, short nLen )
-{
-    // implementation missing: #76673#
-    //
-    // could we use part of ProcessSprmTDelete()  ???
-}
-
-void SwWW8ImplReader::Read_TabCellInsert( USHORT, BYTE* pData, short nLen )
-{
-    // implementation missing, analoguous to #76673#
-}
-
-
 
 // ReadShd liest ggfs die Hintergrundfarben einer Zeile ein.
 // Es muss vorher ReadDef aufgerufen worden sein
@@ -1068,7 +1106,7 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
 
 static BOOL SearchRowEnd( BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp )
 {
-    BYTE* pB;
+    const BYTE* pB;
     WW8PLCFxDesc aRes;
     aRes.pMemPos = 0;
     aRes.nEndPos = rStartCp;
@@ -1158,9 +1196,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         pNewBand->nGapHalf    = 0;
         pNewBand->nLineHeight = 0;
         BOOL bTabRowJustRead  = FALSE;
-        BYTE* pShadeSprm      = 0;
-        BYTE* pTabDxaColSprm  = 0;
-
+        const BYTE* pShadeSprm      = 0;
 
         if( !SearchRowEnd( bVer67, bComplex, pPap, nStartCp ) ) // Suche Ende einer TabZeile
         {
@@ -1176,7 +1212,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         WW8SprmIter aSprmIter( aDesc.pMemPos, aDesc.nSprmsLen,
                                pIo->GetFib().nVersion );
 
-        BYTE* pParams = aSprmIter.GetAktParams();
+        const BYTE* pParams = aSprmIter.GetAktParams();
         for( int nLoop = 0; nLoop < 2; ++nLoop )
         {
             while(     aSprmIter.GetSprms()
@@ -1274,17 +1310,23 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                 case 0x7623:
                     {
                         // sprmTDxaCol
-                        pTabDxaColSprm = pParams;
+                        pNewBand->ProcessSprmTDxaCol( bVer67, pParams );
                     }
                     break;
-                /*              the following is processed by a separate methode
-                case 195:       while reading the table's content...
+                case 194:
+                case 0x7621:
+                    {
+                        // sprmTInsert
+                        pNewBand->ProcessSprmTInsert( bVer67, pParams);
+                    }
+                    break;
+                case 195:
                 case 0x5622:
                     {
                         // sprmTDelete
+                        pNewBand->ProcessSprmTDelete( bVer67, pParams);
                     }
                     break;
-                */
                 }
                 aSprmIter++;
             }
@@ -1315,10 +1357,6 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                 // Shift left x-position
                 *pCenter += nTabeDxaNew;
         }
-
-        if( pTabDxaColSprm )
-            pNewBand->ProcessSprmTDxaCol( bVer67, pTabDxaColSprm );
-
 
      // Bei Unterschieden gibt es ein neues Band
      // Zweite Zeile bekommt immer ein neues Band, damit die erste allein ist
@@ -2383,7 +2421,7 @@ void SwWW8ImplReader::TabCellEnd()
         pTableDesc->TableCellEnd();
 }
 
-void SwWW8ImplReader::Read_TabRowEnd( USHORT, BYTE* pData, short nLen ) // Sprm25
+void SwWW8ImplReader::Read_TabRowEnd( USHORT, const BYTE* pData, short nLen )   // Sprm25
 {
     if( ( nLen > 0 ) && ( *pData == 1 ) )
     {
@@ -2465,12 +2503,12 @@ const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( String& rName ) const
 //          class WW8RStyle
 //-----------------------------------------
 
-BYTE* WW8RStyle::HasParaSprm( USHORT nId ) const
+const BYTE* WW8RStyle::HasParaSprm( USHORT nId ) const
 {
     if( !pParaSprms || !nSprmsLen )
         return 0;
 
-    BYTE* pSprms = pParaSprms;
+    const BYTE* pSprms = pParaSprms;
     BYTE nDelta;
     short i, x;
 
@@ -3073,11 +3111,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.11 2001-05-24 09:43:17 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.12 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/05/24 09:43:17  cmc
+      #74387# ##949## Avoid too narrow table cells (consider distance from text in calculation)
+
       Revision 1.10  2001/04/26 12:01:42  cmc
       ##777## table next row begin cp position not updated after row end properties fetched
 

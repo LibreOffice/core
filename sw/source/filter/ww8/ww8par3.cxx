@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,7 +1605,8 @@ void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 
 
 
-void SwWW8ImplReader::Read_ListLevel(sal_uInt16 nId, sal_uInt8* pData, short nLen)
+void SwWW8ImplReader::Read_ListLevel(sal_uInt16 nId, const sal_uInt8* pData,
+    short nLen)
 {
     if( nLen < 0 )
     {
@@ -1632,7 +1633,8 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16 nId, sal_uInt8* pData, short nLe
 
 
 
-void SwWW8ImplReader::Read_LFOPosition(sal_uInt16 nId, sal_uInt8* pData, short nLen)
+void SwWW8ImplReader::Read_LFOPosition(sal_uInt16 nId, const sal_uInt8* pData,
+    short nLen)
 {
     if( nLen < 0 )
     {
@@ -2136,12 +2138,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.6 2001-02-23 12:45:26 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.7 2001-06-06 12:46:32 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/02/23 12:45:26  os
+      Complete use of DefaultNumbering component
+
       Revision 1.5  2001/02/06 11:10:53  cmc
       ##173##, #80858#, #82192# deeply flawed upgrade to String from pointer to character array fixed
 

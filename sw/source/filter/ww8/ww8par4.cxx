@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-23 13:07:06 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,14 +557,14 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
    Revision Marks ( == Redlining )
 */
 // insert or delete content (change char attributes resp.)
-void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId,
+    const BYTE* pData, short nLen )
 {
     // there *must* be a SprmCIbstRMark[Del] and a SprmCDttmRMark[Del]
     // pointing to the very same char position as our SprmCFRMark[Del]
     if( !pPlcxMan ) return;
     const BYTE* pSprmCIbstRMark;
     const BYTE* pSprmCDttmRMark;
-//  const BYTE* pSprmCIdslRMark;
     if( REDLINE_FORMAT == eType )
     {
         pSprmCIbstRMark = pData+1;
@@ -673,17 +673,19 @@ void SwWW8ImplReader::Read_CRevisionMark(SwRedlineType eType, USHORT nId, BYTE* 
     }
 }
 // insert new content
-void SwWW8ImplReader::Read_CFRMark(   USHORT nId, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_CFRMark( USHORT nId, const BYTE* pData, short nLen )
 {
     Read_CRevisionMark( REDLINE_INSERT, nId, pData, nLen );
 }
 // delete old content
-void SwWW8ImplReader::Read_CFRMarkDel(   USHORT nId, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_CFRMarkDel( USHORT nId, const BYTE* pData,
+    short nLen )
 {
     Read_CRevisionMark( REDLINE_DELETE, nId, pData, nLen );
 }
 // change properties of content ( == char formating)
-void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_CPropRMark( USHORT nId, const BYTE* pData,
+    short nLen )
 {
     // complex (len is always 7)
     // 1 byte  - chp.fPropRMark
@@ -697,11 +699,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.11 2001-05-23 13:07:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.12 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/05/23 13:07:06  cmc
+      #75277# ##897## Object Offset incorrectly saved
+
       Revision 1.10  2001/05/22 09:45:13  cmc
       #87317# ##928## Redlining: Allow deletions after property changes to occur
 

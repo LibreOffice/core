@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-11 14:34:22 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3067,7 +3067,7 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
         pPaM->DeleteMark();
 }
 
-void SwWW8ImplReader::Read_FldVanish( USHORT, BYTE*, short nLen )
+void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 {
     // Vorsicht: Bei Feldnamen mit Umlauten geht das MEMICMP nicht!
     const static sal_Char *aFldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
@@ -3130,7 +3130,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, BYTE*, short nLen )
 // ACHTUNG: Methode gelegentlich umstellen: unsichtbaren Text als
 //                  *Feld* integrieren...
 //
-void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_Invisible( USHORT, const BYTE* pData, short nLen )
 {
     USHORT n = WWF_INVISIBLE;               // Bit-Nummer fuer Invisible
     USHORT nI = n / 32;                     // # des UINT32
@@ -3155,12 +3155,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.18 2001-04-11 14:34:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.19 2001-06-06 12:46:32 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/04/11 14:34:22  cmc
+      Minor merge error fixes
+
       Revision 1.17  2001/04/06 13:51:33  cmc
       ##509## Fill in default content for sections that are linked to files to handle case where file is unavailable and support ww6 INCLUDE field
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,7 @@ void SwWW8ImplReader::GetTxbxPapAndCharAttrs( SfxItemSet& rS,
                                     SVX_ADJUST_RIGHT,
                                     SVX_ADJUST_BLOCK  };
 
-    BYTE* pData = rRes.pMemPos + 1  + (8 > pWwFib->nVersion ? 0 : 1)
+    const BYTE* pData = rRes.pMemPos + 1  + (8 > pWwFib->nVersion ? 0 : 1)
                                     + WW8SprmDataOfs( rRes.nSprmId );
 
     switch( rRes.nSprmId )
@@ -1389,7 +1389,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
 
                             //BOOL bRead_Obj    = FALSE;
                             //BOOL bRead_PicLoc = FALSE;
-                            BYTE* pParams = aSprmIter.GetAktParams();
+                            const BYTE* pParams = aSprmIter.GetAktParams();
                             for( int nLoop = 0; nLoop < 2; ++nLoop )
                             {
                                 while(     aSprmIter.GetSprms()
@@ -3207,11 +3207,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.26 2001-06-02 16:06:14 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.27 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.26  2001/06/02 16:06:14  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.25  2001/05/29 13:52:03  cmc
       #87557# ##974## CJK FontHeight in drawing layer
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-02 16:06:14 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,9 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
 
 
 
-USHORT WW8GetSprmId(        BYTE nVersion, BYTE* pSp,   BYTE*   pDelta = 0 );
-short WW8GetSprmSizeNetto(  BYTE nVersion, BYTE* pSprm, USHORT* pId );
-short WW8GetSprmSizeBrutto( BYTE nVersion, BYTE* pSprm, USHORT* pId );
+USHORT WW8GetSprmId(        BYTE nVersion, const BYTE* pSp, BYTE* pDelta = 0 );
+short WW8GetSprmSizeNetto(  BYTE nVersion, const BYTE* pSprm, USHORT* pId );
+short WW8GetSprmSizeBrutto( BYTE nVersion, const BYTE* pSprm, USHORT* pId );
 BYTE WW8SprmDataOfs( USHORT nId );
 
 struct WW8FieldDesc
@@ -212,8 +212,8 @@ public:
 class WW8SprmIter
 {
     // these members will be updated
-    BYTE*   pSprms;     // remaining part of the SPRMs ( == start of akt. SPRM)
-    BYTE*   pAktParams; // start of akt. SPRM's parameters
+    const BYTE* pSprms; // remaining part of the SPRMs ( == start of akt. SPRM)
+    const BYTE* pAktParams; // start of akt. SPRM's parameters
     USHORT  nAktId;
     short   nAktSizeBrutto;
 
@@ -224,13 +224,13 @@ class WW8SprmIter
 
     void UpdateMyMembers();
 public:
-    WW8SprmIter( BYTE* pSprms_, long nLen_, BYTE nVersion_ );
-    void   SetSprms( BYTE* pSprms_, long nLen_ );
-    BYTE*  operator ++( int );
-    BYTE*  GetSprms()     const { return ( pSprms && (0 < nRemLen) )
+    WW8SprmIter( const BYTE* pSprms_, long nLen_, BYTE nVersion_ );
+    void  SetSprms( const BYTE* pSprms_, long nLen_ );
+    const BYTE*  operator ++( int );
+    const BYTE*  GetSprms()     const { return ( pSprms && (0 < nRemLen) )
                                 ? pSprms
                                 : 0; }
-    BYTE*  GetAktParams() const { return pAktParams; }
+    const BYTE*  GetAktParams() const { return pAktParams; }
     USHORT GetAktId()     const { return nAktId; }
 };
 
@@ -288,7 +288,9 @@ DECLARE_TABLE( WW8Pcd_FC_sortArr, INT32 )
 class WW8PLCFpcd
 {
 friend class WW8PLCFpcd_Iter;
+#if 0
     WW8Pcd_FC_sortArr aFC_sort; // sorted PCD entries by FC
+#endif
     INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
     BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
@@ -297,7 +299,9 @@ friend class WW8PLCFpcd_Iter;
 public:
     WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
     ~WW8PLCFpcd(){ delete( pPLCF_PosArray ); }
+#if 0
     ULONG FindIdx( WW8_FC nFC ) const;
+#endif
 };
 
 /*
@@ -318,7 +322,9 @@ public:
 //  BOOL SeekMaxMainFC( WW8Fib& rWwF, long& rMaxPosData );
     long Where();
     BOOL Get( long& rStart, long& rEnd, void*& rpValue );
+#if 0
     ULONG FindIdx( WW8_FC nFC ) const { return rPLCF.FindIdx( nFC ); }
+#endif
     WW8PLCFpcd_Iter& operator ++( int ) { if( nIdx < rPLCF.nIMax ) nIdx++; return *this; }
 };
 
@@ -364,13 +370,14 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 {
     WW8PLCFpcd_Iter* pPcdI;
     WW8PLCFx_PCD* pPcd;
-    BYTE** pGrpprls;            // Attribute an Piece-Table
+    BYTE** const pGrpprls;// Attribute an Piece-Table
     SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
     UINT16 nGrpprls;            // Attribut Anzahl davon
 
 public:
-    WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
+    WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD,
+        const WW8ScannerBase* pBase );
     virtual ~WW8PLCFx_PCDAttrs();
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nI );
@@ -395,7 +402,6 @@ public:
     virtual void SetIdx( ULONG nI );
     virtual BOOL SeekPos( WW8_CP nCpPos );
     virtual long Where();
-//  virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int );
     WW8_CP AktPieceStartFc2Cp( WW8_FC nStartPos );
@@ -467,7 +473,7 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
             /*
                 ruft GetLenAndIStdAndSprms() auf...
             */
-            BYTE* HasSprm( USHORT nId );
+            const BYTE* HasSprm( USHORT nId );
 
             ULONG GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
 
@@ -475,7 +481,6 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
         };
 
 
-    WW8PLCFx_PCDAttrs* pPCDAttrs;
     SvStream* pFKPStrm;         // Input-File
     SvStream* pDataStrm;        // Input-File
     WW8PLCF* pPLCF;
@@ -485,11 +490,11 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
 
 protected:
     ePLCFT ePLCF;
+    WW8PLCFx_PCDAttrs* pPCDAttrs;
 
 public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
-                     WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL,
-                     WW8PLCFx_PCDAttrs* pPLCFx_PCD );
+                     WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL );
     virtual ~WW8PLCFx_Fc_FKP();
     virtual ULONG GetIdx() const;
     virtual void SetIdx( ULONG nIdx );
@@ -499,7 +504,7 @@ public:
     virtual WW8PLCFx& operator ++( int );
     virtual USHORT GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
-    BYTE* HasSprm( USHORT nId );
+    const BYTE* HasSprm( USHORT nId );
     ULONG GetParaHeight() const;
     BOOL HasFkp() { return (0 != pFkp); }
 };
@@ -554,12 +559,13 @@ public:
     virtual long Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
-    BYTE* HasSprm( USHORT nId ) const;
-    BYTE* HasSprm( USHORT nId, BYTE n2nd ) const;
-    BYTE* HasSprm( USHORT nId, BYTE* pOtherSprms, long nOtherSprmSiz ) const;
+    const BYTE* HasSprm( USHORT nId ) const;
+    const BYTE* HasSprm( USHORT nId, BYTE n2nd ) const;
+    const BYTE* HasSprm( USHORT nId, const BYTE* pOtherSprms,
+        long nOtherSprmSiz ) const;
     BOOL Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
                     BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    BOOL CompareSprms( BYTE* pOtherSprms,
+    BOOL CompareSprms( const BYTE* pOtherSprms,
                        long nOtherSprmSiz,
                        const SvUShortsSort* pIgnoreSprms = 0 ) const;
 };
@@ -658,7 +664,7 @@ struct WW8PLCFManResult
     long nMemLen;       // Laenge dazu
     long nCp2OrIdx;     // footnote-textpos oder Index in PLCF
     WW8_CP nAktCp;      // wird nur vom Aufrufer benutzt
-    BYTE* pMemPos;      // Mem-Pos fuer Sprms
+    const BYTE* pMemPos;// Mem-Pos fuer Sprms
     USHORT nSprmId;     // Sprm-Id ( 0 = ungueltige Id -> ueberspringen! )
                                         // (2..255) oder Pseudo-Sprm-Id (256..260)
                                         // bzw. ab Winword-Ver8 die Sprm-Id (800..)
@@ -690,8 +696,8 @@ struct WW8PLCFxSaveAll
 struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
-    UShortStk* pIdStk;// Speicher fuer Attr-Id fuer Attr-Ende(n)
-    BYTE* pMemPos;      // wo liegen die Sprm(s)
+    UShortStk* pIdStk;  // Speicher fuer Attr-Id fuer Attr-Ende(n)
+    const BYTE* pMemPos;// wo liegen die Sprm(s)
 
     long nStartPos;
     long nEndPos;
@@ -776,12 +782,12 @@ public:
     /*
         fragt, ob *aktueller Absatz* einen Sprm diesen Typs hat
     */
-    BYTE* HasParaSprm( USHORT nId ) const;
+    const BYTE* HasParaSprm( USHORT nId ) const;
 
     /*
         fragt, ob *aktueller Textrun* einen Sprm diesen Typs hat
     */
-    BYTE* HasCharSprm( USHORT nId ) const;
+    const BYTE* HasCharSprm( USHORT nId ) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF(){ return (WW8PLCFx_Cp_FKP*)pChp->pPLCFx; }
     WW8PLCFx_Cp_FKP* GetPapPLCF(){ return (WW8PLCFx_Cp_FKP*)pPap->pPLCFx; }
@@ -800,9 +806,10 @@ public:
 
 class WW8ScannerBase
 {
-friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
+friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion,
+    WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase );
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
-                                        const WW8ScannerBase&, ePLCFT );
+    const WW8ScannerBase&, ePLCFT );
 
 #ifdef DUMP
 friend static void DumpPLCFText( WW8_FC nPos, long nLen, long nOfs, sal_Char* pName,
@@ -1566,12 +1573,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.11 2001-06-02 16:06:14 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.12 2001-06-06 12:46:33 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2001/06/02 16:06:14  cmc
+      #68662# ##989## parent frame of a fly in fly exported as a table
+
       Revision 1.10  2001/04/25 14:06:21  cmc
       ##775## ##776## Update PLCF save/restore for cp based era
 

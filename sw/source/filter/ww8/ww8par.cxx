@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ inline void SetBit( Bit256& rBits, BYTE nBitNo, BOOL bInp )
 }
 #endif
 
-void SwWW8ImplReader::Read_StyleCode( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_StyleCode( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen < 0 )
     {
@@ -378,7 +378,7 @@ void SwWW8ImplReader::Read_StyleCode( USHORT, BYTE* pData, short nLen )
 }
 
 // Read_Majority ist fuer Majority ( 103 ) und Majority50 ( 108 )
-void SwWW8ImplReader::Read_Majority( USHORT, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_Majority( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen < 0 ){
         return;
@@ -575,7 +575,7 @@ void SwWW8ImplReader::SetImplicitTab()
 }
 #endif
 
-void SwWW8ImplReader::Read_Tab( USHORT nId, BYTE* pData, short nLen )
+void SwWW8ImplReader::Read_Tab( USHORT nId, const BYTE* pData, short nLen )
 {
     if( nLen < 0 ){
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_PARATR_TABSTOP );
@@ -593,9 +593,9 @@ void SwWW8ImplReader::Read_Tab( USHORT nId, BYTE* pData, short nLen )
         nLeftMostPos = 0;
 
     short i;
-    BYTE* pDel = pData + 1;                     // Del - Array
+    const BYTE* pDel = pData + 1;                       // Del - Array
     BYTE nDel = pData[0];
-    BYTE* pIns = pData + 2*nDel + 2;            // Ins - Array
+    const BYTE* pIns = pData + 2*nDel + 2;          // Ins - Array
     BYTE nIns = pData[nDel*2+1];
     WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2);// Typ - Array
 
@@ -1190,7 +1190,7 @@ void SwWW8ImplReader::Read_HdFt1( BYTE nPara, BYTE nWhichItems, SwPageDesc* pPD 
 
 static BYTE ReadBSprm( const WW8PLCFx_SEPX* pSep, USHORT nId, BYTE nDefaultVal )
 {
-    BYTE* pS = pSep->HasSprm( nId );            // sprm da ?
+    const BYTE* pS = pSep->HasSprm( nId );          // sprm da ?
     BYTE nVal = ( pS ) ? SVBT8ToByte( pS ) : nDefaultVal;
     return nVal;
 }
@@ -1354,13 +1354,13 @@ void SwWW8ImplReader::UpdatePageDescs( USHORT nPageDescOffset )
 // verwendet.
 // Die Parameter rbStartApo, rbStopApo und rbNowStyleApo sind reine
 // Rueckgabeparameter
-BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
+const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
                                 BOOL& rbNowStyleApo,
                                 BOOL  bInTable,   BOOL bTableRowEnd,
                                 BOOL  bStillInTable )
 {
-    BYTE* pSprm37;
-    BYTE* pSprm29;
+    const BYTE* pSprm37;
+    const BYTE* pSprm29;
     rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
 
     if( bInTable && rbNowStyleApo )
@@ -1458,14 +1458,14 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
 
 
 //  1st look for in-table flag
-    BYTE* pSprm24 = pPlcxMan->HasParaSprm(  bVer67
+    const BYTE* pSprm24 = pPlcxMan->HasParaSprm(  bVer67
                                           ? 24
                                           : 0x2416 ); // Flag: Absatz in(!) Tabelle
 
 //  then look if we are in an Apo
 
     BOOL bStartApo, bStopApo, bNowStyleApo;
-    BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo,
+    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo,
                                 bTable, (bTableRowEnd && bTableInApo),
                                 bTable && (pSprm24 != 0) );
 
@@ -1487,7 +1487,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStar
 
     if( bAnl && !bTableRowEnd )
     {
-        BYTE* pSprm13 = pPlcxMan->HasParaSprm( 13 );
+        const BYTE* pSprm13 = pPlcxMan->HasParaSprm( 13 );
         if( pSprm13 )
         {                                   // Noch Anl ?
             BYTE nT = GetNumType( *pSprm13 );
@@ -3033,7 +3033,7 @@ BOOL SwMSDffManager::GetOLEStorageName( long nOLEId, String& rStorageName,
                 if( aDesc.nSprmsLen && aDesc.pMemPos )  // Attribut(e) vorhanden
                 {
                     long nLen = aDesc.nSprmsLen;
-                    BYTE* pSprm = aDesc.pMemPos;
+                    const BYTE* pSprm = aDesc.pMemPos;
 
                     while( nLen >= 2 && !nPictureId )
                     {
@@ -3132,11 +3132,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.22 2001-05-08 14:02:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.23 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/05/08 14:02:43  cmc
+      ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
+
       Revision 1.21  2001/05/03 09:58:00  fme
       New: Compatible tabstop behaviour
 

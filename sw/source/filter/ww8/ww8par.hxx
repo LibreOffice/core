@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
+ *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,10 +812,10 @@ friend class WW8FormulaControl;
     void SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord, SwFrmFmt *pFlyFmt,
         WW8_FSPA *pF );
 
-    BOOL StartApo( BYTE* pSprm29, BOOL bNowStyleApo );
+    BOOL StartApo( const BYTE* pSprm29, BOOL bNowStyleApo );
     void StopApo();
-    BOOL TestSameApo( BYTE* pSprm29, BOOL bNowStyleApo );
-    BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
+    BOOL TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo );
+    const BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
                    BOOL bInTable,    BOOL bTableRowEnd,
                    BOOL bStillInTable );
     BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
@@ -878,14 +878,14 @@ friend class WW8FormulaControl;
 // verwaltet werden: rglst, hpllfo und hsttbListNames
 // die Strukturen hierfuer sind: LSTF, LVLF, LFO LFOLVL
 
-    void SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE* pTxt,
+    void SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, const BYTE* pTxt,
                             BOOL bOutline );
     void SetAnld( SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel, BOOL bOutLine );
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel );
     SwNumRule* GetStyRule();
 
-    void StartAnl( BYTE* pSprm13 );
-    void NextAnlLine( BYTE* pSprm13, BYTE* pS12 = 0 );
+    void StartAnl( const BYTE* pSprm13 );
+    void NextAnlLine( const BYTE* pSprm13, const BYTE* pS12 = 0 );
     void StopAnl( BOOL bGoBack = TRUE );
 
 // GrafikLayer
@@ -998,88 +998,84 @@ public:     // eigentlich private, geht aber leider nur public
 
                                         // Attribute
 
-    void Read_Special(          USHORT, BYTE*, short nLen );
-    void Read_Obj(              USHORT, BYTE*, short nLen );
-    void Read_PicLoc(           USHORT nId, BYTE* pData, short nLen );
-    void Read_BoldUsw(          USHORT nId, BYTE*, short nLen );
-    void Read_SubSuper(         USHORT, BYTE*, short nLen );
-    void Read_SubSuperProp(     USHORT, BYTE*, short nLen );
-    void Read_Underline(        USHORT, BYTE*, short nLen );
-    void Read_TxtColor(         USHORT, BYTE*, short nLen );
-    void Read_FontCode(         USHORT, BYTE*, short nLen );
-    void Read_FontSize(         USHORT, BYTE*, short nLen );
-    void Read_CharSet(          USHORT nId, BYTE* pData, short nLen );
-    void Read_Language(         USHORT, BYTE*, short nLen );
-    void Read_CColl(            USHORT, BYTE*, short nLen );
-    void Read_Kern(             USHORT, BYTE* pData, short nLen );
-    void Read_FontKern(         USHORT, BYTE* pData, short nLen );
-    void Read_Invisible(        USHORT, BYTE* pData, short nLen );
-    void Read_Emphasis(         USHORT, BYTE* pData, short nLen );
-    void Read_ScaleWidth(       USHORT, BYTE* pData, short nLen );
-    void Read_Relief(           USHORT, BYTE* pData, short nLen);
+    void Read_Special(          USHORT, const BYTE*, short nLen );
+    void Read_Obj(              USHORT, const BYTE*, short nLen );
+    void Read_PicLoc(           USHORT nId, const BYTE* pData, short nLen );
+    void Read_BoldUsw(          USHORT nId, const BYTE*, short nLen );
+    void Read_SubSuper(         USHORT, const BYTE*, short nLen );
+    void Read_SubSuperProp(     USHORT, const BYTE*, short nLen );
+    void Read_Underline(        USHORT, const BYTE*, short nLen );
+    void Read_TxtColor(         USHORT, const BYTE*, short nLen );
+    void Read_FontCode(         USHORT, const BYTE*, short nLen );
+    void Read_FontSize(         USHORT, const BYTE*, short nLen );
+    void Read_CharSet(          USHORT nId, const BYTE* pData, short nLen );
+    void Read_Language(         USHORT, const BYTE*, short nLen );
+    void Read_CColl(            USHORT, const BYTE*, short nLen );
+    void Read_Kern(             USHORT, const BYTE* pData, short nLen );
+    void Read_FontKern(         USHORT, const BYTE* pData, short nLen );
+    void Read_Invisible(        USHORT, const BYTE* pData, short nLen );
+    void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
+    void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
+    void Read_Relief(           USHORT, const BYTE* pData, short nLen);
 
-    void Read_NoLineNumb(       USHORT nId, BYTE* pData, short nLen );
+    void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
-    void Read_LR(               USHORT nId, BYTE*, short nLen );
-    void Read_UL(               USHORT nId, BYTE*, short nLen );
-    void Read_LineSpace(        USHORT, BYTE*, short nLen );
-    void Read_Justify(          USHORT, BYTE*, short nLen );
-    void Read_Hyphenation(      USHORT, BYTE* pData, short nLen );
-    void Read_WidowControl(     USHORT, BYTE* pData, short nLen );
-    void Read_AlignFont(        USHORT, BYTE* pData, short nLen );
-    void Read_KeepLines(        USHORT, BYTE* pData, short nLen );
-    void Read_KeepParas(        USHORT, BYTE* pData, short nLen );
-    void Read_BreakBefore(      USHORT, BYTE* pData, short nLen );
-    void Read_ApoPPC(           USHORT, BYTE* pData, short nLen );
+    void Read_LR(               USHORT nId, const BYTE*, short nLen );
+    void Read_UL(               USHORT nId, const BYTE*, short nLen );
+    void Read_LineSpace(        USHORT, const BYTE*, short nLen );
+    void Read_Justify(          USHORT, const BYTE*, short nLen );
+    void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
+    void Read_WidowControl(     USHORT, const BYTE* pData, short nLen );
+    void Read_AlignFont(        USHORT, const BYTE* pData, short nLen );
+    void Read_KeepLines(        USHORT, const BYTE* pData, short nLen );
+    void Read_KeepParas(        USHORT, const BYTE* pData, short nLen );
+    void Read_BreakBefore(      USHORT, const BYTE* pData, short nLen );
+    void Read_ApoPPC(           USHORT, const BYTE* pData, short nLen );
 
-    void Read_BoolItem(         USHORT nId, BYTE*, short nLen );
+    void Read_BoolItem(         USHORT nId, const BYTE*, short nLen );
 
-    void Read_Border(           USHORT nId, BYTE* pData, short nLen );
-    void Read_Tab(              USHORT nId, BYTE* pData, short nLen );
-    void Read_TabCellDelete(    USHORT nId, BYTE* pData, short nLen );
-    void Read_TabCellInsert(    USHORT nId, BYTE* pData, short nLen );
-    void Read_Symbol(           USHORT nId, BYTE* pData, short nLen );
-    void Read_FldVanish(        USHORT nId, BYTE* pData, short nLen );
+    void Read_Border(           USHORT nId, const BYTE* pData, short nLen );
+    void Read_Tab(              USHORT nId, const BYTE* pData, short nLen );
+    void Read_Symbol(           USHORT nId, const BYTE* pData, short nLen );
+    void Read_FldVanish(        USHORT nId, const BYTE* pData, short nLen );
 
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(SwRedlineType eType,
-                            USHORT nId,
-                            BYTE* pData,
-                            short nLen );
+    void Read_CRevisionMark(SwRedlineType eType, USHORT nId,
+        const BYTE* pData, short nLen );
     // insert new content
-    void Read_CFRMark(          USHORT nId, BYTE* pData, short nLen );
+    void Read_CFRMark(          USHORT nId, const BYTE* pData, short nLen );
     // delete old content
-    void Read_CFRMarkDel(       USHORT nId, BYTE* pData, short nLen );
+    void Read_CFRMarkDel(       USHORT nId, const BYTE* pData, short nLen );
     // change properties of content (e.g. char formating)
-    void Read_CPropRMark(       USHORT nId, BYTE* pData, short nLen ); // complex!
+    void Read_CPropRMark(       USHORT nId, const BYTE* pData, short nLen ); // complex!
 
 
-    void Read_TabRowEnd(        USHORT, BYTE* pData, short nLen );
-    void Read_Shade(            USHORT, BYTE* pData, short nLen );
-    void Read_ANLevelNo(        USHORT, BYTE* pData, short nLen );
-    void Read_ANLevelDesc(      USHORT, BYTE* pData, short nLen );
+    void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
+    void Read_Shade(            USHORT, const BYTE* pData, short nLen );
+    void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );
+    void Read_ANLevelDesc(      USHORT, const BYTE* pData, short nLen );
 
-    void Read_POutLvl( USHORT nId, BYTE* pData, short nLen ); // Gliederungsebene Ver8
+    void Read_POutLvl( USHORT nId, const BYTE* pData, short nLen ); // Gliederungsebene Ver8
 
-    void Read_OLST(             USHORT, BYTE* pData, short nLen );
+    void Read_OLST(             USHORT, const BYTE* pData, short nLen );
 
-    void Read_CharShadow(       USHORT, BYTE* pData, short nLen );
-    void Read_CharHighlight(    USHORT, BYTE* pData, short nLen );
+    void Read_CharShadow(       USHORT, const BYTE* pData, short nLen );
+    void Read_CharHighlight(    USHORT, const BYTE* pData, short nLen );
                                         // Ver8-Listen
 
-    void Read_ListLevel(        USHORT nId, BYTE* pData, short nLen);
-    void Read_LFOPosition(      USHORT nId, BYTE* pData, short nLen);
+    void Read_ListLevel(        USHORT nId, const sal_uInt8* pData, short nLen);
+    void Read_LFOPosition(      USHORT nId, const sal_uInt8* pData, short nLen);
     BOOL SetTxtFmtCollAndListLevel( const SwPaM& rRg,
                                     SwWW8StyInf& rStyleInfo,
                                     BOOL         bReset = TRUE );
 
                                         // FastSave-Attribute
 
-    void Read_StyleCode(        USHORT, BYTE* pData, short nLen );
-    void Read_Majority(         USHORT, BYTE* pData, short nLen );
-    void Read_DoubleLine_Rotate( USHORT, BYTE* pDATA, short nLen);
+    void Read_StyleCode(        USHORT, const BYTE* pData, short nLen );
+    void Read_Majority(         USHORT, const BYTE* pData, short nLen );
+    void Read_DoubleLine_Rotate( USHORT, const BYTE* pDATA, short nLen);
 
                                         // Felder
 
@@ -1131,7 +1127,7 @@ public:     // eigentlich private, geht aber leider nur public
     void DeleteFormImpl();
 
                                 // Ver8: Listen Manager
-    short ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId = 0 );
+    short ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId = 0 );
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
     SwDoc& GetDoc() const           { return rDoc;          }
@@ -1163,11 +1159,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.26 2001-05-08 14:02:43 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.27 2001-06-06 12:46:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.26  2001/05/08 14:02:43  cmc
+      ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
+
       Revision 1.25  2001/04/27 11:17:03  cmc
       ##826## Allow borders set in styles to be removed by sprms with empty line descriptions
 
