@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:36:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,6 +710,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
         case RID_SW_TP_REDLINE_OPT:     //CHINA001 pRet = SwRedlineOptionsTabPage::Create(pParent, rSet); break;
         case RID_SW_TP_OPTLOAD_PAGE:    //CHINA001 pRet = SwLoadOptPage::Create(pParent, rSet); break;
         case RID_SW_TP_OPTCOMPATIBILITY_PAGE:   //CHINA001 pRet = SwCompatibilityOptPage::Create(pParent, rSet); break;
+        case RID_SW_TP_MAILCONFIG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             if ( pFact )
