@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 10:43:36 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _AUTHFLD_HXX
+#include <authfld.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -256,7 +259,7 @@ const char* __FAR_DATA aProvNames[] =
         "com.sun.star.text.FieldMaster.DDE",//SW_SERVICE_FIELDMASTER_DDE
         "com.sun.star.text.FieldMaster.SetExpression",//SW_SERVICE_FIELDMASTER_SET_EXP
         "com.sun.star.text.FieldMaster.Database",//SW_SERVICE_FIELDMASTER_DATABASE
-        "",//SW_SERVICE_FIELDMASTER_DUMMY1
+        "com.sun.star.text.FieldMaster.Bibliography",//SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY
         "",//SW_SERVICE_FIELDMASTER_DUMMY2
         "",//SW_SERVICE_FIELDMASTER_DUMMY3
         "",//SW_SERVICE_FIELDMASTER_DUMMY4
@@ -521,6 +524,25 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 case SW_SERVICE_FIELDMASTER_DATABASE: nResId = RES_DBFLD; break;
             }
             xRet =  (cppu::OWeakObject*)new SwXFieldMaster(pDoc, nResId);
+        }
+        break;
+        case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
+        {
+            SwFieldType* pType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
+            if(!pType)
+            {
+                SwAuthorityFieldType aType(pDoc);
+                pType = pDoc->InsertFldType(aType);
+            }
+            else
+            {
+                SwClientIter aIter( *pType );
+                SwXFieldMaster* pMaster = (SwXFieldMaster*)aIter.First( TYPE( SwXFieldMaster ));
+                if(pMaster)
+                    xRet = (cppu::OWeakObject*)pMaster;
+            }
+            if(!xRet.is())
+                xRet =  (cppu::OWeakObject*)new SwXFieldMaster(*pType, pDoc);
         }
         break;
         case SW_SERVICE_PARAGRAPH :

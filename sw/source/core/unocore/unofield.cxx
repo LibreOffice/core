@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-10 13:49:21 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,6 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             pRet = aDBFieldTypePropMap;
         }
         break;
-        case SW_SERVICE_FIELDMASTER_DUMMY1      :
         case SW_SERVICE_FIELDMASTER_DUMMY2      :
         case SW_SERVICE_FIELDMASTER_DUMMY3      :
         case SW_SERVICE_FIELDMASTER_DUMMY4      :
@@ -820,9 +819,32 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
         {
             static SfxItemPropertyMap aBibliographyFieldMap[] =
             {
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , 0, new uno::Type(::getCppuType((Sequence<PropertyValue>*)0)),PROPERTY_NONE, 0},
+#else
+                {SW_PROP_NAME(UNO_NAME_FIELDS  )    , 0, &::getCppuType((Sequence<PropertyValue>*)0),PROPERTY_NONE, 0},
+#endif
                 {0,0,0,0}
             };
             pRet = aBibliographyFieldMap;
+        }
+        break;
+        case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
+        {
+            static SfxItemPropertyMap aBibliographyFieldMasterMap[] =
+            {
+                {SW_PROP_NAME(UNO_NAME_BRACKET_BEFORE     ) , 0, &::getCppuType((OUString*)0),               PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_BRACKET_AFTER      ) , 0, &::getCppuType((OUString*)0),               PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_NUMBER_ENTRIES  ) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_IS_SORT_BY_POSITION) , 0, &::getBooleanCppuType(),                    PROPERTY_NONE, 0},
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, new uno::Type(::getCppuType((Sequence<PropertyValues>*)0)),PROPERTY_NONE, 0},
+#else
+                {SW_PROP_NAME(UNO_NAME_SORT_KEYS          ) , 0, &::getCppuType((Sequence<PropertyValues>*)0),PROPERTY_NONE, 0},
+#endif
+                {0,0,0,0}
+            };
+            pRet = aBibliographyFieldMasterMap;
         }
         break;
     }
@@ -998,7 +1020,6 @@ SwXFieldMaster::SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId) :
     bParam1(FALSE),
     nParam1(-1)
 {
-
 }
 /*-- 14.12.98 11:08:33---------------------------------------------------
 
@@ -1029,7 +1050,7 @@ uno::Reference< XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
                                             throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    const SfxItemPropertyMap* pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DUMMY1);
+    const SfxItemPropertyMap* pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DUMMY2);
     if(nResTypeId == RES_USERFLD)
         pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_USER);
     else if(nResTypeId == RES_DBFLD)
@@ -1038,6 +1059,8 @@ uno::Reference< XPropertySetInfo >  SwXFieldMaster::getPropertySetInfo(void)
         pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_SET_EXP);
     else if(nResTypeId == RES_DDEFLD)
         pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_DDE);
+    else if(nResTypeId == RES_AUTHORITY)
+        pCreate = SwFieldPropMapProvider::GetPropertyMap(SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY);
     uno::Reference< XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(pCreate);
     return aRef;
 }

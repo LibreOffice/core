@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 14:12:01 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_CONTOURED                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTOUR_OUTSIDE              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CONTENT_PROTECTED                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_COUNT_EMPTY_LINES                ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_RESTART_AT_EACH_PAGE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_BASE_NAME                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_TABLE_NAME              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATA_COLUMN_NAME             ;
@@ -593,6 +594,14 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_TYPE           
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_PREFIX     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_SUFFIX         ;
 
+extern const SwPropNameLen __FAR_DATA UNO_NAME_BRACKET_BEFORE        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_BRACKET_AFTER         ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_NUMBER_ENTRIES     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_BY_POSITION   ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEYS             ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_ASCENDING     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEY              ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS;
 #endif
 
 

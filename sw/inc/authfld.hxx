@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@ public:
     virtual SwFieldType* Copy()    const;
     virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
+
     inline SwDoc*   GetDoc() const                      { return m_pDoc; }
     inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
 
@@ -197,6 +200,9 @@ public:
     virtual SwField*    Copy() const;
     virtual void        SetPar1(const String& rStr);
     virtual SwFieldType* ChgTyp( SwFieldType* );
+
+    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, const String& rProperty ) const;
+    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, const String& rProperty );
 
     long                GetHandle() const       { return nHandle; }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 11:11:17 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,17 @@
 #ifndef _SV_SYSTEM_HXX
 #include <vcl/system.hxx>
 #endif
+#ifndef _UNOPRNMS_HXX
+#include <unoprnms.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
+#include <com/sun/star/beans/PropertyValues.hpp>
+#endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace rtl;
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 typedef SwAuthEntry* SwAuthEntryPtr;
 SV_DECL_PTRARR_DEL( SwAuthDataArr, SwAuthEntryPtr, 5, 5 )
 SV_IMPL_PTRARR( SwAuthDataArr, SwAuthEntryPtr )
@@ -561,7 +571,115 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
     ASSERT(nRet, "Handle not found")
     return nRet;
 }
+/* -----------------------------15.11.00 17:33--------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, const String& rProperty ) const
+{
+    if(rProperty.EqualsAscii(UNO_NAME_BRACKET_BEFORE.pName, 0, UNO_NAME_BRACKET_BEFORE.nNameLen))
+    {
+        OUString sVal(m_cPrefix);
+        rVal <<= sVal;
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_BRACKET_AFTER         .pName, 0, UNO_NAME_BRACKET_AFTER  .nNameLen))
+    {
+        OUString sVal(m_cSuffix);
+        rVal <<= sVal;
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_NUMBER_ENTRIES     .pName, 0, UNO_NAME_IS_NUMBER_ENTRIES .nNameLen))
+    {
+        sal_Bool bVal = m_bIsSequence;
+        rVal.setValue(&bVal, ::getBooleanCppuType());
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_SORT_BY_POSITION  .pName, 0,  UNO_NAME_IS_SORT_BY_POSITION.nNameLen))
+    {
+        sal_Bool bVal = m_bSortByDocument;
+        rVal.setValue(&bVal, ::getBooleanCppuType());
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_SORT_KEYS            .pName, 0,  UNO_NAME_SORT_KEYS      .nNameLen))
+    {
+        Sequence<PropertyValues> aRet(m_pSortKeyArr->Count());
+        PropertyValues* pValues = aRet.getArray();
+        for(sal_Int32 i = 0; i < m_pSortKeyArr->Count(); i++)
+        {
+            const SwTOXSortKey* pKey = (*m_pSortKeyArr)[i];
+            pValues[i].realloc(2);
+            PropertyValue* pValue = pValues[i].getArray();
+            pValue[0].Name = C2U(UNO_NAME_SORT_KEY.pName);
+            pValue[0].Value <<= sal_Int16(pKey->eField);
+            pValue[1].Name = C2U(UNO_NAME_IS_SORT_ASCENDING.pName);
+            pValue[1].Value.setValue(&pKey->bSortAscending, ::getBooleanCppuType());
+        }
+        rVal <<= aRet;
+    }
+    else
+        return FALSE;
+    return TRUE;
+}
+/* -----------------------------15.11.00 17:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL    SwAuthorityFieldType::PutValue( const Any& rVal, const String& rProperty )
+{
+    sal_Bool bRet = TRUE;
+    if(rProperty.EqualsAscii(UNO_NAME_BRACKET_BEFORE.pName, 0, UNO_NAME_BRACKET_BEFORE.nNameLen))
+    {
+        OUString sVal; rVal >>= sVal;
+        if(sVal.getLength())
+            m_cPrefix = sVal[0];
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_BRACKET_AFTER         .pName, 0, UNO_NAME_BRACKET_AFTER  .nNameLen))
+    {
+        OUString sVal; rVal >>= sVal;
+        if(sVal.getLength())
+            m_cSuffix = sVal[0];
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_NUMBER_ENTRIES     .pName, 0, UNO_NAME_IS_NUMBER_ENTRIES .nNameLen))
+    {
+        sal_Bool bValue = *(sal_Bool*)rVal.getValue();
+        m_bIsSequence = bValue;
+
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_IS_SORT_BY_POSITION  .pName, 0,  UNO_NAME_IS_SORT_BY_POSITION.nNameLen))
+    {
+        sal_Bool bValue = *(sal_Bool*)rVal.getValue();
+        m_bSortByDocument = bValue;
+    }
+    else if(rProperty.EqualsAscii(UNO_NAME_SORT_KEYS            .pName, 0,  UNO_NAME_SORT_KEYS      .nNameLen))
+    {
+        Sequence<PropertyValues> aSeq;
+        bRet = rVal >>= aSeq;
+        if(bRet)
+        {
+            const PropertyValues* pValues = aSeq.getConstArray();
+            for(sal_Int32 i = 0; i < aSeq.getLength() && i < USHRT_MAX / 4; i++)
+            {
+                m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
+                const PropertyValue* pValue = pValues[i].getConstArray();
+                SwTOXSortKey* pSortKey = new SwTOXSortKey;
+                for(sal_Int32 j = 0; j < pValues[i].getLength(); i++)
+                {
+                    if(pValue[i].Name.equalsAsciiL(UNO_NAME_SORT_KEY.pName, UNO_NAME_SORT_KEY.nNameLen))
+                    {
+                        sal_Int16 nVal = -1; pValue[i].Value >>= nVal;
+                        if(nVal >= 0 && nVal < AUTH_FIELD_END)
+                            pSortKey->eField = (ToxAuthorityField) nVal;
+                        else
+                            bRet = FALSE;
+                    }
+                    else if(pValue[i].Name.equalsAsciiL(UNO_NAME_IS_SORT_ASCENDING.pName, UNO_NAME_IS_SORT_ASCENDING.nNameLen))
+                    {
+                        pSortKey->bSortAscending = *(sal_Bool*)pValue[i].Value.getValue();
+                    }
+                }
+                m_pSortKeyArr->Insert(pSortKey, m_pSortKeyArr->Count());
+            }
+        }
+    }
+    else
+        bRet = FALSE;
+    return bRet;
+}
 /* -----------------19.10.99 13:25-------------------
 
  --------------------------------------------------*/
@@ -684,8 +802,106 @@ USHORT  SwAuthorityField::GetHandlePosition() const
     DBG_ASSERT(pAuthType, "no field type")
     return pAuthType->GetPosition(nHandle);
 }
+/* -----------------------------15.11.00 17:33--------------------------------
 
+ ---------------------------------------------------------------------------*/
+const char* aFieldNames[] =
+{
+    "Identifier",
+    "BibiliographicType",
+    "Address",
+    "Annote",
+    "Author",
+    "Booktitle",
+    "Chapter",
+    "Edition",
+    "Editor",
+    "Howpublished",
+    "Institution",
+    "Journal",
+    "Month",
+    "Note",
+    "Number",
+    "Organizations",
+    "Pages",
+    "Publisher",
+    "School",
+    "Series",
+    "Title",
+    "Report_Type",
+    "Volume",
+    "Year",
+    "URL",
+    "Custom1",
+    "Custom2",
+    "Custom3",
+    "Custom4",
+    "Custom5",
+    "ISBN"
+};
+/* -----------------------------16.11.00 12:27--------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL    SwAuthorityField::QueryValue( Any& rVal, const String& rProperty ) const
+{
+    if(!GetTyp())
+        return FALSE;
+    const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle);
+    if(!pAuthEntry)
+        return FALSE;
+    Sequence <PropertyValue> aRet(AUTH_FIELD_END);
+    PropertyValue* pValues = aRet.getArray();
+    for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
+    {
+        pValues[i].Name = C2U(aFieldNames[i]);
+        const String& rField = pAuthEntry->GetAuthorField((ToxAuthorityField) i);
+        pValues[i].Value <<= OUString(rField);
+    }
+    rVal <<= aRet;
+    return FALSE;
+}
+/* -----------------------------15.11.00 17:33--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int16 lcl_Find(const OUString& rFieldName)
+{
+    for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
+        if(!rFieldName.compareToAscii(aFieldNames[i]))
+            return i;
+    return -1;
+}
+//----------------------------------------------------------------------------
+BOOL    SwAuthorityField::PutValue( const Any& rVal, const String& rProperty )
+{
+    if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(nHandle))
+        return FALSE;
+
+    Sequence <PropertyValue> aParam;
+    if(!(rVal >>= aParam))
+        return FALSE;
+
+    String sToSet;
+    sToSet.Fill(AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
+    const PropertyValue* pParam = aParam.getConstArray();
+    for(sal_Int32 i = 0; i < aParam.getLength(); i++)
+    {
+        sal_Int16 nFound = lcl_Find(pParam[i].Name);
+        if(nFound >= 0)
+        {
+            OUString sContent;
+            pParam[i].Value >>= sContent;
+            sToSet.SetToken(nFound, TOX_STYLE_DELIMITER, sContent);
+        }
+    }
+
+    ((SwAuthorityFieldType*)GetTyp())->RemoveField(nHandle);
+    ((SwAuthorityFieldType*)GetTyp())->AddField(sToSet);
+
+    return FALSE;
+}
+/* -----------------11.10.99 09:43-------------------
+
+ --------------------------------------------------*/
 SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
 {
     SwAuthorityFieldType* pSrcTyp = (SwAuthorityFieldType*)GetTyp(),

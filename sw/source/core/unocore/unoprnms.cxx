@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,4 +592,12 @@ const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_TYPE              (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_PREFIX            (MAP_CHAR_LEN("EndnoteNumberingPrefix"));
 const SwPropNameLen __FAR_DATA UNO_NAME_ENDNOTE_NUMBERING_SUFFIX            (MAP_CHAR_LEN("EndnoteNumberingSuffix"));
 
+const SwPropNameLen __FAR_DATA UNO_NAME_BRACKET_BEFORE                      (MAP_CHAR_LEN("BracketBefore"));
+const SwPropNameLen __FAR_DATA UNO_NAME_BRACKET_AFTER                       (MAP_CHAR_LEN("BracketAfter"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_NUMBER_ENTRIES                   (MAP_CHAR_LEN("IsNumberEntries"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_BY_POSITION                 (MAP_CHAR_LEN("IsSortByPosition"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEYS                           (MAP_CHAR_LEN("SortKeys"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_ASCENDING                   (MAP_CHAR_LEN("IsSortAscending"));
+const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEY                            (MAP_CHAR_LEN("SortKey"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS                              (MAP_CHAR_LEN("Fields"));
 

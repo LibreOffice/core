@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-09 10:42:57 $
+ *  last change: $Author: os $ $Date: 2000-11-16 12:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDMASTER_DDE                      81
 #define SW_SERVICE_FIELDMASTER_SET_EXP                  82
 #define SW_SERVICE_FIELDMASTER_DATABASE                 83
-#define SW_SERVICE_FIELDMASTER_DUMMY1                   84
+#define SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY             84
 #define SW_SERVICE_FIELDMASTER_DUMMY2                   85
 #define SW_SERVICE_FIELDMASTER_DUMMY3                   86
 #define SW_SERVICE_FIELDMASTER_DUMMY4                   87
