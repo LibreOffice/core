@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:40:50 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,8 +329,6 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* _pDoc, sal_Bool bClipBoa
 ***********************************************************************/
 SdXImpressDocument::~SdXImpressDocument() throw()
 {
-    if( pDoc )
-        EndListening( *pDoc );
 }
 
 // uno helper
@@ -464,55 +462,60 @@ uno::Sequence< sal_Int8 > SAL_CALL SdXImpressDocument::getImplementationId(  ) t
 ***********************************************************************/
 void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-
-    if( pSdrHint )
+    if( pDoc )
     {
-        if( hasEventListeners() )
+        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+        if( pSdrHint )
         {
-
-            bool bBackgroundShape = false;
-
-            // the background shape itself has no api representation, so filter all notifies for it
-            const SdrObject* pSdrObj = pSdrHint->GetObject();
-            if( pSdrObj && (pSdrObj->GetObjInventor() == SdrInventor) && (pSdrObj->GetObjIdentifier() == OBJ_RECT) )
+            if( hasEventListeners() )
             {
-                SdPage* pPage = (SdPage*)pSdrObj->GetPage();
-                bBackgroundShape = pPage && (pPage->GetPresObjKind(const_cast<SdrObject*>(pSdrObj)) == PRESOBJ_BACKGROUND);
-            }
 
-            if( !bBackgroundShape )
-            {
-                document::EventObject aEvent;
-                if( SvxUnoDrawMSFactory::createEvent( pDoc, pSdrHint, aEvent ) )
-                    notifyEvent( aEvent );
-            }
-        }
+                bool bBackgroundShape = false;
 
-        if( pSdrHint->GetKind() == HINT_MODELCLEARED )
-        {
-            pDoc = NULL;
-            pDocShell = NULL;
-        }
-    }
-    else
-    {
-        const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
-
-        // ist unser SdDrawDocument gerade gestorben?
-        if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
-        {
-            // yup, also schnell ein neues erfragen
-            if( pDocShell )
-            {
-                SdDrawDocument *pNewDoc = pDocShell->GetDoc();
-
-                // ist ueberhaupt ein neues da?
-                if( pNewDoc != pDoc )
+                // the background shape itself has no api representation, so filter all notifies for it
+                const SdrObject* pSdrObj = pSdrHint->GetObject();
+                if( pSdrObj && (pSdrObj->GetObjInventor() == SdrInventor) && (pSdrObj->GetObjIdentifier() == OBJ_RECT) )
                 {
-                    pDoc = pNewDoc;
-                    if(pDoc)
-                        StartListening( *pDoc );
+                    SdPage* pPage = (SdPage*)pSdrObj->GetPage();
+                    bBackgroundShape = pPage && (pPage->GetPresObjKind(const_cast<SdrObject*>(pSdrObj)) == PRESOBJ_BACKGROUND);
+                }
+
+                if( !bBackgroundShape )
+                {
+                    document::EventObject aEvent;
+                    if( SvxUnoDrawMSFactory::createEvent( pDoc, pSdrHint, aEvent ) )
+                        notifyEvent( aEvent );
+                }
+            }
+
+            if( pSdrHint->GetKind() == HINT_MODELCLEARED )
+            {
+                if( pDoc )
+                    EndListening( *pDoc );
+                pDoc = NULL;
+                pDocShell = NULL;
+            }
+        }
+        else
+        {
+            const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
+
+            // ist unser SdDrawDocument gerade gestorben?
+            if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
+            {
+                // yup, also schnell ein neues erfragen
+                if( pDocShell )
+                {
+                    SdDrawDocument *pNewDoc = pDocShell->GetDoc();
+
+                    // ist ueberhaupt ein neues da?
+                    if( pNewDoc != pDoc )
+                    {
+                        pDoc = pNewDoc;
+                        if(pDoc)
+                            StartListening( *pDoc );
+                    }
                 }
             }
         }
@@ -676,6 +679,9 @@ sal_Bool SAL_CALL SdXImpressDocument::hasControllersLocked(  )
 
 uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewData() throw( uno::RuntimeException )
 {
+    if( NULL == pDoc )
+        throw lang::DisposedException();
+
     uno::Reference < container::XIndexAccess > xRet( SfxBaseModel::getViewData() );
 
     if( !xRet.is() )
@@ -712,6 +718,9 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
 void SAL_CALL SdXImpressDocument::setViewData( const uno::Reference < container::XIndexAccess >& xData ) throw(::com::sun::star::uno::RuntimeException)
 {
+    if( NULL == pDoc )
+        throw lang::DisposedException();
+
     SfxBaseModel::setViewData( xData );
     if( pDocShell && (pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED) && xData.is() )
     {
@@ -1626,6 +1635,20 @@ void SdXImpressDocument::initializeDocument()
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
     }
+}
+
+void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::RuntimeException)
+{
+    {
+        OGuard aGuard( Application::GetSolarMutex() );
+        if( pDoc )
+        {
+            EndListening( *pDoc );
+            pDoc = NULL;
+        }
+    }
+
+    SfxBaseModel::dispose();
 }
 
 // -----------------------------------------------------------------------------
