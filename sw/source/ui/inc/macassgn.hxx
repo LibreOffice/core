@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macassgn.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ public:
     SwMacroAssignDlg( Window* pParent, SfxItemSet& rSet, DlgEventType eType );
     virtual ~SwMacroAssignDlg();
 
-    static void AddEvents( SfxSmallMacroTabPage& rPg, DlgEventType eType );
+    static void AddEvents( SfxMacroTabPage& rPg, DlgEventType eType );
     static BOOL INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                             SvxMacroItem*& rpINetItem );
 };

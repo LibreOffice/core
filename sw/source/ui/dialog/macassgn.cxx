@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macassgn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ SwMacroAssignDlg::SwMacroAssignDlg( Window* pParent, SfxItemSet& rSet,
     : SfxMacroAssignDlg( pParent, rSet )
 {
      // TabPage holen
-    SwMacroAssignDlg::AddEvents( *(SfxSmallMacroTabPage*) GetTabPage(), eType );
+    SwMacroAssignDlg::AddEvents( *(SfxMacroTabPage*) GetTabPage(), eType );
 }
 
 
@@ -108,7 +108,7 @@ SwMacroAssignDlg::~SwMacroAssignDlg()
 }
 
 
-void SwMacroAssignDlg::AddEvents( SfxSmallMacroTabPage& rPg, DlgEventType eType )
+void SwMacroAssignDlg::AddEvents( SfxMacroTabPage& rPg, DlgEventType eType )
 {
     const SfxItemSet& rSet = rPg.GetItemSet();
 
@@ -233,6 +233,9 @@ SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* pTbPg, const String& rLa
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:34  hr
+      initial import
+
       Revision 1.40  2000/09/18 16:05:20  willem.vandorp
       OpenOffice header added.
 

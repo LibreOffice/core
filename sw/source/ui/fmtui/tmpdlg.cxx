@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-06 11:51:45 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage(TP_COLUMN,       SwColumnPage::Create,
                                         SwColumnPage::GetRanges );
 
-            AddTabPage( TP_MACRO_ASSIGN, SfxSmallMacroTabPage::Create, 0);
+            AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
 
             // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
 /*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
@@ -607,7 +607,7 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             break;
 
         case TP_MACRO_ASSIGN:
-            SwMacroAssignDlg::AddEvents( (SfxSmallMacroTabPage&)rPage, MACASSGN_ALLFRM);
+            SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage, MACASSGN_ALLFRM);
             break;
 
         case RID_SVXPAGE_PICK_NUM:

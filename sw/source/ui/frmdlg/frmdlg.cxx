@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: gt $ $Date: 2002-08-14 07:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ SwFrmDlg::SwFrmDlg( SfxViewFrame*       pFrame,
         AddTabPage(TP_COLUMN,   SwColumnPage::Create,    0);
     }
     AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
-    AddTabPage( TP_MACRO_ASSIGN, SfxSmallMacroTabPage::Create, 0);
+    AddTabPage( TP_MACRO_ASSIGN, SfxMacroTabPage::Create, 0);
     AddTabPage( TP_BORDER,   SvxBorderTabPage::Create,      0);
 
     if(bHtmlMode)
@@ -258,7 +258,7 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         break;
 
     case TP_MACRO_ASSIGN:
-        SwMacroAssignDlg::AddEvents( (SfxSmallMacroTabPage&)rPage,
+        SwMacroAssignDlg::AddEvents( (SfxMacroTabPage&)rPage,
             DLG_FRM_GRF == nDlgType ? MACASSGN_GRAPHIC
                             : DLG_FRM_OLE == nDlgType ? MACASSGN_OLE
                                                       : MACASSGN_FRMURL );
@@ -278,6 +278,9 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-----------------25.02.94 21:22-------------------
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 17:14:37  hr
+   initial import
+
    Revision 1.196  2000/09/18 16:05:33  willem.vandorp
    OpenOffice header added.
 
