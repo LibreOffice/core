@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _SpreadsheetDocumentSettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:35 $
+ *  last change:$Date: 2003-09-08 10:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,15 +58,16 @@
  *
  *
  ************************************************************************/
-
 package ifc.sheet;
+
+import lib.MultiPropertyTest;
 
 import com.sun.star.i18n.ForbiddenCharacters;
 import com.sun.star.i18n.XForbiddenCharacters;
 import com.sun.star.lang.Locale;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.Date;
-import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
+
 
 /**
 * Testing <code>com.sun.star.sheet.SpreadsheetDocumentSettings</code>
@@ -91,15 +92,39 @@ import lib.MultiPropertyTest$PropertyTester;
 * @see com.sun.star.sheet.SpreadsheetDocumentSettings
 */
 public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
-
     /**
      *This class is destined to custom test of property <code>NullDate</code>.
      */
     protected PropertyTester DateTester = new PropertyTester() {
         protected Object getNewValue(String propName, Object oldValue) {
             Date date = (Date) oldValue;
-            Date newDate = new Date( (short)(date.Day - 1), date.Month, date.Year);
+            Date newDate = new Date((short) (date.Day - 1), date.Month,
+                                    date.Year);
+
             return newDate;
+        }
+    };
+
+    /**
+     *This class is destined to custom test of property <code>ForbiddenCharacters</code>.
+     */
+    protected PropertyTester ChrTester = new PropertyTester() {
+        protected Object getNewValue(String propName, Object oldValue) {
+            return new ForbiddenChrTest();
+        }
+
+        protected boolean compare(Object obj1, Object obj2) {
+            Locale loc = new Locale("ru", "RU", "");
+            XForbiddenCharacters fc1 = (XForbiddenCharacters) UnoRuntime.queryInterface(
+                                               XForbiddenCharacters.class,
+                                               obj1);
+            XForbiddenCharacters fc2 = (XForbiddenCharacters) UnoRuntime.queryInterface(
+                                               XForbiddenCharacters.class,
+                                               obj2);
+            boolean has1 = fc1.hasForbiddenCharacters(loc);
+            boolean has2 = fc2.hasForbiddenCharacters(loc);
+
+            return has1 == has2;
         }
     };
 
@@ -108,6 +133,13 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
      */
     public void _NullDate() {
         testProperty("NullDate", DateTester);
+    }
+
+    /**
+     * Test property <code>ForbiddenCharacters</code> using custom <code>PropertyTest</code>.
+     */
+    public void _ForbiddenCharacters() {
+        testProperty("ForbiddenCharacters", ChrTester);
     }
 
     /**
@@ -120,55 +152,33 @@ public class _SpreadsheetDocumentSettings extends MultiPropertyTest {
     protected class ForbiddenChrTest implements XForbiddenCharacters {
         protected Locale locale = new Locale("ru", "RU", "");
         protected ForbiddenCharacters chrs = new ForbiddenCharacters("q", "w");
+
         public ForbiddenCharacters getForbiddenCharacters(Locale rLocale)
             throws com.sun.star.container.NoSuchElementException {
-            if ( rLocale.Country.equals(locale.Country) &&
-                 rLocale.Language.equals(locale.Language) &&
-                 rLocale.Variant.equals(locale.Variant) ) {
-                 return chrs;
+            if (rLocale.Country.equals(locale.Country) &&
+                    rLocale.Language.equals(locale.Language) &&
+                    rLocale.Variant.equals(locale.Variant)) {
+                return chrs;
             }
 
             throw new com.sun.star.container.NoSuchElementException();
         }
 
-        public void setForbiddenCharacters (
-            Locale rLocale, ForbiddenCharacters rForbiddenCharacters ) {
+        public void setForbiddenCharacters(Locale rLocale,
+                                           ForbiddenCharacters rForbiddenCharacters) {
         }
 
-        public void removeForbiddenCharacters (Locale rLocale) {
+        public void removeForbiddenCharacters(Locale rLocale) {
         }
 
-        public boolean hasForbiddenCharacters (Locale rLocale) {
-            if ( rLocale.Country.equals(locale.Country) &&
-                 rLocale.Language.equals(locale.Language) &&
-                 rLocale.Variant.equals(locale.Variant) ) {
-                 return true;
+        public boolean hasForbiddenCharacters(Locale rLocale) {
+            if (rLocale.Country.equals(locale.Country) &&
+                    rLocale.Language.equals(locale.Language) &&
+                    rLocale.Variant.equals(locale.Variant)) {
+                return true;
             }
+
             return false;
         }
     }
-
-    /**
-     *This class is destined to custom test of property <code>ForbiddenCharacters</code>.
-     */
-    protected PropertyTester ChrTester = new PropertyTester() {
-        protected Object getNewValue(String propName, Object oldValue) {
-            return new ForbiddenChrTest();
-        }
-
-        protected boolean compare(Object obj1, Object obj2) {
-            Locale loc = new Locale("ru", "RU", "");
-            boolean has1 = ((XForbiddenCharacters)obj1).hasForbiddenCharacters(loc);
-            boolean has2 = ((XForbiddenCharacters)obj2).hasForbiddenCharacters(loc);
-            return has1 == has2;
-        }
-    };
-
-    /**
-     * Test property <code>ForbiddenCharacters</code> using custom <code>PropertyTest</code>.
-     */
-    public void _ForbiddenCharacters() {
-        testProperty("ForbiddenCharacters", ChrTester);
-    }
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _SpreadsheetViewSettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:35 $
+ *  last change:$Date: 2003-09-08 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.sheet;
 
 import lib.MultiPropertyTest;
+
 import com.sun.star.view.DocumentZoomType;
 
 /**
