@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-20 10:31:47 $
+ *  last change: $Author: er $ $Date: 2001-02-09 14:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,31 +493,24 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
     String aDesc;
 
     ScRedlinData* pNewData=new ScRedlinData;
-
-    if(pNewData!=NULL)
-    {
-        pNewData->bIsRejectable=pScChangeAction->IsClickable();
-        pNewData->bIsAcceptable=pNewData->bIsRejectable;
-        pNewData->bDisabled=!pNewData->bIsRejectable | bDisabled;
-        pNewData->nActionNo=pScChangeAction->GetActionNumber();
-        pNewData->aDateTime=aDateTime;
-        pNewData->pData=(void *)pScChangeAction;
-        pNewData->nRow  = aRef.aStart.Row();
-        pNewData->nCol  = aRef.aStart.Col();
-        pNewData->nTable= aRef.aStart.Tab();
-    }
+    pNewData->pData=(void *)pScChangeAction;
+    pNewData->nActionNo=pScChangeAction->GetActionNumber();
+    pNewData->bIsAcceptable=pScChangeAction->IsClickable();
+    pNewData->bIsRejectable=pScChangeAction->IsRejectable();
+    pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
+    pNewData->aDateTime=aDateTime;
+    pNewData->nRow  = aRef.aStart.Row();
+    pNewData->nCol  = aRef.aStart.Col();
+    pNewData->nTable= aRef.aStart.Tab();
 
     if(eType==SC_CAT_CONTENT)
     {
         if(pScChangeAction->IsDialogParent())
         {
             aString=aStrContentWithChild;
-            if(pNewData!=NULL)
-            {
-                pNewData->nInfo=RD_SPECIAL_VISCONTENT;
-                pNewData->bIsRejectable=FALSE;
-                pNewData->bIsAcceptable=FALSE;
-            }
+            pNewData->nInfo=RD_SPECIAL_VISCONTENT;
+            pNewData->bIsRejectable=FALSE;
+            pNewData->bIsAcceptable=FALSE;
         }
         else
         {
@@ -532,11 +525,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         if(bDelMaster)
         {
             pScChangeAction->GetDescription( aDesc, pDoc,TRUE);
-            if(pNewData!=NULL)
-            {
-                pNewData->bDisabled=TRUE;
-                pNewData->bIsRejectable=FALSE;
-            }
+            pNewData->bDisabled=TRUE;
+            pNewData->bIsRejectable=FALSE;
         }
         else
             pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
@@ -685,31 +675,24 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
 
 
         ScRedlinData* pNewData=new ScRedlinData;
-
-        if(pNewData!=NULL)
-        {
-            pNewData->bIsRejectable=pScChangeAction->IsClickable();
-            pNewData->bIsAcceptable=pNewData->bIsRejectable;
-            pNewData->bDisabled=!pNewData->bIsRejectable | bDisabled;
-            pNewData->nActionNo=pScChangeAction->GetActionNumber();
-            pNewData->aDateTime=aDateTime;
-            pNewData->pData=(void *)pScChangeAction;
-            pNewData->nRow  = aRef.aStart.Row();
-            pNewData->nCol  = aRef.aStart.Col();
-            pNewData->nTable= aRef.aStart.Tab();
-        }
+        pNewData->pData=(void *)pScChangeAction;
+        pNewData->nActionNo=pScChangeAction->GetActionNumber();
+        pNewData->bIsAcceptable=pScChangeAction->IsClickable();
+        pNewData->bIsRejectable=pScChangeAction->IsRejectable();
+        pNewData->bDisabled=!pNewData->bIsAcceptable | bDisabled;
+        pNewData->aDateTime=aDateTime;
+        pNewData->nRow  = aRef.aStart.Row();
+        pNewData->nCol  = aRef.aStart.Col();
+        pNewData->nTable= aRef.aStart.Tab();
 
         if(eType==SC_CAT_CONTENT)
         {
             if(pScChangeAction->IsDialogParent())
             {
                 aString=aStrContentWithChild;
-                if(pNewData!=NULL)
-                {
-                    pNewData->nInfo=RD_SPECIAL_VISCONTENT;
-                    pNewData->bIsRejectable=FALSE;
-                    pNewData->bIsAcceptable=FALSE;
-                }
+                pNewData->nInfo=RD_SPECIAL_VISCONTENT;
+                pNewData->bIsRejectable=FALSE;
+                pNewData->bIsAcceptable=FALSE;
             }
             else
             {
@@ -724,11 +707,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
             if(bDelMaster)
             {
                 pScChangeAction->GetDescription( aDesc, pDoc,TRUE);
-                if(pNewData!=NULL)
-                {
-                    pNewData->bDisabled=TRUE;
-                    pNewData->bIsRejectable=FALSE;
-                }
+                pNewData->bDisabled=TRUE;
+                pNewData->bIsRejectable=FALSE;
             }
             else
                 pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
@@ -768,10 +748,8 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
             aString+=aComment;
             pEntry=pTheView->InsertEntry(aString,pNewData,pParent,nPos);
         }
-        else if(pNewData!=NULL)
-        {
+        else
             delete pNewData;
-        }
     }
     return pEntry;
 }
@@ -883,18 +861,16 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
     aString+=aComment;
 
     ScRedlinData* pNewData=new ScRedlinData;
-
-    if(pNewData!=NULL)
-    {
-        pNewData->nActionNo=pScChangeAction->GetActionNumber();
-        pNewData->nInfo=nSpecial;
-        pNewData->bDisabled=!pScChangeAction->IsClickable();
-        pNewData->aDateTime=aDateTime;
-        pNewData->pData=(void *)pScChangeAction;
-        pNewData->nRow  = aRef.aStart.Row();
-        pNewData->nCol  = aRef.aStart.Col();
-        pNewData->nTable= aRef.aStart.Tab();
-    }
+    pNewData->nInfo=nSpecial;
+    pNewData->pData=(void *)pScChangeAction;
+    pNewData->nActionNo=pScChangeAction->GetActionNumber();
+    pNewData->bIsAcceptable=pScChangeAction->IsClickable();
+    pNewData->bIsRejectable=FALSE;
+    pNewData->bDisabled=!pNewData->bIsAcceptable;
+    pNewData->aDateTime=aDateTime;
+    pNewData->nRow  = aRef.aStart.Row();
+    pNewData->nCol  = aRef.aStart.Col();
+    pNewData->nTable= aRef.aStart.Tab();
 
     if(pTheView->IsValidComment(&aComment) && bFlag)
     {
@@ -1369,13 +1345,27 @@ BOOL ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBo
 {
     BOOL bTheTestFlag=TRUE;
     ScRedlinData *pEntryData=(ScRedlinData *)(pParent->GetUserData());
-    ScChangeAction*pScChangeAction=(ScChangeAction*) pEntryData->pData;
+    const ScChangeAction* pScChangeAction = (ScChangeAction*) pEntryData->pData;
+    BOOL bParentInserted = FALSE;
+    // If the parent is a MatrixOrigin then place it in the right order before
+    // the MatrixReferences. Also if it is the first content change at this
+    // position don't insert the first dependent MatrixReference as the special
+    // content (original value) but insert the predecessor of the MatrixOrigin
+    // itself instead.
+    if ( pScChangeAction->GetType() == SC_CAT_CONTENT &&
+            ((const ScChangeActionContent*)pScChangeAction)->IsMatrixOrigin() )
+    {
+        pActionTable->Insert( pScChangeAction->GetActionNumber(),
+            (ScChangeAction*) pScChangeAction );
+        bParentInserted = TRUE;
+    }
     SvLBoxEntry* pEntry=NULL;
 
     const ScChangeActionContent* pCChild=(const ScChangeActionContent*)pActionTable->First();
     while(pCChild!=NULL)
     {
-        if(pCChild->GetState()==SC_CAS_VIRGIN) break;
+        if( pCChild->GetState()==SC_CAS_VIRGIN )
+            break;
         pCChild=(const ScChangeActionContent*)pActionTable->Next();
     }
 
@@ -1384,12 +1374,13 @@ BOOL ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBo
     SvLBoxEntry* pOriginal=InsertChangeActionContent(pCChild,pParent,RD_SPECIAL_CONTENT);
     if(pOriginal!=NULL)
     {
-        ScRedlinData *pParentData=(ScRedlinData *)(pOriginal->GetUserData());
         bTheTestFlag=FALSE;
+        ScRedlinData *pParentData=(ScRedlinData *)(pOriginal->GetUserData());
         pParentData->pData=(void *)pScChangeAction;
+        pParentData->nActionNo=pScChangeAction->GetActionNumber();
+        pParentData->bIsAcceptable=pScChangeAction->IsRejectable(); // select old value
         pParentData->bIsRejectable=FALSE;
         pParentData->bDisabled=FALSE;
-        pParentData->bIsAcceptable=pScChangeAction->IsDialogParent();
     }
     while(pCChild!=NULL)
     {
@@ -1398,30 +1389,26 @@ BOOL ScAcceptChgDlg::InsertContentChilds(ScChangeActionTable* pActionTable,SvLBo
             pEntry=InsertChangeActionContent(pCChild,pParent,RD_SPECIAL_NONE);
 
             if(pEntry!=NULL)
-            {
-                ScRedlinData *pEData=(ScRedlinData *)(pEntry->GetUserData());
-                pEData->bIsRejectable=FALSE;
-                pEData->bIsAcceptable=pScChangeAction->IsDialogParent();
-                pEData->bDisabled=FALSE;
-
                 bTheTestFlag=FALSE;
-            }
         }
         pCChild=(const ScChangeActionContent*)pActionTable->Next();
     }
 
-    pEntry=InsertChangeActionContent((const ScChangeActionContent*)
-                            pScChangeAction,pParent,RD_SPECIAL_NONE);
-
-    if(pEntry!=NULL)
+    if ( !bParentInserted )
     {
-        ScRedlinData *pParentData=(ScRedlinData *)(pEntry->GetUserData());
-        bTheTestFlag=FALSE;
-        pParentData->bIsRejectable=FALSE;
-        pParentData->bIsAcceptable=pScChangeAction->IsDialogParent();
-        pParentData->bDisabled=FALSE;
-        pParentData->pData=(void *)pScChangeAction;
-        pParentData->nActionNo=pScChangeAction->GetActionNumber();
+        pEntry=InsertChangeActionContent((const ScChangeActionContent*)
+                                pScChangeAction,pParent,RD_SPECIAL_NONE);
+
+        if(pEntry!=NULL)
+        {
+            bTheTestFlag=FALSE;
+            ScRedlinData *pParentData=(ScRedlinData *)(pEntry->GetUserData());
+            pParentData->pData=(void *)pScChangeAction;
+            pParentData->nActionNo=pScChangeAction->GetActionNumber();
+            pParentData->bIsAcceptable=pScChangeAction->IsClickable();
+            pParentData->bIsRejectable=FALSE;
+            pParentData->bDisabled=FALSE;
+        }
     }
 
     return bTheTestFlag;
@@ -1751,7 +1738,8 @@ void ScAcceptChgDlg::RemoveEntrys(ULONG nStartAction,ULONG nEndAction)
 
     BOOL bRemove=FALSE;
 
-    pEntry=pTheView->First();
+    // MUST do it backwards, don't delete parents before children and GPF
+    pEntry=pTheView->Last();
     while(pEntry!=NULL)
     {
         bRemove=FALSE;
@@ -1764,14 +1752,14 @@ void ScAcceptChgDlg::RemoveEntrys(ULONG nStartAction,ULONG nEndAction)
 
 
         }
-        SvLBoxEntry* pNextEntry = pTheView->Next(pEntry);
+        SvLBoxEntry* pPrevEntry = pTheView->Prev(pEntry);
 
         if(bRemove)
         {
             //delete pEntryData;
             pTheView->GetModel()->Remove(pEntry);
         }
-        pEntry=pNextEntry;
+        pEntry=pPrevEntry;
     }
     pTheView->SetUpdateMode(TRUE);
 
@@ -1786,7 +1774,7 @@ void ScAcceptChgDlg::UpdateEntrys(ScChangeTrack* pChgTrack, ULONG nStartAction,U
     BOOL bRemove=FALSE;
 
     SvLBoxEntry* pEntry=pTheView->First();
-    SvLBoxEntry* pNextEntry = pTheView->NextSibling(pEntry);
+    SvLBoxEntry* pNextEntry = (pEntry ? pTheView->NextSibling(pEntry) : NULL);
     SvLBoxEntry* pLastEntry=NULL;
     while(pEntry!=NULL)
     {
@@ -1940,7 +1928,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, pTi)
 
             pScChangeAction=(ScChangeAction*) pEntryData->pData;
             if(pScChangeAction && pScChangeAction->GetType()!=SC_CAT_DELETE_TABS
-                &&!pEntryData->bDisabled)
+                && (!pEntryData->bDisabled || pScChangeAction->IsVisible()))
             {
                 const ScBigRange& rRange = pScChangeAction->GetBigRange();
                 if(rRange.IsValid(pDoc) && IsActive())
@@ -2081,7 +2069,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
 
     if ( aStr.Len())
     {
-        USHORT nCount=aStr.ToInt32();
+        USHORT nCount=(USHORT)aStr.ToInt32();
 
         for(USHORT i=0;i<nCount;i++)
         {
