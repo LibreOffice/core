@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:40 $
+ *  last change: $Author: jl $ $Date: 2004-05-21 15:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,25 @@ extern "C" {
 #endif
 
 /** @file
+    <p>
+    This library currently has to operational modes. In office mode it
+    expects that it is located in the program directory and the javavendors.xml
+    file must be in the folder <office>/share/config. A Java Virtual Machine (JVM)
+    can only be created if a JRE has been selected. That is either
+    <code>jfw_setSelectedJRE</code> or <code>jfw_findAndSelectJRE</code> must have
+    run successfully.</p>
+    <p>
+    In &quot;default mode&quot; the framework uses the environment variables
+    <code>JAVA_HOME</code> and <code>CLASSPATH</code> to determine the JRE which
+    is to be used and the class path. If the JRE does not meet the version
+    requirements as specified by the javavendors.xml then jfw_startVM will return
+    JFW_E_FAILED_VERSION. It is expected that the javavendors.xml and the plug-in
+    libraries are located in the same folder as this library. In this mode no
+    settings are written nor read. The functions will return JFW_E_DEFAULT_MODE.
+    </p>
+
     All settings made by this API are done for the current user if not
     mentioned differently.
-
 */
 
 /** indicates that a JRE has an accessibility bridge installed.
@@ -106,7 +122,8 @@ typedef enum
     JFW_E_NOT_RECOGNIZED,
     JFW_E_FAILED_VERSION,
     JFW_E_NO_JAVA_FOUND,
-    JFW_E_VM_CREATION_FAILED
+    JFW_E_VM_CREATION_FAILED,
+    JFW_E_DEFAULT_MODE
 } javaFrameworkError;
 
 /** an instance of this struct represents an installation of a Java
@@ -284,7 +301,8 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning);
     JFW_E_FORMAT_STORE the internally used data store has not the
     expected format<br/>
     JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
-    JFW_E_NO_JAVA_FOUND no JRE was found that meets the requirements.
+    JFW_E_NO_JAVA_FOUND no JRE was found that meets the requirements.</br>
+    JFW_E_DEFAULT_MODE because of this mode no settings are written.
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo);
 
@@ -419,6 +437,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     JFW_REQUIRE_NEEDRESTART then this error is returned. </br>
     JFW_E_VM_CREATION_FAILED the creation of the JVM failed. The creation is performed
     by a plug-in library and not by this API.
+    JFW_E_FAILED_VERSION the &quot;Default Mode&quot; is active. The JRE determined by
+    <code>JAVA_HOME</code>does not meet the version requirements.
  */
 javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
                                  sal_Int32 nSize, JavaVM **ppVM,
@@ -450,6 +470,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions,
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
     expected format<br/>
+    JFW_E_DEFAULT_MODE because of this mode no settings are written.
  */
 javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
 
@@ -479,6 +500,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo);
     expected format<br/>
     JFW_E_INVALID_SETTINGS the javavendors.xml has been changed and no
     JRE has been selected afterwards. <br/>
+    JFW_E_DEFAULT_MODE because of this mode no settings are read.
  */
 javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
 
@@ -499,6 +521,7 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo);
    the internally used data store. <br/>
    JFW_E_FORMAT_STORE the internally used data store has not the
    expected format<br/>
+   JFW_E_DEFAULT_MODE because of this mode no settings are written.
  */
 javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
 
@@ -512,6 +535,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled);
    the internally used data store. <br/>
    JFW_E_FORMAT_STORE the internally used data store has not the
    expected format<br/>
+   JFW_E_DEFAULT_MODE because of this mode no settings are read.
  */
 javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
@@ -537,6 +561,7 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
     expected format<br/>
+    JFW_E_DEFAULT_MODE because of this mode no settings are written.
  */
 javaFrameworkError SAL_CALL jfw_setVMParameters(
     rtl_uString **  arArgs, sal_Int32 nSize);
@@ -563,6 +588,7 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
     expected format<br/>
+    JFW_E_DEFAULT_MODE because of this mode no settings read.
  */
 javaFrameworkError SAL_CALL jfw_getVMParameters(
     rtl_uString *** parParameters,
@@ -585,7 +611,8 @@ javaFrameworkError SAL_CALL jfw_getVMParameters(
    JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
    the internally used data store. <br/>
    JFW_E_FORMAT_STORE the internally used data store has not the
-   expected format<br/>
+   expected format<br/></br>
+   JFW_E_DEFAULT_MODE because of this mode no settings are written.
  */
 javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
 /** provides the value of the current user class path.
@@ -606,6 +633,7 @@ javaFrameworkError SAL_CALL jfw_setUserClassPath(rtl_uString * pCP);
    the internally used data store. <br/>
    JFW_E_FORMAT_STORE the internally used data store has not the
    expected format<br/>
+   JFW_E_DEFAULT_MODE because of this mode no settings read.
  */
 javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
 
@@ -634,7 +662,8 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
     JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
+    expected format</br>
+    JFW_E_DEFAULT_MODE because of this mode no settings are written.
 
     @see jfw_setJRELocations
  */
@@ -664,7 +693,8 @@ javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
     JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
+    expected format</br>
+    JFW_E_DEFAULT_MODE because of this mode no settings are written.
 
     @see jfw_addJRELocations
  */
@@ -689,7 +719,8 @@ javaFrameworkError SAL_CALL jfw_setJRELocations(
     JFW_E_CONFIG_READWRITE an error occurred while reading or writing to
     the internally used data store. <br/>
     JFW_E_FORMAT_STORE the internally used data store has not the
-    expected format<br/>
+    expected format</br>
+    JFW_E_DEFAULT_MODE because of this mode no settings are read.
  */
 javaFrameworkError SAL_CALL jfw_getJRELocations(
     rtl_uString *** parLocations, sal_Int32 * pSize);
