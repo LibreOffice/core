@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 12:26:18 $
+ *  last change: $Author: tra $ $Date: 2001-03-08 11:40:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,8 +330,16 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
+    Any aAny = m_XTransferable->getTransferData( aFlavor );
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
+        throw UnsupportedFlavorException( );
+
     OUString aText;
-    m_XTransferable->getTransferData( aFlavor ) >>= aText;
+    aAny >>= aText;
 
     sal_uInt32 nBytesToTransfer = aText.getLength( ) * sizeof( sal_Unicode );
 
@@ -356,8 +364,16 @@ void SAL_CALL CXTDataObject::renderAnyDataAndSetupStgMedium(
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
+    Any aAny = m_XTransferable->getTransferData( aFlavor );
+
+    // unfortunately not all transferables fulfill the
+    // spec. an do throw an UnsupportedFlavorException
+    // so we must check the any
+    if ( !aAny.hasValue( ) )
+        throw UnsupportedFlavorException( );
+
     Sequence< sal_Int8 > clipDataStream;
-    m_XTransferable->getTransferData( aFlavor ) >>= clipDataStream;
+    aAny >>= clipDataStream;
 
     sal_uInt32 nRequiredMemSize = 0;
     if ( isOemOrAnsiTextFormat( fetc.cfFormat ) )
@@ -582,12 +598,12 @@ void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
 {
     stgmedium.pUnkForRelease = NULL;
 
-    if ( fetc.tymed & TYMED_MFPICT )
+    if ( fetc.cfFormat == CF_METAFILEPICT )
     {
         stgmedium.tymed         = TYMED_MFPICT;
         stgmedium.hMetaFilePict = static_cast< HMETAFILEPICT >( stgTransHlp.getHGlobal( ) );
     }
-    else if ( fetc.tymed & TYMED_ENHMF )
+    else if ( fetc.cfFormat == CF_ENHMETAFILE )
     {
         stgmedium.tymed        = TYMED_ENHMF;
         stgmedium.hEnhMetaFile = static_cast< HENHMETAFILE >( stgTransHlp.getHGlobal( ) );
@@ -662,6 +678,7 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN lpUnkOuter, const CFormatEtcContainer&
     m_lpUnkOuter( lpUnkOuter ),
     m_FormatEtcContainer( aFormatEtcContainer )
 {
+    Reset( );
 }
 
 //----------------------------------------------------------------------------
