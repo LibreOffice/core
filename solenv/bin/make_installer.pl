@@ -665,7 +665,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             {
                 print "... creating preregistered services.rdb ...\n";
 
-                installer::servicesfile::create_services_rdb($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
+                $filesinproductlanguageresolvedarrayref = installer::servicesfile::create_services_rdb($filesinproductlanguageresolvedarrayref, $includepatharrayref, $languagestringref);
                 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles14.log", $filesinproductlanguageresolvedarrayref); }
             }
         }
