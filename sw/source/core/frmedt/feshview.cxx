@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:54:15 $
+ *  last change: $Author: od $ $Date: 2002-09-03 08:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2946,4 +2946,57 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
         pDrawView->InsertObject(pObj, *pPageView, pDrawView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
     }
     ImpEndCreate();
+}
+
+/** SwFEShell::GetShapeBackgrd
+
+    OD 02.09.2002 for #102450#:
+    method determines background color of the page the selected drawing
+    object is on and returns this color.
+    If no color is found, because no drawing object is selected or ...,
+    color COL_BLACK (default color on constructing object of class Color)
+    is returned.
+
+    @author OD
+
+    @returns an object of class Color
+*/
+const Color SwFEShell::GetShapeBackgrd() const
+{
+    Color aRetColor;
+
+    // check, if a draw view exists
+    ASSERT( Imp()->GetDrawView(), "wrong usage of SwFEShell::GetShapeBackgrd - no draw view!");
+    if( Imp()->GetDrawView() )
+    {
+        // determine list of selected objects
+        const SdrMarkList* pMrkList = &Imp()->GetDrawView()->GetMarkList();
+        // check, if exactly one object is selected.
+        ASSERT( pMrkList->GetMarkCount() == 1, "wrong usage of SwFEShell::GetShapeBackgrd - no selected object!");
+        if ( pMrkList->GetMarkCount() == 1)
+        {
+            // get selected object
+            const SdrObject *pSdrObj = pMrkList->GetMark( 0 )->GetObj();
+            // check, if selected object is a shape (drawing object)
+            ASSERT( !pSdrObj->IsWriterFlyFrame(), "wrong usage of SwFEShell::GetShapeBackgrd - selected object is not a drawing object!");
+            if ( !pSdrObj->IsWriterFlyFrame() )
+            {
+                // determine page frame of the frame the shape is anchored.
+                const SwFrm* pAnchorFrm =
+                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchor();
+                ASSERT( pAnchorFrm, "inconsistent modell - no anchor at shape!");
+                if ( pAnchorFrm )
+                {
+                    const SwPageFrm* pPageFrm = pAnchorFrm->FindPageFrm();
+                    ASSERT( pPageFrm, "inconsistent modell - no page!");
+                    if ( pPageFrm )
+                    {
+                        aRetColor = pPageFrm->GetDrawBackgrdColor();
+                    }
+                }
+            }
+        }
+    }
+
+    return aRetColor;
 }
