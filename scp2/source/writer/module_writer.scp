@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:01:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,5 +104,5 @@ Module gid_Module_Prg_Wrt_Help
     ParentID = gid_Module_Prg_Wrt;
     Default = YES;
     Minimal = YES;
-    Files = (gid_File_Help_Swriter_Zip, gid_File_Help_Smath_Zip);
+    Files = (gid_File_Help_Swriter_Zip);
 End
