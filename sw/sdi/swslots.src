@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:42:13 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,7 +960,7 @@ SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
     SlotName[ swedish ] = "Förteckningspost";
     SlotName[ polish ] = "Wpis w indeksie";
     SlotName[ portuguese_brazilian ] = "EditIndexEntry";
-    SlotName[ japanese ] = "õˆø€–Ú";
+    SlotName[ japanese ] = "–ÚŸ¥õˆø€–Ú";
     SlotName[ chinese_simplified ] = "Ä¿Â¼ÌõÄ¿";
     SlotName[ chinese_traditional ] = "¥Ø¿ı±ø¥Ø";
     SlotName[ arabic ] = "ÅÏÎÇá İåÑÓí";
@@ -1766,7 +1766,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ swedish ] = "Ramegenskaper";
     SlotName[ polish ] = "Edytuj ramkê";
     SlotName[ portuguese_brazilian ] = "FormatFrame";
-    SlotName[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‘®«";
+    SlotName[ japanese ] = "˜g‚Ì‘®«";
     SlotName[ chinese_simplified ] = "ÎÄ±¾¿òÊôĞÔ";
     SlotName[ chinese_traditional ] = "¤å¦r¤è¶ôÄİ©Ê";
     SlotName[ arabic ] = "ÎÕÇÆÕ ÇáßÇÏÑ";
@@ -2962,7 +2962,7 @@ SfxSlotInfo FN_IDX_MARK_TO_IDX
     SlotName[ swedish ] = "Indexmärke till index";
     SlotName[ polish ] = "Znacznik indeksu do indeksu";
     SlotName[ portuguese_brazilian ] = "IndexMarkToIndex";
-    SlotName[ japanese ] = "²İÃŞ¯¸½Ï°¸‚ğõˆø€–Ú‚Ö";
+    SlotName[ japanese ] = "–ÚŸ¥õˆø€–Ú‚ğ–ÚŸ¥õˆø‚Ö";
     SlotName[ chinese_simplified ] = "Ö¸ÏòË÷ÒıµÄË÷Òı±ê¼Ç";
     SlotName[ chinese_traditional ] = "«ü¦V¯Á¤Şªº¯Á¤Ş¼Ğ°O";
     SlotName[ arabic ] = "ÚáÇãÉ ÇáİåÑÓ Åáì ÇáİåÑÓ";
@@ -3118,7 +3118,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ swedish ] = "Infoga kolumnbrytning";
     SlotName[ polish ] = "Wstaw podzia³ kolumn";
     SlotName[ portuguese_brazilian ] = "InsertColumnBreak";
-    SlotName[ japanese ] = "‰ü—ñ‚Ì‘}“ü";
+    SlotName[ japanese ] = "‰ü’i‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈë·ÖÀ¸·û";
     SlotName[ chinese_traditional ] = "´¡¤J¤ÀÄæ²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÚãÏÉ";
@@ -3508,7 +3508,7 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ swedish ] = "Infoga ram";
     SlotName[ polish ] = "Wstaw ramkê";
     SlotName[ portuguese_brazilian ] = "InsertFrame";
-    SlotName[ japanese ] = "˜g‚Ì‘}“ü";
+    SlotName[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈë¿ò";
     SlotName[ chinese_traditional ] = "´¡¤J¤å¦r¤è¶ô";
     SlotName[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ";
@@ -3609,7 +3609,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ swedish ] = "Infoga hårt bindestreck";
     SlotName[ polish ] = "Wstaw twardy znak podzia³u";
     SlotName[ portuguese_brazilian ] = "InsertHardHyphen";
-    SlotName[ japanese ] = "•ÛŒìÊ²ÌÈ°¼®İ‚Ì‘}“ü";
+    SlotName[ japanese ] = "•ÛŒìÊ²Ìİ‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈëÁ¬×Ö·û";
     SlotName[ chinese_traditional ] = "´¡¤J«OÅ@ªº³s¦r²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÔÑØÉ İÇÕáÉ ãÍãíÉ";
@@ -3738,7 +3738,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ swedish ] = "Infoga manuell radbrytning";
     SlotName[ polish ] = "Wstaw rêczny podzia³ wierszy";
     SlotName[ portuguese_brazilian ] = "InsertManualLineBreak";
-    SlotName[ japanese ] = "è“®‰üs‚Ì‘}“ü";
+    SlotName[ japanese ] = "”CˆÓ‰üs‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë»»ĞĞ·û";
     SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J´«¦æ²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕá ÃÓØÑ íÏæí";
@@ -3972,7 +3972,7 @@ SfxSlotInfo FN_INSERT_SOFT_HYPHEN
     SlotName[ swedish ] = "Infoga mjuka bindestreck";
     SlotName[ polish ] = "Wstaw miêkki znak podzia³u";
     SlotName[ portuguese_brazilian ] = "InsertSoftHyphen";
-    SlotName[ japanese ] = "—áŠO‚ÌÊ²Ìİ‚ğ‘}“ü";
+    SlotName[ japanese ] = "¿ÌÄÊ²Ìİ‚Ì‘}“ü";
     SlotName[ chinese_simplified ] = "²åÈëÈíĞÔÁ¬×Ö·û";
     SlotName[ chinese_traditional ] = "´¡¤J³n©Ê³s¦r²Å";
     SlotName[ arabic ] = "ÅÏÑÇÌ İÇÕáÉ ÇÎÊíÇÑíÉ";
@@ -8202,7 +8202,7 @@ SfxSlotInfo FN_UPDATE_CUR_TOX
     SlotName[ swedish ] = "Uppdatera förteckning";
     SlotName[ polish ] = "Aktualizuj indeks";
     SlotName[ portuguese_brazilian ] = "Optimize";
-    SlotName[ japanese ] = "õˆø€–Ú‚ÌXV";
+    SlotName[ japanese ] = "–ÚŸ‚Æõˆø‚ÌXV";
     SlotName[ chinese_simplified ] = "¸üĞÂÄ¿Â¼";
     SlotName[ chinese_traditional ] = "§ó·s¥Ø¿ı";
     SlotName[ arabic ] = "ÊÍÏíË ÇáİåÑÓ";
@@ -8229,7 +8229,7 @@ SfxSlotInfo FN_EDIT_CURRENT_TOX
     SlotName[ danish ] = "Rediger indeks";
     SlotName[ polish ] = "Edytuj indeks";
     SlotName[ portuguese_brazilian ] = "Edit index";
-    SlotName[ japanese ] = "õˆø‚Ì•ÒW";
+    SlotName[ japanese ] = "–ÚŸ¥õˆø‚Ì•ÒW";
     SlotName[ korean ] = "»öÀÎ ÆíÁı";
     SlotName[ chinese_simplified ] = "±à¼­Ä¿Â¼";
     SlotName[ chinese_traditional ] = "½s¿è¥Ø¿ı";
@@ -8791,7 +8791,7 @@ SfxSlotInfo FN_INSERT_MULTI_TOX
     SlotName[ danish ] = "Indsæt indeks";
     SlotName[ polish ] = "Wstaw indeks";
     SlotName[ portuguese_brazilian ] = "Insert Table of";
-    SlotName[ japanese ] = "–ÚŸ‚Æõˆø‚Ì‘}“ü";
+    SlotName[ japanese ] = "–ÚŸ¥õˆø‚Ì‘}“ü";
     SlotName[ korean ] = "»öÀÎ»ğÀÔ";
     SlotName[ chinese_simplified ] = "²åÈëÄ¿Â¼";
     SlotName[ chinese_traditional ] = "´¡¤J¥Ø¿ı";
@@ -8814,7 +8814,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ swedish ] = "Infoga litteraturförteckningspost";
     SlotName[ polish ] = "Dodaj wpis bibliograficzny";
     SlotName[ portuguese_brazilian ] = "Insert Authorities entry";
-    SlotName[ japanese ] = "Ql•¶Œ£€–Ú‚Ì“o˜^";
+    SlotName[ japanese ] = "Ql•¶Œ£€–Ú‚Ì‘}“ü";
     SlotName[ korean ] = "Âü°í¹®Çå Ç×¸ñ »ğÀÔ";
     SlotName[ chinese_simplified ] = "²åÈëÎÄÏ×Ä¿Â¼ÌõÄ¿";
     SlotName[ chinese_traditional ] = "´¡¤J°Ñ¦Ò¤åÄm¥Ø¿ı±ø¥Ø";
