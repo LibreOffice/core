@@ -2,9 +2,9 @@
 *
 *   $RCSfile: ListBox.cxx,v $
 *
-*   $Revision: 1.36 $
+*   $Revision: 1.37 $
 *
-*   last change: $Author: obo $ $Date: 2004-11-16 10:39:57 $
+*   last change: $Author: vg $ $Date: 2005-02-16 17:50:50 $
 *
 *   The Contents of this file are made available subject to the terms of
 *   either of the following licenses
@@ -1044,7 +1044,7 @@ namespace frm
                         xColumns->getByIndex(nBoundColumn) >>= xBoundField;
                     m_bBoundComponent = xBoundField.is();
 
-                    //  Ist die LB an ein Feld gebunden und sind Leereinträge zulaessig
+                    //  Ist die LB an ein Feld gebunden und sind Leereintraege zulaessig
                     //  dann wird die Position fuer einen Leereintrag gemerkt
 
                     ::rtl::OUString aStr;
