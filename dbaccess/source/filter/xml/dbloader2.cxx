@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:00:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,12 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -165,6 +171,12 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
+#endif
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
 
 using namespace ::ucb;
 using namespace ::com::sun::star::task;
@@ -177,6 +189,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::ui::dialogs;
 
 // -------------------------------------------------------------------------
 namespace dbaxml
@@ -275,6 +288,11 @@ private:
     Reference< XLoadEventListener >     m_xListener;
     Reference< XFrame >                 m_xFrame;
     Reference< XMultiServiceFactory >   m_xServiceFactory;
+    Reference< XFrameLoader >           m_xMySelf;
+    ::rtl::OUString                     m_sCurrentURL;
+    sal_Int32                           m_nStartWizard;
+
+    DECL_LINK( OnStartTableWizard, void* );
 public:
     DBContentLoader(const Reference< XMultiServiceFactory >&);
     ~DBContentLoader();
@@ -302,6 +320,7 @@ public:
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
     :m_xServiceFactory(_rxFactory)
+    ,m_nStartWizard(0)
 {
 }
 // -------------------------------------------------------------------------
@@ -420,42 +439,87 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    Reference< XController >    xController(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OApplicationController"))),UNO_QUERY);
+    sal_Bool bStartTableWizard = sal_False;
 
-    if ( bSuccess && (bSuccess = ( xController.is() && xModel.is() )) )
+    if ( bInteractive )
     {
-        xController->attachModel(xModel);
-        xModel->connectController( xController );
-        xModel->setCurrentController(xController);
-
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
-
-        // and initialize
-        try
+        Sequence< Any > aArgs(2);
+        Reference< ::com::sun::star::awt::XWindow> xWindow;
+        // get the top most window
+        if ( rFrame.is() )
         {
-            Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aProp(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
-            Sequence< Any > aArgs(m_aArgs.getLength() + 2);
-
-            Any* pArgIter = aArgs.getArray();
-            Any* pEnd   = pArgIter + aArgs.getLength();
-            *pArgIter++ <<= aProp;
-
-            aProp.Name = URL_INTERACTIVE;
-            aProp.Value <<= bInteractive;
-            *pArgIter++ <<= aProp;
-
-            const PropertyValue* pIter      = m_aArgs.getConstArray();
-            for(++pArgIter;pArgIter != pEnd;++pArgIter,++pIter)
+            xWindow = rFrame->getContainerWindow();
+            Reference<XFrame> xFrame = rFrame;
+            while ( xFrame.is() && !xFrame->isTop() )
             {
-                *pArgIter <<= *pIter;
+                xFrame.set(xFrame->getCreator(),UNO_QUERY);
             }
-
-            xIni->initialize(aArgs);
+            if ( xFrame.is() )
+                xWindow = xFrame->getContainerWindow();
         }
-        catch(Exception&)
+        // the parent window
+        aArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+                                    0,
+                                    makeAny(xWindow),
+                                    PropertyState_DIRECT_VALUE);
+        aArgs[1] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")),
+                                    0,
+                                    makeAny(xModel),
+                                    PropertyState_DIRECT_VALUE);
+
+        // create the dialog
+        Reference< XExecutableDialog > xAdminDialog(
+            m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aArgs), UNO_QUERY);
+
+        // execute it
+        if ( bSuccess = xAdminDialog.is() && RET_OK == xAdminDialog->execute() )
         {
-            bSuccess = sal_False;
+            Reference<XPropertySet> xProp(xAdminDialog,UNO_QUERY);
+            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenDatabase"))) >>= bSuccess;
+            xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StartTableWizard"))) >>= bStartTableWizard;
+        }
+    }
+
+    Reference< XController > xController;
+    if ( bSuccess )
+    {
+        xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OApplicationController"))),UNO_QUERY);
+
+        if ( bSuccess = ( xController.is() && xModel.is() ) )
+        {
+            xController->attachModel(xModel);
+            xModel->connectController( xController );
+            xModel->setCurrentController(xController);
+
+            ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+            // and initialize
+            try
+            {
+                Reference<XInitialization > xIni(xController,UNO_QUERY);
+                PropertyValue aProp(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+                Sequence< Any > aArgs(m_aArgs.getLength() + 2);
+
+                Any* pArgIter = aArgs.getArray();
+                Any* pEnd   = pArgIter + aArgs.getLength();
+                *pArgIter++ <<= aProp;
+
+                aProp.Name = URL_INTERACTIVE;
+                aProp.Value <<= bInteractive;
+                *pArgIter++ <<= aProp;
+
+                const PropertyValue* pIter      = m_aArgs.getConstArray();
+                for(++pArgIter;pArgIter != pEnd;++pArgIter,++pIter)
+                {
+                    *pArgIter <<= *pIter;
+                }
+
+                xIni->initialize(aArgs);
+            }
+            catch(Exception&)
+            {
+                bSuccess = sal_False;
+            }
         }
     }
 
@@ -463,7 +527,6 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         if ( xController.is() && rFrame.is() )
             xController->attachFrame(rFrame);
-
         try
         {
             Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
@@ -479,6 +542,16 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
         }
         rListener->loadFinished(this);
+
+        if ( bStartTableWizard )
+        {
+            // reset the data of the previous async drop (if any)
+            if ( m_nStartWizard )
+                Application::RemoveUserEvent(m_nStartWizard);
+            m_sCurrentURL = xModel->getURL();
+            m_xMySelf = this;
+            m_nStartWizard = Application::PostUserEvent(LINK(this, DBContentLoader, OnStartTableWizard));
+        }
     }
     else if (!bSuccess && rListener.is())
         rListener->loadCancelled(this);
@@ -488,7 +561,31 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 void DBContentLoader::cancel(void) throw()
 {
 }
+// -----------------------------------------------------------------------------
+IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, NOTINTERESTEDIN )
+{
+    m_nStartWizard = 0;
+    try
+    {
+        Sequence< Any > aWizArgs(1);
+        PropertyValue aValue;
+        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseLocation"));
+        aValue.Value <<= m_sCurrentURL;
+        aWizArgs[0] <<= aValue;
 
+        ::vos::OGuard aGuard(Application::GetSolarMutex());
+        Reference< XJobExecutor > xTableWizard(m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard")),aWizArgs),UNO_QUERY);
+
+        if ( xTableWizard.is() )
+            xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "caught an exception while starting the table wizard!");
+    }
+    m_xMySelf = NULL;
+    return 0L;
+}
 }
 // -------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_DBContentLoader2()
@@ -513,3 +610,4 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii("Pattern") );
     xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii("private:factory/sdatabase") );
 }
+// -----------------------------------------------------------------------------
