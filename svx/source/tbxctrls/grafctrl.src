@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:21:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ String RID_SVXSTR_GRAFCROP
     Text[ portuguese_brazilian ] = "Crop";
     Text[ japanese ] = "ÄØÐÝ¸Þ";
     Text[ korean ] = "´Ùµë±â";
-    Text[ chinese_simplified ] = "¼ôÏÂ";
+    Text[ chinese_simplified ] = "²Ã¼ô";
     Text[ chinese_traditional ] = "µô°Å";
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "ÇÞÊÕÇÕ";
@@ -400,6 +400,7 @@ String RID_SVXSTR_GRAFCROP
 };
 
 // ********************************************************************** EOF
+
 
 
 
