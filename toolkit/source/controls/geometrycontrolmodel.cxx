@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-21 17:31:20 $
+ *  last change: $Author: tbe $ $Date: 2001-02-28 10:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,17 @@
 #define GCM_PROPERTY_ID_POS_Y       2
 #define GCM_PROPERTY_ID_WIDTH       3
 #define GCM_PROPERTY_ID_HEIGHT      4
+#define GCM_PROPERTY_ID_NAME        5
+#define GCM_PROPERTY_ID_TABINDEX    6
+#define GCM_PROPERTY_ID_CLASSID     7
 
-#define GCM_PROPERTY_POS_X  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
-#define GCM_PROPERTY_POS_Y  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
-#define GCM_PROPERTY_WIDTH  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
-#define GCM_PROPERTY_HEIGHT ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
+#define GCM_PROPERTY_POS_X      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionX"))
+#define GCM_PROPERTY_POS_Y      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionY"))
+#define GCM_PROPERTY_WIDTH      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))
+#define GCM_PROPERTY_HEIGHT     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))
+#define GCM_PROPERTY_NAME       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))
+#define GCM_PROPERTY_TABINDEX   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabIndex"))
+#define GCM_PROPERTY_CLASSID    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassId"))
 
 #define DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT
 
@@ -112,6 +118,9 @@
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
+        ,m_nName(::rtl::OUString())
+        ,m_nTabIndex(0)
+        ,m_nClassId(0)
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -125,10 +134,13 @@
         decrement(m_refCount);
 
         // register our members for the property handling of the OPropertyContainer
-        registerProperty(GCM_PROPERTY_POS_X,    GCM_PROPERTY_ID_POS_X,  DEFAULT_ATTRIBS(), &m_nPosX, ::getCppuType(&m_nPosX));
-        registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,  DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
-        registerProperty(GCM_PROPERTY_WIDTH,    GCM_PROPERTY_ID_WIDTH,  DEFAULT_ATTRIBS(), &m_nWidth, ::getCppuType(&m_nWidth));
-        registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT, DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
+        registerProperty(GCM_PROPERTY_POS_X,    GCM_PROPERTY_ID_POS_X,      DEFAULT_ATTRIBS(), &m_nPosX, ::getCppuType(&m_nPosX));
+        registerProperty(GCM_PROPERTY_POS_Y,    GCM_PROPERTY_ID_POS_Y,      DEFAULT_ATTRIBS(), &m_nPosY, ::getCppuType(&m_nPosY));
+        registerProperty(GCM_PROPERTY_WIDTH,    GCM_PROPERTY_ID_WIDTH,      DEFAULT_ATTRIBS(), &m_nWidth, ::getCppuType(&m_nWidth));
+        registerProperty(GCM_PROPERTY_HEIGHT,   GCM_PROPERTY_ID_HEIGHT,     DEFAULT_ATTRIBS(), &m_nHeight, ::getCppuType(&m_nHeight));
+        registerProperty(GCM_PROPERTY_NAME,     GCM_PROPERTY_ID_NAME,       DEFAULT_ATTRIBS(), &m_nName, ::getCppuType(&m_nName));
+        registerProperty(GCM_PROPERTY_TABINDEX, GCM_PROPERTY_ID_TABINDEX,   DEFAULT_ATTRIBS(), &m_nTabIndex, ::getCppuType(&m_nTabIndex));
+        registerProperty(GCM_PROPERTY_CLASSID,  GCM_PROPERTY_ID_CLASSID,    DEFAULT_ATTRIBS(), &m_nClassId, ::getCppuType(&m_nClassId));
     }
 
     //--------------------------------------------------------------------
@@ -228,6 +240,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/21 17:31:20  ab
+ *  Support for XScriptEventsSupplier added
+ *
  *  Revision 1.1  2001/01/24 14:55:12  mt
  *  model for dialog controls (weith pos/size)
  *
