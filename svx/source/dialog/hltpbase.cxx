@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-11-22 13:46:00 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #endif
 
 #include <sfx2/sfxsids.hrc>
+
 #define ITEMID_MACRO SID_ATTR_MACROITEM
 #ifndef _SFXMACITEM_HXX
 #include <svtools/macitem.hxx>
