@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:29:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             SwTxtNode * pTxtNode =
                 GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
             USHORT nWidthOfTabs = pTxtNode->GetWidthOfLeadingTabs();
-            GetDoc()->RemoveLeadingChars(*GetCrsr()->GetPoint(), '\t');
+            GetDoc()->RemoveLeadingWhiteSpace( *GetCrsr()->GetPoint() );
 
             BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
             for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
