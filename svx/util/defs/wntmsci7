@@ -19404,3 +19404,7 @@ _real@8@40088000000000000000
 ?SvxUnoConvertFromMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
 ?SvxUnoConvertToMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
 ?PreNotify@RubyEdit@@EAEJAAVNotifyEvent@@@Z
+??0SubsetMap@@QAE@PBVFontCharMap@@@Z
+?ApplyCharMap@SubsetMap@@AAEXPBVFontCharMap@@@Z
+?GetSubsetCount@SubsetMap@@QBEHXZ
+?GetCJKFont@SvxFontPrevWindow@@QAEAAVSvxFont@@XZ
