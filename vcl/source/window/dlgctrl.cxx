@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-25 10:06:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-26 12:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,12 +1076,13 @@ Window* Window::GetLabeledBy() const
     Window* pFrameWindow = ImplGetFrameWindow();
     Window* pParent = ImplGetParent();
 
+/* #105538# OJ approved by PL
     WinBits nFrameStyle = pFrameWindow->GetStyle();
     if( ! ( nFrameStyle & WB_DIALOGCONTROL )
         || ( nFrameStyle & WB_NODIALOGCONTROL )
         )
         return NULL;
-
+*/
     if ( mpRealParent )
         pWindow = mpRealParent->GetParentLabeledBy( this );
 
