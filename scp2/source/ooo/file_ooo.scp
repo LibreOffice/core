@@ -1,0 +1,1783 @@
+/*************************************************************************
+*
+*  $RCSfile: file_ooo.scp,v $
+*
+*  $Revision: 1.1 $
+*
+*  last change: $Author: is $ $Date: 2004-02-05 18:10:03 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+* = ============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+* = ================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Basic_Depot
+    Dir = gid_Dir_Basic_Depot;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvdepot.zip";
+End
+
+File gid_File_Basic_Euro
+    Dir = gid_Dir_Basic_Euro;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrveuro.zip";
+End
+
+File gid_File_Basic_Form
+    Dir = gid_Dir_Basic_Formwizard;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvform.zip";
+End
+
+File gid_File_Basic_Gimmicks
+    Dir = gid_Dir_Basic_Gimmicks;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvgimmicks.zip";
+End
+
+File gid_File_Basic_Importwiz
+    Dir = gid_Dir_Basic_Importwiz;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvimport.zip";
+End
+
+File gid_File_Basic_Launcher
+    Dir = gid_Dir_Basic_Launcher;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvlauncher.zip";
+End
+
+File gid_File_Basic_Schedule
+    Dir = gid_Dir_Basic_Schedule;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvschedule.zip";
+End
+
+File gid_File_Basic_Scriptbindinglib
+    Dir = gid_Dir_Basic_Scriptbindinglib;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "scriptbindinglib.zip";
+End
+
+File gid_File_Basic_Template
+    Dir = gid_Dir_Basic_Template;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtemplate.zip";
+End
+
+File gid_File_Basic_Tools
+    Dir = gid_Dir_Basic_Tools;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvtools.zip";
+End
+
+File gid_File_Basic_User
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_User_Basic;
+    Name = "basicusr.zip";
+End
+
+File gid_File_Basic_User_Standard
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Dir = gid_Dir_Basic_Standard;
+    Name = "basicsrvstandard.zip";
+End
+
+File gid_File_Basic_Webwiz
+    Dir = gid_Dir_Basic_Webwiz;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "basicsrvweb.zip";
+End
+
+#ifdef UNX
+
+File gid_File_Bin_Getstylegnome
+    BIN_FILE_BODY;
+    Name = "getstyle-gnome";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+End
+
+#endif
+
+#ifdef UNX
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Bin_Javaldx
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+    Name = EXENAME(javaldx);
+End
+
+#endif
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Bin_Jvmsetup
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = EXENAME(jvmsetup);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+#ifdef UNX
+
+File gid_File_Bin_Jvmsetup_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "jvmsetup.bin";
+End
+
+#endif
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Ooovirg_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "ooovirg";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Bin_Oovirghook
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "OoVirgHook.dll";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Bin_Openofficehooktray
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "OpenOfficeHookTray.exe";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Pagein
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein";
+End
+
+#endif
+
+File gid_File_Bin_Pkgchk
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "pkgchk.bin";
+  #else
+    Name = "pkgchk.exe";
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Bin_Pluginapp
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "pluginapp.bin";
+    Styles = (PACKED);
+End
+
+#endif
+
+File gid_File_Bin_Setup
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = EXENAME(setup);
+  #ifdef WNT
+    Styles = (PACKED, SETUPZIP, PATCH_SO_NAME);
+  #endif
+  #ifdef UNX
+    Styles = (PACKED, SETUPZIP, UNIX_SOFTLINK);
+  #endif
+End
+
+File gid_File_Bin_Soffice
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = EXENAME(soffice);
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
+    Styles = (PACKED);
+  #endif
+End
+
+#ifdef UNX
+
+File gid_File_Bin_Soffice_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "soffice.bin";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Sopatchlevel_Sh
+    BIN_FILE_BODY;
+    Name = "sopatchlevel.sh";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLARIS
+
+File gid_File_Bin_Sorev
+    BIN_FILE_BODY;
+    Name = "sorev";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Bin_Spadmin_Bin
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "spadmin.bin";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Binary_Setup
+    BIN_FILE_BODY;
+    Name = "setup.bin";
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, SETUPZIP);
+End
+
+#endif
+
+STD_SETUPZIP_BMP_FILE( gid_File_Bmp_Installation, oo_product.bmp )
+
+File gid_File_Bmp_Ssologin
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "ssologin.bmp";
+    Styles = (PACKED);
+End
+
+File gid_File_Dtd_Accelerator
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "accelerator.dtd";
+End
+
+File gid_File_Dtd_Dialog
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "dialog.dtd";
+End
+
+File gid_File_Dtd_Event
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "event.dtd";
+End
+
+File gid_File_Dtd_Image
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "image.dtd";
+End
+
+File gid_File_Dtd_Libraries
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "libraries.dtd";
+End
+
+File gid_File_Dtd_Library
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "library.dtd";
+End
+
+File gid_File_Dtd_Manifest
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "Manifest.dtd";
+End
+
+File gid_File_Dtd_Menubar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "menubar.dtd";
+End
+
+File gid_File_Dtd_Module
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "module.dtd";
+End
+
+File gid_File_Dtd_Office
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "office.dtd";
+End
+
+File gid_File_Dtd_Statusbar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "statusbar.dtd";
+End
+
+File gid_File_Dtd_Toolbar
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "toolbar.dtd";
+End
+
+#ifdef UNX
+
+File gid_File_Exe_Nswrapper
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "nswrapper";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Exe_Quickstart
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "quickstart.exe";
+End
+
+#endif
+
+#ifdef WNT
+
+File gid_File_Exe_Regsvrex
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "regsvrex.exe";
+End
+
+#endif
+
+STD_FILTER_FILE( gid_File_Filter_Eme, eme)
+
+STD_FILTER_FILE( gid_File_Filter_Emp, emp)
+
+STD_FILTER_FILE( gid_File_Filter_Icg, icg)
+
+File gid_File_Fonts_Truetype_All_Delete_Only
+    TXT_FILE_BODY;
+  #ifdef WNT
+    Dir = gid_Dir_Winfonts;
+  #else
+    Dir = gid_Dir_Fonts_Truetype;
+  #endif
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Help_Common_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(shared);
+End
+
+File gid_File_Help_Help_Zip
+    Dir = gid_Dir_Help;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "helpxsl.zip";
+End
+
+File gid_File_Help_Sbasic_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(sbasic);
+End
+
+File gid_File_Help_Schart_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(schart);
+End
+
+File gid_File_Html_Thirdpartylicensereadme
+    Name = "THIRDPARTYLICENSEREADME.html";
+    Dir = PREDEFINED_PROGDIR;
+    Styles = (WORKSTATION);
+    TXT_FILE_BODY;
+End
+
+File gid_File_Inethist_Dat_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "inethist.dat";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#ifdef INCLUDE_JAVA_ACCESSBRIDGE
+
+File gid_File_Jar_Accessbridge
+    TXT_FILE_BODY;
+    Name = "java_uno_accessbridge.jar";
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Classes, classes )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Common, common )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Java_Uno
+    TXT_FILE_BODY;
+    Name = JARFILENAME(java_uno);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Js, js )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Juh
+    TXT_FILE_BODY;
+    Name = JARFILENAME(juh);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Jurt
+    TXT_FILE_BODY;
+    Name = JARFILENAME(jurt);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Jut
+    TXT_FILE_BODY;
+    Name = JARFILENAME(jut);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+#ifndef MACOSX
+
+File gid_File_Jar_Officebean
+    TXT_FILE_BODY;
+    Name = JARFILENAME(officebean);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED);
+End
+
+#endif
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Report, report )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Ridl
+    TXT_FILE_BODY;
+    Name = JARFILENAME(ridl);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Sandbox
+    TXT_FILE_BODY;
+    Name = JARFILENAME(sandbox);
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+File gid_File_Jar_Unoil
+    TXT_FILE_BODY;
+    Name = "unoil.jar";
+    Dir = gid_Dir_Classes;
+    Styles = (PACKED,DONT_OVERWRITE,SETUPZIP);
+End
+
+#endif
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Xt, xt )
+
+#endif
+
+File gid_File_Java_Bak_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "java.bak";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Java_Ini_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "java.ini";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Mod_Chart
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "chart.mod";
+End
+
+File gid_File_Mod_Datastyl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "datastyl.mod";
+End
+
+File gid_File_Mod_Defs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "defs.mod";
+End
+
+File gid_File_Mod_Drawing
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "drawing.mod";
+End
+
+File gid_File_Mod_Dtypes
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "dtypes.mod";
+End
+
+File gid_File_Mod_Form
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "form.mod";
+End
+
+File gid_File_Mod_Meta
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "meta.mod";
+End
+
+File gid_File_Mod_Nmspace
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "nmspace.mod";
+End
+
+File gid_File_Mod_Office
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "office.mod";
+End
+
+File gid_File_Mod_Script
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "script.mod";
+End
+
+File gid_File_Mod_Settings
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "settings.mod";
+End
+
+File gid_File_Mod_Style
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "style.mod";
+End
+
+File gid_File_Mod_Table
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "table.mod";
+End
+
+File gid_File_Mod_Text
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Dtd_Ooo_1_0;
+    Name = "text.mod";
+End
+
+#ifndef WITHOUT_MOZILLA 
+
+#ifndef MACOSX
+
+File gid_File_Mozilla_Runtime
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    Dir = gid_Dir_Program;
+    Name = "mozruntime.zip";
+End
+
+#endif
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Msgbox_Gnome
+    BIN_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "msgbox-gnome";
+End
+
+#endif
+
+File gid_File_Oo_Inet_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/Inet.xcs";
+End
+
+File gid_File_Oo_Inet_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/Inet.xcu";
+End
+
+File gid_File_Oo_Office_Addons_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Addons.xcs";
+End
+
+File gid_File_Oo_Office_Calc_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Calc.xcs";
+End
+
+File gid_File_Oo_Office_Calc_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Calc.xcu";
+End
+
+File gid_File_Oo_Office_Chart_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Chart.xcs";
+End
+
+File gid_File_Oo_Office_Commands_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Commands.xcs";
+End
+
+File gid_File_Oo_Office_Common_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Common.xcs";
+End
+
+File gid_File_Oo_Office_Common_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Common.xcu";
+End
+
+File gid_File_Oo_Office_Compatibility_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Compatibility.xcs";
+End
+
+File gid_File_Oo_Office_Compatibility_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
+End
+
+File gid_File_Oo_Office_Dataaccess_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/DataAccess.xcs";
+End
+
+File gid_File_Oo_Office_Dataaccess_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/DataAccess.xcu";
+End
+
+File gid_File_Oo_Office_Draw_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Draw.xcs";
+End
+
+File gid_File_Oo_Office_Filter_Base_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "fcfg_base.zip";
+End
+
+File gid_File_Oo_Office_Filter_Chart_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "fcfg_chart.zip";
+End
+
+File gid_File_Oo_Office_Impress_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Impress.xcs";
+End
+
+File gid_File_Oo_Office_Java_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Java.xcs";
+End
+
+File gid_File_Oo_Office_Jobs_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Jobs.xcs";
+End
+
+File gid_File_Oo_Office_Jobs_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Jobs.xcu";
+End
+
+File gid_File_Oo_Office_Labels_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Labels.xcs";
+End
+
+File gid_File_Oo_Office_Labels_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Labels.xcu";
+End
+
+File gid_File_Oo_Office_Linguistic_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
+End
+
+File gid_File_Oo_Office_Math_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Math.xcs";
+End
+
+File gid_File_Oo_Office_Math_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Math.xcu";
+End
+
+File gid_File_Oo_Office_Protocolhandler_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/ProtocolHandler.xcs";
+End
+
+File gid_File_Oo_Office_Protocolhandler_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/ProtocolHandler.xcu";
+End
+
+File gid_File_Oo_Office_Scripting_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Scripting.xcs";
+End
+
+File gid_File_Oo_Office_Scripting_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Scripting.xcu";
+End
+
+File gid_File_Oo_Office_Security_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Security.xcs";
+End
+
+File gid_File_Oo_Office_Security_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Security.xcu";
+End
+
+File gid_File_Oo_Office_Sfx_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/SFX.xcs";
+End
+
+File gid_File_Oo_Office_Sfx_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/SFX.xcu";
+End
+
+File gid_File_Oo_Office_Substitution_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Substitution.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/UI.xcs";
+End
+
+File gid_File_Oo_Office_Ui_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/UI.xcu";
+End
+
+File gid_File_Oo_Office_Views_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Views.xcs";
+End
+
+File gid_File_Oo_Office_Writer_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Writer.xcs";
+End
+
+File gid_File_Oo_Office_Writer_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Writer.xcu";
+End
+
+File gid_File_Oo_Office_Writerweb_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/WriterWeb.xcs";
+End
+
+File gid_File_Oo_Setup_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/Setup.xcs";
+End
+
+File gid_File_Oo_Setup_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/Setup.xcu";
+End
+
+File gid_File_Oo_Typedetection_Filter_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
+    Name = "/registry/schema/org/openoffice/TypeDetection/Filter.xcs";
+End
+
+File gid_File_Oo_Typedetection_Graphicfilter_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
+    Name = "/registry/schema/org/openoffice/TypeDetection/GraphicFilter.xcs";
+End
+
+File gid_File_Oo_Typedetection_Misc_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
+    Name = "/registry/schema/org/openoffice/TypeDetection/Misc.xcs";
+End
+
+File gid_File_Oo_Typedetection_Types_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
+    Name = "/registry/schema/org/openoffice/TypeDetection/Types.xcs";
+End
+
+File gid_File_Oo_Ucb_Configuration_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb;
+    Name = "/registry/schema/org/openoffice/ucb/Configuration.xcs";
+End
+
+File gid_File_Oo_Ucb_Configuration_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb;
+    Name = "/registry/data/org/openoffice/ucb/Configuration.xcu";
+End
+
+File gid_File_Oo_Ucb_Hierarchy_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb;
+    Name = "/registry/schema/org/openoffice/ucb/Hierarchy.xcs";
+End
+
+File gid_File_Oo_Ucb_Store_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb;
+    Name = "/registry/schema/org/openoffice/ucb/Store.xcs";
+End
+
+File gid_File_Oo_Userprofile_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/UserProfile.xcs";
+End
+
+File gid_File_Oo_Vcl_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/VCL.xcs";
+End
+
+File gid_File_Oo_Vcl_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/VCL.xcu";
+End
+
+File gid_File_Program_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Program_Resource_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Resource;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#ifdef UNX
+
+File gid_File_Psprint_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Psprint;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Psprint_Fontmetric_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Psprint_Fontmetric;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#endif
+
+File gid_File_Rdb_Setup_Services
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, OVERWRITE, SETUPZIP);
+    Name = "setup_services.rdb";
+End
+
+File gid_File_Rdb_Types
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED, OVERWRITE, SETUPZIP);
+    Name = "types.rdb";
+End
+
+File gid_File_Registry_Lang
+    Dir = gid_Dir_Share_Registry_Res_Lang;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(registry);
+End
+
+#ifdef UNX
+
+File gid_File_Script_Functions
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "functions";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Script_Update_Redhat_User_Menus
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "update-redhat-user-menus";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Script_Update_Suse_User_Menus
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "update-suse-user-menus";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Script_Update_User_Menus
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "update-user-menus";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Script_Update_User_Mime_Data
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "update-user-mime-data";
+    Styles = (PACKED);
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Script_Viewdoc
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "viewdoc";
+    Styles = (PACKED);
+End
+
+#endif
+
+File gid_File_Scripts_Beanshell
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsBeanShell.zip";
+End
+
+File gid_File_Scripts_Java
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsJava.zip";
+End
+
+File gid_File_Scripts_Javascript
+    Dir = gid_Dir_Share_Scripts;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "ScriptsJavascript.zip";
+End
+
+#ifdef UNX
+
+File gid_File_Share_Psprint_Fontmetric_Builtincache_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Psprint_Fontmetric;
+    Name = "builtincache";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#endif
+
+File gid_File_Share_Registry_Data_Org_Openoffice_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Registry_Data_Org_Openoffice_Office_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Registry_Data_Org_Openoffice_Ucb_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Uno_Packages_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Uno_Packages_Cache_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Uno_Packages_Cache;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Share_Uno_Packages_Office_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Uno_Packages_Office;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Html_Soffice, soffice.html)
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Sxc_Soffice, soffice.sxc)
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Sxd_Soffice, soffice.sxd)
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Sxi_Soffice, soffice.sxi)
+
+#endif
+
+#ifdef WNT
+
+STD_SHELLNEW_FILE(gid_File_Shellnew_Sxw_Soffice, soffice.sxw)
+
+#endif
+
+File gid_File_Soffice_Cfg_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "soffice.cfg";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_Txt_License
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_ALL_LANG(Name, LICENSE);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, license, txt);
+  #endif
+    Styles = (PACKED, SETUPZIP, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_License_Html
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_TXT_ALL_LANG(Name, LICENSE, html);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, license, html);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+#ifdef UNX
+
+File gid_File_Txt_Pagein_Calc
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-calc";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Txt_Pagein_Common
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-common";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Txt_Pagein_Draw
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-draw";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Txt_Pagein_Impress
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-impress";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Txt_Pagein_Writer
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "pagein-writer";
+End
+
+#endif
+
+File gid_File_Txt_Readme
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_ALL_LANG(Name, README);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, readme, txt);
+  #endif
+    Styles = (PACKED, SETUPZIP, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_Readme_Html
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme;
+  #ifdef UNX
+    README_TXT_ALL_LANG(Name, README, html);
+  #endif
+  #ifdef WNT
+    README_TXT_ALL_LANG(Name, readme, html);
+  #endif
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
+File gid_File_Txt_Response_Workstation
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Response;
+    Name = "response_workstation.txt";
+    Styles = (PACKED);
+End
+
+File gid_File_User_Autotext_Bau_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Autotext;
+    Name = "*.bau";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Backup_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Backup;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Bookmark_Url_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Bookmark;
+    Name = "*.url";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Cache_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Cache;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Bak_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.bak";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Cfg_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.cfg";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Dat_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.dat";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Config_All_Ini_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.ini";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Lck_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.lck";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Rdb_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.rdb";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_All_Scs_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_Javarc_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "javarc";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_Schedule_Cfg_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config;
+    Name = "schedule.cfg";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_Sofficecfg_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config_Sofficecfg;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_Sofficecfg_Bitmap_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config_Sofficecfg_Bitmaps;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Config_Sofficecfg_Metainf_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Config_Sofficecfg_Metainf;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Database_All_Url_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Database;
+    Name = "*.url";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Desktop_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Desktop;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Explorer_All_Scc_Delete_Only
+    Dir = gid_Dir_User_Explorer;
+    TXT_FILE_BODY;
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+    Name = "*.scc";
+End
+
+File gid_File_User_Gallery_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Gallery;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Registry_Cache_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Registry_Cache;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Registry_Data_Org_Openoffice_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Registry_Data_Org_Openoffice;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Registry_Data_Org_Openoffice_Office_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Registry_Data_Org_Openoffice_Office;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Registry_Data_Org_Openoffice_Ucb_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Registry_Data_Org_Openoffice_Ucb;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Registry_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Registry;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Store_All_Txt_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Store;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Store_Cal_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Store;
+    Name = "*.cal";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Store_Trash_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Store_Trash;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Temp_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Temp;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Template_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Template;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Uno_Packages_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Uno_Packages;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Uno_Packages_Cache_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Uno_Packages_Cache;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP);
+End
+
+File gid_File_User_Wordbook_Dic_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_User_Wordbook;
+    Name = "*.dic";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_User_Work_All_Delete_Only
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Work;
+    Name = "*.*";
+    Styles = (DELETE_ONLY,CHECK_TIMESTAMP,WORKSTATION);
+End
+
+File gid_File_Xsl_Userregistry
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "user_registry.xsl";
+End

@@ -1,0 +1,1314 @@
+/*************************************************************************
+*
+*  $RCSfile: directory_ooo.scp,v $
+*
+*  $Revision: 1.1 $
+*
+*  last change: $Author: is $ $Date: 2004-02-05 18:10:01 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+* = ============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+* = ================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
+
+#include "macros.inc"
+
+Directory gid_Dir_Program
+    ParentID = PD_PROGDIR;
+    DosName = "program";
+End
+
+Directory gid_Dir_Program_Remote
+    ParentID = gid_Dir_Program;
+    DosName = "remote";
+End
+
+Directory gid_Dir_Program_Local
+    ParentID = gid_Dir_Program;
+    DosName = "local";
+End
+
+Directory gid_Dir_Addin
+    Styles = (CREATE);
+    ParentID = gid_Dir_Program;
+    DosName = "addin";
+End
+
+Directory gid_Dir_Addin_Source
+    ParentID = gid_Dir_Addin;
+    DosName = "source";
+End
+
+Directory gid_Dir_Filter
+    ParentID = gid_Dir_Program;
+    DosName = "filter";
+End
+
+Directory gid_Dir_Resource
+    ParentID = gid_Dir_Program;
+    DosName = "resource";
+End
+
+Directory gid_Dir_Httphome
+    ParentID = gid_Dir_Program;
+    DosName = "httphome";
+End
+
+Directory gid_Dir_Classes
+    ParentID = gid_Dir_Program;
+    DosName = "classes";
+End
+
+#ifdef WNT
+
+Directory gid_Dir_Shellnew
+    ParentID = gid_Dir_Program;
+    DosName = "shellnew";
+End
+
+#endif
+
+Directory gid_Dir_User
+    ParentID = PD_PROGDIR;
+    DosName = "user";
+End
+
+Directory gid_Dir_User_Registry
+    ParentID = gid_Dir_User;
+    DosName = "registry";
+End
+
+Directory gid_Dir_User_Registry_Data
+    ParentID = gid_Dir_User_Registry;
+    DosName = "data";
+End
+
+Directory gid_Dir_User_Registry_Data_Org
+    ParentID = gid_Dir_User_Registry_Data;
+    DosName = "org";
+End
+
+Directory gid_Dir_User_Registry_Data_Org_Openoffice
+    ParentID = gid_Dir_User_Registry_Data_Org;
+    DosName = "openoffice";
+End
+
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Office
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
+    DosName = "Office";
+End
+
+Directory gid_Dir_User_Registry_Data_Org_Openoffice_Ucb
+    ParentID = gid_Dir_User_Registry_Data_Org_Openoffice;
+    DosName = "ucb";
+End
+
+Directory gid_Dir_User_Registry_Cache
+    ParentID = gid_Dir_User_Registry;
+    DosName = "cache";
+End
+
+Directory gid_Dir_User_Xslt
+    ParentID = gid_Dir_User;
+    DosName = "xslt";
+End
+
+Directory gid_Dir_User_Autotext
+    ParentID = gid_Dir_User;
+    DosName = "autotext";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Autotext_Language
+    ParentID = gid_Dir_User_Autotext;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_User_Uno_Packages
+    ParentID = gid_Dir_User;
+    DosName = "uno_packages";
+    Styles = (CREATE);
+End
+
+Directory gid_Dir_User_Uno_Packages_Cache
+    ParentID = gid_Dir_User_Uno_Packages;
+    DosName = "cache";
+End
+
+Directory gid_Dir_User_Temp
+    ParentID = gid_Dir_User;
+    DosName = "temp";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Autocorr
+    ParentID = gid_Dir_User;
+    DosName = "autocorr";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Bookmark
+    ParentID = gid_Dir_User;
+    DosName = "bookmark";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Cache
+    ParentID = gid_Dir_User;
+    DosName = "cache";
+End
+
+Directory gid_Dir_User_Scripts
+    ParentID = gid_Dir_User;
+    DosName = "Scripts";
+    Styles = (WORKSTATION,CREATE);
+End
+
+Directory gid_Dir_Backup
+    ParentID = gid_Dir_User;
+    DosName = "backup";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Basic
+    ParentID = gid_Dir_User;
+    DosName = "basic";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Basic_Standard
+    ParentID = gid_Dir_User_Basic;
+    DosName = "Standard";
+End
+
+Directory gid_Dir_User_Config
+    ParentID = gid_Dir_User;
+    DosName = "config";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Config_Sofficecfg
+    ParentID = gid_Dir_User_Config;
+    DosName = "soffice.cfg";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Config_Sofficecfg_Metainf
+    ParentID = gid_Dir_User_Config_Sofficecfg;
+    DosName = "META-INF";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Config_Sofficecfg_Bitmaps
+    ParentID = gid_Dir_User_Config_Sofficecfg;
+    DosName = "Bitmaps";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Template
+    ParentID = gid_Dir_User;
+    DosName = "template";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Database
+    ParentID = gid_Dir_User;
+    DosName = "database";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Database_Biblio
+    ParentID = gid_Dir_Database;
+    DosName = "biblio";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Desktop
+    ParentID = gid_Dir_User;
+    DosName = "desktop";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Explorer
+    ParentID = gid_Dir_User;
+    DosName = "explorer";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_User_Gallery
+    ParentID = gid_Dir_User;
+    DosName = "gallery";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_User_Wordbook
+    ParentID = gid_Dir_User;
+    DosName = "wordbook";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Store
+    ParentID = gid_Dir_User;
+    DosName = "store";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Store_Trash
+    ParentID = gid_Dir_Store;
+    DosName = "trash";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_Download
+    ParentID = gid_Dir_User;
+    DosName = "download";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_Work
+    ParentID = gid_Dir_User;
+    DosName = "work";
+    Styles = (WORKSTATION);
+End
+
+Directory gid_Dir_Plugin
+    ParentID = gid_Dir_User;
+    DosName = "plugin";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Share
+    ParentID = PD_PROGDIR;
+    DosName = "share";
+End
+
+Directory gid_Dir_Share_Migration
+    ParentID = gid_Dir_Share;
+    DosName = "migration";
+End
+
+Directory gid_Dir_Share_Response
+    ParentID = gid_Dir_Share;
+    DosName = "response";
+End
+
+Directory gid_Dir_Share_Readme
+    ParentID = gid_Dir_Share;
+    DosName = "readme";
+End
+
+Directory gid_Dir_Fonts
+    ParentID = gid_Dir_Share;
+    DosName = "fonts";
+End
+
+#ifdef WNT
+
+Directory gid_Dir_Winfonts
+    ParentID = gid_Dir_Fonts;
+    DosName = "truetype";
+End
+
+#endif
+
+Directory gid_Dir_Share_Xslt
+    ParentID = gid_Dir_Share;
+    DosName = "xslt";
+End
+
+Directory gid_Dir_Share_Xslt_Docbook
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "docbook";
+End
+
+Directory gid_Dir_Share_Xslt_Xhtml
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "xhtml";
+End
+
+Directory gid_Dir_Share_Xslt_Microsoftwordxml
+    ParentID = gid_Dir_Share_Xslt;
+    DosName = "MicrosoftWord2003";
+End
+
+Directory gid_Dir_Share_Dtd
+    ParentID = gid_Dir_Share;
+    DosName = "dtd";
+End
+
+Directory gid_Dir_Share_Dtd_Ooo
+    ParentID = gid_Dir_Share_Dtd;
+    DosName = "officedocument";
+End
+
+Directory gid_Dir_Share_Dtd_Ooo_1_0
+    ParentID = gid_Dir_Share_Dtd_Ooo;
+    DosName = "1_0";
+End
+
+Directory gid_Dir_Share_Dtd_Math
+    ParentID = gid_Dir_Share_Dtd;
+    DosName = "math";
+End
+
+Directory gid_Dir_Share_Dtd_Math_1_01
+    ParentID = gid_Dir_Share_Dtd_Math;
+    DosName = "1_01";
+End
+
+Directory gid_Dir_Share_Pqa
+    ParentID = gid_Dir_Share;
+    DosName = "pqa";
+End
+
+Directory gid_Dir_Share_Config
+    ParentID = gid_Dir_Share;
+    DosName = "config";
+End
+
+Directory gid_Dir_Share_Registry
+    ParentID = gid_Dir_Share;
+    DosName = "registry";
+End
+
+Directory gid_Dir_Share_Registry_Schema
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "schema";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org
+    ParentID = gid_Dir_Share_Registry_Schema;
+    HostName = "org";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice
+    ParentID = gid_Dir_Share_Registry_Schema_Org;
+    HostName = "openoffice";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Office
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    HostName = "Office";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Ucb
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    HostName = "ucb";
+End
+
+Directory gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection
+    ParentID = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    HostName = "TypeDetection";
+End
+
+Directory gid_Dir_Share_Registry_Data
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "data";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org
+    ParentID = gid_Dir_Share_Registry_Data;
+    HostName = "org";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice
+    ParentID = gid_Dir_Share_Registry_Data_Org;
+    HostName = "openoffice";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Office
+    ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    HostName = "Office";
+End
+
+Directory gid_Dir_Share_Registry_Data_Org_Openoffice_Ucb
+    ParentID = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    HostName = "ucb";
+End
+
+Directory gid_Dir_Share_Registry_Res
+    ParentID = gid_Dir_Share_Registry;
+    HostName = "res";
+End
+
+Directory gid_Dir_Share_Registry_Res_Lang
+    ParentID = gid_Dir_Share_Registry_Res;
+    DIR_ISOLANGUAGE_ALL_LANG_2;
+End
+
+Directory gid_Dir_Share_Registry_Res_Lang_Org
+    ParentID = gid_Dir_Share_Registry_Res_Lang;
+    HostName = "org";
+End
+
+Directory gid_Dir_Share_Registry_Res_Lang_Org_Openoffice
+    ParentID = gid_Dir_Share_Registry_Res_Lang_Org;
+    HostName = "openoffice";
+End
+
+Directory gid_Dir_Share_Registry_Res_Lang_Org_Openoffice_Office
+    ParentID = gid_Dir_Share_Registry_Res_Lang_Org_Openoffice;
+    HostName = "Office";
+End
+
+Directory gid_Dir_Share_Registry_Res_Lang_Org_Openoffice_Ucb
+    ParentID = gid_Dir_Share_Registry_Res_Lang_Org_Openoffice;
+    HostName = "ucb";
+End
+
+Directory gid_Dir_Autotext
+    ParentID = gid_Dir_Share;
+    DosName = "autotext";
+End
+
+Directory gid_Dir_Autotext_Language
+    ParentID = gid_Dir_Autotext;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Share_Autocorr
+    ParentID = gid_Dir_Share;
+    DosName = "autocorr";
+    Styles = (WORKSTATION, CREATE);
+End
+
+Directory gid_Dir_Basic
+    ParentID = gid_Dir_Share;
+    DosName = "basic";
+End
+
+Directory gid_Dir_Basic_Euro
+    ParentID = gid_Dir_Basic;
+    DosName = "Euro";
+End
+
+Directory gid_Dir_Basic_Formwizard
+    ParentID = gid_Dir_Basic;
+    DosName = "FormWizard";
+End
+
+Directory gid_Dir_Basic_Gimmicks
+    ParentID = gid_Dir_Basic;
+    DosName = "Gimmicks";
+End
+
+Directory gid_Dir_Basic_Depot
+    ParentID = gid_Dir_Basic;
+    DosName = "Depot";
+End
+
+Directory gid_Dir_Basic_Launcher
+    ParentID = gid_Dir_Basic;
+    DosName = "Launcher";
+End
+
+Directory gid_Dir_Basic_Schedule
+    ParentID = gid_Dir_Basic;
+    DosName = "Schedule";
+End
+
+Directory gid_Dir_Basic_Template
+    ParentID = gid_Dir_Basic;
+    DosName = "Template";
+End
+
+Directory gid_Dir_Basic_Tools
+    ParentID = gid_Dir_Basic;
+    DosName = "Tools";
+End
+
+Directory gid_Dir_Basic_Importwiz
+    ParentID = gid_Dir_Basic;
+    DosName = "ImportWizard";
+End
+
+Directory gid_Dir_Basic_Webwiz
+    ParentID = gid_Dir_Basic;
+    DosName = "WebWizard";
+End
+
+Directory gid_Dir_Basic_Scriptbindinglib
+    ParentID = gid_Dir_Basic;
+    DosName = "ScriptBindingLibrary";
+End
+
+Directory gid_Dir_Share_Scripts
+    ParentID = gid_Dir_Share;
+    DosName = "Scripts";
+End
+
+Directory gid_Dir_Share_Uno_Packages
+    ParentID = gid_Dir_Share;
+    DosName = "uno_packages";
+    Styles = (CREATE);
+End
+
+Directory gid_Dir_Share_Uno_Packages_Cache
+    ParentID = gid_Dir_Share_Uno_Packages;
+    DosName = "cache";
+End
+
+Directory gid_Dir_Share_Uno_Packages_Office
+    ParentID = gid_Dir_Share_Uno_Packages;
+    DosName = "Office";
+End
+
+Directory gid_Dir_Share_Dict
+    ParentID = gid_Dir_Share;
+    DosName = "dict";
+End
+
+Directory gid_Dir_Share_Dict_Ooo
+    ParentID = gid_Dir_Share_Dict;
+    DosName = "ooo";
+    Styles = (CREATE);
+End
+
+Directory gid_Dir_Config
+    ParentID = gid_Dir_Share;
+    DosName = "config";
+End
+
+Directory gid_Dir_Config_Language
+    ParentID = gid_Dir_Config;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Share_Config_Help
+    ParentID = gid_Dir_Config;
+    DosName = "help";
+End
+
+Directory gid_Dir_Config_More
+    ParentID = gid_Dir_Config;
+    DosName = "more";
+End
+
+Directory gid_Dir_Config_Start
+    ParentID = gid_Dir_Config;
+    DosName = "start";
+End
+
+Directory gid_Dir_Config_Tasks
+    ParentID = gid_Dir_Config;
+    DosName = "tasks";
+End
+
+Directory gid_Dir_Config_Settings
+    ParentID = gid_Dir_Config;
+    DosName = "settings";
+End
+
+Directory gid_Dir_Config_Symbol
+    ParentID = gid_Dir_Config;
+    DosName = "symbol";
+End
+
+Directory gid_Dir_Config_Webcast
+    ParentID = gid_Dir_Config;
+    DosName = "webcast";
+End
+
+Directory gid_Dir_Gallery
+    ParentID = gid_Dir_Share;
+    DosName = "gallery";
+End
+
+Directory gid_Dir_Gallery_Arrows
+    ParentID = gid_Dir_Gallery;
+    DosName = "arrows";
+End
+
+Directory gid_Dir_Gallery_Balloons
+    ParentID = gid_Dir_Gallery;
+    DosName = "balloons";
+End
+
+Directory gid_Dir_Gallery_Calendar
+    ParentID = gid_Dir_Gallery;
+    DosName = "calendar";
+End
+
+Directory gid_Dir_Gallery_Communic
+    ParentID = gid_Dir_Gallery;
+    DosName = "communic";
+End
+
+Directory gid_Dir_Gallery_Computer
+    ParentID = gid_Dir_Gallery;
+    DosName = "computer";
+End
+
+Directory gid_Dir_Gallery_Emoticons
+    ParentID = gid_Dir_Gallery;
+    DosName = "emoticons";
+End
+
+Directory gid_Dir_Gallery_Finances
+    ParentID = gid_Dir_Gallery;
+    DosName = "finances";
+End
+
+Directory gid_Dir_Gallery_Keyboard
+    ParentID = gid_Dir_Gallery;
+    DosName = "keyboard";
+End
+
+Directory gid_Dir_Gallery_Navi_2d
+    ParentID = gid_Dir_Gallery;
+    DosName = "navi-2d";
+End
+
+Directory gid_Dir_Gallery_Officeart
+    ParentID = gid_Dir_Gallery;
+    DosName = "officeart";
+End
+
+Directory gid_Dir_Gallery_People
+    ParentID = gid_Dir_Gallery;
+    DosName = "people";
+End
+
+Directory gid_Dir_Gallery_Time
+    ParentID = gid_Dir_Gallery;
+    DosName = "time";
+End
+
+Directory gid_Dir_Gallery_Clipart
+    ParentID = gid_Dir_Gallery;
+    DosName = "clipart";
+End
+
+Directory gid_Dir_Gallery_Bullets
+    ParentID = gid_Dir_Gallery;
+    DosName = "bullets";
+End
+
+Directory gid_Dir_Gallery_Flags
+    ParentID = gid_Dir_Gallery;
+    DosName = "flags";
+End
+
+Directory gid_Dir_Gallery_Htmlexpo
+    ParentID = gid_Dir_Gallery;
+    DosName = "htmlexpo";
+End
+
+Directory gid_Dir_Gallery_Photo
+    ParentID = gid_Dir_Gallery;
+    DosName = "photos";
+End
+
+Directory gid_Dir_Gallery_Clima
+    ParentID = gid_Dir_Gallery;
+    DosName = "clima";
+End
+
+Directory gid_Dir_Gallery_Education
+    ParentID = gid_Dir_Gallery;
+    DosName = "education";
+End
+
+Directory gid_Dir_Gallery_Trouble
+    ParentID = gid_Dir_Gallery;
+    DosName = "troubleshooting";
+End
+
+Directory gid_Dir_Gallery_Screenbeans
+    ParentID = gid_Dir_Gallery;
+    DosName = "screenbeans";
+End
+
+Directory gid_Dir_Gallery_Rulers
+    ParentID = gid_Dir_Gallery;
+    DosName = "rulers";
+End
+
+Directory gid_Dir_Gallery_Sounds
+    ParentID = gid_Dir_Gallery;
+    DosName = "sounds";
+End
+
+Directory gid_Dir_Gallery_Surface
+    ParentID = gid_Dir_Gallery;
+    DosName = "surface";
+End
+
+Directory gid_Dir_Gallery_Symbols
+    ParentID = gid_Dir_Gallery;
+    DosName = "symbols";
+End
+
+Directory gid_Dir_Gallery_Wwwanim
+    ParentID = gid_Dir_Gallery;
+    DosName = "www-anim";
+End
+
+Directory gid_Dir_Gallery_Wwwback
+    ParentID = gid_Dir_Gallery;
+    DosName = "www-back";
+End
+
+Directory gid_Dir_Gallery_Wwwgraf
+    ParentID = gid_Dir_Gallery;
+    DosName = "www-graf";
+End
+
+Directory gid_Dir_Template
+    ParentID = gid_Dir_Share;
+    DosName = "template";
+End
+
+Directory gid_Dir_Template_Language
+    ParentID = gid_Dir_Template;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Template_Educate
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(educate);
+End
+
+Directory gid_Dir_Template_Finance
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(finance);
+End
+
+Directory gid_Dir_Template_Forms
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(forms);
+End
+
+Directory gid_Dir_Template_Layout
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(layout);
+End
+
+Directory gid_Dir_Template_Misc
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(misc);
+End
+
+Directory gid_Dir_Template_Officorr
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(officorr);
+End
+
+Directory gid_Dir_Template_Offimisc
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(offimisc);
+End
+
+Directory gid_Dir_Template_Personal
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(personal);
+End
+
+Directory gid_Dir_Template_Presnt
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(presnt);
+End
+
+Directory gid_Dir_Template_Wizard
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(wizard);
+End
+
+Directory gid_Dir_Template_Wizard_Bitmap
+    ParentID = gid_Dir_Template_Wizard;
+    DIR_IDENT_ALL_LANG(bitmap);
+End
+
+Directory gid_Dir_Template_Wizard_Web
+    ParentID = gid_Dir_Template_Wizard;
+    DIR_IDENT_ALL_LANG(web);
+End
+
+Directory gid_Dir_Template_Wizard_Report
+    ParentID = gid_Dir_Template_Wizard;
+    DIR_IDENT_ALL_LANG(report);
+End
+
+Directory gid_Dir_Template_Wizard_Styles
+    ParentID = gid_Dir_Template_Wizard;
+    DIR_IDENT_ALL_LANG(styles);
+End
+
+Directory gid_Dir_Template_Internal
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(internal);
+End
+
+Directory gid_Dir_Share_Database
+    ParentID = gid_Dir_Share;
+    DosName = "database";
+End
+
+Directory gid_Dir_Share_Database_Language
+    ParentID = gid_Dir_Share_Database;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Explorer
+    ParentID = gid_Dir_Share;
+    DosName = "explorer";
+End
+
+Directory gid_Dir_Bookmark
+    ParentID = gid_Dir_Share;
+    DosName = "bookmark";
+End
+
+Directory gid_Dir_Bookmark_Language
+    ParentID = gid_Dir_Bookmark;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Bookmark_Info
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_INFO);
+End
+
+Directory gid_Dir_Bookmark_Internet
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_INTERNET);
+End
+
+Directory gid_Dir_Bookmark_Java
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_JAVA);
+End
+
+Directory gid_Dir_Bookmark_Freizeit
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_FREIZEIT);
+End
+
+Directory gid_Dir_Bookmark_Starone
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_STARONE);
+End
+
+Directory gid_Dir_Bookmark_Tourismus
+    ParentID = gid_Dir_Bookmark_Language;
+    ALL_LANG(DosName, STR_DIR_TOURISMUS);
+End
+
+Directory gid_Dir_Palmpilot
+    ParentID = gid_Dir_Share;
+    DosName = "palmpilot";
+End
+
+Directory gid_Dir_Samples
+    ParentID = gid_Dir_Share;
+    DosName = "samples";
+End
+
+Directory gid_Dir_Samples_Language
+    ParentID = gid_Dir_Samples;
+    Styles = (CREATE);
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Samples_Drawings
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(drawings);
+End
+
+Directory gid_Dir_Samples_Formulas
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(formulas);
+End
+
+Directory gid_Dir_Samples_Presentations
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(presentations);
+End
+
+Directory gid_Dir_Samples_Spreadsheets
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(spreadsheets);
+End
+
+Directory gid_Dir_Samples_Texts
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(texts);
+End
+
+Directory gid_Dir_Samples_Texts_Kapitel
+    ParentID = gid_Dir_Samples_Texts;
+    ALL_LANG(DosName, STR_DIR_KAPITEL);
+End
+
+Directory gid_Dir_Samples_Texts_Homepage
+    ParentID = gid_Dir_Samples_Texts;
+    ALL_LANG(DosName, STR_DIR_HOMEPAGE);
+End
+
+Directory gid_Dir_Samples_Databases
+    ParentID = gid_Dir_Samples_Language;
+    DIR_IDENT_ALL_LANG(databases);
+End
+
+Directory gid_Dir_Samples_Databases_Dateien
+    ParentID = gid_Dir_Samples_Databases;
+    ALL_LANG(DosName, STR_DIR_DATEIEN);
+End
+
+Directory gid_Dir_Wordbook
+    ParentID = gid_Dir_Share;
+    DosName = "wordbook";
+End
+
+Directory gid_Dir_Wordbook_Language
+    ParentID = gid_Dir_Wordbook;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+Directory gid_Dir_Share_Plugin
+    ParentID = gid_Dir_Share;
+    DosName = "plugin";
+End
+
+Directory gid_Dir_Help
+    ParentID = PD_PROGDIR;
+    DosName = "help";
+End
+
+Directory gid_Dir_Help_Isolanguage
+    ParentID = gid_Dir_Help;
+    DIR_ISOLANGUAGE_ALL_LANG;
+End
+
+#ifdef UNX
+
+Directory gid_Dir_User_Psprint
+    ParentID = gid_Dir_User;
+    DosName = "psprint";
+    Styles = (CREATE);
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_User_Psprint_Driver
+    ParentID = gid_Dir_User_Psprint;
+    DosName = "driver";
+    Styles = (CREATE);
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_User_Psprint_Fontmetric
+    ParentID = gid_Dir_User_Psprint;
+    DosName = "fontmetric";
+    Styles = (CREATE);
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_Truetype
+    ParentID = gid_Dir_Fonts;
+    DosName = "truetype";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_Truetypeserver
+    ParentID = gid_Dir_Fonts;
+    DosName = "serverfonts";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_75dpi
+    ParentID = gid_Dir_Fonts;
+    DosName = "75dpi";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_75dpi_Bdf
+    ParentID = gid_Dir_Fonts_75dpi;
+    DosName = "bdf";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Fonts_Type1
+    ParentID = gid_Dir_Fonts;
+    DosName = "type1";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Psprint
+    ParentID = gid_Dir_Share;
+    DosName = "psprint";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Psprint_Driver
+    ParentID = gid_Dir_Psprint;
+    DosName = "driver";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Psprint_Fontmetric
+    ParentID = gid_Dir_Psprint;
+    DosName = "fontmetric";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Share_Icons
+    ParentID = gid_Dir_Share;
+    DosName = "icons";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde_Netdir
+    ParentID = gid_Dir_Share;
+    DosName = "cde";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde_Root_Netdir
+    ParentID = gid_Dir_Cde_Netdir;
+    DosName = "root";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde_Language_Netdir
+    ParentID = gid_Dir_Cde_Netdir;
+    DIR_ENGLISH_ALL_LANG;
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Kde_Netdir
+    ParentID = gid_Dir_Share;
+    DosName = "kde";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Share_Kde_Net
+    ParentID = gid_Dir_Kde_Netdir;
+    DosName = "net";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Share_Kde_Net_Applnk
+    ParentID = gid_Dir_Share_Kde_Net;
+    DosName = "applnk";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Share_Kde_Net_Applnk_Product
+    ParentID = gid_Dir_Share_Kde_Net_Applnk;
+    DosName = "%PRODUCTNAME %PRODUCTVERSION";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Applnk_Netdir
+    ParentID = gid_Dir_Kde_Netdir;
+    DosName = "applnk";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Icons_Netdir
+    ParentID = gid_Dir_Kde_Netdir;
+    DosName = "icons";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Icons_Mini_Netdir
+    ParentID = gid_Dir_Icons_Netdir;
+    DosName = "mini";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Mimelnk_Netdir
+    ParentID = gid_Dir_Kde_Netdir;
+    DosName = "mimelnk";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Mimelnk_Application_Netdir
+    ParentID = gid_Dir_Mimelnk_Netdir;
+    DosName = "application";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Mimelnk_Text_Netdir
+    ParentID = gid_Dir_Mimelnk_Netdir;
+    DosName = "text";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Kde_Share
+    ParentID = PREDEFINED_KDEHOME;
+    DosName = "share";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Kde_Share_Applnk
+    ParentID = gid_Dir_Kde_Share;
+    DosName = "applnk";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Kde_Share_Applnk_Product
+    ParentID = gid_Dir_Kde_Share_Applnk;
+    DosName = "%PRODUCTNAME %PRODUCTVERSION";
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde
+    ParentID = PREDEFINED_HOMEDIR;
+    DosName = ".dt";
+    Styles = (DONT_DELETE);
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde_Icons
+    ParentID = gid_Dir_Cde;
+    DosName = "icons";
+    Styles = (DONT_DELETE);
+End
+
+#endif
+
+#ifdef UNX
+
+Directory gid_Dir_Cde_Types
+    ParentID = gid_Dir_Cde;
+    DosName = "types";
+    Styles = (DONT_DELETE);
+End
+
+#endif

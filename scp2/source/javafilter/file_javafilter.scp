@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ *  $RCSfile: file_javafilter.scp,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: is $ $Date: 2004-02-05 18:09:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "macros.inc"
+
+#ifdef WNT
+
+File gid_File_Lib_Xmergesync
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "xmergesync.dll";
+End
+
+#endif
+
+STD_UNO_LIB_FILE( gid_File_Lib_Xmlfa, xmlfa )
+
+STD_UNO_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
+
+File gid_File_Oo_Office_Filter_Palm_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "fcfg_palm.zip";
+End
+
+File gid_File_Oo_Office_Filter_Pocketword_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "fcfg_pocketword.zip";
+End
+
+File gid_File_Oo_Office_Filter_Pocketexcel_Pkg
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Uno_Packages;
+    Name = "fcfg_pocketexcel.zip";
+End
+
+#ifdef SOLAR_JAVA
+
+STD_JAR_FILE( gid_File_Jar_Aportisdoc, aportisdoc )
+STD_JAR_FILE( gid_File_Jar_Docbook, docbook )
+STD_JAR_FILE( gid_File_Jar_Htmlsoff, htmlsoff )
+STD_JAR_FILE( gid_File_Jar_Pexcel, pexcel )
+STD_JAR_FILE( gid_File_Jar_Pocketword, pocketword )
+STD_JAR_FILE( gid_File_Jar_Xflatxml, XFlatXml )
+STD_JAR_FILE( gid_File_Jar_Xmerge, xmerge )
+STD_JAR_FILE( gid_File_Jar_Xmergebridge, XMergeBridge )
+STD_JAR_FILE( gid_File_Jar_Xsltfilter, XSLTFilter )
+STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
+
+#endif

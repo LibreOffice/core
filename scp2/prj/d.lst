@@ -1,0 +1,27 @@
+..\%__SRC%\bin\osl\setup_osl.inf %_DEST%\bin%_EXT%\setup_osl.inf
+..\%__SRC%\bin\osl\setup_osl.ins %_DEST%\bin%_EXT%\setup_osl.ins
+
+mkdir: %_DEST%\par%_EXT%
+
+mkdir: %_DEST%\par%_EXT%\osl
+mkdir: %_DEST%\par%_EXT%\fat
+mkdir: %_DEST%\par%_EXT%\fam
+mkdir: %_DEST%\par%_EXT%\ada
+mkdir: %_DEST%\par%_EXT%\adm
+mkdir: %_DEST%\par%_EXT%\omc
+
+..\%__SRC%\par\osl\*.par %_DEST%\par%_EXT%\osl\*.par
+..\%__SRC%\par\fat\*.par %_DEST%\par%_EXT%\fat\*.par
+..\%__SRC%\par\fam\*.par %_DEST%\par%_EXT%\fam\*.par
+..\%__SRC%\par\ada\*.par %_DEST%\par%_EXT%\ada\*.par
+..\%__SRC%\par\adm\*.par %_DEST%\par%_EXT%\adm\*.par
+..\%__SRC%\par\omc\*.par %_DEST%\par%_EXT%\omc\*.par
+
+mkdir: %_DEST%\inc%_EXT%\scp
+
+..\inc\macros.inc %_DEST%\inc%_EXT%\macros.inc
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
+

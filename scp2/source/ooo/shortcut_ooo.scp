@@ -1,0 +1,427 @@
+/*************************************************************************
+*
+*  $RCSfile: shortcut_ooo.scp,v $
+*
+*  $Revision: 1.1 $
+*
+*  last change: $Author: is $ $Date: 2004-02-05 18:10:15 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+* = ============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+* = ================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
+
+#include "macros.inc"
+
+Shortcut gid_Shortcut_Setup
+    FileID = gid_File_Bin_Setup;
+    Dir = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    Name = "%PRODUCTNAME Setup";
+    Styles = (NETWORK, WORKSTATION, STANDALONE, RELATIVE);
+  #else
+    Name = "setup";
+    Styles = (STANDALONE, NETWORK, RELATIVE);
+  #endif
+End
+
+Shortcut gid_Shortcut_Soffice
+    FileID = gid_File_Bin_Soffice;
+    Dir = PREDEFINED_PROGDIR;
+  #ifdef WNT
+    Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Styles = (NETWORK, STANDALONE, WORKSTATION, RELATIVE);
+  #else
+    Name = "soffice";
+    Styles = (NETWORK ,STANDALONE, RELATIVE);
+  #endif
+End
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppu
+    FileID = gid_File_Lib_Cppu;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libcppu,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppu_2
+    ShortcutID = gid_Shortcut_Lib_Cppu;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libcppu,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppuhelper
+    FileID = gid_File_Lib_Cppuhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libcppuhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppuhelper_2
+    ShortcutID = gid_Shortcut_Lib_Cppuhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libcppuhelper,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Cppuhelper_3
+    ShortcutID = gid_Shortcut_Lib_Cppuhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libcppuhelper,UDK_MAJOR,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icudata_0
+    FileID = gid_File_Lib_Icudata;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libicudata,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icudata_1
+    FileID = gid_File_Lib_Icudata;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icui18n_0
+    FileID = gid_File_Lib_Icui18n;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libicui18n,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icui18n_1
+    FileID = gid_File_Lib_Icui18n;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icule_0
+    FileID = gid_File_Lib_Icule;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libicule,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icule_1
+    FileID = gid_File_Lib_Icule;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icuuc_0
+    FileID = gid_File_Lib_Icuuc;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libicuuc,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Icuuc_1
+    FileID = gid_File_Lib_Icuuc;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+#ifdef SOLAR_JAVA
+
+Shortcut gid_Shortcut_Lib_Jvmaccess
+    FileID = gid_File_Lib_Jvmaccess;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libjvmaccess,COMID,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#endif
+
+#ifdef UNX
+
+#ifdef SOLAR_JAVA
+
+Shortcut gid_Shortcut_Lib_Jvmaccess_2
+    ShortcutID = gid_Shortcut_Lib_Jvmaccess;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libjvmaccess,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Reg
+    FileID = gid_File_Lib_Reg;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libreg,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Reg_2
+    ShortcutID = gid_Shortcut_Lib_Reg;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libreg,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Rmcxt
+    FileID = gid_File_Lib_Rmcxt;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(librmcxt,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Rmcxt_2
+    ShortcutID = gid_Shortcut_Lib_Rmcxt;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(librmcxt,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Sal
+    FileID = gid_File_Lib_Sal;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libsal,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Sal_2
+    ShortcutID = gid_Shortcut_Lib_Sal;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libsal,UNXSUFFIX));
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Salhelper
+    FileID = gid_File_Lib_Salhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT5(libsalhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Salhelper_2
+    ShortcutID = gid_Shortcut_Lib_Salhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT3(libsalhelper,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Salhelper_3
+    ShortcutID = gid_Shortcut_Lib_Salhelper;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libsalhelper,UDK_MAJOR,COMID,UNXSUFFIX));
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+
+#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) )
+#if ( defined( _gcc3 ) && ( defined( C300 ) || defined( C322 ) ))
+
+Shortcut gid_Shortcut_Lib_Stdc
+    FileID = gid_File_Lib_Stdc;
+    Dir = gid_Dir_Program;
+    Name = STRING(libstdc++.so);
+    Styles = (NETWORK,RELATIVE);
+End
+
+#endif
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Store
+    FileID = gid_File_Lib_Store;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT4(libstore,UNXSUFFIX,.,UDK_MAJOR));
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Lib_Store_2
+    ShortcutID = gid_Shortcut_Lib_Store;
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(libstore,UNXSUFFIX));
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Soffice_Pkgchk
+    FileID = gid_File_Bin_Soffice;
+    Dir = gid_Dir_Program;
+    Name = "pkgchk";
+    Styles = (STANDALONE, NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Spadmin
+    FileID = gid_File_Bin_Soffice;
+    Dir = PREDEFINED_PROGDIR;
+    Name = "spadmin";
+    Styles = (STANDALONE, NETWORK, RELATIVE);
+End
+
+#endif
+
+#ifdef UNX
+
+Shortcut gid_Shortcut_Spadmin_Program
+    FileID = gid_File_Bin_Soffice;
+    Dir = gid_Dir_Program;
+    Name = "spadmin";
+    Styles = (NETWORK, RELATIVE);
+End
+
+#endif
+

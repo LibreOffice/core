@@ -1,0 +1,439 @@
+/*************************************************************************
+*
+*  $RCSfile: file_extra_ooo.scp,v $
+*
+*  $Revision: 1.1 $
+*
+*  last change: $Author: is $ $Date: 2004-02-05 18:10:01 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+* = ============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+* = ================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): _______________________________________
+*
+*
+************************************************************************/
+
+#include "macros.inc"
+
+File gid_File_Extra_Autocorr_Lang
+    Dir = gid_Dir_Share_Autocorr;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE);
+    EXTRA_ALL_LANG(autocorr);
+End
+
+File gid_File_Extra_Autotextshare_Lang
+    Dir = gid_Dir_Autotext_Language;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(autotextshare);
+End
+
+File gid_File_Extra_Autotextuser_Lang
+    NetDir = gid_Dir_User_Autotext_Language;
+    Dir = gid_Dir_User_Autotext;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DOCLANG, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(autotextuser);
+End
+
+#ifdef UNX
+
+File gid_File_Extra_Cfgsrv_Bitmap_Unx
+    Dir = gid_Dir_Config;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "cfgsrvbitmapunx.zip";
+End
+
+#endif
+
+File gid_File_Extra_Cfgusr
+    Dir = gid_Dir_User_Config;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "cfgusr.zip";
+End
+
+File gid_File_Extra_Common_Inc
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "common.inc";
+End
+
+File gid_File_Extra_Common_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "common.pl";
+End
+
+File gid_File_Extra_Databasebiblio
+    Dir = gid_Dir_Database_Biblio;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "databasebiblio.zip";
+End
+
+#ifdef UNX
+
+File gid_File_Extra_Dir_Fonts
+    Dir = gid_Dir_Fonts_Truetype;
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Name = "fonts.dir";
+End
+
+#endif
+
+File gid_File_Extra_Edit_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "edit.asp";
+End
+
+File gid_File_Extra_Edit_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "edit.pl";
+End
+
+File gid_File_Extra_Editpic_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "editpic.asp";
+End
+
+File gid_File_Extra_Editpic_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "editpic.pl";
+End
+
+#ifdef UNX
+
+File gid_File_Extra_Fontunxafm
+    Dir = gid_Dir_Psprint_Fontmetric;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, SETUPZIP);
+    Name = "fontunxafm.zip";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Extra_Fontunxppds
+    Dir = gid_Dir_Psprint_Driver;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, SETUPZIP);
+    Name = "fontunxppds.zip";
+End
+
+#endif
+
+#ifdef UNX
+
+File gid_File_Extra_Fontunxpsprint
+    Dir = gid_Dir_Psprint;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, SETUPZIP, DONT_OVERWRITE);
+    Name (01) = "/letter/fontunxpsprint.zip";
+    Name (03) = "fontunxpsprint.zip";
+    Name (07) = "fontunxpsprint.zip";
+    Name (30) = "fontunxpsprint.zip";
+    Name (31) = "fontunxpsprint.zip";
+    Name (33) = "fontunxpsprint.zip";
+    Name (34) = "fontunxpsprint.zip";
+    Name (35) = "fontunxpsprint.zip";
+    Name (36) = "fontunxpsprint.zip";
+    Name (37) = "fontunxpsprint.zip";
+    Name (50) = "fontunxpsprint.zip";
+    Name (39) = "fontunxpsprint.zip";
+    Name (42) = "fontunxpsprint.zip";
+    Name (43) = "fontunxpsprint.zip";
+    Name (44) = "fontunxpsprint.zip";
+    Name (45) = "fontunxpsprint.zip";
+    Name (46) = "fontunxpsprint.zip";
+    Name (47) = "fontunxpsprint.zip";
+    Name (48) = "fontunxpsprint.zip";
+    Name (49) = "fontunxpsprint.zip";
+    Name (55) = "fontunxpsprint.zip";
+    Name (66) = "fontunxpsprint.zip";
+    Name (77) = "fontunxpsprint.zip";
+    Name (81) = "fontunxpsprint.zip";
+    Name (82) = "fontunxpsprint.zip";
+    Name (86) = "fontunxpsprint.zip";
+    Name (88) = "fontunxpsprint.zip";
+    Name (90) = "fontunxpsprint.zip";
+    Name (91) = "fontunxpsprint.zip";
+    Name (96) = "fontunxpsprint.zip";
+    Name (97) = "fontunxpsprint.zip";
+    Name (99) = "fontunxpsprint.zip";
+End
+
+#endif
+
+File gid_File_Extra_Gallbullets
+    Dir = gid_Dir_Gallery_Bullets;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallbullets.zip";
+End
+
+File gid_File_Extra_Gallhtmlexpo
+    Dir = gid_Dir_Gallery_Htmlexpo;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallhtmlexpo.zip";
+End
+
+File gid_File_Extra_Gallroot
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallroot.zip";
+End
+
+File gid_File_Extra_Gallrulers
+    Dir = gid_Dir_Gallery_Rulers;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallrulers.zip";
+End
+
+File gid_File_Extra_Gallsound
+    Dir = gid_Dir_User_Gallery;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "gallsound.zip";
+End
+
+File gid_File_Extra_Gallsounds
+    Dir = gid_Dir_Gallery_Sounds;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallsounds.zip";
+End
+
+File gid_File_Extra_Gallsystem
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallsystem.zip";
+End
+
+File gid_File_Extra_Gallwwwback
+    Dir = gid_Dir_Gallery_Wwwback;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallwwwback.zip";
+End
+
+File gid_File_Extra_Gallwwwgraf
+    Dir = gid_Dir_Gallery_Wwwgraf;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "gallwwwgraf.zip";
+End
+
+File gid_File_Extra_Index_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "index.pl";
+End
+
+File gid_File_Extra_Palettes
+    Dir = gid_Dir_User_Config;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    Name = "palettes.zip";
+End
+
+File gid_File_Extra_Palettes_Lang
+    Dir = gid_Dir_User_Config;
+    USER_FILE_BODY;
+    Styles = (ARCHIVE, WORKSTATION, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(palettes);
+End
+
+File gid_File_Extra_Poll_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "poll.asp";
+End
+
+File gid_File_Extra_Poll_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "poll.pl";
+End
+
+File gid_File_Extra_Savepic_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "savepic.asp";
+End
+
+File gid_File_Extra_Savepic_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "savepic.pl";
+End
+
+File gid_File_Extra_Show_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "show.asp";
+End
+
+File gid_File_Extra_Show_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "show.pl";
+End
+
+File gid_File_Extra_Symbols
+    Dir = gid_Dir_Config_Symbol;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "symbols.zip";
+End
+
+File gid_File_Extra_Tpllayoutimpr_Lang
+    Dir = gid_Dir_Template_Layout;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tpllayoutimpr);
+End
+
+File gid_File_Extra_Tplpresntimpr_Lang
+    Dir = gid_Dir_Template_Presnt;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplpresntimpr);
+End
+
+File gid_File_Extra_Tplwizagenda_Lang
+    Dir = gid_Dir_Template_Wizard;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizagenda);
+End
+
+File gid_File_Extra_Tplwizbitmap
+    Dir = gid_Dir_Template_Wizard_Bitmap;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_IDENT_ALL_LANG(tplwizbitmap.zip);
+End
+
+File gid_File_Extra_Tplwizdesktop_Lang
+    Dir = gid_Dir_Template_Internal;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizdesktop);
+End
+
+File gid_File_Extra_Tplwizfax_Lang
+    Dir = gid_Dir_Template_Wizard;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizfax);
+End
+
+File gid_File_Extra_Tplwizhomepage_Lang
+    Dir = gid_Dir_Template_Wizard_Web;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizhomepage);
+End
+
+File gid_File_Extra_Tplwizletter_Lang
+    Dir = gid_Dir_Template_Wizard;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizletter);
+End
+
+File gid_File_Extra_Tplwizmemo_Lang
+    Dir = gid_Dir_Template_Wizard;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizmemo);
+End
+
+File gid_File_Extra_Tplwizreport_Lang
+    Dir = gid_Dir_Template_Wizard_Report;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizreport);
+End
+
+File gid_File_Extra_Tplwizstyles_Lang
+    Dir = gid_Dir_Template_Wizard_Styles;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(tplwizstyles);
+End
+
+File gid_File_Extra_Webcast_Asp
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "webcast.asp";
+End
+
+File gid_File_Extra_Webcast_Pl
+    Dir = gid_Dir_Config_Webcast;
+    PACKED_TXT_FILE_BODY;
+    Name = "webcast.pl";
+End
+
+File gid_File_Extra_Wordbook
+    Dir = gid_Dir_Wordbook_Language;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_IDENT_ALL_LANG(wordbook.zip);
+End
+
+File gid_File_Extra_Wordbook_Lang
+    Dir = gid_Dir_Wordbook_Language;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(wordbook);
+End
