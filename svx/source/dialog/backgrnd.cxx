@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-23 15:05:57 $
+ *  last change: $Author: os $ $Date: 2002-08-26 12:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
 #endif
+
+using namespace ::com::sun::star;
 // static ----------------------------------------------------------------
 
 static USHORT pRanges[] =
@@ -175,15 +177,9 @@ inline BYTE lcl_TransparencyToPercent(BYTE nTrans)
 }
 void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 {
-    const GraphicObject* pObject = rBrush.GetGraphicObject(SfxObjectShell::Current());
-    if(pObject)
-    {
-        GraphicObject aObject(*pObject);
-        GraphicAttr aAttr(aObject.GetAttr());
-        aAttr.SetTransparency(lcl_PercentToTransparency(nTransparency));
-        aObject.SetAttr(aAttr);
-        rBrush.SetGraphicObject(aObject);
-    }
+    uno::Any aTransparency;
+    aTransparency <<= (sal_Int8)nTransparency;
+    rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
 //-------------------------------------------------------------------------
 
