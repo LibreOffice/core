@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: sab $ $Date: 2001-01-09 12:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,6 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     uno::Reference< beans::XPropertySet > rPropSet ) const
 {
-    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
-
     XMLPropertyState* pPadding = NULL;
     XMLPropertyState* pPadding_Bottom = NULL;
     XMLPropertyState* pPadding_Left = NULL;
@@ -385,6 +383,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
             pAllBorderWidthState->maValue.clear();
         }
     }
+    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
