@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:52:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ const SfxItemPropertyMap* lcl_GetSheetLinkMap()
         {MAP_CHAR_LEN(SC_UNONAME_FILTOPT),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LINKURL),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_REFDELAY), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD),    0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {0,0,0,0}
     };
     return aSheetLinkMap_Impl;
@@ -270,6 +271,12 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    {
+        sal_Int32 nRefresh;
+        if ( aValue >>= nRefresh )
+            setRefreshDelay( nRefresh );
+    }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
     {
         sal_Int32 nRefresh;
@@ -291,6 +298,8 @@ uno::Any SAL_CALL ScSheetLinkObj::getPropertyValue( const rtl::OUString& aProper
         aRet <<= getFilter();
     else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+        aRet <<= getRefreshDelay();
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
         aRet <<= getRefreshDelay();
     return aRet;
@@ -809,6 +818,12 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
         if ( aValue >>= aValStr )
             setFilterOptions( aValStr );
     }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+    {
+        sal_Int32 nRefresh;
+        if ( aValue >>= nRefresh )
+            setRefreshDelay( nRefresh );
+    }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
     {
         sal_Int32 nRefresh;
@@ -830,6 +845,8 @@ uno::Any SAL_CALL ScAreaLinkObj::getPropertyValue( const rtl::OUString& aPropert
         aRet <<= getFilter();
     else if ( aNameString.EqualsAscii( SC_UNONAME_FILTOPT ) )
         aRet <<= getFilterOptions();
+    else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
+        aRet <<= getRefreshDelay();
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
         aRet <<= getRefreshDelay();
     return aRet;
