@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     SET_CURR_SHELL( this );
 
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
-        SetHiddenFlag( !pOpt->IsHidden() );
+        SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     //In Init wird ein Standard-FrmFmt angelegt.
     if( !pDoc->IsUndoNoResetModified() )
@@ -300,7 +300,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     pOut = pOutput;
 
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
-            SetHiddenFlag( !pOpt->IsHidden() );
+            SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     // in Init wird ein Standard-FrmFmt angelegt
     if( !bModified && !pDoc->IsUndoNoResetModified() )
