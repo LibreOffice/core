@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-13 12:55:21 $
+ *  last change: $Author: aw $ $Date: 2001-03-16 13:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,7 +1694,7 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
     pOutlinerParaObject=pTextObject;
 
     if( pOutlinerParaObject )
-        mpObjectItemSet->Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
+        SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !pOutlinerParaObject->IsVertical() ) );
 
     SetTextSizeDirty();
     bPortionInfoChecked=FALSE;
@@ -2120,7 +2120,7 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
         }
 
         pOutlinerParaObject->SetVertical( bVertical );
-        mpObjectItemSet->Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
+        SetItem( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
     }
 }
 
