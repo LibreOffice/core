@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 14:22:52 $
+#   last change: $Author: obo $ $Date: 2004-04-27 11:10:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 .IF "$(OS)"=="SOLARIS"
 .IF "$(CPU)"=="I"
-CXXFLAGS+=-instances=static
+#CXXFLAGS+=-instances=static
+CFLAGSCXX+=-instances=static
 .ENDIF
 .ENDIF
 
