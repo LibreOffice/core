@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HierarchyAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:02:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,18 @@
 #include <com/sun/star/beans/XExactName.idl>
 #endif
 
+#ifndef __com_sun_star_beans_XPropertySetInfo_idl__
+#include <com/sun/star/beans/XPropertySetInfo.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyState_idl__
+#include <com/sun/star/beans/XPropertyState.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XMultiPropertyState_idl__
+#include <com/sun/star/beans/XMultiPropertyStates.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module configuration {
@@ -138,6 +150,68 @@ service HierarchyAccess
  </p>
 */
     interface com::sun::star::beans::XExactName;
+
+/** provides information about immediate children of this node. [optional]
+
+ <p>This interface may be missing, if the hierarchy supports no traits that are
+ described by <type scope="com::sun::star::beans">PropertyAttribute</type>
+ values or if the same information is available by other means,
+ e.g. if the implementation supports
+ <member scope="com::sun::star::beans">XPropertySet::getPropertySetInfo()</member>.
+ </p>
+
+ <p>If a child of this node is an object that implements
+ <type scope="com::sun::star::beans">XProperty</type>, then this implementation
+ returns the same <type scope="com::sun::star::beans">Property</type> for that
+ child as the child itself.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertySetInfo;
+
+/** provides access to the state of child elements of an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values or
+ if the node does not support accessing the default state of individual children.
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XPropertyState;
+
+/** provides access to the states of multiple child elements of
+ an implementation. [optional]
+
+ <p>This interface may be missing if the hierarchy (or a hierarchy fragment
+ that contains this implementation as element) does not support default values
+ if the node does not support accessing the default state of individual children.
+ </p>
+
+ <p>If elements that are not simple values, but objects themselves, support
+ a default state (as indicated by
+ <const scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</const>),
+ they should implement
+ <type scope="com::sun::star::beans">XPropertyWithState</type>, in which case
+ the <type scope="com::sun::star::beans">PropertyState</type> applies to all
+ their children and recursively to all descendants.
+ </p>
+
+ <p>If an implementation is part of a <em>read-only</em> view of the hierarchy,
+ attempts to change property states will fail.
+ </p>
+*/
+    [optional] interface com::sun::star::beans::XMultiPropertyStates;
 };
 
 //=============================================================================
