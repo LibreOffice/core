@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetimg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 14:11:14 $
+ *  last change: $Author: jp $ $Date: 2001-07-03 12:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,16 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#ifndef TF_SVDATA
 #ifndef _SOT_DTRANS_HXX
 #include <sot/dtrans.hxx>
 #endif
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
 #endif
+#endif
+
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
@@ -77,6 +81,10 @@
 #pragma hdrstop
 
 #include "inetimg.hxx"
+
+#define TOKEN_SEPARATOR '\001'
+
+#ifndef TF_SVDATA
 
 // Die folgende Struktur wurde den Netscape-Sourcen entnommen:
 // netscape/source/ns/cmd/winfe/feimages.cpp
@@ -95,7 +103,7 @@ struct ImageData_Impl {
     sal_Char pImageURL[1];      // Append all variable-length strings starting here
 };
 
-#define TOKEN_SEPARATOR '\001'
+
 //=======================================================================
 
 String INetImage::CopyExchange() const
@@ -235,6 +243,7 @@ BOOL INetImage::CopyFormats( SotDataObject& rObj ) const
     // rTypeList.Append( SvDataType( SOT_FORMATSTR_ID_NETSCAPE_IMAGE, MEDIUM_MEMORY ) );
     return TRUE;
 }
+#endif
 
 sal_Bool INetImage::Write( SvStream& rOStm, ULONG nFormat ) const
 {
