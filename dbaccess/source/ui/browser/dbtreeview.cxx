@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ void DBTreeView::setModel(DBTreeListModel* _pTreeModel)
 }
 
 // -------------------------------------------------------------------------
-SvTreeListBox* DBTreeView::getListBox() const
+DBTreeListBox* DBTreeView::getListBox() const
 {
     return m_pTreeListBox;
 }

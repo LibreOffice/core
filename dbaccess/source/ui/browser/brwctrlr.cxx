@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-14 14:22:04 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,25 +617,36 @@ void SAL_CALL SbaXDataBrowserController::initialize( const Sequence< Any >& aArg
     Reference< ::com::sun::star::awt::XWindow >     xParent;
     Reference< ::com::sun::star::frame::XFrame >    xFrame;
 
+    PropertyValue aValue;
     const Any* pBegin   = aArguments.getConstArray();
     const Any* pEnd     = pBegin + aArguments.getLength();
+
+    ::rtl::OUString aFrameName = ::rtl::OUString::createFromAscii("Frame");
     for(;pBegin != pEnd;++pBegin)
     {
-        if((*pBegin >>= xFrame) && xFrame.is())
+        if((*pBegin >>= aValue) && aValue.Name == aFrameName)
         {
-            xParent = xFrame->getContainerWindow();
-            VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
-            Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
-            if (!pParentWin)
+            if((aValue.Value >>= xFrame) && xFrame.is())
             {
-                throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
-            }
+                xParent = xFrame->getContainerWindow();
+                VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(xParent);
+                Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
+                if (!pParentWin)
+                {
+                    throw Exception(::rtl::OUString::createFromAscii("Parent window is null"),*this);
+                }
 
-            if(xFrame.is() && Construct(pParentWin))
+                if(xFrame.is() && Construct(pParentWin))
+                {
+                    xFrame->setComponent(getContent()->GetWindowPeer(), this);
+                    attachFrame(xFrame);
+                    pParentComponent->setVisible(sal_True);
+                }
+                break; // no more needed here
+            }
+            else
             {
-                xFrame->setComponent(getContent()->GetWindowPeer(), this);
-                attachFrame(xFrame);
-                pParentComponent->setVisible(sal_True);
+                OSL_ENSHURE(0,"SbaXDataBrowserController::initialize: Frame is null!");
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 14:29:10 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef DBAUI_DBTREELISTBOX_HXX
+#include "dbtreelistbox.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -1504,6 +1507,48 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     return 0L;
 }
 // -------------------------------------------------------------------------
+void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+{
+    // first initialize the parent
+    SbaXDataBrowserController::initialize( aArguments );
+
+    PropertyValue aValue;
+    const Any* pBegin   = aArguments.getConstArray();
+    const Any* pEnd     = pBegin + aArguments.getLength();
+
+    m_nDefaultCommandType = -1;
+    for(;pBegin != pEnd;++pBegin)
+    {
+        if((*pBegin >>= aValue) && aValue.Name == PROPERTY_DATASOURCENAME)
+            aValue.Value >>= m_sDefaultDataSourceName;
+        else if(aValue.Name == PROPERTY_COMMANDTYPE)
+            aValue.Value >>= m_nDefaultCommandType;
+        else if(aValue.Name == PROPERTY_COMMAND)
+            aValue.Value >>= m_sDefaultCommand;
+    }
+
+    if(m_sDefaultDataSourceName.getLength() && m_sDefaultCommand.getLength() && m_nDefaultCommandType != -1)
+    {
+        SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(m_sDefaultDataSourceName,NULL);
+        if(pDataSource)
+        {
+            m_pTreeView->getListBox()->Expand(pDataSource);
+            SvLBoxEntry* pCommandType = NULL;
+            if(CommandType::TABLE == m_nDefaultCommandType)
+                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource,1);
+            else if(CommandType::QUERY == m_nDefaultCommandType)
+                pCommandType = m_pTreeView->getListBox()->GetModel()->GetEntry(pDataSource,0);
+            if(pCommandType)
+            {
+                // we need to expand the command
+                m_pTreeView->getListBox()->Expand(pCommandType);
+                SvLBoxEntry* pCommand = m_pTreeView->getListBox()->GetEntryPosByName(m_sDefaultCommand,pCommandType);
+                if(pCommand)
+                   m_pTreeView->getListBox()->Select(pCommand);
+            }
+        }
+    }
+}
 
 // .........................................................................
 }   // namespace dbaui

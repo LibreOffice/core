@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 09:27:29 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 10:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,8 +249,19 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
-            Sequence< Any> aArgs(1);
-            aArgs[0] <<= rFrame;
+            PropertyValue aFrame(::rtl::OUString::createFromAscii("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+            Sequence< Any > aArgs(m_aArgs.getLength()+1);
+
+            Any* pBegin = aArgs.getArray();
+            Any* pEnd   = pBegin + aArgs.getLength();
+            *pBegin <<= aFrame;
+            const PropertyValue* pIter      = m_aArgs.getConstArray();
+            const PropertyValue* pIterEnd   = pIter + m_aArgs.getLength();
+            for(++pBegin;pBegin != pEnd;++pBegin)
+            {
+                *pBegin <<= *pIter;
+            }
+
             xIni->initialize(aArgs);
         }
         catch(Exception&)

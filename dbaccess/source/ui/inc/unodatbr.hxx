@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 13:53:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 10:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,11 @@ namespace dbaui
         SpecialSlotDispatchers  m_aDispatchers;         // external dispatchers for slots we do not execute ourself
         SpecialSlotStates       m_aDispatchStates;      // states of the slots handled by external dispatchers
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                                m_xDatabaseContext;
+        ::rtl::OUString         m_sDefaultDataSourceName;
+        ::rtl::OUString         m_sDefaultCommand;
+        sal_Int32               m_nDefaultCommandType;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDatabaseContext;
 
     // attribute access
     public:
@@ -150,6 +153,8 @@ namespace dbaui
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+        // lang::XInitialization
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     protected:
         // SbaXDataBrowserController overridables
