@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-17 09:44:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class PolyPolygon;
 class XPolyPolygon;
 class Range;
@@ -84,7 +88,7 @@ typedef SvLongs* SvLongsPtr;
 |*    Letzte Aenderung AMA 20.01.97
 |*
 *************************************************************************/
-class TextRanger
+class SVX_DLLPUBLIC TextRanger
 {
     Range *pRangeArr;
     SvLongsPtr *pCache;
