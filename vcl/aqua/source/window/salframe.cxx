@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-15 04:11:27 $
+ *  last change: $Author: pluby $ $Date: 2000-11-15 19:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ void SalFrame::Show( BOOL bVisible )
 
     // Draw a line on the native content view
 
+    VCLGraphics_drawLine ( hView, 0L, 0L, 1000L, 1000L );
     VCLGraphics_drawRect ( hView, 75L, 75L, 150L, 150L );
 }
 
