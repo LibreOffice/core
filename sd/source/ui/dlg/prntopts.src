@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:56:00 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ english_us ] = "Contents" ;
         Text[ chinese_simplified ] = "ÄÚÈİ";
         Text[ russian ] = "Ñîäåğæèìîå";
-        Text[ polish ] = "Zawarto?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ japanese ] = "“à—e";
         Text[ chinese_traditional ] = "¤º®e";
         Text[ arabic ] = "ÇáãÍÊæíÇÊ";
@@ -247,7 +247,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Qualidade" ;
         Text[ chinese_simplified ] = "´òÓ¡µÄÖÊÁ¿";
         Text[ russian ] = "Êà÷åñòâî";
-        Text[ polish ] = "Jako?æ";
+        Text[ polish ] = "Jakoœæ";
         Text[ japanese ] = "ˆóü‰æ‘œ•i¿";
         Text[ chinese_traditional ] = "¦C¦L«~½è";
         Text[ arabic ] = "ÇáäæÚíÉ";
@@ -276,7 +276,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -305,7 +305,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese ] = "Tons de cinzento" ;
         Text[ chinese_simplified ] = "»Ò¶È";
         Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaro?ci";
+        Text[ polish ] = "Odcienie szaroœci";
         Text[ japanese ] = "¸ŞÚ°½¹°Ù";
         Text[ chinese_traditional ] = "¦Ç¶¥";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
@@ -546,7 +546,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ portuguese_brazilian ] = "St~andard" ;
         Text[ chinese_simplified ] = "±ê×¼(~S)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy~?lnie";
+        Text[ polish ] = "Domy~œlnie";
         Text[ japanese ] = "Šù’è(~S)";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~S)";
         Text[ arabic ] = "ŞíÇÓí";
