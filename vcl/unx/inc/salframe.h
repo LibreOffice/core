@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:24:15 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,23 +98,6 @@ class   SalI18N_InputContext;
 
 namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 
-class SalFrameDelData
-{
-    private:
-
-        sal_Bool            mbDeleted;
-        SalFrameDelData*    mpNext;
-
-    public:
-                            SalFrameDelData () : mbDeleted(sal_False), mpNext(NULL)
-                                         {}
-        void                Delete ()    { mbDeleted = sal_True; }
-        sal_Bool            IsDeleted () { return mbDeleted; }
-        void                SetNext (SalFrameDelData* pData)
-                                         { mpNext = pData; }
-        SalFrameDelData*    GetNext ()   { return mpNext; }
-};
-
 // -=-= X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #define SHOWSTATE_UNKNOWN       -1
 #define SHOWSTATE_MINIMIZED     0
@@ -191,8 +174,6 @@ class X11SalFrame : public SalFrame
     SalI18N_InputContext *mpInputContext;
     bool            mbDeleteInputContext;
     Bool            mbInputFocus;
-    SalFrameDelData *mpDeleteData;
-    void            NotifyDeleteData ();
 
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
@@ -251,8 +232,6 @@ public:
     void                    getPosSize( Rectangle& rRect ) { GetPosSize( rRect ); }
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
     bool                    isMapped() const { return bMapped_; }
-    void            RegisterDeleteData (SalFrameDelData *pData);
-    void            UnregisterDeleteData (SalFrameDelData *pData);
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
