@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-09 12:01:20 $
+ *  last change: $Author: fs $ $Date: 2001-04-09 12:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,27 +536,28 @@ void SAL_CALL VCLXToolkit::disposing()
 
     VCLXWindow* pNewComp = NULL;
 
-    Window* pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
-    if ( !pNewWindow )
+    Window* pNewWindow = NULL;
+    // Try to create the window with SvTools
+    // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
+    // and we need to stay compatible)
+    // try to load the lib
+    if ( !fnSvtCreateWindow && !hSvToolsLib )
     {
-        // Try to create the window with SvTools
-        if ( !fnSvtCreateWindow && !hSvToolsLib )
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
+        hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        if ( hSvToolsLib )
         {
-            ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
-            hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
-            if ( hSvToolsLib )
-            {
-                ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
-                fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getSymbol( hSvToolsLib, aFunctionName.pData );
-            }
+            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
+            fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getSymbol( hSvToolsLib, aFunctionName.pData );
         }
-
-        if ( fnSvtCreateWindow )
-        {
-            pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
-        }
-
     }
+    // ask the SvTool creation function
+    if ( fnSvtCreateWindow )
+        pNewWindow = fnSvtCreateWindow( &pNewComp, &rDescriptor, pParent, nWinBits );
+
+    // if SvTools could not provide a window, create it ourself
+    if ( !pNewWindow )
+        pNewWindow = ImplCreateWindow( &pNewComp, rDescriptor, pParent, nWinBits );
 
     DBG_ASSERT( pNewWindow, "createWindow: Unknown Component!" );
     DBG_ASSERTWARNING( pNewComp, "createWindow: No special Interface!" );
