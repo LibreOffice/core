@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOutlineEditSource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-13 18:51:34 $
+ *  last change: $Author: thb $ $Date: 2002-07-26 11:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace accessibility
         mrWindow( rViewWindow ),
         mpOutliner( &rOutliner ),
         mpOutlinerView( &rOutlView ),
-        mTextForwarder( rOutliner ),
+        mTextForwarder( rOutliner, NULL ),
         mViewForwarder( rOutlView )
     {
         // register as listener - need to broadcast state change messages
