@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:18:31 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 14:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,6 @@
 #include <globals.hrc>
 #endif
 
-extern sal_Bool bNotLoadLayout;
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -581,12 +580,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 
         // Das Laden
         // fuer MD
-        sal_Bool bSave = bNotLoadLayout;
-        bNotLoadLayout = sal_Bool( !LoadLayout() );
-#ifndef PRODUCT
-        sal_Bool bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-        bNotLoadLayout |= SW_MOD()->GetUsrPref(bWeb)->IsTest1();
-#endif
         if( bXML )
         {
             ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
@@ -618,9 +611,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
             break;
 
         case SFX_CREATE_MODE_INTERNAL:
-            bNotLoadLayout = sal_True;
-            // kein break;
-
         case SFX_CREATE_MODE_EMBEDDED:
             if ( bXML )
             {
@@ -678,7 +668,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 #endif
 
         }
-        bNotLoadLayout = bSave;
 
         if( !bXML )
         {

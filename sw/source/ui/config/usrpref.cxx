@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-09-20 12:45:38 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 14:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,9 @@ using namespace com::sun::star::uno;
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
-sal_Bool bNotLoadLayout = sal_False;    // fuer MD
-
 void SwMasterUsrPref::SetUsrPref(const SwViewOption &rCopy)
 {
     *((SwViewOption*)this) = rCopy;
-
-#ifndef PRODUCT
-    bNotLoadLayout = rCopy.IsTest1();       // MD Layout lesen
-#endif
 }
 
 SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :

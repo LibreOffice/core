@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:18:57 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 14:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2334,7 +2334,7 @@ SwTestTabPage::SwTestTabPage( Window* pParent,
     lcl_SetPosSize(aTest10CBox  ,   Point(116, 66), Size(74 , 10));
 
     aTestFL.SetText( String(ByteString("Einstellungen nur für Testzwecke" ), RTL_TEXTENCODING_MS_1252));
-    aTest1CBox .SetText( C2S("Layout not loading"));
+    aTest1CBox .SetText( C2S("unused"));
     aTest2CBox .SetText( C2S("dynamic"));
     aTest3CBox .SetText( C2S("No calm"               ));
     aTest4CBox .SetText( C2S("WYSIWYG debug"         ));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-23 14:47:58 $
+ *  last change: $Author: mib $ $Date: 2001-10-12 14:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,9 +273,6 @@
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 
-extern BOOL bNotLoadLayout;
-
-
 #define SwDocShell
 #ifndef _ITEMDEF_HXX
 #include <itemdef.hxx>
@@ -476,18 +473,10 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave(
                             SFX_CREATE_MODE_EMBEDDED == GetCreateMode() );
 
-    // fuer MD
-    BOOL bSave = bNotLoadLayout;
-    bNotLoadLayout = BOOL( !LoadLayout() );
-#ifndef PRODUCT
-    BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    bNotLoadLayout |= SW_MOD()->GetUsrPref(bWeb)->IsTest1();
-#endif
-
     pRdr->GetDoc()->SetHTMLMode( ISA(SwWebDocShell) );
 
     ULONG nErr = pRdr->Read( *pRead );
-    bNotLoadLayout = bSave;
+
     // Evtl. ein altes Doc weg
     if( pDoc )
         RemoveLink();
