@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 21:47:49 $
+ *  last change: $Author: os $ $Date: 2001-07-30 12:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2115,7 +2115,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {SW_PROP_NAME(UNO_NAME_IS_EXPRESSION),      0,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
                     {SW_PROP_NAME(UNO_NAME_VALUE),          0,  CPPU_E2T(CPPUTYPE_DOUBLE), PROPERTY_NONE,   0},
                     {SW_PROP_NAME(UNO_NAME_CONTENT),            0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
@@ -2133,7 +2133,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE    ), 0,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
                     {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), 0,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
                     {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
@@ -2146,7 +2146,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NAME(UNO_NAME_CHAPTER_NUMBERING_LEVEL),0,  CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
                     {SW_PROP_NAME(UNO_NAME_NUMBERING_SEPARATOR), 0, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NAME(UNO_NAME_SUB_TYPE),           0,  CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
@@ -2178,7 +2178,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aStandardFieldMasterMap[] =
                 {
                     {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  CPPU_E2T(CPPUTYPE_SEQDEPTXTFLD), PropertyAttribute::READONLY, 0},
-                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NAME(UNO_NAME_NAME),               0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
                     {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
                     {0,0,0,0}
                 };
