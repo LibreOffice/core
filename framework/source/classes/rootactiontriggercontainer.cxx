@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootactiontriggercontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 07:43:35 $
+ *  last change: $Author: hr $ $Date: 2001-12-10 13:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,8 +404,9 @@ void RootActionTriggerContainer::FillContainer()
 {
     m_bContainerCreated = sal_True;
     m_bInContainerCreation = sal_True;
+    Reference<XIndexContainer> xXIndexContainer( (OWeakObject *)this, UNO_QUERY );
     ActionTriggerHelper::FillActionTriggerContainerFromMenu(
-        Reference< XIndexContainer >( (OWeakObject *)this, UNO_QUERY ),
+        xXIndexContainer,
         m_pMenu );
     m_bInContainerCreation = sal_False;
 }
