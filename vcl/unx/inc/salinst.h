@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
+ *  last change: $Author: pl $ $Date: 2001-06-14 13:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.2 $  $Author: pl $  $Date: 2001-02-01 14:08:06 $    //
+// $Revision: 1.3 $  $Author: pl $  $Date: 2001-06-14 13:31:23 $    //
 //                                                                            //
 // $Workfile:   salinst.h  $                                                  //
 //  $Modtime:   17 Jul 1997 17:21:10  $                                       //
@@ -113,6 +113,7 @@ public:
     void*                           mpEventInst;
     bool(*mpErrorEventCallback)(void*,void*,int);
     void*                           mpErrorEventInst;
+    bool                            mbPrinterInit;
 };
 
 #endif // _SV_SALINST_H

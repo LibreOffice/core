@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:15:48 $
+ *  last change: $Author: pl $ $Date: 2001-06-14 13:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,7 @@ SalInfoPrinter* SalInstance::CreateInfoPrinter(
     SalPrinterQueueInfo*    pQueueInfo,
     ImplJobSetup*           pJobSetup )
 {
+    maInstData.mbPrinterInit = true;
     // create and initialize SalInfoPrinter
     SalInfoPrinter* pPrinter = new SalInfoPrinter;
 
@@ -413,6 +414,7 @@ void SalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 SalPrinter* SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
+    maInstData.mbPrinterInit = true;
     // create and initialize SalPrinter
     SalPrinter* pPrinter = new SalPrinter;
     pPrinter->maPrinterData.m_aJobData = pInfoPrinter->maPrinterData.m_aJobData;
@@ -431,6 +433,7 @@ void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
 
 void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
+    maInstData.mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     ::std::list< OUString > aPrinters;
     rManager.listPrinters( aPrinters );
@@ -472,12 +475,14 @@ void SalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 void SalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
 {
+    maInstData.mbPrinterInit = true;
 }
 
 // -----------------------------------------------------------------------
 
 String SalInstance::GetDefaultPrinter()
 {
+    maInstData.mbPrinterInit = true;
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
     return rManager.getDefaultPrinter();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-12 12:00:55 $
+ *  last change: $Author: pl $ $Date: 2001-06-14 13:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2197,14 +2197,17 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
         if( FocusIn == pEvent->type )
         {
 #ifdef USE_PSPRINT
-            ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
-            if( rManager.checkPrintersChanged() )
+            if( GetSalData()->pFirstInstance_->maInstData.mbPrinterInit )
             {
-                SalFrame* pFrame = GetSalData()->pFirstFrame_;
-                while( pFrame )
+                ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
+                if( rManager.checkPrintersChanged() )
                 {
-                    pFrame->maFrameData.Call( SALEVENT_PRINTERCHANGED, NULL );
-                    pFrame = pFrame->maFrameData.GetNextFrame();
+                    SalFrame* pFrame = GetSalData()->pFirstFrame_;
+                    while( pFrame )
+                    {
+                        pFrame->maFrameData.Call( SALEVENT_PRINTERCHANGED, NULL );
+                        pFrame = pFrame->maFrameData.GetNextFrame();
+                    }
                 }
             }
 #endif
