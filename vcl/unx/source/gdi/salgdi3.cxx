@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-17 08:29:28 $
+ *  last change: $Author: pl $ $Date: 2001-07-20 08:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@
 #include <psprint/printergfx.hxx>
 #include <psprint/fontmanager.hxx>
 #include <psprint/jobdata.hxx>
+
+#include <svapp.hxx>
 #endif
 
 #ifndef ANSI1252_HXX_
@@ -1806,6 +1808,29 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
 #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pJobData != NULL)
     {
+        const char* pLangBoost = NULL;
+        const LanguageType aLang = Application::GetSettings().GetUILanguage();
+        switch( aLang )
+        {
+            case LANGUAGE_JAPANESE:
+                pLangBoost = "jan";    // japanese is default
+                break;
+            case LANGUAGE_CHINESE:
+            case LANGUAGE_CHINESE_SIMPLIFIED:
+            case LANGUAGE_CHINESE_SINGAPORE:
+                pLangBoost = "zhs";
+                break;
+            case LANGUAGE_CHINESE_TRADITIONAL:
+            case LANGUAGE_CHINESE_HONGKONG:
+            case LANGUAGE_CHINESE_MACAU:
+                pLangBoost = "zht";
+                break;
+            case LANGUAGE_KOREAN:
+            case LANGUAGE_KOREAN_JOHAB:
+                pLangBoost = "kor";
+                break;
+        }
+
         ::std::list< psp::fontID > aList;
         const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
         rMgr.getFontList( aList, maGraphicsData.m_pJobData->m_pParser );
@@ -1821,6 +1846,19 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 pFontData->mpSysData = (void*)*it;
                 if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
                     pFontData->maName = pFontData->maName.Copy( 4 );
+                if( aInfo.m_eType == psp::fonttype::TrueType )
+                {
+                    // asian type 1 fonts are not known
+                    ByteString aFileName( rMgr.getFontFileSysPath( *it ) );
+                    int nPos = aFileName.SearchBackward( '_' );
+                    if( nPos == STRING_NOTFOUND || aFileName.GetChar( nPos+1 ) == '.' )
+                        pFontData->mnQuality += 5;
+                    else
+                    {
+                        if( pLangBoost && aFileName.Copy( nPos+1, 3 ).EqualsIgnoreCaseAscii( pLangBoost ) )
+                            pFontData->mnQuality += 10;
+                    }
+                }
                 pList->Add( pFontData );
             }
         }
