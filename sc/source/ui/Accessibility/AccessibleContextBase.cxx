@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:18:23 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ void ScAccessibleContextBase::Init()
         if (xBroadcaster.is())
             xBroadcaster->addEventListener(this);
     }
+    msName = createAccessibleName();
+    msDescription = createAccessibleDescription();
 }
 
 void ScAccessibleContextBase::SetDefunc()
@@ -361,6 +363,7 @@ sal_Int16 SAL_CALL
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+        aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.OldValue <<= msDescription;
         aEvent.NewValue <<= sDescription;
 
@@ -383,6 +386,7 @@ OUString SAL_CALL
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_NAME_EVENT;
+        aEvent.Source = uno::Reference< XAccessible >(this);
         aEvent.OldValue <<= msName;
         aEvent.NewValue <<= sName;
 
@@ -599,13 +603,10 @@ void ScAccessibleContextBase::CommitChange(const AccessibleEventObject& rEvent)
 
 void ScAccessibleContextBase::CommitDefunc()
 {
-    utl::AccessibleStateSetHelper* pStateSet = new utl::AccessibleStateSetHelper();
-    pStateSet->AddState(AccessibleStateType::DEFUNC);
-    uno::Reference<XAccessibleStateSet> xStateSet (pStateSet);
-
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
-    aEvent.NewValue <<= xStateSet;
+    aEvent.Source = uno::Reference< XAccessible >(this);
+    aEvent.NewValue <<= AccessibleStateType::DEFUNC;
 
     CommitChange(aEvent);
 }
