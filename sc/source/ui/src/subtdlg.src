@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:24:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,6 +1166,12 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ hindi ] = "आधा कुलजोड़";
     Text[ slovak ] = "Medzisúčty";
 };
+
+
+
+
+
+
 
 
 
