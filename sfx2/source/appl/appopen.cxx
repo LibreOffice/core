@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 14:54:37 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 16:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,17 +615,15 @@ SfxMedium* SfxApplication::InsertDocumentDialog
             while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
                 Application::Yield();
             pMedium = xLoader->GetMedium();
-
-            if( pMedium )
-                if( CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) ==
-                    ERRCODE_ABORT )
-                {
-                    DELETEZ( pMedium );
-                }
+            if( pMedium && CheckPasswd_Impl( 0, SFX_APP()->GetPool(), pMedium ) == ERRCODE_ABORT )
+                pMedium = NULL;
+                //DELETEZ( pMedium );
         }
+
         delete pURLList;
         break;
     }
+
     return pMedium;
 }
 
