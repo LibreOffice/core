@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 07:15:00 $
+ *  last change: $Author: ama $ $Date: 2002-05-06 09:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     }
     else
     {
-        if( pAnchorMarker )
+        if( rSh.IsPageAtPos( rLPt ) || pAnchorMarker )
             eStyle = POINTER_ARROW;
         else if( bCntAtPos && bExecHyperlinks )
         {

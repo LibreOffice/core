@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-18 08:23:07 $
+ *  last change: $Author: ama $ $Date: 2002-05-06 09:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,6 +790,8 @@ public:
                             SwContentAtPos& rCntntAtPos,
                             FASTBOOL bSetCrsr = FALSE,
                             SwRect* pFldRect = 0 );
+
+    FASTBOOL IsPageAtPos( const Point &rPt ) const;
 
         // Attribut selelktieren
     FASTBOOL SelectTxtAttr( USHORT nWhich, BOOL bExpand = FALSE,
