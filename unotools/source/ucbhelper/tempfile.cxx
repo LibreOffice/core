@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2001-09-25 15:04:11 $
+ *  last change: $Author: mba $ $Date: 2002-03-18 13:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,63 @@ struct TempFile_Impl
                     {}
 };
 
+rtl::OUString getParentName( const rtl::OUString& aFileName )
+{
+    sal_Int32 lastIndex = aFileName.lastIndexOf( sal_Unicode('/') );
+    rtl::OUString aParent = aFileName.copy( 0,lastIndex );
+
+    if( aParent[ aParent.getLength()-1] == sal_Unicode(':') && aParent.getLength() == 6 )
+        aParent += rtl::OUString::createFromAscii( "/" );
+
+    if( 0 == aParent.compareToAscii( "file://" ) )
+        aParent = rtl::OUString::createFromAscii( "file:///" );
+
+    return aParent;
+}
+
+sal_Bool ensuredir( const rtl::OUString& rUnqPath )
+{
+    rtl::OUString aPath;
+    if ( rUnqPath.getLength() < 1 )
+        return sal_False;
+
+    // remove trailing slash
+    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+        aPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
+    else
+        aPath = rUnqPath;
+
+    // HACK: create directory on a mount point with nobrowse option
+    // returns ENOSYS in any case !!
+    osl::Directory aDirectory( aPath );
+    osl::FileBase::RC nError = aDirectory.open();
+    aDirectory.close();
+    if( nError == osl::File::E_None )
+        return sal_True;
+
+    // try to create the directory
+    nError = osl::Directory::create( aPath );
+    sal_Bool  bSuccess = ( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
+    if( !bSuccess )
+    {
+        // perhaps parent(s) don't exist
+        rtl::OUString aParentDir = getParentName( aPath );
+        if ( aParentDir != aPath )
+        {
+            bSuccess = ensuredir( getParentName( aPath ) );
+
+            // After parent directory structure exists try it one's more
+            if ( bSuccess )
+            {
+                // Parent directory exists, retry creation of directory
+                nError = osl::Directory::create( aPath );
+                bSuccess =( nError == osl::File::E_None || nError == osl::FileBase::E_EXIST );
+            }
+        }
+    }
+
+    return bSuccess;
+}
 
 #define TMPNAME_SIZE  ( 1 + 5 + 5 + 4 + 1 )
 String ConstructTempDir_Impl( const String* pParent )
@@ -128,22 +185,13 @@ String ConstructTempDir_Impl( const String* pParent )
         }
     }
 
-#if 1
-    if ( !aName.Len() )
-    {
-        // if no parent or invalid parent : use system directory
-        if ( !aTempNameBase_Impl.getLength() )
-            aTempNameBase_Impl = TempFile::GetTempNameBaseDirectory();
-        aName = aTempNameBase_Impl;
-    }
-#else
     if ( !aName.Len() )
     {
         // if no parent or invalid parent : use default directory
         DBG_ASSERT( aTempNameBase_Impl.getLength(), "No TempDir!" );
         aName = aTempNameBase_Impl;
+        ensuredir( aName );
     }
-#endif
 
     // Make sure that directory ends with a separator
     sal_Int32 i = aName.Len();
@@ -342,21 +390,39 @@ SvStream* TempFile::GetStream( StreamMode eMode )
 
 String TempFile::SetTempNameBaseDirectory( const String &rBaseName )
 {
-    String aName( rBaseName );
+    rtl::OUString aUnqPath( rBaseName );
 
-    FileBase::RC err= Directory::create( aName );
-    if ( err == FileBase::E_None || err == FileBase::E_EXIST )
+    // remove trailing slash
+    if ( rBaseName.GetChar( rBaseName.Len() - 1 ) == sal_Unicode( '/' ) )
+        aUnqPath = rBaseName.Copy( 0, rBaseName.Len() - 1 );
+
+    // try to create the directory
+    sal_Bool bRet = sal_False;
+    osl::FileBase::RC err = osl::Directory::create( aUnqPath );
+    if ( err != FileBase::E_None && err != FileBase::E_EXIST )
+        // perhaps parent(s) don't exist
+        bRet = ensuredir( aUnqPath );
+    else
+        bRet = sal_True;
+
+    // failure to create base directory means returning an empty string
+    rtl::OUString aTmp;
+    if ( bRet )
     {
-        aTempNameBase_Impl = aName;
+        // append own internal directory
+        bRet = sal_True;
+        aTempNameBase_Impl = rBaseName;
         aTempNameBase_Impl += ::rtl::OUString( '/' );
 
         TempFile aBase( NULL, sal_True );
         if ( aBase.IsValid() )
+            // use it in case of success
             aTempNameBase_Impl = aBase.pImp->aName;
+
+        // return system path of used directory
+        FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
     }
 
-    rtl::OUString aTmp;
-    FileBase::getSystemPathFromFileURL( aTempNameBase_Impl, aTmp );
     return aTmp;
 }
 
