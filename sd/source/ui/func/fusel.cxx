@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-03 07:44:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             BOOL bToggle = FALSE;
 
-                            if (rMEvt.IsShift() && pView->GetMarkList().GetMarkCount() > 1)
+                            if (rMEvt.IsShift() && pView->GetMarkedObjectList().GetMarkCount() > 1)
                             {
                                 // Bei Einfachselektion kein Toggle
                                 bToggle = TRUE;
@@ -631,7 +631,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( ! rMEvt.IsRight())
                     pView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
-            else if (pView->HasMarkedObj())
+            else if (pView->AreObjectsMarked())
             {
                 /**************************************************************
                 * Klebepunkt selektieren
@@ -772,11 +772,11 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 * Toggle zw. Selektion und Rotation
                 **************************************************************/
                 SdrObject* pSingleObj = NULL;
-                ULONG nMarkCount = pView->GetMarkList().GetMarkCount();
+                ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
 
                 if (nMarkCount==1)
                 {
-                    pSingleObj = pView->GetMarkList().GetMark(0)->GetObj();
+                    pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
                 }
 
                 if (nSlotId == SID_OBJECT_SELECT
@@ -902,11 +902,11 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         pHdl = NULL;
         pWindow->ReleaseMouse();
         SdrObject* pSingleObj = NULL;
-        ULONG nMarkCount = pView->GetMarkList().GetMarkCount();
+        ULONG nMarkCount = pView->GetMarkedObjectList().GetMarkCount();
 
         if (nMarkCount==1)
         {
-            pSingleObj = pView->GetMarkList().GetMark(0)->GetObj();
+            pSingleObj = pView->GetMarkedObjectList().GetMark(0)->GetObj();
         }
 
         if ( nSlotId != SID_OBJECT_SELECT                            &&
@@ -1022,7 +1022,7 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
     {
         bReturn = FuDraw::KeyInput(rKEvt);
 
-        if(pView->GetMarkList().GetMarkCount() == 0)
+        if(pView->GetMarkedObjectList().GetMarkCount() == 0)
         {
             pView->ShowMirrored();
             pView->ResetCreationActive();
