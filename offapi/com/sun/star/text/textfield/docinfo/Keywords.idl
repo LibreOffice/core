@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Keywords.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-01-08 15:29:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com { module sun { module star {
     in the document information.
     @see com::sun::star::text::TextField
 */
-service Keywords
+published service Keywords
 {
     /** contains content information.
      */
