@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-15 14:54:33 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:53:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -171,8 +171,8 @@ sub create_directories
     }
     else
     {
-        if ( ! $installer::globals::languagepack ) { $path = $path . $installer::globals::product . $installer::globals::separator; }
-        else { $path = $path . $installer::globals::product . "_languagepack" . $installer::globals::separator; }
+        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $path = $path . $installer::globals::product . "_languagepack" . $installer::globals::separator; }
+        else { $path = $path . $installer::globals::product . $installer::globals::separator; }
 
         create_directory($path);
 
@@ -185,7 +185,9 @@ sub create_directories
 
         if (!($locallanguagesref eq "" ))   # this will be a path like "01_49", for Profiles and ConfigurationFiles, idt-Files
         {
-            $path = $path . $$languagesref . $installer::globals::separator;
+            my $languagestring = $$languagesref;
+            if ($installer::globals::is_unix_multi) { $languagestring = $installer::globals::unixmultipath; }
+            $path = $path . $languagestring  . $installer::globals::separator;
             create_directory($path);
         }
     }
