@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:47:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 |*
 |*************************************************************************/
 BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                               SwCrsrMoveState* pCMS ) const
 {
     BOOL bRet = FALSE;
     const SwFrm *pFrm = Lower();
@@ -237,7 +237,7 @@ BOOL SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 #pragma optimize("e",off)
 
 BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS ) const
 {
     BOOL bRet     = FALSE;
     const SwPageFrm *pPage = this;
@@ -362,7 +362,7 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*************************************************************************/
 BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS ) const
 {
     sal_Bool bOldAction = IsCallbackActionEnabled();
     ((SwRootFrm*)this)->SetCallbackActionEnabled( FALSE );
@@ -396,7 +396,7 @@ BOOL SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 |*
 |*************************************************************************/
 BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                             SwCrsrMoveState* pCMS ) const
 {
     // cell frame does not necessarily have a lower (split table cell)
     if ( !Lower() )
@@ -476,7 +476,7 @@ BOOL SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 //am weitesten oben liegt.
 
 BOOL SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
-                            const SwCrsrMoveState* pCMS ) const
+                            SwCrsrMoveState* pCMS ) const
 {
     aOszCtrl.Entry( this );
 
