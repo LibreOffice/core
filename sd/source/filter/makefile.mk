@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 19:48:18 $
+#   last change: $Author: hr $ $Date: 2005-04-06 12:58:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES =\
         $(SLO)$/sdpptwrp.obj	
 
 EXCEPTIONSFILES= \
+           $(SLO)$/pptin.obj		\
            $(SLO)$/sdfilter.obj
 
 # --- Tagets -------------------------------------------------------
