@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2001-06-12 16:08:32 $
+#   last change: $Author: pl $ $Date: 2001-11-01 19:12:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,23 +76,6 @@ LIBTARGET=NO
 
 .IF "$(header)" == ""
 
-CXXFILES=   \
-            textdata.cxx 	\
-            textdoc.cxx		\
-            texteng.cxx		\
-            textundo.cxx	\
-            textview.cxx	\
-            txtattr.cxx		\
-            xtextedt.cxx	\
-            sychconv.cxx
-
-.IF "$(VCL)" != ""
-CXXFILES+=   \
-            svmedit.cxx		\
-            svmedit2.cxx
-.ENDIF
-
-
 SLOFILES=   \
             $(SLO)$/textdata.obj	\
             $(SLO)$/textdoc.obj		\
@@ -101,13 +84,9 @@ SLOFILES=   \
             $(SLO)$/textview.obj	\
             $(SLO)$/txtattr.obj		\
             $(SLO)$/xtextedt.obj	\
-            $(SLO)$/sychconv.obj
-
-.IF "$(VCL)" != ""
-SLOFILES+=   \
+            $(SLO)$/sychconv.obj	\
             $(SLO)$/svmedit.obj		\
             $(SLO)$/svmedit2.obj
-.ENDIF
 
 OBJFILES=   \
             $(OBJ)$/textdata.obj	\
@@ -117,13 +96,9 @@ OBJFILES=   \
             $(OBJ)$/textview.obj	\
             $(OBJ)$/txtattr.obj		\
             $(OBJ)$/xtextedt.obj	\
-            $(OBJ)$/sychconv.obj
-
-.IF "$(VCL)" != ""
-OBJFILES+=   \
+            $(OBJ)$/sychconv.obj	\
             $(OBJ)$/svmedit.obj		\
             $(OBJ)$/svmedit2.obj
-.ENDIF
 
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
