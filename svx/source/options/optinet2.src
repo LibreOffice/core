@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 16:47:23 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,7 +1781,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ portuguese ] = "~Prefixo" ;
         Text[ chinese_simplified ] = "Η°ΧΊ(~P)";
         Text[ russian ] = "Οπετθκρ";
-        Text[ polish ] = "Przedrostek";
+        Text[ polish ] = "Prefiks";
         Text[ japanese ] = "ΜίΪΜ¨―Έ½(~P)";
         Text[ chinese_traditional ] = "«eΊσ(~P)";
         Text[ arabic ] = "ΗαγήΨΪ ΗαΓζα";
@@ -2168,7 +2168,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text[ english_us ] = "The entry \"[%1]\" cound not be found\nin the configuration file \"%2\".";
         Text[ portuguese ] = "Foi impossνvel encontrar a entrada \"[%1]\"\nno ficheiro de configuraηγo \"%2\".";
         Text[ russian ] = "Ηΰοθρό \"[%1]\" β κξντθγσπΰφθξννξμ\nτΰιλε \"%2\" νε νΰιδενΰ.";
-        Text[ greek ] = "Δεν βρέθηκε η εγγραφή \"[%1]\" στο αρχείο διαμόρφωσης \"%2\".";
+        Text[ greek ] = "Δεν βρέθηκε η καταχώριση \"[%1]\" στο αρχείο διαμόρφωσης \"%2\".";
         Text[ dutch ] = "Het item \"[%1]\" is onvindbaar in het\nconfig bestand \"%2\".";
         Text[ french ] = "Impossible de retrouver l'entrιe \"[%1]\"\ndans le fichier de configuration \"%2\".";
         Text[ spanish ] = "La entrada \"[%1]\" no se pudo encontrar\nen el archivo de configuraciσn \"%2\".";
@@ -3088,7 +3088,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text[ japanese ] = " ‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B0 ` 255 ‚ά‚Ε‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "¬O³o­ΣΔζ¦μªΊµL®Δ¶µ¥Ψ΅M½Π±z¦bΏι¤J¤@­Σ¦b0©M255¤§¶΅ªΊΌΖ­Θ΅C";
         Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 0 ζ 255.";
-        Text[ greek ] = "δεν είναι έγκυρη εισαγωγή για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 0 και 255.";
+        Text[ greek ] = " δεν είναι έγκυρη καταχώριση για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 0 και 255.";
         Text[ korean ] = "ΐΜ ΗΚµεΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΗΧΈρΐΤ΄Ο΄Ω. 0°ϊ 255 »ηΐΜΐΗ °ªΐ» ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "bu alan iηin geηerli bir deπer deπil. 0 ile 255 arasύnda bir deπer girin.";
         Text[ language_user1 ] = " ";
@@ -3112,7 +3112,7 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text[ japanese ] = " ‚±‚ΜΜ¨°ΩΔή‚Ε‚Ν–³ψ‚Ε‚·B1 ` 255 ‚ά‚Ε‚Μ”’l‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "¬O³o­ΣΔζ¦μªΊµL®Δ¶µ¥Ψ΅M½Π±z¦bΏι¤J¤@­Σ¦b1©M255¤§¶΅ªΊΌΖ­Θ΅C";
         Text[ arabic ] = "εζ ΕΟΞΗα ΫνΡ ΥΗαΝ αεΠΗ ΗαΝήα. ΗαΡΜΗΑ ΕΟΞΗα ήνγΙ ΚΚΡΗζΝ Θνδ 1 ζ 255.";
-        Text[ greek ] = "δεν είναι έγκυρη εισαγωγή για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 0 και 255.";
+        Text[ greek ] = " δεν είναι έγκυρη καταχώριση για αυτό το πεδίο. Παρακαλώ εισάγετε μια τιμή μεταξύ 1 και 255.";
         Text[ korean ] = "ΐΜ ΗΚµεΏ΅ ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΗΧΈρΐΤ΄Ο΄Ω. 1°ϊ 255 »ηΐΜΐΗ °ªΐ» ΑφΑ¤ΗΟ½Κ½ΓΏΐ.";
         Text[ turkish ] = "bu alan iηin geηerli bir deπer deπil. 1 ile 255 arasύnda bir deπer girin";
         Text[ language_user1 ] = " ";
@@ -4619,7 +4619,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text [ spanish ] = "Tenga en cuenta que junto con Java\ntambiιn desactivarα Javascript.\n\nΏDesea aϊn desactivar Java?";
         Text [ french ] = "Veuillez noter qu'en dιsactivant Java,\nvous dιsactiverez ιgalement le Javascript.\n\nVoulez-vous vraiment poursuivre ?";
         Text[ portuguese ] = "Note que ao desactivar Java\nestarα tambιm a desactivar Javascript.\n\nMesmo assim desactivar?";
-        Text[ russian ] = "Οξζΰλσιρςΰ, σχςθςε, χςξ ξςκλώχΰÿ Java,\nβϋ ξςκλώχθςε θ JavaScript.\n\nΞςκλώχθςό Java νερμξςπÿ νΰ ύςξ?";
+        Text[ russian ] = "Οξζΰλσιρςΰ, σχςθςε, χςξ ξςκλώχΰÿ Java,\nΒϋ ξςκλώχθςε θ JavaScript.\n\nΞςκλώχθςό Java νερμξςπÿ νΰ ύςξ?";
         Text[ dutch ] = "Wij wijzen u erop dat u met Java\nook Javascript uitschakelt.\n\nWilt u Java toch uitschakelen?";
         Text[ danish ] = "Bemζrk venligst, at du deaktiverer\nJavaScript sammenmed Java.\n\nVil du deaktivere Java alligevel?";
         Text[ swedish ] = "Tδnk pε att Du δven stδnger av\nJavascript tillsammans med Java.\n\nVill Du trots det stδnga av Java?";
@@ -4628,7 +4628,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
         Text[ japanese ] = "Java‚Ύ‚―‚Ε‚Θ‚­\nJavaScript‚ΰμ“®‚µ‚Θ‚­‚Θ‚ι‚±‚Ζ‚πl‚¦‚Δ‰Ί‚³‚ΆB\n\nJava‚π½²―ΑµΜ‚Ι‚µ‚ά‚·‚©?";
         Text[ chinese_simplified ] = "ΗλΧΆÒβ£ΊΤΪΚ§»ξJava\nΚ±»αΝ¬Κ±Κ§»ξJavascript΅£\n\nΔϊ»ΉΚΗÒªΚ§»ξJava £Ώ";
         Text[ chinese_traditional ] = "½Π±zª`·N¥Ά¬΅¤F Java ¤δ΄©΅A\n¤]΄N·|¥Ά¬΅Javascript ¥\\―ΰ΅C\n\nΑΩ¬O­n¥Ά¬΅ Java ΅H";
-        Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδε ΘΕΫαΗήί αΜΗέΗ\nΚήζγ ΘΕΫαΗή ΜΗέΗΣίΡνΘΚ ΓνΦΗπ.\n\nεα ΚΡνΟ ΕΫαΗή ΜΗέΗ ΘΗαΡΫγ γδ ΠαίΏ";
+        Text[ arabic ] = "ΗαΡΜΗΑ γαΗΝΩΙ Γδε ΘΕΫαΗήί αά Java\nΚήζγ ΘΕΫαΗή Javascript ΓνΦΗπ.\n\nεα ΚΡνΟ ΕΫαΗή Java ΘΗαΡΫγ γδ ΠαίΏ";
         Text[ greek ] = "Παρακαλώ προσέξτε ότι με την απενεργοποίηση του Java\nγίνεται και απενεργοποίηση του Javascript.\n\nΘέλετε να γίνει απενεργοποίηση του Java;";
         Text[ korean ] = "JavaΏΝ ΄υΊÒΎξ \nJavaScriptµµ »ηΏλ ΊÒ°΅΄ΙΗΨΑψ΄Ω΄Β »η½ΗΏ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ. \n\n±Χ·΅µµ JavaΈ¦ »ηΏλ ΗΨΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
         Text[ turkish ] = "Java ile birlikte Javascript'in de\nkapatύlacaπύnύ dikkate alύn.\n\nYine de Java'yύ kapatmak istiyor musunuz?";
