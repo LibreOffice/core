@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 10:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -129,6 +132,18 @@
 #ifndef _FLDDAT_HXX
 #include <flddat.hxx>
 #endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
+#ifndef _fmtruby_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _POOLFMT_HXX
+#include <poolfmt.hxx>
+#endif
 
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.
@@ -146,7 +161,8 @@ enum RTF_FLD_TYPES {
     RTFFLD_DATE,
     RTFFLD_DATA,
     RTFFLD_MERGEFLD,
-    RTFFLD_HYPERLINK
+    RTFFLD_HYPERLINK,
+    RTFFLD_EQ
 };
 
 static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
@@ -163,13 +179,14 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sMERGEFLD[]=   "\10mergefield";
     sal_Char __READONLY_DATA sIMPORT2[]=    "\16includepicture";
     sal_Char __READONLY_DATA sHYPERLINK[]=  "\x9hyperlink";
+    sal_Char __READONLY_DATA sEQ[]=         "\2eq";
 
     struct _Dummy_RTF_FLD_TYPES
     {
         RTF_FLD_TYPES eFldType;
         const sal_Char* pFldNm;
     };
-    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[ RTFFLD_HYPERLINK+1 ] = {
+    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[ RTFFLD_EQ+1 ] = {
             RTFFLD_TOC,         sTOC,
             RTFFLD_IMPORT,      sIMPORT,
             RTFFLD_INDEX,       sINDEX,
@@ -179,7 +196,8 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             RTFFLD_DATA,        sDATA,
             RTFFLD_MERGEFLD,    sMERGEFLD,
             RTFFLD_IMPORT,      sIMPORT2,
-            RTFFLD_HYPERLINK,   sHYPERLINK
+            RTFFLD_HYPERLINK,   sHYPERLINK,
+            RTFFLD_EQ,          sEQ
     };
 
 
@@ -258,7 +276,11 @@ public:
     RtfFieldSwitch( const String& rParam );
     sal_Unicode GetSwitch( String& rParam );
 
-    BOOL IsAtEnd() const { return nCurPos >= sParam.Len(); }
+    BOOL IsAtEnd() const                { return nCurPos >= sParam.Len(); }
+    xub_StrLen GetCurPos() const        { return nCurPos; }
+    void Erase( xub_StrLen nEndPos )    { sParam.Erase( 0, nEndPos ); }
+    void Insert( const String& rIns )   { sParam.Insert( rIns, 0 ); }
+    const String& GetStr() const        { return sParam; }
 };
 
 RtfFieldSwitch::RtfFieldSwitch( const String& rParam )
@@ -299,6 +321,132 @@ sal_Unicode RtfFieldSwitch::GetSwitch( String& rParam )
     nCurPos = 0;
 
     return cKey;
+}
+
+struct RTF_EquationData
+{
+    String sFontName, sUp, sDown, sText;
+    sal_Int32 nJustificationCode, nFontSize, nUp, nDown, nStyleNo;
+
+    inline RTF_EquationData()
+        : nJustificationCode(0), nFontSize(0), nUp(0), nDown(0),
+        nStyleNo( -1 )
+    {}
+};
+
+xub_StrLen lcl_FindEndBracket( const String& rStr )
+{
+    xub_StrLen nEnd = rStr.Len(), nRet = STRING_NOTFOUND, nPos = 0;
+    int nOpenCnt = 1;
+    sal_Unicode cCh;
+    for( ; nPos < nEnd; ++nPos )
+        if( ')' == (cCh = rStr.GetChar( nPos )) && !--nOpenCnt )
+        {
+            nRet = nPos;
+            break;
+        }
+        else if( '(' == cCh )
+            ++nOpenCnt;
+
+    return nRet;
+}
+
+void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
+                            sal_Unicode nSttKey )
+{
+    int nSubSupFlag;
+    RtfFieldSwitch aRFS( rStr );
+    while( !aRFS.IsAtEnd() )
+    {
+        String sParam;
+        sal_Unicode cKey = aRFS.GetSwitch( sParam );
+        if( 1 == nSubSupFlag )
+            ++nSubSupFlag;
+        else if( 1 < nSubSupFlag )
+            nSubSupFlag = 0;
+
+        BOOL bCheckBracket = FALSE;
+        switch( cKey )
+        {
+        case 0:
+            switch( nSttKey )
+            {
+            case 'u':   rData.sUp += sParam;    break;
+            case 'd':   rData.sDown += sParam;  break;
+            default:    rData.sText += sParam;  break;
+            }
+            break;
+
+        case '*':
+            if( sParam.Len() )
+            {
+                if( sParam.EqualsIgnoreCaseAscii( "jc", 0, 2 ) )
+                    rData.nJustificationCode = sParam.Copy( 2 ).ToInt32();
+                else if( sParam.EqualsIgnoreCaseAscii( "hps", 0, 3 ) )
+                    rData.nFontSize= sParam.Copy( 3 ).ToInt32();
+                else if( sParam.EqualsIgnoreCaseAscii( "Font:", 0, 5 ) )
+                    rData.sFontName = sParam.Copy( 5 );
+                else if( sParam.EqualsIgnoreCaseAscii( "cs", 0, 2 ) )
+                    rData.nStyleNo = sParam.Copy( 2 ).ToInt32();
+            }
+            break;
+        case 's' :
+            ++nSubSupFlag;
+            break;
+
+        case 'u':
+            if( sParam.Len() && 'p' == sParam.GetChar( 0 ) &&
+                2 == nSubSupFlag )
+            {
+                rData.nUp = sParam.Copy( 1 ).ToInt32();
+                bCheckBracket = TRUE;
+            }
+            break;
+
+        case 'd':
+            if( sParam.Len() && 'o' == sParam.GetChar( 0 ) &&
+                2 == nSubSupFlag )
+            {
+                rData.nDown = sParam.Copy( 1 ).ToInt32();
+                bCheckBracket = TRUE;
+            }
+            break;
+
+        default:
+            bCheckBracket = TRUE;
+            cKey = 0;
+            break;
+        }
+
+        if( bCheckBracket && sParam.Len() )
+        {
+            xub_StrLen nEnd, nStt = sParam.Search( '(' ),
+                        nLen = sParam.Len();
+            if( STRING_NOTFOUND != nStt )
+            {
+                sParam.Erase( 0, nStt + 1 ) += aRFS.GetStr();
+                if( STRING_NOTFOUND !=
+                        (nEnd = ::lcl_FindEndBracket( sParam )) )
+                {
+                    // end in the added string?
+                    if( (nLen - nStt - 1 ) < nEnd )
+                        aRFS.Erase( nEnd + 1 - (nLen - nStt - 1));
+                    else
+                    {
+                        // not all handled here, so set new into the RFS
+                        aRFS.Insert( sParam.Copy( nEnd + 1,
+                                                nLen - nStt - nEnd - 2 ));
+                        if( aRFS.GetStr().Len() &&
+                            ',' == aRFS.GetStr().GetChar(0) )
+                            aRFS.Erase( 1 );
+                    }
+
+                    ::lcl_ScanEquationField( sParam.Copy( 0, nEnd ),
+                                                rData, cKey );
+                }
+            }
+        }
+    }
 }
 
 int SwRTFParser::MakeFieldInst( String& rFieldStr )
@@ -505,7 +653,8 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     case RTFFLD_SYMBOL:
         {
             // loesche fuehrende Blanks
-            if( IsNewGroup() )  GetAttrSet();
+            if( IsNewGroup() )
+                GetAttrSet();
             SetNewGroup( TRUE );
 
             SfxItemSet& rSet = GetAttrSet();
@@ -522,7 +671,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     case 0:
                         if( !bCharIns )
                         {
-                            sal_Unicode nChar = sParam.ToInt32();
+                            sal_Unicode nChar = (sal_Unicode)sParam.ToInt32();
                             if( nChar )
                             {
                                 pDoc->Insert( *pPam, nChar );
@@ -556,10 +705,9 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     case 's': case 'S':
                         // Fontsize setzen
                         {
-                            USHORT nVal = sParam.ToInt32();
-                            nVal *= 20;
-                            rSet.Put( SvxFontHeightItem( (const USHORT)nVal,
-                                        100, RES_CHRATR_FONTSIZE ));
+                            const USHORT nVal = (USHORT)(sParam.ToInt32() * 20);
+                            rSet.Put( SvxFontHeightItem( nVal,
+                                                100, RES_CHRATR_FONTSIZE ));
                         }
                         break;
                     }
@@ -603,6 +751,115 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         }
         break;
 
+    case RTFFLD_EQ:
+        rFieldStr.Erase();
+        if( aSaveStr.Len() )
+        {
+            RTF_EquationData aData;
+            ::lcl_ScanEquationField( aSaveStr, aData, 0 );
+
+            // is it a ruby attr?
+            if( aData.sText.Len() && aData.sFontName.Len() &&
+                aData.nFontSize && aData.sUp.Len() && !aData.sDown.Len() )
+            {
+                //Translate and apply
+                switch( aData.nJustificationCode )
+                {
+                case 0:     aData.nJustificationCode = 1;   break;
+                case 1:     aData.nJustificationCode = 3;   break;
+                case 2:     aData.nJustificationCode = 4;   break;
+                case 4:     aData.nJustificationCode = 2;   break;
+//              case 3:
+                default:    aData.nJustificationCode = 0;   break;
+                }
+
+                SwFmtRuby aRuby( aData.sUp );
+                SwCharFmt * pCharFmt = -1 != aData.nStyleNo
+                                          ? aCharFmtTbl.Get( aData.nStyleNo )
+                                          : 0;
+
+                if( !pCharFmt )
+                {
+                    //Make a guess at which of asian of western we should be setting
+                    USHORT nScript;
+                    if (pBreakIt->xBreak.is())
+                        nScript = pBreakIt->xBreak->getScriptType( aData.sUp, 0);
+                    else
+                        nScript = com::sun::star::i18n::ScriptType::ASIAN;
+
+                    USHORT nFntHWhich = GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ),
+                           nFntWhich = GetWhichOfScript( RES_CHRATR_FONT, nScript );
+
+                    //Check to see if we already have a ruby charstyle that this fits
+                    for(USHORT i=0; i < aRubyCharFmts.Count(); ++i )
+                    {
+                        SwCharFmt *pFmt = (SwCharFmt *)aRubyCharFmts[i];
+                        const SvxFontHeightItem &rF = (const SvxFontHeightItem &)
+                                                    pFmt->GetAttr( nFntHWhich );
+                        if( rF.GetHeight() == USHORT(aData.nFontSize * 10 ))
+                        {
+                            const SvxFontItem &rF = (const SvxFontItem &)
+                                                    pFmt->GetAttr( nFntWhich );
+                            if( rF.GetFamilyName().Equals( aData.sFontName ))
+                            {
+                                pCharFmt = pFmt;
+                                break;
+                            }
+                        }
+                    }
+
+                    //Create a new char style if necessary
+                    if( !pCharFmt )
+                    {
+                        String sNm;
+                        //Take this as the base name
+                        pDoc->GetPoolNm( RES_POOLCHR_RUBYTEXT, sNm );
+                        sNm += String::CreateFromInt32( aRubyCharFmts.Count() + 1 );
+                        pCharFmt = pDoc->MakeCharFmt( sNm,
+                                            ( SwCharFmt*)pDoc->GetDfltCharFmt() );
+
+                        SvxFontHeightItem aHeightItem( aData.nFontSize * 10 );
+                        aHeightItem.SetWhich( nFntHWhich );
+
+                        SvxFontItem aFontItem( FAMILY_DONTKNOW, aData.sFontName,
+                            aEmptyStr, PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW );
+                        aFontItem.SetWhich( nFntWhich );
+
+                        pCharFmt->SetAttr( aHeightItem );
+                        pCharFmt->SetAttr( aFontItem );
+                        void* p = pCharFmt;
+                        aRubyCharFmts.Insert( p, aRubyCharFmts.Count() );
+                    }
+                }
+
+                //Set the charstyle and justification
+                aRuby.SetCharFmtName( pCharFmt->GetName() );
+                aRuby.SetCharFmtId( pCharFmt->GetPoolFmtId() );
+                aRuby.SetAdjustment( (USHORT)aData.nJustificationCode );
+
+                // im FieldStr steht der anzuzeigenden Text, im
+                pDoc->Insert( *pPam, aData.sText );
+                pPam->SetMark();
+                pPam->GetMark()->nContent -= aData.sText.Len();
+                pDoc->Insert( *pPam, aRuby, SETATTR_DONTEXPAND );
+                pPam->DeleteMark();
+            }
+            // or a combined character field?
+            else if( aData.sUp.Len() && aData.sDown.Len() &&
+                    !aData.sText.Len() && !aData.sFontName.Len() &&
+                    !aData.nFontSize )
+            {
+                String sFld( aData.sUp );
+                sFld += aData.sDown;
+                SwCombinedCharField aFld((SwCombinedCharFieldType*)pDoc->
+                                GetSysFldType( RES_COMBINED_CHARS ), sFld );
+                pDoc->Insert( *pPam, SwFmtFld( aFld ));
+
+            }
+            SkipGroup();        // ueberlese den Rest
+        }
+        break;
+
     case RTFFLD_TOC:
     case RTFFLD_INDEX:
         break;
@@ -643,16 +900,20 @@ void SwRTFParser::ReadField()
                 {
                     // FieldInst vollstaendig eingelesen, was ist es denn?
                     nRet = MakeFieldInst( sFieldStr );
+                    switch ( nRet )
+                    {
+                    case RTFFLD_TOC:
+                    case RTFFLD_INDEX:
+                        // erstmal Index/Inhaltsverzeichniss ueberspringen
+                        // und als normalen Text einfuegen. Spaeter mal auch dem
+                        // SwPaM darum aufspannen.
+                        return ;
 
-                    // erstmal Index/Inhaltsverzeichniss ueberspringen
-                    // und als normalen Text einfuegen. Spaeter mal auch dem
-                    // SwPaM darum aufspannen.
-                    if( RTFFLD_TOC == nRet || RTFFLD_INDEX == nRet )
-                        return;
-
-                    if( RTFFLD_IMPORT == nRet || RTFFLD_HYPERLINK == nRet )
+                    case RTFFLD_IMPORT:
+                    case RTFFLD_HYPERLINK:
                         sFieldNm = sFieldStr;
-
+                        break;
+                    }
                     sFieldStr.Erase();
                 }
                 else if( RTFFLD_UNKNOWN == nRet ) // FieldResult wurde eingelesen
@@ -671,28 +932,32 @@ void SwRTFParser::ReadField()
                 }
                 else if( sFieldNm.Len() )
                 {
-                    if( RTFFLD_IMPORT == nRet )
+                    switch ( nRet )
                     {
+                    case RTFFLD_IMPORT:
                         // Grafik einfuegen
                         InsPicture( sFieldNm );
                         nRet = INT_MAX;
-                    }
-                    else if( RTFFLD_HYPERLINK == nRet && sFieldStr.Len() )
-                    {
-                        // im FieldStr steht der anzuzeigenden Text, im
-                        pDoc->Insert( *pPam, sFieldStr );
+                        break;
+                    case RTFFLD_HYPERLINK:
+                        if( sFieldStr.Len() )
+                        {
+                            // im FieldStr steht der anzuzeigenden Text, im
+                            pDoc->Insert( *pPam, sFieldStr );
 
-                        String sTarget( sFieldNm.GetToken( 1, '\1' ));
-                        if( sTarget.Len() )
-                            sFieldNm.Erase( sFieldNm.Len() - sTarget.Len() -1 );
+                            String sTarget( sFieldNm.GetToken( 1, '\1' ));
+                            if( sTarget.Len() )
+                                sFieldNm.Erase( sFieldNm.Len() - sTarget.Len() -1 );
 
-                        // oder ueber den Stack setzen??
-                        pPam->SetMark();
-                        pPam->GetMark()->nContent -= sFieldStr.Len();
-                        pDoc->Insert( *pPam,
-                                        SwFmtINetFmt( sFieldNm, sTarget ),
-                                        SETATTR_DONTEXPAND );
-                        pPam->DeleteMark();
+                            // oder ueber den Stack setzen??
+                            pPam->SetMark();
+                            pPam->GetMark()->nContent -= sFieldStr.Len();
+                            pDoc->Insert( *pPam,
+                                            SwFmtINetFmt( sFieldNm, sTarget ),
+                                            SETATTR_DONTEXPAND );
+                            pPam->DeleteMark();
+                        }
+                        break;
                     }
                 }
             }
@@ -782,6 +1047,19 @@ INSINGLECHAR:
         case RTF_SHPRSLT:
             SkipGroup();
             break;
+
+        case RTF_CS:
+            // we write every time "EQ "
+            if( bFldInst && 0 == sFieldStr.SearchAscii( "EQ " ))
+            {
+                // insert behind the EQ the "\*cs<NO> " string. This is utilize
+                // in the MakeFieldInst
+                String sTmp;
+                (sTmp.AssignAscii( "\\* cs" )
+                    += String::CreateFromInt32( nTokenValue )) += ' ';
+                sFieldStr.Insert( sTmp, 3 );
+            }
+            break;
     }
 
     if( RTFFLD_IMPORT == nRet && sFieldNm.Len() )
@@ -798,11 +1076,14 @@ INSINGLECHAR:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.2 2001-02-21 12:45:23 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.3 2001-06-01 10:42:53 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/21 12:45:23  os
+      use database struct instead of a combined string
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 

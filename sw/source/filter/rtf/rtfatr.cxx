@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-25 16:03:48 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 10:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
 #endif
 #ifndef _SVX_HYZNITEM_HXX //autogen
 #include <svx/hyznitem.hxx>
@@ -344,6 +347,12 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
 #endif
 #ifndef _FLTINI_HXX
 #include <fltini.hxx>
@@ -1039,18 +1048,23 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
     while( 0 != Count() && 0 != (pSEPos = GetObject( 0 )) &&
         ( STRING_MAXLEN == nStrPos || nStrPos == pSEPos->GetEnd() ))
     {
-        rWrt.Strm() << '}';
-
         const SfxPoolItems& rAttrs = pSEPos->GetAttrs();
         for( USHORT nAttr = rAttrs.Count(); nAttr; )
-            if( RES_TXTATR_INETFMT == rAttrs[ --nAttr ]->Which() )
+            switch( rAttrs[ --nAttr ]->Which() )
             {
+            case RES_TXTATR_INETFMT:
                 // Hyperlinks werden als Felder geschrieben, aber der
                 // "FieldResult" steht als Text im TextNode. Also muss
                 // bei diesen Attributen am Ende 2 Klammern stehen!
                 rWrt.Strm() << "}}";
+                break;
+
+            case RES_TXTATR_CJK_RUBY:
+                rWrt.Strm() << ")}{" << sRTF_FLDRSLT << " }}";
+                break;
             }
 
+        rWrt.Strm() << '}';     // end of all attributes from this position
         DeleteAndDestroy( 0, 1 );
     }
 }
@@ -2259,6 +2273,50 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
     ((((aFldStt += sRTF_FIELD) += '{' ) += sRTF_IGNORE ) += sRTF_FLDINST) += ' ';
     switch( pFld->GetTyp()->Which() )
     {
+    case RES_COMBINED_CHARS:
+        {
+            /*
+            We need a font size to fill in the defaults, if these are overridden
+            (as they generally are) by character properties then those properties
+            win.
+
+            The fontsize that is used in MS for determing the defaults is always
+            the CJK fontsize even if the text is not in that language, in OOo the
+            largest fontsize used in the field is the one we should take, but
+            whatever we do, word will actually render using the fontsize set for
+            CJK text. Nevertheless we attempt to guess whether the script is in
+            asian or western text based up on the first character and use the
+            font size of that script as our default.
+            */
+            const String& rFldPar1 = pFld->GetPar1();
+            USHORT nScript;
+            if( pBreakIt->xBreak.is() )
+                nScript = pBreakIt->xBreak->getScriptType( rFldPar1, 0);
+            else
+                nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+
+            long nHeight = ((SvxFontHeightItem&)rRTFWrt.GetItem(
+                GetWhichOfScript(RES_CHRATR_FONTSIZE, nScript ))).GetHeight();
+            nHeight = (nHeight + 10) / 20; //Font Size in points;
+
+            /*
+            Divide the combined char string into its up and down part. Get the
+            font size and fill in the defaults as up == half the font size and
+            down == a fifth the font size
+            */
+            xub_StrLen nAbove = (rFldPar1.Len()+1)/2;
+            rWrt.Strm() << aFldStt.GetBuffer() << "EQ \\\\o (\\\\s\\\\up ";
+            rWrt.OutLong( nHeight/2 ) << '(';
+            RTFOutFuncs::Out_String( rWrt.Strm(), rFldPar1.Copy(0,nAbove),
+                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+            rWrt.Strm() << "), \\\\s\\\\do ";
+            rWrt.OutLong( nHeight/5 ) << '(';
+            RTFOutFuncs::Out_String( rWrt.Strm(), rFldPar1.Copy( nAbove ),
+                                    DEF_ENCODING, rRTFWrt.bWriteHelpFmt )
+                    << "))";
+        }
+        break;
+
     case RES_DBFLD:
             aFldStt += "MERGEFIELD ";
             // kein break !!
@@ -2552,6 +2610,111 @@ static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
         OutRTF_SwFmt( rWrt, *pFmt );
     return rWrt;
 }
+
+static Writer& OutRTF_SwTxtRuby( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
+    const SwFmtRuby& rRuby = (const SwFmtRuby&)rHt;
+    const SwTxtRuby* pRubyTxt = rRuby.GetTxtRuby();
+    const SwTxtNode* pNd;
+
+    if( !pRubyTxt || 0 == (pNd = pRubyTxt->GetpTxtNode() ))
+        return rWrt;
+
+    sal_Char cDirective = 0, cJC = '0';
+    switch( rRuby.GetAdjustment() )
+    {
+    case 0:     cJC = '3';  cDirective = 'l';   break;
+    case 2:     cJC = '4';  cDirective = 'r';   break;
+    case 3:     cJC = '1';  cDirective = 'd';   break;
+    case 4:     cJC = '2';  cDirective = 'd';   break;
+    case 1:     break;          //defaults to 0
+    default:
+        ASSERT( FALSE, "Unhandled Ruby justication code" );
+        break;
+    }
+
+    /*
+        MS needs to know the name and size of the font used in the ruby item,
+        but we coud have written it in a mixture of asian and western
+        scripts, and each of these can be a different font and size than the
+        other, so we make a guess based upon the first character of the text,
+        defaulting to asian.
+        */
+    USHORT nScript;
+    if( pBreakIt->xBreak.is() )
+        nScript = pBreakIt->xBreak->getScriptType( rRuby.GetText(), 0);
+    else
+        nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+
+    const SwCharFmt* pFmt = pRubyTxt->GetCharFmt();
+    const SvxFontItem *pFont;
+    long nHeight;
+
+    if( pFmt )
+    {
+        const SwAttrSet& rSet = pFmt->GetAttrSet();
+        pFont = &(const SvxFontItem&)rSet.Get( GetWhichOfScript(
+                                                RES_CHRATR_FONT, nScript ));
+
+        nHeight = ((SvxFontHeightItem&)rSet.Get(
+                GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ))).GetHeight();
+    }
+    else
+    {
+        /*Get document defaults if no formatting on ruby text*/
+        const SfxItemPool *pPool = pNd->GetSwAttrSet().GetPool();
+        pFont = &(const SvxFontItem&)pPool->GetDefaultItem(
+                            GetWhichOfScript( RES_CHRATR_FONT, nScript ));
+
+        nHeight = ((SvxFontHeightItem&)pPool->GetDefaultItem(
+                GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ))).GetHeight();
+    }
+    ( nHeight += 5 ) /= 10;
+
+    // don't change " EQ " to any other without changing the code in RTFFLD.CXX
+    rWrt.Strm() << '{' << sRTF_FIELD << '{' << sRTF_IGNORE << sRTF_FLDINST
+                << " EQ \\\\* jc" << cJC
+                << " \\\\* \"Font:";
+    RTFOutFuncs::Out_String( rWrt.Strm(), pFont->GetFamilyName(),
+                            DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+    rWrt.Strm() << "\" \\\\* hps";
+    rWrt.OutLong( nHeight );
+    rWrt.Strm() << " \\\\o";
+    if( cDirective )
+        rWrt.Strm() << "\\\\a" << cDirective;
+    rWrt.Strm() << "(\\\\s\\\\up ";
+
+    if( pBreakIt->xBreak.is() )
+        nScript = pBreakIt->xBreak->getScriptType( pNd->GetTxt(),
+                                                   *pRubyTxt->GetStart() );
+    else
+        nScript = ::com::sun::star::i18n::ScriptType::ASIAN;
+
+    const SwAttrSet& rSet = pNd->GetSwAttrSet();
+    nHeight = ((SvxFontHeightItem&)rSet.Get(
+                GetWhichOfScript( RES_CHRATR_FONTSIZE, nScript ))).GetHeight();
+    (nHeight += 10) /= 20-1;
+    rWrt.OutLong( nHeight ) << '(';
+
+    if( pFmt )
+    {
+        rWrt.Strm() << '{';
+        OutRTF_SwFmt( rWrt, *pFmt );
+        if( rRTFWrt.bOutFmtAttr )
+            rWrt.Strm() << ' ';
+    }
+    RTFOutFuncs::Out_String( rWrt.Strm(), rRuby.GetText(),
+                            DEF_ENCODING, rRTFWrt.bWriteHelpFmt );
+    if( pFmt )
+        rWrt.Strm() << '}';
+
+    rWrt.Strm() << "),";
+    rRTFWrt.bOutFmtAttr = FALSE;
+
+    return rWrt;
+}
+
 
 /* File FRMATR.HXX */
 
@@ -3634,7 +3797,7 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_TXTATR_TOXMARK */            0, // NOT USED!! OutRTF_SwTOXMark,
 /* RES_TXTATR_CHARFMT   */          OutRTF_SwTxtCharFmt,
 /* RES_TXTATR_TWO_LINES */          0,
-/* RES_TXTATR_CJK_RUBY */           0,
+/* RES_TXTATR_CJK_RUBY */           OutRTF_SwTxtRuby,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  0,
 /* RES_TXTATR_DUMMY5 */             0,
 /* RES_TXTATR_DUMMY6 */             0,
@@ -3739,11 +3902,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.19 2001-05-25 16:03:48 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.20 2001-06-01 10:42:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/05/25 16:03:48  jp
+      Bug #82965#/#82962#: Im-/Export of NumRules
+
       Revision 1.18  2001/05/03 11:46:10  jp
       new: export or scriptspace/forbiddenrule/hangingpuctuation
 

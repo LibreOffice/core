@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 10:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ class SwRTFParser : public SvxRTFParser
     SvBools aMergeBoxes;                // Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
+    SvPtrarr aRubyCharFmts;
 
     SfxItemSet* pGrfAttrSet;
     SwTableNode* pTableNode, *pOldTblNd; // fuers Lesen von Tabellen: akt. Tab
@@ -291,6 +292,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.45  2000/09/18 16:04:51  willem.vandorp
       OpenOffice header added.
 
