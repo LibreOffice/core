@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:23:55 $
+ *  last change: $Author: thb $ $Date: 2001-07-26 10:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,7 +960,7 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                     sal_uInt32  nInSize = pIn->Tell();
                     pIn->Seek( 0 );
 
-#if defined CGM_EXPORT_IMPRESS && TF_ONE51
+#ifdef CGM_EXPORT_IMPRESS
                     uno::Reference< task::XStatusIndicator >  aXStatInd;
                     sal_uInt32  nNext = 0;
                     sal_uInt32  nAdd = nInSize / 20;
@@ -974,7 +974,7 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                     while ( pCGM->IsValid() && ( pIn->Tell() < nInSize ) && !pCGM->IsFinished() )
                     {
 
-#if defined CGM_EXPORT_IMPRESS && defined TF_ONE51
+#ifdef CGM_EXPORT_IMPRESS
 
 
                         if ( bProgressBar )
@@ -996,7 +996,7 @@ extern "C" sal_uInt32 __LOADONCALLAPI ImportCGM( String& rFileName, uno::Referen
                         nStatus = pCGM->GetBackGroundColor() | 0xff000000;
                     }
                     delete pIn;
-#if defined CGM_EXPORT_IMPRESS && defined TF_ONE51
+#ifdef CGM_EXPORT_IMPRESS
                     if ( bProgressBar )
                         aXStatInd->end();
 #endif
