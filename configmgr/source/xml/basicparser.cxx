@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-01 16:10:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,13 +164,13 @@ BasicParser::~BasicParser()
 }
 // -----------------------------------------------------------------------------
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 void BasicParser::dbgUpdateLocation()
 {
 #ifndef DBG_UTIL
     OUString  dbgPublicId,    dbgSystemId;
     sal_Int32 dbgLineNo,      dbgColumnNo;
-#endif // DBG_UTIL
+#endif // OSL_DEBUG_LEVEL
 
     if (m_xLocator.is())
     {
