@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:20:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ enum SwWw8ControlType
 {
     WW8_CT_EDIT,
     WW8_CT_CHECKBOX,
-    WW8_CT_COMBOBOX
+    WW8_CT_DROPDOWN
 };
 
 
@@ -502,20 +502,20 @@ class WW8FormulaControl : public OCX_Control
 {
 public:
     WW8FormulaControl(const String& sN,SwWW8ImplReader &rR)
-        : OCX_Control(sN), rRdr(rR) {}
-    void WW8FormulaControl::SetOthersFromDoc(com::sun::star::awt::Size &rSz,
-        com::sun::star::uno::Reference <
-        com::sun::star::beans::XPropertySet> &rPropSet);
+        : OCX_Control(sN), rRdr(rR), fToolTip(0), fNoMark(0), fUseSize(0),
+    fNumbersOnly(0), fDateOnly(0), fUnused(0), nSize(0), hpsCheckBox(20),
+    nChecked(0)
+    {
+    }
+    UINT8 fToolTip:1;
+    UINT8 fNoMark:1;
+    UINT8 fUseSize:1;
+    UINT8 fNumbersOnly:1;
+    UINT8 fDateOnly:1;
+    UINT8 fUnused:3;
+    UINT16 nSize;
 
-    UINT8   fToolTip:1;
-    UINT8   fNoMark:1;
-    UINT8   fUseSize:1;
-    UINT8   fNumbersOnly:1;
-    UINT8   fDateOnly:1;
-    UINT8   fUnused:3;
-    UINT16  nSize;
-
-    UINT16  hpsCheckBox;
+    UINT16 hpsCheckBox;
     UINT16 nChecked;
 
     String sTitle;
@@ -523,13 +523,14 @@ public:
     String sFormatting;
     String sHelp;
     String sToolTip;
-
+    std::vector<String> maListEntries;
+    virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
 private:
     //No copying
     WW8FormulaControl(const WW8FormulaControl&);
     WW8FormulaControl& operator=(const WW8FormulaControl&);
-
+protected:
     SwWW8ImplReader &rRdr;
 };
 
@@ -541,6 +542,21 @@ private:
     WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
+    virtual sal_Bool Import(const com::sun::star::uno::Reference <
+        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
+        com::sun::star::awt::Size &rSz);
+};
+
+class WW8FormulaListBox : public WW8FormulaControl
+{
+private:
+    //No copying
+    WW8FormulaListBox(const WW8FormulaListBox&);
+    WW8FormulaListBox& operator=(const WW8FormulaListBox&);
+public:
+    WW8FormulaListBox(SwWW8ImplReader &rR);
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
         com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
         com::sun::star::uno::Reference <
@@ -1393,7 +1409,11 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_Embedd( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr);
     eF_ResT Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr );
-    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, String& );
+    eF_ResT Read_F_FormListBox( WW8FieldDesc* pF, String& rStr);
+    com::sun::star::awt::Size MiserableDropDownFormHack(const String &rString,
+        com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>&
+        rPropSet);
+
     eF_ResT Read_F_Macro( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBField( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
@@ -1439,6 +1459,7 @@ public:     // eigentlich private, geht aber leider nur public
     CharSet GetCurrentCharSet();
 };
 
+bool CanUseRemoteLink(const String &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
 void SyncParagraphIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
