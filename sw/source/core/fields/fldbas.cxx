@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
+ *  last change: $Author: os $ $Date: 2001-04-26 07:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,6 +660,8 @@ SwField* SwFieldList::GetLastField() const
 
 String FormatNumber(USHORT nNum, ULONG nFormat)
 {
+    if(SVX_NUM_PAGEDESC == nFormat)
+        return  String::CreateFromInt32( nNum );
     SvxNumberType aNumber;
 
     ASSERT(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
