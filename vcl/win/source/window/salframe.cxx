@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-14 09:34:51 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 15:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,10 +1494,11 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
 
     RECT aRect;
     ImplSalGetWorkArea( maFrameData.mhWnd, &aRect );
-    nScreenX        = aRect.left;
-    nScreenY        = aRect.top;
-    nScreenWidth    = aRect.right-aRect.left;
-    nScreenHeight   = aRect.bottom-aRect.top;
+    // #102500# allow some overlap, the window could have been made a little larger than the physical screen
+    nScreenX        = aRect.left-10;
+    nScreenY        = aRect.top-10;
+    nScreenWidth    = aRect.right-aRect.left+20;
+    nScreenHeight   = aRect.bottom-aRect.top+20;
 
     UINT    nPosSize    = 0;
     RECT    aWinRect;
