@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-12 18:25:05 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 10:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,4 +797,45 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
+}
+
+void ScMyTables::AddMatrixRange(sal_uInt32 nStartColumn, sal_uInt32 nStartRow, sal_uInt32 nEndColumn, sal_uInt32 nEndRow)
+{
+    DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
+    DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
+    table::CellRangeAddress aRange;
+    aRange.StartColumn = nStartColumn;
+    aRange.StartRow = nStartRow;
+    aRange.EndColumn = nEndColumn;
+    aRange.EndRow = nEndRow;
+    aRange.Sheet = nCurrentSheet;
+    aMatrixRangeList.push_back(aRange);
+}
+
+sal_Bool ScMyTables::IsPartOfMatrix(sal_uInt32 nColumn, sal_uInt32 nRow)
+{
+    sal_Bool bResult(sal_False);
+    if (!aMatrixRangeList.empty())
+    {
+        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
+        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
+        sal_Bool bReady(sal_False);
+        while(!bReady && aItr != aEndItr)
+        {
+            if (nCurrentSheet > aItr->Sheet)
+                aItr = aMatrixRangeList.erase(aItr);
+            else if ((nRow >= aItr->EndRow) && (nColumn > aItr->EndColumn))
+                aItr = aMatrixRangeList.erase(aItr);
+            else if (nColumn < aItr->StartColumn)
+                bReady = sal_True;
+            else if (nColumn >= aItr->StartColumn && nColumn <= aItr->EndColumn && nRow >= aItr->StartRow && nRow <= aItr->EndRow)
+            {
+                bReady = sal_True;
+                bResult = sal_True;
+            }
+            else
+                ++aItr;
+        }
+    }
+    return bResult;
 }
