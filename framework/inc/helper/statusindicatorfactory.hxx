@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:49:46 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,9 @@ class StatusIndicatorFactory : public  css::lang::XTypeProvider
 
         /** prevent recursive calling of Application::Reschedule(). */
         static sal_Int32 m_nInReschedule;
+
+        /** time where there last start call was made. */
+        sal_Int32 m_nStartTime;
 
     //-------------------------------------------
     // interface
