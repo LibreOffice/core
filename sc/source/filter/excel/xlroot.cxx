@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:35 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,15 +324,18 @@ XclTracer& XclRoot::GetTracer() const
     return *mrData.mpTracer;
 }
 
-bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress rMaxPos ) const
+bool XclRoot::CheckCellAddress( const ScAddress& rPos, const ScAddress& rMaxPos ) const
 {
     bool bValid = (rPos.Col() <= rMaxPos.Col()) && (rPos.Row() <= rMaxPos.Row()) && (rPos.Tab() <= rMaxPos.Tab());
     if( !bValid )
+    {
         mrData.mbTruncated = true;
+        GetTracer().TraceInvalidAddress(rPos, rMaxPos);
+    }
     return bValid;
 }
 
-bool XclRoot::CheckCellRange( ScRange& rRange, const ScAddress rMaxPos ) const
+bool XclRoot::CheckCellRange( ScRange& rRange, const ScAddress& rMaxPos ) const
 {
     rRange.Justify();
 
