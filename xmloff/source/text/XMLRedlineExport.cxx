@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-25 15:58:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,24 +305,14 @@ void XMLRedlineExport::ExportChangesListElements()
         Reference<XEnumerationAccess> aEnumAccess = xSupplier->getRedlines();
 
         // redline protection key
-        Sequence<sal_Int8> aKey;
         Reference<XPropertySet> aDocPropertySet( rExport.GetModel(),
                                                  uno::UNO_QUERY );
-        aDocPropertySet->getPropertyValue( sRedlineProtectionKey ) >>= aKey;
-        if ( aKey.getLength() > 0 )
-        {
-            OUStringBuffer aBuffer;
-            SvXMLUnitConverter::encodeBase64( aBuffer, aKey );
-            rExport.AddAttribute( XML_NAMESPACE_TEXT, XML_PROTECTION_KEY,
-                                  aBuffer.makeStringAndClear() );
-        }
-
         // redlining enabled?
         sal_Bool bEnabled = *(sal_Bool*)aDocPropertySet->getPropertyValue(
                                                 sRecordChanges ).getValue();
 
         // only export if we have redlines or attributes
-        if ( aEnumAccess->hasElements() || bEnabled || aKey.getLength() > 0 )
+        if ( aEnumAccess->hasElements() || bEnabled )
         {
 
             // export only if we have changes, but tracking is not enabled
@@ -566,24 +556,32 @@ const OUString XMLRedlineExport::GetRedlineID(
 void XMLRedlineExport::ExportChangeInfo(
     const Reference<XPropertySet> & rPropSet)
 {
+
+    SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
+                                   XML_CHANGE_INFO, sal_True, sal_True);
+
     Any aAny = rPropSet->getPropertyValue(sRedlineAuthor);
     OUString sTmp;
     aAny >>= sTmp;
     if (sTmp.getLength() > 0)
     {
-        rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_AUTHOR, sTmp);
+        SvXMLElementExport aCreatorElem( rExport, XML_NAMESPACE_DC,
+                                          XML_CREATOR, sal_True,
+                                          sal_False );
+        rExport.Characters(sTmp);
     }
 
     aAny = rPropSet->getPropertyValue(sRedlineDateTime);
     util::DateTime aDateTime;
     aAny >>= aDateTime;
-    OUStringBuffer sBuf;
-    rExport.GetMM100UnitConverter().convertDateTime(sBuf, aDateTime);
-    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_CHG_DATE_TIME,
-                      sBuf.makeStringAndClear());
-
-    SvXMLElementExport aChangeInfo(rExport, XML_NAMESPACE_OFFICE,
-                                   XML_CHANGE_INFO, sal_True, sal_True);
+    {
+        OUStringBuffer sBuf;
+        rExport.GetMM100UnitConverter().convertDateTime(sBuf, aDateTime);
+        SvXMLElementExport aDateElem( rExport, XML_NAMESPACE_DC,
+                                          XML_DATE, sal_True,
+                                          sal_False );
+        rExport.Characters(sBuf.makeStringAndClear());
+    }
 
     // comment as <text:p> sequence
     aAny = rPropSet->getPropertyValue(sRedlineComment);
