@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 13:09:22 $
+ *  last change: $Author: tl $ $Date: 2001-08-29 10:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         aCursorMoveTimer.Start();
 
         DBG_ASSERT( pEditView, "EditView missing (NULL pointer)" );
+        if (!pEditView)
+            CreateEditView();
         if ( !pEditView->PostKeyEvent(rKEvt) )
         {
             if ( !SfxViewShell::Current()->KeyInput(rKEvt) )
@@ -596,6 +598,8 @@ void SmEditWindow::GetFocus()
 {
     Window::GetFocus();
 
+    if (!pEditView)
+         CreateEditView();
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditView)
         pEditView->SetSelection( aActiveSelection );
