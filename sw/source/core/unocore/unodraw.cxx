@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-04 14:24:39 $
+ *  last change: $Author: tl $ $Date: 2002-05-23 08:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,6 +1177,19 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
+                if(FN_ANCHOR_POSITION == pMap->nWID)
+                {
+                    SvxShape* pSvxShape = GetSvxShape();
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    if(pSvxShape)
+                    {
+                        SdrObject* pObj = pSvxShape->GetSdrObject();
+                        Point aPt = pObj->GetAnchorPos();
+                        awt::Point aPoint( TWIP_TO_MM100( aPt.X() ),
+                                           TWIP_TO_MM100( aPt.Y() ) );
+                        aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
+                    }
+                }
                 else
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
@@ -1211,6 +1224,10 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     break;
                     case RES_OPAQUE :
                         aRet.setValue(&pImpl->GetOpaque(), ::getBooleanCppuType());
+                    break;
+                    case FN_ANCHOR_POSITION :
+                        awt::Point aPoint;
+                        aRet.setValue(&aPoint, ::getCppuType( (::com::sun::star::awt::Point*)0 ));
                     break;
                 }
                 if(pItem)
@@ -1276,6 +1293,8 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                 if(RES_OPAQUE == pMap->nWID)
                     pRet[nProperty] = bFormControl ?
                         PropertyState_DEFAULT_VALUE : PropertyState_DIRECT_VALUE;
+                else if(FN_ANCHOR_POSITION == pMap->nWID)
+                    pRet[nProperty] = PropertyState_DIRECT_VALUE;
                 else if(FN_TEXT_RANGE == pMap->nWID)
                     pRet[nProperty] = PropertyState_DIRECT_VALUE;
                 else if(bGroupMember)

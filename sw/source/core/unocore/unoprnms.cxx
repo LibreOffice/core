@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-26 12:55:12 $
+ *  last change: $Author: tl $ $Date: 2002-05-23 08:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,7 +706,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0624 UNO_NAME_GRID_DISPLAY */        {MAP_CHAR_LEN("GridDisplay")},
 /* 0625 UNO_NAME_SNAP_TO_GRID */        {MAP_CHAR_LEN("SnapToGrid")},
 /* 0626 UNO_NAME_DONT_BALANCE_TEXT_COLUMNS */{MAP_CHAR_LEN("DontBalanceTextColumns")},
-/* 0627 UNO_NAME_IS_CURRENTLY_VISIBLE */{MAP_CHAR_LEN("IsCurrentlyVisible")}
+/* 0627 UNO_NAME_IS_CURRENTLY_VISIBLE */{MAP_CHAR_LEN("IsCurrentlyVisible")},
+/* 0628 UNO_NAME_ANCHOR_POSITION */     {MAP_CHAR_LEN("AnchorPosition")}
 };
 
 #ifndef PRODUCT
