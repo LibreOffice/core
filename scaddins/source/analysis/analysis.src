@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: nf $ $Date: 2001-12-14 21:08:18 $
+ *  last change: $Author: rt $ $Date: 2001-12-19 17:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10158,7 +10158,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (s��nn�llinen korko) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unit� monetarie che paga interessi periodici.";
             Text[ danish ] = "Returns the price per $100 face value of a security that pays periodic interest";
-            Text[ swedish ] = "Returnerar priset per 1000 kr nominellt v�rde f�r ett v�rdepapper som ger periodiska r�ntor.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt v�rde f�r ett v�rdepapper som ger periodiska r�ntor.";
             Text[ polish ] = "Podaje cen� za 100 jednostek warto�ci nominalnej papieru warto�ciowego o okresowym oprocentowaniu.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ japanese ] = "定期的に利息が支払われる証券に対して額面 ￥100 当たりの価格を返します。";
@@ -10566,13 +10566,13 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (reaaliarvo nimellisarvoa pienempi) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo senza interessi del valore nominale di 100 unit� monetarie.";
             Text[ danish ] = "Returns the price per $100 face value of a discounted security";
-            Text[ swedish ] = "Returnerar priset per 1000 kr nominellt v�rde f�r ett diskonterat v�rdepapper.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt v�rde f�r ett diskonterat v�rdepapper.";
             Text[ polish ] = "Podaje cen� za 100 jednostek warto�ci nominalnej papieru warto�ciowego zdyskontowanego.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a discounted security";
             Text[ japanese ] = "割引証券の額面 $100 に対する価格を返します。";
             Text[ korean ] = "감가된 담보물의 $100 액면가당 가격을 반환합니다";
-            Text[ chinese_simplified ] = "计算某一折价发行的面额为100元的有价证券的价格。";
-            Text[ chinese_traditional ] = "傳回某一折價發行、面額為100元的有價證券的價格。";
+            Text[ chinese_simplified ] = "计算某一不计算利息的、面额为100元的有价证券的价格。";
+            Text[ chinese_traditional ] = "傳回某一不計算附加利息的、面額為100元的有價證券的價格。";
             Text[ turkish ] = "Returns the price per $100 face value of a discounted security";
             Text[ arabic ] = "Returns the price per $100 face value of a discounted security";
             Text[ catalan ] = "Torna la cotitzaci� per 100 unitats monet�ries d'un valor amb descompte";
@@ -10866,7 +10866,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (korko maksetaan lainan er��ntyess�) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unit� monetarie che paga gli interessi alla scadenza.";
             Text[ danish ] = "Returns the price per $100 face value of a security that pays interest at maturity";
-            Text[ swedish ] = "Returnerar priset per 1000 kr nominellt v�rde f�r ett v�rdepapper som ger r�ntor p� f�rfallodagen.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt v�rde f�r ett v�rdepapper som ger r�ntor p� f�rfallodagen.";
             Text[ polish ] = "Podaje cen� za 100 jednostek warto�ci nominalnej papieru warto�ciowego oprocentowanego przy wykupie.";
             Text[ portuguese_brazilian ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ japanese ] = "満期日に利息が支払われる証券に対して額面 $100 当たりの価格を返します。";
@@ -11220,7 +11220,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (nimellisarvo 100) Macauley-muokkauksen mukaisen  keston";
             Text[ italian ] = "Restituisce la durata Macauley modificata di un titolo con un valore nominale di 100 unit� monetarie.";
             Text[ danish ] = "Returns the Macauley modified duration for a security with an assumed par ";
-            Text[ swedish ] = "Returnerar den modifierade Macauley-l�ptiden f�r ett v�rdepapper med ett nominellt v�rde p� 100 kr.";
+            Text[ swedish ] = "Returnerar den modifierade Macauley-l�ptiden f�r ett v�rdepapper med ett nominellt v�rde p� 100 valutaenheter.";
             Text[ polish ] = "Podaje warto�� zmodyfikowanego okresu Macauley'a w przypadku papieru warto�ciowego o za�o�onej warto�ci 100 jednostek.";
             Text[ portuguese_brazilian ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ japanese ] = "額面価格 $100 と仮定して、証券に対する修正マコーレー係数を返します。";
@@ -13237,7 +13237,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa valtion obligaation nimellisarvon (100) hinnan";
             Text[ italian ] = "Restituisce il prezzo di un buono del tesoro dal valore nominale di 100 unit� monetarie.";
             Text[ danish ] = "Returns the price of $100 face value for a treasury bill";
-            Text[ swedish ] = "Returnerar priset per 1000 kr nominellt v�rde f�r en statsskuldv�xel.";
+            Text[ swedish ] = "Returnerar priset per 100 valutaenheter nominellt v�rde f�r en statsskuldv�xel.";
             Text[ polish ] = "Podaje cen� za 100 jednostek warto�ci nominalnej bonu skarbowego.";
             Text[ portuguese_brazilian ] = "Returns the price of $100 face value for a treasury bill";
             Text[ japanese ] = "米国財務省短期証券(TB)の額面 $100 当たりの価格を返します。";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
