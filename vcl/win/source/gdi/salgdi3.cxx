@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-09 15:02:09 $
+ *  last change: $Author: hdu $ $Date: 2001-11-28 16:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,7 @@ static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName )
     // Test, if vertical Font available
     LOGFONTW aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
 
     UINT nNameLen = aTemp.Len();
     if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -579,6 +580,7 @@ static void ImplSalGetVerticalFontNameA( HDC hDC, ByteString& rName )
     // Test, if vertical Font available
     LOGFONTA aLogFont;
     memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
 
     UINT nNameLen = aTemp.Len();
     if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
@@ -604,6 +606,7 @@ BOOL ImplIsFontAvailable( HDC hDC, const UniString& rName )
         // Test, if Font available
         LOGFONTW aLogFont;
         memset( &aLogFont, 0, sizeof( aLogFont ) );
+        aLogFont.lfCharSet = DEFAULT_CHARSET;
 
         UINT nNameLen = rName.Len();
         if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
@@ -621,6 +624,7 @@ BOOL ImplIsFontAvailable( HDC hDC, const UniString& rName )
         // Test, if Font available
         LOGFONTA aLogFont;
         memset( &aLogFont, 0, sizeof( aLogFont ) );
+        aLogFont.lfCharSet = DEFAULT_CHARSET;
 
         UINT nNameLen = aTemp.Len();
         if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
