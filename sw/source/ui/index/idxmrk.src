@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 20:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@
             Size = MAP_APPFONT ( 12 , 12 ) ;                        \
             QuickHelpText = "Neues benutzerdefiniertes Verzeichnis";            \
             QuickHelpText[English] = "New user defined index";      \
-            QuickHelpText[ english_us ] = "New user-defined index";\
+            QuickHelpText[ english_us ] = "New User-defined Index!";\
             QuickHelpText[ portuguese ] = "New user defined index";\
             QuickHelpText[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";\
             QuickHelpText[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ïñéóìİíï áğü ôïí ÷ñŞóôç";\
@@ -185,7 +185,7 @@
             QuickHelpText[ italian ] = "Nuovo indice personalizzato";\
             QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
             QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
-            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
+            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika!";\
             QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
             QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø!";\
             QuickHelpText[ korean ] = "»õ¡¡»ç¿ëÀÚÁ¤ÀÇ¡¡»öÀÎ!";\
@@ -554,7 +554,7 @@
             Text[ portuguese_brazilian ] = "Whole words only";\
             Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä(~W)";\
             Text[ korean ] = "ÀüÃ¼ ´Ü¾î¸¸(~W)";\
-            Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê(~W)";\
+            Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö×Ö(~W)";\
             Text[ chinese_traditional ] = "¥u¬O¾ã­Ó¦r(~W)";\
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
             Text[ turkish ] = "Yalnızca ~tam sözcükler bul";\
@@ -814,7 +814,7 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Dal contenuto del documento";\
             Text[ danish ] = "fra dokumentindholdet";\
             Text[ swedish ] = "~Från dokumentinnehåll";\
-            Text[ polish ] = "Z zawarto?ci dokumentu";\
+            Text[ polish ] = "Z zawartoœci dokumentu";\
             Text[ portuguese_brazilian ] = "From document content";\
             Text[ japanese ] = "ÄŞ·­ÒİÄ‚©‚ç(~F)";\
             Text[ korean ] = "¹®¼­ ³»¿ëÀ¸·ÎºÎÅÍ(~F)";\
