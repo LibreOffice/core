@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-13 14:11:41 $
+ *  last change: $Author: thb $ $Date: 2002-10-02 12:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,13 +1164,21 @@ namespace accessibility
             GetParagraphIndex() == nPara )
         {
             // #102259# Double-check if we're _really_ on the given character
-            awt::Rectangle aRect1( getCharacterBounds(nIndex) );
-            Rectangle aRect2( aRect1.X, aRect1.Y,
-                              aRect1.Width + aRect1.X, aRect1.Height + aRect1.Y );
-            if( aRect2.IsInside( Point( rPoint.X, rPoint.Y ) ) )
-                return nIndex;
-            else
+            try
+            {
+                awt::Rectangle aRect1( getCharacterBounds(nIndex) );
+                Rectangle aRect2( aRect1.X, aRect1.Y,
+                                  aRect1.Width + aRect1.X, aRect1.Height + aRect1.Y );
+                if( aRect2.IsInside( Point( rPoint.X, rPoint.Y ) ) )
+                    return nIndex;
+                else
+                    return -1;
+            }
+            catch( const lang::IndexOutOfBoundsException& )
+            {
+                // #103927# Don't throw for invalid nIndex values
                 return -1;
+            }
         }
         else
         {
