@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 16:02:21 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-#ifndef _DBASHARED_STRINGCONSTANTS_HRC_
-#include "stringconstants.hrc"
+#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
+#include "dbustrings.hrc"
 #endif
-
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #endif
@@ -92,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
 #endif
 
 //.........................................................................
@@ -108,7 +110,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 using namespace ::dbtools;
-using namespace ::dbaccess;
 
 //========================================================================
 //= OTableTreeListBox
@@ -364,6 +365,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/13 16:02:21  fs
+ *  typo in error message
+ *
  *  Revision 1.2  2000/10/09 12:36:50  fs
  *  reinserted the code for connecting in UpdateTableList
  *
