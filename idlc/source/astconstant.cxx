@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:06:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,6 @@ sal_Bool AstConstant::dumpBlob(
             aConst.m_type = RT_TYPE_DOUBLE;
             aConst.m_value.aDouble = exprVal->u.dval;
             break;
-        case ET_char:
-            break;
         case ET_byte:
             aConst.m_type = RT_TYPE_BYTE;
             aConst.m_value.aByte = exprVal->u.byval;
@@ -145,15 +143,6 @@ sal_Bool AstConstant::dumpBlob(
         case ET_boolean:
             aConst.m_type = RT_TYPE_BOOL;
             aConst.m_value.aBool = exprVal->u.bval;
-            break;
-        case ET_string:
-            {
-                aConst.m_type = RT_TYPE_STRING;
-                ::rtl::OUString aTempStr( OUString::createFromAscii(exprVal->u.strval->getStr()));
-                str = new sal_Unicode[aTempStr.getLength()+1];
-                rtl_copyMemory(str, aTempStr.getStr(), (aTempStr.getLength()+1) * sizeof(sal_Unicode));
-                aConst.m_value.aString = str;
-            }
             break;
         default:
             {
