@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 16:23:41 $
+#   last change: $Author: kz $ $Date: 2005-03-01 18:18:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,12 @@ IDLFILES=\
     FramesContainer.idl\
     FrameSearchFlag.idl\
     IllegalArgumentIOException.idl\
+    LayoutManager.idl\
+    LayoutManagerEvents.idl\
     MediaTypeDetectionHelper.idl\
+    ModuleManager.idl\
+    PopupMenuController.idl\
+    PopupMenuControllerFactory.idl\
     ProtocolHandler.idl\
     SessionManager.idl\
     Settings.idl\
@@ -115,6 +120,7 @@ IDLFILES=\
     TerminationVetoException.idl\
     ToolbarController.idl\
     TransientDocumentsDocumentContentFactory.idl \
+    UnknownModuleException.idl\
     WindowArrange.idl\
     XBorderResizeListener.idl\
     XBrowseHistoryRegistry.idl\
@@ -144,13 +150,19 @@ IDLFILES=\
     XFrames.idl\
     XFrameSetModel.idl\
     XFramesSupplier.idl\
+    XInplaceLayout.idl\
     XInterceptorInfo.idl\
+    XLayoutManager.idl\
     XLayoutManagerEventBroadcaster.idl\
     XLayoutManagerListener.idl\
     XLoadable.idl\
     XLoadEventListener.idl\
+    XMenuBarAcceptor.idl\
+    XMenuBarMergingAcceptor.idl\
     XModel.idl\
+    XModuleManager.idl\
     XNotifyingDispatch.idl\
+    XPopupMenuController.idl\
     XRecordableDispatch.idl\
     XSessionManagerClient.idl\
     XSessionManagerListener.idl\
@@ -166,6 +178,7 @@ IDLFILES=\
     XTerminateListener.idl\
     XToolbarController.idl\
     XTransientDocumentsDocumentContentFactory.idl\
+    XUIControllerRegistration.idl\
     XUrlList.idl\
     XWindowArranger.idl
 
