@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:05:36 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,39 +465,46 @@ void OEvoabTable::construct()
 // -------------------------------------------------------------------------
 String OEvoabTable::getEntry()
 {
-    ::rtl::OUString aURL;
-    Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
-    Reference< XRow> xRow(xDir,UNO_QUERY);
-    ::rtl::OUString sName;
-    ::rtl::OUString sExt;
-    ::rtl::OUString sNeededExt(m_pConnection->getExtension());
-    //OSL_TRACE("OEvoabTable::getEntry()::m_pConnection->getExtension() = %s\n", ((OUtoCStr(sNeededExt)) ? (OUtoCStr(sNeededExt)):("NULL")) );
-
-    sal_Int32 nExtLen = sNeededExt.getLength();
-    sal_Int32 nExtLenWithSep = nExtLen + 1;
-    xDir->beforeFirst();
-    while(xDir->next())
+    ::rtl::OUString sURL;
+    try
     {
-        sName = xRow->getString(1);
+        Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
+        Reference< XRow> xRow(xDir,UNO_QUERY);
+        ::rtl::OUString sName;
+        ::rtl::OUString sExt;
 
-        // cut the extension
-        sExt = sName.copy(sName.getLength() - nExtLen);
-        sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
-
-        //OSL_TRACE("OEvoabTable::getEntry()::sName = %s\n", ((OUtoCStr(sName)) ? (OUtoCStr(sName)):("NULL")) );
-        //OSL_TRACE("OEvoabTable::getEntry()::sExt = %s\n", ((OUtoCStr(sExt)) ? (OUtoCStr(sExt)):("NULL")) );
-        //OSL_TRACE("OEvoabTable::getEntry()::m_Name = %s\n", ((OUtoCStr(m_Name)) ? (OUtoCStr(m_Name)):("NULL")) );
-
-        // name and extension have to coincide
-        if ((sName == m_Name) && (m_pConnection->matchesExtension( sExt )))
+        INetURLObject aURL;
+        xDir->beforeFirst();
+        static const ::rtl::OUString s_sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        while(xDir->next())
         {
-            Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
-            aURL = xContentAccess->queryContentIdentifierString();
-            break;
+            sName = xRow->getString(1);
+            aURL.SetSmartProtocol(INET_PROT_FILE);
+            String sUrl = m_pConnection->getURL() +  s_sSeparator + sName;
+            aURL.SetSmartURL( sUrl );
+
+            // cut the extension
+            sExt = aURL.getExtension();
+
+            // name and extension have to coincide
+            if ( m_pConnection->matchesExtension( sExt ) )
+            {
+                sName = sName.replaceAt(sName.getLength()-(sExt.getLength()+1),sExt.getLength()+1,::rtl::OUString());
+                if ( sName == m_Name )
+                {
+                    Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+                    sURL = xContentAccess->queryContentIdentifierString();
+                    break;
+                }
+            }
         }
+        xDir->beforeFirst(); // move back to before first record
     }
-    xDir->beforeFirst(); // move back to before first record
-    return aURL.getStr();
+    catch(Exception&)
+    {
+        OSL_ASSERT(0);
+    }
+    return sURL.getStr();
 }
 // -------------------------------------------------------------------------
 void OEvoabTable::refreshColumns()
