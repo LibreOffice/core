@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: cl $ $Date: 2001-11-26 16:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT nPrefix, cons
                 {
                     aName = sValue;
                 }
-                else if( IsXMLToken( rLocalName, XML_PAGES ) )
+                else if( IsXMLToken( aLocalName, XML_PAGES ) )
                 {
                     aPages = sValue;
                 }
