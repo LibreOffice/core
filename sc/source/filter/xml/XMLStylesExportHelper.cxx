@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 16:14:19 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ ScMyValidationsContainer::~ScMyValidationsContainer()
 }
 
 sal_Bool ScMyValidationsContainer::AddValidation(const uno::Any& aTempAny,
-    const table::CellRangeAddress& aCellRange, sal_Int32& nValidationIndex)
+    sal_Int32& nValidationIndex)
 {
     sal_Bool bAdded(sal_False);
     uno::Reference<beans::XPropertySet> xPropertySet;

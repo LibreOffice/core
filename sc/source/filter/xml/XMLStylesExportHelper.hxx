@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-30 16:55:59 $
+ *  last change: $Author: sab $ $Date: 2001-07-06 11:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();
     sal_Bool                    AddValidation(const com::sun::star::uno::Any& aAny,
-                                    const com::sun::star::table::CellRangeAddress& aCellRange, sal_Int32& nValidationIndex);
+                                    sal_Int32& nValidationIndex);
     rtl::OUString               GetCondition(const ScMyValidation& aValidation);
     rtl::OUString               GetBaseCellAddress(ScDocument* pDoc, const com::sun::star::table::CellAddress& aCell);
     void                        WriteMessage(ScXMLExport& rExport,
