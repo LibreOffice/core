@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-06 08:10:50 $
+ *  last change: $Author: nn $ $Date: 2001-02-15 14:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,68 +1291,72 @@ void ScGridWindow::InvertSimple( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
             USHORT nScrX = (USHORT) aScrPos.X();
             for (USHORT nX=nX1; nX<=nLoopEndX; nX++)
             {
-                USHORT nEndX = nScrX + (USHORT) ( pDoc->GetColWidth( nX,nTab ) * nPPTX ) - 1;
-                if (bTestMerge)
+                USHORT nWidth = (USHORT) ( pDoc->GetColWidth( nX,nTab ) * nPPTX );
+                if ( nWidth > 0 )
                 {
-                    USHORT nThisY = nY;
-                    const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
-                    const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
-                                                                    GetItem(ATTR_MERGE_FLAG);
-                    if ( pMergeFlag->IsVerOverlapped() && bDoHidden )
+                    USHORT nEndX = nScrX + nWidth - 1;
+                    if (bTestMerge)
                     {
-                        while ( pMergeFlag->IsVerOverlapped() ?
-                                    (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) : FALSE )
+                        USHORT nThisY = nY;
+                        const ScPatternAttr* pPattern = pDoc->GetPattern( nX, nY, nTab );
+                        const ScMergeFlagAttr* pMergeFlag = (const ScMergeFlagAttr*) &pPattern->
+                                                                        GetItem(ATTR_MERGE_FLAG);
+                        if ( pMergeFlag->IsVerOverlapped() && bDoHidden )
                         {
-                            --nThisY;
-                            pPattern = pDoc->GetPattern( nX, nThisY, nTab );
-                            pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
-                        }
-                    }
-
-                    // nur Rest von zusammengefasster zu sehen ?
-                    USHORT nThisX = nX;
-                    if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
-                    {
-                        while ( pMergeFlag->IsHorOverlapped() )
-                        {
-                            --nThisX;
-                            pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
-                            pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
-                        }
-                    }
-
-                    if ( rMark.IsCellMarked( nThisX, nThisY, TRUE ) == bRepeat )
-                    {
-                        if ( !pMergeFlag->IsOverlapped() )
-                        {
-                            ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-                            if (pMerge->GetColMerge() || pMerge->GetRowMerge())
+                            while ( pMergeFlag->IsVerOverlapped() ?
+                                        (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) : FALSE )
                             {
-                                Point aEndPos = pViewData->GetScrPos(
-                                        nThisX + pMerge->GetColMerge(),
-                                        nThisY + pMerge->GetRowMerge(), eWhich );
-                                if ( aEndPos.X() > nScrX && aEndPos.Y() > nScrY )
+                                --nThisY;
+                                pPattern = pDoc->GetPattern( nX, nThisY, nTab );
+                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                            }
+                        }
+
+                        // nur Rest von zusammengefasster zu sehen ?
+                        USHORT nThisX = nX;
+                        if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
+                        {
+                            while ( pMergeFlag->IsHorOverlapped() )
+                            {
+                                --nThisX;
+                                pPattern = pDoc->GetPattern( nThisX, nThisY, nTab );
+                                pMergeFlag = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                            }
+                        }
+
+                        if ( rMark.IsCellMarked( nThisX, nThisY, TRUE ) == bRepeat )
+                        {
+                            if ( !pMergeFlag->IsOverlapped() )
+                            {
+                                ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+                                if (pMerge->GetColMerge() || pMerge->GetRowMerge())
                                 {
-                                    aInvert.AddRect( Rectangle( nScrX,nScrY,aEndPos.X()-1,aEndPos.Y()-1 ) );
+                                    Point aEndPos = pViewData->GetScrPos(
+                                            nThisX + pMerge->GetColMerge(),
+                                            nThisY + pMerge->GetRowMerge(), eWhich );
+                                    if ( aEndPos.X() > nScrX && aEndPos.Y() > nScrY )
+                                    {
+                                        aInvert.AddRect( Rectangle( nScrX,nScrY,aEndPos.X()-1,aEndPos.Y()-1 ) );
+                                    }
+                                }
+                                else if ( nEndX >= nScrX && nEndY >= nScrY )
+                                {
+                                    aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
                                 }
                             }
-                            else if ( nEndX >= nScrX && nEndY >= nScrY )
-                            {
-                                aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
-                            }
                         }
                     }
-                }
-                else        // !bTestMerge
-                {
-                    if ( rMark.IsCellMarked( nX, nY, TRUE ) == bRepeat &&
-                                            nEndX >= nScrX && nEndY >= nScrY )
+                    else        // !bTestMerge
                     {
-                        aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                        if ( rMark.IsCellMarked( nX, nY, TRUE ) == bRepeat &&
+                                                nEndX >= nScrX && nEndY >= nScrY )
+                        {
+                            aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                        }
                     }
-                }
 
-                nScrX = nEndX + 1;
+                    nScrX = nEndX + 1;
+                }
             }
             nScrY = nEndY + 1;
         }
