@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 18:43:59 $
+ *  last change: $Author: er $ $Date: 2000-12-11 19:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@
 #include "zforlist.hxx"
 #include "numhead.hxx"
 
+
+::rtl::OUString SvNumberformat::sGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian" ) );
 
 const double _D_MAX_U_LONG_ = (double) 0xffffffff;      // 4294967295.0
 const double _D_MAX_LONG_   = (double) 0x7fffffff;      // 2147483647.0
@@ -2141,6 +2143,8 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
 
 BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
+    if ( GetCal().getUniqueID() != sGregorian )
+        return FALSE;
     const ImpSvNumberformatInfo& rInfo = rNumFor.Info();
     const USHORT nAnz = rNumFor.GetnAnz();
     USHORT i;
@@ -2155,6 +2159,8 @@ BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
             case NF_KEY_EEC :
             case NF_KEY_R :
             case NF_KEY_RR :
+            case NF_KEY_AAA :
+            case NF_KEY_AAAA :
                 return TRUE;
             break;
         }
@@ -2166,8 +2172,7 @@ BOOL SvNumberformat::IsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime )
 {
     CalendarWrapper& rCal = GetCal();
-    ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian" ) );
-    if ( rCal.getUniqueID() == aGregorian )
+    if ( rCal.getUniqueID() == sGregorian )
     {
         using namespace ::com::sun::star::i18n;
         ::com::sun::star::uno::Sequence< ::rtl::OUString > xCals
@@ -2177,16 +2182,30 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDa
         {
             for ( sal_Int32 j=0; j < nCnt; j++ )
             {
-                if ( xCals[j] != aGregorian )
+                if ( xCals[j] != sGregorian )
                 {
-                    rOrgCalendar = rCal.getUniqueID();
-                    fOrgDateTime = rCal.getDateTime();
+                    if ( !rOrgCalendar.Len() )
+                    {
+                        rOrgCalendar = rCal.getUniqueID();
+                        fOrgDateTime = rCal.getDateTime();
+                    }
                     rCal.loadCalendar( xCals[j], rLoc().getLocale() );
                     rCal.setDateTime( fOrgDateTime );
                     break;  // for
                 }
             }
         }
+    }
+}
+
+
+void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime )
+{
+    CalendarWrapper& rCal = GetCal();
+    if ( rOrgCalendar.Len() && rCal.getUniqueID() != sGregorian )
+    {
+        rCal.loadCalendar( sGregorian, rLoc().getLocale() );
+        rCal.setDateTime( fOrgDateTime );
     }
 }
 
@@ -2231,7 +2250,8 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     rCal.setGregorianDateTime( aDate );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    if ( IsOtherCalendar( NumFor[nIx] ) )
+    BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
+    if ( bOtherCalendar )
         SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     const USHORT nAnz = NumFor[nIx].GetnAnz();
@@ -2333,39 +2353,54 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
             case NF_KEY_DDD:                // DDD
             {
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 0 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_DDDD:               // DDDD
             {
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 1 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YY:                 // YY
             {
 //! TODO: what about negative values? abs and append era?
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
                 if ( nVal < 10 )
                     OutString += '0';
                 OutString += String::CreateFromInt32( nVal );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YYYY:               // YYYY
             {
 //! TODO: what about negative values? abs and append era?
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += String::CreateFromInt32( nVal );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_EC:                 // E
             {
-//! TODO: is this really the same as JJJJ or should it be modulo 100?
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += String::CreateFromInt32( nVal );
@@ -2466,7 +2501,8 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     rCal.setGregorianDateTime( aDateTime );
     String aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
-    if ( IsOtherCalendar( NumFor[nIx] ) )
+    BOOL bOtherCalendar = IsOtherCalendar( NumFor[nIx] );
+    if ( bOtherCalendar )
         SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
@@ -2698,39 +2734,54 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
             case NF_KEY_DDD:                // DDD
             {
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 0 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_DDDD:               // DDDD
             {
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
                 OutString += rCal.getDisplayName( CalendarDisplayIndex::DAY,
                     nVal, 1 );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YY:                 // YY
             {
 //! TODO: what about negative values? abs and append era?
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
                 if ( nVal < 10 )
                     OutString += '0';
                 OutString += String::CreateFromInt32( nVal );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_YYYY:               // YYYY
             {
 //! TODO: what about negative values? abs and append era?
+                if ( bOtherCalendar )
+                    SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += String::CreateFromInt32( nVal );
+                if ( bOtherCalendar )
+                    SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
             break;
             case NF_KEY_EC:                 // E
             {
-//! TODO: is this really the same as JJJJ or should it be modulo 100?
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 OutString += String::CreateFromInt32( nVal );
