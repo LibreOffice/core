@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_base.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:15:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _T_BASE_CXX "$Revision: 1.3 $"
+#define _T_BASE_CXX "$Revision: 1.4 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -377,7 +377,8 @@ static sal_Int32 __store_convertTextToUnicode (
     const sal_Char *pszText, sal_Int32 nTextLen,
     sal_Unicode    *pBuffer, sal_Int32 nBuffer)
 {
-    sal_uInt32 nInfo, nSrcLen = 0;
+    sal_uInt32 nInfo = 0;
+    sal_uInt32 nSrcLen = 0;
 
     sal_Int32 nDstLen = rtl_convertTextToUnicode (
         hConvert, 0,
