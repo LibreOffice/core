@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hbrinkm $ $Date: 2002-11-19 12:07:02 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:17:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES =	\
         $(SLO)$/XMLScriptExportHandler.obj \
         $(SLO)$/XMLStarBasicContextFactory.obj \
         $(SLO)$/XMLStarBasicExportHandler.obj \
-        $(SLO)$/xmlscripte.obj \
         $(SLO)$/xmlscripti.obj 
 
 SVXLIGHTOBJFILES =	\
