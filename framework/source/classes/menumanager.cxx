@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cd $ $Date: 2001-09-19 08:07:46 $
+ *  last change: $Author: hr $ $Date: 2001-10-10 13:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,10 +227,11 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             // store menu item command as we later have to know which menu is active (see Activate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
+            REFERENCE< XDISPATCH > aXDispatchRef;
             MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                         nItemId,
                                                         pSubMenuManager,
-                                                        REFERENCE< XDISPATCH >() );
+                                                        aXDispatchRef );
             m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                 aQueryLabelItemIdVector.push_back( nItemId );
@@ -240,14 +241,16 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             if ( nItemId == SID_NEWDOCDIRECT ||
                  aItemCommand == aSlotNewDocDirect )
             {
-                MenuConfiguration aMenuCfg( ::comphelper::getProcessServiceFactory() );
+                Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
+                MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_NEWMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
                 MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                REFERENCE< XDISPATCH > aXDispatchRef;
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             pSubMenuManager,
-                                                            REFERENCE< XDISPATCH >() );
+                                                            aXDispatchRef );
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
@@ -255,14 +258,16 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             else if ( nItemId == SID_AUTOPILOTMENU ||
                       aItemCommand == aSlotAutoPilot )
             {
-                MenuConfiguration aMenuCfg( ::comphelper::getProcessServiceFactory() );
+                Reference< ::com::sun::star::lang::XMultiServiceFactory > aMultiServiceFactory(::comphelper::getProcessServiceFactory());
+                MenuConfiguration aMenuCfg( aMultiServiceFactory );
                 BmkMenu* pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( rFrame, BOOKMARK_WIZARDMENU );
                 pMenu->SetPopupMenu( nItemId, pSubMenu );
                 MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                REFERENCE< XDISPATCH > aXDispatchRef;
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             pSubMenuManager,
-                                                            REFERENCE< XDISPATCH >() );
+                                                            aXDispatchRef );
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
@@ -276,7 +281,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
                         pMenu->SetItemImage( nItemId, aImage );
                 }
 
-                m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
+                REFERENCE< XDISPATCH > aXDispatchRef;
+                m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, aXDispatchRef ));
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
                     aQueryLabelItemIdVector.push_back( nItemId );
             }
@@ -346,10 +352,11 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
             // store menu item command as we later have to know which menu is active (see Acivate handler)
             pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
+            REFERENCE< XDISPATCH > aXDispatchRef;
             MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                         nItemId,
                                                         pSubMenuManager,
-                                                        REFERENCE< XDISPATCH >() );
+                                                        aXDispatchRef );
             m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
         }
         else
@@ -357,7 +364,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
             if ( pBmkMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
                 MenuConfiguration::Attributes* pBmkAttributes = (MenuConfiguration::Attributes *)(pBmkMenu->GetUserValue( nItemId ));
-                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() );
+                REFERENCE< XDISPATCH > aXDispatchRef;
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, aXDispatchRef );
 
                 if ( pBmkAttributes )
                 {
@@ -573,10 +581,11 @@ void MenuManager::UpdateSpecialFileMenu( Menu* pMenu )
     {
         Sequence< PropertyValue > aPickListEntry = aHistoryList[i];
 
+        REFERENCE< XDISPATCH > aXDispatchRef;
         MenuItemHandler* pNewMenuItemHandler = new MenuItemHandler(
                                                     nPickItemId++,
                                                     NULL,
-                                                    REFERENCE< XDISPATCH >() );
+                                                    aXDispatchRef );
 
         for ( int j = 0; j < aPickListEntry.getLength(); j++ )
         {
