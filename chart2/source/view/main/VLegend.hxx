@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 14:45:06 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 17:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,18 +108,6 @@ public:
                          const ::drafts::com::sun::star::layout::Alignment& rAlignment );
 
     ::com::sun::star::awt::Size getSize() const;
-
-protected:
-
-    void createLegendEntries(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShapes > & xShapeContainer,
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xParent,
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xRootParent,
-        sal_Int32 & nOutCurrentWidth,
-        sal_Int32 & nOutCurrentHeight );
 
 private:
     ::com::sun::star::uno::Reference<

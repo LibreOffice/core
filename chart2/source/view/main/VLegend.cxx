@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-14 14:45:06 $
+ *  last change: $Author: bm $ $Date: 2003-10-14 17:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,30 @@ using namespace ::drafts::com::sun::star;
 namespace
 {
 
+struct LegendEntry
+{
+    uno::Reference< drawing::XShape >      xShape;
+    uno::Reference< beans::XPropertySet >  xSymbolProperties;
+
+    LegendEntry( uno::Reference< drawing::XShape > _shape,
+                 uno::Reference< beans::XPropertySet > _prop ) :
+            xShape( _shape ),
+            xSymbolProperties( _prop )
+    {}
+};
+typedef ::std::vector< LegendEntry > tEntryGroup;
+
+struct LegendEntryGroup
+{
+    tEntryGroup                           aEntryGroup;
+    awt::Size                             aMaxExtent;
+    uno::Reference< chart2::XChartType >  xChartType;
+};
+typedef ::std::vector< LegendEntryGroup > tEntryGroupContainer;
+
+typedef ::std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyValues;
+
+
 ::rtl::OUString lcl_DataToString( const uno::Sequence< uno::Any > & rSeq )
 {
     sal_Int32 nMax = rSeq.getLength() - 1;
@@ -166,55 +190,51 @@ namespace
  */
 uno::Reference< drawing::XShape >
     lcl_getSymbol(
-    const uno::Reference< chart2::XChartTypeGroup > & xChartTypeGroup,
+    const uno::Reference< chart2::XChartType > & xChartType,
     const uno::Reference< beans::XPropertySet > & xSeriesProp,
     const uno::Reference< lang::XMultiServiceFactory > & xFact,
     const uno::Reference< drawing::XShapes > & xShapeContainer )
 {
     uno::Reference< drawing::XShape > xResult;
 
-    if( xChartTypeGroup.is())
+    if( xChartType.is())
     {
-        uno::Reference< chart2::XChartType > xType( xChartTypeGroup->getChartType());
-        if( xType.is())
+        ::rtl::OUString aChartType( xChartType->getChartType());
+
+        xResult.set( xFact->createInstance(
+                         C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+        xShapeContainer->add( xResult );
+        uno::Reference< drawing::XShapes > xGroup( xResult, uno::UNO_QUERY );
+        if( ! xGroup.is())
+            return uno::Reference< drawing::XShape >();
+
+        xShapeContainer->add( xResult );
+
+        chart2::LegendSymbolStyle eSymbolStyle = chart2::LegendSymbolStyle_BOX;
+
+        // todo: offer UNO components that support the given service-name
+        // and are capable of creating data representations as well as
+        // legend symbols
+
+        if( aChartType.equals( C2U( "com.sun.star.chart2.BarChart" )) ||
+            aChartType.equals( C2U( "com.sun.star.chart2.AreaChart" )))
         {
-            ::rtl::OUString aChartType( xType->getChartType());
-
-            xResult.set( xFact->createInstance(
-                             C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
-            xShapeContainer->add( xResult );
-            uno::Reference< drawing::XShapes > xGroup( xResult, uno::UNO_QUERY );
-            if( ! xGroup.is())
-                return uno::Reference< drawing::XShape >();
-
-            xShapeContainer->add( xResult );
-
-            chart2::LegendSymbolStyle eSymbolStyle = chart2::LegendSymbolStyle_BOX;
-
-            // todo: offer UNO components that support the given service-name
-            // and are capable of creating data representations as well as
-            // legend symbols
-
-            if( aChartType.equals( C2U( "com.sun.star.chart2.BarChart" )) ||
-                aChartType.equals( C2U( "com.sun.star.chart2.AreaChart" )))
-            {
-                eSymbolStyle = chart2::LegendSymbolStyle_BOX;
-            }
-            else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
-            {
-                eSymbolStyle = chart2::LegendSymbolStyle_LINE;
-            }
-            else if( aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
-            {
-                eSymbolStyle = chart2::LegendSymbolStyle_CIRCLE;
-            }
-            else if( aChartType.equals( C2U( "com.sun.star.chart2.NetChart" )))
-            {
-                eSymbolStyle = chart2::LegendSymbolStyle_DIAGONAL_LINE;
-            }
-
-            ::chart::VLegendSymbolFactory::createSymbol( xGroup, eSymbolStyle, xFact, xSeriesProp );
+            eSymbolStyle = chart2::LegendSymbolStyle_BOX;
         }
+        else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
+        {
+            eSymbolStyle = chart2::LegendSymbolStyle_LINE;
+        }
+        else if( aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
+        {
+            eSymbolStyle = chart2::LegendSymbolStyle_CIRCLE;
+        }
+        else if( aChartType.equals( C2U( "com.sun.star.chart2.NetChart" )))
+        {
+            eSymbolStyle = chart2::LegendSymbolStyle_DIAGONAL_LINE;
+        }
+
+        ::chart::VLegendSymbolFactory::createSymbol( xGroup, eSymbolStyle, xFact, xSeriesProp );
     }
     else
     {
@@ -223,6 +243,113 @@ uno::Reference< drawing::XShape >
 
     return xResult;
 }
+
+void lcl_getLegendEntries(
+    const uno::Reference< chart2::XDataSeriesTreeParent > & xParent,
+    tEntryGroup & rOutEntryContainer,
+    const uno::Reference< drawing::XShapes > & xTarget,
+    const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
+    const tPropertyValues & rProperties,
+    awt::Size & rOutMaxExtentSoFar )
+{
+    uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
+        xParent->getChildren());
+
+    for( sal_Int32 nI = 0; nI < aChildren.getLength(); ++nI )
+    {
+        uno::Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ nI ], uno::UNO_QUERY );
+        if( xNewParent.is())
+        {
+            // If there should be lines between two stacking groups, this would
+            // be the place to create and place them.
+
+            // recurse !
+            lcl_getLegendEntries( xNewParent, rOutEntryContainer, xTarget, xShapeFactory,
+                                  rProperties, rOutMaxExtentSoFar );
+        }
+        else
+        {
+            try
+            {
+                // create label shape
+                uno::Reference< drawing::XShape > xEntry(
+                    xShapeFactory->createInstance(
+                        C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY );
+                if( !xEntry.is())
+                    continue;
+
+                xTarget->add( xEntry );
+                // get label text via data source
+                ::rtl::OUString aName;
+                uno::Reference< chart2::XDataSource > xSeriesSource(
+                    aChildren[ nI ], uno::UNO_QUERY );
+                if( xSeriesSource.is())
+                    aName = lcl_getLabelForSeries( xSeriesSource );
+
+                // set label text
+                uno::Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
+                if( xRange.is())
+                    xRange->setString( aName );
+
+                // set character properties
+                ::chart::PropertyMapper::setMultiProperties(
+                    rProperties.first, rProperties.second, xEntry );
+
+                // adapt max-extent
+                awt::Size aEntrySize( xEntry->getSize() );
+                rOutMaxExtentSoFar.Width = ::std::max(  rOutMaxExtentSoFar.Width,  aEntrySize.Width );
+                rOutMaxExtentSoFar.Height = ::std::max( rOutMaxExtentSoFar.Height, aEntrySize.Height );
+
+                // add entry to list
+                uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
+                rOutEntryContainer.push_back(
+                    tEntryGroup::value_type( xEntry, xSeriesProp ));
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+    }
+}
+
+void lcl_getProperties(
+    const uno::Reference< beans::XPropertySet > & xLegendProp,
+    tPropertyValues & rOutLineFillProperties,
+    tPropertyValues & rOutTextProperties )
+{
+    // Get Line- and FillProperties from model legend
+    if( xLegendProp.is())
+    {
+        // set rOutLineFillProperties
+        ::chart::tPropertyNameValueMap aLineFillValueMap;
+        ::chart::tMakePropertyNameMap aNameMap = ::chart::PropertyMapper::getPropertyNameMapForFillProperties();
+        const ::chart::tMakePropertyNameMap& rLinePropMap = ::chart::PropertyMapper::getPropertyNameMapForLineProperties();
+        aNameMap.insert( rLinePropMap.begin(), rLinePropMap.end());
+        ::chart::PropertyMapper::getValueMap( aLineFillValueMap, aNameMap, xLegendProp );
+
+        aLineFillValueMap[ C2U("LineJoint") ] = uno::makeAny( drawing::LineJoint_ROUND );
+
+        ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
+            rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
+
+        // set rOutTextProperties
+        ::chart::tPropertyNameValueMap aTextValueMap;
+        ::chart::tMakePropertyNameMap aCharNameMap = ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties();
+        ::chart::PropertyMapper::getValueMap( aTextValueMap, aCharNameMap, xLegendProp );
+
+        drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
+        drawing::TextVerticalAdjust eVertAdjust( drawing::TextVerticalAdjust_TOP );
+        aTextValueMap[ C2U("TextAutoGrowHeight") ] = uno::makeAny( sal_True );
+        aTextValueMap[ C2U("TextAutoGrowWidth") ] = uno::makeAny( sal_True );
+        aTextValueMap[ C2U("TextHorizontalAdjust") ] = uno::makeAny( eHorizAdjust );
+        aTextValueMap[ C2U("TextVerticalAdjust") ] = uno::makeAny( eVertAdjust );
+
+        ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
+            rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
+    }
+}
+
 
 } // anonymous namespace
 
@@ -246,123 +373,6 @@ void SAL_CALL VLegend::init(
     m_xShapeFactory = xFactory;
 }
 
-void VLegend::createLegendEntries(
-    const uno::Reference< drawing::XShapes > & xShapeContainer,
-    const uno::Reference< chart2::XDataSeriesTreeParent > & xParent,
-    const uno::Reference< chart2::XDataSeriesTreeParent > & xRootParent,
-    sal_Int32 & nOutCurrentWidth,
-    sal_Int32 & nOutCurrentHeight )
-{
-    if( ! xParent.is())
-        return;
-
-    const sal_Int32 nXOffset = 100;
-    const sal_Int32 nYOffset = 100;
-
-    uno::Reference< chart2::XChartTypeGroup > xChartTypeGroup( xRootParent, uno::UNO_QUERY );
-    uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
-        xParent->getChildren());
-
-    // CharacterProperties
-
-    tPropertyNameValueMap aValueMap;
-    uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
-    if( xLegendProp.is())
-    {
-        tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForCharacterProperties();
-        PropertyMapper::getValueMap( aValueMap, aNameMap, xLegendProp );
-    }
-
-    for( sal_Int32 nI = 0; nI < aChildren.getLength(); ++nI )
-    {
-        uno::Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ nI ], uno::UNO_QUERY );
-        if( xNewParent.is())
-        {
-            // If there should be lines between two stacking groups, this would
-            // be the place to create and place them.
-
-            // recurse !
-            createLegendEntries( xShapeContainer, xNewParent, xRootParent, nOutCurrentWidth, nOutCurrentHeight );
-        }
-        else
-        {
-            try
-            {
-                uno::Reference< drawing::XShape > xEntry(
-                    m_xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY );
-
-                if( !xEntry.is())
-                    continue;
-
-                xShapeContainer->add( xEntry );
-
-                ::rtl::OUString aName;
-                uno::Reference< chart2::XDataSource > xSeriesSource(
-                    aChildren[ nI ], uno::UNO_QUERY );
-                if( xSeriesSource.is())
-                    aName = lcl_getLabelForSeries( xSeriesSource );
-
-                uno::Reference< beans::XPropertySet > xTextProp( xEntry, uno::UNO_QUERY );
-                uno::Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
-                if( xRange.is())
-                {
-                    xRange->setString( aName );
-                }
-
-                if( xTextProp.is())
-                {
-                    drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-                    drawing::TextVerticalAdjust eVertAdjust( drawing::TextVerticalAdjust_TOP );
-                    xTextProp->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny( sal_True ));
-                    xTextProp->setPropertyValue( C2U("TextAutoGrowWidth"), uno::makeAny( sal_True ));
-                    xTextProp->setPropertyValue( C2U("TextHorizontalAdjust"), uno::makeAny( eHorizAdjust ));
-                    xTextProp->setPropertyValue( C2U("TextVerticalAdjust"), uno::makeAny( eVertAdjust ));
-
-                    tNameSequence aPropNames;
-                    tAnySequence aPropValues;
-                    PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-                    PropertyMapper::setMultiProperties( aPropNames, aPropValues, xEntry );
-                }
-
-                awt::Size aTextSize( xEntry->getSize());
-                xEntry->setPosition( awt::Point( 2*nXOffset + aTextSize.Height * 3/2, nOutCurrentHeight ));
-
-                // symbol
-                uno::Reference< drawing::XShape > xSymbol(
-                    lcl_getSymbol( xChartTypeGroup,
-                                   uno::Reference< beans::XPropertySet >(
-                                       xSeriesSource, uno::UNO_QUERY ),
-                                   m_xShapeFactory,
-                                   xShapeContainer));
-
-                sal_Int32 nSymbolHeight = 0;
-                sal_Int32 nDiff = 0;
-
-                if( xSymbol.is())
-                {
-                    // aspect ratio should always be 3:2
-                    nSymbolHeight = aTextSize.Height * 75 / 100;
-                    nDiff = (aTextSize.Height - nSymbolHeight) / 2;
-                    xSymbol->setSize( awt::Size( nSymbolHeight * 3/2, nSymbolHeight ));
-                    xSymbol->setPosition( awt::Point( nXOffset + nDiff, nOutCurrentHeight + nDiff ));
-                }
-
-                nOutCurrentHeight += (aTextSize.Height + nYOffset);
-
-                nOutCurrentWidth = ::std::max< sal_Int32 >(
-                    nOutCurrentWidth,
-                    aTextSize.Width + aTextSize.Height * 3/2 + 2*nXOffset + 2*nDiff );
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
-    }
-}
-
-
 void VLegend::createShapes(
     const awt::Size & rAvailableSpace )
 {
@@ -373,8 +383,9 @@ void VLegend::createShapes(
 
     try
     {
-        awt::Size aSize;
-        chart2::LegendExpansion eExp = chart2::LegendExpansion_HIGH;
+        awt::Size aCurrentExtent;
+        chart2::LegendExpansion eExpansion = chart2::LegendExpansion_HIGH;
+        tEntryGroupContainer aEntryContainer;
 
         //create shape and add to page
         m_xShape.set(
@@ -403,20 +414,17 @@ void VLegend::createShapes(
                 m_xShapeFactory->createInstance(
                     C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
 
-            tPropertyNameValueMap aValueMap;
+            // for quickly setting properties
+            tPropertyValues aLineFillProperties;
+            tPropertyValues aTextProperties;
 
-            // Get Line- and FillProperties from model legend
             uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             if( xLegendProp.is())
             {
-                tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForFillProperties();
-                const tMakePropertyNameMap& rLinePropMap = PropertyMapper::getPropertyNameMapForLineProperties();
-                aNameMap.insert( rLinePropMap.begin(), rLinePropMap.end());
+                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties );
 
-                PropertyMapper::getValueMap( aValueMap, aNameMap, xLegendProp );
-                aValueMap[ C2U("LineJoint") ] = uno::makeAny( drawing::LineJoint_ROUND );
-
-                xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExp;
+                // get Expansion property
+                xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;
             }
 
             if( xBorder.is())
@@ -424,16 +432,18 @@ void VLegend::createShapes(
                 xLegendContainer->add( xBorder );
 
                 // apply legend properties
-                tNameSequence aPropNames;
-                tAnySequence aPropValues;
-                PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-                PropertyMapper::setMultiProperties( aPropNames, aPropValues, xBorder );
+                PropertyMapper::setMultiProperties(
+                    aLineFillProperties.first, aLineFillProperties.second, xBorder );
             }
 
-            const sal_Int32 nVerticalPadding = 200;
-            const sal_Int32 nSeparatorDist = 200;
-            sal_Int32 nCurrentWidth = aSize.Width;
-            sal_Int32 nCurrentHeight = nVerticalPadding;
+            // create a group containing symbol and text
+            uno::Reference< drawing::XShape > xLegendEntryShape(
+                m_xShapeFactory->createInstance(
+                    C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+            xLegendContainer->add( xLegendEntryShape );
+            uno::Reference< drawing::XShapes > xLegendEntryGroup(
+                xLegendEntryShape, uno::UNO_QUERY );
+            OSL_ASSERT( xLegendEntryGroup.is());
 
             // create entries
             uno::Sequence< uno::Reference< chart2::XLegendEntry > > aEntries( m_xLegend->getEntries());
@@ -446,69 +456,183 @@ void VLegend::createShapes(
                 uno::Reference< chart2::XDataSeriesTreeParent > xGroup( aEntries[ nI ], uno::UNO_QUERY );
                 if( xGroup.is())
                 {
-                    createLegendEntries( xLegendContainer, xGroup, xGroup, nCurrentWidth, nCurrentHeight );
+                    aEntryContainer.resize( aEntryContainer.size() + 1 );
+                    lcl_getLegendEntries( xGroup, aEntryContainer.back().aEntryGroup,
+                                          xLegendEntryGroup,
+                                          m_xShapeFactory,
+                                          aTextProperties, aEntryContainer.back().aMaxExtent );
+
+                    uno::Reference< chart2::XChartTypeGroup > xCTGroup( xGroup, uno::UNO_QUERY );
+                    if( xCTGroup.is())
+                        aEntryContainer.back().xChartType = xCTGroup->getChartType();
+                }
+            }
+
+            // place entries
+//             const sal_Int32 nVerticalPadding = 200;
+//             const sal_Int32 nHorizontalPadding = 200;
+            const sal_Int32 nSeparatorDist = 200;
+            const sal_Int32 nXOffset = 100;
+            const sal_Int32 nYOffset = 100;
+
+//             sal_Int32 nCurrentWidth = aSize.Width;
+//             sal_Int32 nCurrentHeight = nVerticalPadding;
+
+            for( tEntryGroupContainer::const_iterator aGroupIt = aEntryContainer.begin();
+                 aGroupIt != aEntryContainer.end(); ++aGroupIt )
+            {
+                if( eExpansion == chart2::LegendExpansion_HIGH )
+                {
+                    awt::Size aMaxExtent( (*aGroupIt).aMaxExtent );
+                    awt::Size aMaxSymbolSpace( aMaxExtent.Height * 3 / 2, aMaxExtent.Height );
+                    sal_Int32 nCurrentYPos = nYOffset; // nVerticalPadding;
+
+                    for( tEntryGroup::const_iterator aEntryIt = ((*aGroupIt).aEntryGroup).begin();
+                         aEntryIt != ((*aGroupIt).aEntryGroup).end(); ++aEntryIt )
+                    {
+
+                        // symbol
+                        uno::Reference< drawing::XShape > xSymbol(
+                            lcl_getSymbol( (*aGroupIt).xChartType,
+                                           (*aEntryIt).xSymbolProperties,
+                                           m_xShapeFactory,
+                                           xLegendEntryGroup ));
+
+//                         sal_Int32 nSymbolHeight = 0;
+//                         sal_Int32 nDiff = 0;
+
+                        if( xSymbol.is())
+                        {
+                            // Note: aspect ratio should always be 3:2
+
+                            // set symbol size to 75% of maximum space
+                            awt::Size aSymbolSize(
+                                aMaxSymbolSpace.Width  * 75 / 100,
+                                aMaxSymbolSpace.Height * 75 / 100 );
+                            xSymbol->setSize( aSymbolSize );
+                            xSymbol->setPosition(
+                                awt::Point(
+                                    nXOffset + ((aMaxSymbolSpace.Width - aSymbolSize.Width) / 2),
+                                    nCurrentYPos + ((aMaxSymbolSpace.Height - aSymbolSize.Height) / 2)));
+                        }
+
+                        // position text shape
+                        (*aEntryIt).xShape->setPosition(
+                            awt::Point( 2 * nXOffset + aMaxSymbolSpace.Width, nCurrentYPos ));
+
+                        nCurrentYPos += (aMaxExtent.Height + nYOffset);
+                    }
+
+                    aCurrentExtent.Width = ::std::max(
+                        3 * nXOffset + aMaxSymbolSpace.Width + aMaxExtent.Width,
+                        aCurrentExtent.Width );
+                    aCurrentExtent.Height = nCurrentYPos;
+                }
+                else
+                {
+                    awt::Size aMaxExtent( (*aGroupIt).aMaxExtent );
+                    awt::Size aMaxSymbolSpace( aMaxExtent.Height * 3 / 2, aMaxExtent.Height );
+                    sal_Int32 nCurrentXPos = nXOffset;
+
+                    for( tEntryGroup::const_iterator aEntryIt = ((*aGroupIt).aEntryGroup).begin();
+                         aEntryIt != ((*aGroupIt).aEntryGroup).end(); ++aEntryIt )
+                    {
+
+                        // symbol
+                        uno::Reference< drawing::XShape > xSymbol(
+                            lcl_getSymbol( (*aGroupIt).xChartType,
+                                           (*aEntryIt).xSymbolProperties,
+                                           m_xShapeFactory,
+                                           xLegendEntryGroup ));
+
+//                         sal_Int32 nSymbolHeight = 0;
+//                         sal_Int32 nDiff = 0;
+
+                        if( xSymbol.is())
+                        {
+                            // Note: aspect ratio should always be 3:2
+
+                            // set symbol size to 75% of maximum space
+                            awt::Size aSymbolSize(
+                                aMaxSymbolSpace.Width  * 75 / 100,
+                                aMaxSymbolSpace.Height * 75 / 100 );
+                            xSymbol->setSize( aSymbolSize );
+                            xSymbol->setPosition(
+                                awt::Point(
+                                    nCurrentXPos + ((aMaxSymbolSpace.Width - aSymbolSize.Width) / 2),
+                                    nYOffset + ((aMaxSymbolSpace.Height - aSymbolSize.Height) / 2)));
+                        }
+
+                        // position text shape
+                        (*aEntryIt).xShape->setPosition(
+                            awt::Point( nCurrentXPos + aMaxSymbolSpace.Width, nYOffset ));
+
+                        nCurrentXPos += 3 * nXOffset + aMaxSymbolSpace.Width +
+                            (*aEntryIt).xShape->getSize().Width;
+                    }
+
+                    aCurrentExtent.Width = nCurrentXPos;
+                    aCurrentExtent.Height = 2 * nYOffset /*nVerticalPadding*/ + aMaxExtent.Height;
                 }
 
                 // separator between chart type groups
-                if( nI < nNumOfChartTypes - 1 )
-                {
-                    uno::Reference< drawing::XShape > xSeparator(
-                        m_xShapeFactory->createInstance(
-                            C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
+//                 if( nI < nNumOfChartTypes - 1 )
+//                 {
+//                     uno::Reference< drawing::XShape > xSeparator(
+//                         m_xShapeFactory->createInstance(
+//                             C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
 
-                    if( xSeparator.is())
-                    {
-                        sal_Int32 nLineWidth = 0;
-                        if( xLegendProp.is())
-                            xLegendProp->getPropertyValue( C2U("LineWidth")) >>= nLineWidth;
+//                     if( xSeparator.is())
+//                     {
+//                         sal_Int32 nLineWidth = 0;
+//                         if( xLegendProp.is())
+//                             xLegendProp->getPropertyValue( C2U("LineWidth")) >>= nLineWidth;
 
-                        nCurrentHeight += nSeparatorDist + nLineWidth/2;
-                        xLegendContainer->add( xSeparator );
-                        // correct resizing is done later, when the required size is known
-                        if( eExp == chart2::LegendExpansion_HIGH )
-                        {
-                            xSeparator->setSize( awt::Size( 100, 0 ));
-                            xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
-                        }
-                        else
-                        {
-                            xSeparator->setSize( awt::Size( 0, 100 ));
-                            xSeparator->setPosition( awt::Point( nCurrentWidth, 0 ));
-                        }
-                        nCurrentHeight += nSeparatorDist + nLineWidth/2;
+//                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
+//                         xLegendContainer->add( xSeparator );
+//                         // correct resizing is done later, when the required size is known
+//                         if( eExpansion == chart2::LegendExpansion_HIGH )
+//                         {
+//                             xSeparator->setSize( awt::Size( 100, 0 ));
+//                             xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
+//                         }
+//                         else
+//                         {
+//                             xSeparator->setSize( awt::Size( 0, 100 ));
+//                             xSeparator->setPosition( awt::Point( nCurrentWidth, 0 ));
+//                         }
+//                         nCurrentHeight += nSeparatorDist + nLineWidth/2;
 
-                        // apply legend properties
-                        tNameSequence aPropNames;
-                        tAnySequence aPropValues;
-                        PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
-                        PropertyMapper::setMultiProperties( aPropNames, aPropValues, xSeparator );
+//                         // apply legend properties
+//                         PropertyMapper::setMultiProperties(
+//                             aLineFillProperties.first, aLineFillProperties.second, xSeparator );
 
-                        aSeparators.push_back( xSeparator );
-                    }
-                }
+//                         aSeparators.push_back( xSeparator );
+//                     }
+//                 }
             }
 
-            aSize.Height = nCurrentHeight + nVerticalPadding;
-            aSize.Width = nCurrentWidth;
+//             aSize.Height = nCurrentHeight + nVerticalPadding;
+//             aSize.Width = nCurrentWidth;
             if( xBorder.is())
-                xBorder->setSize( aSize );
+                xBorder->setSize( aCurrentExtent );
 
             // post-process separators (set correct size)
-            for( std::vector< uno::Reference< drawing::XShape > >::const_iterator aIt = aSeparators.begin();
-                 aIt != aSeparators.end(); ++aIt )
-            {
-                if( (*aIt).is())
-                {
-                    if( eExp == chart2::LegendExpansion_HIGH )
-                        (*aIt)->setSize( ::awt::Size( aSize.Width, 0 ));
-                    else
-                        (*aIt)->setSize( ::awt::Size( 0, aSize.Height ));
-                }
-            }
+//             for( std::vector< uno::Reference< drawing::XShape > >::const_iterator aSepIt = aSeparators.begin();
+//                  aSepIt != aSeparators.end(); ++aSepIt )
+//             {
+//                 if( (*aSepIt).is())
+//                 {
+//                     if( eExpansion == chart2::LegendExpansion_HIGH )
+//                         (*aSepIt)->setSize( ::awt::Size( aSize.Width, 0 ));
+//                     else
+//                         (*aSepIt)->setSize( ::awt::Size( 0, aSize.Height ));
+//                 }
+//             }
         }
 
-        m_aBoundRect.Width = aSize.Width;
-        m_aBoundRect.Height = aSize.Height;
+        m_aBoundRect.Width = aCurrentExtent.Width;
+        m_aBoundRect.Height = aCurrentExtent.Height;
     }
     catch( uno::Exception & ex )
     {
