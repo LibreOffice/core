@@ -2,9 +2,9 @@
  *
  *  $RCSfile: minarray.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:34:47 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "minarray.hxx"
 
