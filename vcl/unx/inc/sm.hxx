@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:30:32 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 10:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ class SessionManagerClient
     static SmcConn          aSmcConnection;
     static ByteString       aClientID;
     static oslCondition aSaveCond;
-    static oslCondition aDieCond;
+    static bool         bDocSaveDone;
 
     static void SaveYourselfProc(       SmcConn connection,
                                         SmPointer client_data,
@@ -93,7 +93,9 @@ class SessionManagerClient
 public:
     static void open();
     static void close();
-    static void shutdownDone();
+    static void checkSaveYourselfCond();
+
+    static bool checkDocumentsSaved();
 
     static String getExecName();
     static const ByteString&  getSessionID() { return aClientID; }
