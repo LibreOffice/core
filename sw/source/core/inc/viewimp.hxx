@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:56:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class SwDrawView;
 class SdrPageView;
 class SwPageFrm;
 class SwRegionRects;
-class ExtOutputDevice;
+class XOutputDevice;
 class SdrPaintInfoRec;
 struct SdrPaintProcRec;
 #ifdef ACCESSIBLE_LAYOUT
