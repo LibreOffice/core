@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:39:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                 if( xHyphenator.is() )
                     pOutl->SetHyphenator( xHyphenator );
 
-                pOutl->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+                pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
                 // in einem Gliederungstext darf nicht auf die 0-te
                 // Ebene ausgerueckt werden
