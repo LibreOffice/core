@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:16:18 $
+ *  last change: $Author: fs $ $Date: 2001-01-23 16:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,7 +1184,7 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
     FmFormPage* pCurrentPage = m_pShell->GetCurPage();
 
     SdrUnoObj* pFound = NULL;
-    for (int i=0; i<pCurrentPage->GetObjCount(); ++i)
+    for (sal_uInt32 i=0; i<pCurrentPage->GetObjCount(); ++i)
     {
         SdrObject* pCurrent = pCurrentPage->GetObj(i);
 
@@ -1471,9 +1471,9 @@ void FmXFormShell::ExecuteSearch()
 
     // jetzt enthaelt die Context-Liste noch ein paar Leer-Token
     UniString strRealContexts,strCurrentToken;
-    for (i=0; i<sTestContexts.GetTokenCount(';'); ++i)
+    for (xub_StrLen j=0; j<sTestContexts.GetTokenCount(';'); ++j)
     {
-        strCurrentToken = sTestContexts.GetToken(i);
+        strCurrentToken = sTestContexts.GetToken(j);
         if (strCurrentToken.Len() != 0)
         {
             strRealContexts += ';';
@@ -2456,7 +2456,7 @@ void FmXFormShell::setCurControl( const SdrMarkList& rMarkList )
 
             if( pObj->IsGroupObject() ) // Mehrfachselektion
             {
-                Reference< XPropertyState> xMultiIFace(new FmXMultiSet( rMarkList ));
+                Reference< XPropertyState> xMultiIFace(FmXMultiSet::Create( rMarkList ));
                 setCurControl( xMultiIFace );
             }
             else
@@ -2477,7 +2477,7 @@ void FmXFormShell::setCurControl( const SdrMarkList& rMarkList )
         }
         else if (nMarkCount > 1)            // Mehrfachselektion
         {
-            Reference< XPropertyState> xMultiIFace(new FmXMultiSet( rMarkList ));
+            Reference< XPropertyState> xMultiIFace(FmXMultiSet::Create( rMarkList ));
             setCurControl( xMultiIFace );
         }
     }

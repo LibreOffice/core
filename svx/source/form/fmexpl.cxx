@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:07:34 $
+ *  last change: $Author: fs $ $Date: 2001-01-23 16:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,8 +942,8 @@ void FmExplorerModel::Insert(FmEntryData* pEntry, sal_uInt32 nRelPos, sal_Bool b
         aUndoStr.SearchAndReplace('#', aStr);
         m_pFormModel->BegUndo(aUndoStr);
 
-        if (nRelPos >= xContainer->getCount())
-            nRelPos = (sal_Int32)xContainer->getCount();
+        if (nRelPos >= (sal_uInt32)xContainer->getCount())
+            nRelPos = (sal_uInt32)xContainer->getCount();
 
         // UndoAction
         if (m_pPropChangeList->CanUndo())
@@ -2968,7 +2968,7 @@ void FmExplorer::ShowSelectionProperties(sal_Bool bForce)
                 {   // nur normale Controls
                     // ein MultiSet aus der MarkList der ::com::sun::star::sdbcx::View aufbauen ...
                     const SdrMarkList& mlMarked = pFormShell->GetFormView()->GetMarkList();
-                    FmXMultiSet* pSelectionSet = new FmXMultiSet( mlMarked );
+                    FmXMultiSet* pSelectionSet = FmXMultiSet::Create( mlMarked );
                     xInterfaceSelected = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ( (::com::sun::star::beans::XPropertySet*)pSelectionSet );
                     pFormShell->GetImpl()->setCurControl( xInterfaceSelected );
                     bNeedSetCurControl = sal_False;
@@ -3274,7 +3274,7 @@ void FmExplorer::SynchronizeMarkList()
 
     for (sal_uInt32 i=0; i<m_arrCurrentSelection.Count(); ++i)
     {
-        SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject(i);
+        SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((USHORT)i);
         // Bei Formselektion alle Controls dieser ::com::sun::star::form::Form markieren
         if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
             MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), sal_True, sal_False);
