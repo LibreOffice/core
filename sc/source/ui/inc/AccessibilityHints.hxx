@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:34:42 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,36 @@
 #define SC_HINT_ACC_MAKEDRAWLAYER   SC_HINT_ACC_SIMPLE_START + 6
 #define SC_HINT_ACC_WINDOWRESIZED   SC_HINT_ACC_SIMPLE_START + 7
 
-class ScAccGridWinFocusLostHint : public SfxHint
+class ScAccWinFocusLostHint : public SfxHint
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 xOldAccessible;
+public:
+                TYPEINFO();
+                ScAccWinFocusLostHint(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
+                ~ScAccWinFocusLostHint();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                GetOldAccessible() const { return xOldAccessible; }
+};
+
+class ScAccWinFocusGotHint : public SfxHint
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                xNewAccessible;
+public:
+                TYPEINFO();
+                ScAccWinFocusGotHint(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
+                ~ScAccWinFocusGotHint();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                GetNewAccessible() const { return xNewAccessible; }
+};
+
+class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint
+{
     ScSplitPos  eOldGridWin;
 public:
                 TYPEINFO();
@@ -98,14 +124,10 @@ public:
                 ~ScAccGridWinFocusLostHint();
 
     ScSplitPos  GetOldGridWin() const { return eOldGridWin; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetOldAccessible() const { return xOldAccessible; }
 };
 
-class ScAccGridWinFocusGotHint : public SfxHint
+class ScAccGridWinFocusGotHint : public ScAccWinFocusGotHint
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                xNewAccessible;
     ScSplitPos  eNewGridWin;
 public:
                 TYPEINFO();
@@ -114,8 +136,6 @@ public:
                 ~ScAccGridWinFocusGotHint();
 
     ScSplitPos  GetNewGridWin() const { return eNewGridWin; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetNewAccessible() const { return xNewAccessible; }
 };
 
 #endif
