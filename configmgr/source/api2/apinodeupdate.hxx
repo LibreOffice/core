@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:29 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,13 +207,21 @@ namespace configmgr
         }
 
         template <class Access>
+        #if defined(_MSC_VER) && (_MSC_VER > 1300 )
+        typename GuardedNodeUpdate<Access>::Updater GuardedNodeUpdate<Access>::getNodeUpdater() const
+        #else
         GuardedNodeUpdate<Access>::Updater GuardedNodeUpdate<Access>::getNodeUpdater() const
+        #endif
         {
             return get().getNodeUpdater(this->getDataAccessor());
         }
 
         template <class Access>
+        #if defined(_MSC_VER) && (_MSC_VER > 1300 )
+        typename GuardedNodeUpdate<Access>::Defaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
+        #else
         GuardedNodeUpdate<Access>::Defaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
+        #endif
         {
             return get().getNodeDefaulter(this->getDataAccessor());
         }
