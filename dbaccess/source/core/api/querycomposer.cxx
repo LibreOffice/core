@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-29 09:53:08 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 14:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,9 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateTables::createObject(const ::rtl::OUString& _rName)
     {
+        OSQLTables::iterator aIter = m_aTables.find(_rName);
+        OSL_ENSURE(aIter != m_aTables.end(),"Table not found!");
+        OSL_ENSURE(aIter->second.is(),"Table is null!");
         return Reference< XNamed >(m_aTables.find(_rName)->second,UNO_QUERY);
     }
     // -----------------------------------------------------------------------------
@@ -698,10 +701,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OQueryComposer::g
         const OSQLTables& aTables = m_aSqlIterator.getTables();
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLTables::const_iterator aIter = aTables.begin(); aIter != aTables.end();++aIter)
-        {
-            Reference<XNamed> xName(aIter->second,UNO_QUERY);
-            aNames.push_back(xName->getName());
-        }
+            aNames.push_back(aIter->first);
 
         m_pTables = new OPrivateTables(aTables,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
