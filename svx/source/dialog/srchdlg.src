@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-21 13:28:07 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ΛΡΡ°ΔΪΘέ(~H)";
         Text[ russian ] = "Νΰιςθ";
         Text[ polish ] = "Szukaj";
-        Text[ japanese ] = "υ€–Ϊ(~H)";
+        Text[ japanese ] = "υΓ·½Δ(~H)";
         Text[ chinese_traditional ] = "·j΄M¤Ί®e(~H)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ";
         Text[ greek ] = "Aναζήτηση για";
@@ -260,10 +260,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ dutch ] = "Vervangen ~door" ;
         Text [ spanish ] = "Reemplazar ~con" ;
         Text [ english_us ] = "Replace ~with" ;
-        Text[ chinese_simplified ] = "Μζ»»Ξª(~W)";
+        Text[ chinese_simplified ] = "Μζ»»³Ι(~W)";
         Text[ russian ] = "Ηΰμενθςό νΰ";
         Text[ polish ] = "Zamieρ na";
-        Text[ japanese ] = "’u·σ•β(~W)";
+        Text[ japanese ] = "’u·Γ·½Δ(~W)";
         Text[ chinese_traditional ] = "§σ΄ΐ¦¨(~W)";
         Text[ arabic ] = "ΗαίαγΙ ΗαΘΟναΙ";
         Text[ greek ] = "Αντικατάσταση με";
@@ -350,7 +350,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ finnish ] = "Kir~jainkoko vaikuttaa" ;
         Text [ danish ] = "Sψg eksakt" ;
         Text [ french ] = "Respecter la ~casse" ;
-        Text [ swedish ] = "Sφk e~xakt" ;
+        Text [ swedish ] = "E~xakt sφkning" ;
         Text [ dutch ] = "E~xact dezelfde tekens" ;
         Text [ spanish ] = "Coincidencia e~xacta" ;
         Text [ english_us ] = "Ma~tch case" ;
@@ -359,10 +359,10 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Òξχνϋι οξθρκ";
         Text[ polish ] = "Dok³adne wyszukiwanie";
         Text[ japanese ] = "‘ε•¶/¬•¶‚π‹ζ•Κ(~T)";
-        Text[ chinese_traditional ] = "Ίλ½T·j΄M(~T)";
+        Text[ chinese_traditional ] = "Ίλ½T·j΄M";
         Text[ arabic ] = "ΘΝΛ Οήνή";
         Text[ language_user1 ] = " ";
-        Text[ greek ] = "Ακριβής αναζήτηση";
+        Text[ greek ] = "Ακριβή~ς αναζήτηση";
         Text[ korean ] = "»σΌΌΗΟ°Τ Γ£±β(~T)";
         Text[ turkish ] = "~BάYάK/kόηόk harf duyarlύ";
     };
@@ -387,7 +387,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "ΟςΊσ(~K)";
         Text[ russian ] = "Ξαπΰςνϋι οξθρκ";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "³‚Ι–ί‚ι(~K)";
+        Text[ japanese ] = "Κή―Έ‚·‚ι(~K)";
         Text[ chinese_traditional ] = "¦V«α(~K)";
         Text[ arabic ] = "ααΞαέ";
         Text[ greek ] = "Προς τα πίσω";
@@ -417,7 +417,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Òξλόκξ β βϋδελενθθ";
         Text[ polish ] = "Tylko w selek~cji";
         Text[ japanese ] = "‘I‘π”ΝΝ‚Μ‚έ(~O)";
-        Text[ chinese_traditional ] = "¥u¤Ή³\\·ν«eªΊΏοΎά(~O)";
+        Text[ chinese_traditional ] = "¥u¤Ή³\\·ν«eªΊΏο¨ϊ(~O)";
         Text[ arabic ] = "ΗαΚΝΟνΟ έήΨ";
         Text[ greek ] = "Μό~νο στην επιλογή";
         Text[ korean ] = "Ηφΐη Ό±ΕΓ»ηΗΧΈΈ(~O)";
@@ -445,7 +445,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ chinese_simplified ] = "³£Ήζ±ν΄ο(~X)";
         Text[ russian ] = "Πεγσλÿπνξε βϋπΰζενθε";
         Text[ polish ] = "WyraΏenie regularne";
-        Text[ japanese ] = "ά²ΩΔή¶°Δή•¶(~X)";
+        Text[ japanese ] = "³‹K•\\»(~X)";
         Text[ chinese_traditional ] = "±`³WªνΉF(~X)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική παράσταση";
@@ -523,6 +523,24 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text = "Halb-/normalbreite Formen" ;
         Text [ English ] = "Match half/full width forms" ;
+        Text[ english_us ] = "Match half/full-width forms";
+        Text[ portuguese ] = "Match half/full width forms";
+        Text[ russian ] = "Match half/full width forms";
+        Text[ greek ] = "Φόρμες με κανονικό/μισό πλάτος";
+        Text[ dutch ] = "Match half/full width forms";
+        Text[ french ] = "Match half/full width forms";
+        Text[ spanish ] = "Match half/full width forms";
+        Text[ italian ] = "Match half/full width forms";
+        Text[ danish ] = "Match half/full width forms";
+        Text[ swedish ] = "Halv-/normalbreda former";
+        Text[ polish ] = "Match half/full width forms";
+        Text[ portuguese_brazilian ] = "Match half/full width forms";
+        Text[ japanese ] = "Match half/full width forms";
+        Text[ korean ] = "Match half/full width forms";
+        Text[ chinese_simplified ] = "Match half/full width forms";
+        Text[ chinese_traditional ] = "¥b§Ξ©M¥ώ§Ξ¦r¤Έ";
+        Text[ turkish ] = "Match half/full width forms";
+        Text[ arabic ] = "Match half/full width forms";
     };
     CheckBox CB_JAP_SOUNDS_LIKE
     {
@@ -531,6 +549,24 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text = "Δhnl. Schreibweise (Jap.)" ;
         Text [ English ] = "Sounds like (Japanese)" ;
+        Text[ english_us ] = "Sounds like (Japanese)";
+        Text[ portuguese ] = "Sounds like (Japanese)";
+        Text[ russian ] = "Οξυξζεε νΰοθρΰνθε (ίοξνρκθι)";
+        Text[ greek ] = "Παρόμοια γραφή (Ιαπωνέζικα)";
+        Text[ dutch ] = "Sounds like (Japanese)";
+        Text[ french ] = "Sounds like (Japanese)";
+        Text[ spanish ] = "Sounds like (Japanese)";
+        Text[ italian ] = "Sounds like (Japanese)";
+        Text[ danish ] = "Sounds like (Japanese)";
+        Text[ swedish ] = "Likn. skrivsδtt (japanska)";
+        Text[ polish ] = "Podobna pisownia (Japoρski)";
+        Text[ portuguese_brazilian ] = "Sounds like (Japanese)";
+        Text[ japanese ] = "Sounds like (Japanese)";
+        Text[ korean ] = "Sounds like (Japanese)";
+        Text[ chinese_simplified ] = "Sounds like (Japanese)";
+        Text[ chinese_traditional ] = "Γώ¦ό¦r¤Έ(¤ι¤ε)";
+        Text[ turkish ] = "Sounds like (Japanese)";
+        Text[ arabic ] = "Sounds like (Japanese)";
     };
     PushButton PB_JAP_OPTIONS
     {
@@ -663,7 +699,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ norwegian ] = "Sψk i" ;
         Text [ italian ] = "Cerca in" ;
         Text [ portuguese_brazilian ] = "Buscar Em" ;
-        Text [ portuguese ] = "Localizar em" ;
+        Text [ portuguese ] = "Procurar em" ;
         Text [ finnish ] = "Tutkittava" ;
         Text [ danish ] = "Sψg i" ;
         Text [ french ] = "Oω chercher ?" ;
