@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 09:25:34 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ TabDialog DLG_MULTI_TOX
                 PageResID = TP_TOX_SELECT;
                 Text = "Verzeichnis" ;
                 Text [ ENGLISH ] = "Index" ;
-                Text[ english_us ] = "Index";
+                Text[ english_us ] = "Index/Table";
                 Text[ portuguese ] = "Νndice";
                 Text[ russian ] = "Σκΰηΰςελό";
                 Text[ greek ] = "Ευρετήριο";
@@ -388,7 +388,7 @@ TabDialog DLG_MULTI_TOX
         Text[ arabic ] = "ΕΩεΗΡ ΗαγΪΗνδΙ";
         Text[ catalan ] = "Previsuali~zaciσn";
     };
-    Text[ english_us ] = "Insert Index";
+    Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir νndice";
     Text[ russian ] = "Βρςΰβθςό σκΰηΰςελό";
     Text[ greek ] = "Προσθήκη ευρετηρίου";
@@ -405,7 +405,7 @@ TabDialog DLG_MULTI_TOX
     Text[ chinese_simplified ] = "ζ’ε…¥η›®ε½•";
     Text[ chinese_traditional ] = "ζ’ε…¥η›®ι„";
     Text[ arabic ] = "ΕΟΡΗΜ έεΡΣ";
-    Text[ english_us ] = "Insert Index";
+    Text[ english_us ] = "Insert Index/Table";
     Text[ portuguese ] = "Inserir νndice";
     Text[ russian ] = "Βρςΰβθςό σκΰηΰςελό";
     Text[ greek ] = "Προσθήκη ευρετηρίου";
@@ -796,7 +796,7 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "~Verzeichnis erstellen" ;
         Text [ ENGLISH ] = "Create index of" ;
-        Text[ english_us ] = "Create index";
+        Text[ english_us ] = "Create index/table";
         Text[ portuguese ] = "Criar νn~dice";
         Text[ russian ] = "Ρξηδΰςό σκΰηΰςελό";
         Text[ greek ] = "Δημιο~υργία ευρετηρίου";
@@ -1830,7 +1830,7 @@ TabPage TP_TOX_SELECT
         Text[ swedish ] = "~OLE-objekt";
         Text[ polish ] = "Obiekty OLE";
         Text[ portuguese_brazilian ] = "OLE objects";
-        Text[ japanese ] = "OLEο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„";
+        Text[ japanese ] = "OLE ο½µοΎοΎο½ΌοΎο½ªο½ΈοΎ„";
         Text[ korean ] = "OLE κ°μ²΄";
         Text[ chinese_simplified ] = "OLE ε―Ήθ±΅";
         Text[ chinese_traditional ] = "OLE η‰©δ»¶";
@@ -4805,6 +4805,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
