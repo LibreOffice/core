@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>TIF - Tag Image File</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">TIFF - Tagged Image File Format</value>
+            <value>TIFF - Tagged Image File Format</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

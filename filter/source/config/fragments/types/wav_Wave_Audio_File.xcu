@@ -4,7 +4,7 @@
         <prop oor:name="MediaType"/>
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Wave Audio File</value>
+            <value>Wave Audio File</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
         <prop oor:name="DetectService"/>
