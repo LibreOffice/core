@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-06-21 12:08:38 $
+ *  last change: $Author: nn $ $Date: 2001-06-22 09:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,6 +1098,7 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             case SC_BOTPERC:
             {
                 ScSortParam aLocalSortParam( rParam, rEntry.nField );
+                aSortParam = aLocalSortParam;       // used in CreateSortInfoArray, Compare
                 if ( !bSortCollatorInitialized )
                 {
                     bSortCollatorInitialized = TRUE;
