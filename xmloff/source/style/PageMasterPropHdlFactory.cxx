@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
 #endif
+#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#include "XMLConstantsPropertyHandler.hxx"
+#endif
 
 #ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
 #include "PageMasterPropHdl.hxx"
@@ -86,9 +89,23 @@
 #include "PageMasterStyleMap.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_TEXTGRIDMODE_HPP_
+#include <com/sun/star/text/TextGridMode.hpp>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::xmloff::token;
+using namespace ::com::sun::star;
+
+
+SvXMLEnumMapEntry aXML_TextGridMode_ConstantMap[] =
+{
+    { XML_NONE,         text::TextGridMode::NONE },
+    { XML_LINE,         text::TextGridMode::LINES },
+    { XML_BOTH,         text::TextGridMode::LINES_AND_CHARS },
+    { XML_TOKEN_INVALID, 0 }
+};
 
 //______________________________________________________________________________
 
@@ -166,6 +183,10 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
             break;
             case XML_TYPE_TEXT_COLUMNS:
                 pHdl = new XMLTextColumnsPropertyHandler;
+            break;
+            case XML_TYPE_LAYOUT_GRID_MODE:
+                pHdl = new XMLConstantsPropertyHandler(
+                    aXML_TextGridMode_ConstantMap, XML_NONE );
             break;
         }
 

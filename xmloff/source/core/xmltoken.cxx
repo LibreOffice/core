@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-04 18:13:23 $
+ *  last change: $Author: dvo $ $Date: 2002-02-06 12:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,6 +2092,15 @@ namespace xmloff { namespace token {
         TOKEN( "lr" ),                         // XML_LR
         TOKEN( "rl" ),                         // XML_RL
         TOKEN( "tb" ),                         // XML_TB
+
+        TOKEN( "layout-grid-color" ),          // XML_LAYOUT_GRID_COLOR
+        TOKEN( "layout-grid-lines" ),          // XML_LAYOUT_GRID_LINES
+        TOKEN( "layout-grid-base-height" ),    // XML_LAYOUT_GRID_BASE_HEIGHT
+        TOKEN( "layout-grid-ruby-height" ),    // XML_LAYOUT_GRID_RUBY_HEIGHT
+        TOKEN( "layout-grid-mode" ),           // XML_LAYOUT_GRID_MODE
+        TOKEN( "layout-grid-ruby-below" ),     // XML_LAYOUT_GRID_RUBY_BELOW
+        TOKEN( "layout-grid-print" ),          // XML_LAYOUT_GRID_PRINT
+        TOKEN( "layout-grid-display" ),        // XML_LAYOUT_GRID_DISPLAY
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
