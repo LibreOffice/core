@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "shutdownicon.hxx"
+#include "imgmgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -315,7 +316,7 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ),
-                              aMiscOptions.GetSymbolSet() == SFX_SYMBOLS_LARGE)))
+                              SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE)))
                         bRet = TRUE;
                     break;
                 case SID_ATTR_BACKUP :
