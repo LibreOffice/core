@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:24:43 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,11 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
             case SvtPathOptions::PATH_HELP:
             case SvtPathOptions::PATH_MODULE:
             case SvtPathOptions::PATH_STORAGE:
+            /* #i29834# */
+            case SvtPathOptions::PATH_ADDIN:
+            case SvtPathOptions::PATH_PLUGIN:
+            case SvtPathOptions::PATH_FILTER:
+            /* #i29834# */
             break;
             default:
             {
