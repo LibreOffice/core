@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:47:13 $
+ *  last change: $Author: fme $ $Date: 2002-09-19 13:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2520,10 +2520,21 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                     {
                         const SwFmtFrmSize &rSz = pFly->GetFmt()->GetFrmSize();
                         if( !rSz.GetHeightPercent() )
-// to do VERTICAL !
-                            nHeight = Max( nHeight, pFly->Frm().Height() +
-                                pFly->GetCurRelPos().Y() + pTmp->Frm().Top()
-                                - pFrm->Frm().Top() - pFrm->Frm().Height() );
+                        {
+                            const SwTwips nFlyWidth =
+                                (pFly->Frm().*fnRect->fnGetHeight)() +
+                                    ( bVert ?
+                                      pFly->GetCurRelPos().X() :
+                                      pFly->GetCurRelPos().Y() );
+
+                            const SwTwips nFrmDiff =
+                                (*fnRect->fnYDiff)(
+                                    (pTmp->Frm().*fnRect->fnGetTop)(),
+                                    (pFrm->Frm().*fnRect->fnGetTop)() );
+
+                            nHeight = Max( nHeight, nFlyWidth + nFrmDiff -
+                                            (pFrm->Frm().*fnRect->fnGetHeight)() );
+                        }
                     }
                 }
             }

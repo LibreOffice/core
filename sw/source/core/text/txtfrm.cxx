@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-12 11:25:48 $
+ *  last change: $Author: fme $ $Date: 2002-09-19 13:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,8 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
-#endif
 #endif
 
 #ifndef _DOC_HXX
@@ -136,13 +134,11 @@
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
 #endif
-#ifdef VERTICAL_LAYOUT
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 #endif
 #ifndef _DBG_LAY_HXX
 #include <dbg_lay.hxx>
@@ -216,8 +212,6 @@ extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
-
-#ifdef VERTICAL_LAYOUT
 
 // Switches width and height of the text frame
 void SwTxtFrm::SwapWidthAndHeight()
@@ -361,8 +355,6 @@ SwFrmSwapper::~SwFrmSwapper()
         ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
 }
 
-#endif
-
 #ifdef BIDI
 
 void SwTxtFrm::SwitchLTRtoRTL( SwRect& rRect ) const
@@ -427,11 +419,7 @@ void SwTxtFrm::InitCtor()
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
-#ifdef VERTICAL_LAYOUT
         bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
-#else
-        bFieldFollow = bHasAnimation = sal_False;
-#endif
 }
 
 
@@ -464,9 +452,7 @@ void SwTxtFrm::ResetPreps()
 
 sal_Bool SwTxtFrm::IsHiddenNow() const
 {
-#ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED( this );
-#endif
+    SwFrmSwapper aSwapper( this, sal_True );
 
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
@@ -474,10 +460,6 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
         ASSERT( Frm().Width(), "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
-
-#ifdef VERTICAL_LAYOUT
-    UNDO_SWAP( this );
-#endif
 
     if( !GetTxtNode()->IsVisible() )
     {
@@ -655,10 +637,8 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
 
 void SwTxtFrm::CalcLineSpace()
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::CalcLineSpace with swapped frame!" )
-#endif
 
     if( IsLocked() || !HasPara() )
         return;
@@ -1271,9 +1251,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
     MSHORT nHave = nNeed;
 
     // Wir geben ein paar Zeilen ab und schrumpfen im CalcPreps()
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( this )
-#endif
 
     SwTxtSizeInfo aInf( this );
     SwTxtMargin aLine( this, &aInf );
@@ -1314,10 +1292,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
         InvalidatePage();
     }
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( this )
-#endif
-
 }
 
 /*************************************************************************
@@ -1350,9 +1325,7 @@ sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePre
 void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         sal_Bool bNotify )
 {
-#ifdef VERTICAL_LAYOUT
     SwFrmSwapper aSwapper( this, sal_False );
-#endif
 
 #ifdef DEBUG
     const SwTwips nDbgY = Frm().Top();
@@ -1363,9 +1336,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-#ifdef VERTICAL_LAYOUT
                 SetInvalidVert( TRUE );  // Test
-#endif
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1393,11 +1364,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue())
                     break;
 
-#ifdef VERTICAL_LAYOUT
                 GETGRID( FindPageFrm() )
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     break;
-#endif
 
                 return;
             }
@@ -1406,9 +1375,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-#ifdef VERTICAL_LAYOUT
         SetInvalidVert( TRUE );  // Test
-#endif
         ASSERT( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1486,7 +1453,6 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
         case PREP_BOSS_CHGD :
         {
-#ifdef VERTICAL_LAYOUT
     // Test
             {
                 SetInvalidVert( FALSE );
@@ -1495,7 +1461,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
             }
-#endif
+
             if( HasFollow() )
             {
                 xub_StrLen nNxtOfst = GetFollow()->GetOfst();
@@ -1552,14 +1518,12 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
         case PREP_POS_CHGD :
         {
-#ifdef VERTICAL_LAYOUT
             if ( GetValidPrtAreaFlag() )
             {
                 GETGRID( FindPageFrm() )
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     InvalidatePrt();
             }
-#endif
 
             // Falls wir mit niemandem ueberlappen:
             // Ueberlappte irgendein Fly _vor_ der Positionsaenderung ?
@@ -1741,77 +1705,50 @@ SwTestFormat::SwTestFormat( SwTxtFrm* pTxtFrm, const SwFrm* pPre, SwTwips nMaxHe
     aOldFrm = pFrm->Frm();
     aOldPrt = pFrm->Prt();
 
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
     SwTwips nLower = (pFrm->*fnRect->fnGetBottomMargin)();
-#else
-    SwTwips nLower = aOldFrm.Height() - aOldPrt.Height() - aOldPrt.Top();
-#endif
 
     pFrm->Frm() = pFrm->GetUpper()->Prt();
     pFrm->Frm() += pFrm->GetUpper()->Frm().Pos();
 
-#ifdef VERTICAL_LAYOUT
     (pFrm->Frm().*fnRect->fnSetHeight)( nMaxHeight );
     if( pFrm->GetPrev() )
         (pFrm->Frm().*fnRect->fnSetPosY)(
                 (pFrm->GetPrev()->Frm().*fnRect->fnGetBottom)() -
                 ( bVert ? nMaxHeight + 1 : 0 ) );
-#else
-    if( pFrm->GetPrev() )
-        pFrm->Frm().Top( pFrm->GetPrev()->Frm().Bottom() );
-    pFrm->Frm().Height( nMaxHeight );
-#endif
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), pFrm );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
-#ifdef VERTICAL_LAYOUT
     (pFrm->Prt().*fnRect->fnSetPosX)( rAttrs.CalcLeft( pFrm ) );
-#else
-    pFrm->Prt().Pos().X() = rAttrs.CalcLeft( pFrm );
-#endif
 
     if( pPre )
     {
         SwTwips nUpper = pFrm->CalcUpperSpace( &rAttrs, pPre );
-#ifdef VERTICAL_LAYOUT
         (pFrm->Prt().*fnRect->fnSetPosY)( nUpper );
-#else
-        pFrm->Prt().Pos().Y() = nUpper;
-#endif
     }
-#ifdef VERTICAL_LAYOUT
     (pFrm->Prt().*fnRect->fnSetHeight)(
         Max( 0L , (pFrm->Frm().*fnRect->fnGetHeight)() -
                   (pFrm->Prt().*fnRect->fnGetTop)() - nLower ) );
     (pFrm->Prt().*fnRect->fnSetWidth)(
         (pFrm->Frm().*fnRect->fnGetWidth)() -
         ( rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight() ) );
-#else
-    pFrm->Prt().Height( Max( 0L , pFrm->Frm().Height() - pFrm->Prt().Top() - nLower ) );
-    pFrm->Prt().Width( pFrm->Frm().Width() - (rAttrs.CalcLeft( pFrm ) + rAttrs.CalcRight()) );
-#endif
     pOldPara = pFrm->HasPara() ? pFrm->GetPara() : NULL;
     pFrm->SetPara( new SwParaPortion(), sal_False );
 
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! pFrm->IsSwapped(), "A frame is swapped before _Format" );
 
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
-#endif
 
     SwTxtFormatInfo aInf( pFrm, sal_False, sal_True, sal_True );
     SwTxtFormatter  aLine( pFrm, &aInf );
 
     pFrm->_Format( aLine, aInf );
 
-#ifdef VERTICAL_LAYOUT
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
 
     ASSERT( ! pFrm->IsSwapped(), "A frame is swapped after _Format" );
-#endif
 }
 
 SwTestFormat::~SwTestFormat()
@@ -1851,11 +1788,9 @@ sal_Bool SwTxtFrm::TestFormat( const SwFrm* pPrv, SwTwips &rMaxHeight, sal_Bool 
 
 sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::WouldFit with swapped frame" );
     SWRECTFN( this );
-#endif
 
     if( IsLocked() )
         return sal_False;
@@ -1868,11 +1803,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
     if ( IsEmpty() )
     {
         bSplit = sal_False;
-#ifdef VERTICAL_LAYOUT
         SwTwips nHeight = bVert ? Prt().SSize().Width() : Prt().SSize().Height();
-#else
-        SwTwips nHeight = Prt().SSize().Height();
-#endif
         if( rMaxHeight < nHeight )
             return sal_False;
         else
@@ -1886,23 +1817,15 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
     // Dann returnen wir sal_True, um auf der neuen Seite noch einmal
     // anformatiert zu werden.
     ASSERT( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
-#ifdef VERTICAL_LAYOUT
     if( !HasPara() || ( !(Frm().*fnRect->fnGetHeight)() && IsHiddenNow() ) )
-#else
-    if( !HasPara() || (!Frm().Height() && IsHiddenNow() ) )
-#endif
         return sal_True;
 
     // Da das Orphan-Flag nur sehr fluechtig existiert, wird als zweite
     // Bedingung  ueberprueft, ob die Rahmengroesse durch CalcPreps
     // auf riesengross gesetzt wird, um ein MoveFwd zu erzwingen.
-#ifdef VERTICAL_LAYOUT
     if( IsWidow() || ( bVert ?
                        ( 0 == Frm().Left() ) :
                        ( LONG_MAX - 20000 < Frm().Bottom() ) ) )
-#else
-    if( IsWidow() || LONG_MAX - 20000 < Frm().Bottom() )
-#endif
     {
         SetWidow(sal_False);
         if ( GetFollow() )
@@ -1912,25 +1835,17 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
             // echten Hoehe gibt, andernfalls (z.B. in neu angelegten SctFrms)
             // ignorieren wir das IsWidow() und pruefen doch noch, ob wir
             // genung Platz finden.
-#ifdef VERTICAL_LAYOUT
             if( ( ( ! bVert && LONG_MAX - 20000 >= Frm().Bottom() ) ||
                   (   bVert && 0 < Frm().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
                     !GetFollow()->Frm().Width() :
                     !GetFollow()->Frm().Height() ) )
-#else
-            if( LONG_MAX - 20000 >= Frm().Bottom() && !GetFollow()->Frm().Height() )
-#endif
             {
                 SwTxtFrm* pFoll = GetFollow()->GetFollow();
-#ifdef VERTICAL_LAYOUT
                 while( pFoll &&
                         ( pFoll->IsVertical() ?
                          !pFoll->Frm().Width() :
                          !pFoll->Frm().Height() ) )
-#else
-                while( pFoll && !pFoll->Frm().Height() )
-#endif
                     pFoll = pFoll->GetFollow();
                 if( pFoll )
                     return sal_False;
@@ -1940,9 +1855,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
         }
     }
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( this );
-#endif
 
     SwTxtSizeInfo aInf( this );
     SwTxtMargin aLine( this, &aInf );
@@ -1965,9 +1878,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
         } while ( aLine.Next() );
     }
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( this )
-#endif
 
     return bRet;
 }
@@ -1979,10 +1890,8 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
 
 KSHORT SwTxtFrm::GetParHeight() const
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::GetParHeight with swapped frame" )
-#endif
 
     if( !HasPara() )
     {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
@@ -1998,9 +1907,7 @@ KSHORT SwTxtFrm::GetParHeight() const
         return nRet;
     }
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( this )
-#endif
 
     SwTxtFrm *pThis = (SwTxtFrm*)this;
     SwTxtSizeInfo aInf( pThis );
@@ -2011,9 +1918,7 @@ KSHORT SwTxtFrm::GetParHeight() const
     while( aLine.Next() )
         nHeight += aLine.GetLineHeight();
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( this )
-#endif
 
     return nHeight;
 }
@@ -2026,9 +1931,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 // returnt this _immer_ im formatierten Zustand!
 SwTxtFrm *SwTxtFrm::GetFormatted()
 {
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_SWAPPED( this )
-#endif
 
     //Kann gut sein, dass mir der IdleCollector mir die gecachten
     //Informationen entzogen hat. Calc() ruft unser Format.
@@ -2047,9 +1950,7 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
             Format();
     }
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( this )
-#endif
 
     return this;
 }
@@ -2166,11 +2067,7 @@ KSHORT SwTxtFrm::FirstLineHeight() const
     if ( !HasPara() )
     {
         if( IsEmpty() && IsValid() )
-#ifdef VERTICAL_LAYOUT
             return IsVertical() ? (KSHORT)Prt().Width() : (KSHORT)Prt().Height();
-#else
-            return (KSHORT)Prt().Height();
-#endif
         return KSHRT_MAX;
     }
     const SwParaPortion *pPara = GetPara();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: od $ $Date: 2002-09-18 10:44:07 $
+ *  last change: $Author: fme $ $Date: 2002-09-19 13:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,6 +1183,14 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             pPrv = pFrm;
             //Index auf den Endnode der Tabellensection setzen.
             nIndex = pTblNode->EndOfSectionIndex();
+
+            SwTabFrm* pTmpFrm = (SwTabFrm*)pFrm;
+            while ( pTmpFrm )
+            {
+                pTmpFrm->CheckDirChange();
+                pTmpFrm = pTmpFrm->IsFollow() ? pTmpFrm->FindMaster() : NULL;
+            }
+
         }
         else if ( pNd->IsSectionNode() )
         {
