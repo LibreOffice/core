@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:37:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,8 +303,10 @@ public:
      */
     SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         USHORT nBoxes, SwTxtFmtColl* pCntntTxtColl,
-                        USHORT nLines=0, SwTxtFmtColl* pHeadlineTxtColl=0,
-                              const SwAttrSet * pAttrSet = 0);
+                        USHORT nLines = 0, USHORT nRepeat = 0,
+                        SwTxtFmtColl* pHeadlineTxtColl = 0,
+                        const SwAttrSet * pAttrSet = 0);
+
         // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                 SwTableFmt* pTblFmt,
