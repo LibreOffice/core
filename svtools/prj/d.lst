@@ -76,6 +76,7 @@ hedabu: ..\inc\fltcall.hxx %_DEST%\inc%_EXT%\svtools\fltcall.hxx
 hedabu: ..\inc\wmf.hxx %_DEST%\inc%_EXT%\svtools\wmf.hxx
 hedabu: ..\inc\fltdefs.hxx %_DEST%\inc%_EXT%\svtools\fltdefs.hxx
 hedabu: ..\inc\filter.hxx %_DEST%\inc%_EXT%\svtools\filter.hxx
+hedabu: ..\inc\FilterConfigItem.hxx %_DEST%\inc%_EXT%\svtools\FilterConfigItem.hxx
 hedabu: ..\inc\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
 hedabu: ..\inc\fontdlg.hxx %_DEST%\inc%_EXT%\svtools\fontdlg.hxx
 hedabu: ..\inc\hint.hxx %_DEST%\inc%_EXT%\svtools\hint.hxx
