@@ -2,9 +2,9 @@
 *
 *  $RCSfile: emptylayer.cxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jb $ $Date: 2002-11-28 12:58:17 $
+*  last change: $Author: cyrillem $ $Date: 2002-11-29 13:18:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -59,7 +59,6 @@
 *
 ************************************************************************/
 
-#include "emptylayer.hxx"
 #include "emptylayerimpl.hxx"
 
 // -----------------------------------------------------------------------------
