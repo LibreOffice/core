@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:09:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2279,6 +2279,40 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     {
     }
 
+    aWriteLock.lock();
+    Reference< XUIElement > xMenuBar( m_xMenuBar, UNO_QUERY );
+    Reference< css::awt::XWindow > xContainerWindow( m_xContainerWindow );
+    Reference< XComponent > xInplaceMenuBar( m_xInplaceMenuBar );
+    MenuBarManager* pInplaceMenuBar( m_pInplaceMenuBar );
+    aWriteLock.unlock();
+
+    if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
+    {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        MenuBar* pMenuBar( 0 );
+        if ( xInplaceMenuBar.is() )
+            pMenuBar = (MenuBar *)pInplaceMenuBar->GetMenuBar();
+        else
+        {
+            MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, xMenuBar.get() );
+            pMenuBar = (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar();
+        }
+
+        Window* pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+        while ( pWindow && !pWindow->IsSystemWindow() )
+            pWindow = pWindow->GetParent();
+
+        if ( pWindow )
+        {
+            SystemWindow* pSysWindow = (SystemWindow *)pWindow;
+            if ( bSetVisible )
+                pSysWindow->SetMenuBar( pMenuBar );
+            else
+                pSysWindow->SetMenuBar( 0 );
+        }
+    }
+
     doLayout();
 }
 
@@ -2478,23 +2512,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
     return sal_False;
 }
 
-void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
-throw (::com::sun::star::uno::RuntimeException)
-{
-     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    m_xFrame = xFrame;
-    aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-}
-
-void SAL_CALL LayoutManager::reset()
-throw (RuntimeException)
-{
-    implts_reset( sal_True );
-}
-
-void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer )
+void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& xMergedMenuBar )
 throw (::com::sun::star::uno::RuntimeException)
 {
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -2514,7 +2532,9 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( m_xFrame.is() &&
              m_xContainerWindow.is() )
         {
-            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, (MenuBar *)(long)pInplaceMenuBarPointer, sal_False, sal_False );
+            MenuBar* pMenuBar = new MenuBar;
+            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
             while ( pWindow && !pWindow->IsSystemWindow() )
@@ -2523,7 +2543,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( pWindow )
             {
                 SystemWindow* pSysWindow = (SystemWindow *)pWindow;
-                pSysWindow->SetMenuBar( (MenuBar *)(long)pInplaceMenuBarPointer );
+                pSysWindow->SetMenuBar( pMenuBar );
             }
 
              m_bInplaceMenuSet = sal_True;
@@ -2534,17 +2554,18 @@ throw (::com::sun::star::uno::RuntimeException)
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
         implts_updateMenuBarClose();
     }
+
 }
 
-void SAL_CALL LayoutManager::resetInplaceMenuBar()
+void LayoutManager::implts_resetInplaceMenuBar()
 throw (::com::sun::star::uno::RuntimeException)
 {
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
     m_bInplaceMenuSet = sal_False;
 
-    if ( m_xMenuBar.is() &&
-         m_xContainerWindow.is() )
+    // if ( m_xMenuBar.is() &&
+    if ( m_xContainerWindow.is() )
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
         MenuBarWrapper* pMenuBarWrapper = SAL_STATIC_CAST( MenuBarWrapper*, m_xMenuBar.get() );
@@ -2555,7 +2576,10 @@ throw (::com::sun::star::uno::RuntimeException)
         if ( pWindow )
         {
             SystemWindow* pSysWindow = (SystemWindow *)pWindow;
-            pSysWindow->SetMenuBar( (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar() );
+            if ( pMenuBarWrapper )
+                pSysWindow->SetMenuBar( (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar() );
+            else
+                pSysWindow->SetMenuBar( 0 );
         }
     }
 
@@ -2569,22 +2593,51 @@ throw (::com::sun::star::uno::RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 }
 
+void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
+throw (::com::sun::star::uno::RuntimeException)
+{
+     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    m_xFrame = xFrame;
+    aWriteLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    // if ( xFrame.is() )
+    //    xFrame->getContainerWindow()->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
+}
+
+void SAL_CALL LayoutManager::reset()
+throw (RuntimeException)
+{
+    implts_reset( sal_True );
+}
+
+void SAL_CALL LayoutManager::setInplaceMenuBar( sal_Int64 pInplaceMenuBarPointer )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+}
+
+void SAL_CALL LayoutManager::resetInplaceMenuBar()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    OSL_ENSURE( sal_False, "This method is obsolete and should not be used!\n" );
+}
+
 //---------------------------------------------------------------------------------------------------------
 // XMenuBarMergingAcceptor
 //---------------------------------------------------------------------------------------------------------
-sal_Bool SAL_CALL LayoutManager::setMergeMenuBar(
-    const Reference< XIndexAccess >& ContainerMenuBar,
-    const Reference< XDispatchProvider >& ContainerDispatchProvider,
-    const Reference< XIndexAccess >& EmbedObjectMenuBar,
-    const Reference< XDispatchProvider >& EmbedObjectDispatchProvider )
+sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
+    const Reference< XIndexAccess >& xMergedMenuBar )
 throw (::com::sun::star::uno::RuntimeException)
 {
-    return sal_False;
+    implts_setInplaceMenuBar( xMergedMenuBar );
+    return sal_True;
 }
 
 void SAL_CALL LayoutManager::removeMergedMenuBar()
 throw (::com::sun::star::uno::RuntimeException)
 {
+    implts_resetInplaceMenuBar();
 }
 
 ::com::sun::star::awt::Rectangle SAL_CALL LayoutManager::getCurrentDockingArea()
@@ -2612,17 +2665,19 @@ throw ( RuntimeException )
     if ( m_xDockingAreaAcceptor == xDockingAreaAcceptor )
         return;
 
+    std::vector< Reference< css::awt::XWindow > > oldDockingAreaWindows;
+
     // Remove listener from old docking area acceptor
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< css::awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
-        if ( xWindow.is() )
+        if ( xWindow.is() && m_xFrame->getContainerWindow() != m_xContainerWindow )
             xWindow->removeWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject * >( this ), UNO_QUERY ));
 
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP]->dispose();
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM]->dispose();
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT]->dispose();
-        m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT]->dispose();
+        oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP] );
+        oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM] );
+        oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_LEFT] );
+        oldDockingAreaWindows.push_back( m_xDockAreaWindows[DockingArea_DOCKINGAREA_RIGHT] );
 
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_TOP].clear();
         m_xDockAreaWindows[DockingArea_DOCKINGAREA_BOTTOM].clear();
@@ -2650,6 +2705,24 @@ throw ( RuntimeException )
      /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
     implts_destroyElements(); // remove all elements
+
+    if ( oldDockingAreaWindows.size() > 0 )
+    {
+        for ( sal_Int32 i=0; i < (sal_Int32)oldDockingAreaWindows.size(); i++ )
+        {
+            if ( oldDockingAreaWindows[i].is() )
+            {
+                try
+                {
+                    oldDockingAreaWindows[i]->dispose();
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+        }
+    }
+
     implts_createAddonsToolBars(); // create addon toolbars
     implts_createCustomToolBars(); // create custom toolbars
     implts_sortUIElements();
@@ -5168,6 +5241,23 @@ throw( css::uno::RuntimeException )
                 aLink.Call( &m_aAsyncLayoutTimer );
         }
         m_aAsyncLayoutTimer.Start();
+    }
+    else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
+    {
+        Reference< css::awt::XWindow > xComponentWindow( m_xFrame->getComponentWindow() );
+        if( xComponentWindow.is() == sal_True )
+        {
+            css::uno::Reference< css::awt::XDevice > xDevice( m_xFrame->getContainerWindow(), css::uno::UNO_QUERY );
+
+            // Convert relativ size to output size.
+            css::awt::Rectangle  aRectangle  = m_xFrame->getContainerWindow()->getPosSize();
+            css::awt::DeviceInfo aInfo       = xDevice->getInfo();
+            css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
+                                                aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
+
+            // Resize our component window.
+            xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, css::awt::PosSize::POSSIZE );
+        }
     }
     else
     {
