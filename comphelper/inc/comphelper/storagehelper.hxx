@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storagehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:36:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,13 @@
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 namespace comphelper {
 
-class OStorageHelper
+class COMPHELPER_DLLPUBLIC OStorageHelper
 {
 public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
