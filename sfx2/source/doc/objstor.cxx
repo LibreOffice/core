@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-01 09:21:32 $
+ *  last change: $Author: fs $ $Date: 2001-10-02 16:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1542,9 +1542,23 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     {
         if(! bUrl )
         {
+            // check if we have a filter which allows for filter options
+            sal_Bool bAllowOptions = sal_False;
+            {
+                SfxFilterMatcher* pMatcher = new SfxFilterMatcher( GetFactory().GetFilterContainer() );
+                SfxFilterMatcherIter aIter( pMatcher, SFX_FILTER_EXPORT, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
+
+                for ( const SfxFilter* pFilter = aIter.First(); pFilter && !bAllowOptions; pFilter = aIter.Next() )
+                {
+                    if ( 0 != ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS ) )
+                        bAllowOptions = sal_True;
+                }
+                DELETEZ( pMatcher );
+            }
+
             // get the filename by dialog ...
             // create the file dialog
-            sfx2::FileDialogHelper aFileDlg( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS,
+            sfx2::FileDialogHelper aFileDlg( bAllowOptions ? FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS : FILESAVE_AUTOEXTENSION_PASSWORD,
                                              0L, GetFactory() );
 
             if ( HasName() )
