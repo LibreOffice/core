@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-14 10:55:39 $
+ *  last change: $Author: mba $ $Date: 2000-12-14 11:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,6 +771,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 xOldObj->SetModified( sal_False );
                 // Altes Dok nicht cachen! Gilt nicht, wenn anderes
                 // Doc geladen wird.
+
+                const SfxFilter *pSaveFilter = pNewMedium->GetFilter();
+                SfxItemSet* pSaveItemSet = pNewSet->Clone();
                 if( !pURLItem || pURLItem->GetValue() ==
                     xOldObj->GetMedium()->GetName() )
                     xOldObj->Get_Impl()->bForbidCaching = sal_True;
@@ -783,7 +786,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( !xNewObj.Is() )
                 {
                     pNewMedium =  xLoader->GetMedium();
-                    if( pNewMedium ) pNewMedium->Close();
+                    if( pNewMedium )
+                        pNewMedium->Close();
 
                     // wieder auf das alte Medium zurueck
                     const SfxFilter* pOldFilter = xOldObj->GetMedium()->GetFilter();
@@ -798,19 +802,16 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         if ( RET_YES == aBox.Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
-                            aSet.Put( SfxStringItem( SID_FILE_NAME, pNewMedium->GetName() ) );
-                            SFX_ITEMSET_ARG( pNewMedium->GetItemSet(), pOptions,
-                                             SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
+                            aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
+                            SFX_ITEMSET_ARG( pSaveItemSet, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False);
                             if ( pOptions )
                                 aSet.Put( *pOptions );
-                            SFX_ITEMSET_ARG( pNewMedium->GetItemSet(), pReferer,
-                                             SfxStringItem, SID_REFERER, sal_False);
+                            SFX_ITEMSET_ARG( pSaveItemSet, pReferer, SfxStringItem, SID_REFERER, sal_False);
                             if ( pReferer )
                                 aSet.Put( *pReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                            if( pNewMedium->GetFilter() )
-                                aSet.Put( SfxStringItem( SID_FILTER_NAME,
-                                                         pNewMedium->GetFilter()->GetName() ) );
+                            if( pSaveFilter )
+                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pSaveFilter->GetName() ) );
 
                             //MI: im selben Frame => er macht gar nix !?!
                             //SfxFrameItem aFrameItem( SID_DOCFRAME, GetFrame() );
@@ -820,6 +821,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
                 else
                     xNewObj->GetMedium()->GetItemSet()->ClearItem( SID_RELOAD );
+
+                DELETEZ( pSaveItemSet );
 
                 SfxViewFrame* pThis = (SfxViewFrame*)this;
                 sal_Bool bDeleted = aFrames.C40_GETPOS( SfxViewFrame, pThis ) == USHRT_MAX;
