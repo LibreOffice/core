@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalNameAccess.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:35 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 /** is used to have hierarchical access to elements within a container.
 
     <p>You address an object of a specific level in the hierarchy by giving its
-    fully qualified name, e.g. "com::sun::star::uno::XInterface". </p>
+    fully qualified name, e.g., "com::sun::star::uno::XInterface". </p>
 
     <p>To implement inaccurate name access, support the
     <type scope="com::sun::star::beans">XExactName</type> interface.  </p>
@@ -111,7 +111,7 @@ interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
             <TRUE/> if an element with this name is in
             the container, <FALSE/> otherwise.
 
-        <p>In many cases the next call is <member>XNameAccess::getByName</member>.
+        <p>In many cases, the next call is <member>XNameAccess::getByName</member>.
         You should optimize this case.
 
         @param aName
@@ -128,6 +128,9 @@ interface XHierarchicalNameAccess: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/16 15:10:35  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.6  2000/12/19 15:32:24  mi
     documentation syntax fixed
 

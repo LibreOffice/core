@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdentifierContainer.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-31 13:37:47 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ interface XIdentifierContainer: com::sun::star::container::XIdentifierReplace
 {
     //-------------------------------------------------------------------------
 
-    /** inserts an element and create a new unique identifier for it.
+    /** inserts an element and creates a new unique identifier for it.
 
         @returns
             the newly created identifier under which the element is inserted.
@@ -126,7 +126,7 @@ interface XIdentifierContainer: com::sun::star::container::XIdentifierReplace
             The identifier that should be removed.
 
         @throws com::sun::star::lang::NoSuchElementException
-            If the identifier is not existing.
+            If the identifier does not exist.
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
