@@ -90,7 +90,7 @@ public class CanvasFont
         fontRequest = _fontRequest;
 
         // TODO: Use proper attributes here, first of all, use fractional point font size
-        font = new java.awt.Font( fontRequest.FamilyName, java.awt.Font.PLAIN, (int)(fontRequest.CellSize + .5) );
+        font = new java.awt.Font( fontRequest.FontDescription.FamilyName, java.awt.Font.PLAIN, (int)(fontRequest.CellSize + .5) );
     }
 
     public java.awt.Font getFont()
@@ -105,59 +105,32 @@ public class CanvasFont
     // ===========================
     //
 
-    public XPolyPolygon2D[] queryTextShapes( StringContext  text,
-                                             ViewState      viewState,
-                                             RenderState    renderState,
-                                             byte           direction ) throws com.sun.star.lang.IllegalArgumentException
+    public XTextLayout createTextLayout( StringContext aText, byte nDirection, long nRandomSeed )
     {
-        return null;
+        return new TextLayout( aText, nDirection, nRandomSeed, this, associatedCanvas );
     }
 
-    public RealRectangle2D[] queryTightMeasures( StringContext  text,
-                                                 ViewState      viewState,
-                                                 RenderState    renderState,
-                                                 byte           direction ) throws com.sun.star.lang.IllegalArgumentException
-    {
-        return null;
-    }
-
-    public RealRectangle2D[] queryTextMeasures( StringContext   text,
-                                                ViewState       viewState,
-                                                RenderState     renderState,
-                                                byte            direction ) throws com.sun.star.lang.IllegalArgumentException
-    {
-        return null;
-    }
-
-    public double[] queryTextOffsets( StringContext text,
-                                      ViewState     viewState,
-                                      RenderState   renderState,
-                                      byte          direction ) throws com.sun.star.lang.IllegalArgumentException
-    {
-        return null;
-    }
-
-    public RealRectangle2D queryTextBounds( StringContext   text,
-                                            ViewState       viewState,
-                                            RenderState     renderState,
-                                            byte            direction ) throws com.sun.star.lang.IllegalArgumentException
-    {
-        return null;
-    }
-
-    public FontRequest getFontRequest()
+    public FontRequest getFontRequest(  )
     {
         return fontRequest;
     }
 
-    public FontMetrics getFontMetrics()
+    public FontMetrics getFontMetrics(  )
     {
+        // TODO
         return null;
     }
 
-    public XCanvas getAssociatedCanvas()
+    public double[] getAvailableSizes(  )
     {
-        return associatedCanvas;
+        // TODO
+        return null;
+    }
+
+    public com.sun.star.beans.PropertyValue[] getExtraFontProperties(  )
+    {
+        // TODO
+        return null;
     }
 
     //----------------------------------------------------------------------------------
