@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-04-18 09:15:17 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 12:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2550,6 +2550,16 @@ SvxColorItem::~SvxColorItem()
 }
 
 // -----------------------------------------------------------------------
+USHORT SvxColorItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_50==nFFVer,
+            "SvxColorItem: Gibt es ein neues Fileformat?" );
+    return  SOFFICE_FILEFORMAT_50 >= nFFVer ? VERSION_USEAUTOCOLOR : 0;
+}
+
+// -----------------------------------------------------------------------
 
 int SvxColorItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -2616,7 +2626,11 @@ SfxPoolItem* SvxColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxColorItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
-    rStrm << mColor;
+    if( VERSION_USEAUTOCOLOR == nItemVersion &&
+        COL_AUTO == mColor.GetColor() )
+        rStrm << Color( COL_BLACK );
+    else
+        rStrm << mColor;
     return rStrm;
 }
 
