@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-14 15:05:17 $
+ *  last change: $Author: dr $ $Date: 2002-09-25 15:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,14 +712,36 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetHeight() );
             rSet.Put( rChg.GetWeight() );
             rSet.Put( rChg.GetPosture() );
-            rSet.Put( rChg.GetCJKFont() );
-            rSet.Put( rChg.GetCJKHeight() );
-            rSet.Put( rChg.GetCJKWeight() );
-            rSet.Put( rChg.GetCJKPosture() );
-            rSet.Put( rChg.GetCTLFont() );
-            rSet.Put( rChg.GetCTLHeight() );
-            rSet.Put( rChg.GetCTLWeight() );
-            rSet.Put( rChg.GetCTLPosture() );
+            // #103065# do not insert empty CJK font
+            const SvxFontItem& rCJKFont = rChg.GetCJKFont();
+            if( rCJKFont.GetStyleName().Len() )
+            {
+                rSet.Put( rChg.GetCJKFont() );
+                rSet.Put( rChg.GetCJKHeight() );
+                rSet.Put( rChg.GetCJKWeight() );
+                rSet.Put( rChg.GetCJKPosture() );
+            }
+            else
+            {
+                rSet.Put( rChg.GetHeight(), RES_CHRATR_CJK_FONTSIZE );
+                rSet.Put( rChg.GetWeight(), RES_CHRATR_CJK_WEIGHT );
+                rSet.Put( rChg.GetPosture(), RES_CHRATR_CJK_POSTURE );
+            }
+            // #103065# do not insert empty CTL font
+            const SvxFontItem& rCTLFont = rChg.GetCTLFont();
+            if( rCTLFont.GetStyleName().Len() )
+            {
+                rSet.Put( rChg.GetCTLFont() );
+                rSet.Put( rChg.GetCTLHeight() );
+                rSet.Put( rChg.GetCTLWeight() );
+                rSet.Put( rChg.GetCTLPosture() );
+            }
+            else
+            {
+                rSet.Put( rChg.GetHeight(), RES_CHRATR_CTL_FONTSIZE );
+                rSet.Put( rChg.GetWeight(), RES_CHRATR_CTL_WEIGHT );
+                rSet.Put( rChg.GetPosture(), RES_CHRATR_CTL_POSTURE );
+            }
             rSet.Put( rChg.GetUnderline() );
             rSet.Put( rChg.GetCrossedOut() );
             rSet.Put( rChg.GetContour() );
