@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:43:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,16 +108,11 @@
 #include "arrdecl.hxx"
 #include "dispatch.hxx"
 #include "sfxresid.hxx"
-//#include "interno.hxx"
 #include "fcontnr.hxx"
 #include "viewsh.hxx"
 #include "intro.hxx"
 #include "msgpool.hxx"
-#include "cfgmgr.hxx"
-#include "accmgr.hxx"
 #include "mnumgr.hxx"
-#include "stbmgr.hxx"
-#include "imgmgr.hxx"
 #include "appuno.hxx"
 #include "objuno.hxx"
 #include "app.hrc"
