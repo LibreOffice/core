@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-16 10:13:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,24 @@ void SwDoc::SetNumRule( const SwPaM& rPam, const SwNumRule& rRule,
 
                 case FRMDIR_HORI_RIGHT_TOP:
                     pNew->SetNumAdjust(SVX_ADJUST_RIGHT);
+
+                    break;
+
+                case FRMDIR_ENVIRONMENT :
+                    // --> FME 2004-08-06 #i32203# If the direction attribute
+                    // has not been set directly, we have to get it from the
+                    // layout:
+                    {
+                        SwClientIter aClientIter( *pCntntNode );
+                        SwClient* pLast = aClientIter.GoStart();
+                        if ( pLast && pLast->ISA( SwTxtFrm ) )
+                        {
+                            if ( static_cast<const SwTxtFrm*>(pLast)->IsRightToLeft() )
+                                pNew->SetNumAdjust(SVX_ADJUST_RIGHT);
+                            else
+                                pNew->SetNumAdjust(SVX_ADJUST_LEFT);
+                        }
+                    }
 
                     break;
 
