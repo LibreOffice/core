@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 11:22:05 $
+#   last change: $Author: vg $ $Date: 2004-01-06 13:22:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,23 +100,11 @@ SLOFILES=	$(SLO)$/button.obj		\
             $(SLO)$/spinbtn.obj 	\
             $(SLO)$/tabctrl.obj
 
-.IF "$(remote)"!=""
-EXCEPTIONSFILES=					\
-            $(SLO)$/button.obj		\
-            $(SLO)$/ctrl.obj		\
-            $(SLO)$/edit.obj		\
-            $(SLO)$/field.obj		\
-            $(SLO)$/field2.obj		\
-            $(SLO)$/longcurr.obj	\
-            $(SLO)$/ilstbox.obj 	\
-            $(SLO)$/tabctrl.obj
-.ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/edit.obj		\
             $(SLO)$/field2.obj		\
             $(SLO)$/ilstbox.obj		\
             $(SLO)$/tabctrl.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
