@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:48:31 $
+ *  last change: $Author: dr $ $Date: 2002-08-06 16:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,12 @@
 
 struct Func_SetDefault
 {
-    inline operator()( ScCsvColState& rState ) { rState.mnType = CSV_TYPE_DEFAULT; }
+    inline void operator()( ScCsvColState& rState ) { rState.mnType = CSV_TYPE_DEFAULT; }
 };
 
 struct Func_Deselect
 {
-    inline operator()( ScCsvColState& rState ) { rState.Select( false ); }
+    inline void operator()( ScCsvColState& rState ) { rState.Select( false ); }
 };
 
 
