@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-03 20:13:16 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "信封方向";
         Text[ turkish ] = "Envelope orientation";
         Text[ arabic ] = "Envelope orientation";
-        Text[ catalan ] = "Envelope orientation";
+        Text[ catalan ] = "Orientaci� del sobre";
         Text[ thai ] = "วางแนวซองจดหมาย";
     };
     ToolBox BOX_ALIGN
@@ -164,7 +164,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "위에서부터 인쇄(~P)";
         Text[ turkish ] = "�stten yazd�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimir r~everso";
+        Text[ catalan ] = "~Imprimeix des de la part superior";
         Text[ thai ] = "~พิมพ์จากด้านบน";
     };
     RadioButton BTN_BOTTOM
@@ -195,7 +195,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "아래에서부터 인쇄(~B)";
         Text[ turkish ] = "Alttan yazd�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimir ~anverso";
+        Text[ catalan ] = "Imprimeix des de la ~part inferior";
         Text[ thai ] = "พิมพ์จากด้าน~ล่าง";
     };
     FixedText TXT_RIGHT
@@ -226,7 +226,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "오른쪽으로 이동(~S)";
         Text[ turkish ] = "S~a�a";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Hacia la ~derecha";
+        Text[ catalan ] = "Cap a la ~dreta";
         Text[ thai ] = "เ~ลื่อนทางขวา";
     };
     MetricField FLD_RIGHT
@@ -274,7 +274,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "아래로 이동(~D)";
         Text[ turkish ] = "~A�a��";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Hacia a~bajo";
+        Text[ catalan ] = "Cap a a~vall";
         Text[ thai ] = "เลื่อน ~ลง";
     };
     MetricField FLD_DOWN
@@ -319,7 +319,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "目前的印表機";
         Text[ turkish ] = "Current printer";
         Text[ arabic ] = "Current printer";
-        Text[ catalan ] = "Current printer";
+        Text[ catalan ] = "Impressora activa";
         Text[ thai ] = "เครื่องพิมพ์ปัจจุบัน";
     };
     FixedText TXT_PRINTER
@@ -350,7 +350,7 @@ TabPage TP_ENV_PRT
         Text[ korean ] = "- 프린터가 설치되지 않았습니다. -";
         Text[ turkish ] = "- Kurulu yaz�c� yok -";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "- No hay instalada ninguna impresora -";
+        Text[ catalan ] = "- No hi ha cap impressora instal.lada -";
         Text[ thai ] = "- ไม่ได้ติดตั้งเครื่องพิมพ์ -";
     };
     PushButton BTN_PRTSETUP
@@ -379,7 +379,7 @@ TabPage TP_ENV_PRT
         Text[ greek ] = "~�����������...";
         Text[ korean ] = "설치...";
         Text[ turkish ] = "Ayarlar...";
-        Text[ catalan ] = "Configurar...";
+        Text[ catalan ] = "Configura...";
         Text[ finnish ] = "Asennus";
         Text[ thai ] = "ติดตั้ง...";
     };
