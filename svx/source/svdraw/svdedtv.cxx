@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:53:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ SdrEditView::SdrEditView(SdrModel* pModel1, OutputDevice* pOut):
     ImpClearVars();
 }
 
-SdrEditView::SdrEditView(SdrModel* pModel1, ExtOutputDevice* pXOut):
+SdrEditView::SdrEditView(SdrModel* pModel1, XOutputDevice* pXOut):
     SdrMarkView(pModel1,pXOut)
 {
     ImpClearVars();
