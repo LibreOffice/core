@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-18 16:16:21 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ String STR_PRESOBJ_GRAPHIC
     Text [ english_us ] = "Double-click to add graphics" ;
     Text [ italian ] = "Aggiungi l'immagine con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir una imagen" ;
-    Text [ french ] = "Ajouter une image par double-clic" ;
+    Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till grafik genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj grafik ved at dobbeltklikke" ;
     Text [ portuguese_brazilian ] = "Graphik durch Doppelklicken hinzufügen" ;
@@ -786,7 +786,7 @@ String STR_PRESOBJ_OBJECT
     Text [ english_us ] = "Double-click to add an object" ;
     Text [ italian ] = "Aggiungere un oggetto con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir un objeto" ;
-    Text [ french ] = "Double-cliquez pour ajouter des objets" ;
+    Text [ french ] = "Double-clic pour insérer un objet" ;
     Text [ dutch ] = "Dubbelklik om object toe te voegen" ;
     Text [ swedish ] = "Lägg till objekt genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj objekt ved at dobbeltklikke" ;
@@ -814,7 +814,7 @@ String STR_PRESOBJ_CHART
     Text [ english_us ] = "Double-click to add a chart" ;
     Text [ italian ] = "Aggiungere il diagramma con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir un diagrama" ;
-    Text [ french ] = "Double-cliquez pour insérer le diagramme" ;
+    Text [ french ] = "Double-clic pour insérer un diagramme" ;
     Text [ swedish ] = "Lägg till diagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj diagram ved at dobbeltklikke" ;
     Text [ portuguese_brazilian ] = "Diagramm durch Doppelklicken hinzufügen" ;
@@ -840,7 +840,7 @@ String STR_PRESOBJ_ORGCHART
     Text [ english_us ] = "Double-click to add an organization chart" ;
     Text [ italian ] = "Aggiungere un organigramma con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir un organigrama" ;
-    Text [ french ] = "Double-cliquez pour ajouter un organigramme" ;
+    Text [ french ] = "Double-clic pour insérer un organigramme" ;
     Text [ dutch ] = "Dubbelklik om organisatiediagram toe te voegen" ;
     Text [ swedish ] = "Lägg till organisationsdiagram genom att dubbelklicka" ;
     Text [ danish ] = "Tilføj organisationsdiagram ved at dobbeltklikke" ;
@@ -867,7 +867,7 @@ String STR_PRESOBJ_TABLE
     Text [ english_us ] = "Double-click to add a spreadsheet" ;
     Text [ italian ] = "Aggiungere una tabella con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir una hoja" ;
-    Text [ french ] = "Double-cliquez pour insérer une feuille de calcul" ;
+    Text [ french ] = "Double-clic pour insérer une feuille de calcul" ;
     Text [ dutch ] = "Dubbelklik om werkblad toe te voegen" ;
     Text [ swedish ] = "Dubbelklicka för att lägga till tabell" ;
     Text [ danish ] = "Tilføj regneark ved at dobbeltklikke" ;
@@ -1922,6 +1922,24 @@ String STR_POWERPOINT_IMPORT
 {
     Text = "PowerPoint Import" ;
     Text [ ENGLISH ] = "PowerPoint import" ;
+    Text[ english_us ] = "PowerPoint Import";
+    Text[ portuguese ] = "PowerPoint import";
+    Text[ russian ] = "PowerPoint import";
+    Text[ greek ] = "ÅéóáãùãŞ ôïõ PowerPoint";
+    Text[ dutch ] = "PowerPoint import";
+    Text[ french ] = "Import PowerPoint";
+    Text[ spanish ] = "Importación PowerPoint";
+    Text[ italian ] = "PowerPoint import";
+    Text[ danish ] = "PowerPoint import";
+    Text[ swedish ] = "PowerPoint-import";
+    Text[ polish ] = "Import PowerPoint";
+    Text[ portuguese_brazilian ] = "PowerPoint import";
+    Text[ japanese ] = "PowerPoint import";
+    Text[ korean ] = "PowerPoint import";
+    Text[ chinese_simplified ] = "PowerPoint ÊäÈë";
+    Text[ chinese_traditional ] = "PowerPoint import";
+    Text[ turkish ] = "PowerPoint import";
+    Text[ arabic ] = "PowerPoint ÇÓÊíÑÇÏ";
 };
 
 #ifdef STARIMAGE_AVAILABLE
@@ -1934,20 +1952,20 @@ String STR_PRESOBJ_IMAGE
     Text [ english_us ] = "Double-click to add an image" ;
     Text [ italian ] = "Aggiungere l'immagine con un doppio clic" ;
     Text [ spanish ] = "Pulse dos veces para añadir una imagen" ;
-    Text [ french ] = "Double-cliquez pour insérer l'image" ;
+    Text [ french ] = "Double-clic pour insérer une image" ;
     Text [ swedish ] = "Lägg till bild genom att dubbelklicka" ;
-    Text [ danish ] = "Tilføj billede ved at dobbeltklikke" ;
+    Text [ danish ] = "Tilføj billede via dobbeltklik" ;
     Text [ portuguese_brazilian ] = "Bild durch Doppelklicken hinzufügen" ;
     Text [ portuguese ] = "Inserir imagem com clique duplo" ;
-    Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼Ïñ";
+    Text[ chinese_simplified ] = "Í¨¹ıË«»÷²åÈëÍ¼Ïñ";
     Text[ russian ] = "Äîáàâèòü êàğòèíêó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj obraz przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚ÄŠG‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚Å²Ò°¼Ş‚Ì‘}“ü";
     Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ´¡¤J¼v¹³";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÕæÑÉ";
     Text[ dutch ] = "Dubbelklik om afbeelding toe te voegen";
-    Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼Ïñ";
-    Text[ greek ] = "ÊÜíôå äéğëü êëéê ãéá ôç ğñïóèŞêç åéêüíáò";
+    Text[ chinese_simplified ] = "Í¨¹ıË«»÷²åÈëÍ¼Ïñ";
+    Text[ greek ] = "ÊÜíôå äéğëü êëéê ãéá ôç ğñïóèŞêç ôçò åéêüíáò";
     Text[ korean ] = "´õºíÅ¬¸¯À¸·Î ÀÌ¹ÌÁö Ãß°¡";
     Text[ turkish ] = "Resim eklemek için çift tıklayın";
     Text[ language_user1 ] = " ";
