@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-04 13:04:18 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_NOGLOS1
     TEXT[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯µÄËõĞ´ '";
     TEXT[ russian ] = "Àâòîòåêñò ê ñîêğàùåíèş '";
     TEXT[ polish ] = "Autotekst do skrótu '";
-    TEXT[ japanese ] = "“ü—Íx‰‡‚Ì¼®°Ä¶¯Ä '";
+    TEXT[ japanese ] = "“ü—Íx‰‡‚Ì¼®°Ä¶¯Äu";
     TEXT[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g '";
     TEXT[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ '";
     TEXT[ dutch ] = "AutoTekst voor afkortingen'";
@@ -117,7 +117,7 @@ String STR_NOGLOS2
     TEXT[ chinese_simplified ] = "' Ã»ÓĞ±»ÕÒµ½¡£";
     TEXT[ russian ] = "' íå íàéäåí.";
     TEXT[ polish ] = "' nie znaleziono.";
-    TEXT[ japanese ] = "' ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    TEXT[ japanese ] = "v‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
     TEXT[ chinese_traditional ] = "' ¨S¦³³Q§ä¨ì¡C";
     TEXT[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     TEXT[ dutch ] = "' niet gevonden.";
@@ -207,7 +207,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ chinese_simplified ] = "ËùĞèÒªµÄ²Ã¼ô°å¸ñÊ½²»´æÔÚ¡£";
     MESSAGE[ russian ] = "Æåëàåìûé ôîğìàò áóôåğà îáìåíà íåäîñòóïåí.";
     MESSAGE[ polish ] = "Szukany format schowka jest niedostêpny.";
-    MESSAGE[ japanese ] = "w’è‚Ì¸Ø¯ÌßÜ°ÄŞ‘®‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
+    MESSAGE[ japanese ] = "w’è‚Ì¸Ø¯ÌßÎŞ°ÄŞ‘®‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
     MESSAGE[ chinese_traditional ] = "©Ò»İ­nªºµô°ÅÃ¯®æ¦¡¤£¦s¦b¡C";
     MESSAGE[ arabic ] = "ÊäÓíŞ ÇáÍÇİÙÉ ÇáãØáæÈ ÛíÑ ãÊæİÑ.";
     MESSAGE[ dutch ] = "Gevraagd clipboardformaat is niet beschikbaar.";
@@ -240,7 +240,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ chinese_simplified ] = "Õâ¸öÇøÓò¾ßÓĞµÄ¸ñÊ½ÊÇ¾ÉµÄ¡£\nÒª´æÅÌ¸ü¸Ä¾Í±ØĞë½øĞĞ¸ñÊ½×ª»»¡£\nÒª×ª»»¸ñÊ½Âğ£¿";
     Message[ russian ] = "Ğàçäåë ïğåäñòàâëåí â ñòàğîì ôîğìàòå.\nÅãî íåîáõîäèìî ïğåîáğàçîâàòü, ñ òåì ÷òîáû ìîæíî \náûëî ñîõğàíèòü èçìåíåíèÿ\n.Ïğåîáğàçîâàòü?";
     Message[ polish ] = "Format obszaru nie jest aktualny.\nObszar musi byæ skonwertowany, by mo¿na by³o zapisaæ zmiany\n. Skonwertowaæ go?";
-    Message[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í‹Œ‘®‚É‚ ‚è‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚·‚é‚É‚Í\n‘®‚ğ•ÏŠ·‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n‘®•ÏŠ·‚µ‚Ü‚·‚©?";
+    Message[ japanese ] = "‚±‚Ì”ÍˆÍ‚Í‹Œ‘®‚É‚ ‚è‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚·‚é‚É‚Í\n‘®‚ğ•ÏŠ·‚·‚é•K—v‚ª‚ ‚è‚Ü‚·B\n‘®•ÏŠ·‚µ‚Ü‚·‚©?";
     Message[ chinese_traditional ] = "³o­Ó°Ï°ìªº®æ¦¡¬OÂÂªº¡C\n­nÀx¦sÅÜ§ó´N¥²¶·Âà´«¥¦®æ¦¡¡C\n±z­nÂà´«¥¦ªº®æ¦¡¡H";
     Message[ arabic ] = "ÊäÓíŞ ÇáäØÇŞ ŞÏíã.\níÌÈ ÊÍæíáå¡ ÍÊì íãßä \nÍİÙ ÇáÊÛííÑÇÊ.\nåá ÊÑíÏ ÊÍæíáå¿";
     Message[ dutch ] = "Het bereik heeft een verouderd formaat.\nHet moet worden geconverteerd om de wijzigingen\nte kunnen opslaan.\nWilt u de conversie nu uitvoeren?";
