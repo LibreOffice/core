@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 15:58:12 $
+ *  last change: $Author: iha $ $Date: 2003-12-06 21:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVEPOSITION_HPP_
 #include <drafts/com/sun/star/layout/RelativePosition.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_LAYOUT_RELATIVESIZE_HPP_
+#include <drafts/com/sun/star/layout/RelativeSize.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
@@ -536,12 +539,20 @@ bool getPosAndSizeForDiagram(
     if( nHeight <= 0 || nWidth <= 0 )
         return false;
 
+    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
+
     //size:
-    rOutSize = awt::Size(nWidth,nHeight);
+    ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
+    if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativeSize" ) )>>=aRelativeSize) )
+    {
+        rOutSize.Height = aRelativeSize.Secondary*rPageSize.Height;
+        rOutSize.Width = aRelativeSize.Primary*rPageSize.Width;
+    }
+    else
+        rOutSize = awt::Size(nWidth,nHeight);
 
     //position:
     ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
-    uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
     {
         //@todo decide wether x is primary or secondary
