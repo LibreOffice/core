@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scwarngs.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:06:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ Resource RID_WRNHDLSC
         Text[ turkish ] = "Yalnýzca yürürlükteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Solo se ha guardado la hoja actual.";
+        Text[ finnish ] = "Vain aktiivinen lomake voitiin tallentaa.";
     };
     String ERRCODE_SC_IMPORT_WRN_RNGOVRFLW & SH_MAX
     {
@@ -118,6 +119,7 @@ Resource RID_WRNHDLSC
         Text[ turkish ] = "Azami satýr sayýsý aþýldý. Fazla satýrlar içe aktarýlmadý!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¡Se ha excedido el número máximo de filas, las filas adicionales no se importaron!";
+        Text[ finnish ] = "Rivimäärä on ylittänyt sallitun enimmäisrajan. Ylimääräisiä rivejä ei tuotu.";
     };
     /*
     String ERRCODE_SC_  & SH_MAX
