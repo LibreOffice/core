@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:18:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,15 +156,17 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 {
     // this code will be called after reading all text into the
     // empty sections
-    const String aOldURL( INetURLObject::GetBaseURL() );
+    const String aOldURL( rBlocks.GetBaseURL() );
     bool bRet=false;
     if( bSaveRelFile )
     {
-        INetURLObject::SetBaseURL(
-            URIHelper::SmartRelToAbs( rBlocks.GetFileName()));
+        rBlocks.SetBaseURL(
+            URIHelper::SmartRel2Abs(
+                INetURLObject(), rBlocks.GetFileName(),
+                URIHelper::GetMaybeFileHdl()));
     }
     else
-        INetURLObject::SetBaseURL( aEmptyStr );
+        rBlocks.SetBaseURL( aEmptyStr );
 
     SwNodeIndex aDocEnd( pD->GetNodes().GetEndOfContent() );
     SwNodeIndex aStart( *aDocEnd.GetNode().StartOfSectionNode(), 1 );
@@ -259,7 +261,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
 // this code will be called after reading all text into the empty sections
 
-    INetURLObject::SetBaseURL( aOldURL );
+    rBlocks.SetBaseURL( aOldURL );
     return bRet;
 }
 
@@ -288,7 +290,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
             {
                 SwDoc *pD =  ((SwDocShell*)(&xDocSh))->GetDoc();
                 SwWW8ImplReader* pRdr = new SwWW8ImplReader(pGlossary->nVersion,
-                    xStg, &rStrm, *pD, true);
+                    xStg, &rStrm, *pD, rBlocks.GetBaseURL(), true);
 
                 SwNodeIndex aIdx(
                     *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
