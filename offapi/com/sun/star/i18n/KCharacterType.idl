@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KCharacterType.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module i18n {
     <member>XCharacterClassification::getStringType()</member> </p>
  */
 
-constants KCharacterType
+published constants KCharacterType
 {
     /// digit
     const long DIGIT      = 0x00000001;
