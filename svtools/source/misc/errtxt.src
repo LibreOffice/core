@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:38:00 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1193,7 +1193,7 @@ Resource RID_ERRHDL
         Text [ french ] = "Cette action ne peut pas être exécutée sur des fichiers\ncontenant des caractères génériques (Wildcards)" ;
         Text [ swedish ] = "Operationen kan inte utföras på filer som\ninnehåller jokertecken" ;
         Text [ danish ] = "Det er ikke muligt at udføre processen på filer,\nsom indeholder jokertegn" ;
-        Text [ portuguese ] = "A operação não pode ser executada em\nficheiros que contenham caracteres polivalentes (wildcards)" ;
+        Text [ portuguese ] = "A operação não pode ser executada em\nficheiros que contenham caracteres universais." ;
         Text [ portuguese_brazilian ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgeführt werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨ÔÚº¬ÓĞÍ¨Åä·ûµÄ\nÎÄ¼şÖĞÖ´ĞĞÕâ¸ö²Ù×÷";
         Text[ russian ] = "Âûïîëíèòü îïåğàöèş ñ ôàéëàìè, \nñîäåğæàùèìè ïîäñòàíîâî÷íûå çíàêè, íåâîçìîæíî";
