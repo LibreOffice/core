@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:14:00 $
+ *  last change: $Author: fs $ $Date: 2000-11-29 22:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
+#endif
 
 using namespace connectivity::file;
 using namespace connectivity::dbtools;
@@ -179,10 +182,20 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     const PropertyValue *pEnd    = pBegin + info.getLength();
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!pBegin->Name.compareToAscii("Extension"))
+        if(0 == pBegin->Name.compareToAscii("Extension"))
             pBegin->Value >>= aExt;
-        if(!pBegin->Name.compareToAscii("CharSet"))
-            pBegin->Value >>= m_nTextEncoding;
+        if(0 == pBegin->Name.compareToAscii("CharSet"))
+        {
+            ::rtl::OUString sIanaName;
+            pBegin->Value >>= sIanaName;
+
+            ::dbtools::OCharsetMap aLookupIanaName;
+            ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(sIanaName, ::dbtools::OCharsetMap::IANA());
+            if (aLookup != aLookupIanaName.end())
+                m_nTextEncoding = (*aLookup).getEncoding();
+            else
+                m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
+        }
     }
 
     if(aExt.len())
