@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XStorable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:17 $
+ *  last change:$Date: 2003-05-27 12:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.frame;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XStorable;
 import com.sun.star.io.IOException;
 import lib.MultiMethodTest;
@@ -170,7 +171,8 @@ public class _XStorable extends MultiMethodTest {
     */
     public void _storeAsURL() {
         // getting an url to store
-        String url = (String) utils.getOfficeTemp(tParam.getMSF());
+        String url = (String) utils.getOfficeTemp(
+                                (XMultiServiceFactory)tParam.getMSF());
 
         url += "xstorable.store.as.test";
         if (url != null) {
@@ -196,7 +198,8 @@ public class _XStorable extends MultiMethodTest {
     */
     public void _storeToURL() {
         // getting an url to store
-        String url = (String) utils.getOfficeTemp(tParam.getMSF());
+        String url = (String) utils.getOfficeTemp(
+                                (XMultiServiceFactory)tParam.getMSF());
 
         url += "xstorable.store.as.test";
         if (url != null) {

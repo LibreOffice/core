@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSynchronousFrameLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:16 $
+ *  last change:$Date: 2003-05-27 12:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.frame;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XSynchronousFrameLoader;
@@ -119,7 +120,8 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
             throw new StatusException(Status.failed("Some relations not found")) ;
         }
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                             (XMultiServiceFactory)tParam.getMSF() );
 
         XURLTransformer xURLTrans = null;
 
@@ -129,13 +131,15 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
                 log.println( "creating a textdocument" );
                 frameSup = SOF.createTextDoc( null );
 
-                Object oDsk = tParam.getMSF().createInstance
+                Object oDsk = (
+                    (XMultiServiceFactory)tParam.getMSF()).createInstance
                     ("com.sun.star.frame.Desktop") ;
                 XDesktop dsk = (XDesktop) UnoRuntime.queryInterface
                     (XDesktop.class, oDsk) ;
                 frame = dsk.getCurrentFrame() ;
 
-                Object o = tParam.getMSF().createInstance
+                Object o = (
+                    (XMultiServiceFactory)tParam.getMSF()).createInstance
                     ("com.sun.star.util.URLTransformer") ;
                 xURLTrans = (XURLTransformer) UnoRuntime.queryInterface
                     (XURLTransformer.class, o) ;
