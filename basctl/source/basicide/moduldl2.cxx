@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-20 08:32:42 $
+ *  last change: $Author: ab $ $Date: 2000-12-05 08:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ void LibPage::NewLib()
     BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
     String aLibName;
-    String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
+    String aLibStdName( String( RTL_CONSTASCII_USTRINGPARAM( "Library" ) ) );
+    //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
     BOOL bValid = FALSE;
     USHORT i = 1;
     while ( !bValid )

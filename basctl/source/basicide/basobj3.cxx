@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-19 09:19:37 $
+ *  last change: $Author: ab $ $Date: 2000-12-05 08:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ SbMethod* BasicIDE::CreateMacro( SbModule* pModule, const String& rMacroName )
         else
         {
             BOOL bValid = FALSE;
-            String aStdMacroText( IDEResId( RID_STR_STDMACRONAME ) );
+            String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
+            //String aStdMacroText( IDEResId( RID_STR_STDMACRONAME ) );
             USHORT nMacro = 1;
             while ( !bValid )
             {
@@ -159,7 +160,8 @@ String BasicIDE::CreateDialogName( StarBASIC* pBasic, const String& rDlgName )
     String aDlgName( rDlgName );
     if ( aDlgName.Len() == 0 )
     {
-        String aDlgStdName( IDEResId( RID_STR_STDDIALOGNAME ) );
+        String aDlgStdName( RTL_CONSTASCII_USTRINGPARAM( "Dialog" ) );
+        //String aDlgStdName( IDEResId( RID_STR_STDDIALOGNAME ) );
         BOOL bValid = FALSE;
         USHORT i = 1;
         while ( !bValid )
@@ -190,7 +192,8 @@ String BasicIDE::CreateModuleName( StarBASIC* pBasic, const String& rModName )
     if ( aModName.Len() == 0 )
     {
         // Namen generieren...
-        String aModStdName( IDEResId( RID_STR_STDMODULENAME ) );
+        String aModStdName( RTL_CONSTASCII_USTRINGPARAM( "Module" ) );
+        //String aModStdName( IDEResId( RID_STR_STDMODULENAME ) );
         BOOL bValid = FALSE;
         USHORT i = 1;
         while ( !bValid )
