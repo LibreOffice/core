@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:29:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Describes a command.</desc>
 				<desc xml:lang="pl">Describes a command.</desc>
 				<desc xml:lang="pt-BR">Describes a command.</desc>
-				<desc xml:lang="ja">Describes a command.</desc>
+				<desc xml:lang="ja">コマンドを記述します。</desc>
 				<desc xml:lang="ko">Describes a command.</desc>
 				<desc xml:lang="tr">Describes a command.</desc>
 				<desc xml:lang="th">Describes a command.</desc>
 				<desc xml:lang="hi-IN">Describes a command.</desc>
+				<desc xml:lang="x-comment">Describes a command.</desc>
 			</info>
 			<prop oor:name="Command" oor:type="xs:string">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="pl">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="pt-BR">Specifies the command name for dispatching without a protocol part.</desc>
-					<desc xml:lang="ja">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="ja">プロトコル部分を含めないでディスパッチするためのコマンド名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="tr">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="th">Specifies the command name for dispatching without a protocol part.</desc>
 					<desc xml:lang="hi-IN">Specifies the command name for dispatching without a protocol part.</desc>
+					<desc xml:lang="x-comment">Specifies the command name for dispatching without a protocol part.</desc>
 				</info>
 			</prop>
 		</group>
@@ -145,11 +147,12 @@
 				<desc xml:lang="sv">Contains information about the execute status.</desc>
 				<desc xml:lang="pl">Contains information about the execute status.</desc>
 				<desc xml:lang="pt-BR">Contains information about the execute status.</desc>
-				<desc xml:lang="ja">Contains information about the execute status.</desc>
+				<desc xml:lang="ja">実行状態に関する情報が含まれます。</desc>
 				<desc xml:lang="ko">Contains information about the execute status.</desc>
 				<desc xml:lang="tr">Contains information about the execute status.</desc>
 				<desc xml:lang="th">Contains information about the execute status.</desc>
 				<desc xml:lang="hi-IN">Contains information about the execute status.</desc>
+				<desc xml:lang="x-comment">Contains information about the execute status.</desc>
 			</info>
 			<set oor:name="Disabled" oor:node-type="CommandType">
 				<info>
@@ -172,16 +175,18 @@
 					<desc xml:lang="sv">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="pl">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="pt-BR">Contains commands that are disabled in the Office user interface.</desc>
-					<desc xml:lang="ja">Contains commands that are disabled in the Office user interface.</desc>
+					<desc xml:lang="ja">Office ユーザーインタフェース内で無効にするコマンドが含まれます。</desc>
 					<desc xml:lang="ko">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="tr">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="th">Contains commands that are disabled in the Office user interface.</desc>
 					<desc xml:lang="hi-IN">Contains commands that are disabled in the Office user interface.</desc>
+					<desc xml:lang="x-comment">Contains commands that are disabled in the Office user interface.</desc>
 				</info>
 			</set>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
