@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:24:46 $
+ *  last change: $Author: bustamam $ $Date: 2002-04-04 22:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ NumToChar##name::NumToChar##name() \
     implementationName = "com.sun.star.i18n.Transliteration.NumToChar"#name; \
 }
 
-TRANSLITERATION_NUMTOCHAR( , HalfWidth )
+TRANSLITERATION_NUMTOCHAR( Halfwidth, HalfWidth )
 TRANSLITERATION_NUMTOCHAR( Fullwidth, FullWidth )
 TRANSLITERATION_NUMTOCHAR( Lower_zh_CN, Lower_zh )
 TRANSLITERATION_NUMTOCHAR( Lower_zh_TW, Lower_zh )

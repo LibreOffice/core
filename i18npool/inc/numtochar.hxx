@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtochar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-03-30 09:23:22 $
+ *  last change: $Author: bustamam $ $Date: 2002-04-04 22:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class NumToChar : public transliteration_Numeric {
 public:
-    NumToChar();
+    NumToChar() {};
 
     rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
 
@@ -96,6 +96,7 @@ TRANSLITERATION_NUMTOCHAR(Indic_ar)
 TRANSLITERATION_NUMTOCHAR(EastIndic_ar)
 TRANSLITERATION_NUMTOCHAR(Indic_hi)
 TRANSLITERATION_NUMTOCHAR(_th)
+TRANSLITERATION_NUMTOCHAR(Halfwidth)
 #endif
 #undef TRANSLITERATION_NUMTOCHAR
 
