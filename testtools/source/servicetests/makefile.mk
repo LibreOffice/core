@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 13:04:59 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:48:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,5 @@ IDLTESTFILES := \
     XTestService3.idl \
     XTestService4.idl
 JARFILES := juh.jar jurt.jar ridl.jar
-#TODO:
-JARFILES +:= sandbox.jar
 
 .INCLUDE: javaunittest.mk
