@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:39:44 $
+ *  last change: $Author: cd $ $Date: 2002-08-01 11:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
                 }
             }
 
-            USHORT nId;
+            USHORT nId = 0;
             if ( nProtocol == INET_PROT_UNO )
             {
                 SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pViewFrame );
