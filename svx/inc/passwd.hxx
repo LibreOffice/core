@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:07:12 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,26 +96,24 @@ private:
     CancelButton    aEscBtn;
     HelpButton      aHelpBtn;
 
-    String          aOldPassword;
     String          aOldPasswdErrStr;
     String          aRepeatPasswdErrStr;
 
-    FASTBOOL        bVerify;
-    FASTBOOL        bEmpty;
+    Link            aCheckPasswordHdl;
 
-#ifdef _SVX_PASSWD_CXX
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( ModifyHdl_Impl, Edit * );
-#endif
+    BOOL            bEmpty;
+
+    DECL_LINK( ButtonHdl, OKButton * );
+    DECL_LINK( EditModifyHdl, Edit * );
 
 public:
-                    SvxPasswordDialog( Window* pParent,
-                                       FASTBOOL bAllowEmptyPasswords = FALSE );
+                    SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords = FALSE, BOOL bDisableOldPassword = FALSE );
                     ~SvxPasswordDialog();
 
     String          GetOldPassword() const { return aOldPasswdED.GetText(); }
-    void            SetOldPassword( const String& rOld );
     String          GetNewPassword() const { return aNewPasswdED.GetText(); }
+
+    void            SetCheckPasswordHdl( const Link& rLink ) { aCheckPasswordHdl = rLink; }
 };
 
 

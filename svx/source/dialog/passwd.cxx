@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 16:14:56 $
+ *  last change: $Author: tbe $ $Date: 2001-11-02 13:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,43 +78,40 @@
 
 // class SvxPasswordDialog -----------------------------------------------
 
-IMPL_LINK( SvxPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
 {
-    FASTBOOL bOK = TRUE;
+    BOOL bOK = TRUE;
     short nRet = RET_OK;
     String aEmpty;
 
-    if ( bVerify )
-    {
-        if ( aOldPasswdED.GetText() != aOldPassword )
-        {
-            ErrorBox aBox( this, WB_OK, aOldPasswdErrStr );
-            aBox.Execute();
-            aOldPasswdED.SetText( aEmpty );
-            aOldPasswdED.GrabFocus();
-            bOK = FALSE;
-        }
-    }
-
-    if ( bOK && aNewPasswdED.GetText() != aRepeatPasswdED.GetText() )
+    if ( aNewPasswdED.GetText() != aRepeatPasswdED.GetText() )
     {
         ErrorBox( this, WB_OK, aRepeatPasswdErrStr ).Execute();
-        bOK = FALSE;
         aNewPasswdED.SetText( aEmpty );
         aRepeatPasswdED.SetText( aEmpty );
         aNewPasswdED.GrabFocus();
+        bOK = FALSE;
+    }
+
+    if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
+    {
+        ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
+        aOldPasswdED.SetText( aEmpty );
+        aOldPasswdED.GrabFocus();
+        bOK = FALSE;
     }
 
     if ( bOK )
         EndDialog( nRet );
+
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPasswordDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 {
-        if ( !bEmpty )
+    if ( !bEmpty )
     {
         String aPasswd = aRepeatPasswdED.GetText();
         aPasswd.EraseLeadingChars().EraseTrailingChars();
@@ -131,11 +128,8 @@ IMPL_LINK( SvxPasswordDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxPasswordDialog::SvxPasswordDialog( Window* pParent,
-                                      FASTBOOL bAllowEmptyPasswords ) :
-
+SvxPasswordDialog::SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords, BOOL bDisableOldPassword ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
-
     aOldPasswdFT    ( this, ResId( FT_OLD_PASSWD ) ),
     aOldPasswdED    ( this, ResId( ED_OLD_PASSWD ) ),
     aOldFL          ( this, ResId( FL_OLD_PASSWD ) ),
@@ -147,20 +141,23 @@ SvxPasswordDialog::SvxPasswordDialog( Window* pParent,
     aOKBtn          ( this, ResId( BTN_PASSWD_OK ) ),
     aEscBtn         ( this, ResId( BTN_PASSWD_ESC ) ),
     aHelpBtn        ( this, ResId( BTN_PASSWD_HELP ) ),
-
     aOldPasswdErrStr    ( ResId( STR_ERR_OLD_PASSWD ) ),
     aRepeatPasswdErrStr ( ResId( STR_ERR_REPEAT_PASSWD ) ),
-
-    bVerify ( FALSE ),
     bEmpty  ( bAllowEmptyPasswords )
-
 {
     FreeResource();
 
-    aOKBtn.SetClickHdl( LINK( this, SvxPasswordDialog, OKHdl_Impl ) );
-    aRepeatPasswdED.SetModifyHdl(
-        LINK( this, SvxPasswordDialog, ModifyHdl_Impl ) );
-    ModifyHdl_Impl( 0 );
+    aOKBtn.SetClickHdl( LINK( this, SvxPasswordDialog, ButtonHdl ) );
+    aRepeatPasswdED.SetModifyHdl( LINK( this, SvxPasswordDialog, EditModifyHdl ) );
+    EditModifyHdl( 0 );
+
+    if ( bDisableOldPassword )
+    {
+        aOldFL.Disable();
+         aOldPasswdFT.Disable();
+        aOldPasswdED.Disable();
+        aNewPasswdED.GrabFocus();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -169,22 +166,6 @@ SvxPasswordDialog::~SvxPasswordDialog()
 {
 }
 
-
 // -----------------------------------------------------------------------
-
-void SvxPasswordDialog::SetOldPassword( const String& rOld )
-{
-    aOldPassword = rOld;
-
-    if ( !aOldPassword.Len() && !bEmpty )
-    {
-        bVerify = FALSE;
-        aOldPasswdFT.Disable();
-        aOldPasswdED.Disable();
-        aNewPasswdED.GrabFocus();
-    }
-    else
-        bVerify = TRUE;
-}
 
 
