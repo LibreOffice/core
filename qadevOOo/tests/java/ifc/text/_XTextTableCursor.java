@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTextTableCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:07 $
+ *  last change:$Date: 2003-09-08 11:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.text;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.table.XCell;
 import com.sun.star.text.XTextTableCursor;
-import lib.MultiMethodTest;
 
 
 /**
