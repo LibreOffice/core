@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:45:34 $
+ *  last change: $Author: fme $ $Date: 2002-05-06 15:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ const sal_Char *GetLangName( const MSHORT nLang );
 
 #ifdef VERTICAL_LAYOUT
 
+using namespace ::com::sun::star::i18n::ScriptType;
+
 /*************************************************************************
  *                          lcl_AddSpace
  * Returns for how many characters an extra space has to be added
@@ -152,35 +154,77 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     else if ( pBreakIt->xBreak.is() )
         nScript = (BYTE)pBreakIt->xBreak->getScriptType( *pStr, nPos );
 
-    // Now we check the language. Note: rInf.GetIdx() can differ from nPos,
+    // Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
     // to the function, rInf.GetIdx() referes to the original string.
-    if ( nEnd > nPos && ::com::sun::star::i18n::ScriptType::ASIAN == nScript &&
-         ( LANGUAGE_KOREAN !=
-           rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
+
+    // We try to find out which justification mode is required. This is done by
+    // evaluating the script type and the language attribute set for this portion
+
+    // Asian Justification: Each character get some extra space
+    if ( nEnd > nPos && ASIAN == nScript )
     {
-        const SwLinePortion* pPor = rPor.GetPortion();
-        if ( pPor && pPor->IsKernPortion() )
-            pPor = pPor->GetPortion();
+        LanguageType aLang =
+            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
 
-        nCnt += nEnd - nPos;
+        if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
+        {
+            const SwLinePortion* pPor = rPor.GetPortion();
+            if ( pPor && pPor->IsKernPortion() )
+                pPor = pPor->GetPortion();
 
-        if ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() )
-            --nCnt;
+            nCnt += nEnd - nPos;
 
-        return nCnt;
+            if ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() )
+                --nCnt;
+
+            return nCnt;
+        }
+    }
+
+    // Thai Justification: Each character cell gets some extra space
+    if ( nEnd > nPos && COMPLEX == nScript )
+    {
+        LanguageType aLang =
+            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
+
+        if ( LANGUAGE_THAI == aLang )
+        {
+            nCnt = SwScriptInfo::ThaiJustify( *pStr, 0, 0, nPos, nEnd - nPos );
+
+            const SwLinePortion* pPor = rPor.GetPortion();
+            if ( pPor && pPor->IsKernPortion() )
+                pPor = pPor->GetPortion();
+
+            if ( nCnt && ( ! pPor || pPor->IsHolePortion() || pPor->InFixMargGrp() ) )
+                --nCnt;
+
+            return nCnt;
+        }
     }
 
 #ifdef BIDI
-    // Now we look for kashidas, in Arabic portions we do not consider blanks
-    if ( nEnd > nPos && pSI &&
-         ::com::sun::star::i18n::ScriptType::COMPLEX == nScript &&
-         ( LANGUAGE_HEBREW !=
-           rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
-        return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+    // Kashida Justification: Insert Kashidas
+    if ( nEnd > nPos && pSI && COMPLEX == nScript )
+    {
+        LanguageType aLang =
+            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript );
+
+        // Oh my god!!!
+        if ( LANGUAGE_ARABIC == aLang || LANGUAGE_ARABIC_SAUDI_ARABIA == aLang ||
+             LANGUAGE_ARABIC_IRAQ == aLang || LANGUAGE_ARABIC_EGYPT == aLang ||
+             LANGUAGE_ARABIC_LIBYA == aLang || LANGUAGE_ARABIC_ALGERIA == aLang ||
+             LANGUAGE_ARABIC_MOROCCO == aLang || LANGUAGE_ARABIC_TUNISIA == aLang ||
+             LANGUAGE_ARABIC_OMAN == aLang || LANGUAGE_ARABIC_YEMEN == aLang ||
+             LANGUAGE_ARABIC_SYRIA == aLang || LANGUAGE_ARABIC_JORDAN == aLang ||
+             LANGUAGE_ARABIC_LEBANON == aLang || LANGUAGE_ARABIC_KUWAIT == aLang ||
+             LANGUAGE_ARABIC_UAE == aLang || LANGUAGE_ARABIC_BAHRAIN == aLang ||
+             LANGUAGE_ARABIC_QATAR == aLang )
+            return pSI->KashidaJustify( 0, 0, nPos, nEnd - nPos );
+    }
 #endif
 
-    // now we search for ordinary blanks
+    // Here starts the good old "Look for blanks and add space to them" part.
     for ( ; nPos < nEnd; ++nPos )
     {
         if( CH_BLANK == pStr->GetChar( nPos ) )
@@ -218,10 +262,14 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         else
             nNextScript = (BYTE)pBreakIt->xBreak->getScriptType( rInf.GetTxt(), nPos );
 
-        if( ::com::sun::star::i18n::ScriptType::ASIAN == nNextScript &&
-            ( LANGUAGE_KOREAN !=
-            rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript ) ) )
-            ++nCnt;
+        if( ASIAN == nNextScript )
+        {
+            LanguageType aLang =
+                rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript );
+
+            if ( LANGUAGE_KOREAN != aLang && LANGUAGE_KOREAN_JOHAB != aLang )
+                ++nCnt;
+        }
     }
 
     return nCnt;

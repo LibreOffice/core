@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-02 07:55:57 $
+ *  last change: $Author: fme $ $Date: 2002-05-06 15:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ public:
 */
     USHORT KashidaJustify( long* pKernArray ,long* pScrArray,
                            xub_StrLen nIdx, xub_StrLen nLen,
-                           const USHORT nSpace = 0 ) const;
+                           USHORT nSpace = 0 ) const;
 #endif
 
 /** Performes a thai justification on the kerning array
@@ -243,12 +243,12 @@ public:
     @param  nLen
                 The number of characters to be considered.
     @param  nSpace
-                The value which has to be added to a kashida opportunity.
+                The value which has to be added to the cells.
     @return The number of extra spaces in the given range
 */
     static USHORT ThaiJustify( const XubString& rTxt, long* pKernArray,
                                long* pScrArray, xub_StrLen nIdx,
-                               xub_StrLen nLen, const USHORT nSpace = 0 );
+                               xub_StrLen nLen, USHORT nSpace = 0 );
 };
 
 inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )

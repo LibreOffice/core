@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-02 08:04:29 $
+ *  last change: $Author: fme $ $Date: 2002-05-06 15:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
 #ifdef BIDI
-#ifndef _SVX_ADJITEM_HXX //autogen
-#include <svx/adjitem.hxx>
-#endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#include <unotools/charclass.hxx>
-#endif
 #include <unicode/ubidi.h>
 
 /*************************************************************************
@@ -1302,7 +1296,7 @@ long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
 
 USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
                                      xub_StrLen nStt, xub_StrLen nLen,
-                                     const USHORT nSpace ) const
+                                     USHORT nSpace ) const
 {
     ASSERT( nLen, "Kashida justification without text?!" )
 
@@ -1374,8 +1368,10 @@ USHORT SwScriptInfo::KashidaJustify( long* pKernArray, long* pScrArray,
 
 USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
                                   long* pScrArray, xub_StrLen nStt,
-                                  xub_StrLen nLen, const USHORT nSpace )
+                                  xub_StrLen nLen, USHORT nSpace )
 {
+    ASSERT( nStt + nLen <= rTxt.Len(), "String in ThaiJustify too small" )
+
     long nSpaceSum = 0;
     USHORT nCnt = 0;
 
@@ -1385,7 +1381,7 @@ USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, long* pKernArray,
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
-                ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
+             ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
         {
             nSpaceSum += nSpace;
             ++nCnt;
