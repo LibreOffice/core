@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-16 16:43:25 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,6 +719,8 @@ void SwXTextSection::setPropertyValues(
                         pSect->SetUpdateType(bLinkMode ? LINKUPDATE_ALWAYS
                                                  : LINKUPDATE_ONCALL);
                     }
+                    // section found and processed: break from loop
+                    break;
                 }
             }
         }
