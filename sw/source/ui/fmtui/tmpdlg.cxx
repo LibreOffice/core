@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-14 07:40:52 $
+ *  last change: $Author: os $ $Date: 2002-08-16 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,8 @@ void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
                 ((SvxBackgroundTabPage&)rPage).ShowParaControl();
             if( SFX_STYLE_FAMILY_CHAR != nType )
                 ((SvxBackgroundTabPage&)rPage).ShowSelector();
+            if( SFX_STYLE_FAMILY_FRAME == nType )
+                ((SvxBackgroundTabPage&)rPage).EnableTransparency(TRUE, TRUE);
             break;
 
         case TP_CONDCOLL:
