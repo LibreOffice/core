@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:43:35 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2607,7 +2607,7 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx, const xub_StrLen nLen,
 
 BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                         xub_StrLen nIdx, xub_StrLen nLen, BOOL bWithNum,
-                        BOOL bWithFtn ) const
+                        BOOL bWithFtn, BOOL bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
         return FALSE;
@@ -2618,7 +2618,10 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     xub_StrLen nDestStt = aDestIdx.GetIndex();
 
     // Text einfuegen
-    rDestNd.Insert( GetTxt().Copy( nIdx, nLen ), aDestIdx );
+    String sTmpText = GetTxt().Copy(nIdx, nLen);
+    if(bReplaceTabsWithSpaces)
+        sTmpText.SearchAndReplaceAll('\t', ' ');
+    rDestNd.Insert( sTmpText, aDestIdx );
     nLen = aDestIdx.GetIndex() - nDestStt;
 
     // alle FontAttribute mit CHARSET Symbol in dem Bereich setzen
