@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:44:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,22 +542,6 @@ void ImportExcel8::ApplyEscherObjects()
                         {
                             SvxMSDffImportData aDffImportData;
                             rDffManager.SetSdrObject( pEscherObj, nShapeId, aDffImportData );
-
-                            // *** find some comboboxes to skip ***
-                            if( const XclImpEscherTbxCtrl* pCtrlObj = PTR_CAST( XclImpEscherTbxCtrl, pEscherObj ) )
-                            {
-                                if( pCtrlObj->GetType() == EXC_OBJ_CMO_COMBOBOX )
-                                {
-                                    if( const XclEscherAnchor* pAnchor = rObjManager.GetEscherAnchor( pShapeInfo->nFilePos ) )
-                                    {
-                                        bool bSkipObj = false;
-                                        if( pExcRoot->pAutoFilterBuffer )
-                                            bSkipObj = pExcRoot->pAutoFilterBuffer->HasDropDown( static_cast<SCCOL>(pAnchor->mnLCol), static_cast<SCROW>(pAnchor->mnTRow), pAnchor->mnScTab );
-                                        if( bSkipObj )
-                                            pEscherObj->SetSkip();
-                                    }
-                                }
-                            }
                         }
                     }
                     rSubProgress.Progress();
@@ -623,7 +607,6 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
         pCurrDBData(NULL),
         nFirstEmpty( 0 ),
         bActive( FALSE ),
-        bHasDropDown( FALSE ),
         bHasConflict( FALSE ),
         bCriteria( FALSE ),
         bAutoOrAdvanced(FALSE),
@@ -635,9 +618,6 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
     aParam.nCol2 = rRange.aEnd.Col();
     aParam.nRow2 = rRange.aEnd.Row();
 
-    // Excel defaults to always in place regardless
-    // of whether an extract record exists. The user
-    // must choose to explicity set the Copy To in the UI.
     aParam.bInplace = TRUE;
 
 }
@@ -651,7 +631,6 @@ void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 
 void XclImpAutoFilterData::SetCellAttribs()
 {
-    bHasDropDown = TRUE;
     for ( SCCOL nCol = StartCol(); nCol <= EndCol(); nCol++ )
     {
         INT16 nFlag = ((ScMergeFlagAttr*) pExcRoot->pDoc->
@@ -681,12 +660,6 @@ void XclImpAutoFilterData::InsertQueryParam()
             SetCellAttribs();
         }
     }
-}
-
-BOOL XclImpAutoFilterData::HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
-{
-    return (bHasDropDown && (StartCol() <= nCol) && (nCol <= EndCol()) &&
-            (nRow == StartRow()) && (nTab == Tab()));
 }
 
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
@@ -799,7 +772,13 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                         bIgnore = TRUE;
                 }
 
-                if( (nE > 0) && (nCol > 0) && (eConn == SC_OR) && !bIgnore )
+                /*  #i39464# conflict, if two conditions of one column are 'OR'ed,
+                    and they follow conditions of other columns.
+                    Example: Let A1 be a condition of column A, and B1 and B2
+                    conditions of column B, connected with OR. Excel performs
+                    'A1 AND (B1 OR B2)' in this case, but Calc would do
+                    '(A1 AND B1) OR B2' instead. */
+                if( (nFirstEmpty > 1) && nE && (eConn == SC_OR) && !bIgnore )
                     bHasConflict = TRUE;
                 if( !bHasConflict && !bIgnore )
                 {
@@ -836,8 +815,8 @@ void XclImpAutoFilterData::SetExtractPos( const ScAddress& rAddr )
     aParam.nDestCol = rAddr.Col();
     aParam.nDestRow = rAddr.Row();
     aParam.nDestTab = rAddr.Tab();
+    aParam.bInplace = FALSE;
     aParam.bDestPers = TRUE;
-
 }
 
 void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
@@ -848,18 +827,19 @@ void XclImpAutoFilterData::Apply( const BOOL bUseUnNamed )
     {
         InsertQueryParam();
 
-        SCROW nRow1 = StartRow();
-        SCROW nRow2 = EndRow();
-        size_t nRows = nRow2 - nRow1 + 1;
-        boost::scoped_array<BYTE> pFlags( new BYTE[nRows]);
-        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
-                pFlags.get());
-        for (size_t j=0; j<nRows; ++j)
-        {
-            if ((pFlags[j] & CR_HIDDEN) && !(pFlags[j] & CR_FILTERED))
-                pExcRoot->pDoc->SetRowFlags( nRow1 + j, Tab(),
-                        pFlags[j] | CR_FILTERED );
-        }
+        // #i38093# rows hidden by filter need extra flag, but CR_FILTERED is not set here yet
+//        SCROW nRow1 = StartRow();
+//        SCROW nRow2 = EndRow();
+//        size_t nRows = nRow2 - nRow1 + 1;
+//        boost::scoped_array<BYTE> pFlags( new BYTE[nRows]);
+//        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
+//                pFlags.get());
+//        for (size_t j=0; j<nRows; ++j)
+//        {
+//            if ((pFlags[j] & CR_HIDDEN) && !(pFlags[j] & CR_FILTERED))
+//                pExcRoot->pDoc->SetRowFlags( nRow1 + j, Tab(),
+//                        pFlags[j] | CR_FILTERED );
+//        }
     }
 }
 
@@ -965,13 +945,5 @@ XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )
         if( pData->Tab() == nTab )
             return pData;
     return NULL;
-}
-
-BOOL XclImpAutoFilterBuffer::HasDropDown( SCCOL nCol, SCROW nRow, SCTAB nTab )
-{
-    for( XclImpAutoFilterData* pData = _First(); pData; pData = _Next() )
-        if( pData->HasDropDown( nCol, nRow, nTab ) )
-            return TRUE;
-    return FALSE;
 }
 
