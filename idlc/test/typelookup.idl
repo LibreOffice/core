@@ -1,0 +1,63 @@
+/* In this file the idl struct will be tested.
+  bla
+ */
+
+#include <enum.idl>
+
+typedef short Error;
+
+/// idlc defines a test module
+module idlc
+{
+
+typedef long Error;
+
+/// test defines a test module
+module test
+{
+
+/** bla
+   BaseStruct defines an * intial struct
+ */
+struct BaseStruct
+{
+    /// a long member
+    long    m1;
+    /// a string member
+    string  m2;
+    /// a byte member
+    byte    m3;
+    /// a type member
+    type    m4;
+    /// a enum member, Error in moudle idlc::test
+    Error   m5;
+    /// a typedef member, global Error (typedef short)
+    ::Error m6;
+    /// a typedef member, Error in moudle idlc (typedef long)
+    ::idlc::Error   m7;
+    /// a typedef member, Error in moudle idlc (typedef long)
+    idlc::Error m8;
+    /// a enum member, Error in moudle idlc::test
+    test::Error m9;
+};
+
+/** TestStruct deinfes a struct which inherits
+    from the base strcut type BaseStruct.
+*/
+struct TestStruct : BaseStruct
+{
+    /// a short member
+    short           ms1;
+    /// a hyper member
+    hyper           ms2;
+    /// a sequence<long> member
+    sequence< long >    ms3;
+    /// a long array member with dimesion 5,10
+    long            ms4[5][10];
+    /// a string array member with dimension 4,8
+    long[5][10]     ms5;
+};
+
+}; // test
+
+}; // idlc

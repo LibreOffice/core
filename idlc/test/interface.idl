@@ -1,0 +1,51 @@
+#include <enum.idl>
+#include <struct.idl>
+
+module idlc
+{
+
+module test
+{
+
+interface XBase
+{
+    [readonly, attribute] string description;
+
+    string getDescription();
+};
+
+interface XTestBaseTypes : XBase
+{
+    void voidFunc();
+    [oneway] void onewayFunc();
+
+    short shortFunc( [in] short inparam, [out] short outparam, [inout] short inoutparam);
+    unsigned short uShortFunc( [in] unsigned short inparam, [out] unsigned short outparam, [inout] unsigned short inoutparam);
+
+    long longFunc( [in] long inparam, [out] long outparam, [inout] long inoutparam);
+    unsigned long ulongFunc( [in] unsigned long inparam, [out] unsigned long outparam, [inout] unsigned long inoutparam);
+
+    hyper hyperFunc( [in] hyper inparam, [out] hyper outparam, [inout] hyper inoutparam);
+    unsigned hyper uHyperFunc( [in] unsigned hyper inparam, [out] unsigned hyper outparam, [inout] unsigned hyper inoutparam);
+
+    float floatFunc( [in] float inparam, [out] float outparam, [inout] float inoutparam);
+    double doubleFunc( [in] double inparam, [out] double outparam, [inout] double inoutparam);
+    char charFunc( [in] char inparam, [out] char outparam, [inout] char inoutparam);
+    string stringFunc( [in] string inparam, [out] string outparam, [inout] string inoutparam);
+    byte byteFunc( [in] byte inparam, [out] byte outparam, [inout] byte inoutparam);
+
+    type typeFunc( [in] type inparam, [out] type outparam, [inout] type inoutparam);
+    any anyFunc( [in] any inparam, [out] any outparam, [inout] any inoutparam);
+};
+
+
+interface XTestComplexTypes : XBase
+{
+    Error enumFunc( [in] Error inparam, [out] Error outparam, [inout] Error inoutparam);
+
+    BaseStruct structFunc( [in] ::idlc::test::BaseStruct inparam, [out] idlc::test::BaseStruct outparam, [inout] BaseStruct inoutparam);
+};
+
+};
+
+};

@@ -1,0 +1,4 @@
+ic	idlc	:	sal salhelper NULL
+ic	idlc					usr1	-	all	ic_mkout NULL
+ic	idlc\source\preproc		nmake	-	all	ic_preproc NULL
+ic	idlc\source				nmake	-	all ic_source NULL

@@ -1,0 +1,48 @@
+module test
+{
+    const long l = 1;
+    const long add = 1 + 2;
+    const long sub = 3 - 2;
+    const hyper h = 123456789;
+    const string str = "hallo";
+    const float f7 = 3.4123;
+    const float f2 = 3.4123 + 10e-12;
+    const boolean bt = True;
+    const boolean bf = False;
+    const boolean and = bt & bf;
+
+    /// SHORT_MAX + 1;
+    const short shortMax = -0x8000;
+    /// LONG_MAX + 1;
+    const unsigned long longMax = 0x80000000;
+
+
+constants USER
+{
+    /// = 1
+    const long FLAG1 = 0x00000001;
+    /// = 2
+    const long FLAG2 = 0x00000002;
+    /// = 4
+    const long FLAG3 = 0x00000004;
+    /// = 8
+    const long FLAG4 = 0x00000008;
+    /// = 16
+    const long FLAG5 = 0x00000010;
+    /// = 0
+    const long FLAG6 = FLAG1 & FLAG2;
+    /// = 3
+    const long FLAG7 = FLAG1 | FLAG2;
+    /// = 2
+    const long FLAG8 = (FLAG1 | FLAG2) & FLAG2;
+    /// = 4
+    const long FLAG9 = FLAG1 << 2;
+    /// = 32
+    const long FLAG10 = (FLAG5 >> 1) << 2;
+    /// = 1
+    const long FLAG11 = 33 % 4;
+    /// = 4
+    const long FLAG12 = FLAG10 / 8;
+};
+
+};

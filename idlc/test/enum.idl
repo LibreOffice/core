@@ -1,0 +1,24 @@
+module idlc
+{
+module test
+{
+
+enum Error
+{
+    NONE,
+    FATAL,
+    SYSTEM,
+    RUNTIME
+};
+
+enum Warning
+{
+    NO,
+    USER = 2,
+    WRONGPASSWORD = 4,
+    IDFAILURE
+};
+
+
+};
+};

@@ -1,0 +1,35 @@
+module idlc
+{
+module test
+{
+
+union UnionTest switch (long) {
+  case 1: long x;
+  case 2: byte y;
+  case 3: string z;
+  case 4:
+  case 5: short w;
+  case 6: long array[ 10 ][ 20 ];
+  case 7: sequence<long> seq;
+ default: any a;
+};
+
+typedef enum E {
+  A,
+  B
+} E_Alias;
+
+// Union with no default label
+union U2 switch(E_Alias) {
+  case E::A : long x;
+  case E::B : short y;
+};
+
+union U3 switch(char) {
+  case 2 : long x;
+  case 4 : short y;
+};
+
+};
+};
+
