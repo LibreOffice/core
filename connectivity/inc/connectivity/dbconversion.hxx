@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,6 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
-//#ifndef _COM_SUN_STAR_SDB_XCOLUMNUPDATE_HPP_
-//#include <com/sun/star/sdb/XColumnUpdate.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
-//#include <com/sun/star/sdb/XColumn.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-//#include <com/sun/star/util/XNumberFormatter.hpp>
-//#endif
-//#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-//#include <com/sun/star/beans/XPropertySet.hpp>
-//#endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
@@ -104,6 +92,10 @@ namespace com
             {
                 class XColumn;
                 class XColumnUpdate;
+            }
+            namespace sdbc
+            {
+                class SQLException;
             }
             namespace beans
             {
@@ -208,6 +200,29 @@ namespace dbtools
         // return the any in an sql standard format
         static ::rtl::OUString toSQLString(sal_Int32 eType, const ::com::sun::star::uno::Any& _rVal, sal_Bool bQuote,
             const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >&  _rxTypeConverter);
+
+        /** converts a Unicode string into a 8-bit string, using the given encoding
+
+            @param _rSource
+                the source string to convert
+            @param _rDest
+                the destination string
+            @param _eEncoding
+                the encoding to use for the conversion
+
+            @throws com::sun::star::sdbc::SQLException
+                if the given string contains characters which are not convertible using the given encoding
+                The SQLState of the exception will be set to 22018 ("Invalid character value for cast specification")
+
+            @return
+                the length of the converted string
+        */
+        static sal_Int32 convertUnicodeString(
+            const ::rtl::OUString& _rSource,
+            ::rtl::OString&  _rDest,
+            rtl_TextEncoding _eEncoding
+        )
+            SAL_THROW((::com::sun::star::sdbc::SQLException));
     };
 
 //.........................................................................
