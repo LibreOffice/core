@@ -2,9 +2,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-29 16:11:05 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:29:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ The following parameter are needed:
 -msilanguage: Source of the msi file templates (Windows compiler only)
 -msifiles: Source of the msifiles instmsia.exe, instmsiw.exe (Windows only)
 -javafiles: Source of the Java installer files  (opt., non-Windows only)
+-javalanguage: Source of the Java language files (opt., non-Windows only)
 -buildid: Current BuildID (optional)
 -pro: Product version
 -dontunzip: do not unzip all files with flag ARCHIVE
@@ -178,6 +179,7 @@ sub getparameter
         elsif ($param eq "-msilanguage") { $installer::globals::idtlanguagepath = shift(@ARGV); }
         elsif ($param eq "-msifiles") { $installer::globals::msifilespath = shift(@ARGV); }
         elsif ($param eq "-javafiles") { $installer::globals::javafilespath = shift(@ARGV); }
+        elsif ($param eq "-javalanguage") { $installer::globals::javalanguagepath = shift(@ARGV); }
         elsif ($param eq "-buildid") { $installer::globals::buildid = shift(@ARGV); }
         elsif ($param eq "-packagelist") { $installer::globals::packagelist = shift(@ARGV); }
         elsif ($param eq "-copyproject") { $installer::globals::is_copy_only_project = 1; }
@@ -342,6 +344,43 @@ sub setglobalvariables
     if ($installer::globals::product =~ /OpenOffice/i )
     {
         push(@installer::globals::binarytablefiles, "gid_File_Pythonmsi_Dll");  # to be removed after scp changes, see parameter.pm
+    }
+
+}
+
+############################################
+# Setting child product names. This has to
+# be removed after removal of old setup.
+# SCP_TODO
+############################################
+
+sub set_childproductnames
+{
+    if ( $installer::globals::iswindowsbuild )
+    {
+        $installer::globals::adafilename = "adabasd1201";       # Adabas is a complete directory
+        $installer::globals::javafilename = "j2re-1_4_2_05-windows-i586-p.exe";
+        # $installer::globals::javafilename = 'Java 2 Runtime Environment, SE v1.4.2.msi';
+    }
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        $installer::globals::adafilename = "adabas-12.0.1-1.i586.rpm";
+        $installer::globals::javafilename = "j2re-1_4_2_05-linux-i586.rpm";
+    }
+
+    if ( $installer::globals::issolarissparcbuild )
+    {
+        $installer::globals::adafilename = "SUNWadabas.tar.gz";
+        $installer::globals::javafilename = "SUNWj3rt_1_4_2_05_sparc.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj3cfg_1_4_2_05_sparc.tar.gz";
+    }
+
+    if ( $installer::globals::issolarisx86build )
+    {
+        $installer::globals::adafilename = "";
+        $installer::globals::javafilename = "SUNWj3rt_1_4_2_05_x86.tar.gz";
+        $installer::globals::javafilename2 = "SUNWj3cfg_1_4_2_05_x86.tar.gz";
     }
 
 }
@@ -524,7 +563,9 @@ sub outputparameter
     if ((!($installer::globals::iswindowsbuild)) && ( $installer::globals::call_epm )) { push(@output, "Calling epm\n"); }
     if ((!($installer::globals::iswindowsbuild)) && (!($installer::globals::call_epm))) { push(@output, "Not calling epm\n"); }
     if (!($installer::globals::javafilespath eq "")) { push(@output, "Java installer files path: $installer::globals::javafilespath\n"); }
-    if ((!($installer::globals::javafilespath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java files path will be ignored for Windows builds!\n"); }
+    if ((!($installer::globals::javafilespath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
+    if (!($installer::globals::javalanguagepath eq "")) { push(@output, "Java language path: $installer::globals::javalanguagepath\n"); }
+    if ((!($installer::globals::javalanguagepath eq "")) && ($installer::globals::iswindowsbuild)) { push(@output, "Java language path will be ignored for Windows builds!\n"); }
     if (($installer::globals::iswindowsbuild) && ($installer::globals::addchildprojects )) { push(@output, "Adding child projects into installation set\n"); }
     if ( $installer::globals::globallogging ) { push(@output, "Complete logging activated\n"); }
     if ( $installer::globals::debug ) { push(@output, "Debug is activated\n"); }
