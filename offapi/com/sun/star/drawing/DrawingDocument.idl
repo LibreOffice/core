@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocument.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:43 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 12:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,52 +61,8 @@
 #ifndef __com_sun_star_drawing_DrawingDocument_idl__
 #define __com_sun_star_drawing_DrawingDocument_idl__
 
-#ifndef __com_sun_star_drawing_XDrawPageDuplicator_idl__
-#include <com/sun/star/drawing/XDrawPageDuplicator.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
-#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XMasterPagesSupplier_idl__
-#include <com/sun/star/drawing/XMasterPagesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_XLayerSupplier_idl__
-#include <com/sun/star/drawing/XLayerSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
-#include <com/sun/star/lang/XMultiServiceFactory.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
-#include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
-#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
-#endif
-
-#ifndef __com_sun_star_awt_Rectangle_idl__
-#include <com/sun/star/awt/Rectangle.idl>
-#endif
-
-#ifndef __com_sun_star_i18n_XForbiddenCharacters_idl__
-#include <com/sun/star/i18n/XForbiddenCharacters.idl>
-#endif
-
-#ifndef __com_sun_star_document_OfficeDocument_idl__
-#include <com/sun/star/document/OfficeDocument.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_DrawingDocumentFactory_idl__
-#include <com/sun/star/drawing/DrawingDocumentFactory.idl>
+#ifndef __com_sun_star_drawing_GenericDrawingDocument_idl__
+#include <com/sun/star/drawing/GenericDrawingDocument.idl>
 #endif
 
 //=============================================================================
@@ -120,105 +76,8 @@
  */
 service DrawingDocument
 {
-    /** this base service describes storing and printing */
-    service com::sun::star::document::OfficeDocument;
-
-    /** This service describes the available services that can be
-        created with the <type scope="com::sun::star::lang">XMultiServiceFactory</type>
-        of a document that supports drawing objects.
-
-        The following services are only for documents in a drawing application.
-
-        <p>The following service can be used to create a new
-            graphic style for this document.
-
-        <ul>
-            <li><type scope="com::sun::star::style">Style</type></li>
-        </ul>
-
-        <p>The following service gives access to the XML namespaces used
-        inside the document.
-
-        <ul>
-            <li><type scope="com::sun::star::xml">NamespaceContainer</type></li>
-        </ul>
-
-        <p>The following service can be used to add a background to a
-        <type>DrawPage</type> or <type>MasterPage</type>
-
-        <ul>
-            <li><type scope="com::sun::star::drawing">Background</type></li>
-        </ul>
-
-        <p>The following service can be used to change the settings for this
-            document
-
-        <ul>
-            <li><type scope="com::sun::star::drawing">DocumentSettings</type></li>
-        </ul>
-
-     */
-    service DrawingDocumentFactory;
-
-    /** lets you access the properties of this service.
-     */
-    interface com::sun::star::beans::XPropertySet;
-
-    /** lets you duplicate pages inside this document.
-     */
-    interface com::sun::star::drawing::XDrawPageDuplicator;
-
-
-    /** provides an object that is implementing the service
-                <type>DrawPage</type>s. With this service you have access to the
-                <type>DrawPage</type>s inside a document.
-     */
-    interface com::sun::star::drawing::XDrawPagesSupplier;
-
-
-    /** returns an object that is implementing the service
-                <type>MasterPages</type>. With this service you have access to the
-                <type>MasterPage</type>s inside a document.
-     */
-    interface com::sun::star::drawing::XMasterPagesSupplier;
-
-
-    /** returns an object that is implementing the service
-                <type>LayerManager</type>. This service lets you manipulate the
-                <type>Layer</type>s of this document.
-     */
-    interface com::sun::star::drawing::XLayerSupplier;
-
-    /** This interface lets you access the styles contained in this document
-     */
-    interface com::sun::star::style::XStyleFamiliesSupplier;
-
-    //-------------------------------------------------------------------------
-
-    /** This property specifies the length between the default tab stops
-        inside text in this document in 1/100th mm.
-     */
-    [property] long TabStop;
-
-    //-------------------------------------------------------------------------
-
-    /** contains the identifier of the default locale of the document.
-     */
-    [property] com::sun::star::lang::Locale CharLocale;
-
-    //-------------------------------------------------------------------------
-
-    /** if this document is an ole client, this is the current visible area
-        in 100th mm
-    */
-    [property] com::sun::star::awt::Rectangle VisibleArea;
-
-    //-------------------------------------------------------------------------
-
-    /** This property gives the XForbiddenCharacters.
-     */
-    [readonly, property] com::sun::star::i18n::XForbiddenCharacters ForbiddenCharacters;
-
+    /** this base service describes the whole functionality of such DrawingDocument. */
+    service GenericDrawingDocument;
 };
 
 //=============================================================================
