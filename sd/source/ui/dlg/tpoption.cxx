@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:20:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,8 +382,9 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     // ListBox mit Metriken f"ullen
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
+    USHORT i;
 
-    for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
+    for ( i = 0; i < aMetricArr.Count(); ++i )
     {
         String sMetric = aMetricArr.GetStringByPos( i );
         long nFieldUnit = aMetricArr.GetValue( i );
