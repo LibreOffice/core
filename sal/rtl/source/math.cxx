@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:27:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,7 +817,7 @@ double SAL_CALL rtl_math_round(double fValue, int nDecPlaces,
     if ( bSign )
         fValue = -fValue;
 
-    double fFac;
+    double fFac = 0;
     if ( nDecPlaces != 0 )
     {
         // max 20 decimals, we don't have unlimited precision
