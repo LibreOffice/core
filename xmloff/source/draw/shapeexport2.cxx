@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2001-08-02 11:49:11 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 13:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,6 +1002,8 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
+        OUString sImageURL;
+
         if(eShapeType == XmlShapeTypePresGraphicObjectShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
 
@@ -1010,30 +1012,41 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             OUString aStreamURL;
             OUString aStr;
 
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aStr;
-            aStr = rExport.AddEmbeddedGraphicObject( aStr );
+            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
+            aStr = rExport.AddEmbeddedGraphicObject( sImageURL );
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
-            if( aStr.getLength() && aStr[ 0 ] == '#' )
+            if( aStr.getLength() )
             {
-                aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
-                aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                if( aStr[ 0 ] == '#' )
+                {
+                    aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
+                    aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                }
+
+                // update stream URL for load on demand
+                uno::Any aAny;
+                aAny <<= aStreamURL;
+                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
+
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+
+                rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
-
-            // update stream URL for load on demand
-            uno::Any aAny;
-            aAny <<= aStreamURL;
-            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
         }
+
         // write graphic object
         sal_Bool bCreateNewline(pRefPoint == 0L && (nFeatures & SEF_EXPORT_X) && (nFeatures & SEF_EXPORT_Y)); // #86116#
         SvXMLElementExport aOBJ(rExport, XML_NAMESPACE_DRAW, XML_IMAGE, bCreateNewline, sal_True);
+
+        if( sImageURL.getLength() )
+        {
+            // optional office:binary-data
+            rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+        }
+
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -1390,12 +1403,11 @@ void XMLShapeExport::ImpExportOLE2Shape(
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, eElem, bCreateNewline, sal_True );
 
         // see if we need to export a thumbnail bitmap
-        OUString aStr;
-        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= aStr;
-        if( aStr.getLength() )
+        OUString sImageURL;
+        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= sImageURL;
+        if( sImageURL.getLength() )
         {
-            aStr = rExport.AddEmbeddedGraphicObject( aStr );
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, rExport.AddEmbeddedGraphicObject( sImageURL ) );
 
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
 

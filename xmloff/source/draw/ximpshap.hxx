@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-30 14:19:26 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _XIMPSHAPE_HXX
 #define _XIMPSHAPE_HXX
+
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -428,7 +432,10 @@ public:
 
 class SdXMLGraphicObjectShapeContext : public SdXMLShapeContext
 {
+private:
     ::rtl::OUString maURL;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
+
 public:
     TYPEINFO();
 
@@ -439,6 +446,7 @@ public:
     virtual ~SdXMLGraphicObjectShapeContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual void EndElement();
     virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
 

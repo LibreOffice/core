@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,8 @@ SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext;
-    if( xmloff::token::IsXMLToken( rLocalName,
+    if( (XML_NAMESPACE_OFFICE == nPrefix) &&
+        xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
         if( !sURL.getLength() && !xBase64Stream.is() )

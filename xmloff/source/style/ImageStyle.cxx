@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:09 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,11 +158,11 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 {
     sal_Bool bRet = sal_False;
 
-    OUString aURL;
+    OUString sImageURL;
 
     if( rStrName.getLength() )
     {
-        if( rValue >>= aURL )
+        if( rValue >>= sImageURL )
         {
             OUString aStrValue;
             OUStringBuffer aOut;
@@ -171,11 +171,14 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rStrName );
 
             // uri
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, rExport.AddEmbeddedGraphicObject( aURL ) );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-            rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
-
+            const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
+            if( aStr.getLength() )
+            {
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aStr );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+            }
 /*
             // size
             awt::Size aSize = xBitmap->getSize();
@@ -190,6 +193,12 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
 */
             // Do Write
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
+
+            if( sImageURL.getLength() )
+            {
+                // optional office:binary-data
+                rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+            }
         }
     }
 

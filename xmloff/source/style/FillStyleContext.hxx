@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XMLOFF_FILLSTYLECONTEXTS_HXX_
 #define _XMLOFF_FILLSTYLECONTEXTS_HXX_
 
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+
 #ifndef _XMLOFF_XMLSTYLE_HXX //autogen
 #include <xmlstyle.hxx>
 #endif
@@ -116,6 +120,7 @@ class XMLBitmapStyleContext: public SvXMLStyleContext
 private:
     ::com::sun::star::uno::Any  maAny;
     rtl::OUString               maStrName;
+    ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > mxBase64Stream;
 
 public:
     TYPEINFO();
@@ -123,6 +128,11 @@ public:
     XMLBitmapStyleContext( SvXMLImport& rImport,  sal_uInt16 nPrfx,  const rtl::OUString& rLName,
                            const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual ~XMLBitmapStyleContext();
+
+    virtual SvXMLImportContext *CreateChildContext(
+            sal_uInt16 nPrefix,
+            const ::rtl::OUString& rLocalName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();
 };

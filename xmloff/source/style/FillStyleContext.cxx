@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
 #endif
 
 using namespace ::com::sun::star;
@@ -209,8 +213,42 @@ XMLBitmapStyleContext::~XMLBitmapStyleContext()
 {
 }
 
+SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList )
+{
+    SvXMLImportContext *pContext;
+    if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
+    {
+        OUString sURL;
+        maAny >>= sURL;
+        if( !sURL.getLength() && !mxBase64Stream.is() )
+        {
+            mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( mxBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    mxBase64Stream );
+        }
+    }
+    if( !pContext )
+    {
+        pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return pContext;
+}
+
 void XMLBitmapStyleContext::EndElement()
 {
+    OUString sURL;
+    maAny >>= sURL;
+
+    if( !sURL.getLength() && mxBase64Stream.is() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
+        mxBase64Stream = 0;
+        maAny <<= sURL;
+    }
+
     uno::Reference< container::XNameContainer > xBitmap( GetImport().GetBitmapHelper() );
 
     try

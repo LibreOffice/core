@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-31 16:31:45 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _XIMPSHAPE_HXX
 #include "ximpshap.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
+#include "XMLBase64ImportContext.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
@@ -2069,6 +2073,32 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
     }
 }
 
+void SdXMLGraphicObjectShapeContext::EndElement()
+{
+    if( mxBase64Stream.is() )
+    {
+        OUString sURL( GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream ) );
+        if( sURL.getLength() )
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+                if(xProps.is())
+                {
+                    const uno::Any aAny( uno::makeAny( sURL ) );
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL") ), aAny );
+                }
+            }
+            catch (lang::IllegalArgumentException const &)
+            {
+            }
+        }
+    }
+
+}
+
+
 //////////////////////////////////////////////////////////////////////////////
 
 SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
@@ -2085,6 +2115,18 @@ SvXMLImportContext* SdXMLGraphicObjectShapeContext::CreateChildContext(
         {
             pContext = new XMLImageMapContext(GetImport(), nPrefix,
                                               rLocalName, xPropSet);
+        }
+    }
+    else if( (XML_NAMESPACE_OFFICE == nPrefix) &&
+             xmloff::token::IsXMLToken( rLocalName, xmloff::token::XML_BINARY_DATA ) )
+    {
+        if( !maURL.getLength() && !mxBase64Stream.is() )
+        {
+            mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( mxBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(), nPrefix,
+                                                    rLocalName, xAttrList,
+                                                    mxBase64Stream );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-06 15:52:12 $
+ *  last change: $Author: cl $ $Date: 2001-08-09 14:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
                                                                xAttrList,
                                                              *this );
     }
-    else if( xmloff::token::IsXMLToken( rLocalName,
+    else if( (XML_NAMESPACE_OFFICE == nPrefix) && xmloff::token::IsXMLToken( rLocalName,
                                         xmloff::token::XML_BINARY_DATA ) )
     {
         if( bImage && !sImageURL.getLength() && !xBase64Stream.is() )
