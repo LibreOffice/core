@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 09:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ XML_CONSTASCII_ACTION( sXML_paragraph_content, "paragraph-content" );
 XML_CONSTASCII_ACTION( sXML_line, "line" );
 XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
 XML_CONSTASCII_ACTION( sXML_char, "char" );
-XML_CONSTASCII_ACTION( sXML_as_char, "as_char" );
+XML_CONSTASCII_ACTION( sXML_as_char, "as-char" );
 
 XML_CONSTASCII_ACTION( sXML_A, "A" );
 XML_CONSTASCII_ACTION( sXML_a, "a" );
@@ -328,6 +328,7 @@ XML_CONSTASCII_ACTION( sXML_thick, "thick" );
 
 XML_CONSTASCII_ACTION( sXML_column, "column" );
 XML_CONSTASCII_ACTION( sXML_columns, "columns" );
+XML_CONSTASCII_ACTION( sXML_column_count, "column-count" );
 XML_CONSTASCII_ACTION( sXML_even_page, "even-page" );
 XML_CONSTASCII_ACTION( sXML_odd_page, "odd_page" );
 
