@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_idataobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-03-25 08:21:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,13 +111,13 @@ sal_uInt64 EmbedDocument_Impl::getMetaFileHandle_Impl( sal_Bool isEnhMeta )
         if ( isEnhMeta )
         {
             aFlavor.MimeType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                "application/x-openoffice;windows_formatname=\"Image EMF\"" ) );
+                                                "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) );
             aFlavor.HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Enhanced Windows MetaFile" ) );
         }
         else
         {
             aFlavor.MimeType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                "application/x-openoffice;windows_formatname=\"Image WMF\"" ) );
+                                                "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) );
             aFlavor.HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Windows GDIMetaFile" ) );
         }
 
