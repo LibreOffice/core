@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:16:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1903,7 +1903,10 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         else
         {
             nReal = 0;
-            GetUpper()->InvalidateSize();
+            // #108745# Sorry, dear old footer friend, I'm not gonna invalidate you.
+            // This may lead to a footer frame that is too big, but this is better
+            // than looping.
+//            GetUpper()->InvalidateSize();
         }
     }
     else
@@ -2213,10 +2216,8 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             nMin = 0;
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     SwRect aOldFrm( Frm() );
     sal_Bool bMoveAccFrm = sal_False;
-#endif
 
     BOOL bChgPos = IsVertical() && !IsReverse();
     if ( !bTst )
@@ -2224,9 +2225,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         (Frm().*fnRect->fnSetHeight)( nFrmHeight + nDist );
         if( bChgPos )
             Frm().Pos().X() -= nDist;
-#ifdef ACCESSIBLE_LAYOUT
         bMoveAccFrm = sal_True;
-#endif
     }
 
     SwTwips nReal = nDist - nMin;
@@ -2287,9 +2286,7 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                           - nDist );
             if( bChgPos )
                 Frm().Pos().X() += nDist;
-#ifdef ACCESSIBLE_LAYOUT
             bMoveAccFrm = sal_True;
-#endif
         }
 
         if ( nReal )
@@ -2318,7 +2315,6 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         }
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     if( bMoveAccFrm && IsAccessibleFrm() )
     {
         SwRootFrm *pRootFrm = FindRootFrm();
@@ -2328,7 +2324,6 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
         }
     }
-#endif
     return nReal;
 }
 
@@ -2373,10 +2368,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     if( nReal <= 0 )
         return nDist;
 
-#ifdef ACCESSIBLE_LAYOUT
     SwRect aOldFrm( Frm() );
     sal_Bool bMoveAccFrm = sal_False;
-#endif
 
     SwTwips nRealDist = nReal;
     if ( !bTst )
@@ -2384,9 +2377,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         (Frm().*fnRect->fnSetHeight)( nFrmHeight - nReal );
         if( bChgPos )
             Frm().Pos().X() += nReal;
-#ifdef ACCESSIBLE_LAYOUT
         bMoveAccFrm = sal_True;
-#endif
     }
 
     BYTE nAdjust = GetUpper() && GetUpper()->IsFtnBossFrm() ?
@@ -2407,9 +2398,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                             + nRealDist - nReal );
                 if( bChgPos )
                     Frm().Pos().X() += nRealDist - nReal;
-#ifdef ACCESSIBLE_LAYOUT
                 ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
-#endif
             }
         }
     }
@@ -2422,9 +2411,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                                           + nReal - nTmp );
             if( bChgPos )
                 Frm().Pos().X() += nTmp - nReal;
-#ifdef ACCESSIBLE_LAYOUT
             ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
-#endif
             nReal = nTmp;
         }
     }
@@ -2437,7 +2424,6 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             AdjustNeighbourhood( nReal - nShrink );
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     if( bMoveAccFrm && IsAccessibleFrm() )
     {
         SwRootFrm *pRootFrm = FindRootFrm();
@@ -2447,7 +2433,6 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             pRootFrm->GetCurrShell()->Imp()->MoveAccessibleFrm( this, aOldFrm );
         }
     }
-#endif
     if ( !bTst && (IsCellFrm() || IsColumnFrm() ? nReal : nRealDist) )
     {
         SwPageFrm *pPage = FindPageFrm();
@@ -2806,7 +2791,11 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                         // directly adjsuted to the page height change and the
                         // foot note frame height isn't touched, because its
                         // determined by its content.
-                        if ( IsPageFrm() )
+                        // OD 31.03.2003 #108446# - apply special case for page
+                        // lowers - see description above - also for section columns.
+                        if ( IsPageFrm() ||
+                             ( IsColumnFrm() && IsInSct() )
+                           )
                         {
                             ASSERT( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
                                     "ChgLowersProp - only for body or foot note container" );
@@ -2819,9 +2808,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                                             ( Prt().Height() - rOldSize.Height() );
                                     if ( nNewHeight < 0)
                                     {
-                                            ASSERT( !( (pLowerFrm->Frm().Height()>0) && (pLowerFrm->IsValid()) ),
+                                        // OD 01.04.2003 #108446# - adjust assertion condition and text
+                                        ASSERT( !( IsPageFrm() &&
+                                                   (pLowerFrm->Frm().Height()>0) &&
+                                                   (pLowerFrm->IsValid()) ),
                                                     "ChgLowersProg - negative height for lower.");
-                                            nNewHeight = 0;
+                                        nNewHeight = 0;
                                     }
                                     pLowerFrm->Frm().Height( nNewHeight );
                                 }
@@ -3322,19 +3314,23 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             // OD 14.03.2003 #i11760# - adjust method call <CalcCntnt(..)>:
             // Set 3rd parameter to true in order to forbid format of follow
             // during format of text frames. (2nd parameter = default value.)
-            ::CalcCntnt( this, false, true );
+            // OD 11.04.2003 #108824# - undo change of fix for #i11760# - allow
+            // follow formatting for text frames.
+            ::CalcCntnt( this );
 
             pCol = (SwLayoutFrm*)Lower();
             ASSERT( pCol && pCol->GetNext(), ":-( Spalten auf Urlaub?");
             // bMinDiff wird gesetzt, wenn es keine leere Spalte gibt
             BOOL bMinDiff = TRUE;
-            while ( bMinDiff && pCol && pCol->GetNext() )
-            {   // Zwischen Spalte und Inhalt ist jetzt noch der BodyFrm gekommen
-                bMinDiff = 0 != ((SwLayoutFrm*)pCol->Lower())->Lower();
+            // OD 28.03.2003 #108446# - check for all column content and all columns
+            while ( bMinDiff && pCol )
+            {
+                bMinDiff = 0 != pCol->ContainsCntnt();
                 pCol = (SwLayoutFrm*)pCol->GetNext();
             }
             pCol = (SwLayoutFrm*)Lower();
-            SwFrm *pLow;
+            // OD 28.03.2003 #108446# - initialize local variable
+            SwFrm *pLow = NULL;
             SwTwips nDiff = 0;
             SwTwips nMaxFree = 0;
             SwTwips nAllFree = LONG_MAX;
@@ -3492,7 +3488,9 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
         } while ( !bEnd || !bValidSize );
     }
-    ::CalcCntnt( this );
+    // OD 01.04.2003 #108446# - Don't collect endnotes for sections. Thus, set
+    // 2nd parameter to <true>.
+    ::CalcCntnt( this, true );
     if( IsSctFrm() )
     {
         // OD 14.03.2003 #i11760# - adjust 2nd parameter - TRUE --> true
