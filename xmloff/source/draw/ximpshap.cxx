@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 11:18:46 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,6 +1388,23 @@ SdXMLTextBoxShapeContext::~SdXMLTextBoxShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLTextBoxShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_CORNER_RADIUS ) )
+        {
+            GetImport().GetMM100UnitConverter().convertMeasure(mnRadius, rValue);
+            return;
+        }
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // create textbox shape
@@ -1467,6 +1484,18 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
         // set pos, size, shear and rotate
         SetTransformation();
+
+        if(mnRadius)
+        {
+            uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                uno::Any aAny;
+                aAny <<= mnRadius;
+                xPropSet->setPropertyValue(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius")), aAny);
+            }
+        }
 
         SdXMLShapeContext::StartElement(xAttrList);
     }

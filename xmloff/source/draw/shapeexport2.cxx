@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-20 14:20:24 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,6 +621,16 @@ void XMLShapeExport::ImpExportTextBoxShape(
 
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        // evtl. corner radius?
+        sal_Int32 nCornerRadius(0L);
+        xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CornerRadius"))) >>= nCornerRadius;
+        if(nCornerRadius)
+        {
+            OUStringBuffer sStringBuffer;
+            rExport.GetMM100UnitConverter().convertMeasure(sStringBuffer, nCornerRadius);
+            rExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
+        }
 
         if(bIsPresShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );

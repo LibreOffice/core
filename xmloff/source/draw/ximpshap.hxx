@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-07 06:06:55 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,8 @@ public:
 
 class SdXMLTextBoxShapeContext : public SdXMLShapeContext
 {
+    sal_Int32                   mnRadius;
+
 public:
     TYPEINFO();
 
@@ -307,6 +309,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLTextBoxShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////
