@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:03:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
@@ -149,7 +148,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "The object should not be resized without activation!\n" );
+            OSL_ENSURE( sal_False, "The object should not be resized without activation!\n" );
         }
     }
 
@@ -198,7 +197,6 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
             m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
             m_nCachedAspect = nAspect;
             m_bHasCachedSize = sal_True;
-            return m_aCachedSize;
         }
         catch( lang::IllegalArgumentException& )
         {
@@ -211,24 +209,33 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
                 // try to switch the object to RUNNONG state and request the value again
                 try {
                     changeState( embed::EmbedStates::RUNNING );
+                    m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                 }
                 catch( uno::Exception& )
                 {
-                    OSL_ASSERT( "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
-                    throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+                    // TODO/LATER: this workaround must be implemented in the application
+                    OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
+                    return awt::Size( 5000, 5000 );
+
+                    //OSL_ENSURE( sal_False, "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
+                    //throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+                    //              uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
                 }
 
-                m_aCachedSize = m_pOleComponent->GetExtent( nAspect ); // will throw an exception in case of failure
                 m_nCachedAspect = nAspect;
                 m_bHasCachedSize = sal_True;
-                return m_aCachedSize;
             }
             else
             {
                 OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
-                return m_aCachedSize;
             }
+        }
+        catch ( uno::Exception& )
+        {
+            // TODO/LATER: this workaround must be implemented in the application
+            OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
+            return awt::Size( 5000, 5000 );
         }
     }
     else
@@ -238,15 +245,20 @@ awt::Size SAL_CALL OleEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         if ( m_bHasCachedSize )
         {
             OSL_ENSURE( nAspect == m_nCachedAspect, "Unexpected aspect is requested!\n" );
-            return m_aCachedSize;
         }
         else
         {
-            OSL_ASSERT( "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
-            throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
-                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+            // TODO/LATER: this workaround must be implemented in the application
+            OSL_ENSURE( sal_False, "The workaround must be implemented in application, not in embedded object!\n" );
+            return awt::Size( 5000, 5000 );
+
+            // OSL_ENSURE( sal_False, "The size of the OLE object that can't be activated is requested!\nNo size was provided to the object for caching!\n" );
+            // throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
+            //                      uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
         }
     }
+
+    return m_aCachedSize;
 }
 
 embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
