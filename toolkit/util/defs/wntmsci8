@@ -15422,3 +15422,6 @@ _TI2?AVbad_alloc@std@@
 ?lcl_getSpinButtonValue@?A0x1df5f195@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
 ?lcl_modifyStyle@?A0x1df5f195@toolkit@@YAXPAVWindow@@_JE@Z
 ?lcl_setSpinButtonValue@?A0x1df5f195@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
+?lcl_getSpinButtonValue@?A0xe006cd1c@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0xe006cd1c@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0xe006cd1c@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
