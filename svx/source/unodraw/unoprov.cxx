@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-17 10:14:03 $
+ *  last change: $Author: cl $ $Date: 2000-11-21 17:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,6 @@ SfxItemPropertyMap* ImplGetSvxGroupPropertyMap()
     {
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_CHAR_PROPERTIES,
-        SVX_UNOEDIT_SIMPLE_FONT_PROPERTIES,
         SHADOW_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
