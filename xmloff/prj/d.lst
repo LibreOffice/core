@@ -114,3 +114,5 @@ hedabu: ..\inc\xmltoken.hxx %_DEST%\inc%_EXT%\xmloff\xmltoken.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
+
+..\xml\components.xml %_DEST%\xml%_EXT%\components.xml
