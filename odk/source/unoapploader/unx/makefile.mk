@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:52:06 $
+#   last change: $Author: rt $ $Date: 2004-07-13 17:07:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,11 @@ STDLIB= -lX11 -ldl -lc -lm
 LINK=gcc
 LINKFLAGS=
 LINKFLAGSAPP=
-STDLIB= -lX11 -ldl -lc -lm
+  .IF "$(OS)"=="FREEBSD"
+  STDLIB= -lX11 -lc -lm
+  .ELSE
+  STDLIB= -lX11 -ldl -lc -lm
+.ENDIF # "$(OS)"=="FREEBSD"
 .ENDIF          # "$(OS)$(COMID)"=="GCC"
 
 APP1NOSAL=TRUE
