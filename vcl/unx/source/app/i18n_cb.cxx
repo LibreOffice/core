@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-12 11:58:47 $
+ *  last change: $Author: cp $ $Date: 2001-06-26 11:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,22 +93,13 @@
 int
 PreeditStartCallback ( XIC ic, XPointer client_data, XPointer call_data )
 {
-    #define PREEDIT_BUFSZ 16
-
       preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
 
     if ( pPreeditData->eState == ePreeditStatusActivationRequired )
     {
         pPreeditData->eState = ePreeditStatusActive;
-
-        pPreeditData->aText.pUnicodeBuffer =
-                (sal_Unicode*)malloc(PREEDIT_BUFSZ * sizeof(sal_Unicode));
-        pPreeditData->aText.pCharStyle  =
-                (XIMFeedback*)malloc(PREEDIT_BUFSZ * sizeof(XIMFeedback));
-        pPreeditData->aText.nCursorPos  = 0;
-        pPreeditData->aText.nLength     = 0;
-        pPreeditData->aText.nSize       = PREEDIT_BUFSZ;
-
+        pPreeditData->aText.nCursorPos = 0;
+        pPreeditData->aText.nLength    = 0;
     }
 
     return -1;
@@ -136,17 +127,6 @@ PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
         #endif
     }
     pPreeditData->eState = ePreeditStatusStartPending;
-
-    if ( pPreeditData->aText.pUnicodeBuffer != NULL )
-    {
-          free (pPreeditData->aText.pUnicodeBuffer);
-        pPreeditData->aText.pUnicodeBuffer = NULL;
-    }
-    if ( pPreeditData->aText.pCharStyle != NULL )
-    {
-          free (pPreeditData->aText.pCharStyle);
-        pPreeditData->aText.pCharStyle = NULL;
-    }
 }
 
 // -------------------------------------------------------------------------
@@ -406,6 +386,11 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     if ( (call_data->text == NULL) && (call_data->chg_length == 0) )
         return;
 
+    // #88564# Solaris 7 deletes the preedit buffer after commit
+    // since the next call to preeditstart will have the same effect just skip this.
+    // if (pPreeditData->eState == ePreeditStatusStartPending && call_data->text == NULL)
+    //    return;
+
     if ( pPreeditData->eState == ePreeditStatusStartPending )
         pPreeditData->eState = ePreeditStatusActivationRequired;
     PreeditStartCallback( ic, client_data, NULL );
@@ -486,12 +471,16 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
       pTextEvent->mnDeltaStart  = 0; // call_data->chg_first;
       pTextEvent->mbOnlyCursor  = False;
 
-      if (pPreeditData->eState == ePreeditStatusActive)
-    {
-        pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
-                (void*)pTextEvent);
-    }
+       pPreeditData->pFrame->maFrameData.PostExtTextEvent (SALEVENT_EXTTEXTINPUT,
+        (void*)pTextEvent);
     #endif
+
+    if (pPreeditData->aText.nLength == 0)
+    {
+        pPreeditData->pFrame->maFrameData.PostExtTextEvent( SALEVENT_ENDEXTTEXTINPUT,
+                (void*)NULL );
+        pPreeditData->eState = ePreeditStatusStartPending;
+    }
 
     GetPreeditSpotLocation(ic, (XPointer)pPreeditData);
 }
