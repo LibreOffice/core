@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-25 16:56:04 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ GraphicDescriptor::GraphicDescriptor( const String* pPath ) :
 \************************************************************************/
 
 GraphicDescriptor::GraphicDescriptor( const INetURLObject& rPath ) :
-    pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL(), STREAM_READ ) ),
+    pFileStm( ::utl::UcbStreamHelper::CreateStream( rPath.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ) ),
     aPathExt( rPath.GetFileExtension().ToLowerAscii() )
 {
     if ( pFileStm )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:58:01 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,7 +882,7 @@ void BmapType::Draw(OutputDevice& rOut)
     String          aStr( Filename[ 1 ], (xub_StrLen)Filename[ 0 ], RTL_TEXTENCODING_UTF8 );
     INetURLObject   aFNam( aStr );
 
-    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL(), STREAM_READ );
+    SvStream* pInp = ::utl::UcbStreamHelper::CreateStream( aFNam.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
     if ( pInp )
     {
         nSgfTyp=CheckSgfTyp( *pInp,nVersion);
@@ -1136,7 +1136,7 @@ BOOL SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 
     pSgfFonts = new SgfFontLst;
 
-    pSgfFonts->AssignFN( aIniPath.GetMainURL() );
+    pSgfFonts->AssignFN( aIniPath.GetMainURL( INetURLObject::NO_DECODE ) );
     nFileStart=rInp.Tell();
     rInp>>aHead;
     if (aHead.ChkMagic() && aHead.Typ==SgfStarDraw && aHead.Version==SGV_VERSION) {

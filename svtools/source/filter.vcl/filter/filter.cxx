@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:13:22 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ BOOL ImplDirEntryHelper::Exists( const INetURLObject& rObj )
     try
     {
         ::rtl::OUString aTitle;
-        ::ucb::Content  aCnt( rObj.GetMainURL(),
+        ::ucb::Content  aCnt( rObj.GetMainURL( INetURLObject::NO_DECODE ),
                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
         aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
@@ -1276,7 +1276,7 @@ USHORT GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     sal_uInt16  nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::CanImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    String      aMainUrl( rPath.GetMainURL() );
+    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
     if ( pStream )
     {
@@ -1310,7 +1310,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPa
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
 
-    String      aMainUrl( rPath.GetMainURL() );
+    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
     if ( pStream )
     {
@@ -1657,7 +1657,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObjec
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ExportGraphic() : ProtType == INET_PROT_NOT_VALID" );
     BOOL        bAlreadyExists = ImplDirEntryHelper::Exists( rPath );
 
-    String      aMainUrl( rPath.GetMainURL() );
+    String      aMainUrl( rPath.GetMainURL( INetURLObject::NO_DECODE ) );
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_WRITE | STREAM_TRUNC );
     if ( pStream )
     {
