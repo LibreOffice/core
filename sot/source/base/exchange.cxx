@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /* 31 SOT_FORMATSTR_ID_STARWRITERGLOB_40*/      { "application/x-openoffice-starwriterglob-40;windows_formatname=\"StarWriter/Global 4.0\"", "StarWriter/Global 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 32 SOT_FORMATSTR_ID_STARWRITERGLOB_50*/      { "application/x-openoffice-starwriterglob-50;windows_formatname=\"StarWriter/Global 5.0\"", "StarWriter/Global 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 33 SOT_FORMATSTR_ID_STARDRAW*/               { "application/x-openoffice-stardraw;windows_formatname=\"StarDrawDocument\"", "StarDrawDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/* 34 SOT_FORMATSTR_ID_STARDRAW_40*/            { "application/x-openoffice-stardraw-40;windows_formatname=\"StarDrawDocument 4.0\"", "StarDrawDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 34 SOT_FORMATSTR_ID_STARDRAW_40*/            { "application/x-openoffice-starimpress-40;windows_formatname=\"StarImpressDocument 4.0\"", "StarImpressDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 35 SOT_FORMATSTR_ID_STARIMPRESS_50*/         { "application/x-openoffice-starimpress-50;windows_formatname=\"StarImpress 5.0\"", "StarImpress 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 36 SOT_FORMATSTR_ID_STARDRAW_50*/            { "application/x-openoffice-stardraw-50;windows_formatname=\"StarDraw 5.0\"", "StarDraw 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /* 37 SOT_FORMATSTR_ID_STARCALC*/               { "application/x-openoffice-starcalc;windows_formatname=\"StarCalcDocument\"", "StarCalcDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
