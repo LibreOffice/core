@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 10:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,11 +333,13 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_URL_HYPERLINKNAME:
             sVal = aName;
         break;
-        case MID_URL_VISITED_FMT    :
-            sVal = aVisitedFmt;
+        case MID_URL_VISITED_FMT:
+            sVal = SwXStyleFamilies::GetProgrammaticName( aVisitedFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
         break;
-        case MID_URL_UNVISITED_FMT   :
-            sVal = aINetFmt;
+        case MID_URL_UNVISITED_FMT:
+            sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
+                                                    SFX_STYLE_FAMILY_CHAR );
         break;
         default:
             bRet = FALSE;
@@ -363,11 +365,13 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
              aName = sVal;
         break;
         case MID_URL_VISITED_FMT:
-            aVisitedFmt = sVal;
+            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                       SFX_STYLE_FAMILY_CHAR );
             nVisitedId = USHRT_MAX;
         break;
         case MID_URL_UNVISITED_FMT:
-            aINetFmt = sVal;
+            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
+                                                    SFX_STYLE_FAMILY_CHAR );
             nINetId = USHRT_MAX;
         break;
         default:
