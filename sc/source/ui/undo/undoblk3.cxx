@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-26 13:06:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
         pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
     }
 
-    BOOL bPaintExt = FALSE;
+    USHORT nExtFlags = 0;
 
     if (bUndo)  // nur Undo
     {
@@ -222,11 +222,11 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-        bPaintExt = pDoc->HasAttrib( aRange, HASATTR_PAINTEXT );    // hinterher
+        pDocShell->UpdatePaintExt( nExtFlags, aRange );             // content after the change
     }
     else        // nur Redo
     {
-        bPaintExt = pDoc->HasAttrib( aRange, HASATTR_PAINTEXT );    // vorher
+        pDocShell->UpdatePaintExt( nExtFlags, aRange );             // content before the change
 
         aMarkData.MarkToMulti();
         if (pDrawUndo)
@@ -237,7 +237,6 @@ void ScUndoDeleteContents::DoChange( const BOOL bUndo )
         SetChangeTrack();
     }
 
-    USHORT nExtFlags = bPaintExt ? SC_PF_LINES : 0;
     if ( !( (pViewShell) && pViewShell->AdjustRowHeight(
                                 aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
 /*A*/   pDocShell->PostPaint( aRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
@@ -527,7 +526,8 @@ void ScUndoSelectionAttr::DoChange( const BOOL bUndo )
     if ( pDoc->HasAttrib( aEffRange, HASATTR_MERGED ) )         // zusammengefasste Zellen?
         pDoc->ExtendMerge( aEffRange );
 
-    BOOL bHasLines = pDoc->HasAttrib( aEffRange, HASATTR_PAINTEXT );
+    USHORT nExtFlags = 0;
+    pDocShell->UpdatePaintExt( nExtFlags, aEffRange );
 
     if (bUndo)  // nur bei Undo
     {
@@ -548,7 +548,7 @@ void ScUndoSelectionAttr::DoChange( const BOOL bUndo )
     }
 
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
-/*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, (bHasLines ? SC_PF_LINES : 0) );
+/*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
     ShowTable( aRange );
 }
@@ -673,12 +673,13 @@ void __EXPORT ScUndoAutoFill::Undo()
             aWorkRange.aStart.SetTab(nTab);
             aWorkRange.aEnd.SetTab(nTab);
 
-            BOOL bHasLines = pDoc->HasAttrib( aWorkRange, HASATTR_PAINTEXT );
+            USHORT nExtFlags = 0;
+            pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
             pDoc->DeleteAreaTab( aWorkRange, IDF_ALL );
             pUndoDoc->CopyToDocument( aWorkRange, IDF_ALL, FALSE, pDoc );
 
             pDoc->ExtendMerge( aWorkRange, TRUE );
-            pDocShell->PostPaint( aWorkRange, PAINT_GRID, (bHasLines ? SC_PF_LINES : 0) );
+            pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
         }
     }
     pDocShell->PostDataChanged();
@@ -1376,12 +1377,13 @@ void __EXPORT ScUndoTabOp::Undo()
 
     ScUndoUtil::MarkSimpleBlock( pDocShell, aRange );
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    BOOL bHasLines = pDoc->HasAttrib( aRange, HASATTR_PAINTEXT );
+    USHORT nExtFlags = 0;
+    pDocShell->UpdatePaintExt( nExtFlags, aRange );
 
+    ScDocument* pDoc = pDocShell->GetDocument();
     pDoc->DeleteAreaTab( aRange,IDF_ALL );
     pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
-    pDocShell->PostPaint( aRange, PAINT_GRID, (bHasLines ? SC_PF_LINES : 0) );
+    pDocShell->PostPaint( aRange, PAINT_GRID, nExtFlags );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
