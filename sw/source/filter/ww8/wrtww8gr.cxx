@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:11:56 $
+ *  last change: $Author: cmc $ $Date: 2002-08-28 12:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
+#endif
+#ifndef _ESCHER_HXX
+#include "escher.hxx"
 #endif
 
 // Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
@@ -641,9 +644,8 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
             aGrTwipSz.Width() = nWidth;
             aGrTwipSz.Height() = nHeight;
         }
-
-    Set_UInt16( pArr, aGrTwipSz.Width() * 254L / 144 );     // set xExt
-    Set_UInt16( pArr, aGrTwipSz.Height() * 254L / 144 );    // set yExt
+    Set_UInt16(pArr, aGrTwipSz.Width() * 254L / 144);       // set xExt
+    Set_UInt16(pArr, aGrTwipSz.Height() * 254L / 144);  // set yExt
     pArr += 16;                                     // skip hMF & rcWinMF
     Set_UInt16( pArr, (UINT16)aGrTwipSz.Width() );  // set dxaGoal
     Set_UInt16( pArr, (UINT16)aGrTwipSz.Height() ); // set dyaGoal
@@ -738,8 +740,18 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
         long nSchreibsReinA = nSchreibsRausA;
 #endif
 
-        Write1GrfHdr( rStrm, pGrfNd, pFly, 8, nWidth, nHeight );    // Header
-        WriteWindowMetafileBits( rStrm, aMeta );        // eigentliche Grafik
+        if (rWrt.bWrtWW8 && pFly)
+        {
+            Write1GrfHdr(rStrm, pGrfNd, pFly, 0x64, nWidth, nHeight);
+            SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+            aInlineEscher.WriteGrfFlyFrame(*pFly, 0x401);
+            aInlineEscher.WritePictures();
+        }
+        else
+        {
+            Write1GrfHdr(rStrm, pGrfNd, pFly, 8, nWidth, nHeight);
+            WriteWindowMetafileBits(rStrm, aMeta);
+        }
 
 #ifdef DEBUG
         if(  bSchreibsRaus )

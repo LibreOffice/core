@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-26 11:58:34 $
+ *  last change: $Author: cmc $ $Date: 2002-08-28 12:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,6 @@
 #endif
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
-#endif
-#ifndef _ESCHEREX_HXX
-#include <svx/escherex.hxx>
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
@@ -231,10 +228,15 @@
 #include <goodies/grfmgr.hxx>
 #endif
 
+#ifndef _ESCHER_HXX
+#include "escher.hxx"
+#endif
+
 using namespace ::com::sun::star;
 
 #define sEscherStream CREATE_CONST_ASC("tempEsher")
 #define sEscherPictStream   CREATE_CONST_ASC("EsherPicts")
+#define sBasicEscherPictStream  CREATE_CONST_ASC("BasicEsherPicts")
 
 PlcDrawObj::~PlcDrawObj()
 {
@@ -1054,77 +1056,6 @@ void SwWW8Writer::WriteSdrTextObj( const SdrObject& rObj )
         WriteStringAsPara( aEmptyStr );
 }
 
-/*  */
-class WinwordAnchoring : public EscherExClientRecord_Base
-{
-public:
-    void WriteData( EscherEx& rEx ) const;
-    void SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN = false);
-private:
-    UINT32 nXAlign;
-    UINT32 nYAlign;
-    UINT32 nXRelTo;
-    UINT32 nYRelTo;
-};
-
-class SwEscherEx : public  EscherEx
-{
-private:
-    SvULongs aFollowShpIds;
-    std::vector<short> maDirections;
-    SvPtrarr aSortFmts;
-    SwWW8Writer& rWrt;
-    EscherExHostAppData aHostData;
-    WinwordAnchoring aWinwordAnchoring;
-    WW8_WrPlcTxtBoxes *pTxtBxs;
-    SvStream* pEscherStrm, *pPictStrm;
-    long nEmuMul, nEmuDiv;
-
-    void Init();
-    UINT32 GetFlyShapeId( const SwFrmFmt& rFmt );
-    void MakeZOrderArrAndFollowIds( const ::std::vector<DrawObj>& rSrcArr );
-
-    INT32 ToFract16( INT32 nVal, UINT32 nMax ) const
-        {
-            if( nMax )
-            {
-                INT32 nMSVal = ( nVal / 65536) * nMax;
-                nMSVal += ( nVal * 65536 ) / nMax;
-                return nMSVal;
-            }
-            return 0;
-        }
-    INT32 DrawModelToEmu( INT32 nVal ) const
-        { return BigMulDiv( nVal, nEmuMul, nEmuDiv ); }
-
-    INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId, short nDirection);
-    INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId,
-        UINT32 nTxtBox, short nDirection);
-    INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
-    INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt,UINT32 nShapeId);
-    INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt,MSO_SPT eShapeType,
-        EscherPropertyContainer& rPropOpt);
-    void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
-    void WriteOCXControl(const SwFrmFmt& rFmt,UINT32 nShapeId);
-
-    virtual SvStream* QueryPicStream();
-    virtual UINT32 QueryTextID( const uno::Reference< drawing::XShape>&,UINT32);
-
-    //No copying
-    SwEscherEx(const SwEscherEx&);
-    SwEscherEx &operator=(const SwEscherEx&);
-public:
-    SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt );
-    virtual ~SwEscherEx();
-
-    void FinishEscher();
-    void WriteFrmExtraData( const SwFrmFmt& rFmt );
-    void WritePictures();
-
-    EscherExHostAppData* StartShape( const uno::Reference< drawing::XShape >& )
-        {return &aHostData;}
-};
-
 void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 {
     //Toplevel groups get their winword extra data attached, and sub elements
@@ -1170,17 +1101,446 @@ void SwWW8Writer::WriteEscher()
     }
 }
 
+void SwEscherEx::WritePictures()
+{
+    if (pPictStrm)
+    {
+        // set the blip - entries to the correct stream pos
+        INT32 nEndPos = rWrt.Strm().Tell();
+        SetNewBlipStreamOffset( nEndPos );
+
+        pPictStrm->Seek( 0 );
+        rWrt.Strm() << *pPictStrm;
+
+        delete pPictStrm, pPictStrm = 0;
+        rWrt.GetStorage().Remove(msEscherPictStream);
+    }
+    Flush();
+}
 
 /*  */
 
 // Output- Routines for Escher Export
 
-SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
-    : EscherEx( *pStrm, rWW8Wrt.pHFSdrObjs->size() ? 2 : 1 ),
-    rWrt( rWW8Wrt ), pTxtBxs( 0 ), pEscherStrm( pStrm ), pPictStrm( 0 )
+SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt,
+    UINT32 nDrawings)
+    : EscherEx(*pStrm, nDrawings), rWrt(rWW8Wrt), pEscherStrm(pStrm),
+    pPictStrm(0), msEscherPictStream(sBasicEscherPictStream)
 {
-    aHostData.SetClientData(&aWinwordAnchoring);
     Init();
+}
+
+SwBasicEscherEx::~SwBasicEscherEx()
+{
+}
+
+void SwBasicEscherEx::WriteFrmExtraData(const SwFrmFmt& rFmt)
+{
+    AddAtom(4, ESCHER_ClientAnchor);
+    GetStream() << 0x80000000;
+}
+
+INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
+{
+    INT32 nBorderThick=0;
+    OpenContainer( ESCHER_SpContainer );
+
+    AddShape( ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId );
+
+    EscherPropertyContainer aPropOpt;
+
+    UINT32 nFlags = ESCHER_BlipFlagDefault;
+    SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
+    SwGrfNode& rGrfNd = *aIdx.GetNode().GetGrfNode();
+    if( rGrfNd.IsLinkedFile() )
+    {
+        String sURL;
+        rGrfNd.GetFileFilterNms( &sURL, 0 );
+
+        WW8Bytes aBuf;
+        SwWW8Writer::InsAsString16( aBuf, sURL );
+        SwWW8Writer::InsUInt16( aBuf, 0 );
+
+        USHORT nArrLen = aBuf.Count();
+        BYTE* pArr = new BYTE[ nArrLen ];
+        memcpy( pArr, aBuf.GetData(), nArrLen );
+
+        aPropOpt.AddOpt(ESCHER_Prop_pibName, true, nArrLen, pArr, nArrLen);
+        nFlags = ESCHER_BlipFlagLinkToFile | ESCHER_BlipFlagURL |
+                    ESCHER_BlipFlagDoNotSave;
+    }
+    else
+    {
+        rGrfNd.SwapIn(true);
+
+        Graphic         aGraphic( rGrfNd.GetGrf() );
+        GraphicObject   aGraphicObject( aGraphic );
+        ByteString      aUniqueId = aGraphicObject.GetUniqueID();
+
+        if ( aUniqueId.Len() )
+        {
+             const  MapMode aMap100mm( MAP_100TH_MM );
+            Size    aSize( aGraphic.GetPrefSize() );
+
+            if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
+            {
+                aSize = Application::GetDefaultDevice()->PixelToLogic(
+                    aSize, aMap100mm );
+            }
+            else
+            {
+                aSize = OutputDevice::LogicToLogic( aSize,
+                    aGraphic.GetPrefMapMode(), aMap100mm );
+            }
+
+            Point aEmptyPoint = Point();
+            Rectangle aRect( aEmptyPoint, aSize );
+
+            sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
+                aRect, 0 );
+            if ( nBlibId )
+            {
+                aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+                aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
+            }
+        }
+    }
+
+    aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
+    nBorderThick = WriteFlyFrameAttr(rFmt,mso_sptPictureFrame,aPropOpt);
+    WriteGrfAttr( rGrfNd, aPropOpt );
+
+    aPropOpt.Commit( GetStream() );
+
+    // store anchor attribute
+    WriteFrmExtraData( rFmt );
+
+    CloseContainer();   // ESCHER_SpContainer
+    return nBorderThick;
+}
+
+void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
+    EscherPropertyContainer& rPropOpt)
+{
+    const SfxPoolItem* pItem;
+    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
+    sal_Int32 nContrast = 0;
+    sal_Int16 nBrightness = 0;
+
+    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
+        true, &pItem))
+    {
+        nContrast = ((SfxInt16Item*)pItem)->GetValue();
+    }
+
+    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
+        true, &pItem))
+    {
+        nBrightness = ((SfxInt16Item*)pItem)->GetValue();
+    }
+
+
+    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
+        true, &pItem))
+    {
+        nMode = ((SfxEnumItem*)pItem)->GetValue();
+        if (nMode == GRAPHICDRAWMODE_WATERMARK)
+        {
+            /*
+            There is no real watermark mode in word, we must use standard
+            mode and modify our ones by 70% extra brightness and 70% less
+            contrast. This means that unmodified default OOo watermark
+            will turn back into watermark, and modified OOo watermark will
+            change into a close visual representation in standardmode
+            */
+            nBrightness += 70;
+            if (nBrightness > 100)
+                nBrightness = 100;
+            nContrast -= 70;
+            if (nContrast < -100)
+                nContrast = -100;
+            nMode = GRAPHICDRAWMODE_STANDARD;
+        }
+    }
+
+    if (nMode == GRAPHICDRAWMODE_GREYS)
+        nMode = 0x40004;
+    else if (nMode == GRAPHICDRAWMODE_MONO)
+        nMode = 0x60006;
+    else
+        nMode = 0;
+    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nMode );
+
+    if (nContrast != 0)
+    {
+        nContrast+=100;
+        if (nContrast == 100)
+            nContrast = 0x10000;
+        else if (nContrast < 100)
+        {
+            nContrast *= 0x10000;
+            nContrast /= 100;
+        }
+        else if (nContrast < 200)
+            nContrast = (100 * 0x10000) / (200-nContrast);
+        else
+            nContrast = 0x7fffffff;
+        rPropOpt.AddOpt( ESCHER_Prop_pictureContrast, nContrast);
+    }
+
+    if (nBrightness != 0)
+        rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
+
+#if 0
+    //gamma not seen
+    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_GAMMA,
+                                                        true, &pItem ) )
+    {
+        double fGamma = ((SwGammaGrf*)pItem)->GetValue();
+        rPropOpt.AddOpt( ESCHER_Prop_pictureGamma,
+            static_cast<sal_uInt32>(fGamma * 655) );
+    }
+#endif
+
+    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
+        true, &pItem))
+    {
+        const Size aSz( rNd.GetTwipSize() );
+        INT32 nVal;
+        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetLeft() ) )
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
+        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetRight() ) )
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
+        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetTop() ) )
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
+        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetBottom() ) )
+            rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
+    }
+    // mirror ??
+}
+
+INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    EscherPropertyContainer& rPropOpt)
+{
+    INT32 nLineWidth=0;
+    const SfxPoolItem* pItem;
+    bool bFirstLine = true;
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem))
+    {
+        static UINT16 __READONLY_DATA aExhperProp[ 4 ] = {
+            ESCHER_Prop_dyTextTop,  ESCHER_Prop_dyTextBottom,
+            ESCHER_Prop_dxTextLeft, ESCHER_Prop_dxTextRight
+        };
+        const SvxBorderLine* pLine;
+
+        for( int n = 0; n < 4; ++n )
+            if( 0 != ( pLine = ((SvxBoxItem*)pItem)->GetLine( n )) )
+            {
+                if( bFirstLine )
+                {
+                    UINT32 nLineColor = GetColor(pLine->GetColor(), false);
+                    rPropOpt.AddOpt( ESCHER_Prop_lineColor, nLineColor );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineBackColor,
+                        nLineColor ^ 0xffffff );
+
+                    MSO_LineStyle eStyle;
+                    if( pLine->GetInWidth() )
+                    {
+                        // double line
+                        nLineWidth = pLine->GetInWidth() + pLine->GetOutWidth()
+                            + pLine->GetDistance();
+                        if( pLine->GetInWidth() == pLine->GetOutWidth() )
+                            eStyle = mso_lineDouble;
+                        else if( pLine->GetInWidth() < pLine->GetOutWidth() )
+                            eStyle = mso_lineThickThin;
+                        else
+                            eStyle = mso_lineThinThick;
+                    }
+                    else
+                    {
+                        // simple line
+                        eStyle = mso_lineSimple;
+                        nLineWidth = pLine->GetOutWidth();
+                    }
+
+                    rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineWidth,
+                        DrawModelToEmu( nLineWidth ));
+                    rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x8000E );
+
+                    //Use import logic to determine how much of border will go
+                    //outside graphic
+                    nLineWidth = SwMSDffManager::GetEscherLineMatch(
+                        eStyle,eShapeType,nLineWidth);
+                    bFirstLine = false;
+                }
+                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
+                    ((SvxBoxItem*)pItem)->GetDistance( n ) ));
+            }
+    }
+    if( bFirstLine )                // no valid line found
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
+    }
+
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BACKGROUND, true, &pItem))
+    {
+        if( ((SvxBrushItem*)pItem)->GetGraphic() )
+        {
+            {
+                Graphic aGraphic( *((SvxBrushItem*)pItem)->GetGraphic() );
+                GraphicObject aGraphicObject( aGraphic );
+                ByteString aUniqueId = aGraphicObject.GetUniqueID();
+
+                if ( aUniqueId.Len() )
+                {
+                     const MapMode aMap100mm( MAP_100TH_MM );
+                    Size aSize( aGraphic.GetPrefSize() );
+
+                    if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
+                    {
+                        aSize = Application::GetDefaultDevice()->PixelToLogic(
+                            aSize, aMap100mm );
+                    }
+                    else
+                    {
+                        aSize = OutputDevice::LogicToLogic( aSize,
+                            aGraphic.GetPrefMapMode(), aMap100mm );
+                    }
+
+                    Point aEmptyPoint = Point();
+                    Rectangle aRect( aEmptyPoint, aSize );
+
+                    sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(),
+                        aUniqueId, aRect, 0 );
+                    if ( nBlibId )
+                        rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
+                }
+
+            }
+            rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
+        }
+        else
+        {
+            UINT32 nFillColor = GetColor( ((SvxBrushItem*)pItem)->
+                                                    GetColor(), false);
+            rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
+            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+
+            if (((SvxBrushItem*)pItem)->GetColor().GetTransparency())
+            {
+                sal_uInt32 nOpaque =
+                    ((SvxBrushItem*)pItem)->GetColor().GetTransparency();
+                nOpaque = (nOpaque * 100) / 0xFE;
+                nOpaque = ((100 - nOpaque) << 16) / 100;
+                rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
+            }
+
+        }
+    }
+
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
+                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetLeft() ) );
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
+                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetRight() ) );
+    }
+    else
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
+    }
+
+    if (SFX_ITEM_SET == rFmt.GetItemState(RES_UL_SPACE, true, &pItem))
+    {
+        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
+                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
+        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
+                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
+    }
+
+    const SdrObject* pObj = rFmt.FindRealSdrObject();
+    if( pObj && pObj->GetLayer() == GetHellLayerId() )
+        rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
+
+    return nLineWidth;
+}
+
+void SwBasicEscherEx::Init()
+{
+    MapUnit eMap = MAP_TWIP;
+    if (SdrModel *pModel = rWrt.pDoc->GetDrawModel())
+    {
+        // PPT arbeitet nur mit Einheiten zu 576DPI
+        // WW hingegen verwendet twips, dh. 1440DPI.
+        eMap = pModel->GetScaleUnit();
+    }
+
+    // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
+    // 1mm=36000emu, 1twip=635emu
+    Fraction aFact(360, 1);
+    aFact /= GetMapFactor(MAP_100TH_MM, eMap).X();
+    // create little values
+    aFact = Fraction(aFact.GetNumerator(), aFact.GetDenominator());
+    mnEmuMul = aFact.GetNumerator();
+    mnEmuDiv = aFact.GetDenominator();
+
+    SetHellLayerId(rWrt.pDoc->GetHellId());
+}
+
+INT32 SwBasicEscherEx::ToFract16(INT32 nVal, UINT32 nMax) const
+{
+    if (nMax)
+    {
+        INT32 nMSVal = (nVal / 65536) * nMax;
+        nMSVal += (nVal * 65536 ) / nMax;
+        return nMSVal;
+    }
+    return 0;
+}
+
+SvStream* SwBasicEscherEx::QueryPicStream()
+{
+    if (!pPictStrm)
+    {
+        pPictStrm = rWrt.GetStorage().OpenStream(msEscherPictStream,
+            STREAM_READWRITE | STREAM_SHARE_DENYALL);
+        pPictStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    }
+    return pPictStrm;
+}
+
+void SwBasicEscherEx::WritePictures()
+{
+    ASSERT(pPictStrm, "no picture!");
+    if (pPictStrm)
+    {
+        // set the blip - entries to the correct stream pos
+        INT32 nEndPos = pPictStrm->Tell();
+        WriteBlibStoreEntry(*pEscherStrm, 1, sal_True, nEndPos);
+
+        pPictStrm->Seek(0);
+        *pEscherStrm << *pPictStrm;
+
+        delete pPictStrm, pPictStrm = 0;
+        rWrt.GetStorage().Remove(msEscherPictStream);
+    }
+}
+
+SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
+    : SwBasicEscherEx(pStrm, rWW8Wrt, rWW8Wrt.pHFSdrObjs->size() ? 2 : 1),
+    pTxtBxs(0)
+{
+    msEscherPictStream = sEscherPictStream;
+    aHostData.SetClientData(&aWinwordAnchoring);
     OpenContainer( ESCHER_DggContainer );
 
     sal_uInt16 nColorCount = 4;
@@ -1294,64 +1654,6 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
 
 SwEscherEx::~SwEscherEx()
 {
-}
-
-void SwEscherEx::Init()
-{
-    MapUnit eMap = MAP_TWIP;
-    SdrModel *pModel = rWrt.pDoc->GetDrawModel();
-    if (pModel)
-    {
-        // PPT arbeitet nur mit Einheiten zu 576DPI
-        // WW hingegen verwendet twips, dh. 1440DPI.
-        eMap = pModel->GetScaleUnit();
-    }
-
-//  Fraction aFact( nAppScale );
-//  aFact /= GetMapFactor( MAP_INCH, eMap ).X();
-    // create little values
-//  aFact = Fraction( aFact.GetNumerator(), aFact.GetDenominator() );
-
-    // Bei 100TH_MM -> 2540/576=635/144
-    // Bei Twip     -> 1440/576=5/2
-//  nMapMul = aFact.GetNumerator();
-//  nMapDiv = aFact.GetDenominator();
-//  bNeedMap = nMapMul != nMapDiv;
-
-    // MS-DFF-Properties sind grossteils in EMU (English Metric Units) angegeben
-    // 1mm=36000emu, 1twip=635emu
-    Fraction aFact( 360, 1 );
-//  aFact = Fraction( 360, 1 );
-    aFact /= GetMapFactor( MAP_100TH_MM, eMap ).X();
-    // create little values
-    aFact = Fraction( aFact.GetNumerator(), aFact.GetDenominator() );
-    nEmuMul = aFact.GetNumerator();
-    nEmuDiv = aFact.GetDenominator();
-
-    // Und noch was fuer typografische Points
-//  aFact = Fraction( 1, 1 );
-//  aFact /= GetMapFactor(MAP_POINT,eMap).X();
-//  nPntMul = aFact.GetNumerator();
-//  nPntDiv = aFact.GetDenominator();
-
-    SetHellLayerId( rWrt.pDoc->GetHellId() );
-}
-
-void SwEscherEx::WritePictures()
-{
-    if( pPictStrm )
-    {
-        // set the blip - entries to the correct stream pos
-        INT32 nEndPos = rWrt.Strm().Tell();
-        SetNewBlipStreamOffset( nEndPos );
-
-        pPictStrm->Seek( 0 );
-        rWrt.Strm() << *pPictStrm;
-
-        delete pPictStrm, pPictStrm = 0;
-        rWrt.GetStorage().Remove( sEscherPictStream );
-    }
-    Flush();
 }
 
 void SwEscherEx::FinishEscher()
@@ -1853,6 +2155,12 @@ void SwEscherEx::WriteFrmExtraData( const SwFrmFmt& rFmt )
 {
     aWinwordAnchoring.SetAnchoring(rFmt );
     aWinwordAnchoring.WriteData(*this);
+
+    AddAtom(4, ESCHER_ClientAnchor);
+    GetStream() << 0L;
+
+    AddAtom(4, ESCHER_ClientData);
+    GetStream() << 1L;
 }
 
 INT32 SwEscherEx::WriteFlyFrm(const SwFrmFmt& rFmt, UINT32 &rShapeId,
@@ -1965,94 +2273,11 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
     // store anchor attribute
     WriteFrmExtraData( rFmt );
 
-    AddAtom( 4, ESCHER_ClientAnchor );  GetStream() << 0L;
-    AddAtom( 4, ESCHER_ClientData );    GetStream() << 1L;
     AddAtom( 4, ESCHER_ClientTextbox ); GetStream() << nTxtBox;
 
     CloseContainer();   // ESCHER_SpContainer
     return nBorderThick;
 }
-
-INT32 SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
-{
-    INT32 nBorderThick=0;
-    OpenContainer( ESCHER_SpContainer );
-
-    AddShape( ESCHER_ShpInst_PictureFrame, 0xa00, nShapeId );
-
-    EscherPropertyContainer aPropOpt;
-
-    UINT32 nFlags = ESCHER_BlipFlagDefault;
-    SwNodeIndex aIdx( *rFmt.GetCntnt().GetCntntIdx(), 1 );
-    SwGrfNode& rGrfNd = *aIdx.GetNode().GetGrfNode();
-    if( rGrfNd.IsLinkedFile() )
-    {
-        String sURL;
-        rGrfNd.GetFileFilterNms( &sURL, 0 );
-
-        WW8Bytes aBuf;
-        SwWW8Writer::InsAsString16( aBuf, sURL );
-        SwWW8Writer::InsUInt16( aBuf, 0 );
-
-        USHORT nArrLen = aBuf.Count();
-        BYTE* pArr = new BYTE[ nArrLen ];
-        memcpy( pArr, aBuf.GetData(), nArrLen );
-
-        aPropOpt.AddOpt(ESCHER_Prop_pibName, true, nArrLen, pArr, nArrLen);
-        nFlags = ESCHER_BlipFlagLinkToFile | ESCHER_BlipFlagURL |
-                    ESCHER_BlipFlagDoNotSave;
-    }
-    else
-    {
-        rGrfNd.SwapIn(true);
-
-        Graphic         aGraphic( rGrfNd.GetGrf() );
-        GraphicObject   aGraphicObject( aGraphic );
-        ByteString      aUniqueId = aGraphicObject.GetUniqueID();
-
-        if ( aUniqueId.Len() )
-        {
-             const  MapMode aMap100mm( MAP_100TH_MM );
-            Size    aSize( aGraphic.GetPrefSize() );
-
-            if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
-            {
-                aSize = Application::GetDefaultDevice()->PixelToLogic(
-                    aSize, aMap100mm );
-            }
-            else
-            {
-                aSize = OutputDevice::LogicToLogic( aSize,
-                    aGraphic.GetPrefMapMode(), aMap100mm );
-            }
-
-            Point aEmptyPoint = Point();
-            Rectangle aRect( aEmptyPoint, aSize );
-
-            sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
-                aRect, 0 );
-            if ( nBlibId )
-            {
-                aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-                aPropOpt.AddOpt( ESCHER_Prop_pib, nBlibId, sal_True );
-            }
-        }
-    }
-    aPropOpt.AddOpt( ESCHER_Prop_pibFlags, nFlags );
-    nBorderThick = WriteFlyFrameAttr(rFmt,mso_sptPictureFrame,aPropOpt);
-    WriteGrfAttr( rGrfNd, aPropOpt );
-    aPropOpt.Commit( GetStream() );
-
-    // store anchor attribute
-    WriteFrmExtraData( rFmt );
-
-    AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
-    AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
-
-    CloseContainer();   // ESCHER_SpContainer
-    return nBorderThick;
-}
-
 
 void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 {
@@ -2079,9 +2304,6 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         // store anchor attribute
         WriteFrmExtraData( rFmt );
-
-        AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
-        AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
 
         CloseContainer();   // ESCHER_SpContainer
     }
@@ -2135,270 +2357,9 @@ INT32 SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
         // store anchor attribute
         WriteFrmExtraData( rFmt );
 
-        AddAtom( 4, ESCHER_ClientAnchor );
-        GetStream() << 0L;
-        AddAtom( 4, ESCHER_ClientData );
-        GetStream() << 1L;
-
         CloseContainer();   // ESCHER_SpContainer
     }
     return nBorderThick;
-}
-
-
-void SwEscherEx::WriteGrfAttr( const SwNoTxtNode& rNd,
-    EscherPropertyContainer& rPropOpt )
-{
-    const SfxPoolItem* pItem;
-    sal_uInt32 nMode = GRAPHICDRAWMODE_STANDARD;
-    sal_Int32 nContrast = 0;
-    sal_Int16 nBrightness = 0;
-
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
-        true, &pItem))
-    {
-        nContrast = ((SfxInt16Item*)pItem)->GetValue();
-    }
-
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
-        true, &pItem))
-    {
-        nBrightness = ((SfxInt16Item*)pItem)->GetValue();
-    }
-
-
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
-        true, &pItem))
-    {
-        nMode = ((SfxEnumItem*)pItem)->GetValue();
-        if (nMode == GRAPHICDRAWMODE_WATERMARK)
-        {
-            /*
-            There is no real watermark mode in word, we must use standard
-            mode and modify our ones by 70% extra brightness and 70% less
-            contrast. This means that unmodified default OOo watermark
-            will turn back into watermark, and modified OOo watermark will
-            change into a close visual representation in standardmode
-            */
-            nBrightness += 70;
-            if (nBrightness > 100)
-                nBrightness = 100;
-            nContrast -= 70;
-            if (nContrast < -100)
-                nContrast = -100;
-            nMode = GRAPHICDRAWMODE_STANDARD;
-        }
-    }
-
-    if (nMode == GRAPHICDRAWMODE_GREYS)
-        nMode = 0x40004;
-    else if (nMode == GRAPHICDRAWMODE_MONO)
-        nMode = 0x60006;
-    else
-        nMode = 0;
-    rPropOpt.AddOpt( ESCHER_Prop_pictureActive, nMode );
-
-    if (nContrast != 0)
-    {
-        nContrast+=100;
-        if (nContrast == 100)
-            nContrast = 0x10000;
-        else if (nContrast < 100)
-        {
-            nContrast *= 0x10000;
-            nContrast /= 100;
-        }
-        else if (nContrast < 200)
-            nContrast = (100 * 0x10000) / (200-nContrast);
-        else
-            nContrast = 0x7fffffff;
-        rPropOpt.AddOpt( ESCHER_Prop_pictureContrast, nContrast);
-    }
-
-    if (nBrightness != 0)
-        rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
-
-#if 0
-    //gamma not seen
-    if( SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState( RES_GRFATR_GAMMA,
-                                                        true, &pItem ) )
-    {
-        double fGamma = ((SwGammaGrf*)pItem)->GetValue();
-        rPropOpt.AddOpt( ESCHER_Prop_pictureGamma,
-            static_cast<sal_uInt32>(fGamma * 655) );
-    }
-#endif
-
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
-        true, &pItem))
-    {
-        const Size aSz( rNd.GetTwipSize() );
-        INT32 nVal;
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetLeft() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromLeft, ToFract16( nVal, aSz.Width()) );
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetRight() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromRight, ToFract16( nVal, aSz.Width()));
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetTop() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromTop, ToFract16( nVal, aSz.Height()));
-        if( 0 != ( nVal = ((SwCropGrf*)pItem )->GetBottom() ) )
-            rPropOpt.AddOpt( ESCHER_Prop_cropFromBottom, ToFract16( nVal, aSz.Height()));
-    }
-    // mirror ??
-}
-
-INT32 SwEscherEx::WriteFlyFrameAttr( const SwFrmFmt& rFmt, MSO_SPT eShapeType,
-    EscherPropertyContainer& rPropOpt )
-{
-    INT32 nLineWidth=0;
-    const SfxPoolItem* pItem;
-    bool bFirstLine = true;
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem))
-    {
-        static UINT16 __READONLY_DATA aExhperProp[ 4 ] = {
-            ESCHER_Prop_dyTextTop,  ESCHER_Prop_dyTextBottom,
-            ESCHER_Prop_dxTextLeft, ESCHER_Prop_dxTextRight
-        };
-        const SvxBorderLine* pLine;
-
-        for( int n = 0; n < 4; ++n )
-            if( 0 != ( pLine = ((SvxBoxItem*)pItem)->GetLine( n )) )
-            {
-                if( bFirstLine )
-                {
-                    UINT32 nLineColor = GetColor(pLine->GetColor(), false);
-                    rPropOpt.AddOpt( ESCHER_Prop_lineColor, nLineColor );
-                    rPropOpt.AddOpt( ESCHER_Prop_lineBackColor,
-                        nLineColor ^ 0xffffff );
-
-                    MSO_LineStyle eStyle;
-                    if( pLine->GetInWidth() )
-                    {
-                        // double line
-                        nLineWidth = pLine->GetInWidth() + pLine->GetOutWidth()
-                            + pLine->GetDistance();
-                        if( pLine->GetInWidth() == pLine->GetOutWidth() )
-                            eStyle = mso_lineDouble;
-                        else if( pLine->GetInWidth() < pLine->GetOutWidth() )
-                            eStyle = mso_lineThickThin;
-                        else
-                            eStyle = mso_lineThinThick;
-                    }
-                    else
-                    {
-                        // simple line
-                        eStyle = mso_lineSimple;
-                        nLineWidth = pLine->GetOutWidth();
-                    }
-
-                    rPropOpt.AddOpt( ESCHER_Prop_lineStyle, eStyle );
-                    rPropOpt.AddOpt( ESCHER_Prop_lineWidth,
-                        DrawModelToEmu( nLineWidth ));
-                    rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x8000E );
-
-                    //Use import logic to determine how much of border will go
-                    //outside graphic
-                    nLineWidth = SwMSDffManager::GetEscherLineMatch(
-                        eStyle,eShapeType,nLineWidth);
-                    bFirstLine = false;
-                }
-                rPropOpt.AddOpt( aExhperProp[ n ], DrawModelToEmu(
-                    ((SvxBoxItem*)pItem)->GetDistance( n ) ));
-            }
-    }
-    if( bFirstLine )                // no valid line found
-    {
-        rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x80000 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
-    }
-
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BACKGROUND, true, &pItem))
-    {
-        if( ((SvxBrushItem*)pItem)->GetGraphic() )
-        {
-            {
-                Graphic aGraphic( *((SvxBrushItem*)pItem)->GetGraphic() );
-                GraphicObject aGraphicObject( aGraphic );
-                ByteString aUniqueId = aGraphicObject.GetUniqueID();
-
-                if ( aUniqueId.Len() )
-                {
-                     const MapMode aMap100mm( MAP_100TH_MM );
-                    Size aSize( aGraphic.GetPrefSize() );
-
-                    if ( MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit() )
-                    {
-                        aSize = Application::GetDefaultDevice()->PixelToLogic(
-                            aSize, aMap100mm );
-                    }
-                    else
-                    {
-                        aSize = OutputDevice::LogicToLogic( aSize,
-                            aGraphic.GetPrefMapMode(), aMap100mm );
-                    }
-
-                    Point aEmptyPoint = Point();
-                    Rectangle aRect( aEmptyPoint, aSize );
-
-                    sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(),
-                        aUniqueId, aRect, 0 );
-                    if ( nBlibId )
-                        rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
-                }
-
-            }
-            rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
-        }
-        else
-        {
-            UINT32 nFillColor = GetColor( ((SvxBrushItem*)pItem)->
-                                                    GetColor(), false);
-            rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
-            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
-            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-
-            if (((SvxBrushItem*)pItem)->GetColor().GetTransparency())
-            {
-                sal_uInt32 nOpaque =
-                    ((SvxBrushItem*)pItem)->GetColor().GetTransparency();
-                nOpaque = (nOpaque * 100) / 0xFE;
-                nOpaque = ((100 - nOpaque) << 16) / 100;
-                rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
-            }
-
-        }
-    }
-
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
-    {
-        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
-                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetLeft() ) );
-        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight,
-                DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetRight() ) );
-    }
-    else
-    {
-        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft, 0 );
-        rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
-    }
-
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_UL_SPACE, true, &pItem))
-    {
-        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
-                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
-        rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
-                DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
-    }
-
-    const SdrObject* pObj = rFmt.FindRealSdrObject();
-    if( pObj && pObj->GetLayer() == GetHellLayerId() )
-        rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
-
-    return nLineWidth;
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(
@@ -2473,18 +2434,6 @@ UINT32 SwEscherEx::QueryTextID(
     }
     return nId;
 }
-
-SvStream* SwEscherEx::QueryPicStream()
-{
-    if( !pPictStrm )
-    {
-        pPictStrm = rWrt.GetStorage().OpenStream( sEscherPictStream,
-                                STREAM_READWRITE | STREAM_SHARE_DENYALL );
-        pPictStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-    }
-    return pPictStrm;
-}
-
 
 bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
 {
