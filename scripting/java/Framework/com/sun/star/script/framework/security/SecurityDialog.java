@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-11 16:05:03 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-11 18:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@ package com.sun.star.script.framework.security;
 
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.XActionListener;
+import com.sun.star.awt.ItemEvent;
+import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XCheckBox;
 import com.sun.star.awt.XControl;
@@ -101,7 +103,11 @@ XInitialization {
     private static final String _label1String = "This document contains macros. Do you want to allow these macros to be run?";
 
     private static final String _label2Name = "Label2";
-    private static final String _label2String = "This document contains macros. According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
+    private static final String _label2String = "This document contains macros. According to the security settings, the";
+    private static final String _label3Name = "Label3";
+    private static final String _label3String = "macros in this document should not be run. Do you want to run them";
+    private static final String _label4Name = "Label4";
+    private static final String _label4String = "anyway?";
 
     private static final String _checkBoxName = "CheckBox";
     private static final String _checkBoxString = "Add this directory to the list of secure paths: ";
@@ -117,28 +123,36 @@ XInitialization {
     private static final int dialogW = 235;
     private static final int dialogH = 47;
 
-    private int cbIncrW = 0;
+    private int cbIncrW = -20;
     private int cbIncrH = 19;
 
     private static final int runButtonW = 40;
     private static final int runButtonH = 13;
     private static final int doNotRunButtonW = 40;
     private static final int doNotRunButtonH = 13;
-    private static final int label1X = 23;
+    private static final int label1X = 20;
     private static final int label1Y = 9;
     private static final int label1W = 210;
-    private static final int label1H = 12;
-    private static final int label2X = 19;
-    private static final int label2Y = 12;
+    private static final int label1H = 10;
+    private static final int label2X = 22;
+    private static final int label2Y = 7;
     private static final int label2W = 210;
-    private static final int label2H = 12;
-    private static final int checkBoxX = 19;
-    private static final int checkBoxY = 31;
+    private static final int label2H = 7;
+    private static final int label3X = 22;
+    private static final int label3Y = 15;
+    private static final int label3W = 210;
+    private static final int label3H = 7;
+    private static final int label4X = 22;
+    private static final int label4Y = 23;
+    private static final int label4W = 210;
+    private static final int label4H = 7;
+    private static final int checkBoxX = 22;
+    private static final int checkBoxY = 40;
     private static final int checkBoxW = 210;
-    private static final int checkBoxH = 12;
+    private static final int checkBoxH = 9;
 
     private boolean checkBoxDialog;
-    private boolean checkBoxState;
+    private short _checkBoxState = (short)0;
     private String checkBoxPath="";
     private String _pushed = _doNotRunButtonName;
 
@@ -181,11 +195,12 @@ XInitialization {
         catch ( com.sun.star.uno.Exception e )
         {
             System.out.println("Couldn't create dialog");
-            System.out.println("message: "+e.getMessage());
+            System.out.println("uno message: "+e.getMessage());
         }
         catch ( Exception e )
         {
             System.out.println("Couldn't create dialog");
+            System.out.println("message: "+e.getMessage());
         }
 
     }
@@ -272,7 +287,7 @@ XInitialization {
         xPSetButton.setPropertyValue( "Width", new Integer( runButtonW ));
         xPSetButton.setPropertyValue( "Height", new Integer( runButtonH ));
         xPSetButton.setPropertyValue( "Name", _runButtonName );
-        xPSetButton.setPropertyValue( "TabIndex", new Short( (short)0 ) );
+        xPSetButton.setPropertyValue( "TabIndex", new Short( (short)1 ) );
         xPSetButton.setPropertyValue( "Label", _runMacro );
 
         // create the Dont Run Macro button model and set the properties
@@ -312,6 +327,32 @@ XInitialization {
             xPSetLabel.setPropertyValue( "TabIndex", new Short( (short)1 ) );
             xPSetLabel.setPropertyValue( "Label", _label2String );
 
+            // create the label model and set the properties
+            Object label3Model = xMultiServiceFactory.createInstance(
+                "com.sun.star.awt.UnoControlFixedTextModel" );
+            XPropertySet xPSetLabel3 = ( XPropertySet )UnoRuntime.queryInterface(
+                XPropertySet.class, label3Model );
+            xPSetLabel3.setPropertyValue( "PositionX", new Integer( label3X ));
+            xPSetLabel3.setPropertyValue( "PositionY", new Integer( label3Y ));
+            xPSetLabel3.setPropertyValue( "Width", new Integer( label3W ));
+            xPSetLabel3.setPropertyValue( "Height", new Integer( label3H ));
+            xPSetLabel3.setPropertyValue( "Name", _label3Name );
+            xPSetLabel3.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel3.setPropertyValue( "Label", _label3String );
+
+            // create the label model and set the properties
+            Object label4Model = xMultiServiceFactory.createInstance(
+                "com.sun.star.awt.UnoControlFixedTextModel" );
+            XPropertySet xPSetLabel4 = ( XPropertySet )UnoRuntime.queryInterface(
+                XPropertySet.class, label4Model );
+            xPSetLabel4.setPropertyValue( "PositionX", new Integer( label4X ));
+            xPSetLabel4.setPropertyValue( "PositionY", new Integer( label4Y ));
+            xPSetLabel4.setPropertyValue( "Width", new Integer( label4W ));
+            xPSetLabel4.setPropertyValue( "Height", new Integer( label4H ));
+            xPSetLabel4.setPropertyValue( "Name", _label4Name );
+            xPSetLabel4.setPropertyValue( "TabIndex", new Short( (short)1 ) );
+            xPSetLabel4.setPropertyValue( "Label", _label4String );
+
             // create the checkbox model and set the properties
             Object checkBoxModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlCheckBoxModel" );
@@ -328,6 +369,8 @@ XInitialization {
 
             // insert the control models into the dialog model
             xNameCont.insertByName( _label2Name, label2Model );
+            xNameCont.insertByName( _label3Name, label3Model );
+            xNameCont.insertByName( _label4Name, label4Model );
             xNameCont.insertByName( _checkBoxName, checkBoxModel );
         }
         else
@@ -374,6 +417,15 @@ XInitialization {
             XButton.class, objectButton );
         xButton.addActionListener( new ActionListenerImpl( xControlCont, _doNotRunButtonName ) );
 
+        if ( checkBoxDialog )
+        {
+            // add to checkbox
+            Object objectCheckBox = xControlCont.getControl( _checkBoxName );
+            XCheckBox xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
+                XCheckBox.class, objectCheckBox );
+            xCheckBox.addItemListener((XItemListener) new ItemListenerImpl( xControlCont ) );
+        }
+
         // create a peer
         Object toolkit = xMultiComponentFactory.createInstanceWithContext(
             "com.sun.star.awt.ExtToolkit", _xComponentContext );
@@ -392,6 +444,7 @@ XInitialization {
     public short execute()
     {
 
+        short result = 0;
         _pushed = _doNotRunButtonName;
         System.out.println("*DF* Before execute " );
         _xDialog.execute();
@@ -403,9 +456,13 @@ XInitialization {
         xComponent.dispose();*/
         if ( _pushed.equals( _runButtonName ) )
         {
-            return 1;
+            result += 1;
         }
-        return 0;
+        if ( _checkBoxState == 1 )
+        {
+            result +=2;
+        }
+        return result;
     }
 
     public void endExecute()
@@ -460,47 +517,31 @@ XInitialization {
 
         // XActionListener
         public void actionPerformed( ActionEvent actionEvent ) {
-            /*
-            Object buttonModel = actionEvent.Source;
-            try
-            {
-                String name = com.sun.star.uno.AnyConverter.toType( buttonModel ).getTypeName();
-                System.out.println( "Type is " + name );
-            }
-            catch ( Exception e )
-            {
-                e.printStackTrace();
-            }
-            System.out.println( " source is " + buttonModel);
-            System.out.println( " desc is " + actionEvent.ActionCommand );
-            XPropertySet xPSetLabel = ( XPropertySet )UnoRuntime.queryInterface(
-                XPropertySet.class, buttonModel );
-            String lable = "";
-            if ( xPSetLabel != null )
-            {
-                try
-                {
-                    lable = (String) xPSetLabel.getPropertyValue( "Name" );
-                }
-                catch ( Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                System.out.println(" No XPropertySet found ");
-            }
-            // set label text
-            Object label = _xControlCont.getControl( _label1Name );
-            XFixedText xLabel = ( XFixedText )UnoRuntime.queryInterface(
-                XFixedText.class, label );
-            xLabel.setText( _label1String + _nCounts );
-          */
           _pushed = _buttonName;
           System.out.println("** Button pushed ->" + _pushed );
 
           _xDialog.endExecute();
+        }
+    }
+
+    public class ItemListenerImpl implements com.sun.star.awt.XItemListener {
+        private XCheckBox _xCheckBox;
+        public ItemListenerImpl( XControlContainer xControlCont ) {
+            Object objectCheckBox = xControlCont.getControl( _checkBoxName );
+            _xCheckBox = ( XCheckBox )UnoRuntime.queryInterface(
+                XCheckBox.class, objectCheckBox );
+          System.out.println("** never get here?");
+        }
+
+        // XEventListener
+        public void disposing( EventObject eventObject ) {
+            _xCheckBox = null;
+        }
+
+        // XAdjustmentListener
+        public void itemStateChanged( ItemEvent itemEvent ) {
+          _checkBoxState = _xCheckBox.getState();
+          System.out.println("** checkbox state ->" + _checkBoxState );
         }
     }
 }
