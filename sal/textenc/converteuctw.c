@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converteuctw.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:40:37 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ sal_Size ImplConvertEucTwToUnicode(ImplTextConverterData const * pData,
     for (; nConverted < nSrcBytes; ++nConverted)
     {
         sal_Bool bUndefined = sal_True;
-        sal_uInt32 nChar = *((sal_uChar const *) pSrcBuf)++;
+        sal_uInt32 nChar = *(sal_uChar const *) pSrcBuf++;
         switch (eState)
         {
         case IMPL_EUC_TW_TO_UNICODE_STATE_0:
