@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+#   last change: $Author: jb $ $Date: 2002-10-24 15:29:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,9 +65,13 @@ PRJINC=$(PRJ)$/source
 
 PRJNAME=configmgr
 
-TARGET=configshutdown
+TARGET=configtools
+TARGET1=configshutdown
+TARGET2=configimport
 TARGETTYPE=CUI
 LIBTARGET=NO
+
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
@@ -83,23 +87,49 @@ APPSTDLIBS=\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)
 
+OBJFILES=\
+    $(OBJ)$/configshutdown.obj \
+    $(OBJ)$/configimport.obj \
+    $(OBJ)$/unomain.obj \
 
+
+# --- Apps --------------------------------------------------------
 APP1STDLIBS = $(APPSTDLIBS)
 
 .IF "$(GUI)"=="UNX"
-APP1TARGET= $(TARGET).bin
+APP1TARGET= $(TARGET1).bin
 .ELSE
-APP1TARGET= $(TARGET)
+APP1TARGET= $(TARGET1)
 .ENDIF
 
 APP1OBJS=	\
-    $(SLO)$/configshutdown.obj
+    $(OBJ)$/configshutdown.obj
+
+#---------------------------------------
+
+APP2STDLIBS = $(APPSTDLIBS)
+
+.IF "$(GUI)"=="UNX"
+APP2TARGET= $(TARGET2).bin
+.ELSE
+APP2TARGET= $(TARGET2)
+.ENDIF
+
+APP2OBJS=	\
+    $(OBJ)$/filehelper.obj \
+    $(OBJ)$/oslstream.obj \
+    $(OBJ)$/trivialbufferedfile.obj \
+    $(OBJ)$/configimport.obj \
+    $(OBJ)$/unomain.obj \
 
 .INCLUDE :  target.mk
 
 #**************************************************************************
 # history:
 #	$Log: not supported by cvs2svn $
+#	Revision 1.1.1.1  2000/09/18 16:13:40  hr
+#	initial import
+#	
 #	Revision 1.4  2000/09/15 09:51:48  willem.vandorp
 #	OpenOffice header added
 #	
