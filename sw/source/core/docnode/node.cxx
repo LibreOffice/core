@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:36:58 $
+ *  last change: $Author: jp $ $Date: 2001-01-16 19:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,7 +962,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 {
     USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
-    BOOL bNumRuleSet = FALSE;
+    BOOL bNumRuleSet = FALSE, bCallModify = TRUE;
     String sNumRule, sOldNumRule;
     const SfxPoolItem* pItem;
 
@@ -1077,6 +1077,8 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         }
         else if( ((SwTxtNode*)this)->GetNum() )
         {
+            bCallModify = FALSE;
+            SwModify::Modify( pOldValue, pNewValue );
             ((SwTxtNode*)this)->UpdateNum( SwNodeNum(NO_NUMBERING) );
 #ifndef NUM_RELSPACE
             SetNumLSpace( TRUE );
@@ -1090,7 +1092,8 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             pRule->SetInvalidRule( TRUE );
     }
 
-    SwModify::Modify( pOldValue, pNewValue );
+    if( bCallModify )
+        SwModify::Modify( pOldValue, pNewValue );
 }
 
 BOOL SwCntntNode::InvalidateNumRule()
