@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editundo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:31:39 $
+ *  last change: $Author: mt $ $Date: 2002-08-21 16:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,12 @@ void __EXPORT EditUndoMarkSelection::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: Keine Active View!" );
     if ( GetImpEditEngine()->GetActiveView() )
-        GetImpEditEngine()->GetActiveView()->SetSelection( aSelection );
+    {
+        if ( GetImpEditEngine()->IsFormatted() )
+            GetImpEditEngine()->GetActiveView()->SetSelection( aSelection );
+        else
+            GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( GetImpEditEngine()->CreateSel( aSelection ) );
+    }
 }
 
 void __EXPORT EditUndoMarkSelection::Redo()
