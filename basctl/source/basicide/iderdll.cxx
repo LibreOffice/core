@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-28 14:16:47 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,11 @@ BasicIDEData::~BasicIDEData()
 //  StarBASIC::setGlobalStarScriptListener( XEngineListenerRef() );
 
     delete pSearchItem;
-    delete pAccelerator;
+    //delete pAccelerator;
 }
 
 void BasicIDEData::InitAccelerator()
-{
+{/*
     if ( !pAccelerator )
     {
         pAccelerator = new Accelerator;
@@ -218,6 +218,7 @@ void BasicIDEData::InitAccelerator()
         pAccelerator->InsertItem( 7, KeyCode( KEY_F9 ) );
         pAccelerator->InsertItem( 8, KeyCode( KEY_F9, KEY_SHIFT ) );
     }
+ */
 }
 
 SvxSearchItem& BasicIDEData::GetSearchItem() const
