@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 14:08:36 $
+#   last change: $Author: rt $ $Date: 2004-11-26 17:33:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ XCUFILES= \
     DbRelationWindowState.xcu \
     DbBrowserWindowState.xcu \
     DrawImpressCommands.xcu \
+    Effects.xcu \
     GenericCommands.xcu \
     MathCommands.xcu \
     StartModuleCommands.xcu \
@@ -114,6 +115,7 @@ LOCALIZEDFILES= \
     DbRelationWindowState.xcu \
     DbBrowserWindowState.xcu \
     DrawImpressCommands.xcu \
+    Effects.xcu \
     GenericCommands.xcu \
     MathCommands.xcu \
     StartModuleCommands.xcu \
