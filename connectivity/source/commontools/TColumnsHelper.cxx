@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:57:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,12 @@ namespace connectivity
     };
 }
 
-OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent,
-                    sal_Bool _bCase,
-                    ::osl::Mutex& _rMutex,
-                    const TStringVector &_rVector
-            ) : OCollection(_rParent,_bCase,_rMutex,_rVector)
+OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
+                                ,sal_Bool _bCase
+                                ,::osl::Mutex& _rMutex
+                                ,const TStringVector &_rVector
+                                ,sal_Bool _bUseHardRef
+            ) : OCollection(_rParent,_bCase,_rMutex,_rVector,sal_False,_bUseHardRef)
     ,m_pTable(NULL)
     ,m_pImpl(NULL)
 {
@@ -157,7 +158,9 @@ Reference< XNamed > OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
     {
         Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
-        ::rtl::OUString sComposedName = ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInDataManipulation);
+        sal_Bool bUseCatalogInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCatalogInSelect")),sal_True);
+        sal_Bool bUseSchemaInSelect = isDataSourcePropertyEnabled(xConnection,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSchemaInSelect")),sal_True);
+        ::rtl::OUString sComposedName = ::dbtools::composeTableName(xMetaData,m_pTable,sal_True,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
         collectColumnInformation(xConnection,sComposedName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ,m_pImpl->m_aColumnInfo);
         aFind = m_pImpl->m_aColumnInfo.find(_rName);
     }
