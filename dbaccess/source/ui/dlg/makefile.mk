@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.11 $
+ #  $Revision: 1.12 $
  #
- #  last change: $Author: fs $ $Date: 2001-02-05 09:50:30 $
+ #  last change: $Author: oj $ $Date: 2001-02-28 10:03:45 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        RelationDlg.src	\
         adtabdlg.src	\
         dlgtext.src		\
         dlgsave.src		\
@@ -93,6 +94,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/RelationDlg.obj	\
         $(SLO)$/adtabdlg.obj	\
         $(SLO)$/dlgtext.obj		\
         $(SLO)$/dlgsave.obj		\
@@ -118,6 +120,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.11  2001/02/05 09:50:30  fs
+ #	dlgerr is obsolete - sqlmessage already covers this
+ #	
  #	Revision 1.10  2001/02/05 09:15:31  oj
  #	one new file
  #	

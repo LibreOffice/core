@@ -1,0 +1,405 @@
+ //--------------------------------------------------------------------------
+ //
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.1 2001-02-28 10:03:25 oj Exp $
+ //
+ // (c) Copyright 1997 by Star Division GmbH, Hamburg.
+ //
+ // Ersterstellung:
+ //  AWO
+ //
+ // Letzte Aenderung:
+ //  $Author: oj $ $Date: 2001-02-28 10:03:25 $ $Revision: 1.1 $
+ //
+ //--------------------------------------------------------------------------
+#ifndef DBAUI_RELATIONDIALOG_HRC
+#include "RelationDlg.hrc"
+#endif
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+
+ModalDialog DLG_REL_PROPERTIES
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 186 , 235 ) ;
+    Text = "Relationen" ;
+    Text [ English ] = "Relationships" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    GroupBox GB_INVOLVED_TABLES
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 174 , 31 ) ;
+        Text = "beteiligte Tabellen" ;
+        Text [ English ] = "involved tables" ;
+        Text[ english_us ] = "tables involved";
+        Text[ portuguese ] = "Tabelas implicadas";
+        Text[ russian ] = "âêëş÷åííûå òàáëèöû";
+        Text[ greek ] = "åìğëåêüìåíïé ğßíáêåò";
+        Text[ dutch ] = "betrokken tabellen";
+        Text[ french ] = "Tables impliquées";
+        Text[ spanish ] = "tablas implicadas";
+        Text[ italian ] = "Tabelle considerate";
+        Text[ danish ] = "involverede tabeller";
+        Text[ swedish ] = "inkluderade tabeller";
+        Text[ polish ] = "implikowane tabele";
+        Text[ portuguese_brazilian ] = "involved tables";
+        Text[ japanese ] = "ŠÖ˜AÃ°ÌŞÙ";
+        Text[ korean ] = "°ü·Ã Å×ÀÌºí";
+        Text[ chinese_simplified ] = "ÓĞ¹ØÁªµÄ±í¸ñ";
+        Text[ chinese_traditional ] = "¬ÛÃöªºªí®æ";
+        Text[ arabic ] = "ÇáÌÏÇæá ÇáãÔÊÑßÉ";
+        Text[ turkish ] = "İlgili tablolar";
+    };
+
+    ListBox LB_LEFT_TABLE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 12, 18 );
+        Size = MAP_APPFONT( 78, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+    };
+
+    ListBox LB_RIGHT_TABLE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 96, 18 );
+        Size = MAP_APPFONT( 78, 60 );
+        DropDown = TRUE;
+        TabStop = TRUE;
+    };
+
+    GroupBox GB_INVOLVED_FIELDS
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 174 , 86 ) ;
+        Text = "beteiligte Felder" ;
+        Text [ English ] = "involved fields" ;
+        Text[ english_us ] = "fields involved";
+        Text[ portuguese ] = "Campos implicados";
+        Text[ russian ] = "âêëş÷åííûå ïîëÿ";
+        Text[ greek ] = "åìğëåêüìåíá ğåäßá";
+        Text[ dutch ] = "betrokken velden";
+        Text[ french ] = "Champs impliqués";
+        Text[ spanish ] = "campos implicados";
+        Text[ italian ] = "Campi considerati";
+        Text[ danish ] = "involverede felter";
+        Text[ swedish ] = "inkluderade fält";
+        Text[ polish ] = "implikowane pola";
+        Text[ portuguese_brazilian ] = "involved fields";
+        Text[ japanese ] = "ŠÖ˜AÌ¨°ÙÄŞ";
+        Text[ korean ] = "°ü·Ã ÇÊµå";
+        Text[ chinese_simplified ] = "ÓĞ¹ØÁªµÄ×Ö¶Î";
+        Text[ chinese_traditional ] = "¬ÛÃöªºÄæ¦ì";
+        Text[ arabic ] = "ÇáÍŞæá ÇáãÔÊÑßÉ";
+        Text[ turkish ] = "İlgili alanlar";
+    };
+
+    GroupBox GB_CASC_UPD
+    {
+        Pos = MAP_APPFONT ( 6 , 135 ) ;
+        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Text = "Update Optionen" ;
+        Text [ English ] = "Update options" ;
+        Text [ english_us ] = "Update options" ;
+        Text [ portuguese_brazilian ] = "Update Optionen" ;
+        Text [ swedish ] = "Uppdateringsalternativ" ;
+        Text [ danish ] = "Opdatering indstillinger" ;
+        Text [ italian ] = "Opzioni di aggiornamento" ;
+        Text [ spanish ] = "Opciones de actualización" ;
+        Text [ french ] = "Options de mise à jour" ;
+        Text [ dutch ] = "Ugdate opties" ;
+        Text [ portuguese ] = "Actualizar opções" ;
+        Text[ chinese_simplified ] = "¸üĞÂÑ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû àêòóàëèçàöèè";
+        Text[ polish ] = "Aktualizacja opcji";
+        Text[ japanese ] = "XVµÌß¼®İ";
+        Text[ chinese_traditional ] = "§ó·s¿ï¶µ";
+        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÊÍÏíË";
+        Text[ greek ] = "Åíçìİñùóç åğéëïãşí";
+        Text[ korean ] = "¾÷µ¥ÀÌÆ® ¿É¼Ç";
+        Text[ turkish ] = "Güncelleme seçnekleri";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_NO_CASC_UPD
+    {
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "~Keine Aktion" ;
+        Text [ English ] = "No action" ;
+        Text [ portuguese ] = "~Nenhuma acção" ;
+        Text [ english_us ] = "No action" ;
+        Text [ portuguese_brazilian ] = "Keine Aktion" ;
+        Text [ swedish ] = "Ingen åtgärd" ;
+        Text [ danish ] = "Ingen handling" ;
+        Text [ italian ] = "~Nessuna operazione" ;
+        Text [ spanish ] = "~Ninguna acción" ;
+        Text [ french ] = "Aucune action" ;
+        Text [ dutch ] = "~Geen activiteit" ;
+        Text[ chinese_simplified ] = "ÎŞ²Ù×÷ÃüÁî";
+        Text[ russian ] = "Áåç äåéñòâèÿ";
+        Text[ polish ] = "Bez akcji";
+        Text[ japanese ] = "±¸¼®İ‚È‚µ";
+        Text[ chinese_traditional ] = "µL¾Ş§@";
+        Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
+        Text[ greek ] = "ÊáìéÜ åíİñãåéá";
+        Text[ korean ] = "½ÇÇà ¾øÀ½";
+        Text[ turkish ] = "İşlem yok";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_UPD
+    {
+        Pos = MAP_APPFONT ( 12 , 162 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "K~ask. Update" ;
+        Text [ English ] = "Cascading update" ;
+        Text [ portuguese ] = "Actualizar ~cascata" ;
+        Text [ english_us ] = "Update cascade" ;
+        Text [ portuguese_brazilian ] = "Kask. Update" ;
+        Text [ swedish ] = "Uppdatera k~askad" ;
+        Text [ danish ] = "Opdater kaskade" ;
+        Text [ italian ] = "Aggiorna cascata" ;
+        Text [ spanish ] = "Actualizar ~cascada" ;
+        Text [ french ] = "Mise à jour cascade" ;
+        Text [ dutch ] = "~Casc. update" ;
+        Text[ chinese_simplified ] = "¸üĞÂ²ãµş";
+        Text[ russian ] = "Îáíîâëåíèå êàñêàäà";
+        Text[ polish ] = "Aktualizuj kaskadê";
+        Text[ japanese ] = "¶½¹°ÄŞ‚ÌXV";
+        Text[ chinese_traditional ] = "§ó·s¼hÅ|";
+        Text[ arabic ] = "ÊÍÏíË ÇáÊÊÇáí";
+        Text[ greek ] = "Åíçìİñùóç åğéêÜëõøçò";
+        Text[ korean ] = "°è´Ü½Ä ¾÷µ¥ÀÌÆ®";
+        Text[ turkish ] = "Basamakları güncelle";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_UPD_NULL
+    {
+        Pos = MAP_APPFONT ( 12 , 177 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "~Null setzen" ;
+        Text [ English ] = "Set null" ;
+        Text [ portuguese ] = "Definir ~zero" ;
+        Text [ english_us ] = "Set Null" ;
+        Text [ portuguese_brazilian ] = "Null setzen" ;
+        Text [ swedish ] = "Sätt ~null" ;
+        Text [ danish ] = "Angiv nul" ;
+        Text [ italian ] = "Imposta ~zero" ;
+        Text [ spanish ] = "Poner ~null" ;
+        Text [ french ] = "Mettre ~Null" ;
+        Text [ dutch ] = "~Op nul zetten" ;
+        Text[ chinese_simplified ] = "Éè¶¨Áã";
+        Text[ russian ] = "Óñòàíîâèòü íóëü";
+        Text[ polish ] = "OsadŸ zero";
+        Text[ japanese ] = "¾ŞÛ‚Éİ’è";
+        Text[ chinese_traditional ] = "³]©w¹s";
+        Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
+        Text[ greek ] = "Ïñéóìüò ìçäİ~í";
+        Text[ korean ] = "³Î ¼³Á¤";
+        Text[ turkish ] = "Sıfır belirle";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_UPD_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 12 , 192 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "~Default setzen" ;
+        Text [ English ] = "Set default" ;
+        Text [ portuguese ] = "Definir ~padrão" ;
+        Text [ english_us ] = "Set default" ;
+        Text [ portuguese_brazilian ] = "Default setzen" ;
+        Text [ swedish ] = "Sätt standard" ;
+        Text [ danish ] = "Angiv standard" ;
+        Text [ italian ] = "~Preimpostazione" ;
+        Text [ spanish ] = "~Predeterminar" ;
+        Text [ french ] = "~Prédéfinir" ;
+        Text [ dutch ] = "Op ~standaard zetten" ;
+        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
+        Text[ russian ] = "Óñòàíîâèòü çíà÷åíèå ïî óìîë÷àíèş";
+        Text[ polish ] = "Ustaw domyœlne";
+        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
+        Text[ chinese_traditional ] = "³]©wÀq»{";
+        Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
+        Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
+        Text[ korean ] = "±âº» ¼³Á¤";
+        Text[ turkish ] = "Standart belirle";
+        Text[ language_user1 ] = " ";
+    };
+// zweite Groupbox
+    GroupBox GB_CASC_DEL
+    {
+        Pos = MAP_APPFONT ( 96 , 135 ) ;
+        Size = MAP_APPFONT ( 84 , 71 ) ;
+        Text = "Löschoptionen" ;
+        Text [ English ] = "Delete options" ;
+        Text [ english_us ] = "Delete options" ;
+        Text [ portuguese_brazilian ] = "L÷schoptionen" ;
+        Text [ swedish ] = "Raderingsalternativ" ;
+        Text [ danish ] = "Sletningsindstillinger" ;
+        Text [ italian ] = "Opzioni di eliminazione" ;
+        Text [ spanish ] = "Opciones de eliminación" ;
+        Text [ french ] = "Options de suppression" ;
+        Text [ dutch ] = "Wisopties" ;
+        Text [ portuguese ] = "Opções de eliminação" ;
+        Text[ chinese_simplified ] = "É¾³ıÑ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû óäàëåíèÿ";
+        Text[ polish ] = "Opcje usuwania";
+        Text[ japanese ] = "íœµÌß¼®İ";
+        Text[ chinese_traditional ] = "§R°£¿ï¶µ";
+        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍĞİ";
+        Text[ greek ] = "Åğéëïãİò äéáãñáöŞò";
+        Text[ korean ] = "»èÁ¦ ¿É¼Ç";
+        Text[ turkish ] = "Silme seçenekleri";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_NO_CASC_DEL
+    {
+        Pos = MAP_APPFONT ( 102 , 147 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "K~eine Aktion" ;
+        Text [ English ] = "No action" ;
+        Text [ portuguese ] = "N~enhuma acção" ;
+        Text [ english_us ] = "No action" ;
+        Text [ portuguese_brazilian ] = "Keine Aktion" ;
+        Text [ swedish ] = "Ing~en åtgärd" ;
+        Text [ danish ] = "Ingen handling" ;
+        Text [ italian ] = "~Nessua operazione" ;
+        Text [ spanish ] = "Ninguna a~cción" ;
+        Text [ french ] = "Aucune action" ;
+        Text [ dutch ] = "G~een activiteit" ;
+        Text[ chinese_simplified ] = "ÎŞ²Ù×÷ÃüÁî";
+        Text[ russian ] = "Áåç äåéñòâèÿ";
+        Text[ polish ] = "Bez akcji";
+        Text[ japanese ] = "±¸¼®İ‚È‚µ";
+        Text[ chinese_traditional ] = "µL¾Ş§@";
+        Text[ arabic ] = "ÈÏæä ÅÌÑÇÁ";
+        Text[ greek ] = "ÊáìéÜ åíİñãåéá";
+        Text[ korean ] = "½ÇÇà¾øÀ½";
+        Text[ turkish ] = "İşlem yok";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_DEL
+    {
+        Pos = MAP_APPFONT ( 102 , 162 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "Ka~sk. Löschen" ;
+        Text [ English ] = "Cascading delete" ;
+        Text [ portuguese ] = "Eli~minar cascata" ;
+        Text [ english_us ] = "Delete cascade" ;
+        Text [ portuguese_brazilian ] = "Kask. L÷schen" ;
+        Text [ swedish ] = "Radera ka~skad" ;
+        Text [ danish ] = "Opdater kaskade" ;
+        Text [ italian ] = "Elimina cascata" ;
+        Text [ spanish ] = "Eliminar c~ascada" ;
+        Text [ french ] = "Supprimer la cascade" ;
+        Text [ dutch ] = "~Casc. wissen" ;
+        Text[ chinese_simplified ] = "É¾³ı²ãµş";
+        Text[ russian ] = "Óäàëèòü êàñêàä";
+        Text[ polish ] = "Usuñ kaskadê";
+        Text[ japanese ] = "¶½¹°ÄŞ‚Ìíœ";
+        Text[ chinese_traditional ] = "§R°£¼hÅ|";
+        Text[ arabic ] = "ÍĞİ ÇáÊÊÇáí";
+        Text[ greek ] = "ÄéáãñáöŞ åğéêÜëõøçò";
+        Text[ korean ] = "°è´Ü½Ä »èÁ¦";
+        Text[ turkish ] = "Basamakları sil";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_DEL_NULL
+    {
+        Pos = MAP_APPFONT ( 102 , 177 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "Nu~ll setzen" ;
+        Text [ English ] = "Set null" ;
+        Text [ portuguese ] = "Definir ~zero" ;
+        Text [ english_us ] = "Set Null" ;
+        Text [ portuguese_brazilian ] = "Null setzen" ;
+        Text [ swedish ] = "Sätt nu~ll" ;
+        Text [ danish ] = "Angiv nul" ;
+        Text [ italian ] = "~Imposta zero" ;
+        Text [ spanish ] = "Poner ~null" ;
+        Text [ french ] = "Mettre ~Null" ;
+        Text [ dutch ] = "Op n~ul zetten" ;
+        Text[ chinese_simplified ] = "Éè¶¨Áã";
+        Text[ russian ] = "Óñòàíîâèòü íóëü";
+        Text[ polish ] = "Wstaw zero";
+        Text[ japanese ] = "¾ŞÛ‚Éİ’è";
+        Text[ chinese_traditional ] = "³]©w¹s";
+        Text[ arabic ] = "ÊÚííä ŞíãÉ ÎÇáíÉ";
+        Text[ greek ] = "Ïñéóìüò ìçäİí";
+        Text[ korean ] = "³Î ¼³Á¤";
+        Text[ turkish ] = "Sıfır belirle";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_CASC_DEL_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 102 , 192 ) ;
+        Size = MAP_APPFONT ( 72 , 12 ) ;
+        Text = "De~fault setzen" ;
+        Text [ English ] = "Set default" ;
+        Text [ portuguese ] = "Definir ~padrão" ;
+        Text [ english_us ] = "Set default" ;
+        Text [ portuguese_brazilian ] = "Default setzen" ;
+        Text [ swedish ] = "Sätt standard" ;
+        Text [ danish ] = "Angiv standard" ;
+        Text [ italian ] = "~Preimpostazione" ;
+        Text [ spanish ] = "Pre~determinar" ;
+        Text [ french ] = "~Prédéfinir" ;
+        Text [ dutch ] = "Op standaard ~zetten" ;
+        Text[ chinese_simplified ] = "Éè¶¨Ä¬ÈÏ";
+        Text[ russian ] = "Óñòàíîâèòü çíà÷åíèå ïî óìîë÷àíèş";
+        Text[ polish ] = "Ustaw domyœlne";
+        Text[ japanese ] = "ÃŞÌ«ÙÄ‚Ìİ’è";
+        Text[ chinese_traditional ] = "³]©wÀq»{";
+        Text[ arabic ] = "ÊÚííä ÇİÊÑÇÖí";
+        Text[ greek ] = "Ïñéóìüò ğñïåğéëïãŞò";
+        Text[ korean ] = "±âº» ¼³Á¤";
+        Text[ turkish ] = "Standart belirle";
+        Text[ language_user1 ] = " ";
+    };
+
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 216 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 59 , 216 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 115 , 216 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    Text [ english_us ] = "Relations" ;
+    Text [ portuguese_brazilian ] = "Relationen" ;
+    Text [ swedish ] = "Relationer" ;
+    Text [ danish ] = "Relationer" ;
+    Text [ italian ] = "Relazioni" ;
+    Text [ spanish ] = "Relaciones" ;
+    Text [ french ] = "Relations" ;
+    Text [ dutch ] = "Relaties" ;
+    Text [ portuguese ] = "Relações" ;
+    Text[ chinese_simplified ] = "¹ØÏµ";
+    Text[ russian ] = "Ñâÿçè";
+    Text[ polish ] = "Relacje";
+    Text[ japanese ] = "ØÚ°¼®İ";
+    Text[ chinese_traditional ] = "Ãö«Y";
+    Text[ arabic ] = "ÇáÚáÇŞÇÊ";
+    Text[ greek ] = "Ó÷İóåéò";
+    Text[ korean ] = "°ü°è";
+    Text[ turkish ] = "İlişkiler";
+    Text[ language_user1 ] = " ";
+};
