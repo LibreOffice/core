@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:34:25 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     // autogrowsize
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
     {
-        aTsbAutoGrowSize.SetState( ( ( const SdrTextAutoGrowSizeItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWSIZE ) ).
+        aTsbAutoGrowSize.SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? STATE_CHECK : STATE_NOCHECK );
         aTsbAutoGrowSize.EnableTriState( FALSE );
     }
@@ -489,7 +489,7 @@ BOOL SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     eState = aTsbAutoGrowSize.GetState();
     if( eState != aTsbAutoGrowSize.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAutoGrowSizeItem( (BOOL) STATE_CHECK == eState ) );
+        rAttrs.Put( SdrTextAutoGrowHeightItem( (BOOL) STATE_CHECK == eState ) );
     }
 
     eState = aTsbWordWrapText.GetState();
