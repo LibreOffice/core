@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-08 13:57:23 $
+ *  last change: $Author: tl $ $Date: 2002-03-22 11:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,11 @@ BOOL SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Width());
         break;
         case MID_FRMSIZE_HEIGHT:
-            rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Height());
+            // #95848# returned size should never be zero.
+            // (there was a bug that allowed for setting height to 0.
+            // Thus there some documents existing with that not allowed
+            // attribut value which may cause problems on import.)
+            rVal <<= (sal_Int32)TWIP_TO_MM100(aSize.Height() < MINLAY ? MINLAY : aSize.Height() );
         break;
         case MID_FRMSIZE_SIZE_TYPE:
             rVal <<= (sal_Int16)GetSizeType();
