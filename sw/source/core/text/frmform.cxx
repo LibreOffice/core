@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-27 09:27:05 $
+ *  last change: $Author: vg $ $Date: 2002-05-31 14:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,8 @@
 #include <pormulti.hxx>     // SwMultiPortion
 #endif
 
-#ifndef PRODUCT
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>       // SwFrmFmt
-#endif
 #endif
 
 extern FASTBOOL IsInProgress( const SwFlyFrm *pFly );
