@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:16:04 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,10 @@
 #endif
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
-#endif // _SV_SALLAYOUT_HXX
+#endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
-#ifdef GCP_KERN_HACK
-#include <algorithm>
-#endif // GCP_KERN_HACK
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -113,6 +110,16 @@
 #include <psprint/list.h>
 #include <psprint/sft.h>
 #endif
+#ifndef _RTL_TEXTCVT_H
+#include <rtl/textcvt.h>
+#endif
+
+#ifdef GCP_KERN_HACK
+#include <algorithm>
+#endif
+
+#include <vector>
+#include <set>
 
 // -----------
 // - Inlines -
@@ -729,6 +736,7 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
     }
 
     // find the most interesting subtable in the CMAP
+    rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
     int nOffset = 0;
     int nFormat = -1;
     int nBestVal = 0;
@@ -738,13 +746,17 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
         int nEncoding = GetUShort( p+2 );
 
         int nValue;
-        if( nPlatform==3 && nEncoding==1 )      // Win Unicode
-            nValue = 13;
-        else if( nPlatform==1 && nEncoding==3 ) // Mac Unicode>2.0
-            nValue = 12;
-        else if( nPlatform==1 && nEncoding==0 ) // Mac Unicode<2.0
+        if( nPlatform==3 && nEncoding==1 )       // Win Unicode
+            nValue = 24;
+        else if( nPlatform==3 && nEncoding==10 ) // Win UCS-4
+            nValue = 23;
+        else if( nPlatform==1 && nEncoding==3 )  // Mac Unicode>2.0
+            nValue = 22;
+        else if( nPlatform==1 && nEncoding==0 )  // Mac Unicode<2.0
+            nValue = 21;
+        else if( nPlatform==3 && nEncoding>=2 )  // non-Unicode
             nValue = 11;
-        else if( nPlatform==3 && nEncoding==0 ) // Win Symbol
+        else if( nPlatform==3 && nEncoding==0 )  // Win Symbol
             nValue = 1;
         else
             continue;                           // ignore other encodings
@@ -761,6 +773,21 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
             nBestVal = nValue;
             nOffset = nTmpOffset;
             nFormat = nTmpFormat;
+
+            int nPlatformEncoding = (nPlatform << 8) + nEncoding;
+            switch( nPlatformEncoding )
+            {
+                default:     // fall through
+                case 0x001:  // fall through
+                case 0x002:  // fall through
+                case 0x003:  // fall through
+                case 0x301:  eRecodeFrom = RTL_TEXTENCODING_UNICODE; break;
+                case 0x302:  eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS; break;
+                case 0x303:  eRecodeFrom = RTL_TEXTENCODING_GB_18030; break;
+                case 0x304:  eRecodeFrom = RTL_TEXTENCODING_BIG5; break;
+                case 0x305:  eRecodeFrom = RTL_TEXTENCODING_MS_949; break;
+                case 0x306:  eRecodeFrom = RTL_TEXTENCODING_MS_1361; break;
+            }
         }
     }
 
@@ -810,10 +837,94 @@ void ImplWinFontData::ReadCmapTable( HDC hDC )
         nRangeCount = (pCP - pCodePairs) / 2;
     }
 
-    if( nRangeCount > 0 )
-        mpUnicodeMap = new ImplFontCharMap( nRangeCount, pCodePairs );
-    else
+    if( nRangeCount <= 0 )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    else
+    {
+        // recode the code ranges to their unicode encoded ranges
+        rtl_TextToUnicodeConverter aConverter = NULL;
+        rtl_UnicodeToTextContext aCvtContext = NULL;
+
+        if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
+        {
+            aConverter = rtl_createTextToUnicodeConverter( eRecodeFrom );
+            aCvtContext = rtl_createTextToUnicodeContext( aConverter );
+            mbDisableGlyphApi = true;
+        }
+
+        if( aConverter && aCvtContext )
+        {
+            // determine the set of supported unicodes from encoded ranges
+            typedef std::set<sal_uInt32> IntSet;
+            IntSet aSupportedUnicodes;
+
+            static const int NINSIZE = 64;
+            static const int NOUTSIZE = 64;
+            sal_Char    cCharsInp[ NINSIZE ];
+            sal_Unicode cCharsOut[ NOUTSIZE ];
+            sal_uInt32* pCP = pCodePairs;
+            for( int i = 0; i < nRangeCount; ++i )
+            {
+                sal_uInt32 cMin = *(pCP++);
+                sal_uInt32 cEnd = *(pCP++);
+                while( cMin < cEnd )
+                {
+                   int j = 0;
+                   for(; (cMin < cEnd) && (j < NINSIZE); ++cMin )
+                   {
+                       if( cMin >= 0x0100 )
+                           cCharsInp[ j++ ] = static_cast<sal_Char>(cMin >> 8);
+                       if( (cMin >= 0x0100) || (cMin < 0x00A0)  )
+                          cCharsInp[ j++ ] = static_cast<sal_Char>(cMin);
+                   }
+
+                   sal_uInt32 nCvtInfo;
+                   sal_Size nSrcCvtBytes;
+                   int nOutLen = rtl_convertTextToUnicode(
+                       aConverter, aCvtContext,
+                       cCharsInp, j, cCharsOut, NOUTSIZE,
+                       RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE
+                       | RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE,
+                       &nCvtInfo, &nSrcCvtBytes );
+
+                   for( j = 0; j < nOutLen; ++j )
+                       aSupportedUnicodes.insert( cCharsOut[j] );
+                }
+            }
+
+            rtl_destroyTextToUnicodeConverter( aCvtContext );
+            rtl_destroyTextToUnicodeConverter( aConverter );
+
+            // convert the set of supported unicodes to ranges
+            typedef std::vector<sal_uInt32> IntVector;
+            IntVector aSupportedRanges;
+
+            IntSet::const_iterator itChar = aSupportedUnicodes.begin();
+            for(; itChar != aSupportedUnicodes.end(); ++itChar )
+            {
+                if( aSupportedRanges.empty()
+                || (aSupportedRanges.back() != *itChar) )
+                {
+                    // add new range beginning with current unicode
+                    aSupportedRanges.push_back( *itChar );
+                    aSupportedRanges.push_back( 0 );
+                }
+
+                // extend existing range to include current unicode
+                aSupportedRanges.back() = *itChar + 1;
+            }
+
+            // make a pCodePairs array using the vector from above
+            delete[] pCodePairs;
+            nRangeCount = aSupportedRanges.size() / 2;
+            pCodePairs = new sal_uInt32[ nRangeCount * 2 ];
+            IntVector::const_iterator itInt = aSupportedRanges.begin();
+            for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
+                *(pCP++) = *itInt;
+        }
+
+        mpUnicodeMap = new ImplFontCharMap( nRangeCount, pCodePairs );
+    }
 }
 
 // =======================================================================
@@ -2358,3 +2469,5 @@ const std::map< sal_Unicode, sal_Int32 >* WinSalGraphics::GetFontEncodingVector(
 
 void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 {}
+
+//--------------------------------------------------------------------------
