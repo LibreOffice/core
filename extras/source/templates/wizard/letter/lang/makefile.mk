@@ -1,10 +1,10 @@
 #*************************************************************************
 #
-#   $RCSfile: makefile.mk,v $
+#   $RCSfile$
 #
-#   $Revision: 1.5 $
+#   $Revision$
 #
-#   last change: $Author: willem.vandorp $ $Date: 2000/09/15 14:36:48 $
+#   last change: $Author$ $Date$
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,10 +71,10 @@ TARGET=templateswizardletter
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
 
-
+ZIPFLAGS                =
 ZIP1TARGET      = $(TEMPLATE_WIZARD_LETTER_TARGET)
 
-ZIP1LIST	= $(LANGDIR)$/*
+ZIP1LIST	= english_us$/* german$/*
 
 
 
