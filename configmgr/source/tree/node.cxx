@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 14:14:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,18 +107,15 @@ rtl::OUString NodeInfo::getName(memory::Accessor const & _aAccessor) const
 }
 //-----------------------------------------------------------------------------
 
-configmgr::node::Attributes NodeInfo::getAttributes() const
+configmgr::node::Attributes NodeInfo::getNodeInfoAttributes() const
 {
     configmgr::node::Attributes aResult;
 
-    aResult.bWritable   = ! (flags & Flags::readonly);
-    aResult.bFinalized  = !!(flags & Flags::finalized);
 
-    aResult.bNullable   = !!(flags & Flags::nullable);
-    aResult.bLocalized  = !!(flags & Flags::localized);
+    aResult.setAccess( !!(flags & Flags::readonly),!!(flags & Flags::finalized) );
 
-//    aResult.bNotified   = !!(flags & Flags::notified);
-//    aResult.bConstrained= !!(flags & Flags::constrained);
+    aResult.setNullable(!!(flags & Flags::nullable));
+    aResult.setLocalized(!!(flags & Flags::localized));
 
     configmgr::node::State state = (flags & Flags::defaulted)   ? configmgr::node::isDefault :
                         (flags & Flags::defaultable) ? configmgr::node::isMerged  :
@@ -433,8 +430,7 @@ uno::Any    ValueNode::getDefaultValue(memory::Accessor const & _aAccessor)    c
 
 bool Node::isNamed(rtl::OUString const & _aName, memory::Accessor const & _aAccessor) const
 {
-    // TODO: optimize comparison
-    return !!(this->getName(_aAccessor) == _aName);
+    return 0 == rtl_ustr_compare(_aName.getStr(),accessString(_aAccessor,node.info.name));
 }
 //-----------------------------------------------------------------------------
 
@@ -446,7 +442,14 @@ rtl::OUString Node::getName(memory::Accessor const & _aAccessor) const
 
 configmgr::node::Attributes Node::getAttributes() const
 {
-    return node.info.getAttributes();
+    if(this->isFragmentRoot())
+    {
+        return this->getTreeFragment()->getAttributes();
+    }
+    else
+    {
+        return node.info.getNodeInfoAttributes();
+    }
 }
 //-----------------------------------------------------------------------------
 
