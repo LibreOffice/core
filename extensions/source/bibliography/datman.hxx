@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:15:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
@@ -149,11 +149,11 @@ class BibDataManager
             ,public BibDataManager_Base
 {
 private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                   m_xForm;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >            m_xGridModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xSourceProps;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xParser;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >         m_xFormCtrl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >                       m_xForm;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >                m_xGridModel;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xSourceProps;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xParser;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >             m_xFormCtrl;
         // #100312# -------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >      m_xFormDispatch;
         BibInterceptorHelper* m_pInterceptorHelper;
@@ -221,8 +221,8 @@ public:
         ::rtl::OUString                     getQueryField();
         void                        startQueryWith(const ::rtl::OUString& rQuery);
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >&         getParser() { return m_xParser; }
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                    getForm()   { return m_xForm; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >&    getParser() { return m_xParser; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >&                        getForm()   { return m_xForm; }
 
 
         ::rtl::OUString                     getControlName(sal_Int32 nFormatKey );
