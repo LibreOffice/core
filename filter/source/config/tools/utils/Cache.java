@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cache.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:26 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ import java.io.*;
  *  in different modes. That would make it possible to edit an xml directly or
  *  to contact a running office instance.
  *
- *  @author  Andreas Schlüns
+ *
  */
 public class Cache
 {
