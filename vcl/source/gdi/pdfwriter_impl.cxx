@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:22:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 14:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2902,7 +2902,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 double fTempXScale = fXScale;
 
                 Point aDeltaPos;
-                if( nGlyphFlags[n] & GF_ROTL )
+                if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTL )
                 {
                     fDeltaAngle = M_PI/2.0;
                     aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent() - m_pReferenceDevice->GetFontMetric().GetDescent();
@@ -2910,7 +2910,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                 }
-                else if( nGlyphFlags[n] & GF_ROTR )
+                else if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTR )
                 {
                     fDeltaAngle = -M_PI/2.0;
                     aDeltaPos.X() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent()*fXScale);
