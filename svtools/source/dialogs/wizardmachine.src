@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 19:13:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String STR_WIZDLG_FINISH
     Text[ chinese_traditional ] = "ßπ¶®(~R)";
     Text[ turkish ] = "~Finish";
     Text[ arabic ] = "≈‰‘«¡";
+    Text[ catalan ] = "~Crear";
 };
 
 String STR_WIZDLG_NEXT
@@ -111,6 +112,7 @@ String STR_WIZDLG_NEXT
     Text[ chinese_traditional ] = "ƒ~ƒÚ >>";
     Text[ turkish ] = "~Next >>";
     Text[ arabic ] = "«· «·Ì <<";
+    Text[ catalan ] = "~Siguiente >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -136,11 +138,15 @@ String STR_WIZDLG_PREVIOUS
     Text[ chinese_traditional ] = "<< ™¶^(~K)";
     Text[ turkish ] = "<< ~Previous";
     Text[ arabic ] = "<< ~Previous";
+    Text[ catalan ] = "<< ~Anterior";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/26 19:13:48  rt
+ *  Merge SRC630: 26.04.01 - 21:13:19 (NoBranch)
+ *
  *  Revision 1.7  2001/04/11 18:07:51  kz
  *  Merge SRC627: 11.04.01 - 21:07:21
  *
