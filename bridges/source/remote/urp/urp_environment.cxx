@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-14 14:41:13 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 10:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <bridges/export.h>
 
 #include <assert.h>
 #include <stdio.h>
@@ -398,7 +396,7 @@ using namespace bridges_urp;
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL BRIDGE_EXPORT(uno_initEnvironment)(
+extern "C" SAL_DLLEXPORT void SAL_CALL __EXPORT_UNO_INITENVIRONMENT(
     uno_Environment * pEnvRemote )
 {
     // set C-virtual methods
@@ -485,7 +483,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL BRIDGE_EXPORT(uno_initEnvironment)(
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL BRIDGE_EXPORT(uno_ext_getMapping)(
+extern "C" SAL_DLLEXPORT void SAL_CALL __EXPORT_UNO_EXT_GETMAPPING(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo )

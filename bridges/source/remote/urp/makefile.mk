@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-14 14:41:13 $
+#   last change: $Author: dbo $ $Date: 2000-12-15 10:18:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,13 @@ NO_BSYMBOLIC=TRUE
 
 # ------------------------------------------------------------------
 
-CFLAGS += -DBRIDGE_NAME=$(TARGET)
+.IF "$(COM)$(OS)" == "GCCMACOSX"
+CFLAGS += -D__EXPORT_UNO_INITENVIRONMENT=$(TARGET)uno_initEnvironment \
+      -D__EXPORT_UNO_EXT_GETMAPPING=$(TARGET)uno_ext_getMapping
+.ELSE
+CFLAGS += -D__EXPORT_UNO_INITENVIRONMENT=uno_initEnvironment \
+      -D__EXPORT_UNO_EXT_GETMAPPING=uno_ext_getMapping
+.ENDIF
 
 #CPPUMAKERFLAGS += -C
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
