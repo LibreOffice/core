@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-14 21:24:33 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,12 @@ TabPage RID_SFXPAGE_SAVE
         Text = "E~igenschaften vorher bearbeiten" ;
         Text [ English ] = "~Edit document info before" ;
         Text [ norwegian ] = "~Lagre dem dokumentinformasjon" ;
-        Text [ italian ] = "~Modifica prima le proprietà" ;
+        Text [ italian ] = "Modifica prima le proprietà" ;
         Text [ portuguese_brazilian ] = "~Gravar com Informa??s sobre o documento" ;
         Text [ portuguese ] = "~Editar propriedades do documento antes de guardar" ;
         Text [ finnish ] = "~Muokkaa asiakirjan ominaisuuksia ennen tallennusta" ;
         Text [ danish ] = "Rediger egenskaber forinden" ;
-        Text [ french ] = "É~diter les propriétés avant l'enregistrement" ;
+        Text [ french ] = "Éditer les propriétés avant l'enregistrement" ;
         Text [ swedish ] = "Redigera egenskaper ~innan" ;
         Text [ dutch ] = "~Eigenschappen eerst bewerken" ;
         Text [ spanish ] = "Edi~tar propiedades previamente" ;
@@ -221,7 +221,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese ] = "Criar sempre ~cópia de segurança" ;
         Text [ finnish ] = "~Luo aina varmistuskopio" ;
         Text [ danish ] = "Opret altid sikkerhedskopi" ;
-        Text [ french ] = "Toujours créer une ~copie de sauvegarde" ;
+        Text [ french ] = "Toujours créer une copie de sauvegarde" ;
         Text [ swedish ] = "Skapa alltid ~säkerhetskopia" ;
         Text [ dutch ] = "Altijd een ~reservekopie maken" ;
         Text [ spanish ] = "Cre~ar siempre copia de seguridad" ;
@@ -258,8 +258,8 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_simplified ] = "è‡ªåŠ¨å­˜ç›˜é—´éš”æ—¶é—´(~A)";
         Text[ russian ] = "Ñîõğàíÿòü àâòîìàòè÷åñêè êàæäûå";
         Text[ polish ] = "Zapisuj automatycznie co";
-        Text[ japanese ] = "ã™ã¹ã¦è‡ªå‹•çš„ã«ä¿å­˜(~A)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨è‡ªå‹•å„²å­˜(~A)";
+        Text[ japanese ] = "è‡ªå‹•çš„ã«ä¿å­˜(~A)";
+        Text[ chinese_traditional ] = "è‡ªå‹•å„²å­˜é–“éš”æ™‚é–“(~A)";
         Text[ arabic ] = "ÇáÍİÙ ÊáŞÇÆíÇğ ßá";
         Text[ greek ] = "Áõôüìáôç áğïèŞêåõóç üëùí";
         Text[ korean ] = "ëª¨ë‘ ìë™ìœ¼ë¡œ ì €ì¥(~A)";
@@ -322,7 +322,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ portuguese ] = "~Pronta para guardar" ;
         Text [ finnish ] = "~Kehota tallentamaan" ;
         Text [ danish ] = "Spørg først" ;
-        Text [ french ] = "Avec ~confirmation" ;
+        Text [ french ] = "Avec confirmation" ;
         Text [ swedish ] = "Bek~räfta före spara" ;
         Text [ dutch ] = "~Met bevestiging" ;
         Text [ spanish ] = "Con c~onsulta" ;
@@ -406,7 +406,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ spanish ] = "En el ~sistema de archivos" ;
         Text [ french ] = "~Système de fichiers" ;
         TabStop = TRUE ;
-        Text [ swedish ] = "i filsys~tem" ;
+        Text [ swedish ] = "i fils~ystem" ;
         Text [ danish ] = "i filsystemet" ;
         Text [ portuguese_brazilian ] = "im Da~teisystem" ;
         Text [ portuguese ] = "No sistema de ~ficheiros" ;
@@ -518,7 +518,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ french ] = "Enregistrer systématiquement comme";
         Text[ spanish ] = "Guardar siempre como";
         Text[ finnish ] = "~Vakiotallennusmuoto";
-        Text[ italian ] = "Salva se~mpre come";
+        Text[ italian ] = "Salva sempre come";
         Text[ danish ] = "File formats";
         Text[ swedish ] = "Spara alltid s~om";
         Text[ polish ] = "Zapisuj zawsze jako";
@@ -788,7 +788,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ italian ] = "L'uso di \"%1\" quale formato standard può causare la perdita di dati.\n";
         Text[ danish ] = "Saving with \"%1\" may cause information loss.\n";
-        Text[ swedish ] = "Att använda \"%1\" som standarfilformat kan leda till att information går förlorad.\n";
+        Text[ swedish ] = "Att använda \"%1\" som standardfilformat kan leda till att information går förlorad.\n";
         Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ portuguese_brazilian ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ japanese ] = "\"%1\" ã‚’æ¨™æº–ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨ã€æƒ…å ±ãŒå¤±ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n";
