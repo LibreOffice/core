@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-27 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,9 +257,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nBreakPos = nCutPos;
         xub_StrLen nX = nBreakPos;
-        while( nX && nBreakPos > rInf.GetLineStart() &&
+
+        // we step back until a non blank character has been found
+        // or there is only one more character left
+        while( nX && nBreakPos > rInf.GetLineStart() + 1 &&
                CH_BLANK == rInf.GetChar( --nX ) )
             --nBreakPos;
+
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
         while( ++nCutPos < rInf.GetTxt().Len() &&
