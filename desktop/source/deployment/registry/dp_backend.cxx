@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:09:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include "dp_backend.h"
-#include "dp_registry.hrc"
 #include "dp_ucb.h"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
@@ -98,22 +97,12 @@ void PackageRegistryBackend::disposing( lang::EventObject const & event )
 PackageRegistryBackend::PackageRegistryBackend(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext,
-    OUString const & implName,
-    Sequence<OUString> const & supportedMediaTypes )
+    OUString const & implName )
     : t_BackendBase( getMutex() ),
       m_xComponentContext( xContext ),
       m_implName( implName ),
-      m_supportedMediaTypes( supportedMediaTypes ),
       m_eContext( CONTEXT_UNKNOWN ),
-      m_readOnly( false ),
-      m_strCannotDetectMediaType(
-          getResourceString(RID_STR_CANNOT_DETECT_MEDIA_TYPE) ),
-      m_strUnsupportedMediaType(
-          getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) ),
-      m_strRegisteringPackage(
-          getResourceString(RID_STR_REGISTERING_PACKAGE) ),
-      m_strRevokingPackage(
-          getResourceString(RID_STR_REVOKING_PACKAGE) )
+      m_readOnly( false )
 {
     extract_throw( &m_context, args[ 0 ] );
     if (args.getLength() > 1) {
@@ -256,13 +245,6 @@ Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     return xNewPackage;
 }
 
-//______________________________________________________________________________
-Sequence<OUString> PackageRegistryBackend::getSupportedMediaTypes()
-    throw (RuntimeException)
-{
-    return m_supportedMediaTypes;
-}
-
 //##############################################################################
 
 //______________________________________________________________________________
@@ -273,17 +255,15 @@ Package::~Package()
 //______________________________________________________________________________
 Package::Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
                   OUString const & url,
-                  OUString const & mediaType,
                   OUString const & name,
                   OUString const & displayName,
-                  OUString const & description )
+                  Reference<deployment::XPackageTypeInfo> const & xPackageType )
     : t_PackageBase( getMutex() ),
       m_myBackend( myBackend ),
       m_url( url ),
-      m_mediaType( mediaType ),
       m_name( name ),
       m_displayName( displayName ),
-      m_description( description )
+      m_xPackageType( xPackageType )
 {
 }
 
@@ -352,9 +332,10 @@ void Package::removeModifyListener(
 void Package::checkAborted(
     ::rtl::Reference<AbortChannel> const & abortChannel )
 {
-    if (abortChannel.is() && abortChannel->isAborted())
+    if (abortChannel.is() && abortChannel->isAborted()) {
         throw CommandAbortedException(
             OUSTR("abort!"), static_cast<OWeakObject *>(this) );
+    }
 }
 
 // XPackage
@@ -390,12 +371,6 @@ OUString Package::getName() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-OUString Package::getMediaType() throw (RuntimeException)
-{
-    return m_mediaType;
-}
-
-//______________________________________________________________________________
 OUString Package::getURL() throw (RuntimeException)
 {
     return m_url;
@@ -410,14 +385,17 @@ OUString Package::getDisplayName() throw (RuntimeException)
 //______________________________________________________________________________
 OUString Package::getDescription() throw (RuntimeException)
 {
-    return m_description;
+    if (m_xPackageType.is())
+        return m_xPackageType->getDescription();
+    else
+        return OUString();
 }
 
 //______________________________________________________________________________
-Any Package::getIcon(
-    sal_Bool highContrast, sal_Bool smallIcon ) throw (RuntimeException)
+Reference<deployment::XPackageTypeInfo> Package::getPackageType()
+    throw (RuntimeException)
 {
-    return Any();
+    return m_xPackageType;
 }
 
 //______________________________________________________________________________
@@ -444,7 +422,8 @@ void Package::fireModified()
         Sequence< Reference<XInterface> > elements(
             container->getElements() );
         lang::EventObject evt( static_cast<OWeakObject *>(this) );
-        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos ) {
+        for ( sal_Int32 pos = 0; pos < elements.getLength(); ++pos )
+        {
             Reference<util::XModifyListener> xListener(
                 elements[ pos ], UNO_QUERY );
             if (xListener.is())
@@ -488,6 +467,70 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
 }
 
 //______________________________________________________________________________
+void Package::processPackage_(
+    bool registerPackage,
+    Reference<task::XAbortChannel> const & xAbortChannel,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    check();
+    bool action = false;
+
+    try {
+        try {
+            ::osl::ResettableMutexGuard guard( getMutex() );
+            beans::Optional< beans::Ambiguous<sal_Bool> > option(
+                isRegistered_( guard, AbortChannel::get(xAbortChannel),
+                               xCmdEnv ) );
+            action = (option.IsPresent &&
+                      (option.Value.IsAmbiguous ||
+                       (registerPackage ? !option.Value.Value
+                                        : option.Value.Value)));
+            if (action) {
+                OUString displayName( getDisplayName() );
+                ProgressLevel progress(
+                    xCmdEnv,
+                    (registerPackage
+                     ? PackageRegistryBackend::StrRegisteringPackage::get()
+                     : PackageRegistryBackend::StrRevokingPackage::get())
+                    + displayName );
+                processPackage_( guard,
+                                 registerPackage,
+                                 AbortChannel::get(xAbortChannel),
+                                 xCmdEnv );
+            }
+        }
+        catch (RuntimeException &) {
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
+            throw;
+        }
+        catch (CommandFailedException &) {
+            throw;
+        }
+        catch (CommandAbortedException &) {
+            throw;
+        }
+        catch (deployment::DeploymentException &) {
+            throw;
+        }
+        catch (Exception &) {
+            Any exc( ::cppu::getCaughtException() );
+            throw deployment::DeploymentException(
+                (registerPackage
+                 ? getResourceString(RID_STR_ERROR_WHILE_REGISTERING)
+                 : getResourceString(RID_STR_ERROR_WHILE_REVOKING))
+                + getDisplayName(), static_cast<OWeakObject *>(this), exc );
+        }
+    }
+    catch (...) {
+        if (action)
+            fireModified();
+        throw;
+    }
+    if (action)
+        fireModified();
+}
+
+//______________________________________________________________________________
 void Package::registerPackage(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -495,48 +538,7 @@ void Package::registerPackage(
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    check();
-    ProgressLevel progress( xCmdEnv );
-
-    try {
-        ::osl::ResettableMutexGuard guard( getMutex() );
-        beans::Optional< beans::Ambiguous<sal_Bool> > option(
-            isRegistered_( guard, AbortChannel::get(xAbortChannel), xCmdEnv ) );
-        if (option.IsPresent &&
-            (option.Value.IsAmbiguous || !option.Value.Value)) {
-            OUString displayName( getDisplayName() );
-            progress.update(
-                m_myBackend->m_strRegisteringPackage + displayName );
-            processPackage_( guard,
-                             true /* registerPackage() */,
-                             AbortChannel::get(xAbortChannel),
-                             xCmdEnv );
-            guard.clear();
-            fireModified();
-        }
-    }
-    catch (RuntimeException &) {
-        throw;
-    }
-    catch (CommandFailedException &) {
-        fireModified();
-        throw;
-    }
-    catch (CommandAbortedException &) {
-        fireModified();
-        throw;
-    }
-    catch (deployment::DeploymentException &) {
-        fireModified();
-        throw;
-    }
-    catch (Exception &) {
-        Any exc( ::cppu::getCaughtException() );
-        fireModified();
-        throw deployment::DeploymentException(
-            getResourceString(RID_STR_ERROR_WHILE_REGISTERING) +
-            getDisplayName(), static_cast<OWeakObject *>(this), exc );
-    }
+    processPackage_( true /* register */, xAbortChannel, xCmdEnv );
 }
 
 //______________________________________________________________________________
@@ -547,48 +549,48 @@ void Package::revokePackage(
            CommandFailedException, CommandAbortedException,
            lang::IllegalArgumentException, RuntimeException)
 {
-    check();
-    ProgressLevel progress( xCmdEnv );
+    processPackage_( false /* revoke */, xAbortChannel, xCmdEnv );
+}
 
-    try {
-        ::osl::ResettableMutexGuard guard( getMutex() );
-        beans::Optional< beans::Ambiguous<sal_Bool> > option(
-            isRegistered_( guard, AbortChannel::get(xAbortChannel), xCmdEnv ) );
-        if (option.IsPresent &&
-            (option.Value.IsAmbiguous || option.Value.Value))
-        {
-            OUString displayName( getDisplayName() );
-            progress.update( m_myBackend->m_strRevokingPackage + displayName );
-            processPackage_( guard,
-                             false /* revokePackage() */,
-                             AbortChannel::get(xAbortChannel),
-                             xCmdEnv );
-            guard.clear();
-            fireModified();
-        }
-    }
-    catch (RuntimeException &) {
-        throw;
-    }
-    catch (CommandFailedException &) {
-        fireModified();
-        throw;
-    }
-    catch (CommandAbortedException &) {
-        fireModified();
-        throw;
-    }
-    catch (deployment::DeploymentException &) {
-        fireModified();
-        throw;
-    }
-    catch (Exception &) {
-        Any exc( ::cppu::getCaughtException() );
-        fireModified();
-        throw deployment::DeploymentException(
-            getResourceString(RID_STR_ERROR_WHILE_REVOKING) + getDisplayName(),
-            static_cast<OWeakObject *>(this), exc );
-    }
+//##############################################################################
+
+//______________________________________________________________________________
+Package::TypeInfo::~TypeInfo()
+{
+}
+
+// XPackageTypeInfo
+//______________________________________________________________________________
+OUString Package::TypeInfo::getMediaType() throw (RuntimeException)
+{
+    return m_mediaType;
+}
+
+//______________________________________________________________________________
+OUString Package::TypeInfo::getDescription() throw (RuntimeException)
+{
+    return getShortDescription();
+}
+
+//______________________________________________________________________________
+OUString Package::TypeInfo::getShortDescription() throw (RuntimeException)
+{
+    return m_shortDescr;
+}
+
+//______________________________________________________________________________
+OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
+{
+    return m_fileFilter;
+}
+
+//______________________________________________________________________________
+Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
+    throw (RuntimeException)
+{
+    if (! smallIcon)
+        return Any();
+    return makeAny( highContrast ? m_smallIcon_HC : m_smallIcon );
 }
 
 }
