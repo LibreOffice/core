@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:52:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String STR_ACCESS_DOC_NAME
     Text[ spanish ] = "VisualizaciÛn del documento";
     Text[ finnish ] = "Document view";
     Text[ italian ] = "Vista documento";
-    Text[ danish ] = "Document view";
+    Text[ danish ] = "Dokumentvisning";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
     Text[ portuguese_brazilian ] = "Visualizar documento";
@@ -90,6 +90,8 @@ String STR_ACCESS_DOC_NAME
     Text[ hebrew ] = "Dokument-Ansicht";
     Text[ hindi ] = "Document view";
     Text[ slovak ] = "Pohƒæad na dokument";
+    Text[ hungarian ] = "Dokumentumn√©zet";
+    Text[ slovenian ] = "Pogled dokumenta";
 };
 String STR_ACCESS_DOC_DESC
 {
@@ -104,7 +106,7 @@ String STR_ACCESS_DOC_DESC
     Text[ spanish ] = "VisualizaciÛn del documento";
     Text[ finnish ] = "Document view";
     Text[ italian ] = "Vista documento";
-    Text[ danish ] = "Document view";
+    Text[ danish ] = "Dokumentvisning";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
     Text[ portuguese_brazilian ] = "Visualizar documento";
@@ -120,6 +122,8 @@ String STR_ACCESS_DOC_DESC
     Text[ hebrew ] = "Dokument-Ansicht";
     Text[ hindi ] = "Document view";
     Text[ slovak ] = "Pohƒæad na dokument";
+    Text[ hungarian ] = "Dokumentumn√©zet";
+    Text[ slovenian ] = "Pogled dokumenta";
 };
 String STR_ACCESS_PARAGRAPH_NAME
 {
@@ -134,7 +138,7 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ spanish ] = "P·rrafo $(ARG1)";
     Text[ finnish ] = "Paragraph $(ARG1)";
     Text[ italian ] = "Paragrafo $(ARG1)";
-    Text[ danish ] = "Paragraph $(ARG1)";
+    Text[ danish ] = "Afsnit $(ARG1)";
     Text[ swedish ] = "Stycke $(ARG1)";
     Text[ polish ] = "Paragraph $(ARG1)";
     Text[ portuguese_brazilian ] = "Par·grafo $(ARG1)";
@@ -150,6 +154,8 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ hebrew ] = "Absatz $(ARG1)";
     Text[ hindi ] = "Paragraph $(ARG1)";
     Text[ slovak ] = "Odstavec $(ARG1)";
+    Text[ hungarian ] = "Bekezd√©s $(ARG1)";
+    Text[ slovenian ] = "Odstavek $(ARG1)";
 };
 String STR_ACCESS_PARAGRAPH_DESC
 {
@@ -164,7 +170,7 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ spanish ] = "P·rrafo: $(ARG1)";
     Text[ finnish ] = "Paragraph: $(ARG1)";
     Text[ italian ] = "Paragrafo : $(ARG1) ";
-    Text[ danish ] = "Paragraph: $(ARG1)";
+    Text[ danish ] = "Afsnit: $(ARG1)";
     Text[ swedish ] = "Stycke: $(ARG1) ";
     Text[ polish ] = "Paragraph: $(ARG1)";
     Text[ portuguese_brazilian ] = "Par·grafo: $(ARG1)";
@@ -180,6 +186,8 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ hebrew ] = "Absatz: $(ARG1)";
     Text[ hindi ] = "Paragraph: $(ARG1) ";
     Text[ slovak ] = "Odstavec: $(ARG1) ";
+    Text[ hungarian ] = "Bekezd√©s: $(ARG1) ";
+    Text[ slovenian ] = "Odstavek: $(ARG1) ";
 };
 String STR_ACCESS_HEADING_NAME
 {
@@ -194,7 +202,7 @@ String STR_ACCESS_HEADING_NAME
     Text[ spanish ] = "Encabezado $(ARG1)";
     Text[ finnish ] = "Heading $(ARG1)";
     Text[ italian ] = "Intestazione $(ARG1)";
-    Text[ danish ] = "Heading $(ARG1)";
+    Text[ danish ] = "Overskrift $(ARG1)";
     Text[ swedish ] = "÷verskrift $(ARG1)";
     Text[ polish ] = "Heading $(ARG1)";
     Text[ portuguese_brazilian ] = "TÌtulo $(ARG1)";
@@ -210,6 +218,8 @@ String STR_ACCESS_HEADING_NAME
     Text[ hebrew ] = "√úberschrift $(ARG1)";
     Text[ hindi ] = "Heading $(ARG1)";
     Text[ slovak ] = "Nadpis $(ARG1)";
+    Text[ hungarian ] = "C√≠msor $(ARG1)";
+    Text[ slovenian ] = "Naslov $(ARG1)";
 };
 String STR_ACCESS_HEADING_DESC
 {
@@ -224,7 +234,7 @@ String STR_ACCESS_HEADING_DESC
     Text[ spanish ] = "Encabezado: $(ARG1)";
     Text[ finnish ] = "Heading: $(ARG1)";
     Text[ italian ] = "Intestazione: $(ARG1)";
-    Text[ danish ] = "Heading: $(ARG1)";
+    Text[ danish ] = "Overskrift: $(ARG1)";
     Text[ swedish ] = "÷verskrift: $(ARG1)";
     Text[ polish ] = "Heading: $(ARG1)";
     Text[ portuguese_brazilian ] = "TÌtulo: $(ARG1)";
@@ -240,6 +250,8 @@ String STR_ACCESS_HEADING_DESC
     Text[ hebrew ] = "√úberschrift: $(ARG1)";
     Text[ hindi ] = "Heading: $(ARG1)";
     Text[ slovak ] = "Nadpis: $(ARG1)";
+    Text[ hungarian ] = "C√≠msor: $(ARG1)";
+    Text[ slovenian ] = "Naslov: $(ARG1)";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
@@ -254,7 +266,7 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ spanish ] = "N˙mero de encabezado $(ARG2): $(ARG1)";
     Text[ finnish ] = "Heading number $(ARG2): $(ARG1)";
     Text[ italian ] = "Numero intestazione $(ARG2): $(ARG1)";
-    Text[ danish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ danish ] = "Overskrift nummer $(ARG2): $(ARG1)";
     Text[ swedish ] = "÷verskrift nummer $(ARG2): $(ARG1)";
     Text[ polish ] = "Heading number $(ARG2): $(ARG1)";
     Text[ portuguese_brazilian ] = "N˙mero do tÌtulo $(ARG2): $(ARG1)";
@@ -270,6 +282,8 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ hebrew ] = "√úberschrift Nummer $(ARG2): $(ARG1)";
     Text[ hindi ] = "Heading number $(ARG2): $(ARG1)";
     Text[ slovak ] = "Nadpis ƒç√≠slo $(ARG2): $(ARG1)";
+    Text[ hungarian ] = "C√≠msorsz√°m $(ARG2): $(ARG1)";
+    Text[ slovenian ] = "≈†tevilka naslova $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
 {
@@ -284,7 +298,7 @@ String STR_ACCESS_HEADER_NAME
     Text[ spanish ] = "Encabezamiento $(ARG1)";
     Text[ finnish ] = "Header $(ARG1)";
     Text[ italian ] = "Riga d'intestazione $(ARG1)";
-    Text[ danish ] = "Header $(ARG1)";
+    Text[ danish ] = "Sidehoved $(ARG1)";
     Text[ swedish ] = "Sidhuvud $(ARG1)";
     Text[ polish ] = "Header $(ARG1)";
     Text[ portuguese_brazilian ] = "CabeÁalho $(ARG1)";
@@ -300,6 +314,8 @@ String STR_ACCESS_HEADER_NAME
     Text[ hebrew ] = "Kopfzeile $(ARG1)";
     Text[ hindi ] = "Header $(ARG1)";
     Text[ slovak ] = "Z√°hlavie $(ARG1)";
+    Text[ hungarian ] = "√âl≈ëfej $(ARG1)";
+    Text[ slovenian ] = "Glava $(ARG1)";
 };
 String STR_ACCESS_HEADER_DESC
 {
@@ -314,7 +330,7 @@ String STR_ACCESS_HEADER_DESC
     Text[ spanish ] = "P·gina encabezamiento $(ARG1)";
     Text[ finnish ] = "Header page $(ARG1)";
     Text[ italian ] = "Pagina riga d'intestazione $(ARG1)";
-    Text[ danish ] = "Header page $(ARG1)";
+    Text[ danish ] = "Sidehoved side $(ARG1)";
     Text[ swedish ] = "Sidhuvud sida $(ARG1)";
     Text[ polish ] = "Header page $(ARG1)";
     Text[ portuguese_brazilian ] = "CabeÁalho p·gina $(ARG1)";
@@ -330,6 +346,8 @@ String STR_ACCESS_HEADER_DESC
     Text[ hebrew ] = "Kopfzeile Seite $(ARG1)";
     Text[ hindi ] = "Header page $(ARG1)";
     Text[ slovak ] = "Z√°hlavie str√°nky $(ARG1)";
+    Text[ hungarian ] = "Oldal √©l≈ëfeje $(ARG1)";
+    Text[ slovenian ] = "Stran z glavo $(ARG1)";
 };
 String STR_ACCESS_FOOTER_NAME
 {
@@ -344,7 +362,7 @@ String STR_ACCESS_FOOTER_NAME
     Text[ spanish ] = "Pie de p·gina $(ARG1)";
     Text[ finnish ] = "Footer $(ARG1)";
     Text[ italian ] = "PiË di pagina $(ARG1)";
-    Text[ danish ] = "Footer $(ARG1)";
+    Text[ danish ] = "Sidefod $(ARG1)";
     Text[ swedish ] = "Sidfot $(ARG1)";
     Text[ polish ] = "Footer $(ARG1)";
     Text[ portuguese_brazilian ] = "RodapÈ $(ARG1)";
@@ -360,6 +378,8 @@ String STR_ACCESS_FOOTER_NAME
     Text[ hebrew ] = "Fu√üzeile $(ARG1)";
     Text[ hindi ] = "Footer $(ARG1)";
     Text[ slovak ] = "Z√°p√§tie $(ARG1)";
+    Text[ hungarian ] = "√âl≈ël√°b $(ARG1)";
+    Text[ slovenian ] = "Noga $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
@@ -374,7 +394,7 @@ String STR_ACCESS_FOOTER_DESC
     Text[ spanish ] = "Pie de p·gina $(ARG1)";
     Text[ finnish ] = "Footer page $(ARG1)";
     Text[ italian ] = "Pagina piË di pagina $(ARG1)";
-    Text[ danish ] = "Footer page $(ARG1)";
+    Text[ danish ] = "Sidfod side $(ARG1)";
     Text[ swedish ] = "Sidfot sida $(ARG1)";
     Text[ polish ] = "Footer page $(ARG1)";
     Text[ portuguese_brazilian ] = "RodapÈ p·gina $(ARG1)";
@@ -390,6 +410,8 @@ String STR_ACCESS_FOOTER_DESC
     Text[ hebrew ] = "Fu√üzeile Seite $(ARG1)";
     Text[ hindi ] = "Footer page $(ARG1)";
     Text[ slovak ] = "Z√°p√§tie str√°nky $(ARG1)";
+    Text[ hungarian ] = "Oldal √©l≈ël√°ba $(ARG1)";
+    Text[ slovenian ] = "Stran z nogo $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
@@ -404,7 +426,7 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ spanish ] = "Nota al pie $(ARG1)";
     Text[ finnish ] = "Footnote $(ARG1)";
     Text[ italian ] = "Nota a piË pagina $(ARG1)";
-    Text[ danish ] = "Footnote $(ARG1)";
+    Text[ danish ] = "Fodnote $(ARG1)";
     Text[ swedish ] = "Fotnot $(ARG1)";
     Text[ polish ] = "Footnote $(ARG1)";
     Text[ portuguese_brazilian ] = "Nota de rodapÈ $(ARG1)";
@@ -420,6 +442,8 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ hebrew ] = "Fu√ünote $(ARG1)";
     Text[ hindi ] = "Footnote $(ARG1)";
     Text[ slovak ] = "Pozn√°mka pod ƒçiarou $(ARG1)";
+    Text[ hungarian ] = "L√°bjegyzet $(ARG1)";
+    Text[ slovenian ] = "Sprotna opomba $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
@@ -434,7 +458,7 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ spanish ] = "Nota al pie $(ARG1)";
     Text[ finnish ] = "Footnote $(ARG1)";
     Text[ italian ] = "Nota a piË pagina $(ARG1)";
-    Text[ danish ] = "Footnote $(ARG1)";
+    Text[ danish ] = "Fodnote $(ARG1)";
     Text[ swedish ] = "Fotnot $(ARG1)";
     Text[ polish ] = "Footnote $(ARG1)";
     Text[ portuguese_brazilian ] = "Nota de rodapÈ $(ARG1)";
@@ -450,6 +474,8 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ hebrew ] = "Fu√ünote $(ARG1)";
     Text[ hindi ] = "Footnote $(ARG1)";
     Text[ slovak ] = "Pozn√°mka pod ƒçiarou $(ARG1)";
+    Text[ hungarian ] = "L√°bjegyzet $(ARG1)";
+    Text[ slovenian ] = "Sprotna opomba $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
 {
@@ -464,7 +490,7 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ spanish ] = "Nota final $(ARG1)";
     Text[ finnish ] = "Endnote $(ARG1)";
     Text[ italian ] = "Nota di chiusura $(ARG1)";
-    Text[ danish ] = "Endnote $(ARG1)";
+    Text[ danish ] = "Slutnote $(ARG1)";
     Text[ swedish ] = "Slutnot $(ARG1)";
     Text[ polish ] = "Endnote $(ARG1)";
     Text[ portuguese_brazilian ] = "Nota de fim $(ARG1)";
@@ -480,6 +506,8 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ hebrew ] = "Endnote $(ARG1)";
     Text[ hindi ] = "Endnote $(ARG1)";
     Text[ slovak ] = "Vysvetlivka $(ARG1)";
+    Text[ hungarian ] = "V√©gjegyzet $(ARG1)";
+    Text[ slovenian ] = "Konƒçna opomba $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_DESC
 {
@@ -494,7 +522,7 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ spanish ] = "Nota final $(ARG1)";
     Text[ finnish ] = "Endnote $(ARG1)";
     Text[ italian ] = "Nota di chiusura $(ARG1)";
-    Text[ danish ] = "Endnote $(ARG1)";
+    Text[ danish ] = "Slutnote $(ARG1)";
     Text[ swedish ] = "Slutnot $(ARG1)";
     Text[ polish ] = "Endnote $(ARG1)";
     Text[ portuguese_brazilian ] = "Nota de fim $(ARG1)";
@@ -510,6 +538,8 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ hebrew ] = "Endnote $(ARG1)";
     Text[ hindi ] = "Endnote $(ARG1)";
     Text[ slovak ] = "Vysvetlivka $(ARG1)";
+    Text[ hungarian ] = "V√©gjegyzet $(ARG1)";
+    Text[ slovenian ] = "Konƒçna opomba $(ARG1)";
 };
 String STR_ACCESS_TABLE_DESC
 {
@@ -524,7 +554,7 @@ String STR_ACCESS_TABLE_DESC
     Text[ spanish ] = "$(ARG1) en la p·gina $(ARG2)";
     Text[ finnish ] = "$(ARG1) on page $(ARG2)";
     Text[ italian ] = "$(ARG1) a pagina $(ARG2)";
-    Text[ danish ] = "$(ARG1) on page $(ARG2)";
+    Text[ danish ] = "$(ARG1) pÂ side $(ARG2)";
     Text[ swedish ] = "$(ARG1) pÂ sida $(ARG2)";
     Text[ polish ] = "$(ARG1) on page $(ARG2)";
     Text[ portuguese_brazilian ] = "$(ARG1) na p·gina $(ARG2)";
@@ -540,6 +570,8 @@ String STR_ACCESS_TABLE_DESC
     Text[ hebrew ] = "$(ARG1) auf Seite $(ARG2)";
     Text[ hindi ] = "$(ARG1) on page $(ARG2)";
     Text[ slovak ] = "$(ARG1) na str√°nke $(ARG2)";
+    Text[ hungarian ] = "$(ARG1) a(z) $(ARG2). oldalon";
+    Text[ slovenian ] = "$(ARG1) na strani $(ARG2)";
 };
 String STR_ACCESS_PAGE_NAME
 {
@@ -554,7 +586,7 @@ String STR_ACCESS_PAGE_NAME
     Text[ spanish ] = "P·gina $(ARG1)";
     Text[ finnish ] = "Page $(ARG1)";
     Text[ italian ] = "Pagina $(ARG1)";
-    Text[ danish ] = "Page $(ARG1)";
+    Text[ danish ] = "Side $(ARG1)";
     Text[ swedish ] = "Sida $(ARG1)";
     Text[ polish ] = "Page $(ARG1)";
     Text[ japanese ] = "$(ARG1) „Éö„Éº„Ç∏";
@@ -570,6 +602,8 @@ String STR_ACCESS_PAGE_NAME
     Text[ thai ] = "Page $(ARG1)";
     Text[ hindi ] = "Page $(ARG1)";
     Text[ slovak ] = "Str√°nka $(ARG1)";
+    Text[ hungarian ] = "Oldal $(ARG1)";
+    Text[ slovenian ] = "Stran $(ARG1)";
 };
 String STR_ACCESS_PAGE_DESC
 {
@@ -584,7 +618,7 @@ String STR_ACCESS_PAGE_DESC
     Text[ spanish ] = "P·gina: $(ARG1)";
     Text[ finnish ] = "Page: $(ARG1)";
     Text[ italian ] = "Pagina: $(ARG1)";
-    Text[ danish ] = "Page: $(ARG1)";
+    Text[ danish ] = "Side: $(ARG1)";
     Text[ swedish ] = "Sida: $(ARG1)";
     Text[ polish ] = "Page: $(ARG1)";
     Text[ japanese ] = "„Éö„Éº„Ç∏: $(ARG1)";
@@ -600,6 +634,8 @@ String STR_ACCESS_PAGE_DESC
     Text[ thai ] = "Page: $(ARG1)";
     Text[ hindi ] = "Page: $(ARG1)";
     Text[ slovak ] = "Str√°nka: $(ARG1)";
+    Text[ hungarian ] = "Oldal: $(ARG1)";
+    Text[ slovenian ] = "Stran: $(ARG1)";
 };
 
 
