@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-08 22:58:53 $
+ *  last change: $Author: iha $ $Date: 2003-11-10 19:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "ViewElementListProvider.hxx"
 #include "macros.hxx"
 #include "ChartModelHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <drafts/com/sun/star/chart2/XChartType.hpp>
@@ -123,127 +124,6 @@ using namespace ::drafts::com::sun::star::chart2;
 
 namespace
 {
-bool lcl_doesChartTypeHasGeometryProperties( const uno::Reference< XChartType >& xChartType )
-{
-    //form tab only for 3D-bar and 3D-column charts.
-
-    //@todo ask charttype itself --> need model change first
-    if(xChartType.is())
-    {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
-        {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
-                return true;
-            if( aChartTypeName.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.ColumnChart")) )
-                return true;
-        }
-    }
-    return false;
-}
-
-bool lcl_doesChartTypeHasStatisticProperties( const uno::Reference< XChartType >& xChartType )
-{
-    //3D charts, pie, net and stock do not have statistic properties
-
-    //@todo ask charttype itself (and series? --> stock chart?)  --> need model change first
-    if(xChartType.is())
-    {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
-            return false;
-
-        rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
-            return false;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
-            return false;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Stock")) )
-            return false;
-    }
-    return true;
-}
-
-bool lcl_doesChartTypeProvidesSecondaryYAxis( const uno::Reference< XChartType >& xChartType )
-{
-    //3D, pie and net charts do not support a second y-axis
-
-    //@todo ask charttype itself --> need model change first
-    if(xChartType.is())
-    {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
-            return false;
-
-        rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.PieChart")) )
-            return false;
-        if( aChartTypeName.match(C2U("com.sun.star.chart2.Net")) )
-            return false;
-    }
-    return true;
-}
-bool lcl_doesChartTypeHasAreaProperties( const uno::Reference< XChartType >& xChartType )
-{
-    //2D line charts do not support area properties
-
-    //@todo ask charttype itself --> need model change first
-    if(xChartType.is())
-    {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==2)
-        {
-            rtl::OUString aChartTypeName = xChartType->getChartType();
-            if( aChartTypeName.match(C2U("com.sun.star.chart2.LineChart")) )
-                return false;
-            //@todo add the more complicated line charts
-        }
-    }
-    return true;
-}
-bool lcl_doesChartTypeHasSymbolProperties( const uno::Reference< XChartType >& xChartType )
-{
-    //only special 2D symbol charts do provide symbols
-
-    //@todo ask charttype itself --> need model change first
-    if(xChartType.is())
-    {
-        sal_Int32 nDimension=2;
-        {
-            uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY );
-            if(xChartTypeProp.is())
-                xChartTypeProp->getPropertyValue( C2U( "Dimension" )) >>= nDimension;
-        }
-        if(nDimension==3)
-            return false;
-
-        rtl::OUString aChartTypeName = xChartType->getChartType();
-        if( aChartTypeName.indexOf(C2U("symbol"))!=-1 )
-            return true;
-    }
-    return false;
-}
 
 sal_Int32 lcl_getDimensionCount( const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -285,41 +165,19 @@ ObjectType ObjectPropertiesDialogParameter::getObjectType() const
 
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
-    uno::Reference< XChartType > xChartType(NULL);
-    uno::Reference< XDataSeries > xSeries(NULL);
+    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
+    uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
-    switch(m_eObjectType)
-    {
-    case OBJECTTYPE_DATA_LABELS:
-    case OBJECTTYPE_DATA_SERIES:
-    {
-        rtl::OUString aSeriesID = ObjectIdentifier::getParticleID( m_aObjectCID );
-        xSeries = ChartModelHelper::getSeriesByIdentifier( aSeriesID, xChartModel );
-        break;
-    }
-    case OBJECTTYPE_DATA_LABEL:
-    case OBJECTTYPE_DATA_POINT:
-    {
-        rtl::OUString aSeriesID = ObjectIdentifier::getParentParticleID( m_aObjectCID );
-        xSeries = ChartModelHelper::getSeriesByIdentifier( aSeriesID, xChartModel );
-        break;
-    }
-    default:
-        break;
-    }
-    if(xSeries.is())
-        xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
-
-    m_bHasGeometryProperties = lcl_doesChartTypeHasGeometryProperties( xChartType );
-    m_bHasAreaProperties   = lcl_doesChartTypeHasAreaProperties( xChartType );
-    m_bHasSymbolProperties = lcl_doesChartTypeHasSymbolProperties( xChartType );
-    m_bHasLineProperties = true; //@todo ask object
+    m_bHasGeometryProperties = ChartTypeHelper::isSupportingGeometryProperties( xChartType );
+    m_bHasAreaProperties     = ChartTypeHelper::isSupportingAreaProperties( xChartType );
+    m_bHasSymbolProperties   = ChartTypeHelper::isSupportingSymbolProperties( xChartType );
+    m_bHasLineProperties     = true; //@todo ask object
 
     if(    OBJECTTYPE_DATA_SERIES==m_eObjectType
         || OBJECTTYPE_DATA_LABELS==m_eObjectType )
     {
-        m_bHasStatisticProperties = lcl_doesChartTypeHasStatisticProperties( xChartType );
-        m_bProvidesSecondaryYAxis = lcl_doesChartTypeProvidesSecondaryYAxis( xChartType );
+        m_bHasStatisticProperties = ChartTypeHelper::isSupportingStatisticProperties( xChartType );
+        m_bProvidesSecondaryYAxis = ChartTypeHelper::isSupportingSecondaryYAxis( xChartType );
     }
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
