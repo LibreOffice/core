@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prcntfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:01:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,8 @@ PercentField::PercentField( Window* pWin, const ResId& rResId ) :
         nOldMin     (0),
         nOldMax     (0),
         nLastPercent(-1L),
-        nLastValue  (-1L)
+        nLastValue  (-1L),
+        bLockAutoCalculation(sal_False)
 {
 
     nOldSpinSize = GetSpinSize();
@@ -97,7 +98,7 @@ void PercentField::SetRefValue(long nValue)
 
     nRefValue = nValue;
 
-    if (GetUnit() == FUNIT_CUSTOM)
+    if (!bLockAutoCalculation && (GetUnit() == FUNIT_CUSTOM))
         SetPrcntValue(nRealValue, eOldUnit);
 }
 
