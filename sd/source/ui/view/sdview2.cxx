@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:53:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,11 @@
 #ifndef _SVX_XEXCH_HXX //autogen
 #include <svx/xexch.hxx>
 #endif
-#ifndef _SVX_DLG_NAME_HXX
-#include <svx/dlgname.hxx>
-#endif
+//CHINA001 #ifndef _SVX_DLG_NAME_HXX
+//CHINA001 #include <svx/dlgname.hxx>
+//CHINA001 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -1004,7 +1006,11 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                 {
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
-                    SvxNameDialog*  pDlg = new SvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc );
+                    //CHINA001 SvxNameDialog*  pDlg = new SvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( pViewSh->GetWindow(), *pNewName, aDesc, ResId(RID_SVXDLG_NAME) );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
 
                     bNameOK = FALSE;
