@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:47:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:53:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,6 +1203,15 @@ BOOL SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
             SwPageFrm *pPage = rpPage;
             while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
                 pPage = (SwPageFrm*)pPage->GetNext();
+            // --> OD 2005-02-22 #i43266# - if the found page is an empty page,
+            // take the previous one (take next one, if previous one doesn't exists)
+            if ( pPage && pPage->IsEmptyPage() )
+            {
+                pPage = static_cast<SwPageFrm*>( pPage->GetPrev()
+                                                 ? pPage->GetPrev()
+                                                 : pPage->GetNext() );
+            }
+            // <--
             if( pPage )
             {
                 rpPage = pPage;
