@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+#   last change: $Author: jp $ $Date: 2000-09-27 09:38:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,6 +125,7 @@ LIB3OBJFILES=\
     $(SLO)$/ehdl.obj \
     $(SLO)$/filearch.obj \
     $(SLO)$/flbytes.obj \
+    $(SLO)$/fstathelper.obj \
     $(SLO)$/imap.obj \
     $(SLO)$/imap2.obj \
     $(SLO)$/imap3.obj \
