@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:03:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,8 @@ String STR_ACCESS_PAGE_DESC
     Text[ hindi ] = "Page: $(ARG1)";
     Text[ slovak ] = "Stránka: $(ARG1)";
 };
+
+
 
 
 
