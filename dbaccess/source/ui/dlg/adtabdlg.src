@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:15:06 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ ITALIAN ] = "~Aggiungi" ;
         Text [ DUTCH ] = "Toe~voegen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Acrescentar" ;
-        Text [ SWEDISH ] = "~Lägg till" ;
-        Text [ PORTUGUESE ] = "Adicionar" ;
+        Text [ SWEDISH ] = "Läg~g till" ;
+        Text [ PORTUGUESE ] = "A~dicionar" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text[ chinese_simplified ] = "ÐÂÔö(~A)";
@@ -157,7 +157,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ arabic ] = "ÅÖÇÝÉ";
         Text[ dutch ] = "Toe~voegen";
         Text[ chinese_simplified ] = "ÐÂÔö(~A)";
-        Text[ greek ] = "~ÐñïóèÞêç";
+        Text[ greek ] = "ÐñïóèÞêç";
         Text[ korean ] = "Ãß°¡(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
@@ -171,13 +171,13 @@ ModelessDialog DLG_JOIN_TABADD
         Text = "S~chließen" ;
         Text [ ENGLISH ] = "Close" ;
         Text [ norwegian ] = "Lukk" ;
-        Text [ italian ] = "Chiudi" ;
+        Text [ italian ] = "~Chiudi" ;
         Text [ portuguese_brazilian ] = "Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "Sulje" ;
         Text [ danish ] = "Luk" ;
         Text [ french ] = "F~ermer" ;
-        Text [ swedish ] = "~Stäng" ;
+        Text [ swedish ] = "Stä~ng" ;
         Text [ dutch ] = "~Sluiten" ;
         Text [ spanish ] = "~Cerrar" ;
         Text [ english_us ] = "~Close" ;
@@ -241,13 +241,13 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ SPANISH ] = "<predeterminado>" ;
         Text [ FINNISH ] = "<oletus>" ;
         Text [ FRENCH ] = "<Par défaut>" ;
-        Text [ ITALIAN ] = "<default>" ;
+        Text [ ITALIAN ] = "<standard>" ;
         Text [ DUTCH ] = "<Standaard>" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "<padrÒo>" ;
         Text [ SWEDISH ] = "<standard>" ;
         Text [ PORTUGUESE ] = "<padrão>" ;
         Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
-        Text[ russian ] = "<ñòàíäàðò>";
+        Text[ russian ] = "<Ñòàíäàðò>";
         Text[ polish ] = "<Domyœlnie>";
         Text[ japanese ] = "<•W€>";
         Text[ chinese_traditional ] = "<Àq»{>";
