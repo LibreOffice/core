@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testapp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:47 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ private:
     xub_StrLen PreCompilePart( String &aSource, xub_StrLen nStart, xub_StrLen nEnd, String aFinalErrorLabel, USHORT &nLabelCount );
     void PreCompileDispatchParts( String &aSource, String aStart, String aEnd, String aFinalLable );
 public:
+    String GetRevision(String const &aSourceIn);    // find Revision in the sourcecode
     String PreCompile(String const &aSourceIn); // try catch; testcase endcase ..
     BOOL WasPrecompilerError(); // True wenn beim letzten Precompile ein Fehler auftrat
     void            SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
