@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:24:12 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <xmloff/xmlnumfe.hxx>
 #endif
 
+#include <comphelper/processfactory.hxx>
 #include <tools/lang.hxx>
 #include <tools/solmath.hxx>
 #include <tools/date.hxx>
@@ -1549,7 +1550,7 @@ sal_Int32 ScXMLExport::GetLastRow(const sal_Int32 nTable)
 sal_Int16 ScXMLExport::GetFieldUnit()
 {
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xProperties(
-                utl::getProcessServiceFactory()->createInstance(
+                comphelper::getProcessServiceFactory()->createInstance(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" )) ),
                 com::sun::star::uno::UNO_QUERY);
     if (xProperties.is())

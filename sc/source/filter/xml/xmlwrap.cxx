@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 09:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <sfx2/objsh.hxx>
 #include <tools/debug.hxx>
 #include <vos/xception.hxx>
-#include <unotools/processfactory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <xmloff/xmlkywd.hxx>
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
@@ -103,7 +103,7 @@ ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium& rM) :
 sal_Bool ScXMLImportWrapper::Import()
 {
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        utl::getProcessServiceFactory();
+                                        comphelper::getProcessServiceFactory();
     DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return sal_False;
@@ -238,7 +238,7 @@ sal_Bool ScXMLImportWrapper::Import()
 sal_Bool ScXMLImportWrapper::Export()
 {
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
-                                        utl::getProcessServiceFactory();
+                                        comphelper::getProcessServiceFactory();
     DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return sal_False;
