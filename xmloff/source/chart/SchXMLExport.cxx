@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: af $ $Date: 2001-06-07 13:40:43 $
+ *  last change: $Author: bm $ $Date: 2001-06-15 13:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,13 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
 
             cppu::any2enum< chart::ChartDataRowSource >( eRowSource, aAny );
             mbRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
+
+            // the chart core treats donut chart with interchanged rows/columns
+            rtl::OUString sChartType = xDiagram->getDiagramType();
+            if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
+            {
+                mbRowSourceColumns = ! mbRowSourceColumns;
+            }
         }
         catch( uno::Exception )
         {

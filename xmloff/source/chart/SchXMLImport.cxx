@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-28 09:40:27 $
+ *  last change: $Author: bm $ $Date: 2001-06-15 13:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,17 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
             chart::ChartDataRowSource eRowSource;
             xDiaProp->getPropertyValue( ::rtl::OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
             bDataInColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
+
+            // the chart core treats donut chart with interchanged rows/columns
+            uno::Reference< chart::XDiagram > xDiagram( xDiaProp, uno::UNO_QUERY );
+            if( xDiagram.is())
+            {
+                rtl::OUString sChartType = xDiagram->getDiagramType();
+                if( 0 == sChartType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart.DonutDiagram" )))
+                {
+                    bDataInColumns = ! bDataInColumns;
+                }
+            }
         }
         sal_Int32 nColCount = bDataInColumns ? nSeries : nDataPoints;
         sal_Int32 nRowCount = bDataInColumns ? nDataPoints : nSeries;
