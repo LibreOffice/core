@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:18:28 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "프린터";
         Text[ turkish ] = "Yaz�c�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Impresora";
+        Text[ catalan ] = "Impressora";
         Text[ finnish ] = "Tulostin";
         Text[ thai ] = "เครื่องพิมพ์";
     };
@@ -137,7 +137,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "이름(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nombre";
+        Text[ catalan ] = "~Nom";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "~ชื่อ";
     };
@@ -174,7 +174,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "등록정보(~I)...";
         Text[ turkish ] = "~�zellikler...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Propiedades...";
+        Text[ catalan ] = "Propietats...";
         Text[ finnish ] = "Ominai~suudet";
         Text[ thai ] = "คุณสม~บัติ...";
     };
@@ -203,7 +203,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "상태";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Estado";
+        Text[ catalan ] = "Estat";
         Text[ finnish ] = "Tila";
         Text[ thai ] = "สถานะ";
     };
@@ -237,7 +237,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "유형";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
         Text[ finnish ] = "Tyyppi";
         Text[ thai ] = "ชนิด";
     };
@@ -271,7 +271,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "위치";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ubicaci�n";
+        Text[ catalan ] = "Ubicaci�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ที่ตั้ง";
     };
@@ -305,7 +305,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "주석";
         Text[ turkish ] = "A��klama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentario";
+        Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "ข้อคิดเห็น";
     };
@@ -373,7 +373,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "파일로 인쇄";
         Text[ turkish ] = "D~osyaya yazd�r";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimir ~en archivo";
+        Text[ catalan ] = "Imprimeix a un fitxer";
         Text[ finnish ] = "Tulosta tiedostoon";
         Text[ thai ] = "พิมพ์ถึงแฟ้ม";
     };
@@ -413,7 +413,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "인쇄 영역";
         Text[ turkish ] = "Yazd�rma aral���";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "�rea de impresi�n";
+        Text[ catalan ] = "�rea d'impressi�";
         Text[ finnish ] = "Tulostusalue";
         Text[ thai ] = "ช่วงการพิมพ์";
     };
@@ -442,7 +442,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "모두";
         Text[ turkish ] = "~T�m�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Todo";
+        Text[ catalan ] = "Tot";
         Text[ finnish ] = "Kaikki";
         Text[ thai ] = "ทั้งหมด";
     };
@@ -471,7 +471,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "페이지";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~P�ginas";
+        Text[ catalan ] = "~P�gines";
         Text[ finnish ] = "Sivut";
         Text[ thai ] = "หน้า";
     };
@@ -500,7 +500,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "선택";
         Text[ turkish ] = "Se�im";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Selecci�n";
+        Text[ catalan ] = "~Selecci�";
         Text[ finnish ] = "Valinta";
         Text[ thai ] = "เลือก";
     };
@@ -546,7 +546,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "복사";
         Text[ turkish ] = "Kopya";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Copias";
+        Text[ catalan ] = "C�pies";
         Text[ finnish ] = "Kopioita";
         Text[ thai ] = "สำเนา";
     };
@@ -575,7 +575,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "사본 수";
         Text[ turkish ] = "~Kopya say�s�";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ejemplares";
+        Text[ catalan ] = "~Nombre de c�pies";
         Text[ finnish ] = "Kopioiden m��r�";
         Text[ thai ] = "จำนวนสำเนา";
     };
@@ -617,7 +617,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "분류(~L)";
         Text[ turkish ] = "S~�rala";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ordenar";
+        Text[ catalan ] = "~Compara";
         Text[ finnish ] = "~Yhdist�";
         Text[ thai ] = "ตรวจเ~ทียบ";
     };
@@ -661,7 +661,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "옵션(~O)...";
         Text[ turkish ] = "~Se�enekler...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Opciones...";
+        Text[ catalan ] = "~Opcions";
         Text[ finnish ] = "~Asetukset";
         Text[ thai ] = "~ตัวเลือก...";
     };
@@ -704,7 +704,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "<全部>";
         Text[ turkish ] = "<All>";
         Text[ arabic ] = "<All>";
-        Text[ catalan ] = "<All>";
+        Text[ catalan ] = "<Tot>";
         Text[ thai ] = "<ทั้งหมด>";
     };
     Text[ chinese_simplified ] = "打印";
@@ -717,7 +717,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ korean ] = "인쇄";
     Text[ turkish ] = "Yazd�r";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Imprimir";
+    Text[ catalan ] = "Imprimeix";
     Text[ finnish ] = "Tulosta";
     Text[ thai ] = "พิมพ์";
 };
