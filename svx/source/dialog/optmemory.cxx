@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:36:49 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_UNDOOPT_HXX
+#include <svtools/undoopt.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
@@ -300,11 +303,7 @@ BOOL OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     // Undo-Schritte
     if ( aUndoEdit.GetText() != aUndoEdit.GetSavedValue() )
-    {
-        rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_UNDO_COUNT ),
-                                 (UINT16)aUndoEdit.GetValue() ) );
-        bModified |= TRUE;
-    }
+        SvtUndoOptions().SetUndoCount((UINT16)aUndoEdit.GetValue());
 
     // GraphicCache
     aCacheOptions.SetGraphicManagerTotalCacheSize( GetNfGraphicCacheVal() );
@@ -342,16 +341,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem*  pItem;
 
     // Undo-Schritte
-    USHORT nWhich = GetWhich( SID_ATTR_UNDO_COUNT );
-
-    if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
-    {
-        const SfxUInt16Item& rItem = (const SfxUInt16Item&)rSet.Get( nWhich );
-        aUndoEdit.SetValue( rItem.GetValue() );
-    }
-    else
-        aUndoEdit.SetValue( 100 );
-
+    aUndoEdit.SetValue( SvtUndoOptions().GetUndoCount() );
     aUndoEdit.SaveValue();
 
     // GraphicCache
