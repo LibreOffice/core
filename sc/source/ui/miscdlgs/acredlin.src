@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ chinese_simplified ] = "¼ÓÈë¹¤×÷±í";
         Text[ russian ] = "Òàáëèöà âñòàâëåíà";
         Text[ polish ] = "Wstawiona tabela";
-        Text[ japanese ] = "•\\‚ª‘}“ü‚³‚ê‚Ä‚Ü‚µ‚½";
+        Text[ japanese ] = "•\\‚ª‘}“ü‚³‚ê‚Ü‚µ‚½";
         Text[ chinese_traditional ] = "¥[¤J¤u§@ªí";
         Text[ arabic ] = "ÌÏæá ãÏÑÌ";
         Text[ dutch ] = "Tabelle ingevoegd";
