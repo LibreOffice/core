@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSourceInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:35:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ OXMLDataSourceInfo::OXMLDataSourceInfo( ODBFilter& rImport
     if ( bAutoEnabled )
     {
         aProperty.Name = INFO_AUTORETRIEVEENABLED;
-        aProperty.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
+        aProperty.Value <<= sal_True;
         m_rParent.addInfo(aProperty);
     }
 }
