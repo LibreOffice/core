@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_stgelems.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:34:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,22 +542,6 @@ void SAL_CALL Storage::moveElementTo(
             uno::RuntimeException )
 {
     m_xWrappedStorage->moveElementTo( aElementName, xDest, rNewName );
-}
-
-//=========================================================================
-// virtual
-void SAL_CALL Storage::insertRawEncrStreamElement(
-        const ::rtl::OUString& aStreamName,
-        const uno::Reference< io::XInputStream >& xInStream )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            packages::NoRawFormatException,
-            container::ElementExistException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            uno::RuntimeException )
-{
-    m_xWrappedStorage->insertRawEncrStreamElement( aStreamName, xInStream );
 }
 
 //=========================================================================
