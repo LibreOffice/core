@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:35:09 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( rDCEvt.GetFlags() & SETTINGS_STYLE )
     {
-        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+        //SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
         SetImages();
     }
 }
@@ -3191,7 +3191,15 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
 
     if ( bFont )
         pWin->SetPointFont( rStyleSettings.GetMenuFont() );
-    pWin->SetBackground( Wallpaper( bMenuBar ? rStyleSettings.GetMenuBarColor() : rStyleSettings.GetMenuColor() ) );
+    if( bMenuBar )
+    {
+        Wallpaper aWallpaper;
+        aWallpaper.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
+        pWin->SetBackground( aWallpaper );
+    }
+    else
+        pWin->SetBackground( Wallpaper( rStyleSettings.GetMenuColor() ) );
+
     pWin->SetTextColor( rStyleSettings.GetMenuTextColor() );
     pWin->SetTextFillColor();
     pWin->SetLineColor();
@@ -4325,7 +4333,10 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aCloser.maImageHC = Image( aBitmapHC, Color( COL_LIGHTMAGENTA ) );
 
     aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    aCloser.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+    //aCloser.SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetMenuBarColor() ) );
+    Wallpaper aWall;
+    aWall.SetStyle( WALLPAPER_APPLICATIONGRADIENT );
+    aCloser.SetBackground( aWall );
 
     aCloser.InsertItem( IID_DOCUMENTCLOSE,
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
@@ -4605,13 +4616,15 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
         {
             if ( pData->eType != MENUITEM_SEPARATOR )
             {
-                if ( bHighlight )
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
-                else
-                    SetFillColor( GetSettings().GetStyleSettings().GetMenuBarColor() );
-
                 // #107747# give menuitems the height of the menubar
-                DrawRect( Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) ) );
+                Rectangle aRect = Rectangle( Point( nX, 1 ), Size( pData->aSz.Width(), GetOutputSizePixel().Height()-2 ) );
+                if ( bHighlight )
+                {
+                    SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                    DrawRect( aRect );
+                }
+                else
+                    Erase( aRect );
                 pMenu->ImplPaint( this, 0, 0, pData, bHighlight );
             }
             return;
