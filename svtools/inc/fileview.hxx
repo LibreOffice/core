@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:36:10 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:00:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ class SvtFileView_Impl;
 class SvLBoxEntry;
 class HeaderBar;
 
+class IUrlFilter;
 class SvtFileView : public Control
 {
 private:
@@ -143,6 +144,9 @@ public:
                             // save and load column size and sort order
     String                  GetConfigString() const;
     void                    SetConfigString( const String& rCfgStr );
+
+    void                    SetUrlFilter( const IUrlFilter* _pFilter );
+    const IUrlFilter*       GetUrlFilter( ) const;
 };
 
 // struct SvtContentEntry ------------------------------------------------
