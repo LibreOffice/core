@@ -56,6 +56,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::container;
 
 
 namespace framework
@@ -64,42 +65,48 @@ namespace framework
 SV_IMPL_PTRARR( StatusBarDescriptor, StatusBarItemDescriptorPtr);
 
 static Reference< XParser > GetSaxParser(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XParser >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
     return Reference< XParser >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )), UNO_QUERY);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
-    // #110897#
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
     )
 {
-    //Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-    //return Reference< XDocumentHandler >( xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
     return Reference< XDocumentHandler >( xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
 }
 
-// #110897#
 sal_Bool StatusBarConfiguration::LoadStatusBar(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     SvStream& rInStream, StatusBarDescriptor& aItems )
 {
+    // obsolete - only support linkage of binary filters!
+    return sal_True;
+}
+
+sal_Bool StatusBarConfiguration::StoreStatusBar(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    SvStream& rOutStream, const StatusBarDescriptor& aItems )
+{
+    // obsolete - only support linkage of binary filters!
+    return sal_True;
+}
+
+sal_Bool StatusBarConfiguration::LoadStatusBar(
+    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XInputStream >& xInputStream,
+    const Reference< XIndexContainer >& rStatusbarConfiguration )
+{
     Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
-    Reference< XInputStream > xInputStream(
-                                (::cppu::OWeakObject *)new utl::OInputStreamWrapper( rInStream ),
-                                UNO_QUERY );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
-
     aInputSource.aInputStream = xInputStream;
 
     // create namespace filter and set menudocument handler inside to support xml namespaces
-    Reference< XDocumentHandler > xDocHandler( new OReadStatusBarDocumentHandler( aItems ));
+    Reference< XDocumentHandler > xDocHandler( new OReadStatusBarDocumentHandler( rStatusbarConfiguration ));
     Reference< XDocumentHandler > xFilter( new SaxNamespaceFilter( xDocHandler ));
 
     // connect parser and filter
@@ -126,24 +133,18 @@ sal_Bool StatusBarConfiguration::LoadStatusBar(
     return sal_False;
 }
 
-
-// #110897#
 sal_Bool StatusBarConfiguration::StoreStatusBar(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    SvStream& rOutStream, const StatusBarDescriptor& aItems )
+    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XOutputStream >& xOutputStream,
+    const Reference< XIndexAccess >& rStatusbarConfiguration )
 {
     Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
-
-    Reference< XOutputStream > xOutputStream(
-                                (::cppu::OWeakObject *)new utl::OOutputStreamWrapper( rOutStream ),
-                                UNO_QUERY );
-
     Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
     xDataSource->setOutputStream( xOutputStream );
 
     try
     {
-        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( aItems, xWriter );
+        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xWriter );
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
         return sal_True;
     }
@@ -160,7 +161,6 @@ sal_Bool StatusBarConfiguration::StoreStatusBar(
         return sal_False;
     }
 
-    return sal_False;
-}
+    return sal_False; }
 
 }
