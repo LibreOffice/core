@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-16 12:28:19 $
+ *  last change: $Author: mt $ $Date: 2001-12-04 15:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,3 +706,11 @@ LanguageType Outliner::GetLanguage( USHORT nPara, USHORT nPos ) const
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetLanguage( nPara, nPos );
 }
+
+void Outliner::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
+}
+
+
