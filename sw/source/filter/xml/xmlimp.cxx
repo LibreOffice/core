@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:11:33 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
-
 
 #ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
 #include <ForbiddenCharactersEnum.hxx>
@@ -494,15 +493,15 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
     return SvXMLImport::getSomething( rId );
 }
 
-SwXTextCursor *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
+OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
     Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xCrsrTunnel.is() )
         return 0;
-    SwXTextCursor *pTxtCrsr =
-        (SwXTextCursor *)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+    OTextCursorHelper *pTxtCrsr =
+        (OTextCursorHelper *)xCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     return pTxtCrsr;
 }
@@ -525,7 +524,7 @@ void SwXMLImport::startDocument( void )
     // We also might change into the insert mode later, so we have to make
     // sure to first set the insert mode and then create the text import
     // helper. Otherwise it won't have the insert flag set!
-    SwXTextCursor *pTxtCrsr = 0;
+    OTextCursorHelper *pTxtCrsr = 0;
     Reference < XTextCursor > xTextCursor;
     if( HasTextImport() )
            xTextCursor = GetTextImport()->GetCursor();
@@ -586,7 +585,7 @@ void SwXMLImport::startDocument( void )
         pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
         if( IsInsertMode() )
         {
-            SwPaM *pPaM = pTxtCrsr->GetCrsr();
+            SwPaM *pPaM = pTxtCrsr->GetPaM();
             const SwPosition* pPos = pPaM->GetPoint();
 
             // Split once and remember the node that has been splitted.
@@ -649,11 +648,11 @@ void SwXMLImport::endDocument( void )
         Reference<XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
                                               UNO_QUERY);
         ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-        SwXTextCursor *pTxtCrsr =
-                (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+        OTextCursorHelper *pTxtCrsr =
+                (OTextCursorHelper*)xCrsrTunnel->getSomething(
+                                            OTextCursorHelper::getUnoTunnelId() );
         ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-        SwPaM *pPaM = pTxtCrsr->GetCrsr();
+        SwPaM *pPaM = pTxtCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {
             // If we are in insert mode, join the splitted node that is in front
@@ -1181,6 +1180,7 @@ void main()
         }
         pValues++;
     }
+<<<<<<< xmlimp.cxx
 
     // finally, treat the non-default cases
     if( ! bPrinterIndependentLayout )
@@ -1207,9 +1207,9 @@ void main()
             SwDoc *pDoc = pText->GetDoc();
             if( pDoc )
             {
-                // If the printer is known or we use a virtual device then
-                // the OLE objects will already have correct sizes, and we
-                // don't have to call PrtOLENotify again. Otherwise we have to call it.
+                // If the printer is known, then the OLE objects will
+                // already have correct sizes, and we don't have to call
+                // PrtOLENotify again. Otherwise we have to call it.
                 // The flag might be set from setting the printer, so it
                 // it is required to clear it.
                 SfxPrinter *pPrinter = pDoc->GetPrt( sal_False );
