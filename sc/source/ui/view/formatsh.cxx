@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2002-09-18 12:22:23 $
+ *  last change: $Author: nn $ $Date: 2002-09-30 14:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 
 #include "formatsh.hxx"
 #include "sc.hrc"
+#include "globstr.hrc"
 #include "docsh.hxx"
 #include "patattr.hxx"
 #include "scmod.hxx"
@@ -295,6 +296,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
         SfxStyleSheetBase*      pStyleSheet = NULL;
 
+        BOOL bStyleToMarked = FALSE;
+        BOOL bListAction = FALSE;
         BOOL bAddUndo = FALSE;          // add ScUndoModifyStyle (style modified)
         ScStyleSaveData aOldData;       // for undo/redo
         ScStyleSaveData aNewData;
@@ -463,6 +466,13 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                         if ( SID_STYLE_NEW_BY_EXAMPLE == nSlotId )
                         {
+                            if ( bUndo )
+                            {
+                                String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                                bListAction = TRUE;
+                            }
+
                             BOOL            bConvertBack = FALSE;
                             SfxStyleSheet*  pSheetInUse = (SfxStyleSheet*)
                                                           pTabViewShell->GetStyleSheetFromMarked();
@@ -503,9 +513,10 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             // Attribute uebernehmen und Style anwenden
                             pStyleSheet->GetItemSet().Put( aAttrSet );
                             pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
-                            pTabViewShell->SetStyleSheetToMarked( (SfxStyleSheet*)pStyleSheet );
 
-                            pTabViewShell->InvalidateAttribs();
+                            //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
+                            //  (pStyleSheet pointer is used!)
+                            bStyleToMarked = TRUE;
                         }
                         else // ( nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE )
                         {
@@ -513,10 +524,21 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             if ( pStyleSheet )
                             {
+                                aOldData.InitFromStyle( pStyleSheet );
+
+                                if ( bUndo )
+                                {
+                                    String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
+                                    pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+                                    bListAction = TRUE;
+                                }
+
                                 pStyleSheet->GetItemSet().Put( aAttrSet );
                                 pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
-                                pTabViewShell->SetStyleSheetToMarked( (SfxStyleSheet*)pStyleSheet );
-                                pTabViewShell->InvalidateAttribs();
+
+                                //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
+                                //  (pStyleSheet pointer is used!)
+                                bStyleToMarked = TRUE;
                             }
                         }
 
@@ -804,6 +826,17 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         if ( bAddUndo && bUndo)
             pDocSh->GetUndoManager()->AddUndoAction(
                         new ScUndoModifyStyle( pDocSh, eFamily, aOldData, aNewData ) );
+
+        if ( bStyleToMarked )
+        {
+            //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle,
+            //  so redo will find the modified style
+            pTabViewShell->SetStyleSheetToMarked( (SfxStyleSheet*)pStyleSheet );
+            pTabViewShell->InvalidateAttribs();
+        }
+
+        if ( bListAction )
+            pDocSh->GetUndoManager()->LeaveListAction();
     }
     else
     {
