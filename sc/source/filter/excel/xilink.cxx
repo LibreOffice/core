@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:49 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef SC_RANGENAM_HXX
 #include "rangenam.hxx"
 #endif
+#ifndef SC_TABLINK_HXX
+#include "tablink.hxx"
+#endif
 
 #include "root.hxx"
 #include "excform.hxx"
@@ -99,10 +102,10 @@ class XclImpCrn : public XclImpCachedValue
 {
 public:
     /** Reads a cached value and stores it with its cell address. */
-    explicit                    XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow );
+    explicit                    XclImpCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow );
 
     /** Copies the cached value to sheet nTab in the document. */
-    void                        SetCell( ScDocument& rDoc, sal_uInt16 nTab ) const;
+    void                        SetCell( ScDocument& rDoc, USHORT nScTab ) const;
 };
 
 
@@ -113,25 +116,28 @@ class XclImpSupbookTab
 {
 public:
     /** Stores the sheet name and marks the sheet index as invalid.
-        The sheet index is set while creating a sheet with CreateSheet(). */
-    explicit                    XclImpSupbookTab( const String& rName );
+        The sheet index is set while creating the Calc sheet with CreateTable(). */
+    explicit                    XclImpSupbookTab( const String& rTabName );
                                 ~XclImpSupbookTab();
 
-    inline const String&        GetName() const     { return maName; }
-    inline sal_uInt16           GetScTab() const    { return mnScTab; }
+    inline const String&        GetTabName() const  { return maTabName; }
+    inline USHORT               GetScTab() const    { return mnScTab; }
 
     /** Reads a CRN record (external referenced cell) at the specified address. */
-    void                        ReadCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow );
+    void                        ReadCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow );
 
-    /** Creates a new sheet in the Calc document and stores all external cells in it. */
-    void                        CreateTable( ScDocument& rDoc, const String& rUrl );
+    /** Creates a new linked table in the passed document and fills it with the cached cells.
+        @descr  Stores the index of the new sheet, will be accessible with GetScTab(). */
+    void                        CreateAndFillTable(
+                                    ScDocument& rDoc, const String& rAbsUrl,
+                                    const String& rFilterName, const String& rFilterOpt );
 
 private:
     typedef ScfDelList< XclImpCrn > XclImpCrnList;
 
     XclImpCrnList               maCrnList;      /// List of CRN records (cached cell values).
-    String                      maName;         /// Name of the external sheet.
-    sal_uInt16                  mnScTab;        /// New sheet index in Calc document.
+    String                      maTabName;      /// Name of the external sheet.
+    USHORT                      mnScTab;        /// New sheet index in Calc document.
 };
 
 
@@ -158,12 +164,12 @@ public:
     inline bool                 IsAddIn() const { return mbAddIn; }
 
     /** Returns the URL of the external document. */
-    inline const String&        GetUrl() const { return maUrl; }
+    inline const String&        GetXclUrl() const { return maXclUrl; }
 
     /** Returns Calc sheet index from Excel sheet index. */
-    sal_uInt16                  GetScTabNum( sal_uInt16 nXclTab ) const;
+    USHORT                      GetScTabNum( sal_uInt16 nXclTab ) const;
     /** Returns Calc sheet index from sheet name. */
-    sal_uInt16                  GetScTabNum( const String& rTabName ) const;
+    USHORT                      GetScTabNum( const String& rTabName ) const;
 
     /** Returns the external name specified by an index from the Excel document (one-based). */
     const XclImpExtName*        GetExternName( sal_uInt16 nXclIndex ) const;
@@ -178,7 +184,7 @@ public:
         @param nLastTab  The external Excel index of the last sheet to be created. */
     void                        CreateTables(
                                     const XclImpRoot& rRoot,
-                                    sal_uInt16 nFirstTab, sal_uInt16 nLastTab ) const;
+                                    sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast );
 
 private:
     typedef ScfDelList< XclImpSupbookTab >  XclImpSupbookTabList;
@@ -186,8 +192,10 @@ private:
 
     XclImpSupbookTabList        maSupbTabList;      /// All sheet names of the document.
     XclImpExtNameList           maExtNameList;      /// All external names of the document.
-    String                      maUrl;              /// URL of the external document.
-    sal_uInt16                  mnCrnXclTab;        /// Current Excel sheet index for XCT/CRN records.
+    String                      maXclUrl;           /// URL of the external document (Excel mode).
+    String                      maFilterName;       /// Detected filer name.
+    String                      maFilterOpt;        /// Detected filer options.
+    sal_uInt16                  mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
     bool                        mbSelf;             /// true = internal 3D references.
     bool                        mbAddIn;            /// true = Add-in function names.
 };
@@ -200,14 +208,14 @@ private:
     therefore here occurs a sheet range. */
 struct XclImpXti
 {
-    sal_uInt16                  mnSupbook;          /// Index to SUPBOOK.
-    sal_uInt16                  mnFirst;            /// Index of first sheet.
-    sal_uInt16                  mnLast;             /// Index of last sheet.
+    sal_uInt16                  mnSupbook;      /// Index to SUPBOOK record.
+    sal_uInt16                  mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
+    sal_uInt16                  mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
 {
-    return rStrm >> rXti.mnSupbook >> rXti.mnFirst >> rXti.mnLast;
+    return rStrm >> rXti.mnSupbook >> rXti.mnSBTabFirst >> rXti.mnSBTabLast;
 }
 
 
@@ -235,7 +243,7 @@ public:
     /** Returns the Calc sheet index range of the specified XTI entry.
         @return  true = XTI data found, returned sheet index range is valid. */
     bool                        GetScTabRange(
-                                    sal_uInt16& rnFirstScTab, sal_uInt16& rnLastScTab,
+                                    USHORT& rnScTabFirst, USHORT& rnScTabLast,
                                     sal_uInt16 nXtiIndex ) const;
     /** Returns the specified external name or 0 on error. */
     const XclImpExtName*        GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const;
@@ -247,7 +255,7 @@ public:
 
     /** Returns the Calc sheet index of a table in an external document.
         @return  Calc sheet index or EXC_TAB_INVALID on error. */
-    sal_uInt16                  GetScTab( const String& rUrl, const String& rTabName ) const;
+    USHORT                      GetScTab( const String& rUrl, const String& rTabName ) const;
 
 private:
     /** Returns the specified SUPBOOK (external document). */
@@ -259,14 +267,14 @@ private:
     void                        CreateTables();
 
     /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
-        @param nSupb  The list index of the SUPBOOK.
-        @param nStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
-        @param rnFirst  The first index of the range is returned here.
-        @param rnLast  The last index of the range is returned here (incusive).
+        @param rnSBTabFirst  (out-param) The first sheet index of the range in SUPBOOK is returned here.
+        @param rnSBTabLast  (out-param) The last sheet index of the range in SUPBOOK is returned here (inclusive).
+        @param nSupbook  The list index of the SUPBOOK.
+        @param nSBTabStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
         @return  true = the return values are valid; false = nothing found. */
     bool                        FindNextTabRange(
-                                    sal_uInt16& rnFirst, sal_uInt16& rnLast,
-                                    sal_uInt16 nSupb, sal_uInt16 nStart ) const;
+                                    sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+                                    sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
 
 private:
     typedef ScfDelList< XclImpXti >     XclImpXtiList;
@@ -284,23 +292,22 @@ private:
 
 // Excel sheet indexes ========================================================
 
-void XclImpTabIdBuffer::ReadTabid( XclImpStream& rStrm )
+void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 {
+    DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == xlBiff8 );
     if( rStrm.GetRoot().GetBiff() == xlBiff8 )
     {
         sal_uInt32 nReadCount = rStrm.GetRecLeft() / 2;
-        DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabIdBuffer::ReadTabid - record too long" );
+        DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
         maTabIdVec.clear();
         maTabIdVec.reserve( nReadCount );
         for( sal_uInt32 nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
             // #93471# zero index is not allowed in BIFF8, but it seems that it occurs in real life
             maTabIdVec.push_back( rStrm.ReaduInt16() );
     }
-    else
-        DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() < xlBiff8 );
 }
 
-sal_uInt16 XclImpTabIdBuffer::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId ) const
+sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMaxTabId ) const
 {
     sal_uInt16 nReturn = 0;
     for( ScfUInt16Vec::const_iterator aIt = maTabIdVec.begin(), aEnd = maTabIdVec.end(); aIt != aEnd; ++aIt )
@@ -321,7 +328,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     XclImpRoot( rStrm.GetRoot() ),
     mpScData( NULL ),
     mcBuiltIn( EXC_BUILTIN_UNKNOWN ),
-    mnScTab( EXC_NOTAB )
+    mnScTab( SCNOTAB )
 {
     ExcelToSc& rFmlaConv = GetFmlaConverter();
     ScRangeName& rRangeNames = GetNamedRanges();
@@ -400,7 +407,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     if( nXclTab != EXC_NAME_GLOBAL )
     {
         maScName.Append( '_' ).Append( String::CreateFromInt32( nXclTab ) );
-        mnScTab = nXclTab - 1;
+        mnScTab = static_cast< USHORT >( nXclTab - 1 );
     }
 
     // find an unused name
@@ -499,13 +506,13 @@ void XclImpNameBuffer::ReadName( XclImpStream& rStrm )
         maNameList.Append( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
-const XclImpName* XclImpNameBuffer::FindName( const String& rXclName, sal_uInt16 nScTab ) const
+const XclImpName* XclImpNameBuffer::FindName( const String& rXclName, USHORT nScTab ) const
 {
     const XclImpName* pGlobalName = NULL;   // a found global name
     const XclImpName* pLocalName = NULL;    // a found local name
     for( const XclImpName* pName = maNameList.First(); pName && !pLocalName; pName = maNameList.Next() )
     {
-        if( pName->GetScTabNum() == nScTab )
+        if( pName->GetScTab() == nScTab )
             pLocalName = pName;
         else if( pName->IsGlobal() )
             pGlobalName = pName;
@@ -580,31 +587,33 @@ void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic,const
 
 // Cached external cells ======================================================
 
-XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow ) :
-    XclImpCachedValue( rStrm, nCol, nRow )
+XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow ) :
+    XclImpCachedValue( rStrm, nXclCol, nXclRow )
 {
 }
 
-void XclImpCrn::SetCell( ScDocument& rDoc, sal_uInt16 nTab ) const
+void XclImpCrn::SetCell( ScDocument& rDoc, USHORT nScTab ) const
 {
+    ScAddress aPos( static_cast< USHORT >( mnCol ), static_cast< USHORT >( mnRow ), nScTab );
+
     switch( GetType() )
     {
         case EXC_CACHEDVAL_DOUBLE:
-            rDoc.SetValue( mnCol, mnRow, nTab, GetValue() );
+            rDoc.SetValue( aPos.Col(), aPos.Row(), aPos.Tab(), GetValue() );
         break;
         case EXC_CACHEDVAL_STRING:
         {
             DBG_ASSERT( GetString(), "XclImpCrn::SetCell - missing string" );
             ScStringCell* pStrCell = new ScStringCell( *GetString() );
-            rDoc.PutCell( mnCol, mnRow, nTab, pStrCell );
+            rDoc.PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pStrCell );
         }
         break;
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
         {
-            ScFormulaCell* pFmlaCell = new ScFormulaCell( &rDoc, ScAddress( mnCol, mnRow, nTab ), GetTokArray() );
+            ScFormulaCell* pFmlaCell = new ScFormulaCell( &rDoc, aPos, GetTokArray() );
             pFmlaCell->SetDouble( GetValue() );
-            rDoc.PutCell( mnCol, mnRow, nTab, pFmlaCell );
+            rDoc.PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pFmlaCell );
         }
         break;
     }
@@ -613,9 +622,9 @@ void XclImpCrn::SetCell( ScDocument& rDoc, sal_uInt16 nTab ) const
 
 // Sheet in an external document ==============================================
 
-XclImpSupbookTab::XclImpSupbookTab( const String& rName ) :
-    maName( rName ),
-    mnScTab( EXC_NOTAB )
+XclImpSupbookTab::XclImpSupbookTab( const String& rTabName ) :
+    maTabName( rTabName ),
+    mnScTab( SCNOTAB )
 {
 }
 
@@ -623,47 +632,46 @@ XclImpSupbookTab::~XclImpSupbookTab()
 {
 }
 
-void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow )
+void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, sal_uInt16 nXclCol, sal_uInt16 nXclRow )
 {
-    maCrnList.Append( new XclImpCrn( rStrm, nCol, nRow ) );
+    maCrnList.Append( new XclImpCrn( rStrm, nXclCol, nXclRow ) );
 }
 
-void XclImpSupbookTab::CreateTable( ScDocument& rDoc, const String& rUrl )
+void XclImpSupbookTab::CreateAndFillTable(
+        ScDocument& rDoc, const String& rAbsUrl, const String& rFilterName, const String& rFilterOpt )
 {
-    if( rDoc.LinkEmptyTab( mnScTab, ScGlobal::GetDocTabName( rUrl, maName ), rUrl, maName ) )
-    {
-        for( XclImpCrn* pCrn = maCrnList.First(); pCrn; pCrn = maCrnList.Next() )
-            pCrn->SetCell( rDoc, mnScTab );
-    }
-    else
-        mnScTab = EXC_NOTAB;
+    if( mnScTab == SCNOTAB )
+        if( rDoc.InsertLinkedEmptyTab( mnScTab, rAbsUrl, rFilterName, rFilterOpt, maTabName ) )
+            for( const XclImpCrn* pCrn = maCrnList.First(); pCrn; pCrn = maCrnList.Next() )
+                pCrn->SetCell( rDoc, mnScTab );
 }
 
 
 // External document (SUPBOOK) ================================================
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
-    mnCrnXclTab( EXC_EXTSH_DELETED ),
+    mnSBTab( EXC_EXTSH_DELETED ),
     mbSelf( false ),
     mbAddIn( false )
 {
-    sal_uInt16 nTabCnt;
-    rStrm >> nTabCnt;
+    sal_uInt16 nSBTabCnt;
+    rStrm >> nSBTabCnt;
 
     if( rStrm.GetRecLeft() == 2 )
     {
         sal_uInt16 nType = rStrm.ReaduInt16();
         mbSelf = (nType == EXC_SUPB_SELF);
         mbAddIn = (nType == EXC_SUPB_ADDIN);
+        DBG_ASSERT( mbSelf || mbAddIn, "XclImpSupbook::XclImpSupbook - unknown special SUPBOOK type" );
         return;
     }
 
     String aEncUrl( rStrm.ReadUniString() );
-    XclImpUrlHelper::DecodeUrl( maUrl, mbSelf, rStrm.GetRoot(), aEncUrl );
+    XclImpUrlHelper::DecodeUrl( maXclUrl, mbSelf, rStrm.GetRoot(), aEncUrl );
 
-    if( nTabCnt )
+    if( nSBTabCnt )
     {
-        for( sal_uInt16 nTab = 0; nTab < nTabCnt; ++nTab )
+        for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
             String aTabName( rStrm.ReadUniString() );
             ScfTools::ConvertToScSheetName( aTabName );
@@ -672,25 +680,25 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     }
     else
         // create dummy list entry
-        maSupbTabList.Append( new XclImpSupbookTab( maUrl ) );
+        maSupbTabList.Append( new XclImpSupbookTab( maXclUrl ) );
 }
 
 void XclImpSupbook::ReadXct( XclImpStream& rStrm )
 {
     rStrm.Ignore( 2 );
-    rStrm >> mnCrnXclTab;
+    rStrm >> mnSBTab;
 }
 
 void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 {
-    if( XclImpSupbookTab* pTab = maSupbTabList.GetObject( mnCrnXclTab ) )
+    if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( mnSBTab ) )
     {
-        sal_uInt8 nLastCol, nFirstCol;
-        sal_uInt16 nRow;
-        rStrm >> nLastCol >> nFirstCol >> nRow;
+        sal_uInt8 nXclColLast, nXclColFirst;
+        sal_uInt16 nXclRow;
+        rStrm >> nXclColLast >> nXclColFirst >> nXclRow;
 
-        for( sal_uInt16 nCol = nFirstCol; (nCol <= nLastCol) && (rStrm.GetRecLeft() > 1); ++nCol )
-            pTab->ReadCrn( rStrm, nCol, nRow );
+        for( sal_uInt8 nXclCol = nXclColFirst; (nXclCol <= nXclColLast) && (rStrm.GetRecLeft() > 1); ++nXclCol )
+            pSBTab->ReadCrn( rStrm, nXclCol, nXclRow );
     }
 }
 
@@ -699,20 +707,20 @@ void XclImpSupbook::ReadExternname( XclImpStream& rStrm )
     maExtNameList.Append( new XclImpExtName( rStrm, mbAddIn ) );
 }
 
-sal_uInt16 XclImpSupbook::GetScTabNum( sal_uInt16 nXclTab ) const
+USHORT XclImpSupbook::GetScTabNum( sal_uInt16 nXclTab ) const
 {
     if( mbSelf )
-        return nXclTab;
-    const XclImpSupbookTab* pTab = maSupbTabList.GetObject( nXclTab );
-    return pTab ? pTab->GetScTab() : EXC_NOTAB;
+        return static_cast< USHORT >( nXclTab );
+    const XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nXclTab );
+    return pSBTab ? pSBTab->GetScTab() : SCNOTAB;
 }
 
-sal_uInt16 XclImpSupbook::GetScTabNum( const String& rTabName ) const
+USHORT XclImpSupbook::GetScTabNum( const String& rTabName ) const
 {
-    for( const XclImpSupbookTab* pTab = maSupbTabList.First(); pTab; pTab = maSupbTabList.Next() )
-        if( pTab->GetName() == rTabName )
-            return pTab->GetScTab();
-    return EXC_NOTAB;
+    for( const XclImpSupbookTab* pSBTab = maSupbTabList.First(); pSBTab; pSBTab = maSupbTabList.Next() )
+        if( pSBTab->GetTabName() == rTabName )
+            return pSBTab->GetScTab();
+    return SCNOTAB;
 }
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
@@ -723,17 +731,23 @@ const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 
 bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
 {
-    return !mbSelf && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maUrl );
+    return !mbSelf && XclImpUrlHelper::DecodeLink( rApplic, rTopic, maXclUrl );
 }
 
-void XclImpSupbook::CreateTables( const XclImpRoot& rRoot, sal_uInt16 nFirstTab, sal_uInt16 nLastTab ) const
+void XclImpSupbook::CreateTables( const XclImpRoot& rRoot, sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast )
 {
-    if( !mbSelf && (rRoot.mpRD->pExtDocOpt->nLinkCnt < 1) && rRoot.GetDocShell() )
+    if( !mbSelf && (rRoot.GetExtDocOptions().nLinkCnt < 1) && rRoot.GetDocShell() )
     {
-        String aScUrl( ScGlobal::GetAbsDocName( maUrl, rRoot.GetDocShell() ) );
-        for( sal_uInt16 nTab = nFirstTab; nTab <= nLastTab; ++nTab )
-            if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nTab ) )
-                pSBTab->CreateTable( rRoot.GetDoc(), aScUrl );
+        String aAbsUrl( ScGlobal::GetAbsDocName( maXclUrl, rRoot.GetDocShell() ) );
+
+        // get filter name for external document
+        if( !maFilterName.Len() )
+            ScDocumentLoader::GetFilterName( aAbsUrl, maFilterName, maFilterOpt, FALSE );
+
+        // create tables
+        for( sal_uInt16 nSBTab = nSBTabFirst; nSBTab <= nSBTabLast; ++nSBTab )
+            if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( nSBTab ) )
+                pSBTab->CreateAndFillTable( rRoot.GetDoc(), aAbsUrl, maFilterName, maFilterOpt );
     }
 }
 
@@ -793,14 +807,14 @@ bool XclImpLinkManager_Impl::IsSelfRef( sal_uInt16 nXtiIndex ) const
 }
 
 bool XclImpLinkManager_Impl::GetScTabRange(
-        sal_uInt16& rnFirstScTab, sal_uInt16& rnLastScTab, sal_uInt16 nXtiIndex ) const
+        USHORT& rnScTabFirst, USHORT& rnScTabLast, sal_uInt16 nXtiIndex ) const
 {
     if( const XclImpXti* pXti = maXtiList.GetObject( nXtiIndex ) )
     {
         if( const XclImpSupbook* pSupbook = maSupbookList.GetObject( pXti->mnSupbook ) )
         {
-            rnFirstScTab = pSupbook->GetScTabNum( pXti->mnFirst );
-            rnLastScTab = pSupbook->GetScTabNum( pXti->mnLast );
+            rnScTabFirst = pSupbook->GetScTabNum( pXti->mnSBTabFirst );
+            rnScTabLast = pSupbook->GetScTabNum( pXti->mnSBTabLast );
             return true;
         }
     }
@@ -819,10 +833,10 @@ bool XclImpLinkManager_Impl::GetLinkData( String& rApplic, String& rTopic, sal_u
     return pSupbook && pSupbook->GetLinkData( rApplic, rTopic );
 }
 
-sal_uInt16 XclImpLinkManager_Impl::GetScTab( const String& rUrl, const String& rTabName ) const
+USHORT XclImpLinkManager_Impl::GetScTab( const String& rUrl, const String& rTabName ) const
 {
     const XclImpSupbook* pSupbook = GetSupbook( rUrl );
-    return pSupbook ? pSupbook->GetScTabNum( rTabName ) : EXC_NOTAB;
+    return pSupbook ? pSupbook->GetScTabNum( rTabName ) : SCNOTAB;
 }
 
 const XclImpSupbook* XclImpLinkManager_Impl::GetSupbook( sal_uInt32 nXtiIndex ) const
@@ -834,7 +848,7 @@ const XclImpSupbook* XclImpLinkManager_Impl::GetSupbook( sal_uInt32 nXtiIndex ) 
 const XclImpSupbook* XclImpLinkManager_Impl::GetSupbook( const String& rUrl ) const
 {
     for( const XclImpSupbook* pSupbook = maSupbookList.First(); pSupbook; pSupbook = maSupbookList.Next() )
-        if( pSupbook->GetUrl() == rUrl )
+        if( pSupbook->GetXclUrl() == rUrl )
             return pSupbook;
     return NULL;
 }
@@ -844,37 +858,37 @@ void XclImpLinkManager_Impl::CreateTables()
     DBG_ASSERT( !mbCreated, "XclImpLinkManager::CreateTables - multiple call" );
     if( mbCreated ) return;
 
-    sal_uInt16 nFirst, nLast;
+    sal_uInt16 nSBTabFirst, nSBTabLast;
     sal_uInt32 nCount = maSupbookList.Count();
 
     for( sal_uInt16 nSupbook = 0; nSupbook < nCount; ++nSupbook )
     {
-        const XclImpSupbook* pSupbook = maSupbookList.GetObject( nSupbook );
-        bool bLoop = FindNextTabRange( nFirst, nLast, nSupbook, 0 );
+        XclImpSupbook* pSupbook = maSupbookList.GetObject( nSupbook );
+        bool bLoop = FindNextTabRange( nSBTabFirst, nSBTabLast, nSupbook, 0 );
         while( bLoop && pSupbook )
         {
-            pSupbook->CreateTables( *this, nFirst, nLast );
-            // #96263# don't search again if last sheet == 0xFFFF
-            bLoop = (nLast < 0xFFFF) && FindNextTabRange( nFirst, nLast, nSupbook, nLast + 1 );
+            pSupbook->CreateTables( *this, nSBTabFirst, nSBTabLast );
+            // #96263# don't search again if last sheet == EXC_NOTAB
+            bLoop = (nSBTabLast != EXC_NOTAB) && FindNextTabRange( nSBTabFirst, nSBTabLast, nSupbook, nSBTabLast + 1 );
         }
     }
     mbCreated = true;
 }
 
 bool XclImpLinkManager_Impl::FindNextTabRange(
-        sal_uInt16& rnFirst, sal_uInt16& rnLast,
-        sal_uInt16 nSupb, sal_uInt16 nStart ) const
+        sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+        sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const
 {
-    rnFirst = rnLast = 0xFFFF;
+    rnSBTabFirst = rnSBTabLast = EXC_NOTAB;
     for( const XclImpXti* pXti = maXtiList.First(); pXti; pXti = maXtiList.Next() )
     {
-        if( (nSupb == pXti->mnSupbook) && (nStart <= pXti->mnLast) && (pXti->mnFirst < rnFirst) )
+        if( (nSupbook == pXti->mnSupbook) && (nSBTabStart <= pXti->mnSBTabLast) && (pXti->mnSBTabFirst < rnSBTabFirst) )
         {
-            rnFirst = ::std::max( nStart, pXti->mnFirst );
-            rnLast = pXti->mnLast;
+            rnSBTabFirst = ::std::max( nSBTabStart, pXti->mnSBTabFirst );
+            rnSBTabLast = pXti->mnSBTabLast;
         }
     }
-    return rnFirst < 0xFFFF;
+    return rnSBTabFirst != EXC_NOTAB;
 }
 
 
@@ -920,9 +934,9 @@ bool XclImpLinkManager::IsSelfRef( sal_uInt16 nXtiIndex ) const
 }
 
 bool XclImpLinkManager::GetScTabRange(
-        sal_uInt16& rnFirstScTab, sal_uInt16& rnLastScTab, sal_uInt16 nXtiIndex ) const
+        USHORT& rnScTabFirst, USHORT& rnScTabLast, sal_uInt16 nXtiIndex ) const
 {
-    return mpImpl->GetScTabRange( rnFirstScTab, rnLastScTab, nXtiIndex );
+    return mpImpl->GetScTabRange( rnScTabFirst, rnScTabLast, nXtiIndex );
 }
 
 const XclImpExtName* XclImpLinkManager::GetExternName( sal_uInt16 nXtiIndex, sal_uInt16 nExtName ) const
@@ -935,7 +949,7 @@ bool XclImpLinkManager::GetLinkData( String& rApplic, String& rTopic, sal_uInt16
     return mpImpl->GetLinkData( rApplic, rTopic, nXtiIndex );
 }
 
-sal_uInt16 XclImpLinkManager::GetScTab( const String& rUrl, const String& rTabName ) const
+USHORT XclImpLinkManager::GetScTab( const String& rUrl, const String& rTabName ) const
 {
     return mpImpl->GetScTab( rUrl, rTabName );
 }
