@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:34:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,112 +74,25 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_OPEN_LINK ;
             HelpId = HID_TEXTCPNT_OPEN_LINK ;
-            Text = "Öff~nen" ;
-            Text[ English ] = "~Open" ;
-            Text[ italian ] = "~Apri";
-            Text[ portuguese_brazilian ] = "~Abrir";
-            Text[ portuguese ] = "~Abrir";
-            Text[ danish ] = "Å~bn";
-            Text[ french ] = "Ouvrir";
-            Text[ swedish ] = "Öpp~na";
-            Text[ dutch ] = "Ope~nen";
-            Text[ spanish ] = "~Abrir";
-            Text[ english_us ] = "~Open";
-            Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
-            Text[ russian ] = "Îòêğûòü";
-            Text[ polish ] = "~Otwórz";
-            Text[ japanese ] = "é–‹ã(~O)";
-            Text[ chinese_traditional ] = "é–‹å•ŸèˆŠæª”(~O)";
-            Text[ arabic ] = "İÊÍ";
-            Text[ dutch ] = "Ope~nen";
-            Text[ chinese_simplified ] = "æ‰“å¼€(~O)";
-            Text[ greek ] = "¢~íïéãìá";
-            Text[ korean ] = "ì—´ê¸°(~O)";
-            Text[ turkish ] = "Aç";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Obre";
-            Text[ finnish ] = "~Avaa";
-            Text[ thai ] = "à¹€~à¸›à¸´à¸”";
-            Text[ czech ] = "OtevÅ™Ã­t";
-            Text[ hebrew ] = "â€®×¤×ª×™×—×”â€¬";
-            Text[ hindi ] = "~à¤–à¥‹à¤²à¥‹";
-            Text[ slovak ] = "O~tvoriÅ¥";
-            Text[ hungarian ] = "~MegnyitÃ¡s";
-            Text[ slovenian ] = "~Odpri";
+            Text [ de ] = "Öff~nen" ;
+            Text [ en-US ] = "~Open";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_OPEN_LINK_NEW ;
             HelpId = HID_TEXTCPNT_OPEN_LINK_NEW ;
-            Text = "Öffnen in neuem ~Fenster" ;
-            Text[ English ] = "Open in ~new window" ;
-            Text[ italian ] = "Apri nella ~finestra nuova";
-            Text[ portuguese_brazilian ] = "Abrir numa ~Nova Janela";
-            Text[ portuguese ] = "Abrir em ~nova janela";
-            Text[ danish ] = "Åbn i nyt ~vindue";
-            Text[ french ] = "Ouvrir dans une nouvelle ~fenêtre";
-            Text[ swedish ] = "Öppna i ett nytt ~fönster";
-            Text[ dutch ] = "Openen in nieuw ~venster";
-            Text[ spanish ] = "Abrir en ~ventana nueva";
-            Text[ english_us ] = "Open in New ~Window";
-            Text[ chinese_simplified ] = "ä½¿ç”¨ä¸€ä¸ªæ–°è§†çª—æ‰“å¼€(~W)";
-            Text[ russian ] = "Îòêğûòü â íîâîì îêíå";
-            Text[ polish ] = "Otwórz ~w nowym oknie";
-            Text[ japanese ] = "æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’é–‹ã(~W)";
-            Text[ chinese_traditional ] = "ç”¨ä¸€å€‹æ–°è¦–çª—é–‹å•Ÿ(~W)";
-            Text[ arabic ] = "İÊÍ İí äÇİĞÉ ÌÏíÏÉ";
-            Text[ dutch ] = "Openen in nieuw ~venster";
-            Text[ chinese_simplified ] = "ä½¿ç”¨ä¸€ä¸ªæ–°è§†çª—æ‰“å¼€(~W)";
-            Text[ greek ] = "¢íïéãìá óå íİï ~ğáñÜèõñï";
-            Text[ korean ] = "ìƒˆ ì°½ì—ì„œ ì—´ê¸°(~W)";
-            Text[ turkish ] = "Yeni bir pencerede aç";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Obre en una ~finestra nova";
-            Text[ finnish ] = "Avaa uudessa ~ikkunassa";
-            Text[ thai ] = "à¹€à¸›à¸´à¸”à¹ƒà¸™~à¸«à¸™à¹‰à¸²à¸•à¹ˆà¸²à¸‡à¹ƒà¸«à¸¡à¹ˆ";
-            Text[ czech ] = "OtevÅ™Ã­t v novÃ©m oknÄ›";
-            Text[ hebrew ] = "â€®×¤×ª×™×—×” ×‘×—×œ×•×Ÿ ×—×“×©â€¬";
-            Text[ hindi ] = "Open in New ~Window";
-            Text[ slovak ] = "~OtvoriÅ¥ v novom okne";
-            Text[ hungarian ] = "MegnyitÃ¡s Ãºj ~ablakban";
-            Text[ slovenian ] = "Odpri v novem ~oknu";
+            Text [ de ] = "Öffnen in neuem ~Fenster" ;
+            Text [ en-US ] = "Open in New ~Window";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_DOWNLOAD ;
             HelpId = HID_TEXTCPNT_DOWNLOAD ;
-            Text = "~Download..." ;
-            Text[ English ] = "~Download..." ;
-            Text[ italian ] = "~Download...";
-            Text[ portuguese_brazilian ] = "~Download...";
-            Text[ portuguese ] = "~Download...";
-            Text[ danish ] = "~Overfør...";
-            Text[ french ] = "~Téléchargement...";
-            Text[ swedish ] = "~Ladda ned...";
-            Text[ dutch ] = "~Downloaden...";
-            Text[ spanish ] = "~Descargar...";
-            Text[ english_us ] = "~Download...";
-            Text[ chinese_simplified ] = "ä¸‹è½½(~D)...";
-            Text[ russian ] = "Çàãğóçèòü...";
-            Text[ polish ] = "~Pobieranie...";
-            Text[ japanese ] = "ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰(~D)...";
-            Text[ chinese_traditional ] = "ä¸‹è¼‰(~D)...";
-            Text[ arabic ] = "ÊäÒíá...";
-            Text[ dutch ] = "~Downloaden...";
-            Text[ chinese_simplified ] = "ä¸‹è½½(~D)...";
-            Text[ greek ] = "~ËŞøç áñ÷åßùí...";
-            Text[ korean ] = "ë‹¤ìš´ë¡œë“œ(~D)...";
-            Text[ turkish ] = "İndir...";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Descarregar...";
-            Text[ finnish ] = "~Lataa...";
-            Text[ thai ] = "~à¸”à¸²à¸§à¸™à¹Œà¹‚à¸«à¸¥à¸”...";
-            Text[ czech ] = "StÃ¡hnout...";
-            Text[ hebrew ] = "â€®×”×•×¨×“×ª × ×ª×•× ×™× ××”×¨×©×ªâ€¬";
-            Text[ hindi ] = "~à¤¡à¥Œà¤¨à¤²à¥‹à¤¡...";
-            Text[ slovak ] = "Stia~hnuÅ¥...";
-            Text[ hungarian ] = "~LetÃ¶ltÃ©s...";
-            Text[ slovenian ] = "Pr~enesi...";
+            Text [ de ] = "~Download..." ;
+            Text [ en-US ] = "~Download...";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -189,38 +102,9 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_ADD_BOOKMARK ;
             HelpId = HID_TEXTCPNT_ADD_BOOKMARK ;
-            Text = "Verknüpfung ~hinzufügen" ;
-            Text[ English ] = "~Add bookmark" ;
-            Text[ italian ] = "~Aggiungi collegamento";
-            Text[ portuguese_brazilian ] = "Adicionar ~Vínculo";
-            Text[ portuguese ] = "Adicionar ~ligação";
-            Text[ danish ] = "Tilføj ~kæde";
-            Text[ french ] = "~Ajouter un lien";
-            Text[ swedish ] = "Lägg till l~änk";
-            Text[ dutch ] = "Koppeling ~toevoegen";
-            Text[ spanish ] = "~Añadir vínculo";
-            Text[ english_us ] = "Add ~Link";
-            Text[ chinese_simplified ] = "æ–°å¢é“¾æ¥(~L)";
-            Text[ russian ] = "Äîáàâèòü ññûëêó";
-            Text[ polish ] = "~Dodaj ³¹cze";
-            Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®è¿½åŠ (~L)";
-            Text[ chinese_traditional ] = "åŠ å…¥æ·å¾‘(~L)";
-            Text[ arabic ] = "ÅÖÇİÉ ÇÑÊÈÇØ";
-            Text[ dutch ] = "Koppeling ~toevoegen";
-            Text[ chinese_simplified ] = "æ–°å¢é“¾æ¥(~L)";
-            Text[ greek ] = "ĞñïóèŞê~ç óıíäåóçò";
-            Text[ korean ] = "ë§í¬ ì¶”ê°€(~L)";
-            Text[ turkish ] = "Bağlantıyı ekle";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Afegeix un enllaç";
-            Text[ finnish ] = "Lisää ~linkki";
-            Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸à¸²à¸£à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
-            Text[ czech ] = "PÅ™idat odkaz";
-            Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×§×™×©×•×¨â€¬";
-            Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤œà¥‹à¤¡à¤¼à¥‹";
-            Text[ slovak ] = "P~ridaÅ¥ odkaz";
-            Text[ hungarian ] = "~HivatkozÃ¡s hozzÃ¡adÃ¡sa";
-            Text[ slovenian ] = "Dodaj ~povezavo";
+            Text [ de ] = "Verknüpfung ~hinzufügen" ;
+            Text [ en-US ] = "Add ~Link";
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -230,38 +114,9 @@ Menu RID_CONTEXTMENU
         {
             Identifier = RID_COPY_LINK ;
             HelpId = HID_TEXTCPNT_COPY_LINK ;
-            Text = "~Link kopieren" ;
-            Text[ English ] = "~Copy Link" ;
-            Text[ english_us ] = "Cop~y Link" ;
-            Text[ portuguese ] = "~Copiar ligação" ;
-            Text[ portuguese_brazilian ] = "~Copiar Vínculo" ;
-            Text[ swedish ] = "~Kopiera länk" ;
-            Text[ danish ] = "Kopier kæde" ;
-            Text[ italian ] = "Copia ~link" ;
-            Text[ spanish ] = "Copiar ~vínculo" ;
-            Text[ french ] = "Copier le ~lien" ;
-            Text[ dutch ] = "Kopel~ling kopiëren" ;
-            Text[ chinese_simplified ] = "å¤åˆ¶é“¾æ¥(~Y)";
-            Text[ russian ] = "Êîïèğîâàòü ññûëêó";
-            Text[ polish ] = "~Kopiuj ³¹cze";
-            Text[ japanese ] = "ãƒªãƒ³ã‚¯ã®ã‚³ãƒ”ãƒ¼(~Y)";
-            Text[ chinese_traditional ] = "è¤‡è£½æ·å¾‘(~Y)";
-            Text[ arabic ] = "äÓÎ ÇáÇÑÊÈÇØ";
-            Text[ dutch ] = "Kopel~ling kopiëren";
-            Text[ chinese_simplified ] = "å¤åˆ¶é“¾æ¥(~Y)";
-            Text[ greek ] = "ÁíôéãñáöŞ ~óıíäåóçò";
-            Text[ korean ] = "ë§í¬ ë³µì‚¬(~Y)";
-            Text[ turkish ] = "Bağlantıyı kopyala";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Copia l'~enllaç";
-            Text[ finnish ] = "~Kopioi linkki";
-            Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­~à¸à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
-            Text[ czech ] = "KopÃ­rovat odkaz";
-            Text[ hebrew ] = "â€®×”×¢×ª×§×ª ×§×™×©×•×¨â€¬";
-            Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-            Text[ slovak ] = "Ko~pÃ­rovaÅ¥ odkaz";
-            Text[ hungarian ] = "HivatkozÃ¡s ~mÃ¡solÃ¡sa";
-            Text[ slovenian ] = "Kopira~j povezavo";
+            Text [ de ] = "~Link kopieren" ;
+            Text [ en-US ] = "Cop~y Link" ;
+            Text [ x-comment ] = " ";
         };
     };
 };
