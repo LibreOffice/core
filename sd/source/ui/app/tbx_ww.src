@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:41:42 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,8 @@ FloatingWindow RID_ALIGNMENT
     Text[ hebrew ] = "‮ישור‬";
     Text[ hindi ] = "पंक्तिकरण";
     Text[ slovak ] = "Zarovnanie";
+    Text[ hungarian ] = "Igazítás";
+    Text[ slovenian ] = "Poravnava";
 };
 FloatingWindow RID_ZOOM
 {
@@ -232,6 +234,8 @@ FloatingWindow RID_ZOOM
     Text[ hebrew ] = "‮זום‬";
     Text[ hindi ] = "झूम";
     Text[ slovak ] = "Lupa";
+    Text[ hungarian ] = "Nagyítás";
+    Text[ slovenian ] = "Zoom";
 };
 FloatingWindow RID_CHOOSE_MODE
 {
@@ -337,6 +341,8 @@ FloatingWindow RID_CHOOSE_MODE
     Text[ hebrew ] = "‮אפקטים‬";
     Text[ hindi ] = "प्रभाव";
     Text[ slovak ] = "Efekty";
+    Text[ hungarian ] = "Hatások";
+    Text[ slovenian ] = "Učinki";
 };
 FloatingWindow RID_TEXT
 {
@@ -420,6 +426,8 @@ FloatingWindow RID_TEXT
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -525,6 +533,8 @@ FloatingWindow RID_RECTANGLES
     Text[ hebrew ] = "Rechtecke";
     Text[ hindi ] = "आयतें";
     Text[ slovak ] = "Obdĺžniky";
+    Text[ hungarian ] = "Téglalapok";
+    Text[ slovenian ] = "Pravokotniki";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -658,6 +668,8 @@ FloatingWindow RID_ELLIPSES
     Text[ hebrew ] = "Ellipsen";
     Text[ hindi ] = "दीर्घवृत्त";
     Text[ slovak ] = "Elipsy";
+    Text[ hungarian ] = "Ellipszisek";
+    Text[ slovenian ] = "Elipse";
 };
 FloatingWindow RID_LINES
 {
@@ -756,6 +768,8 @@ FloatingWindow RID_LINES
     Text[ hebrew ] = "Kurven";
     Text[ hindi ] = "वक्र";
     Text[ slovak ] = "Krivky";
+    Text[ hungarian ] = "Görbék";
+    Text[ slovenian ] = "Krivulje";
 };
 FloatingWindow RID_ARROWS
 {
@@ -879,6 +893,8 @@ FloatingWindow RID_ARROWS
     Text[ hebrew ] = "Linien";
     Text[ hindi ] = "रेखाएँ";
     Text[ slovak ] = "Čiary";
+    Text[ hungarian ] = "Vonalak";
+    Text[ slovenian ] = "Črte";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -977,6 +993,8 @@ FloatingWindow RID_3D_OBJECTS
     Text[ hebrew ] = "3D-Objekte";
     Text[ hindi ] = "3D वस्तु";
     Text[ slovak ] = "3D objekty";
+    Text[ hungarian ] = "Térbeli objektumok";
+    Text[ slovenian ] = "3D predmeti";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -1230,6 +1248,8 @@ FloatingWindow RID_CONNECTORS
     Text[ hebrew ] = "Verbinder";
     Text[ hindi ] = "कनेक्टरें";
     Text[ slovak ] = "Spojnice";
+    Text[ hungarian ] = "Összekötők";
+    Text[ slovenian ] = "Konektorji";
 };
 FloatingWindow RID_INSERT
 {
@@ -1350,6 +1370,8 @@ FloatingWindow RID_INSERT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Vložiť";
+    Text[ hungarian ] = "Beszúrás";
+    Text[ slovenian ] = "Vstavi";
 };
 FloatingWindow RID_POSITION
 {
@@ -1436,7 +1458,11 @@ FloatingWindow RID_POSITION
     Text[ hebrew ] = "‮סידור‬";
     Text[ hindi ] = "क्रम में रखो";
     Text[ slovak ] = "Usporiadať";
+    Text[ hungarian ] = "Elrendezés";
+    Text[ slovenian ] = "Razporedi";
 };
+
+
 
 
 
