@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 19:42:17 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:14:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,20 +67,17 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=core
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 IENV+=-I..\ui\inc
 
 # --- Files --------------------------------------------------------
 
-
-SRCFILES = glob.src
+SRS1NAME=$(TARGET)
+SRC1FILES = glob.src
 
 SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/stlpool.obj	\
