@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:33:20 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 14:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,16 +509,21 @@ namespace pcr
 
         if (pDocSh)
         {
-            SvxColorTableItem aItem( *(const SvxColorTableItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
-            XColorTable* pColorTbl = aItem.GetColorTable();
-            DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
-
-            if (pColorTbl)
+            const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
+            if (pColorItem)
             {
-                for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
+                DBG_ASSERT(pColorItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
+                SvxColorTableItem aItem( *static_cast< const SvxColorTableItem*>( pColorItem ) );
+                XColorTable* pColorTbl = aItem.GetColorTable();
+                DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
+
+                if (pColorTbl)
                 {
-                    XColorEntry* pEntry = pColorTbl->Get( i );
-                    InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+                    for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
+                    {
+                        XColorEntry* pEntry = pColorTbl->Get( i );
+                        InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+                    }
                 }
             }
         }
@@ -1231,6 +1236,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:33:20  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 09.01.01 10:28:46  fs
  ************************************************************************/
