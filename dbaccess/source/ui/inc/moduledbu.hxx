@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduledbu.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:08:51 $
+ *  last change: $Author: oj $ $Date: 2000-10-26 14:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,6 @@ private:
 */
 class OModuleClient
 {
-private:
-    class ResId;
-        // with this, nobody derived from this class can use a ResId (without qualifying the global scope explicitly)
-        // if you're derived from this class and want to use ressources, please use ModuleRes (see below)
-
 public:
     OModuleClient()     { OModule::registerClient(); }
     ~OModuleClient()    { OModule::revokeClient(); }
@@ -147,6 +142,9 @@ public:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:08:51  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 20.09.00 15:26:10  fs
  ************************************************************************/
