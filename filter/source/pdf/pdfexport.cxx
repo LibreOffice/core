@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 07:44:47 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 09:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,19 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
         if( xRenderable.is() )
         {
-            PDFWriter*  pPDFWriter = NULL;
-            OUString    aPageRange;
-            Any         aSelection;
-            sal_Int32   nCompressMode = 0;
+            Sequence< PropertyValue >   aRenderOptions( 1 );
+            PDFWriter*                  pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
+            OutputDevice*               pOut = pPDFWriter->GetReferenceDevice();
+            VCLXDevice*                 pXDevice = new VCLXDevice;
+            OUString                    aPageRange;
+            Any                         aSelection;
+            sal_Int32                   nCompressMode = 0;
+
+            DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
+
+            pXDevice->SetOutputDevice( pOut );
+            aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
+            aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
@@ -157,9 +166,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aSelection <<= mxSrcDoc;
             }
 
-            const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection );
+            const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection, aRenderOptions );
 
-            if( nPageCount )
+            if( nPageCount && pOut )
             {
                 const Range     aRange( 1, nPageCount );
                 MultiSelection  aSel;
@@ -179,7 +188,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                     for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
                     {
-                        Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1, aSelection ) );
+                        Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1, aSelection, aRenderOptions ) );
                         awt::Size                   aPageSize;
                         sal_Bool                    bProcess = sal_True;
 
@@ -192,41 +201,27 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                         if( ( aPageSize.Width > 0 ) && ( aPageSize.Height > 0 ) )
                         {
                             GDIMetaFile                 aMtf;
-                            OutputDevice*               pOut = NULL;
                             const MapMode               aMapMode( MAP_100TH_MM );
                             const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
                             VCLXDevice*                 pXDevice = new VCLXDevice;
-                            Sequence< PropertyValue >   aRenderOptions( 1 );
 
-                            if( !pPDFWriter )
-                                pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
+                            pOut->Push();
+                            pOut->EnableOutput( FALSE );
+                            pOut->SetMapMode( aMapMode );
 
-                            pOut = pPDFWriter->GetReferenceDevice();
+                            aMtf.SetPrefSize( aMtfSize );
+                            aMtf.SetPrefMapMode( aMapMode );
+                            aMtf.Record( pOut );
 
-                            if( pOut )
-                            {
-                                pOut->Push();
-                                pOut->EnableOutput( FALSE );
-                                pOut->SetMapMode( aMapMode );
-                                pXDevice->SetOutputDevice( pOut );
+                            xRenderable->render( nSel - 1, aSelection, aRenderOptions );
 
-                                aMtf.SetPrefSize( aMtfSize );
-                                aMtf.SetPrefMapMode( aMapMode );
-                                aMtf.Record( pOut );
+                            aMtf.Stop();
+                            aMtf.WindStart();
 
-                                aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
-                                aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
+                            if( aMtf.GetActionCount() )
+                                bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
 
-                                xRenderable->render( nSel - 1, aSelection, aRenderOptions );
-
-                                aMtf.Stop();
-                                aMtf.WindStart();
-
-                                if( aMtf.GetActionCount() )
-                                    bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
-
-                                pOut->Pop();
-                            }
+                            pOut->Pop();
                         }
                     }
                 }
@@ -234,7 +229,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 {
                 }
 
-                if( bRet && pPDFWriter )
+                if( bRet )
                     pPDFWriter->Emit();
 
                 delete pPDFWriter;
