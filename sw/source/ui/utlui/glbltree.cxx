@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-21 13:39:17 $
+ *  last change: $Author: os $ $Date: 2000-09-21 15:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,10 +1425,11 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
         SfxStringItem aURL(SID_FILE_NAME,
             sFileName);
         SfxBoolItem aReadOnly(SID_DOC_READONLY, FALSE);
+        SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
         SfxStringItem aReferer(SID_REFERER, pActiveShell->GetView().GetDocShell()->GetTitle());
         pActiveShell->GetView().GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON,
-                            &aURL, &aReadOnly, &aReferer, 0);
+                            &aURL, &aReadOnly, &aReferer, &aTargetFrameName, 0);
     }
 }
 
