@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 12:45:28 $
+ *  last change: $Author: sab $ $Date: 2002-02-21 12:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,21 +124,21 @@ sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
 sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
     return maStates.test(aState);
 }
 
 void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
     maStates.set(aState);
 }
 
 void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    DBG_ASSERT(aState >= BITFIELDSIZE, "the statesset is to small")
+    DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
     maStates.set(aState, 0);
 }
 
