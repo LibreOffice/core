@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 14:31:03 $
+ *  last change: $Author: ihi $ $Date: 2004-11-04 16:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@
     {\
         Identifier = SID_MODIFYPAGE ; \
         HelpID = SID_MODIFYPAGE ; \
-        Text [ de ] = "Seite~nlayout ändern..." ; \
-        Text [ en-US ] = "~Modify Slide..." ; \
+        Text [ de ] = "Folienlayout" ; \
+        Text [ en-US ] = "~Slide Layout" ; \
         Text [ x-comment ] = " ";\
     };
 
@@ -179,25 +179,37 @@
         Text [ x-comment ] = " ";\
     };
 
+
+#define MN_INSERT_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_INSERTPAGE ; \
+        HelpID = SID_INSERTPAGE ; \
+        Text [ de ] = "~Neue Folie" ; \
+        Text [ en-US ] = "~New Slide" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_INSERT_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_INSERT_MASTER_PAGE ; \
+        HelpID = SID_INSERT_MASTER_PAGE ; \
+        Text [ de ] = "~Neuer Master" ; \
+        Text [ en-US ] = "~New Master" ; \
+        Text [ x-comment ] = " ";\
+    };
+
 #define MN_INSERT_PAGE \
     MenuItem\
     {\
         Identifier = SID_INSERTPAGE ; \
         HelpID = SID_INSERTPAGE ; \
-        Text [ de ] = "Seite ~einfügen..." ; \
-        Text [ en-US ] = "Insert ~Slide..." ; \
+        Text [ de ] = "~Neue Seite" ; \
+        Text [ en-US ] = "~New Page" ; \
         Text [ x-comment ] = " ";\
     };
 
-#define MN_INSERT_PAGE_DRAW \
-    MenuItem\
-    {\
-        Identifier = SID_INSERTPAGE ; \
-        HelpID = SID_INSERTPAGE ; \
-        Text [ de ] = "Seite ~einfügen" ; \
-        Text [ en-US ] = "Insert ~Slide" ; \
-        Text [ x-comment ] = " ";\
-    };
 
 #define MN_PAGE_MENU \
     MenuItem\
@@ -233,15 +245,27 @@
         Text [ x-comment ] = " ";\
     };
 
-#define MN_RENAME_PAGE \
+#define MN_DELETE_SLIDE \
     MenuItem\
     {\
-        Identifier = SID_RENAMEPAGE ; \
-        HelpID = SID_RENAMEPAGE ; \
-        Text [ de ] = "Seite ~umbenennen" ; \
-        Text [ en-US ] = "~Rename Slide..." ; \
+        Identifier = SID_DELETE_PAGE ; \
+        HelpID = SID_DELETE_PAGE ; \
+        Text [ de ] = "Folie ~löschen" ; \
+        Text [ en-US ] = "D~elete Slide" ; \
         Text [ x-comment ] = " ";\
     };
+
+#define MN_DELETE_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_DELETE_MASTER_PAGE ; \
+        HelpID = SID_DELETE_MASTER_PAGE ; \
+        Text [ de ] = "Master ~löschen" ; \
+        Text [ en-US ] = "D~elete Master" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+
 
 #define MN_DELETE_PAGE \
     MenuItem\
@@ -250,6 +274,36 @@
         HelpID = SID_DELETE_PAGE ; \
         Text [ de ] = "Seite ~löschen" ; \
         Text [ en-US ] = "D~elete Slide..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMEPAGE ; \
+        HelpID = SID_RENAMEPAGE ; \
+        Text [ de ] = "Folie ~umbenennen" ; \
+        Text [ en-US ] = "~Rename Slide" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_MASTER \
+    MenuItem\
+    {\
+        Identifier = SID_RENAME_MASTER_PAGE ; \
+        HelpID = SID_RENAME_MASTER_PAGE ; \
+        Text [ de ] = "Master ~umbenennen" ; \
+        Text [ en-US ] = "~Rename Master" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_RENAME_PAGE \
+    MenuItem\
+    {\
+        Identifier = SID_RENAMEPAGE ; \
+        HelpID = SID_RENAMEPAGE ; \
+        Text [ de ] = "Seite ~umbenennen" ; \
+        Text [ en-US ] = "~Rename Page" ; \
         Text [ x-comment ] = " ";\
     };
 

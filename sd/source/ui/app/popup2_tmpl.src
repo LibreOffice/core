@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup2_tmpl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 14:32:00 $
+ *  last change: $Author: ihi $ $Date: 2004-11-04 16:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,11 +632,11 @@
     ItemList =
     {
 #if SD_POPUP == RID_DRAW_TEXTOBJ_POPUP
-        MN_INSERT_PAGE
-        MN_DELETE_PAGE
+        MN_INSERT_SLIDE
+        MN_DELETE_SLIDE
         MN_MODIFY_PAGE
 #else
-        MN_INSERT_PAGE_DRAW
+        MN_INSERT_PAGE
         MN_DELETE_PAGE
 #endif
         MN_RENAME_PAGE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuids3_tmpl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 14:30:23 $
+ *  last change: $Author: ihi $ $Date: 2004-11-04 16:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,8 @@
     {\
         Identifier = SID_PRESENTATION_LAYOUT ; \
         HelpID = SID_PRESENTATION_LAYOUT ; \
-        Text [ de ] = "~Seitenvorlage..." ; \
-        Text [ en-US ] = "~Slide Design..." ; \
+        Text [ de ] = "~Foliendesign" ; \
+        Text [ en-US ] = "~Slide Design" ; \
         Text [ x-comment ] = " ";\
     };
 
@@ -177,7 +177,7 @@
     {\
         Identifier = SID_SLIDE_CHANGE_WIN ; \
         HelpID = SID_SLIDE_CHANGE_WIN ; \
-        Text [ de ] = "Dia~wechsel" ; \
+        Text [ de ] = "Folienübergang"; \
         Text [ en-US ] = "Slide ~Transition" ; \
         Text [ x-comment ] = " ";\
     };
@@ -187,8 +187,8 @@
     {\
         Identifier = SID_HIDE_SLIDE ; \
         HelpID = SID_HIDE_SLIDE ; \
-        Text [ de ] = "~Dia anzeigen" ; \
-        Text [ en-US ] = "~Show/Hide Slide" ; \
+        Text [ de ] = "Folie ausblenden" ; \
+        Text [ en-US ] = "~Hide Slide" ; \
         Text [ x-comment ] = " ";\
     };
 
