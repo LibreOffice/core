@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:31:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,10 @@ private:
     void                    InitFocus       ();
     void                    CalcWndSizes    ();
     Point                   DlgPos2WndPos   ( const Point& rPt, Window& rWnd );
-    LabelData*              GetLabelData    ( short nCol, size_t* pPos = NULL );
-    String                  GetLabelString  ( short nCol );
+    LabelData*              GetLabelData    ( SCsCOL nCol, size_t* pPos = NULL );
+    String                  GetLabelString  ( SCsCOL nCol );
     String                  GetFuncString   ( USHORT& rFuncMask, BOOL bIsValue = TRUE );
-    BOOL                    Contains        ( FuncDataVec* pArr, short nCol, size_t& nAt );
+    BOOL                    Contains        ( FuncDataVec* pArr, SCsCOL nCol, size_t& nAt );
     void                    Remove          ( FuncDataVec* pArr, size_t nAt );
     void                    Insert          ( FuncDataVec* pArr, const FuncData& rFData, size_t nAt );
 
