@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-14 14:32:08 $
+ *  last change: $Author: dv $ $Date: 2001-05-23 10:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,7 +1211,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     aTargetURL2 = aTargetObj.GetMainURL();
 
     if ( aTargetURL2 == rSourceURL )
-        return addEntry( aGroup, rTemplateName, rSourceURL, aType );
+        return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
 
     // copy the template into the new group (targeturl)
 
@@ -1240,7 +1240,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     { return FALSE; }
 
     // create a new entry in the hierarchy
-    return addEntry( aGroup, rTemplateName, rSourceURL, aType );
+    return addEntry( aGroup, rTemplateName, aTargetURL2, aType );
 }
 
 //-----------------------------------------------------------------------------
