@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 08:08:11 $
+ *  last change: $Author: fs $ $Date: 2002-06-07 12:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,7 +2314,7 @@ namespace
                 if ( _rxFrame.is() )
                     xParentFrame = xParentFrame.query( _rxFrame->getCreator() );
                 // did we find a parent frame? Which is no top-level frame?
-                if ( xParentFrame.is() /* && !_rxFrame->isTop() */ )
+                if ( xParentFrame.is() && !_rxFrame->isTop() )
                     // TODO: to prevent framework assertions, re-insert this "isTop" once 98303 is fixed
                     return lcl_getModuleHelpModuleName( xParentFrame );
             }
