@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 14:35:52 $
+ *  last change: $Author: os $ $Date: 2001-02-15 13:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,6 +1418,11 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
                             pTOXType = pTemp;
                             break;
                         }
+                    }
+                    if(!pTOXType)
+                    {
+                        SwTOXType aUserType(TOX_USER, sUserIndexName);
+                        pTOXType = pDoc->InsertTOXType(aUserType);
                     }
                 }
             }
