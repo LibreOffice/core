@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 12:59:52 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ static GtkWidget *  gMenubarWidget          = NULL;
 static GtkWidget *  gMenuItemMenubarWidget  = NULL;
 static GtkWidget *  gMenuWidget             = NULL;
 static GtkWidget *  gMenuItemMenuWidget     = NULL;
+static GtkWidget *  gTooltipPopup           = NULL;
 
 osl::Mutex  * pWidgetMutex;
 
@@ -156,6 +157,7 @@ static void NWEnsureGTKScrolledWindow   ( void );
 static void NWEnsureGTKToolbar          ( void );
 static void NWEnsureGTKMenubar          ( void );
 static void NWEnsureGTKMenu             ( void );
+static void NWEnsureGTKTooltip          ( void );
 
 static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* nGTKState, GtkShadowType* nGTKShadow );
 static void NWAddWidgetToCacheWindow( GtkWidget* widget );
@@ -414,6 +416,8 @@ void GtkData::deInitNWF( void )
         gtk_widget_destroy( gCacheWindow );
     if( gMenuWidget )
         gtk_widget_destroy( gMenuWidget );
+    if( gTooltipPopup )
+        gtk_widget_destroy( gTooltipPopup );
 
     delete pWidgetMutex;
     delete gNWPixmapCacheList;
@@ -482,6 +486,7 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 || (nPart==PART_ALL_BUTTONS)    )               )   ||
         ((nType==CTRL_COMBOBOX) &&
                 (  (nPart==PART_ENTIRE_CONTROL)
+                || (nPart==PART_BUTTON_DOWN)
                 || (nPart==HAS_BACKGROUND_TEXTURE)  )           )   ||
         (((nType==CTRL_TAB_ITEM) || (nType==CTRL_TAB_PANE) ||
           (nType==CTRL_TAB_BODY) || (nType==CTRL_FIXEDBORDER)) &&
@@ -501,6 +506,8 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 )
                                                                 )   ||
         ((nType == CTRL_MENUBAR) &&
+                (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
+        ((nType == CTRL_TOOLTIP) &&
                 (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
         ((nType == CTRL_MENU_POPUP) &&
                 (   (nPart==PART_ENTIRE_CONTROL) )
@@ -732,7 +739,10 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         {
             returnVal = NWPaintGTKSpinBox( nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, aCaption );
         }
-        else if ( (nType == CTRL_COMBOBOX) && (nPart==PART_ENTIRE_CONTROL) )
+        else if ( (nType == CTRL_COMBOBOX) &&
+            ( (nPart==PART_ENTIRE_CONTROL)
+            ||(nPart==PART_BUTTON_DOWN)
+            ) )
         {
             returnVal = NWPaintGTKComboBox( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, aCaption );
         }
@@ -762,6 +772,10 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         )
         {
             returnVal = NWPaintGTKPopupMenu( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, aCaption );
+        }
+        else if( (nType == CTRL_TOOLTIP) && (nPart == PART_ENTIRE_CONTROL) )
+        {
+            returnVal = NWPaintGTKTooltip( gdkDrawable, nType, nPart, aCtrlRect, aClip, nState, aValue, rControlHandle, aCaption );
         }
         if( pixmap )
         {
@@ -1966,6 +1980,8 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
     NWSetWidgetState( gArrowWidget, nState, stateType );
 
     buttonRect = NWGetComboBoxButtonRect( nType, nPart, pixmapRect, nState, aValue, rControlHandle, aCaption );
+    if( nPart == PART_BUTTON_DOWN )
+        buttonRect.Left() += 1;
 
     Rectangle       aEditBoxRect( pixmapRect );
     aEditBoxRect.SetSize( Size( pixmapRect.GetWidth() - buttonRect.GetWidth(), aEditBoxRect.GetHeight() ) );
@@ -1983,8 +1999,9 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
         clipRect.width = it->GetWidth();
         clipRect.height = it->GetHeight();
 
-        NWPaintOneEditBox( gdkDrawable, &clipRect, nType, nPart, aEditBoxRect,
-                           nState, aValue, rControlHandle, aCaption );
+        if( nPart == PART_ENTIRE_CONTROL )
+            NWPaintOneEditBox( gdkDrawable, &clipRect, nType, nPart, aEditBoxRect,
+                               nState, aValue, rControlHandle, aCaption );
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
         gtk_paint_flat_box( gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
@@ -2575,6 +2592,44 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
     return( TRUE );
 }
 
+BOOL GtkSalGraphics::NWPaintGTKTooltip(
+            GdkDrawable* gdkDrawable,
+            ControlType nType, ControlPart nPart,
+            const Rectangle& rControlRectangle,
+            const clipList& rClipList,
+            ControlState nState, const ImplControlValue& aValue,
+            SalControlHandle& rControlHandle, OUString aCaption )
+{
+    NWEnsureGTKTooltip();
+
+    gint            x, y, w, h;
+    GdkRectangle    clipRect;
+
+    x = rControlRectangle.Left();
+    y = rControlRectangle.Top();
+    w = rControlRectangle.GetWidth();
+    h = rControlRectangle.GetHeight();
+
+    for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
+    {
+        clipRect.x = it->Left();
+        clipRect.y = it->Top();
+        clipRect.width = it->GetWidth();
+        clipRect.height = it->GetHeight();
+
+        gtk_paint_flat_box( gTooltipPopup->style,
+                            gdkDrawable,
+                            GTK_STATE_NORMAL,
+                            GTK_SHADOW_OUT,
+                            &clipRect,
+                            gTooltipPopup,
+                            "tooltip",
+                            x, y, w, h );
+    }
+
+    return( TRUE );
+}
+
 //----
 
 static Rectangle NWGetListBoxButtonRect( ControlType    nType,
@@ -2789,6 +2844,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetInfoTextColor( aTextColor );
     aStyleSet.SetWindowTextColor( aTextColor );
     aStyleSet.SetFieldTextColor( aTextColor );
+    aStyleSet.SetHelpTextColor( aTextColor );
 
     // background colors
     Color aBackColor = getColor( pStyle->bg[GTK_STATE_NORMAL] );
@@ -2799,7 +2855,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
-    // ancient wisdom tells us a mystic algorithm how to set checked color
+    aStyleSet.SetHelpColor( aBackColor );
+   // ancient wisdom tells us a mystic algorithm how to set checked color
     if( aBackColor == COL_LIGHTGRAY )
         aStyleSet.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
     else
@@ -3301,5 +3358,16 @@ static void NWEnsureGTKMenu(void)
 
         gWidgetDefaultFlags[ (long)gMenuWidget ] = GTK_WIDGET_FLAGS( gMenuWidget );
         gWidgetDefaultFlags[ (long)gMenuItemMenuWidget ] = GTK_WIDGET_FLAGS( gMenuItemMenuWidget );
+    }
+}
+
+static void NWEnsureGTKTooltip(void)
+{
+    if( !gTooltipPopup )
+    {
+        gTooltipPopup = gtk_window_new (GTK_WINDOW_POPUP);
+        gtk_widget_set_name (gTooltipPopup, "gtk-tooltips");
+        gtk_widget_realize( gTooltipPopup );
+        gtk_widget_ensure_style( gTooltipPopup );
     }
 }
