@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:05:25 $
+ *  last change: $Author: os $ $Date: 2000-11-02 11:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
 #include <com/sun/star/style/TabStop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTADJUST_HPP_
-#include <com/sun/star/drawing/TextAdjust.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_STYLE_LINESPACING_HPP_
 #include <com/sun/star/style/LineSpacing.hpp>
@@ -143,24 +140,6 @@ using namespace ::com::sun::star;
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
-// Adjust
-const drawing::TextAdjust aSvxToUnoAdjust[] =
-{
-    drawing::TextAdjust_LEFT,
-    drawing::TextAdjust_RIGHT,
-    drawing::TextAdjust_BLOCK,
-    drawing::TextAdjust_CENTER,
-    drawing::TextAdjust_STRETCH
-};
-
-const SvxAdjust aUnoToSvxAdjust[] =
-{
-    SVX_ADJUST_LEFT,
-    SVX_ADJUST_CENTER,
-    SVX_ADJUST_RIGHT,
-    SVX_ADJUST_BLOCK,
-    SVX_ADJUST_BLOCKLINE
-};
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -543,8 +522,8 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     switch( nMemberId )
     {
-        case MID_PARA_ADJUST      : rVal <<= (sal_Int16)(aSvxToUnoAdjust[(sal_uInt16)GetAdjust()]); break;
-        case MID_LAST_LINE_ADJUST : rVal <<= (sal_Int16)(aSvxToUnoAdjust[(sal_uInt16)GetLastBlock()]); break;
+        case MID_PARA_ADJUST      : rVal <<= (sal_Int16)GetAdjust(); break;
+        case MID_LAST_LINE_ADJUST : rVal <<= (sal_Int16)GetLastBlock(); break;
         case MID_EXPAND_SINGLE    :
         {
             sal_Bool bValue = bOneBlock;
@@ -574,11 +553,10 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             if(eVal >= 0 && eVal <= 4)
             {
                 if(MID_LAST_LINE_ADJUST == nMemberId &&
-                    eVal != drawing::TextAdjust_LEFT &&
-                    eVal != drawing::TextAdjust_BLOCK &&
-                    eVal != drawing::TextAdjust_CENTER)
+                    eVal != SVX_ADJUST_LEFT &&
+                    eVal != SVX_ADJUST_BLOCK &&
+                    eVal != SVX_ADJUST_CENTER)
                         return FALSE;
-                eVal = aUnoToSvxAdjust[eVal];
                 if(eVal < (sal_uInt16)SVX_ADJUST_END)
                     nMemberId == MID_PARA_ADJUST ?
                         SetAdjust((SvxAdjust)eVal) :
