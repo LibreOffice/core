@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:05:25 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 class ScTabViewShell;
+class ScAccessibleDocument;
 
 namespace accessibility
 {
@@ -102,7 +103,8 @@ public:
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
-        ScSplitPos eSplitPos);
+        ScSplitPos eSplitPos,
+        ScAccessibleDocument* pAccDoc);
 
 protected:
     virtual ~ScAccessibleCell();
@@ -121,11 +123,11 @@ public:
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
+    virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
+    virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -179,6 +181,7 @@ public:
 
 private:
     ScTabViewShell* mpViewShell;
+    ScAccessibleDocument* mpAccDoc;
 
     accessibility::AccessibleTextHelper* mpTextHelper;
 

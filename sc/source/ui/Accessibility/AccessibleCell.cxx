@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-17 19:04:44 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
+#endif
+#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
+#include "AccessibleDocument.hxx"
 #endif
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
@@ -137,12 +140,14 @@ ScAccessibleCell::ScAccessibleCell(
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
-        ScSplitPos eSplitPos)
+        ScSplitPos eSplitPos,
+        ScAccessibleDocument* pAccDoc)
     :
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos),
-    mpTextHelper(NULL)
+    mpTextHelper(NULL),
+    mpAccDoc(pAccDoc)
 {
 }
 
@@ -193,7 +198,7 @@ void SAL_CALL ScAccessibleCell::grabFocus(  )
     }
 }
 
-Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void)
+Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
     Rectangle aCellRect(GetBoundingBox());
@@ -210,7 +215,7 @@ Rectangle ScAccessibleCell::GetBoundingBoxOnScreen(void)
     return aCellRect;
 }
 
-Rectangle ScAccessibleCell::GetBoundingBox(void)
+Rectangle ScAccessibleCell::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
     Rectangle aCellRect;
@@ -297,7 +302,11 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper();
+    utl::AccessibleRelationSetHelper* pRelationSet = NULL;
+    if (mpAccDoc)
+        pRelationSet = mpAccDoc->GetRelationSet(&maCellAddress);
+    if (!pRelationSet)
+        pRelationSet = new utl::AccessibleRelationSetHelper();
     FillDependends(pRelationSet);
     FillPrecedents(pRelationSet);
     return pRelationSet;

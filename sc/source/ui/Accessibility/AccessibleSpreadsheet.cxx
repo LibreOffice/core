@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-19 18:14:00 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef _SC_ACCESSIBLECELL_HXX
 #include "AccessibleCell.hxx"
 #endif
+#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
+#include "AccessibleDocument.hxx"
+#endif
 #ifndef SC_TABVWSH_HXX
 #include "tabvwsh.hxx"
 #endif
@@ -114,19 +117,20 @@ using namespace ::drafts::com::sun::star::accessibility;
 //=====  internal  ============================================================
 
 ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
-        const uno::Reference<XAccessible>& rxParent,
+        ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
         sal_uInt16 nTab,
         ScSplitPos eSplitPos)
     :
-    ScAccessibleTableBase (rxParent, GetDocument(pViewShell),
+    ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
         ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
     mpViewShell(pViewShell),
     mpMarkedRanges(NULL),
     mpSortedMarkedCells(NULL),
     maVisCells(GetVisCells(GetVisArea(pViewShell, eSplitPos))),
     meSplitPos(eSplitPos),
-    mbHasSelection(sal_False)
+    mbHasSelection(sal_False),
+    mpAccDoc(pAccDoc)
 {
     if (pViewShell)
     {
@@ -235,7 +239,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             else
                 mbDelIns = sal_False;
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        // commented out, because to use a ModelChangeEvent is not the right way
+        // at the moment there is no way, but the Java/Gnome Api should be extended sometime
+/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpViewShell)
             {
@@ -252,7 +258,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
             }
-        }
+        }*/
     }
     else if (rHint.ISA( ScUpdateRefHint ))
     {
@@ -369,7 +375,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleCel
     ScUnoGuard aGuard;
     ScAddress aCellAddress(static_cast<sal_uInt16>(maRange.aStart.Col() + nColumn),
         static_cast<sal_uInt16>(maRange.aStart.Row() + nRow), maRange.aStart.Tab());
-    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos);
+    ScAccessibleCell* pAccessibleCell = new ScAccessibleCell(this, mpViewShell, aCellAddress, getAccessibleIndex(nRow, nColumn), meSplitPos, mpAccDoc);
     uno::Reference < XAccessible > xAccessible = pAccessibleCell;
     pAccessibleCell->Init();
     return xAccessible;
@@ -417,6 +423,15 @@ void SAL_CALL ScAccessibleSpreadsheet::grabFocus(  )
 }
 
     //=====  XAccessibleContext  ==============================================
+
+uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAccessibleRelationSet(void)
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    utl::AccessibleRelationSetHelper* pRelationSet = NULL;
+    if(mpAccDoc)
+        pRelationSet = mpAccDoc->GetRelationSet(NULL);
+    return pRelationSet;
+}
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleSpreadsheet::getAccessibleStateSet(void)
@@ -645,7 +660,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
     //====  internal  =========================================================
 
-Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
+Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen() const
     throw (uno::RuntimeException)
 {
     Rectangle aRect;
@@ -658,7 +673,7 @@ Rectangle ScAccessibleSpreadsheet::GetBoundingBoxOnScreen()
     return aRect;
 }
 
-Rectangle ScAccessibleSpreadsheet::GetBoundingBox()
+Rectangle ScAccessibleSpreadsheet::GetBoundingBox() const
     throw (uno::RuntimeException)
 {
     Rectangle aRect;

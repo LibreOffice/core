@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-19 18:12:37 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ public:
 };
 
 class ScTabViewShell;
+class ScAccessibleDocument;
 
 /** @descr
         This base class provides an implementation of the
@@ -98,8 +99,7 @@ class ScAccessibleSpreadsheet
 public:
     //=====  internal  ========================================================
     ScAccessibleSpreadsheet(
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ScAccessibleDocument* pAccDoc,
         ScTabViewShell* pViewShell,
         sal_uInt16  nTab,
         ScSplitPos eSplitPos);
@@ -158,6 +158,12 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     ///=====  XAccessibleContext  ==============================================
+
+    /// Return NULL to indicate that an empty relation set.
+    virtual ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+        getAccessibleRelationSet(void)
+        throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
@@ -219,16 +225,17 @@ public:
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
+    virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
+    virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 private:
     ScTabViewShell* mpViewShell;
     ScRangeList*    mpMarkedRanges;
     std::vector<ScMyAddress>* mpSortedMarkedCells;
+    ScAccessibleDocument* mpAccDoc;
     Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
