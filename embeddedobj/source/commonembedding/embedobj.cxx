@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:19:45 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,4 +720,19 @@ void SAL_CALL OCommonEmbeddedObject::setContainerName( const ::rtl::OUString& sN
     m_aContainerName = sName;
 }
 
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_xParent;
+}
+
+void SAL_CALL OCommonEmbeddedObject::setParent( const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& xParent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException)
+{
+    m_xParent = xParent;
+    if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
+    {
+        uno::Reference < container::XChild > xChild( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( xParent );
+    }
+}
 
