@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:03:10 $
+ *  last change: $Author: pl $ $Date: 2002-05-24 12:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,12 @@
       <prop oor:name="FontWeight" oor:type="xs:string"/>
       <prop oor:name="FontType" oor:type="xs:string"/>
     </group>
+    <group oor:name="ConfigurableSettings" oor:extensible="true"/>
     <group oor:name="LocalizedDefaultFonts" oor:extensible="true"/>
     <set oor:name="LocalizedFontSubstitutions" oor:node-type="LFonts"/>
   </templates>
   <component>
+    <set oor:name="Settings" oor:node-type="ConfigurableSettings"/>
     <set oor:name="DefaultFonts" oor:node-type="LocalizedDefaultFonts"/>
     <set oor:name="FontSubstitutions" oor:node-type="LocalizedFontSubstitutions"/>
   </component>
