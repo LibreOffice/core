@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:24:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModalDialog DLG_MACROQUERY
         Text[ russian ] = "«апущено событие, дл€ которого сконфигурирован макрос. ¬ы хотите выполнить этот макрос?";
         Text[ polish ] = "Zosta≥o uruchomione wydarzenie, do ktуrego zosta≥o skonfigurowane makro. Czy chcesz wykonaж to makro?";
         Text[ japanese ] = "ѕЄџВ≈РЁТиВµВљОјНsМ_Л@В™КJОnВ≥ВкВ№ВµВљБBВ±ВћѕЄџВрОјНsВµВ№ВЈВ©?";
-        Text[ chinese_traditional ] = "ЊёІ@Ђь•O™љ±µ®”¶џ§@≠”•®ґ∞°M±z≠n∞х¶ж≥o≠”•®ґ∞°H";
+        Text[ chinese_traditional ] = "∞ І@Ђь•O™љ±µ®”©у§@≠”•®ґ∞°C≠n∞х¶ж≥o≠”•®ґ∞°H";
         Text[ arabic ] = " г »ѕЅ ЌѕЋ гхяжшд Џбне г«я—ж. еб  —нѕ  дЁн– е–« «бг«я—жњ";
         Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
         Text[ chinese_simplified ] = "≤ў„ч√ьЅо÷±љ”јі„‘“їЄцЇк£ђƒъ“™÷і––’вЄцЇк£њ";
