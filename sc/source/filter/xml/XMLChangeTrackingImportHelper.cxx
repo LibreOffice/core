@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:45:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,9 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         {
             sal_uInt32 nFormat(0);
             if (nType == NUMBERFORMAT_DATE)
-                nFormat = pDoc->GetFormatTable()->GetStandardFormat(NUMBERFORMAT_DATE);
+                nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
             else if (nType == NUMBERFORMAT_TIME)
-                nFormat = pDoc->GetFormatTable()->GetStandardFormat(NUMBERFORMAT_TIME);
+                nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_TIME, ScGlobal::eLnge );
             pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
         }
     }
@@ -706,7 +706,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* 
                     ScBaseCell* pNewCell = pOldCell->Clone(pDoc);
                     if (pNewCell)
                     {
-                        pPrevActContent->SetNewCell(pNewCell, pDoc);
+                        pPrevActContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
                         pPrevActContent->SetNewValue(pActContent->GetOldCell(), pDoc);
                     }
                 }
@@ -744,8 +744,9 @@ void ScXMLChangeTrackingImportHelper::SetDependencies(ScMyBaseAction* pAction)
                         ScBaseCell* pCell = (*aItr)->pCellInfo->CreateCell(pDoc);
                         if (!ScBaseCell::CellEqual(pCell, pContentAct->GetNewCell()))
                         {
-                            pContentAct->SetNewCell(pCell, pDoc);
-                            pContentAct->SetNewValue((*aItr)->pCellInfo->sInputString, pDoc);
+                            // #i40704# Don't overwrite SetNewCell result by calling SetNewValue,
+                            // instead pass the input string to SetNewCell.
+                            pContentAct->SetNewCell(pCell, pDoc, (*aItr)->pCellInfo->sInputString);
                         }
                     }
                 }
@@ -812,8 +813,10 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                                 static_cast<ScFormulaCell*>(pNewCell)->SetInChangeTrack(sal_True);
                             }
                         }
-                        pChangeActionContent->SetNewCell(pNewCell, pDoc);
-                        pChangeActionContent->SetNewValue(pCell, pDoc);
+                        pChangeActionContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
+                        // #i40704# don't overwrite the formula string from above with pCell's content
+                        if (pCell->GetCellType() != CELLTYPE_FORMULA)
+                            pChangeActionContent->SetNewValue(pCell, pDoc);
                     }
                 }
                 else
