@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSpreadsheets.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:15 $
+ *  last change:$Date: 2003-09-08 11:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.sheet;
 
-import com.sun.star.sheet.XSpreadsheets;
 import lib.MultiMethodTest;
+
+import com.sun.star.sheet.XSpreadsheets;
 
 /**
 * Testing <code>com.sun.star.sheet.XSpreadsheets</code>
