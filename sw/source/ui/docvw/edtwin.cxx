@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-18 10:32:51 $
+ *  last change: $Author: mib $ $Date: 2002-02-18 15:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3393,9 +3393,9 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nDropFormat( 0 ),
     nDropDestination( 0 ),
     nInsFrmColCount( 1 ),
-    bLockInput(FALSE),
+    bLockInput(FALSE)
 #ifdef ACCESSIBLE_LAYOUT
-    bHasAccessible( FALSE )
+    ,bHasAccessible( FALSE )
 #endif
 {
     SetHelpId(HID_EDIT_WIN);
