@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:58:54 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,6 +803,7 @@ public:
 
     virtual UINT16          GetNum() const;
     virtual ULONG           GetLen() const;
+    virtual const String&   GetName() const;
 };
 
 
@@ -815,8 +816,9 @@ private:
     BiffTyp                 eBiff;
     BOOL                    bHidden;
     BOOL                    bBuiltIn;
+    BOOL                    bMacro;
 
-    void                    Init( BOOL bHid = FALSE, BOOL bBIn = FALSE );
+    void                    Init( BOOL bHid = FALSE, BOOL bBIn = FALSE, BOOL bMacro = FALSE );
     void                    BuildFormula( const ScRange& rRange );
 
     void                    SetName( const String& rRangeName );
@@ -834,7 +836,10 @@ public:
                             ExcName( RootData& rRootData, const ScRange& rRange,
                                     UINT8 nKey, BOOL bHid = FALSE );
 
-    inline const String&    GetName() const     { return aName; }
+                /** Create a macro name. */
+                ExcName( RootData& rRootData, const String& rName );
+
+    inline virtual const String&    GetName() const     { return aName; }
 
     virtual ULONG           GetLen() const;
 };
@@ -897,6 +902,9 @@ public:
     /** Inserts a named range in table name sort order. */
     void                    InsertSorted( RootData& rRootData, ExcNameListEntry* pName, SCTAB nScTab );
 
+    /** Returns the 1-based macro name index from the names list.
+        Creates a new entry if macro name does not already exist. */
+    UINT16          GetMacroIdx( RootData& rRootData, const String &rName );
 
     virtual void            Save( XclExpStream& rStrm );
 };
