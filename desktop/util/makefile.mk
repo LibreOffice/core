@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-10 16:48:20 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:23:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=desktop
 TARGET=soffice
 TARGETTYPE=GUI
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
@@ -75,6 +76,7 @@ VERINFONAME=verinfo
 
 TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/lockfile.obj			\
+            $(OBJ)$/lockfile2.obj			\
             $(OBJ)$/intro.obj				\
             $(OBJ)$/officeipcthread.obj		\
             $(OBJ)$/appinit.obj				\
