@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 09:59:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 13:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include "prstylei.hxx"
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
 #endif
 #ifndef _DATE_HXX
 #include <tools/date.hxx>
@@ -165,6 +168,8 @@ namespace xmloff
         {
             nNamespace = m_rContext.getGlobalContext().GetNamespaceMap().GetKeyByAttrName(_rxAttrList->getNameByIndex(i), &sLocalName);
             handleAttribute(nNamespace, sLocalName, _rxAttrList->getValueByIndex(i));
+
+            m_aEncounteredAttributes.insert(sLocalName);
         }
 
         // TODO: create PropertyValues for all the attributes which were not present, because they were implied
@@ -175,6 +180,20 @@ namespace xmloff
     {
         // ignore them (should be whitespaces only)
         OSL_ENSURE(0 == _rChars.trim().getLength(), "OPropertyImport::Characters: non-whitespace characters!");
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OPropertyImport::encounteredAttribute(const ::rtl::OUString& _rAttributeName) const
+    {
+        return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyImport::simluateDefaultedAttribute(const sal_Char* _pAttributeName, const ::rtl::OUString& _rPropertyName, const sal_Char* _pAttributeDefault)
+    {
+        ::rtl::OUString sLocalAttrName = ::rtl::OUString::createFromAscii(_pAttributeName);
+        if (!encounteredAttribute(sLocalAttrName))
+            handleAttribute(XML_NAMESPACE_FORM, sLocalAttrName, ::rtl::OUString::createFromAscii(_pAttributeDefault));
     }
 
     //---------------------------------------------------------------------
@@ -354,8 +373,8 @@ namespace xmloff
     ::com::sun::star::util::Time OPropertyImport::implGetTime(double _nValue)
     {
         ::com::sun::star::util::Time aTime;
-        sal_Int32 nIntValue = _nValue * 8640000.0;
-        nIntValue *= 8640000.0;
+        sal_Int32 nIntValue = sal_Int32(_nValue * 8640000);
+        nIntValue *= 8640000;
         aTime.HundredthSeconds = nIntValue % 100;
         nIntValue /= 100;
         aTime.Seconds = nIntValue % 60;
@@ -363,7 +382,7 @@ namespace xmloff
         aTime.Minutes = nIntValue % 60;
         nIntValue /= 60;
         OSL_ENSURE(nIntValue < 24, "OPropertyImport::implGetTime: more than a day?");
-        aTime.Hours = nIntValue;
+        aTime.Hours = (sal_uInt16)nIntValue;
 
         return aTime;
     }
@@ -536,6 +555,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/28 09:59:38  fs
+ *  #85097# correctly import boolean properties with inverse semantics
+ *
  *  Revision 1.9  2001/03/16 14:36:39  sab
  *  did the required change (move of extract.hxx form cppuhelper to comphelper)
  *
