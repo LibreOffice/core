@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:37:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,10 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
             rReq.AppendItem(SvxUnderlineItem(eUnderline));
             rReq.Done();
         }
+        break;
+        case FN_REMOVE_DIRECT_CHAR_FORMATS:
+            if( !rSh.HasReadonlySel() && rSh.IsEndPara())
+                rSh.DontExpandFmt();
         break;
         default:
             ASSERT(FALSE, falscher Dispatcher);
