@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:13:14 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,9 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
       mpCache (new ViewShellCache(*this)),
       mnUpdateLockCount(0),
       mbKeepMainViewShellOnTop(true),
-      mbIsValid (true)
+      mbIsValid (true),
+      mbTakeShellsFromStackPending(false),
+      mbShellStackIsUpToDate(true)
 {
 }
 
@@ -486,6 +488,8 @@ void ViewShellManager::TakeShellsFromStack (void)
 
 void ViewShellManager::PushShellsOnStack (void)
 {
+    mbShellStackIsUpToDate = false;
+
     // Remove all stacked shells.
     mrBase.RemoveSubShell (NULL);
 
@@ -506,10 +510,20 @@ void ViewShellManager::PushShellsOnStack (void)
             OSL_TRACE ("    putting %s on stack",
                 ::rtl::OUStringToOString((*iShell)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
             mrBase.AddSubShell (**iShell);
+
+            // The pushing of the shell on to the shell stack may have lead
+            // to another invocation of this method.  In this case we have
+            // to abort pushing shells on the stack and return immediately.
+            if (mbShellStackIsUpToDate)
+                break;
         }
         if (mrBase.GetDispatcher() != NULL)
             mrBase.GetDispatcher()->Flush();
     }
+
+    // Tell an invocation of this method on a higher level that it can (has
+    // to) abort and return immediately.
+    mbShellStackIsUpToDate = true;
 }
 
 
