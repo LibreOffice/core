@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-23 11:25:16 $
+ *  last change: $Author: os $ $Date: 2001-05-30 08:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5347,10 +5347,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_a90degRB.Hide();
         m_a270degRB.Hide();
         m_aFitToLineCB.Hide();
-        m_aScalingFL.Hide();
         m_aFitToLineCB .Hide();
-        m_aScaleWidthFT.Hide();
-        m_aScaleWidthMF.Hide();
 
 
         // move the following controls upwards
@@ -5359,8 +5356,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             &m_aKerningLB, &m_aKerningFT, &m_aKerningEdit, &m_aPairKerningBtn,
             0 };
 
-        long nDiff = m_aKerningLine.GetPosPixel().Y() -
-                    m_aScalingFL.GetPosPixel().Y();
+        long nDiff = m_aScaleWidthMF.GetPosPixel().Y() -
+                        m_a0degRB.GetPosPixel().Y();
 
         for( Window** ppW = aCntrlArr; *ppW; ++ppW )
         {
