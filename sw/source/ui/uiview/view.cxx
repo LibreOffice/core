@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:41:17 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,8 +935,9 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
             //#95521# to update the field command et.al. if necessary
             const SwViewOption* pPreViewOpt = rPreviewViewShell.GetViewOptions();
             if( pPreViewOpt->IsFldName() != aUsrPref.IsFldName() ||
-                    pPreViewOpt->IsHidden() != aUsrPref.IsHidden() ||
-                    pPreViewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() )
+                    pPreViewOpt->IsShowHiddenField() != aUsrPref.IsShowHiddenField() ||
+                    pPreViewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() ||
+                    pPreViewOpt->IsShowHiddenChar() != aUsrPref.IsShowHiddenChar() )
                 rPreviewViewShell.ApplyViewOptions(aUsrPref);
             // OD 09.01.2003 #106334# - reset design mode at draw view for form
             // shell, if needed.
