@@ -89,6 +89,7 @@ common
 		OLD_CHAOS
 		PCLEAN_PATH
 		PRE
+		PRODUCTNAME
 		PROEXT
 		PROFILE
 		profile
@@ -99,6 +100,7 @@ common
 		RES_DTCH
 		RES_ENUS
 		RES_FREN
+		RES_GER
 		RES_GREEK
 		RES_ITAL
 		RES_JAPN
