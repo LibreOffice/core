@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scheduler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:54:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,22 @@ namespace sdr
         sal_uInt32 Scheduler::GetTime()
         {
             return mnTime;
+        }
+
+        // #i38135#
+        void Scheduler::SetTime(sal_uInt32 nTime)
+        {
+            Stop();
+            mnTime = nTime;
+
+            Event* pEvent = maList.GetFirst();
+            while(pEvent)
+            {
+                pEvent->SetTime(nTime);
+                pEvent = pEvent->GetNext();
+            }
+
+            Execute();
         }
 
         void Scheduler::Reset(sal_uInt32 nTime)
