@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 14:47:24 $
+#   last change: $Author: rt $ $Date: 2004-03-02 11:32:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,5 +66,5 @@ USE_BUILTIN_RASTERIZER=true
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)" != ""
-ENVCDEFS += -DUSE_BUILTIN_RASTERIZER
+ADDCDEFS += -DUSE_BUILTIN_RASTERIZER
 .ENDIF
