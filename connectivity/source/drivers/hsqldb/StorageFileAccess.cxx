@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:09:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,30 @@ using namespace ::connectivity::hsqldb;
 JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_isStreamElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
-    Reference< XStorage> xStorage = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( xStorage.is() )
+    TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
+    if ( aStoragePair.first.first.is() )
     {
         try
         {
-            return xStorage->isStreamElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name)));
+            ::rtl::OUString sName = StorageContainer::jstring2ustring(env,name);
+            try
+            {
+                ::rtl::OUString sOldName = StorageContainer::removeOldURLPrefix(sName);
+                if ( aStoragePair.first.first->isStreamElement(sOldName) )
+                {
+                    try
+                    {
+                        aStoragePair.first.first->renameElement(sOldName,StorageContainer::removeURLPrefix(sName,aStoragePair.first.second));
+                    }
+                    catch(Exception&)
+                    {
+                    }
+                }
+            }
+            catch(NoSuchElementException&)
+            {
+            }
+            return aStoragePair.first.first->isStreamElement(StorageContainer::removeURLPrefix(sName,aStoragePair.first.second));
         }
         catch(NoSuchElementException&)
         {
@@ -130,12 +148,12 @@ JNIEXPORT jboolean JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_removeElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring name)
 {
-    Reference< XStorage> xStorage = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( xStorage.is() )
+    TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
+    if ( aStoragePair.first.first.is() )
     {
         try
         {
-            xStorage->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name)));
+            aStoragePair.first.first->removeElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,name),aStoragePair.first.second));
         }
         catch(NoSuchElementException&)
         {
@@ -163,12 +181,12 @@ JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_rem
 JNIEXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageFileAccess_renameElement
   (JNIEnv * env, jobject obj_this,jstring key, jstring oldname, jstring newname)
 {
-    Reference< XStorage> xStorage = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
-    if ( xStorage.is() )
+    TStorages::mapped_type aStoragePair = StorageContainer::getRegisteredStorage(StorageContainer::jstring2ustring(env,key));
+    if ( aStoragePair.first.first.is() )
     {
         try
         {
-            xStorage->renameElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname)),StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname)));
+            aStoragePair.first.first->renameElement(StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,oldname),aStoragePair.first.second),StorageContainer::removeURLPrefix(StorageContainer::jstring2ustring(env,newname),aStoragePair.first.second));
         }
         catch(NoSuchElementException&)
         {

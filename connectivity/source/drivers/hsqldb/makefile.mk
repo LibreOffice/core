@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-21 16:40:57 $
+#   last change: $Author: vg $ $Date: 2005-02-16 15:53:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ nojava:
 # --- Files -------------------------------------
 
 SLOFILES=\
-        $(SLO)$/HStorage.obj					\
         $(SLO)$/HStorageMap.obj					\
         $(SLO)$/HStorageAccess.obj				\
         $(SLO)$/HDriver.obj						\
