@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:50:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,9 +68,7 @@ BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  		svpre.mk
 .INCLUDE :  		settings.mk
-.INCLUDE :  		sv.mk
 
 # --- Generate -----------------------------------------------------
 
@@ -109,7 +107,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/colorlistener.obj                       \
                     $(SLO)$/framelistanalyzer.obj
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
     resource.src
 
 RESLIB1NAME=		fwe
