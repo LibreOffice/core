@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:32:22 $
+ *  last change: $Author: os $ $Date: 2000-10-12 08:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#ifndef _SFXCFGITEM_HXX //autogen
-#include <sfx2/cfgitem.hxx>
-#endif
 #ifndef _SFX_INIMGR_HXX
 #include <sfx2/inimgr.hxx>
 #endif
@@ -119,13 +116,6 @@
 #endif
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
-#endif
-
-#ifndef _CFGID_H
-#include <cfgid.h>
-#endif
-#ifndef _CFGSTR_HRC
-#include <cfgstr.hrc>
 #endif
 
 #define VERSION_30B     ((USHORT)250)
@@ -249,7 +239,7 @@ BOOL /**/ SwBaseNumRules::Store(SvStream &rStream)
         else
             rStream << (unsigned char) FALSE;
     }
-    return SfxConfigItem::ERR_OK;
+    return TRUE;
 }
 
 
@@ -261,7 +251,7 @@ BOOL /**/ SwBaseNumRules::Store(SvStream &rStream)
 
 int SwBaseNumRules::Load(SvStream &rStream)
 {
-    int         rc = SfxConfigItem::ERR_OK;
+    int         rc = 0;
 
     rStream >> nVersion;
 
@@ -284,7 +274,7 @@ int SwBaseNumRules::Load(SvStream &rStream)
     }
     else
     {
-        rc = SfxConfigItem::WARNING_VERSION;
+        rc = 1;
     }
 
     return rc;
@@ -315,15 +305,6 @@ void SwChapterNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, USHORT nI
 {
     bModified = TRUE;
     SwBaseNumRules::ApplyNumRules(rCopy, nIdx);
-}
-
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
-String   SwChapterNumRules::GetName() const
-{
-    return SW_RESSTR( STR_CFG_UINUM );
 }
 
 /*------------------------------------------------------------------------*/
@@ -757,47 +738,4 @@ void SwNumRulesWithName::_SwNumFmtGlobal::ChgNumFmt( SwWrtShell& rSh,
     if( pFmt )
         ((SwNumFmt&)aFmt).SetCharFmt( 0 );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:33  hr
-    initial import
-
-    Revision 1.69  2000/09/18 16:05:18  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.68  2000/07/26 10:46:37  jp
-    Bulletchar is now an unicode char, so we must write a new format
-
-    Revision 1.67  2000/07/24 12:55:43  jp
-    Bug #76561#: convert Bulletchar to unicode
-
-    Revision 1.66  2000/06/26 13:09:13  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.65  2000/06/07 13:08:17  os
-    using UCB
-
-    Revision 1.64  2000/04/20 12:50:49  os
-    GetName() returns String&
-
-    Revision 1.63  2000/04/11 08:02:24  os
-    UNICODE
-
-    Revision 1.62  2000/03/03 15:16:59  os
-    StarView remainders removed
-
-    Revision 1.61  1999/10/21 17:47:37  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.60  1998/11/17 09:50:14  OS
-    #58263# NumType durch SvxExtNumType ersetzt
-
-
-      Rev 1.59   17 Nov 1998 10:50:14   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-------------------------------------------------------------------------*/
-
 
