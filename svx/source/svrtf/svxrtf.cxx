@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:18:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,7 +432,7 @@ void SvxRTFParser::ReadStyleTable()
             }
             break;
 
-        case RTF_SBASEDON:  pStyle->nBasedOn = USHORT(nTokenValue); break;
+        case RTF_SBASEDON:  pStyle->nBasedOn = USHORT(nTokenValue); pStyle->bBasedOnIsSet=TRUE; break;
         case RTF_SNEXT:     pStyle->nNext = USHORT(nTokenValue);    break;
         case RTF_OUTLINELEVEL:
         case RTF_SOUTLVL:   pStyle->nOutlineNo = BYTE(nTokenValue); break;
@@ -1295,6 +1295,7 @@ SvxRTFStyleType::SvxRTFStyleType( SfxItemPool& rPool, const USHORT* pWhichRange 
 {
     nOutlineNo = BYTE(-1);          // nicht gesetzt
     nBasedOn = 0;
+    bBasedOnIsSet = FALSE;          //$flr #117411#
     nNext = 0;
     bIsCharFmt = FALSE;
 }
