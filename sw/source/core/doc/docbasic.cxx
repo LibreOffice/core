@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbasic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:35:47 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,6 +289,8 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             if( !bCheckPtr )
                 pTbl = &pIMapObj->GetMacroTable();
         }
+        break;
+    default:
         break;
     }
 
