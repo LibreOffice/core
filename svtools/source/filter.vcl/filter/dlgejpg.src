@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:08:40 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ dutch ] = "Grijswaarden";
         Text[ chinese_simplified ] = "»Ò¶Θ";
         Text[ greek ] = "Διαβάθμιση του γκρι";
-        Text[ korean ] = "ΘΈ»φΑ¶";
+        Text[ korean ] = "ΘΈ»φµµ";
         Text[ turkish ] = "Gri tonlama";
         Text[ language_user1 ] = " ";
     };
