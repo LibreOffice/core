@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:55:25 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1306,7 +1306,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_PAGEFOOTER:
             {
 #ifndef CHECK_MENU
-                rSet.Put( SfxObjectItem( nWhich, GetView().GetDocShell() ));
+                rSet.Put( SfxObjectShellItem( nWhich, GetView().GetDocShell() ));
 #else
                 // Seitenvorlagen besorgen
                 BOOL bFound = FALSE;
@@ -1324,7 +1324,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
 
                 if( bFound )
-                    rSet.Put( SfxObjectItem( nWhich, GetView().GetDocShell() ));
+                    rSet.Put( SfxObjectShellItem( nWhich, GetView().GetDocShell() ));
                 else
                     rSet.DisableItem( nWhich );
 #endif
