@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mtg $ $Date: 2002-01-29 15:32:28 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 10:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ static void ImplSetStoredData( ZipEntry & rEntry, Reference < XInputStream> & rS
 void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool &rRandomPool)
     throw(RuntimeException)
 {
+    sal_Bool bWritingFailed = sal_False;
     ZipPackageFolder *pFolder = NULL;
     ZipPackageStream *pStream = NULL;
     const OUString sMediaTypeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
@@ -475,13 +476,15 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                     rZipOut.rawCloseEntry();
                 }
-                catch (ZipException&)
+                catch ( ZipException& r )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    bWritingFailed = sal_True;
                 }
-                catch (IOException & )
+                catch ( IOException& r )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    bWritingFailed = sal_True;
                 }
             }
             else
@@ -529,13 +532,15 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
 
                     rZipOut.closeEntry();
                 }
-                catch (ZipException&)
+                catch ( ZipException& r )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    bWritingFailed = sal_True;
                 }
-                catch (IOException & )
+                catch ( IOException& r )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                    bWritingFailed = sal_True;
                 }
                 if ( bToBeEncrypted && !nMagicalHackPos )
                 {
@@ -554,6 +559,9 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
         rManList.push_back (aPropSet);
     }
+
+    if( bWritingFailed )
+        throw RuntimeException();
 }
 
 void ZipPackageFolder::releaseUpwardRef( void )
