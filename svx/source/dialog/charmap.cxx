@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-12 12:56:20 $
+ *  last change: $Author: hdu $ $Date: 2001-07-17 18:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,14 @@ static int UnicodeToMapIndex( const FontCharMap& rMap, sal_UCS4 cChar )
         sal_UCS4 cFirst, cLast;
         rMap.GetRange( i, cFirst, cLast );
         if( cChar < cLast )
-            return nIndex + (cChar - cFirst);
+            if( cChar >= cFirst )
+                return nIndex + (cChar - cFirst);
+            else
+                return nIndex;
         nIndex += cLast - cFirst;
     }
-    return 0;
+
+    return -1;
 }
 
 // -----------------------------------------------------------------------
@@ -287,8 +291,8 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
         else if ( aPos.Y() > aSize.Height()-5 )
             aPos.Y() = aSize.Height()-5;
 
-        int index = PixelToMapIndex( aPos);
-        SelectIndex( index );
+        int nIndex = PixelToMapIndex( aPos );
+        SelectIndex( nIndex );
     }
 }
 
@@ -343,13 +347,14 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aCode = rKEvt.GetKeyCode();
 
-    if ( aCode.GetModifier() )
+    if( aCode.GetModifier() )
     {
         Control::KeyInput( rKEvt );
         return;
     }
 
     int tmpSelected = nSelectedIndex;
+
 
     switch ( aCode.GetCode() )
     {
@@ -381,11 +386,15 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
             tmpSelected = maFontCharMap.GetCharCount() - 1;
             break;
         default:
-            tmpSelected = UnicodeToMapIndex( maFontCharMap, rKEvt.GetCharCode() );
-            if ( tmpSelected < 0 || tmpSelected >= maFontCharMap.GetCharCount() )
             {
-                Control::KeyInput( rKEvt );
-                tmpSelected = - 1;  // mark as invalid
+                sal_Unicode cChar = rKEvt.GetCharCode();
+                sal_Unicode cNext = maFontCharMap.GetNextChar( cChar - 1 );
+                tmpSelected = UnicodeToMapIndex( maFontCharMap, cNext );
+                if( tmpSelected < 0 || (cChar != cNext) )
+                {
+                    Control::KeyInput( rKEvt );
+                    tmpSelected = - 1;  // mark as invalid
+                }
             }
     }
 
@@ -426,7 +435,13 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
         int x = pix.X();
         int y = pix.Y();
 
-        if ( i == nSelectedIndex /*&& HasFocus()*/ )
+        String aCharStr( MapIndexToUnicode( maFontCharMap, i ) );
+        int tx = x + ( nX - GetTextWidth(aCharStr) ) / 2;
+        int ty = y + ( nY - GetTextHeight() ) / 2;
+
+        if ( i != nSelectedIndex /*&& HasFocus()*/ )
+            DrawText( Point( tx, ty ), aCharStr );
+        else
         {
             const StyleSettings& rStyleSettings =
                 Application::GetSettings().GetStyleSettings();
@@ -434,22 +449,32 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2)
             Color aLineCol = GetLineColor();
             Color aFillCol = GetFillColor();
             SetLineColor();
-            SetFillColor( rStyleSettings.GetFaceColor() );
-            DrawRect( Rectangle( Point( x+1, y+1), Size( nX-1, nY-1)));
-            SetLineColor( rStyleSettings.GetLightColor() );
-            DrawLine( Point( x+1, y+1 ), Point( x+nX-1, y+1));
-            DrawLine( Point( x+1, y+1 ), Point( x+1, y+nY-1));
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( x+1, y+nY-1), Point( x+nX-1, y+nY-1));
-            DrawLine( Point( x+nX-1, y+nY-1), Point( x+nX-1, y+1));
+            if( HasFocus() )
+            {
+                SetFillColor( rStyleSettings.GetHighlightColor() );
+                DrawRect( Rectangle( Point(x+1,y+1), Size(nX-1,nY-1) ) );
+
+                Color aTextCol = GetTextColor();
+                SetTextColor( rStyleSettings.GetHighlightTextColor() );
+                DrawText( Point( tx, ty ), aCharStr );
+                SetTextColor( aTextCol );
+            }
+            else
+            {
+                SetFillColor( rStyleSettings.GetFaceColor() );
+                DrawRect( Rectangle( Point( x+1, y+1), Size( nX-1, nY-1) ) );
+                SetLineColor( rStyleSettings.GetLightColor() );
+                DrawLine( Point( x+1,y+1 ), Point( x+nX-1, y+1) );
+                DrawLine( Point( x+1,y+1 ), Point( x+1, y+nY-1) );
+                SetLineColor( rStyleSettings.GetShadowColor() );
+                DrawLine( Point( x+1, y+nY-1), Point( x+nX-1, y+nY-1) );
+                DrawLine( Point( x+nX-1, y+nY-1), Point( x+nX-1, y+1) );
+
+                DrawText( Point( tx, ty ), aCharStr );
+            }
             SetLineColor( aLineCol );
             SetFillColor( aFillCol );
         }
-
-        String aCharStr( MapIndexToUnicode( maFontCharMap, i ) );
-        x += ( nX - GetTextWidth(aCharStr) ) / 2;
-        y += ( nY - GetTextHeight() ) / 2;
-        DrawText( Point( x, y ), aCharStr );
     }
 }
 
@@ -586,7 +611,10 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, BOOL bFocus )
 
 void SvxShowCharSet::SelectCharacter( sal_Unicode cNew, BOOL bFocus )
 {
-    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cNew );
+    // get next available char of current font
+    sal_Unicode cNext = maFontCharMap.GetNextChar( cNew - 1 );
+
+    int nMapIndex = UnicodeToMapIndex( maFontCharMap, cNext );
     SelectIndex( nMapIndex, bFocus );
     if( !bFocus )
     {
@@ -862,15 +890,21 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
     // TODO: get info from the Font once it provides it
     if( pSubsetMap)
         delete pSubsetMap;
-    pSubsetMap = new SubsetMap;
+    pSubsetMap = NULL;
 
     BOOL bNeedSubset = (aFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL);
-    if( bNeedSubset) {
+    if( bNeedSubset )
+    {
+        FontCharMap aFontCharMap;
+        aShowSet.GetFontCharMap( aFontCharMap );
+        pSubsetMap = new SubsetMap( &aFontCharMap );
+
         // update subset listbox for new font's unicode subsets
         aSubsetLB.Clear();
         const Subset* s = 0;
         // TODO: is it worth to improve stupid linear search?
-        for( int i = 0; (s = pSubsetMap->GetSubsetByIndex( i)) != 0; ++i) {
+        for( int i = 0; (s = pSubsetMap->GetSubsetByIndex( i)) != 0; ++i )
+        {
             USHORT nPos = aSubsetLB.InsertEntry( s->GetName());
             aSubsetLB.SetEntryData( nPos, (void*)s );
             // subset must live at least as long as the selected font !!!
@@ -891,10 +925,11 @@ IMPL_LINK( SvxCharMapData, FontSelectHdl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxCharMapData, SubsetSelectHdl, ListBox *, EMPTYARG )
 {
     USHORT nPos = aSubsetLB.GetSelectEntryPos();
-    const Subset* subset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
-    if( subset) {
-        sal_Unicode c = subset->GetRangeMin();
-        aShowSet.SelectCharacter( c);
+    const Subset* pSubset = reinterpret_cast<const Subset*> (aSubsetLB.GetEntryData(nPos));
+    if( pSubset )
+    {
+        sal_Unicode cFirst = pSubset->GetRangeMin();
+        aShowSet.SelectCharacter( cFirst );
     }
     return 0;
 }
@@ -936,11 +971,14 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
     String aTemp;
     sal_Unicode c = aShowSet.GetSelectCharacter();
     sal_Bool bSelect = ( c > 0 );
-    if ( bSelect ) {
+    if ( bSelect )
+    {
         aTemp = c;
-        const Subset* subset = pSubsetMap->GetSubsetByUnicode( c);
-        if( subset)
-            aSubsetLB.SelectEntry( subset->GetName());
+        const Subset* pSubset = NULL;
+        if( pSubsetMap )
+            pSubset = pSubsetMap->GetSubsetByUnicode( c );
+        if( pSubset )
+            aSubsetLB.SelectEntry( pSubset->GetName() );
     }
     aShowChar.SetText( aTemp );
     aShowChar.Update();
@@ -967,6 +1005,15 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
 
 IMPL_LINK( SvxCharMapData, CharPreSelectHdl, Control *, EMPTYARG )
 {
+    // adjust subset selection
+    if( pSubsetMap )
+    {
+        sal_Unicode cChar = aShowSet.GetSelectCharacter();
+        const Subset* pSubset = pSubsetMap->GetSubsetByUnicode( cChar );
+        if( pSubset )
+            aSubsetLB.SelectEntry( pSubset->GetName() );
+    }
+
     aOKBtn.Enable();
     return 0;
 }
@@ -984,11 +1031,13 @@ IMPL_LINK( SvxCharMapData, DeleteHdl, PushButton *, EMPTYARG )
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 
-SubsetMap::SubsetMap( /* TODO */ ) :
-    Resource( ResId( SVX_RES(RID_SUBSETMAP)))
+static const Subset** ppAllSubsets = NULL;
+
+SubsetMap::SubsetMap( const FontCharMap* pFontCharMap )
+:   Resource( ResId( SVX_RES(RID_SUBSETMAP) ) )
 {
     InitList();
-    FreeResource();
+    ApplyCharMap( pFontCharMap );
 }
 
 SubsetMap::~SubsetMap()
@@ -1015,10 +1064,10 @@ const Subset* SubsetMap::GetSubsetByUnicode( sal_Unicode c) const
 }
 
 inline Subset::Subset( sal_Unicode _min, sal_Unicode _max, int resId)
-:   rangeMin(_min), rangeMax(_max), rangeName( ResId(resId))
+:   rangeMin(_min), rangeMax(_max), rangeName( ResId(resId) )
 {}
 
-void SubsetMap::InitList( void)
+void SubsetMap::InitList()
 {
     aSubsets = new const Subset*[ RID_SUBSET_COUNT];
     int i = 0;
@@ -1130,8 +1179,49 @@ void SubsetMap::InitList( void)
     aSubsets[ i++] = new Subset( 0xFF00, 0xFFEF, RID_SUBSETSTR_HALFW_FULLW_FORMS);
     aSubsets[ i++] = new Subset( 0xFFF0, 0xFFFF, RID_SUBSETSTR_SPECIALS);
 
+    FreeResource();
+
     nSubsets = i;
     DBG_ASSERT( (nSubsets < RID_SUBSET_COUNT), "RID_SUBSET_COUNT too small");
     DBG_ASSERT( (2*nSubsets > RID_SUBSET_COUNT), "RID_SUBSET_COUNT way to big");
 }
 
+void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
+{
+    if( !pFontCharMap )
+        return;
+
+    int nSrc = 0;
+    int nDst = 0;
+    ULONG nIndex = 0;
+    const ULONG nRanges = pFontCharMap->GetRangeCount();
+    while( nSrc < nSubsets )
+    {
+        sal_UCS4 cFirst, cLast;
+        if( nIndex < nRanges )
+            pFontCharMap->GetRange( nIndex, cFirst, cLast );
+        else
+            cFirst = cLast = ~0;
+
+        const Subset* pS = aSubsets[ nSrc ];
+        if( cLast <= pS->GetRangeMin() )
+            if( nIndex < nRanges )
+                { ++nIndex; continue; }
+
+        if( cFirst > pS->GetRangeMax() )
+        {
+            delete aSubsets[ nSrc ];
+            aSubsets[ nSrc ] = NULL;
+        }
+        else if( nSrc != nDst )
+        {
+            aSubsets[ nDst++ ] = aSubsets[ nSrc ];
+            aSubsets[ nSrc ] = NULL;
+        } else
+            ++nDst;
+
+        ++nSrc;
+    }
+
+    nSubsets = nDst;
+}
