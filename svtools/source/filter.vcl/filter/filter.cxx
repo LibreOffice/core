@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 12:14:16 $
+ *  last change: $Author: thb $ $Date: 2001-07-30 13:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,6 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
 static String ImpCreateFullFilterPath( const String& rPath, const String& rFilterName )
 {
-#ifdef TF_FILEURL
     ::rtl::OUString aPathURL;
 
     ::osl::FileBase::getFileURLFromSystemPath( rPath, aPathURL );
@@ -924,14 +923,6 @@ static String ImpCreateFullFilterPath( const String& rPath, const String& rFilte
     aSystemPath += ::rtl::OUString( rFilterName );
 
     return String( aSystemPath );
-#else
-    ::rtl::OUString aDest, aNormalizedPath;
-    ::osl::FileBase::normalizePath( rPath, aDest );
-    aDest += ::rtl::OUString( sal_Unicode( '/' ) );
-    aDest += ::rtl::OUString( rFilterName );
-    ::osl::FileBase::getSystemPathFromNormalizedPath( aDest, aNormalizedPath );
-    return String( aNormalizedPath );
-#endif
 }
 
 
