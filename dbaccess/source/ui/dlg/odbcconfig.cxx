@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,10 @@
 #define ODBC_UI_LIBRARY "ODBCCP32.DLL"
 #endif
 #ifdef UNX
-#define ODBC_LIBRARY    "libodbc.so"
-#define ODBC_UI_LIBRARY "libodbcinst.so"
+#define ODBC_LIBRARY_1      "libodbc.so.1"
+#define ODBC_UI_LIBRARY_1   "libodbcinst.so.1"
+#define ODBC_LIBRARY        "libodbc.so"
+#define ODBC_UI_LIBRARY     "libodbcinst.so"
 #endif
 
 // just to go with calling convention of windows
@@ -137,15 +139,15 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 //= OOdbcLibWrapper
 //=========================================================================
 //-------------------------------------------------------------------------
-OOdbcLibWrapper::OOdbcLibWrapper(const sal_Char* _pLibPath)
-    :m_sLibPath(::rtl::OUString::createFromAscii(_pLibPath))
-    ,m_pOdbcLib(NULL)
+OOdbcLibWrapper::OOdbcLibWrapper()
+    :m_pOdbcLib(NULL)
 {
 }
 
 //-------------------------------------------------------------------------
-sal_Bool OOdbcLibWrapper::load()
+sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
+    m_sLibPath = ::rtl::OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
     // load the module
     m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
@@ -192,14 +194,19 @@ struct OdbcTypesImpl
 //-------------------------------------------------------------------------
 OOdbcEnumeration::OOdbcEnumeration()
 #ifdef HAVE_ODBC_SUPPORT
-    :OOdbcLibWrapper(ODBC_LIBRARY)
-    ,m_pAllocHandle(NULL)
+    :m_pAllocHandle(NULL)
     ,m_pSetEnvAttr(NULL)
     ,m_pDataSources(NULL)
     ,m_pImpl(new OdbcTypesImpl)
 #endif
 {
-    if (load())
+    sal_Bool bLoaded = load(ODBC_LIBRARY);
+#ifdef ODBC_LIBRARY_1
+    if ( !bLoaded )
+        bLoaded = load(ODBC_LIBRARY_1);
+#endif
+
+    if ( bLoaded )
     {
 #ifdef HAVE_ODBC_SUPPORT
         // load the generic functions
@@ -301,12 +308,16 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 //=========================================================================
 //-------------------------------------------------------------------------
 OOdbcManagement::OOdbcManagement()
-    :OOdbcLibWrapper(ODBC_UI_LIBRARY)
 #ifdef HAVE_ODBC_SUPPORT
-    ,m_pSQLManageDataSource(NULL)
+:m_pSQLManageDataSource(NULL)
 #endif
 {
-    if (load())
+    sal_Bool bLoaded = load(ODBC_UI_LIBRARY);
+#ifdef ODBC_UI_LIBRARY_1
+    if ( !bLoaded )
+        bLoaded = load(ODBC_UI_LIBRARY_1);
+#endif
+    if ( bLoaded )
     {
 #ifdef HAVE_ODBC_SUPPORT
         m_pSQLManageDataSource = loadSymbol("SQLManageDataSources");
