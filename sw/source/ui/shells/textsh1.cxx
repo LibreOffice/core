@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 17:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,7 @@ short lcl_AskRedlineMode(Window *pWin)
 
 void SwTextShell::Execute(SfxRequest &rReq)
 {
+    BOOL bUseDialog = TRUE;
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwWrtShell& rWrtSh = GetShell();
     const SfxPoolItem* pItem = 0;
@@ -589,6 +590,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case SID_ATTR_PARA_NUMRULE :
+        case FN_FORMAT_LINENUMBER :
+        case FN_NUMBER_NEWSTART :
+        case FN_NUMBER_NEWSTART_AT :
+        {
+            USHORT nWhich = GetPool().GetWhich( nSlot );
+            if ( pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
+                bUseDialog = FALSE;
+            // intentionally no break
+
+        }
         case SID_PARA_DLG:
         {
         //Damit aus dem Basic keine Dialoge fuer Hintergrund-Views aufgerufen werden:
@@ -651,17 +663,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aCoreSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
                                                     rWrtSh.IsNodeNumStart()));
                 }
-                SwParaDlg *pDlg = new SwParaDlg( GetView().GetWindow(),
+                SwParaDlg *pDlg = NULL;
+                if ( bUseDialog )
+                    pDlg = new SwParaDlg( GetView().GetWindow(),
                                                  GetView(), aCoreSet, DLG_STD,
                                                  NULL, FALSE, nDefPage );
 
-                if ( pDlg->Execute() == RET_OK )
+                SfxItemSet* pSet = NULL;
+                if ( !bUseDialog )
+                    pSet = (SfxItemSet*) pArgs;
+                else if ( pDlg->Execute() == RET_OK )
                 {
                     // Defaults evtl umsetzen
-                    SfxItemSet* pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
+                    pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                     USHORT nNewDist;
-                    if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
-                        FALSE, &pItem ) &&
+                    if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, FALSE, &pItem ) &&
                         nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
                     {
                         SvxTabStopItem aDefTabs( 0, 0 );
@@ -670,8 +686,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
                     }
 
-                    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
+                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
+                    {
+                        // only one item is needed, especially for recording
+                        BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
+                        if ( !bStart )
+                            pSet->ClearItem( FN_NUMBER_NEWSTART_AT );
+                        else
+                            pSet->ClearItem( FN_NUMBER_NEWSTART );
+                    }
+                }
 
+                if ( pSet )
+                {
+                    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
+                    rReq.Done( *pSet );
                     if( pSet->Count() )
                     {
                         rWrtSh.StartAction();
@@ -690,17 +719,28 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             rWrtSh.AutoUpdatePara(pColl, *pSet);
                         }
                     }
-                    if(SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART))
+
+                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                     {
                         BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                        // das zweite Item muss immer drin sein!
+                        if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+                        {
+                            // das zweite Item muss immer drin sein!
+                            USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+                            if(!bStart)
+                                nNumStart = USHRT_MAX;
+                            rWrtSh.SetNodeNumStart(nNumStart);
+                        }
+                        else if (!bStart)
+                            rWrtSh.SetNodeNumStart(USHRT_MAX);
+                    }
+                    else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+                    {
                         USHORT nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
-                        if(!bStart)
-                            nNumStart = USHRT_MAX;
                         rWrtSh.SetNodeNumStart(nNumStart);
                     }
-                    rReq.Done( *pSet );
                 }
+
                 delete pDlg;
             }
         }
