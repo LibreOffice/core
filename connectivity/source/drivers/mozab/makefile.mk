@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:41:27 $
+#   last change: $Author: obo $ $Date: 2004-03-17 10:41:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,26 @@ MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
 #.ENDIF
 
 .IF "$(OS)"=="WNT" 
+.IF "$(SHELL)=="4NT"
+MOZ_EMBED_LIB := $(shell +-dir /ba:f $(MOZ_LIB)$/embed_base_s.lib 2>$(NULLDEV) )
+MOZ_REG_LIB	  := $(shell +-dir /ba:f $(MOZ_LIB)$/mozreg_s.lib 2>$(NULLDEV) )
+.ELSE	#"$(SHELL)=="4NT"
+MOZ_EMBED_LIB := $(shell +-test -f $(MOZ_LIB)$/embed_base_s.lib && echo $(MOZ_LIB)$/embed_base_s.lib )
+MOZ_REG_LIB	  := $(shell +-test -f $(MOZ_LIB)$/mozreg_s.lib && echo $(MOZ_LIB)$/mozreg_s.lib )
+.ENDIF
+
+.IF X"$(MOZ_EMBED_LIB)"=="X"
+MOZ_EMBED_LIB := $(MOZ_LIB)$/baseembed_s.lib
+.ENDIF
+.IF X"$(MOZ_REG_LIB)" == "X"
+MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
+.ENDIF
+.ENDIF
+
+.IF "$(OS)"=="WNT" 
 LIB += $(MOZ_LIB)
-MOZ_LIB_XPCOM= $(MOZ_LIB)$/baseembed_s.lib $(MOZ_LIB)$/nspr4.lib $(MOZ_LIB)$/mozreg.lib $(MOZ_LIB)$/xpcom.lib
-.ELSE
+MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib
+.ELSE "$(OS)"=="WNT" 
 MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
 .ENDIF
 #End of mozilla specific stuff.
