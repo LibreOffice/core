@@ -2,9 +2,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:38:10 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:47:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,6 +181,16 @@ sub add_lowercase_productname_setupscriptvariable
             if ( $key eq "PRODUCTNAME" )
             {
                 my $newline = "\%LCPRODUCTNAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+                my $original = $value;
+                $value =~ s/\s*//g;
+                $newline = "\%ONEWORDPRODUCTNAME " . $value . "\n";
+                push(@{$variablesref} ,$newline);
+                $newline = "\%LCONEWORDPRODUCTNAME " . lc($value) . "\n";
+                push(@{$variablesref} ,$newline);
+                $value = $original;
+                $value =~ s/\s/\_/g;
+                $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
             }
         }
@@ -373,10 +383,6 @@ sub add_installationobject_to_variables
         {
             my $key = $1;
             my $value = $2;
-            if ( ! $installer::globals::iswindowsbuild )
-            {
-                $value =~ s/\s/\_/g;     # no spaces allowed for pathes on Unix
-            }
 
             $allvariables->{$key} = $value; # overwrite existing values from zip.lst
         }
