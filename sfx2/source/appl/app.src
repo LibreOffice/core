@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-13 13:11:15 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 16:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4081,7 +4081,7 @@ String STR_KEY_USERDICTIONARY_DIR
 {
     Text = "Benutzerwörterbücher" ;
     Text [ English ] = "User Dictionaries" ;
-    Text[ english_us ] = "User Dictionaries";
+    Text[ english_us ] = "User-defined dictionaries";
     Text[ portuguese ] = "Dicionários personalizados";
     Text[ russian ] = "Ñëîâàğè ïîëüçîâàòåëÿ";
     Text[ greek ] = "ËåîéêÜ ÷ñŞóôç";
@@ -4301,7 +4301,7 @@ String STR_QUICKSTART_LNKNAME
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ finnish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION";
+    Text[ danish ] = "%PRODUCTNAME 6.0";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ polish ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME %PRODUCTVERSION";
@@ -4332,7 +4332,7 @@ WarningBox RID_SECURITY_WARNING_HYPERLINK
     Message[ finnish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
     Message[ italian ] = "Questo hyperlink apre \"%s\". Volete procedere?";
     Message[ danish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
-    Message[ swedish ] = "Den här hyperlänken kommmer att öppna \"%s\".  Vill du fortsätta?";
+    Message[ swedish ] = "Den här hyperlänken kommer att öppna \"%s\".  Vill du fortsätta?";
     Message[ polish ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
     Message[ portuguese_brazilian ] = "This hyperlink is going to open \"%s\". Do you want to proceed?";
     Message[ japanese ] = "ã“ã®ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯ã‚’ \"%s\" ã§é–‹ãã¾ã™ã€‚ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
