@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:29 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,9 +598,9 @@ struct EPPTHyperlink
 {
     String      aURL;
     sal_uInt32  nType;      // bit 0-7 : type       ( 1: click action to a slide )
-                        //                      ( 2: hyperlink url )
-                        // bit 8-23: index
-                        // bit 31  : hyperlink is attached to a shape
+                            //                      ( 2: hyperlink url )
+                            // bit 8-23: index
+                            // bit 31  : hyperlink is attached to a shape
 
     EPPTHyperlink( const String rURL, sal_uInt32 nT ) :
         aURL        ( rURL ),
@@ -977,6 +977,8 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplCreateCurrentUserStream();
         sal_Bool            ImplCreateDocument();
         sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
+        sal_uInt32          ImplInsertBookmarkURL( const String& rBookmark, const sal_uInt32 nType,
+            const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 );
         sal_Bool            ImplCreateMaster( sal_uInt32 nPageNum );
         sal_Bool            ImplCreateMainNotes();
         sal_Bool            ImplCreateSlide( sal_uInt32 nPageNum );
