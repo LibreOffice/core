@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:55:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,13 +287,13 @@ String S_TEAROFF_FAILED
 // Has to stay in for old res files
 String S_NO_SELECTED_ENTRY_DEPRECATED
 {
-    Text [ de ] = "Es ist kein Eintrag Selektiert in TreeListBox bei ($Arg1)";
+    Text [ de ] = "Es ist kein Eintrag ausgewählt in TreeListBox bei ($Arg1)";
     Text[ en-US ] = "No entry is selected in TreeListBox at ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
-    Text [ de ] = "Es ist kein Eintrag Selektiert in ($Arg2) bei ($Arg1)";
-    Text[ en-US ] = "Es ist kein Eintrag Selektiert in ($Arg2) bei ($Arg1)";
+    Text [ de ] = "Es ist kein Eintrag ausgewählt in ($Arg2) bei ($Arg1)";
+    Text[ en-US ] = "No entry is selected in ($Arg2) at ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
@@ -302,17 +302,17 @@ String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
-    Text [ de ] = "Methode nur im Froating-Mode erlaubt bei ($Arg1)";
+    Text [ de ] = "Methode nur bei frei schwebenden Fenstern erlaubt bei ($Arg1)";
     Text[ en-US ] = "Method only allowed in floating mode at ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
-    Text [ de ] = "Methode nur im Docking-Mode erlaubt bei ($Arg1)";
+    Text [ de ] = "Methode nur im angedockten Modus erlaubt bei ($Arg1)";
     Text[ en-US ] = "Method only allowed in docking mode at ($Arg1)";
 };
 String S_SIZE_NOT_CHANGEABLE
 {
-    Text [ de ] = "Größe ist nicht verÃ¤nderbar bei ($Arg1)";
+    Text [ de ] = "Größe ist nicht veränderbar bei ($Arg1)";
     Text[ en-US ] = "Size cannot be altered at ($Arg1)";
 };
 String S_NO_OK_BUTTON
@@ -407,26 +407,26 @@ String S_NO_SAX_PARSER
 };
 String S_CANNOT_CREATE_DIRECTORY
 {
-    Text [ de ] = "";
+    Text [ de ] = "Kann Verzeichnis nicht erstellen: \"($Arg1)\"";
     Text[ en-US ] = "Cannot create Directory: \"($Arg1)\"";
 };
 String S_DIRECTORY_NOT_EMPTY
 {
-    Text [ de ] = "";
+    Text [ de ] = "Verzeichnis muss leer sein um darin zu entpacken. Verzeichnis: \"($Arg1)\"";
     Text[ en-US ] = "Directory has to be Empty to unpack to. Directory: \"($Arg1)\"";
 };
 String S_DEPRECATED
 {
-    Text [ de ] = "";
+    Text [ de ] = "Veraltet! Bitte das Script ändern";
     Text[ en-US ] = "Deprecated! Please change the script.";
 };
 String S_SIZE_BELOW_MINIMUM
 {
-    Text [ de ] = "";
+    Text [ de ] = "Die Größe ist unter dem Minimum. x=($Arg1) ,y=($Arg2)";
     Text[ en-US ] = "The Size is below the minimum. x=($Arg1) ,y=($Arg2)";
 };
 String S_CANNOT_FIND_FLOATING_WIN
 {
-    Text [ de ] = "";
-    Text[ en-US ] = "Cannot find FloatingWindow for Floating DockingWindow at ($Arg1).";
+    Text [ de ] = "Kann FloatingWindow für frei schwebendes DockingWindow nicht finden";
+    Text[ en-US ] = "Cannot find FloatingWindow for floating DockingWindow at ($Arg1).";
 };
