@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:39:28 $
+#   last change: $Author: kz $ $Date: 2005-03-03 20:01:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,13 +98,6 @@ OBJFILES = \
         $(OBJ)$/userinstall.obj             \
         $(OBJ)$/desktopcontext.obj
 
-
-.IF "$(GUI)" == "UNX"
-.IF "$(OS)" != "MACOSX"
-OBJFILES+= $(OBJ)$/icon_resource_ooo.obj \
-    $(OBJ)$/icon_resource_sun.obj
-.ENDIF
-.ENDIF
 
 SRS1NAME=	desktop
 SRC1FILES=	desktop.src	
