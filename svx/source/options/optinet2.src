@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:44:45 $
+ *  last change: $Author: os $ $Date: 2001-05-18 13:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "~Aucun Proxy pour :" ;
         Text [ swedish ] = "~Ingen proxy för" ;
         Text [ danish ] = "Ingen proxy for" ;
-        Text [ portuguese_brazilian ] = "Kein Proxy f~?:" ;
+        Text [ portuguese_brazilian ] = "Kein Proxy f~ür:" ;
         Text [ portuguese ] = "N~enhum Proxy para:" ;
         Text[ chinese_simplified ] = "´úÀí·şÎñÆ÷²»ÊÊÓÃÓÚ(~N)";
         Text[ russian ] = "Áåç ïğîêñè äëÿ ";
@@ -717,7 +717,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ English ] = " is not a valid entry for this field. Please specify a value between 0 and 255." ;
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 0 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
+        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 0 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 0 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 0 og 255." ;
         Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 0 e 255." ;
@@ -727,7 +727,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 0 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 0 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 0 äî 255.";
-        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y podaæ warto?æ miêdzy 0 a 255.";
+        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y podaæ wartoœæ miêdzy 0 a 255.";
         Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B0 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b0©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 0 æ 255.";
@@ -743,7 +743,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text = " ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ English ] = " is not a valid entry for this field. Please specify a value between 1 and 255." ;
         Text [ english_us ] = "is not a valid entry for this field. Please specify a value between 1 and 255." ;
-        Text [ portuguese_brazilian ] = "ist kein g?tiger Eintrag f? dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
+        Text [ portuguese_brazilian ] = "ist kein gültiger Eintrag für dieses Feld. Bitte geben sie einen Wert zwischen 1 und 255 an." ;
         Text [ swedish ] = "är ingen giltig inmatning för det här fältet. Ange ett värde mellan 1 och 255." ;
         Text [ danish ] = "er intet gyldigt input til dette felt. Angiv venligst en værdi mellem 1 og 255." ;
         Text [ italian ] = "non è un valore valido per questo campo. Digitate un valore compreso tra 1 e 255." ;
@@ -753,7 +753,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ portuguese ] = "não é uma entrada válida para este campo. Indique um valor entre 1 e 255." ;
         Text[ chinese_simplified ] = " ÊÇÕâ¸ö×Ö¶ÎµÄÎŞĞ§ÌõÄ¿£¬ÇëÊäÈëÒ»¸öÔÚ 1 ºÍ 255 Ö®¼äµÄÊıÖµ¡£";
         Text[ russian ] = "íåïğàâèëüíàÿ çàïèñü äëÿ ıòîãî ïîëÿ. Ââåäèòå, ïîæàëóéñòà, çíà÷åíèå îò 1 äî 255.";
-        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y wpisaæ warto?æ miêdzy 1 a 255 .";
+        Text[ polish ] = "jest wpisem niedozwolonym w danym polu. Nale¿y wpisaæ wartoœæ miêdzy 1 a 255 .";
         Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Å‚Í–³Œø‚Å‚·B1 ` 255 ”ÍˆÍ‚Ì”’l‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = " ¬O³o­ÓÄæ¦ìªºµL®Ä±ø¥Ø¡M½Ğ¿é¤J¤@­Ó¦b1©M255¤§¶¡ªº¼Æ­È¡C";
         Text[ arabic ] = "åæ ÅÏÎÇá ÛíÑ ÕÇáÍ áåĞÇ ÇáÍŞá. ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÊÊÑÇæÍ ãÇ Èíä 1 æ 255.";
@@ -1008,7 +1008,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "~Préfixe" ;
         Text [ swedish ] = "~Prefix" ;
         Text [ danish ] = "Præfiks" ;
-        Text [ portuguese_brazilian ] = "~Pr?fix" ;
+        Text [ portuguese_brazilian ] = "~Präfix" ;
         Text [ portuguese ] = "~Prefixo" ;
         Text[ chinese_simplified ] = "Ç°×º(~P)";
         Text[ russian ] = "Ïğåôèêñ";
@@ -1176,7 +1176,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         stringlist [ portuguese_brazilian ] =
         {
             < "Keiner" ; > ;
-            < "Gro?" ; > ;
+            < "Groß" ; > ;
             < "Klein" ; > ;
         };
         stringlist [ swedish ] =
@@ -1311,7 +1311,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ french ] = "~Ajouter" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
+        Text [ portuguese_brazilian ] = "H~inzufügen" ;
         Text [ portuguese ] = "A~dicionar" ;
         Text[ chinese_simplified ] = "ĞÂÔö(~A)";
         Text[ russian ] = "Äîáàâèòü";
@@ -1339,7 +1339,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ dutch ] = "Wij~zigen" ;
         Text [ swedish ] = "~Ändra" ;
         Text [ danish ] = "Modificer" ;
-        Text [ portuguese_brazilian ] = "~?ndern" ;
+        Text [ portuguese_brazilian ] = "~Ändern" ;
         Text [ portuguese ] = "~Modificar" ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
         Text[ russian ] = "Èçìåíèòü";
@@ -1367,7 +1367,7 @@ TabPage RID_SVXPAGE_INET_SEARCH
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
-        Text [ portuguese_brazilian ] = "~L?chen" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "É¾³ı(~D)";
         Text[ russian ] = "Óäàëèòü";
@@ -1445,7 +1445,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "%PRODUCTNAME Basic-Scripte ausführen von" ;
         Text [ English ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
-        Text [ portuguese_brazilian ] = "Star Basic-Scripts ausf?ren von" ;
+        Text [ portuguese_brazilian ] = "Star Basic-Scripts ausführen von" ;
         Text [ swedish ] = "Utför %PRODUCTNAME Basic-skript från" ;
         Text [ danish ] = "Udfør %PRODUCTNAME Basic-scripter fra" ;
         Text [ italian ] = "Esegui script %PRODUCTNAME Basic da" ;
@@ -1475,7 +1475,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     ListBox LB_SCRIPT_EXEC
     {
         Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 8 , GB_SCRIPT_EXEC_Y + 25 ) ;
-        Size = MAP_APPFONT ( 183 , 58 ) ;
+        Size = MAP_APPFONT ( 183 , 34 ) ;
         Border = TRUE ;
         Sort = TRUE ;
     };
@@ -1486,7 +1486,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "H~inzufügen" ;
         Text [ English ] = "A~dd" ;
         Text [ english_us ] = "~Add" ;
-        Text [ portuguese_brazilian ] = "H~inzuf?en" ;
+        Text [ portuguese_brazilian ] = "H~inzufügen" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ danish ] = "Tilføj" ;
         Text [ italian ] = "~Aggiungi" ;
@@ -1514,7 +1514,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~L?chen" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -1552,7 +1552,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼(~E)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "•W€(~E)";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~E)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -1564,7 +1564,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ finnish ] = "~Oletusarvo";
     };
                                     #define GB_SCRIPTING_X 6
-                                    #define GB_SCRIPTING_Y 90
+                                    #define GB_SCRIPTING_Y 68
     FixedLine GB_STARBASIC
     {
         Pos = MAP_APPFONT ( GB_SCRIPTING_X , GB_SCRIPTING_Y ) ;
@@ -1593,42 +1593,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "Script %PRODUCTNAME Basic";
         Text[ finnish ] = "%PRODUCTNAME Basic-Script";
     };
-    RadioButton RBT_STARBASIC_ALWAYS
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 11 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text = "i~mmer ausführen" ;
-        Text [ English ] = "execute ~always" ;
-        Text [ english_us ] = "Always e~xecute" ;
-        Text [ portuguese_brazilian ] = "~immer  ausf?ren" ;
-        Text [ swedish ] = "utför ~alltid" ;
-        Text [ danish ] = "udfør altid" ;
-        Text [ italian ] = "Esegui ~sempre" ;
-        Text [ spanish ] = "Ejecutar s~iempre" ;
-        Text [ french ] = "Toujours ~exécuter" ;
-        Text [ dutch ] = "~altijd uitvoeren" ;
-        Text [ portuguese ] = "~Executar sempre" ;
-        Text[ chinese_simplified ] = "×ÜÊÇÖ´ĞĞ(~X)";
-        Text[ russian ] = "Âûïîëíÿòü âñåãäà";
-        Text[ polish ] = "Zawsze wykonuj";
-        Text[ japanese ] = "í‚ÉÀs(~X)";
-        Text[ chinese_traditional ] = "Á`¬O°õ¦æ(~X)";
-        Text[ arabic ] = "ÇáÊäİíĞ ÏÇÆãÇğ";
-        Text[ greek ] = "ğÜíôá åêôİëåóç";
-        Text[ korean ] = "Ç×»ó ¼öÇà(~X)";
-        Text[ turkish ] = "Her zaman yürüt";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ejecutar s~iempre";
-        Text[ finnish ] = "~Suorita aina";
-    };
     RadioButton RBT_STARBASIC_LIST
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 24 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 11 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~gemäß Liste" ;
         Text [ English ] = "like ~list" ;
         Text [ english_us ] = "~From list" ;
-        Text [ portuguese_brazilian ] = "~gem?? Liste" ;
+        Text [ portuguese_brazilian ] = "~gemäß Liste" ;
         Text [ swedish ] = "enli~gt lista" ;
         Text [ danish ] = "fra listen" ;
         Text [ italian ] = "Come da ~lista" ;
@@ -1649,14 +1621,42 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "Según ~lista";
         Text[ finnish ] = "~Luettelosta";
     };
+    RadioButton RBT_STARBASIC_ALWAYS
+    {
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 23 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "i~mmer ausführen" ;
+        Text [ English ] = "execute ~always" ;
+        Text [ english_us ] = "Always e~xecute" ;
+        Text [ portuguese_brazilian ] = "~immer  ausführen" ;
+        Text [ swedish ] = "utför ~alltid" ;
+        Text [ danish ] = "udfør altid" ;
+        Text [ italian ] = "Esegui ~sempre" ;
+        Text [ spanish ] = "Ejecutar s~iempre" ;
+        Text [ french ] = "Toujours ~exécuter" ;
+        Text [ dutch ] = "~altijd uitvoeren" ;
+        Text [ portuguese ] = "~Executar sempre" ;
+        Text[ chinese_simplified ] = "×ÜÊÇÖ´ĞĞ(~X)";
+        Text[ russian ] = "Âûïîëíÿòü âñåãäà";
+        Text[ polish ] = "Zawsze wykonuj";
+        Text[ japanese ] = "í‚ÉÀs(~X)";
+        Text[ chinese_traditional ] = "Á`¬O°õ¦æ(~X)";
+        Text[ arabic ] = "ÇáÊäİíĞ ÏÇÆãÇğ";
+        Text[ greek ] = "ğÜíôá åêôİëåóç";
+        Text[ korean ] = "Ç×»ó ¼öÇà(~X)";
+        Text[ turkish ] = "Her zaman yürüt";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ejecutar s~iempre";
+        Text[ finnish ] = "~Suorita aina";
+    };
     RadioButton RBT_STARBASIC_NEVER
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 37 ) ;
-        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 35 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "~nie ausführen" ;
         Text [ English ] = "execute ~never" ;
         Text [ english_us ] = "Ne~ver execute" ;
-        Text [ portuguese_brazilian ] = "~nie  ausf?ren" ;
+        Text [ portuguese_brazilian ] = "~nie  ausführen" ;
         Text [ swedish ] = "utför al~drig" ;
         Text [ danish ] = "udfør aldrig" ;
         Text [ italian ] = "Esegui ~mai" ;
@@ -1679,14 +1679,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_ALWAYS
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
-        Size = MAP_APPFONT ( 240 , 16 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
+        Size = MAP_APPFONT ( 145 , 30 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
         Text = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
         Text [ English ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
         Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without being checked." ;
-        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne ?berpr?ung ausgef?rt!" ;
+        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
         Text [ swedish ] = "OBS: %PRODUCTNAME Basic-skript från Internet utförs utan kontroll!" ;
         Text [ danish ] = "BEMÆRK: %PRODUCTNAME Basic-scripter fra Internettet bliver udført uden kontrol!" ;
         Text [ italian ] = "ATTENZIONE: gli script %PRODUCTNAME Basic di Internet vengono eseguiti senza un controllo!" ;
@@ -1709,14 +1709,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_LIST
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
-        Size = MAP_APPFONT ( 240 , 16 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
+        Size = MAP_APPFONT ( 145 , 30 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
         Text = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
         Text [ English ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
         Text [ english_us ] = "%PRODUCTNAME Basic scripts will only be executed from directories in the list." ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgef?rt." ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
         Text [ swedish ] = "%PRODUCTNAME Basic-skript utförs bara från kataloger i listan." ;
         Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver kun udført fra biblioteker i listen." ;
         Text [ italian ] = "Gli Script di %PRODUCTNAME Basic vengono eseguiti solo dalle cartelle dell'elenco." ;
@@ -1739,14 +1739,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     FixedText FI_STARBASIC_DISCRIPTION_NEVER
     {
-        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 6 , GB_SCRIPTING_Y + 50 ) ;
-        Size = MAP_APPFONT ( 240 , 16 ) ;
+        Pos = MAP_APPFONT ( GB_SCRIPTING_X + 100 , GB_SCRIPTING_Y + 11 ) ;
+        Size = MAP_APPFONT ( 145 , 30 ) ;
         WordBreak = TRUE ;
         Hide = TRUE ;
         Text = "Es werden keine %PRODUCTNAME Basic-Scripte ausgeführt." ;
         Text [ English ] = "%PRODUCTNAME Basic scripts won't be executed." ;
         Text [ english_us ] = "No %PRODUCTNAME Basic scripts will be executed." ;
-        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgef?rt." ;
+        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgeführt." ;
         Text [ swedish ] = "Inga %PRODUCTNAME Basic-skript utförs." ;
         Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver ikke udført." ;
         Text [ italian ] = "Gli Script %PRODUCTNAME Basic non vengono eseguiti." ;
@@ -1767,38 +1767,272 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ catalan ] = "No se ejecutan ningún script de %PRODUCTNAME Basic.";
         Text[ finnish ] = "%PRODUCTNAME Basic scripts won't be executed.";
     };
+#define GB_JAVA_Y 119
+    FixedLine FL_JAVA
+    {
+        Pos = MAP_APPFONT ( 6 , GB_JAVA_Y ) ;
+        Size = MAP_APPFONT ( 168, 8 ) ;
+        Text = "Java" ;
+        Text [ English ] = "Java" ;
+    };
+    CheckBox CB_J_ENABLE
+    {
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 159 , 10 ) ;
+        Text = "~freischalten" ;
+        Text [ English ] = "~Enable" ;
+        Text [ english_us ] = "~Enable" ;
+        Text [ italian ] = "A~bilita" ;
+        Text [ spanish ] = "Vali~dar" ;
+        Text [ french ] = "~Valider" ;
+        Text [ dutch ] = "~Vrijgeven" ;
+        Text [ swedish ] = "~frige" ;
+        Text [ danish ] = "aktiver" ;
+        Text [ portuguese_brazilian ] = "~Java freischalten" ;
+        Text [ portuguese ] = "~Activar" ;
+        Text[ chinese_simplified ] = "¿ª·Å(~E)";
+        Text[ russian ] = "~ğàçáëîêèğîâàòü";
+        Text[ polish ] = "Aktywacja";
+        Text[ japanese ] = "g—p‚·‚é(~E)";
+        Text[ chinese_traditional ] = "¶}©ñ(~E)";
+        Text[ arabic ] = "ÇáÊÔÛíá";
+        Text[ greek ] = "åíåñãïğïßçóç";
+        Text[ korean ] = "»ç¿ë °¡´É(~E)";
+        Text[ turkish ] = "Etkinleştir";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_J_SECURITY
+    {
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 24 ) ;
+        Size = MAP_APPFONT ( 159 , 10 ) ;
+        Text = "S~icherheitsüberprüfungen";
+        Text [ English ] = "Enable ~security checks";
+        Text [ english_us ] = "Enable ~security checks";
+            Text[ italian ] = "Controlli di s~icurezza";
+        Text[ portuguese_brazilian ] = "S~icherheitsüberprüfungen";
+        Text[ portuguese ] = "~Controlos de segurança";
+        Text[ danish ] = "Sikkerhedskontroller";
+        Text[ french ] = "C~ontrôles de sécurité";
+        Text[ swedish ] = "s~äkerhetskontroller";
+        Text[ dutch ] = "V~eiligheidscontroles";
+        Text[ spanish ] = "Co~ntroles de seguridad";
+        Text[ chinese_simplified ] = "°²È«¼ì²é(~S)";
+        Text[ russian ] = "Ïğîâåğêà áåçîïàñíîñòè";
+        Text[ polish ] = "Kontrola zabezpieczeñ";
+        Text[ japanese ] = "¾·­ØÃ¨ Áª¯¸(~S)";
+        Text[ chinese_traditional ] = "¦w¥şÀË¬d(~S)";
+        Text[ arabic ] = "İÍæÕ ÃãäíÉ";
+        Text[ greek ] = "¸ëåã÷ï~é áóöáëåßáò";
+        Text[ korean ] = "º¸¾È Á¡°Ë(~S)";
+        Text[ turkish ] = "Güvenlik kontrolleri";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NETACCESS
+    {
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 39 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "~Netzzugriff" ;
+        Text [ English ] = "~Netaccess" ;
+        Text [ english_us ] = "Net ~access" ;
+        Text [ italian ] = "Accesso rete" ;
+        Text [ spanish ] = "Acce~so a la red" ;
+        Text [ french ] = "Accès ~réseau" ;
+        Text [ dutch ] = "~Nettoegang" ;
+        Text [ swedish ] = "~Nätåtkomst" ;
+        Text [ danish ] = "Netadgang" ;
+        Text [ portuguese_brazilian ] = "~Netzzugriff" ;
+        Text [ portuguese ] = "~Acesso à rede" ;
+        Text[ chinese_simplified ] = "·ÃÎÊÍøÂç(~A)";
+        Text[ russian ] = "Äîñòóï ê ñåòè";
+        Text[ polish ] = "Dostêp do sieci";
+        Text[ japanese ] = "È¯ÄÜ°¸‚Ö‚Ì±¸¾½(~A)";
+        Text[ chinese_traditional ] = "³X°İºôµ¸(~A)";
+        Text[ arabic ] = "ÇáæÕæá Åáì ÇáÔÈßÉ";
+        Text[ greek ] = "Ğñüóâáóç óôï äßêôõï";
+        Text[ korean ] = "³×Æ®¿¡ Á¢±Ù(~A)";
+        Text[ turkish ] = "Ağ erişimi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_NETACCESS
+    {
+        Pos = MAP_APPFONT ( 56 , GB_JAVA_Y + 37 ) ;
+        Size = MAP_APPFONT ( 72 , 48 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Uneingeschränkt" ; > ;
+            < "Keinen" ; > ;
+            < "Rechner" ; > ;
+        };
+        StringList [ English ] =
+        {
+            < "Uneingeschränkt" ; > ;
+            < "Keinen" ; > ;
+            < "Rechner" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Unrestricted" ; > ;
+            < "None" ; > ;
+            < "Host" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Unrestricted" ; > ;
+            < "None" ; > ;
+            < "Host" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Obegränsad" ; > ;
+            < "Inga" ; > ;
+            < "Host" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Uindskrænket" ; > ;
+            < "Ingen" ; > ;
+            < "Host computer" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Illimitato" ; > ;
+            < "Senza" ; > ;
+            < "Host" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Sin restricción" ; > ;
+            < "Ninguno" ; > ;
+            < "Ordenador" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Illimité" ; > ;
+            < "Aucun(e)" ; > ;
+            < "Ordinateur" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Onbeperkt" ; > ;
+            < "Geen" ; > ;
+            < "Host" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Sem restrições" ; > ;
+            < "Nenhum" ; > ;
+            < "Host" ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+            < "Ã»ÓĞÏŞÖÆµÄ" ; > ;
+            < "ÎŞ" ; > ;
+            < "¼ÆËã»ú" ; > ;
+        };
+        StringList [ russian ] =
+        {
+            < "Íåîãğàíè÷åííûé" ; > ;
+            < "Áåç" ; > ;
+            < "Êîìïüşòåğ" ; > ;
+        };
+        StringList [ polish ] =
+        {
+            < "Nieograniczony" ; > ;
+            < "Brak" ; > ;
+            < "Host" ; > ;
+        };
+        StringList [ japanese ] =
+        {
+            < "§ŒÀ‚È‚µ" ; > ;
+            < "‚È‚µ" ; > ;
+            < "Î½Ä" ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+            < "¨S¦³­­¨îªº" ; > ;
+            < "µL" ; > ;
+            < "¹q¸£" ; > ;
+        };
+        StringList [ arabic ] =
+        {
+            < "ÈÏæä ŞíÏ" ; > ;
+            < "ÈÏæä" ; > ;
+            < "ÇáãÖíİ" ; > ;
+        };
+        StringList [ greek ] =
+        {
+            < "Áğåñéüñéóôá" ; > ;
+            < "Êáíİíá" ; > ;
+            < "ÕğïëïãéóôŞò" ; > ;
+        };
+        StringList [ korean ] =
+        {
+            < "¹«Á¦ÇÑ" ; > ;
+            < "¾øÀ½" ; > ;
+            < "È£½ºÆ®" ; > ;
+        };
+    StringList [ turkish ] =
+    {
+            < "Sınırlamasız" ; > ;
+        < "Hiçbiri" ; > ;
+        < "Ana bilgisayar" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    FixedText FT_CLASSPATH
+    {
+        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 54 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "~ClassPath" ;
+        Text [ English ] = "~ClassPath" ;
+        Text [ english_us ] = "~Class path" ;
+        Text [ italian ] = "~ClassPath" ;
+        Text [ spanish ] = "~Class path" ;
+        Text [ french ] = "~ClassPath" ;
+        Text [ dutch ] = "~ClassPath" ;
+        Text [ swedish ] = "~ClassPath" ;
+        Text [ danish ] = "ClassPath" ;
+        Text [ portuguese_brazilian ] = "~ClassPath" ;
+        Text [ portuguese ] = "~ClassPath" ;
+        Text[ chinese_simplified ] = "~ClassPath";
+        Text[ russian ] = "~Class Path";
+        Text[ polish ] = "ClassPath";
+        Text[ japanese ] = "~ClassPath";
+        Text[ chinese_traditional ] = "~ClassPath";
+        Text[ arabic ] = "Class path~";
+        Text[ greek ] = "~Class path";
+        Text[ korean ] = "Class path(~C)";
+        Text[ turkish ] = "~ClassPath";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_CLASSPATH
+    {
+        Pos = MAP_APPFONT ( 56 , GB_JAVA_Y + 52 ) ;
+        Size = MAP_APPFONT ( 97 , 12 ) ;
+        Border = TRUE ;
+    };
+    PushButton PB_CLASSPATH
+    {
+        Pos = MAP_APPFONT ( 157 , GB_JAVA_Y + 52 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Text = "~...";
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 175 , GB_JAVA_Y + 7 ) ;
+        Size = MAP_APPFONT ( 4 , 40 ) ;
+    };
     FixedLine GB_EXECUTE
     {
-        Pos = MAP_APPFONT ( 6 , GB_SCRIPTING_Y + 72 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "PlugIns" ;
-        Text [ English ] = "PlugIns" ;
-        Text [ english_us ] = "Plug-ins" ;
-        Text [ portuguese_brazilian ] = "Ausf?ren" ;
-        Text [ swedish ] = "Plug-ins" ;
-        Text [ danish ] = "PlugIns" ;
-        Text [ italian ] = "PlugIns" ;
-        Text [ spanish ] = "Plug-ins" ;
-        Text [ french ] = "Plug-ins" ;
-        Text [ dutch ] = "PlugIns" ;
-        Text [ portuguese ] = "PlugIns" ;
-        Text[ chinese_simplified ] = "Plug-Ins";
-        Text[ russian ] = "Plug-Ins";
-        Text[ polish ] = "Wtyczki Plug-In";
-        Text[ japanese ] = "Ìß×¸Ş²İ";
-        Text[ chinese_traditional ] = "Plug-Ins";
-        Text[ arabic ] = "Plug-Ins";
-        Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
-        Text[ korean ] = "ÇÃ·¯±×ÀÎ";
-        Text[ turkish ] = "Plug-In";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Plug-ins";
-        Text[ finnish ] = "Lisäosat";
-    };
-    CheckBox CB_EXECUTE_PLUGINS
-    {
-        Pos = MAP_APPFONT ( 12 , GB_SCRIPTING_Y + 83 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 180 , GB_JAVA_Y ) ;
+        Size = MAP_APPFONT ( 74 , 8 ) ;
         Text = "F~reischalten" ;
         Text [ English ] = "~enable" ;
         Text [ english_us ] = "E~nable" ;
@@ -1822,6 +2056,41 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Va~lidar";
         Text[ finnish ] = "~Ota käyttöön";
+    };
+    CheckBox CB_EXECUTE_PLUGINS
+    {
+        Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 11 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "PlugIns" ;
+        Text [ English ] = "PlugIns" ;
+        Text [ english_us ] = "Plug-ins" ;
+        Text [ portuguese_brazilian ] = "Ausführen" ;
+        Text [ swedish ] = "Plug-ins" ;
+        Text [ danish ] = "PlugIns" ;
+        Text [ italian ] = "PlugIns" ;
+        Text [ spanish ] = "Plug-ins" ;
+        Text [ french ] = "Plug-ins" ;
+        Text [ dutch ] = "PlugIns" ;
+        Text [ portuguese ] = "PlugIns" ;
+        Text[ chinese_simplified ] = "Plug-Ins";
+        Text[ russian ] = "Plug-Ins";
+        Text[ polish ] = "Wtyczki Plug-In";
+        Text[ japanese ] = "Ìß×¸Ş²İ";
+        Text[ chinese_traditional ] = "Plug-Ins";
+        Text[ arabic ] = "Plug-Ins";
+        Text[ greek ] = "Óõíäåüìåíåò õğïìïíÜäåò";
+        Text[ korean ] = "ÇÃ·¯±×ÀÎ";
+        Text[ turkish ] = "Plug-In";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Plug-ins";
+        Text[ finnish ] = "Lisäosat";
+    };
+    CheckBox CB_EXECUTE_APPLETS
+    {
+        Pos = MAP_APPFONT ( 186 , GB_JAVA_Y + 24 ) ;
+        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Text = "Applets" ;
+        Text [ English ] = "Applets" ;
     };
     Text[ chinese_simplified ] = "½Å±¾";
     Text[ russian ] = "Ñêğèïò";
@@ -1851,8 +2120,8 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ italian ] = "Valore non valido!\n\nIl valore massimo di una porta è 65535.";
     Message[ danish ] = "Ugyldig værdi!\n\nEt portnummers højeste værdi er 65535.";
     Message[ swedish ] = "Ogiltigt värde!\n\nEtt portnummers högsta värde är 65535.";
-    Message[ polish ] = "Nieprawid³owa warto?æ!\n\nMaksymalny numer portu wynosi 65535.";
-    Message[ portuguese_brazilian ] = "Ung?tiger Wert!\n\nDer H?hstwert einer Portnummer ist 65535.";
+    Message[ polish ] = "Nieprawid³owa wartoœæ!\n\nMaksymalny numer portu wynosi 65535.";
+    Message[ portuguese_brazilian ] = "Ungültiger Wert!\n\nDer Höchstwert einer Portnummer ist 65535.";
     Message[ japanese ] = "”’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ!\n\nÎß°Ä”Ô†‚ÌÅ‚’l‚Í65535‚Å‚·B";
     Message[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ£¡\n\nÒ»¸ö²ººÅÂëµÄ×î´óÖµÊÇ 65535 ¡£";
     Message[ chinese_traditional ] = "µL®Äªº¼Æ­È¡I\n\n¤@­Ó°ğ¸¹½Xªº³Ì¤j­È¬O65535 ¡C";
