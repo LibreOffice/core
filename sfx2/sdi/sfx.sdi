@@ -2534,7 +2534,7 @@ SfxUInt16Item EditStyle SID_STYLE_EDIT
 
 //--------------------------------------------------------------------------
 SfxVoidItem ExecuteSearch FID_SEARCH_NOW
-(SvxSearchItem SearchItem SID_SEARCH_ITEM)
+(SvxSearchItem SearchItem SID_SEARCH_ITEM, SfxBoolItem Quiet SID_SEARCH_QUIET )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6853,7 +6853,6 @@ SfxBoolItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
 
 //--------------------------------------------------------------------------
 SfxBoolItem SearchDialog SID_SEARCH_DLG
-
 [
     /* flags: */
     AutoUpdate = TRUE,
@@ -6869,7 +6868,6 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
     Synchron;
 
     Readonly = FALSE,
-
     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
