@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 09:54:39 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 14:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,7 +1463,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
         return ::std::auto_ptr< ImpLineGeometry > (new ImpLineGeometry(aPolyPoly3D, aLinePoly3D,
                                                                        aLineAttr, bForceOnePixel, bForceTwoPixel));
     else
-        return NULL;
+        return ::std::auto_ptr< ImpLineGeometry > (NULL);
 }
 
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(BOOL bBezier) const
