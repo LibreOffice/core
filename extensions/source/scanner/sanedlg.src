@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 14:09:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,14 +183,14 @@ ModalDialog RID_SANE_DIALOG
         Text [ french ] = "Zone à scanner" ;
         Text [ dutch ] = "Scanbereik" ;
         Text [ portuguese ] = "Área de digitalização" ;
-        Text[ chinese_simplified ] = "É¨ÃèÇøÓò";
+        Text[ chinese_simplified ] = "É¨ÃèµÄÇøÓò";
         Text[ russian ] = "Îáëàñòü ñêàíèğîâàíèÿ";
-        Text[ polish ] = "Obszar skanowania";
+        Text[ polish ] = "Skanowany obszar";
         Text[ japanese ] = "½·¬İ”ÍˆÍ";
         Text[ chinese_traditional ] = "±½´y°Ï°ì";
         Text[ arabic ] = "äØÇŞ ÇáãÓÍ ÇáÖæÆí";
         Text[ dutch ] = "Scanbereik";
-        Text[ chinese_simplified ] = "É¨ÃèÇøÓò";
+        Text[ chinese_simplified ] = "É¨ÃèµÄÇøÓò";
         Text[ greek ] = "Ğåñéï÷Ş óÜñùóçò";
         Text[ korean ] = "½ºÄµ ¿µ¿ª";
         Text[ turkish ] = "Tarama alanı";
@@ -696,14 +696,14 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ french ] = "Le périphérique utilisé ne permet pas de créer un aperçu. Il permet uniquement une digitalisation normale en guise d'aperçu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
     Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
-    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà èñïîëüçóåòñÿ îáû÷íî";
+    Text[ russian ] = "Óñòğîéñòâî íå íàñòğîåíî íà ñîçäàíèå ïğåäâàğèòåëüíîãî ïğîñìîòğà. Âìåñòî ıòîãî â êà÷åñòâå ïğåäâàğèòåëüíîãî ïğîñìîòğà èñïîëüçóåòñÿ îáû÷íîå ñîñêàíèğîâàííîå èçîáğàæåíèå, ÷òî çàéìåò çíà÷èòåëüíî áîëüøå âğåìåíè.";
     Text[ polish ] = "Urz¹dzenie to nie dysponuje opcj¹ podgl¹du. Zastosowany zostanie wzamian zwyk³y tryb przegl¹du. Operacja ta mo¿e trochê d³u¿ej potrwaæ.";
     Text[ japanese ] = "‚±‚ÌÃŞÊŞ²½‚ÍÌßÚËŞ­°‚Ìì¬‚É‚Í“K‚µ‚Ä‚¢‚Ü‚¹‚ñB‚©‚í‚è‚ÉÌßÚËŞ­°‚Æ‚µ‚Ä•’Ê‚Ì½·¬İ‚ªg—p‚³‚ê‚Ü‚·‚ªŠÔ‚ª­‚µ‚©‚©‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó³]³Æ¨S¦³³]©w¹wµø¥\\¯à¡C¦]¦¹±Ä¥Î´¶³qªº±½´y¤è¦¡¹wµø·|»İ­n¸ûªøªº®É¶¡¡C";
     Text[ arabic ] = "ÇáÌåÇÒ ÛíÑ ãõÚÏ áÅäÔÇÁ ãÚÇíäÉ. ÈÏáÇğ ãä åĞÇ¡ Óæİ íÊã ÇÓÊÎÏÇã ãÓÍ ÚÇÏí ßãÚÇíäÉ. íãßä Ãä íÓÊÛÑŞ Ğáß İÊÑÉ ÃØæá ÈßËíÑ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
     Text[ chinese_simplified ] = "Õâ¸öÉè±¸Ã»ÓĞÔ¤ÀÀ¹¦ÄÜ¡£²ÉÓÃÆÕÍ¨É¨Ãè·½Ê½Ô¤ÀÀ¿ÉÄÜĞèÒª½Ï³¤µÄÊ±¼ä¡£";
-    Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá";
+    Text[ greek ] = "Ç óõóêåõŞ äåí İ÷åé ñõèìéóôåß ãéá ôçí åìöÜíéóç ğñïåğéóêüğçóçò. Áíôß áõôïı ÷ñçóéìïğïéåßôáé ìéá êáíïíéêŞ óÜñùóç. Ç äéáäéêáóßá áõôŞ ìğïñåß íá ? ";
     Text[ korean ] = "ÀåÄ¡´Â ¹Ì¸®º¸±â ¿É¼ÇÀ» Á¦°øÇÏÁö ¾Ê½À´Ï´Ù. ±× ´ë½Å ÀÏ¹İ ½ºÄµÀÌ ¹Ì¸®º¸±â·Î ÀÌ¿ëµÉ °ÍÀÔ´Ï´Ù. ÀÌ ½ºÄµÀº ½Ã°£ÀÌ ÈÎ¾À ´õ ¿À·¡ °É¸± ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Cihaz önizleme işlevine desteklemiyor. Bunun yerine önizleme olarak normal bir tarama görüntüsü kullanılacak. Bu işlem daha fazla zaman alabilir.";
     Text[ catalan ] = "El dispositivo no está preparado para ofrecer opción de previsualización. En lugar de esta se utilizará un escaneado normal, que puede tardar considerablemente más.";
@@ -716,7 +716,7 @@ String RID_SANE_NOSANELIB_TXT
     Text [ portuguese ] = "Impossível inicializar a interface SANE. Impossível iniciar o processo de digitalização." ;
     Text [ english_us ] = "The SANE interface could not be initialized. Scanning is not possible." ;
     Text [ portuguese_brazilian ] = "Das SANE Interface konnte nicht initialisiert werden. Es kann kein Scanvorgang stattfinden." ;
-    Text [ swedish ] = "SANE-gränssnittet kunde inte initialiseras. Det är inte möjligt att skanna." ;
+    Text [ swedish ] = "Det gick inte att initiera SANE-gränssnittet. Det är inte möjligt att skanna." ;
     Text [ danish ] = "Det var ikke muligt at initialisere SANE-grænsefladen. Scanning er ikke mulig." ;
     Text [ italian ] = "Non è stato possibile inizializzare l'interfaccia SANE. Non è possibile eseguire lo scanning." ;
     Text [ spanish ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización." ;
@@ -736,6 +736,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningún proceso de digitalización.";
     Text[ finnish ] = "SANE-liittymää ei voitu alustaa. Skannausta ei voida suorittaa.";
 };
+
 
 
 
