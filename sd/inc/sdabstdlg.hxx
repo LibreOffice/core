@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdabstdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:41:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ class Bitmap;
 class List;
 class SdResId;
 class Window;
+class SdPage;
+class TabPage;
+class ViewShell;
 
 class AbstractCopyDlg : public VclAbstractDialog  //add for CopyDlg
 {
@@ -219,6 +222,14 @@ public:
     virtual void GetParameterSequence( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rParams ) = 0;
 };
 
+class AbstractHeaderFooterDialog : public VclAbstractDialog // add for HeaderFooterDialog
+{
+public:
+    virtual void ApplyToAll( TabPage* pPage ) = 0;
+    virtual void Apply( TabPage* pPage ) = 0;
+    virtual void Cancel( TabPage* pPage ) = 0;
+};
+
 //---------------------------------------------------------
 class SdAbstractDialogFactory
 {
@@ -300,6 +311,14 @@ public:
                                                 ::sd::DrawDocShell* pDocShell ) = 0; //add for SdVectorizeDlg
     virtual AbstractSdPublishingDlg*    CreateSdPublishingDlg( const ResId& rResId,
                                                 ::Window* pWindow, DocumentType eDocType) = 0; //add for SdPublishingDlg
+    virtual VclAbstractDialog*          CreateMasterLayoutDialog( ::Window* pParent,
+                                                                  SdDrawDocument* pDoc,
+                                                                  SdPage* ) = 0; // add for MasterLayoutDialog
+
+    virtual AbstractHeaderFooterDialog* CreateHeaderFooterDialog( ViewShell* pViewShell,
+                                                                  ::Window* pParent,
+                                                                  SdDrawDocument* pDoc,
+                                                                  SdPage* pCurrentPage ) = 0; // add for HeaderFooterDialog
 
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;

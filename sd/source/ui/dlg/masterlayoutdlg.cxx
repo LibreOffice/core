@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterlayoutdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:49:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     {
         aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
         maCBHeader.Enable( FALSE );
-        String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
+    String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
         maCBPageNumber.SetText( aSlideNumberStr );
         break;
     }
@@ -137,12 +137,11 @@ MasterLayoutDialog::~MasterLayoutDialog()
 {
 }
 
-void MasterLayoutDialog::execute( Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
+short MasterLayoutDialog::Execute()
 {
-    MasterLayoutDialog* pDlg = new MasterLayoutDialog( pParent, pDoc, pCurrentPage );
-    if( pDlg->Execute() )
-        pDlg->applyChanges();
-    delete pDlg;
+    if ( ModalDialog::Execute() )
+        applyChanges();
+    return 1;
 }
 
 void MasterLayoutDialog::applyChanges()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headerfooterdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:49:16 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 16:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,13 +365,12 @@ IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-void HeaderFooterDialog::execute( ViewShell* pViewShell, ::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage )
+short HeaderFooterDialog::Execute()
 {
-    HeaderFooterDialog* pDlg = new HeaderFooterDialog( pViewShell, pParent, pDoc, pCurrentPage );
-    USHORT nRet = pDlg->Execute();
+    USHORT nRet = TabDialog::Execute();
     if( nRet )
-        pViewShell->GetDocSh()->SetModified();
-    delete pDlg;
+        mpViewShell->GetDocSh()->SetModified();
+    return nRet;
 }
 
 // -----------------------------------------------------------------------
