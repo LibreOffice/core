@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:53:56 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,11 @@ public:
     // formatting by virtual device or printer
     short IsUseVirtualDevice() const;
     void SetUseVirtualDevice( short nNew );
+
+    // OD 06.01.2004 #i11859# - former formatting of text lines with
+    // proportional line spacing or not
+    sal_Bool IsFormerLineSpacing() const;
+    void SetUseFormerLineSpacing( const sal_Bool _bUseFormerLineSpacing );
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
