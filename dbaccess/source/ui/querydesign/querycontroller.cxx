@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-07 13:42:41 $
+ *  last change: $Author: rt $ $Date: 2001-02-08 16:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,8 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
     if(!m_xConnection.is()) // so what should otherwise
     {
         String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-        InfoBox(getView(), aMessage).Execute();
+        ODataView * aWindow=getView();
+        InfoBox(aWindow, aMessage).Execute();
         aReturn.aState = ::cppu::bool2any(sal_False);
         return aReturn;
     }
