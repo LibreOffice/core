@@ -88,7 +88,7 @@ Dim oDocSettings as Object
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	If bDBFields Then
 		&apos;set the address db as current db at the document
-		oDocSettings = oDocument.createInstance(&quot;com.sun.star.document.DocumentSettings&quot;)
+    oDocSettings = oDocument.createInstance(&quot;com.sun.star.document.Settings&quot;)
 		oDocSettings.CurrentDatabaseDataSource = sAddressbook
 		oDocSettings.CurrentDatabaseCommand = Table
 		oDocSettings.CurrentDatabaseCommandType = 0
