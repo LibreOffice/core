@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-26 03:47:32 $
+ *  last change: $Author: pluby $ $Date: 2000-10-28 01:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
 extern "C" {
 #endif // __cplusplus
 
-// Create a native NSWindow
-HWND NSWindow_create( ULONG nSalFrameStyle );
+// Instantiate a native NSWindow
+HWND NSWindow_new( ULONG nSalFrameStyle );
 
-// Destroy a native NSWindow
-void NSWindow_destroy( HWND window );
+// Release a native NSWindow
+void NSWindow_release( HWND window );
 
 #ifdef __cplusplus
 }

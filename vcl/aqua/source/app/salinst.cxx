@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-26 03:48:34 $
+ *  last change: $Author: pluby $ $Date: 2000-10-28 01:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,7 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
     // we figure how to implement a good substitute for a child window
     if( pParent )
         return NULL;
-    pFrame->maFrameData.mhWnd = NSWindow_create( nSalFrameStyle );
+    pFrame->maFrameData.mhWnd = NSWindow_new( nSalFrameStyle );
     return pFrame;
 #endif
 }
@@ -900,7 +900,7 @@ void SalInstance::DestroyFrame( SalFrame* pFrame )
 #ifdef WIN
     ImplSendMessage( maInstData.mhComWnd, SAL_MSG_DESTROYFRAME, 0, (LPARAM)pFrame );
 #else
-    NSWindow_destroy( pFrame->maFrameData.mhWnd );
+    NSWindow_release( pFrame->maFrameData.mhWnd );
 #endif
 }
 
