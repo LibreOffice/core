@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:17:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     pView->GroupMarked();
 
     pView->AdjustMarkHdl();
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
