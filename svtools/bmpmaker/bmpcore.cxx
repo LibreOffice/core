@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-10 13:56:14 $
+ *  last change: $Author: ka $ $Date: 2002-02-28 09:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,8 @@ void BmpCreator::Message( const String& rText, BYTE cExitCode )
 void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, String& rPrefix,
                              String& rName, const LangInfo& rLang )
 {
-       const char* pResPath = getenv( "SOLARSRC" );
+       const char* pCollectPath = getenv( "BMP_COLLECT_PATH" );
+    const char* pResPath = getenv( "SOLARSRC" );
 
     if( pResPath && *pResPath )
     {
@@ -107,10 +108,12 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
         long                nBmpPos = 0L;
         USHORT              nId;
         USHORT              nN = 1;
-        DirEntry            aInPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
         DirEntry            aOutFile( rOut );
-        DirEntry            SolarPath1( aResPath );
-        DirEntry            SolarPath2( aResPath );
+        DirEntry            aLocalPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
+        DirEntry            aLocalCollectPath;
+        DirEntry            aGlobalPath( aResPath );
+        DirEntry            aGlobalLangPath( aResPath );
+        DirEntry            aGlobalCollectPath;
         String              aDefaultName( rPrefix ); aDefaultName.Append( String( RTL_CONSTASCII_USTRINGPARAM( "00000.bmp" ) ) );
         BOOL                bInserted = FALSE;
         BOOL                bFirst = TRUE;
@@ -126,14 +129,14 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
             aName = DirEntry( aName ).GetBase();
             aName += aNumStr;
             aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
-            SolarPath1 += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
+            aGlobalLangPath += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
         }
 
         aOutFile += DirEntry( aName );
 
         // Die Namen werden spaeter ersetzt
-        SolarPath1 += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
-        SolarPath2 += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
+        aGlobalLangPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
+        aGlobalPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
 
         // Anzahl der Bitmaps bestimmen
         for ( nTotCount = 0UL, nSRSPos = pSRS->Tell(); aText.Search( '}' ) == STRING_NOTFOUND; )
@@ -163,18 +166,43 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
         String aInfo( RTL_CONSTASCII_USTRINGPARAM( "CREATING ImageList for language: " ) );
         aInfo += String( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
         aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " [ " ) );
-        aInfo += aInPath.GetPath().GetFull();
+        aInfo += aLocalPath.GetPath().GetFull();
         aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-        aInfo += SolarPath1.GetPath().GetFull();
-        if( SolarPath2 != SolarPath1 )
+        aInfo += aGlobalLangPath.GetPath().GetFull();
+
+        if( aGlobalPath != aGlobalLangPath )
         {
             aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-            aInfo += SolarPath2.GetPath().GetFull();
+            aInfo += aGlobalPath.GetPath().GetFull();
         }
+
         aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
         Message( aInfo );
 
-        for ( ; aText.Search( '}' ) == STRING_NOTFOUND; )
+        if( pCollectPath )
+        {
+            String aLocalStr( aLocalPath.GetPath().GetFull() );
+            aLocalStr.EraseLeadingChars( '/' );
+            aLocalStr.SearchAndReplace( ':', '_' );
+            aLocalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
+            aLocalCollectPath += DirEntry( aLocalStr );
+            aLocalCollectPath.MakeDir();
+
+            String aGlobalStr( aGlobalPath.GetPath().GetFull() );
+            aGlobalStr.EraseLeadingChars( '/' );
+            aGlobalStr.SearchAndReplace( ':', '_' );
+            aGlobalCollectPath = DirEntry( String( pCollectPath, RTL_TEXTENCODING_ASCII_US ) );
+            aGlobalCollectPath += DirEntry( aGlobalStr );
+            aGlobalCollectPath.MakeDir();
+
+            if( !aLocalCollectPath.Exists() || !aGlobalCollectPath.Exists() )
+            {
+                pCollectPath = NULL;
+                Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: couldn't create collect path" ) ), 0 );
+            }
+        }
+
+        for( ; aText.Search( '}' ) == STRING_NOTFOUND; )
         {
             ByteString aTmp;
 
@@ -203,53 +231,66 @@ void BmpCreator::ImplCreate( SvStream& rStm, DirEntry& rIn, DirEntry& rOut, Stri
                 aString.Assign( rPrefix );
                 aString.Append( aText );
                 aString.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) );
-                aInPath.SetName( aString );
+                aLocalPath.SetName( aString );
             }
             else
                 continue;
 
-            if( !FILETEST( aInPath ) )
+            if( !FILETEST( aLocalPath ) )
             {
                 // Falls nicht deutsch, suchen wir zuerst im jeweiligen Sprach-Unterverz.
                 if( rLang.mnLangNum != 49 )
                 {
-                    SolarPath1.SetName( aString );
+                    aGlobalLangPath.SetName( aString );
 
-                    if ( !FILETEST( SolarPath1 ) )
+                    if ( !FILETEST( aGlobalLangPath ) )
                     {
-                        SolarPath2.SetName( aString );
+                        aGlobalPath.SetName( aString );
 
-                        if( !FILETEST( SolarPath2 ) )
+                        if( !FILETEST( aGlobalPath ) )
                             aBmp = Bitmap();
                         else
                         {
-                            SvFileStream aIStm( aFileName = SolarPath2.GetFull(), STREAM_READ );
+                            SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
                             aIStm >> aBmp;
                         }
                     }
                     else
                     {
-                        SvFileStream aIStm( aFileName = SolarPath1.GetFull(), STREAM_READ );
+                        SvFileStream aIStm( aFileName = aGlobalLangPath.GetFull(), STREAM_READ );
                         aIStm >> aBmp;
                     }
                 }
                 else
                 {
-                    SolarPath2.SetName( aString );
+                    aGlobalPath.SetName( aString );
 
-                    if( !FILETEST( SolarPath2 ) )
+                    if( !FILETEST( aGlobalPath ) )
                         aBmp = Bitmap();
                     else
                     {
-                        SvFileStream aIStm( aFileName = SolarPath2.GetFull(), STREAM_READ );
+                        SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
                         aIStm >> aBmp;
                     }
+                }
+
+                if( pCollectPath && !aBmp.IsEmpty() )
+                {
+                    DirEntry aSrcPath( aFileName ), aDstPath( aGlobalCollectPath );
+                    aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
                 }
             }
             else
             {
-                SvFileStream aIStm( aFileName = aInPath.GetFull(), STREAM_READ );
+                SvFileStream aIStm( aFileName = aLocalPath.GetFull(), STREAM_READ );
                 aIStm >> aBmp;
+                aIStm.Close();
+
+                if( pCollectPath && !aBmp.IsEmpty() )
+                {
+                    DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
+                    aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
+                }
             }
 
             aSize = aBmp.GetSizePixel();
