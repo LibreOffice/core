@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:24:17 $
+ *  last change: $Author: tl $ $Date: 2001-06-12 13:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,33 +193,33 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     if (!aOpt.IsMatchCase())
         rFlags |= TransliterationModules_IGNORE_CASE;
-    if (!aOpt.IsMatchFullHalfWidthForms())
+    if ( aOpt.IsMatchFullHalfWidthForms())
         rFlags |= TransliterationModules_IGNORE_WIDTH;
-    if (!aOpt.IsMatchHiraganaKatakana())
+    if ( aOpt.IsMatchHiraganaKatakana())
         rFlags |= TransliterationModules_IGNORE_KANA;
-    if (!aOpt.IsMatchContractions())
+    if ( aOpt.IsMatchContractions())
         rFlags |= TransliterationModules_ignoreSize_ja_JP;
-    if (!aOpt.IsMatchMinusDashChoon())
+    if ( aOpt.IsMatchMinusDashChoon())
         rFlags |= TransliterationModules_ignoreMinusSign_ja_JP;
-    if (!aOpt.IsMatchRepeatCharMarks())
+    if ( aOpt.IsMatchRepeatCharMarks())
         rFlags |= TransliterationModules_ignoreIterationMark_ja_JP;
-    if (!aOpt.IsMatchVariantFormKanji())
+    if ( aOpt.IsMatchVariantFormKanji())
         rFlags |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
-    if (!aOpt.IsMatchOldKanaForms())
+    if ( aOpt.IsMatchOldKanaForms())
         rFlags |= TransliterationModules_ignoreTraditionalKana_ja_JP;
-    if (!aOpt.IsMatchDiziDuzu())
+    if ( aOpt.IsMatchDiziDuzu())
         rFlags |= TransliterationModules_ignoreZiZu_ja_JP;
-    if (!aOpt.IsMatchBavaHafa())
+    if ( aOpt.IsMatchBavaHafa())
         rFlags |= TransliterationModules_ignoreBaFa_ja_JP;
-    if (!aOpt.IsMatchTsithichiDhizi())
+    if ( aOpt.IsMatchTsithichiDhizi())
         rFlags |= TransliterationModules_ignoreTiJi_ja_JP;
-    if (!aOpt.IsMatchHyuiyuByuvyu())
+    if ( aOpt.IsMatchHyuiyuByuvyu())
         rFlags |= TransliterationModules_ignoreHyuByu_ja_JP;
-    if (!aOpt.IsMatchSesheZeje())
+    if ( aOpt.IsMatchSesheZeje())
         rFlags |= TransliterationModules_ignoreSeZe_ja_JP;
-    if (!aOpt.IsMatchIaiya())
+    if ( aOpt.IsMatchIaiya())
         rFlags |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
-    if (!aOpt.IsMatchKiku())
+    if ( aOpt.IsMatchKiku())
         rFlags |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
     if ( aOpt.IsIgnorePunctuation())
         rFlags |= TransliterationModules_ignoreSeparator_ja_JP;
@@ -388,7 +388,7 @@ void SvxSearchItem::Notify( const Sequence< OUString > &rPropertyNames )
 
 void SvxSearchItem::SetMatchFullHalfWidthForms( sal_Bool bVal )
 {
-    if (!bVal)
+    if (bVal)
         aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
     else
         aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_WIDTH;
