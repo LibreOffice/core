@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-05-04 16:32:25 $
+ *  last change: $Author: er $ $Date: 2001-05-04 16:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2158,59 +2158,24 @@ BOOL ImpSvNumberInputScan::IsNumberFormat(
                     fOutNumber = StringToDouble(sResString);
                 else                                        // Nachbehandlung Exponent
                 {
-                    double fExp;
-
+                    sResString += 'E';
+                    if ( nESign == -1 )
+                        sResString += '-';
                     if (nDecPos == 2)
-                        fExp = StringToDouble(sStrArray[nNums[nThousand+2]]);
+                        sResString += sStrArray[nNums[nThousand+2]];
                     else
-                        fExp = StringToDouble(sStrArray[nNums[nThousand+1]]);
-#ifdef S390
-                    // S390: DBL_MIN == 5.397605347e-79, DBL_MAX == ...e75
-                    if ((nESign == -1 && fExp > 79.0) || (nESign != -1 && fExp > 75.0))
-#else
-                    if (fExp > 308.0)
-#endif
+                        sResString += sStrArray[nNums[nThousand+1]];
+                    int nErrno = 0;
+                    fOutNumber = SolarMath::StringToDouble(
+                        sResString.GetBuffer(), ',', '.', nErrno );
+                    if ( nErrno == ERANGE )
                     {
-                        F_Type = NUMBERFORMAT_TEXT;         // Ueberlauf -> Text
+                        F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
                         if (nESign == -1)
                             fOutNumber = 0.0;
                         else
                             fOutNumber = DBL_MAX;
 /*!*/                   return TRUE;
-                    }
-                    else
-                    {
-                        fOutNumber = StringToDouble(sResString);
-                        if (nESign == -1)
-                        {
-#ifdef S390
-                            if (fExp == 79.0  && fOutNumber < 5.397605348)
-#else
-                            if (fExp == 308.0 && fOutNumber < DBL_MIN*1.0E308)
-#endif
-                            {
-                                eScannedType = NUMBERFORMAT_TEXT;   // Ueberlauf -> Text
-                                fOutNumber = 0.0;
-                            }
-                            else
-                                fOutNumber = SolarMath::Pow10Exp(
-                                    fOutNumber, -((int)fExp) );
-                        }
-                        else
-                        {
-#ifdef S390
-                            if (fExp == 75.0 && fOutNumber > DBL_MAX/1.0E75)
-#else
-                            if (fExp == 308.0 && fOutNumber > DBL_MAX/1.0E308)
-#endif
-                            {
-                                fOutNumber = DBL_MAX;
-                                eScannedType = NUMBERFORMAT_TEXT;   // Ueberlauf -> Text
-                            }
-                            else
-                                fOutNumber = SolarMath::Pow10Exp(
-                                    fOutNumber, (int)fExp );
-                        }
                     }
                 }
 
