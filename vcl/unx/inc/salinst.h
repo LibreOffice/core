@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:44:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,15 @@
 #ifndef _VOS_THREAD_HXX
 #include <vos/thread.hxx>
 #endif
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 #ifndef _SV_SALINST_HXX
 #include <salinst.hxx>
 #endif
 
-class SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class VCL_DLLPUBLIC SalYieldMutex : public NAMESPACE_VOS(OMutex)
 {
 protected:
     ULONG                                       mnCount;
@@ -94,7 +98,7 @@ public:
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class X11SalInstance : public SalInstance
+class VCL_DLLPUBLIC X11SalInstance : public SalInstance
 {
 protected:
     SalYieldMutex*                  mpSalYieldMutex;
