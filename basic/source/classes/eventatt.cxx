@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-21 17:45:58 $
+ *  last change: $Author: ab $ $Date: 2001-02-22 15:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,8 @@ void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw (
     firing_impl( aScriptEvent, NULL );
 }
 
-Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent ) throw ( RuntimeException )
+Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
+    throw ( InvocationTargetException, RuntimeException )
 {
     Any aRetAny;
     firing_impl( aScriptEvent, &aRetAny );
@@ -373,7 +374,8 @@ void DialogAllListener_Impl::firing( const AllEventObject& Event ) throw ( Runti
     firing_impl( Event, NULL );
 }
 
-Any DialogAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( RuntimeException )
+Any DialogAllListener_Impl::approveFiring( const AllEventObject& Event )
+    throw ( InvocationTargetException, RuntimeException )
 {
     Any aRetAny;
     firing_impl( Event, &aRetAny );
