@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-30 16:51:30 $
+ *  last change: $Author: nn $ $Date: 2001-02-08 14:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 
+#include "scitems.hxx"
 #include <svx/objfac3d.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svditer.hxx>
@@ -629,6 +630,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
+#include <svx/drawitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
@@ -637,6 +639,7 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/itempool.hxx>
 #include <vcl/virdev.hxx>
+#include <offmgr/app.hxx>
 
 #include "drwlayer.hxx"
 #include "drawpage.hxx"
@@ -766,11 +769,8 @@ inline void TwipsToMM( long& nVal )
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
                  NULL,                          // SfxItemPool* Pool
-                pGlobalDrawPersist ?
-                    pGlobalDrawPersist :
-                    pDocument->GetDocumentShell()  // SvPersist*   pPers
-                                                // VCItemPool*  pVCPool=NULL
-               ),
+                 pGlobalDrawPersist ? pGlobalDrawPersist : pDocument->GetDocumentShell(),
+                 TRUE ),        // bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
     pUndoGroup( NULL ),
@@ -779,7 +779,19 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 {
     pGlobalDrawPersist = NULL;          // nur einmal benutzen
 
-    SetObjectShell( pDocument->GetDocumentShell() );
+    SfxObjectShell* pObjSh = pDocument->GetDocumentShell();
+    if ( pObjSh )
+    {
+        SetObjectShell( pObjSh );
+
+        // set color table
+        SvxColorTableItem* pColItem = (SvxColorTableItem*) pObjSh->GetItem( ITEMID_COLOR_TABLE );
+        XColorTable* pXCol = pColItem ? pColItem->GetColorTable() : OFF_APP()->GetStdColorTable();
+        SetColorTable( pXCol );
+    }
+    else
+        SetColorTable( OFF_APP()->GetStdColorTable() );
+
     SetSwapGraphics(TRUE);
 //  SetSwapAsynchron(TRUE);     // an der View
 
