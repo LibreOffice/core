@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:53:59 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include <vector>
 #include <stack>
 
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
@@ -79,7 +78,6 @@
 
 #include <vos/diagnose.hxx>
 
-#include <tools/string.hxx>
 #include "LocaleNode.hxx"
 
 using namespace ::rtl;
