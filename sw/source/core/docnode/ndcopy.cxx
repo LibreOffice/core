@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:25:12 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwTable& rTbl = (SwTable&)pTblNd->GetTable();
     pTblFmt->Add( &rTbl );      // das Frame-Format setzen
 
-    rTbl.SetHeadlineRepeat( GetTable().IsHeadlineRepeat() );
+    rTbl.SetRowsToRepeat( GetTable().GetRowsToRepeat() );
     rTbl.SetTblChgMode( GetTable().GetTblChgMode() );
 
     SwDDEFieldType* pDDEType = 0;
