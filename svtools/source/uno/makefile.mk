@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-11-24 12:36:52 $
+#   last change: $Author: mba $ $Date: 2000-12-13 11:16:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -240,6 +240,7 @@ SLOFILES=   \
             $(SLO)$/addrtempuno.obj	\
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/registerservices.obj \
+                        $(SLO)$/registerlight.obj \
             $(SLO)$/unoifac3.obj	\
             $(SLO)$/unoifac2.obj	\
             $(SLO)$/unoiface.obj	\
@@ -253,7 +254,15 @@ SLOFILES+=$(SLO)$/staticmbuno.obj
 .ENDIF
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
-LIB1OBJFILES=  $(SLOFILES)
+LIB1OBJFILES=  \
+            $(SLO)$/addrtempuno.obj	\
+            $(SLO)$/genericunodialog.obj \
+            $(SLO)$/registerservices.obj \
+            $(SLO)$/unoifac3.obj	\
+            $(SLO)$/unoifac2.obj	\
+            $(SLO)$/unoiface.obj	\
+            $(SLO)$/imgprod.obj
+
 
 .ENDIF
 

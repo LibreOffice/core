@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:37:19 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 11:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,6 @@
 #include <unoifac3.hxx>
 #include <unoiface.hxx>
 
-#include <pathoptions.hxx>
-
 #include <toolkit/helper/macros.hxx>
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -100,7 +98,6 @@
     }
 
 // -------------------------------------------------------------------------------------
-IMPL_CREATEINSTANCE( PathService )
 IMPL_CREATEINSTANCE( SvtTextLoader )
 IMPL_CREATEINSTANCE( ExtVCLXToolkit )
 DECLARE_CREATEINSTANCE( SvNumberFormatsSupplierServiceObject )
@@ -137,26 +134,8 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
 
         xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/org.openoffice.comp.svt.OAddressBookSourceDialogUno/UNO/SERVICES" ) );
         xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" ) );
-
-        xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/com.sun.star.comp.svtools.PathService/UNO/SERVICES" ) );
-        xNewKey->createKey( ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" ) );
-
-// !!!
-/*
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xKey;
-        uno2smart(xKey, *xUnoKey);
-
-        ::rtl::OUString aImpl( L"/" );
-        aImpl += SvUnoAttributeContainer::getStaticImplementationName();
-        aImpl += L"/UNO/SERVICES";
-        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey = xKey->createKey( aImpl );
-        ::com::sun::star::uno::Sequence <::rtl::OUString> aSequ = SvUnoAttributeContainer::getStaticSupportedServiceNames();
-        const ::rtl::OUString* pArray = aSequ.getConstArray();
-        for( sal_Int32 i = 0; i < aSequ.getLength(); i++ )
-            xNewKey->createKey( pArray[i] );
-*/
-
     }
+
     return sal_True;
 }
 
@@ -193,12 +172,6 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
             ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
             aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.AddressBookSourceDialog" );
             xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), svt::OAddressBookSourceDialogUno_CreateInstance, aServiceNames );
-        }
-        else if ( rtl_str_compare( sImplementationName, "com.sun.star.comp.svtools.PathService" ) == 0 )
-        {
-            ::com::sun::star::uno::Sequence< ::rtl::OUString > aServiceNames(1);
-            aServiceNames.getArray()[0] = ::rtl::OUString::createFromAscii( "com.sun.star.config.SpecialConfigManager" );
-            xFactory = ::cppu::createSingleFactory( pServiceManager, ::rtl::OUString::createFromAscii( sImplementationName ), PathService_CreateInstance, aServiceNames );
         }
 
         if ( xFactory.is() )
