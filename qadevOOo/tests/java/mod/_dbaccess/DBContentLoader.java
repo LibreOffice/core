@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBContentLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:39 $
+ *  last change:$Date: 2003-05-27 12:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._dbaccess;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -110,7 +111,7 @@ public class DBContentLoader extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = Param.getMSF().createInstance
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.sdb.ContentLoader") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
