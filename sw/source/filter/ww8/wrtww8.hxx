@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:12:50 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ typedef std::vector<aPair>::iterator SwImplBookmarksIter;
 class SwWW8Writer: public StgWriter
 {
 friend bool WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt ); // pO
-friend void WW8_WrPlcSepx::WriteOlst( SwWW8Writer& rWrt, USHORT i );
+friend class WW8_WrPlcSepx;
 friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
 
     wwFontHelper maFontHelper;
