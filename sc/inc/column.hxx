@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:56:44 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ class TypedStrCollection;
 class ScProgress;
 struct ScFunctionData;
 struct ScLineFlags;
+struct ScMergePatternState;
 
 
 #define COLUMN_DELTA    4
@@ -346,8 +347,8 @@ public:
 
     ULONG       GetNumberFormat( SCROW nRow ) const;
 
-    void        MergeSelectionPattern( SfxItemSet** ppSet, const ScMarkData& rMark, BOOL bDeep ) const;
-    void        MergePatternArea( SfxItemSet** ppSet, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const;
+    void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, BOOL bDeep ) const;
+    void        MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, BOOL bDeep ) const;
     void        MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                             ScLineFlags& rFlags,
                             SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight ) const;
