@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-01-31 19:29:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-19 10:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,10 @@ public:
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
     inline  const String&       getQuarterWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER_WORD ); }
+    inline  const String&       getAboveWord() const
+                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
+    inline  const String&       getBelowWord() const
+                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::BELOW_WORD ); }
 
 #ifndef PRODUCT
             ByteString&         AppendLocaleInfo( ByteString& rDebugMsg ) const;
