@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-11 13:55:09 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 15:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -938,6 +938,7 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit )
     pOutliner->SetRefDevice(GetRefDevice());
     pOutliner->SetForbiddenCharsTable(GetForbiddenCharsTable());
     pOutliner->SetAsianCompressionMode( mnCharCompressType );
+    pOutliner->SetKernAsianPunctuation( IsKernAsianPunctuation() );
 
     if ( !GetRefDevice() )
     {
@@ -2655,6 +2656,16 @@ void SdrModel::SetCharCompressType( UINT16 nType )
     if( nType != mnCharCompressType )
     {
         mnCharCompressType = nType;
+        ImpSetOutlinerDefaults( pDrawOutliner );
+        ImpSetOutlinerDefaults( pHitTestOutliner );
+    }
+}
+
+void SdrModel::SetKernAsianPunctuation( sal_Bool bEnabled )
+{
+    if( mbKernAsianPunctuation != bEnabled )
+    {
+        mbKernAsianPunctuation = bEnabled;
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-26 09:17:45 $
+ *  last change: $Author: cl $ $Date: 2001-10-17 15:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,7 @@ SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel )
     pOutl->SetDefTab( pModel->GetDefaultTabulator() );
     pOutl->SetForbiddenCharsTable( pModel->GetForbiddenCharsTable() );
     pOutl->SetAsianCompressionMode( pModel->GetCharCompressType() );
+    pOutl->SetKernAsianPunctuation( pModel->IsKernAsianPunctuation() );
 
     return pOutl;
 }
