@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2001-02-21 20:49:29 $
+#   last change: $Author: dbo $ $Date: 2001-03-06 09:39:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ APP1STDLIBS= \
         $(CPPULIB)			\
         $(CPPUHELPERLIB)		\
         $(SALLIB)			\
-        ixcr$(UPD)$(DLLPOSTFIX).lib
+        $(XMLSCRIPTLIB)
 
 APP1DEF=	$(MISC)$/imexp.def
 
