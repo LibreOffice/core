@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstreamhelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:19:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 11:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ static SvStream* lcl_CreateStream( const String& rFileName, StreamMode eOpenMode
                 }
             }
 
-            if ( bEnsureFileExists )
+            if ( bEnsureFileExists || bTruncate )
             {
                 try
                 {
