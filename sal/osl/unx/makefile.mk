@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obr $ $Date: 2000-11-06 12:40:19 $
+#   last change: $Author: hr $ $Date: 2001-02-22 17:03:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,3 +130,11 @@ APP1STDLIBS+=-lC
 
 .INCLUDE :  target.mk
 
+.IF "$(OS)$(CPU)"=="SOLARISS"
+$(SLO)$/interlck.obj: asm/interlck_sparc_cas.s
+        as -q -K PIC -o $(SLO)$/interlck.o asm/interlck_sparc_cas.s ; touch $(SLO)$/interlck.obj
+
+$(OBJ)$/interlck.obj: asm/interlck_sparc_cas.s
+        as -q -o $(OBJ)$/interlck.o asm/interlck_sparc_cas.s ; touch $(OBJ)$/interlck.obj
+
+.ENDIF
