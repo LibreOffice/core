@@ -1,10 +1,10 @@
- /*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:07:28 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ namespace
         : public rtl::Static< ::rtl::OUString, ProductExtension > {};
     struct XMLFileFormatVersion
         : public rtl::Static< ::rtl::OUString, XMLFileFormatVersion > {};
+    struct WriterCompatibilityVersionOOo11
+        : public rtl::Static< ::rtl::OUString, WriterCompatibilityVersionOOo11 > {};
 }
 
 //-----------------------------------------------------------------------------
@@ -477,6 +479,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         return aRet;
     }
 
+    rtl::OUString &rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+    if ( eProp == WRITERCOMPATIBILITYVERSIONOOO11 && rWriterCompatibilityVersionOOo11.getLength() )
+    {
+        aRet <<= rWriterCompatibilityVersionOOo11;
+        return aRet;
+    }
+
     OUString sPath = C2U(cConfigBaseURL);
     switch(eProp)
     {
@@ -488,6 +497,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         case PRODUCTXMLFILEFORMATVERSION:   sPath += C2U("Setup/Product"); break;
 
         case DEFAULTCURRENCY:               sPath += C2U("Setup/L10N"); break;
+
+        case WRITERCOMPATIBILITYVERSIONOOO11:
+            sPath += C2U("Office.Compatibility/WriterCompatibilityVersion"); break;
     }
     Sequence< Any > aArgs(1);
     aArgs[0] <<= sPath;
@@ -509,12 +521,13 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
         OUString sProperty;
         switch(eProp)
         {
-            case LOCALE:                        sProperty = C2U("ooLocale"); break;
-            case PRODUCTNAME:                   sProperty = C2U("ooName"); break;
-            case PRODUCTVERSION:                sProperty = C2U("ooSetupVersion"); break;
-            case PRODUCTEXTENSION:              sProperty = C2U("ooSetupExtension"); break;
-            case PRODUCTXMLFILEFORMATVERSION:   sProperty = C2U("ooXMLFileFormatVersion"); break;
-            case DEFAULTCURRENCY:               sProperty = C2U("ooSetupCurrency"); break;
+            case LOCALE:                            sProperty = C2U("ooLocale"); break;
+            case PRODUCTNAME:                       sProperty = C2U("ooName"); break;
+            case PRODUCTVERSION:                    sProperty = C2U("ooSetupVersion"); break;
+            case PRODUCTEXTENSION:                  sProperty = C2U("ooSetupExtension"); break;
+            case PRODUCTXMLFILEFORMATVERSION:       sProperty = C2U("ooXMLFileFormatVersion"); break;
+            case DEFAULTCURRENCY:                   sProperty = C2U("ooSetupCurrency"); break;
+            case WRITERCOMPATIBILITYVERSIONOOO11:   sProperty = C2U("OOo11"); break;
         }
         try
         {
@@ -544,6 +557,9 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if ( eProp == PRODUCTEXTENSION )
         aRet >>= rProductExtension;
+
+    if ( eProp == WRITERCOMPATIBILITYVERSIONOOO11 )
+        aRet >>= rWriterCompatibilityVersionOOo11;
 
     return aRet;
 }
