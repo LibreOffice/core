@@ -2,6 +2,7 @@
  * needed at the head of an OO document.
  *
  * Copyright (C) 2002-2003 William Lachance (william.lachance@sympatico.ca)
+ * Copyright (C) 2004 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -32,48 +33,42 @@
 #include "Style.hxx"
 #include "WriterProperties.hxx"
 
-using com::sun::star::uno::Reference;
-using com::sun::star::xml::sax::XDocumentHandler;
-
 class DocumentElement;
+class DocumentHandler;
 
 class TableCellStyle : public Style
 {
 public:
-    TableCellStyle(const float fLeftBorderThickness, const float fRightBorderThickness,
-               const float fTopBorderThickness, const float fBottomBorderThickness,
-               const RGBSColor *pFgColor, const RGBSColor *pBgColor, const char *psName);
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
+    TableCellStyle(const WPXPropertyList &xPropList, const char *psName);
+    virtual void write(DocumentHandler &xHandler) const;
 private:
-    float mfLeftBorderThickness;
-    float mfRightBorderThickness;
-    float mfTopBorderThickness;
-    float mfBottomBorderThickness;
-    RGBSColor m_fgColor;
-    RGBSColor m_bgColor;
+        WPXPropertyList mPropList;
+};
+
+class TableRowStyle : public Style
+{
+public:
+    TableRowStyle(const WPXPropertyList &propList, const char *psName);
+    virtual void write(DocumentHandler &xHandler) const;
+private:
+        WPXPropertyList mPropList;
 };
 
 class TableStyle : public Style, public TopLevelElementStyle
 {
- public:
-    TableStyle(const float fDocumentMarginLeft, const float fDocumentMarginRight,
-           const float fMarginLeftOffset, const float fMarginRightOffset,
-           const uint8_t iTablePositionBits, const float fLeftOffset,
-           const vector < WPXColumnDefinition > &columns,
-           const char *psName);
+public:
+    TableStyle(const WPXPropertyList &xPropList, const WPXPropertyListVector &columns, const char *psName);
     ~TableStyle();
-    virtual void write(Reference < XDocumentHandler > &xHandler) const;
-    const int getNumColumns() const { return miNumColumns; }
+    virtual void write(DocumentHandler &xHandler) const;
+    const int getNumColumns() const { return mColumns.count(); }
     void addTableCellStyle(TableCellStyle *pTableCellStyle) { mTableCellStyles.push_back(pTableCellStyle); }
     int getNumTableCellStyles() { return mTableCellStyles.size(); }
+    void addTableRowStyle(TableRowStyle *pTableRowStyle) { mTableRowStyles.push_back(pTableRowStyle); }
+    int getNumTableRowStyles() { return mTableRowStyles.size(); }
 private:
-    float mfDocumentMarginLeft, mfDocumentMarginRight;
-    float mfMarginLeftOffset, mfMarginRightOffset;
-    vector< WPXColumnDefinition > mColumns;
-    unsigned int miTablePositionBits;
-    float mfLeftOffset;
-    vector<TableCellStyle *> mTableCellStyles;
-    int miNumColumns;
+        WPXPropertyList mPropList;
+    WPXPropertyListVector mColumns;
+    std::vector<TableCellStyle *> mTableCellStyles;
+    std::vector<TableRowStyle *> mTableRowStyles;
 };
-
 #endif
