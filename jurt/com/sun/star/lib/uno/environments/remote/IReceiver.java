@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IReceiver.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-17 12:46:27 $
+ *  last change: $Author: sb $ $Date: 2002-09-17 15:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -61,31 +61,22 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
-
-import java.io.IOException;
-
-import com.sun.star.lib.uno.environments.java.IRequester;
-
 /**
- * This interface is an abstraction for giving back
- * a reply for a request.
- * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-17 12:46:27 $
- * @author      Kay Ramme
- * @see         com.sun.star.uno.IQueryInterface
+ * An abstraction for giving back a reply for a request.
+ *
+ * @version $Revision: 1.4 $ $ $Date: 2002-09-17 15:06:14 $
+ * @author Kay Ramme
+ * @see com.sun.star.uno.IQueryInterface
  */
 public interface IReceiver {
     /**
-     * Sends back a reply for the passed request id.
-     * <p>
-     * @param  threadId    the thread id of the request
-     * @param  requestId   the request id
-     * @param  status      the status of the request
-     * @param  result      the result of the request
-     * @param  resultClass the type of the result
-     * @param  params      the out and in/out parameters passed with the request
-     * @param  signature   the types of the out and in/out parameters
+     * Send back a reply for a request.
+     *
+     * @param exception <CODE>true</CODE> if an exception (instead of a normal
+     *     result) is sent back.
+     * @param threadId the thread ID of the request.
+     * @param result the result of executing the request, or an exception thrown
+     *     while executing the request.
      */
-    public void sendReply(boolean exception, ThreadId threadId, Object result);
+    void sendReply(boolean exception, ThreadId threadId, Object result);
 }
-
