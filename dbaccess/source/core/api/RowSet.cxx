@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:02:26 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         m_aCurrentRow.setBookmark(Any());
 
         notifyAllListenersRowChanged(aEvt);
-        ORowSetBase::firePropertyChange(aOldValues);
+        //  ORowSetBase::firePropertyChange(aOldValues);
         fireRowcount();
         checkInsert();
     }
