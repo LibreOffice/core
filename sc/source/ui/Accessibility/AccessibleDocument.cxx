@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 13:14:36 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 15:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,9 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
 
                 if (pShape->pAccShape)
                 {
-                    if (VCLRectangle(pShape->pAccShape->getBounds()).IsInside(VCLPoint(rPoint)))
+                    Point aPoint(VCLPoint(rPoint));
+                    aPoint -= VCLRectangle(pShape->pAccShape->getBounds()).TopLeft();
+                    if (pShape->pAccShape->contains(AWTPoint(aPoint)))
                     {
                         xAccessible = pShape->pAccShape;
                         bFound = sal_True;
