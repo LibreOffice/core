@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+#   last change: $Author: aw $ $Date: 2000-11-24 13:43:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ SRC1FILES=\
         float3d.src
 
 SLOFILES= \
+        $(SLO)$/svx3ditems.obj		\
         $(SLO)$/deflt3d.obj		\
         $(SLO)$/class3d.obj		\
         $(SLO)$/e3dundo.obj      \
@@ -110,6 +111,7 @@ SLOFILES= \
         $(SLO)$/float3d.obj
 
  SVXLIGHTOBJFILES= \
+        $(SLO)$/svx3ditems.obj		\
          $(OBJ)$/deflt3d.obj		\
         $(OBJ)$/class3d.obj		\
         $(OBJ)$/e3dundo.obj      \
