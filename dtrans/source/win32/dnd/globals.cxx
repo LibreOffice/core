@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
+ *  last change: $Author: jl $ $Date: 2001-08-08 08:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     {
         if( nSourceActions & ACTION_MOVE )
         {
-            ret= ACTION_DEFAULT;
+            ret= ACTION_DEFAULT | ACTION_MOVE;
         }
 
         else if( nSourceActions & ACTION_COPY )

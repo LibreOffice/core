@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-26 11:28:05 $
+ *  last change: $Author: jl $ $Date: 2001-08-08 08:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
         // m_nLastDropAction has to be set by a listener. If no listener calls
         //XDropTargetDragContext::acceptDrag and specifies an action then pdwEffect
         // will be DROPEFFECT_NONE throughout
-        m_nLastDropAction= ACTION_DEFAULT;
+        m_nLastDropAction= ACTION_DEFAULT | ACTION_MOVE;
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );
@@ -653,6 +653,8 @@ void DropTarget::_acceptDrag( sal_Int8 dragOperation, const Reference<XDropTarge
     if( context == m_currentDragContext)
     {
         m_nLastDropAction= dragOperation;
+        if( m_nLastDropAction == ACTION_MOVE)
+            m_nLastDropAction |= ACTION_DEFAULT;
     }
 }
 
