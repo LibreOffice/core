@@ -377,11 +377,11 @@ namespace dynamic_loader {
 
 
 extern "C" {
-    SAL_DLLEXPORT void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv)   {
+    void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv) {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    SAL_DLLEXPORT sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
+    sal_Bool SAL_CALL component_writeInfo(XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
         sal_Bool bRes = sal_False;
 
         if (pRegistryKey) {
@@ -409,7 +409,7 @@ extern "C" {
         return bRes;
     }
 
-    SAL_DLLEXPORT void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
+    void * SAL_CALL component_getFactory(const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, XRegistryKey * pRegistryKey) {
         void * pRet = 0;
 
         if (pServiceManager && OUString::createFromAscii(pImplName).equals(::dynamic_loader::DynamicLoader::implname)) {
