@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-12 11:55:13 $
+ *  last change: $Author: nn $ $Date: 2001-08-13 16:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <svtools/smplhint.hxx>
 #include <svtools/itemprop.hxx>
 #include <svx/unomid.hxx>
+#include <tools/isolang.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -107,6 +108,9 @@ const SfxItemPropertyMap* lcl_GetDocDefaultsMap()
         {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,          &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
         {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,      &getCppuType((rtl::OUString*)0),    0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   ATTR_FONT_LANGUAGE, &getCppuType((lang::Locale*)0),     0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   ATTR_CJK_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),              0,      &getCppuType((sal_Int16*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_TABSTOPDIS),               0,      &getCppuType((sal_Int32*)0),        0, 0 },
         {0,0,0,0}
@@ -214,6 +218,36 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             }
             else
                 throw uno::RuntimeException();
+        }
+    }
+    else if ( pMap->nWID == ATTR_FONT_LANGUAGE ||
+              pMap->nWID == ATTR_CJK_FONT_LANGUAGE ||
+              pMap->nWID == ATTR_CTL_FONT_LANGUAGE )
+    {
+        //  for getPropertyValue the PoolDefaults are sufficient,
+        //  but setPropertyValue has to be handled differently
+
+        lang::Locale aLocale;
+        if ( aValue >>= aLocale )
+        {
+            LanguageType eNew;
+            if (aLocale.Language.getLength() || aLocale.Country.getLength())
+                eNew = ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country );
+            else
+                eNew = LANGUAGE_NONE;
+
+            ScDocument* pDoc = pDocShell->GetDocument();
+            LanguageType eLatin, eCjk, eCtl;
+            pDoc->GetLanguage( eLatin, eCjk, eCtl );
+
+            if ( pMap->nWID == ATTR_CJK_FONT_LANGUAGE )
+                eCjk = eNew;
+            else if ( pMap->nWID == ATTR_CTL_FONT_LANGUAGE )
+                eCtl = eNew;
+            else
+                eLatin = eNew;
+
+            pDoc->SetLanguage( eLatin, eCjk, eCtl );
         }
     }
     else
