@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 10:13:07 $
+ *  last change: $Author: kr $ $Date: 2001-04-19 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ import com.sun.star.uno.UnoRuntime;
 public class JobQueue_Test {
     static class MyContext {
     }
+
+    static JavaThreadPool __javaThreadPool = new JavaThreadPool();
 
     static class MyImpl implements MyInterface {
         int _received_requestId;
@@ -280,7 +282,7 @@ public class JobQueue_Test {
 
         Object context = new MyContext();
 
-        JobQueue jobQueue     = new JobQueue(threadID, true);
+        JobQueue jobQueue     = new JobQueue(__javaThreadPool, threadID, true);
         MyImpl myImpl         = new MyImpl();
         MyReceiver myReceiver = new MyReceiver(passed);
 
@@ -315,7 +317,7 @@ public class JobQueue_Test {
 
         Thread thread = Thread.currentThread();
 
-        JobQueue jobQueue     = new JobQueue(threadID, false);
+        JobQueue jobQueue     = new JobQueue(__javaThreadPool, threadID, false);
         MyImpl myImpl         = new MyImpl();
         MyReceiver myReceiver = new MyReceiver(passed);
 
@@ -350,7 +352,7 @@ public class JobQueue_Test {
 
         Object context = new MyContext();
 
-        JobQueue jobQueue     = new JobQueue(threadID, true);
+        JobQueue jobQueue     = new JobQueue(__javaThreadPool, threadID, true);
         MyImpl2 myImpl         = new MyImpl2();
         MyReceiver myReceiver = new MyReceiver(passed);
 
