@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 14:23:01 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@ class FmFormPageImpl
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  xForms;         // Liste aller Forms
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>              xModel;
     FmFormPage*             pPage;
-    UniString               m_sPageId;
 
     sal_Bool        m_bFirstActivation  : 1;
 
@@ -146,8 +145,6 @@ public:
                          const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
                          const ::rtl::OUString& rCursorSource = ::rtl::OUString(),
                          sal_Int32 nCommandType = 0);
-
-    UniString GetPageId() const { return m_sPageId; }
 
     // activation handling
     inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
