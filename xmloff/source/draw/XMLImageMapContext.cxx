@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-21 08:39:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
@@ -150,6 +153,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XPropertySetInfo;
 using ::com::sun::star::container::XIndexContainer;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::Reference;
@@ -348,7 +352,7 @@ SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken(rLocalName, XML_EVENTS) )
+         IsXMLToken(rLocalName, XML_EVENT_LISTENERS) )
     {
         Reference<XEventsSupplier> xEvents( xMapEntry, UNO_QUERY );
         return new XMLEventsImportContext(
@@ -751,7 +755,10 @@ XMLImageMapContext::XMLImageMapContext(
 {
     try
     {
-        xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
+        Reference < XPropertySetInfo > xInfo =
+            xPropertySet->getPropertySetInfo();
+        if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
+            xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
     }
     catch( com::sun::star::uno::Exception e )
     {
@@ -798,8 +805,9 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
 
 void XMLImageMapContext::EndElement()
 {
-    Any aAny;
-    aAny <<= xImageMap;
-    xPropertySet->setPropertyValue(sImageMap, aAny);
+    Reference < XPropertySetInfo > xInfo =
+        xPropertySet->getPropertySetInfo();
+    if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
+        xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );
 }
 
