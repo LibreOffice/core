@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:54:21 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2511,7 +2511,8 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
     while(pView && pView->GetObjectShell() != pDocShell)
     {
         if((!pCurrentShell || pView == pCurrentShell) &&
-            !pView->IsA(aSwSrcViewTypeId))
+            !pView->IsA(aSwSrcViewTypeId) &&
+            (pView->GetObjectShell() == pDocShell))
             break;
         pView = SfxViewShell::GetNext(*pView );
     }
