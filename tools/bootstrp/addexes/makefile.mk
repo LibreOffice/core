@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:03:18 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:36:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,65 +68,38 @@ TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
-.INCLUDE : 	static.mk
 
 CDEFS+=-D_TOOLS_STRINGLIST
 
 # --- Files --------------------------------------------------------
 
-LIB1TARGET= $(LB)$/btstrp.lib
-LIB1ARCHIV= $(LB)$/libbtstrp.a
-LIB1FILES=  $(LB)$/bootstrp.lib
-
-APP1TARGET=	dirsync
-APP1STACK=	16000
-APP1OBJS=   $(OBJ)$/dirsync.obj
-APP1STDLIBS=$(STATIC_LIBS)
-APP1LIBS=	$(LB)$/bootstrp.lib
-APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-APP2TARGET=	include
-APP2STACK=	16000
-APP2OBJS=   $(OBJ)$/include.obj
-APP2STDLIBS=$(STATIC_LIBS)
-APP2LIBS=	$(LB)$/bootstrp.lib
-APP2DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
-
-#APP3TARGET=	ldump
-APP3STACK=	16000
-APP3OBJS=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
-APP3STDLIBS=gnu_getopt.lib
-APP3DEPN=   $(OBJ)$/ldump.obj $(OBJ)$/hashtbl.obj
+#APP2TARGET=	include
+#APP2OBJS=   $(OBJ)$/include.obj
+#APP2LIBS=	$(LB)$/bootstrp.lib
 
 #APP4TARGET=	readmap
-APP4STACK=	16000
-APP4OBJS=   $(OBJ)$/readmap.obj $(OBJ)$/deco.obj
-APP4STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
-APP4LIBS=	$(LB)$/bootstrp.lib
-APP4DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+#APP4OBJS=   $(OBJ)$/readmap.obj $(OBJ)$/deco.obj
+#APP4STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
+#APP4LIBS=	$(LB)$/bootstrp.lib
 
 #APP5TARGET=	deco
-APP5STACK=	16000
-APP5OBJS=   $(OBJ)$/deco.obj $(OBJ)$/deco2.obj
-APP5STDLIBS=$(STATIC_LIBS) $(LIBCIMT)
-APP5LIBS=	$(LB)$/bootstrp.lib
-APP5DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+#APP5OBJS=   $(OBJ)$/deco.obj $(OBJ)$/deco2.obj
+#APP5STDLIBS=$(LIBCIMT)
+#APP5LIBS=	$(LB)$/bootstrp.lib
 
 #APP6TARGET= urlconv
-APP6OBJS= $(OBJ)$/urlconv.obj
-APP6STDLIBS=\
-    $(TOOLSLIB)	\
-    $(SALLIB)
+#APP6OBJS= $(OBJ)$/urlconv.obj
+#APP6STDLIBS=\
+#    $(TOOLSLIB)	\
+#	$(SALLIB)
 
 #APP7TARGET= replace
 APP7TARGET= txtrepl
 APP7OBJS= $(OBJ)$/replace.obj
-APP7STDLIBS=$(STATIC_LIBS)
-APP7DEPN=   $(LB)$/atools.lib 
+APP7STDLIBS=$(TOOLSLIB)
 
+DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
