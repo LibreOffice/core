@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:48:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,11 @@ struct PrinterInfo : JobData
     m_aFontSubstitutes;
     std::hash_map< fontID, fontID >
     m_aFontSubstitutions;
+
+    PrinterInfo() :
+            JobData(),
+            m_bPerformFontSubstitution( false )
+    {}
 };
 
 class PrinterInfoManager
