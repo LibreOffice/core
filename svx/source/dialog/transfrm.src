@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-12 22:11:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 22:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ portuguese ] = "Ponto de base";
         Text[ russian ] = "Áàçèñíàÿ òî÷êà";
         Text[ greek ] = "Base point";
-        Text[ dutch ] = "Base point";
+        Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
@@ -1011,7 +1011,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ portuguese ] = "Ponto de base";
         Text[ russian ] = "Áàçèñíàÿ òî÷êà";
         Text[ greek ] = "Base point";
-        Text[ dutch ] = "Base point";
+        Text[ dutch ] = "Basispunt";
         Text[ french ] = "Point de base";
         Text[ spanish ] = "Punto base";
         Text[ finnish ] = "Base point";
@@ -1364,7 +1364,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
-        Text[ dutch ] = "Presets";
+        Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
@@ -1519,7 +1519,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ portuguese ] = "Predefinições";
         Text[ russian ] = "Çàäàííûå çíà÷åíèÿ";
         Text[ greek ] = "Presets";
-        Text[ dutch ] = "Presets";
+        Text[ dutch ] = "Standaardinstellingen";
         Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
@@ -1549,7 +1549,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ portuguese ] = "Ângulo de rotação";
         QuickHelpText[ russian ] = "Óãîë ïîâîðîòà";
         QuickHelpText[ greek ] = "Angle";
-        QuickHelpText[ dutch ] = "Angle";
+        QuickHelpText[ dutch ] = "Draaihoek";
         QuickHelpText[ french ] = "Angle de rotation";
         QuickHelpText[ spanish ] = "Ángulo de rotación";
         QuickHelpText[ finnish ] = "Angle";
@@ -1601,7 +1601,7 @@ TabPage RID_SVXPAGE_SLANT
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Eckenradius" ;
         Text [ ENGLISH ] = "Edge radius" ;
-        Text [ dutch ] = "Hoekafronding" ;
+        Text [ dutch ] = "Hoekradius" ;
         Text [ english_us ] = "Corner radius" ;
         Text [ italian ] = "Raggio d'angolo" ;
         Text [ spanish ] = "Radio de ángulo" ;
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posición y tamaño";
 };
  // ********************************************************************** EOF
+
 
 
 
