@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 12:12:22 $
+ *  last change: $Author: jp $ $Date: 2000-11-29 14:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3917,7 +3917,7 @@ void QuickHelpData::Start( SwWrtShell& rSh, USHORT nWrdLen )
             *(pAttrs + --n ) = EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE |
                                 EXTTEXTINPUT_ATTR_HIGHLIGHT;
         pCETID = new CommandExtTextInputData( sStr, pAttrs, nL,
-                                                TRUE, 0, 0, FALSE );
+                                                0, 0, 0, FALSE );
         rSh.CreateExtTextInput();
         rSh.SetExtTextInputData( *pCETID );
     }
@@ -3936,6 +3936,9 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.4  2000/11/13 12:12:22  jp
+        must/should changes in Command handler
+
         Revision 1.3  2000/10/25 15:35:11  jp
         use CharClass/BreakIt instead of old WordSelection
 
