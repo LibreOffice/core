@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:57:38 $
+#   last change: $Author: kz $ $Date: 2004-08-02 09:58:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ SRC1FILES =  \
         pview.src
 
 SLOFILES =  \
+        $(SLO)$/formatclipboard.obj \
         $(SLO)$/view0.obj \
         $(SLO)$/view.obj \
         $(SLO)$/view1.obj \
