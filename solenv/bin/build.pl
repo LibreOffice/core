@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-05 15:06:20 $
+#   last change: $Author: vg $ $Date: 2002-12-05 15:55:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ use GenInfoParser;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.70 $ ';
+$id_str = ' $Revision: 1.71 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1195,14 +1195,7 @@ sub ensure_clear_module {
     &clear_module and return if ($module_type eq 'mod');
     if ($module_type eq 'lnk') {
         $Prj =~ /\.lnk$/;
-        # In case of windows we need a workaround
-        # for handling links, so I move
-        # prj.lnk to prj.oldlink
-        if ($ENV{GUI} eq 'WNT') {
-            rename $StandDir.$Prj, $StandDir . $` . '.oldlink';
-        } else {
-            unlink $StandDir.$Prj;
-        };
+        unlink $StandDir.$Prj;
         $Prj = $`;
     } else {
         rmtree($StandDir.$Prj, 1, 1);
