@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-29 12:45:31 $
+ *  last change: $Author: dg $ $Date: 2001-02-13 09:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace configmgr
 #define INFO    1
 #define WARNING 2
 #define ERROR   4
+#define TIME    8
 
 namespace configmgr
 {
@@ -115,6 +116,24 @@ struct OTracerSetup
 //==========================================================================
 ::osl::Mutex    OConfigTracer::s_aMutex;
 OTracerSetup*   OConfigTracer::s_pImpl = NULL;
+timeb           OConfigTracer::s_aStartTime;
+
+
+//--------------------------------------------------------------------------
+void OConfigTracer::startGlobalTimer()
+{
+    ftime( &s_aStartTime );
+}
+
+//--------------------------------------------------------------------------
+sal_uInt32 OConfigTracer::getGlobalTimer()
+{
+    struct timeb currentTime;
+    sal_uInt32 nSeconds;
+    ftime( &currentTime );
+    nSeconds = (sal_uInt32)( currentTime.time - s_aStartTime.time );
+    return ( nSeconds * 1000 ) + (long)( currentTime.millitm - s_aStartTime.millitm );
+}
 
 //--------------------------------------------------------------------------
 void OConfigTracer::ensureData()
@@ -147,9 +166,18 @@ void OConfigTracer::traceInfo(const sal_Char* _pFormat, ...)
     ensureData();
     if (s_pImpl->s_nTraceMask & INFO)
     {
+
+
         va_list args;
         va_start(args, _pFormat);
-        implTrace("info    : ", _pFormat, args);
+        if (s_pImpl->s_nTraceMask & TIME)
+        {
+            static sal_Char szMessage[1024] = "";
+            sprintf(szMessage, "info (%06lu): ", getGlobalTimer());
+            implTrace(szMessage, _pFormat, args);
+        }
+        else
+            implTrace("info    : ", _pFormat, args);
         va_end(args);
     }
 }
@@ -180,6 +208,15 @@ void OConfigTracer::traceError(const sal_Char* _pFormat, ...)
         implTrace("error   : ", _pFormat, args);
         va_end(args);
     }
+}
+
+//--------------------------------------------------------------------------
+void OConfigTracer::trace(const sal_Char* _pFormat, ...)
+{
+    va_list args;
+    va_start(args, _pFormat);
+    implTrace("", _pFormat, args);
+    va_end(args);
 }
 
 //--------------------------------------------------------------------------
@@ -303,6 +340,9 @@ void OConfigTracer::ensureInitalized()
                             case 'i':   s_pImpl->s_nTraceMask |= INFO; break;
                             case 'w':   s_pImpl->s_nTraceMask |= WARNING; break;
                             case 'e':   s_pImpl->s_nTraceMask |= ERROR; break;
+                            case 'p':   s_pImpl->s_nTraceMask |= TIME;
+                                        startGlobalTimer();
+                                        break;
                         }
                         ++pSettings;
                     }
@@ -366,8 +406,11 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
         // no tracing enabled
         return;
 
-    fprintf(s_pImpl->s_pOutputMedium, "%s", _pType);
-    indent();
+    if (_pType && strlen(_pType))
+    {
+        fprintf(s_pImpl->s_pOutputMedium, "%s", _pType);
+        indent();
+    }
     vfprintf(s_pImpl->s_pOutputMedium, _pFormat, args);
     fprintf(s_pImpl->s_pOutputMedium,"\n");
     fflush(s_pImpl->s_pOutputMedium);
@@ -380,6 +423,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.3  2000/11/29 12:45:31  fs
+//  #80122# additional traces upon initialization (process id / executable name)
+//
 //  Revision 1.2  2000/11/07 12:14:37  hr
 //  #65293#: includes
 //

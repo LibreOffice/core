@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: dg $ $Date: 2001-02-13 09:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <sys/timeb.h>
 
 #define OUSTRING2ASCII(rtlOUString) ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ASCII_US).getStr()
 
@@ -87,6 +88,7 @@
 #define CFG_TRACE_INFO_NI       OConfigTracer::traceInfo
 #define CFG_TRACE_WARNING_NI    OConfigTracer::traceWarning
 #define CFG_TRACE_ERROR_NI      OConfigTracer::traceError
+
 
 #define CFG_TRACE_TO_DEVICE     OConfigTracer::traceToVirtualDevice
 
@@ -101,6 +103,7 @@ class OConfigTracer
 protected:
     static  ::osl::Mutex    s_aMutex;
     static OTracerSetup*    s_pImpl;
+    static timeb            s_aStartTime;
 
 private:
     OConfigTracer();    // never implemented, no instantiation of this class allowed, only static members
@@ -109,13 +112,15 @@ public:
     static void traceInfo(const sal_Char* _pFormat, ...);
     static void traceWarning(const sal_Char* _pFormat, ...);
     static void traceError(const sal_Char* _pFormat, ...);
-
     static void traceToVirtualDevice(const sal_Char* _pDeviceName, const sal_Char* _pFormat, ...);
 
     static ::rtl::OString getTimeStamp();
 
 protected:
+    static void trace(const sal_Char* _pFormat, ...);
     static void implTrace(const sal_Char* _pType, const sal_Char* _pFormat, va_list args);
+    static void startGlobalTimer();
+    static sal_uInt32 getGlobalTimer();
 
     static void inc();
     static void dec();
@@ -156,6 +161,9 @@ public:
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.1.1.1  2000/09/18 16:13:41  hr
+//  initial import
+//
 //  Revision 1.6  2000/09/15 09:51:50  willem.vandorp
 //  OpenOffice header added
 //
