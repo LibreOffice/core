@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:46:30 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@ namespace sdr
         {
             // make the ViewContact remember me
             mrViewContact.AddViewObjectContact(*this);
+
+            // make the ObjectContact remember me
+            mrObjectContact.AddViewObjectContact(*this);
         }
 
         ViewObjectContact::~ViewObjectContact()
@@ -149,6 +152,10 @@ namespace sdr
             // check for ViewContact
             DBG_ASSERT(sal_False == mrViewContact.ContainsViewObjectContact(*this),
                 "ViewObjectContact destructor: The associated ViewContact still knows me, call PrepareDelete() before deleting (!)");
+
+            // check for ObjectContact
+            DBG_ASSERT(sal_False == mrObjectContact.ContainsViewObjectContact(*this),
+                "ViewObjectContact destructor: The associated ObjectContact still knows me, call PrepareDelete() before deleting (!)");
 
             // check for own sub-list
             DBG_ASSERT(0L == maVOCList.Count(),
@@ -182,6 +189,13 @@ namespace sdr
             // take care of ViewContact
             GetViewContact().RemoveViewObjectContact(*this);
 
+            // take care of ObjectContact, evtl. #114735# It will be removed from
+            // base vector of current draw hierarchy there, too.
+            GetObjectContact().RemoveViewObjectContact(*this);
+
+            // invalidate DrawHierarchy of ObjectContact to force rebuild
+            GetObjectContact().MarkDrawHierarchyInvalid();
+
             // take care of own SubList
             while(maVOCList.Count())
             {
@@ -194,9 +208,6 @@ namespace sdr
                 pCandidate->PrepareDelete();
                 delete pCandidate;
             }
-
-            // invalidate DrawHierarchy of ObjectContact to force rebuild
-            GetObjectContact().MarkDrawHierarchyInvalid();
         }
 
         // A ViewObjectContact was deleted and shall be forgotten.
