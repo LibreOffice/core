@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-16 07:52:10 $
+ *  last change: $Author: pb $ $Date: 2002-05-31 10:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ public:
     long                CalcHeight() const;
     sal_Bool            IsRootURL( const String& rURL ) const;
     ULONG               GetRootPos( const String& rURL ) const;
+    void                UpdateIcons( sal_Bool _bHiContrast );
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
     inline const String&    GetSamplesFolderURL() const;
@@ -299,10 +300,13 @@ private:
     void                AppendHistoryURL( const String& rURL, ULONG nGroup );
     void                OpenHistory();
     void                DoAction( USHORT nAction );
-    void                InitToolboxes();
+    void                InitToolBoxes();
+    void                InitToolBoxImages();
+    void                UpdateIcons();
 
 protected:
     virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
     SvtTemplateWindow( Window* pParent );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 11:30:48 $
+ *  last change: $Author: pb $ $Date: 2002-05-31 10:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // insert the categories
     // "New Document"
-    Image aImage( SvtResId( IMG_SVT_NEWDOC ) );
+    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+    Image aImage( SvtResId( bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) );
     nMaxTextLength = aImage.GetSizePixel().Width();
     String aEntryStr = String( SvtResId( STR_SVT_NEWDOC ) );
     SvxIconChoiceCtrlEntry* pEntry =
@@ -369,7 +370,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     if( aTemplateRootURL.Len() > 0 )
     {
         aEntryStr = String( SvtResId( STR_SVT_TEMPLATES ) );
-        pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
+        pEntry = aIconCtrl.InsertEntry(
+            aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_TEMPLATES_HC : IMG_SVT_TEMPLATES ) ), ICON_POS_TEMPLATES );
         pEntry->SetUserData( new String( aTemplateRootURL ) );
         DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
         nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -379,7 +381,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // "My Documents"
     aEntryStr = String( SvtResId( STR_SVT_MYDOCS ) );
-    pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
+    pEntry = aIconCtrl.InsertEntry(
+        aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ), ICON_POS_MYDOCS );
     pEntry->SetUserData( new String( aMyDocumentsRootURL ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -388,7 +391,8 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     // "Samples"
     aEntryStr = String( SvtResId( STR_SVT_SAMPLES ) );
-    pEntry = aIconCtrl.InsertEntry( aEntryStr, Image( SvtResId( IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
+    pEntry = aIconCtrl.InsertEntry(
+        aEntryStr, Image( SvtResId( bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ), ICON_POS_SAMPLES );
     pEntry->SetUserData( new String( aSamplesFolderRootURL ) );
     DBG_ASSERT( !pEntry->GetBoundRect().IsEmpty(), "empty rectangle" );
     nTemp = pEntry->GetBoundRect().GetSize().Width();
@@ -553,6 +557,18 @@ ULONG SvtIconWindow_Impl::GetRootPos( const String& rURL ) const
     }
 
     return nPos;
+}
+
+void SvtIconWindow_Impl::UpdateIcons( sal_Bool _bHiContrast )
+{
+    aIconCtrl.GetEntry( ICON_POS_NEWDOC )->SetImage(
+        Image( SvtResId( _bHiContrast ? IMG_SVT_NEWDOC_HC : IMG_SVT_NEWDOC ) ) );
+    aIconCtrl.GetEntry( ICON_POS_TEMPLATES )->SetImage(
+        Image( SvtResId( _bHiContrast ? IMG_SVT_TEMPLATES_HC : IMG_SVT_TEMPLATES ) ) );
+    aIconCtrl.GetEntry( ICON_POS_MYDOCS )->SetImage(
+        Image( SvtResId( _bHiContrast ? IMG_SVT_MYDOCS_HC : IMG_SVT_MYDOCS ) ) );
+    aIconCtrl.GetEntry( ICON_POS_SAMPLES )->SetImage(
+        Image( SvtResId( _bHiContrast ? IMG_SVT_SAMPLES_HC : IMG_SVT_SAMPLES ) ) );
 }
 
 // class SvtFileViewWindow_Impl -----------------------------------------_
@@ -1092,7 +1108,7 @@ SvtTemplateWindow::SvtTemplateWindow( Window* pParent ) :
     aSelectTimer.SetTimeoutHdl( LINK( this, SvtTemplateWindow, TimeoutHdl_Impl ) );
 
     // initialize the toolboxes and then show them
-    InitToolboxes();
+    InitToolBoxes();
     aFileViewTB.Show();
     aFrameWinTB.Show();
 
@@ -1303,22 +1319,9 @@ void SvtTemplateWindow::DoAction( USHORT nAction )
 
 // ------------------------------------------------------------------------
 
-void SvtTemplateWindow::InitToolboxes()
+void SvtTemplateWindow::InitToolBoxes()
 {
-    SvtMiscOptions aMiscOpt;
-    BOOL bLarge = ( aMiscOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
-
-    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
-        bLarge ? IMG_SVT_DOCTEMPLATE_BACK_LARGE : IMG_SVT_DOCTEMPLATE_BACK_SMALL ) ) );
-    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PREV, Image( SvtResId(
-        bLarge ? IMG_SVT_DOCTEMPLATE_PREV_LARGE : IMG_SVT_DOCTEMPLATE_PREV_SMALL ) ) );
-    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PRINT, Image( SvtResId(
-        bLarge ? IMG_SVT_DOCTEMPLATE_PRINT_LARGE : IMG_SVT_DOCTEMPLATE_PRINT_SMALL ) ) );
-
-    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_DOCINFO, Image( SvtResId(
-        bLarge ? IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE : IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL ) ) );
-    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_PREVIEW, Image( SvtResId(
-        bLarge ? IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE : IMG_SVT_DOCTEMPLATE_PREVIEW_SMALL ) ) );
+    InitToolBoxImages();
 
     Size aSize = aFileViewTB.CalcWindowSizePixel();
     aSize.Height() += 4;
@@ -1327,7 +1330,7 @@ void SvtTemplateWindow::InitToolboxes()
     aSize.Height() += 4;
     aFrameWinTB.SetPosSizePixel( Point( pFrameWin->GetPosPixel().X() + 2, 2 ), aSize );
 
-    BOOL bFlat = ( aMiscOpt.GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
+    BOOL bFlat = ( SvtMiscOptions().GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
     if ( bFlat )
     {
         aFileViewTB.SetOutStyle( TOOLBOX_STYLE_FLAT );
@@ -1341,6 +1344,39 @@ void SvtTemplateWindow::InitToolboxes()
     Link aLink = LINK( this, SvtTemplateWindow, ClickHdl_Impl );
     aFileViewTB.SetClickHdl( aLink );
     aFrameWinTB.SetClickHdl( aLink );
+}
+
+// ------------------------------------------------------------------------
+
+void SvtTemplateWindow::InitToolBoxImages()
+{
+    SvtMiscOptions aMiscOpt;
+    BOOL bLarge = ( aMiscOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    sal_Bool bHiContrast = aFileViewTB.GetBackground().GetColor().IsDark();
+
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_BACK, Image( SvtResId(
+        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_BACK_LARGE : IMG_SVT_DOCTEMPLATE_BACK_LARGE
+               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_BACK_SMALL : IMG_SVT_DOCTEMPLATE_BACK_SMALL ) ) );
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PREV, Image( SvtResId(
+        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREV_LARGE : IMG_SVT_DOCTEMPLATE_PREV_LARGE
+               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREV_SMALL : IMG_SVT_DOCTEMPLATE_PREV_SMALL ) ) );
+    aFileViewTB.SetItemImage( TI_DOCTEMPLATE_PRINT, Image( SvtResId(
+        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PRINT_LARGE : IMG_SVT_DOCTEMPLATE_PRINT_LARGE
+               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PRINT_SMALL : IMG_SVT_DOCTEMPLATE_PRINT_SMALL ) ) );
+
+    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_DOCINFO, Image( SvtResId(
+        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_DOCINFO_LARGE : IMG_SVT_DOCTEMPLATE_DOCINFO_LARGE
+               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_DOCINFO_SMALL : IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL ) ) );
+    aFrameWinTB.SetItemImage( TI_DOCTEMPLATE_PREVIEW, Image( SvtResId(
+        bLarge ? bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREVIEW_LARGE : IMG_SVT_DOCTEMPLATE_PREVIEW_LARGE
+               : bHiContrast ? IMG_SVT_DOCTEMPL_HC_PREVIEW_SMALL : IMG_SVT_DOCTEMPL_HC_PREVIEW_SMALL ) ) );
+}
+
+// ------------------------------------------------------------------------
+
+void SvtTemplateWindow::UpdateIcons()
+{
+    pIconWin->UpdateIcons( aFileViewTB.GetBackground().GetColor().IsDark() );
 }
 
 // ------------------------------------------------------------------------
@@ -1369,6 +1405,24 @@ long SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
     return nRet ? nRet : Window::PreNotify( rNEvt );
 }
 
+// -----------------------------------------------------------------------------
+
+void SvtTemplateWindow::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
+           ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
+         ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        // update of the background for the area left of the FileView toolbox
+        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
+        // update of the images of the IconChoiceControl
+        UpdateIcons();
+        // update of the toolbox images
+        InitToolBoxImages();
+    }
+}
 // ------------------------------------------------------------------------
 
 void SvtTemplateWindow::Resize()
