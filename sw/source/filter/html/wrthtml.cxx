@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:17:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,7 +1143,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         }
 
         if( !pPageDesc )
-            pPageDesc = &pDoc->GetPageDesc( 0 );
+            pPageDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
     //}
     //else
     //{
