@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-24 15:34:42 $
+ *  last change: $Author: cl $ $Date: 2001-04-26 10:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,7 +823,9 @@ void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsEx
     uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
     if(xViewDataSupplier.is())
     {
-        uno::Reference<container::XIndexAccess> xIndexAccess(xViewDataSupplier->getViewData());
+        uno::Reference<container::XIndexAccess> xIndexAccess;
+        xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
+        xIndexAccess = xViewDataSupplier->getViewData();
         if(xIndexAccess.is())
         {
             sal_Int32 nOldLength(aProps.getLength());
@@ -833,9 +835,6 @@ void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsEx
             aProp.Value <<= xIndexAccess;
             aProps[nOldLength] = aProp;
         }
-
-        xIndexAccess = NULL;
-        xViewDataSupplier->setViewData( xIndexAccess );
     }
     OUString sViewSettings(RTL_CONSTASCII_USTRINGPARAM(sXML_view_settings));
     rSettingsExportHelper.exportSettings(aProps, sViewSettings);
