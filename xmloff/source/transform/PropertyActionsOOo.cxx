@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:11:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,7 +767,7 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_SHADOW, XML_ATACTION_INCHS2INS,
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_PTACTION_KEEP_WITH_NEXT,
-          NO_PARAMS }, /* generated entry */
+          NO_PARAMS },
     { XML_NAMESPACE_TEXT, XML_NUMBER_LINES, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_TEXT, XML_LINE_NUMBER, XML_ATACTION_COPY,
@@ -795,6 +795,10 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_TEXT, XML_ENABLE_NUMBERING, XML_ATACTION_COPY,
           NO_PARAMS }, /* TODO: undocumented*/
+    { XML_NAMESPACE_STYLE, XML_FONT_INDEPENDENT_LINE_SPACING, XML_ATACTION_COPY,
+          NO_PARAMS },
+    { XML_NAMESPACE_STYLE, XML_DEFAULT_OUTLINE_LEVEL, XML_ATACTION_REMOVE,
+          NO_PARAMS }, /* i41811: style-default-outline was exported as propery */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
@@ -830,6 +834,8 @@ XMLTransformerActionInit aTablePropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_MARGIN_BOTTOM, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_PTACTION_KEEP_WITH_NEXT,
+          NO_PARAMS },
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
