@@ -8660,3 +8660,6 @@ _TI1?AVException@uno@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx269911123@@YAXABVSbxVariableRef@@PAX@Z
 ?getFilterOptions@RequestFilterOptions@@QAE?AV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@XZ
 ?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx2970217559@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX642\src\sfx2\source\doc\objmisc.cxx572625846@@YAXABVSbxVariableRef@@PAX@Z
+??0Locale@lang@star@sun@com@@QAE@XZ
+??4Locale@lang@star@sun@com@@QAEAAU01234@ABU01234@@Z
