@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:37:39 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,35 @@ void ScDocument::InvalidateControls( Window* pWin, USHORT nTab, const Rectangle&
             }
         }
     }
+}
+
+BOOL ScDocument::HasDetectiveObjects(USHORT nTab) const
+{
+    //  looks for detective objects, annotations don't count
+    //  (used to adjust scale so detective objects hit their cells better)
+
+    BOOL bFound = FALSE;
+
+    if (pDrawLayer)
+    {
+        SdrPage* pPage = pDrawLayer->GetPage(nTab);
+        DBG_ASSERT(pPage,"Page ?");
+        if (pPage)
+        {
+            SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+            SdrObject* pObject = aIter.Next();
+            while (pObject && !bFound)
+            {
+                // anything on the internal layer except captions (annotations)
+                if ( pObject->GetLayer() == SC_LAYER_INTERN && !pObject->ISA( SdrCaptionObj ) )
+                    bFound = TRUE;
+
+                pObject = aIter.Next();
+            }
+        }
+    }
+
+    return bFound;
 }
 
 void ScDocument::UpdateFontCharSet()

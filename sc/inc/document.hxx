@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:45:23 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,6 +1014,8 @@ public:
     ScDetOpList*    GetDetOpList() const                { return pDetOpList; }
     void            SetDetOpList(ScDetOpList* pNew);
 
+    BOOL            HasDetectiveObjects(USHORT nTab) const;
+
     void            GetSelectionFrame( const ScMarkData& rMark,
                                        SvxBoxItem&      rLineOuter,
                                        SvxBoxInfoItem&  rLineInner );
@@ -1136,6 +1138,8 @@ public:
 
     USHORT          GetOriginalWidth( USHORT nCol, USHORT nTab ) const;
     USHORT          GetOriginalHeight( USHORT nRow, USHORT nTab ) const;
+
+    USHORT          GetCommonWidth( USHORT nEndCol, USHORT nTab ) const;
 
     inline USHORT   FastGetRowHeight( USHORT nRow, USHORT nTab ) const;     // ohne Ueberpruefungen!
 

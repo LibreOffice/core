@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1942,6 +1942,53 @@ USHORT ScTable::GetOriginalWidth( USHORT nCol ) const       // immer die eingest
         return pColWidth[nCol];
     else
         return (USHORT) STD_COL_WIDTH;
+}
+
+
+USHORT ScTable::GetCommonWidth( USHORT nEndCol ) const
+{
+    //  get the width that is used in the largest continuous column range (up to nEndCol)
+
+    if ( nEndCol > MAXCOL )
+    {
+        DBG_ERROR("wrong column");
+        nEndCol = MAXCOL;
+    }
+
+    USHORT nMaxWidth = 0;
+    USHORT nMaxCount = 0;
+    USHORT nRangeStart = 0;
+    while ( nRangeStart <= nEndCol )
+    {
+        //  skip hidden columns
+        while ( nRangeStart <= nEndCol && (pColFlags[nRangeStart] & CR_HIDDEN) )
+            ++nRangeStart;
+        if ( nRangeStart <= nEndCol )
+        {
+            USHORT nThisCount = 0;
+            USHORT nThisWidth = pColWidth[nRangeStart];
+            USHORT nRangeEnd = nRangeStart;
+            while ( nRangeEnd <= nEndCol && pColWidth[nRangeEnd] == nThisWidth )
+            {
+                ++nThisCount;
+                ++nRangeEnd;
+
+                //  skip hidden columns
+                while ( nRangeEnd <= nEndCol && (pColFlags[nRangeEnd] & CR_HIDDEN) )
+                    ++nRangeEnd;
+            }
+
+            if ( nThisCount > nMaxCount )
+            {
+                nMaxCount = nThisCount;
+                nMaxWidth = nThisWidth;
+            }
+
+            nRangeStart = nRangeEnd;        // next range
+        }
+    }
+
+    return nMaxWidth;
 }
 
 

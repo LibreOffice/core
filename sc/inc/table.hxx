@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-06-21 12:06:46 $
+ *  last change: $Author: nn $ $Date: 2001-08-02 18:14:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,8 @@ public:
 
     USHORT      GetOriginalWidth( USHORT nCol ) const;
     USHORT      GetOriginalHeight( USHORT nRow ) const;
+
+    USHORT      GetCommonWidth( USHORT nEndCol ) const;
 
     USHORT      GetHiddenRowCount( USHORT nRow ) const;
 
