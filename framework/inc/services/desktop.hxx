@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:19:38 $
+ *  last change: $Author: as $ $Date: 2001-07-02 13:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,7 +1248,7 @@ class Desktop   :   public css::lang::XTypeProvider             ,
         FrameContainer                                                  m_aChildTaskContainer       ;   /// array of child tasks (childs of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
         ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer        ;   /// container for ALL Listener
         css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
-        css::uno::Reference< css::frame::XDispatch >                    m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
+        css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
         eIMPL_loadState                                                 m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         TaskCreator                                                     m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;
