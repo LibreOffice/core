@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:59:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ arabic ] = "«·«”„ «·ÃœÌœ";
         Text[ turkish ] = "Yeni ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nuevo nombre";
     };
     Edit ED_NEW_NAME
     {
@@ -129,6 +130,7 @@ ModalDialog DLG_RENAME_XNAMED
         Text[ arabic ] = " ⁄œÌ· «·«”„";
         Text[ turkish ] = "Ad˝ dei˛tir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Cambiar nombre";
     };
     OKButton PB_OK
     {
@@ -171,6 +173,7 @@ ModalDialog DLG_RENAME_XNAMED
     Text[ arabic ] = "≈⁄«œ…  ”„Ì… «·ﬂ«∆‰: ";
     Text[ turkish ] = "Nesneyi yeniden adland˝r: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cambiar nombre de objeto: ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
@@ -195,6 +198,7 @@ String STR_SERVICE_UNAVAILABLE
     Text[ arabic ] = "«·Œœ„… «· «·Ì… €Ì— „ Ê›—…: ";
     Text[ turkish ] = "A˛a˝daki hizmet kullan˝lam˝yor: ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El siguiente servicio no est· disponible: ";
 };
 Resource RES_FRMEX_MENU
 {
@@ -325,6 +329,12 @@ Resource RES_FRMEX_MENU
             < "~Yak˝nla˛t˝r" ;      ST_MENU_ZOOM; > ;
         < "Y~ukar˝" ;   ST_MENU_UP;     > ;
         < "A~˛a˝" ;    ST_MENU_DOWN; > ;
+    };
+    ItemList [ catalan ] =
+    {
+            < "~Escala" ;   ST_MENU_DOWN; > ;
+        < "Hacia ~arriba" ;     ST_MENU_DOWN; > ;
+        < "Hacia a~bajo" ;  ST_MENU_DOWN; > ;
     };
     };
 };
