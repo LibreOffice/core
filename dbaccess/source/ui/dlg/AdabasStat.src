@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-24 20:25:59 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,12 +563,13 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text[ portuguese_brazilian ] = "Could no display the information. No access rights for system tables.";
     Text[ japanese ] = "梫媮偟偨冀醚冒剔賯謧瘫妇綄爞獋葌絺邆蓙A忣曬偼昞\帵偝傟傑偣傫偱偟偨丅";
     Text[ korean ] = "Could no display the information. No access rights for system tables.";
-    Text[ chinese_simplified ] = "因为没有必要的读取系统表格的权限而无法显示任何信息。";
-    Text[ chinese_traditional ] = "Could no display the information. No access rights for system tables.";
+    Text[ chinese_simplified ] = "因为不具备读取需要的系统表格的权限而无法显示任何信息。";
+    Text[ chinese_traditional ] = "?ぃㄣ称惠璶╰参舦τ礚猭陪ボヴ戈癟";
     Text[ turkish ] = "Could no display the information. No access rights for system tables.";
     Text[ arabic ] = "Could no display the information. No access rights for system tables.";
     Text[ catalan ] = "Could no display the information. No access rights for system tables.";
 };
+
 
 
 
