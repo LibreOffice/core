@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 10:26:49 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 12:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,11 +830,11 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
         }
         else if( aType.EqualsAscii( "NotesShape", 26, 13 ) )
         {
-            nType = PRESOBJ_NOTES;
+            nType = OBJ_TEXT;
         }
         else if( aType.EqualsAscii( "HandoutShape", 26, 13 ) )
         {
-            nType = PRESOBJ_HANDOUT;
+            nType = OBJ_PAGE;
         }
         else
         {
