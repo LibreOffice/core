@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 07:16:11 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 02:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 
+//MM : search for the default profile
+#include <unotools/streamhelper.hxx>
+//MM : end
+
 /* SEInitializer component */
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
@@ -106,7 +110,53 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
     DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
     ImplCreateSEInitializer();
-    mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
+
+    //MM : search for the default profile
+    rtl::OUString tokenPath = rTokenPath;
+
+    if( tokenPath.getLength() == 0 )
+    {
+        rtl::OUString aDefaultCryptokenFileName = rtl::OUString::createFromAscii("cryptoken.default");
+        SvFileStream* pStream = new SvFileStream( aDefaultCryptokenFileName, STREAM_READ );
+        if (pStream != NULL)
+        {
+            pStream->Seek( STREAM_SEEK_TO_END );
+            ULONG nBytes = pStream->Tell();
+
+            if (nBytes > 0)
+            {
+                pStream->Seek( STREAM_SEEK_TO_BEGIN );
+                SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
+                uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
+
+                if (xInputStream.is())
+                {
+                    uno::Sequence< sal_Int8 > tokenFileName( 1024 );
+                    int numbers = xInputStream->readBytes( tokenFileName, 1024 );
+                    const sal_Int8* readBytes = ( const sal_Int8* )tokenFileName.getArray();
+
+                    sal_Char cToken[1024];
+
+                    for (int i=0; i<numbers; i++)
+                    {
+                        cToken[i] = (sal_Char)(*(readBytes+i));
+                    }
+
+                    xInputStream->closeInput();
+
+                    tokenPath = rtl::OStringToOUString(rtl::OString((const sal_Char*)cToken, numbers), RTL_TEXTENCODING_UTF8);
+                }
+            }
+        }
+    }
+
+    mxSecurityContext = mxSEInitializer->createSecurityContext( tokenPath );
+    //MM : end
+
+    //MM : search for the default profile
+    //mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
+    //MM : end
+
     return mxSecurityContext.is();
 }
 
