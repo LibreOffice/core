@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 12:14:59 $
+ *  last change: $Author: oj $ $Date: 2001-01-03 09:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,6 +423,7 @@ static sal_Bool implIsLeapYear(sal_Int32 _nYear)
 //------------------------------------------------------------------------------
 static sal_Int32 implDaysInMonth(sal_Int32 _nMonth, sal_Int32 _nYear)
 {
+    OSL_ENSURE(_nMonth > 0 && _nMonth < 13,"Month as invalid value!");
     if (_nMonth != 2)
         return aDaysInMonth[_nMonth-1];
     else
@@ -790,6 +791,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/12/06 12:14:59  oj
+ *  #80219# toDays corrected
+ *
  *  Revision 1.8  2000/11/30 15:29:40  oj
  *  #80934# standarddate is no longer public
  *
