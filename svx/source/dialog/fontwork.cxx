@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: cl $ $Date: 2002-05-16 11:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,9 +263,6 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
 |*
 \************************************************************************/
 
-// pMgr wird unten angelegt
-#define FW_RESID(nId) ResId(nId, pMgr)
-
 SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       SfxChildWindow *pCW,
                                       Window* pParent,
@@ -291,6 +288,9 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
 
     aShadowColorLB  (this, ResId(CLB_SHADOW_COLOR)),
 
+    maImageList     (ResId(IL_FONTWORK)),
+    maImageListH    (ResId(ILH_FONTWORK)),
+
     rBindings       (*pBindinx),
 
     nLastStyleTbxId(0),
@@ -304,6 +304,8 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     pColorTable     (NULL)
 {
     FreeResource();
+
+    ApplyImageList();
 
     pCtrlItems[0] = new SvxFontWorkControllerItem(SID_FORMTEXT_STYLE, *this, rBindings);
     pCtrlItems[1] = new SvxFontWorkControllerItem(SID_FORMTEXT_ADJUST, *this, rBindings);
@@ -331,9 +333,8 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aTbxShadow.SetSizePixel(aSize);
     aTbxShadow.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
-    ResMgr* pMgr = DIALOG_MGR();
-    aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
-    aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
+//  aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
+//  aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
 
     Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     aMtrFldDistance.SetModifyHdl( aLink );
@@ -371,36 +372,11 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aFormSet.SetColCount(4);
     aFormSet.SetLineCount(2);
 
-    Bitmap aBmp(FW_RESID(RID_SVXBMP_FONTWORK_FORM1));
+    ResMgr* pMgr = DIALOG_MGR();
+    Bitmap aBmp(ResId(RID_SVXBMP_FONTWORK_FORM1,pMgr));
     aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
     aFormSet.SetSizePixel(aSize);
-
-    aFormSet.InsertItem( 1, aBmp, String(FW_RESID(RID_SVXSTR_FONTWORK_FORM1)));
-    aFormSet.InsertItem( 2, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM2)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM2)));
-    aFormSet.InsertItem( 3, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM3)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM3)));
-    aFormSet.InsertItem( 4, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM4)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM4)));
-    aFormSet.InsertItem( 5, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM5)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM5)));
-    aFormSet.InsertItem( 6, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM6)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM6)));
-    aFormSet.InsertItem( 7, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM7)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM7)));
-    aFormSet.InsertItem( 8, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM8)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM8)));
-    aFormSet.InsertItem( 9, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM9)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM9)));
-    aFormSet.InsertItem(10, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM10)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM10)));
-    aFormSet.InsertItem(11, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM11)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM11)));
-    aFormSet.InsertItem(12, Bitmap(FW_RESID(RID_SVXBMP_FONTWORK_FORM12)),
-                            String(FW_RESID(RID_SVXSTR_FONTWORK_FORM12)));
 }
-
-#undef FW_RESID
 
 /*************************************************************************
 |*
@@ -672,8 +648,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 nId = TBI_SHADOW_NORMAL;
                  const FieldUnit eDlgUnit = GetModuleFieldUnit();
 
-                aFbShadowX.SetBitmap(
-                    Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, pMgr ) ) );
+//              aFbShadowX.SetBitmap( Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, pMgr ) ) );
                 //aMtrFldShadowX.SetUnit(FUNIT_MM);
                 aMtrFldShadowX.SetUnit( eDlgUnit );
                 aMtrFldShadowX.SetDecimalDigits(2);
@@ -684,8 +659,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 else
                     aMtrFldShadowX.SetSpinSize( 10 );
 
-                aFbShadowY.SetBitmap(
-                    Bitmap( ResId( RID_SVXBMP_SHADOW_YDIST, pMgr ) ) );
+//              aFbShadowY.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_YDIST, pMgr ) ) );
                 //aMtrFldShadowY.SetUnit(FUNIT_MM);
                 aMtrFldShadowY.SetUnit( eDlgUnit );
                 aMtrFldShadowY.SetDecimalDigits(2);
@@ -712,16 +686,14 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             {
                 nId = TBI_SHADOW_SLANT;
 
-                aFbShadowX.SetBitmap(
-                    Bitmap( ResId( RID_SVXBMP_SHADOW_ANGLE, pMgr ) ) );
+//              aFbShadowX.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_ANGLE, pMgr ) ) );
                 aMtrFldShadowX.SetUnit(FUNIT_CUSTOM);
                 aMtrFldShadowX.SetDecimalDigits(1);
                 aMtrFldShadowX.SetMin(-1800);
                 aMtrFldShadowX.SetMax( 1800);
                 aMtrFldShadowX.SetSpinSize(10);
 
-                aFbShadowY.SetBitmap(
-                    Bitmap( ResId( RID_SVXBMP_SHADOW_SIZE, pMgr ) ) );
+//              aFbShadowY.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_SIZE, pMgr ) ) );
                 aMtrFldShadowY.SetUnit(FUNIT_CUSTOM);
                 aMtrFldShadowY.SetDecimalDigits(0);
                 aMtrFldShadowY.SetMin(-999);
@@ -745,6 +717,8 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             aTbxShadow.CheckItem(nId);
         }
         nLastShadowTbxId = nId;
+
+        ApplyImageList();
     }
     else
     {
@@ -1229,3 +1203,73 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
     }
 }
 
+void SvxFontWorkDialog::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
+
+    SfxDockingWindow::DataChanged( rDCEvt );
+}
+/* -----------------------------08.05.2002 14:28------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxFontWorkDialog::ApplyImageList()
+{
+    bool bHighContrast =
+        (GetSettings().GetStyleSettings().GetHighContrastMode() != 0) &&
+        (bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0);
+
+    ResMgr* pMgr = DIALOG_MGR();
+
+    USHORT nBitmapResId = bHighContrast ? RID_SVXBMP_FONTWORK_FORM1_H : RID_SVXBMP_FONTWORK_FORM1;
+    USHORT nTextResId = RID_SVXSTR_FONTWORK_FORM1;
+
+    bool bInit = aFormSet.GetItemCount() == 0;
+
+    if( bInit )
+    {
+/*
+        Size aSize( aTbxStyle.CalcWindowSizePixel() );
+        Bitmap aBmp(ResId(RID_SVXBMP_FONTWORK_FORM1,pMgr));
+        aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
+        aFormSet.SetSizePixel(aSize);
+*/
+    }
+
+    USHORT i;
+    for( i = 1; i < 13; i++, nTextResId++, nBitmapResId++ )
+    {
+        if( bInit )
+        {
+            aFormSet.InsertItem( i, Bitmap(ResId(nBitmapResId,pMgr)),
+                                    String(ResId(nTextResId,pMgr)));
+        }
+        else
+        {
+            aFormSet.SetItemImage( i, Bitmap(ResId(nBitmapResId,pMgr)) );
+        }
+    }
+
+    ImageList& rImgLst = bHighContrast ? maImageListH : maImageList;
+
+    aTbxStyle.SetImageList( rImgLst );
+    aTbxAdjust.SetImageList( rImgLst );
+    aTbxShadow.SetImageList( rImgLst );
+
+    switch( nLastShadowTbxId )
+    {
+    case TBI_SHADOW_SLANT:
+        aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_ANGLE ) );
+        aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_SIZE ) );
+        break;
+//  case TBI_SHADOW_NORMAL:
+    default:
+        aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_XDIST ) );
+        aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_YDIST ) );
+        break;
+    }
+
+    aFbDistance.SetImage( rImgLst.GetImage( TBI_DISTANCE ) );
+    aFbTextStart.SetImage( rImgLst.GetImage( TBI_TEXTSTART ) );
+
+}

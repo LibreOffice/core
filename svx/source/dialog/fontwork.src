@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:25:02 $
+ *  last change: $Author: cl $ $Date: 2002-05-16 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,11 +113,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_STYLE_OFF ;
                 Text = "Aus" ;
                 Text [ ENGLISH ] = "Off" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftoff.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Uit" ;
                 Text [ english_us ] = "Off" ;
                 Text [ italian ] = "Off" ;
@@ -153,11 +148,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_STYLE_ROTATE ;
                 Text = "Drehen" ;
                 Text [ ENGLISH ] = "Rotate" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftrotate.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Draaien" ;
                 Text [ english_us ] = "Rotate" ;
                 Text [ italian ] = "Ruota" ;
@@ -189,11 +179,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_STYLE_UPRIGHT ;
                 Text = "Aufrecht" ;
                 Text [ ENGLISH ] = "Upright" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftuprght.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Rechtop" ;
                 Text [ english_us ] = "Upright" ;
                 Text [ italian ] = "In piedi" ;
@@ -225,11 +210,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_STYLE_SLANTX ;
                 Text = "Horizontal kippen" ;
                 Text [ ENGLISH ] = "Slant horizontal" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftslantx.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Horizontaal kantelen" ;
                 Text [ english_us ] = "Slant Horizontal" ;
                 Text [ italian ] = "Inclina in orizzontale" ;
@@ -261,11 +241,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_STYLE_SLANTY ;
                 Text = "Vertikal kippen" ;
                 Text [ ENGLISH ] = "Slant vertical" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftslanty.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Slant Vertical" ;
                 Text [ italian ] = "Inclina in verticale" ;
                 Text [ spanish ] = "Inclinar verticalmente" ;
@@ -305,11 +280,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_ADJUST_MIRROR ;
                 Text = "Laufrichtung" ;
                 Text [ ENGLISH ] = "Text direction" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftmirror.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Looprichting" ;
                 Text [ english_us ] = "Orientation" ;
                 Text [ italian ] = "Direzione di scorrimento" ;
@@ -343,15 +313,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_LEFT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Linksb¸ndig : Linksb≥ndig */
-                /* ### ACHTUNG: Neuer Text in Resource? Linksb¸ndig : Linksb≥ndig */
                 Text = "Linksb¸ndig" ;
                 Text [ ENGLISH ] = "Left aligned" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftleft.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Links uitgelijnd" ;
                 Text [ english_us ] = "Align Left" ;
                 Text [ italian ] = "Allineato a sinistra" ;
@@ -383,11 +346,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_ADJUST_CENTER ;
                 Text = "Zentriert" ;
                 Text [ ENGLISH ] = "Centered" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftcenter.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Centreren" ;
                 Text [ english_us ] = "Center" ;
                 Text [ italian ] = "Centrato" ;
@@ -417,15 +375,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_RIGHT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
-                /* ### ACHTUNG: Neuer Text in Resource? Rechtsb¸ndig : Rechtsb≥ndig */
-                /* ### ACHTUNG: Neuer Text in Resource? Rechtsb¸ndig : Rechtsb≥ndig */
                 Text = "Rechtsb¸ndig" ;
                 Text [ ENGLISH ] = "Right aligned" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftright.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Align Right" ;
                 Text [ italian ] = "Allineato a destra" ;
                 Text [ spanish ] = "Alinear a la derecha" ;
@@ -455,15 +406,8 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_AUTOSIZE ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
-                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgrˆﬂe : Auto-Textgr˜òe */
-                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgrˆﬂe : Auto-Textgr˜òe */
                 Text = "Auto-Textgrˆﬂe" ;
                 Text [ ENGLISH ] = "Autosize" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftautosz.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "AutoTekstgrootte" ;
                 Text [ english_us ] = "AutoSize Text" ;
                 Text [ italian ] = "Dimensione testo automatico" ;
@@ -489,14 +433,10 @@ DockingWindow RID_SVXDLG_FONTWORK
             };
         };
     };
-    FixedBitmap FB_DISTANCE
+    FixedImage FB_DISTANCE
     {
         Pos = MAP_APPFONT ( 10 , 84 ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
-        Fixed = Bitmap
-        {
-            File = "ftdist.bmp" ;
-        };
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -541,14 +481,10 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ finnish ] = "Et‰isyys";
         QuickHelpText[ thai ] = "Distance";
     };
-    FixedBitmap FB_TEXTSTART
+    FixedImage FB_TEXTSTART
     {
         Pos = MAP_APPFONT ( 10 , 99 ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
-        Fixed = Bitmap
-        {
-            File = "ftstart.bmp" ;
-        };
     };
     MetricField MTR_FLD_TEXTSTART
     {
@@ -604,11 +540,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_SHOWFORM ;
                 Text = "Kontur" ;
                 Text [ ENGLISH ] = "Outline" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftshowfm.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Contour" ;
                 Text [ italian ] = "Contorno" ;
                 Text [ spanish ] = "Contorno" ;
@@ -640,11 +571,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_OUTLINE ;
                 Text = "Buchstabenumrandung" ;
                 Text [ ENGLISH ] = "Character outlines" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftoutlin.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Letteromranding" ;
                 Text [ english_us ] = "Text Contour" ;
                 Text [ italian ] = "Bordo dei caratteri" ;
@@ -680,11 +606,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_SHADOW_OFF ;
                 Text = "Aus" ;
                 Text [ ENGLISH ] = "Off" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftshdoff.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "No Shadow" ;
                 Text [ italian ] = "Senza ombre" ;
                 Text [ spanish ] = "Sin sombra" ;
@@ -716,11 +637,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_SHADOW_NORMAL ;
                 Text = "Senkrecht" ;
                 Text [ ENGLISH ] = "Vertical" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftshdwnm.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ dutch ] = "Verticaal" ;
                 Text [ english_us ] = "Vertical" ;
                 Text [ italian ] = "Verticale" ;
@@ -752,11 +668,6 @@ DockingWindow RID_SVXDLG_FONTWORK
                 HelpId = HID_FONTWORK_TBI_SHADOW_SLANT ;
                 Text = "Kippen" ;
                 Text [ ENGLISH ] = "Slant" ;
-                ItemImage = Image
-                {
-                    ImageBitmap = Bitmap { File = "ftshdwsl.bmp" ; };
-                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
-                };
                 Text [ english_us ] = "Slant" ;
                 Text [ italian ] = "Inclina" ;
                 Text [ spanish ] = "Inclinar" ;
@@ -782,7 +693,7 @@ DockingWindow RID_SVXDLG_FONTWORK
             };
         };
     };
-    FixedBitmap FB_SHADOW_X
+    FixedImage FB_SHADOW_X
     {
         Pos = MAP_APPFONT ( 10 , 143 ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
@@ -852,7 +763,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ thai ] = " ‡∏≠‡∏á‡∏®‡∏≤";
         QuickHelpText[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞ X";
     };
-    FixedBitmap FB_SHADOW_Y
+    FixedImage FB_SHADOW_Y
     {
         Pos = MAP_APPFONT ( 10 , 158 ) ;
         Size = MAP_APPFONT ( 14 , 15 ) ;
@@ -1015,6 +926,48 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "FontWork";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏≠‡∏±‡∏Å‡∏©‡∏£‡∏ó‡∏µ‡πà‡πÉ‡∏ä‡πâ‡∏á‡∏≤‡∏ô";
+
+#define FONTWORK_IDLIST \
+        IdList =            \
+        {                   \
+            TBI_STYLE_OFF ; \
+            TBI_STYLE_ROTATE ;  \
+            TBI_STYLE_UPRIGHT ; \
+            TBI_STYLE_SLANTX ;  \
+            TBI_STYLE_SLANTY ;  \
+            TBI_ADJUST_MIRROR ; \
+            TBI_ADJUST_LEFT ;   \
+            TBI_ADJUST_CENTER ; \
+            TBI_ADJUST_RIGHT ;  \
+            TBI_ADJUST_AUTOSIZE ; \
+            TBI_SHOWFORM ;  \
+            TBI_OUTLINE ;   \
+            TBI_SHADOW_OFF ;    \
+            TBI_SHADOW_NORMAL ; \
+            TBI_SHADOW_SLANT ; \
+            TBI_SHADOW_XDIST ; \
+            TBI_SHADOW_YDIST ; \
+            TBI_SHADOW_ANGLE ; \
+            TBI_SHADOW_SIZE ; \
+            TBI_DISTANCE ; \
+            TBI_TEXTSTART ; \
+        };                 \
+        IdCount = { 21 ; };
+
+    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+
+    ImageList IL_FONTWORK
+    {
+        ImageBitmap = Bitmap { File = "fw_imagelist.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        FONTWORK_IDLIST
+    };
+    ImageList ILH_FONTWORK
+    {
+        ImageBitmap = Bitmap { File = "fwh_imagelist.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        FONTWORK_IDLIST
+    };
 };
  // Bitmaps ---------------------------------------------------------------
 Bitmap RID_SVXBMP_FONTWORK_FORM1
@@ -1065,22 +1018,56 @@ Bitmap RID_SVXBMP_FONTWORK_FORM12
 {
     File = "fwbuttn4.bmp" ;
 };
-Bitmap RID_SVXBMP_SHADOW_XDIST
+
+Bitmap RID_SVXBMP_FONTWORK_FORM1_H
 {
-    File = "ftshdwx.bmp" ;
+    File = "fwthcirc_h.bmp" ;
 };
-Bitmap RID_SVXBMP_SHADOW_YDIST
+Bitmap RID_SVXBMP_FONTWORK_FORM2_H
 {
-    File = "ftshdwy.bmp" ;
+    File = "fwbhcirc_h.bmp" ;
 };
-Bitmap RID_SVXBMP_SHADOW_ANGLE
+Bitmap RID_SVXBMP_FONTWORK_FORM3_H
 {
-    File = "ftshdang.bmp" ;
+    File = "fwlhcirc_h.bmp" ;
 };
-Bitmap RID_SVXBMP_SHADOW_SIZE
+Bitmap RID_SVXBMP_FONTWORK_FORM4_H
 {
-    File = "ftshdsiz.bmp" ;
+    File = "fwrhcirc_h.bmp" ;
 };
+Bitmap RID_SVXBMP_FONTWORK_FORM5_H
+{
+    File = "fwtoparc_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM6_H
+{
+    File = "fwbotarc_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM7_H
+{
+    File = "fwlftarc_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM8_H
+{
+    File = "fwrgtarc_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM9_H
+{
+    File = "fwbuttn1_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM10_H
+{
+    File = "fwbuttn2_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM11_H
+{
+    File = "fwbuttn3_h.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM12_H
+{
+    File = "fwbuttn4_h.bmp" ;
+};
+
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_FONTWORK_FORM1
 {
