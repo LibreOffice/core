@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-06 11:21:59 $
+ *  last change: $Author: cl $ $Date: 2002-09-23 15:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1531,27 +1531,19 @@ BOOL ImpEditEngine::IsRightToLeft( USHORT nPara ) const
     if ( !IsVertical() )
     {
         bR2L = GetDefaultHorizontalTextDirection() == EE_HTEXTDIR_R2L;
-        if ( !aStatus.IsOutliner() )
+        pFrameDirItem = &(const SvxFrameDirectionItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
+        if ( pFrameDirItem->GetValue() == FRMDIR_ENVIRONMENT )
         {
-            pFrameDirItem = &(const SvxFrameDirectionItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
-            if ( pFrameDirItem->GetValue() == FRMDIR_ENVIRONMENT )
+            // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
+            if ( GetDefaultHorizontalTextDirection() != EE_HTEXTDIR_DEFAULT )
             {
-                // #103045# if DefaultHorizontalTextDirection is set, use that value, otherwise pool default.
-                if ( GetDefaultHorizontalTextDirection() != EE_HTEXTDIR_DEFAULT )
-                {
-                    pFrameDirItem = NULL; // bR2L allready set to default horizontal text direction
-                }
-                else
-                {
-                    // Use pool default
-                    pFrameDirItem = &(const SvxFrameDirectionItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
-                }
+                pFrameDirItem = NULL; // bR2L allready set to default horizontal text direction
             }
-        }
-        else
-        {
-            // Use pool default
-            pFrameDirItem = &(const SvxFrameDirectionItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
+            else
+            {
+                // Use pool default
+                pFrameDirItem = &(const SvxFrameDirectionItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
+            }
         }
     }
 
