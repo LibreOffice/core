@@ -145,7 +145,7 @@
              Doctitle="OpenOffice XMerge API"
              windowtitle="OpenOffice XMerge API"
              sourcepath="${prj}/java"
-             excludepackagenames="org.openoffice.xmerge.test"
+             excludepackagenames="org.openoffice.xmerge.test,org.openoffice.xmerge.converter.xml.sxc.minicalc"
              classpathref="classpath">
              <link offline="true" href="http://java.sun.com/j2se/1.3/docs/api" packagelistLoc="${solar.doc}/jdk13"/>
             <bottom><![CDATA[<i>Copyright &#169 2002 OpenOffice.org</i>]]></bottom>
