@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 15:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,15 @@ using namespace dbaui;
 
 // XStatusListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener)
-IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener, statusChanged, ::com::sun::star::frame::FeatureStateEvent)
+
+void SAL_CALL SbaXStatusMultiplexer::statusChanged(const ::com::sun::star::frame::FeatureStateEvent& e) throw (::com::sun::star::uno::RuntimeException)
+{
+    m_aLastKnownStatus = e;
+    m_aLastKnownStatus.Source = &m_rParent;
+    ::cppu::OInterfaceIteratorHelper aIt( *this );
+    while ( aIt.hasMoreElements() )
+        static_cast< ::com::sun::star::frame::XStatusListener* >( aIt.next() )->statusChanged( m_aLastKnownStatus );
+}                                                                                       \
 
 // LoadListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXLoadMultiplexer, ::com::sun::star::form::XLoadListener)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 12:33:35 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 15:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,6 +453,11 @@ namespace dbaui
     // ::com::sun::star::frame::XStatusListener
     BEGIN_DECLARE_LISTENER_MULTIPLEXER(SbaXStatusMultiplexer, ::com::sun::star::frame::XStatusListener)
         DECLARE_MULTIPLEXER_VOID_METHOD(statusChanged, ::com::sun::star::frame::FeatureStateEvent)
+
+    private:
+        ::com::sun::star::frame::FeatureStateEvent  m_aLastKnownStatus;
+    public:                                                                                 \
+        inline ::com::sun::star::frame::FeatureStateEvent getLastEvent( ) const { return m_aLastKnownStatus; }
     END_DECLARE_LISTENER_MULTIPLEXER()
 
     // ::com::sun::star::form::XLoadListener
