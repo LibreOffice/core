@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-29 15:27:57 $
+ *  last change: $Author: dbo $ $Date: 2002-01-25 09:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,11 +528,25 @@ protected:
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
         throw (::com::sun::star::lang::IllegalArgumentException) = 0;
-    /**
-       The same as setFastProperyValue, but no exception is thrown and nHandle
-       is always valid. The changes must not be broadcasted in this method.
-       The method is not implemented in this class.
-     */
+
+    /** The same as setFastProperyValue; nHandle is always valid.
+        The changes must not be broadcasted in this method.
+        The method is implemented in a derived class.
+
+        @attention
+        Although you are permitted to throw any UNO exception, only the following
+        are valid for usage:
+        -- ::com::sun::star::beans::UnknownPropertyException
+        -- ::com::sun::star::beans::PropertyVetoException
+        -- ::com::sun::star::lang::IllegalArgumentException
+        -- ::com::sun::star::lang::WrappedTargetException
+        -- ::com::sun::star::uno::RuntimeException
+
+        @param nHandle
+               handle
+        @param rValue
+               value
+    */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rValue )
