@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-15 18:07:09 $
+ *  last change: $Author: nn $ $Date: 2001-06-01 19:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,9 @@ SvxTextForwarder* ScHeaderFooterEditSource::GetTextForwarder()
 {
     if (!pEditEngine)
     {
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
+        SfxItemPool* pEnginePool = EditEngine::CreatePool();
+        pEnginePool->FreezeIdRanges();
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
 
         pHdrEngine->EnableUndo( FALSE );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
@@ -253,8 +255,11 @@ SvxTextForwarder* ScCellEditSource::GetTextForwarder()
                 pDoc->GetEditPool(), FALSE );
         }
         else
-            pEditEngine = new ScFieldEditEngine( EditEngine::CreatePool(),
-                NULL, TRUE );
+        {
+            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            pEnginePool->FreezeIdRanges();
+            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+        }
 #if SUPD > 600
         //  currently, GetPortions doesn't work if UpdateMode is FALSE,
         //  this will be fixed (in EditEngine) by src600
@@ -380,8 +385,11 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
             pEditEngine = new ScEditEngineDefaulter(
                 pDocShell->GetDocument()->GetEnginePool(), FALSE );
         else
-            pEditEngine = new ScEditEngineDefaulter(
-                EditEngine::CreatePool(), TRUE );
+        {
+            SfxItemPool* pEnginePool = EditEngine::CreatePool();
+            pEnginePool->FreezeIdRanges();
+            pEditEngine = new ScEditEngineDefaulter( pEnginePool, TRUE );
+        }
         pForwarder = new SvxEditEngineForwarder(*pEditEngine);
     }
 
