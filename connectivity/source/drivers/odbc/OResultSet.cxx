@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 09:47:43 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1466,12 +1466,12 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
     m_bFetchData = sal_True;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }

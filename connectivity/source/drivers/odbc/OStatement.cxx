@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:07 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void OStatement_BASE2::disposing()
     OStatement_Base::disposing();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw(RuntimeException)
+void SAL_CALL OStatement_BASE2::release() throw()
 {
     relase_ChildImpl();
 }
@@ -1061,22 +1061,22 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw(RuntimeException)
+void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::release() throw(RuntimeException)
+void SAL_CALL OStatement_Base::release() throw()
 {
     OStatement_BASE::release();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::acquire() throw(RuntimeException)
+void SAL_CALL OStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::release() throw(RuntimeException)
+void SAL_CALL OStatement::release() throw()
 {
     OStatement_BASE2::release();
 }

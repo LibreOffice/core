@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:07 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ OConnection::~OConnection()
     ModuleContext::ReleaseRef();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OConnection::release() throw(RuntimeException)
+void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }

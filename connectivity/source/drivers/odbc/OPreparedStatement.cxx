@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,12 +129,12 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const TTypeInf
 {
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::acquire() throw()
 {
     OStatement_BASE2::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
 }

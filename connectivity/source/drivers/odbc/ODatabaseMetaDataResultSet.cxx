@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 14:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,12 +178,12 @@ Reference< XPropertySetInfo > SAL_CALL ODatabaseMetaDataResultSet::getPropertySe
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw()
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::release() throw(RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
