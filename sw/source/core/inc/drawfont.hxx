@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:07 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ class SwDrawTextInfo
     SwFont *pFnt;
     SwUnderlineFont* pUnderFnt;
     xub_StrLen* pHyphPos;
-//   Fraction aZoom;
     long nLeft;
     long nRight;
     long nKanaDiff;
@@ -118,34 +117,26 @@ class SwDrawTextInfo
                             // line numbering
     BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second
-                                // have of bound rect, used for Accessibility
+                                // half of bound rect, used for Accessibility
 
     SwDrawTextInfo();       // nicht zulaessig
 public:
+
 #ifndef PRODUCT
-    BOOL bOut   : 1;    // In der Non-Product wird der Zugriff auf die Member
-    BOOL bPos   : 1;    // durch diese Flags ueberwacht.
-    BOOL bText  : 1;    // Wird ein Member gesetzt, so wird das entsprechende
-    BOOL bWrong : 1;    // Flag gesetzt.
-    BOOL bSize  : 1;    // Wird ein Member ausgelesen, so wird ASSERTet, dass
-    BOOL bFnt   : 1;    // dieser zuvor gesetzt worden ist.
-    BOOL bIdx   : 1;
-    BOOL bLen   : 1;
-    BOOL bWidth : 1;
-    BOOL bAscent: 1;
-    BOOL bSperr : 1;
-    BOOL bKern  : 1;
-    BOOL bSpace : 1;
-    BOOL bBull  : 1;
-    BOOL bSpec  : 1;
-    BOOL bUppr  : 1;
-    BOOL bDrawSp: 1;
-    BOOL bGreyWv: 1;
+    BOOL bPos   : 1;    // These flags should control, that the appropriate
+    BOOL bWrong : 1;    // Set-function has been called before calling
+    BOOL bSize  : 1;    //  the Get-function of a member
+    BOOL bFnt   : 1;
+    BOOL bHyph  : 1;
     BOOL bLeft  : 1;
     BOOL bRight : 1;
     BOOL bKana  : 1;
     BOOL bOfst  : 1;
-    BOOL bHyph  : 1;
+    BOOL bAscent: 1;
+    BOOL bSperr : 1;
+    BOOL bSpace : 1;
+    BOOL bUppr  : 1;
+    BOOL bDrawSp: 1;
 #endif
 
     SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
@@ -171,12 +162,30 @@ public:
         bIgnoreFrmRTL = FALSE;
         bPosMatchesBounds = FALSE;
 
-#ifndef PRODUCT
-        bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec =
-        bGreyWv = TRUE;
+        // These values are initialized but, they have to be
+        // set explicitly via their Set-function before they may
+        // be accessed by their Get-function:
+        pPos = 0;
+        pWrong = 0;
+        pSize = 0;
+        pFnt = 0;
+        pHyphPos = 0;
+        nLeft = 0;
+        nRight = 0;
+        nKanaDiff = 0;
+        nOfst = 0;
+        nAscent = 0;
+        nSperren = 0;
+        nSpace = 0;
+        bUpper = FALSE;
+        bDrawSpace = FALSE;
 
+#ifndef PRODUCT
+        // these flags control, whether the matching member variables have
+        // been set by using the Set-function before they may be accessed
+        // by their Get-function:
         bPos = bWrong = bSize = bFnt = bAscent = bSpace = bUppr =
-        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
+        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = FALSE;
 #endif
     }
 
@@ -197,13 +206,11 @@ public:
 
     OutputDevice& GetOut() const
     {
-        ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );
         return *pOut;
     }
 
     OutputDevice *GetpOut() const
     {
-        ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );
         return pOut;
     }
 
@@ -226,7 +233,6 @@ public:
 
     const XubString &GetText() const
     {
-        ASSERT( bText, "DrawTextInfo: Undefined String" );
         return *pText;
     }
 
@@ -250,19 +256,16 @@ public:
 
     SwUnderlineFont* GetUnderFnt() const
     {
-        ASSERT( bSpec, "DrawTextInfo: Undefined Underlinefont" );
         return pUnderFnt;
     }
 
     xub_StrLen GetIdx() const
     {
-        ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
         return nIdx;
     }
 
     xub_StrLen GetLen() const
     {
-        ASSERT( bLen, "DrawTextInfo: Undefined Length" );
         return nLen;
     }
 
@@ -274,8 +277,6 @@ public:
 
     xub_StrLen GetEnd() const
     {
-        ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
-        ASSERT( bLen, "DrawTextInfo: Undefined Length" );
         return nIdx + nLen;
     }
 
@@ -299,7 +300,6 @@ public:
 
     USHORT GetWidth() const
     {
-        ASSERT( bWidth, "DrawTextInfo: Undefined Width" );
         return nWidth;
     }
 
@@ -322,7 +322,6 @@ public:
 
     short GetKern() const
     {
-        ASSERT( bKern, "DrawTextInfo: Undefined Kerning" );
         return nKern;
     }
 
@@ -339,7 +338,6 @@ public:
 
     BOOL GetBullet() const
     {
-        ASSERT( bBull, "DrawTextInfo: Undefined Bulletflag" );
         return bBullet;
     }
 
@@ -357,7 +355,6 @@ public:
 
     BOOL GetGreyWave() const
     {
-        ASSERT( bGreyWv, "DrawTextInfo: Undefined GreyWave" );
         return bGreyWave;
     }
 
@@ -384,9 +381,6 @@ public:
     void SetOut( OutputDevice &rNew )
     {
         pOut = &rNew;
-#ifndef PRODUCT
-        bOut = TRUE;
-#endif
     }
 
     void SetPos( const Point &rNew )
@@ -408,9 +402,6 @@ public:
     void SetText( const XubString &rNew )
     {
         pText = &rNew;
-#ifndef PRODUCT
-        bText = TRUE;
-#endif
     }
 
     void SetWrong( const SwWrongList* pNew )
@@ -440,17 +431,11 @@ public:
     void SetIdx( xub_StrLen nNew )
     {
         nIdx = nNew;
-#ifndef PRODUCT
-        bIdx = TRUE;
-#endif
     }
 
     void SetLen( xub_StrLen nNew )
     {
         nLen = nNew;
-#ifndef PRODUCT
-        bLen = TRUE;
-#endif
     }
 
     void SetOfst( xub_StrLen nNew )
@@ -488,9 +473,6 @@ public:
     void SetWidth( USHORT nNew )
     {
         nWidth = nNew;
-#ifndef PRODUCT
-        bWidth = TRUE;
-#endif
     }
 
     void SetAscent( USHORT nNew )
@@ -504,9 +486,6 @@ public:
     void SetKern( short nNew )
     {
         nKern = nNew;
-#ifndef PRODUCT
-        bKern = TRUE;
-#endif
     }
 
     void SetSperren( short nNew )
@@ -547,17 +526,11 @@ public:
     void SetBullet( BOOL bNew )
     {
         bBullet = bNew;
-#ifndef PRODUCT
-        bBull = TRUE;
-#endif
     }
 
     void SetUnderFnt( SwUnderlineFont* pFnt )
     {
         pUnderFnt = pFnt;
-#ifndef PRODUCT
-        bSpec = TRUE;
-#endif
     }
 
     void SetUpper( BOOL bNew )
@@ -579,9 +552,6 @@ public:
     void SetGreyWave( BOOL bNew )
     {
         bGreyWave = bNew;
-#ifndef PRODUCT
-        bGreyWv = TRUE;
-#endif
     }
 
     void SetSpaceStop( BOOL bNew )
