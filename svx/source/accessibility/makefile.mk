@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: af $ $Date: 2002-02-05 14:32:26 $
+#   last change: $Author: af $ $Date: 2002-03-05 17:52:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,9 @@ SLOFILES =										\
     $(SLO)$/AccessibleOLEShape.obj				\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj
+
+SRS2NAME = accessibility
+SRC2FILES = accessibility.src
 
 # --- Tagets -------------------------------------------------------
 
