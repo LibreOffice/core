@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 09:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,9 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             DataTypeEnum get_Type() const
@@ -235,7 +237,9 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             KeyTypeEnum get_Type() const
@@ -261,7 +265,9 @@ namespace connectivity
 
             void put_RelatedTable(const ::rtl::OUString& _rName)
             {
-                pInterface->put_RelatedTable(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_RelatedTable(bstr));
+                SysFreeString(bstr);
             }
 
             RuleEnum get_DeleteRule() const
@@ -317,7 +323,9 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             sal_Bool get_Clustered() const
@@ -438,7 +446,9 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             ::rtl::OUString get_Type() const
@@ -537,7 +547,9 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             RightsEnum GetPermissions(
@@ -591,12 +603,20 @@ namespace connectivity
 
             void put_Name(const ::rtl::OUString& _rName)
             {
-                pInterface->put_Name(SysAllocString(_rName.getStr()));
+                BSTR bstr = SysAllocString(_rName.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
             }
 
             sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd)
             {
-                return SUCCEEDED(pInterface->ChangePassword(SysAllocString(_rPwd.getStr()),SysAllocString(_rNewPwd.getStr())));
+                BSTR sStr1 = SysAllocString(_rPwd.getStr());
+                BSTR sStr2 = SysAllocString(_rNewPwd.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1,sStr2));
+                SysFreeString(sStr1);
+                SysFreeString(sStr2);
+
+                return bErg;
             }
 
             ADOGroups* get_Groups()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 09:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,9 @@ void OAdoTable::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     OLEVariant _rVar;
     _rVar.setNoArg();
     BSTR aBSTR;
-    pInterface->GetObjectOwner(SysAllocString(_rName.getStr()),_eNum,_rVar,&aBSTR);
+    BSTR sStr1 = SysAllocString(_rName.getStr());
+    pInterface->GetObjectOwner(sStr1,_eNum,_rVar,&aBSTR);
+    SysFreeString(sStr1);
     rtl::OUString sRetStr((sal_Unicode*)aBSTR);
     SysFreeString(aBSTR);
     return sRetStr;

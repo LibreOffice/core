@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 09:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,10 @@ namespace connectivity
 
             inline sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const
             {
-                return SUCCEEDED(pInterface->put_ConnectionString(SysAllocString(aCon.getStr())));
+                BSTR bstr = SysAllocString(aCon.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr));
+                SysFreeString(bstr);
+                return bErg;
             }
 
             inline sal_Int32 GetCommandTimeout() const
@@ -165,7 +168,10 @@ namespace connectivity
 
             inline sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
             {
-                return SUCCEEDED(pInterface->Execute(SysAllocString(_CommandText.getStr()),&RecordsAffected,Options,(_ADORecordset**)ppiRset));
+                BSTR sStr1 = SysAllocString(_CommandText.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->Execute(sStr1,&RecordsAffected,Options,(_ADORecordset**)ppiRset));
+                SysFreeString(sStr1);
+                return bErg;
             }
 
             inline sal_Bool BeginTrans()
@@ -186,7 +192,14 @@ namespace connectivity
 
             inline sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options)
             {
-                return SUCCEEDED(pInterface->Open(SysAllocString(ConnectionString.getStr()),SysAllocString(UserID.getStr()),SysAllocString(Password.getStr()),Options));
+                BSTR sStr1 = SysAllocString(ConnectionString.getStr());
+                BSTR sStr2 = SysAllocString(UserID.getStr());
+                BSTR sStr3 = SysAllocString(Password.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->Open(sStr1,sStr2,sStr3,Options));
+                SysFreeString(sStr1);
+                SysFreeString(sStr2);
+                SysFreeString(sStr3);
+                return bErg;
             }
 
             inline sal_Bool GetErrors(ADOErrors** pErrors)
@@ -201,9 +214,12 @@ namespace connectivity
                 SysFreeString(aBSTR); return sRetStr;
             }
 
-            inline sal_Bool PutDefaultDatabase(const ::rtl::OUString& bstr)
+            inline sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr)
             {
-                return SUCCEEDED(pInterface->put_DefaultDatabase(SysAllocString(bstr.getStr())));
+                BSTR bstr = SysAllocString(_bstr.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr));
+                SysFreeString(bstr);
+                return bErg;
             }
 
             inline IsolationLevelEnum get_IsolationLevel() const
@@ -262,9 +278,12 @@ namespace connectivity
                 SysFreeString(aBSTR); return sRetStr;
             }
 
-            inline sal_Bool put_Provider(const ::rtl::OUString& bstr)
+            inline sal_Bool put_Provider(const ::rtl::OUString& _bstr)
             {
-                return SUCCEEDED(pInterface->put_Provider(SysAllocString(bstr.getStr())));
+                BSTR bstr = SysAllocString(_bstr.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Provider(bstr));
+                SysFreeString(bstr);
+                return bErg;
             }
 
             inline sal_Int32 get_State() const
@@ -397,12 +416,13 @@ namespace connectivity
                 return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Parameters,Options,ppiRset));
             }
 
-            inline ADOParameter* CreateParameter(const ::rtl::OUString &bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
+            inline ADOParameter* CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
             {
                 ADOParameter* pPara = NULL;
-                if(SUCCEEDED(pInterface->CreateParameter(bstr.getLength() ? SysAllocString(bstr.getStr()) : NULL,Type,Direction,nSize,Value,&pPara)))
-                    return pPara;
-                return NULL;
+                BSTR bstr = SysAllocString(_bstr.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->CreateParameter(_bstr.getLength() ? bstr : NULL,Type,Direction,nSize,Value,&pPara));
+                SysFreeString(bstr);
+                return bErg ? pPara : NULL;
             }
 
             inline ADOParameters* get_Parameters() const
@@ -434,7 +454,10 @@ namespace connectivity
 
             inline sal_Bool put_Name(const ::rtl::OUString& _Name)
             {
-                return SUCCEEDED(pInterface->put_Name(SysAllocString(_Name.getStr())));
+                BSTR bstr = SysAllocString(_Name.getStr());
+                sal_Bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
+                SysFreeString(bstr);
+                return bErg;
             }
             inline sal_Bool Cancel()
             {
