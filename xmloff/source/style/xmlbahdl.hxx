@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dr $ $Date: 2000-10-17 12:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,4 +180,29 @@ public:
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_COLORTRANSPARENT
+*/
+class XMLColorTransparentPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLColorTransparentPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_ISTRANSPARENT
+*/
+class XMLIsTransparentPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLIsTransparentPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
 #endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX

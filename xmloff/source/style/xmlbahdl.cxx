@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: dr $ $Date: 2000-10-17 12:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,4 +483,81 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
     return bRet;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLColorTransparentPropHdl
+//
+
+XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_True;
+
+    if( rStrImpValue.compareToAscii( sXML_transparent ) != 0 )
+    {
+        Color aColor;
+        bRet = rUnitConverter.convertColor( aColor, rStrImpValue );
+        rValue <<= (sal_Int32)( aColor.GetColor() );
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nColor;
+
+    if( rStrExpValue.compareToAscii( sXML_transparent ) == 0 )
+        bRet = sal_True;
+    else if( rValue >>= nColor )
+    {
+        Color aColor( nColor );
+        OUStringBuffer aOut;
+        rUnitConverter.convertColor( aOut, aColor );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLIsTransparentPropHdl
+//
+
+XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bValue = (rStrImpValue.compareToAscii( sXML_transparent ) == 0);
+    rValue <<= sal_Bool( bValue );
+
+    return sal_True;
+}
+
+sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Bool bIsTrans;
+
+    if( rValue >>= bIsTrans )
+    {
+        rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_transparent ) );
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
 
