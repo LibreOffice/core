@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 12:12:08 $
+ *  last change: $Author: obo $ $Date: 2001-10-12 21:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,16 @@ String STR_RECOVER_QUERY
     Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
     Text [ french ] = "Restaurer le fichier \"$1\" ?" ;
     Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
-    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ chinese_simplified ] = "è¦ä¿®å¤è¿™ä¸ªæ–‡ä»¶ \"$1\" ï¼Ÿ";
     Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
     Text[ polish ] = "Odtworzyæ plik \"$1\"?";
-    Text[ japanese ] = "Ì§²Ù \"$1\" ‚ğ•œŒ³‚µ‚Ü‚·‚©B";
-    Text[ chinese_traditional ] = "­n­×´_ÀÉ®× \"$1\"¡H";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ \"$1\" ã‚’å¾©å…ƒã—ã¾ã™ã‹ã€‚";
+    Text[ chinese_traditional ] = "è¦ä¿®å¾©æª”æ¡ˆ<$1>ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
-    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ chinese_simplified ] = "è¦ä¿®å¤è¿™ä¸ªæ–‡ä»¶ \"$1\" ï¼Ÿ";
     Text[ greek ] = "Íá ãßíåé åğáíáöïñÜ ôïõ áñ÷åßïõ \"$1\";";
-    Text[ korean ] = "ÆÄÀÏ \"$1\"À»£¨¸¦£© º¹±¸ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ korean ] = "íŒŒì¼ \"$1\"ì„(ë¥¼ï¼‰ ë³µêµ¬í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "\"$1\" dosyası geri getirilsin mi?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¿Desea restaurar el archivo \"$1\"?";
@@ -103,16 +103,16 @@ String STR_RECOVER_TITLE
     Text [ french ] = "Restauration de fichier" ;
     Text [ dutch ] = "Herstel bestand" ;
     Text [ portuguese ] = "Restaurar ficheiro" ;
-    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ chinese_simplified ] = "ä¿®å¤æ–‡ä»¶";
     Text[ russian ] = "Âîññòàíîâëåíèå ôàéëà";
     Text[ polish ] = "Odtwarzanie plików";
-    Text[ japanese ] = "Ì§²Ù‚Ì•œŒ³";
-    Text[ chinese_traditional ] = "­×´_ÀÉ®×";
+    Text[ japanese ] = "ï¾Œï½§ï½²ï¾™ã®å¾©å…ƒ";
+    Text[ chinese_traditional ] = "ä¿®å¾©æª”æ¡ˆ";
     Text[ arabic ] = "ÇÓÊÚÇÏÉ ãáİ";
     Text[ dutch ] = "Herstel bestand";
-    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ chinese_simplified ] = "ä¿®å¤æ–‡ä»¶";
     Text[ greek ] = "ÅğáíáöïñÜ áñ÷åßïõ";
-    Text[ korean ] = "ÆÄÀÏ º¹±¸";
+    Text[ korean ] = "íŒŒì¼ ë³µêµ¬";
     Text[ turkish ] = "Dosya kurtarma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Recuperar archivo";
@@ -132,16 +132,16 @@ WarningBox STR_RECOVER_PREPARED
     Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los archivos modificados\ny quizás podrán recuperarse\nal iniciar de nuevo el programa." ;
     Message [ french ] = "Une erreur irrécupérable s'est produite.\n\nTous les fichiers modifiés ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
     Message [ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden." ;
-    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸¡£¸Õ²ÅµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
+    Message[ chinese_simplified ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚åˆšæ‰çš„æ“ä½œå¼•å‘äº†ä¸€ä¸ªæ— æ³•æ’é™¤çš„é”™è¯¯ã€‚\nä¿®æ”¹è¿‡çš„æ–‡ä»¶å·²ç»ä¿å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å¯åŠ¨ç¨‹åºæ—¶å¾ˆå¯èƒ½é‡æ–°æ¢å¤è¿™äº›æ–‡ä»¶ã€‚";
     Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
     Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y jednak\nzabezpieczone i zostan¹ prawdopodobnie przywrócone przy nastêpnym uruchomieniu programu.\n.";
-    Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½Ì§²Ù‚Í‚·‚×‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚é‚Ì‚Å\nŸ‚ÌÌßÛ¸Ş×Ñ‹N“®‚Å•œŒ³‚³‚ê‚é‚Í‚¸‚Å‚·B";
-    Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡C­è¤~ªº°Ê§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
+    Message[ japanese ] = "é™¤å»ã§ããªã„ï½´ï¾—ï½°ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚\n\nå¤‰æ›´ã—ãŸï¾Œï½§ï½²ï¾™ã¯ã™ã¹ã¦ä¿å­˜ã•ã‚Œã¦ã„ã‚‹ã®ã§\næ¬¡ã®ï¾Œï¾Ÿï¾›ï½¸ï¾ï¾—ï¾‘èµ·å‹•ã§å¾©å…ƒã•ã‚Œã‚‹ã¯ãšã§ã™ã€‚";
+    Message[ chinese_traditional ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚å‰›æ‰çš„å‹•ä½œå¼•ç™¼äº†ä¸€å€‹ç„¡æ³•æ’é™¤çš„éŒ¯èª¤ã€‚\nå…ˆå‰ä¿®æ”¹éçš„æª”æ¡ˆå·²ç¶“å„²å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å•Ÿå‹•ç¨‹å¼æ™‚å¾ˆå¯èƒ½é‡æ–°æ¢å¾©é€™äº›æª”æ¡ˆã€‚";
     Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
-    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸¡£¸Õ²ÅµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
+    Message[ chinese_simplified ] = "çœŸæ˜¯éå¸¸æŠ±æ­‰ã€‚åˆšæ‰çš„æ“ä½œå¼•å‘äº†ä¸€ä¸ªæ— æ³•æ’é™¤çš„é”™è¯¯ã€‚\nä¿®æ”¹è¿‡çš„æ–‡ä»¶å·²ç»ä¿å­˜ã€‚\nåœ¨ä¸‹ä¸€æ¬¡å¯åŠ¨ç¨‹åºæ—¶å¾ˆå¯èƒ½é‡æ–°æ¢å¤è¿™äº›æ–‡ä»¶ã€‚";
     Message[ greek ] = "ĞáñïõóéÜóôçêå êÜğïéï áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí\nşóôå íá åßíáé äõíáôŞ (ğéèáíüôáôá) ç åğáíáöïñÜ ôïõò\n";
-    Message[ korean ] = "Á¦°ÅÇÒ ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\nÇÏÁö¸¸ º¯°æµÈ  ¸ğµç ÆÄÀÏÀº\nÀúÀåµÇ¾úÀ¸¹Ç·Î,  ´ÙÀ½\nÇÁ·Î±×·¥ ½ÃÀÛ½Ã¿¡´Â º¹±¸µÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
+    Message[ korean ] = "ì¹˜ëª…ì ì¸ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.\n\nê·¸ëŸ¬ë‚˜ ë³€ê²½ëœ ëª¨ë“  íŒŒì¼ì´\nì €ì¥ë˜ì—ˆìœ¼ë¯€ë¡œ, ë‹¤ìŒ\ní”„ë¡œê·¸ë¨ ì‹œì‘ì‹œì—ëŠ” ë³µêµ¬ë  ìˆ˜ ìˆì„ ê²ƒì…ë‹ˆë‹¤.";
     Message[ turkish ] = "Düzeltilemeyen bir hata oluştu.\n\nDeğiştirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden başlatıldığında\nkurtarılabilecek.";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa.";
@@ -152,76 +152,337 @@ String STR_BOOTSTRAP_ERR_CANNOT_START
 {
     Text = "Die Anwendung kann nicht gestartet werden. " ;
     Text [ ENGLISH ] = "The program cannot be started. " ;
+    Text[ english_us ] = "The application cannot be started. ";
+    Text[ portuguese ] = "The program cannot be started. ";
+    Text[ russian ] = "The program cannot be started. ";
+    Text[ greek ] = "The program cannot be started. ";
+    Text[ dutch ] = "The program cannot be started. ";
+    Text[ french ] = "The program cannot be started. ";
+    Text[ spanish ] = "The program cannot be started. ";
+    Text[ finnish ] = "The program cannot be started. ";
+    Text[ italian ] = "The program cannot be started. ";
+    Text[ danish ] = "The program cannot be started. ";
+    Text[ swedish ] = "Det går inte att starta programmet. ";
+    Text[ polish ] = "Uruchomienie aplikacji nie jest mo¿liwe.";
+    Text[ portuguese_brazilian ] = "The program cannot be started. ";
+    Text[ japanese ] = "The program cannot be started. ";
+    Text[ korean ] = "The program cannot be started. ";
+    Text[ chinese_simplified ] = "æ— æ³•å¯åŠ¨è¯¥åº”ç”¨ç¨‹åºã€‚";
+    Text[ chinese_traditional ] = "The program cannot be started. ";
+    Text[ turkish ] = "The program cannot be started. ";
+    Text[ arabic ] = "The program cannot be started. ";
+    Text[ catalan ] = "The program cannot be started. ";
 };
 
 String STR_BOOTSTRAP_ERR_DIR_MISSING
 {
     Text = "Der Konfigurationspfad \"$1\" wurde nicht gefunden." ;
     Text [ ENGLISH ] = "The configuration directory \"$1\" is missing." ;
+    Text[ english_us ] = "The configuration directory \"$1\" is missing.";
+    Text[ portuguese ] = "The configuration directory \"$1\" is missing.";
+    Text[ russian ] = "The configuration directory \"$1\" is missing.";
+    Text[ greek ] = "The configuration directory \"$1\" is missing.";
+    Text[ dutch ] = "The configuration directory \"$1\" is missing.";
+    Text[ french ] = "The configuration directory \"$1\" is missing.";
+    Text[ spanish ] = "The configuration directory \"$1\" is missing.";
+    Text[ finnish ] = "The configuration directory \"$1\" is missing.";
+    Text[ italian ] = "The configuration directory \"$1\" is missing.";
+    Text[ danish ] = "The configuration directory \"$1\" is missing.";
+    Text[ swedish ] = "Konfigurationssökvägen \"$1\" hittades inte.";
+    Text[ polish ] = "Nie znaleziono œcie¿ki konfiguracyjnej \"$1\".";
+    Text[ portuguese_brazilian ] = "The configuration directory \"$1\" is missing.";
+    Text[ japanese ] = "The configuration directory \"$1\" is missing.";
+    Text[ korean ] = "The configuration directory \"$1\" is missing.";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°é…ç½®è·¯å¾„ \"$1\"ã€‚";
+    Text[ chinese_traditional ] = "The configuration directory \"$1\" is missing.";
+    Text[ turkish ] = "The configuration directory \"$1\" is missing.";
+    Text[ arabic ] = "The configuration directory \"$1\" is missing.";
+    Text[ catalan ] = "The configuration directory \"$1\" is missing.";
 };
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
     Text = "Der Installationspfad ist ungültig." ;
     Text [ ENGLISH ] = "The installation path is invalid." ;
+    Text[ english_us ] = "The installation path is invalid.";
+    Text[ portuguese ] = "The installation path is invalid.";
+    Text[ russian ] = "The installation path is invalid.";
+    Text[ greek ] = "The installation path is invalid.";
+    Text[ dutch ] = "The installation path is invalid.";
+    Text[ french ] = "The installation path is invalid.";
+    Text[ spanish ] = "The installation path is invalid.";
+    Text[ finnish ] = "The installation path is invalid.";
+    Text[ italian ] = "The installation path is invalid.";
+    Text[ danish ] = "The installation path is invalid.";
+    Text[ swedish ] = "Installationssökvägen är ogiltig.";
+    Text[ polish ] = "Œcie¿ka instalacyjna jest nieprawid³owa.";
+    Text[ portuguese_brazilian ] = "The installation path is invalid.";
+    Text[ japanese ] = "The installation path is invalid.";
+    Text[ korean ] = "The installation path is invalid.";
+    Text[ chinese_simplified ] = "å®‰è£…è·¯å¾„æ— æ•ˆã€‚";
+    Text[ chinese_traditional ] = "The installation path is invalid.";
+    Text[ turkish ] = "The installation path is invalid.";
+    Text[ arabic ] = "The installation path is invalid.";
+    Text[ catalan ] = "The installation path is invalid.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATH
 {
     Text = "Der Installationspfad konnte nicht bestimmt werden." ;
     Text [ ENGLISH ] = "The installation path is not available." ;
+    Text[ english_us ] = "The installation path is not available.";
+    Text[ portuguese ] = "The installation path is not available.";
+    Text[ russian ] = "The installation path is not available.";
+    Text[ greek ] = "The installation path is not available.";
+    Text[ dutch ] = "The installation path is not available.";
+    Text[ french ] = "The installation path is not available.";
+    Text[ spanish ] = "The installation path is not available.";
+    Text[ finnish ] = "The installation path is not available.";
+    Text[ italian ] = "The installation path is not available.";
+    Text[ danish ] = "The installation path is not available.";
+    Text[ swedish ] = "Det gick inte att bestämma installationssökvägen.";
+    Text[ polish ] = "Ustalenie œcie¿ki instalacyjnej nie powiod³o siê.";
+    Text[ portuguese_brazilian ] = "The installation path is not available.";
+    Text[ japanese ] = "The installation path is not available.";
+    Text[ korean ] = "The installation path is not available.";
+    Text[ chinese_simplified ] = "æ— æ³•ç¡®å®šå®‰è£…è·¯å¾„ã€‚";
+    Text[ chinese_traditional ] = "The installation path is not available.";
+    Text[ turkish ] = "The installation path is not available.";
+    Text[ arabic ] = "The installation path is not available.";
+    Text[ catalan ] = "The installation path is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
 {
     Text = "Ein interner Fehler ist aufgetreten." ;
     Text [ ENGLISH ] = "An internal failure occurred." ;
+    Text[ english_us ] = "An internal failure occurred.";
+    Text[ portuguese ] = "An internal failure occurred.";
+    Text[ russian ] = "An internal failure occurred.";
+    Text[ greek ] = "An internal failure occurred.";
+    Text[ dutch ] = "An internal failure occurred.";
+    Text[ french ] = "An internal failure occurred.";
+    Text[ spanish ] = "An internal failure occurred.";
+    Text[ finnish ] = "An internal failure occurred.";
+    Text[ italian ] = "An internal failure occurred.";
+    Text[ danish ] = "An internal failure occurred.";
+    Text[ swedish ] = "Det har uppstått ett internt fel.";
+    Text[ polish ] = "Wyst¹pi³ wewnêtrzny b³¹d.";
+    Text[ portuguese_brazilian ] = "An internal failure occurred.";
+    Text[ japanese ] = "An internal failure occurred.";
+    Text[ korean ] = "An internal failure occurred.";
+    Text[ chinese_simplified ] = "å‡ºç°äº†ä¸€ä¸ªå†…éƒ¨çš„é”™è¯¯ã€‚";
+    Text[ chinese_traditional ] = "An internal failure occurred.";
+    Text[ turkish ] = "An internal failure occurred.";
+    Text[ arabic ] = "An internal failure occurred.";
+    Text[ catalan ] = "An internal failure occurred.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
 {
     Text = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
     Text [ ENGLISH ] = "The configuration file \"$1\" is corrupt." ;
+    Text[ english_us ] = "The configuration file \"$1\" is corrupt.";
+    Text[ portuguese ] = "The configuration file \"$1\" is corrupt.";
+    Text[ russian ] = "The configuration file \"$1\" is corrupt.";
+    Text[ greek ] = "The configuration file \"$1\" is corrupt.";
+    Text[ dutch ] = "The configuration file \"$1\" is corrupt.";
+    Text[ french ] = "The configuration file \"$1\" is corrupt.";
+    Text[ spanish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ finnish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ italian ] = "The configuration file \"$1\" is corrupt.";
+    Text[ danish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ swedish ] = "Konfigurationsfilen \"$1\" är skadad.";
+    Text[ polish ] = "Plik konfiguracyjny \"$1\" jest uszkodzony.";
+    Text[ portuguese_brazilian ] = "The configuration file \"$1\" is corrupt.";
+    Text[ japanese ] = "The configuration file \"$1\" is corrupt.";
+    Text[ korean ] = "The configuration file \"$1\" is corrupt.";
+    Text[ chinese_simplified ] = "é…ç½®æ–‡ä»¶ \"$1\" å·²ç»æŸåã€‚";
+    Text[ chinese_traditional ] = "The configuration file \"$1\" is corrupt.";
+    Text[ turkish ] = "The configuration file \"$1\" is corrupt.";
+    Text[ arabic ] = "The configuration file \"$1\" is corrupt.";
+    Text[ catalan ] = "The configuration file \"$1\" is corrupt.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_MISSING
 {
     Text = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden." ;
     Text [ ENGLISH ] = "The configuration file \"$1\" is missing." ;
+    Text[ english_us ] = "The configuration file \"$1\" is missing.";
+    Text[ portuguese ] = "The configuration file \"$1\" is missing.";
+    Text[ russian ] = "The configuration file \"$1\" is missing.";
+    Text[ greek ] = "The configuration file \"$1\" is missing.";
+    Text[ dutch ] = "The configuration file \"$1\" is missing.";
+    Text[ french ] = "The configuration file \"$1\" is missing.";
+    Text[ spanish ] = "The configuration file \"$1\" is missing.";
+    Text[ finnish ] = "The configuration file \"$1\" is missing.";
+    Text[ italian ] = "The configuration file \"$1\" is missing.";
+    Text[ danish ] = "The configuration file \"$1\" is missing.";
+    Text[ swedish ] = "Konfigurationsfilen \"$1\" hittades inte.";
+    Text[ polish ] = "Nie znaleziono pliku konfiguracyjnego \"$1\".";
+    Text[ portuguese_brazilian ] = "The configuration file \"$1\" is missing.";
+    Text[ japanese ] = "The configuration file \"$1\" is missing.";
+    Text[ korean ] = "The configuration file \"$1\" is missing.";
+    Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°é…ç½®æ–‡ä»¶ \"$1\" ã€‚";
+    Text[ chinese_traditional ] = "The configuration file \"$1\" is missing.";
+    Text[ turkish ] = "The configuration file \"$1\" is missing.";
+    Text[ arabic ] = "The configuration file \"$1\" is missing.";
+    Text[ catalan ] = "The configuration file \"$1\" is missing.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
 {
     Text = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
     Text [ ENGLISH ] = "The main configuration file \"$1\" does not support the current version." ;
+    Text[ english_us ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ portuguese ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ russian ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ greek ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ dutch ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ french ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ spanish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ finnish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ italian ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ danish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ swedish ] = "Konfigurationsfilen \"$1\" understöder inte den här versionen.";
+    Text[ polish ] = "Plik konfiguracyjny \"$1\" nie obs³uguje danej wersji.";
+    Text[ portuguese_brazilian ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ japanese ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ korean ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ chinese_simplified ] = "é…ç½®æ–‡ä»¶ \"$1\" ä¸æ”¯æŒè¿™ä¸ªç‰ˆæœ¬ã€‚";
+    Text[ chinese_traditional ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ turkish ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ arabic ] = "The main configuration file \"$1\" does not support the current version.";
+    Text[ catalan ] = "The main configuration file \"$1\" does not support the current version.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
 {
     Text = "Der Komponenten-Manager ist nicht verfügbar." ;
     Text [ ENGLISH ] = "The service manager is not available." ;
+    Text[ english_us ] = "The service manager is not available.";
+    Text[ portuguese ] = "The service manager is not available.";
+    Text[ russian ] = "The service manager is not available.";
+    Text[ greek ] = "The service manager is not available.";
+    Text[ dutch ] = "The service manager is not available.";
+    Text[ french ] = "The service manager is not available.";
+    Text[ spanish ] = "The service manager is not available.";
+    Text[ finnish ] = "The service manager is not available.";
+    Text[ italian ] = "The service manager is not available.";
+    Text[ danish ] = "The service manager is not available.";
+    Text[ swedish ] = "Komponentmanagern är inte tillgänglig.";
+    Text[ polish ] = "Brak dostêpu do mened¿era komponentów.";
+    Text[ portuguese_brazilian ] = "The service manager is not available.";
+    Text[ japanese ] = "The service manager is not available.";
+    Text[ korean ] = "The service manager is not available.";
+    Text[ chinese_simplified ] = "æ— æ³•ä½¿ç”¨ç¨‹åºå…ƒä»¶ç®¡ç†å™¨ã€‚";
+    Text[ chinese_traditional ] = "The service manager is not available.";
+    Text[ turkish ] = "The service manager is not available.";
+    Text[ arabic ] = "The service manager is not available.";
+    Text[ catalan ] = "The service manager is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
 {
     Text = "Der Konfigurations-Manager kann nicht erzeugt werden." ;
     Text [ ENGLISH ] = "The configuration service is not available." ;
+    Text[ english_us ] = "The configuration service is not available.";
+    Text[ portuguese ] = "The configuration service is not available.";
+    Text[ russian ] = "The configuration service is not available.";
+    Text[ greek ] = "The configuration service is not available.";
+    Text[ dutch ] = "The configuration service is not available.";
+    Text[ french ] = "The configuration service is not available.";
+    Text[ spanish ] = "The configuration service is not available.";
+    Text[ finnish ] = "The configuration service is not available.";
+    Text[ italian ] = "The configuration service is not available.";
+    Text[ danish ] = "The configuration service is not available.";
+    Text[ swedish ] = "Det går inte att skapa konfigurationsmanagern.";
+    Text[ polish ] = "Utworzenie mened¿era konfiguracyjnego nie jest mo¿liwe.";
+    Text[ portuguese_brazilian ] = "The configuration service is not available.";
+    Text[ japanese ] = "The configuration service is not available.";
+    Text[ korean ] = "The configuration service is not available.";
+    Text[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆé…ç½®æœåŠ¡ç®¡ç†å™¨ã€‚";
+    Text[ chinese_traditional ] = "The configuration service is not available.";
+    Text[ turkish ] = "The configuration service is not available.";
+    Text[ arabic ] = "The configuration service is not available.";
+    Text[ catalan ] = "The configuration service is not available.";
 };
 
 String STR_ASK_START_SETUP_REPAIR
 {
     Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?" ;
     Text [ ENGLISH ] = "Start setup application to repair installation?" ;
+    Text[ english_us ] = "Start setup application to repair installation?";
+    Text[ portuguese ] = "Start setup application to repair installation?";
+    Text[ russian ] = "Start setup application to repair installation?";
+    Text[ greek ] = "Start setup application to repair installation?";
+    Text[ dutch ] = "Start setup application to repair installation?";
+    Text[ french ] = "Start setup application to repair installation?";
+    Text[ spanish ] = "Start setup application to repair installation?";
+    Text[ finnish ] = "Start setup application to repair installation?";
+    Text[ italian ] = "Start setup application to repair installation?";
+    Text[ danish ] = "Start setup application to repair installation?";
+    Text[ swedish ] = "Ska setupprogrammet startas så att din installation kan repareras?";
+    Text[ polish ] = "Uruchomiæ aplikacjê instalacyjn¹ w celu naprawy zainstalowanego programu?";
+    Text[ portuguese_brazilian ] = "Start setup application to repair installation?";
+    Text[ japanese ] = "Start setup application to repair installation?";
+    Text[ korean ] = "Start setup application to repair installation?";
+    Text[ chinese_simplified ] = "è¦å¯åŠ¨å®‰è£…ç¨‹åºæ¥ä¿®è¡¥æ‚¨åŸå…ˆçš„å®‰è£…ï¼Ÿ";
+    Text[ chinese_traditional ] = "Start setup application to repair installation?";
+    Text[ turkish ] = "Start setup application to repair installation?";
+    Text[ arabic ] = "Start setup application to repair installation?";
+    Text[ catalan ] = "Start setup application to repair installation?";
 };
 
 String STR_ASK_START_SETUP
 {
     Text = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
     Text [ ENGLISH ] = "Start setup application to check installation?" ;
+    Text[ english_us ] = "Start setup application to check installation?";
+    Text[ portuguese ] = "Start setup application to check installation?";
+    Text[ russian ] = "Start setup application to check installation?";
+    Text[ greek ] = "Start setup application to check installation?";
+    Text[ dutch ] = "Start setup application to check installation?";
+    Text[ french ] = "Start setup application to check installation?";
+    Text[ spanish ] = "Start setup application to check installation?";
+    Text[ finnish ] = "Start setup application to check installation?";
+    Text[ italian ] = "Start setup application to check installation?";
+    Text[ danish ] = "Start setup application to check installation?";
+    Text[ swedish ] = "Ska setupprogrammet startas så att din installation kan kontrolleras?";
+    Text[ polish ] = "Uruchomiæ aplikacjê instalacyjn¹ w celu sprawdzenia zainstalowanego programu?";
+    Text[ portuguese_brazilian ] = "Start setup application to check installation?";
+    Text[ japanese ] = "Start setup application to check installation?";
+    Text[ korean ] = "Start setup application to check installation?";
+    Text[ chinese_simplified ] = "è¦å¯åŠ¨å®‰è£…ç¨‹åºæ¥æ£€æŸ¥æ‚¨åŸå…ˆçš„å®‰è£…ï¼Ÿ";
+    Text[ chinese_traditional ] = "Start setup application to check installation?";
+    Text[ turkish ] = "Start setup application to check installation?";
+    Text[ arabic ] = "Start setup application to check installation?";
+    Text[ catalan ] = "Start setup application to check installation?";
 };
 
 String STR_SETUP_ERR_CANNOT_START
 {
     Text = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell." ;
     Text [ ENGLISH ] = "Couldn't start setup application! Please start it manually." ;
+    Text[ english_us ] = "Couldn't start setup application! Please start it manually.";
+    Text[ portuguese ] = "Couldn't start setup application! Please start it manually.";
+    Text[ russian ] = "Couldn't start setup application! Please start it manually.";
+    Text[ greek ] = "Couldn't start setup application! Please start it manually.";
+    Text[ dutch ] = "Couldn't start setup application! Please start it manually.";
+    Text[ french ] = "Couldn't start setup application! Please start it manually.";
+    Text[ spanish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ finnish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ italian ] = "Couldn't start setup application! Please start it manually.";
+    Text[ danish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ swedish ] = "Det gick inte att starta setupprogrammet automatiskt! Starta det manuellt.";
+    Text[ polish ] = "Automatyczne uruchomienie aplikacji instalacyjnej nie powiod³o siê! Nale¿y uruchomiæ j¹ rêcznie.";
+    Text[ portuguese_brazilian ] = "Couldn't start setup application! Please start it manually.";
+    Text[ japanese ] = "Couldn't start setup application! Please start it manually.";
+    Text[ korean ] = "Couldn't start setup application! Please start it manually.";
+    Text[ chinese_simplified ] = "æ— æ³•è‡ªåŠ¨å¯åŠ¨å®‰è£…ç¨‹åºï¼è¯·æ‰‹åŠ¨å¯åŠ¨ã€‚";
+    Text[ chinese_traditional ] = "Couldn't start setup application! Please start it manually.";
+    Text[ turkish ] = "Couldn't start setup application! Please start it manually.";
+    Text[ arabic ] = "Couldn't start setup application! Please start it manually.";
+    Text[ catalan ] = "Couldn't start setup application! Please start it manually.";
 };
+
