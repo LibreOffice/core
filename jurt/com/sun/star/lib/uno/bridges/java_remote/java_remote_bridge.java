@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:22:30 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -80,7 +81,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Vector;
 
-
+import com.sun.star.lib.util.DisposeListener;
+import com.sun.star.lib.util.DisposeNotifier;
 import com.sun.star.lib.util.IInvokeHook;
 import com.sun.star.lib.util.IInvokable;
 
@@ -98,20 +100,15 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.DisposedException;
 
-import com.sun.star.lib.sandbox.Disposable;
-
 import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
 import com.sun.star.lib.uno.environments.remote.IReceiver;
 import com.sun.star.lib.uno.environments.remote.Job;
 import com.sun.star.lib.uno.environments.remote.ThreadId;
-import com.sun.star.lib.uno.environments.remote.ThreadPoolFactory;
+import com.sun.star.lib.uno.environments.remote.ThreadPoolManager;
 import com.sun.star.lib.uno.environments.remote.IThreadPool;
 
 import com.sun.star.lib.uno.typedesc.TypeDescription;
-
-import com.sun.star.lib.util.IStableObject;
-import com.sun.star.lib.util.IStableListener;
 
 import com.sun.star.registry.XRegistryKey;
 
@@ -130,14 +127,14 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.32 $ $ $Date: 2003-08-13 17:22:30 $
+ * @version     $Revision: 1.33 $ $ $Date: 2003-10-09 10:09:37 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
  */
 public class java_remote_bridge
-    implements IBridge, IReceiver, RequestHandler, XBridge, Disposable,
-        XComponent, IStableObject
+    implements IBridge, IReceiver, RequestHandler, XBridge, XComponent,
+        DisposeNotifier
 {
     /**
      * When set to true, enables various debugging output.
@@ -159,7 +156,7 @@ public class java_remote_bridge
         }
 
         public void run() {
-            _threadId = ThreadPoolFactory.getThreadId();
+            _threadId = _iThreadPool.getThreadId();
 
             if(__MessageDispatcher_run_hook != null) {
                 try {
@@ -314,7 +311,6 @@ public class java_remote_bridge
     protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
 
     protected Vector            _listeners;
-    protected Vector            _stableListeners;
 
     protected boolean           _negotiate;
     protected boolean           _forceSynchronous;
@@ -562,15 +558,14 @@ public class java_remote_bridge
             throw new com.sun.star.lang.IllegalArgumentException(getClass().getName());
 
         _listeners        = new Vector();
-        _stableListeners  = new Vector();
 
         proxyFactory = new ProxyFactory(this);
 
-        // create the message dispatcher and start it
-          _messageDispatcher  = new MessageDispatcher();
-        _messageDispatcher.start();
+        _iThreadPool = ThreadPoolManager.create();
 
-        _iThreadPool = ThreadPoolFactory.createThreadPool();
+        // create the message dispatcher and start it
+        _messageDispatcher = new MessageDispatcher();
+        _messageDispatcher.start();
     }
 
 
@@ -587,17 +582,6 @@ public class java_remote_bridge
             catch(com.sun.star.uno.RuntimeException runtimeException) {
                 // we are here not interested in any exceptions
             }
-        }
-    }
-
-    private void notifyStableListeners() {
-        EventObject eventObject = new EventObject(this);
-
-        Enumeration elements = _stableListeners.elements();
-        while(elements.hasMoreElements()) {
-            IStableListener iStableListener = (IStableListener)elements.nextElement();
-
-            iStableListener.deStable();
         }
     }
 
@@ -741,7 +725,9 @@ public class java_remote_bridge
         }
 
         notifyListeners();
-        notifyStableListeners();
+        for (Iterator i = disposeListeners.iterator(); i.hasNext();) {
+            ((DisposeListener) i.next()).notifyDispose(this);
+        }
 
         try {
             _messageDispatcher.terminate();
@@ -918,7 +904,7 @@ public class java_remote_bridge
 
         boolean goThroughThreadPool = false;
 
-        ThreadId threadId = ThreadPoolFactory.getThreadId();
+        ThreadId threadId = _iThreadPool.getThreadId();
         Object handle = null;
         try {
             synchronized(_outputStream) {
@@ -981,13 +967,15 @@ public class java_remote_bridge
         _listeners.removeElement(xEventListener);
     }
 
-
-    public void addStableListener(IStableListener stableListener) {
-        _stableListeners.addElement(stableListener);
-    }
-
-    public void removeStableListener(IStableListener stableListener) {
-        _stableListeners.removeElement(stableListener);
+    // @see NotifyDispose.addDisposeListener
+    public void addDisposeListener(DisposeListener listener) {
+        synchronized (this) {
+            if (state == STATE_ALIVE) {
+                disposeListeners.add(listener);
+                return;
+            }
+        }
+        listener.notifyDispose(this);
     }
 
     // This function must only be called while synchronized on this object:
@@ -999,4 +987,7 @@ public class java_remote_bridge
     }
 
     private final ProxyFactory proxyFactory;
+
+    // Access to disposeListeners must be synchronized on <CODE>this</CODE>:
+    private final ArrayList disposeListeners = new ArrayList();
 }
