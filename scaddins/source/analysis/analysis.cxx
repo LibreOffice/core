@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
+ *  last change: $Author: gt $ $Date: 2001-06-21 13:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,8 @@ AnalysisAddIn::~AnalysisAddIn()
     if( pCDL )
         delete pCDL;
 
-    if( pResMgr )
-        delete pResMgr;
+//  if( pResMgr )           no delete, because _all_ resource managers are deleted _before_ this dtor is called
+//      delete pResMgr;
 
     if( pDefLocales )
         delete pDefLocales;
