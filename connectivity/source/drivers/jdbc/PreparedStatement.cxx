@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:21:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,"com.sun.star.sdbcx.JPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pCon,const ::rtl::OUString& sql )
-    : OStatement_BASE2( pEnv, myObj, _pCon )
+java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql )
+    : OStatement_BASE2( pEnv, _pCon )
 {
     m_sSqlStatement = sql;
 }
@@ -134,7 +134,7 @@ jclass java_sql_PreparedStatement::getMyClass()
 
 void java_sql_PreparedStatement::saveClassRef( jclass pClass )
 {
-    if( SDBThreadAttach::IsJavaErrorOccured() || pClass==0  )
+    if( pClass==0  )
         return;
     // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
     theClass = pClass;
@@ -167,6 +167,7 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "()Z";
@@ -187,6 +188,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -205,8 +207,8 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
 void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
+    if( t.pEnv ){       // temporaere Variable initialisieren
+        createStatement();
         char * cSignature = "(ILjava/lang/String;)V";
         char * cMethodName = "setString";
         // Java-Call absetzen
@@ -236,6 +238,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "()Ljava/sql/ResultSet;";
@@ -256,6 +259,7 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(IZ)V";
         char * cMethodName = "setBoolean";
@@ -274,6 +278,7 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(IB)V";
         char * cMethodName = "setByte";
@@ -292,6 +297,7 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Date;)V";
@@ -317,6 +323,7 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Time;)V";
@@ -341,6 +348,7 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Timestamp;)V";
@@ -364,6 +372,7 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(ID)V";
         char * cMethodName = "setDouble";
@@ -382,6 +391,7 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(IF)V";
         char * cMethodName = "setFloat";
@@ -400,6 +410,7 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(II)V";
         char * cMethodName = "setInt";
@@ -418,6 +429,7 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(IJ)V";
         char * cMethodName = "setLong";
@@ -436,6 +448,7 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(II)V";
         char * cMethodName = "setNull";
@@ -454,6 +467,7 @@ void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 parameterIndex, con
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Clob;)V";
         char * cMethodName = "setClob";
@@ -476,6 +490,7 @@ void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 parameterIndex, con
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Blob;)V";
         char * cMethodName = "setBlob";
@@ -498,6 +513,7 @@ void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 parameterIndex, co
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Array;)V";
         char * cMethodName = "setArray";
@@ -520,6 +536,7 @@ void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 parameterIndex, cons
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/sql/Ref;)V";
@@ -543,6 +560,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/lang/Object;II)V";
@@ -566,6 +584,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/lang/Object;)V";
@@ -597,6 +616,7 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(IS)V";
         char * cMethodName = "setShort";
@@ -615,6 +635,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(I[B)V";
@@ -641,6 +662,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/io/InputStream;I)V";
@@ -683,6 +705,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "(ILjava/io/InputStream;I)V";
         char * cMethodName = "setBinaryStream";
@@ -722,6 +745,7 @@ void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::
 {
     SDBThreadAttach t;
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "()V";
@@ -739,6 +763,7 @@ void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(::com::sun::star:
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
 
         // temporaere Variable initialisieren
         char * cSignature = "()V";
@@ -757,6 +782,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "()V";
         char * cMethodName = "addBatch";
@@ -775,6 +801,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     ::com::sun::star::uno::Sequence< sal_Int32 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "()[I";
         char * cMethodName = "executeBatch";
@@ -801,6 +828,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
+        createStatement();
         // temporaere Variable initialisieren
         char * cSignature = "()Ljava/sql/ResultSetMetaData;";
         char * cMethodName = "getMetaData";
@@ -824,6 +852,42 @@ void SAL_CALL java_sql_PreparedStatement::acquire() throw()
 void SAL_CALL java_sql_PreparedStatement::release() throw()
 {
     OStatement_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+void java_sql_PreparedStatement::createStatement()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
+
+
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    if( t.pEnv && !object ){
+        // temporaere Variable initialisieren
+        char * cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
+        char * cMethodName = "prepareStatement";
+
+        jvalue args[1];
+        // Parameter konvertieren
+        args[0].l = convertwchar_tToJavaString(t.pEnv,m_sSqlStatement);
+        // Java-Call absetzen
+        jobject out = NULL;
+        jmethodID mID = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        if( mID )
+        {
+            out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
+        }
+        else
+        {
+            cSignature = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
+            mID = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+            if ( mID )
+                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l );
+        }
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
+        ThrowSQLException(t.pEnv,*this);
+        if ( out )
+            object = t.pEnv->NewGlobalRef( out );
+    } //t.pEnv
 }
 // -----------------------------------------------------------------------------
 
