@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-09 21:01:09 $
+ *  last change: $Author: os $ $Date: 2001-03-12 15:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 TabPage TP_NUMPARA
 {
     HelpID = HID_NUMPARA ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     GroupBox GB_NUMBER_STYLE
     {
