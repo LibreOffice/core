@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:40:34 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,10 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL.copy( 1 ) );
         pGrfNd->SetNewStreamName( aNewURL );
+
+        // #i15411# save-as will swap all graphics in; we need to swap
+        // them out again, to prevent excessive memory use
+        pGrfNd->SwapOut();
     }
 }
 
