@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:17:46 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _UNOMODEL_HXX
-#define _UNOMODEL_HXX
+#ifndef SD_UNO_MODEL_HXX
+#define SD_UNO_MODEL_HXX
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
@@ -134,11 +134,14 @@
 
 #include <unotools/servicehelper.hxx>
 
-class SdDrawDocShell;
 class SdDrawDocument;
 class SdPage;
 class List;
 class SdXCustomPresentations;
+
+namespace sd {
+class DrawDocShell;
+}
 
 /***********************************************************************
 *                                                                      *
@@ -164,7 +167,7 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
     friend class SdLayerManager;
 
 private:
-    SdDrawDocShell* pDocShell;
+    ::sd::DrawDocShell* pDocShell;
     SdDrawDocument* pDoc;
 
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
@@ -194,7 +197,7 @@ private:
 
     void initializeDocument();
 public:
-    SdXImpressDocument( SdDrawDocShell* pShell ) throw();
+    SdXImpressDocument( ::sd::DrawDocShell* pShell ) throw();
     SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard = sal_False ) throw();
     virtual ~SdXImpressDocument() throw();
 
@@ -202,7 +205,7 @@ public:
     virtual int operator==( const SdXImpressDocument& rModel ) const { return pDoc == rModel.pDoc; }
     virtual int operator!=( const SdXImpressDocument& rModel ) const { return pDoc != rModel.pDoc; }
 
-    SdDrawDocShell* GetDocShell() const { return pDocShell; }
+    ::sd::DrawDocShell* GetDocShell() const { return pDocShell; }
     SdDrawDocument* GetDoc() const { return pDoc; }
     sal_Bool IsImpressDocument() const { return mbImpressDoc; }
 
