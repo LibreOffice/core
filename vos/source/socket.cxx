@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-27 10:33:08 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 10:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,7 +619,7 @@ sal_Bool OSocket::create(TSocketType Type,
     // if this was a valid socket, decrease reference
     if ((m_pSockRef) && (m_pSockRef->release() == 0))
     {
-        osl_destroySocket((*m_pSockRef)());
+        osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
         m_pSockRef= 0;
     }
@@ -647,7 +647,7 @@ OSocket& OSocket::operator= (const OSocket& sock)
     // if this was a valid socket, decrease reference
     if ((m_pSockRef) && (m_pSockRef->release() == 0))
     {
-        osl_destroySocket((*m_pSockRef)());
+        osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
         m_pSockRef= 0;
     }
@@ -687,7 +687,7 @@ void OSocket::close()
 {
     if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
-        osl_destroySocket((*m_pSockRef)());
+        osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
     }
 
@@ -1238,7 +1238,7 @@ OAcceptorSocket::~OAcceptorSocket()
     {
         /* mfe: prepare for forthcoming api change */
         osl_closeSocket((*m_pSockRef)());
-        osl_destroySocket((*m_pSockRef)());
+        osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
     }
 }
@@ -1397,7 +1397,7 @@ void OStreamSocket::close()
     if (m_pSockRef && (*m_pSockRef)() && (m_pSockRef->release() == 0))
     {
         shutdown();
-        osl_destroySocket((*m_pSockRef)());
+        osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
     }
 
