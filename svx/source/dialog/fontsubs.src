@@ -1,0 +1,689 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fontsubs.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:27:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ------------------------------------------------------------------
+
+#include "svxids.hrc"
+#include "fontsubs.hrc"
+#include "helpid.hrc"
+
+ // pragma -------------------------------------------------------------------
+
+
+
+
+/**************************************************************************/
+/*                                                                        */
+/*                                                                        */
+/*                                                                        */
+/**************************************************************************/
+
+TabPage RID_SVX_FONT_SUBSTITUTION
+{
+    HelpID = HID_OFA_FONT_SUBSTITUTION ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    CheckBox CB_USETABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 248 , 10 ) ;
+        TEXT = "~Ersetzungstabelle anwenden" ;
+        TEXT [ English ] = "Use font ~substitution table" ;
+        TabStop = TRUE ;
+            TEXT[ italian ] = "~Applica tabella di sostituzione";
+        TEXT[ portuguese_brazilian ] = "~Aplicar tabela de substituição de fontes";
+        TEXT[ portuguese ] = "~Aplicar tabela de substituição";
+        TEXT[ danish ] = "~Anvend erstatningstabel";
+        TEXT[ french ] = "~Utiliser la table de remplacement";
+        TEXT[ swedish ] = "Använd ~ersättningstabell";
+        TEXT[ dutch ] = "V~ervangende tabel gebruiken";
+        TEXT[ spanish ] = "Utilizar la tabla de sustituciones";
+        TEXT[ english_us ] = "~Apply replacement table";
+        TEXT[ chinese_simplified ] = "ä½¿ç”¨æ›¿æ¢è¡¨(~A)";
+        TEXT[ russian ] = "Ïğèìåíèòü òàáëèöó çàìåí";
+        TEXT[ polish ] = "~Zastosuj tabelê zamian";
+        TEXT[ japanese ] = "ç½®æ›ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ä½¿ã†(~A)";
+        TEXT[ chinese_traditional ] = "ä½¿ç”¨æ›¿ä»£æ¸…å–®(~A)";
+        TEXT[ arabic ] = "ÇÓÊÎÏÇã ŞÇÆãÉ ÇáÇÓÊÈÏÇá";
+        TEXT[ greek ] = "~ÅöáñìïãŞ ôïõ ğßíáêá áíôéêáôÜóôáóçò";
+        TEXT[ korean ] = "ëŒ€ì²´ í…Œì´ë¸” ì‚¬ìš©(~A)";
+        TEXT[ turkish ] = "Değiştirme tablosunu kullan";
+        TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "~Aplica la taula de reemplaçament";
+        TEXT[ finnish ] = "Käytä korvaus~taulukkoa";
+        TEXT[ thai ] = "à¹ƒ~à¸Šà¹‰à¸à¸²à¸£à¹à¸—à¸™à¸—à¸µà¹ˆà¸•à¸²à¸£à¸²à¸‡";
+        TEXT[ czech ] = "PouÅ¾Ã­t tabulku nÃ¡hrad";
+        TEXT[ hebrew ] = "~Ersetzungstabelle anwenden";
+        TEXT[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹ ~à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
+        TEXT[ slovak ] = "PouÅ¾iÅ¥ t~abuÄ¾ku nÃ¡hrad";
+        TEXT[ hungarian ] = "~CseretÃ¡blÃ¡zat alkalmazÃ¡sa";
+        TEXT[ slovenian ] = "~Uporabi tabelo zamenjav";
+    };
+    FixedText FT_FONT1
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "~Schriftart" ;
+        TEXT [ English ] = "~Font" ;
+        Left = TRUE ;
+        TEXT[ italian ] = "~Tipo di carattere";
+        TEXT[ portuguese_brazilian ] = "~Fonte";
+        TEXT[ portuguese ] = "~Tipo de letra";
+        TEXT[ danish ] = "~Skrifttype";
+        TEXT[ french ] = "Police";
+        TEXT[ swedish ] = "Tecken~snitt";
+        TEXT[ dutch ] = "~Lettertype";
+        TEXT[ spanish ] = "~Fuente";
+        TEXT[ english_us ] = "~Font";
+        TEXT[ chinese_simplified ] = "å­—ä½“(~F)";
+        TEXT[ russian ] = "Øğèôò";
+        TEXT[ polish ] = "~Czcionka";
+        TEXT[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡(~F)";
+        TEXT[ chinese_traditional ] = "å­—å‹(~F)";
+        TEXT[ arabic ] = "äæÚ ÇáÎØ";
+        TEXT[ greek ] = "ÃñáììáôïóåéñÜ";
+        TEXT[ korean ] = "ê¸€ê¼´(~F)";
+        TEXT[ turkish ] = "~Yazıtipi";
+        TEXT[ language_user1 ] = " ";
+        TEXT[ catalan ] = "Tipus de ~lletra";
+        TEXT[ finnish ] = "~Fontti";
+        TEXT[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
+        TEXT[ czech ] = "PÃ­smo";
+        TEXT[ hebrew ] = "â€®×’×•×¤×Ÿâ€¬";
+        TEXT[ hindi ] = "~à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥";
+        TEXT[ slovak ] = "~PÃ­smo";
+        TEXT[ hungarian ] = "~BetÅ±";
+        TEXT[ slovenian ] = "~Pisava";
+    };
+    ComboBox CB_FONT1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+        DDExtraWidth = TRUE ;
+        DropDown = TRUE;
+        Sort = TRUE;
+    };
+    FixedText FT_FONT2
+    {
+        Pos = MAP_APPFONT ( 110 , 20 ) ;
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+        Text = "Ersetzen ~durch" ;
+        Text [ ENGLISH ] = "~Replace by" ;
+        Left = TRUE ;
+        Text[ italian ] = "Sostituisci con";
+        Text[ portuguese_brazilian ] = "~Substituir por";
+        Text[ portuguese ] = "~Substituir por";
+        Text[ danish ] = "~Erstat med";
+        Text[ french ] = "Remplacer par";
+        Text[ swedish ] = "Ersätt ~med";
+        Text[ dutch ] = "Vervangen ~door";
+        Text[ spanish ] = "Reemplazar ~por";
+        Text[ english_us ] = "Re~place with";
+        Text[ chinese_simplified ] = "æ›¿æ¢æˆ(~P)";
+        Text[ russian ] = "Çàìåíèòü íà";
+        Text[ polish ] = "Z~amieñ na";
+        Text[ japanese ] = "ç½®æ›å€™è£œ(~P)";
+        Text[ chinese_traditional ] = "æ›´æ›¿æˆ(~P)";
+        Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
+        Text[ korean ] = "ëŒ€ì²´ ê¸€ê¼´(~P)";
+        Text[ turkish ] = "~Yerine konulan:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ree~mplaça amb";
+        Text[ finnish ] = "~Korvaa kohteella";
+        Text[ thai ] = "à¹à¸—~à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢";
+        Text[ czech ] = "Nahradit za";
+        Text[ hebrew ] = "Ersetzen ~durch";
+        Text[ hindi ] = "à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿~à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
+        Text[ slovak ] = "~ZameniÅ¥ za";
+        Text[ hungarian ] = "Cs~ere erre";
+        Text[ slovenian ] = "Za~menjaj z";
+    };
+    ComboBox CB_FONT2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 110 , 33 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
+        TabStop = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+        DDExtraWidth = TRUE ;
+        DropDown = TRUE;
+        Sort = TRUE;
+    };
+    ImageList IL_ICON
+    {
+        ImageBitmap = Bitmap { File = "nu_mfmt.bmp" ; };
+        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+        IdList =
+        {
+            BT_SUBSTAPPLY ;
+            BT_SUBSTDELETE ;
+        };
+        IdCount = { 2 ; };
+    };
+    ToolBox TBX_SUBSTNEWDEL
+    {
+        Pos = MAP_APPFONT ( 214 , 33 ) ;
+        SVLook = TRUE ;
+        Border = FALSE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = BT_SUBSTAPPLY ;
+                HelpID = HID_OFA_SUBST_APPLY ;
+                Text = "Übernehmen" ;
+                Text [ English ] = "Apply" ;
+                Text [ norwegian ] = "Benytt" ;
+                Text [ italian ] = "Applica" ;
+                Text [ portuguese_brazilian ] = "Aplicar" ;
+                Text [ portuguese ] = "Aplicar" ;
+                Text [ finnish ] = "Käytä" ;
+                Text [ danish ] = "Anvend" ;
+                Text [ french ] = "Appliquer" ;
+                Text [ swedish ] = "Överta" ;
+                Text [ dutch ] = "Overnemen" ;
+                Text [ spanish ] = "Aplicar" ;
+                Text [ english_us ] = "Apply" ;
+                Text[ chinese_simplified ] = "é‡‡ç”¨";
+                Text[ russian ] = "Ïğèìåíèòü";
+                Text[ polish ] = "Zastosuj";
+                Text[ japanese ] = "é©ç”¨";
+                Text[ chinese_traditional ] = "æ¡ç”¨";
+                Text[ arabic ] = "ÊØÈíŞ";
+                Text[ greek ] = "ÅöáñìïãŞ";
+                Text[ korean ] = "ì ìš©";
+                Text[ turkish ] = "Uygula";
+                Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Aplica";
+                Text[ thai ] = "à¹ƒà¸Šà¹‰";
+                Text[ czech ] = "PouÅ¾Ã­t";
+                Text[ hebrew ] = "â€®×™×™×©×•×â€¬";
+                Text[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
+                Text[ slovak ] = "PouÅ¾iÅ¥";
+                Text[ hungarian ] = "Alkalmaz";
+                Text[ slovenian ] = "Uporabi";
+            };
+            ToolBoxItem
+            {
+                Identifier = BT_SUBSTDELETE ;
+                HelpID = HID_OFA_SUBST_DELETE ;
+                Text = "Löschen" ;
+                Text [ ENGLISH ] = "Delete" ;
+                Text [ norwegian ] = "Slett" ;
+                Text [ italian ] = "Elimina" ;
+                Text [ portuguese_brazilian ] = "Excluir" ;
+                Text [ portuguese ] = "Eliminar" ;
+                Text [ finnish ] = "Poista" ;
+                Text [ danish ] = "Slet" ;
+                Text [ french ] = "Supprimer" ;
+                Text [ swedish ] = "Radera" ;
+                Text [ dutch ] = "Wissen" ;
+                Text [ spanish ] = "Borrar" ;
+                Text [ english_us ] = "Delete" ;
+                Text[ chinese_simplified ] = "åˆ é™¤";
+                Text[ russian ] = "Óäàëèòü";
+                Text[ polish ] = "Usuñ";
+                Text[ japanese ] = "å‰Šé™¤";
+                Text[ chinese_traditional ] = "åˆªé™¤";
+                Text[ arabic ] = "ÍĞİ";
+                Text[ greek ] = "ÄéáãñáöŞ";
+                Text[ korean ] = "ì‚­ì œ";
+                Text[ turkish ] = "Sil";
+                Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Suprimeix";
+                Text[ thai ] = "à¸¥à¸š";
+                Text[ czech ] = "Smazat";
+                Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+                Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
+                Text[ slovak ] = "ZmazaÅ¥";
+                Text[ hungarian ] = "TÃ¶rlÃ©s";
+                Text[ slovenian ] = "IzbriÅ¡i";
+            };
+        };
+    };
+    Control CLB_SUBSTITUTES
+    {
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , 75 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_SOURCEVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Schrifteinstellungen für HTML- und Basic-Quelltexte" ;
+        Text [ english_us ] = "Font settings for HTML and Basic sources" ;
+        Text[ portuguese ] = "Font settings for HTML and Basic sources";
+        Text[ russian ] = "Font settings for HTML and Basic sources";
+        Text[ greek ] = "Font settings for HTML and Basic sources";
+        Text[ dutch ] = "Lettertype-instellingen voor HTML en Basic broncode";
+        Text[ french ] = "Paramètres des polices pour les sources HTML et Basic";
+        Text[ spanish ] = "Configuración de fuentes para los textos fuente HTML y Basic";
+        Text[ finnish ] = "Font settings for HTML and Basic sources";
+        Text[ italian ] = "Impostazione caratteri per testi sorgente HTML e Basic";
+        Text[ danish ] = "Skrifttypeindstillinger for kildtekster med HTML og Basic";
+        Text[ swedish ] = "Teckensnittsinställningar för HTML- och Basic-källtexter";
+        Text[ polish ] = "Font settings for HTML and Basic sources";
+        Text[ portuguese_brazilian ] = "Configurações das fontes para edição de código HTML e BASIC";
+        Text[ japanese ] = "HTML ã¨ Basic ã®ã‚½ãƒ¼ã‚¹ç”¨ãƒ•ã‚©ãƒ³ãƒˆè¨­å®š";
+        Text[ korean ] = "HTML ë° Basic ì›ë³¸ìš© ê¸€ê¼´ ì„¤ì •";
+        Text[ chinese_simplified ] = "HTML åŠ Basic æºæ–‡æœ¬çš„å­—ä½“è®¾å®š";
+        Text[ chinese_traditional ] = "HTML åŠ Basic åŸå§‹æª”çš„å­—å‹è¨­å®š";
+        Text[ turkish ] = "HTML ve Temel kaynaklar için ayarlar";
+        Text[ arabic ] = "Font settings for HTML and Basic sources";
+        Text[ catalan ] = "Font settings for HTML and Basic sources";
+        Text[ thai ] = "Font settings for HTML and Basic sources";
+        Text[ czech ] = "NastavenÃ­ pÃ­sma pro zdroje HTML a Basic";
+        Text[ hebrew ] = "Schrifteinstellungen fÃ¼r HTML- und Basic-Quelltexte";
+        Text[ hindi ] = "Font settings for HTML and Basic sources";
+        Text[ slovak ] = "Nastavenia pÃ­sma pre HTML a Basic.";
+        Text[ hungarian ] = "BetÅ±kÃ©szlet-beÃ¡llÃ­tÃ¡sok HTML- Ã©s Basic-forrÃ¡sokhoz.";
+        Text[ slovenian ] = "Nastavitve pisav za HTML in Basic izvorno kodo";
+    };
+    FixedText FT_FONTNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 142 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
+        Text = "Schriftarten" ;
+        Text [ english_us ] = "Fonts" ;
+        Text[ portuguese ] = "Tipos de letra";
+        Text[ russian ] = "Òèïû øğèôòà";
+        Text[ greek ] = "Ôığïò ãñáììáôïóåéñÜò";
+        Text[ dutch ] = "Lettertypen";
+        Text[ french ] = "Polices";
+        Text[ spanish ] = "Fuentes";
+        Text[ finnish ] = "Fontit";
+        Text[ italian ] = "Tipi di carattere";
+        Text[ danish ] = "Skrifttyper";
+        Text[ swedish ] = "Teckensnitt";
+        Text[ polish ] = "Czcionki";
+        Text[ portuguese_brazilian ] = "Fontes";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡";
+        Text[ korean ] = "ê¸€ê¼´";
+        Text[ chinese_simplified ] = "å­—ä½“";
+        Text[ chinese_traditional ] = "å­—å‹";
+        Text[ turkish ] = "Yazıtipleri";
+        Text[ arabic ] = "ÃäæÇÚ ÇáÎØ";
+        Text[ catalan ] = "Tipus de lletra";
+        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
+        Text[ czech ] = "PÃ­sma";
+        Text[ hebrew ] = "Schriftarten";
+        Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾";
+        Text[ slovak ] = "PÃ­sma";
+        Text[ hungarian ] = "BetÅ±kÃ©szletek";
+        Text[ slovenian ] = "Pisave";
+    };
+    ListBox LB_FONTNAME
+    {
+        Pos = MAP_APPFONT ( 65 , 140 ) ;
+        Size = MAP_APPFONT ( 100 , 68 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE;
+    };
+    CheckBox  CB_NONPROP
+    {
+        Pos = MAP_APPFONT ( 65 , 155 ) ;
+        Size = MAP_APPFONT ( 180 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Nur die nicht-proportionalen Schriften" ;
+        Text [ english_us ] = "Non-proportional fonts only" ;
+        Text[ portuguese ] = "Non-proportional fonts only";
+        Text[ russian ] = "Non-proportional fonts only";
+        Text[ greek ] = "Non-proportional fonts only";
+        Text[ dutch ] = "Alleen niet-proportionele lettertypen";
+        Text[ french ] = "Uniquement les polices non proportionnelles";
+        Text[ spanish ] = "Sólo fuentes no proporcionales";
+        Text[ finnish ] = "Non-proportional fonts only";
+        Text[ italian ] = "Solo caratteri non proporzionali";
+        Text[ danish ] = "Kun ikke-proportionelle skrifttyper";
+        Text[ swedish ] = "Bara teckensnitt som inte är proportionella";
+        Text[ polish ] = "Non-proportional fonts only";
+        Text[ portuguese_brazilian ] = "Somente fontes não proporcionais";
+        Text[ japanese ] = "ç­‰å¹…ãƒ•ã‚©ãƒ³ãƒˆã®ã¿";
+        Text[ korean ] = "ë¹„ê°€ë³€ í­ ê¸€ê¼´ë§Œ";
+        Text[ chinese_simplified ] = "ä»…å®½åº¦ç›¸ç­‰çš„å­—ä½“";
+        Text[ chinese_traditional ] = "åƒ…å¯¬åº¦ç›¸ç­‰çš„å­—å‹";
+        Text[ turkish ] = "Sadece orantısız yazı tipleri";
+        Text[ arabic ] = "Non-proportional fonts only";
+        Text[ catalan ] = "Non-proportional fonts only";
+        Text[ thai ] = "Non-proportional fonts only";
+        Text[ czech ] = "Pouze neproporcionÃ¡lnÃ­ pÃ­sma";
+        Text[ hebrew ] = "Nur die nicht-proportionalen Schriften";
+        Text[ hindi ] = "Non-proportional fonts only";
+        Text[ slovak ] = "Len neproporcionÃ¡lne pÃ­sma";
+        Text[ hungarian ] = "Csak rÃ¶gzÃ­tett szÃ©lessÃ©gÅ± betÅ±kÃ©szletek";
+        Text[ slovenian ] = "Samo nespremenljive pisave";
+    };
+    FixedText FT_FONTHEIGHT
+    {
+        Pos = MAP_APPFONT ( 6 , 171 ) ;
+        Size = MAP_APPFONT ( 57 , 8 ) ;
+        Text = "~Größe";
+        Text [english_us] ="~Size";
+        Text[ portuguese ] = "~Tamanho";
+        Text[ russian ] = "Ğàçìåğ";
+        Text[ greek ] = "Ìİ~ãåèïò";
+        Text[ dutch ] = "~Grootte";
+        Text[ french ] = "Taille";
+        Text[ spanish ] = "~Tamaño";
+        Text[ finnish ] = "Koko";
+        Text[ italian ] = "~Dimensione";
+        Text[ danish ] = "~Størrelse";
+        Text[ swedish ] = "St~orlek";
+        Text[ polish ] = "Rozmiar";
+        Text[ portuguese_brazilian ] = "~Tamanho";
+        Text[ japanese ] = "ã‚µã‚¤ã‚º(~S)";
+        Text[ korean ] = "í¬ê¸°(~S)";
+        Text[ chinese_simplified ] = "å¤§å°(~S)";
+        Text[ chinese_traditional ] = "å¤§å°(~S)";
+        Text[ turkish ] = "~Boyut";
+        Text[ arabic ] = "ÇáÍÌã";
+        Text[ catalan ] = "~Mida";
+        Text[ thai ] = "~à¸‚à¸™à¸²à¸”";
+        Text[ czech ] = "Velikost";
+        Text[ hebrew ] = "â€®×’×•×“×œâ€¬";
+        Text[ hindi ] = "~à¤ªà¤°à¤¿à¤®à¤¾à¤£";
+        Text[ slovak ] = "VeÄ¾ko~sÅ¥";
+        Text[ hungarian ] = "~MÃ©ret";
+        Text[ slovenian ] = "Veliko~st";
+    };
+    ListBox LB_FONTHEIGHT
+    {
+        Pos = MAP_APPFONT ( 65 , 169 ) ;
+        Size = MAP_APPFONT ( 30 , 68 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE;
+    };
+    String STR_HEADER1
+    {
+        Text = "Immer" ;
+        Text [ English ] = "Always" ;
+        Text[ italian ] = "Sempre";
+        Text[ portuguese_brazilian ] = "Sempre";
+        Text[ portuguese ] = "Sempre";
+        Text[ danish ] = "Altid";
+        Text[ french ] = "Toujours";
+        Text[ swedish ] = "Alltid";
+        Text[ dutch ] = "Altijd";
+        Text[ spanish ] = "Siempre";
+        Text[ english_us ] = "Always";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨";
+        Text[ russian ] = "Âñåãäà";
+        Text[ polish ] = "Zawsze";
+        Text[ japanese ] = "å¸¸ã«";
+        Text[ chinese_traditional ] = "è‡ªå‹•";
+        Text[ arabic ] = "ÏÇÆãÇğ";
+        Text[ greek ] = "ĞÜíôá";
+        Text[ korean ] = "í•­ìƒ";
+        Text[ turkish ] = "Her zaman";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Sempre";
+        Text[ finnish ] = "Aina";
+        Text[ thai ] = "à¸ªà¸¡à¹ˆà¸³à¹€à¸ªà¸¡à¸­";
+        Text[ czech ] = "VÅ¾dy";
+        Text[ hebrew ] = "Immer";
+        Text[ hindi ] = "à¤¹à¤®à¥‡à¤¶à¤¾";
+        Text[ slovak ] = "VÅ¾dy";
+        Text[ hungarian ] = "Mindig";
+        Text[ slovenian ] = "Vedno";
+    };
+    String STR_HEADER2
+    {
+        Text = "Bildschirm" ;
+        Text [ English ] = "Screen" ;
+        Text[ italian ] = "Schermo";
+        Text[ portuguese_brazilian ] = "Tela";
+        Text[ portuguese ] = "Ecrã";
+        Text[ danish ] = "Skærm";
+        Text[ french ] = "Écran";
+        Text[ swedish ] = "Bildskärm";
+        Text[ dutch ] = "Scherm";
+        Text[ spanish ] = "Pantalla";
+        Text[ english_us ] = "Screen";
+        Text[ chinese_simplified ] = "å±å¹•";
+        Text[ russian ] = "İêğàí";
+        Text[ polish ] = "Ekran";
+        Text[ japanese ] = "ç”»é¢";
+        Text[ chinese_traditional ] = "è¢å¹•";
+        Text[ arabic ] = "ÇáÔÇÔÉ";
+        Text[ greek ] = "Ïèüíç";
+        Text[ korean ] = "í™”ë©´";
+        Text[ turkish ] = "Ekran";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pantalla";
+        Text[ finnish ] = "Näyttö";
+        Text[ thai ] = "à¸ˆà¸­à¸ à¸²à¸";
+        Text[ czech ] = "Obrazovka";
+        Text[ hebrew ] = "Bildschirm";
+        Text[ hindi ] = "à¤ªà¤°à¤¦à¤¾";
+        Text[ slovak ] = "Obrazovka";
+        Text[ hungarian ] = "KÃ©pernyÅ‘n";
+        Text[ slovenian ] = "Zaslon";
+    };
+    String STR_HEADER3
+    {
+        Text = "Schriftart" ;
+        Text [ English ] = "Font" ;
+        Text[ italian ] = "Tipo di carattere";
+        Text[ portuguese_brazilian ] = "Fonte";
+        Text[ portuguese ] = "Tipo de letra";
+        Text[ danish ] = "Skrifttype";
+        Text[ french ] = "Police";
+        Text[ swedish ] = "Teckensnitt";
+        Text[ dutch ] = "Lettertype";
+        Text[ spanish ] = "Fuente";
+        Text[ english_us ] = "Font";
+        Text[ chinese_simplified ] = "å­—ä½“";
+        Text[ russian ] = "Øğèôò";
+        Text[ polish ] = "Czcionka";
+        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã®ç¨®é¡";
+        Text[ chinese_traditional ] = "å­—å‹";
+        Text[ arabic ] = "äæÚ ÇáÎØ";
+        Text[ greek ] = "ÃñáììáôïóåéñÜ";
+        Text[ korean ] = "ê¸€ê¼´";
+        Text[ turkish ] = "Yazıtipi";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipus de lletra";
+        Text[ finnish ] = "Fontti";
+        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
+        Text[ czech ] = "PÃ­smo";
+        Text[ hebrew ] = "â€®×’×•×¤×Ÿâ€¬";
+        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤°";
+        Text[ slovak ] = "PÃ­smo";
+        Text[ hungarian ] = "BetÅ±kÃ©szlet";
+        Text[ slovenian ] = "Pisava";
+    };
+    String STR_HEADER4
+    {
+        Text = "Ersetzen durch" ;
+        Text [ English ] = "Replace by" ;
+        Text[ italian ] = "Sostituisci con";
+        Text[ portuguese_brazilian ] = "Substituir por";
+        Text[ portuguese ] = "Substituir por";
+        Text[ danish ] = "Erstat med";
+        Text[ french ] = "Remplacer par";
+        Text[ swedish ] = "Ersätt med";
+        Text[ dutch ] = "Vervangen door";
+        Text[ spanish ] = "Reemplazar por";
+        Text[ english_us ] = "Replace with";
+        Text[ chinese_simplified ] = "æ›¿æ¢ä¸º";
+        Text[ russian ] = "Çàìåíèòü íà";
+        Text[ polish ] = "Zamieñ na";
+        Text[ japanese ] = "ç½®æ›å€™è£œ";
+        Text[ chinese_traditional ] = "æ›´æ›¿æˆ";
+        Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
+        Text[ korean ] = "ëŒ€ì²´ ê¸€ê¼´";
+        Text[ turkish ] = "Yerine konulan:";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Reemplaça amb";
+        Text[ finnish ] = "Korvaa kohteella";
+        Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢";
+        Text[ czech ] = "Nahradit za";
+        Text[ hebrew ] = "â€®×•×œ×”×—×œ×™×£ ×‘â€¬";
+        Text[ hindi ] = "à¤¸à¥‡ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¿à¤¤ à¤•à¤°à¥‹";
+        Text[ slovak ] = "NahradiÅ¥ za";
+        Text[ hungarian ] = "Csere erre";
+        Text[ slovenian ] = "Zamenjaj z";
+    };
+    String STR_AUTOMATIC
+    {
+        Text = "Automatisch" ;
+        Text[ english_us ] = "Automatic";
+        Text[ portuguese ] = "Automaticamente";
+        Text[ russian ] = "Àâòîìàòè÷åñêè";
+        Text[ greek ] = "Áõôüìáôá";
+        Text[ dutch ] = "Velden en diagrammen actualiseren";
+        Text[ french ] = "Automatique";
+        Text[ spanish ] = "Automático";
+        Text[ finnish ] = "Päivitä automaattisesti";
+        Text[ italian ] = "In modo automatico";
+        Text[ danish ] = "Automatisk";
+        Text[ swedish ] = "Automatiskt";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "automático";
+        Text[ japanese ] = "è‡ªå‹•";
+        Text[ korean ] = "ìë™";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨";
+        Text[ chinese_traditional ] = "è‡ªå‹•";
+        Text[ turkish ] = "Otomatik";
+        Text[ arabic ] = "ÊáŞÇÆí";
+        Text[ catalan ] = "Estils personalitzats";
+        Text[ thai ] = "à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+        Text[ czech ] = "AutomatickÃ©";
+        Text[ hebrew ] = "â€®××•×˜×•××˜×™â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡";
+        Text[ slovak ] = "Automaticky";
+        Text[ hungarian ] = "Automatikus";
+        Text[ slovenian ] = "Samodejno";
+    };
+    Bitmap CHKBUT_UNCHECKED
+    {
+        File = "chkun.bmp" ;
+    };
+    Bitmap CHKBUT_CHECKED
+    {
+        File = "chkch.bmp" ;
+    };
+    Bitmap CHKBUT_HICHECKED
+    {
+        File = "chkchhi.bmp" ;
+    };
+    Bitmap CHKBUT_HIUNCHECKED
+    {
+        File = "chkunhi.bmp" ;
+    };
+    Bitmap CHKBUT_TRISTATE
+    {
+        File = "chktri.bmp" ;
+    };
+    Bitmap CHKBUT_HITRISTATE
+    {
+        File = "chktrihi.bmp" ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
