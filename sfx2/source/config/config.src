@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:25:35 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 14:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,16 @@ String STR_EVENTCONFIG
     Text [ danish ] = "Tildel begivenheder" ;
     Text [ portuguese ] = "Atribuir eventos" ;
     Text [ portuguese_brazilian ] = "Ereigniszuordnung" ;
-    Text[ chinese_simplified ] = "Ö¸¶¨ÊÂ¼ş";
+    Text[ chinese_simplified ] = "æŒ‡å®šäº‹ä»¶";
     Text[ russian ] = "Óïîğÿäî÷åíèå ñîáûòèÿ";
     Text[ polish ] = "Przyporz¹dkowanie wydarzeñ";
-    Text[ japanese ] = "ÀsŒ_‹@‚Ì”z’u";
-    Text[ chinese_traditional ] = "³]©w°Ê§@";
+    Text[ japanese ] = "å®Ÿè¡Œå¥‘æ©Ÿã®é…ç½®";
+    Text[ chinese_traditional ] = "è¨­å®šå‹•ä½œ";
     Text[ arabic ] = "ÊÚííä ÇáÃÍÏÇË";
     Text[ dutch ] = "Gebeurtenis toewijzen";
-    Text[ chinese_simplified ] = "Ö¸¶¨ÊÂ¼ş";
+    Text[ chinese_simplified ] = "æŒ‡å®šäº‹ä»¶";
     Text[ greek ] = "Áíôéóôïß÷éóç ãåãïíüôïò";
-    Text[ korean ] = "ÀÌº¥Æ® ¹èÁ¤";
+    Text[ korean ] = "ì´ë²¤íŠ¸ ë°°ì •";
     Text[ turkish ] = "Olay ata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Asignar acontecimientos";
@@ -102,16 +102,16 @@ String STR_FILTERNAME_CFG
     Text [ danish ] = "Konfiguration" ;
     Text [ portuguese ] = "Configuração" ;
     Text [ portuguese_brazilian ] = "Konfiguration" ;
-    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ chinese_simplified ] = "é…ç½®";
     Text[ russian ] = "Êîíôèãóğàöèÿ";
     Text[ polish ] = "Konfiguracja";
-    Text[ japanese ] = "İ’è";
-    Text[ chinese_traditional ] = "°t¸m";
+    Text[ japanese ] = "è¨­å®š";
+    Text[ chinese_traditional ] = "é…ç½®";
     Text[ arabic ] = "Êßæíä";
     Text[ dutch ] = "Configuratie";
-    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ chinese_simplified ] = "é…ç½®";
     Text[ greek ] = "ĞáñÜìåôñïé";
-    Text[ korean ] = "±¸¼º";
+    Text[ korean ] = "êµ¬ì„±";
     Text[ turkish ] = "Konfigürasyon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Configuración";
@@ -134,11 +134,11 @@ ModalDialog DLG_MACROQUERY
     TEXT[ swedish ] = "Utför makro";
     TEXT[ dutch ] = "Macro uitvoeren";
     TEXT[ spanish ] = "Ejecutar macro";
-    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
+    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
     TEXT[ russian ] = "Âûïîëíèòü ìàêğîñ";
     TEXT[ polish ] = "Wykonaj makro";
-    TEXT[ japanese ] = "Ï¸Û‚ÌÀs";
-    TEXT[ chinese_traditional ] = "°õ¦æ¥¨¶°";
+    TEXT[ japanese ] = "ï¾ï½¸ï¾›ã®å®Ÿè¡Œ";
+    TEXT[ chinese_traditional ] = "åŸ·è¡Œå·¨é›†";
     TEXT[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
     FixedImage ICN_MESSAGE
     {
@@ -161,16 +161,16 @@ ModalDialog DLG_MACROQUERY
         Text [ french ] = "Un événement s'est produit pour lequel une macro a été configurée. Désirez-vous l'exécuter?" ;
         Text [ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?" ;
         Text [ portuguese ] = "Produziu-se um evento para o qual foi configurada uma macro. Deseja executá-la?" ;
-        Text[ chinese_simplified ] = "²Ù×÷ÃüÁîÖ±½ÓÀ´×ÔÒ»¸öºê£¬ÄúÒªÖ´ĞĞÕâ¸öºê£¿";
+        Text[ chinese_simplified ] = "æ“ä½œå‘½ä»¤ç›´æ¥æ¥è‡ªä¸€ä¸ªå®ï¼Œæ‚¨è¦æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
         Text[ russian ] = "Çàïóùåíî ñîáûòèå, äëÿ êîòîğîãî ñêîíôèãóğèğîâàí ìàêğîñ. Âû õîòèòå âûïîëíèòü ıòîò ìàêğîñ?";
         Text[ polish ] = "Zosta³o uruchomione wydarzenie, do którego zosta³o skonfigurowane makro. Czy chcesz wykonaæ to makro?";
-        Text[ japanese ] = "Ï¸Û‚Åİ’è‚µ‚½ÀsŒ_‹@‚ªŠJn‚³‚ê‚Ü‚µ‚½B‚±‚ÌÏ¸Û‚ğÀs‚µ‚Ü‚·‚©?";
-        Text[ chinese_traditional ] = "°Ê§@«ü¥Oª½±µ¨Ó©ó¤@­Ó¥¨¶°¡C­n°õ¦æ³o­Ó¥¨¶°¡H";
+        Text[ japanese ] = "ï¾ï½¸ï¾›ã§è¨­å®šã—ãŸå®Ÿè¡Œå¥‘æ©ŸãŒé–‹å§‹ã•ã‚Œã¾ã—ãŸã€‚ã“ã®ï¾ï½¸ï¾›ã‚’å®Ÿè¡Œã—ã¾ã™ã‹?";
+        Text[ chinese_traditional ] = "å‹•ä½œæŒ‡ä»¤ç›´æ¥ä¾†æ–¼ä¸€å€‹å·¨é›†ã€‚è¦åŸ·è¡Œé€™å€‹å·¨é›†ï¼Ÿ";
         Text[ arabic ] = "Êã ÈÏÁ ÍÏË ãõßæøä Úáíå ãÇßÑæ. åá ÊÑíÏ ÊäİíĞ åĞÇ ÇáãÇßÑæ¿";
         Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
-        Text[ chinese_simplified ] = "²Ù×÷ÃüÁîÖ±½ÓÀ´×ÔÒ»¸öºê£¬ÄúÒªÖ´ĞĞÕâ¸öºê£¿";
+        Text[ chinese_simplified ] = "æ“ä½œå‘½ä»¤ç›´æ¥æ¥è‡ªä¸€ä¸ªå®ï¼Œæ‚¨è¦æ‰§è¡Œè¿™ä¸ªå®ï¼Ÿ";
         Text[ greek ] = "Åêôåëİóôçêå İíá ãåãïíüò, ôï ïğïßï óõíäİåôáé ìå ìéá ìáêñïåíôïëŞ. Èİëåôå íá åêôåëåóôåß ç ìáêñïåíôïëŞ áõôŞ;";
-        Text[ korean ] = "¸ÅÅ©·Î°¡ ±¸¼ºµÈ ÀÌº¥Æ®°¡ ½ÃÇàµÇ¾ú½À´Ï´Ù. ÀÌ ¸ÅÅ©·Î¸¦ ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ korean ] = "ë§¤í¬ë¡œê°€ êµ¬ì„±ëœ ì´ë²¤íŠ¸ê°€ ì‹œí–‰ë˜ì—ˆìŠµë‹ˆë‹¤. ì´ ë§¤í¬ë¡œë¥¼ ì‹¤í–‰í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
         Text[ turkish ] = "Başlatılan olay ile ilgili bir yapılandırılmış bir makro mevcut. Bu makroyu çalıştırmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?";
@@ -191,16 +191,16 @@ ModalDialog DLG_MACROQUERY
         Text [ spanish ] = "Desactivar las advertencias para este documento" ;
         Text [ french ] = "Ne plus afficher d'avertissement pour ce document" ;
         Text [ dutch ] = "Voor dit document niet meer waarschuwen" ;
-        Text[ chinese_simplified ] = "²»ÒªÔÙ´ÎÎªÕâ¸öÎÄµµÌá³ö¾¯¸æ";
+        Text[ chinese_simplified ] = "ä¸è¦å†æ¬¡ä¸ºè¿™ä¸ªæ–‡æ¡£æå‡ºè­¦å‘Š";
         Text[ russian ] = "Áîëüøå íå ïğåäóïğåæäàòü äëÿ ıòîãî äîêóìåíòà";
         Text[ polish ] = "Nie pokazuj wiêcej ostrze¿enia dla tego dokumentu";
-        Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Ì‚½‚ß‚É‚à‚¤Œx‚Í‚µ‚È‚¢‚Å‰º‚³‚¢";
-        Text[ chinese_traditional ] = "¤£­n¦A¦¸¬°³o­Ó¤å¥ó´£¥XÄµ§i";
+        Text[ japanese ] = "ã“ã®ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ãŸã‚ã«ã‚‚ã†è­¦å‘Šã¯ã—ãªã„ã§ä¸‹ã•ã„";
+        Text[ chinese_traditional ] = "ä¸è¦å†æ¬¡ç‚ºé€™å€‹æ–‡ä»¶æå‡ºè­¦å‘Š";
         Text[ arabic ] = "ÚÏã ÇáÊÍĞíÑ ãÑÉ ÃÎÑì ÈÇáäÓÈÉ áåĞÇ ÇáãÓÊäÏ";
         Text[ dutch ] = "Voor dit document niet meer waarschuwen";
-        Text[ chinese_simplified ] = "²»ÒªÔÙ´ÎÎªÕâ¸öÎÄµµÌá³ö¾¯¸æ";
+        Text[ chinese_simplified ] = "ä¸è¦å†æ¬¡ä¸ºè¿™ä¸ªæ–‡æ¡£æå‡ºè­¦å‘Š";
         Text[ greek ] = "¼÷é Üëëç ğñïåéäïğïßçóç ãéá áõôü ôï İããñáöï";
-        Text[ korean ] = "ÀÌ ¹®¼­¿¡ ´ëÇØ¼­´Â ´õ ÀÌ»ó °æ°í ¾ÈÇÔ";
+        Text[ korean ] = "ì´ ë¬¸ì„œì— ëŒ€í•´ì„œëŠ” ë” ì´ìƒ ê²½ê³  ì•ˆí•¨";
         Text[ turkish ] = "Bu belge için bir daha uyarı görüntüleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desactivar las advertencias para este documento";
@@ -221,16 +221,16 @@ ModalDialog DLG_MACROQUERY
         Text [ spanish ] = "Ejecutar" ;
         Text [ french ] = "Exécuter" ;
         Text [ dutch ] = "Uitvoeren" ;
-        Text[ chinese_simplified ] = "Ö´ĞĞ";
+        Text[ chinese_simplified ] = "æ‰§è¡Œ";
         Text[ russian ] = "Âûïîëíèòü";
         Text[ polish ] = "Wykonaj";
-        Text[ japanese ] = "Às";
-        Text[ chinese_traditional ] = "°õ¦æ";
+        Text[ japanese ] = "å®Ÿè¡Œ";
+        Text[ chinese_traditional ] = "åŸ·è¡Œ";
         Text[ arabic ] = "ÊäİíĞ";
         Text[ dutch ] = "Uitvoeren";
-        Text[ chinese_simplified ] = "Ö´ĞĞ";
+        Text[ chinese_simplified ] = "æ‰§è¡Œ";
         Text[ greek ] = "Åêôİëåóç";
-        Text[ korean ] = "½ÇÇà";
+        Text[ korean ] = "ì‹¤í–‰";
         Text[ turkish ] = "Çalıştır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ejecutar";
@@ -251,30 +251,31 @@ ModalDialog DLG_MACROQUERY
         Text [ french ] = "Ne pas exécuter" ;
         Text [ dutch ] = "Niet uitvoeren" ;
         Text [ portuguese ] = "Não executar" ;
-        Text[ chinese_simplified ] = "²»Ö´ĞĞ";
+        Text[ chinese_simplified ] = "ä¸æ‰§è¡Œ";
         Text[ russian ] = "Íå âûïîëíÿòü";
         Text[ polish ] = "Nie wykonuj";
-        Text[ japanese ] = "Às‚µ‚È‚¢";
-        Text[ chinese_traditional ] = "¤£­n°õ¦æ";
+        Text[ japanese ] = "å®Ÿè¡Œã—ãªã„";
+        Text[ chinese_traditional ] = "ä¸è¦åŸ·è¡Œ";
         Text[ arabic ] = "ÚÏã ÇáÊäİíĞ";
         Text[ dutch ] = "Niet uitvoeren";
-        Text[ chinese_simplified ] = "²»Ö´ĞĞ";
+        Text[ chinese_simplified ] = "ä¸æ‰§è¡Œ";
         Text[ greek ] = "Íá ìçí åêôåëåóôåß";
-        Text[ korean ] = "½ÇÇà ¾ÈÇÔ";
+        Text[ korean ] = "ì‹¤í–‰ ì•ˆí•¨";
         Text[ turkish ] = "Çalıştırma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No ejecutar";
         Text[ finnish ] = "Älä suorita";
     };
     TEXT[ dutch ] = "Macro uitvoeren";
-    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
+    TEXT[ chinese_simplified ] = "æ‰§è¡Œå®";
     TEXT[ greek ] = "Åêôİëåóç ìáêñïåíôïëşí";
-    TEXT[ korean ] = "¸ÅÅ©·Î ½ÇÇà";
+    TEXT[ korean ] = "ë§¤í¬ë¡œ ì‹¤í–‰";
     TEXT[ turkish ] = "Makroyu çalıştır";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Ejecutar macro";
     TEXT[ finnish ] = "Suorita makro";
 };
+
 
 
 
