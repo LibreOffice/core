@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:22:13 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@ TabPage TP_FRM_WRAP
         Text = "Vorgaben";
         Text[ ENGLISH ] = "Presets";
         Text[ english_us ] = "Settings";
-        Text[ portuguese ] = "Presets";
-        Text[ russian ] = "Presets";
+        Text[ portuguese ] = "Predefinições";
+        Text[ russian ] = "Íàñòğîéêè ïî óìîë÷àíèş";
         Text[ greek ] = "Presets";
         Text[ dutch ] = "Presets";
-        Text[ french ] = "Presets";
+        Text[ french ] = "Définitions";
         Text[ spanish ] = "Predeterminaciones";
         Text[ finnish ] = "Presets";
         Text[ italian ] = "Predefiniti";
@@ -473,14 +473,14 @@ TabPage TP_FRM_WRAP
         Text [ spanish ] = "D~erecha" ;
         Text [ english_us ] = "~Right" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÓÒ(~H)";
+        Text[ chinese_simplified ] = "ÓÒ(~R)";
         Text[ russian ] = "Ñïğàâà";
         Text[ polish ] = "Z prawej";
-        Text[ japanese ] = "‰E(~H)";
-        Text[ chinese_traditional ] = "¥k(~H)";
+        Text[ japanese ] = "‰E(~R)";
+        Text[ chinese_traditional ] = "¥k(~R)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ(~H)";
+        Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "S~ağ";
         Text[ catalan ] = "D~erecha";
     };
@@ -508,17 +508,17 @@ TabPage TP_FRM_WRAP
         Text [ norwegian ] = "~Top" ;
         Text [ italian ] = "In alto" ;
         Text [ portuguese_brazilian ] = "~Topo" ;
-        Text [ portuguese ] = "Em ~cima" ;
+        Text [ portuguese ] = "~Topo" ;
         Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Øverst" ;
-        Text [ french ] = "En ~haut" ;
+        Text [ french ] = "En haut" ;
         Text [ swedish ] = "U~ppe" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "~Arriba" ;
         Text [ english_us ] = "~Top" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÉÏ(~T)";
-        Text[ russian ] = "Ââåğõó";
+        Text[ russian ] = "Ñâåğõó";
         Text[ polish ] = "W górze";
         Text[ japanese ] = "ã(~T)";
         Text[ chinese_traditional ] = "¤W(~T)";
@@ -637,6 +637,7 @@ TabPage TP_FRM_WRAP
         IdCount = { 11 ; };
     };
 };
+
 
 
 
