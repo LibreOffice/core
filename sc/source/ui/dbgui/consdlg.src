@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:12:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,13 +330,13 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     StringList [ chinese_traditional ] =
     {
-            < "Á`­p" ; Default ; > ;
+            < "¤p­p" ; Default ; > ;
         < "­p¼Æ" ; Default ; > ;
         < "¥­§¡­È" ; Default ; > ;
         < "³Ì¤j" ; Default ; > ;
         < "³Ì¤p" ; Default ; > ;
         < "­¼¿n" ; Default ; > ;
-        < "­p¼Æ(¥u¬O¼Æ¦r)" ; Default ; > ;
+        < "¼Æ¥Ø(¥u¬O¼Æ¦r)" ; Default ; > ;
         < "¼Ğ·Ç°¾®t(©â¼Ë)" ; Default ; > ;
         < "¼Ğ·Ç°¾®t(¥ş³¡°ò¼Æ)" ; Default ; > ;
         < "¤è®t(©â¼Ë)" ; Default ; > ;
@@ -379,9 +379,9 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < "ÃÖ¼Ò" ; Default ; > ;
         < "°ö" ; Default ; > ;
         < "¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (Ç¥º»)" ; Default ; > ;
+        < "StDev (»ùÇÃ)" ; Default ; > ;
         < "StDevP (¸ğÁı´Ü)" ; Default ; > ;
-        < "ºĞ»ê (Ç¥º»)" ; Default ; > ;
+        < "ºĞ»ê (»ùÇÃ)" ; Default ; > ;
         < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
@@ -542,14 +542,14 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text [ dutch ] = "Be~rekeningsvoorschrift" ;
         Text [ spanish ] = "~Instrucción de cálculo" ;
         Text [ english_us ] = "~Function" ;
-        Text[ chinese_simplified ] = "º¯Êı(~F)";
+        Text[ chinese_simplified ] = "¼ÆËã¹æÔò(~F)";
         Text[ russian ] = "Èíñòğóêöèÿ ïî âû÷èñëåíèÿì";
         Text[ polish ] = "Instrukcja obliczania";
         Text[ japanese ] = "ŒvZ•û–@(~F)";
-        Text[ chinese_traditional ] = "¨ç¼Æ(~F)";
+        Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "°è»ê¡¡±ÔÄ¢(~F)";
+        Text[ korean ] = "±â´É(~F)";
         Text[ turkish ] = "Fonksi~yon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Instrucción de cálculo";
@@ -607,7 +607,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "·½¸ê®Æ°Ï°ì(~S)";
         Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Ğåñéï÷Ş ğñïİëåõóçò äåäïìİíùí";
-        Text[ korean ] = "¼Ò½ºµ¥ÀÌÅÍ ¿µ¿ª(~S)";
+        Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ ¿µ¿ª(~S)";
         Text[ turkish ] = "Kaynak veri a~ralıkları";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Área de datos fuente";
@@ -636,7 +636,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "½Æ»sµ²ªG¨ì(~T)";
         Text[ arabic ] = "äÓÎ ÇáäÊÇÆÌ Åáì";
         Text[ greek ] = "ÅìöÜíéóç áğïôåëåóìÜôùí áğü";
-        Text[ korean ] = "°á°ú¸¦ Ãâ·Â(~T)";
+        Text[ korean ] = "¿¡ °á°ú¸¦ º¹»ç(~T)";
         Text[ turkish ] = "Sonuc~un gösterileceği yer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Re~sultado a partir de";
@@ -790,7 +790,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Text[ chinese_traditional ] = "©M·½¸ê®Æ³sµ²(~L)";
         Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
         Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
-        Text[ korean ] = "¼Ò½ºµ¥ÀÌÅÍ¿¡ ¿¬°á(~L)";
+        Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ¿¡ ¿¬°á(~L)";
         Text[ turkish ] = "Kaynak verilerine ~bağla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vincular con datos fuente";
@@ -896,6 +896,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Consolidar";
 };
+
 
 
 
