@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:11:35 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     SetBackground();
 
     // DropDown ?
-    WinBits nEditStyle = 0;
+    WinBits nEditStyle = nStyle & ( WB_LEFT | WB_RIGHT | WB_CENTER );
     WinBits nListStyle = nStyle;
     if( nStyle & WB_DROPDOWN )
     {
@@ -1241,11 +1241,21 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
     // Inhalt
     if ( !IsDropDownBox() )
     {
-        long nOnePixel = GetDrawPixel( pDev, 1 );
-        long nTextHeight = pDev->GetTextHeight();
-        long nEditHeight = nTextHeight + 6*nOnePixel;
+        long        nOnePixel = GetDrawPixel( pDev, 1 );
+        long        nTextHeight = pDev->GetTextHeight();
+        long        nEditHeight = nTextHeight + 6*nOnePixel;
+        USHORT      nTextStyle = TEXT_DRAW_VCENTER;
 
+        // First, draw the edit part
         mpSubEdit->Draw( pDev, aPos, Size( aSize.Width(), nEditHeight ), nFlags );
+
+        // Second, draw the listbox
+        if ( GetStyle() & WB_CENTER )
+            nTextStyle |= TEXT_DRAW_CENTER;
+        else if ( GetStyle() & WB_RIGHT )
+            nTextStyle |= TEXT_DRAW_RIGHT;
+        else
+            nTextStyle |= TEXT_DRAW_LEFT;
 
         if ( ( nFlags & WINDOW_DRAW_MONO ) || ( eOutDevType == OUTDEV_PRINTER ) )
         {
@@ -1270,8 +1280,21 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, U
         if ( !nLines )
             nLines = 1;
         USHORT nTEntry = IsReallyVisible() ? mpImplLB->GetTopEntry() : 0;
+
+        Rectangle aTextRect( aPos, aSize );
+
+        aTextRect.Left() += 3*nOnePixel;
+        aTextRect.Right() -= 3*nOnePixel;
+        aTextRect.Top() += nEditHeight + nOnePixel;
+        aTextRect.Bottom() = aTextRect.Top() + nTextHeight;
+
+        // the drawing starts here
         for ( USHORT n = 0; n < nLines; n++ )
-            pDev->DrawText( Point( aPos.X() + 3*nOnePixel, aPos.Y() + n*nTextHeight + nEditHeight + nOnePixel ), mpImplLB->GetEntryList()->GetEntryText( n+nTEntry ) );
+        {
+            pDev->DrawText( aTextRect, mpImplLB->GetEntryList()->GetEntryText( n+nTEntry ), nTextStyle );
+            aTextRect.Top() += nTextHeight;
+            aTextRect.Bottom() += nTextHeight;
+        }
     }
 
     pDev->Pop();
