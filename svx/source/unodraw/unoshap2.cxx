@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:34:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@
 #include "svdouno.hxx"
 #include "shapeimpl.hxx"
 #include "svdoashp.hxx"
+
+// #i29181#
+#ifndef _SVDVITER_HXX
+#include "svdviter.hxx"
+#endif
+#ifndef _SVDVIEW_HXX //autogen
+#include "svdview.hxx"
+#endif
 
 using namespace ::osl;
 using namespace ::vos;
@@ -344,6 +352,19 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
 
     if( nObjNum < nObjCount )
     {
+        // #i29181#
+        // If the SdrObject which is about to be deleted is in any selection,
+        // deselect it first.
+        SdrViewIter aIter( pSdrShape );
+
+        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+        {
+            if(CONTAINER_ENTRY_NOTFOUND != pView->TryToFindMarkedObject(pSdrShape))
+            {
+                pView->MarkObj(pSdrShape, pView->GetPageViewPvNum(0), sal_True, sal_False);
+            }
+        }
+
         delete rList.NbcRemoveObject( nObjNum );
         pShape->InvalidateSdrObject();
     }
