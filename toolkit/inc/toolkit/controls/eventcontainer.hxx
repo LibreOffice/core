@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventcontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-21 17:24:14 $
+ *  last change: $Author: ab $ $Date: 2001-03-09 09:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,11 @@
 #include <com/sun/star/container/XContainer.hpp>
 #endif
 
+#include <toolkit/helper/listenermultiplexer.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer > NameContainerHelper;
+#include <cppuhelper/implbase2.hxx>
+typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
+                                 ::com::sun::star::container::XContainer > NameContainerHelper;
 
 
 //namespace toolkit
@@ -104,19 +106,19 @@ NameContainerNameMap;
 
 class NameContainer_Impl : public NameContainerHelper
 {
-    //OInterfaceContainerHelper maListenerContainer;
     NameContainerNameMap mHashMap;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > mNames;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
     sal_Int32 mnElementCount;
     ::com::sun::star::uno::Type mType;
 
+    ContainerListenerMultiplexer maContainerListeners;
 
 public:
     NameContainer_Impl( ::com::sun::star::uno::Type aType )
         : mType( aType )
         , mnElementCount( 0 )
-        //, maListenerContainer( *Mutex::getGlobalMutex() )
+        , maContainerListeners( *this )
     {}
 
     // Methods XElementAccess
@@ -152,6 +154,12 @@ public:
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::lang::WrappedTargetException,
               ::com::sun::star::uno::RuntimeException);
+
+    // Methods XContainer
+    void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
+        throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener )
+        throw(::com::sun::star::uno::RuntimeException);
 };
 
 class ScriptEventContainer : public NameContainer_Impl

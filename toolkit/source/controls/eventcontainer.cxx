@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventcontainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2001-02-21 17:40:06 $
+ *  last change: $Author: ab $ $Date: 2001-03-09 09:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,16 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
         throw NoSuchElementException();
     }
     sal_Int32 iHashResult = (*aIt).second;
+    Any aOldElement = mValues.getConstArray()[ iHashResult ];
     mValues.getArray()[ iHashResult ] = aElement;
+
+    // Fire event
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Element <<= aElement;
+    aEvent.ReplacedElement = aOldElement;
+    aEvent.Accessor <<= aName;
+    maContainerListeners.elementReplaced( aEvent );
 }
 
 
@@ -171,6 +180,13 @@ void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElemen
     mNames.getArray()[ nCount ] = aName;
     mValues.getArray()[ nCount ] = aElement;
     mHashMap[ aName ] = nCount;
+
+    // Fire event
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Element <<= aElement;
+    aEvent.Accessor <<= aName;
+    maContainerListeners.elementInserted( aEvent );
 }
 
 void NameContainer_Impl::removeByName( const OUString& Name )
@@ -183,6 +199,15 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     }
 
     sal_Int32 iHashResult = (*aIt).second;
+    Any aOldElement = mValues.getConstArray()[ iHashResult ];
+
+    // Fire event
+    ContainerEvent aEvent;
+    aEvent.Source = *this;
+    aEvent.Element = aOldElement;
+    aEvent.Accessor <<= Name;
+    maContainerListeners.elementRemoved( aEvent );
+
     mHashMap.erase( aIt );
     sal_Int32 iLast = mNames.getLength() - 1;
     if( iLast != iHashResult )
@@ -195,9 +220,22 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     }
     mNames.realloc( iLast );
     mValues.realloc( iLast );
+
+}
+
+// Methods XContainer
+void NameContainer_Impl::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    maContainerListeners.addInterface( l );
+}
+
+void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
+{
+    maContainerListeners.removeInterface( l );
 }
 
 
+// Ctor
 ScriptEventContainer::ScriptEventContainer( void )
     : NameContainer_Impl( getCppuType( (ScriptEventDescriptor*) NULL ) )
 {
