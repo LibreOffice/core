@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextOutputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:58:08 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-ClassData3 cppu::WeakImplHelper3<com::sun::star::io::XTextOutputStream, com::sun::star::io::XActiveDataSource, com::sun::star::lang::XServiceInfo>::s_aCD(1);
-#endif
 
 namespace io_TextOutputStream
 {
