@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 11:59:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 #define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START +  2 )
 #define RID_STR_NOMODULE                ( RID_BASICIDE_START +  3 )
 #define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START +  4 )
+// free
 #define RID_STR_CANNOTCLOSE             ( RID_BASICIDE_START + 13 )
 #define RID_STR_IDENAME                 ( RID_BASICIDE_START + 14 )
 #define RID_STR_INITIDE                 ( RID_BASICIDE_START + 15 )
@@ -142,6 +143,7 @@
 #define RID_STR_ERROROPENSTORAGE        ( RID_BASICIDE_START + 33 )
 #define RID_STR_NOLIBINSTORAGE          ( RID_BASICIDE_START + 34 )
 #define RID_STR_SBXNAMEALLREADYUSED     ( RID_BASICIDE_START + 35 )
+// free
 #define RID_STR_REPLACESTDLIB           ( RID_BASICIDE_START + 41 )
 #define RID_STR_SBXNAMEALLREADYUSED2    ( RID_BASICIDE_START + 42 )
 #define RID_STR_SEARCHNOTFOUND          ( RID_BASICIDE_START + 43 )
@@ -152,6 +154,7 @@
 #define RID_STR_GENERATESOURCE          ( RID_BASICIDE_START + 48 )
 #define RID_STR_REFNOTPOSSIBLE          ( RID_BASICIDE_START + 49 )
 #define RID_STR_FILEEXISTS              ( RID_BASICIDE_START + 50 )
+// free
 #define RID_STR_ERROROPENLIB            ( RID_BASICIDE_START + 55 )
 #define RID_STR_STDJAVAMODULENAME       ( RID_BASICIDE_START + 56 )
 #define RID_STR_NEWLIB                  ( RID_BASICIDE_START + 57 )
@@ -159,11 +162,14 @@
 #define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
 #define RID_STR_LIBNAMETOLONG           ( RID_BASICIDE_START + 60 )
 #define RID_STR_ERRORCHOOSEMACRO        ( RID_BASICIDE_START + 61 )
+// free
 #define RID_STR_LIBISREADONLY           ( RID_BASICIDE_START + 63 )
 #define RID_STR_REPLACELIB              ( RID_BASICIDE_START + 64 )
+// free
 #define RID_STR_IMPORTNOTPOSSIBLE       ( RID_BASICIDE_START + 67 )
 #define RID_STR_NOIMPORT                ( RID_BASICIDE_START + 68 )
 #define RID_STR_ENTERPASSWORD           ( RID_BASICIDE_START + 69 )
+// free
 #define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 71 )
 #define RID_STR_USERMACROS              ( RID_BASICIDE_START + 72 )
 #define RID_STR_USERDIALOGS             ( RID_BASICIDE_START + 73 )
@@ -172,6 +178,7 @@
 #define RID_STR_SHAREDIALOGS            ( RID_BASICIDE_START + 76 )
 #define RID_STR_SHAREMACROSDIALOGS      ( RID_BASICIDE_START + 77 )
 // free
+#define RID_STR_QUERYREPLACEMACRO       ( RID_BASICIDE_START + 80 )
 #define RID_STR_FILENAME                ( RID_BASICIDE_START + 81 )
 #define RID_STR_APPENDLIBS              ( RID_BASICIDE_START + 82 )
 #define RID_STR_QUERYDELMACRO           ( RID_BASICIDE_START + 83 )
@@ -191,7 +198,6 @@
 #define RID_STR_LINE                    ( RID_BASICIDE_START + 97 )
 #define RID_STR_COLUMN                  ( RID_BASICIDE_START + 98 )
 #define RID_STR_SOURCETOBIG             ( RID_BASICIDE_START + 99 )
-#define RID_STR_QUERYREPLACEMACRO       ( RID_BASICIDE_START + 100 )
 
 #endif  // _SVX_NOIDERESIDS
 
