@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hr $ $Date: 2004-08-02 15:02:56 $ $Revision: 1.17 $
+    $Author: kz $ $Date: 2004-10-04 20:41:18 $ $Revision: 1.18 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -173,6 +173,11 @@ interface Window : Object
     SID_OBJECT // ole(no) api(no)
     [
         StateMethod = GetState_Impl ;
+        ExecMethod = ExecView_Impl ;
+    ]
+
+    SID_TERMINATE_INPLACEACTIVATION
+    [
         ExecMethod = ExecView_Impl ;
     ]
 }
