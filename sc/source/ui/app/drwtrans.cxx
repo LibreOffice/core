@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:01:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:27:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,9 @@ void ScDrawTransferObj::AddSupportedFormats()
     }
     else if ( bGraphic )        // other graphic
     {
+        // #i25616#
+        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMATSTR_ID_SVXB );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
