@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2001-02-21 12:53:39 $
+#   last change: $Author: os $ $Date: 2001-03-23 11:38:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,6 +137,7 @@ IDLFILES=\
     XStringMapping.idl\
     XStringEscape.idl\
     XTextSearch.idl\
+    XUpdatable.idl\
     XURLTransformer.idl\
     XUniqueIDFactory.idl\
     DataEditorEventType.idl\
