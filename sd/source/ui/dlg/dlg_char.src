@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:25:33 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 10:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabDialog TAB_CHAR
                 Text[ polish ] = "Czcionka";
                 Text[ japanese ] = "Ì«ÝÄ";
                 Text[ chinese_traditional ] = "¦r«¬";
-                Text[ arabic ] = "ÎØ";
+                Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
@@ -127,7 +127,7 @@ TabDialog TAB_CHAR
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Merkin tehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
-                Text [ french ] = "Effet de caractère" ;
+                Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckensnittseffekt" ;
                 Text [ dutch ] = "Schrifteffecten" ;
                 Text [ spanish ] = "Efectos de fuente" ;
@@ -164,10 +164,10 @@ TabDialog TAB_CHAR
                 Text[ portuguese_brazilian ] = "Position";
                 Text[ japanese ] = "ˆÊ’u";
                 Text[ korean ] = "À§Ä¡";
-                Text[ chinese_simplified ] = "Position";
-                Text[ chinese_traditional ] = "Position";
+                Text[ chinese_simplified ] = "Î»ÖÃ";
+                Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
-                Text[ arabic ] = "Position";
+                Text[ arabic ] = "ÇáãæÖÚ";
             };
         };
     };
