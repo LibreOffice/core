@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importsvc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,12 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XImportLayer.hpp>
-#include <drafts/com/sun/star/configuration/backend/XLayerHandler.hpp>
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERIMPORTER_HPP_
+#include <com/sun/star/configuration/backend/XLayerImporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERHANDLER_HPP_
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -97,11 +101,11 @@ namespace configmgr
         using rtl::OUString;
         namespace uno   = ::com::sun::star::uno;
         namespace lang  = ::com::sun::star::lang;
-        namespace backenduno = drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 // -----------------------------------------------------------------------------
 
         class ImportService : public ::cppu::WeakImplHelper3<
-                                            backenduno::XImportLayer,
+                                            backenduno::XLayerImporter,
                                             lang::XInitialization,
                                             lang::XServiceInfo
                                         >
@@ -131,7 +135,7 @@ namespace configmgr
                 getSupportedServiceNames(  )
                     throw (uno::RuntimeException);
 
-            // XImportLayer
+            // XLayerImporter
             virtual uno::Reference< backenduno::XBackend > SAL_CALL
                 getTargetBackend(  )
                     throw (uno::RuntimeException);
@@ -142,12 +146,14 @@ namespace configmgr
 
             virtual void SAL_CALL
                 importLayer( const uno::Reference< backenduno::XLayer >& aLayer )
-                    throw ( lang::WrappedTargetException, lang::IllegalArgumentException,
-                            lang::NullPointerException, uno::RuntimeException);
+                throw ( backenduno::MalformedDataException,
+                        lang::WrappedTargetException, lang::IllegalArgumentException,
+                        lang::NullPointerException, uno::RuntimeException);
 
             virtual void SAL_CALL
                 importLayerForEntity( const uno::Reference< backenduno::XLayer >& aLayer, const OUString& aEntity )
-                    throw ( lang::WrappedTargetException, lang::IllegalArgumentException,
+                    throw ( backenduno::MalformedDataException,
+                            lang::WrappedTargetException, lang::IllegalArgumentException,
                             lang::NullPointerException, uno::RuntimeException);
         protected:
             typedef uno::Reference< uno::XComponentContext >        Context;
