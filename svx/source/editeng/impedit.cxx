@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-26 17:20:17 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 09:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,7 +890,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, US
         if ( bForceVisCursor )
             GetCursor()->Show();
 
-        if ( !pEditEngine->pImpEditEngine->mpIMEInfos )
+        // #102936# Call SetInputContext every time, otherwise we may have the wrong font
+        // if ( !pEditEngine->pImpEditEngine->mpIMEInfos )
         {
             SvxFont aFont;
             pEditEngine->pImpEditEngine->SeekCursor( aPaM.GetNode(), aPaM.GetIndex()+1, aFont );
