@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:04:14 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@
 #endif
 #include "drawdoc.hxx"
 #include "app.hrc"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
 
@@ -152,8 +154,16 @@ FuLine::FuLine (
         SfxItemSet* pNewAttr = new SfxItemSet( pDoc->GetPool() );
         pView->GetAttributes( *pNewAttr );
 
-        SvxLineTabDialog* pDlg = new SvxLineTabDialog( NULL, pNewAttr, pDoc, pObj, bHasMarked );
-
+        //CHINA001 SvxLineTabDialog* pDlg = new SvxLineTabDialog( NULL, pNewAttr, pDoc, pObj, bHasMarked );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog(NULL,
+                    pNewAttr,
+                    pDoc,
+                ResId(RID_SVXDLG_LINE),
+                pObj,
+                bHasMarked);
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
             // die ausgabeparameter des dialogs bestimmen
