@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:34:24 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "T~abel";
         Text[ chinese_simplified ] = "±νΈρ(~A)";
         Text[ greek ] = "Πίνακας";
-        Text[ korean ] = "Η¥";
+        Text[ korean ] = "Η¥(~A)";
         Text[ turkish ] = "T~ablo";
     };
     RadioButton RB_AS_FIELD
@@ -155,7 +155,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "~Velden";
         Text[ chinese_simplified ] = "ΧΦ¶Ξ(~F)";
         Text[ greek ] = "Πεδία";
-        Text[ korean ] = "ΗΚµε";
+        Text[ korean ] = "ΗΚµε(~F)";
         Text[ turkish ] = "~Alanlar";
     };
     RadioButton RB_AS_TEXT
@@ -183,7 +183,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "~Tekst";
         Text[ chinese_simplified ] = "ΞΔΧΦ(~T)";
         Text[ greek ] = "Κείμενο";
-        Text[ korean ] = "ΕΨ½ΊΖ®";
+        Text[ korean ] = "ΕΨ½ΊΖ®(~T)";
         Text[ turkish ] = "~Metin";
     };
     OKButton BT_OK
@@ -236,7 +236,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Database~kolommen";
         Text[ chinese_simplified ] = "ΚύΎέΏβΐΈ(~C)";
         Text[ greek ] = "Στήλες βάσης δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ώ­";
+        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ώ­(~C)";
         Text[ turkish ] = "Veritabanύ ~sόtunlarύ";
     };
     GroupBox GB_DB_FORMAT
@@ -263,7 +263,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Op~maak";
         Text[ chinese_simplified ] = "ΈρΚ½(~M)";
         Text[ greek ] = "~Μορφή";
-        Text[ korean ] = "Ό­½Δ";
+        Text[ korean ] = "Ό­½Δ(~M)";
         Text[ turkish ] = "For~mat";
     };
     RadioButton RB_DBFMT_FROM_DB
@@ -292,7 +292,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "U~it databank";
         Text[ chinese_simplified ] = "΄ΣΚύΎέΏβ(~D)";
         Text[ greek ] = "Από βάση δεδομένων";
-        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί·ΞΊΞΕΝ";
+        Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί·ΞΊΞΕΝ(~D)";
         Text[ turkish ] = "Kaynak veritabanύ";
     };
     RadioButton RB_DBFMT_FROM_USR
@@ -366,7 +366,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ dutch ] = "~Alinea-opmaakprofiel:";
         TEXT[ chinese_simplified ] = "¶ΞΒδΡωΚ½(~S)£Ί";
         TEXT[ greek ] = "Πρότυπo παραγράφου:";
-        TEXT[ korean ] = "΄ά¶τ ΐ―Ηό:";
+        TEXT[ korean ] = "΄ά¶τ ΐ―Ηό(~S):";
         TEXT[ turkish ] = "Paragraf b~iηimi:";
     };
     ListBox LB_DB_PARA_COLL
@@ -439,7 +439,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Tabe~l";
         Text[ chinese_simplified ] = "±νΈρ(~L)";
         Text[ greek ] = "Πίνακας";
-        Text[ korean ] = "Η¥";
+        Text[ korean ] = "Η¥(~L)";
         Text[ turkish ] = "~Tablo";
     };
     ListBox LB_TABLE_COL
@@ -502,7 +502,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "In~schakelen";
         Text[ chinese_simplified ] = "Ό¤»ξ(~O)";
         Text[ greek ] = "Ενεργοποίηση";
-        Text[ korean ] = "Θ°ΌΊ";
+        Text[ korean ] = "Θ°ΌΊ(~O)";
         Text[ turkish ] = "Ηalύώtύr";
     };
     RadioButton RB_HEADL_COLNMS
@@ -531,7 +531,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "K~olomnaam";
         Text[ chinese_simplified ] = "ΐΈΓϋ(~N)";
         Text[ greek ] = "Ονόματα στήλης";
-        Text[ korean ] = "Ώ­ ΐΜΈ§";
+        Text[ korean ] = "Ώ­ ΐΜΈ§(~N)";
         Text[ turkish ] = "~Sόtun adύ";
     };
     RadioButton RB_HEADL_EMPTY
@@ -559,7 +559,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "lee~g";
         Text[ chinese_simplified ] = "ΏΥΘ±(~E)";
         Text[ greek ] = "κενό";
-        Text[ korean ] = "ΊρΎξΐΦΐ½";
+        Text[ korean ] = "ΊρΎξΐΦΐ½(~E)";
         Text[ turkish ] = "boώ";
     };
     PushButton PB_TBL_FORMAT
@@ -587,7 +587,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "~Eigenschappen...";
         Text[ chinese_simplified ] = "ΚτΠΤ(~O)...";
         Text[ greek ] = "Ιδιότητες...";
-        Text[ korean ] = "µξ·ΟΑ¤ΊΈ...";
+        Text[ korean ] = "µξ·ΟΑ¤ΊΈ(~O)...";
         Text[ turkish ] = "Φ~zelikler...";
     };
     PushButton PB_TBL_AUTOFMT
@@ -615,7 +615,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ dutch ] = "Aut~oOpmaak...";
         Text[ chinese_simplified ] = "ΧΤ¶―ΈρΚ½(~O)...";
         Text[ greek ] = "Αυτ~οΜορφή...";
-        Text[ korean ] = "ΐΪµΏ Ό­½Δ ...";
+        Text[ korean ] = "ΐΪµΏ Ό­½Δ (~O)...";
         Text[ turkish ] = "Otomatik formatla...";
     };
     String STR_NOTEMPL
