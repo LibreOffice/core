@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jp $ $Date: 2000-11-16 22:17:01 $
+#   last change: $Author: er $ $Date: 2000-11-18 19:23:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
     $(SLO)$/charclass.obj	\
+    $(SLO)$/calendarwrapper.obj	\
     $(SLO)$/localedatawrapper.obj	\
     $(SLO)$/numberformatcodewrapper.obj \
     $(SLO)$/textsearch.obj
