@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 08:14:21 $
+#   last change: $Author: hr $ $Date: 2004-11-09 12:17:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ SLOFILES =	\
         $(SLO)$/strings.obj \
         $(SLO)$/logging.obj \
         $(SLO)$/formcellbinding.obj \
+        $(SLO)$/gridcolumnproptranslator.obj \
 
 # --- Tagets -------------------------------------------------------
 
