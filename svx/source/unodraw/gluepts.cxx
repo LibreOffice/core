@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gluepts.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-07 15:26:09 $
+ *  last change: $Author: cl $ $Date: 2002-11-04 08:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ static void convert( const drawing::GluePoint2& rUnoGlue, SdrGluePoint& rSdrGlue
     case drawing::Alignment_RIGHT:
         rSdrGlue.SetAlign( SDRHORZALIGN_RIGHT|SDRVERTALIGN_CENTER );
         break;
-    case SDRHORZALIGN_LEFT|SDRVERTALIGN_BOTTOM:
+    case drawing::Alignment_BOTTOM_LEFT:
         rSdrGlue.SetAlign( SDRHORZALIGN_LEFT|SDRVERTALIGN_BOTTOM );
         break;
     case drawing::Alignment_BOTTOM:
