@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:37 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1425,9 +1425,14 @@ sal_Bool SvtFileView::Initialize( const String& rURL, const String& rFilter )
 {
     WaitObject aWaitCursor( this );
 
+    String sPushURL( mpImp->maViewURL );
+
     mpImp->maViewURL = rURL;
     if ( !ExecuteFilter( rFilter ) )
+    {
+        mpImp->maViewURL = sPushURL;
         return sal_False;
+    }
 
     mpImp->maOpenDoneLink.Call( this );
     return sal_True;
