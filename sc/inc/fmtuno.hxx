@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:10:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ private:
     ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
     void                        AddEntry_Impl( USHORT nMode,
                                     const String& rExpr1, const String& rExpr2,
-                                    const ScAddress& rPos, const String& rStyle );
+                                    const ScAddress& rPos, const String& rPosStr, const String& rStyle );
 
 public:
                             ScTableConditionalFormat();
@@ -208,6 +208,7 @@ private:
     String                      aExpr1;
     String                      aExpr2;
     ScAddress                   aSrcPos;
+    String                      aPosString; // formula position as text - set only in ctor
     String                      aStyle;     // display name as stored in ScStyleSheet
 
 public:
@@ -215,11 +216,11 @@ public:
                             ScTableConditionalEntry( ScTableConditionalFormat* pPar,
                                                      USHORT nM, const String& rEx1,
                                                      const String& rEx2, const ScAddress& rPos,
-                                                     const String& rSt );
+                                                     const String& rPosStr, const String& rSt );
     virtual                 ~ScTableConditionalEntry();
 
     void                    GetData( USHORT& rM, String& rEx1, String& rEx2,
-                                        ScAddress& rPos, String& rSt ) const;
+                                        ScAddress& rPos, String& rPosStr, String& rSt ) const;
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
@@ -265,6 +266,7 @@ private:
     String              aExpr1;
     String              aExpr2;
     ScAddress           aSrcPos;
+    String              aPosString;     // formula position as text
     USHORT              nValMode;       // enum ScValidationMode
     BOOL                bIgnoreBlank;
     sal_Int16           nShowList;

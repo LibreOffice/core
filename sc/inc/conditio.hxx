@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:04:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,9 @@ class ScConditionEntry
     BOOL                bIsStr2;
     ScTokenArray*       pFormula1;      // eingegebene Formel
     ScTokenArray*       pFormula2;
-    ScAddress           aSrcPos;        // Quell-Adresse fuer Formeln
-                                        // temporaere Daten:
+    ScAddress           aSrcPos;        // source position for formulas
+                                        // temporary data:
+    String              aSrcString;     // formula source position as text during XML import
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
     ScDocument*         pDoc;
@@ -168,6 +169,10 @@ public:
     BOOL            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
     void            SetIgnoreBlank(BOOL bSet);
     ScAddress       GetSrcPos() const           { return aSrcPos; }
+
+    ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
+
+    void            SetSrcString( const String& rNew );     // for XML import
 
     String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
                                     BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE,
