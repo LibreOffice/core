@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-16 18:14:25 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;
@@ -96,6 +102,14 @@ OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(
             ,m_pGroups(NULL)
             ,m_pUsers(NULL)
 {
+    try
+    {
+        m_xMetaData = _xConnection->getMetaData();
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(0,"No Metadata available!");
+    }
 }
 //-----------------------------------------------------------------------------
 OCatalog::~OCatalog()
@@ -228,6 +242,38 @@ Reference< XNameAccess > SAL_CALL OCatalog::getGroups(  ) throw(RuntimeException
     }
 
     return const_cast<OCatalog*>(this)->m_pGroups;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OCatalog::buildName(const Reference< XRow >& _xRow)
+{
+    ::rtl::OUString sCatalog = _xRow->getString(1);
+    if ( _xRow->wasNull() )
+        sCatalog = ::rtl::OUString();
+    ::rtl::OUString sSchema  = _xRow->getString(2);
+    if ( _xRow->wasNull() )
+        sSchema = ::rtl::OUString();
+    ::rtl::OUString sTable   = _xRow->getString(3);
+    if ( _xRow->wasNull() )
+        sTable = ::rtl::OUString();
+
+    ::rtl::OUString sComposedName;
+    ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
+    return sComposedName;
+}
+// -----------------------------------------------------------------------------
+void OCatalog::fillNames(Reference< XResultSet >& _xResult,TStringVector& _rNames)
+{
+    if ( _xResult.is() )
+    {
+        _rNames.reserve(20);
+        Reference< XRow > xRow(_xResult,UNO_QUERY);
+        while ( _xResult->next() )
+        {
+            _rNames.push_back( buildName(xRow) );
+        }
+        xRow = NULL;
+        ::comphelper::disposeComponent(_xResult);
+    }
 }
 // -------------------------------------------------------------------------
 void ODescriptor::construct()
