@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:14:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@
 #endif
 #ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
+#endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -1742,6 +1745,8 @@ void ScXMLExport::_ExportContent()
                             nEqualCells = 0;
                         }
                     }
+                    RemoveTempAnnotaionShape(nTable);
+
                     GetProgressBarHelper()->Increment();
                 }
             }
@@ -2895,25 +2900,28 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
 
         pCurrentCell = NULL;
 
-        if (rMyCell.xNoteShape.is() && !rMyCell.xAnnotation->getIsVisible())
+        rMyCell.xNoteShape.clear();
+    }
+}
+
+void ScXMLExport::RemoveTempAnnotaionShape(const sal_Int32 nTable)
+{
+    if (pDoc)
+    {
+        SdrPage* pPage = NULL;
+        ScDrawLayer* pDrawModel = pDoc->GetDrawLayer();
+        if(pDrawModel)
+            pPage = pDrawModel->GetPage(nTable);
+        if(pPage)
         {
-            rtl::OUString sType(rMyCell.xNoteShape->getShapeType());
-            if ( sType.equals(sCaptionShape) )
+            SdrObjListIter aIter( *pPage, IM_FLAT );
+            while (aIter.IsMore())
             {
-                SvxShape* pShapeImp = SvxShape::getImplementation(rMyCell.xNoteShape);
-                if (pShapeImp)
+                SdrObject* pObject = aIter.Next();
+                if (pObject->GetLayer() == SC_LAYER_HIDDEN)
                 {
-                    SdrCaptionObj *pSdrObj = static_cast<SdrCaptionObj*>(pShapeImp->GetSdrObject());
-                    if (pSdrObj)
-                    {
-                        ScPostIt aCellNote(pDoc);
-                        if(pDoc->GetNote( rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row, rMyCell.aCellAddress.Sheet, aCellNote ))
-                        {
-                            rMyCell.xNoteShape.clear();
-                            aCellNote.RemoveObject(pSdrObj, *pDoc, rMyCell.aCellAddress.Sheet);
-                            delete pSdrObj;
-                        }
-                    }
+                    pPage->RemoveObject(pObject->GetOrdNum());
+                    delete pObject;
                 }
             }
         }
