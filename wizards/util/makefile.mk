@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-07 10:55:24 $
+#   last change: $Author: hjs $ $Date: 2002-04-04 14:15:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ GEN_HID=TRUE
 .IF "$(GUI)"=="WNT"
 .IF "$(BUILD_SOSL)"==""
 
-all : $(SRS)$/hidother.hid ALLTAR
+ALLTAR : $(SRS)$/hidother.hid
 
 .ENDIF
 .ENDIF
