@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:23:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ PrinterInfoManager& PrinterInfoManager::get()
 
         if( pManager )
             pManager->initialize();
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
+#endif
     }
 
     return *pManager;
@@ -1161,7 +1164,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
                 if( nSubstitute != -1 )
                 {
                     rInfo.m_aFontSubstitutions[ it->m_nID ] = nSubstitute;
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
                     FastPrintFontInfo aInfo;
                     rFontManager.getFontFastInfo( nSubstitute, aInfo );
                     fprintf( stderr,
@@ -1283,7 +1286,7 @@ struct SystemCommandParameters
     const char*     pPrintCommand;
     const char*     pForeToken;
     const char*     pAftToken;
-    int                 nForeTokenCount;
+    unsigned int    nForeTokenCount;
 };
 
 static const struct SystemCommandParameters aParms[] =
@@ -1313,7 +1316,7 @@ void SystemQueueInfo::run()
 {
     char pBuffer[1024];
     ByteString aPrtQueueCmd, aForeToken, aAftToken, aString;
-    int nForeTokenCount = 0, i;
+    unsigned int nForeTokenCount = 0, i;
     FILE *pPipe;
     bool bSuccess = false;
     std::list< ByteString > aLines;
@@ -1405,7 +1408,7 @@ void SystemQueueInfo::run()
                 ByteString aOutLine( aLines.front() );
                 aLines.pop_front();
 
-                for( int i = 0; i < nForeTokenCount && nPos != STRING_NOTFOUND; i++ )
+                for( i = 0; i < nForeTokenCount && nPos != STRING_NOTFOUND; i++ )
                 {
                     nPos = aOutLine.Search( aForeToken, nPos );
                     if( nPos != STRING_NOTFOUND && aOutLine.Len() >= nPos+aForeToken.Len() )
@@ -1498,6 +1501,7 @@ sal_Int32 macxp_GetSystemPrintMethod( void )
      return( applePrintSysType );
 }
 
+#if 0
 /*
  * macxp_GetSystemPrintFormat()
  *
@@ -1511,7 +1515,7 @@ sal_Int32 macxp_GetSystemPrintMethod( void )
  * therefore the environment variable OOO_PRINT_PS_DIRECTLY, if set,
  * forces OOo to NOT undergo the PS -> PDF translation by default.
  */
-/*sal_Int32 macxp_GetSystemPrintFormat( void )
+sal_Int32 macxp_GetSystemPrintFormat( void )
 {
      int            printFormat;
      int            err;
@@ -1522,15 +1526,15 @@ sal_Int32 macxp_GetSystemPrintMethod( void )
 
      /* Check for presence of OSAScript executable, which is
       * believed to be MacOS X only (ie not present on Darwin).
-      *
+      */
      err = stat( "/usr/bin/osascript", &status );
      if ( err == 0 )
      {
-          /* Check to see if the user wants to print PS anyway *
+         /* Check to see if the user wants to print PS anyway */
           pPDFOverride = getenv( "OOO_PRINT_PS_DIRECTLY" );
           if ( pPDFOverride == NULL )
           {
-               /* Now we have to check for ps2pdf to make sure we can do the conversion *
+          /* Now we have to check for ps2pdf to make sure we can do the conversion */
                err = stat( kApplePS2PDFLocation, &status );
                if ( err == 0 )
                {
@@ -1543,6 +1547,7 @@ sal_Int32 macxp_GetSystemPrintMethod( void )
      }
 
      return( printFormat );
-}*/
+}
+#endif
 #endif
 
