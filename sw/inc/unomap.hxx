@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-31 11:28:03 $
+ *  last change: $Author: os $ $Date: 2000-11-02 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@
 #define WID_PARA_LEV9                           1047
 #define WID_PARA_LEV10                          1048
 #define WID_IS_COMMA_SEPARATED                  1049
+#define WID_INDEX_MARKS                         1050
 
 //text document
 #define WID_DOC_CHAR_COUNT                      1000

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:25:38 $
+ *  last change: $Author: os $ $Date: 2000-11-02 15:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,4 +552,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT       
 const SwPropNameLen __FAR_DATA UNO_NAME_SEPARATOR_LINE_IS_ON                    (MAP_CHAR_LEN("SeparatorLineIsOn"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_HIDDEN_TEXT                     (MAP_CHAR_LEN("IsSkipHiddenText"));
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_SKIP_PROTECTED_TEXT                  (MAP_CHAR_LEN("IsSkipProtectedText"));
-
+const SwPropNameLen __FAR_DATA UNO_NAME_DOCUMENT_INDEX_MARKS                    (MAP_CHAR_LEN("DocumentIndexMarks"));

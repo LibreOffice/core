@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 15:13:25 $
+ *  last change: $Author: os $ $Date: 2000-11-02 15:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,6 +783,29 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 SwXStyleFamilies::GetProgrammaticName(
                         rForm.GetTemplate(nLPos + pMap->nWID - WID_PARA_LEV1),
                                                             SFX_STYLE_FAMILY_PARA));
+                bBOOL = sal_False;
+            }
+            break;
+            case WID_INDEX_MARKS:
+            {
+                SwTOXMarks aMarks;
+                const SwTOXType* pType = pTOXBase->GetTOXType();
+                SwClientIter aIter(*(SwTOXType*)pType);
+                SwTOXMark* pMark = (SwTOXMark*)aIter.First(TYPE(SwTOXMark));
+                while( pMark )
+                {
+                    if(pMark->GetTxtTOXMark())
+                        aMarks.Insert(pMark, aMarks.Count());
+                    pMark = (SwTOXMark*)aIter.Next();
+                }
+                Sequence< Reference < XDocumentIndexMark > > aXMarks(aMarks.Count());
+                Reference<XDocumentIndexMark>* pxMarks = aXMarks.getArray();
+                for(USHORT i = 0; i < aMarks.Count(); i++)
+                {
+                    SwTOXMark* pMark = aMarks.GetObject(i);
+                    pxMarks[i] = SwXDocumentIndexMark::GetObject((SwTOXType*)pType, pMark, m_pDoc);
+                }
+                aRet.setValue(&aXMarks, ::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0));
                 bBOOL = sal_False;
             }
             break;

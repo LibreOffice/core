@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-11-01 16:09:10 $
+ *  last change: $Author: os $ $Date: 2000-11-02 15:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,8 @@
 #endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::rtl;
@@ -1373,6 +1375,11 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleLevel2"),              WID_PARA_LEV2,          &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel3"),              WID_PARA_LEV3,          &::getCppuType((const OUString*)0)  , 0,     0},
                     { SW_PROP_NAME(UNO_NAME_IS_COMMA_SEPARATED),        WID_IS_COMMA_SEPARATED, &::getBooleanCppuType(),            PROPERTY_NONE ,0         },
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, new uno::Type(::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0)),         PropertyAttribute::READONLY ,0       },
+#else
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),      WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark > >*)0),           PropertyAttribute::READONLY ,0       },
+#endif
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXIndexMap_Impl;
@@ -1448,6 +1455,11 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("ParaStyleLevel8"),  WID_PARA_LEV8,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel9"),  WID_PARA_LEV9,  &::getCppuType((const OUString*)0)  , 0,     0},
                     { MAP_CHAR_LEN("ParaStyleLevel10"),     WID_PARA_LEV10,     &::getCppuType((const OUString*)0)  , 0,     0},
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),  WID_INDEX_MARKS, new uno::Type(::getCppuType((Sequence< Reference< XDocumentIndexMark> >*)0)),          PropertyAttribute::READONLY ,0       },
+#else
+                    { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX_MARKS),  WID_INDEX_MARKS, &::getCppuType((Sequence< Reference< XDocumentIndexMark> >*)0),            PropertyAttribute::READONLY ,0       },
+#endif
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTOXUserMap_Impl;
