@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:45:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,6 +844,10 @@ XclExpPalette::XclExpPalette( const XclExpRoot& rRoot ) :
 {
 }
 
+XclExpPalette::~XclExpPalette()
+{
+}
+
 sal_uInt32 XclExpPalette::InsertColor( const Color& rColor, XclColorType eType, sal_uInt16 nAutoDefault )
 {
     return mxImpl->InsertColor( rColor, eType, nAutoDefault );
@@ -1051,7 +1055,7 @@ sal_uInt16 XclExpFontBuffer::Insert( const XclExpFontData& rFontData, bool bAppF
         if( nSize < mnXclMaxSize )
         {
             // possible to insert
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), rFontData ) ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), rFontData ) );
             nPos = nSize;       // old size is last position now
         }
         else
@@ -1188,28 +1192,33 @@ void XclExpFontBuffer::InitDefaultFonts()
     {
         case xlBiff5:
         case xlBiff7:
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+        {
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
             aFontData.SetScWeight( WEIGHT_BOLD );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
             aFontData.SetScWeight( WEIGHT_NORMAL );
             aFontData.SetScPosture( ITALIC_NORMAL );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
             aFontData.SetScWeight( WEIGHT_BOLD );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
             // the blind font with index 4
-            maFontList.AppendRecord( XclExpFontRef( new XclExpBlindFont( GetRoot() ) ) );
+            maFontList.AppendNewRecord( new XclExpBlindFont( GetRoot() ) );
             // already add the first user defined font (Excel does it too)
             aFontData.SetScWeight( WEIGHT_NORMAL );
             aFontData.SetScPosture( ITALIC_NONE );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+            maFontList.AppendNewRecord( new XclExpFont( GetRoot(), aFontData ) );
+        }
         break;
         case xlBiff8:
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
-            maFontList.AppendRecord( XclExpFontRef( new XclExpFont( GetRoot(), aFontData ) ) );
+        {
+            XclExpFontRef xFont( new XclExpFont( GetRoot(), aFontData ) );
+            maFontList.AppendRecord( xFont );
+            maFontList.AppendRecord( xFont );
+            maFontList.AppendRecord( xFont );
+            maFontList.AppendRecord( xFont );
             // the blind font with index 4
-            maFontList.AppendRecord( XclExpFontRef( new XclExpBlindFont( GetRoot() ) ) );
+            maFontList.AppendNewRecord( new XclExpBlindFont( GetRoot() ) );
+        }
         break;
         default:
             DBG_ERROR_BIFF();
@@ -2077,7 +2086,7 @@ XclExpXFBuffer::XclExpXFBuffer( const XclExpRoot& rRoot ) :
 {
 }
 
-void XclExpXFBuffer::InitDefaults()
+void XclExpXFBuffer::Initialize()
 {
     InsertDefaultRecords();
     InsertUserStyles();
@@ -2269,9 +2278,9 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int1
         // not found - insert new cell XF
         if( maXFList.Size() < EXC_XFLIST_HARDLIMIT )
         {
-            maXFList.AppendRecord( XclExpXFRef( new XclExpXF(
-                GetRoot(), *pPattern, nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak ) ) );
-            // do not set nXFId before the AppendRecord() call - it may insert 2 XFs (style+cell)
+            maXFList.AppendNewRecord( new XclExpXF(
+                GetRoot(), *pPattern, nScript, nForceScNumFmt, nForceXclFont, bForceLineBreak ) );
+            // do not set nXFId before the AppendNewRecord() call - it may insert 2 XFs (style+cell)
             nXFId = static_cast< sal_uInt32 >( maXFList.Size() - 1 );
         }
         else
@@ -2302,7 +2311,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         }
         else
         {
-            DBG_ASSERT( maXFList.GetRecord( nXFId ).get(), "XclExpXFBuffer::InsertStyleXF - built-in XF not found" );
+            DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::InsertStyleXF - built-in XF not found" );
             // XF record still predefined? -> Replace with real XF
             bool& rbPredefined = maBuiltInMap[ nXFId ].mbPredefined;
             if( rbPredefined )
@@ -2317,7 +2326,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         bool& rbHasStyleRec = maBuiltInMap[ nXFId ].mbHasStyleRec;
         if( !rbHasStyleRec )
         {
-            maStyleList.AppendRecord( XclExpStyleRef( new XclExpStyle( nXFId, nStyleId, nLevel ) ) );
+            maStyleList.AppendNewRecord( new XclExpStyle( nXFId, nStyleId, nLevel ) );
             rbHasStyleRec = true;
         }
 
@@ -2333,10 +2342,10 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
         nXFId = static_cast< sal_uInt32 >( maXFList.Size() );
         if( nXFId < EXC_XFLIST_HARDLIMIT )
         {
-            maXFList.AppendRecord( XclExpXFRef( new XclExpXF( GetRoot(), rStyleSheet ) ) );
+            maXFList.AppendNewRecord( new XclExpXF( GetRoot(), rStyleSheet ) );
             // create the STYLE record
             if( rStyleSheet.GetName().Len() )
-                maStyleList.AppendRecord( XclExpStyleRef( new XclExpStyle( nXFId, rStyleSheet.GetName() ) ) );
+                maStyleList.AppendNewRecord( new XclExpStyle( nXFId, rStyleSheet.GetName() ) );
         }
         else
             // list full - fall back to default style XF
@@ -2367,7 +2376,7 @@ sal_uInt32 XclExpXFBuffer::AppendBuiltInXF( XclExpXFRef xXF, sal_uInt8 nStyleId,
 sal_uInt32 XclExpXFBuffer::AppendBuiltInXFWithStyle( XclExpXFRef xXF, sal_uInt8 nStyleId, sal_uInt8 nLevel )
 {
     sal_uInt32 nXFId = AppendBuiltInXF( xXF, nStyleId, nLevel );
-    maStyleList.AppendRecord( XclExpStyleRef( new XclExpStyle( nXFId, nStyleId, nLevel ) ) );
+    maStyleList.AppendNewRecord( new XclExpStyle( nXFId, nStyleId, nLevel ) );
     maBuiltInMap[ nXFId ].mbHasStyleRec = true;  // mark existing STYLE record
     return nXFId;
 }
@@ -2409,7 +2418,7 @@ void XclExpXFBuffer::InsertDefaultRecords()
     }
 
     // index 15: default hard cell format, placeholder to be able to add more built-in styles
-    maXFList.AppendRecord( XclExpXFRef( new XclExpDefaultXF( GetRoot(), true ) ) );
+    maXFList.AppendNewRecord( new XclExpDefaultXF( GetRoot(), true ) );
     maBuiltInMap[ EXC_XF_DEFAULTCELL ].mbPredefined = true;
 
     // index 16-20: other built-in styles
@@ -2438,7 +2447,7 @@ void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
     DBG_ASSERT( nXFId < maXFIndexVec.size(), "XclExpXFBuffer::AppendXFIndex - XF ID out of range" );
     maXFIndexVec[ nXFId ] = static_cast< sal_uInt16 >( maSortedXFList.Size() );
     maSortedXFList.AppendRecord( maXFList.GetRecord( nXFId ) );
-    DBG_ASSERT( maXFList.GetRecord( nXFId ).get(), "XclExpXFBuffer::AppendXFIndex - XF not found" );
+    DBG_ASSERT( maXFList.HasRecord( nXFId ), "XclExpXFBuffer::AppendXFIndex - XF not found" );
 }
 
 // ============================================================================
