@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2004-05-13 13:29:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 13:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ public:
 class AbstractSwWordCountDialog : public VclAbstractDialog
 {
 public:
-    void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc) = 0;
+    virtual void    SetValues(const SwDocStat& rCurrent, const SwDocStat& rDoc) = 0;
 };
 
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog    //CHINA001 add for SwInsertAbstractDlg
