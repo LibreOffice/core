@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:30:30 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 10:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,23 +630,6 @@ void SAL_CALL osl_releasePipe( oslPipe pPipe )
         __osl_destroyPipeImpl( pPipe );
     }
 }
-/*****************************************************************************/
-/* osl_copyPipe  */
-/*****************************************************************************/
-oslPipe SAL_CALL osl_copyPipe(oslPipe pPipe)
-{
-    osl_acquirePipe( pPipe );
-    return pPipe;
-}
-
-
-/*****************************************************************************/
-/* osl_destroyPipe  */
-/*****************************************************************************/
-void SAL_CALL osl_destroyPipe(oslPipe pPipe)
-{
-    osl_releasePipe( pPipe );
-}
 
 void SAL_CALL osl_closePipe( oslPipe pPipe )
 {
@@ -713,7 +696,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         while (pAccept = pPipe->m_Acceptions)
         {
             pPipe->m_Acceptions = pAccept->m_Next;
-            osl_destroyPipe(pAccept);
+            osl_releasePipe(pAccept);
         }
 
         osl_releaseMutex(pPipe->m_Mutex);
