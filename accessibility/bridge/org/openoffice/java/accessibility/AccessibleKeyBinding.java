@@ -57,8 +57,8 @@
 
 package org.openoffice.java.accessibility;
 
-import drafts.com.sun.star.accessibility.*;
-import drafts.com.sun.star.awt.*;
+import com.sun.star.accessibility.*;
+import com.sun.star.awt.KeyStroke;
 
 /**
  *
