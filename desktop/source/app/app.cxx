@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:39:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include "ssoinit.hxx"
 #include "configinit.hxx"
 #include "lockfile.hxx"
-#include "testtool.hxx"
 #include "checkinstall.hxx"
 #include "cmdlinehelp.hxx"
 #include "userinstall.hxx"
@@ -170,6 +169,9 @@
 #ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
 #include <com/sun/star/task/XJobExecutor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJob.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -182,6 +184,9 @@
 
 #include <com/sun/star/java/XJavaVM.hpp>
 
+#ifndef _TOOLS_TESTTOOLLOADER_HXX_
+#include <tools/testtoolloader.hxx>
+#endif
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -1289,7 +1294,7 @@ void Desktop::Main()
     // there is no other instance using our data files from a remote host
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main -> Lockfile" );
     m_pLockfile = new Lockfile;
-    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check()) {
+    if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
         // Lockfile exists, and user clicked 'no'
         return;
     }
@@ -1329,7 +1334,7 @@ void Desktop::Main()
     SetSplashScreenProgress(15);
 
     // create title string
-    sal_Bool    bCheckOk = sal_False;
+    sal_Bool bCheckOk = sal_False;
     String aMgrName = String::CreateFromAscii( "iso" );
     aMgrName += String::CreateFromInt32(SUPD); // current build version
     ResMgr* pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
@@ -1413,13 +1418,36 @@ void Desktop::Main()
         Application::SetSettings( aSettings );
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
 
-        // if we need to display the dialog, we need to do it here
-        if (!pCmdLineArgs->IsQuickstart() && !Desktop::CheckOEM())
-        {
-               //Application::PostUserEvent( STATIC_LINK( 0, Desktop, AsyncTerminate ) );
-            return;
-        }
+        aMgrName = String::CreateFromAscii("ofa");
+        aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
+         ResMgr* pOffResMgr = ResMgr::CreateResMgr(U2S(aMgrName));
+        Resource::SetResManager( pOffResMgr );
 
+        // create service for loadin SFX (still needed in startup)
+        Reference < XInterface >( xSMgr->createInstance(
+            DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
+
+        // initialize test-tool library (if available)
+        tools::InitTestToolLib();
+
+        // License Dialog
+        Reference< XJob > xLicense(xSMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.License" ))), UNO_QUERY );
+        if (xLicense.is())
+        {
+            sal_Bool bAccepted = sal_False;
+            Any aResult = xLicense->execute(Sequence< NamedValue >());
+            if ( !((aResult >>= bAccepted) && bAccepted))
+            {
+                Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"))),UNO_QUERY);
+                xDesktop.is() && xDesktop->terminate();
+                return; // License was declined, exit bootstrap routine
+            }
+        }
+        SetSplashScreenProgress(50);
+
+        // Backing Component
         if (pCmdLineArgs->IsEmpty() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         {
             ::desktop::Desktop::bSuppressOpenDefault = sal_True;
@@ -1428,6 +1456,7 @@ void Desktop::Main()
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
             if (xDesktopFrame.is())
             {
+                SetSplashScreenProgress(60);
                 Reference< XFrame > xBackingFrame;
                 Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
@@ -1436,13 +1465,14 @@ void Desktop::Main()
                     xContainerWindow = xBackingFrame->getContainerWindow();
                 if (xContainerWindow.is())
                 {
+                    SetSplashScreenProgress(70);
                     Sequence< Any > lArgs(1);
                     lArgs[0] <<= xContainerWindow;
 
                     Reference< XController > xBackingComp(
                         xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
                         UNO_QUERY);
-
+                    SetSplashScreenProgress(80);
                     if (xBackingComp.is())
                     {
                         Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
@@ -1450,7 +1480,9 @@ void Desktop::Main()
                         // Because the backing component set the property "IsBackingMode" of the frame
                         // to true inside attachFrame(). But setComponent() reset this state everytimes ...
                         xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                        SetSplashScreenProgress(90);
                         xBackingComp->attachFrame(xBackingFrame);
+                        CloseSplashScreen();
                         xContainerWindow->setVisible(sal_True);
 
                         Window* pCompWindow = VCLUnoHelper::GetWindow(xBackingFrame->getComponentWindow());
@@ -1483,11 +1515,7 @@ void Desktop::Main()
         return;
     }
     */
-
-    aMgrName = String::CreateFromAscii("ofa");
-    aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
-     ResMgr* pOffResMgr = ResMgr::CreateResMgr(U2S(aMgrName));
-    Resource::SetResManager( pOffResMgr );
+    SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
 
@@ -1496,13 +1524,14 @@ void Desktop::Main()
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
+    SetSplashScreenProgress(60);
 
     Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
 
     sal_Bool bTerminateRequested = sal_False;
 
     // Preload function depends on an initialized sfx application!
-    SetSplashScreenProgress(75);
+    SetSplashScreenProgress(70);
 
     sal_Bool bUseSystemFileDialog;
     if ( pCmdLineArgs->IsHeadless() )
@@ -1518,23 +1547,10 @@ void Desktop::Main()
     // use system window dialogs
     Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
-    // initialize test-tool library (if available)
-    InitTestToolLib();
     SetSplashScreenProgress(80);
 
     if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() )
         InitializeQuickstartMode( xSMgr );
-
-    // create service for loadin SFX (still needed in startup)
-    try
-    {
-        Reference < XInterface >( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
-    }
-    catch ( com::sun::star::uno::Exception& e )
-    {
-        FatalError( MakeStartupErrorMessage(e.Message) );
-        return;
-    }
 
     // Create TypeDetection service to support feature "increase startup performance for loading filter config".
     // Its not an one-instance service any longer. But it shares a singleton cache instance internaly.
@@ -1603,7 +1619,7 @@ void Desktop::Main()
 
     DeregisterServices();
 
-    DeInitTestToolLib();
+    tools::DeInitTestToolLib();
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
     delete pLanguageOptions;
@@ -1797,6 +1813,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenClients_Impl" );
 
     OpenClients();
+
     // CloseStartupScreen();
     CloseSplashScreen();
 
