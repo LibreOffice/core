@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestWriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-21 13:48:27 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 12:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XML_SAX_SAXEXCEPTION_HPP
+#include <com/sun/star/xml/sax/SAXException.hpp>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -110,7 +113,13 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
         xSource->setOutputStream ( rStream );
         Reference < XDocumentHandler > xHandler ( xSource, UNO_QUERY );
         if (xHandler.is())
-            ManifestExport aExporter ( xHandler, rSequence);
+            try {
+                ManifestExport aExporter ( xHandler, rSequence);
+            }
+            catch( SAXException& )
+            {
+                throw RuntimeException();
+            }
     }
 }
 
