@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:40:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,33 @@ namespace css = ::com::sun::star;
 ItemHolder1::ItemHolder1()
     : ItemHolderMutexBase()
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::lang::XComponent > xCfg(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
-        css::uno::UNO_QUERY);
-    if (xCfg.is())
-        xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::lang::XComponent > xCfg(
+            xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")),
+            css::uno::UNO_QUERY);
+        if (xCfg.is())
+            xCfg->addEventListener(static_cast< css::lang::XEventListener* >(this));
+    }
+// #i37892  got errorhandling from   ConfigManager::GetConfigurationProvider()
+#ifdef DBG_UTIL
+    catch(css::uno::Exception& rEx)
+    {
+        static sal_Bool bMessage = sal_True;
+        if(bMessage)
+        {
+            bMessage = sal_False;
+            ::rtl::OString sMsg("CreateInstance with arguments exception: ");
+            sMsg += ::rtl::OString(rEx.Message.getStr(),
+                        rEx.Message.getLength(),
+                        RTL_TEXTENCODING_ASCII_US);
+            OSL_ENSURE(sal_False, sMsg.getStr());
+        }
+    }
+#else
+    catch(css::uno::Exception&){}
+#endif
 }
 
 //-----------------------------------------------
