@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:13:38 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 12:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3434,7 +3434,8 @@ throw (RuntimeException)
             if ( aElementName.equalsIgnoreAsciiCaseAscii( "menubar" ) && !bInPlaceMenu && !bPreview )
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
-                if ( !m_xMenuBar.is() )
+                // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
+                if ( !m_xMenuBar.is() && xFrame->isTop() )
                     m_xMenuBar = implts_createElement( aName );
 
                 if ( m_xMenuBar.is() && xFrame->isTop() )
