@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: ka $ $Date: 2000-11-01 16:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ protected:
 
     MapMode         aOldMap;
     Region          aOldClip;
-    Rectangle       aOldRect;
+    Rectangle       aPaintRect;
     Point           aPt;
     Size            aSz;
     Point           aLayerOffsetPix;
@@ -106,7 +106,8 @@ protected:
     ULONG           nLastTime;
     BOOL            bClipRegion;
 
-    void            ImpDrawSprite( OutputDevice* pOut );
+    BOOL            ImplPrepareMoveTo();
+    void            ImplDrawSprite( OutputDevice* pOut, const Point& rPt, const Size& rSz );
 
 public:
 
@@ -119,7 +120,8 @@ public:
                                  SdMetaFile** ppTopMtf = NULL,
                                  Marker* pObjStartMarker = NULL,
                                  Marker* pObjEndMarker = NULL );
-    void            MoveTo( OutputDevice* pOut, const Point& rPt );
+    void            MoveTo( OutputDevice* pOut, const Point& rPt, const Size* pSz = NULL );
+    void            MoveTo( OutputDevice* pOut, const Point& rPt, const double& rScaleX, const double& rScaleY );
     void            EndMoving( OutputDevice* pOut );
 };
 
