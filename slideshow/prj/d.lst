@@ -1,0 +1,2 @@
+..\%__SRC%\bin\slideshow*.dll %_DEST%\bin%_EXT%\slideshow*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
