@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:40:24 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,46 @@ interface TextEditView : BaseTextEditView
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
     SID_INSERT_DRAW // status()
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_FONTWORK_GALLERY_FLOATER
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_BASIC
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_SYMBOL
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_ARROW
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_FLOWCHART
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_CALLOUT
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAWTBX_CS_STAR
+    [
+        ExecMethod = ExecDraw ;
+        StateMethod = GetDrawState ;
+    ]
+    SID_DRAW_CS_ID
     [
         ExecMethod = ExecDraw ;
         StateMethod = GetDrawState ;
