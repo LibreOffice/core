@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 10:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ OQuery_LINUX::OQuery_LINUX(const Reference< XPropertySet >& _rxCommandDefinition
     if (m_xCommandDefinition.is())
     {
         m_xCommandDefinition->addPropertyChangeListener(::rtl::OUString(), this);
+        m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
 
         // TODO : be a listener on the configuration node which is responsible for my properties not belonging
         // to the CommandDefinition
@@ -307,8 +308,11 @@ void OQuery_LINUX::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const A
     OQueryDescriptor::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     ::rtl::OUString sAggPropName;
     sal_Int16 nAttr = 0;
-    if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle))
+    if (getInfoHelper().fillPropertyMembersByHandle(&sAggPropName,&nAttr,_nHandle) &&
+        m_xCommandPropInfo.is() &&
+        m_xCommandPropInfo->hasPropertyByName(sAggPropName))
     {   // the base class holds the property values itself, but we have to forward this to our CommandDefinition
+
         m_eDoingCurrently = SETTING_PROPERTIES;
         OAutoActionReset(this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);

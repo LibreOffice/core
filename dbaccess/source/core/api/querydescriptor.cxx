@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 10:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,31 +146,28 @@ OQueryDescriptor::OQueryDescriptor()
 }
 
 //--------------------------------------------------------------------------
-OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxForeignDescriptor)
+OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
     ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>())
 {
     registerProperties();
-    OSL_ENSHURE(_rxForeignDescriptor.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
+
+    OSL_ENSHURE(_rxCommandDefinition.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
     try
     {
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_NAME) >>= m_sElementName;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_FILTER) >>= m_sFilter;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_ORDER) >>= m_sOrder;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_APPLYFILTER) >>= m_bApplyFilter;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_FONT) >>= m_aFont;
-        m_aRowHeight = _rxForeignDescriptor->getPropertyValue(PROPERTY_ROW_HEIGHT);
-        m_aTextColor = _rxForeignDescriptor->getPropertyValue(PROPERTY_TEXTCOLOR);
+        _rxCommandDefinition->getPropertyValue(PROPERTY_NAME)                   >>= m_sElementName;
+        _rxCommandDefinition->getPropertyValue(PROPERTY_COMMAND)                >>= m_sCommand;
+        _rxCommandDefinition->getPropertyValue(PROPERTY_UPDATE_TABLENAME)       >>= m_sUpdateTableName;
+        _rxCommandDefinition->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)      >>= m_sUpdateSchemaName;
+        _rxCommandDefinition->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)     >>= m_sUpdateCatalogName;
+        _rxCommandDefinition->getPropertyValue(PROPERTY_LAYOUTINFORMATION)      >>= m_aLayoutInformation;
 
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_COMMAND) >>= m_sCommand;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING) >>= m_bEscapeProcessing;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_TABLENAME) >>= m_sUpdateTableName;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME) >>= m_sUpdateSchemaName;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME) >>= m_sUpdateCatalogName;
-        _rxForeignDescriptor->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= m_aLayoutInformation;
+        m_bEscapeProcessing = ::cppu::any2bool(_rxCommandDefinition->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
     }
-    catch (UnknownPropertyException&) { }
-    catch (WrappedTargetException&) { }
+    catch(Exception&)
+    {
+        OSL_ASSERT(0);
+    }
 }
 
 //--------------------------------------------------------------------------

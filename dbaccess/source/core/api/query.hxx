@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:22:32 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 10:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ protected:
                         m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                         m_xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xCommandPropInfo;
     sal_Bool            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
     sal_Bool            m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
 
