@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:05:14 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#include <osl/thread.h>
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -113,10 +114,28 @@ using namespace ::com::sun::star::lang;
     return xVM;
 }
 // -----------------------------------------------------------------------------
+typedef ::std::map<oslThreadIdentifier,TGuard> TGuardMap;
+TGuardMap& lcl_getGuardMap()
+{
+    static TGuardMap s_sMap;
+    return s_sMap;
+}
+// -----------------------------------------------------------------------------
+TGuard getVMGuard()
+{
+    TGuardMap& s_sMap = lcl_getGuardMap();
+
+    oslThreadIdentifier id = osl_getThreadIdentifier(NULL);
+    TGuardMap::iterator aFind = s_sMap.find(id);
+    if ( aFind == s_sMap.end() )
+        aFind = s_sMap.insert(TGuardMap::value_type(id,TGuard(new jvmaccess::VirtualMachine::AttachGuard(java_lang_Object::getVM())))).first;
+    return aFind->second;
+}
+// -----------------------------------------------------------------------------
 SDBThreadAttach::SDBThreadAttach()
  : pEnv(NULL)
 {
-    m_aGuard = ::std::auto_ptr< jvmaccess::VirtualMachine::AttachGuard>(new jvmaccess::VirtualMachine::AttachGuard(java_lang_Object::getVM()) );
+    m_aGuard = getVMGuard();
     if ( m_aGuard.get() )
         pEnv = m_aGuard->getEnvironment();
 }
@@ -140,12 +159,15 @@ void SDBThreadAttach::releaseRef()
 {
     getJavaVMRefCount()--;
     if ( getJavaVMRefCount() == 0 )
+    {
+        TGuardMap& s_sMap = lcl_getGuardMap();
+        s_sMap.clear();
         getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
+    }
 }
 // -----------------------------------------------------------------------------
 // statische Variablen der Klasse:
 jclass java_lang_Object::theClass = 0;
-sal_uInt32 java_lang_Object::nObjCount = 0;
 
 jclass java_lang_Object::getMyClass()
 {
@@ -170,9 +192,8 @@ java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFa
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
     : object( NULL )
 {
-    SDBThreadAttach t;
-    if( t.pEnv && myObj )
-        object = t.pEnv->NewGlobalRef( myObj );
+    if( pXEnv && myObj )
+        object = pXEnv->NewGlobalRef( myObj );
 }
 
 java_lang_Object::~java_lang_Object()
@@ -184,14 +205,31 @@ java_lang_Object::~java_lang_Object()
             t.pEnv->DeleteGlobalRef( object );
     }
 }
+void java_lang_Object::clearObject(JNIEnv& rEnv)
+{
+    if( object )
+    {
+        rEnv.DeleteGlobalRef( object );
+        object = NULL;
+    }
+}
 
+void java_lang_Object::clearObject()
+{
+    if( object )
+    {
+        SDBThreadAttach t;
+        if( t.pEnv )
+            t.pEnv->DeleteGlobalRef( object );
+        object = NULL;
+    }
+}
 // der protected-Konstruktor fuer abgeleitete Klassen
 void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 {
     OSL_ENSURE( myObj, "object in c++ -> Java Wrapper" );
-    SDBThreadAttach t;
-    if( t.pEnv && myObj )
-        object = t.pEnv->NewGlobalRef( myObj );
+    if( pXEnv && myObj )
+        object = pXEnv->NewGlobalRef( myObj );
 }
 
 
@@ -202,10 +240,12 @@ java_lang_Class * java_lang_Object::getClass()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/Class;";
-        char * cMethodName = "getClass";
+        static char * cSignature = "()Ljava/lang/Class;";
+        static char * cMethodName = "getClass";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
             out = t.pEnv->CallObjectMethodA( object, mID, NULL );
@@ -224,17 +264,17 @@ java_lang_Class * java_lang_Object::getClass()
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/String;";
-        char * cMethodName = "toString";
+        static char * cSignature = "()Ljava/lang/String;";
+        static char * cMethodName = "toString";
         // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
         {
-            jstring out(0);
-            out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
             ThrowSQLException(t.pEnv,NULL);
-            if(out)
-                aStr = JavaString2String(t.pEnv,out);
+            aStr = JavaString2String(t.pEnv,out);
         } //mID
     } //pEnv
     return  aStr;
