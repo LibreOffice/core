@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-11 15:11:43 $
+ *  last change: $Author: pb $ $Date: 2001-12-12 10:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,11 +199,12 @@ using namespace ::ucb;
 #define ROW_DATE_CREATE     4
 #define ROW_IS_FOLDER       5
 #define ROW_TARGET_URL      6
-#define ROW_IS_VOLUME       7
-#define ROW_IS_REMOTE       8
-#define ROW_IS_REMOVEABLE   9
-#define ROW_IS_FLOPPY       10
-#define ROW_IS_COMPACTDISC  11
+#define ROW_IS_HIDDEN       7
+#define ROW_IS_VOLUME       8
+#define ROW_IS_REMOTE       9
+#define ROW_IS_REMOVEABLE   10
+#define ROW_IS_FLOPPY       11
+#define ROW_IS_COMPACTDISC  12
 
 DECLARE_LIST( StringList_Impl, OUString* );
 
@@ -1771,7 +1772,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(11);
+        Sequence< OUString > aProps(12);
 
         aProps[0] = OUString::createFromAscii( "Title" );
         aProps[1] = OUString::createFromAscii( "Size" );
@@ -1779,11 +1780,12 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         aProps[3] = OUString::createFromAscii( "DateCreated" );
         aProps[4] = OUString::createFromAscii( "IsFolder" );
         aProps[5] = OUString::createFromAscii( "TargetURL" );
-        aProps[6] = OUString::createFromAscii( "IsVolume" );
-        aProps[7] = OUString::createFromAscii( "IsRemote" );
-        aProps[8] = OUString::createFromAscii( "IsRemoveable" );
-        aProps[9] = OUString::createFromAscii( "IsFloppy" );
-        aProps[10] = OUString::createFromAscii( "IsCompactDisc" );
+        aProps[6] = OUString::createFromAscii( "IsHidden" );
+        aProps[7] = OUString::createFromAscii( "IsVolume" );
+        aProps[8] = OUString::createFromAscii( "IsRemote" );
+        aProps[9] = OUString::createFromAscii( "IsRemoveable" );
+        aProps[10] = OUString::createFromAscii( "IsFloppy" );
+        aProps[11] = OUString::createFromAscii( "IsCompactDisc" );
 
         try
         {
@@ -1814,66 +1816,71 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
                 while ( xResultSet->next() )
                 {
-                    pData = new SortingData_Impl;
-
-                    aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                    if ( xRow->wasNull() )
-                        aDT = xRow->getTimestamp( ROW_DATE_CREATE );
-
-                    OUString aContentURL = xContentAccess->queryContentIdentifierString();
-                    OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                    sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
-                    pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
-                    pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME );
-                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE );
-                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE );
-                    pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY );
-                    pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC );
-                    pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
-                    pData->maSize = xRow->getLong( ROW_SIZE );
-
-                    if ( bHasTargetURL &&
-                         INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                    sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
+                    // don't show hidden files
+                    if ( !bIsHidden )
                     {
-                        Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
-                        aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
-                        aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
-                    }
+                        pData = new SortingData_Impl;
 
-                    CONVERT_DATETIME( aDT, pData->maModDate );
+                        aDT = xRow->getTimestamp( ROW_DATE_MOD );
+                        if ( xRow->wasNull() )
+                            aDT = xRow->getTimestamp( ROW_DATE_CREATE );
 
-                    if ( bHasTargetURL )
-                        pData->maTargetURL = aTargetURL;
-                    else
-                        pData->maTargetURL = aContentURL;
+                        OUString aContentURL = xContentAccess->queryContentIdentifierString();
+                        OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
+                        sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
+                        pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
+                        pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME );
+                        pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE );
+                        pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE );
+                        pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY );
+                        pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC );
+                        pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
+                        pData->maSize = xRow->getLong( ROW_SIZE );
 
-                    if ( pData->mbIsFolder )
-                    {
-                        ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
-                                                        pData->mbIsRemoveable, pData->mbIsFloppy,
-                                                        pData->mbIsCompactDisc );
-                        pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-                    }
-                    else
-                        pData->maType = SvFileInformationManager::GetFileDescription(
-                            INetURLObject( pData->maTargetURL ) );
+                        if ( bHasTargetURL &&
+                             INetURLObject( aContentURL ).GetProtocol() == INET_PROT_VND_SUN_STAR_HIER )
+                        {
+                            Content aCnt( aTargetURL, Reference< XCommandEnvironment > () );
+                            aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= pData->maSize;
+                            aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
+                        }
 
-                    // replace names on demand
-                    if( mbReplaceNames )
-                    {
-                        OUString aNewTitle;
-                        sal_Bool bTranslated;
+                        CONVERT_DATETIME( aDT, pData->maModDate );
 
-                        if( pData->mbIsFolder )
-                            bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
+                        if ( bHasTargetURL )
+                            pData->maTargetURL = aTargetURL;
                         else
-                            bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
+                            pData->maTargetURL = aContentURL;
 
-                        if( bTranslated )
-                            pData->ChangeTitle( aNewTitle );
+                        if ( pData->mbIsFolder )
+                        {
+                            ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
+                                                            pData->mbIsRemoveable, pData->mbIsFloppy,
+                                                            pData->mbIsCompactDisc );
+                            pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
+                        }
+                        else
+                            pData->maType = SvFileInformationManager::GetFileDescription(
+                                INetURLObject( pData->maTargetURL ) );
+
+                        // replace names on demand
+                        if( mbReplaceNames )
+                        {
+                            OUString aNewTitle;
+                            sal_Bool bTranslated;
+
+                            if( pData->mbIsFolder )
+                                bTranslated = GetTranslatedName( pData->GetTitle(), aNewTitle );
+                            else
+                                bTranslated = GetDocTitle( pData->maTargetURL, aNewTitle );
+
+                            if( bTranslated )
+                                pData->ChangeTitle( aNewTitle );
+                        }
+
+                        maContent.push_back( pData );
                     }
-
-                    maContent.push_back( pData );
                 }
             }
             catch( CommandAbortedException& )
