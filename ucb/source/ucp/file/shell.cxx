@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-22 09:44:23 $
+ *  last change: $Author: hro $ $Date: 2001-02-22 12:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2009,7 +2009,7 @@ shell::ls( sal_Int32 CommandId,
     if( ! p->CtorSuccess() )
     {
         delete p; p = 0;
-        throw CommandAbortedException();
+        // throw CommandAbortedException();
     }
 
     return uno::Reference< XDynamicResultSet > ( p );
