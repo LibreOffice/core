@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_error_transl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-29 10:37:55 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,10 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
 
         case EOVERFLOW:
             osl_error = osl_File_E_OVERFLOW;
+            break;
+
+        case ETIMEDOUT:
+            osl_error = osl_File_E_TIMEDOUT;
             break;
 
         default:
