@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 14:44:46 $
+ *  last change: $Author: dv $ $Date: 2001-03-29 11:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,7 @@ String SfxDocumentTemplates::GetTemplatePath
     {
         // --**-- extension handling will become more complicated, because
         //          every new document type will have it's own extension
-        //          e.g.: .swv or .scv instead of .vor
+        //          e.g.: .stw or .stc instead of .vor
         INetURLObject aURLObj( pRegion->GetTargetURL() );
         aURLObj.insertName( rLongName, false,
                      INetURLObject::LAST_SEGMENT, true,
@@ -1562,36 +1562,30 @@ BOOL SfxDocumentTemplates::GetFull
 */
 
 {
+    // We don't search for empty names!
+    if ( ! rName.Len() )
+        return FALSE;
+
     if ( ! pImp->Construct() )
         return FALSE;
 
     EntryData_Impl* pEntry = NULL;
     const USHORT nCount = GetRegionCount();
-    BOOL bFQ = FALSE;
-    USHORT nPos = rRegion.Len();
-
-    while( --nPos != USHRT_MAX && rRegion.GetChar( nPos ) != '(' )
-        ;
-    if ( nPos != USHRT_MAX && rRegion.GetChar( USHORT(rRegion.Len() - 1) ) == ')' )
-        bFQ = TRUE;
 
     for ( USHORT i = 0; i < nCount; ++i )
     {
-        String aName;
-        if( bFQ )
-            aName = GetFullRegionName( i );
-        else
-            aName = GetRegionName( i );
-        if( !rRegion.Len() || ( aName == rRegion ) )
+        RegionData_Impl *pRegion = pImp->GetRegion( i );
+
+        if( pRegion &&
+            ( !rRegion.Len() || ( rRegion == String( pRegion->GetTitle() ) ) ) )
         {
-            RegionData_Impl *pRegion = pImp->GetRegion( i );
-            if ( pRegion )
-                pEntry = pRegion->GetEntry( rName );
+            pEntry = pRegion->GetEntry( rName );
 
             if ( pEntry )
+            {
                 rPath = pEntry->GetTargetURL();
-            if ( pEntry || bFQ )
                 break;
+            }
         }
     }
 
