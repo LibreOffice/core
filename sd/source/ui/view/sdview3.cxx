@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:01:34 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:19:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,10 +699,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     {
                         // replace object
                         SdrObject*  pNewObj = pObj->Clone();
-                        Rectangle   aPickObjRect( pPickObj->GetBoundRect() );
+                        Rectangle   aPickObjRect( pPickObj->GetCurrentBoundRect() );
                         Size        aPickObjSize( aPickObjRect.GetSize() );
                         Point       aVec( aPickObjRect.TopLeft() );
-                        Rectangle   aObjRect( pNewObj->GetBoundRect() );
+                        Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
                         Size        aObjSize( aObjRect.GetSize() );
 
                         Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
@@ -730,7 +730,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                         // set new attributes to object
                         BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
                         AddUndo( new SdrUndoAttrObj( *pPickObj ) );
-                        aSet.Put( pObj->GetItemSet() );
+                        aSet.Put( pObj->GetMergedItemSet() );
 
                         // Eckenradius soll nicht uebernommen werden.
                         // In der Gallery stehen Farbverlauefe (Rechtecke)
@@ -738,7 +738,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                         // nicht auf das Objekt uebertragen werden.
                         aSet.ClearItem( SDRATTR_ECKENRADIUS );
 
-                        pPickObj->SetItemSetAndBroadcast( aSet );
+                        pPickObj->SetMergedItemSetAndBroadcast( aSet );
 
                         if( pPickObj->ISA( E3dObject ) && pObj->ISA( E3dObject ) )
                         {
@@ -746,11 +746,11 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                             SfxItemSet aNewSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
                             SfxItemSet aOldSet( pDoc->GetPool(), SID_ATTR_3D_START, SID_ATTR_3D_END, 0 );
 
-                            aOldSet.Put(pPickObj->GetItemSet());
-                            aNewSet.Put( pObj->GetItemSet() );
+                            aOldSet.Put(pPickObj->GetMergedItemSet());
+                            aNewSet.Put( pObj->GetMergedItemSet() );
 
                             AddUndo( new E3dAttributesUndoAction( *pDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
-                            pPickObj->SetItemSetAndBroadcast( aNewSet );
+                            pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                         }
 
                         EndUndo();
@@ -1117,7 +1117,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     aSet.Put( XLineColorItem( aName, aColor ) );
 
                 // Textfarbe hinzufuegen
-                pPickObj->SetItemSetAndBroadcast( aSet );
+                pPickObj->SetMergedItemSetAndBroadcast( aSet );
             }
         }
     }
