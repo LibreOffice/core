@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:05:38 $
+ *  last change: $Author: as $ $Date: 2001-07-31 06:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,22 +396,6 @@ class FilterCache   :   private ThreadHelpBase
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-
-        /*-****************************************************************************************************//**
-            @short      convert between internal and external structures
-            @descr      We use some vector or self defined structures internal - but get sequences from configuration or must
-                        return uno compatible values.
-                        Thats the reason for these convert methods.
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    No error should occure.
-        *//*-*****************************************************************************************************/
-
-        static ::rtl::OUString impl_extractURLExtension( const ::rtl::OUString& sURL );
 
         /*-****************************************************************************************************//**
             @short      support query mode
