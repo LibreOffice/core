@@ -2,7 +2,7 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: sw $
  *
@@ -91,6 +91,8 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.AnyConverter;
 
 /**
  * Test for object which is represented by accessible component of
@@ -134,14 +136,30 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(1);
+            XSpreadsheet oSheet = null;
+            try {
+                oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(1));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't get sheet",iae);
+            }
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessibleDocumentPagePreview - Page 2");
-            oSheet = (XSpreadsheet) oIndexSheets.getByIndex(2);
+            try {
+                oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(2));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't get sheet",iae);
+            }
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessibleDocumentPagePreview - Page 3");
 
-            oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            try {
+                oSheet = (XSpreadsheet) AnyConverter.toObject(
+                        new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                throw new StatusException("couldn't get sheet",iae);
+            }
             xCell = oSheet.getCellByPosition(0, 0) ;
             xCell.setFormula("ScAccessibleDocumentPagePreview");
         } catch(com.sun.star.lang.WrappedTargetException e) {
@@ -218,7 +236,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
             (xRoot, AccessibleRole.DOCUMENT, "");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
