@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:22:52 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,7 @@ void ScDrawView::InvalidateAttribs()
     rBindings.Invalidate( SID_ATTR_GRAF_CONTRAST );
     rBindings.Invalidate( SID_ATTR_GRAF_GAMMA );
     rBindings.Invalidate( SID_ATTR_GRAF_TRANSPARENCE );
+    rBindings.Invalidate( SID_COLOR_SETTINGS );
 
     rBindings.Invalidate( SID_GRFFILTER );
     rBindings.Invalidate( SID_GRFFILTER_INVERT );
