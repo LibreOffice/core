@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:20:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,16 +325,16 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
     lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
     KSHORT nTmpHeight = pCurr->GetRealHeight();
     KSHORT nAscent = pCurr->GetAscent() + nTmpHeight - pCurr->Height();
-    sal_uInt8 nFlags = SETBASE_ULSPACE;
+    objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
     if( GetMulti() )
     {
         aTmpInf.SetDirection( GetMulti()->GetDirection() );
         if( GetMulti()->HasRotation() )
         {
-            nFlags |= SETBASE_ROTATE;
+            nFlags |= AS_CHAR_ROTATE;
             if( GetMulti()->IsRevers() )
             {
-                nFlags |= SETBASE_REVERSE;
+                nFlags |= AS_CHAR_REVERSE;
                 aTmpInf.X( aTmpInf.X() - nAscent );
             }
             else
@@ -343,7 +343,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
         else
         {
             if ( GetMulti()->IsBidi() )
-                nFlags |= SETBASE_BIDI;
+                nFlags |= AS_CHAR_BIDI;
             aTmpInf.Y( aTmpInf.Y() + nAscent );
         }
     }
@@ -436,12 +436,12 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
         return;
     SwLinePortion *pFirst = pCurr->GetFirstPortion();
     SwLinePortion *pPos = pFirst;
-    sal_uInt8 nFlags = SETBASE_NOFLAG;
+    objectpositioning::AsCharFlags nFlags = AS_CHAR_NOFLAG;
     if( GetMulti() && GetMulti()->HasRotation() )
     {
-        nFlags |= SETBASE_ROTATE;
+        nFlags |= AS_CHAR_ROTATE;
         if( GetMulti()->IsRevers() )
-            nFlags |= SETBASE_REVERSE;
+            nFlags |= AS_CHAR_REVERSE;
     }
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
@@ -834,12 +834,12 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
         nFlyAsc = nAscent;
 
     Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
-    sal_uInt8 nMode = IsQuick() ? SETBASE_QUICK : 0;
+    objectpositioning::AsCharFlags nMode = IsQuick() ? AS_CHAR_QUICK : 0;
     if( GetMulti() && GetMulti()->HasRotation() )
     {
-        nMode |= SETBASE_ROTATE;
+        nMode |= AS_CHAR_ROTATE;
         if( GetMulti()->IsRevers() )
-            nMode |= SETBASE_REVERSE;
+            nMode |= AS_CHAR_REVERSE;
     }
 
     Point aTmpBase( aBase );
@@ -859,7 +859,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
         if( pRet->GetAscent() > nAscent )
         {
             aBase.Y() = Y() + pRet->GetAscent();
-            nMode |= SETBASE_ULSPACE;
+            nMode |= AS_CHAR_ULSPACE;
             if( !rInf.IsTest() )
                 aTmpBase = aBase;
                 if ( GetInfo().GetTxtFrm()->IsVertical() )
