@@ -49,6 +49,11 @@ F4_IMPRESSGRAPHICS = \
     impress_xpm_Export
 
 # -----------------------------------------------
+# count = 1
+F4_UI_IMPRESSGRAPHICS = \
+    impress_html_Export_ui
+
+# -----------------------------------------------
 # count = 0
 L4_IMPRESSGRAPHICS =
 
@@ -57,15 +62,22 @@ L4_IMPRESSGRAPHICS =
 C4_IMPRESSGRAPHICS =
 
 # -----------------------------------------------
-TYPES_4fcfg_impressgraphics           = $(foreach,i,$(T4_IMPRESSGRAPHICS) types$/$i.xcu          )
-FILTERS_4fcfg_impressgraphics         = $(foreach,i,$(F4_IMPRESSGRAPHICS) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_impressgraphics    = $(foreach,i,$(L4_IMPRESSGRAPHICS) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_impressgraphics = $(foreach,i,$(C4_IMPRESSGRAPHICS) contenthandlers$/$i.xcu)
+TYPES_4fcfg_impressgraphics           = $(foreach,i,$(T4_IMPRESSGRAPHICS)    types$/$i.xcu                   )
+FILTERS_4fcfg_impressgraphics         = $(foreach,i,$(F4_IMPRESSGRAPHICS)    filters$/$i.xcu                 )
+UI_FILTERS_4fcfg_impressgraphics      = $(foreach,i,$(F4_UI_IMPRESSGRAPHICS) $(DIR_LOCFRAG)$/filters$/$i.xcu )
+FRAMELOADERS_4fcfg_impressgraphics    = $(foreach,i,$(L4_IMPRESSGRAPHICS)    frameloaders$/$i.xcu            )
+CONTENTHANDLERS_4fcfg_impressgraphics = $(foreach,i,$(C4_IMPRESSGRAPHICS)    contenthandlers$/$i.xcu         )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_impressgraphics = \
     $(TYPES_4fcfg_impressgraphics) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_impressgraphics) \
+    $(UI_FILTERS_4fcfg_impressgraphics) \
     $(FRAMELOADERS_4fcfg_impressgraphics) \
     $(CONTENTHANDLERS_4fcfg_impressgraphics)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_impressgraphics)    
+    
+ALL_PACKAGES+=impressgraphics
+    
