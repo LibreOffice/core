@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astunion.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:46:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ AstUnionBranch* AstUnion::lookupLabel(AstUnionBranch* pBranch)
 
 AstUnionBranch* AstUnion::lookupEnum(AstUnionBranch* pBranch)
 {
-    AstType const * pType = resolveTypedefs(m_pDiscriminantType);
+    AstDeclaration const * pType = resolveTypedefs(m_pDiscriminantType);
     if ( pType->getNodeType() != NT_enum )
         return NULL;
 
@@ -324,8 +324,8 @@ sal_Bool AstUnion::dump(RegistryKey& rKey)
     typereg::Writer aBlob(
         TYPEREG_VERSION_0, getDocumentation(),
         OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), RT_TYPE_UNION,
-        OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, nMember,
-        0, 0);
+        false, OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1,
+        nMember, 0, 0);
     aBlob.setSuperTypeName(
         0,
         OStringToOUString(
