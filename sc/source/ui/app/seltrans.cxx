@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:30:59 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,9 @@ void ScSelectionTransferObj::CreateCellData()
 
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
             // bApi = TRUE -> no error mesages
-            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE, TRUE );
+            // #i18364# bStopEdit = FALSE -> don't end edit mode
+            // (this may be called from pasting into the edit line)
+            BOOL bCopied = pViewData->GetView()->CopyToClip( pClipDoc, FALSE, TRUE, TRUE, FALSE );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
