@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:16:33 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,26 +1248,16 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
         if( !pMulti )
         {   // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
-            const SwTxtAttr* pTwoLines = rInf.GetTwoLines( rInf.GetIdx() );
+            xub_StrLen nEnd = rInf.GetIdx();
+            const SwTxtAttr* pTwoLines = rInf.GetMultiAttr( nEnd );
             if( pTwoLines )
             {
                 SwMultiPortion* pTmp = NULL;
+                if( RES_TXTATR_CJK_RUBY == pTwoLines->Which() )
+                    pTmp = new SwRubyPortion( *pTwoLines,*rInf.GetFont(),nEnd );
+
                 //pTmp = new SwDoubleLinePortion(*pTwoLines->GetEnd());
 #ifdef DEBUG
-                static BOOL bOnTop = sal_False;
-                pTmp = new SwRubyPortion(*pTwoLines->GetEnd(), 1, bOnTop );
-                SwFont *pRubyFont = new SwFont( *rInf.GetFont() );
-                pRubyFont->SetProportion( 50 );
-                String aStr( String::CreateFromAscii( "Ein Ruby Test Elch" ) );
-                SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
-                pFld->SetFollow( sal_True );
-                if( bOnTop )
-                    pTmp->GetRoot().SetPortion( pFld );
-                else
-                {
-                    pTmp->GetRoot().SetNext( new SwLineLayout() );
-                    pTmp->GetRoot().GetNext()->SetPortion( pFld );
-                }
                 //pTmp->SetBrackets( '(', ')' );
 #endif
                 return pTmp;

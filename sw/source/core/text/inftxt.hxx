@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:22:33 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,9 +211,10 @@ public:
                    const xub_StrLen nLen = STRING_LEN )
            { CtorInit( pFrm, pFnt, nIdx, nLen ); }
 
-    // EndOfMulti returns the end of the multi-line part of the text,
-    // but zero, if nPos is not inside any multi-line part.
-    const SwTxtAttr* GetTwoLines( const xub_StrLen nPos ) const;
+    // GetMultiAttr returns the text attribute of the multiportion,
+    // if rPos is inside any multi-line part.
+    // rPos will set to the end of the multi-line part.
+    const SwTxtAttr* GetMultiAttr( xub_StrLen &rPos ) const;
 
     inline sal_Bool OnWin() const { return bOnWin; }
     inline void SetOnWin( const sal_Bool bNew ) { bOnWin = bNew; }
