@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:05:24 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 19:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage RID_TP_GENERAL
         Size = MAP_APPFONT( FTSIZE_LEFT, 10 );
         Text = "~Kurzbezeichnung";
         Text[English]= "Identifier";
-        Text[ english_us ] = "Short ~name";
+        Text[ english_us ] = "~Short name";
         Text[ portuguese ] = "~Abreviatura";
         Text[ russian ] = "Ñîêğàùåíèå";
         Text[ greek ] = "Óõíôïìïãñáößá";
@@ -1644,7 +1644,7 @@ Menu RID_POPUP_ME_VIEW
             Text[ polish ] = "Modyfikuj nazwê...";
             Text[ portuguese_brazilian ] = "Remove Address...";
             Text[ japanese ] = "–¼‘O‚Ì•ÏX...";
-            Text[ korean ] = "ÁÖ¼Ò º¯°æ...";
+            Text[ korean ] = "ÀÌ¸§ º¯°æ...";
             Text[ chinese_simplified ] = "¸ü¸ÄÃû³Æ...";
             Text[ chinese_traditional ] = "ÅÜ§ó¦WºÙ...";
             Text[ arabic ] = "ÊÚÏíá ÇÓã...";
