@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
+ *  last change: $Author: af $ $Date: 2002-05-21 14:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #include "AccessibleContextBase.hxx"
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #include <vos/mutex.hxx>
 #include <vector>
@@ -87,6 +87,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBLE_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
@@ -131,7 +134,9 @@ class CMShapeIterator;
     @see ChildrenManager
 */
 class ChildrenManagerImpl
-    :   public cppu::WeakImplHelper1< ::com::sun::star::document::XEventListener>,
+    :   public cppu::WeakImplHelper2<
+            ::com::sun::star::document::XEventListener,
+            ::com::sun::star::view::XSelectionChangeListener>,
         public IAccessibleViewForwarderListener,
         public IAccessibleParent
 {
@@ -288,6 +293,13 @@ public:
 
     virtual void SAL_CALL
         notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+    //=====  view::XSelectionChangeListener  ==================================
+
+    virtual void  SAL_CALL
+        selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
 

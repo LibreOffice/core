@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 16:11:41 $
+ *  last change: $Author: af $ $Date: 2002-05-21 14:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,12 +112,12 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 
 void ChildrenManagerImpl::Init (void)
 {
-    /*
-    // Register as document::XEventListener.
-    if (maShapeTreeInfo.GetModelBroadcaster().is())
-        maShapeTreeInfo.GetModelBroadcaster()->addEventListener (
-            static_cast<document::XEventListener*>(this));
-    */
+    // Register as view::XSelectionChangeListener.
+    Reference<view::XSelectionSupplier> xSelectionSupplier (
+        maShapeTreeInfo.GetController(), uno::UNO_QUERY);
+    if (xSelectionSupplier.is())
+        xSelectionSupplier->addSelectionChangeListener (
+            static_cast<view::XSelectionChangeListener*>(this));
 }
 
 
@@ -575,6 +575,19 @@ void SAL_CALL
 
 
 
+//=====  view::XSelectionChangeListener  ======================================
+
+void  SAL_CALL
+    ChildrenManagerImpl::selectionChanged (const lang::EventObject& rEvent)
+        throw (uno::RuntimeException)
+{
+    OSL_TRACE ("selection changed");
+    UpdateSelection ();
+}
+
+
+
+
 // This method is experimental.  Use with care.
 long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Reference<
     ::drafts::com::sun::star::accessibility::XAccessible>& xChild) const
@@ -663,7 +676,9 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
 
 
 
-/** Update the selection state of all children.
+/** Update the <const>SELECTED</const> and the <const>FOCUSED</const> state
+    of all visible children.  Maybe this should be changed to all children.
+
     Iterate over all descriptors of visible accessible shapes and look them
     up in the selection.
 */
@@ -706,6 +721,7 @@ void ChildrenManagerImpl::UpdateSelection (void)
                     if (xSelectedShapeAccess->getByIndex(i) == I->mxShape)
                     {
                         bShapeIsSelected = true;
+                        // In a multi-selection no shape has the focus.
                         if (nCount == 1)
                             pNewFocusedShape = pAccessibleShape;
                     }
@@ -724,10 +740,13 @@ void ChildrenManagerImpl::UpdateSelection (void)
     }
 
     // Now reset and then set the FOCUSED state.
-    if (pCurrentlyFocusedShape != NULL)
-        pCurrentlyFocusedShape->ResetState (AccessibleStateType::FOCUSED);
-    if (pNewFocusedShape != NULL)
-        pNewFocusedShape->ResetState (AccessibleStateType::FOCUSED);
+    if (pCurrentlyFocusedShape != pNewFocusedShape)
+    {
+        if (pCurrentlyFocusedShape != NULL)
+            pCurrentlyFocusedShape->ResetState (AccessibleStateType::FOCUSED);
+        if (pNewFocusedShape != NULL)
+            pNewFocusedShape->SetState (AccessibleStateType::FOCUSED);
+    }
 }
 
 
