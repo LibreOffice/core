@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:32:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
             {
                 m_aLabel.SetText(m_sTblLabel);
                 Point aPos(m_aPB_OK.GetPosPixel());
-                if(!_rxMetaData->supportsCatalogsInTableDefinitions())
+                if(_rxMetaData.is() && !_rxMetaData->supportsCatalogsInTableDefinitions())
                 {
                     m_aCatalogLbl.Hide();
                     m_aCatalog.Hide();
@@ -171,7 +171,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aSchemaLbl.SetPosPixel(m_aCatalogLbl.GetPosPixel());
                     m_aSchema.SetPosPixel(m_aCatalog.GetPosPixel());
                 }
-                else
+                else if ( _rxMetaData.is() )
                 {
                     // now fill the catalogs
                     try
@@ -200,7 +200,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     }
                 }
 
-                if(!_rxMetaData->supportsSchemasInTableDefinitions())
+                if(_rxMetaData.is() && !_rxMetaData->supportsSchemasInTableDefinitions())
                 {
                     m_aSchemaLbl.Hide();
                     m_aSchema.Hide();
@@ -210,7 +210,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                     m_aLabel.SetPosPixel(m_aSchemaLbl.GetPosPixel());
                     m_aTitle.SetPosPixel(m_aSchema.GetPosPixel());
                 }
-                else
+                else if ( _rxMetaData.is() )
                 {
                     // now fill the schemata
                     try
@@ -265,7 +265,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
 
 
-                sal_Int32 nLength = _rxMetaData->getMaxTableNameLength();
+                sal_Int32 nLength = _rxMetaData.is() ? _rxMetaData->getMaxTableNameLength() : 0;
                 nLength = nLength ? nLength : EDIT_NOLIMIT;
 
                 m_aTitle.SetMaxTextLen(nLength);
