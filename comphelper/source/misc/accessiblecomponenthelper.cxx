@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecomponenthelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //=====================================================================
     //= OCommonAccessibleComponent
@@ -96,7 +96,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OCommonAccessibleComponent::contains( const Point& _rPoint ) throw (RuntimeException)
+    sal_Bool SAL_CALL OCommonAccessibleComponent::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
         OExternalLockGuard aGuard( this );
         Rectangle aBounds( implGetBounds() );
@@ -170,9 +170,9 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OAccessibleComponentHelper::contains( const Point& _rPoint ) throw (RuntimeException)
+    sal_Bool SAL_CALL OAccessibleComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
-        return OCommonAccessibleComponent::contains( _rPoint );
+        return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
     //--------------------------------------------------------------------
@@ -219,9 +219,9 @@ namespace comphelper
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
     //--------------------------------------------------------------------
-    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::contains( const Point& _rPoint ) throw (RuntimeException)
+    sal_Bool SAL_CALL OAccessibleExtendedComponentHelper::containsPoint( const Point& _rPoint ) throw (RuntimeException)
     {
-        return OCommonAccessibleComponent::contains( _rPoint );
+        return OCommonAccessibleComponent::containsPoint( _rPoint );
     }
 
     //--------------------------------------------------------------------
