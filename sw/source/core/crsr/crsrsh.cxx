@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:27:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,29 +443,42 @@ FASTBOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
         return bLeft ? GoPrevCell() : GoNextCell();
 
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
-    BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
+    FASTBOOL bRet = FALSE;
 
     // #i27615# Handle cursor in front of label.
-    const SwTxtNode* pTxtNode = 0;
-    FASTBOOL bRet = FALSE;
-    if ( !bLeft && pCurCrsr->IsInFrontOfLabel() )
+    const SwTxtNode* pTxtNd = 0;
+
+    //
+    // 1. CASE: Cursor is in front of label. A move to the right
+    // will simply reset the bInFrontOfLabel flag:
+    //
+    if ( !bLeft && _GetCrsr()->IsInFrontOfLabel() )
     {
-        pCurCrsr->SetInFrontOfLabel(FALSE);
+        SetInFrontOfLabel( FALSE );
         bRet = TRUE;
     }
-    else if ( bLeft && 0 == pCurCrsr->GetPoint()->nContent.GetIndex() &&
-             !pCurCrsr->IsInFrontOfLabel() &&
-             0 != ( pTxtNode = pCurCrsr->GetPoint()->nNode.GetNode().GetTxtNode() ) &&
-             pTxtNode->IsNumbered() )
+    //
+    // 2. CASE: Cursor is at beginning of numbered paragraph. A move
+    // to the left will simply set the bInFrontOfLabel flag:
+    //
+    else if ( bLeft && 0 == _GetCrsr()->GetPoint()->nContent.GetIndex() &&
+             !_GetCrsr()->IsInFrontOfLabel() && !_GetCrsr()->HasMark() &&
+             0 != ( pTxtNd = _GetCrsr()->GetNode()->GetTxtNode() ) &&
+             pTxtNd->HasVisibleNumberingOrBullet() )
     {
-        pCurCrsr->SetInFrontOfLabel(TRUE);
+        SetInFrontOfLabel( TRUE );
         bRet = TRUE;
     }
+    //
+    // 3. CASE: Regular cursor move. Reset the bInFrontOfLabel flag:
+    //
     else
     {
+        const BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
+        bRet = SetInFrontOfLabel( FALSE );
         bRet = pCurCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
                                     bSkipHidden,
-                                    !IsOverwriteCrsr() );
+                                   !IsOverwriteCrsr() ) || bRet;
     }
 
     if( bRet )
@@ -480,8 +493,6 @@ void SwCrsrShell::SetMarkedNumLevel(const String & sNumRule, BYTE nLevel)
 {
     if (sNumRule != sMarkedNumRule || nLevel != nMarkedNumLevel)
     {
-        StartAction();
-
         if (sMarkedNumRule.Len() > 0)
             pDoc->SetMarkedNumLevel(sMarkedNumRule, nMarkedNumLevel, FALSE);
 
@@ -492,22 +503,18 @@ void SwCrsrShell::SetMarkedNumLevel(const String & sNumRule, BYTE nLevel)
 
         sMarkedNumRule = sNumRule;
         nMarkedNumLevel = nLevel;
-
-        EndAction();
     }
 }
 
 void SwCrsrShell::UpdateMarkedNumLevel()
 {
-    SwTxtNode * pTxtNd =
-        pCurCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+    SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
 
-    if (pTxtNd && ! pCurCrsr->HasMark()) // #i27615#
+    if ( pTxtNd ) // #i27615#
     {
         if (! pTxtNd->IsNumbered())
         {
-            pCurCrsr->SetInFrontOfLabel(FALSE);
-
+            pCurCrsr->_SetInFrontOfLabel( FALSE );
             SetMarkedNumLevel(String(), 0);
         }
         else if (pCurCrsr->IsInFrontOfLabel())
@@ -538,10 +545,9 @@ FASTBOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
     SwShellCrsr* pTmpCrsr = bTableMode ? pTblCrsr : pCurCrsr;
 
     FASTBOOL bRet = pTmpCrsr->UpDown( bUp, nCnt );
-
     // --> FME 2005-01-10 #i40019# UpDown should always reset the
     // bInFrontOfLabel flag:
-    pCurCrsr->SetInFrontOfLabel(FALSE);
+    bRet = SetInFrontOfLabel(FALSE) || bRet;
     // <--
 
     if( bRet )
@@ -566,9 +572,25 @@ FASTBOOL SwCrsrShell::LRMargin( BOOL bLeft, BOOL bAPI)
     SET_CURR_SHELL( this );
     eMvState = MV_LEFTMARGIN;       // Status fuers Crsr-Travelling - GetCrsrOfst
 
-    BOOL bTableMode = IsTableMode();
+    const BOOL bTableMode = IsTableMode();
     SwShellCrsr* pTmpCrsr = bTableMode ? pTblCrsr : pCurCrsr;
+
+    const FASTBOOL bWasAtLM =
+            ( 0 == _GetCrsr()->GetPoint()->nContent.GetIndex() );
+
     FASTBOOL bRet = pTmpCrsr->LeftRightMargin( bLeft, bAPI );
+
+    if ( bLeft && !bTableMode && bRet && bWasAtLM && !_GetCrsr()->HasMark() )
+    {
+        const SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
+        if ( pTxtNd && pTxtNd->HasVisibleNumberingOrBullet() )
+            SetInFrontOfLabel( TRUE );
+    }
+    else if ( !bLeft )
+    {
+        bRet = SetInFrontOfLabel( FALSE ) || bRet;
+    }
+
     if( bRet )
     {
         UpdateCrsr();
@@ -685,22 +707,29 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
-    SwTxtNode * pTxtNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+    SwTxtNode * pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
-    if (pTxtNd && pTxtNd->GetNum() &&
+    if ( pTxtNd && !IsTableMode() &&
         // --> FME 2004-11-25 #i37515# No bInFrontOfLabel during selection
-        !pCrsr->HasMark() )
+        !pCrsr->HasMark() &&
         // <--
+        pTxtNd->HasVisibleNumberingOrBullet() )
+    {
         aTmpState.bInFrontOfLabel = TRUE; // #i27615#
+    }
     else
+    {
         aTmpState.bInFrontOfLabel = FALSE;
+    }
 
     int bRet = CRSR_POSOLD |
                 ( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState )
                     ? 0 : CRSR_POSCHG );
 
+    const bool bOldInFrontOfLabel = IsInFrontOfLabel();
+    const bool bNewInFrontOfLabel = aTmpState.bInFrontOfLabel;
+
     pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
-    pCrsr->SetInFrontOfLabel( aTmpState.bInFrontOfLabel ); // #i27615#
 
     if( MV_RIGHTMARGIN == aTmpState.eState )
         eMvState = MV_RIGHTMARGIN;
@@ -716,7 +745,8 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
     {
         // steht an der gleichen Position und wenn im Header/Footer,
         // dann im gleichen
-        if( aPos == *pCrsr->GetPoint() )
+        if( aPos == *pCrsr->GetPoint() &&
+            bOldInFrontOfLabel == bNewInFrontOfLabel )
         {
             if( pFrm )
             {
@@ -753,6 +783,13 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
 
     *pCrsr->GetPoint() = aPos;
     rAktCrsrPt = aPt;
+
+    // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
+    // Force update of marked number levels if necessary.
+    if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
+        pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
+    SetInFrontOfLabel( bNewInFrontOfLabel );
+    // <--
 
     if( !pCrsr->IsSelOvr( SELOVER_CHANGEPOS ) )
     {
@@ -976,6 +1013,17 @@ FASTBOOL SwCrsrShell::IsEndPara() const
 FASTBOOL SwCrsrShell::IsInFrontOfLabel() const
 {
     return pCurCrsr->IsInFrontOfLabel();
+}
+
+bool SwCrsrShell::SetInFrontOfLabel( FASTBOOL bNew )
+{
+    if ( bNew != IsInFrontOfLabel() )
+    {
+        pCurCrsr->_SetInFrontOfLabel( bNew );
+        UpdateMarkedNumLevel();
+        return true;
+    }
+    return false;
 }
 
 FASTBOOL SwCrsrShell::GotoPage( USHORT nPage )
@@ -1679,8 +1727,6 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
 #endif
 
-    UpdateMarkedNumLevel(); // #i27615#
-
     if( bSVCrsrVis )
         pVisCrsr->Show();           // wieder anzeigen
 }
@@ -2088,7 +2134,7 @@ FASTBOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
 
     FASTBOOL bRet = GetLayout()->GetCrsrOfst( &aPos, aPt /*, &aTmpState*/ );
 
-    pCurCrsr->SetInFrontOfLabel(FALSE); // #i27615#
+    SetInFrontOfLabel( FALSE ); // #i27615#
 
     // nur in TextNodes anzeigen !!
     SwTxtNode* pTxtNd = aPos.nNode.GetNode().GetTxtNode();
