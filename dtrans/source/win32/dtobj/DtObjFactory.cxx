@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:52:43 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include "DOTransferable.hxx"
 #endif
 
+#ifndef _WRPDOTRANSFERABLE_HXX_
+#include "WrpDOTransferable.hxx"
+#endif
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -90,12 +94,22 @@ using namespace com::sun::star::lang;
 IDataObjectPtr SAL_CALL CDTransObjFactory::createDataObjFromTransferable( const Reference< XMultiServiceFactory >& aServiceManager,
                                                                        const Reference< XTransferable >& refXTransferable )
 {
-    return ( IDataObjectPtr( new CXTDataObject( aServiceManager, refXTransferable ) ) );
+    Reference< XTransferable > wrpTransf( new CWrpDOTransferable( aServiceManager, refXTransferable, sal_False ) );
+    return ( IDataObjectPtr( new CXTDataObject( aServiceManager, wrpTransf ) ) );
 }
 
 Reference< XTransferable > SAL_CALL CDTransObjFactory::createTransferableFromDataObj( const Reference< XMultiServiceFactory >& aServiceManager,
                                                                                      IDataObject* pIDataObject )
 {
-    return Reference< XTransferable >( new CDOTransferable( aServiceManager, pIDataObject ) );
+    CDOTransferable* pTransf = new CDOTransferable( aServiceManager, pIDataObject );
+    Reference< XTransferable > refDOTransf( pTransf );
+
+    pTransf->acquire( );
+    pTransf->initFlavorList( );
+    pTransf->release( );
+
+    return Reference< XTransferable >( new CWrpDOTransferable( aServiceManager, refDOTransf ) );
+
+    //return refDOTransf;
 }
 

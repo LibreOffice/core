@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:54:17 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,6 @@ const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );
 
 CDOTransferable::CDOTransferable( const Reference< XMultiServiceFactory >& ServiceManager, IDataObjectPtr rDataObject ) :
     m_rDataObject( rDataObject ),
-    m_bFlavorListInitialized( sal_False ),
     m_SrvMgr( ServiceManager ),
     m_DataFormatTranslator( m_SrvMgr )
 {
@@ -139,18 +138,12 @@ CDOTransferable::CDOTransferable( const Reference< XMultiServiceFactory >& Servi
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
         throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
-    initFlavorList( );
+    MutexGuard aGuard( m_aMutex );
 
     FORMATETC fetc = dataFlavorToFormatEtc( aFlavor );
     OSL_ASSERT( CF_INVALID != fetc.cfFormat );
 
     ByteSequence_t clipDataStream = getClipboardData( fetc );
-
-    // format conversion if necessary
-    if ( CF_DIB == fetc.cfFormat )
-        clipDataStream = WinDIBToOOBMP( clipDataStream );
-    else if ( CF_METAFILEPICT == fetc.cfFormat )
-        clipDataStream = WinMFPictToOOMFPict( clipDataStream );
 
     return byteStreamToAny( clipDataStream, aFlavor.DataType );
 }
@@ -162,7 +155,7 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
     throw( RuntimeException )
 {
-    initFlavorList( );
+    MutexGuard aGuard( m_aMutex );
     return m_FlavorList;
 }
 
@@ -173,7 +166,7 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
 sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw( RuntimeException )
 {
-    initFlavorList( );
+    MutexGuard aGuard( m_aMutex );
 
     for ( sal_Int32 i = 0; i < m_FlavorList.getLength( ); i++ )
         if ( aFlavor == m_FlavorList[i] )
@@ -192,39 +185,28 @@ sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFla
 
 void SAL_CALL CDOTransferable::initFlavorList( )
 {
-    // using double checked locking
-    if ( m_bFlavorListInitialized )
-        return;
-
-    MutexGuard aGuard( m_aMutex );
-
-    if ( !m_bFlavorListInitialized )
+    IEnumFORMATETCPtr pEnumFormatEtc;
+    HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
+    if ( SUCCEEDED( hr ) )
     {
-        IEnumFORMATETCPtr pEnumFormatEtc;
-        HRESULT hr = m_rDataObject->EnumFormatEtc( DATADIR_GET, &pEnumFormatEtc );
-        if ( SUCCEEDED( hr ) )
+        pEnumFormatEtc->Reset( );
+
+        FORMATETC fetc;
+        while ( S_FALSE != pEnumFormatEtc->Next( 1, &fetc, NULL ) )
         {
-            pEnumFormatEtc->Reset( );
+            // we use locales only to determine the
+            // charset if there is text on the cliboard
+            // we don't offer this format
+            if ( CF_LOCALE == fetc.cfFormat )
+                continue;
 
-            FORMATETC fetc;
-            while ( S_FALSE != pEnumFormatEtc->Next( 1, &fetc, NULL ) )
-            {
-                // we use locales only to determine the
-                // charset if there is text on the cliboard
-                // we don't offer this format
-                if ( CF_LOCALE == fetc.cfFormat )
-                    continue;
+            DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
-                DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
+            addSupportedFlavor( aFlavor );
 
-                addSupportedFlavor( aFlavor );
-
-                // see MSDN IEnumFORMATETC
-                if ( fetc.ptd )
-                    CoTaskMemFree( fetc.ptd );
-            }
-
-            m_bFlavorListInitialized = sal_True;
+            // see MSDN IEnumFORMATETC
+            if ( fetc.ptd )
+                CoTaskMemFree( fetc.ptd );
         }
     }
 }
@@ -233,10 +215,10 @@ void SAL_CALL CDOTransferable::initFlavorList( )
 //
 //------------------------------------------------------------------------
 
-inline
+//inline
 void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 {
-    // we irgnore all formats that can't be translated
+    // we ignore all formats that can't be translated
     if ( aFlavor.MimeType.getLength( ) )
     {
         m_FlavorList.realloc( m_FlavorList.getLength( ) + 1 );
@@ -258,7 +240,7 @@ FORMATETC SAL_CALL CDOTransferable::dataFlavorToFormatEtc( const DataFlavor& aFl
 // helper function
 //------------------------------------------------------------------------
 
-inline
+//inline
 DataFlavor SAL_CALL CDOTransferable::formatEtcToDataFlavor( const FORMATETC& aFormatEtc )
 {
     return m_DataFormatTranslator.getDataFlavorFromFormatEtc( this, aFormatEtc );
@@ -295,6 +277,12 @@ CDOTransferable::ByteSequence_t CDOTransferable::getClipboardData( const FORMATE
         ReleaseStgMedium( &stgmedium );
         throw RuntimeException( );
     }
+
+    // format conversion if necessary
+    if ( CF_DIB == aFormatEtc.cfFormat )
+        byteStream = WinDIBToOOBMP( byteStream );
+    else if ( CF_METAFILEPICT == aFormatEtc.cfFormat )
+        byteStream = WinMFPictToOOMFPict( byteStream );
 
     ReleaseStgMedium( &stgmedium );
 

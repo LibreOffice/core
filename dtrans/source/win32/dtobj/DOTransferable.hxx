@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:54:25 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,16 +85,13 @@
 // deklarations
 //------------------------------------------------------------------------
 
+// forward
+class CDTransObjFactory;
+
 class CDOTransferable : public ::cppu::WeakImplHelper1< ::com::sun::star::datatransfer::XTransferable >
 {
 public:
     typedef com::sun::star::uno::Sequence< sal_Int8 > ByteSequence_t;
-
-public:
-    // the DataObject should be the one returned by OleGetClipboard!!!
-    explicit CDOTransferable(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
-        IDataObjectPtr rDataObject );
 
     //------------------------------------------------------------------------
     // XTransferable
@@ -110,12 +107,17 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
 private:
+    // should be created only by CDTransObjFactory
+    explicit CDOTransferable(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ServiceManager,
+        IDataObjectPtr rDataObject );
 
     //------------------------------------------------------------------------
     // some helper functions
     //------------------------------------------------------------------------
 
     void SAL_CALL initFlavorList( );
+
     void                                     SAL_CALL addSupportedFlavor( const com::sun::star::datatransfer::DataFlavor& aFlavor );
     FORMATETC                                SAL_CALL dataFlavorToFormatEtc( const com::sun::star::datatransfer::DataFlavor& aFlavor ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc );
@@ -128,7 +130,6 @@ private:
 private:
     IDataObjectPtr                                                                          m_rDataObject;
     com::sun::star::uno::Sequence< com::sun::star::datatransfer::DataFlavor >               m_FlavorList;
-    sal_Bool                                                                                m_bFlavorListInitialized;
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  m_SrvMgr;
     CDataFormatTranslator                                                                   m_DataFormatTranslator;
     ::osl::Mutex                                                                            m_aMutex;
@@ -137,6 +138,8 @@ private:
 private:
     CDOTransferable( const CDOTransferable& );
     CDOTransferable& operator=( const CDOTransferable& );
+
+    friend class CDTransObjFactory;
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:51:04 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,12 @@ public:
 private:
     FORMATETC m_FormatEtc;
 
-    friend sal_Bool operator==( CFormatEtc& lhs, CFormatEtc& rhs );
-    friend sal_Bool operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
+    friend sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs );
+    friend sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
 };
 
-sal_Bool operator==( CFormatEtc& lhs, CFormatEtc& rhs );
-sal_Bool operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
+sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs );
+sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs );
 
 /*****************************************************************
     a simple container for FORMATECT structures

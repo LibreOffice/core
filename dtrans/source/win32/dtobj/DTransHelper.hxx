@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:50:37 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,12 @@
 // deklarations
 //------------------------------------------------------------------------
 
-// will be thrown of allocation of
-// memory fails
-class COutOfMemoryException
+// will be thrown in case of failures
+class CStgTransferException
 {
+public:
+    HRESULT m_hr;
+    CStgTransferException( HRESULT hr ) : m_hr( hr ) {};
 };
 
 //-------------------------------------------------------------------------

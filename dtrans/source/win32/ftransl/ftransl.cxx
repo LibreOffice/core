@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftransl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:38:03 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 
 #define IMPL_NAME  "com.sun.star.datatransfer.DataFormatTranslator"
 
+#define MODULE_PRIVATE
 #define CPPUTYPE_SEQSALINT8       getCppuType( (const Sequence< sal_Int8 >*) 0 )
 #define CPPUTYPE_OUSTR            getCppuType( (const ::rtl::OUString*) 0 )
 #define CPPUTYPE_SALINT32         getCppuType( ( sal_Int32 * ) 0 )
@@ -95,7 +96,7 @@
 #define EMPTY_OUSTR               OUString::createFromAscii( "" )
 #define _PARAM_WINFORMATNAME      "windows_formatname"
 
-#define PRIVATE_OO( native_fmt )  OUString::createFromAscii( "application/x-openoffice;" _PARAM_WINFORMATNAME "=" #native_fmt )
+#define PRIVATE_OO                OUString::createFromAscii( "application/x-openoffice;" _PARAM_WINFORMATNAME "=" )
 #define PARAM_WINFORMATNAME       OUString::createFromAscii( _PARAM_WINFORMATNAME )
 
 //------------------------------------------------------------------------
@@ -115,7 +116,7 @@ using namespace com::sun::star::container;
 // helper functions
 //------------------------------------------------------------------------
 
-namespace
+namespace MODULE_PRIVATE
 {
     Sequence< OUString > SAL_CALL DataFormatTranslator_getSupportedServiceNames( )
     {
@@ -158,20 +159,20 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
         OUString fullMediaType = refXMimeCntType->getFullMediaType( );
         if ( isTextPlainMediaType( fullMediaType ) )
         {
+            // default is CF_TEXT
             aAny <<= static_cast< sal_Int32 >( CF_TEXT );
 
-            if ( refXMimeCntType->hasParameter( OUSTR( charset ) ) )
-            {
-                OUString charset = refXMimeCntType->getParameterValue( OUSTR( charset ) );
-                findStandardFormatIdForCharset( charset, aAny );
-            }
+            // but maybe it is unicode text or oem text
+            OUString charset = refXMimeCntType->getParameterValue( OUSTR( charset ) );
+            findStandardFormatIdForCharset( charset, aAny );
         }
         else
         {
             if ( refXMimeCntType->hasParameter( PARAM_WINFORMATNAME ) )
             {
-                OUString winfmtname = refXMimeCntType->getParameterValue( OUSTR( PARAM_WINFORMATNAME ) );
+                OUString winfmtname = refXMimeCntType->getParameterValue( PARAM_WINFORMATNAME );
                 aAny <<= winfmtname;
+
                 setStandardFormatIdForNativeFormatName( winfmtname, aAny );
             }
             else
@@ -184,11 +185,11 @@ Any SAL_CALL CDataFormatTranslator::getSystemDataTypeFromDataFlavor( const DataF
     }
     catch( NoSuchElementException& )
     {
-        OSL_ASSERT( sal_False );
+        OSL_ENSURE( sal_False, "text/plain Contenttype without charset parameter detected" );
     }
     catch( ... )
     {
-        OSL_ASSERT( sal_False );
+        OSL_ENSURE( sal_False, "Unexpected error" );
         throw;
     }
 
@@ -277,6 +278,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Bitmap), CF_DIB ) );// SOT_FORMAT_BITMAP
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(text/plain;charset=utf-16), EMPTY_OUSTR, CF_UNICODETEXT, OUSTR(Unicode-Text), CPPUTYPE_OUSTR) );
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Locale), CF_LOCALE ) );
+    m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Image WMF), CF_METAFILEPICT ) );// SOT_FORMAT_WMF
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(GDIMetaFile) ) );// SOT_FORMAT_GDIMETAFILE
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(Private) ) );// SOT_FORMAT_PRIVATE
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(FileName) ) );// SOT_FORMAT_FILE
@@ -334,6 +336,7 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable( )
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(StarDraw TabBar) ) );  //SOT_FORMATSTR_ID_STARDRAW_TABBAR
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(SONLK (StarOffice Navi Link)) ) );//SOT_FORMATSTR_ID_SONLK
     m_TranslTable.push_back( mkPublicFormatEntry(  OUSTR(application/msword), OUSTR(MSWordDoc) ) ); //SOT_FORMATSTR_ID_MSWORD_DOC
+    //m_TranslTable.push_back( mkPrivateFormatEntry(  OUSTR(MSWordDoc) ) ); //SOT_FORMATSTR_ID_MSWORD_DOC
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(StarFrameSetDocument) ) );//SOT_FORMATSTR_ID_STAR_FRAMESET_DOC
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(OfficeDocument) ) );//SOT_FORMATSTR_ID_OFFICE_DOC
     m_TranslTable.push_back( mkPrivateFormatEntry( OUSTR(NotesDocInfo) ) ); //SOT_FORMATSTR_ID_NOTES_DOCINFO
@@ -422,7 +425,9 @@ void SAL_CALL CDataFormatTranslator::findDataFlavorForStandardFormatId( sal_Int3
 void SAL_CALL CDataFormatTranslator::findDataFlavorForNativeFormatName( const OUString& aNativeFormatName, DataFlavor& aDataFlavor ) const
 {
     vector< FormatEntry >::const_iterator citer_end = m_TranslTable.end( );
-    for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( ); citer != citer_end; ++citer )
+    for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( );
+          citer != citer_end;
+          ++citer )
     {
         if ( aNativeFormatName.equalsIgnoreCase( citer->aNativeFormatName ) )
         {
@@ -458,7 +463,7 @@ void SAL_CALL CDataFormatTranslator::setStandardFormatIdForNativeFormatName( con
     for ( vector< FormatEntry >::const_iterator citer = m_TranslTable.begin( ); citer != citer_end; ++citer )
     {
         if ( aNativeFormatName.equalsIgnoreCase( citer->aNativeFormatName ) &&
-             CF_INVALID != citer->aStandardFormatId )
+             (CF_INVALID != citer->aStandardFormatId) )
         {
             aAny <<= citer->aStandardFormatId;
             break;
@@ -543,18 +548,14 @@ FormatEntry CDataFormatTranslator::mkFormatEntry( const DataFlavor& aDataFlavor,
 FormatEntry CDataFormatTranslator::mkPrivateFormatEntry( const OUString& aNativeFormatName, CLIPFORMAT aClipformat, const OUString& aHpName, Type aCppuType )
 {
     DataFlavor aDFlv;
+    OUString quotedFName = OUString::createFromAscii( "\"" ) + aNativeFormatName + OUString::createFromAscii( "\"" );
 
     if ( aHpName.getLength( ) )
-        aDFlv = mkDataFlv( PRIVATE_OO( aNativeFormatName ), aHpName, aCppuType );
+        aDFlv = mkDataFlv( PRIVATE_OO + quotedFName, aHpName, aCppuType );
     else
-        aDFlv = mkDataFlv( PRIVATE_OO( aNativeFormatName ), aNativeFormatName, aCppuType );
+        aDFlv = mkDataFlv( PRIVATE_OO + quotedFName, aNativeFormatName, aCppuType );
 
-    FormatEntry fmtentry;
-
-    if ( CF_INVALID == aClipformat )
-        fmtentry = mkFormatEntry( aDFlv, aNativeFormatName, aClipformat );
-    else
-        fmtentry = mkFormatEntry( aDFlv, EMPTY_OUSTR, aClipformat );
+    FormatEntry fmtentry = mkFormatEntry( aDFlv, aNativeFormatName, aClipformat );
 
     return fmtentry;
 }
@@ -566,11 +567,12 @@ FormatEntry CDataFormatTranslator::mkPrivateFormatEntry( const OUString& aNative
 FormatEntry CDataFormatTranslator::mkPublicFormatEntry( const OUString& aContentType, const OUString& aNativeFormatName, CLIPFORMAT aClipformat, const OUString& aHpName, Type aCppuType )
 {
     DataFlavor aDFlv;
+    OUString quotedFName = OUString::createFromAscii( "\"" ) + aNativeFormatName + OUString::createFromAscii( "\"" );
 
     if ( aHpName.getLength( ) )
         aDFlv = mkDataFlv( aContentType, aHpName, aCppuType );
     else
-        aDFlv = mkDataFlv( aContentType, aNativeFormatName, aCppuType );
+        aDFlv = mkDataFlv( aContentType, quotedFName, aCppuType );
 
     return mkFormatEntry( aDFlv, aNativeFormatName, aClipformat );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:53:22 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,17 @@ using namespace com::sun::star::lang;
 using namespace rtl;
 
 //------------------------------------------------------------------------
+// a helper class that will be thrown by the function validateFormatEtc
+//------------------------------------------------------------------------
+
+class CInvalidFormatEtcException
+{
+public:
+    HRESULT m_hr;
+    CInvalidFormatEtcException( HRESULT hr ) : m_hr( hr ) {};
+};
+
+//------------------------------------------------------------------------
 // ctor
 //------------------------------------------------------------------------
 
@@ -175,155 +186,41 @@ STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 //
 //------------------------------------------------------------------------
 
-inline
-sal_Bool CXTDataObject::isRequestForLocale( LPFORMATETC lpFormatEtc ) const
-{
-    return ( CF_LOCALE == lpFormatEtc->cfFormat );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-inline
-DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
-{
-    return m_DataFormatTranslator.getDataFlavorFromFormatEtc( m_XTransferable, aFormatEtc );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
-sal_Bool SAL_CALL CXTDataObject::isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const
-{
-    return ( (lpFormatEtc->cfFormat == CF_TEXT) ||
-             (lpFormatEtc->cfFormat == CF_OEMTEXT) ||
-             (lpFormatEtc->cfFormat == CF_UNICODETEXT) );
-}
-
-//------------------------------------------------------------------------
-//
-//------------------------------------------------------------------------
-
 STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
     if ( !(pFormatetc && pmedium) )
         return E_INVALIDARG;
 
-    HRESULT hr = validateFormatEtc( pFormatetc );
-    if ( FAILED( hr ) )
-        return hr;
-
-    DataFlavor aFlavor;
-
     try
     {
-        if ( isRequestForLocale( pFormatetc ) )
-        {
-            if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
-            {
-                LCID lcid = m_FormatRegistrar.getSynthesizedLocale( );
-                TransferDataToStorageAndSetupStgMedium( reinterpret_cast< sal_Int8* >( &lcid ),
-                                       *pFormatetc,
-                                       0,
-                                       sizeof( LCID ),
-                                       *pmedium );
-                return S_OK;
-            }
-            else
-                return DV_E_FORMATETC;
-        }
+        invalidateStgMedium( *pmedium );
+        validateFormatEtc( pFormatetc );
 
-        aFlavor = formatEtcToDataFlavor( *pFormatetc );
-
-        if ( CF_UNICODETEXT == pFormatetc->cfFormat )
-        {
-            OUString aText;
-            m_XTransferable->getTransferData( aFlavor ) >>= aText;
-
-            sal_uInt32 nRequiredMemSize = aText.getLength( ) * sizeof( sal_Unicode ) + 1;
-            sal_uInt32 nBytesToTransfer = aText.getLength( ) * sizeof( sal_Unicode );
-            hr = TransferDataToStorageAndSetupStgMedium( reinterpret_cast< const sal_Int8* >( aText.getStr( ) ),
-                                   *pFormatetc,
-                                   nRequiredMemSize,
-                                   nBytesToTransfer,
-                                   *pmedium );
-        }
+        // handle locale request, because locale is a artificial format for us
+        if ( CF_LOCALE == pFormatetc->cfFormat )
+            transferLocaleToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
+        else if ( CF_UNICODETEXT == pFormatetc->cfFormat )
+            transferUnicodeToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
         else
-        {
-            Sequence< sal_Int8 > clipDataStream;
-            m_XTransferable->getTransferData( aFlavor ) >>= clipDataStream;
-
-            sal_uInt32 nRequiredMemSize = 0;
-            if ( (CF_TEXT == pFormatetc->cfFormat) || (CF_OEMTEXT == pFormatetc->cfFormat) )
-                nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
-
-            // prepare data for transmision
-            if ( CF_DIB == pFormatetc->cfFormat )
-            {
-                clipDataStream = OOBmpToWinDIB( clipDataStream );
-            }
-
-            if ( CF_METAFILEPICT == pFormatetc->cfFormat )
-            {
-                HMETAFILE hMfPict = OOMFPictToWinMFPict( clipDataStream );
-                TransferDataToStorageAndSetupStgMedium( reinterpret_cast< sal_Int8* >( &hMfPict ),
-                                       *pFormatetc,
-                                       0,
-                                       sizeof( HMETAFILE ),
-                                       *pmedium );
-            }
-            else
-                TransferDataToStorageAndSetupStgMedium( clipDataStream.getArray( ),
-                                       *pFormatetc,
-                                       nRequiredMemSize,
-                                       clipDataStream.getLength( ),
-                                       *pmedium );
-        }
+            transferAnyDataToClipbAndSetupStgMedium( *pFormatetc, *pmedium );
     }
     catch(UnsupportedFlavorException&)
     {
         if ( isSynthesizeableFormat( pFormatetc ) )
         {
-            /*
-            FORMATETC fetc;
-
-            synthesize format
-            if ( requested format is unicodetext ) // implies the transferable has really only text
-            {
-                fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT );
-                aFlavor = formatEtcToDataFlavor( fetc );
-
-                get transfer data
-                convert transfer data to unicode text
-                transfer result to storage
-            }
-            else // implies the transferable has really only unicodetext
-            {
-                fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT );
-                aFlavor = formatEtcToDataFlavor( fetc );
-
-                get transfer data
-                if ( request is for ansi text )
-                    convert transfer data to text using the CP_ACP
-                else
-                    convert transfer data to oemtext using CP_OEMCP
-
-                transfer result to storage
-            }
-
-            transfer data to storage
-            */
-
+            // synthesize format
             return S_OK;
         }
 
         return DV_E_FORMATETC;
     }
-    catch(COutOfMemoryException&)
+    catch( CInvalidFormatEtcException& ex )
     {
-        return STG_E_MEDIUMFULL;
+        return ex.m_hr;
+    }
+    catch( CStgTransferException& ex )
+    {
+        return translateStgExceptionCode( ex.m_hr );
     }
     catch(...)
     {
@@ -333,46 +230,151 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     return S_OK;
 }
 
+/*
+    FORMATETC fetc;
+
+    synthesize format
+    if ( requested format is unicodetext ) // implies the transferable has really only text
+    {
+        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_TEXT );
+        aFlavor = formatEtcToDataFlavor( fetc );
+
+        get transfer data
+        convert transfer data to unicode text
+        transfer result to storage
+    }
+    else // implies the transferable has really only unicodetext
+    {
+        fetc = m_DataFormatTranslator.getFormatEtcForClipformat( CF_UNICODETEXT );
+        aFlavor = formatEtcToDataFlavor( fetc );
+
+        get transfer data
+        if ( request is for ansi text )
+            convert transfer data to text using the CP_ACP
+        else
+            convert transfer data to oemtext using CP_OEMCP
+
+        transfer result to storage
+    }
+
+    transfer data to storage
+*/
+
 //------------------------------------------------------------------------
 //
 //------------------------------------------------------------------------
 
-HRESULT SAL_CALL CXTDataObject::TransferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
+// inline
+void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
                                                                          const FORMATETC& fetc,
                                                                         sal_uInt32 nInitStgSize,
                                                                         sal_uInt32 nBytesToTransfer,
                                                                         STGMEDIUM& stgmedium )
 {
-    HRESULT hr = S_OK;
+    OSL_PRECOND( !nInitStgSize || nInitStgSize && (nInitStgSize >= nBytesToTransfer),
+                 "Memory size less than number of bytes to transfer" );
 
-    if ( isValidTymedForClipformat( fetc ) )
+    // if the client wants the data only via IStream we setup the storage transfer
+    // helper so that the stream will not be released on destruction
+    sal_Bool bShouldReleaseStream = ((fetc.tymed & TYMED_HGLOBAL) || !(fetc.tymed & TYMED_ISTREAM));
+    CStgTransferHelper stgTransfHelper( AUTO_INIT,
+                                        NULL,
+                                        sal_False,
+                                        bShouldReleaseStream );
+
+    // setup storage size
+    if ( nInitStgSize > 0 )
+        stgTransfHelper.init( nInitStgSize,
+                              GMEM_MOVEABLE | GMEM_ZEROINIT,
+                              sal_False,
+                              bShouldReleaseStream );
+
+    stgTransfHelper.write( lpStorage, nBytesToTransfer );
+
+    setupStgMedium( fetc, stgTransfHelper, stgmedium );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+//inline
+void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
     {
-        // if the client wants the data only via IStream we setup the storage transfer
-        // helper so that the stream will not be released on destruction
-        sal_Bool bShouldReleaseStream =
-            ( (fetc.tymed & TYMED_ISTREAM) && !(fetc.tymed & TYMED_HGLOBAL) );
-        CStgTransferHelper stgTransfHelper( AUTO_INIT,
-                                            NULL,
-                                            sal_False,
-                                            bShouldReleaseStream );
-
-        // setup storage size
-        if ( nInitStgSize > 0 )
-            stgTransfHelper.init( nInitStgSize,
-                                  GMEM_MOVEABLE | GMEM_ZEROINIT,
-                                  sal_False,
-                                  bShouldReleaseStream );
-
-        sal_Bool bResult = stgTransfHelper.write( lpStorage, nBytesToTransfer );
-
-        setupStgMedium( bResult, fetc, stgTransfHelper, stgmedium );
-        if ( !bResult )
-            hr = E_UNEXPECTED;
+        LCID lcid = m_FormatRegistrar.getSynthesizedLocale( );
+        transferDataToStorageAndSetupStgMedium(
+            reinterpret_cast< sal_Int8* >( &lcid ),
+            fetc,
+            0,
+            sizeof( LCID ),
+            stgmedium );
     }
     else
-        hr = DV_E_FORMATETC;
+        throw CInvalidFormatEtcException( DV_E_FORMATETC );
+}
 
-    return hr;
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+//inline
+void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
+
+    OUString aText;
+    m_XTransferable->getTransferData( aFlavor ) >>= aText;
+
+    sal_uInt32 nBytesToTransfer = aText.getLength( ) * sizeof( sal_Unicode );
+    sal_uInt32 nRequiredMemSize = nBytesToTransfer + 1;
+
+    transferDataToStorageAndSetupStgMedium(
+        reinterpret_cast< const sal_Int8* >( aText.getStr( ) ),
+        fetc,
+        nRequiredMemSize,
+        nBytesToTransfer,
+        stgmedium );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+//inline
+void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+{
+    DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
+
+    Sequence< sal_Int8 > clipDataStream;
+    m_XTransferable->getTransferData( aFlavor ) >>= clipDataStream;
+
+    sal_uInt32 nRequiredMemSize = 0;
+    if ( isOemOrAnsiTextFormat( fetc.cfFormat ) )
+        nRequiredMemSize = sizeof( sal_Int8 ) * clipDataStream.getLength( ) + 1;
+
+    // prepare data for transmision
+    if ( CF_DIB == fetc.cfFormat )
+        clipDataStream = OOBmpToWinDIB( clipDataStream );
+
+    if ( CF_METAFILEPICT == fetc.cfFormat )
+    {
+        HMETAFILE hMfPict = OOMFPictToWinMFPict( clipDataStream );
+        transferDataToStorageAndSetupStgMedium(
+            reinterpret_cast< sal_Int8* >( &hMfPict ),
+            fetc,
+            0,
+            sizeof( HMETAFILE ),
+            stgmedium );
+    }
+    else
+        transferDataToStorageAndSetupStgMedium(
+            clipDataStream.getArray( ),
+            fetc,
+            nRequiredMemSize,
+            clipDataStream.getLength( ),
+            stgmedium );
 }
 
 //------------------------------------------------------------------------
@@ -496,26 +498,26 @@ void SAL_CALL CXTDataObject::GetAllDataFromSource( )
 //------------------------------------------------------------------------
 
 inline
-STDMETHODIMP CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
+DataFlavor SAL_CALL CXTDataObject::formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const
 {
-    OSL_ASSERT( lpFormatEtc );
+    DataFlavor aFlavor =
+        m_DataFormatTranslator.getDataFlavorFromFormatEtc( m_XTransferable, aFormatEtc );
 
-    if ( lpFormatEtc->lindex != -1 )
-        return DV_E_LINDEX;
+    if ( !aFlavor.MimeType.getLength( ) )
+        throw UnsupportedFlavorException( );
 
-    if ( (lpFormatEtc->dwAspect != DVASPECT_CONTENT) ||
-         (lpFormatEtc->dwAspect != DVASPECT_COPY) ||
-         (lpFormatEtc->dwAspect != DVASPECT_LINK) ||
-         (lpFormatEtc->dwAspect != DVASPECT_SHORTNAME) )
-        return DV_E_DVASPECT;
+    return aFlavor;
+}
 
-    if ( (lpFormatEtc->tymed != TYMED_HGLOBAL) ||
-         (lpFormatEtc->tymed != TYMED_ISTREAM) ||
-         (lpFormatEtc->tymed != TYMED_MFPICT) ||
-         (lpFormatEtc->tymed != TYMED_ENHMF) )
-        return DV_E_TYMED;
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
 
-    return S_OK;
+sal_Bool SAL_CALL CXTDataObject::isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const
+{
+    return ( (lpFormatEtc->cfFormat == CF_TEXT) ||
+             (lpFormatEtc->cfFormat == CF_OEMTEXT) ||
+             (lpFormatEtc->cfFormat == CF_UNICODETEXT) );
 }
 
 //------------------------------------------------------------------------
@@ -523,40 +525,67 @@ STDMETHODIMP CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
 //------------------------------------------------------------------------
 
 inline
-void SAL_CALL CXTDataObject::setupStgMedium( sal_Bool bTransferSuccessful,
-                                             const FORMATETC& fetc,
+void CXTDataObject::validateFormatEtc( LPFORMATETC lpFormatEtc ) const
+{
+    OSL_ASSERT( lpFormatEtc );
+
+    if ( lpFormatEtc->lindex != -1 )
+        throw CInvalidFormatEtcException( DV_E_LINDEX );
+
+    if ( !(lpFormatEtc->dwAspect & DVASPECT_CONTENT) &&
+         !(lpFormatEtc->dwAspect & DVASPECT_COPY) &&
+         !(lpFormatEtc->dwAspect & DVASPECT_LINK) &&
+         !(lpFormatEtc->dwAspect & DVASPECT_SHORTNAME) )
+        throw CInvalidFormatEtcException( DV_E_DVASPECT );
+
+    if ( !(lpFormatEtc->tymed & TYMED_HGLOBAL) &&
+         !(lpFormatEtc->tymed & TYMED_ISTREAM) &&
+         !(lpFormatEtc->tymed & TYMED_MFPICT) &&
+         !(lpFormatEtc->tymed & TYMED_ENHMF) )
+        throw CInvalidFormatEtcException( DV_E_TYMED );
+
+    if ( lpFormatEtc->cfFormat == CF_METAFILEPICT &&
+         !(lpFormatEtc->tymed & TYMED_MFPICT) )
+        throw CInvalidFormatEtcException( DV_E_TYMED );
+
+    if ( lpFormatEtc->cfFormat == CF_ENHMETAFILE &&
+         !(lpFormatEtc->tymed & TYMED_ENHMF) )
+        throw CInvalidFormatEtcException( DV_E_TYMED );
+}
+
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+//inline
+void SAL_CALL CXTDataObject::setupStgMedium( const FORMATETC& fetc,
                                              CStgTransferHelper& stgTransHlp,
                                              STGMEDIUM& stgmedium )
 {
     stgmedium.pUnkForRelease = NULL;
 
-    if ( bTransferSuccessful )
+    if ( fetc.tymed & TYMED_MFPICT )
     {
-        if ( fetc.tymed & TYMED_MFPICT )
-        {
-            stgmedium.tymed         = TYMED_MFPICT;
-            stgmedium.hMetaFilePict = static_cast< HMETAFILEPICT >( stgTransHlp.getHGlobal( ) );
-        }
-        else if ( fetc.tymed & TYMED_ENHMF )
-        {
-            stgmedium.tymed        = TYMED_ENHMF;
-            stgmedium.hEnhMetaFile = static_cast< HENHMETAFILE >( stgTransHlp.getHGlobal( ) );
-        }
-        else if ( fetc.tymed & TYMED_HGLOBAL )
-        {
-            stgmedium.tymed   = TYMED_HGLOBAL;
-            stgmedium.hGlobal = stgTransHlp.getHGlobal( );
-        }
-        else if ( fetc.tymed & TYMED_ISTREAM )
-        {
-            stgmedium.tymed = TYMED_ISTREAM;
-            stgTransHlp.getIStream( &stgmedium.pstm );
-        }
-        else
-            OSL_ASSERT( sal_False );
+        stgmedium.tymed         = TYMED_MFPICT;
+        stgmedium.hMetaFilePict = static_cast< HMETAFILEPICT >( stgTransHlp.getHGlobal( ) );
+    }
+    else if ( fetc.tymed & TYMED_ENHMF )
+    {
+        stgmedium.tymed        = TYMED_ENHMF;
+        stgmedium.hEnhMetaFile = static_cast< HENHMETAFILE >( stgTransHlp.getHGlobal( ) );
+    }
+    else if ( fetc.tymed & TYMED_HGLOBAL )
+    {
+        stgmedium.tymed   = TYMED_HGLOBAL;
+        stgmedium.hGlobal = stgTransHlp.getHGlobal( );
+    }
+    else if ( fetc.tymed & TYMED_ISTREAM )
+    {
+        stgmedium.tymed = TYMED_ISTREAM;
+        stgTransHlp.getIStream( &stgmedium.pstm );
     }
     else
-        stgmedium.tymed = TYMED_NULL;
+        OSL_ASSERT( sal_False );
 }
 
 //------------------------------------------------------------------------
@@ -564,19 +593,42 @@ void SAL_CALL CXTDataObject::setupStgMedium( sal_Bool bTransferSuccessful,
 //------------------------------------------------------------------------
 
 inline
-sal_Bool SAL_CALL CXTDataObject::isValidTymedForClipformat( const FORMATETC& fetc ) const
+void SAL_CALL CXTDataObject::invalidateStgMedium( STGMEDIUM& stgmedium ) const
 {
-    if ( fetc.cfFormat == CF_METAFILEPICT && !(fetc.tymed & TYMED_MFPICT) )
-        return sal_False;
+    stgmedium.tymed = TYMED_NULL;
+}
 
-    if ( fetc.cfFormat == CF_ENHMETAFILE && !(fetc.tymed & TYMED_ENHMF) )
-        return sal_False;
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
 
-    if ( !(fetc.tymed & TYMED_HGLOBAL) ||
-         !(fetc.tymed & TYMED_ISTREAM) )
-         return sal_False;
+inline
+sal_Bool SAL_CALL CXTDataObject::isOemOrAnsiTextFormat( const CLIPFORMAT& aClipformat ) const
+{
+    return ( (aClipformat == CF_TEXT) || (aClipformat == CF_OEMTEXT) );
+}
 
-    return sal_True;
+//------------------------------------------------------------------------
+//
+//------------------------------------------------------------------------
+
+inline
+HRESULT SAL_CALL CXTDataObject::translateStgExceptionCode( HRESULT hr ) const
+{
+    HRESULT hrTransl;
+
+    switch( hr )
+    {
+    case STG_E_MEDIUMFULL:
+        hrTransl = hr;
+        break;
+
+    default:
+        hrTransl = E_UNEXPECTED;
+        break;
+    }
+
+    return hrTransl;
 }
 
 //============================================================================

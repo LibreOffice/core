@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:50:29 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
     OSL_ASSERT( !(bDeleteStorageOnRelease && !bReleaseStreamOnDestruction) );
 
     if ( bAutoInit )
-        init( hGlob, bDeleteStorageOnRelease );
+        init( hGlob, bDeleteStorageOnRelease, bReleaseStreamOnDestruction );
 }
 
 //------------------------------------------------------------------------
@@ -111,6 +111,9 @@ sal_Bool SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG
     if ( m_lpStream )
         hr = m_lpStream->Write( lpData, cb, cbWritten );
 
+    if ( FAILED( hr ) )
+        throw CStgTransferException( hr );
+
     return SUCCEEDED( hr );
 }
 
@@ -124,6 +127,9 @@ sal_Bool SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead 
 
     if ( m_lpStream )
         hr = m_lpStream->Read( pv, cb , pcbRead );
+
+    if ( FAILED( hr ) )
+        throw CStgTransferException( hr );
 
     return SUCCEEDED( hr );
 }
@@ -172,7 +178,7 @@ sal_Bool SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
     cleanup( );
     HGLOBAL hGlob = GlobalAlloc( uiFlags, newSize );
     if ( NULL == hGlob )
-        throw COutOfMemoryException();
+        throw CStgTransferException( STG_E_MEDIUMFULL );
 
     HRESULT hr = CreateStreamOnHGlobal( hGlob, bDeleteStorageOnRelease, &m_lpStream );
 
@@ -195,7 +201,7 @@ sal_Bool SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
     cleanup( );
     HRESULT hr = CreateStreamOnHGlobal( hGlob, bDeleteStorageOnRelease, &m_lpStream );
     if ( hr == E_OUTOFMEMORY )
-        throw COutOfMemoryException();
+        throw CStgTransferException( STG_E_MEDIUMFULL );
 
     m_bDelStgOnRelease      = bDeleteStorageOnRelease;
     m_bReleaseStreamOnDestr = bReleaseStreamOnDestruction;
@@ -216,8 +222,11 @@ void SAL_CALL CStgTransferHelper::cleanup( )
         GlobalFree( hGlob );
     }
 
-    m_lpStream->Release( );
-    m_lpStream = NULL;
+    if ( m_lpStream )
+    {
+        m_lpStream->Release( );
+        m_lpStream = NULL;
+    }
 }
 
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:52:05 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
     m_XDataFormatTranslator = Reference< XDataFormatTranslator >(
         m_SrvMgr->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.DataFormatTranslator" ) ), UNO_QUERY );
 
-    OSL_ASSERT( !m_XDataFormatTranslator.is( ) );
+    OSL_ASSERT( m_XDataFormatTranslator.is( ) );
 }
 
 //------------------------------------------------------------------------
@@ -141,7 +141,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
 
 FORMATETC CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& aDataFlavor ) const
 {
-    CLIPFORMAT cf = CF_INVALID;
+    sal_Int32 cf = CF_INVALID;
 
     try
     {
@@ -194,7 +194,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
             aFlavor.MimeType            += getTextCharsetFromClipboard( refXTransferable, aClipformat );
 
             aFlavor.HumanPresentableName = OUString::createFromAscii( "OEM/ANSI Text" );
-            aFlavor.DataType             = CPPUTYPE_SALINT8;
+            aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
         }
         else
         {
@@ -202,8 +202,20 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
 
             if ( !aFlavor.MimeType.getLength( ) )
             {
-                aAny <<= getClipboardFormatName( aClipformat );
-                aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
+                // lookup of DataFlavor from clipboard format id
+                // failed, so we try to resolve via clipboard
+                // format name
+                OUString clipFormatName = getClipboardFormatName( aClipformat );
+
+                // if we could not get a clipboard format name an
+                // error must have occured or it is a standard
+                // clipboard format that we don't translate, e.g.
+                // CF_BITMAP (the office only uses CF_DIB)
+                if ( clipFormatName.getLength( ) )
+                {
+                    aAny <<= clipFormatName;
+                    aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
+                }
             }
         }
     }
@@ -295,9 +307,7 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
     const Reference< XTransferable >& refXTransferable ) const
 {
     Any       aAny;
-    FORMATETC fetc;
-
-    fetc.cfFormat = CF_LOCALE;
+    FORMATETC fetc = getFormatEtcForClipformat( CF_LOCALE );
     DataFlavor aFlavor = getDataFlavorFromFormatEtc( refXTransferable, fetc );
 
     OSL_ASSERT( aFlavor.MimeType.getLength( ) );
@@ -306,18 +316,19 @@ LCID SAL_CALL CDataFormatTranslator::getCurrentLocaleFromClipboard(
 
     try
     {
-        if ( refXTransferable->isDataFlavorSupported( aFlavor ) )
+        aAny = refXTransferable->getTransferData( aFlavor );
+        if ( aAny.hasValue( ) )
         {
-            aAny = refXTransferable->getTransferData( aFlavor );
-            if ( aAny.hasValue( ) )
-            {
-                OSL_ASSERT( aAny.getValueType( ) == CPPUTYPE_SEQSALINT8 );
-                Sequence< sal_Int8 > seqSalInt8;
-                aAny >>= seqSalInt8;
+            OSL_ASSERT( aAny.getValueType( ) == CPPUTYPE_SEQSALINT8 );
+            Sequence< sal_Int8 > byteStream;
+            aAny >>= byteStream;
 
-                lcid = *reinterpret_cast< sal_Int32* >( seqSalInt8.getArray( ) );
-            }
+            lcid = *reinterpret_cast< LCID* >( byteStream.getArray( ) );
         }
+    }
+    catch( UnsupportedFlavorException& )
+    {
+        lcid = GetThreadLocale( );
     }
     catch( ... )
     {
@@ -339,7 +350,7 @@ OUString SAL_CALL CDataFormatTranslator::makeMimeCharsetFromLocaleId(
     LCID lcid, LCTYPE lcType, const OUString& aCharsetValuePrefix ) const
 {
     OUString charset = getCodePageFromLocaleId( lcid, lcType );
-    return OUString::createFromAscii( "charset=" ) + charset;
+    return aCharsetValuePrefix + charset;
 }
 
 //------------------------------------------------------------------------

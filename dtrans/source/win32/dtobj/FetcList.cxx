@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:51:10 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,7 @@ CFormatEtc::CFormatEtc( const FORMATETC& aFormatEtc )
 CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD dwAspect, LONG lindex )
 {
     m_FormatEtc.cfFormat = cf;
-
-    if ( ptd )
-        m_FormatEtc.ptd = CopyTargetDevice( ptd );
-
+    m_FormatEtc.ptd      = CopyTargetDevice( ptd );
     m_FormatEtc.dwAspect = dwAspect;
     m_FormatEtc.lindex   = lindex;
     m_FormatEtc.tymed    = tymed;
@@ -140,10 +137,7 @@ CFormatEtc::CFormatEtc( CLIPFORMAT cf, DWORD tymed, DVTARGETDEVICE* ptd, DWORD d
 CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
 {
     m_FormatEtc.cfFormat = theOther.m_FormatEtc.cfFormat;
-
-    if ( theOther.m_FormatEtc.ptd )
-        m_FormatEtc.ptd = CopyTargetDevice( theOther.m_FormatEtc.ptd );
-
+    m_FormatEtc.ptd      = CopyTargetDevice( theOther.m_FormatEtc.ptd );
     m_FormatEtc.dwAspect = theOther.m_FormatEtc.dwAspect;
     m_FormatEtc.lindex   = theOther.m_FormatEtc.lindex;
     m_FormatEtc.tymed    = theOther.m_FormatEtc.tymed;
@@ -155,8 +149,7 @@ CFormatEtc::CFormatEtc( const CFormatEtc& theOther )
 
 CFormatEtc::~CFormatEtc( )
 {
-    if ( m_FormatEtc.ptd )
-        DeleteTargetDevice( m_FormatEtc.ptd );
+    DeleteTargetDevice( m_FormatEtc.ptd );
 }
 
 //------------------------------------------------------------------------
@@ -167,14 +160,10 @@ CFormatEtc& CFormatEtc::operator=( const CFormatEtc& theOther )
 {
     if ( this != &theOther )
     {
-        if ( m_FormatEtc.ptd )
-            DeleteTargetDevice( m_FormatEtc.ptd );
+        DeleteTargetDevice( m_FormatEtc.ptd );
 
         m_FormatEtc.cfFormat = theOther.m_FormatEtc.cfFormat;
-
-        if ( theOther.m_FormatEtc.ptd )
-            m_FormatEtc.ptd = CopyTargetDevice( theOther.m_FormatEtc.ptd );
-
+        m_FormatEtc.ptd      = CopyTargetDevice( theOther.m_FormatEtc.ptd );
         m_FormatEtc.dwAspect = theOther.m_FormatEtc.dwAspect;
         m_FormatEtc.lindex   = theOther.m_FormatEtc.lindex;
         m_FormatEtc.tymed    = theOther.m_FormatEtc.tymed;
@@ -259,7 +248,7 @@ LONG CFormatEtc::getLindex( ) const
 //
 //------------------------------------------------------------------------
 
-sal_Bool operator==( CFormatEtc& lhs, CFormatEtc& rhs )
+sal_Int32 operator==( CFormatEtc& lhs, CFormatEtc& rhs )
 {
     return CompareFormatEtc( &lhs.m_FormatEtc, &rhs.m_FormatEtc );
 }
@@ -268,9 +257,9 @@ sal_Bool operator==( CFormatEtc& lhs, CFormatEtc& rhs )
 //
 //------------------------------------------------------------------------
 
-sal_Bool operator!=( CFormatEtc& lhs, CFormatEtc& rhs )
+sal_Int32 operator!=( CFormatEtc& lhs, CFormatEtc& rhs )
 {
-    return ( !( lhs == rhs ) );
+    return ( ( lhs == rhs ) != 1 );
 }
 
 
@@ -365,7 +354,7 @@ sal_uInt32 SAL_CALL CFormatEtcContainer::nextFormatEtc( LPFORMATETC lpFetc,
 
     if ( m_EnumIterator != m_FormatMap.end( ) )
     {
-        for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++ )
+        for ( sal_uInt32 i = 0; i < aNum; i++, nFetched++, lpFetc++, ++m_EnumIterator )
         {
             CopyFormatEtc( lpFetc, m_EnumIterator->second );
         }

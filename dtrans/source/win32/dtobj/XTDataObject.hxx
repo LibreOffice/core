@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:53:16 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,22 +153,27 @@ public:
     //Unlock( );
 
 private:
-    STDMETHODIMP validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
-    sal_Bool SAL_CALL isRequestForLocale( LPFORMATETC lpFormatEtc ) const;
+    void validateFormatEtc( LPFORMATETC lpFormatEtc ) const;
     com::sun::star::datatransfer::DataFlavor SAL_CALL formatEtcToDataFlavor( const FORMATETC& aFormatEtc ) const;
     sal_Bool SAL_CALL isSynthesizeableFormat( LPFORMATETC lpFormatEtc ) const;
-    HRESULT SAL_CALL TransferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
-                                                             const FORMATETC& fetc,
-                                                             sal_uInt32 nInitStgSize,
-                                                             sal_uInt32 nBytesToTransfer,
-                                                             STGMEDIUM& stgmedium );
+    void SAL_CALL transferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
+                                                          const FORMATETC& fetc,
+                                                          sal_uInt32 nInitStgSize,
+                                                          sal_uInt32 nBytesToTransfer,
+                                                          STGMEDIUM& stgmedium );
 
-    void SAL_CALL setupStgMedium( sal_Bool bTransferSuccessful,
-                                  const FORMATETC& fetc,
+    void SAL_CALL transferLocaleToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void SAL_CALL transferUnicodeToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+    void SAL_CALL transferAnyDataToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium );
+
+    void SAL_CALL setupStgMedium( const FORMATETC& fetc,
                                   CStgTransferHelper& stgTransHlp,
                                   STGMEDIUM& stgmedium );
 
-    sal_Bool SAL_CALL isValidTymedForClipformat( const FORMATETC& fetc ) const;
+    void SAL_CALL invalidateStgMedium( STGMEDIUM& stgmedium ) const;
+
+    sal_Bool SAL_CALL isOemOrAnsiTextFormat( const CLIPFORMAT& aClipformat ) const;
+    HRESULT SAL_CALL translateStgExceptionCode( HRESULT hr ) const;
 
 private:
     LONG m_nRefCnt;

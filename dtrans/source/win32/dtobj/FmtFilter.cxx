@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:53:46 $
+ *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
     OSL_ASSERT( pMFPict );
     OSL_ASSERT( !IsBadReadPtr( pMFPict, sizeof( METAFILEPICT ) ) );
 
-    sal_uInt32 nCount = GetMetaFileBitsEx( pMFPict->hMF, 0, NULL );
+    HMETAFILE hMf = pMFPict->hMF;
+    sal_uInt32 nCount = GetMetaFileBitsEx( hMf, 0, NULL );
     Sequence< sal_Int8 > mfpictStream( nCount + sizeof( METAFILEHEADER ) );
 
     METAFILEHEADER* pMFHeader = (METAFILEHEADER*)mfpictStream.getArray( );
