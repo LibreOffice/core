@@ -282,3 +282,9 @@ __1cEcppuGUnoUrlNgetObjectName6kM_rknDrtlIOUString__;
         *;
 };
 
+UDK_3.2 {
+    global:
+__1cEcppuSgetCaughtException6F_nDcomDsunEstarDunoDAny__;
+__1cEcppuSOPropertySetHelper2t5B6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___b_v_;
+__1cEcppuSOPropertySetHelper2t6Mrn0ATOBroadcastHelperVar4n0AbIOMultiTypeInterfaceContainerHelper_nDcomDsunEstarDunoEType___b_v_;
+} UDK_3_0_0;
