@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:33:39 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ class SwDocDisplayItem : public SfxPoolItem
     BOOL bSpace             :1;
     BOOL bNonbreakingSpace  :1;
     BOOL bSoftHyphen        :1;
-    BOOL bHiddenText        :1;
+    BOOL bCharHiddenText    :1;
+    BOOL bFldHiddenText     :1;
     BOOL bManualBreak       :1;
     BOOL bShowHiddenPara    :1;
 
