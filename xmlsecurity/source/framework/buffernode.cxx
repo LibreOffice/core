@@ -2,9 +2,9 @@
  *
  *  $RCSfile: buffernode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:23 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
  *   FUNCTION
  *  checks each ElementCollector on this BufferNode, if all following
  *  conditions are satisfied, then returns true:
- *  1. the ElementCollector's priority is PRI_BEFOREMODIFY;
+ *  1. the ElementCollector's priority is BEFOREMODIFY;
  *  2. the ElementCollector's securityId can't be ignored.
  *  otherwise, returns false.
  *
@@ -121,7 +121,7 @@ bool BufferNode::isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const
 
         if ((nIgnoredSecurityId == cssxc::sax::ConstOfSecurityId::UNDEFINEDSECURITYID ||
              pElementCollector->getSecurityId() != nIgnoredSecurityId) &&
-            (pElementCollector->getPriority() == cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY))
+            (pElementCollector->getPriority() == cssxc::sax::ElementMarkPriority_BEFOREMODIFY))
         {
             rc = true;
             break;
@@ -325,10 +325,10 @@ rtl::OUString BufferNode::printChildren() const
 
         switch (((ElementCollector*)(*ii))->getPriority())
         {
-            case cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY:
+            case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
                 rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BEFOREMODIFY" ));
                 break;
-            case cssxc::sax::ElementMarkPriority_PRI_AFTERMODIFY:
+            case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
                 rc += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AFTERMODIFY" ));
                 break;
             default:
@@ -993,7 +993,7 @@ void BufferNode::elementCollectorNotify()
 {
     if (m_vElementCollectors.size()>0)
     {
-        cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_PRI_MINIMUM;
+        cssxc::sax::ElementMarkPriority nMaxPriority = cssxc::sax::ElementMarkPriority_MINIMUM;
         cssxc::sax::ElementMarkPriority nPriority;
 
         /*
@@ -1024,10 +1024,10 @@ void BufferNode::elementCollectorNotify()
              * perform notify operation.
              * Moreover, if any blocker exists in the subtree of
              * this BufferNode, this ElementCollector can't do notify
-             * unless its priority is PRI_BEFOREMODIFY.
+             * unless its priority is BEFOREMODIFY.
              */
             if (nPriority == nMaxPriority &&
-                (nPriority == cssxc::sax::ElementMarkPriority_PRI_BEFOREMODIFY ||
+                (nPriority == cssxc::sax::ElementMarkPriority_BEFOREMODIFY ||
                  !isBlockerInSubTreeIncluded(pElementCollector->getSecurityId())))
             {
                 /*
