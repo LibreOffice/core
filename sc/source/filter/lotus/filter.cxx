@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:26:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include <tools/solar.h>
 #include <string.h>
+#include <stl/map>
 
 #include "filter.hxx"
 #include "document.hxx"
@@ -88,6 +89,7 @@
 #include "fprogressbar.hxx"
 #endif
 
+#include "op.h"
 
 // Konstanten ------------------------------------------------------------
 const UINT16        nBOF = 0x0000;
@@ -116,18 +118,146 @@ extern sal_Char*    pDummy1;        // -> memory.cxx
 
 extern OPCODE_FKT   pOpFkt[ FKT_LIMIT ];
                                     // -> optab.cxx, Tabelle moeglicher Opcodes
+extern OPCODE_FKT   pOpFkt123[ FKT_LIMIT123 ];
+                                    // -> optab.cxx, Table of possible Opcodes
 
 extern long         nDateiLaenge;   // -> datei.cpp, ...der gerade offenen Datei
 
 LOTUS_ROOT*         pLotusRoot = NULL;
 
 
-WKTYP               ScanVersion( SvStream& aStream );
+std::map<UINT16, ScPatternAttr> aLotusPatternPool;
 
+static FltError
+generate_Opcodes( SvStream& aStream, ScDocument* pDoc,
+                  ScfStreamProgressBar& aPrgrsBar, WKTYP eTyp )
+{
+    OPCODE_FKT *pOps;
+    int         nOps;
 
-extern FltError     ScImportLotus123old( SvStream&, ScDocument*, CharSet eSrc );
+    switch(eTyp)
+    {
+        case eWK_1:
+        case eWK_2:
+        pOps = pOpFkt;
+        nOps = FKT_LIMIT;
+        break;
+        case eWK123:
+        pOps = pOpFkt123;
+        nOps = FKT_LIMIT123;
+        break;
+        case eWK3:      return eERR_NI;
+        case eWK_Error: return eERR_FORMAT;
+        default:        return eERR_UNKN_WK;
+     }
+    aStream.Seek( 0UL );
+    while( !bEOF && !aStream.IsEof() )
+    {
+        UINT16 nOpcode, nLength;
 
+        aStream >> nOpcode >> nLength;
+#ifdef DEBUG
+        fprintf( stderr, "nOpcode=%x nLength=%x\n", nOpcode, nLength);
+#endif
+        aPrgrsBar.Progress();
+        if( nOpcode == LOTUS_EOF )
+        bEOF = TRUE;
 
+        else if( nOpcode == LOTUS_FILEPASSWD )
+        return eERR_FILEPASSWD;
+
+        else if( nOpcode < nOps )
+        pOps[ nOpcode ] ( aStream, nLength );
+
+        else if( eTyp == eWK123 &&
+             nOpcode == LOTUS_PATTERN )
+            {
+        // This is really ugly - needs re-factoring ...
+        aStream.SeekRel(nLength);
+        aStream >> nOpcode >> nLength;
+        if ( nOpcode == 0x29a)
+        {
+            aStream.SeekRel(nLength);
+            aStream >> nOpcode >> nLength;
+            if ( nOpcode == 0x804 )
+            {
+            aStream.SeekRel(nLength);
+            OP_ApplyPatternArea123(aStream);
+            }
+            else
+            aStream.SeekRel(nLength);
+        }
+        else
+            aStream.SeekRel(nLength);
+        }
+        else
+        aStream.SeekRel( nLength );
+    }
+
+    MemDelete();
+
+    pDoc->CalcAfterLoad();
+
+    return eERR_OK;
+}
+
+WKTYP ScanVersion( SvStream& aStream )
+{
+    // PREC:    pWKDatei:   Zeiger auf offene Datei
+    // POST:    return:     Typ der Datei
+    UINT16          nOpcode, nVersNr, nRecLen;
+
+    // erstes Byte muss wegen BOF zwingend 0 sein!
+    aStream >> nOpcode;
+    if( nOpcode != nBOF )
+        return eWK_UNKNOWN;
+
+    aStream >> nRecLen >> nVersNr;
+
+    if( aStream.IsEof() )
+        return eWK_Error;
+
+    switch( nVersNr )
+    {
+        case 0x0404:
+            if( nRecLen == 2 )
+                return eWK_1;
+            else
+                return eWK_UNKNOWN;
+            break;
+
+        case 0x0406:
+            if( nRecLen == 2 )
+                return eWK_2;
+            else
+                return eWK_UNKNOWN;
+            break;
+
+        case 0x1000:
+            aStream >> nVersNr;
+            if( aStream.IsEof() ) return eWK_Error;
+            if( nVersNr == 0x0004 && nRecLen == 26 )
+            {   // 4 Bytes von 26 gelesen->22 ueberlesen
+                aStream.Read( pDummy1, 22 );
+                return eWK3;
+            }
+            break;
+        case 0x1003:
+            if( nRecLen == 0x1a )
+                return eWK123;
+            else
+                return eWK_UNKNOWN;
+            break;
+        case 0x1005:
+            if( nRecLen == 0x1a )
+                return eWK123;
+            else
+                return eWK_UNKNOWN;
+            break;
+    }
+
+    return eWK_UNKNOWN;
+}
 
 FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet eSrc )
 {
@@ -146,99 +276,15 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
 
     InitPage(); // Seitenformat initialisieren (nur Tab 0!)
 
-    // Progressbar starten
+        // Progressbar starten
     ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
     // Datei-Typ ermitteln
     eTyp = ScanVersion( aStream );
 
-    switch( eTyp )  // auswaehlen der Tabelle
-    {
-        case eWK_1:
-        case eWK_2:     break;
-        case eWK3:      return eERR_NI;
-        case eWK_Error: return eERR_FORMAT;
-        default:        return eERR_UNKN_WK;
-    }
+    aLotusPatternPool.clear();
 
-    // Init von Lotus Root-Daten -> Ctor LotusImport
-
-    // Aufdroeseln der Opcodes
-
-    while( !bEOF )
-    {
-        UINT16          nOpcode, nLaenge;
-
-        // ein Lotus-Record einlesen
-        aStream >> nOpcode >> nLaenge;
-
-        aPrgrsBar.Progress();
-
-
-        if( aStream.IsEof() )
-            bEOF = TRUE;
-        else if( nOpcode == 75 )
-            return eERR_FILEPASSWD;
-        else if( nOpcode < FKT_LIMIT )
-            ( pOpFkt[ nOpcode ] )( aStream, nLaenge );
-        else
-            aStream.SeekRel( nLaenge );
-    }
-
-    MemDelete();
-
-    pDoc->CalcAfterLoad();
-
-    return eERR_OK;
+    return generate_Opcodes( aStream, pDoc, aPrgrsBar, eTyp );
 }
-
-
-WKTYP ScanVersion( SvStream& aStream )
-{
-    // PREC:    pWKDatei:   Zeiger auf offene Datei
-    // POST:    return:     Typ der Datei
-    UINT16          nOpcode, nVersNr, nRecLaenge;
-
-    // erstes Byte muss wegen BOF zwingend 0 sein!
-    aStream >> nOpcode;
-    if( nOpcode != nBOF )
-        return eWK_UNKNOWN;
-
-    aStream >> nRecLaenge >> nVersNr;
-
-    if( aStream.IsEof() )
-        return eWK_Error;
-
-    switch( nVersNr )
-    {
-        case 0x0404:
-            if( nRecLaenge == 2 )
-                return eWK_1;
-            else
-                return eWK_UNKNOWN;
-            break;
-
-        case 0x0406:
-            if( nRecLaenge == 2 )
-                return eWK_2;
-            else
-                return eWK_UNKNOWN;
-            break;
-
-        case 0x1000:
-            aStream >> nVersNr;
-            if( aStream.IsEof() ) return eWK_Error;
-            if( nVersNr == 0x0004 && nRecLaenge == 26 )
-            {   // 4 Bytes von 26 gelesen->22 ueberlesen
-                aStream.Read( pDummy1, 22 );
-                return eWK3;
-            }
-            break;
-    }
-
-    return eWK_UNKNOWN;
-}
-
-
 
 
