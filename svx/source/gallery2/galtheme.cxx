@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:51:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,8 +1020,8 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
             FmFormModel*    pFormModel = (FmFormModel*) &rModel;
 
             pFormModel->BurnInStyleSheetAttributes();
-            pFormModel->SetStreamingSdrModel( TRUE );
-            pFormModel->RemoveNotPersistentObjects( TRUE );
+//BFS04         pFormModel->SetStreamingSdrModel( TRUE );
+//BFS01         pFormModel->RemoveNotPersistentObjects( TRUE );
 
             {
                 com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( aMemStm ) );
@@ -1030,7 +1030,7 @@ BOOL GalleryTheme::InsertModel( const FmFormModel& rModel, ULONG nInsertPos )
                     SvxDrawingLayerExport( pFormModel, xDocOut );
             }
 
-            pFormModel->SetStreamingSdrModel( FALSE );
+//BFS04         pFormModel->SetStreamingSdrModel( FALSE );
             aMemStm.Seek( 0 );
 
             xOStm->SetBufferSize( 16348 );
@@ -1085,8 +1085,8 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
                         if( GallerySvDrawImport( *xIStm, aModel ) )
                         {
                             aModel.BurnInStyleSheetAttributes();
-                            aModel.SetStreamingSdrModel( TRUE );
-                            aModel.RemoveNotPersistentObjects( TRUE );
+//BFS04                         aModel.SetStreamingSdrModel( TRUE );
+//BFS01                         aModel.RemoveNotPersistentObjects( TRUE );
 
                             {
                                 com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxModelStream ) );
@@ -1095,7 +1095,7 @@ BOOL GalleryTheme::GetModelStream( ULONG nPos, SotStorageStreamRef& rxModelStrea
                                     rxModelStream->Commit();
                             }
 
-                            aModel.SetStreamingSdrModel( FALSE );
+//BFS04                         aModel.SetStreamingSdrModel( FALSE );
                         }
                     }
                     else if( 2 == nVersion )
