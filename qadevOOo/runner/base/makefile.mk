@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2003-10-06 12:37:36 $
+#   last change: $Date: 2004-07-23 13:40:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ TARGET = runner_base
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JARFILES = ridl.jar jurt.jar unoil.jar
 JAVAFILES = TestBase.java           \
             java_complex.java       \
             java_fat.java           \
