@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:27:48 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ TabPage TP_CONTENT_OPT
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Proste uchwyty";
         Text[ portuguese_brazilian ] = "Simple control points";
-        Text[ japanese ] = "g‚¢‚â‚·‚¢ÊİÄŞÙ(~S)";
+        Text[ japanese ] = "¼İÌßÙ‚ÈÊİÄŞÙ(~S)";
         Text[ korean ] = "~´Ü¼øÇÑ ÇÚµé";
         Text[ chinese_simplified ] = "±ê×¼¿Øµã";
         Text[ chinese_traditional ] = "¼Ğ·Ç±±ÂI";
@@ -654,7 +654,7 @@ TabPage TP_CONTENT_OPT
         Text [ english_us ] = "Highlighting" ;
         Group = TRUE ;
         Text[ chinese_simplified ] = "»ÒÉ«±³¾°±ê¼Ç";
-        Text[ russian ] = "Ïîäöâåòêà";
+        Text[ russian ] = "Ïîäñâåòêà";
         Text[ polish ] = "Cieniowanie";
         Text[ japanese ] = "ŠDF‚ÌÊŞ¯¸‚Å‹­’²";
         Text[ chinese_traditional ] = "¦Ç¦â­I´º¼Ğ°O";
@@ -1538,7 +1538,7 @@ TabPage TP_STD_FONT
         Text[ french ] = "Polices standard (%1)";
         Text[ spanish ] = "Fuentes estándar (%1)";
         Text[ finnish ] = "Oletusfontit";
-        Text[ italian ] = "Caratteri standard";
+        Text[ italian ] = "Caratteri standard (%1)";
         Text[ danish ] = "Standardskrifttyper";
         Text[ swedish ] = "Standardteckensnitt (%1)";
         Text[ polish ] = "Czcionki podstawowe (%1)";
@@ -1660,7 +1660,7 @@ TabPage TP_STD_FONT
         Left = TRUE ;
         Text[ chinese_simplified ] = "±êÇ©(~A)";
         Text[ russian ] = "Ïîäïèñü";
-        Text[ polish ] = "Opis";
+        Text[ polish ] = "Etykieta";
         Text[ japanese ] = "}•\\”Ô†(~A)";
         Text[ chinese_traditional ] = "¼ĞÅÒ(~A)";
         Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
@@ -1759,7 +1759,7 @@ TabPage TP_STD_FONT
         Text[ russian ] = "Òîëüêî äëÿ òåêóùåãî äîêóìåíòà";
         Text[ polish ] = "Tylko w bie¿¹cym dokumencie";
         Text[ japanese ] = "Œ»İì‹Æ’†‚ÌÄŞ·­ÒİÄ‚Ì‚İ(~U)";
-        Text[ chinese_traditional ] = "¶ÈÓì¥Î©ó·í«eªº¤å¥ó(~U)";
+        Text[ chinese_traditional ] = "¶È¾A¥Î©ó·í«eªº¤å¥ó(~U)";
         Text[ arabic ] = "ááãÓÊäÏ ÇáÍÇáí İŞØ";
         Text[ greek ] = "Ìüíï ãéá ôï ôñİ÷ùí İããñáöï";
         Text[ korean ] = "ÇöÀç ¹®¼­ ¸¸(~U)";
@@ -1808,7 +1808,7 @@ TabPage TP_STD_FONT
         Text[ french ] = "Asiatique";
         Text[ spanish ] = "Asiático";
         Text[ finnish ] = "Asian";
-        Text[ italian ] = "Asian";
+        Text[ italian ] = "Asiatica";
         Text[ danish ] = "Asian";
         Text[ swedish ] = "Asiatiskt";
         Text[ polish ] = "Azjatyckie";
@@ -1833,7 +1833,7 @@ TabPage TP_STD_FONT
         Text[ french ] = "Occidental";
         Text[ spanish ] = "Occidental";
         Text[ finnish ] = "Western";
-        Text[ italian ] = "Western";
+        Text[ italian ] = "Occidentale";
         Text[ danish ] = "Western";
         Text[ swedish ] = "Västligt";
         Text[ polish ] = "Zachodnioeuropejskie";
@@ -1870,7 +1870,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ dutch ] = "Standaard";
         Text[ french ] = "Par défaut";
         Text[ spanish ] = "Predeterminado";
-        Text[ italian ] = "Configurazione standard";
+        Text[ italian ] = "Standard";
         Text[ danish ] = "Defaults";
         Text[ swedish ] = "Standard";
         Text[ polish ] = "Domyœlnie";
@@ -2162,7 +2162,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Déplacement des cellules";
         Text[ spanish ] = "Desplazar celdas";
         Text[ finnish ] = "Umschalt- und Pfeiltaste gedrückt";
-        Text[ italian ] = "Tasto (Maiusc) e (freccia) premuti";
+        Text[ italian ] = "Sposta celle";
         Text[ danish ] = "Shift and arrow key pressed";
         Text[ swedish ] = "Flytta celler";
         Text[ polish ] = "Przesuñ komórki";
@@ -2277,7 +2277,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Insertion de cellules";
         Text[ spanish ] = "Insertar celda";
         Text[ finnish ] = "Lisää";
-        Text[ italian ] = "Inserisci";
+        Text[ italian ] = "Inserisci celle";
         Text[ danish ] = "Insert";
         Text[ swedish ] = "Infoga cell";
         Text[ polish ] = "Wstaw wiersz";
@@ -2537,7 +2537,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_simplified ] = "¿É±ä(~V)";
         Text[ russian ] = "Èçì.";
         Text[ polish ] = "Zmie~nny";
-        Text[ japanese ] = "•Ï”(~V)";
+        Text[ japanese ] = "‰Â•Ï(~V)";
         Text[ chinese_traditional ] = "¥iÅÜ(~V)";
         Text[ arabic ] = "ãÊÛíÑ";
         Text[ greek ] = "ÌåôáâëçôŞ";
@@ -2598,7 +2598,7 @@ TabPage TP_OPTSRCVIEW
         Text [ portuguese_brazilian ] = "Farbzuordnung Syntax - Highlighting" ;
         Text [ swedish ] = "Färgtilldelning för syntaxframhävning" ;
         Text [ danish ] = "Farvetildeling syntaks - fremhævning" ;
-        Text [ italian ] = "Correlazione colori per evidenziazione sintassi" ;
+        Text [ italian ] = "Assegnazione colori per evidenziare la sintassi" ;
         Text [ spanish ] = "Colores para sintaxis-destacado" ;
         Text [ french ] = "Couleurs pour marquage de syntaxe" ;
         Text [ dutch ] = "Kleuren voor Syntax - markering" ;
@@ -3329,6 +3329,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ catalan ] = "~Permitir cursor en zonas protegidas";
     };
 };
+
 
 
 
