@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:07 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,16 @@ service DatabaseRange
     //-------------------------------------------------------------------------
 
     /** specifies whether the AutoFilter is enabled or not.
+
+        @since #107627#
      */
     [optional, property] boolean AutoFilter;
 
     //-------------------------------------------------------------------------
 
-    /** specifies whether the filter criteria should be taken from a CellRange
+    /** specifies whether the filter criteria should be taken from a CellRange.
+
+        @since #107627#
      */
     [optional, property] boolean UseFilterCriteriaSource;
 
@@ -149,6 +153,8 @@ service DatabaseRange
 
     /** specifies the range where the filter can find the filter criterias.
         <p>This is only used if <member>SheetFilterDescriptor::UseFilterCriteriaSource</member> is <TRUE/>.</p>
+
+        @since #107627#
      */
     [optional, property] com::sun::star::table::CellRangeAddress FilterCriteriaSource;
 
