@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-28 12:47:31 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -158,6 +161,7 @@
 #include <osl/file.hxx>
 #endif
 #include <svtools/extendedsecurityoptions.hxx>
+#include <svtools/docpasswdrequest.hxx>
 
 #pragma hdrstop
 
@@ -198,6 +202,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
+using namespace ::com::sun::star::task;
 using namespace ::cppu;
 using namespace ::sfx2;
 
@@ -393,28 +398,34 @@ ULONG CheckPasswd_Impl
                 Window* pWin = pDoc ? pDoc->GetDialogParent( pFile ) : NULL;
                 if ( pWin )
                     pWin->Show();
-                SfxPasswordDialog *pDlg = new SfxPasswordDialog(pWin);
-                String aTitle( pDlg->GetText() );
-                aTitle += String::CreateFromAscii(" [");
-                aTitle += INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET );
-                aTitle += String::CreateFromAscii("]");
-                pDlg->SetText( aTitle );
-                if(RET_OK == pDlg->Execute())
-                {
-                    SfxItemSet *pSet = pFile->GetItemSet();
-                    if(!pSet)
-                    {
-                        pSet =
-                            new SfxItemSet(rPool,
-                                SID_PASSWORD, SID_PASSWORD, 0 );
-                        pFile->SetItemSet(pSet);
-                    }
 
-                    pSet->Put(SfxStringItem(SID_PASSWORD, pDlg->GetPassword()));
+                nRet = ERRCODE_SFX_CANTGETPASSWD;
+
+                SfxItemSet *pSet = pFile->GetItemSet();
+                if( pSet )
+                {
+                    Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler;
+
+                    SFX_ITEMSET_ARG( pSet, pxInteractionItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
+                    if( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteractionHandler )
+                     && xInteractionHandler.is() )
+                    {
+                        RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                            ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
+                            INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+
+                        Reference< XInteractionRequest > rRequest( pPasswordRequest );
+                        xInteractionHandler->handle( rRequest );
+
+                        if ( pPasswordRequest->isPassword() )
+                        {
+                            pSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            nRet = ERRCODE_NONE;
+                        }
+                        else
+                            nRet = ERRCODE_IO_ABORT;
+                    }
                 }
-                else
-                    nRet=ERRCODE_IO_ABORT;
-                delete pDlg;
             }
         }
     }
