@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:18:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,16 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
         m_xDriverSet = _xDriverSet;
         m_xDriverRow = Reference<XRow>(_xDriverSet,UNO_QUERY);
         m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY)->getMetaData();
+        if ( m_xSetMetaData.is() )
+        {
+            sal_Int32 nCount = m_xSetMetaData->getColumnCount();
+            m_aSignedFlags.realloc(nCount);
+            sal_Bool* pBegin = m_aSignedFlags.getArray();
+            for (sal_Int32 i=1; i <= nCount; ++i,++pBegin)
+            {
+                *pBegin = m_xSetMetaData->isSigned(i);
+            }
+        }
         Reference< XStatement> xStmt(m_xDriverSet->getStatement(),UNO_QUERY);
         if(xStmt.is())
             m_xConnection = xStmt->getConnection();
@@ -511,19 +521,31 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
                 _xParameter->setString(nPos,_rValue);
                 break;
             case DataType::BIGINT:
-                _xParameter->setLong(nPos,_rValue);
+                if ( _rValue.isSigned() )
+                    _xParameter->setLong(nPos,_rValue);
+                else
+                    _xParameter->setString(nPos,_rValue);
                 break;
             case DataType::BIT:
                 _xParameter->setBoolean(nPos,_rValue);
                 break;
             case DataType::TINYINT:
-                _xParameter->setByte(nPos,_rValue);
+                if ( _rValue.isSigned() )
+                    _xParameter->setByte(nPos,_rValue);
+                else
+                    _xParameter->setShort(nPos,_rValue);
                 break;
             case DataType::SMALLINT:
-                _xParameter->setShort(nPos,_rValue);
+                if ( _rValue.isSigned() )
+                    _xParameter->setShort(nPos,_rValue);
+                else
+                    _xParameter->setInt(nPos,_rValue);
                 break;
             case DataType::INTEGER:
-                _xParameter->setInt(nPos,_rValue);
+                if ( _rValue.isSigned() )
+                    _xParameter->setInt(nPos,_rValue);
+                else
+                    _xParameter->setLong(nPos,_rValue);
                 break;
             case DataType::FLOAT:
                 _xParameter->setFloat(nPos,_rValue);
@@ -577,70 +599,8 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
     for(sal_Int32 i=1;aIter != _rRow->end();++aIter,++i)
     {
         sal_Int32 nType = m_xSetMetaData->getColumnType(i);
-        sal_Bool bReadData = sal_True;
-
-        switch(nType)
-        {
-        case DataType::CHAR:
-        case DataType::VARCHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
-        case DataType::LONGVARCHAR:
-            (*aIter) = getString(i);
-            break;
-        case DataType::BIGINT:
-            (*aIter) = getLong(i);
-            break;
-        case DataType::FLOAT:
-            (*aIter) = getFloat(i);
-            break;
-        case DataType::DOUBLE:
-        case DataType::REAL:
-            (*aIter) = getDouble(i);
-            break;
-        case DataType::DATE:
-            (*aIter) = getDate(i);
-            break;
-        case DataType::TIME:
-            (*aIter) = getTime(i);
-            break;
-        case DataType::TIMESTAMP:
-            (*aIter) = getTimestamp(i);
-            break;
-        case DataType::BINARY:
-        case DataType::VARBINARY:
-        case DataType::LONGVARBINARY:
-            (*aIter) = getBytes(i);
-            break;
-        case DataType::BIT:
-            (*aIter) = getBoolean(i);
-            break;
-        case DataType::TINYINT:
-            (*aIter) = getByte(i);
-            break;
-        case DataType::SMALLINT:
-            (*aIter) = getShort(i);
-            break;
-        case DataType::INTEGER:
-            (*aIter) = getInt(i);
-            break;
-        case DataType::CLOB:
-            (*aIter) = makeAny(getCharacterStream(i));
-            break;
-        case DataType::BLOB:
-            (*aIter) = makeAny(getBinaryStream(i));
-            break;
-        default:
-            bReadData = sal_False;
-            OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
-        }
-        if ( bReadData && wasNull() )
-            aIter->setNull();
-        if(nType != aIter->getTypeKind())
-        {
-            aIter->setTypeKind(nType);
-        }
-
+        aIter->setSigned(m_aSignedFlags[i-1]);
+        fetchValue(i,nType,this,*aIter);
     }
 }
 // -----------------------------------------------------------------------------
@@ -841,6 +801,83 @@ sal_Bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException
 Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
     return m_xDriverSet->getStatement();
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::fetchValue(sal_Int32 _nPos,sal_Int32 _nType,const Reference<XRow>& _xRow,ORowSetValue& _rValue)
+{
+    sal_Bool bReadData = sal_True;
+    switch(_nType)
+    {
+    case DataType::CHAR:
+    case DataType::VARCHAR:
+    case DataType::DECIMAL:
+    case DataType::NUMERIC:
+    case DataType::LONGVARCHAR:
+        _rValue = _xRow->getString(_nPos);
+        break;
+    case DataType::BIGINT:
+        if ( _rValue.isSigned() )
+            _rValue = _xRow->getLong(_nPos);
+        else
+            _rValue = _xRow->getString(_nPos);
+        break;
+    case DataType::FLOAT:
+        _rValue = _xRow->getFloat(_nPos);
+        break;
+    case DataType::DOUBLE:
+    case DataType::REAL:
+        _rValue = _xRow->getDouble(_nPos);
+        break;
+    case DataType::DATE:
+        _rValue = _xRow->getDate(_nPos);
+        break;
+    case DataType::TIME:
+        _rValue = _xRow->getTime(_nPos);
+        break;
+    case DataType::TIMESTAMP:
+        _rValue = _xRow->getTimestamp(_nPos);
+        break;
+    case DataType::BINARY:
+    case DataType::VARBINARY:
+    case DataType::LONGVARBINARY:
+        _rValue = _xRow->getBytes(_nPos);
+        break;
+    case DataType::BIT:
+        _rValue = _xRow->getBoolean(_nPos);
+        break;
+    case DataType::TINYINT:
+        if ( _rValue.isSigned() )
+            _rValue = _xRow->getByte(_nPos);
+        else
+            _rValue = _xRow->getShort(_nPos);
+        break;
+    case DataType::SMALLINT:
+        if ( _rValue.isSigned() )
+            _rValue = _xRow->getShort(_nPos);
+        else
+            _rValue = _xRow->getInt(_nPos);
+        break;
+    case DataType::INTEGER:
+        if ( _rValue.isSigned() )
+            _rValue = _xRow->getInt(_nPos);
+        else
+            _rValue = _xRow->getLong(_nPos);
+        break;
+    case DataType::CLOB:
+        _rValue = makeAny(_xRow->getCharacterStream(_nPos));
+        _rValue.setTypeKind(DataType::CLOB);
+        break;
+    case DataType::BLOB:
+        _rValue = makeAny(_xRow->getBinaryStream(_nPos));
+        _rValue.setTypeKind(DataType::BLOB);
+        break;
+    default:
+        bReadData = sal_False;
+        break;
+    }
+    if ( bReadData && _xRow->wasNull() )
+        _rValue.setNull();
+    _rValue.setTypeKind(_nType);
 }
 // -----------------------------------------------------------------------------
 
