@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2002-07-19 10:09:06 $
+#   last change: $Author: oj $ $Date: 2002-08-05 07:34:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,6 +114,7 @@ IDLFILES=\
     XDriver.idl \
     XDriverAccess.idl \
     XDriverManager.idl \
+    XIsolatedConnection.idl \
     XMultipleResults.idl \
     XOutParameters.idl \
     XParameters.idl \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2002-07-08 15:21:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-05 07:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,19 +81,23 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #endif
 
-#ifndef __com_sun_star_sdbc_XDataSource_idl__
-#include <com/sun/star/sdbc/XDataSource.idl>
-#endif
+
+ module com {  module sun {  module star {  module sdbc {
+    interface XIsolatedConnection;
+    interface XDataSource;
+ };};};};
+
 
  module com {  module sun {  module star {  module sdb {
 
 interface XCompletedConnection;
 interface XQueryDefinitionsSupplier;
 interface XBookmarksSupplier;
-interface XDataSource;
+
 
 /** is a factory to establish database connections. It should be registered at
-    a NamingService.@see com::sun::star::sdb::DatabaseContext
+    a <type scope="com::sun::star::uno">NamingService</type>.
+    @see com::sun::star::sdb::DatabaseContext
  */
 service DataSource
 {
@@ -104,6 +108,14 @@ service DataSource
                 provided during user interaction.
      */
     interface XCompletedConnection;
+
+    /** useful for establishing isolated connections which are not shared among others
+        as it is the case when using <type>XCompletedConnection</type> or <type scope="com::sun::star::sdbc">XDataSource</type>.
+        @see XCompletedConnection
+        @see com::sun::star::sdbc::XDataSource
+        @since #101798#
+     */
+    interface com::sun::star::sdbc::XIsolatedConnection;
 
 
     /** is provided to flush a DataSource within to a Database Context.
@@ -198,6 +210,9 @@ service DataSource
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/07/08 15:21:26  obo
+    #100000#
+
     Revision 1.8  2002/06/17 07:01:55  oj
     interface XDataSource was missing.
 
