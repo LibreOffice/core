@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:29:20 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     if ( IsVertical() )
         pFnt->SetVertical( 2700 );
 
-    OutputDevice *pOut = pSh ? pSh->GetOut() : 0;
+    OutputDevice* pOut = pSh ? pSh->GetOut() : 0;
     if ( !pOut || !rTxtNode.GetDoc()->IsBrowseMode() ||
          ( pSh->GetViewOptions()->IsPrtFormat() ) )
     {
@@ -403,8 +403,8 @@ SwTwips SwTxtFrm::EmptyHeight() const
     else
     {
         pFnt->SetFntChg( sal_True );
-        pFnt->ChgPhysFnt( pSh, pOut );
-        nRet = pFnt->GetHeight( pSh, pOut );
+        pFnt->ChgPhysFnt( pSh, *pOut );
+        nRet = pFnt->GetHeight( pSh, *pOut );
     }
     delete pFnt;
     return nRet;
@@ -530,8 +530,8 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                 pOut = GetpApp()->GetDefaultDevice();
                             MapMode aOldMap( pOut->GetMapMode() );
                             pOut->SetMapMode( MapMode( MAP_TWIP ) );
-                            aFnt.ChgFnt( pSh, pOut );
-                            rRegDiff = aFnt.GetHeight( pSh, pOut );
+                            aFnt.ChgFnt( pSh, *pOut );
+                            rRegDiff = aFnt.GetHeight( pSh, *pOut );
                             KSHORT nNettoHeight = rRegDiff;
                             switch( rSpace.GetLineSpaceRule() )
                             {
@@ -573,7 +573,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                             }
                             pDesc->SetRegHeight( rRegDiff );
                             pDesc->SetRegAscent( rRegDiff - nNettoHeight +
-                                                 aFnt.GetAscent( pSh, pOut ) );
+                                                 aFnt.GetAscent( pSh, *pOut ) );
                             pOut->SetMapMode( aOldMap );
                         }
                     }
