@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:38:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ void E3dView::ConvertMarkedToPolyObj(BOOL bLineToArea)
 {
     SdrObject* pNewObj = NULL;
 
-    if (aMark.GetMarkCount() == 1)
+    if (GetMarkedObjectCount() == 1)
     {
-        SdrObject* pObj = aMark.GetMark(0)->GetObj();
+        SdrObject* pObj = GetMarkedObjectByIndex(0);
 
         if (pObj && pObj->ISA(E3dPolyScene))
         {
@@ -252,12 +252,12 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL bOnly3DAttr) const
         MergeAttrFromMarked(aSet, FALSE);
 
         // calc flags for SID_ATTR_3D_INTERN
-        const SdrMarkList& rMarkList = GetMarkList();
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
         sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
 
         for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
-            SdrObject* pObj = aMark.GetMark(a)->GetObj();
+            SdrObject* pObj = GetMarkedObjectByIndex(a);
             Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, FALSE);
         }
     }
@@ -307,12 +307,12 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL
 
         // Durchlauf mit Korrektur der veraenderten Szenen,
         // da die enthaltenen Objekte geometrisch veraendert sein koennen
-        const SdrMarkList& rMarkList = GetMarkList();
+        const SdrMarkList& rMarkList = GetMarkedObjectList();
         sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
 
         for(sal_uInt32 a(0); a < nMarkCnt; a++)
         {
-            SdrObject* pObj = aMark.GetMark(a)->GetObj();
+            SdrObject* pObj = GetMarkedObjectByIndex(a);
             Imp_E3dView_InorderRun3DObjects(pObj, nSelectedItems, TRUE);
         }
 
