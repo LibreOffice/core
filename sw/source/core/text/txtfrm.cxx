@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:16:24 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 09:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1841,7 +1841,8 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
 KSHORT SwTxtFrm::GetParHeight() const
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED( this )
+    ASSERT( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::GetParHeight with swapped frame" )
 #endif
 
     if( !HasPara() )
@@ -1855,11 +1856,13 @@ KSHORT SwTxtFrm::GetParHeight() const
             else
                 ++nRet;
         }
-#ifdef VERTICAL_LAYOUT
-        UNDO_SWAP( this )
-#endif
         return nRet;
     }
+
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( this )
+#endif
+
     SwTxtFrm *pThis = (SwTxtFrm*)this;
     SwTxtSizeInfo aInf( pThis );
     SwTxtIter aLine( pThis, &aInf );
@@ -1870,7 +1873,7 @@ KSHORT SwTxtFrm::GetParHeight() const
         nHeight += aLine.GetLineHeight();
 
 #ifdef VERTICAL_LAYOUT
-        UNDO_SWAP( this )
+    UNDO_SWAP( this )
 #endif
 
     return nHeight;
