@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 17:05:55 $
+ *  last change: $Author: cp $ $Date: 2001-03-02 07:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,10 @@ private:
 
 public:
 
-    Bool UseContext()   { return mbUseable; }
+    Bool UseContext()       { return mbUseable; }
     Bool IsMultiLingual()   { return mbMultiLingual; }
-    XIC  GetContext()   { return maContext; }
+    Bool IsPreeditMode()    { return maClientData.eState == ePreeditStatusActive; }
+    XIC  GetContext()       { return maContext; }
 
     void ExtendEventMask(  XLIB_Window aFocusWindow );
     void SetICFocus();

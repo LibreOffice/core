@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-21 17:56:16 $
+ *  last change: $Author: cp $ $Date: 2001-03-02 07:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,11 @@ public:
     inline  BOOL            IsCaptured() const { return nCaptured_ == 1; }
     inline  BOOL            IsWaitingForExpose() const
                                 { return !!pPaintRegion_; }
+    #if !defined(__synchronous_extinput__)
+            void            HandleExtTextEvent (XClientMessageEvent *pEvent);
+            void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
+                                void *pExtTextEvent);
+    #endif
     inline  SalColormap    &GetColormap() const;
 };
 

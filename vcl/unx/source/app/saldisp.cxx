@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 15:25:09 $
+ *  last change: $Author: cp $ $Date: 2001-03-02 07:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,9 @@ static const char* const AtomStrings[] =
 
     "SAL_QUITEVENT",        // client message events
     "SAL_USEREVENT",
+    #if !defined(__synchronous_extinput__)
+    "SAL_EXTTEXTEVENT",
+    #endif
 };
 
 static const char* const EventNames[] =
@@ -2517,13 +2520,9 @@ final void SalDisplay::SendEvent( Atom          aEvent,
     aData[1] = NULL;
 #endif
     aData[2] = NULL;
-#ifndef DBG_UTIL
     aData[3] = NULL;
     aData[4] = NULL;
-#else
-    aData[3] = ++nIn___;
-    aData[4] = nOut___;
-#endif
+
     SendEvent( aEvent, aData, hReceiver );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: cp $ $Date: 2001-03-02 07:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,11 +175,18 @@ public:
 
             Atom            aQuitEvent_;        // client message events
             Atom            aUserEvent_;
+    #if !defined(__synchronous_extinput__)
+            Atom            aExtTextEvent_;
+    #endif
 
     inline  int             IsQuitEvent( Atom a ) const
                                 { return aQuitEvent_ == a; }
     inline  int             IsUserEvent( Atom a ) const
                                 { return aUserEvent_ == a; }
+    #if !defined(__synchronous_extinput__)
+    inline  int             IsExtTextEvent( Atom a ) const
+                                { return aExtTextEvent_ == a; }
+    #endif
     inline  int             IsWM_State( Atom a ) const
                                 { return aWM_State_ == a; }
     inline  int             IsWM_DeleteWindow( Atom a ) const

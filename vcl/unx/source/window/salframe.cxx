@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-21 17:46:15 $
+ *  last change: $Author: cp $ $Date: 2001-03-02 07:50:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1466,6 +1466,68 @@ void SalFrame::CaptureMouse( BOOL bCapture )
 void SalFrame::SetPointerPos( long nX, long nY )
 { XWarpPointer( _GetXDisplay(), None, maFrameData.GetShellWindow(), 0, 0, 0, 0, nX, nY ); }
 
+// delay handling of extended text input
+#if !defined(__synchronous_extinput__)
+void
+SalFrameData::PostExtTextEvent (sal_uInt16 nExtTextEventType, void *pExtTextEvent)
+{
+    XLIB_Window nFocusWindow = GetWindow();
+    Atom        nEventAtom   = GetDisplay()->GetICCCM().aExtTextEvent_;
+
+    sal_uInt32 pEventData[5];
+
+    #if __SIZEOFLONG > 4
+    pEventData[0] = (sal_uInt32)((long)pExtTextEvent & 0xffffffff);
+    pEventData[1] = (sal_uInt32)((long)pExtTextEvent >> 32);
+    #else
+    pEventData[0] = (sal_uInt32)((long)pExtTextEvent);
+    pEventData[1] = NULL;
+    #endif
+    pEventData[2] = (sal_uInt32)nExtTextEventType;
+    pEventData[3] = NULL;
+    pEventData[4] = NULL;
+
+    GetDisplay()->SendEvent (nEventAtom, pEventData, nFocusWindow);
+}
+
+void
+SalFrameData::HandleExtTextEvent (XClientMessageEvent *pEvent)
+{
+    #if __SIZEOFLONG > 4
+    void* pExtTextEvent = (void*)(  (pEvent->data.l[0] & 0xffffffff)
+                                  | (pEvent->data.l[1] << 32) );
+    #else
+    void* pExtTextEvent = (void*)(pEvent->data.l[0]);
+    #endif
+    sal_uInt16 nExtTextEventType = sal_uInt16(pEvent->data.l[2]);
+
+    Call(nExtTextEventType, pExtTextEvent);
+
+    switch (nExtTextEventType)
+    {
+        case SALEVENT_ENDEXTTEXTINPUT:
+
+            break;
+
+        case SALEVENT_EXTTEXTINPUT:
+
+            if (pExtTextEvent != NULL)
+            {
+                  SalExtTextInputEvent *pEvent = (SalExtTextInputEvent*)pExtTextEvent;
+
+                if (pEvent->mpTextAttr != NULL)
+                    free ((void*)pEvent->mpTextAttr);
+                delete (pEvent);
+            }
+            break;
+
+        default:
+
+            fprintf(stderr, "SalFrameData::HandleExtTextEvent: invalid extended input\n");
+    }
+}
+#endif /* defined(__synchronous_extinput__) */
+
 // PostEvent
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 BOOL SalFrame::PostEvent( void *pData )
@@ -1979,13 +2041,10 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         pString = (sal_Unicode*)pPrintable;
           nSize = nLen;
     }
-    // XXX it shouldn't be possible to create a keyrelease event with
-    // more than a single character in the event, but check it anyway
-    // as well it shouldn't be possible to generate more than a single
-    // char without an input method
-    if (   nSize > 1
-        && mpInputContext != NULL
+
+    if (   mpInputContext != NULL
         && mpInputContext->UseContext()
+        && mpInputContext->IsPreeditMode()
         && KeyRelease != pEvent->type )
     {
         mpInputContext->CommitStringCallback( pString, nSize );
@@ -2530,6 +2589,13 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
         Call( SALEVENT_USEREVENT, pData );
         return 1;
     }
+    #if !defined(__synchronous_extinput__)
+    if( rICCCM.IsExtTextEvent( pEvent->message_type ) )
+    {
+        HandleExtTextEvent (pEvent);
+        return 1;
+    }
+    #endif
     else if( rICCCM.IsQuitEvent( pEvent->message_type ) )
     {
         stderr0( "SalFrameData::Dispatch Quit\n" );
