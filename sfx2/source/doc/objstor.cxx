@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-12 09:13:58 $
+ *  last change: $Author: mba $ $Date: 2001-04-19 10:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,9 +452,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     if ( bHasStorage )
     {
         SvStorageRef xStor( pMed->GetStorage() );
-        // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
-        if(xStor.Is() && !xStor->GetError() )
+        if( xStor.Is() && !xStor->GetError() && pMed->GetFilter()->GetVersion() < SOFFICE_FILEFORMAT_60 )
         {
+            // Undoobjekte aufraeumen, muss vor dem eigentlichen Laden erfolgen
             SvEmbeddedObjectRef xThis = this;
             SvPersistRef xPer;
             if ( xThis.Is() )
