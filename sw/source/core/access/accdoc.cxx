@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 16:27:35 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getAccessibleIndexInParent (void)
     return -1L;
 }
 
-OUString SAL_CALL SwAccessibleDocument::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleDocument::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
 {
     return GetResource( STR_ACCESS_DOC_DESC );
 }

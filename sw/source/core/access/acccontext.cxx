@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 16:27:35 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,7 @@ SwAccessibleContext::~SwAccessibleContext()
 
 Reference< XAccessibleContext > SAL_CALL
     SwAccessibleContext::getAccessibleContext( void )
+        throw (::com::sun::star::uno::RuntimeException)
 {
     Reference < XAccessibleContext > xRet( this );
     return xRet;

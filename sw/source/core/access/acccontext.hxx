@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 16:27:35 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ public:
 
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext (void);
+        getAccessibleContext (void) throw (com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-18 16:27:35 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ SwAccessibleParagraph::~SwAccessibleParagraph()
 {
 }
 
-OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
+OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 

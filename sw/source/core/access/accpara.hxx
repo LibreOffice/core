@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-05 15:52:06 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 17:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ public:
 
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
-        getAccessibleDescription (void);
+        getAccessibleDescription (void) throw (com::sun::star::uno::RuntimeException);
 
     /** Return the parents locale or throw exception if this object has no
         parent yet/anymore.
