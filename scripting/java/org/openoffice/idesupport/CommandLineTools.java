@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-21 10:56:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-25 16:46:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,15 @@ public class CommandLineTools {
     }
 
     private void printUsage() {
-        System.out.println("java " + getClass().getName() + " -g " +
-            "[parcel root directory]");
         System.out.println("java " + getClass().getName() + " -d " +
             "<script parcel zip file> " +
             "<destination document or directory>");
+        System.out.println("java " + getClass().getName() + " -g " +
+            "[parcel root directory] [options]");
+        System.out.println("options:");
+        System.out.println("\t[-l language[=supported extensions]]");
+        System.out.println("\t[-p name=value]");
+        System.out.println("\t[-v]");
     }
 
     private void fatal(String message) {
