@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_docu2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ Cx_Base::FollowUpContext()
 void
 Cx_Base::Handle_DocuSyntaxError( CharacterSource & io_rText )
 {
+    // KORR
+    // Put this into Error Log File
+
     Cerr() << "Error:  Syntax error in documentation within "
               << "this text:\n\""
               << io_rText.CutToken()
