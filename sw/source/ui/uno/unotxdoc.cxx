@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 07:38:49 $
+ *  last change: $Author: os $ $Date: 2001-02-26 12:08:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef _SVXLINKMGR_HXX
+#include <svx/linkmgr.hxx>
+#endif
 #ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
 #endif
@@ -2131,6 +2134,22 @@ void SwXTextDocument::removeRefreshListener(const Reference< util::XRefreshListe
     throw( RuntimeException )
 {
     DBG_WARNING("not implemented")
+}
+/* -----------------------------26.02.01 12:22--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    if(!IsValid())
+        throw RuntimeException();
+    SwDoc* pDoc = pDocShell->GetDoc();
+      SvxLinkManager& rLnkMan = pDoc->GetLinkManager();
+    if( rLnkMan.GetLinks().Count() )
+    {
+        UnoActionContext aAction(pDoc);
+        rLnkMan.UpdateAllLinks( FALSE, FALSE, TRUE );
+    }
 }
 /* -----------------------------20.06.00 09:54--------------------------------
 
