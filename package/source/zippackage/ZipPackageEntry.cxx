@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-17 13:42:26 $
+ *  last change: $Author: mtg $ $Date: 2001-01-17 15:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,11 @@ void SAL_CALL ZipPackageEntry::setPropertyValue( const ::rtl::OUString& aPropert
     }
     else if (aPropertyName == OUString::createFromAscii("Size"))
         aValue >>= aEntry.nSize;
+#if SUPD>617
+    else if (aPropertyName == OUString::createFromAscii("Compressed"))
+#else
     else if (aPropertyName == OUString::createFromAscii("Compress"))
+#endif
         aValue >>= bToBeCompressed;
     else
         throw beans::UnknownPropertyException();
@@ -177,7 +181,11 @@ uno::Any SAL_CALL ZipPackageEntry::getPropertyValue( const ::rtl::OUString& Prop
         aAny <<= aEntry.nSize;
         return aAny;
     }
+#if SUPD>617
+    else if (PropertyName == OUString::createFromAscii("Compressed"))
+#else
     else if (PropertyName == OUString::createFromAscii("Compress"))
+#endif
     {
         aAny <<= bToBeCompressed;
         return aAny;
