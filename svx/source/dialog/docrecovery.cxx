@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:35:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1409,8 +1409,11 @@ IMPL_LINK( RecoveryDialog, NextButtonHdl, void*, EMPTYARG )
 //===============================================
 IMPL_LINK( RecoveryDialog, CancelButtonHdl, void*, EMPTYARG )
 {
-    if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) == DLG_RET_CANCEL)
-        return 0;
+    if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_PREPARED)
+    {
+        if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) == DLG_RET_CANCEL)
+            return 0;
+    }
     m_bUserDecideNext = sal_False;
     m_bWaitForUser    = sal_False;
     return 0;
