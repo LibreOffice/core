@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:44:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,16 +98,39 @@
 
 #include <comphelper/processfactory.hxx>
 
+#ifndef _SVDOUNO_HXX
 #include "svdouno.hxx"
+#endif
+#ifndef _SVDXOUT_HXX
 #include "svdxout.hxx"
+#endif
+#ifndef _SVDPAGV_HXX
 #include "svdpagv.hxx"
+#endif
+#ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
+#endif
+#ifndef _SVDIO_HXX
 #include "svdio.hxx"
+#endif
+#ifndef _SVDGLOB_HXX
 #include "svdglob.hxx"  // Stringcache
+#endif
 #include "svdstr.hrc"   // Objektname
+#ifndef _SVDETC_HXX
 #include "svdetc.hxx"
+#endif
+#ifndef _SVDVIEW_HXX
 #include "svdview.hxx"
+#endif
+#ifndef _SVDORECT_HXX
 #include "svdorect.hxx"
+#endif
+#ifndef _SVDVITER_HXX
+#include "svdviter.hxx"
+#endif
+
+#include <set>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -163,6 +186,61 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
 {
     if (xComp.is())
         xComp->addEventListener(this);
+}
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
+    {
+        SdrPageView* pPageView = _pView ? _pView->GetPageView( _pObject->GetPage() ) : NULL;
+        DBG_ASSERT( pPageView, "lcl_ensureControlVisibility: no view found!" );
+
+        if ( pPageView )
+        {
+            // loop through all the views windows
+            const SdrPageViewWinList& rViewWins = pPageView->GetWinList();
+            USHORT nWins = rViewWins.GetCount();
+            for ( USHORT i=0; i<nWins; ++i )
+            {
+                const SdrPageViewWinRec& rWinData = rViewWins[i];
+
+                // loop through all controls in this window
+                const SdrUnoControlList& rControlsInThisWin = rWinData.GetControlList();
+                USHORT nControlsInThisWin = rControlsInThisWin.GetCount();
+                for ( USHORT j=0; j<nControlsInThisWin; ++j )
+                {
+                    const SdrUnoControlRec& rControlData = rControlsInThisWin[j];
+                    if ( rControlData.GetUnoObj() == _pObject )
+                    {
+                        // yep - this control is the representation of the given FmFormObj in the
+                        // given view
+                        // is the control in alive mode?
+                        uno::Reference< awt::XControl > xControl( rControlData.GetControl(), uno::UNO_QUERY );
+                        DBG_ASSERT( xControl.is(), "lcl_ensureControlVisibility: no control!" );
+                        if ( xControl.is() && !xControl->isDesignMode() )
+                        {
+                            // yes, alive mode. Is the visibility correct?
+                            if ( (bool)rControlData.IsVisible() != _bVisible )
+                            {
+                                // no -> adjust it
+                                uno::Reference< awt::XWindow > xControlWindow( xControl, uno::UNO_QUERY );
+                                DBG_ASSERT( xControlWindow.is(), "lcl_ensureControlVisibility: the control is no window!" );
+                                if ( xControlWindow.is() )
+                                {
+                                    xControlWindow->setVisible( _bVisible );
+                                    DBG_ASSERT( (bool)rControlData.IsVisible() == _bVisible, "lcl_ensureControlVisibility: this didn't work!" );
+                                        // now this would mean that either IsVisible is not reliable (which would
+                                        // be bad 'cause we used it above) or that showing/hiding the window
+                                        // did not work as intended.
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 //************************************************************
@@ -657,6 +735,77 @@ void SdrUnoObj::NbcSetLogicRect(const Rectangle& rRect)
 {
     SdrRectObj::NbcSetLogicRect(rRect);
     VisAreaChanged();
+}
+
+// -----------------------------------------------------------------------------
+void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
+{
+    if ( GetLayer() == _nLayer )
+    {   // redundant call -> not interested in doing anything here
+        SdrRectObj::NbcSetLayer( _nLayer );
+        return;
+    }
+
+    // we need some special handling here in case we're moved from an invisible layer
+    // to a visible one, or vice versa
+    // (relative to a layer. Remember that the visibility of a layer is a view attribute
+    // - the same layer can be visible in one view, and invisible in another view, at the
+    // same time)
+    // 2003-06-03 - #110592# - fs@openoffice.org
+
+    // collect all views in which our old layer is visible
+    ::std::set< SdrView* > aPreviouslyVisible;
+
+    {
+        SdrViewIter aIter( this );
+        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+            aPreviouslyVisible.insert( pView );
+    }
+
+    SdrRectObj::NbcSetLayer( _nLayer );
+
+    // collect all views in which our new layer is visible
+    ::std::set< SdrView* > aNewlyVisible;
+
+    {
+        SdrViewIter aIter( this );
+        for ( SdrView* pView = aIter.FirstView(); pView; pView = aIter.NextView() )
+        {
+            ::std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
+            if ( aPreviouslyVisible.end() != aPrevPos )
+            {   // in pView, we were visible _before_ the layer change, and are
+                // visible _after_ the layer change, too
+                // -> we're not interested in this view at all
+                aPreviouslyVisible.erase( aPrevPos );
+            }
+            else
+            {
+                // in pView, we were visible _before_ the layer change, and are
+                // _not_ visible after the layer change
+                // => remember this view, as our visibility there changed
+                aNewlyVisible.insert( pView );
+            }
+        }
+    }
+
+    // now aPreviouslyVisible contains all views where we became invisible
+    ::std::set< SdrView* >::const_iterator aLoopViews;
+    for (   aLoopViews = aPreviouslyVisible.begin();
+            aLoopViews != aPreviouslyVisible.end();
+            ++aLoopViews
+        )
+    {
+        lcl_ensureControlVisibility( *aLoopViews, this, false );
+    }
+
+    // and aNewlyVisible all views where we became visible
+    for (   aLoopViews = aNewlyVisible.begin();
+            aLoopViews != aNewlyVisible.end();
+            ++aLoopViews
+        )
+    {
+        lcl_ensureControlVisibility( *aLoopViews, this, true );
+    }
 }
 
 void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
