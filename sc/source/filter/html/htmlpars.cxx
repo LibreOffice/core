@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:36:22 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #include "flttools.hxx"
 #include "document.hxx"
 #include "rangelst.hxx"
-#include "ftools.hxx"
 
 
 SV_IMPL_VARARR_SORT( ScHTMLColOffset, ULONG );
@@ -2957,7 +2956,7 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
                     // font list separator: VCL = ';' HTML = ','
                     String aFName = rFace.GetToken( 0, ',', nPos );
                     aFName.EraseLeadingAndTrailingChars();
-                    ScfTools::AddToken( aFontName, aFName, ';' );
+                    ScGlobal::AddToken( aFontName, aFName, ';' );
                 }
                 if ( aFontName.Len() )
                     mpCurrTable->PutItem( SvxFontItem( FAMILY_DONTKNOW,
