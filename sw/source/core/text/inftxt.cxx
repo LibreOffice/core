@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:26:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,10 +276,12 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 
 void ChkOutDev( const SwTxtSizeInfo &rInf )
 {
+    if ( !rInf.GetVsh() )
+        return;
+
     const OutputDevice *pOut = rInf.GetOut();
     const OutputDevice *pWin = rInf.GetVsh()->GetWin();
     const OutputDevice *pRef = rInf.GetRefDev();
-
     ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
 }
 #endif  // PRODUCT
@@ -336,10 +338,23 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     pVsh = pFrm->GetShell();
 
     // Get the output and reference device
-    ASSERT( pVsh, "SwTxtSizeInfo::CtorInit without ViewShell" )
-    pOut = pVsh->GetOut();
-    pRef = &pVsh->GetRefDev();
-    bOnWin = pVsh->GetWin() || OUTDEV_WINDOW == pOut->GetOutDevType();
+    if ( pVsh )
+    {
+        pOut = pVsh->GetOut();
+        pRef = &pVsh->GetRefDev();
+        bOnWin = pVsh->GetWin() || OUTDEV_WINDOW == pOut->GetOutDevType();
+    }
+    else
+    {
+        //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
+        if ( pNd->GetDoc()->IsBrowseMode() ) //?!?!?!?
+            //in Ermangelung eines Besseren kann hier ja wohl nur noch das
+            //AppWin genommen werden?
+            pOut = GetpApp()->GetDefaultDevice();
+        else
+            pOut = pNd->GetDoc()->GetPrt(); //Muss es geben (oder sal_True uebergeben?)
+        pRef = pOut;
+    }
 
 #ifndef PRODUCT
     ChkOutDev( *this );
