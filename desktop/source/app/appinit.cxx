@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 06:37:23 $
+ *  last change: $Author: kr $ $Date: 2001-07-25 14:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@
 #include <ucbhelper/configurationkeys.hxx>
 #endif
 
+#include <cppuhelper/bootstrap.hxx>
+
 #include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -182,49 +184,54 @@ Reference< XMultiServiceFactory > createApplicationServiceManager()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::createApplicationServiceManager" );
 
-    try
-    {
-        ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
-        ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
+    Reference<XComponentContext> xComponentContext = ::cppu::defaultBootstrap_InitialComponentContext();
+    Reference<XMultiServiceFactory> xMS(xComponentContext->getServiceManager(), UNO_QUERY);
 
-        Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
-        Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
-        if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
-        {
-            try
-            {
-                xLocalRegistry->open( localRegistry, sal_False, sal_True);
-            }
-            catch ( InvalidRegistryException& )
-            {
-            }
+    return xMS;
 
-            if ( !xLocalRegistry->isValid() )
-                xLocalRegistry->open(localRegistry, sal_True, sal_True);
-        }
+//      try
+//      {
+//          ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
+//          ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
 
-        if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
-            xSystemRegistry->open( systemRegistry, sal_True, sal_False);
+//          Reference< XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
+//          Reference< XSimpleRegistry > xSystemRegistry( ::cppu::createSimpleRegistry() );
+//          if ( xLocalRegistry.is() && (localRegistry.getLength() > 0) )
+//          {
+//              try
+//              {
+//                  xLocalRegistry->open( localRegistry, sal_False, sal_True);
+//              }
+//              catch ( InvalidRegistryException& )
+//              {
+//              }
 
-        if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
-             (xSystemRegistry.is() && xSystemRegistry->isValid()) )
-        {
-            Reference < XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
-            Sequence< Any > seqAnys(2);
-            seqAnys[0] <<= xLocalRegistry ;
-            seqAnys[1] <<= xSystemRegistry ;
-            Reference< XInitialization > xInit( xReg, UNO_QUERY );
-            xInit->initialize( seqAnys );
+//              if ( !xLocalRegistry->isValid() )
+//                  xLocalRegistry->open(localRegistry, sal_True, sal_True);
+//          }
 
-            Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
-            return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
-        }
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-    }
+//          if ( xSystemRegistry.is() && (systemRegistry.getLength() > 0) )
+//              xSystemRegistry->open( systemRegistry, sal_True, sal_False);
 
-    return ::cppu::createServiceFactory();
+//          if ( (xLocalRegistry.is() && xLocalRegistry->isValid()) &&
+//               (xSystemRegistry.is() && xSystemRegistry->isValid()) )
+//          {
+//              Reference < XSimpleRegistry > xReg( ::cppu::createNestedRegistry() );
+//              Sequence< Any > seqAnys(2);
+//              seqAnys[0] <<= xLocalRegistry ;
+//              seqAnys[1] <<= xSystemRegistry ;
+//              Reference< XInitialization > xInit( xReg, UNO_QUERY );
+//              xInit->initialize( seqAnys );
+
+//              Reference< XComponentContext > xContext( ::cppu::bootstrap_InitialComponentContext( xReg ) );
+//              return Reference< XMultiServiceFactory >( xContext->getServiceManager(), UNO_QUERY );
+//          }
+//      }
+//      catch( ::com::sun::star::uno::Exception& )
+//      {
+//      }
+
+//      return ::cppu::createServiceFactory();
 }
 
 void destroyApplicationServiceManager( Reference< XMultiServiceFactory >& xSMgr )
