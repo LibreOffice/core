@@ -153,4 +153,5 @@ Dim a as Integer
 		BigArray(a) = GetResText(i)
 		a = a + 1
 	Next			
-End Sub</script:module>
+End Sub
+</script:module>
