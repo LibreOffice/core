@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:47:17 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,8 +1577,6 @@ void Desktop::Main()
     ::vos::IMutex& rMutex = Application::GetSolarMutex();
     if ( rMutex.tryToAcquire() )
         nAcquireCount = Application::ReleaseSolarMutex() - 1;
-
-    Application::WaitForClientConnect();
 
     // Post user event to startup first application component window
     // We have to send this OpenClients message short before execute() to
