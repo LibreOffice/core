@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgslots.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 16:33:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,5 +131,6 @@ ModulePrefix( "Sd" )
         include "_docsh.sdi"
         include "grdocsh.sdi"
         include "drgrfob.sdi"
+        include "mediaob.sdi"
 }
 
