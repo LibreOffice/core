@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:36 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,6 @@ private:
     ScNoteMarker*           pNoteMarker;
 
     ScFilterListBox*        pFilterBox;
-    USHORT                  nFilterBoxCol;
-    USHORT                  nFilterBoxRow;
     FloatingWindow*         pFilterFloat;
 
     USHORT                  nCursorHideCount;
@@ -220,6 +218,9 @@ private:
 
     BOOL                    bAutoMarkVisible;
     ScAddress               aAutoMarkPos;
+
+    BOOL                    bListValButton;
+    ScAddress               aListValPos;
 
     Rectangle               aInvertRect;
 
@@ -284,6 +285,7 @@ private:
                                      long           nCellSizeY,
                                      BOOL           bArrowState,
                                      BOOL           bBtnIn  = FALSE );
+    Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
     void            DrawPagePreview( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 );
 
@@ -373,6 +375,8 @@ public:
     void            DrawCursor();
     void            DrawAutoFillMark();
     void            UpdateAutoFillMark(BOOL bMarked, const ScRange& rMarkRange);
+
+    void            UpdateListValPos( BOOL bVisible, const ScAddress& rPos );
 
     BOOL            ShowNoteMarker( short nPosX, short nPosY, BOOL bKeyboard );
     void            HideNoteMarker();
