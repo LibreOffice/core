@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 20:30:08 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         pRead->SetTemplateName( pFlt->GetDefaultTemplate() );
 
     if( pRead == ReadAscii && 0 != rMedium.GetInStream() &&
-        String::CreateFromAscii(FILTER_TEXT_DLG) == pFlt->GetUserData() )
+        pFlt->GetUserData().EqualsAscii( FILTER_TEXT_DLG ) )
     {
         SwAsciiOptions aOpt;
         const SfxItemSet* pSet;
@@ -450,20 +450,6 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SwRead pRead = StartConvertFrom(rMedium, &pRdr);
     if (!pRead)
         return FALSE;
-
-#ifdef _JP_LOADTIME
-{
-extern int bIsSttTime;
-extern long nSttTime;
-{
-SvFileStream aStrm( "\\loadtime.txt", STREAM_WRITE );
-aStrm.Seek( STREAM_SEEK_TO_END );
-aStrm << "ConvertFrom: " << rMedium.GetName().GetStr() << endl;
-}
-bIsSttTime = TRUE;
-nSttTime = Time().GetTime();
-}
-#endif
 
     SwWait aWait( *this, TRUE );
 
@@ -710,7 +696,8 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         else
             pStg = pIo->GetStorage();
         SvxImportMSVBasic aTmp( *this, *pStg );
-        nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave, String::CreateFromAscii("Macros") );
+        nVBWarning = aTmp.SaveOrDelMSVBAStorage( bSave,
+                                String::CreateFromAscii("Macros") );
         pDoc->SetContainsMSVBasic( bSave );
     }
 
@@ -1467,6 +1454,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/10/30 20:30:08  jp
+    Bug #79779#: BrushGraphicCache removed
+
     Revision 1.2  2000/10/30 14:32:03  jp
     Bug #79589#: View must not exist
 

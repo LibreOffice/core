@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svtools/svarray.hxx>
 #endif
 
+class SfxMedium;
 class SwPaM;
 class SwDoc;
 class SvxMacroTableDtor;
@@ -185,7 +186,7 @@ class Sw2TextBlocks : public SwImpBlocks
 {
     SvPersistRef refPersist;            // Fuer OLE-Objekte
     SwSwgReader* pRdr;                  // Lese-Routinen
-    SvStream* pFstrm;                   // der logische Input-Stream
+    SfxMedium* pMed;                    // der logische Input-Stream
     String* pText;                      // String fuer GetText()
     long   nDocStart;                   // Beginn des Doc-Records
     long   nDocSize;                    // Laenge des Doc-Records

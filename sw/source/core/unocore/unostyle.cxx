@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 12:06:06 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,67 +65,32 @@
 
 #pragma hdrstop
 
-#ifndef _PAGEDESC_HXX //autogen
-#include <pagedesc.hxx>
-#endif
-#ifndef _DOC_HXX //autogen
-#include <doc.hxx>
-#endif
-#ifndef _DOCARY_HXX
-#include <docary.hxx>
-#endif
-#ifndef _CHARFMT_HXX //autogen
-#include <charfmt.hxx>
-#endif
-#ifndef _SVX_SVXIDS_HRC //autogen
-#include <svx/svxids.hrc>
-#endif
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
-#include <cmdid.h>
-#ifndef _UNOSTYLE_HXX
-#include <unostyle.hxx>
+
+#ifndef _VOS_MUTEX_HXX_ //autogen
+#include <vos/mutex.hxx>
 #endif
-#ifndef _UNOMAP_HXX
-#include <unomap.hxx>
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
 #endif
-#ifndef _UNOSETT_HXX
-#include <unosett.hxx>
+#ifndef _SFXSMPLHINT_HXX //autogen
+#include <svtools/smplhint.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX //autogen
+#include <svtools/ctrltool.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
-#ifndef _SWDOCSH_HXX //autogen
-#include <docsh.hxx>
-#endif
-#ifndef _SWSTYLE_H
-#include <swstyle.h>
-#endif
-#ifndef _PARATR_HXX
-#include <paratr.hxx>
-#endif
-#ifndef SW_UNOMID_HXX
-#include <unomid.h>
-#endif
-#ifndef _UNOPRNMS_HXX
-#include <unoprnms.hxx>
-#endif
-#ifndef _SHELLIO_HXX //autogen
-#include <shellio.hxx>
-#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _DOCSTYLE_HXX //autogen
-#include <docstyle.hxx>
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
-#endif
-#ifndef _FMTHDFT_HXX //autogen
-#include <fmthdft.hxx>
-#endif
+
 #ifndef _SVX_PAGEITEM_HXX //autogen
 #define ITEMID_SETITEM
 #include <svx/pageitem.hxx>
@@ -152,17 +117,58 @@
 #ifndef _SVX_FLSTITEM_HXX //autogen
 #include <svx/flstitem.hxx>
 #endif
-#ifndef _CTRLTOOL_HXX //autogen
-#include <svtools/ctrltool.hxx>
+#ifndef _SVX_SVXIDS_HRC //autogen
+#include <svx/svxids.hrc>
 #endif
-#ifndef _VOS_MUTEX_HXX_ //autogen
-#include <vos/mutex.hxx>
+
+#ifndef _PAGEDESC_HXX //autogen
+#include <pagedesc.hxx>
 #endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
+#ifndef _DOC_HXX //autogen
+#include <doc.hxx>
 #endif
-#ifndef _SFXSMPLHINT_HXX //autogen
-#include <svtools/smplhint.hxx>
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
+#ifndef _CHARFMT_HXX //autogen
+#include <charfmt.hxx>
+#endif
+#include <cmdid.h>
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>
+#endif
+#ifndef _UNOMAP_HXX
+#include <unomap.hxx>
+#endif
+#ifndef _UNOSETT_HXX
+#include <unosett.hxx>
+#endif
+#ifndef _SWDOCSH_HXX //autogen
+#include <docsh.hxx>
+#endif
+#ifndef _SWSTYLE_H
+#include <swstyle.h>
+#endif
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
+#ifndef SW_UNOMID_HXX
+#include <unomid.h>
+#endif
+#ifndef _UNOPRNMS_HXX
+#include <unoprnms.hxx>
+#endif
+#ifndef _SHELLIO_HXX //autogen
+#include <shellio.hxx>
+#endif
+#ifndef _DOCSTYLE_HXX //autogen
+#include <docstyle.hxx>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
+#endif
+#ifndef _FMTHDFT_HXX //autogen
+#include <fmthdft.hxx>
 #endif
 #ifndef _FMTPDSC_HXX //autogen wg. SwFmtPageDesc
 #include <fmtpdsc.hxx>
@@ -176,6 +182,7 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #endif
@@ -659,27 +666,11 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         String aFileName(rURL);
         INetURLObject aObj(aFileName);
         aFileName = aObj.GetFull();
-        //bug SB
+        //bug SB -- JP: why???
         aFileName.SearchAndReplace('|', ':');
-        SvStorageRef pStor;
-        SvFileStream* pStream = 0;
-        SwRead pRead;
-        SwReader* pReader;
-        if( SvStorage::IsStorageFile( aFileName ))
-        {
-            pStor = new SvStorage( aFileName, STREAM_STD_READ );
-            pRead = ReadSw3;
-            SwNodeIndex aIdx(GetDoc()->GetNodes().GetEndOfContent(), -1);
-            SwPaM aPam(aIdx);
-            pReader = new SwReader(*pStor, aFileName,
-                                    aPam );
-        }
-        else
-        {
-            pStream = new SvFileStream(aFileName, STREAM_STD_READ);
-            pRead = ReadSwg;
-            pReader = new SwReader(*pStream, aFileName, GetDoc());
-        }
+
+        SfxMedium aMedium( aFileName, STREAM_STD_READ, FALSE );
+        SwRead pRead = aMedium.IsStorage() ? ReadSw3 : ReadSwg;
         pRead->GetReaderOpt().SetAllFmtsOnly();
         pRead->GetReaderOpt().SetTxtFmts(bLoadStyleText);
         pRead->GetReaderOpt().SetFrmFmts(bLoadStyleFrame);
@@ -687,13 +678,12 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         pRead->GetReaderOpt().SetNumRules(bLoadStyleNumbering);
         pRead->GetReaderOpt().SetMerge(!bLoadStyleOverwrite);
 
+        SwReader aReader( aMedium, aFileName, GetDoc() );
         {
-            UnoActionContext aAction(GetDoc());
-            if( 0 != pReader->Read( *pRead ))
+            UnoActionContext aAction( GetDoc() );
+            if( 0 != aReader.Read( *pRead ))
                 throw io::IOException();
         }
-        delete pReader;
-        delete pStream;
     }
     else
         throw RuntimeException();

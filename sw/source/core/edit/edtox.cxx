@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,19 @@
 
 #pragma hdrstop
 
-#if SUPD<591
-#include <swmodule.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _TXTCMP_HXX //autogen wg. SearchParam
+#include <svtools/txtcmp.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
@@ -112,12 +119,6 @@
 #endif
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _TXTCMP_HXX //autogen wg. SearchParam
-#include <svtools/txtcmp.hxx>
-#endif
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -443,9 +444,6 @@ void SwEditShell::ApplyAutoMark()
         try
         {
             ::ucb::Content aTestContent(
-    #if SUPD<591
-                SW_MOD()->GetContentBroker(),
-    #endif
                 sAutoMarkURL,
                 uno::Reference< XCommandEnvironment >());
             bIsDocument = aTestContent.isDocument();
@@ -470,24 +468,22 @@ void SwEditShell::ApplyAutoMark()
         }
 
         //2.
-        SvFileStream aStream(sAutoMarkURL, STREAM_STD_READ);
-        aStream.ReOpen();
-        aStream.Seek(0);
-        ULONG nError = aStream.GetError();
+        SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ, TRUE );
+        SvStream& rStrm = *aMedium.GetInStream();
         const String sZero('0');
         Push();
         rtl_TextEncoding eChrSet = ::gsl_getSystemTextEncoding();
 
-        while(!aStream.GetError() && !aStream.IsEof())
+        while( !rStrm.GetError() && !rStrm.IsEof() )
         {
             ByteString aRdLine;
-            aStream.ReadLine( aRdLine );
+            rStrm.ReadLine( aRdLine );
 
             // # -> comment
             // ; -> delimiter between entries ->
             // Format: TextToSearchFor;AlternativeString;PrimaryKey;SecondaryKey;CaseSensitive;WordOnly
             // Leading and trailing blanks are ignored
-            if( aRdLine.Len() && aRdLine.GetChar(0) != '#')
+            if( aRdLine.Len() && '#' != aRdLine.GetChar(0) )
             {
                 String sLine( aRdLine, eChrSet );
 
@@ -511,7 +507,8 @@ void SwEditShell::ApplyAutoMark()
 
                     KillPams();
                     ULONG nRet = Find( aParam,  DOCPOS_START, DOCPOS_END,
-                                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
+                                    (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY),
+                                    FALSE );
 
                     if(nRet)
                     {
@@ -529,19 +526,15 @@ void SwEditShell::ApplyAutoMark()
                         //4.
                         SwEditShell::Insert(*pMark);
                     }
-
                 }
             }
         }
-        aStream.Close();
         KillPams();
         Pop(FALSE);
     }
     DoUndo(bDoesUndo);
     EndAllAction();
 }
-
-
 
 
 

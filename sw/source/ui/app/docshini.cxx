@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:44:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _OFA_MISCCFG_HXX //autogen
 #include <sfx2/misccfg.hxx>
@@ -232,10 +235,6 @@
 
 extern sal_Bool bNotLoadLayout;
 
-#ifdef _JP_LOADTIME
-extern int bIsSttTime = 0;
-extern long nSttTime = 0;
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -547,17 +546,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
         case SFX_CREATE_MODE_PREVIEW:
             if( ReadSw3 )
             {
-#ifdef _JP_LOADTIME
-{
-{
-SvFileStream aStrm( "\\loadtime.txt", STREAM_WRITE );
-aStrm.Seek( STREAM_SEEK_TO_END );
-aStrm << "Load: " << pStor->GetName().GetStr() << endl;
-}
-bIsSttTime = sal_True;
-nSttTime = util::Time().GetTime();
-}
-#endif
                 // die DocInfo vom Doc am DocShell-Medium setzen
                 {
                     SfxDocumentInfo aInfo;
@@ -677,14 +665,14 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
                 break;
 
             const SfxFilter* pFltr = SwIoSystem::GetFileFilter( rNm, aEmptyStr );
-            if( !pFltr || pFltr->GetUserData() != String::CreateFromAscii(FILTER_SWG) )
+            if( !pFltr || !pFltr->GetUserData().EqualsAscii( FILTER_SWG ))
                 break;
 
-            SvFileStream aStrm( rNm, STREAM_STD_READ );
-            if( 0 == ( nErr = aStrm.GetError() ) )
+            SfxMedium aMed( rNm, STREAM_STD_READ, FALSE );
+            if( 0 == ( nErr = aMed.GetInStream()->GetError() ) )
             {
                 SwWait aWait( *this, sal_True );
-                SwReader aRead( aStrm, rNm, pDoc );
+                SwReader aRead( aMed, rNm, pDoc );
                 nErr = aRead.Read( *ReadSwg );
             }
         }
@@ -757,16 +745,20 @@ void SwDocShell::SubInitNew()
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
                                                         RES_PARATR_HYPHENZONE) );
-        if(xProp.is())
-            xProp->getPropertyValue( OUString::createFromAscii(UPN_HYPH_MIN_LEADING) )>>= nVal;
+        if( xProp.is() )
+            xProp->getPropertyValue(
+                OUString::createFromAscii(UPN_HYPH_MIN_LEADING) ) >>= nVal;
         else
             nVal = 2;
         aHyp.GetMinLead()   = sal_Int8(nVal);
+
         if(xProp.is())
-            xProp->getPropertyValue( OUString::createFromAscii(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
+            xProp->getPropertyValue(
+                OUString::createFromAscii(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
         else
             nVal = 2;
         aHyp.GetMinTrail()  = sal_Int8(nVal);
+
         aDfltSet.Put( aHyp );
 
         sal_uInt16 nNewPos = SW_MOD()->GetUsrPref(FALSE)->GetDefTab();
@@ -780,6 +772,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/31 15:44:59  hr
+    #65293#: includes
+
     Revision 1.4  2000/10/30 20:30:08  jp
     Bug #79779#: BrushGraphicCache removed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-26 11:23:10 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 20:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SvtPathOptions aPathOpt;
                 SwLoadTemplateDlg* pDlg = new SwLoadTemplateDlg(0);
                 pDlg->SetPath( aPathOpt.GetWorkPath() );
-                String sSW5(String::CreateFromAscii(FILTER_SW5));
 
                 SfxObjectFactory &rFact = GetFactory();
                 for( USHORT i = 0; i < rFact.GetFilterCount(); i++ )
@@ -840,7 +839,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                     ((WildCard&)pFlt->GetWildcard())(),
                                     pFlt->GetTypeName() );
 
-                    if( pFlt->GetUserData() == sSW5 )
+                    if( pFlt->GetUserData().EqualsAscii( FILTER_SW5 ))
                         pDlg->SetCurFilter( pFlt->GetUIName() );
                 }
 
@@ -868,62 +867,37 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 ((USHORT)bOverwrite << 3) +
                                 ((USHORT)bNumbering << 4);
                 delete pDlg;
-                if(aFileName.Len())
+                if( aFileName.Len() )
                 {
                     // Create a URL from filename
-                    INetURLObject aURLObj;
-                    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-                    aURLObj.SetURL( aFileName );
-                    if( INET_PROT_FILE != aURLObj.GetProtocol() )
-                        break;
-
+                    INetURLObject aURLObj( aFileName );
                     String sURL( aURLObj.GetMainURL() );
 
                     String sBaseURL( INetURLObject::GetBaseURL() );
                     INetURLObject::SetBaseURL( sURL );
 
-                    SvStorageRef pStor;
-                    SvFileStream* pStream = 0;
                     SwRead pRead = 0;
-                    SwReader* pReader = 0;
-                    if( SvStorage::IsStorageFile( aFileName ))
-                    {
-                        // Filter bestimmen:
-                        const SfxFilter* pFlt = SwIoSystem::GetFileFilter(
-                                                    aFileName, aEmptyStr );
-                        pStor = new SvStorage( aFileName, STREAM_STD_READ );
 
+                    // Filter bestimmen:
+                    const SfxFilter* pFlt = SwIoSystem::GetFileFilter(
+                                                    aFileName, aEmptyStr );
+                    SfxMedium aMed( aFileName, STREAM_STD_READ, FALSE );
+                    if( aMed.IsStorage() )
+                    {
                         if( pFlt && pFlt->GetVersion() )
-                            pStor->SetVersion( (long)pFlt->GetVersion() );
-
+                            aMed.GetStorage()->SetVersion(
+                                                (long)pFlt->GetVersion() );
                         pRead = ReadSw3;
-                        pReader = new SwReader(*pStor, sURL,
-                                               *pWrtShell->GetCrsr() );
                     }
-                    else
+                    else if( pFlt )
                     {
-                        const SfxFilter* pFlt = SwIoSystem::GetFileFilter(
-                                                    aFileName, aEmptyStr );
-                        if( pFlt )
-                        {
-                            if( pFlt->GetUserData() == String::CreateFromAscii(FILTER_SWG) ||
-                                pFlt->GetUserData() == String::CreateFromAscii(FILTER_SWGV) )
-                            {
-                                pRead = ReadSwg;
-                            }
-                            else if( pFlt->GetUserData() == String::CreateFromAscii(FILTER_XML) )
-                            {
-                                pRead = ReadXML;
-                            }
-                        }
-
-                        if( pRead )
-                        {
-                            pStream = new SvFileStream( aFileName,
-                                                        STREAM_STD_READ );
-                            pReader = new SwReader(*pStream, sURL, pDoc);
-                        }
+                        if( pFlt->GetUserData().EqualsAscii( FILTER_SWG ) ||
+                            pFlt->GetUserData().EqualsAscii( FILTER_SWGV ))
+                            pRead = ReadSwg;
+                        else if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+                            pRead = ReadXML;
                     }
+
                     ASSERT( pRead, "no reader found" );
                     if( pRead )
                     {
@@ -935,14 +909,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         pRead->GetReaderOpt().SetMerge(!bOverwrite);
 
                         pWrtShell->StartAllAction();
-                        SetError( pReader->Read( *pRead ));
+                        SwReader aReader( aMed, sURL, pDoc );
+                        SetError( aReader.Read( *pRead ));
                         pWrtShell->EndAllAction();
                     }
-
-
-                    delete pReader;
-                    delete pStream;
-
                     INetURLObject::SetBaseURL( sBaseURL );
                 }
             }
@@ -1230,7 +1200,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( FN_NEW_HTML_DOC == nWhich )
                 {
                     // fuer HTML gibts es nur einen Filter!!
-                    pFlt = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii("HTML"),
+                    pFlt = SwIoSystem::GetFilterOfFormat(
+                            String::CreateFromAscii("HTML"),
                             SwWebDocShell::Factory().GetFilterContainer() );
                     nStrId = STR_LOAD_HTML_DOC;
                 }
@@ -1238,7 +1209,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     // Fuer Global-Dokumente bieten wir jetzt auch nur
                     // noch den aktuellen an.
-                    pFlt = SwIoSystem::GetFilterOfFormat( String::CreateFromAscii(FILTER_SW5),
+                    pFlt = SwIoSystem::GetFilterOfFormat(
+                            String::CreateFromAscii(FILTER_SW5),
                             SwGlobalDocShell::Factory().GetFilterContainer() );
                     nStrId = STR_LOAD_GLOBAL_DOC;
                 }
@@ -1377,7 +1349,7 @@ SvPseudoObject* SwDocShell::DdeCreateHotLink( const String& rItem )
 void SwDocShell::FillRegInfo( SvEmbeddedRegistryInfo*  pInfo )
 {
     SfxInPlaceObject::FillRegInfo( pInfo );
-    pInfo->aObjName = String::CreateFromAscii("StarWriterDocument");
+    pInfo->aObjName.AssignAscii( "StarWriterDocument" );
     pInfo->nMajorVers = 5;
     pInfo->nMinorVers = 0;
     pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
@@ -1419,7 +1391,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_30 );
 
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_30;
-        *pAppName       = String::CreateFromAscii("Swriter 3.1");
+        pAppName->AssignAscii( "Swriter 3.1" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_31);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_40)
@@ -1429,7 +1401,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_40 );
 
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_40;
-        *pAppName       = String::CreateFromAscii("StarWriter 4.0");
+        pAppName->AssignAscii( "StarWriter 4.0" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_40);
     }
     else if (nVersion == SOFFICE_FILEFORMAT_NOW)
@@ -1496,7 +1468,6 @@ void SwDocShell::UpdateChildWindows()
 void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView )
 {
     BOOL bModified = IsModified();
-    SvFileStream aStream(rStreamName, STREAM_READ);
 
     // MIB 23.6.97: Die HTTP-Header-Felder muessen geloescht werden,
     // sonst gibt es welche aus Meta-Tags hinter doppelt und dreifach.
@@ -1523,8 +1494,9 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 if( pBasic )
                 {
                     // Die IDE benachrichtigen
-                    String aLibName( String::CreateFromAscii("[" ));
-                    ((aLibName += GetTitle()) += String::CreateFromAscii("].")) += pBasic->GetName();
+                    String aLibName( '[' );
+                    ((aLibName += GetTitle()).AppendAscii( "]." ))
+                            += pBasic->GetName();
                     SfxStringItem aStrItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
 
                     pSrcView->GetViewFrame()->GetDispatcher()->Execute(
@@ -1557,6 +1529,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     AddLink();
     pSrcView->SetPool(&GetPool());
 
+
     String sBaseURL = INetURLObject::GetBaseURL();
     const String& rMedname = GetMedium()->GetName();
     INetURLObject::SetBaseURL( rMedname );
@@ -1571,9 +1544,10 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
     SubInitNew();
 
-    SwReader aReader( aStream, rMedname, pDoc );
+    SfxMedium aMed( rStreamName, STREAM_READ, FALSE );
+    SwReader aReader( aMed, rMedname, pDoc );
     aReader.Read( *ReadHTML );
-    aStream.Close();
+
     INetURLObject::SetBaseURL(sBaseURL);
 
 
@@ -1692,6 +1666,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* pView )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/26 11:23:10  jp
+    Bug #75694#: use replace instead close & open
+
     Revision 1.5  2000/10/23 18:12:37  jp
     ToggleBrowserMode without GPF
 
