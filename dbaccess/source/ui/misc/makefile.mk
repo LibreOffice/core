@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-05 10:09:20 $
+#   last change: $Author: fs $ $Date: 2001-01-26 14:17:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/querydesignaccess.obj	\
         $(SLO)$/stringlistitem.obj	\
         $(SLO)$/charsets.obj	\
         $(SLO)$/dsntypes.obj	\
