@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-26 10:16:56 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:52:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,15 +69,21 @@ ENABLE_EXCEPTIONS=TRUE
 
 DLLPRE = 
 
-.INCLUDE :  pyversion.mk
 #-------------------------------------------------------------------
-
-CFLAGS+=-I$(SOLARINCDIR)$/python
 
 .IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
 # no -Bdirect for SunWS CC
 DIRECT = $(LINKFLAGSDEFS)
 .ENDIF
+
+.IF "$(SYSTEM_PYTHON)" == "YES"
+SHL1NOCHECK=yes
+PYTHONLIB=$(PYTHON_LIBS)
+CFLAGS+=$(PYTHON_CFLAGS)
+.ELSE
+.INCLUDE :  pyversion.mk
+
+CFLAGS+=-I$(SOLARINCDIR)$/python
 
 .IF "$(GUI)" == "UNX"
 PYUNOLIB=-lpyuno
@@ -85,6 +91,7 @@ PYTHONLIB=-lpython
 .ELSE
 PYUNOLIB=ipyuno.lib
 PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
+.ENDIF
 .ENDIF
 
 SHL1TARGET=	$(TARGET)
