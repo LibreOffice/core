@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:57:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
             mbMultiLingual = True; // set ml-input flag to create input-method
             maMethod = XvaOpenIM(pDisplay, NULL, NULL, NULL,
                     XNMultiLingualInput, mbMultiLingual, /* dummy */
-                     0);
+                     (void *)0);
             // get ml-input flag from input-method
             if ( maMethod == (XIM)NULL )
                 mbMultiLingual = False;
