@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:47:32 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,10 +100,12 @@
 #include <svx/frmdiritem.hxx>
 #endif
 
-#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
-#include <svtools/languageoptions.hxx>
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
 #endif
-
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 
 #ifndef _FMTORNT_HXX //autogen
 #include <fmtornt.hxx>
@@ -268,8 +270,7 @@ SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) 
     if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
         bHtmlMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
-    SvtLanguageOptions aLangOptions;
-    sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
+    sal_Bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
     if( !bHtmlMode && bCTL )
     {
         aPropertiesFL.Show();
