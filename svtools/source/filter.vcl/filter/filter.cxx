@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-27 13:01:11 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 10:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1723,7 +1723,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
         aFilterConfigPath.Append( aFilterType );
         pConfigItem = new FilterConfigItem( aFilterConfigPath );
 
-        ImpGetScaledGraphic( rGraphic, *pConfigItem );
+        aGraphic = ImpGetScaledGraphic( rGraphic, *pConfigItem );
     }
 
     eType = aGraphic.GetType();
