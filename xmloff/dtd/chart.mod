@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.19 2001-05-29 12:40:52 bm Exp $
+	$Id: chart.mod,v 1.20 2001-06-05 16:09:28 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -187,7 +187,8 @@
 		  text:line-break %boolean; "true"
 		  chart:display-label %boolean; "true"
 		  chart:label-arrangement (side-by-side|stagger-even|stagger-odd) "side-by-side" 
-		  chart:visible %boolean; "true" >
+		  chart:visible %boolean; "true" 
+		  chart:link-data-style-to-source %boolean; "true" >
 
 <!ELEMENT chart:grid EMPTY>
 <!ATTLIST chart:grid

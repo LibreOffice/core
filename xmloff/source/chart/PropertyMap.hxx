@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-29 12:44:51 $
+ *  last change: $Author: bm $ $Date: 2001-06-05 16:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,9 @@
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT       ( XML_SCH_CTF_START + 21 )
 #define XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME   ( XML_SCH_CTF_START + 22 )
 
-#define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, sXML_##nm, t }
-#define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t, XML_SCH_CONTEXT_##c }
-#define MAP_SPECIAL( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, sXML_##nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
+#define MAP_ENTRY( a, ns, nm, t ) { a, XML_NAMESPACE_##ns, ##nm, t }
+#define MAP_CONTEXT( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, ##nm, t, XML_SCH_CONTEXT_##c }
+#define MAP_SPECIAL( a, ns, nm, t, c ) { a, XML_NAMESPACE_##ns, ##nm, t | MID_FLAG_SPECIAL_ITEM, XML_SCH_CONTEXT_SPECIAL_##c }
 #define MAP_ENTRY_END { 0,0,0,0 }
 
 // ---------------------------------------------------------
@@ -149,64 +149,65 @@
 const XMLPropertyMapEntry aXMLChartPropMap[] =
 {
     // chart subtypes
-    MAP_ENTRY( "UpDown", CHART, stock_updown_bars, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Volume", CHART, stock_with_volume, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Dim3D", CHART, three_dimensional, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Deep", CHART, deep, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Lines", CHART, lines, XML_TYPE_BOOL ),
-    MAP_ENTRY( "Percent", CHART, percentage, XML_TYPE_BOOL ),
-    MAP_ENTRY( "SolidType", CHART, solid_type, XML_SCH_TYPE_SOLID_TYPE ),
-    MAP_ENTRY( "SplineType", CHART, splines, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "Stacked", CHART, stacked, XML_TYPE_BOOL ),
-    MAP_ENTRY( "SymbolType", CHART, symbol, XML_TYPE_NUMBER ),
-    MAP_SPECIAL( "SymbolSize", CHART, symbol_width, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
-    MAP_SPECIAL( "SymbolSize", CHART, symbol_height, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
-    MAP_SPECIAL( "SymbolBitmapURL", CHART, symbol_image_name, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
-    MAP_ENTRY( "Vertical", CHART, vertical, XML_TYPE_BOOL ),
-    MAP_ENTRY( "NumberOfLines", CHART, lines_used, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "StackedBarsConnected", CHART, connect_bars, XML_TYPE_BOOL ),
+    MAP_ENTRY( "UpDown", CHART, sXML_stock_updown_bars, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Volume", CHART, sXML_stock_with_volume, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Dim3D", CHART, sXML_three_dimensional, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Deep", CHART, sXML_deep, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Lines", CHART, sXML_lines, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Percent", CHART, sXML_percentage, XML_TYPE_BOOL ),
+    MAP_ENTRY( "SolidType", CHART, sXML_solid_type, XML_SCH_TYPE_SOLID_TYPE ),
+    MAP_ENTRY( "SplineType", CHART, sXML_splines, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "Stacked", CHART, sXML_stacked, XML_TYPE_BOOL ),
+    MAP_ENTRY( "SymbolType", CHART, sXML_symbol, XML_TYPE_NUMBER ),
+    MAP_SPECIAL( "SymbolSize", CHART, sXML_symbol_width, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_WIDTH ),
+    MAP_SPECIAL( "SymbolSize", CHART, sXML_symbol_height, XML_TYPE_MEASURE | MID_FLAG_MERGE_PROPERTY, SYMBOL_HEIGHT ),
+    MAP_SPECIAL( "SymbolBitmapURL", CHART, sXML_symbol_image_name, XML_TYPE_STRING, SYMBOL_IMAGE_NAME ),
+    MAP_ENTRY( "Vertical", CHART, sXML_vertical, XML_TYPE_BOOL ),
+    MAP_ENTRY( "NumberOfLines", CHART, sXML_lines_used, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "StackedBarsConnected", CHART, sXML_connect_bars, XML_TYPE_BOOL ),
 
     // plot-area properties
-    MAP_ENTRY( "DataRowSource", CHART, series_source, XML_SCH_TYPE_DATAROWSOURCE ),
+    MAP_ENTRY( "DataRowSource", CHART, sXML_series_source, XML_SCH_TYPE_DATAROWSOURCE ),
 
     // axis properties
-    MAP_ENTRY( "DisplayLabels", CHART, display_label, XML_TYPE_BOOL ),
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_INNER ),          // convert one constant
-    MAP_SPECIAL( "Marks", CHART, tick_marks_major_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),          // to two bools
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),      // see above
-    MAP_SPECIAL( "HelpMarks", CHART, tick_marks_minor_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
-    MAP_ENTRY( "Logarithmic", CHART, logarithmic, XML_TYPE_BOOL ),
-    MAP_CONTEXT( "Min", CHART, minimum, XML_TYPE_DOUBLE, MIN ),
-    MAP_CONTEXT( "Max", CHART, maximum, XML_TYPE_DOUBLE, MAX ),
-    MAP_CONTEXT( "Origin", CHART, origin, XML_TYPE_DOUBLE, ORIGIN ),
-    MAP_CONTEXT( "StepMain", CHART, interval_major, XML_TYPE_DOUBLE, STEP_MAIN ),
-    MAP_CONTEXT( "StepHelp", CHART, interval_minor, XML_TYPE_DOUBLE, STEP_HELP ),
-    MAP_ENTRY( "GapWidth", CHART, gap_width, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "Overlap", CHART, overlap, XML_TYPE_NUMBER ),
-    MAP_ENTRY( "TextBreak", TEXT, line_break, XML_TYPE_BOOL ),
-    MAP_ENTRY( "ArrangeOrder", CHART, label_arrangement, XML_SCH_TYPE_AXIS_ARRANGEMENT ),
-    MAP_SPECIAL( "NumberFormat", STYLE, data_style_name, XML_TYPE_NUMBER, NUMBER_FORMAT ),
-    MAP_ENTRY( "Visible", CHART, visible, XML_TYPE_BOOL ),
+    MAP_ENTRY( "DisplayLabels", CHART, sXML_display_label, XML_TYPE_BOOL ),
+    MAP_SPECIAL( "Marks", CHART, sXML_tick_marks_major_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_INNER ),         // convert one constant
+    MAP_SPECIAL( "Marks", CHART, sXML_tick_marks_major_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MAJ_OUTER ),         // to two bools
+    MAP_SPECIAL( "HelpMarks", CHART, sXML_tick_marks_minor_inner, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_INNER ),     // see above
+    MAP_SPECIAL( "HelpMarks", CHART, sXML_tick_marks_minor_outer, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, TICKS_MIN_OUTER ),
+    MAP_ENTRY( "Logarithmic", CHART, sXML_logarithmic, XML_TYPE_BOOL ),
+    MAP_CONTEXT( "Min", CHART, sXML_minimum, XML_TYPE_DOUBLE, MIN ),
+    MAP_CONTEXT( "Max", CHART, sXML_maximum, XML_TYPE_DOUBLE, MAX ),
+    MAP_CONTEXT( "Origin", CHART, sXML_origin, XML_TYPE_DOUBLE, ORIGIN ),
+    MAP_CONTEXT( "StepMain", CHART, sXML_interval_major, XML_TYPE_DOUBLE, STEP_MAIN ),
+    MAP_CONTEXT( "StepHelp", CHART, sXML_interval_minor, XML_TYPE_DOUBLE, STEP_HELP ),
+    MAP_ENTRY( "GapWidth", CHART, sXML_gap_width, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "Overlap", CHART, sXML_overlap, XML_TYPE_NUMBER ),
+    MAP_ENTRY( "TextBreak", TEXT, sXML_line_break, XML_TYPE_BOOL ),
+    MAP_ENTRY( "ArrangeOrder", CHART, sXML_label_arrangement, XML_SCH_TYPE_AXIS_ARRANGEMENT ),
+    MAP_SPECIAL( "NumberFormat", STYLE, sXML_data_style_name, XML_TYPE_NUMBER, NUMBER_FORMAT ),
+    MAP_ENTRY( "LinkNumberFormatToSource", CHART, sXML_link_data_style_to_source, XML_TYPE_BOOL ),
+    MAP_ENTRY( "Visible", CHART, sXML_visible, XML_TYPE_BOOL ),
 
     // statistical properties
-    MAP_ENTRY( "MeanValue", CHART,  mean_value, XML_TYPE_BOOL ),
-    MAP_ENTRY( "ErrorMargin", CHART, error_margin, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ConstantErrorLow", CHART, error_lower_limit, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ConstantErrorHigh", CHART, error_upper_limit, XML_TYPE_DOUBLE ),
-    MAP_ENTRY( "ErrorIndicator", CHART, error_upper_indicator, XML_SCH_TYPE_ERROR_INDICATOR_UPPER | MID_FLAG_MERGE_PROPERTY ),  // convert one constant
-    MAP_ENTRY( "ErrorIndicator", CHART, error_lower_indicator, XML_SCH_TYPE_ERROR_INDICATOR_LOWER | MID_FLAG_MERGE_PROPERTY ),  // to two bools
-      MAP_ENTRY( "ErrorCategory", CHART, error_category, XML_SCH_TYPE_ERROR_CATEGORY ),
-      MAP_ENTRY( "PercentageError", CHART, error_percentage, XML_TYPE_DOUBLE ),
-      MAP_ENTRY( "RegressionCurves", CHART, regression_type, XML_SCH_TYPE_REGRESSION_TYPE ),
+    MAP_ENTRY( "MeanValue", CHART, sXML_mean_value, XML_TYPE_BOOL ),
+    MAP_ENTRY( "ErrorMargin", CHART, sXML_error_margin, XML_TYPE_DOUBLE ),
+    MAP_ENTRY( "ConstantErrorLow", CHART, sXML_error_lower_limit, XML_TYPE_DOUBLE ),
+    MAP_ENTRY( "ConstantErrorHigh", CHART, sXML_error_upper_limit, XML_TYPE_DOUBLE ),
+    MAP_ENTRY( "ErrorIndicator", CHART, sXML_error_upper_indicator, XML_SCH_TYPE_ERROR_INDICATOR_UPPER | MID_FLAG_MERGE_PROPERTY ), // convert one constant
+    MAP_ENTRY( "ErrorIndicator", CHART, sXML_error_lower_indicator, XML_SCH_TYPE_ERROR_INDICATOR_LOWER | MID_FLAG_MERGE_PROPERTY ), // to two bools
+      MAP_ENTRY( "ErrorCategory", CHART, sXML_error_category, XML_SCH_TYPE_ERROR_CATEGORY ),
+      MAP_ENTRY( "PercentageError", CHART, sXML_error_percentage, XML_TYPE_DOUBLE ),
+      MAP_ENTRY( "RegressionCurves", CHART, sXML_regression_type, XML_SCH_TYPE_REGRESSION_TYPE ),
 
     // series/data-point properties
-    MAP_SPECIAL( "DataCaption", CHART, data_label_number, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),   // convert one constant
-    MAP_SPECIAL( "DataCaption", CHART, data_label_text, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),       // to 'tristate' and two bools
-    MAP_SPECIAL( "DataCaption", CHART, data_label_symbol, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
-    MAP_ENTRY( "SegmentOffset", CHART, pie_offset, XML_TYPE_NUMBER ),
+    MAP_SPECIAL( "DataCaption", CHART, sXML_data_label_number, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_NUMBER ),  // convert one constant
+    MAP_SPECIAL( "DataCaption", CHART, sXML_data_label_text, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),      // to 'tristate' and two bools
+    MAP_SPECIAL( "DataCaption", CHART, sXML_data_label_symbol, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
+    MAP_ENTRY( "SegmentOffset", CHART, sXML_pie_offset, XML_TYPE_NUMBER ),
 
     // text properties for titles
-    MAP_SPECIAL( "TextRotation", TEXT, rotation_angle, XML_TYPE_NUMBER, TEXT_ROTATION ),    // convert 1/100th degrees to degrees
+    MAP_SPECIAL( "TextRotation", TEXT, sXML_rotation_angle, XML_TYPE_NUMBER, TEXT_ROTATION ),   // convert 1/100th degrees to degrees
 
     MAP_ENTRY_END
 };
