@@ -2782,3 +2782,15 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?_M_set@?$vector@PAVOSQLParseNode@connectivity@@V?$allocator@PAVOSQLParseNode@connectivity@@@_STL@@@_STL@@IAEXPAPAVOSQLParseNode@connectivity@@00@Z
 ?fill_n@_STL@@YAPAPAVOSQLParseNode@connectivity@@PAPAV23@IABQAV23@@Z
 ?isCaseSensitiveParentFolder@?%O:\SRX642\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx2220013418@@YAEABVString@@0@Z
+??_C@_0CD@CICL@o?3?2SRC651?2wntmsci7?2inc?2vos?1ref?4i@
+??0?$_Deque_base@PAVOOperand@file@connectivity@@V?$allocator@PAVOOperand@file@connectivity@@@_STL@@@_STL@@QAE@ABV?$allocator@PAVOOperand@file@connectivity@@@1@I@Z
+?DbgName_file_OSQLAnalyzer@@YAPAUDbgDataType@@XZ
+??_C@_0DF@DHBG@o?3?2SRC651?2wntmsci7?2inc?2com?1sun?1s@
+?DbgName_file_ODatabaseMetaData@@YAPAUDbgDataType@@XZ
+?isCaseSensitiveParentFolder@?%O:\SRC651\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1093431941@@YAEABVString@@0@Z
+??_C@_0DB@CHGD@o?3?2SRC651?2wntmsci7?2inc?2comphelpe@
+??_C@_0DG@PBIL@o?3?2SRC651?2wntmsci7?2inc?2comphelpe@
+?DbgName_file_OResultSet@@YAPAUDbgDataType@@XZ
+?DbgName_file_OFileTable@@YAPAUDbgDataType@@XZ
+?DbgName_file_OResultSetMetaData@@YAPAUDbgDataType@@XZ
+?DbgName_file_OConnection@@YAPAUDbgDataType@@XZ
