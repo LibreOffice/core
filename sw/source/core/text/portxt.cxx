@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:37:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,11 @@
 #ifndef _VIEWSH_HXX
 #include <viewsh.hxx>
 #endif
-
+// --> FME 2004-06-24 #i16816# tagged pdf support
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>  // SwViewOptions
+#endif
+// <--
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -766,6 +770,13 @@ SwLinePortion *SwHolePortion::Compress() { return this; }
 
 void SwHolePortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    if( rInf.GetVsh()->GetViewOptions()->IsPDFExport() )
+    {
+        const XubString aTxt( ' ' );
+        rInf.DrawText( aTxt, *this, 0, 1, false );
+    }
+    // <--
 }
 
 /*************************************************************************
