@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:06:26 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:51:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,31 +156,6 @@ bool office_is_running();
 oslProcess raiseProcess( ::rtl::OUString const & appURL,
                          css::uno::Sequence< ::rtl::OUString > const & args );
 
-}
-
-//##############################################################################
-
-// xxx todo: shift to rtl/instance.hxx
-namespace rtl {
-template<typename T, typename InitData,
-         typename Unique = InitData, typename Data = T>
-class StaticData {
-    struct StaticInstanceWithInit {
-        T * operator () ( Data d ) {
-            static T aInstance(d);
-            return &aInstance;
-        }
-    };
-public:
-    static T & get() {
-        return *rtl_Instance<
-            T, StaticInstanceWithInit,
-            ::osl::MutexGuard, ::osl::GetGlobalMutex,
-            Data, InitData >::create( StaticInstanceWithInit(),
-                                      ::osl::GetGlobalMutex(),
-                                      InitData() );
-    }
-};
 }
 
 #endif
