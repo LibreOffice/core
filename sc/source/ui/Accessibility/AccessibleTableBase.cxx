@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-11 07:38:58 $
+ *  last change: $Author: sab $ $Date: 2002-07-05 09:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
     aModelChange.Type = nId;
 
     AccessibleEventObject aEvent;
-    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_CHANGED;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_TABLE_MODEL_EVENT;
     aEvent.Source = uno::Reference< XAccessible >(this);
     aEvent.NewValue <<= aModelChange;
 
