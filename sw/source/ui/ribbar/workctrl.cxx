@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-04-04 13:32:20 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId,
                                 const ResId &rId,
                                 SfxBindings & rBnd)
     : SfxPopupWindow(nId, rId, rBnd),
-    aToolBox(this, WB_NAMEFIELD),
+    aToolBox(this, 0),
     aSeparator(this, ResId(FL_SEP)),
     aInfoField(this, ResId(FI_INFO)),
     aIList(ResId(IL_VALUES)),
