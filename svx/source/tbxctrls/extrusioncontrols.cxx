@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:17:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, Fiel
     maHelpButton( this, SVX_RES( BTN_HELP ) )
 {
     bool bMetric = IsMetric( eDefaultUnit );
-    maMtrDepth.SetUnit( bMetric ? FUNIT_MM : FUNIT_INCH );
+    maMtrDepth.SetUnit( bMetric ? FUNIT_CM : FUNIT_INCH );
     maMtrDepth.SetValue( (int) fDepth * (bMetric ? 10 : 100), FUNIT_100TH_MM );
 
     FreeResource();
