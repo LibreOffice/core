@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-08 09:03:40 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 09:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,11 +303,11 @@ struct FlagMapping_Impl
 #ifdef TF_FILTER//MUSTFILTER
 
 #ifndef __SGI_STL_HASH_MAP
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 
 #ifndef __SGI_STL_ITERATOR
-#include <stl/iterator>
+#include <iterator>
 #endif
 
 // Hash code function for calculation of map key.
