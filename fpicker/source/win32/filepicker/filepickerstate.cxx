@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-10 12:09:26 $
+ *  last change: $Author: tra $ $Date: 2001-11-05 07:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ListBoxControlActions.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #endif
 
 #ifndef _CONTROLCOMMANDREQUEST_HXX_
@@ -404,6 +408,10 @@ CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
 
 void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
 {
+    // we do not support SET_HELP_URL/GET_HELP_URL
+    if ( com::sun::star::ui::dialogs::ControlActions::SET_HELP_URL == aControlAction )
+        return;
+
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     // the filter listbox can be manipulated via this
@@ -442,6 +450,10 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
 
 Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
+    // we do not support SET_HELP_URL/GET_HELP_URL
+    if ( com::sun::star::ui::dialogs::ControlActions::GET_HELP_URL == aControlAction )
+        return Any( );
+
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     // the filter listbox can be manipulated via this
