@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-16 09:04:37 $
+ *  last change: $Author: cp $ $Date: 2002-08-13 16:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3301,7 +3301,14 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
                     if( ! (nStyle_ & SAL_FRAME_STYLE_FLOAT ) )
-                        XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                    {
+                        // #101775# don't set the focus into the IME status window
+                        // since this will lead to a parent loose-focus, close status,
+                        // reget focus, open status, .... flicker loop
+                        if ( (I18NStatus::get().getStatusFrame() != pFrame_) )
+                            XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                    }
+
                     /*
                      *  sometimes a message box/dialogue is brought up when a frame is not mapped
                      *  the corresponding TRANSIENT_FOR hint is then set to the root window
