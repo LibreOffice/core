@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:50:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,14 +528,32 @@ sal_Bool SwView::BeginTextEdit( SdrObject* pObj, SdrPageView* pPV,
         if( bIsNewObj )
             pOutliner->SetVertical( SID_DRAW_TEXT_VERTICAL == nDrawSfxId ||
                                     SID_DRAW_CAPTION_VERTICAL == nDrawSfxId );
-        Color aBackground(pSh->GetShapeBackgrd());
-        pOutliner->SetBackgroundColor(aBackground);
+        // #i7672#
+        // No longer necessary, see text below
+        // Color aBackground(pSh->GetShapeBackgrd());
+        // pOutliner->SetBackgroundColor(aBackground);
+
         // OD 09.12.2002 #103045# - set default horizontal text direction at outliner
         EEHorizontalTextDirection aDefHoriTextDir =
             pSh->IsShapeDefaultHoriTextDirR2L() ? EE_HTEXTDIR_R2L : EE_HTEXTDIR_L2R;
         pOutliner->SetDefaultHorizontalTextDirection( aDefHoriTextDir );
     }
     sal_Bool bRet = pSdrView->BegTextEdit( pObj, pPV, pWin, TRUE, pOutliner );
+
+    // #i7672#
+    // Since BegTextEdit actually creates the OutlinerView and thus also
+    // sets the background color, an own background color needs to be set
+    // after TextEditing was started. This is now done here.
+    if(bRet)
+    {
+        OutlinerView* pView = pSdrView->GetTextEditOutlinerView();
+
+        if(pView)
+        {
+            Color aBackground(pSh->GetShapeBackgrd());
+            pView->SetBackgroundColor(aBackground);
+        }
+    }
 
     return bRet;
 }
