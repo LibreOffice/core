@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-25 13:34:16 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "Ze~ichnung" ;
         Text [ ENGLISH ] = "Drawin~g" ;
         Text [ dutch ] = "Te~kening" ;
-        Text [ english_us ] = "Drawin~g" ;
+        Text [ english_us ] = "~Drawing" ;
         Text [ italian ] = "Disegno" ;
         Text [ spanish ] = "~Dibujo" ;
         Text [ french ] = "~Dessin" ;
@@ -265,7 +265,7 @@ TabPage TP_PRINT_OPTIONS
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Standa~rd" ;
         Text [ ENGLISH ] = "~Default" ;
-        Text [ english_us ] = "~Default" ;
+        Text [ english_us ] = "Default" ;
         TabStop = TRUE ;
         Text [ portuguese_brazilian ] = "Standard" ;
         Text [ swedish ] = "Standa~rd" ;
@@ -274,7 +274,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "Predeterminado" ;
         Text [ french ] = "Par ~défaut" ;
         Text [ dutch ] = "Standaard" ;
-        Text [ portuguese ] = "Padrão" ;
+        Text [ portuguese ] = "Pa~drão" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàðò";
         Text[ polish ] = "Domyœlnie";
@@ -303,7 +303,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "Escala de grises" ;
         Text [ french ] = "Niveaux de ~gris" ;
         Text [ dutch ] = "Grijswaarden" ;
-        Text [ portuguese ] = "Tons de cinzento" ;
+        Text [ portuguese ] = "Tons de ~cinzento" ;
         Text[ chinese_simplified ] = "»Ò¶È";
         Text[ russian ] = "Îòòåíêè ñåðîãî";
         Text[ polish ] = "Odcienie szaroœci";
@@ -332,7 +332,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ spanish ] = "Blanco y negro" ;
         Text [ french ] = "Noir et ~blanc" ;
         Text [ dutch ] = "Zwart-wit" ;
-        Text [ portuguese ] = "Preto e branco" ;
+        Text [ portuguese ] = "Preto e ~branco" ;
         Text[ chinese_simplified ] = "ºÚ°×";
         Text[ russian ] = "×åðíî-áåëîå";
         Text[ polish ] = "Czarno-bia~³y";
@@ -537,7 +537,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "St~andard" ;
         Text [ ENGLISH ] = "~Standard" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Standard" ;
+        Text [ english_us ] = "Default" ;
         Text [ italian ] = "St~andard" ;
         Text [ spanish ] = "~Predeterminado" ;
         Text [ french ] = "St~andard" ;
@@ -626,7 +626,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "~Brochure" ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Brochure" ;
-        Text [ english_us ] = "~Brochure" ;
+        Text [ english_us ] = "B~rochure" ;
         Text [ italian ] = "Depliant" ;
         Text [ spanish ] = "~Prospecto" ;
         Text [ french ] = "~Prospectus" ;
@@ -745,6 +745,7 @@ TabPage TP_PRINT_OPTIONS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones";
 };
+
 
 
 
