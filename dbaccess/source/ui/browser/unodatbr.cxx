@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-22 13:04:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 14:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2942,7 +2942,22 @@ void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
             SQLExceptionInfo aErrorInfo;
             try
             {
-                xDrop->dropByName(sTableName);
+                if(xTables->hasByName(sTableName))
+                    xDrop->dropByName(sTableName);
+                else
+                {// could be a view
+                    Reference<XViewsSupplier> xViewsSup(xConnection,UNO_QUERY);
+
+                    Reference<XNameAccess> xViews;
+                    if(xViewsSup.is())
+                        xViews = xViewsSup->getViews();
+                    if(xViews.is() && xViews->hasByName(sTableName))
+                    {
+                        xDrop = Reference<XDrop>(xViews,UNO_QUERY);
+                        if(xDrop.is())
+                            xDrop->dropByName(sTableName);
+                    }
+                }
             }
             catch(SQLContext& e) { aErrorInfo = e; }
             catch(SQLWarning& e) { aErrorInfo = e; }

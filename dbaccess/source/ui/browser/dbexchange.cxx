@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-21 13:57:48 $
+ *  last change: $Author: oj $ $Date: 2001-05-31 14:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,12 @@ namespace dbaui
         {
             m_pHtml = new OHTMLImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xHtml = m_pHtml;
-            m_pHtml->initialize();
         }
 
         if (DCF_RTF_TABLE == (m_nFormats & DCF_RTF_TABLE))
         {
             m_pRtf = new ORTFImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xRtf = m_pRtf;
-            m_pRtf->initialize();
         }
     }
 
@@ -327,9 +325,11 @@ namespace dbaui
         switch (nFormat)
         {
             case SOT_FORMAT_RTF:
+                m_pRtf->initialize();
                 return SetObject(m_pRtf,SOT_FORMAT_RTF,rFlavor);
 
             case SOT_FORMATSTR_ID_HTML:
+                m_pHtml->initialize();
                 return SetObject(m_pHtml,SOT_FORMATSTR_ID_HTML,rFlavor);
 
             case SOT_FORMATSTR_ID_DBACCESS_TABLE:
