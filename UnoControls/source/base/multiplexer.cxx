@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multiplexer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-07 16:11:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,12 +98,12 @@ namespace unocontrols{
 #define MULTIPLEX( INTERFACE, METHOD, EVENTTYP, EVENT )                                                                             \
                                                                                                                                     \
     /* First get all interfaces from container with right type.*/                                                                   \
-    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( ::getCppuType((const Reference< INTERFACE## >*)0) );    \
+    OInterfaceContainerHelper* pContainer = m_aListenerHolder.getContainer( ::getCppuType((const Reference< INTERFACE >*)0) );  \
     /* Do the follow only, if elements in container exist.*/                                                                        \
     if( pContainer != NULL )                                                                                                        \
     {                                                                                                                               \
         OInterfaceIteratorHelper aIterator( *pContainer );                                                                          \
-        EVENTTYP aLocalEvent = EVENT##;                                                                                             \
+        EVENTTYP aLocalEvent = EVENT;                                                                                               \
         /* Remark: The control is the event source not the peer.*/                                                                  \
         /*         We must change the source of the event.      */                                                                  \
         aLocalEvent.Source = m_xControl ;                                                                                           \
@@ -112,10 +112,10 @@ namespace unocontrols{
         {                                                                                                                           \
             if( aIterator.hasMoreElements() )                                                                                       \
             {                                                                                                                       \
-                INTERFACE## * pListener = (INTERFACE## *)aIterator.next();                                                          \
+                INTERFACE * pListener = (INTERFACE *)aIterator.next();                                                          \
                 try                                                                                                                 \
                 {                                                                                                                   \
-                    pListener->METHOD##( aLocalEvent );                                                                             \
+                    pListener->METHOD( aLocalEvent );                                                                               \
                 }                                                                                                                   \
                 catch( RuntimeException& )                                                                                          \
                 {                                                                                                                   \
