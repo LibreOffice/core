@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
             SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
             rNIdx = pSttIdx->GetIndex() + 1;
             SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-            if( pTNd )
+            if (pTNd && pTNd->GetTxt().Len())
             {
                 String sNo( pTNd->GetTxt().GetChar( 0 ));
                 ((SwTxtFtn*)pFN)->SetNumber( 0, &sNo );
@@ -3753,6 +3753,8 @@ void WW8RStyle::PostProcessStyles()
     for(i=0; i < cstd; i++)
         if( pIo->pCollA[i].bValid )
             RecursiveReg( i );
+
+    pIo->StrengthReduceListStyles();
 }
 
 
