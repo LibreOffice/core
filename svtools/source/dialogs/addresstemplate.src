@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:05:56 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:07:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "≥q∞Tø˝®”∑Ω";
         Text[ turkish ] = "Address Book Source";
         Text[ arabic ] = "„’œ— œ› — «·⁄‰«ÊÌ‰";
+        Text[ catalan ] = "Fuente de libreta de direcciones";
     };
     FixedText FT_DATASOURCE
     {
@@ -132,6 +133,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "∏ÍÆ∆®”∑Ω";
         Text[ turkish ] = "Datasource";
         Text[ arabic ] = "„’œ— «·»Ì«‰« ";
+        Text[ catalan ] = "Fuente de datos";
     };
     ComboBox CB_DATASOURCE
     {
@@ -168,6 +170,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "∫ﬁ≤z (~A)...";
         Text[ turkish ] = "~Administrate ...";
         Text[ arabic ] = "≈œ«—…...";
+        Text[ catalan ] = "~Administrar ...";
     };
     FixedText FT_TABLE
     {
@@ -196,6 +199,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "™ÌÆÊ";
         Text[ turkish ] = "Table";
         Text[ arabic ] = "«·ÃœÊ·";
+        Text[ catalan ] = "Tabla";
     };
     ComboBox CB_TABLE
     {
@@ -231,6 +235,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "´¸©wƒÊ¶Ï";
         Text[ turkish ] = "Field assignment";
         Text[ arabic ] = " ⁄ÌÌ‰ «·Õﬁ·";
+        Text[ catalan ] = "AsignaciÛn de campo";
     };
 
 #define DECLARE_FIELD( row, column )    \
@@ -359,7 +364,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ chinese_traditional ] = "<µL>";
         Text[ arabic ] = "<»œÊ‰>";
         Text[ turkish ] = "<Yok>";
-    };
+        Text[ catalan ] = "<ninguno>";
+        };
 
     String STR_FIELD_COMPANY
     {
@@ -383,7 +389,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "§Ω•q";
     Text[ turkish ] = "Company";
     Text[ arabic ] = "«·‘—ﬂ…";
-};
+    Text[ catalan ] = "Empresa";
+        };
     String STR_FIELD_DEPARTMENT
     {
         Text = "Abteilung";
@@ -406,7 +413,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "≥°™˘";
     Text[ turkish ] = "Department";
     Text[ arabic ] = "«·ﬁ”„";
-};
+    Text[ catalan ] = "Departamento";
+        };
     String STR_FIELD_FIRSTNAME
     {
         Text = "Vorname";
@@ -429,7 +437,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¶W¶r";
     Text[ turkish ] = "First name";
     Text[ arabic ] = "«·«”„";
-};
+    Text[ catalan ] = "Nombre";
+        };
     String STR_FIELD_LASTNAME
     {
         Text = "Name";
@@ -452,7 +461,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "©m§Û";
     Text[ turkish ] = "Last name";
     Text[ arabic ] = "«”„ «·⁄«∆·…";
-};
+    Text[ catalan ] = "Apellidos";
+        };
     String STR_FIELD_STREET
     {
         Text = "Straﬂe";
@@ -475,7 +485,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "µÛπD";
     Text[ turkish ] = "Street";
     Text[ arabic ] = "«·‘«—⁄";
-};
+    Text[ catalan ] = "Calle";
+        };
     String STR_FIELD_COUNTRY
     {
         Text = "Land";
@@ -498,7 +509,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∞ÍÆa";
     Text[ turkish ] = "Country";
     Text[ arabic ] = "«·»·œ";
-};
+    Text[ catalan ] = "PaÌs";
+        };
     String STR_FIELD_ZIPCODE
     {
         Text = "PLZ";
@@ -521,7 +533,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∂lªº∞œ∏π";
     Text[ turkish ] = "ZIP code";
     Text[ arabic ] = "«·—„“ «·»—ÌœÌ";
-};
+    Text[ catalan ] = "CP";
+        };
     String STR_FIELD_CITY
     {
         Text = "Ort";
@@ -544,7 +557,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "´∞•´";
     Text[ turkish ] = "City";
     Text[ arabic ] = "«·„œÌ‰…";
-};
+    Text[ catalan ] = "Ciudad";
+        };
     String STR_FIELD_TITLE
     {
         Text = "Titel";
@@ -567,7 +581,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∫Ÿø◊";
     Text[ turkish ] = "Title";
     Text[ arabic ] = "«··ﬁ» «·„Â‰Ì";
-};
+    Text[ catalan ] = "TÌtulo";
+        };
     String STR_FIELD_POSITION
     {
         Text = "Position";
@@ -590,7 +605,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¬æ∞»";
     Text[ turkish ] = "Position";
     Text[ arabic ] = "«·ÊŸÌ›…";
-};
+    Text[ catalan ] = "PosiciÛn";
+        };
     String STR_FIELD_ADDRFORM
     {
         Text = "Anrede";
@@ -613,7 +629,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∫Ÿ©I";
     Text[ turkish ] = "Addr. form";
     Text[ arabic ] = "·ﬁ» «·„Œ«ÿ»…";
-};
+    Text[ catalan ] = "Tratamiento";
+        };
     String STR_FIELD_INITIALS
     {
         Text = "K¸rzel";
@@ -636,7 +653,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¡Yºg";
     Text[ turkish ] = "Initials";
     Text[ arabic ] = "«·«Œ ’«—";
-};
+    Text[ catalan ] = "Iniciales";
+        };
     String STR_FIELD_SALUTATION
     {
         Text = "Anrede";
@@ -659,7 +677,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∫Ÿ©I";
     Text[ turkish ] = "Salutation";
     Text[ arabic ] = "«· ÕÌ…";
-};
+    Text[ catalan ] = "Tratamiento";
+        };
     String STR_FIELD_HOMETEL
     {
         Text = "Telefon priv.";
@@ -682,7 +701,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®p§Hπq∏‹∏πΩX";
     Text[ turkish ] = "Telephon Home";
     Text[ arabic ] = "«·Â« › („‰“·)";
-};
+    Text[ catalan ] = "TelÈfono privado";
+        };
     String STR_FIELD_WORKTEL
     {
         Text = "Telefon gesch.";
@@ -705,7 +725,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "§Ω•qπq∏‹∏πΩX";
     Text[ turkish ] = "Telephon Work";
     Text[ arabic ] = "«·Â« › (⁄„·)";
-};
+    Text[ catalan ] = "TelÈfono trabajo";
+        };
     String STR_FIELD_FAX
     {
         Text = "FAX";
@@ -728,7 +749,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "∂«Øu∏πΩX";
     Text[ turkish ] = "FAX";
     Text[ arabic ] = "«·›«ﬂ”";
-};
+    Text[ catalan ] = "FAX";
+        };
     String STR_FIELD_EMAIL
     {
         Text = "E-Mail";
@@ -751,7 +773,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "πq§l∂l•Û¶aß}";
     Text[ turkish ] = "E-Mail";
     Text[ arabic ] = "«·»—Ìœ «·≈·ﬂ —Ê‰Ì";
-};
+    Text[ catalan ] = "E-mail";
+        };
     String STR_FIELD_URL
     {
         Text = "URL";
@@ -774,7 +797,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "URL";
     Text[ turkish ] = "URL";
     Text[ arabic ] = "URL";
-};
+    Text[ catalan ] = "URL";
+        };
     String STR_FIELD_NOTE
     {
         Text = "Notiz";
@@ -797,7 +821,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "≥∆µ˘";
     Text[ turkish ] = "Note";
     Text[ arabic ] = "„·«ÕŸ…";
-};
+    Text[ catalan ] = "Nota";
+        };
     String STR_FIELD_USER1
     {
         Text = "Benutzer 1";
@@ -820,7 +845,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®œ•Œ™Ã 1";
     Text[ turkish ] = "User 1";
     Text[ arabic ] = "„” Œœ„  1";
-};
+    Text[ catalan ] = "Usuario 1";
+        };
     String STR_FIELD_USER2
     {
         Text = "Benutzer 2";
@@ -843,7 +869,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®œ•Œ™Ã 2";
     Text[ turkish ] = "User 2";
     Text[ arabic ] = "„” Œœ„ 2";
-};
+    Text[ catalan ] = "Usuario 2";
+        };
     String STR_FIELD_USER3
     {
         Text = "Benutzer 3";
@@ -866,7 +893,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®œ•Œ™Ã 3";
     Text[ turkish ] = "User 3";
     Text[ arabic ] = "„” Œœ„ 3";
-};
+    Text[ catalan ] = "Usuario 3";
+        };
     String STR_FIELD_USER4
     {
         Text = "Benutzer 4";
@@ -889,7 +917,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®œ•Œ™Ã 4";
     Text[ turkish ] = "User 4";
     Text[ arabic ] = "„” Œœ„ 4";
-};
+    Text[ catalan ] = "Usuario 4";
+        };
 
     String STR_FIELD_ID
     {
@@ -913,7 +942,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "ID";
     Text[ turkish ] = "ID";
     Text[ arabic ] = "«· ⁄—Ì›";
-};
+    Text[ catalan ] = "ID";
+        };
     String STR_FIELD_STATE
     {
         Text = "Bund.land";
@@ -937,7 +967,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¨Ÿ•´";
     Text[ turkish ] = "State";
     Text[ arabic ] = "«·Ê·«Ì…";
-};
+    Text[ catalan ] = "Provincia";
+        };
     String STR_FIELD_OFFICETEL
     {
         Text = "Telefon B¸ro";
@@ -960,7 +991,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "øÏ§Ω´«πq∏‹∏πΩX";
     Text[ turkish ] = "Telephon Office";
     Text[ arabic ] = "«·Â« › („ﬂ »)";
-};
+    Text[ catalan ] = "TelÈfono trabajo";
+        };
     String STR_FIELD_PAGER
     {
         Text = "Telefon Funk";
@@ -983,7 +1015,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "µLΩu©I•s∏πΩX";
     Text[ turkish ] = "Pager";
     Text[ arabic ] = "»ÌÃ—";
-};
+    Text[ catalan ] = "Buscapersonas";
+        };
     String STR_FIELD_MOBILE
     {
         Text = "Handy";
@@ -1006,7 +1039,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "§‚æ˜∏πΩX";
     Text[ turkish ] = "Mobile";
     Text[ arabic ] = "«·„Õ„Ê·";
-};
+    Text[ catalan ] = "MÛvil";
+        };
     String STR_FIELD_TELOTHER
     {
         Text = "Telefon andere";
@@ -1029,7 +1063,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "®‰•Lπq∏‹∏πΩX";
     Text[ turkish ] = "Telephon other";
     Text[ arabic ] = "«·Â« › (¬Œ—)";
-};
+    Text[ catalan ] = "TelÈfono, otros";
+        };
     String STR_FIELD_CALENDAR
     {
         Text = "Kalender";
@@ -1052,7 +1087,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¶Ê®∆æ˙";
     Text[ turkish ] = "Calendar";
     Text[ arabic ] = "«· ﬁÊÌ„";
-};
+    Text[ catalan ] = "Agenda";
+        };
     String STR_FIELD_INVITE
     {
         Text = "Einladen";
@@ -1075,5 +1111,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "¡‹Ω–";
     Text[ turkish ] = "Invite";
     Text[ arabic ] = "œ⁄Ê…";
-};
+    Text[ catalan ] = "Invitar";
+        };
 };
