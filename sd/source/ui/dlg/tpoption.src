@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2001-02-07 13:29:02 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_simplified ] = "¶ΤΖλΞ»ΦΓ²»½φΚΚΣΓΣΪΙϊ³ΙΝΌΠΞ¶ΤΟσ£¬¶ψΗÒÒ²ΚΚΣΓΣΪÒΖ¶―ΝΌΠΞ¶ΤΟσ΅£";
         Text[ russian ] = "Οπθβÿηκΰ ξςνξρθςρÿ κΰκ κ ρξηδΰνθώ, ςΰκ θ κ οεπεδβθζενθώ γπΰτθχερκθυ ξαϊεκςξβ.";
         Text[ polish ] = "Zaczepianie odnosi siκ zarσwno do tworzenia jak i do przemieszczania obiektσw graficznych.";
-        Text[ japanese ] = "½Ε―Μί‚·‚ι‹@”\\‚ΝΈήΧΜ¨―Έ µΜήΌήªΈΔ‚Μμ¬‚ΖΪ“®‚Εg‚¦‚ά‚·B";
+        Text[ japanese ] = "Κ’u‡‚ν‚Ή‹@”\\‚Ν}`•`‰ζµΜήΌήªΈΔ‚Μμ¬‚ΖΪ“®‚ΕA}`‚Μ’²®‚Ιg‚¦‚ά‚·B";
         Text[ chinese_traditional ] = "Ήο»τ¦μΈm¤£¶ΘΎA¥Ξ©σ²£¥ΝΉΟ§Ξª«¥σ΅M¦Σ¥B¤]ΎA¥Ξ©σ²Ύ°ΚΉΟ§Ξª«¥σ΅C";
         Text[ arabic ] = "νδΨΘή ΗαΝΘΣ Ϊαμ ία γδ ΕδΤΗΑ ζΚΝΡνί ίΗΖδΗΚ ΗαΡΣγ.";
         Text[ greek ] = "Η 'προσκόλληση' αναφέρεται τόσο στη δημιουργία, όσο και στη μετακίνηση των αντικειμένων γραφικών.";
@@ -163,7 +163,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_traditional ] = "®yΌΠ½u(~O)";
         Text[ arabic ] = "έν ΞΨζΨ ΗαΝΘΣ";
         Text[ greek ] = "Σε γραμμές προσκόλλησης";
-        Text[ korean ] = "°³ΓΌ ΎΘ³»Ό±(~N)";
+        Text[ korean ] = "ΈΒΓγΌ±Ώ΅£¨~N)";
         Text[ turkish ] = "Kavrama ηizgisinde";
         Text[ language_user1 ] = " ";
     };
@@ -190,7 +190,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_traditional ] = "­¶Γδ(~M)";
         Text[ arabic ] = "έν εζΗγΤ ΗαΥέΝΙ";
         Text[ greek ] = "Στα περιθώρια της σελίδας";
-        Text[ korean ] = "ΖδΐΜΑφ Ώ©Ήι(~P)";
+        Text[ korean ] = "ΒΚ Ώ©Ήι(~P)";
         Text[ turkish ] = "Sayfa kenarlarύnda";
         Text[ language_user1 ] = " ";
     };
@@ -210,7 +210,7 @@ TabPage TP_OPTIONS_SNAP
         Text [ ITALIAN ] = "Alla cornice dell'oggetto" ;
         Text [ DUTCH ] = "Aan object~kader" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Am Objektrahmen" ;
-        Text [ SWEDISH ] = "Vid ~objektramen" ;
+        Text [ SWEDISH ] = "Vid ~objektram" ;
         Text [ PORTUGUESE ] = "Na moldura do objecto" ;
         Text[ chinese_simplified ] = "¶ΤΟσΏς(~F)";
         Text[ russian ] = "Κ πΰμκε ξαϊεκςΰ";
@@ -338,7 +338,7 @@ TabPage TP_OPTIONS_SNAP
         Text[ chinese_simplified ] = "¶ΤΖλ";
         Text[ russian ] = "Οπθβÿηΰςό";
         Text[ polish ] = "Zaczep";
-        Text[ japanese ] = "½Ε―Μί‚·‚ι";
+        Text[ japanese ] = "Κ’u‡‚ν‚Ή";
         Text[ chinese_traditional ] = "Ήο»τ";
         Text[ arabic ] = "ΗαΝΘΣ";
         Text[ greek ] = "Προσκόλληση";
@@ -645,7 +645,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_traditional ] = "Εγ¥άΌΠ¤Ψ(~V)";
         Text[ arabic ] = "ΗαγΣΗΨΡ γΡΖνΙ";
         Text[ greek ] = "Χάρακες ορατά";
-        Text[ korean ] = "΄«±έΐΪ Η¥½Γ(~R)";
+        Text[ korean ] = "΄«±έΐΪ Η¥½Γ";
         Text[ turkish ] = "Cetvelleri gφster";
         Text[ language_user1 ] = " ";
     };
@@ -699,7 +699,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text[ chinese_traditional ] = "¦±½u½sΏθµ{¦΅¤ΊªΊ¥ώ³΅±±ΒI(~A)";
         Text[ arabic ] = "ία δήΗΨ ΗαΚΝίγ έν γΝΡΡ Bιzier";
         Text[ greek ] = "Όλες τα σημε~ία ελέγχου σε επεξεργασία Bιzier";
-        Text[ korean ] = "Ί£ΑφΏ΅ ΖνΑύ±βΐΗ Έπµη ΗΪµι(~A)";
+        Text[ korean ] = "Ί£ΑφΏ΅ ΖνΑύ±βΐΗ Έπµη ΗΪµι";
         Text[ turkish ] = "Bιzier dόzenleyicisindeki tόm denetim nokt.";
         Text[ language_user1 ] = " ";
     };
@@ -842,7 +842,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text [ spanish ] = "Distancia entre tabuladores" ;
         Text [ french ] = "Espace entre les tabulations" ;
         Text [ dutch ] = "Tabstops" ;
-        Text [ portuguese ] = "Espaηos entre tabulaηυes" ;
+        Text [ portuguese ] = "Intervalo entre tabulaηυes" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
         Text[ chinese_simplified ] = "ΦΖ±ν·ϋµΔΌδΈτ";
         Text[ russian ] = "Οξηθφθÿ ςΰασλÿφθθ";
@@ -901,14 +901,14 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE_BRAZILIAN ] = "Fremdgrafiken andeuten" ;
         Text [ SWEDISH ] = "Antyd extern gra~fik" ;
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
-        Text[ chinese_simplified ] = "ΟΤΚΎΝβ²ΏΝΌΠΞΏς(~P)";
+        Text[ chinese_simplified ] = "ΟΤΚΎΖδΛόΈρΚ½ΝΌΠΞµΔ±ίΏς(~P)";
         Text[ russian ] = "Ξαξηνΰχθςό βνεψνθε πθρσνκθ";
         Text[ polish ] = "Wskazaζ na obce grafiki";
         Text[ japanese ] = "²Ò°Όήg‚Μ•\\¦(~P)";
-        Text[ chinese_traditional ] = "Εγ¥άΉΟ§Ξ®Ψ(~P)";
+        Text[ chinese_traditional ] = "Εγ¥ά¨δ¥L®ζ¦΅ΉΟ§ΞªΊΓδ®Ψ(~P)";
         Text[ arabic ] = "ΚαγνΝ αΥζΡ ΞΗΡΜνΙ";
         Text[ greek ] = "Υποδήλωση εξωτερικών γρα~φικών";
-        Text[ korean ] = "ΏάΊΞ ±Χ·΅ΗΘ Η¥½Γ(~P)";
+        Text[ korean ] = "ΏάΊΞ±Χ·΅ΗΘ Η¥½Γ";
         Text[ turkish ] = "Harici grafik iηin yer tutucu";
         Text[ language_user1 ] = " ";
     };
@@ -962,7 +962,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ(~T)";
         Text[ arabic ] = "ΚαγνΝ Εαμ ΗαδΥ";
         Text[ greek ] = "Υποδήλωση κειμένου";
-        Text[ korean ] = "ΕΨ½ΊΖ® Η¥½Γ(~T)";
+        Text[ korean ] = "ΕΨ½ΊΖ® Η¥½Γ";
         Text[ turkish ] = "Metin iηin yer tutucu";
         Text[ language_user1 ] = " ";
     };
@@ -991,8 +991,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_traditional ] = "¥uΕγ¥ά½όΉψ½u(~L)";
         Text[ arabic ] = "ΕΩεΗΡ ΝΟζΟ ΗαΞΨ έήΨ";
         Text[ greek ] = "Εμφά~νιση μόνο πολύ λεπτών γραμμών";
-        Text[ korean ] = "Ό± ΐ±°ϋΈΈ(~L)";
-        Text[ turkish ] = "Ηizgileri kontur olarak gφster";
+        Text[ korean ] = "°΅΄ΒΌ±ΈΈ΅΅ΊΈΐΜ±β(~L)";
+        Text[ turkish ] = "Kontur ηizgilerini gφster";
         Text[ language_user1 ] = " ";
     };
     GroupBox GRP_VIEW_SUBSTITUTE
@@ -1395,7 +1395,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_traditional ] = "Α`¬O±q·ν«eªΊ­¶­±¶}©l";
         Text[ arabic ] = "ΟΗΖγΗπ γΪ ΗαΥέΝΙ ΗαΝΗανΙ";
         Text[ greek ] = "Πάντα με την τρέχουσα σελίδα";
-        Text[ korean ] = "ΗΧ»σ Ηφΐη ΖδΐΜΑφ·Ξ";
+        Text[ korean ] = "ΗΧ»σ Ηφΐη ΒΚΐΈ·Ξ";
         Text[ turkish ] = "Hep gόncel sayfa ile";
         Text[ language_user1 ] = " ";
     };
