@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:50:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,13 @@
 
 namespace desktop
 {
+
+class WizardResId : public ResId
+{
+public:
+    WizardResId( USHORT nId );
+};
+
 class FirstStartWizard : public svt::RoadmapWizard
 {
 
@@ -79,13 +86,19 @@ public:
     static const WizardState STATE_USER;
     static const WizardState STATE_REGISTRATION;
 
+    static ResMgr* pResMgr;
+    static ResMgr* GetResManager();
+
     FirstStartWizard(Window* pParent);
 
     virtual short Execute();
 
     static rtl::OUString getLicensePath();
 
+    void overrideCheck(sal_Bool bOverride);
+
 private:
+    sal_Bool m_bOverride;
     WizardState _currentState;
     PathId m_aDefaultPath;
     PathId m_aMigrationPath;
@@ -98,10 +111,12 @@ private:
     void storeAcceptDate();
     void disableWizard();
     void enableQuickstart();
-    sal_Bool isFirstStart();
-    sal_Bool isLicenseAccepted();
 
     DECL_LINK(DeclineHdl, PushButton*);
+
+public:
+    static sal_Bool isFirstStart();
+    static sal_Bool isLicenseAccepted();
 
 protected:
     // from svt::WizardMachine
