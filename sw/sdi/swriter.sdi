@@ -4109,32 +4109,6 @@ SfxBoolItem InsertFieldCtrl FN_INSERT_FIELD_CTRL
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem InsertFooter FN_INSERT_FOOTER
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFootnoteDialog FN_INSERT_FOOTNOTE_DLG
@@ -4342,32 +4316,6 @@ SfxVoidItem InsertHardHyphen FN_INSERT_HARDHYPHEN
     GroupId = GID_INSERT;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem InsertHeader FN_INSERT_HEADER
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_INSERT;
-]
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertHyperlinkDlg FN_INSERT_HYPERLINK
