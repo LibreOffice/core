@@ -64,7 +64,7 @@ Dim i as Integer
 Dim SelCount as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-	bDebug = False
+	bDebug = True
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
@@ -299,9 +299,9 @@ End Sub
 
 Sub StoreForm()
 Dim bDocIsStored as Boolean
-Dim FilterNames(0,2) as String
+Dim TypeNames(0,2) as String
 Dim oMasterKey as Object
-Dim oFilters() as Object
+Dim oTypes() as Object
 Dim sTargetPath as String
 Dim sBookmarkName as String
 Dim oDBBookmarks as Object		
@@ -309,11 +309,11 @@ Dim bLinkExists as Boolean
 Dim i as Integer	
 Dim sBaseBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-	oFilters() = oMasterKey.Filters
-	FilterNames(0,0) = oFilters.GetByName(&quot;swriter: StarOffice XML (Writer)&quot;).UIName
-	FilterNames(0,1) = &quot;*.sxw&quot;
-	FilterNames(0,2) = &quot;&quot;
-	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath)
+	oTypes() = oMasterKey.Types
+	TypeNames(0,0) = oTypes.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+	TypeNames(0,1) = &quot;*.sxw&quot;
+	TypeNames(0,2) = &quot;&quot;
+	sTargetPath = StoreDocument(oDocument, TypeNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName &amp; &quot;.sxw&quot;, WorkPath)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
 		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
 		sBaseBookmarkName = sBookmarkName
