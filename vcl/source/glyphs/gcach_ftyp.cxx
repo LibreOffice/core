@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.11 $
- *  last change: $Author: hdu $ $Date: 2001-02-27 18:34:38 $
+ *  $Revision: 1.12 $
+ *  last change: $Author: pl $ $Date: 2001-03-05 10:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     maFaceFT(NULL)
 {
     const char* pszFontFileName = rFI.aNativeFileName.getStr();
+
     FT_Error rc = FT_New_Face( aLibFT, pszFontFileName, rFI.nFaceNum, &maFaceFT );
     if( rc != FT_Err_Ok )
         return;
@@ -399,7 +400,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     if( pOS2 && (~pOS2->version != 0) )
     {
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        rTo.mnWidth         = (long)( pOS2->xAvgCharWidth * fScale + 0.5 );
         rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
         rTo.mnDescent       = (long)( +pOS2->usWinDescent * fScale + 0.5 );
         rTo.mnLeading       = (long)( (+pOS2->usWinAscent - pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );

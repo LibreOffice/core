@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 06:44:03 $
+ *  last change: $Author: pl $ $Date: 2001-03-05 10:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
                         mpServerSideFont->SetFontId( nFontId );
                     }
                 }
-                m_pPrinterGfx->SetFont( nFontId, pEntry->mnHeight, pEntry->mnOrientation );
+                m_pPrinterGfx->SetFont( nFontId, pEntry->mnHeight, pEntry->mnWidth, pEntry->mnOrientation );
             }
 #endif // USE_PSPRINT
             return;
@@ -1227,7 +1227,7 @@ SalGraphicsData::DrawText(
 USHORT
 SalGraphics::SetFont( ImplFontSelectData *pEntry )
 {
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     if( (maGraphicsData.m_pPrinterGfx != NULL)
 #ifdef USE_BUILTIN_RASTERIZER
     && ( !pEntry->mpFontData || (pEntry->mpFontData->mpSysData != SERVERFONT_MAGIC) )
@@ -1237,20 +1237,24 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
         sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
-        return maGraphicsData.m_pPrinterGfx->SetFont(nID, pEntry->mnHeight,
-                                                     pEntry->mnOrientation);
+        return maGraphicsData.m_pPrinterGfx->SetFont(
+                                                     nID,
+                                                     pEntry->mnHeight,
+                                                     pEntry->mnWidth,
+                                                     pEntry->mnOrientation
+                                                     );
     }
     else
     {
-    #endif
+#endif
 
 
     maGraphicsData.SetFont( pEntry );
     return _IsPrinter() ? SAL_SETFONT_USEDRAWTEXTARRAY : 0;
 
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     }
-    #endif
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -1489,17 +1493,7 @@ sal_DivideNeg( long n1, long n2 )
 void
 SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 {
-#ifdef USE_BUILTIN_RASTERIZER
-    if( maGraphicsData.mpServerSideFont != NULL )
-    {
-        long rDummyFactor;
-        maGraphicsData.mpServerSideFont->FetchFontMetric( *pMetric,
-            rDummyFactor );
-        return;
-    }
-#endif //USE_BUILTIN_RASTERIZER
-
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
     {
         const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -1507,7 +1501,10 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
 
         if (rMgr.getFontInfo (maGraphicsData.m_pPrinterGfx->GetFontID(), aInfo))
         {
-            sal_Int32 nTextSize = maGraphicsData.m_pPrinterGfx->GetFontSize();
+            sal_Int32 nTextHeight   = maGraphicsData.m_pPrinterGfx->GetFontHeight();
+            sal_Int32 nTextWidth    = maGraphicsData.m_pPrinterGfx->GetFontWidth();
+            if( ! nTextWidth )
+                nTextWidth = nTextHeight;
 
             pMetric->mnOrientation  = maGraphicsData.m_pPrinterGfx->GetFontAngle();
             pMetric->mnSlant        = 0;
@@ -1519,20 +1516,30 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
             pMetric->meWeight       = ToFontWeight (aInfo.m_eWeight);
             pMetric->mePitch        = ToFontPitch  (aInfo.m_ePitch);
             pMetric->meItalic       = ToFontItalic (aInfo.m_eItalic);
-            pMetric->meType     = TYPE_SCALABLE;
+            pMetric->meType         = TYPE_SCALABLE;
 
             pMetric->mnFirstChar    =   0;
-            pMetric->mnLastChar = 255;
+            pMetric->mnLastChar     = 255;
 
-            pMetric->mnWidth        = aInfo.m_nWidth * nTextSize / 1000;
-            pMetric->mnAscent       = aInfo.m_nAscend * nTextSize / 1000;
-            pMetric->mnDescent      = aInfo.m_nDescend * nTextSize / 1000;
-            pMetric->mnLeading      = aInfo.m_nLeading * nTextSize / 1000;
+            pMetric->mnWidth        = nTextWidth;
+            pMetric->mnAscent       = aInfo.m_nAscend * nTextHeight / 1000;
+            pMetric->mnDescent      = aInfo.m_nDescend * nTextHeight / 1000;
+            pMetric->mnLeading      = aInfo.m_nLeading * nTextHeight / 1000;
         }
     }
     else
     {
-    #endif
+#endif
+#ifdef USE_BUILTIN_RASTERIZER
+        if( maGraphicsData.mpServerSideFont != NULL )
+        {
+            long rDummyFactor;
+            maGraphicsData.mpServerSideFont->FetchFontMetric( *pMetric,
+                                                              rDummyFactor );
+            return;
+        }
+#endif //USE_BUILTIN_RASTERIZER
+
 
     ExtendedFontStruct* pFont = maGraphicsData.xFont_;
 
@@ -1540,10 +1547,10 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
     {
         pFont->ToImplFontMetricData( pMetric );
 
-        #ifndef USE_PSPRINT
+#ifndef USE_PSPRINT
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
-        #endif
+#endif
         if ( maGraphicsData.bFontVertical_ )
             pMetric->mnOrientation = 2700;
 
@@ -1570,9 +1577,9 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         }
     }
 
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     }
-    #endif
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1591,29 +1598,27 @@ InitializeWidthArray( long *pWidthArray, sal_Size nItems, int nValue = 0  )
 // ---------------------------------------------------------------------------
 
 long
-
 SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
 {
-#ifdef USE_BUILTIN_RASTERIZER
-    if( maGraphicsData.mpServerSideFont != NULL )
-    {
-        ServerFont& rSF = *maGraphicsData.mpServerSideFont;
-        for( int i = nChar1; i <= nChar2; ++i )
-        {
-            const int nGlyphIndex = rSF.GetGlyphIndex( i );
-            const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
-            pWidthAry[ i - nChar1 ] = rGM.GetDelta().X();
-        }
-        return 1;
-    }
-#endif // USE_BUILTIN_RASTERIZER
-
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
         return maGraphicsData.m_pPrinterGfx->GetCharWidth(nChar1, nChar2, pWidthAry);
     else
     {
-    #endif
+#endif
+#ifdef USE_BUILTIN_RASTERIZER
+        if( maGraphicsData.mpServerSideFont != NULL )
+        {
+            ServerFont& rSF = *maGraphicsData.mpServerSideFont;
+            for( int i = nChar1; i <= nChar2; ++i )
+            {
+                const int nGlyphIndex = rSF.GetGlyphIndex( i );
+                const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
+                pWidthAry[ i - nChar1 ] = rGM.GetDelta().X();
+            }
+            return 1;
+        }
+#endif // USE_BUILTIN_RASTERIZER
 
     // return the precision of the calculated charwidth, e.g. 1000 = 3 digits
     // defaultet to 1 for now
@@ -1655,9 +1660,9 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
     // return
     return nPrecision;
 
-    #if defined(USE_PSPRINT)
+#if defined(USE_PSPRINT)
     }
-    #endif
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1690,12 +1695,15 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
     if( pKernPairs && nPairs )
     {
         ::std::list< ::psp::KernPair >::const_iterator it;
-        int i, nHeight = maGraphicsData.m_pPrinterGfx->GetFontSize();
+        int i;
+        int nTextScale = maGraphicsData.m_pPrinterGfx->GetFontWidth();
+        if( ! nTextScale )
+            nTextScale = maGraphicsData.m_pPrinterGfx->GetFontHeight();
         for( i = 0, it = rPairs.begin(); i < nPairs && i < nHavePairs; i++, ++it )
         {
             pKernPairs[i].mnChar1   = it->first;
             pKernPairs[i].mnChar2   = it->second;
-            pKernPairs[i].mnKern    = it->kern_x * nHeight / 1000;
+            pKernPairs[i].mnKern    = it->kern_x * nTextScale / 1000;
         }
     }
     return nHavePairs;
