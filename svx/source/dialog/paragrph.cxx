@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-01-09 11:37:50 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2122,11 +2122,11 @@ SvxAsianTabPage::SvxAsianTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, ResId( RID_SVXPAGE_PARA_ASIAN, DIALOG_MGR() ), rSet),
     aOptionsGB(         this, ResId(GB_AS_OPTIONS       )),
     aHangingPunctCB(    this, ResId(CB_AS_HANG_PUNC     )),
-    aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
+    aAllowWordBreakCB(  this, ResId(CB_AS_ALLOW_WORD_BREAK)),
     aForbiddenRulesCB(  this, ResId(CB_AS_FORBIDDEN     )),
     aCharDistGB(        this, ResId(GB_AS_CHAR_DIST     )),
     aPuntuationCB(      this, ResId(CB_AS_PUNCTUATION   )),
-    aAdjustWesternCB(   this, ResId(CB_AS_ADJUST_WESTERN)),
+    aScriptSpaceCB(     this, ResId(CB_AS_SCRIPT_SPACE  )),
     aAdjustNumbersCB(   this, ResId(CB_AS_ADJUST_NUMBERS)),
     aTextAlignFT(       this, ResId(FT_TEXT_ALIGN       )),
     aTextAlignLB(       this, ResId(LB_TEXT_ALIGN       ))
@@ -2223,16 +2223,17 @@ void lcl_SetBox(const SfxItemSet& rSet, USHORT nSlotId, TriStateBox& rBox)
 
 void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 {
-    lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
-    lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
     lcl_SetBox(rSet, SID_ATTR_PARA_FORBIDDEN_RULES, aForbiddenRulesCB );
+//  lcl_SetBox(rSet, , aAllowWordBreakCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_HANGPUNCTUATION, aHangingPunctCB );
+
 
     //character distance not yet available
 //  lcl_SetBox(rSet, , aPuntuationCB    );
-//  lcl_SetBox(rSet, , aAdjustWesternCB );
+    lcl_SetBox(rSet, SID_ATTR_PARA_SCRIPTSPACE, aScriptSpaceCB );
 //  lcl_SetBox(rSet, , aAdjustNumbersCB );
+    aAllowWordBreakCB   .Enable(FALSE);
     aPuntuationCB       .Enable(FALSE);
-    aAdjustWesternCB    .Enable(FALSE);
     aAdjustNumbersCB    .Enable(FALSE);
     aTextAlignFT.Enable(FALSE);
     aTextAlignLB.Enable(FALSE);

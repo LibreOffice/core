@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-01-09 11:37:50 $
+ *  last change: $Author: os $ $Date: 2001-01-17 16:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,80 +1975,12 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     {
         Pos = MAP_APPFONT ( 3 , 6 ) ;
         Size = MAP_APPFONT ( 254 , 52 ) ;
-        Text = "Optionen" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text[ english_us ] = "Options";
-        Text[ portuguese ] = "Options";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ dutch ] = "Options";
-        Text[ french ] = "Options";
-        Text[ spanish ] = "Opciones";
-        Text[ italian ] = "Options";
-        Text[ danish ] = "Options";
-        Text[ swedish ] = "Options";
-        Text[ polish ] = "Opcje";
-        Text[ portuguese_brazilian ] = "Options";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ korean ] = "Options";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
-        Text[ chinese_traditional ] = "¿ï¶µ";
-        Text[ turkish ] = "Options";
-        Text[ arabic ] = "ÎíÇÑÇÊ";
-    };
-    TriStateBox CB_AS_HANG_PUNC
-    {
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 245 , 12 ) ;
-        Text = "Hängende Interpunktion zulassen" ;
-        Text [ ENGLISH ] = "Hanging punctuation" ;
-        Text[ english_us ] = "Allow hanging punctuation";
-        Text[ portuguese ] = "Hanging punctuation";
-        Text[ russian ] = "Âèñÿ÷àÿ ïóíêòóàöèÿ";
-        Text[ greek ] = "Åğéôñİğïíôáé ôá ğñïåîİ÷ïíôá óçìåßá óôßîçò";
-        Text[ dutch ] = "Hanging punctuation";
-        Text[ french ] = "Permettre la ponctuation négative";
-        Text[ spanish ] = "Permitir puntuación libre";
-        Text[ italian ] = "Hanging punctuation";
-        Text[ danish ] = "Hanging punctuation";
-        Text[ swedish ] = "Hanging punctuation";
-        Text[ polish ] = "Hanging punctuation";
-        Text[ portuguese_brazilian ] = "Hanging punctuation";
-        Text[ japanese ] = "‹å“Ç“_‚ğ‚Â‚¯‚é";
-        Text[ korean ] = "Hanging punctuation";
-        Text[ chinese_simplified ] = "ÈİĞíĞĞÄ©¸½¼Ó±êµã·ûºÅ";
-        Text[ chinese_traditional ] = "¦æ¥½ªş¥[¼ĞÂI²Å¸¹";
-        Text[ turkish ] = "Hanging punctuation";
-        Text[ arabic ] = "ÇáÓãÇÍ ÈÚáÇãÇÊ ÇáÊäŞíØ ÇáãÚáŞÉ";
-    };
-    TriStateBox CB_AS_SCRIPT_SPACE
-    {
-        Pos = MAP_APPFONT ( 6 , 29 ) ;
-        Size = MAP_APPFONT ( 245 , 12 ) ;
-        Text = "Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
-        Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
-        Text[ english_us ] = "Apply spacing between Asian, Latin and Complex text";
-        Text[ portuguese ] = "Apply distance between asian, latin and complex text";
-        Text[ russian ] = "Ïğèìåíèòü èíòåğâàë ìåæäó àçèàòñêèì, ëàòèíñêèì è ñëîæíûì òåêñòîì";
-        Text[ greek ] = "ÅöáñìïãŞ áğüóôáóçò ìåôáîı áóéÜôéêïõ, ëáôéíéêïı êáé ğïëığëïêïõ êåéìİíïõ";
-        Text[ dutch ] = "Apply distance between asian, latin and complex text";
-        Text[ french ] = "Appliquer l'espacement entre les textes asiatiques, latins et complexes.";
-        Text[ spanish ] = "Aplicar espacio entre texto asiático, latino y complejo.";
-        Text[ italian ] = "Apply distance between asian, latin and complex text";
-        Text[ danish ] = "Apply distance between asian, latin and complex text";
-        Text[ swedish ] = "Apply distance between asian, latin and complex text";
-        Text[ polish ] = "Odstêp miêdzy tekstami o czcionce azjatyckiej, ³aciñskiej i kompleksowej.";
-        Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
-        Text[ japanese ] = "˜a•¶A‰p”šA‚¨‚æ‚Ñ¬‡•¶Í‚Å‚Ì•¶šŠÔŠu‚ğg—p";
-        Text[ korean ] = "Apply distance between asian, latin and complex text";
-        Text[ chinese_simplified ] = "ÔÚÖĞÈÕº«ÎÄ×ÖºÍÎ÷ÎÄÖ®¼ä¼ÓÈë¿Õ¸ñ";
-        Text[ chinese_traditional ] = "¦b¤¤¤éÁú¤å¦r©M¦è¤å¤§¶¡¥[¤JªÅ®æ";
-        Text[ turkish ] = "Apply distance between asian, latin and complex text";
-        Text[ arabic ] = "ÇÓÊÎÏÇã ãÓÇİÉ Èíä ÇáäÕæÕ ÇáÂÓíæíÉ æÇááÇÊíäíÉ æÇáãÚŞÏÉ.";
+        Text = "Zeilenwechsel" ;
+        Text [ ENGLISH ] = "Line break" ;
     };
     TriStateBox CB_AS_FORBIDDEN
     {
-        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 245 , 12 ) ;
         Text = "Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
         Text [ ENGLISH ] = "Apply list of forbidden characters at line end and line start" ;
@@ -2071,6 +2003,38 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
         Text[ arabic ] = "ÊØÈíŞ ŞÇÆãÉ ÇáÃÍÑİ ÇáããäæÚÉ Úáì ÈÏÇíÉ ÇáÃÓØÑ æäåÇíÊåÇ";
     };
+    TriStateBox CB_AS_ALLOW_WORD_BREAK
+    {
+        Pos = MAP_APPFONT ( 6 , 29 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Textumbruch innerhalb von Wötern im lateinischen Text zulassen" ;
+        Text [ ENGLISH ] = "Allow break inside of words in latin text" ;
+    };
+    TriStateBox CB_AS_HANG_PUNC
+    {
+        Pos = MAP_APPFONT ( 6 , 42 ) ;
+        Size = MAP_APPFONT ( 245 , 12 ) ;
+        Text = "Hängende Interpunktion zulassen" ;
+        Text [ ENGLISH ] = "Hanging punctuation" ;
+        Text[ english_us ] = "Allow hanging punctuation";
+        Text[ portuguese ] = "Hanging punctuation";
+        Text[ russian ] = "Âèñÿ÷àÿ ïóíêòóàöèÿ";
+        Text[ greek ] = "Åğéôñİğïíôáé ôá ğñïåîİ÷ïíôá óçìåßá óôßîçò";
+        Text[ dutch ] = "Hanging punctuation";
+        Text[ french ] = "Permettre la ponctuation négative";
+        Text[ spanish ] = "Permitir puntuación libre";
+        Text[ italian ] = "Hanging punctuation";
+        Text[ danish ] = "Hanging punctuation";
+        Text[ swedish ] = "Hanging punctuation";
+        Text[ polish ] = "Hanging punctuation";
+        Text[ portuguese_brazilian ] = "Hanging punctuation";
+        Text[ japanese ] = "‹å“Ç“_‚ğ‚Â‚¯‚é";
+        Text[ korean ] = "Hanging punctuation";
+        Text[ chinese_simplified ] = "ÈİĞíĞĞÄ©¸½¼Ó±êµã·ûºÅ";
+        Text[ chinese_traditional ] = "¦æ¥½ªş¥[¼ĞÂI²Å¸¹";
+        Text[ turkish ] = "Hanging punctuation";
+        Text[ arabic ] = "ÇáÓãÇÍ ÈÚáÇãÇÊ ÇáÊäŞíØ ÇáãÚáŞÉ";
+    };
     GroupBox GB_AS_CHAR_DIST
     {
         Pos = MAP_APPFONT ( 3 , 61 ) ;
@@ -2085,12 +2049,30 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "~Interpunktion am Zeilenbeginn zum Komprimieren zulassen" ;
         Text [ ENGLISH ] = "Allow punctuation at line start" ;
     };
-    TriStateBox CB_AS_ADJUST_WESTERN
+    TriStateBox CB_AS_SCRIPT_SPACE
     {
         Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 245 , 12 ) ;
-        Text = "Abstand zwischen asiatischem und westlichenm Text ~automatisch anpassen" ;
-        Text [ ENGLISH ] = "Automatically adjust distance between asian and western text" ;
+        Text = "Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
+        Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
+        Text[ english_us ] = "Apply spacing between Asian, Latin and Complex text";
+        Text[ portuguese ] = "Apply distance between asian, latin and complex text";
+        Text[ russian ] = "Ïğèìåíèòü èíòåğâàë ìåæäó àçèàòñêèì, ëàòèíñêèì è ñëîæíûì òåêñòîì";
+        Text[ greek ] = "ÅöáñìïãŞ áğüóôáóçò ìåôáîı áóéÜôéêïõ, ëáôéíéêïı êáé ğïëığëïêïõ êåéìİíïõ";
+        Text[ dutch ] = "Apply distance between asian, latin and complex text";
+        Text[ french ] = "Appliquer l'espacement entre les textes asiatiques, latins et complexes.";
+        Text[ spanish ] = "Aplicar espacio entre texto asiático, latino y complejo.";
+        Text[ italian ] = "Apply distance between asian, latin and complex text";
+        Text[ danish ] = "Apply distance between asian, latin and complex text";
+        Text[ swedish ] = "Apply distance between asian, latin and complex text";
+        Text[ polish ] = "Odstêp miêdzy tekstami o czcionce azjatyckiej, ³aciñskiej i kompleksowej.";
+        Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
+        Text[ japanese ] = "˜a•¶A‰p”šA‚¨‚æ‚Ñ¬‡•¶Í‚Å‚Ì•¶šŠÔŠu‚ğg—p";
+        Text[ korean ] = "Apply distance between asian, latin and complex text";
+        Text[ chinese_simplified ] = "ÔÚÖĞÈÕº«ÎÄ×ÖºÍÎ÷ÎÄÖ®¼ä¼ÓÈë¿Õ¸ñ";
+        Text[ chinese_traditional ] = "¦b¤¤¤éÁú¤å¦r©M¦è¤å¤§¶¡¥[¤JªÅ®æ";
+        Text[ turkish ] = "Apply distance between asian, latin and complex text";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ãÓÇİÉ Èíä ÇáäÕæÕ ÇáÂÓíæíÉ æÇááÇÊíäíÉ æÇáãÚŞÏÉ.";
     };
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
