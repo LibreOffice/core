@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:17:14 $
+ *  last change: $Author: dvo $ $Date: 2001-05-17 14:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,17 @@
 #include "xmlictxt.hxx"
 #endif
 
+#if SUPD > 632 || DVO_TEST
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#else
+#ifndef _XMLOFF_FUNCTIONAL_HXX
+#include <xmloff/functional.hxx>
+#endif
+#endif
+
+
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; class XTextContent; }
     namespace beans { class XPropertySet; }
@@ -83,7 +94,11 @@ namespace com { namespace sun { namespace star {
 #define XML_TEXT_FRAME_PLUGIN 6
 #define XML_TEXT_FRAME_FLOATING_FRAME 7
 
+#if SUPD > 632 || DVO_TEST
+typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, ::comphelper::UStringLess> ParamMap;
+#else
 typedef ::std::map < const ::rtl::OUString, ::rtl::OUString, less_functor> ParamMap;
+#endif
 
 class XMLTextFrameContext : public SvXMLImportContext
 {

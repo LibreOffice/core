@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:47:17 $
+ *  last change: $Author: dvo $ $Date: 2001-05-17 14:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,10 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::lang;
 using ::com::sun::star::util::DateTime;
+
+#if SUPD > 632 || DVO_TEST
+using ::comphelper::UStringLess;
+#endif
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
@@ -1892,7 +1896,11 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
 
 void XMLTextImportHelper::endAppletOrPlugin(
         Reference < XPropertySet> & rPropSet,
+#if SUPD > 632 || DVO_TEST
+        std::map < const rtl::OUString, rtl::OUString, UStringLess > &rParamMap)
+#else
         std::map < const rtl::OUString, rtl::OUString, less_functor > &rParamMap)
+#endif
 {
 }
 // redline helper: dummy implementation to be overridden in sw/filter/xml

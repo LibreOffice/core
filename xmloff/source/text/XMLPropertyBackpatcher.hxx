@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLPropertyBackpatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 18:37:07 $
+ *  last change: $Author: dvo $ $Date: 2001-05-17 14:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,15 @@
 #include <vector>
 #endif
 
+#if SUPD > 632 || DVO_TEST
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#else
 #ifndef _XMLOFF_FUNCTIONAL_HXX
 #include "functional.hxx"
 #endif
-
+#endif
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -137,10 +142,18 @@ class XMLPropertyBackpatcher
 
     /// backpatch list for unresolved IDs
     //::std::map<const ::rtl::OUString, BackpatchListType*> aBackpatchListMap;
+#if SUPD > 632 || DVO_TEST
+    ::std::map<const ::rtl::OUString, void*, ::comphelper::UStringLess> aBackpatchListMap;
+#else
     ::std::map<const ::rtl::OUString, void*, less_functor> aBackpatchListMap;
+#endif
 
     /// mapping of names -> IDs
+#if SUPD > 632 || DVO_TEST
+    ::std::map<const ::rtl::OUString, A, ::comphelper::UStringLess> aIDMap;
+#else
     ::std::map<const ::rtl::OUString, A, less_functor> aIDMap;
+#endif
 
 public:
 
