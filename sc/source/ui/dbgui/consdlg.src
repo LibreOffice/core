@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 19:59:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     ImageButton RB_DATA_AREA
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 206 , 106 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 206 , 105 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
@@ -147,8 +147,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     ImageButton RB_DEST_AREA
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 206 , 135 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 206 , 134 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
         QuickHelpText [ x-comment ] = " ";
