@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:24:43 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -985,40 +985,11 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         {
         }
 
-        ::rtl::OUString aTitle = GetTitle( SFX_TITLE_DETECT );
-
         // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
         if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
             ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
             )
             FinishedLoading( SFX_LOADED_MAINDOCUMENT );
-
-        if ( pSalvageItem )
-        {
-            pImp->aTempName = pMedium->GetPhysicalName();
-            pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
-            pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
-            pMedium->GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetOrigURL() ) );
-        }
-        else
-        {
-            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-            pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
-        }
-
-        pMedium->GetItemSet()->ClearItem( SID_REFERER );
-        uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
-        if ( xModel.is() )
-        {
-            ::rtl::OUString aURL = GetMedium()->GetOrigURL();
-            SfxItemSet *pSet = GetMedium()->GetItemSet();
-            if ( !GetMedium()->IsReadOnly() )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            uno::Sequence< beans::PropertyValue > aArgs;
-            TransformItems( SID_OPENDOC, *pSet, aArgs );
-            xModel->attachResource( aURL, aArgs );
-            impl_addToModelCollection(xModel);
-        }
 
         if( IsOwnStorageFormat_Impl(*pMed) && pMed->GetFilter() )
         {
@@ -1632,8 +1603,10 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // as object storage
             if ( !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) && !IsOwnStorageFormat_Impl(rMedium) )
             {
-                if ( pMedium->GetName().Len() )
+                if ( pMedium->GetName().Len()
+                  || ( pMedium->HasStorage_Impl() && pMedium->WillDisposeStorageOnClose_Impl() ) )
                 {
+                    OSL_ENSURE( pMedium->GetName().Len(), "Fallback is used, the medium without name should not dispose the storage!\n" );
                     // copy storage of old medium to new temporary storage and take this over
                     if( !ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
                         bOk = sal_False;
