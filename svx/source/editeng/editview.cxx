@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-01 13:28:23 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,6 +622,16 @@ void EditView::MoveParagraphs( Range aParagraphs, sal_uInt16 nNewPos )
     PIMPEE->UndoActionStart( EDITUNDO_MOVEPARAS );
     PIMPEE->MoveParagraphs( aParagraphs, nNewPos, this );
     PIMPEE->UndoActionEnd( EDITUNDO_MOVEPARAS );
+}
+
+void EditView::MoveParagraphs( long nDiff )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+    ESelection aSel = GetSelection();
+    long nDest = aSel.nStartPara + nDiff;
+    DBG_ASSERT( ( nDest >= 0 ) && ( nDest <= pImpEditView->pEditEngine->GetParagraphCount() ), "MoveParagraphs - wrong Parameters!" );
+    MoveParagraphs( Range( aSel.nStartPara, aSel.nEndPara ), nDest );
 }
 
 void EditView::SetBackgroundColor( const Color& rColor )
