@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usercontrol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:04:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,12 @@
 #ifndef _FMTFIELD_HXX_
 #include <svtools/fmtfield.hxx>
 #endif
+#ifndef SVTOOLS_FILEURLBOX_HXX
+#include <svtools/fileurlbox.hxx>
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_STANDARDCONTROL_HXX_
+#include "standardcontrol.hxx"
+#endif
 
 class SvNumberFormatsSupplierObj;
 
@@ -127,6 +133,38 @@ namespace pcr
             virtual void                    SetDefaultValue(double dDef) { FormattedField::SetDefaultValue(dDef); }
             virtual void                    EnableEmptyField(sal_Bool bEnable) { FormattedField::EnableEmptyField(bEnable); }
             virtual void                    SetThousandsSep(sal_Bool bEnable) { FormattedField::SetThousandsSep(bEnable); }
+    };
+
+    //========================================================================
+    //= OFileUrlControl
+    //========================================================================
+    typedef ::svt::FileURLBox OFileUrlControl_Base;
+    class OFileUrlControl : public OCommonBehaviourControl, OFileUrlControl_Base
+    {
+    protected:
+        virtual long                    PreNotify( NotifyEvent& rNEvt );
+
+    public:
+        OFileUrlControl( Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        ~OFileUrlControl();
+
+        virtual void                    SetProperty( const ::rtl::OUString& _rString, sal_Bool bIsUnknown = sal_False );
+        virtual ::rtl::OUString         GetProperty() const;
+
+        void                            SetBaseURL( const String& _rURL ) { OFileUrlControl_Base::SetBaseURL( _rURL ); }
+    };
+
+    //========================================================================
+    //= TimeDurationInput
+    //========================================================================
+    class TimeDurationInput : public ONumericControl
+    {
+    public:
+        TimeDurationInput( ::Window* pParent, WinBits nWinStyle = WB_TABSTOP);
+        ~TimeDurationInput();
+
+    protected:
+        virtual void CustomConvert();
     };
 
 //............................................................................
