@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ void OTables::impl_refresh(  ) throw(RuntimeException)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     m_aCollection.Refresh();
+    m_pCatalog->refreshTables();
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OTables::createEmptyObject()
@@ -148,7 +149,7 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
 void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
-    if(!m_aCollection.Delete(_sElementName))
+    if ( !m_aCollection.Delete(_sElementName) )
         ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
 // -------------------------------------------------------------------------
