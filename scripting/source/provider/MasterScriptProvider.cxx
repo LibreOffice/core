@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2005-02-11 16:34:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ throw ( Exception, RuntimeException )
             try
             {
                 m_xModel.set( args[ 0 ], UNO_QUERY_THROW );
-                m_sCtxString =  MiscUtils::xModelToTdocUrl( m_xModel );
+                m_sCtxString =  MiscUtils::xModelToTdocUrl( m_xModel, m_xContext );
                 Any propValURL = makeAny( m_sCtxString );
                 invokeArgs[ 0 ] <<= propValURL;
             }
@@ -253,6 +253,7 @@ void MasterScriptProvider::createPkgProvider()
     }
     catch ( Exception& e )
     {
+        e;
         OSL_TRACE("Exception creating MasterScriptProvider for uno_packages in context %s: %s",
                 ::rtl::OUStringToOString( m_sCtxString,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer,
@@ -447,9 +448,9 @@ MasterScriptProvider::getName()
         ::rtl::OUString sCtx = getContextString();
         if ( sCtx.indexOf( OUSTR( "vnd.sun.star.tdoc" ) ) == 0 )
         {
-            // seems to be a bug with tdoc, Title is
-            // incorrect after a save-as, also
-            // Title property is not returned if it is set
+            // @@@ cannot be used because title returned is not the same
+            //     as returned by MiscUtils::xModelToDocTitle(). And this
+            //     would break code in SVX (source/dialog/selector.cxx).
             //m_sNodeName = MiscUtils::tDocUrlToTitle( sCtx );
 
             Reference< frame::XModel > xModel = m_xModel;
@@ -602,7 +603,7 @@ MasterScriptProvider::insertByName( const ::rtl::OUString& aName, const Any& aEl
                 xCont->insertByName( aName, aElement );
                 break;
             }
-            catch ( Exception& ignore )
+            catch ( Exception& )
             {
             }
 
@@ -676,7 +677,7 @@ MasterScriptProvider::removeByName( const ::rtl::OUString& Name ) throw ( contai
                 xCont->removeByName( Name );
                 break;
             }
-            catch ( Exception& ignore )
+            catch ( Exception& )
             {
             }
 
@@ -779,7 +780,7 @@ MasterScriptProvider::hasByName( const ::rtl::OUString& aName ) throw (RuntimeEx
                     break;
                 }
             }
-            catch ( Exception& ignore )
+            catch ( Exception& )
             {
             }
 
@@ -1022,7 +1023,7 @@ extern "C"
                 xKey->setStringValue( OUSTR("com.sun.star.script.browse.BrowseNodeFactory") );
                 return sal_True;
             }
-            catch (Exception & exc)
+            catch (Exception &)
             {
             }
         }
