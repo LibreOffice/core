@@ -2,9 +2,9 @@
 *
 *  $RCSfile: PlainSourceView.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:13:49 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:28:53 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -106,12 +106,15 @@ public class PlainSourceView extends JScrollPane
            so we don't get a storm of DocumentEvents during loading */
         ta.getDocument().removeDocumentListener(this);
 
-        if (model.isModified()) {
-            if (this.isModified()) {
-                // ouch, contention, prompt for what to do
+        if (isModified == false)
+        {
+            int pos = ta.getCaretPosition();
+            ta.setText(model.getText());
+            try {
+                ta.setCaretPosition(pos);
             }
-            else {
-                ta.insert(model.getText(), 0);
+            catch (IllegalArgumentException iae) {
+                // do nothing and allow JTextArea to set it's own position
             }
         }
 
@@ -132,7 +135,11 @@ public class PlainSourceView extends JScrollPane
     }
 
     public boolean isModified() {
-        return this.isModified;
+        return isModified;
+    }
+
+    public void setModified(boolean value) {
+        isModified = value;
     }
 
     private void initUI() {
@@ -167,7 +174,7 @@ public class PlainSourceView extends JScrollPane
     /* If the number of lines in the JTextArea has changed then update the
        GlyphGutter */
     public void doChanged(DocumentEvent e) {
-        this.isModified = true;
+        isModified = true;
 
         if (linecount != ta.getLineCount()) {
             gg.update();
