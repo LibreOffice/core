@@ -1332,16 +1332,8 @@ The last line of the file is terminated by a new-line which is inserted
 due to the \en found at the end of the \fIdata\fP string.
 .PP
 If the optional \fIfile\fP specifier is present then its expanded value
-is the name of the temporary file to create.  Whenever a $(mktmp ...) macro
-is expanded the macro $(TMPFILE) is set to a new temporary file name.  Thus
-the construct:
-.RS
-.sp
-$(mktmp,$(TMPFILE) data)
-.sp
-.RE
-is completely equivalent to not specifying the $(TMPFILE) optional argument.
-Another example that would be useful for MSDOS users with a Turbo-C compiler
+is the name of the temporary file to create.  An example that would be useful
+for MSDOS users with a Turbo-C compiler
 .RS
 .sp
 $(mktmp,turboc.cfg $(CFLAGS))
@@ -3124,11 +3116,6 @@ informative bug reports.  Many thanks also go to those on the
 NET that have helped in making \fBdmake\fP one of the best Make tools
 available.
 .SH BUGS
-Dmake's temporary file creation uses the tempnam function to generate unique
-filenames in its working directory, but does not check that the file does not
-exist at the time it is created.  This could possibly be a security problem if
-the directory where dmake is run is writeable by untrusted users.
-.PP
 Some system commands return non-zero status inappropriately.
 Use
 .B \-i
