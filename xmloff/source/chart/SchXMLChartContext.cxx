@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-09 15:54:51 $
+ *  last change: $Author: bm $ $Date: 2001-03-26 15:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
+#endif
 
 using namespace com::sun::star;
 
@@ -191,6 +194,8 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
     awt::Size aChartSize;
+    // this flag is necessarry for pie charts in the core
+    sal_Bool bSetSwitchData = sal_False;
 
     rtl::OUString aServiceName;
     rtl::OUString sAutoStyleName;
@@ -222,6 +227,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                             case XML_CHART_CLASS_CIRCLE:
                                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.chart.PieDiagram" ));
+                                bSetSwitchData = sal_True;
                                 break;
                             case XML_CHART_CLASS_RING:
                                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -282,7 +288,21 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
             {
                 uno::Reference< chart::XDiagram > xDia( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
                 if( xDia.is())
+                {
                     xDoc->setDiagram( xDia );
+
+                    // set data row source for pie charts to ROWS
+                    if( bSetSwitchData )
+                    {
+                        uno::Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
+                        if( xDiaProp.is())
+                        {
+                            uno::Any aAny;
+                            aAny <<= chart::ChartDataRowSource( chart::ChartDataRowSource_ROWS );
+                            xDiaProp->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), aAny );
+                        }
+                    }
+                }
             }
         }
     }
