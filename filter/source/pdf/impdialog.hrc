@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 10:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,15 +61,41 @@
 
 #include <filter.hrc>
 
-#define FL_PAGES            1
-#define RB_ALL              2
-#define RB_RANGE            3
-#define RB_SELECTION        4
-#define ED_PAGES            5
-#define BT_OK               6
-#define BT_CANCEL           7
-#define BT_HELP             8
-#define FL_COMPRESSION      9
-#define RB_SCREEN           10
-#define RB_PRINT            11
-#define RB_PRESS            12
+#define FL_PAGES                    1
+#define RB_ALL                      2
+#define RB_RANGE                    3
+#define RB_SELECTION                4
+#define ED_PAGES                    5
+#define BT_OK                       6
+#define BT_CANCEL                   7
+#define BT_HELP                     8
+#define FL_IMAGES                   9
+#define RB_LOSSLESSCOMPRESSION      10
+#define RB_JPEGCOMPRESSION          11
+#define FT_QUALITY                  12
+#define NF_QUALITY                  13
+#define CB_REDUCEIMAGERESOLUTION    14
+#define FT_REDUCEIMAGERESOLUTION    15
+#define CO_REDUCEIMAGERESOLUTION    16
+#define FL_GENERAL                  17
+#define CB_TAGGEDPDF                18
+#define FT_TAGGEDPDF                19
+#define CB_EXPORTNOTES              20
+#define FT_EXPORTNOTES              21
+#define CB_TRANSITIONEFFECTS        22
+#define FT_TRANSITIONEFFECTS        23
+#define FT_FORMSFORMAT              24
+#define LB_FORMSFORMAT              25
+
+#define FL_OLD_PAGES        51
+#define RB_OLD_ALL          52
+#define RB_OLD_RANGE        53
+#define RB_OLD_SELECTION    54
+#define ED_OLD_PAGES        55
+#define BT_OLD_OK           56
+#define BT_OLD_CANCEL       57
+#define BT_OLD_HELP         58
+#define FL_OLD_COMPRESSION  59
+#define RB_OLD_SCREEN       60
+#define RB_OLD_PRINT        61
+#define RB_OLD_PRESS        62
