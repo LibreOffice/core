@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-12 12:02:22 $
+#   last change: $Author: jl $ $Date: 2001-04-12 14:01:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,6 +105,11 @@ DEF1EXPORTFILE=	exports.dxp
 DEF1NAME=	$(SHL1TARGET)
 #DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 #DEFLIB1NAME=	$(TARGET)
+
+.IF "$(OS)"=="SOLARIS"
+SHL1VERSIONMAP=	sols.map
+.ENDIF
+
 
 # --- Targets ------------------------------------------------------
 
