@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:42:46 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,10 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                             {
                                 if ( !pWin )
                                 {
-                                    QueryBox aQuery( pCurWin, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHFROMSTART ) ) );
+                                    SfxViewFrame* pViewFrame = GetViewFrame();
+                                    SfxChildWindow* pChildWin = pViewFrame ? pViewFrame->GetChildWindow( SID_SEARCH_DLG ) : NULL;
+                                    Window* pParent = pChildWin ? pChildWin->GetWindow() : NULL;
+                                    QueryBox aQuery( pParent, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHFROMSTART ) ) );
                                     if ( aQuery.Execute() == RET_YES )
                                     {
                                         pWin = aIDEWindowTable.First();
@@ -482,39 +485,31 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             const SfxStringItem &rModName = (const SfxStringItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MODULENAME );
             IDEBaseWindow* pWin = aIDEWindowTable.Get( rTabId.GetValue() );
             DBG_ASSERT( pWin, "Window nicht im Liste, aber in TabBar ?" );
-
-            // Focus wieder auf "Arbeitsflaeche"
-            pWin->GrabFocus();
-
-            if ( pWin->IsA( TYPE( ModulWindow ) ) )
+            if ( pWin )
             {
-                ModulWindow* pEditWin = (ModulWindow*)pWin;
-                if ( !pEditWin->RenameModule( rModName.GetValue() ) )
+                String aNewName( rModName.GetValue() );
+                String aOldName( pWin->GetName() );
+
+                if ( aNewName != aOldName )
                 {
-                    // set old name in TabWriter
-                    USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
-                    DBG_ASSERT( nId, "No entry in Tabbar!" );
-                    if ( nId )
+                    if ( ( pWin->IsA( TYPE( ModulWindow ) ) && ((ModulWindow*)pWin)->RenameModule( aNewName ) )
+                         || ( pWin->IsA( TYPE( DialogWindow ) ) && ((DialogWindow*)pWin)->RenameDialog( aNewName ) ) )
                     {
-                        pTabBar->SetPageText( nId, pEditWin->GetName() );
+                        BasicIDE::MarkDocShellModified( pWin->GetShell() );
+                    }
+                    else
+                    {
+                        // set old name in TabWriter
+                        USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
+                        DBG_ASSERT( nId, "No entry in Tabbar!" );
+                        if ( nId )
+                            pTabBar->SetPageText( nId, aOldName );
                     }
                 }
+
+                // set focus to current window
+                pWin->GrabFocus();
             }
-            else
-            {
-                DialogWindow* pViewWin = (DialogWindow*)pWin;
-                if ( !pViewWin->RenameDialog( rModName.GetValue() ) )
-                {
-                    // set old name in TabWriter
-                    USHORT nId = (USHORT)aIDEWindowTable.GetKey( pWin );
-                    DBG_ASSERT( nId, "No entry in Tabbar!" );
-                    if ( nId )
-                    {
-                        pTabBar->SetPageText( nId, pViewWin->GetName() );
-                    }
-                }
-            }
-            BasicIDE::MarkDocShellModified( pWin->GetBasic() );
         }
         break;
         case SID_BASICIDE_STOREMODULESOURCE:
