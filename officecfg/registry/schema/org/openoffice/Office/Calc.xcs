@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@
 					<desc xml:lang="en-US">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 					<label xml:lang="en-US">Use printer metrics for text formatting</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean">
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
