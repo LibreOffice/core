@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:06:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ String STR_SETFMTCOLL_UNDO
     TEXT[ greek ] = "Εφαρμογή προτύπων";
     TEXT[ korean ] = "μ¤νƒ€μΌ μ μ©";
     TEXT[ turkish ] = "Biηim uygula";
-    TEXT[ language_user1 ] = "All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
+    TEXT[ language_user1 ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     TEXT[ catalan ] = "Aplica els estils";
     TEXT[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
     TEXT[ czech ] = "PouΕΎΓ­t styly";
@@ -424,7 +424,7 @@ String STR_INSERT_DOC_UNDO
     TEXT[ arabic ] = "ΕΟΡΗΜ γΣΚδΟ";
     TEXT[ dutch ] = "Document invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥ζ–‡ζ΅£";
-    TEXT[ greek ] = "Προσθήκη εγγράφου";
+    TEXT[ greek ] = "Εισαγωγή εγγράφου";
     TEXT[ korean ] = "λ¬Έμ„ μ‚½μ…";
     TEXT[ turkish ] = "Belge ekle";
     TEXT[ language_user1 ] = " ";
@@ -458,7 +458,7 @@ String STR_INSERT_GLOSSARY
     TEXT[ arabic ] = "ΕΟΡΗΜ δΥ ΚαήΗΖν";
     TEXT[ dutch ] = "AutoTekst invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥θ‡ªε¨ε›Ύζ–‡ι›†";
-    TEXT[ greek ] = "Προσθήκη ΑυτοΚειμένου";
+    TEXT[ greek ] = "Εισαγωγή αυτόματου κειμένου";
     TEXT[ korean ] = "μλ™ ν…μ¤νΈ μ‚½μ…";
     TEXT[ turkish ] = "Otomatik metin ekle";
     TEXT[ language_user1 ] = " ";
@@ -900,7 +900,7 @@ String STR_INSERT_ENV_UNDO
     Text[ arabic ] = "ΕΟΡΗΜ ΩΡέ";
     Text[ dutch ] = "Envelop invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥δΏ΅ε°";
-    Text[ greek ] = "Προσθήκη φακέλου επιστολής";
+    Text[ greek ] = "Εισαγωγή φακέλου επιστολής";
     Text[ korean ] = "νΈμ§€λ΄‰ν¬ μ‚½μ…";
     Text[ turkish ] = "Zarf ekle";
     Text[ language_user1 ] = " ";
@@ -1031,7 +1031,7 @@ String STR_INSERT_CHART
     Text[ arabic ] = "ΕΟΡΗΜ %PRODUCTNAME Chart";
     Text[ dutch ] = "%PRODUCTNAME Chart invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ %PRODUCTNAME ε›Ύθ΅¨";
-    Text[ greek ] = "Προσθήκη %PRODUCTNAME Chart";
+    Text[ greek ] = "Εισαγωγή διαγράμματος %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME Chart μ‚½μ…";
     Text[ turkish ] = "%PRODUCTNAME Grafiπi Ekle";
     Text[ language_user1 ] = " ";
@@ -1066,7 +1066,7 @@ String STR_INSERTFLY
     TEXT[ arabic ] = "ΕΟΡΗΜ ίΗΟΡ";
     TEXT[ dutch ] = "Kader invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥ζ΅†ε―Ήθ±΅";
-    TEXT[ greek ] = "Προσθήκη πλαισίου";
+    TEXT[ greek ] = "Εισαγωγή πλαισίου";
     TEXT[ korean ] = "ν”„λ μ„ μ‚½μ…";
     TEXT[ turkish ] = "Ηerηeve ekle";
     TEXT[ language_user1 ] = " ";
@@ -1134,7 +1134,7 @@ String STR_AUTOFORMAT
     TEXT[ arabic ] = "ΚδΣνή ΚαήΗΖν";
     TEXT[ dutch ] = "AutoOpmaak";
     TEXT[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ";
-    TEXT[ greek ] = "ΑυτοΜορφή";
+    TEXT[ greek ] = "Αυτόματη μορφοποίηση";
     TEXT[ korean ] = "μλ™ μ„μ‹";
     TEXT[ turkish ] = "Otomatik formatlama";
     TEXT[ language_user1 ] = " ";
@@ -1236,7 +1236,7 @@ String STR_INSERTSECTION
     TEXT[ arabic ] = "ΕΟΡΗΜ δΨΗή";
     TEXT[ dutch ] = "Bereik invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥εΊε";
-    TEXT[ greek ] = "Προσθήκη περιοχής";
+    TEXT[ greek ] = "Εισαγωγή ενότητας";
     TEXT[ korean ] = "κµ¬μ—­ μ‚½μ…";
     TEXT[ turkish ] = "Bφlόm ekle";
     TEXT[ language_user1 ] = " ";
@@ -1270,7 +1270,7 @@ String STR_DELETESECTION
     TEXT[ arabic ] = "ΝΠέ ΗαέΖΙ";
     TEXT[ dutch ] = "Bereik wissen";
     TEXT[ chinese_simplified ] = "ε ι™¤εΊε";
-    TEXT[ greek ] = "Διαγραφή κατηγορίας";
+    TEXT[ greek ] = "Διαγραφή ενότητας";
     TEXT[ korean ] = "κµ¬μ—­ μ‚­μ ";
     TEXT[ turkish ] = "Bφlόmό sil";
     TEXT[ language_user1 ] = " ";
@@ -1304,7 +1304,7 @@ String STR_CHANGESECTION
     TEXT[ arabic ] = "ΚΪΟνα ΗαδΨΗή";
     TEXT[ dutch ] = "Bereik wijzigen";
     TEXT[ chinese_simplified ] = "ζ›΄ζ”ΉεΊε";
-    TEXT[ greek ] = "Τροποποίηση περιοχής";
+    TEXT[ greek ] = "Τροποποίηση ενότητας";
     TEXT[ korean ] = "κµ¬μ—­ μμ •";
     TEXT[ turkish ] = "Bφlόmό deπiώtir";
     TEXT[ language_user1 ] = " ";
@@ -1473,7 +1473,7 @@ String STR_INSNUM
     TEXT[ arabic ] = "ΕΟΡΗΜ ΚΡήνγ";
     TEXT[ dutch ] = "Nummering invoegen";
     TEXT[ chinese_simplified ] = "ζ’ε…¥ηΌ–ε·";
-    TEXT[ greek ] = "Προσθήκη αρίθμησης";
+    TEXT[ greek ] = "Εισαγωγή αρίθμησης";
     TEXT[ korean ] = "λ²νΈ λ§¤κΈ°κΈ° μ‚½μ…";
     TEXT[ turkish ] = "Numaralama ekle";
     TEXT[ language_user1 ] = " ";
@@ -1572,7 +1572,7 @@ String STR_INSERTDRAW
     Text[ arabic ] = "ΕΟΡΗΜ ίΗΖδ ΡΣζγν";
     Text[ dutch ] = "Tekenobject invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥η»ε›Ύε―Ήθ±΅";
-    Text[ greek ] = "Προσθήκη αντικειμένου σχεδίασης";
+    Text[ greek ] = "Εισαγωγή αντικειμένου σχεδίασης";
     Text[ korean ] = "κ·Έλ¦¬κΈ° κ°μ²΄ μ‚½μ…";
     Text[ turkish ] = "Ηizim nesnesi ekle";
     Text[ language_user1 ] = " ";
@@ -1704,7 +1704,7 @@ String STR_INSERTLABEL
     Text[ arabic ] = "ΕΟΡΗΜ ΚΣγνΙ ΚζΦνΝνΙ";
     Text[ dutch ] = "Bijschrift invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ζ ‡η­Ύ";
-    Text[ greek ] = "Προσθήκη επιγραφής";
+    Text[ greek ] = "Εισαγωγή λεζάντας";
     Text[ korean ] = "μΊ΅μ… μ‚½μ…";
     Text[ turkish ] = "Resim  yazύsύ ekle";
     Text[ language_user1 ] = " ";
@@ -1940,7 +1940,7 @@ String STR_AUTOCORRECT
     Text[ arabic ] = "ΚΥΝνΝ ΚαήΗΖν";
     Text[ dutch ] = "AutoCorrectie";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ›΄ζ­£";
-    Text[ greek ] = "ΑυτοΔιόρθωση";
+    Text[ greek ] = "Αυτόματη Διόρθωση";
     Text[ korean ] = "μλ™ μμ •/μλ™ μ„μ‹";
     Text[ turkish ] = "Otomatik dόzeltme";
     Text[ language_user1 ] = " ";
@@ -1973,7 +1973,7 @@ String STR_MERGE_TABLE
     Text[ arabic ] = "ζΥα ΗαΜΟζα";
     Text[ dutch ] = "Tabel verbinden";
     Text[ chinese_simplified ] = "εεΉ¶θ΅¨ζ Ό";
-    Text[ greek ] = "Σύνδεση πινάκων";
+    Text[ greek ] = "Συγχώνευση πινάκων";
     Text[ korean ] = "ν‘ ν•©μΉκΈ°";
     Text[ turkish ] = "Tabloyu birleώtir";
     Text[ language_user1 ] = " ";
@@ -2228,7 +2228,7 @@ String STR_DELGRF
     Text [ swedish ] = "Radera grafik" ;
     Text [ danish ] = "Slet grafik" ;
     Text [ portuguese ] = "Eliminar imagem" ;
-    Text [ portuguese_brazilian ] = "Excluir figuras" ;
+    Text [ portuguese_brazilian ] = "Excluir grαfico" ;
     Text[ chinese_simplified ] = "ε ι™¤ε›Ύε½Ά";
     Text[ russian ] = "Σδΰλθςό γπΰτθκσ";
     Text[ polish ] = "Usuρ grafikκ";
@@ -2336,7 +2336,7 @@ String STR_TABLE_AUTOFMT
     Text[ arabic ] = "ΚδΣνή ΚαήΗΖν ααΜΟζα";
     Text[ dutch ] = "AutoOpmaak tabel";
     Text[ chinese_simplified ] = "θ‡ªε¨ζ ΌεΌ θ΅¨ζ Ό";
-    Text[ greek ] = "ΑυτοΜορφή Πίνακας";
+    Text[ greek ] = "Αυτόματη μορφοποίηση πίνακα";
     Text[ korean ] = "ν‘ μλ™ μ„μ‹";
     Text[ turkish ] = "Otomatik formatlama Tablo";
     Text[ language_user1 ] = " ";
@@ -2422,7 +2422,7 @@ String STR_TABLE_DELBOX
     Text [ ENGLISH ] = "Delete row/column" ;
     Text [ norwegian ] = "Slett rad/kolonne" ;
     Text [ italian ] = "Elimina riga/colonna" ;
-    Text [ portuguese_brazilian ] = "Excluir linha/coluna" ;
+    Text [ portuguese_brazilian ] = "Excluir linha / coluna" ;
     Text [ portuguese ] = "Eliminar linha/coluna" ;
     Text [ finnish ] = "Poista rivi/sarake" ;
     Text [ danish ] = "Slet rζkke/kolonne" ;
@@ -2505,7 +2505,7 @@ String STR_TABLE_MERGE
     Text[ arabic ] = "ζΥα ΗαΞανΙ";
     Text[ dutch ] = "Cel koppelen";
     Text[ chinese_simplified ] = "εεΉ¶ε•ε…ƒζ Ό";
-    Text[ greek ] = "Ένωση κελιών";
+    Text[ greek ] = "Συγχώνευση κελιών";
     Text[ korean ] = "μ…€ ν•©μΉκΈ°";
     Text[ turkish ] = "Hόcreleri birleώtir";
     Text[ language_user1 ] = " ";
@@ -2982,7 +2982,7 @@ String STR_INSERT_FOOTNOTE
     Text = "Fuίnote einfόgen" ;
     Text [ ENGLISH ] = "insert footnote" ;
     Text [ english_us ] = "Insert footnote" ;
-    Text [ portuguese_brazilian ] = "Inserir nota de nodapι" ;
+    Text [ portuguese_brazilian ] = "Inserir nota de rodapι" ;
     Text [ swedish ] = "Infoga fotnot" ;
     Text [ danish ] = "Indsζt fodnote" ;
     Text [ italian ] = "Inserisci nota a piθ pagina" ;
@@ -2998,7 +2998,7 @@ String STR_INSERT_FOOTNOTE
     Text[ arabic ] = "ΕΟΡΗΜ ΝΗΤνΙ ΣέανΙ";
     Text[ dutch ] = "Voetnoot invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ζ³¨θ„";
-    Text[ greek ] = "Προσθήκη υποσημείωσης";
+    Text[ greek ] = "Εισαγωγή υποσημείωσης";
     Text[ korean ] = "κ°μ£Ό μ‚½μ…";
     Text[ turkish ] = "Dipnot ekle";
     Text[ language_user1 ] = " ";
@@ -3031,7 +3031,7 @@ String STR_INSERT_URLBTN
     Text[ arabic ] = "ΕΟΡΗΜ γέΚΗΝ URL";
     Text[ dutch ] = "URL-knop invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥ URL ζ‰ι’®";
-    Text[ greek ] = "Προσθήκη πεδίου επιλογής URL";
+    Text[ greek ] = "Εισαγωγή πεδίου επιλογής URL";
     Text[ korean ] = "URL λ²„νΌ μ‚½μ…";
     Text[ turkish ] = "URL dόπmesi ekle";
     Text[ language_user1 ] = " ";
@@ -3064,7 +3064,7 @@ String STR_INSERT_URLTXT
     Text[ arabic ] = "ΕΟΡΗΜ ΗΡΚΘΗΨ ΚΤΪΘν";
     Text[ dutch ] = "Hyperlink invoegen";
     Text[ chinese_simplified ] = "ζ’ε…¥θ¶…ι“Ύζ¥";
-    Text[ greek ] = "Προσθήκη υπερ-σύνδεσης";
+    Text[ greek ] = "Εισαγωγή υπερ-σύνδεσης";
     Text[ korean ] = "ν•μ΄νΌλ§ν¬ μ‚½μ…";
     Text[ turkish ] = "Hiperlink ekle";
     Text[ language_user1 ] = " ";
@@ -3303,6 +3303,7 @@ String STR_DDEERROR_LINK2
     TEXT[ hindi ] = "] ΰ¤Έΰ¥ΰ¤¥ΰ¤Ύΰ¤ªΰ¤Ώΰ¤¤ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥";
     TEXT[ slovak ] = "] nemoΕΎno vykonaΕ¥";
 };
+
 
 
 
