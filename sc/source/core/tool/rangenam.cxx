@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,10 +390,8 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
     {
         if( t->GetType() != svIndex )
         {
-            SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                SingleDoubleRefModifier( t->GetSingleRef() ) :
-                SingleDoubleRefModifier( t->GetDoubleRef() ));
-            ComplRefData& rRef = rMod.Ref();
+            SingleDoubleRefModifier aMod( *t );
+            ComplRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
@@ -420,10 +418,8 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, USHORT nGrowX, USHORT nGrowY
     {
         if( t->GetType() != svIndex )
         {
-            SingleDoubleRefModifier& rMod = (t->GetType() == svSingleRef ?
-                SingleDoubleRefModifier( t->GetSingleRef() ) :
-                SingleDoubleRefModifier( t->GetDoubleRef() ));
-            ComplRefData& rRef = rMod.Ref();
+            SingleDoubleRefModifier aMod( *t );
+            ComplRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
                 ( t->GetType() == svSingleRef ||
