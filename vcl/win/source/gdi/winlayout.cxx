@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:23:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
                 break;
         }
     }
-    if( i >= mnGlyphCount )
+    if( i >= mnCharCount )
         return;
 
     if( !mpGlyphOrigAdvs )
@@ -969,7 +969,7 @@ void SimpleWinLayout::ApplyDXArray( const ImplLayoutArgs& rArgs )
 
 void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 {
-   if( nStart >= mnGlyphCount )
+   if( nStart > mnGlyphCount )
         return;
 
     // calculate the current x-position of the requested glyph
@@ -998,8 +998,6 @@ void SimpleWinLayout::MoveGlyph( int nStart, long nNewXPos )
 void SimpleWinLayout::DropGlyph( int nStart )
 {
     mpOutGlyphs[ nStart ] = DROPPED_OUTGLYPH;
-    if( mnWidth )
-        mnWidth -= mpGlyphAdvances[ nStart ];
 }
 
 // -----------------------------------------------------------------------
