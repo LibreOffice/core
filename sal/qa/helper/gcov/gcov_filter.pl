@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 #
-# $Id: gcov_filter.pl,v 1.2 2003-05-19 13:16:54 vg Exp $
+# $Id: gcov_filter.pl,v 1.3 2003-06-11 16:36:22 vg Exp $
 #
 
 # GCOV_FILTER
@@ -18,7 +18,7 @@ use File::Basename;
 use Getopt::Long;
 
 # Global constants
-our $version_info = 'gcov helper $Revision: 1.2 $';
+our $version_info = 'gcov helper $Revision: 1.3 $ ';
 our $help;                    # Help option flag
 our $version;                 # Version option flag
 our $cwd = `pwd`;             # current working directory
@@ -35,11 +35,13 @@ our $showallfunc;             # showallfunc option flag
 our $no_percentage;           # no_percentage option flag
 our $donotfilter;             # donotfilter option flag
 
+
 # Prototypes
 sub print_usage(*);
 sub read_gcov_function_file($);
 sub get_PRJ_from_makefile_mk();
-sub read_ExportedFunctionList();
+# sub read_ExportedFunctionList();
+sub read_List($);
 
 # if (! ($tool_dir =~ /^\/(.*)$/))
 # {
@@ -121,8 +123,11 @@ if ( ! $input_allfunc )
         exit(1);
     }
 }
+our @aDeprecatedList;
 our @aExportedFunctionList;
-read_ExportedFunctionList();
+# read_ExportedFunctionList();
+@aExportedFunctionList = read_List($input_allfunc);
+@aDeprecatedList = read_List("deprecated.txt");
 
 if ($allfuncinfo)
 {
@@ -168,10 +173,10 @@ for ($nIdx = 0; $nIdx < $nCount ; ++$nIdx)
     if (! ($file =~ /\.f$/ ))
     {
         my $filef = "$file.f";
-        if (! -e $filef )
-        {
+        # if (! -e $filef )
+        # {
             my $blah = `gcov -f $file >$filef`;
-        }
+        # }
         $file = $filef;
     }
     read_gcov_function_file($file);
@@ -190,12 +195,14 @@ exit(0);
 
 # --------------------------------------------------------------------------------
 # Read the map file, which should contain all exported functions.
-sub read_ExportedFunctionList()
+sub read_List($)
 {
     local *INPUT_HANDLE;
+    my $filename = $_[0];
+    my @list;
     my $line = "";
-    open(INPUT_HANDLE, $input_allfunc)
-        or die("ERROR: cannot open $input_allfunc!\n");
+    open(INPUT_HANDLE, $filename);
+        # or die("ERROR: cannot open $filename!\n");
 
     while ($line = <INPUT_HANDLE>)
     {
@@ -204,10 +211,11 @@ sub read_ExportedFunctionList()
         if ($line =~ /^\s+(\w*);$/)
         {
             # print("$1\n");
-            push(@aExportedFunctionList, $1);
+            push(@list, $1);
         }
     }
     close(INPUT_HANDLE);
+    return @list;
 }
 
 # --------------------------------------------------------------------------------
@@ -219,17 +227,18 @@ sub read_ExportedFunctionList()
 # or
 # void getSystemPathFromFileURL( const char* rtl_...)
 #
-sub contain_in_ExportedFunctionList($)
+sub contain_in_List($$)
 {
     my $func;
     my $value = $_[0];
+    my $list = $_[1];
 
     if ($donotfilter)
     {
-        return 1;
+        return $value;
     }
 
-    foreach $func (@aExportedFunctionList)
+    foreach $func (@$list) # (@aExportedFunctionList)
     {
         # first try, direct check
         if ($value eq $func)
@@ -278,16 +287,24 @@ sub read_gcov_function_file($)
         # 100.00% of 3 source lines executed in function osl_thread_init_Impl
         if ($line =~ /^(.*)% of \d+ source lines executed in function (.*)$/ )
         {
-            my $value = contain_in_ExportedFunctionList( $2 );
+            my $value = contain_in_List( $2, \@aExportedFunctionList );
             if ($value)
             {
-                if ($no_percentage)
+                my $isDeprecated = contain_in_List( $2, \@aDeprecatedList );
+                if ($isDeprecated)
                 {
-                    print("$value\n");
+                    # Function is deprecated, do not export it.
                 }
                 else
                 {
-                    print("$1 $value\n");
+                    if ($no_percentage)
+                    {
+                        print("$value\n");
+                    }
+                    else
+                    {
+                        print("$1 $value\n");
+                    }
                 }
             }
             # push(@aExportedFunctionList, $1);
@@ -313,7 +330,7 @@ sub get_PRJ_from_makefile_mk()
         # sample line
         # PRJ=
         # HWD: print("$line\n");
-        if ($line =~ /^PRJ\s*=(.*)/)
+        if ($line =~ /^PRJ\s*=(.*)\s*$/)
         {
             # HWD: print("FOUND #####\n");
             $value = $1;
@@ -334,8 +351,6 @@ sub print_usage(*)
     print(HANDLE <<END_OF_USAGE);
 
 Usage: $tool_name [OPTIONS] INPUTFILE
-
-    foo bla
 
     -h, --help                     Print this help, then exit
     -v, --version                  Print version number, then exit
