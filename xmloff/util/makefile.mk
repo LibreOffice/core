@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+#   last change: $Author: obo $ $Date: 2000-09-21 09:38:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
 .ENDIF
     +echo	_CTA	   >>	$@
     +echo	sXML_	   >>	$@
-    +echo	allocator   >>	$@
-    +echo	std   >>	$@
 
