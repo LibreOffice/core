@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:49:39 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 15:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,8 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             void scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes);
             sal_Bool moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData);
+            // return true when the select statement is "select count(*) from table"
+            sal_Bool isCount() const;
         protected:
 
             using OResultSet_BASE::rBHelper;
