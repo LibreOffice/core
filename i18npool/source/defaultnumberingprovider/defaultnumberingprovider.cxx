@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-31 21:59:29 $
+ *  last change: $Author: khong $ $Date: 2002-08-29 19:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,8 +372,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
              Sequence< long > offset;
              result += translit->transliterate(tmp, 0, tmp.getLength(), offset);
            } catch (Exception& ) {
-                    assert(0);
-                    throw IllegalArgumentException();
+            // When translteration property is missing, return default number (bug #101141#)
+            result += OUString::valueOf( number );
+                    // assert(0);
+                    // throw IllegalArgumentException();
            }
                break;
 
@@ -385,8 +387,10 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
             getPropertyByName(aProperties, "NatNum", sal_True) >>= nNatNum;
             result += sNatNum.getNativeNumberString(tmp, aLocale, nNatNum);
            } catch (Exception& ) {
-                    assert(0);
-                    throw IllegalArgumentException();
+            // When NatNum property is missing, return default number (bug #101141#)
+            result += OUString::valueOf( number );
+                    // assert(0);
+                    // throw IllegalArgumentException();
            }
                break;
 
