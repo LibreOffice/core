@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 11:57:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-10-02 08:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,44 +818,28 @@ void SAL_CALL SwAccessibleContext::removeEventListener(
     aAccessibleEventListeners.removeInterface( xListener );
 }
 
+static sal_Bool lcl_PointInRectangle(const awt::Point & aPoint,
+                                     const awt::Rectangle & aRect)
+{
+    long nDiffX = aPoint.X - aRect.X;
+    long nDiffY = aPoint.Y - aRect.Y;
+
+    return
+        nDiffX >= 0 && nDiffX < aRect.Width && nDiffY >= 0 &&
+        nDiffY < aRect.Height;
+
+}
+
 sal_Bool SAL_CALL SwAccessibleContext::contains(
             const ::com::sun::star::awt::Point& aPoint )
         throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    awt::Rectangle aPixBounds = getBoundsImpl(sal_True);
+    aPixBounds.X = 0;
+    aPixBounds.Y = 0;
 
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
-
-    const SwFrm *pParent = GetParent();
-    ASSERT( pParent, "no Parent found" );
-
-    Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
-
-    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Rectangle aPixBounds( 0, 0, 0, 0 );
-    if( GetFrm()->IsPageFrm() &&
-        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
-    {
-        ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
-        if( GetShell()->IsPreView() )
-            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
-    }
-    if( !aLogBounds.IsEmpty() )
-    {
-        aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
-        if( !pParent->IsRootFrm() )
-        {
-            Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-            Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-            aPixBounds.Move( -aParentPixPos.X(), -aParentPixPos.Y() );
-        }
-    }
-
-    Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to parent
-    return aPixBounds.IsInside( aPixPoint );
+    return lcl_PointInRectangle(aPoint, aPixBounds);
 }
-
 
 Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
                 const awt::Point& aPoint )
@@ -893,7 +877,25 @@ Reference< XAccessible > SAL_CALL SwAccessibleContext::getAccessibleAt(
 }
 
 
-awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
+/**
+   Get bounding box.
+
+   There are two modes.
+
+   - realative
+
+     Return bounding box relative to parent if parent is no root
+     frame. Otherwise return the absolute bounding box.
+
+   - absolute
+
+     Return the absolute bounding box.
+
+   @param bRelative
+   true: Use relative mode.
+   false: Use absolute mode.
+*/
+awt::Rectangle SAL_CALL SwAccessibleContext::getBoundsImpl(sal_Bool bRelative)
         throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -918,7 +920,7 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
     if( !aLogBounds.IsEmpty() )
     {
         aPixBounds = GetMap()->CoreToPixel( aLogBounds.SVRect() );
-        if( !pParent->IsRootFrm() )
+        if( !pParent->IsRootFrm() && bRelative)
         {
             Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
             Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
@@ -933,89 +935,43 @@ awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
 }
 
 
+awt::Rectangle SAL_CALL SwAccessibleContext::getBounds()
+        throw (RuntimeException)
+{
+    return getBoundsImpl(sal_True);
+}
+
 awt::Point SAL_CALL SwAccessibleContext::getLocation()
-        throw (RuntimeException)
+    throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    awt::Rectangle aRect = getBoundsImpl(sal_True);
+    awt::Point aPoint(aRect.X, aRect.Y);
 
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
-
-    const SwFrm *pParent = GetParent();
-    ASSERT( pParent, "no parent found" );
-    Window *pWin = GetWindow();
-
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin && pParent )
-
-    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Point aPixPos( 0, 0 );
-
-    //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
-    aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
-    if( !pParent->IsRootFrm() )
-    {
-        Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
-        //          Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
-        Point aParentPixPos( GetMap()->CoreToPixel( aParentLogPos ) );
-        aPixPos.X() -= aParentPixPos.X();
-        aPixPos.Y() -= aParentPixPos.Y();
-    }
-
-    awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
-
-    return aLoc;
+    return aPoint;
 }
 
 
-::com::sun::star::awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
+
+awt::Point SAL_CALL SwAccessibleContext::getLocationOnScreen()
         throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
+    awt::Rectangle aRect = getBoundsImpl(sal_False);
 
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
+    Point aPixPos(aRect.X, aRect.Y);
 
-    Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
+    /* getBoundsImpl already checked that GetWindow returns valid pointer. */
+    aPixPos = GetWindow()->OutputToAbsoluteScreenPixel(aPixPos);
+    awt::Point aPoint(aPixPos.X(), aPixPos.Y());
 
-    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Point aPixPos( 0, 0 );
-
-    //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
-    aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
-    aPixPos = pWin->OutputToAbsoluteScreenPixel( aPixPos );
-
-    awt::Point aLoc( aPixPos.X(), aPixPos.Y() );
-
-    return aLoc;
+    return aPoint;
 }
 
 
-::com::sun::star::awt::Size SAL_CALL SwAccessibleContext::getSize()
+awt::Size SAL_CALL SwAccessibleContext::getSize()
         throw (RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
-
-    CHECK_FOR_DEFUNC( XAccessibleComponent )
-
-    Window *pWin = GetWindow();
-    CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
-
-    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
-    Size aPixSize( 0, 0 );
-
-    if( GetFrm()->IsPageFrm() &&
-        static_cast < const SwPageFrm * >( GetFrm() )->IsEmptyPage() )
-    {
-        ASSERT( GetShell()->IsPreView(), "empty page accessible?" );
-        if( GetShell()->IsPreView() )
-            aLogBounds.SSize( GetMap()->GetPreViewPageSize() );
-    }
-    // The size may differ by one pixel, dependent on the position of
-    // the rectangle. For that reason we first have to do the conversion
-    // into pixel and then have to get the size.
-    if( !aLogBounds.IsEmpty() )
-        //      aPixSize = pWin->LogicToPixel( aLogBounds.SVRect() ).GetSize();
-        aPixSize = GetMap()->CoreToPixel( aLogBounds.SVRect() ).GetSize();
-    awt::Size aSize( aPixSize.Width(), aPixSize.Height() );
+    awt::Rectangle aRect = getBoundsImpl(sal_False);
+    awt::Size aSize( aRect.Width, aRect.Height );
 
     return aSize;
 }
