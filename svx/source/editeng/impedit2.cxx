@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <wghtitem.hxx>
 #include <postitem.hxx>
 #include <udlnitem.hxx>
+#include <scripttypeitem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -1426,6 +1427,48 @@ short ImpEditEngine::GetScriptType( const EditPaM& rPaM ) const
                {
                 nScriptType = rTypes[n].nScriptType;
                 break;
+            }
+        }
+    }
+    return nScriptType;
+}
+
+USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
+{
+    EditSelection aSel( rSel );
+    aSel.Adjust( aEditDoc );
+
+    short nScriptType = 0;
+
+     USHORT nStartPara = GetEditDoc().GetPos( aSel.Min().GetNode() );
+     USHORT nEndPara = GetEditDoc().GetPos( aSel.Max().GetNode() );
+
+    for ( USHORT nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    {
+        ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+        if ( !pParaPortion->aScriptInfos.Count() )
+            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+        ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
+
+        USHORT nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
+        USHORT nE = ( nPara == nEndPara ) ? aSel.Max().GetIndex() : pParaPortion->GetNode()->Len();
+        for ( USHORT n = 0; n < rTypes.Count(); n++ )
+        {
+            if ( ( rTypes[n].nStartPos <= nE ) && ( rTypes[n].nEndPos >= nS ) )
+               {
+                switch ( rTypes[n].nScriptType )
+                {
+                    case text::ScriptType::LATIN:
+                        nScriptType |= SCRIPTTYPE_LATIN;
+                        break;
+                    case text::ScriptType::ASIAN:
+                        nScriptType |= SCRIPTTYPE_ASIAN;
+                        break;
+                    case text::ScriptType::COMPLEX:
+                        nScriptType |= SCRIPTTYPE_COMPLEX;
+                        break;
+                }
             }
         }
     }

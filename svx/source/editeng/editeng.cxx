@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,12 @@ BOOL EditEngine::IsVertical() const
     return pImpEditEngine->IsVertical();
 }
 
+USHORT EditEngine::GetScriptType( const ESelection& rSelection ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    EditSelection aSel( pImpEditEngine->CreateSel( rSelection ) );
+    return pImpEditEngine->GetScriptType( aSel );
+}
 
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
 {
@@ -857,7 +863,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
-                #ifdef DBG_UTIL
+                #if defined(DBG_UTIL) || defined(DEBUG)
                     if ( ( rKeyEvent.GetKeyCode().GetCode() == KEY_V ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         SetVertical( !IsVertical() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 12:17:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,6 +664,13 @@ BOOL Outliner::IsVertical() const
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsVertical();
 }
+
+USHORT Outliner::GetScriptType( const ESelection& rSelection ) const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->GetScriptType( rSelection );
+}
+
 
 // Hilfsfunktionen fuers Undo
 

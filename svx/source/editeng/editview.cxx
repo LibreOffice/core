@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,13 @@ void EditView::DeleteSelected()
     pImpEditView->SetEditSelection( EditSelection( aPaM, aPaM ) );
     PIMPEE->FormatAndUpdate( this );
     ShowCursor();
+}
+
+USHORT EditView::GetSelectedScriptType() const
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+    return PIMPEE->GetScriptType( pImpEditView->GetEditSelection() );
 }
 
 void EditView::Paint( const Rectangle& rRect )

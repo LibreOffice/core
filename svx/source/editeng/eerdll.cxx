@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <tstpitem.hxx>
 #include <bulitem.hxx>
 #include <flditem.hxx>
+#include <emphitem.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -174,7 +175,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
          ppDefItems[33] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
         ppDefItems[34] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
         ppDefItems[35] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
-        ppDefItems[36] = new SfxVoidItem( EE_CHAR_EMPHASISMARK_DUMMY );
+        ppDefItems[36] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
         ppDefItems[37] = new SfxVoidItem( EE_CHAR_2LINES_DUMMY );
         ppDefItems[38] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[39] = new SfxVoidItem( EE_CHAR_ROTATION_DUMMY );

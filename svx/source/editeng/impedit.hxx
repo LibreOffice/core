@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,6 +519,7 @@ private:
 
     void                InitScriptTypes( USHORT nPara );
     short               GetScriptType( const EditPaM& rPaM ) const;
+    USHORT              GetScriptType( const EditSelection& rSel ) const;
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );

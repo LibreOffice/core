@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,8 +209,8 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_OUTLLRSPACE
         { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },
-        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },            // PARA ?
-        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },            // PARA ?
+        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },
         { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },
@@ -228,18 +228,18 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_AUTOKERN, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_KERNING, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_WORDLINEMODE, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE_CJK
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_LANGUAGE_CTL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTINFO_CJK
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTINFO_CTL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTHEIGHT_CJK
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_FONTHEIGHT_CTL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_WEIGHT_CJK
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_WEIGHT_CTL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ITALIC_CJK
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ITALIC_CTL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_EMPHASISMARK_DUMMY
+        { SID_ATTR_CHAR_LANGUAGE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_LANGUAGE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_LANGUAGE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_FONT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_FONT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_FONTHEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_WEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_WEIGHT, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CJK_POSTURE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
+        { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_2LINES_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
         { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_ROTATION_DUMMY

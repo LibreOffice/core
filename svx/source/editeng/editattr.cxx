@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,3 +433,21 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont )
 {
     rFont.SetWordLineMode( ((const SvxWordLineModeItem*)GetItem())->GetValue() );
 }
+
+/*
+
+// -------------------------------------------------------------------------
+// class EditCharAttribEmphasisMark
+// -------------------------------------------------------------------------
+EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, USHORT nStart, USHORT nEnd )
+    : EditCharAttrib( rAttr, nStart, nEnd )
+{
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_EMPHASISMARK, "Kein Emphasisattribut!" );
+}
+
+void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont )
+{
+//  rFont.SetEmphasis( ( ((const SvxItem*)GetItem())->GetEmphasisMark() )
+}
+
+*/

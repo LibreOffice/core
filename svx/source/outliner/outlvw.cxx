@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1953,3 +1953,10 @@ SfxItemSet OutlinerView::GetAttribs()
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetAttribs();
 }
+
+USHORT OutlinerView::GetSelectedScriptType() const
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetSelectedScriptType();
+}
+

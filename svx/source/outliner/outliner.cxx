@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 12:17:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-24 11:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,6 +993,9 @@ Font Outliner::ImpCalcBulletFont( USHORT nPara ) const
 
     aBulletFont.SetAlign( ALIGN_BOTTOM );
     aBulletFont.SetSize( Size( 0, nScaledLineHeight ) );
+    BOOL bVertical = IsVertical();
+    aBulletFont.SetVertical( bVertical );
+    aBulletFont.SetOrientation( bVertical ? 2700 : 0 );
 
     Color aColor( COL_BLACK );
     if( !pEditEngine->IsFlatMode() && !( pEditEngine->GetControlWord() & EE_CNTRL_NOCOLORS ) )
@@ -1008,8 +1011,13 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
 
     if ( ImplHasBullet( nPara ) )
     {
+        BOOL bVertical = IsVertical();
+
         Rectangle aBulletArea( ImpCalcBulletArea( nPara, TRUE ) );
-        aBulletArea.Move( rStartPos.X(), rStartPos.Y() );
+        if ( !bVertical )
+            aBulletArea.Move( rStartPos.X(), rStartPos.Y() );
+        else
+            aBulletArea.Move( rStartPos.Y(), rStartPos.X()-2*aBulletArea.Top() );
 
         Paragraph* pPara = pParaList->GetParagraph( nPara );
         const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
@@ -1022,7 +1030,14 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                 Font aOldFont = pOutDev->GetFont();
                 pOutDev->SetFont( aBulletFont );
 
-                Point aTextPos( aBulletArea.BottomLeft() );
+                Point aTextPos;
+                if ( !bVertical )
+                    aTextPos = aBulletArea.BottomLeft();
+                else
+                {
+                    aTextPos.X() = aBulletArea.Bottom();
+                    aTextPos.Y() = aBulletArea.Left();
+                }
 
                 if ( !bStrippingPortions )
                 {
@@ -1062,19 +1077,33 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                         }
                         const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)pEditEngine->GetParaAttrib( nPara, EE_CHAR_FONTHEIGHT );
                         Size aFontSz( 0, rFH.GetHeight() );
-                        // aFontSz.Height() *= 2;
                         aFontSz.Height() /= 5;
+
                         Font aNewFont( System::GetStandardFont( STDFONT_SWISS ) );
                         aNewFont.SetSize( aFontSz );
                         aNewFont.SetAlign( ALIGN_BOTTOM );
+                        aNewFont.SetVertical( bVertical );
+                        aNewFont.SetOrientation( bVertical ? 2700 : 0 );
                         pOutDev->SetFont( aNewFont );
                         String aPageText = String::CreateFromInt32( nPage );
                         Size aTextSz;
                         aTextSz.Width() = pOutDev->GetTextWidth( aPageText );
                         aTextSz.Height() = pOutDev->GetTextHeight();
-                        aTextPos.X() -= aTextSz.Width();
-                        aTextPos.X() -= aTextSz.Height() / 8;
-                        aTextPos.Y() -= aFontSz.Height() / 2;
+                        long nBulletHeight = aBulletArea.GetHeight();
+                        if ( !bVertical )
+                        {
+                            aTextPos.X() -= aTextSz.Width();
+                            aTextPos.X() -= aTextSz.Height() / 8;
+                            aTextPos.Y() -= nBulletHeight / 2;
+                            aTextPos.Y() += aTextSz.Height() / 2;
+                        }
+                        else
+                        {
+                            aTextPos.Y() -= aTextSz.Width();
+                            aTextPos.Y() -= aTextSz.Height() / 8;
+                            aTextPos.X() += nBulletHeight / 2;
+                            aTextPos.X() -= aTextSz.Height() / 2;
+                        }
                         pOutDev->DrawText( aTextPos, aPageText );
                     }
                 }
