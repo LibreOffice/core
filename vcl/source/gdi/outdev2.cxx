@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:56:48 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
             if( (GetOutDevType() != OUTDEV_WINDOW) && pGraphics2 && (pGraphics2->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
             {
                 SalTwoRect pPosAry2 = *pPosAry;
-                ((SalGraphicsLayout*)pGraphics2)->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
+                pGraphics2->mirror( pPosAry2.mnSrcX, pPosAry2.mnSrcWidth, pSrcDev );
                 mpGraphics->CopyBits( &pPosAry2, pGraphics2, this, pSrcDev );
             }
             else
