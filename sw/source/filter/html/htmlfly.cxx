@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:26:50 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_SIZE) &&
         SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, TRUE, &pItem ) &&
         ( (nFrmOpts & HTML_FRMOPT_ANYSIZE) ||
-          ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetSizeType()) )
+          ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
     {
         const SwFmtFrmSize *pFSItem = (const SwFmtFrmSize *)pItem;
         BYTE nPrcWidth = pFSItem->GetWidthPercent();
