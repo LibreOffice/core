@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-04 08:25:04 $
+ *  last change: $Author: aw $ $Date: 2002-06-06 11:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,8 @@ void SAL_CALL SvXMLImport::startDocument( void )
                     xGraphicResolver = Reference< XGraphicObjectResolver >::query(
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.document.ExportGraphicObjectResolver"))));
+                                // #99870# Import... instead of Export...
+                                "com.sun.star.document.ImportGraphicObjectResolver"))));
                     pImpl->mbOwnGraphicResolver = xGraphicResolver.is;
                 }
 
@@ -534,7 +535,8 @@ void SAL_CALL SvXMLImport::startDocument( void )
                     xEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
                         xFactory->createInstance(
                             OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.document.ExportEmbeddedObjectResolver"))));
+                                // #99870# Import... instead of Export...
+                                "com.sun.star.document.ImportEmbeddedObjectResolver"))));
                     pImpl->mbOwnEmbeddedResolver = xEmbeddedResolver.is;
                 }
             }
