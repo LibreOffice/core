@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
+ *  last change: $Author: nn $ $Date: 2001-03-23 09:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2198,11 +2198,12 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
                 //  Manual-Flag wird bei bAll=TRUE schon in SetOptimalHeight gesetzt
                 //  (an bei Extra-Height, sonst aus).
             }
-            else if ( eMode==SC_SIZE_DIRECT )
+            else if ( eMode==SC_SIZE_DIRECT || eMode==SC_SIZE_ORIGINAL )
             {
                 if (nSizeTwips)
                     pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
-                pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
+                if ( eMode != SC_SIZE_ORIGINAL )
+                    pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
                 pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );      // Manual-Flag
             }
             else if ( eMode==SC_SIZE_SHOW )
@@ -2225,17 +2226,21 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
                     if ( nThisSize )
                         pDoc->SetColWidth( nCol, nTab, nThisSize );
 
-                    pDoc->ShowCol( nCol, nTab, bShow );
+                    if ( eMode != SC_SIZE_ORIGINAL )
+                        pDoc->ShowCol( nCol, nTab, bShow );
                 }
             }
         }
 
-                            //  Outline anpassen
+                            //  adjust outlines
 
-        if (bWidth)
-            bOutline = bOutline || pDoc->UpdateOutlineCol( nStartNo, nEndNo, nTab, bShow );
-        else
-            bOutline = bOutline || pDoc->UpdateOutlineRow( nStartNo, nEndNo, nTab, bShow );
+        if ( eMode != SC_SIZE_ORIGINAL )
+        {
+            if (bWidth)
+                bOutline = bOutline || pDoc->UpdateOutlineCol( nStartNo, nEndNo, nTab, bShow );
+            else
+                bOutline = bOutline || pDoc->UpdateOutlineRow( nStartNo, nEndNo, nTab, bShow );
+        }
     }
     pDoc->DecSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
 
@@ -2255,10 +2260,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
 
     pDoc->UpdatePageBreaks( nTab );
 
-
-    //! Test !!!!!!!
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
-    //! Test !!!!!!!
 
     return bSuccess;
 }
