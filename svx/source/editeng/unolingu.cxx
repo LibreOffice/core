@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-19 08:41:29 $
+ *  last change: $Author: rt $ $Date: 2002-09-26 09:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
     if (xMgr.is())
     {
         xRes = Reference< XLinguServiceManager > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM (
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
                     "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
     }
     return xRes;
