@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:37:36 $
+#   last change: $Author: vg $ $Date: 2001-05-16 15:31:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ SLOFILES=\
 .IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(TARGET).$(DLLPOSTFIX).map
 .ELSE      
-SHL1VERSIONMAP=$(TARGET).map
+#SHL1VERSIONMAP=$(TARGET).map
 .ENDIF
 # --- Library -----------------------------------
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
