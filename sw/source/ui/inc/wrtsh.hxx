@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:29:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ public:
     BOOL    IsInSelect() const { return bInSelect; }
     void    SetInSelect(BOOL bSel = TRUE) { bInSelect = bSel; }
         // Liegt eine Text- oder Rahmenselektion vor?
-    BOOL    HasSelection() const { return IsSelection() || IsSelFrmMode() || IsObjSelected(); }
+    BOOL    HasSelection() const { return SwCrsrShell::HasSelection() || IsSelFrmMode() || IsObjSelected(); }
     FASTBOOL Pop( BOOL bOldCrsr = TRUE );
 
     void    EnterStdMode();
