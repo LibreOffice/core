@@ -1,6 +1,8 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\bin%_EXT%\local
 mkdir: %_DEST%\bin%_EXT%\remote2
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\so\soffice.exe %_DEST%\bin%_EXT%\so\soffice.exe
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
