@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:09:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 09:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,7 +318,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     OSL_TRACE("Leaving Init()");
 }
 
-Reference< browse::XBrowseNode >
+Reference< XInterface >
 SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -427,7 +427,6 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
 }
 
 Reference< browse::XBrowseNode >
->>>>>>> 1.4
 SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNode, ::rtl::OUString& language )
 {
     OSL_TRACE("Entering getLangNodeFromRootNode");
