@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-23 17:52:52 $
+#   last change: $Author: hjs $ $Date: 2002-10-25 16:14:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -568,7 +568,7 @@ $(MISC)$/%.dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 .IF "$(nodep)"==""
     @echo Making: $@
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
-    dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_srs_deps=true SRCALLTARGET -u
+    dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) NO_HIDS=true make_srs_deps=true SRCALLTARGET -u
     +-$(TYPE) $(SRS)$/$(PWD:f).*.dpr >> $@
 .ENDIF			# "$(nodep)"==""
 
