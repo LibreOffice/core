@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 12:54:59 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,9 +510,6 @@ namespace com { namespace sun { namespace star { namespace lang {
 #ifndef _SCALC_EXE
 class ScGlobal
 {
-    static ScDocument*      pClipDoc;
-    static SdrModel*        pClipModel;
-    static BYTE             nClipState;
     static SvxSearchItem*   pSearchItem;
     static ScAutoFormat*    pAutoFormat;
     static FuncCollection*  pFuncCollection;
@@ -545,16 +542,8 @@ public:
     static CalendarWrapper*     pCalendar;
     static LanguageType         eLnge;
     static sal_Unicode          cListDelimiter;
-    static ScDocument*          GetClipDoc();
-    static BOOL                 HasClipDoc();
     static const String&        GetClipDocName();
     static void                 SetClipDocName( const String& rNew );
-    static void                 CaptureClip();
-    static void                 ReleaseClip();
-    static BOOL                 IsClipCaptured();
-    static void                 SetClipDraw(SdrModel* pModel);
-    static BOOL                 IsClipDraw();
-    static SdrModel*            GetClipModel();
     static const SvxSearchItem& GetSearchItem();
     static void                 SetSearchItem( const SvxSearchItem& rNew );
     static ScAutoFormat*        GetAutoFormat();

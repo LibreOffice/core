@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-02-02 12:55:44 $
+ *  last change: $Author: nn $ $Date: 2001-02-14 19:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,7 @@
 #define CLIPST_DELETE       2
 #define CLIPST_DRAW         3
 
-ScDocument*     ScGlobal::pClipDoc = NULL;
-SdrModel*       ScGlobal::pClipModel = NULL;
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
-BYTE            ScGlobal::nClipState = CLIPST_AVAILABLE;
 SvxSearchItem*  ScGlobal::pSearchItem = NULL;
 ScAutoFormat*   ScGlobal::pAutoFormat = NULL;
 FuncCollection* ScGlobal::pFuncCollection = NULL;
@@ -351,57 +348,6 @@ BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_MARGIN )
         );
 }
-
-ScDocument* ScGlobal::GetClipDoc()
-{
-    if (!pClipDoc)
-        pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-    return pClipDoc;
-}
-
-BOOL ScGlobal::HasClipDoc()
-{
-    return (pClipDoc != 0);
-}
-
-void ScGlobal::CaptureClip()
-{
-    nClipState = CLIPST_CAPTURED;
-}
-
-void ScGlobal::SetClipDraw(SdrModel* pModel)
-{
-    pClipModel = pModel;
-    if (pClipDoc)
-        pClipDoc->Clear();
-    nClipState = CLIPST_DRAW;
-}
-
-SdrModel* ScGlobal::GetClipModel()
-{
-    return pClipModel;
-}
-
-BOOL ScGlobal::IsClipDraw()
-{
-    return ( nClipState == CLIPST_DRAW );
-}
-
-void ScGlobal::ReleaseClip()
-{
-    if (nClipState == CLIPST_DELETE)
-    {
-        DELETEZ(pClipDoc);
-    }
-    else
-        nClipState = CLIPST_AVAILABLE;
-}
-
-BOOL ScGlobal::IsClipCaptured()
-{
-    return ( nClipState == CLIPST_CAPTURED );
-}
-
 
 const SvxSearchItem& ScGlobal::GetSearchItem()
 {
@@ -712,10 +658,6 @@ void ScGlobal::Clear()
     theAddInAsyncTbl.DeleteAndDestroy( 0, theAddInAsyncTbl.Count() );
     ExitExternalFunc();
     DELETEZ(pEmptyString);
-    if (nClipState)
-        nClipState = CLIPST_DELETE;
-    else
-        DELETEZ(pClipDoc);
     DELETEZ(pAutoFormat);
     DELETEZ(pSearchItem);
     DELETEZ(pFuncCollection);
