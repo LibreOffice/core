@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actiontriggerhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 07:28:56 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,9 +453,12 @@ void ActionTriggerHelper::FillActionTriggerContainerFromMenu(
     FillActionTriggerContainerWithMenu( pMenu, xActionTriggerContainer );
 }
 
-Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu( const Menu* pMenu )
+Reference< XIndexContainer > ActionTriggerHelper::CreateActionTriggerContainerFromMenu(
+    // #110897#
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const Menu* pMenu )
 {
-    return new RootActionTriggerContainer( pMenu, ::comphelper::getProcessServiceFactory() );
+    return new RootActionTriggerContainer( pMenu, xServiceFactory );
 }
 
 }
