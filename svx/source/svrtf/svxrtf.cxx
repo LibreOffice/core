@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-08 10:26:23 $
+ *  last change: $Author: cmc $ $Date: 2002-07-29 10:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1456,6 +1456,5 @@ RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )
     nScriptSpace = rPool.GetTrueWhich( SID_ATTR_PARA_SCRIPTSPACE, FALSE );
     nHangPunct = rPool.GetTrueWhich( SID_ATTR_PARA_HANGPUNCTUATION, FALSE );
     nForbRule = rPool.GetTrueWhich( SID_ATTR_PARA_FORBIDDEN_RULES, FALSE );
+    nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, FALSE );
 }
-
-

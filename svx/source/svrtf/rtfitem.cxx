@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-20 11:40:06 $
+ *  last change: $Author: cmc $ $Date: 2002-07-29 10:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 #define ITEMID_FORBIDDENRULE 0
 #define ITEMID_SCRIPTSPACE 0
 #define ITEMID_HANGINGPUNCTUATION 0
+#define ITEMID_FRAMEDIR 0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -170,6 +171,7 @@
 #include "forbiddenruleitem.hxx"
 #include "hngpnctitem.hxx"
 #include "scriptspaceitem.hxx"
+#include "frmdiritem.hxx"
 
 
 #ifndef _RTFTOKEN_H
@@ -1002,9 +1004,26 @@ ATTR_SETUNDERLINE:
                 }
                 break;
 
-            case RTF_RTLCH:     bIsLeftToRightDef = FALSE;          break;
-            case RTF_LTRCH:     bIsLeftToRightDef = TRUE;           break;
-
+            case RTF_RTLCH:
+                bIsLeftToRightDef = FALSE;
+                break;
+            case RTF_LTRCH:
+                bIsLeftToRightDef = TRUE;
+                break;
+            case RTF_RTLPAR:
+                if (PARDID->nDirection)
+                {
+                    pSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP,
+                        PARDID->nDirection));
+                }
+                break;
+            case RTF_LTRPAR:
+                if (PARDID->nDirection)
+                {
+                    pSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP,
+                        PARDID->nDirection));
+                }
+                break;
             case RTF_LOCH:      eCharType = LOW_CHARTYPE;           break;
             case RTF_HICH:      eCharType = HIGH_CHARTYPE;          break;
             case RTF_DBCH:      eCharType = DOUBLEBYTE_CHARTYPE;    break;
