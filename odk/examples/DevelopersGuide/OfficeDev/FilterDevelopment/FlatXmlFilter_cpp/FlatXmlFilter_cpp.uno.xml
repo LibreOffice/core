@@ -34,11 +34,14 @@
     <type>com.sun.star.container.XHierarchicalNameAccess</type>
     <type>com.sun.star.lang.XServiceInfo</type>
     <type>com.sun.star.xml.sax.XDocumentHandler</type>
+    <type>com.sun.star.xml.sax.XExtendedDocumentHandler</type>
     <type>com.sun.star.text.XTextDocument</type>
     <type>com.sun.star.xml.XImportFilter</type>
     <type>com.sun.star.xml.XExportFilter</type>
     <type>com.sun.star.io.XInputStream</type>
     <type>com.sun.star.io.XOutputStream</type>
+    <type>com.sun.star.io.XActiveDataSource</type>
+    <type>com.sun.star.io.XSeekable</type>
     <type>com.sun.star.frame.XConfigManager</type>
     <type>com.sun.star.xml.sax.XParser</type>
     <type>com.sun.star.ucb.XSimpleFileAccess</type>
