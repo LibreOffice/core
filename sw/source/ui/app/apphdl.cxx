@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 13:56:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,12 @@
 #ifndef _SVX_SELCTRL_HXX //autogen
 #include <svx/selctrl.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
 #include <svx/xmlsecctrl.hxx>
 #ifndef _NAVICFG_HXX
 #include <navicfg.hxx>
@@ -190,9 +196,6 @@
 #endif
 #ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
-#ifndef _WIZZARD_HXX
-#include <wizzard.hxx>      // Wizzards
 #endif
 #ifndef _USRPREF_HXX
 #include <usrpref.hxx>
@@ -568,16 +571,6 @@ void SwModule::StateOther(SfxItemSet &rSet)
         }
         nWhich = aIter.NextWhich();
     }
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Wizzards
- --------------------------------------------------------------------*/
-
-
-void SwModule::ExecWizzard(SfxRequest & rReq)
-{
-    Wizzard( rReq.GetSlot() );
 }
 
 /*--------------------------------------------------------------------
@@ -1168,18 +1161,25 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 // alle FIX-Date/Time Felder auf akt. setzen
                 if( pWrtSh )
                 {
+                    SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+                    sal_Bool bUpdateFields = sal_True;
+                    if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == com::sun::star::document::UpdateDocMode::NO_UPDATE)
+                        bUpdateFields = sal_False;
                     pWrtSh->SetFixFields();
-                    pWrtSh->UpdateInputFlds();
+                    if(bUpdateFields)
+                    {
+                        pWrtSh->UpdateInputFlds();
 
-                    // Sind Datenbankfelder enthalten?
-                    // Erstmal alle verwendeten Datenbanken holen
-                    SwDoc *pDoc = pDocSh->GetDoc();
-                    SvStringsDtor aDBNameList;
-                    pDoc->GetAllUsedDB( aDBNameList );
-                    sal_uInt16 nCount = aDBNameList.Count();
-                    if (nCount)
-                    {   // Datenbankbeamer oeffnen
-                        ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
+                        // Sind Datenbankfelder enthalten?
+                        // Erstmal alle verwendeten Datenbanken holen
+                        SwDoc *pDoc = pDocSh->GetDoc();
+                        SvStringsDtor aDBNameList;
+                        pDoc->GetAllUsedDB( aDBNameList );
+                        sal_uInt16 nCount = aDBNameList.Count();
+                        if (nCount)
+                        {   // Datenbankbeamer oeffnen
+                            ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
+                        }
                     }
                 }
                 break;
