@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConstantTypeInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2000-11-08 15:38:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 package com.sun.star.lib.uno.typeinfo;
 
-
+/**
+   @deprecated <code>UNOTYPEINFO</code> for constants is not needed
+ */
 public class ConstantTypeInfo extends TypeInfo
 {
     public ConstantTypeInfo(String name, int flags)
