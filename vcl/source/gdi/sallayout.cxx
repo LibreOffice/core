@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,7 @@ MultiSalLayout::~MultiSalLayout()
 
 // -----------------------------------------------------------------------
 
-bool MultiSalLayout::AddFallback( SalLayout& rFallback )
+bool MultiSalLayout::AddFallback( SalLayout& rFallback, ImplFontData* pFallbackFont )
 {
     if( mnLevel >= MAX_FALLBACK )
         return false;
@@ -1154,6 +1154,7 @@ bool MultiSalLayout::AddFallback( SalLayout& rFallback )
     if( mnUnitsPerPixel != rFallback.GetUnitsPerPixel() )
         return false;
 
+    mpFallbackFonts[ mnLevel ] = pFallbackFont;
     mpLayouts[ mnLevel++ ] = &rFallback;
     return true;
 }
@@ -1185,7 +1186,10 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
             nStartNew[ nLevel ], &nGlyphAdv[ nLevel ], &nCharPos[ nLevel ] );
         // release unused fallbacks
         if( nValid[ nLevel ] || !n )
+        {
+            mpFallbackFonts[ nLevel ] = mpFallbackFonts[ n ];
             mpLayouts[ nLevel++ ] = mpLayouts[ n ];
+        }
         else
             mpLayouts[ n ]->Release();
     }
@@ -1412,6 +1416,7 @@ int MultiSalLayout::GetNextGlyphs( int nLen, long* pGlyphIdxAry, Point& rPos,
             nStart |= nFontTag;
             for( int i = 0; i < nRetVal; ++i )
                 pGlyphIdxAry[ i ] |= nFontTag;
+            rPos += maDrawBase;
             return nRetVal;
         }
     }
