@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 16:50:42 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:12:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ TARGET=swg
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
-
 SLOFILES =  \
         $(SLO)$/rdcont.obj \
         $(SLO)$/rdflds.obj \
@@ -88,7 +87,7 @@ SLOFILES =  \
         $(SLO)$/rdtox.obj \
         $(SLO)$/swgpar.obj \
         $(SLO)$/swgstr.obj \
-        $(SLO)$/sw2block.obj \
+                $(SLO)$/sw2block.obj \
         $(SLO)$/swblocks.obj	\
         $(SLO)$/SwXMLBlockImport.obj	\
         $(SLO)$/SwXMLSectionList.obj	\
@@ -102,6 +101,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/SwXMLSectionList.obj	\
         $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockListContext.obj	\
+        $(SLO)$/SwXMLTextBlocks.obj \
         $(SLO)$/SwXMLTextBlocks1.obj
 
 # --- Tagets -------------------------------------------------------
