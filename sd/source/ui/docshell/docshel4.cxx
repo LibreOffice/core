@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:06:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,7 @@ sal_Bool DrawDocShell::IsNewDocument() const
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+BOOL DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
@@ -413,7 +413,7 @@ BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::sta
     bool    bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;
 
-    SfxItemSet* pSet = GetMedium()->GetItemSet();
+    SfxItemSet* pSet = rMedium.GetItemSet();
 
 
     if( pSet )
@@ -431,11 +431,10 @@ BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::sta
         }
     }
 
-    bRet = SfxObjectShell::Load( xStorage );
+    bRet = SfxObjectShell::Load( rMedium );
     if( bRet )
     {
-        SfxMedium* pMedium = GetMedium();
-        bRet = SdXMLFilter( *pMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStorage ) ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
     }
 
     if( bRet )
@@ -472,7 +471,6 @@ BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::sta
     if( IsPreview() || bStartPresentation )
     {
         SfxItemSet *pSet = GetMedium()->GetItemSet();
-
         if( pSet )
             pSet->Put( SfxUInt16Item( SID_VIEW_ID, bStartPresentation ? 1 : 5 ) );
     }
@@ -486,7 +484,7 @@ BOOL DrawDocShell::Load( const ::com::sun::star::uno::Reference< ::com::sun::sta
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
@@ -496,6 +494,7 @@ BOOL DrawDocShell::LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun:
 
     BOOL bRet = FALSE;
 
+        /*
         // #90691# return to old behaviour (before #80365#): construct own medium
         SfxMedium aMedium(xStorage);
 
@@ -518,7 +517,7 @@ BOOL DrawDocShell::LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun:
                     pDestItemSet->Put(*pItem);
                 }
             }
-        }
+        }                           */
 
         pDoc->NewOrLoadCompleted( NEW_DOC );
         pDoc->CreateFirstPages();
@@ -526,7 +525,7 @@ BOOL DrawDocShell::LoadFrom( const ::com::sun::star::uno::Reference< ::com::sun:
 
         // TODO/LATER: nobody is interested in the error code?!
         ErrCode nError = ERRCODE_NONE;
-        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( xStorage ) ).Import( nError );
+        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Organizer, SotStorage::GetVersion( rMedium.GetStorage() ) ).Import( nError );
 
 
     // tell SFX to change viewshell when in preview mode
@@ -630,9 +629,7 @@ BOOL DrawDocShell::Save()
         // #86834# Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
 
-        uno::Reference< embed::XStorage > xStorage = GetStorage();
-        SfxMedium   aMedium( xStorage );
-        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStorage ) ).Export();
+        bRet = SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
     }
 
     return bRet;
@@ -644,7 +641,7 @@ BOOL DrawDocShell::Save()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStore )
+BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
     pDoc->StopWorkStartupDelay();
 
@@ -653,14 +650,13 @@ BOOL DrawDocShell::SaveAs( const ::com::sun::star::uno::Reference< ::com::sun::s
         SfxObjectShell::SetVisArea( Rectangle() );
 
     UINT32  nVBWarning = ERRCODE_NONE;
-    BOOL    bRet = SfxObjectShell::SaveAs( xStore );
+    BOOL    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
     {
         // #86834# Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
-        SfxMedium aMedium( xStore );
-        bRet = SdXMLFilter( aMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( xStore ) ).Export();
+        bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
     }
 
     if( GetError() == ERRCODE_NONE )
