@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-20 14:54:47 $
+ *  last change: $Author: cmc $ $Date: 2001-04-26 12:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
                                     // Tracking beginnt neu
     pRdr->bHdFtFtnEdn = TRUE;
     pRdr->bApo = pRdr->bTxbxFlySection
-               = pRdr->bTable = bTableInApo = pRdr->bAnl = FALSE;
+               = pRdr->bTable = pRdr->bTableInApo = pRdr->bAnl = FALSE;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
@@ -1363,19 +1363,40 @@ BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 
     // here Apo
     BOOL bNowApo = rbNowStyleApo || pSprm29 || pSprm37;
+#if 0
     BOOL bApoContinuedInTabCell2ndParagraph
             = (bApo && bTableInApo && bStillInTable) && !bNowApo;
     bNowApo |= bApoContinuedInTabCell2ndParagraph;
+#endif
 
     rbStartApo = bNowApo && !bApo && !bTableRowEnd; // normal APO-start
     rbStopApo  = bApo && !bNowApo && !bTableRowEnd; // normal APO-end
 
+#if 0
+    /*
+    ##777##
+    I'm very suspicious of this use of bApoContinuedInTabCell2ndParagraph, if
+    we are at the end of a table but another table is anchored after it with
+    completely different absolute positioning location so as to be in a
+    different place entirely then if we use this test the two tables are all
+    made into one single table. If there is something that this wants to fix
+    then this is the wrong place. The test to determine if they are the same
+    floating frame in TestSameApo should be sufficient.
+    */
     if( bApo && bNowApo && !bTableRowEnd
         && !bApoContinuedInTabCell2ndParagraph
         && !TestSameApo( pSprm29, rbNowStyleApo ) )
     {
         rbStopApo = rbStartApo = TRUE;              // aneinandergrenzende APOs
     };
+#else
+    if( bApo && bNowApo && !bTableRowEnd &&
+        !TestSameApo( pSprm29, rbNowStyleApo ) )
+    {
+        rbStopApo = rbStartApo = TRUE;              // two bordering eachother
+    }
+#endif
+
     return pSprm29;
 }
 
@@ -3091,11 +3112,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.19 2001-04-20 14:54:47 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.20 2001-04-26 12:00:32 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/04/20 14:54:47  cmc
+      base table handling on logical character positions and by using new property finding algorithm
+
       Revision 1.18  2001/04/12 15:15:55  cmc
       Make identifying page vs section break safe
 
