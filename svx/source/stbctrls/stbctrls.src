@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:18:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,20 @@ Menu RID_SVXMNU_PSZ_FUNC
         };
     };
 };
+Menu RID_SVXMNU_XMLSECSTATBAR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = XMLSEC_CALL ;
+            HelpId = HID_XMLSEC_CALL ;
+            Text [ de ] = "Digitale Signaturen..." ;
+            Text [ en-US ] = "Digital Signatures..." ;
+            Text [ x-comment ] = " ";
+        };
+    };
+};
  // Images ----------------------------------------------------------------
 Image RID_SVXBMP_POSITION
 {
@@ -251,31 +265,29 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Image RID_SVXBMP_SIGNET
+{
+    ImageBitmap = Bitmap
+    {
+        File = "signet_11x16.png" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
+    };
+};
+Image RID_SVXBMP_SIGNET_BROKEN
+{
+    ImageBitmap = Bitmap
+    {
+        File = "caution_11x16.png" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
+    };
+};
