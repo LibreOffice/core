@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swafopt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:14 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,29 +70,13 @@
 
 #include "swafopt.hxx"
 
-#if defined UNX
-
-#if defined GCC
-extern const sal_Char __FAR_DATA sBulletFntName[];
-const sal_Char __FAR_DATA sBulletFntName[] = "starbats";
-#else
-extern const sal_Char __FAR_DATA sBulletFntName[] = "starbats";
-#endif
-
-#else
-extern const sal_Char __FAR_DATA sBulletFntName[] = "StarBats";
-#endif
-
-// !! JP - 17.04.00: which value becomes this Bulletchar
-//                   in the Unicode Version?
-const sal_Char cBulletChar  = '\x95';   // character for Aufzaehlungen
-
 /*------------------------------------------------------------------------
  Beschreibung:
 ------------------------------------------------------------------------*/
 
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
-    : aBulletFont( String( sBulletFntName, RTL_TEXTENCODING_MS_1252 ),
+    : aBulletFont( String::CreateFromAscii(
+                        RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),
                     Size( 0, 14 ) )
 {
     bReplaceQuote =
@@ -140,8 +124,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     aBulletFont.SetWeight( WEIGHT_DONTKNOW );
     aBulletFont.SetTransparent( TRUE );
 
-    cBullet = ByteString::ConvertToUnicode( cBulletChar,
-                                            RTL_TEXTENCODING_SYMBOL );
+    cBullet = 0x2022;
     cByInputBullet = cBullet;
     aByInputBulletFont = aBulletFont;
 
