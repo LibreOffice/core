@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:55:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ String STR_LAYER_BCKGRND
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 String STR_LAYER_BCKGRNDOBJ
 {
@@ -131,6 +132,7 @@ String STR_LAYER_BCKGRNDOBJ
     Text[ czech ] = "Objekty pozadí";
     Text[ hebrew ] = "Hintergrundobjekte";
     Text[ hindi ] = "पृष्ठभाग वस्तु";
+    Text[ slovak ] = "Objekty pozadia";
 };
 String STR_LAYER_LAYOUT
 {
@@ -164,6 +166,7 @@ String STR_LAYER_LAYOUT
     Text[ czech ] = "Rozvržení";
     Text[ hebrew ] = "‮פריסה‬";
     Text[ hindi ] = "अभिन्यास";
+    Text[ slovak ] = "Formát";
 };
 String STR_LAYER_CONTROLS
 {
@@ -197,6 +200,7 @@ String STR_LAYER_CONTROLS
     Text[ czech ] = "Ovládací prvky";
     Text[ hebrew ] = "‮כפתורי שליתה‬";
     Text[ hindi ] = "नियंत्रण";
+    Text[ slovak ] = "Ovládacie prvky";
 };
 String STR_LAYER_MEASURELINES
 {
@@ -230,6 +234,7 @@ String STR_LAYER_MEASURELINES
     Text[ czech ] = "Kótovací čáry";
     Text[ hebrew ] = "Maßlinien";
     Text[ hindi ] = "परिमाण रेखा";
+    Text[ slovak ] = "Kótovacie čiary";
 };
 String STR_PAGE
 {
@@ -263,6 +268,7 @@ String STR_PAGE
     Text[ czech ] = "Snímek";
     Text[ hebrew ] = "Seite";
     Text[ hindi ] = "स्लइड";
+    Text[ slovak ] = "Snímok";
 };
 String STR_MASTERPAGE
 {
@@ -296,6 +302,7 @@ String STR_MASTERPAGE
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 String STR_NOTES
 {
@@ -329,6 +336,7 @@ String STR_NOTES
     Text[ czech ] = "(Komentáře)";
     Text[ hebrew ] = "‮(הערות)‬";
     Text[ hindi ] = "(टिप्पणी)";
+    Text[ slovak ] = "(Poznámky)";
 };
 String STR_HANDOUT
 {
@@ -362,6 +370,7 @@ String STR_HANDOUT
     Text[ czech ] = "Teze";
     Text[ hebrew ] = "Handzettel";
     Text[ hindi ] = "हान्डौट्स";
+    Text[ slovak ] = "Tézy";
 };
 String STR_PRESOBJ_MPTITLE
 {
@@ -394,6 +403,7 @@ String STR_PRESOBJ_MPTITLE
     Text[ czech ] = "Klikněte pro úpravu formátu titulního textu";
     Text[ hebrew ] = "Klicken Sie, um das Format des Titeltextes zu bearbeiten";
     Text[ hindi ] = "शीर्षक टेक्स्ट् रचना के संपादन करने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť na editáciu formátu textu titulku";
 };
 String STR_PRESOBJ_MPOUTLINE
 {
@@ -426,6 +436,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ czech ] = "Klikněte pro úpravu formátu textu osnovy";
     Text[ hebrew ] = "Klicken Sie, um die Formate des Gliederungstextes zu bearbeiten";
     Text[ hindi ] = "बाहरी रूपरेखा टेक्स्ट् रचना के संपादन करने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť na editáciu formátu textu osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER2
 {
@@ -459,6 +470,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ czech ] = "Druhá úroveň osnovy";
     Text[ hebrew ] = "Zweite Gliederungsebene";
     Text[ hindi ] = "दूसरा बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Druhá úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER3
 {
@@ -492,6 +504,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ czech ] = "Třetí úroveň osnovy";
     Text[ hebrew ] = "Dritte Gliederungsebene";
     Text[ hindi ] = "तीसरा बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Tretia úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER4
 {
@@ -525,6 +538,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ czech ] = "Čtvrtá úroveň osnovy";
     Text[ hebrew ] = "Vierte Gliederungsebene";
     Text[ hindi ] = "चौथा बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Štvrtá úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER5
 {
@@ -559,6 +573,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ czech ] = "Pátá úroveň osnovy";
     Text[ hebrew ] = "Fünfte Gliederungsebene";
     Text[ hindi ] = "पाँचवाँ बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Piata úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER6
 {
@@ -592,6 +607,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ czech ] = "Šestá úroveň osnovy";
     Text[ hebrew ] = "Sechste Gliederungsebene";
     Text[ hindi ] = "छठवाँ बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Šiesta úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER7
 {
@@ -625,6 +641,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ czech ] = "Sedmá úroveň osnovy";
     Text[ hebrew ] = "Siebente Gliederungsebene";
     Text[ hindi ] = "बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Siedma úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER8
 {
@@ -658,6 +675,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ czech ] = "Osmá úroveň osnovy";
     Text[ hebrew ] = "Achte Gliederungsebene";
     Text[ hindi ] = "आठवाँ बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "ôsma úroveň osnovy";
 };
 String STR_PRESOBJ_MPOUTLLAYER9
 {
@@ -691,6 +709,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ czech ] = "Devátá úroveň osnovy";
     Text[ hebrew ] = "Neunte Gliederungsebene";
     Text[ hindi ] = "नवाँ बाहरी रूपरेखा सतह";
+    Text[ slovak ] = "Deviata úroveň osnovy";
 };
 String STR_PRESOBJ_MPNOTESTITLE
 {
@@ -723,6 +742,7 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ czech ] = "Klikněte pro přesun snímku";
     Text[ hebrew ] = "Klicken Sie, um die Seite zu verschieben";
     Text[ hindi ] = "स्लइड का स्थान परिवर्तन करने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre presun snímku";
 };
 String STR_PRESOBJ_MPNOTESTEXT
 {
@@ -755,6 +775,7 @@ String STR_PRESOBJ_MPNOTESTEXT
     Text[ czech ] = "Klikněte pro úpravu formátu komentářů";
     Text[ hebrew ] = "Klicken Sie, um das Format der Notizen zu bearbeiten";
     Text[ hindi ] = "सूचना रचना के संपादन करने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre úpravu formátu poznámok";
 };
 String STR_PRESOBJ_TITLE
 {
@@ -788,6 +809,7 @@ String STR_PRESOBJ_TITLE
     Text[ czech ] = "Kliknutím vložíte titulek";
     Text[ hebrew ] = "Titel durch Klicken hinzufügen";
     Text[ hindi ] = "शीर्षक जोड़ने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre vloženie nadpisu";
 };
 String STR_PRESOBJ_OUTLINE
 {
@@ -821,6 +843,7 @@ String STR_PRESOBJ_OUTLINE
     Text[ czech ] = "Kliknutím vložíte osnovu";
     Text[ hebrew ] = "Gliederung durch Klicken hinzufügen";
     Text[ hindi ] = "बाहरी रूपरेखा जोड़ने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre vloženie textu";
 };
 String STR_PRESOBJ_TEXT
 {
@@ -854,6 +877,7 @@ String STR_PRESOBJ_TEXT
     Text[ czech ] = "Kliknutím vložíte text";
     Text[ hebrew ] = "Text durch Klicken hinzufügen";
     Text[ hindi ] = "टेक्स्ट् जोड़ने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre vloženie textu";
 };
 String STR_PRESOBJ_NOTESTEXT
 {
@@ -887,6 +911,7 @@ String STR_PRESOBJ_NOTESTEXT
     Text[ czech ] = "Kliknutím vložíte komentáře";
     Text[ hebrew ] = "Notizen durch Klicken hinzufügen";
     Text[ hindi ] = "टिप्पणी जोड़ने केलिए क्लिक करो";
+    Text[ slovak ] = "Kliknúť pre vloženie poznámok";
 };
 String STR_PRESOBJ_GRAPHIC
 {
@@ -920,6 +945,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ czech ] = "Dvojitým kliknutím vložíte obrázek";
     Text[ hebrew ] = "Grafik durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक सुचित्र को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte grafiku";
 };
 String STR_PRESOBJ_OBJECT
 {
@@ -953,6 +979,7 @@ String STR_PRESOBJ_OBJECT
     Text[ czech ] = "Dvojitým kliknutím vložíte objekt";
     Text[ hebrew ] = "Objekt durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक वस्तु को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte objekt";
 };
 String STR_PRESOBJ_CHART
 {
@@ -986,6 +1013,7 @@ String STR_PRESOBJ_CHART
     Text[ czech ] = "Dvojitým kliknutím vložíte graf";
     Text[ hebrew ] = "Diagramm durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक चार्ट को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte graf";
 };
 String STR_PRESOBJ_ORGCHART
 {
@@ -1019,6 +1047,7 @@ String STR_PRESOBJ_ORGCHART
     Text[ czech ] = "Dvojitým kliknutím vložíte organizační diagram";
     Text[ hebrew ] = "Organisationsdiagramm durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक चित्र को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte organizačný graf";
 };
 String STR_PRESOBJ_TABLE
 {
@@ -1052,6 +1081,7 @@ String STR_PRESOBJ_TABLE
     Text[ czech ] = "Dvojitým kliknutím vložíte sešit";
     Text[ hebrew ] = "Tabelle durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक स्प्रेडशीट् को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte zošit";
 };
 String STR_SLIDEVIEWSHELL
 {
@@ -1085,6 +1115,7 @@ String STR_SLIDEVIEWSHELL
     Text[ czech ] = "Snímkový režim";
     Text[ hebrew ] = "Diamodus";
     Text[ hindi ] = "स्लइड प्रकार";
+    Text[ slovak ] = "Snímkový režim";
 };
 String STR_OUTLINEVIEWSHELL
 {
@@ -1118,6 +1149,7 @@ String STR_OUTLINEVIEWSHELL
     Text[ czech ] = "Zobrazit osnovu";
     Text[ hebrew ] = "Gliederungsmodus";
     Text[ hindi ] = "बाहरी रूपरेखा दृश्य";
+    Text[ slovak ] = "Pohľad s osnovou";
 };
 String STR_DRAWVIEWSHELL
 {
@@ -1151,6 +1183,7 @@ String STR_DRAWVIEWSHELL
     Text[ czech ] = "Pohled na kreslení";
     Text[ hebrew ] = "Zeichenmodus";
     Text[ hindi ] = "रेखाचित्र दृश्य";
+    Text[ slovak ] = "Náhľad kresby";
 };
 String STR_PRESVIEWSHELL
 {
@@ -1180,6 +1213,7 @@ String STR_PRESVIEWSHELL
     Text[ czech ] = "Režim prezentace";
     Text[ hebrew ] = "Präsentationsmodus";
     Text[ hindi ] = "प्रस्तुति प्रकार";
+    Text[ slovak ] = "Prezentačný režim";
 };
 String STR_PREVIEWVIEWSHELL
 {
@@ -1209,6 +1243,7 @@ String STR_PREVIEWVIEWSHELL
     Text[ czech ] = "Okno náhledu";
     Text[ hebrew ] = "Vorschaufenster";
     Text[ hindi ] = "पूर्वदृश्य विन्डो";
+    Text[ slovak ] = "Náhľadové okno";
 };
 String STR_TEXTOBJECTBARSHELL
 {
@@ -1242,6 +1277,7 @@ String STR_TEXTOBJECTBARSHELL
     Text[ czech ] = "Textový režim";
     Text[ hebrew ] = "Textmodus";
     Text[ hindi ] = "टेक्स्ट् प्रकार";
+    Text[ slovak ] = "Textový režim";
 };
 String STR_STDOBJECTBARSHELL
 {
@@ -1275,6 +1311,7 @@ String STR_STDOBJECTBARSHELL
     Text[ czech ] = "Režim dokumentu";
     Text[ hebrew ] = "Dokumentmodus";
     Text[ hindi ] = "लेखपत्र प्रकार";
+    Text[ slovak ] = "Dokumentový režim";
 };
 String STR_BEZIEROBJECTBARSHELL
 {
@@ -1309,6 +1346,7 @@ String STR_BEZIEROBJECTBARSHELL
     Text[ czech ] = "Bézierův režim";
     Text[ hebrew ] = "Béziermodus";
     Text[ hindi ] = "BÃ©zier mode";
+    Text[ slovak ] = "Bézierov režim";
 };
 String STR_APPLICATIONOBJECTBAR
 {
@@ -1345,6 +1383,7 @@ String STR_APPLICATIONOBJECTBAR
     Text[ czech ] = "StarImpress 4.0";
     Text[ hebrew ] = "StarImpress 4.0";
     Text[ hindi ] = "StarImpress 4.0";
+    Text[ slovak ] = "StarImpress 4.0";
 };
 String STR_GLUEPOINTSOBJECTBARSHELL
 {
@@ -1377,6 +1416,7 @@ String STR_GLUEPOINTSOBJECTBARSHELL
     Text[ czech ] = "Režim záchytných bodů";
     Text[ hebrew ] = "Klebepunktemodus";
     Text[ hindi ] = "ग्लू बिन्दु प्रकार";
+    Text[ slovak ] = "Režim záchytných bodov";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_TITLE
@@ -1435,6 +1475,7 @@ String STR_LAYOUT_DEFAULT_NAME
     Text[ czech ] = "Výchozí";
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
+    Text[ slovak ] = "Východzie";
 };
 String STR_LAYOUT_DEFAULT_TITLE_NAME
 {
@@ -1467,6 +1508,7 @@ String STR_LAYOUT_DEFAULT_TITLE_NAME
     Text[ czech ] = "Titul";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Nadpis";
 };
 String STR_STANDARD_STYLESHEET_NAME
 {
@@ -1500,6 +1542,7 @@ String STR_STANDARD_STYLESHEET_NAME
     Text[ czech ] = "Výchozí";
     Text[ hebrew ] = "‮ברירת מחדל‬";
     Text[ hindi ] = "अनुपस्थिति";
+    Text[ slovak ] = "Východzie";
 };
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
@@ -1534,6 +1577,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text[ czech ] = "Heslo je nesprávné nebo je soubor poškozen.";
     Text[ hebrew ] = "Das Kennwort ist falsch oder die Datei beschädigt.";
     Text[ hindi ] = "कूटशब्द गलत है अथवा फाइल को हानी पहुँचा है ।";
+    Text[ slovak ] = "Heslo je nesprávne alebo je súbor poškodený.";
 };
 String STR_UNDO_MOVEPAGES
 {
@@ -1567,6 +1611,7 @@ String STR_UNDO_MOVEPAGES
     Text[ czech ] = "Přesunout snímky";
     Text[ hebrew ] = "Seiten verschieben";
     Text[ hindi ] = "स्लइडों का स्थान परिवर्तन करो";
+    Text[ slovak ] = "Presunúť snímky";
 };
 String STR_NOT_ENOUGH_MEMORY
 {
@@ -1599,6 +1644,7 @@ String STR_NOT_ENOUGH_MEMORY
     Text[ czech ] = "Nedostatek paměti!\nAkce bude zrušena.";
     Text[ hebrew ] = "Nicht genug Speicher!\nDie Aktion wird abgebrochen.";
     Text[ hindi ] = "मेमरी पर्याप्त नहीं है !\nकार्य को अदूरा रखा जायेगा ।";
+    Text[ slovak ] = "Nedostatok pamäte!\nAkcia bude zrušená.";
 };
 /* nicht uebersetzen */
 String STR_LAYOUT_SUBTITLE
@@ -1642,6 +1688,7 @@ String STR_POOLSHEET_MEASURE
     Text[ czech ] = "Kótovací čára";
     Text[ hebrew ] = "Maßlinie";
     Text[ hindi ] = "परिमाण रेखा";
+    Text[ slovak ] = "Kótovacia čiara";
 };
 String STR_POOLSHEET_OBJWITHARROW
 {
@@ -1674,6 +1721,7 @@ String STR_POOLSHEET_OBJWITHARROW
     Text[ czech ] = "Objekt se šipkou";
     Text[ hebrew ] = "Objekt mit Pfeilspitze";
     Text[ hindi ] = "वस्तु तीर रेखा";
+    Text[ slovak ] = "Objekt so šípkou";
 };
 String STR_POOLSHEET_OBJWITHSHADOW
 {
@@ -1706,6 +1754,7 @@ String STR_POOLSHEET_OBJWITHSHADOW
     Text[ czech ] = "Objekt se stínováním";
     Text[ hebrew ] = "Objekt mit Schatten";
     Text[ hindi ] = "वस्तु छाया सहित";
+    Text[ slovak ] = "Objekt s tieňovaním";
 };
 String STR_POOLSHEET_OBJWITHOUTFILL_NT
 {
@@ -1743,6 +1792,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text[ czech ] = "Objekt bez výplně";
     Text[ hebrew ] = "Objekt ohne Füllung";
     Text[ hindi ] = "वस्तु बिना भरा";
+    Text[ slovak ] = "Objekt bez výplne";
 };
 String STR_POOLSHEET_TEXT
 {
@@ -1775,6 +1825,7 @@ String STR_POOLSHEET_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String STR_POOLSHEET_TEXTBODY_NT
 {
@@ -1812,6 +1863,7 @@ String STR_POOLSHEET_TEXTBODY
     Text[ czech ] = "Tělo textu";
     Text[ hebrew ] = "Textkörper";
     Text[ hindi ] = "टेक्स्ट् का मुख्य भाग";
+    Text[ slovak ] = "Telo textu";
 };
 String STR_POOLSHEET_TEXTBODY_JUSTIFY_NT
 {
@@ -1849,6 +1901,7 @@ String STR_POOLSHEET_TEXTBODY_JUSTIFY
     Text[ czech ] = "Zarovnané tělo textu";
     Text[ hebrew ] = "Textkörper Blocksatz";
     Text[ hindi ] = "टेक्स्ट् का मुख्य भाग व्यवस्थित";
+    Text[ slovak ] = "Zarovnané telo textu";
 };
 String STR_POOLSHEET_TEXTBODY_INDENT_NT
 {
@@ -1886,6 +1939,7 @@ String STR_POOLSHEET_TEXTBODY_INDENT
     Text[ czech ] = "Odsazení prvního řádku";
     Text[ hebrew ] = "Textkörper Einzug";
     Text[ hindi ] = "पहिला रेखा इन्डेन्ट";
+    Text[ slovak ] = "Odsadenie prvého riadku";
 };
 String STR_POOLSHEET_TITLE
 {
@@ -1918,6 +1972,7 @@ String STR_POOLSHEET_TITLE
     Text[ czech ] = "Titul";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Titulok";
 };
 String STR_POOLSHEET_TITLE1
 {
@@ -1950,6 +2005,7 @@ String STR_POOLSHEET_TITLE1
     Text[ czech ] = "Titul1";
     Text[ hebrew ] = "Titel1";
     Text[ hindi ] = "शीर्षक1";
+    Text[ slovak ] = "Titulok1";
 };
 String STR_POOLSHEET_TITLE2
 {
@@ -1982,6 +2038,7 @@ String STR_POOLSHEET_TITLE2
     Text[ czech ] = "Titul2";
     Text[ hebrew ] = "Titel2";
     Text[ hindi ] = "शीर्षक2";
+    Text[ slovak ] = "Titulok2";
 };
 String STR_POOLSHEET_HEADLINE_NT
 {
@@ -2019,6 +2076,7 @@ String STR_POOLSHEET_HEADLINE
     Text[ czech ] = "Nadpis";
     Text[ hebrew ] = "Überschrift";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Nadpis";
 };
 String STR_POOLSHEET_HEADLINE1_NT
 {
@@ -2056,6 +2114,7 @@ String STR_POOLSHEET_HEADLINE1
     Text[ czech ] = "Nadpis1";
     Text[ hebrew ] = "Überschrift1";
     Text[ hindi ] = "शीर्षक1";
+    Text[ slovak ] = "Nadpis1";
 };
 String STR_POOLSHEET_HEADLINE2_NT
 {
@@ -2093,6 +2152,7 @@ String STR_POOLSHEET_HEADLINE2
     Text[ czech ] = "Nadpis2";
     Text[ hebrew ] = "Überschrift2";
     Text[ hindi ] = "शीर्षक2";
+    Text[ slovak ] = "Nadpis2";
 };
 String STR_EMPTY_STYLESHEET_NAME
 {
@@ -2125,6 +2185,7 @@ String STR_EMPTY_STYLESHEET_NAME
     Text[ czech ] = "Prázdná šablona";
     Text[ hebrew ] = "Leere Vorlage";
     Text[ hindi ] = "खाली नमूना";
+    Text[ slovak ] = "Prázdna šablóna";
 };
 String STR_PSEUDOSHEET_TITLE
 {
@@ -2157,6 +2218,7 @@ String STR_PSEUDOSHEET_TITLE
     Text[ czech ] = "Titul";
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
+    Text[ slovak ] = "Titulok";
 };
 String STR_PSEUDOSHEET_SUBTITLE
 {
@@ -2189,6 +2251,7 @@ String STR_PSEUDOSHEET_SUBTITLE
     Text[ czech ] = "Podtitul";
     Text[ hebrew ] = "Untertitel";
     Text[ hindi ] = "अधीन शीर्षक";
+    Text[ slovak ] = "Podtitul";
 };
 String STR_PSEUDOSHEET_OUTLINE
 {
@@ -2221,6 +2284,7 @@ String STR_PSEUDOSHEET_OUTLINE
     Text[ czech ] = "Osnova";
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "बाहरी रूपरेखा";
+    Text[ slovak ] = "Osnova";
 };
 String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
 {
@@ -2253,6 +2317,7 @@ String STR_PSEUDOSHEET_BACKGROUNDOBJECTS
     Text[ czech ] = "Objekty pozadí";
     Text[ hebrew ] = "Hintergrundobjekte";
     Text[ hindi ] = "पृष्ठभाग वस्तु";
+    Text[ slovak ] = "Objekty pozadia";
 };
 String STR_PSEUDOSHEET_BACKGROUND
 {
@@ -2285,6 +2350,7 @@ String STR_PSEUDOSHEET_BACKGROUND
     Text[ czech ] = "Pozadí";
     Text[ hebrew ] = "‮רקע‬";
     Text[ hindi ] = "पृष्ठभाग";
+    Text[ slovak ] = "Pozadie";
 };
 String STR_PSEUDOSHEET_NOTES
 {
@@ -2317,6 +2383,7 @@ String STR_PSEUDOSHEET_NOTES
     Text[ czech ] = "Komentáře";
     Text[ hebrew ] = "‮הערות‬";
     Text[ hindi ] = "टिप्पणी";
+    Text[ slovak ] = "Poznámky";
 };
 String STR_GRAFOBJECTBARSHELL
 {
@@ -2346,6 +2413,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ czech ] = "Režim grafiky";
     Text[ hebrew ] = "Grafikmodus";
     Text[ hindi ] = "सुचित्र प्रकार";
+    Text[ slovak ] = "Grafický režim";
 };
 
 String STR_POWERPOINT_IMPORT
@@ -2376,6 +2444,7 @@ String STR_POWERPOINT_IMPORT
     Text[ czech ] = "Import z PowerPointu";
     Text[ hebrew ] = "PowerPoint Import";
     Text[ hindi ] = "पवरपोइन्ट आयात";
+    Text[ slovak ] = "Import z PowerPoint";
 };
 
 #ifdef STARIMAGE_AVAILABLE
@@ -2411,6 +2480,7 @@ String STR_PRESOBJ_IMAGE
     Text[ czech ] = "Dvojitým kliknutím přidáte obrázek";
     Text[ hebrew ] = "Bild durch Doppelklicken hinzufügen";
     Text[ hindi ] = "एक चित्र को जोड़ने केलिए डबल-क्लिक् करो";
+    Text[ slovak ] = "Dvojitým kliknutím pridáte obrázok";
 };
 #endif
 
@@ -2444,6 +2514,7 @@ String STR_POOLSHEET_ARROW
     Text[ czech ] = "Šipka";
     Text[ hebrew ] = "Pfeil";
     Text[ hindi ] = "तीर";
+    Text[ slovak ] = "Šípka";
 };
 
 
@@ -2477,6 +2548,7 @@ String STR_LOAD_DOC
     Text[ czech ] = "Načíst dokument";
     Text[ hebrew ] = "‮טעינת מסמך‬";
     Text[ hindi ] = "लेखपत्र लोड करो";
+    Text[ slovak ] = "Načítavam dokument";
 };
 String STR_SAVE_DOC
 {
@@ -2508,6 +2580,7 @@ String STR_SAVE_DOC
     Text[ czech ] = "Uložit dokument";
     Text[ hebrew ] = "Dokument speichern";
     Text[ hindi ] = "लेखपत्र संचित करो";
+    Text[ slovak ] = "Ukladám dokument";
 };
 
 #define ERR_CODE( class, err )  (class | (err - ERROR_SD_BASE))
@@ -2544,6 +2617,7 @@ Resource RID_SD_ERRHDL
         Text[ czech ] = "Chyba formátu souboru na $(ARG1)(řádek,sloupec)";
         Text[ hebrew ] = "Formatfehler an Position $(ARG1)(Zeile,Spalte) in der Datei entdeckt";
         Text[ hindi ] = "$(ARG2)(पंक्ति,स्तंभ) में फाइल रचना का गलती हुआ ।";
+        Text[ slovak ] = "Chyba formátu súboru v $(ARG1)(riadok,stĺpec)";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
     {
@@ -2573,6 +2647,7 @@ Resource RID_SD_ERRHDL
         Text[ czech ] = "V souboru byla objevena chyba formátu v podřízeném dokumentu $(ARG1) na pozici $(ARG2)(řádek,sloupec)";
         Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         Text[ hindi ] = "अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) स्थान पर फाइल में रचना का गलती प्रकट हुआ ।";
+        Text[ slovak ] = "Objavená chyba formátu v súbore v poddokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec) ";
     };
     String ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL )
     {
@@ -2602,8 +2677,11 @@ Resource RID_SD_ERRHDL
         Text[ czech ] = "V souboru byla objevena chyba formátu v podřízeném dokumentu $(ARG1) na pozici $(ARG2)(řádek,sloupec)";
         Text[ hebrew ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
         Text[ hindi ] = "अधीन-लेखपत्र $(ARG1) में $(ARG2)(पंक्ति,स्तंभ) स्थान पर फाइल में रचना का गलती प्रकट हुआ ।";
+        Text[ slovak ] = "Objavená chyba formátu v súbore v poddokumente $(ARG1) na pozícii $(ARG2)(riadok,stĺpec) ";
     };
 };
+
+
 
 
 
