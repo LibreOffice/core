@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:50 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,13 +98,14 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SVX_NUMFMT_HXX //autogen
-#include <svx/numfmt.hxx>
-#endif
-
-#ifndef _TBLNUMFM_HXX
-#include <tblnumfm.hxx>
-#endif
+//CHINA001 #ifndef _SVX_NUMFMT_HXX //autogen
+//CHINA001 #include <svx/numfmt.hxx>
+//CHINA001 #endif
+#include <svx/flagsdef.hxx> //CHINA001
+#include <svtools/itemset.hxx>
+//CHINA001 #ifndef _TBLNUMFM_HXX
+//CHINA001 #include <tblnumfm.hxx>
+//CHINA001 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -127,7 +128,8 @@
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
 #endif
-
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -512,7 +514,12 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO, bUseAutomaticLanguage));
 
-        SwNumFmtDlg* pDlg = new SwNumFmtDlg(this, aCoreSet);
+        //CHINA001 SwNumFmtDlg* pDlg = new SwNumFmtDlg(this, aCoreSet);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aCoreSet, ResId( RC_DLG_SWNUMFMTDLG ));
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         if (RET_OK == pDlg->Execute())
         {
