@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.25 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-12 00:55:18 $
+ *  $Revision: 1.26 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-12 01:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,19 +177,19 @@ static BOOL QDColorsMatch ( const RGBColor  *pRGBColor1,                       
            )
     {
         return TRUE;
-    }
+    } // if
     else
     {
         return FALSE;
-    }} // QDColorsMatch
+    } // else} // QDColorsMatch
 
 // -----------------------------------------------------------------------
 
 static void GetBestSalColor ( const CTabPtr    pCTable,
                               const RGBColor  *pRGBColor,                              unsigned long   *pBestSalColor
-                            ){    unsigned short   nCTableSize     = 0;  unsigned long    nCTableIndex    = 0;  unsigned long    nRGBNewDistance = 0;  unsigned long    nRGBMinDistance = UID_MAX;    RGBColor        *pRGBNextColor   = NULL;   BOOL             bRGBColorsMatch = FALSE; *pBestSalColor = 0;           nCTableSize = pCTable->ctSize;        while ( ( nCTableIndex < nCTableSize ) && !( bRGBColorsMatch == FALSE ) )  {      pRGBNextColor = &pCTable->ctTable[nCTableIndex].rgb;
+                            ){    unsigned short   nCTableSize     = 0;  unsigned long    nCTableIndex    = 0;  unsigned long    nRGBNewDistance = 0;  unsigned long    nRGBMinDistance = UID_MAX;    RGBColor        *pRGBNextColor   = NULL;   BOOL             bRGBColorsMatch = FALSE; *pBestSalColor = 0;           nCTableSize = pCTable->ctSize;        while ( ( nCTableIndex < nCTableSize ) && ( bRGBColorsMatch == FALSE ) )   {      pRGBNextColor = &pCTable->ctTable[nCTableIndex].rgb;
         bRGBColorsMatch = QDColorsMatch( pRGBColor, pRGBNextColor );
-       if ( bRGBColorsMatch == TRUE )     {          *pBestSalColor= nCTableIndex;      } // if        else       {          nRGBNewDistance = RGBDistance ( pRGBColor, pRGBNextColor );                           if ( nRGBNewDistance < nRGBMinDistance )           {               nRGBMinDistance = nRGBNewDistance;                *pBestSalColor   = nCTableIndex;           } // if                               nCTableIndex++;        } //else   } // while} // GetBestSalColor    // -----------------------------------------------------------------------
+       if ( bRGBColorsMatch == TRUE )     {          *pBestSalColor= nCTableIndex;      } // if        else       {          nRGBNewDistance = RGBDistance( pRGBColor, pRGBNextColor );                        if ( nRGBNewDistance < nRGBMinDistance )           {               nRGBMinDistance = nRGBNewDistance;                *pBestSalColor   = nCTableIndex;           } // if                               nCTableIndex++;        } //else   } // while} // GetBestSalColor    // -----------------------------------------------------------------------
 
 static void GetCTableIndex ( const  PixMapPtr   pPixMap,
                              const RGBColor    *pRGBColor,                             SalColor          *rSalColor
@@ -197,6 +197,10 @@ static void GetCTableIndex ( const  PixMapPtr   pPixMap,
     if ( pCTable != NULL )
     {          GetBestSalColor( pCTable, pRGBColor, rSalColor );                                                                 if ( *rSalColor > pCTable->ctSize )        {          *rSalColor = 255;      } // if
     } // if} // GetCTableIndex    // -----------------------------------------------------------------------
+//
+// Convert RGB color to Sal color.
+//
+// -----------------------------------------------------------------------
 
 static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      pGDevice  = NULL;   SalColor   nSalColor = 0;                 pGDevice = *GetGDevice ( );
     if ( pGDevice != NULL )
@@ -206,13 +210,13 @@ static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      p
         pPixMap = *(*pGDevice).gdPMap;
 
         if ( pPixMap != NULL )
-        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor ( pPixMap, pRGBColor, &nSalColor );           } // if            else           {              GetCTableIndex ( pPixMap, pRGBColor, &nSalColor );         } // else
+        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor( pPixMap, pRGBColor, &nSalColor );            } // if            else           {              GetCTableIndex( pPixMap, pRGBColor, &nSalColor );          } // els
         } // if
     } // if                   return  nSalColor;} // RGBColor2SALColor// =======================================================================
 // =======================================================================
 static unsigned short IndexTo32BitDeviceColor ( SalColor  *rSalColor ){  unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
 
-    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rSalColor & kByteMask;   nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
+    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rSalColor   & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
 
 // -----------------------------------------------------------------------
 
@@ -234,7 +238,7 @@ static void Index2EightBitColor ( SalColor     *pSalColor,                     
     } // if} // Index2EightBitColor
 // -----------------------------------------------------------------------
 //
-// Here we will convert index SAL color to either 8-bit or 32-bit color.
+// Here we will convert SAL color to either 8-bit or 32-bit color.
 // For 16-bit color we shall let Mac OS compute the nearest color
 // from that of 32-bit color using the Euclidean 2-norm in RGB color
 // space.
@@ -1096,6 +1100,8 @@ void SalGraphics::DrawText( long                nX,
                             xub_StrLen          nLen
                           )
 {
+    // The implementation is not yet complete
+
     if ( ( pStr != NULL ) && ( nLen > 0 ) )
     {
         short        nFirstByte = 0;
@@ -1106,7 +1112,7 @@ void SalGraphics::DrawText( long                nX,
 
         ::MacDrawText( pTextBuf, nFirstByte, nByteCount );
     } // if
-}
+} // SalGraphics::DrawText
 
 // -----------------------------------------------------------------------
 
