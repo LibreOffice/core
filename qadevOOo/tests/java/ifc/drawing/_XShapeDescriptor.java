@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XShapeDescriptor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:32:51 $
+ *  last change:$Date: 2005-01-13 17:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ public class _XShapeDescriptor extends MultiMethodTest {
         if (stype.equals("com.sun.star.chart.ChartObject")) result=true;
         if (stype.equals("com.sun.star.drawing.ControlShape")) result=true;
         if (stype.equals("com.sun.star.drawing.ClosedBezierShape")) result=true;
+        if (stype.equals("com.sun.star.drawing.CaptionShape")) result=true;
 
         //Writer has its own behaviour it returns a 'FrameShape'
         if (stype.equals("FrameShape")) result=true;

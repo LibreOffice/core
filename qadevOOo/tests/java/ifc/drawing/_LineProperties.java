@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _LineProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:28:55 $
+ *  last change:$Date: 2005-01-13 17:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package ifc.drawing;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.drawing.LineDash;
 import lib.MultiPropertyTest;
 
 /**
@@ -105,6 +107,28 @@ public class _LineProperties extends MultiPropertyTest {
     public void _LineStartName() {
         log.println("Testing with custom Property tester");
         testProperty("LineStartName", LineTester) ;
+    }
+
+    public void _LineDash() {
+        LineDash aLineDash = new LineDash();
+        LineDash aLineDash2 = new LineDash();
+        aLineDash.DashLen = 5;
+        aLineDash2.DashLen = 1;
+        PropertyValue[] firstValue = new PropertyValue[2];
+        firstValue[0] = new PropertyValue();
+        firstValue[0].Name = "Name";
+        firstValue[0].Value = "Name1";
+        firstValue[1] = new PropertyValue();
+        firstValue[1].Name = "LineDash";
+        firstValue[1].Value = aLineDash;
+        PropertyValue[] secondValue = new PropertyValue[2];
+        secondValue[0] = new PropertyValue();
+        secondValue[0].Name = "Name";
+        secondValue[0].Value = "Name2";
+        secondValue[1] = new PropertyValue();
+        secondValue[1].Name = "LineDash";
+        secondValue[1].Value = aLineDash2;
+        testProperty("LineDash",firstValue,secondValue);
     }
 }
 
