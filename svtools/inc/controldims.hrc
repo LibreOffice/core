@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controldims.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-22 09:45:32 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #define RSC_SP_GRP_SPACE_Y                  6
 #define RSC_SP_TXT_SPACE_X                  5       // spacing between text paragraphs
 #define RSC_SP_TXT_SPACE_Y                  7
+#define RSC_SP_CHK_TEXTINDENT               8       // x indent of text aligned to checkbox title
 
 // dialog inner border
 #define RSC_SP_DLG_INNERBORDER_LEFT         6
