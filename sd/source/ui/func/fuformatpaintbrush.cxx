@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuformatpaintbrush.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:09:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 10:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ BOOL FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
     SdFormatClipboard* pFormatClipboard = 0;
     if(pViewShell)
         pFormatClipboard = pViewShell->GetDocSh()->pFormatClipboard;
-    if( pFormatClipboard && pView && pView->HasMarked() )
+    if( pFormatClipboard && pView && pView->AreObjectsMarked() )
     {
         bool bNoCharacterFormats = false;
         bool bNoParagraphFormats = false;
