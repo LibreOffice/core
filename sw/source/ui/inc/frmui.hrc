@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 10:05:17 $
+ *  last change: $Author: os $ $Date: 2002-08-23 13:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,9 @@
 #define STR_REL_PG_BOTTOM      (STR_FRMDLG_BEGIN + 57)
 #define STR_REL_FRM_TOP        (STR_FRMDLG_BEGIN + 58)
 #define STR_REL_FRM_BOTTOM     (STR_FRMDLG_BEGIN + 59)
+#define STR_FROMRIGHT          (STR_FRMDLG_BEGIN + 60)
 
-#define FRMDLG_ACT_END          STR_REL_FRM_BOTTOM
+#define FRMDLG_ACT_END          STR_FROMBOTTOM
 
 #if FRMDLG_ACT_END > RC_FRMDLG_END
 #error Resource-Id Ueberlauf in #file, #line

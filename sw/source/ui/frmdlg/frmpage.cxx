@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-08-22 10:31:36 $
+ *  last change: $Author: os $ $Date: 2002-08-23 13:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,35 +588,46 @@ void lcl_SetTwipValue(MetricField& rMetric, long nValue)
 /* -----------------------------20.08.2002 16:12------------------------------
 
  ---------------------------------------------------------------------------*/
-USHORT lcl_ChangeResIdToVertical(USHORT nResId)
+USHORT lcl_ChangeResIdToVerticalOrRTL(USHORT nResId, BOOL bVertical, BOOL bRTL)
 {
     //exchange horizontal strings with vertical strings and vice versa
     ResIdPair_Impl aHoriVertIds[] =
     {
         {STR_LEFT,           STR_TOP},
         {STR_RIGHT,          STR_BOTTOM},
+        {STR_FROMTOP,        STR_FROMLEFT},
         {STR_CENTER_HORI,    STR_CENTER_VERT},
-        {STR_FROMLEFT,       STR_FROMTOP},
         {STR_REL_PG_LEFT,    STR_REL_PG_TOP},
         {STR_REL_PG_RIGHT,   STR_REL_PG_BOTTOM} ,
         {STR_REL_FRM_LEFT,   STR_REL_FRM_TOP},
         {STR_REL_FRM_RIGHT,  STR_REL_FRM_BOTTOM},
         {0, 0}
     };
-    USHORT nIndex = 0;
-    while(aHoriVertIds[nIndex].nHori)
+    //special handling of STR_FROMLEFT
+    if(STR_FROMLEFT == nResId)
     {
-        if(aHoriVertIds[nIndex].nHori == nResId)
+        nResId = bVertical ?
+            bRTL ? STR_FROMBOTTOM : STR_FROMTOP :
+            bRTL ? STR_FROMRIGHT : STR_FROMLEFT;
+        return nResId;
+    }
+    if(bVertical)
+    {
+        USHORT nIndex = 0;
+        while(aHoriVertIds[nIndex].nHori)
         {
-            nResId = aHoriVertIds[nIndex].nVert;
-            break;
+            if(aHoriVertIds[nIndex].nHori == nResId)
+            {
+                nResId = aHoriVertIds[nIndex].nVert;
+                break;
+            }
+            else if(aHoriVertIds[nIndex].nVert == nResId)
+            {
+                nResId = aHoriVertIds[nIndex].nHori;
+                break;
+            }
+            nIndex++;
         }
-        else if(aHoriVertIds[nIndex].nVert == nResId)
-        {
-            nResId = aHoriVertIds[nIndex].nHori;
-            break;
-        }
-        nIndex++;
     }
     return nResId;
 }
@@ -662,6 +673,7 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     bFormat(FALSE),
     bVerticalChanged(FALSE),
     bIsVerticalFrame(FALSE),
+    bIsInRightToLeft(FALSE),
     bNew(TRUE),
     nDlgType(0),
     nUpperBorder(0),
@@ -764,7 +776,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             aAnchorAtFrameRB.Hide();
-        if(!bVerticalChanged && pSh->IsFrmInVertical())
+        if(!bVerticalChanged && pSh->IsFrmInVertical(bIsInRightToLeft))
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
@@ -1204,8 +1216,7 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
 //      if (!bFormat || (pMap[i].nStrId != STR_FROMLEFT && pMap[i].nStrId != STR_FROMTOP))
         {
             USHORT nResId = aMirrorPagesCB.IsChecked() ? pMap[i].nMirrorStrId : pMap[i].nStrId;
-            if(bIsVerticalFrame)
-                nResId = lcl_ChangeResIdToVertical(nResId);
+            nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
             String sEntry(SW_RES(nResId));
             sEntry.EraseAllChars( '~' );
             if (rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
@@ -1258,8 +1269,7 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                         {
                             USHORT nResId = aAsCharRelationMap[nRelPos].nStrId;
 
-                            if(bIsVerticalFrame)
-                                nResId = lcl_ChangeResIdToVertical(nResId);
+                            nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
                             String sEntry(SW_RES(nResId));
                             USHORT nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
@@ -1305,8 +1315,7 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
                         if (aRelationMap[nRelPos].nLBRelation == nBit)
                         {
                             USHORT nResId = aMirrorPagesCB.IsChecked() ? aRelationMap[nRelPos].nMirrorStrId : aRelationMap[nRelPos].nStrId;
-                            if(bIsVerticalFrame)
-                                nResId = lcl_ChangeResIdToVertical(nResId);
+                            nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
                             String sEntry(SW_RES(nResId));
                             USHORT nPos = rLB.InsertEntry(sEntry);
                             rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
