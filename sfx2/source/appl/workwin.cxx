@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include "stbmgr.hxx"
 #include "sfxresid.hxx"
 #include <vcl/taskpanelist.hxx>
+#include "objsh.hxx"
 
 DBG_NAME(SfxWorkWindow);
 
@@ -286,6 +287,11 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm )
     , pFrame( pFrm )
 {
     pConfigShell = pFrm->GetCurrentViewFrame();
+    if ( pConfigShell && pConfigShell->GetObjectShell() )
+    {
+        bShowStatusBar = ( !pConfigShell->GetObjectShell()->IsInPlaceActive() );
+        bDockingAllowed = bShowStatusBar;
+    }
 
     // Die ben"otigten SplitWindows (je eins f"ur jede Seite) werden erzeugt
     for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
@@ -349,7 +355,8 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     nOrigMode( 0 ),
     pConfigShell( 0 ),
     pActiveChild( 0 ),
-    bIsFullScreen( FALSE )
+    bIsFullScreen( FALSE ),
+    bShowStatusBar( TRUE )
 {
     DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "Keine Bindings!");
@@ -1550,7 +1557,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 //--------------------------------------------------------------------
 void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBindings& rBindings )
 {
-    if ( rResId.GetId() )
+    if ( rResId.GetId() && bShowStatusBar )
     {
         aStatBar.nId = rResId.GetId();
         aStatBar.pShell = pSh;
@@ -1560,7 +1567,7 @@ void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBi
 
 void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 {
-    if ( aStatBar.bTemp != bSet )
+    if ( aStatBar.bTemp != bSet && bShowStatusBar )
     {
         BOOL bOn = FALSE;
         SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
@@ -1642,7 +1649,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
-    if ( aStatBar.nId && IsDockingAllowed() &&
+    if ( aStatBar.nId && IsDockingAllowed() && bShowStatusBar &&
             ( aStatBar.bOn && !bIsFullScreen && ( !pTbxCfg || pTbxCfg->IsStatusBarVisible() ) || aStatBar.bTemp ) )
     {
         if ( aStatBar.nId != nActId || aStatBar.pStatusBar && aStatBar.pStatusBar->GetBindings_Impl() != aStatBar.pBindings )
