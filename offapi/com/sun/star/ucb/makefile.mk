@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: sb $ $Date: 2001-04-24 15:23:37 $
+#   last change: $Author: kso $ $Date: 2001-04-27 08:19:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,8 @@ IDLFILES=\
     CachedDynamicResultSet.idl\
     CachedDynamicResultSetStub.idl\
     CHAOSProgressStart.idl\
+    ChaosContent.idl
+    ChaosContentProvider.idl
     Command.idl\
     CommandAbortedException.idl\
     CommandInfo.idl\
@@ -160,6 +162,7 @@ IDLFILES=\
     PersistentPropertySet.idl\
     PostCommandArgument.idl\
     Priority.idl\
+    PropertiesManager.idl\
     PropertyMatcherFactory.idl\
     PropertyValueInfo.idl\
     PropertyValueState.idl\
