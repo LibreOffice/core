@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 15:17:57 $
+ *  last change: $Author: pb $ $Date: 2002-07-31 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,7 +1749,7 @@
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Motif</desc>
+							<desc xml:lang="en-US">X Window</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -1937,7 +1937,7 @@
 					<!-- UIHints: Tools  Options - General  View  [Section] Options -->
 					<value>true</value>
 					<info>
-						<desc xml:lang="en-US">Automatic selection while moving the mouse on a menu (True)</desc>
+						<desc xml:lang="en-US">Automatic selection while moving the mouse over a menu (True)</desc>
 						<label xml:lang="en-US">Menu follows mouse pointer</label>
 					</info>
 				</prop>
@@ -4029,7 +4029,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search for whole words only</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsBackwards" oor:type="xs:boolean">
@@ -4039,7 +4039,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search backwards</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsUseRegularExpression" oor:type="xs:boolean">
@@ -4049,7 +4049,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search with the use of regular expression</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsSearchForStyles" oor:type="xs:boolean">
@@ -4059,7 +4059,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search for styles only</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsSimilaritySearch" oor:type="xs:boolean">
@@ -4069,7 +4069,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search with similarity</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsMatchCase" oor:type="xs:boolean">
@@ -4079,7 +4079,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search case sensitive</desc>
 				</info>
 			</prop>
 			<prop oor:name="IsUseAsianOptions" oor:type="xs:boolean">
@@ -4089,7 +4089,7 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 				<!-- UIHints: Edit/Find & Replace -->
 				<value>false</value>
 				<info>
-					<desc xml:lang="en-US"/>
+					<desc xml:lang="en-US">Search with the use of asian options</desc>
 				</info>
 			</prop>
 			<group oor:name="Japanese">
