@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:19:17 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5323,7 +5323,10 @@ static const mso_CustomShape msoCloudCallout =
 // for each shapetype a bit of 1 is indicating that the shape is NOT filled by default
 static const sal_uInt16 mso_DefaultFillingTable[] =
 {
-    0x0000, 0xff18, 0x01ff, 0x0000, 0x0400, 0x01e0, 0x0000, 0x0000, 0xff00, 0xffff, 0xffff, 0x0600, 0x0000, 0x0000, 0x0000, 0x0000
+    0x0000, 0xff18, 0x01ff, 0x0000,
+    (0x0400 | 0x0800), 0x01e0, 0x0000, 0x0000, // #i28269# Added shape 75 (mso_sptPictureFrame)
+    0xff00, 0xffff, 0xffff, 0x0600,
+    0x0000, 0x0000, 0x0000, 0x0000
 };
 const sal_Bool IsCustomShapeFilledByDefault( MSO_SPT eSpType )
 {
@@ -5353,6 +5356,26 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
     }
     return nGluePointType;
 }
+
+// for each shapetype a bit of 1 is indicating that the shape is NOT stroked by default
+// #i28269#
+static const sal_uInt16 mso_DefaultStrokingTable[] =
+{
+    0x0000, 0x0000, 0x0000, 0x0000,
+    0x0800, 0x0000, 0x0000, 0x0000, // #i28269# Added shape 75 (mso_sptPictureFrame)
+    0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000
+};
+// #i28269#
+const sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
+{
+    sal_Bool bIsStrokedByDefault = sal_True;
+    sal_uInt32 i = (sal_uInt32)eSpType;
+    if ( i < 0x100 )
+        bIsStrokedByDefault = ( mso_DefaultStrokingTable[ i >> 4 ] & ( 1 << ( i & 0xf ) ) ) == 0;
+    return bIsStrokedByDefault;
+}
+
 static const sal_uInt16 msoSortFilledObjectsToBackTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0400, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
