@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: mtg $ $Date: 2001-05-16 11:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,17 +196,24 @@ class SmSymbolDialog;
 
 struct SmSymSetManager_Impl
 {
-    SmArraySymSet   SymbolSets;
-    String          aStreamName;
-    SmSym**         HashEntries;
-    USHORT          NoSymbolSets;
-    USHORT          NoHashEntries;
-    BOOL            Modified;
+    SmArraySymSet       SymbolSets;
+    SmSymSetManager &   rSymSetMgr;
+    SmSym**             HashEntries;
+    USHORT              NoSymbolSets;
+    USHORT              NoHashEntries;
+    BOOL                Modified;
+
+    SmSymSetManager_Impl( SmSymSetManager &rMgr, USHORT HashTableSize );
+    ~SmSymSetManager_Impl();
+
+    SmSymSetManager_Impl & operator = ( const SmSymSetManager_Impl &rImpl );
 };
 
 
 class SmSymSetManager : public SfxListener
 {
+    friend struct SmSymSetManager_Impl;
+
     SmSymSetManager_Impl *pImpl;
 
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
@@ -224,6 +231,7 @@ public:
     ~SmSymSetManager();
 
     SmSymSetManager&   operator = (const SmSymSetManager& rSymbolSetManager);
+
 
     USHORT      AddSymbolSet(SmSymSet* pSymbolSet);
     void        ChangeSymbolSet(SmSymSet* pSymbolSet);
