@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 15:36:13 $
+ *  last change: $Author: fs $ $Date: 2002-10-18 15:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,8 @@ namespace pcr
     //------------------------------------------------------------------
     void OFormattedNumericControl::SetFormatDescription(const FormatDescription& rDesc)
     {
+        sal_Bool bFallback = sal_True;
+
         if (rDesc.pSupplier)
         {
             TreatAsNumber(sal_True);
@@ -243,27 +245,33 @@ namespace pcr
             SetFormatKey(rDesc.nKey);
 
             const SvNumberformat* pEntry = GetFormatter()->GetEntry(GetFormatKey());
-            switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
+            DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
+            if ( pEntry )
             {
-                case NUMBERFORMAT_NUMBER:
-                case NUMBERFORMAT_CURRENCY:
-                case NUMBERFORMAT_SCIENTIFIC:
-                case NUMBERFORMAT_FRACTION:
-                case NUMBERFORMAT_PERCENT:
-                    m_nLastDecimalDigits = GetDecimalDigits();
-                    break;
-                case NUMBERFORMAT_DATETIME:
-                case NUMBERFORMAT_DATE:
-                case NUMBERFORMAT_TIME:
-                    m_nLastDecimalDigits = 7;
-                    break;
-                default:
-                    m_nLastDecimalDigits = 0;
-                    break;
+                switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
+                {
+                    case NUMBERFORMAT_NUMBER:
+                    case NUMBERFORMAT_CURRENCY:
+                    case NUMBERFORMAT_SCIENTIFIC:
+                    case NUMBERFORMAT_FRACTION:
+                    case NUMBERFORMAT_PERCENT:
+                        m_nLastDecimalDigits = GetDecimalDigits();
+                        break;
+                    case NUMBERFORMAT_DATETIME:
+                    case NUMBERFORMAT_DATE:
+                    case NUMBERFORMAT_TIME:
+                        m_nLastDecimalDigits = 7;
+                        break;
+                    default:
+                        m_nLastDecimalDigits = 0;
+                        break;
+                }
+                bFallback = sal_False;
             }
 
         }
-        else
+
+        if ( bFallback )
         {
             TreatAsNumber(sal_False);
             SetFormatter(NULL, sal_True);
@@ -279,6 +287,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/02/13 15:36:13  fs
+ *  #83843# SetFormatDescription: correctly calculate m_nLastDecimalDigits
+ *
  *  Revision 1.1  2001/01/12 11:34:02  fs
  *  initial checkin - outsourced the form property browser
  *
