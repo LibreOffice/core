@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _Settings.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2004-03-19 15:57:05 $
+ *  last change:$Date: 2004-12-10 17:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,10 +68,11 @@ import com.sun.star.i18n.XLocaleData;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import java.lang.reflect.Method;
 
-import java.awt.print.PrinterJob;
+//import java.awt.print.PrinterJob;
 
-import javax.print.PrintService;
+//import javax.print.PrintService;
 
 import lib.MultiPropertyTest;
 import lib.Status;
@@ -83,11 +84,40 @@ import lib.StatusException;
  */
 public class _Settings extends MultiPropertyTest {
     public void _PrinterName() {
-        PrintService[] services = PrinterJob.lookupPrintServices();
+        Object[] oServices = null;
+        Exception ex = null;
 
-        if (services.length > 1) {
-            testProperty("PrinterName", services[0].getName(),
-                         services[1].getName());
+        try {
+            Class cPrinterJob = Class.forName("java.awt.print.PrinterJob");
+            Method lookupMethod = cPrinterJob.getDeclaredMethod("lookupPrintServices", new Class[0]);
+            Object retValue = lookupMethod.invoke(cPrinterJob, new Object[0]);
+            oServices = (Object[])retValue;
+        }
+        catch(java.lang.ClassNotFoundException e) {
+            ex = e;
+        }
+        catch(java.lang.NoSuchMethodException e) {
+            ex = e;
+        }
+        catch(java.lang.IllegalAccessException e) {
+            ex = e;
+        }
+        catch(java.lang.reflect.InvocationTargetException e) {
+            ex = e;
+        }
+
+        if (ex != null) {
+            // get Java version:
+            String javaVersion = System.getProperty("java.version");
+            throw new StatusException(Status.failed(
+                "Cannot execute test with current Java version (Java 1.4 required) " +
+                javaVersion + ": " + ex.getMessage()));
+        }
+//        PrintService[] services = PrinterJob.lookupPrintServices();
+
+        if (oServices.length > 1) {
+            testProperty("PrinterName", getPrinterNameWithReflection(oServices[0]),
+                            getPrinterNameWithReflection(oServices[1]));
         } else {
             log.println(
                     "checking this property needs at least two printers to be installed on your system");
@@ -138,5 +168,25 @@ public class _Settings extends MultiPropertyTest {
         }
 
         return res;
+    }
+
+    private String getPrinterNameWithReflection(Object pService) {
+        String pName = null;
+        try {
+            Class cPrintService = Class.forName("javax.print.PrintService");
+            Method getNameMethod = cPrintService.getDeclaredMethod("getName", new Class[0]);
+            Object retValue = getNameMethod.invoke(pService, new Object[0]);
+            pName = (String)retValue;
+        }
+        // ignore all excptions: we already ran into one of these if Java is too old
+        catch(java.lang.ClassNotFoundException e) {
+        }
+        catch(java.lang.NoSuchMethodException e) {
+        }
+        catch(java.lang.IllegalAccessException e) {
+        }
+        catch(java.lang.reflect.InvocationTargetException e) {
+        }
+        return pName;
     }
 }
