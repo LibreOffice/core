@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:25:34 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,13 @@ namespace sdr
         class ObjectContact
         {
         protected:
-            // current DrawHierarchy
+            // All VOCs which are created using this OC, thus remembering this OC
+            // as a reference. All those VOCs need to be deleted when the OC goes down.
+            // Registering and de-registering is done in the VOC constructors/destructors.
+            ViewObjectContactList                           maVOCList;
+
+            // Current DrawHierarchy. This may be rebuilt from srcatch anytime and
+            // may not contain all registered objects from maVOCList.
             ViewObjectContactList                           maDrawHierarchy;
 
             // the ObjectAnimator if this View and the contained objects
@@ -138,6 +144,15 @@ namespace sdr
             // destructor no virtual function calls are allowed. To avoid this problem,
             // it is required to first call PrepareDelete().
             virtual void PrepareDelete();
+
+            // A new ViewObjectContact was created and shall be remembered.
+            void AddViewObjectContact(ViewObjectContact& rVOContact);
+
+            // A ViewObjectContact was deleted and shall be forgotten.
+            void RemoveViewObjectContact(ViewObjectContact& rVOContact);
+
+            // Test if ViewObjectContact is registered here
+            sal_Bool ContainsViewObjectContact(ViewObjectContact& rVOContact);
 
             // Clear Draw Hierarchy data.
             void ClearDrawHierarchy();
