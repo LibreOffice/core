@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:36:05 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+
+#include <malloc.h>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -471,10 +473,81 @@ static BOOL ImplTestSalJobSetup( SalInfoPrinter* pPrinter,
 {
     if ( pSetupData && pSetupData->mpDriverData )
     {
-        // Signature und Groesse muss uebereinstimmen, damit wir keine
-        // JobSetup's von anderen Systemen setzen
+        // signature and size must fit to avoid using
+        // JobSetups from a wrong system
+
+        BOOL bCheckdmSpec = FALSE;
+
+        // initialize dmSpecVersion with version from jobsetup
+        // this will be overwritten with driver's version if checking enabled
+        DEVMODE *pDevMode = SAL_DEVMODE( pSetupData );
+        LONG dmSpecVersion = pDevMode->dmSpecVersion;
+
+        if( pPrinter )
+        {
+            // #110800#, Fujitsu-Xerox ART driver crashes on Win98 when feeding a DEVMODE structure from the corresponding XP driver
+            // to workaround we have to check for the filename of the driver because multiple driver names are exported
+            HANDLE hPrn;
+            if ( !OpenPrinterA( (LPSTR)ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(), &hPrn, NULL ) )
+                return FALSE;
+
+            DWORD nRet;
+            DRIVER_INFO_2 *aDriverInfo;
+            DWORD bNeeded;
+            DWORD bReceived;
+            nRet = GetPrinterDriverA(hPrn, NULL, 2, NULL, 0, &bNeeded);
+            if( !nRet && GetLastError() == ERROR_INSUFFICIENT_BUFFER )
+                aDriverInfo = (DRIVER_INFO_2*) _alloca( bNeeded );
+            else
+            {
+                ClosePrinter( hPrn );
+                return FALSE;
+            }
+
+            nRet = GetPrinterDriverA(hPrn, NULL, 2, (LPBYTE)aDriverInfo, bNeeded, &bReceived);
+            if( nRet )
+            {
+                // #110800#, the buggy driver is called fxart4.drv (98) or fxart.dll (xp/2k) so fxart should be sufficient
+                if( strstr( strlwr(aDriverInfo->pDriverPath), "fxart" ) )
+                    bCheckdmSpec = TRUE;
+            }
+            else
+            {
+                ClosePrinter( hPrn );
+                return FALSE;
+            }
+
+            if( bCheckdmSpec )
+            {
+                long nSysJobSize = DocumentPropertiesA( 0, hPrn,
+                                                        (LPSTR)ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
+                                                        NULL, NULL, 0 );
+                if( nSysJobSize < 0 )
+                {
+                    ClosePrinter( hPrn );
+                    return FALSE;
+                }
+                DEVMODE *pBuffer = (DEVMODE*) _alloca( nSysJobSize );
+                nRet = DocumentPropertiesA( 0, hPrn,
+                                                (LPSTR)ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
+                                                pBuffer, NULL, DM_OUT_BUFFER );
+                if( nRet < 0 )
+                {
+                    ClosePrinter( hPrn );
+                    return FALSE;
+                }
+
+                // the spec version differs between the windows platforms, ie 98,NT,2000/XP
+                // this allows us to throw away printer settings from other platforms that might crash a buggy driver
+                dmSpecVersion = pBuffer->dmSpecVersion;
+            }
+
+            ClosePrinter( hPrn );
+        }
+
         if ( (pSetupData->mnSystem == JOBSETUP_SYSTEM_WINDOWS) &&
              (pSetupData->mnDriverDataLen > sizeof( SalDriverData )) &&
+             (dmSpecVersion == pDevMode->dmSpecVersion) &&
              (((SalDriverData*)(pSetupData->mpDriverData))->mnSysSignature == SAL_DRIVERDATA_SYSSIGN) )
             return TRUE;
         else if ( bDelete )
