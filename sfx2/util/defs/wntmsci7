@@ -7527,3 +7527,15 @@ _TI4?AVout_of_range@_STL@@
 ?_Destroy@_STL@@YAXU?$_Deque_iterator@VXMLNamespaces@@U?$_Nonconst_traits@VXMLNamespaces@@@_STL@@@1@0@Z
 ?__destroy@_STL@@YAXU?$_Deque_iterator@VXMLNamespaces@@U?$_Nonconst_traits@VXMLNamespaces@@@_STL@@@1@0PAVXMLNamespaces@@@Z
 ?__destroy_aux@_STL@@YAXU?$_Deque_iterator@VXMLNamespaces@@U?$_Nonconst_traits@VXMLNamespaces@@@_STL@@@1@0U__false_type@@@Z
+??_R0?AVCommandFailedException@ucb@star@sun@com@@@8
+??_R0?AVInteractiveIOException@ucb@star@sun@com@@@8
+?impl_DateTime_Object2Struct@SfxDocumentInfoObject@@SA?AUDateTime@util@star@sun@com@@ABV2@@Z
+?impl_DateTime_Struct2Object@SfxDocumentInfoObject@@SA?AVDateTime@@ABU2util@star@sun@com@@@Z
+?SetAutoStyleFilterIndex@SfxObjectShell@@QAEXG@Z
+?lcl_translateBasic2Uno@?%O:\SRC640\src\sfx2\source\doc\objmisc.cxx149396032@@YAXABVSbxVariableRef@@PAX@Z
+??1?$Reference@VXFastPropertySet@beans@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?IsHelpDocument@SfxObjectShell@@QBEEXZ
+?__query@?$Reference@VXFastPropertySet@beans@star@sun@com@@@uno@star@sun@com@@CAPAVXFastPropertySet@beans@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXStandaloneDocumentInfo@document@star@sun@com@@@uno@star@sun@com@@CAPAVXStandaloneDocumentInfo@document@345@PAVXInterface@2345@@Z
+??1WaitObject@@QAE@XZ
+?GetActiveFrame@SfxBindings@@QBE?BV?$Reference@VXFrame@frame@star@sun@com@@@uno@star@sun@com@@XZ
