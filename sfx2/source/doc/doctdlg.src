@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:31:27 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 09:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_traditional ] = "ι–‹ε•ζ–°ζ–‡δ»¶ζ¨£εΌ";
         Text[ arabic ] = "ήΗαΘ γΣΚδΟ ΜΟνΟ";
         Text[ greek ] = "Δημιουργία πρότυπου εγγράφου";
-        Text[ korean ] = "μƒ μ„μ‹νμΌ";
+        Text[ korean ] = "μƒ λ¬Έμ„ μ ν•";
         Text[ turkish ] = "Yeni belge ώablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nueva plantilla";
@@ -152,7 +152,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_traditional ] = "ζ¨£εΌ";
         Text[ arabic ] = "ήζΗαΘ";
         Text[ greek ] = "Πρότυπα";
-        Text[ korean ] = "μ„μ‹ νμΌ";
+        Text[ korean ] = "μ ν•";
         Text[ turkish ] = "ήablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plantillas";
@@ -302,6 +302,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "~Administrar...";
     };
 };
+
 
 
 
