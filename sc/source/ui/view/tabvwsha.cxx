@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-21 18:36:59 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,9 +344,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_AUTO_OUTLINE:
                 {
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-
-                    if (pDoc->GetChangeTrack()!=NULL || rMark.IsMultiMarked())
+                    if (pDoc->GetChangeTrack()!=NULL || GetViewData()->IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }

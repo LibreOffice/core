@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:30:04 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,8 @@ public:
 
     BOOL            SimpleColMarked();
     BOOL            SimpleRowMarked();
+
+    BOOL            IsMultiMarked();
 
     void            SetFillMode( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow );
     void            SetDragMode( USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:05:31 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,9 +1109,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
             case SID_FILTER:
             case SID_SPECIAL_FILTER:
                 {
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-
-                    if (rMark.IsMultiMarked())
+                    if (GetViewData()->IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1128,9 +1126,8 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //! move ReadOnly check to idl flags
 
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
                     if ( pDocSh->IsReadOnly() || pDoc->GetChangeTrack()!=NULL ||
-                            rMark.IsMultiMarked() )
+                            GetViewData()->IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1175,9 +1172,7 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
                     if ( nWhich == SID_AUTO_FILTER )
                     {
-                        ScMarkData& rMark = GetViewData()->GetMarkData();
-
-                        if (rMark.IsMultiMarked())
+                        if (GetViewData()->IsMultiMarked())
                         {
                             rSet.DisableItem( nWhich );
                         }

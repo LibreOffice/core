@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-03 13:10:30 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         ScDocument* pDoc = GetViewData()->GetDocument();
-                        BOOL bTheFlag=GetViewData()->GetMarkData().IsMultiMarked() ||
+                        BOOL bTheFlag=GetViewData()->IsMultiMarked() ||
                                     (pDoc->GetChangeTrack()!=NULL);
 
                         ScDeleteCellDlg* pDlg = new ScDeleteCellDlg(

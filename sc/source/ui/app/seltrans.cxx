@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:30:32 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,9 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             ScRange aRange;
             ScViewData* pViewData = pView->GetViewData();
             const ScMarkData& rMark = pViewData->GetMarkData();
-            if ( rMark.IsMarked() &&  pViewData->GetSimpleArea( aRange, FALSE ) )
+            //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
+            //  (GetSimpleArea modifies a local copy of MarkData)
+            if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) && pViewData->GetSimpleArea( aRange, TRUE ) )
             {
                 //  only for "real" selection, cursor alone isn't used
                 if ( aRange.aStart == aRange.aEnd )
@@ -301,18 +303,18 @@ void ScSelectionTransferObj::CreateCellData()
     if ( pView )
     {
         ScViewData* pViewData = pView->GetViewData();
-        const ScMarkData& rMark = pViewData->GetMarkData();
-        //! MarkToSimple?
+        ScMarkData aNewMark( pViewData->GetMarkData() );    // use local copy for MarkToSimple
+        aNewMark.MarkToSimple();
 
         //  similar to ScViewFunctionSet::BeginDrag
-        if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
+        if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
             ScDocShell* pDocSh = pViewData->GetDocShell();
 
             ScRange aSelRange;
-            rMark.GetMarkArea( aSelRange );
+            aNewMark.GetMarkArea( aSelRange );
             ScDocShellRef aDragShellRef;
-            if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &rMark ) )
+            if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew(NULL);
@@ -341,7 +343,7 @@ void ScSelectionTransferObj::CreateCellData()
                 SvEmbeddedObjectRef aPersistRef( aDragShellRef );
                 pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
 
-                pTransferObj->SetDragSource( pDocSh, rMark );
+                pTransferObj->SetDragSource( pDocSh, aNewMark );
 
                 pCellData = pTransferObj;
                 pCellData->acquire();       // keep ref count up - released in ForgetView

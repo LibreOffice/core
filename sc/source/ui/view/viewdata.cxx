@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:07:20 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,6 +757,20 @@ BOOL ScViewData::SimpleRowMarked()
         if (nStartCol==0 && nEndCol==MAXCOL)
             return TRUE;
 
+    return FALSE;
+}
+
+BOOL ScViewData::IsMultiMarked()
+{
+    // test for "real" multi selection, calling MarkToSimple on a local copy
+
+    if ( aMarkData.IsMultiMarked() )
+    {
+        ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+        aNewMark.MarkToSimple();
+        if ( aNewMark.IsMultiMarked() )
+            return TRUE;
+    }
     return FALSE;
 }
 

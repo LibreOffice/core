@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-16 12:15:35 $
+ *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,8 +453,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
         if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = TRUE;
-        ScMarkData& rMark = GetViewData()->GetMarkData();
-        if (rMark.IsMultiMarked())
+        if (GetViewData()->IsMultiMarked())
             bDisable = TRUE;
     }
 
@@ -794,9 +793,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 */
             case SID_OUTLINE_MAKE:
                 {
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-
-                    if (pDoc->GetChangeTrack()!=NULL || rMark.IsMultiMarked())
+                    if (pDoc->GetChangeTrack()!=NULL || GetViewData()->IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }
