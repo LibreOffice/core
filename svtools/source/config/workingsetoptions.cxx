@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workingsetoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-01 12:01:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ void SvtWorkingSetOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtWorkingSetOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\WorkingSet\\WindowList\"?" );
             seqValues[nProperty] >>= m_seqWindowList;
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtWorkingSetOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
