@@ -1,8 +1,10 @@
 mkdir: %_DEST%\inc%_EXT%\psprint
 
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\slb\apsp.lib %_DEST%\lib%_EXT%\apsp.lib
 
 ..\inc\psprint\*.hxx %_DEST%\inc%_EXT%\psprint\*.hxx
+..\source\fontsubset\sft.h %_DEST%\inc%_EXT%\psprint\sft.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crc32.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: crc32.h,v 1.1.1.1 2001-05-08 11:45:36 pl Exp $ */
+/* $Id: crc32.h,v 1.2 2002-08-02 12:11:20 pl Exp $ */
 
 /**
  *
@@ -68,12 +68,10 @@
  * @author Alexander Gelfenbain
  */
 
-#include <sys/types.h>
-
 #ifdef __cplusplus
 extern "C"{
 #endif
-    uint32 crc32(const void *ptr, size_t len);
+    sal_Int32 crc32(const void *ptr, sal_Int32 len);
 #ifdef __cplusplus
 }
 #endif

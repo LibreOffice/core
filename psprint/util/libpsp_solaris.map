@@ -4,7 +4,6 @@
         CloseTTFont;
         cmapAdd;
         CountTTCFonts;
-        crc32;
         CreateT3FromTTGlyphs;
         CreateT42FromTTGlyphs;
         CreateTTFromTTGlyphs;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:21:18 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ using namespace rtl;
  *  static helpers
  */
 
-inline sal_uInt16 getUInt16BE( const byte*& pBuffer )
+inline sal_uInt16 getUInt16BE( const sal_uInt8*& pBuffer )
 {
     sal_uInt16 nRet = (sal_uInt16)pBuffer[1] |
         (((sal_uInt16)pBuffer[0]) << 8);
@@ -319,7 +319,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
         }
         m_pMetrics->m_aPages[ nPage/8 ] |= (1 << ( nPage & 7 ));
         int i;
-        uint16 table[256], table_vert[256];
+        sal_uInt16 table[256], table_vert[256];
 
         for( i = 0; i < 256; i++ )
             table[ i ] = 256*nPage + i;
@@ -387,7 +387,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                 KernPair aPair;
                 for( i = 0; i < pImplTTFont->nkern; i++ )
                 {
-                    const byte* pTable = pImplTTFont->kerntables[i];
+                    const sal_uInt8* pTable = pImplTTFont->kerntables[i];
 
                     sal_uInt16 nVersion     = getUInt16BE( pTable );
                     sal_uInt16 nLength      = getUInt16BE( pTable );
@@ -431,12 +431,12 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
                         case 2:
 
                         {
-                            const byte* pSubTable = pTable;
+                            const sal_uInt8* pSubTable = pTable;
                             sal_uInt16 nRowWidth    = getUInt16BE( pTable );
                             sal_uInt16 nOfLeft      = getUInt16BE( pTable );
                             sal_uInt16 nOfRight     = getUInt16BE( pTable );
                             sal_uInt16 nOfArray     = getUInt16BE( pTable );
-                            const byte* pTmp = pSubTable + nOfLeft;
+                            const sal_uInt8* pTmp = pSubTable + nOfLeft;
                             sal_uInt16 nFirstLeft   = getUInt16BE( pTmp );
                             sal_uInt16 nLastLeft    = getUInt16BE( pTmp ) + nFirstLeft - 1;
                             pTmp = pSubTable + nOfRight;
@@ -1245,7 +1245,7 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
        )
     {
         OUStringBuffer aName( pNameRecord->slen/2 );
-        const byte* pNameBuffer = pNameRecord->sptr;
+        const sal_uInt8* pNameBuffer = pNameRecord->sptr;
         for(int n = 0; n < pNameRecord->slen/2; n++ )
             aName.append( (sal_Unicode)getUInt16BE( pNameBuffer ) );
         aValue = aName.makeStringAndClear();
@@ -1261,7 +1261,7 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
              *  while others code two bytes as a uint16 and swap to BE
              */
             OStringBuffer aName;
-            const byte* pNameBuffer = pNameRecord->sptr;
+            const sal_uInt8* pNameBuffer = pNameRecord->sptr;
             for(int n = 0; n < pNameRecord->slen/2; n++ )
             {
                 sal_Unicode aCode = (sal_Unicode)getUInt16BE( pNameBuffer );
@@ -3186,9 +3186,9 @@ bool PrintFontManager::createFontSubset(
     if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
-    uint16* pTempIDs = (uint16*)rtl_allocateMemory( sizeof(uint16)*nGlyphs );
+    sal_uInt16* pTempIDs = (sal_uInt16*)rtl_allocateMemory( sizeof(sal_uInt16)*nGlyphs );
     for( i = 0; i < nGlyphs; i++ )
-        pTempIDs[i] = (uint16)pGlyphIDs[i];
+        pTempIDs[i] = (sal_uInt16)pGlyphIDs[i];
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                               pTempIDs,
                                                               nGlyphs,

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-13 12:16:01 $
+#   last change: $Author: pl $ $Date: 2002-08-02 12:10:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,10 @@ dummy:
     @echo "Nothing to build for Mac OS X"
  
 .ELSE		# "$(OS)"=="MACOSX"
+.IF "$(OS)"=="WNT"
+LIB1TARGET= $(SLB)$/a$(TARGET).lib
+LIB1FILES=	$(SLB)$/fontsubset.lib
+.ELSE
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/fontman.lib			\
@@ -103,6 +107,7 @@ SHL1STDLIBS=$(UNOTOOLSLIB)		\
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
+.ENDIF      # "$(OS)"=="WNT"
 .ENDIF		# "$(OS)"=="MACOSX"
 
 # --- Targets ------------------------------------------------------------

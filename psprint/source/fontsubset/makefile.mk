@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: pl $ $Date: 2001-05-08 11:45:36 $
+#   last change: $Author: pl $ $Date: 2002-08-02 12:11:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,6 @@ SLOFILES=\
     $(SLO)$/list.obj		\
     $(SLO)$/sft.obj			\
     $(SLO)$/xlat.obj		\
-    $(SLO)$/crc32.obj		\
     $(SLO)$/ttcr.obj		\
     $(SLO)$/gsub.obj
 

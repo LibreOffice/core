@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-30 12:07:22 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.6 2001-11-30 12:07:22 hdu Exp $ */
+/* $Id: sft.h,v 1.7 2002-08-02 12:11:23 pl Exp $ */
 
 /**
 
@@ -99,9 +99,14 @@
 #ifndef __SUBFONT_H
 #define __SUBFONT_H
 
+#ifdef UNX
 #include <sys/types.h>
 #include <unistd.h>
+#endif
 #include <stdio.h>
+
+#include <sal/types.h>
+
 #ifndef NO_LIST
 #include "list.h"
 #endif
@@ -110,73 +115,20 @@
 extern "C" {
 #endif
 
-#ifdef __sparc
-#ifndef G_BIG_ENDIAN
-#define G_BIG_ENDIAN
-#endif
-#endif
-
-#if defined(__powerpc__) || defined(POWERPC)
-#ifndef G_BIG_ENDIAN
-#define G_BIG_ENDIAN
-#endif
-#endif
-
-#ifdef __i386
-#ifndef G_LITTLE_ENDIAN
-#define G_LITTLE_ENDIAN
-#endif
-#endif
-
-#ifdef __mips
-#ifndef G_BIG_ENDIAN
-#define G_BIG_ENDIAN
-#endif
-#endif
-
-#if !defined(G_BIG_ENDIAN) && !defined(G_LITTLE_ENDIAN)
-#error "Either G_BIG_ENDIAN or G_LITTLE_ENDIAN should be defined."
-#endif
-
-#if defined(G_BIG_ENDIAN) && defined(G_LITTLE_ENDIAN)
-#error "This is bizarre"
-#endif
-
-#if 0  /* These should be defined in the makefile */
-#define DEBUG      /* Generate debugging output */
-#define DEBUG2     /* More detailed debugging output */
-#define DEBUG3     /* Dump of TrueType outlines */
-#endif
-
-
-
-
 /*@{*/
 #define false 0               /**< standard false value */
 #define true  1               /**< standard true value */
 /*@}*/
 
-/*- XXX These should be dynamically configured */ /*FOLD00*/
-    typedef unsigned char         byte;
-    typedef unsigned char         uint8;
-    typedef signed char           int8;
-    typedef unsigned short int    uint16;
-    typedef short int             int16;
-
-    typedef unsigned int          uint32;
-    typedef int                   int32;
-    typedef unsigned long long    uint64;
-    typedef long long             int64;
-
 /*@{*/
-    typedef int16       F2Dot14;            /**< fixed: 2.14 */
-    typedef int32       F16Dot16;           /**< fixed: 16.16 */
+    typedef sal_Int16       F2Dot14;            /**< fixed: 2.14 */
+    typedef sal_Int32       F16Dot16;           /**< fixed: 16.16 */
 /*@}*/
 
     typedef struct {
-        uint16 s;
-        uint16 d;
-    } uint16pair;
+        sal_uInt16 s;
+        sal_uInt16 d;
+    } sal_uInt16pair;
 
 /** Return value of OpenTTFont() and CreateT3FromTTGlyphs() */
     enum SFErrCodes {
@@ -262,8 +214,8 @@ extern "C" {
 
 /** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
     typedef struct {
-        uint16 adv;                         /**< advance width or height            */
-        int16 sb;                           /**< left or top sidebearing            */
+        sal_uInt16 adv;                         /**< advance width or height            */
+        sal_Int16 sb;                           /**< left or top sidebearing            */
     } TTSimpleGlyphMetrics;
 
 
@@ -271,26 +223,26 @@ extern "C" {
 /** Structure used by the TrueType Creator and GetRawGlyphData() */
 
     typedef struct {
-        uint32 glyphID;                     /**< glyph ID                           */
-        uint16 nbytes;                      /**< number of bytes in glyph data      */
-        byte  *ptr;                         /**< pointer to glyph data              */
-        uint16 aw;                          /**< advance width                      */
-        int16  lsb;                         /**< left sidebearing                   */
-        uint16 compflag;                    /**< 0- if non-composite, 1- otherwise  */
-        uint16 npoints;                     /**< number of points                   */
-        uint16 ncontours;                   /**< number of contours                 */
+        sal_uInt32 glyphID;                     /**< glyph ID                           */
+        sal_uInt16 nbytes;                      /**< number of bytes in glyph data      */
+        sal_uInt8  *ptr;                         /**< pointer to glyph data              */
+        sal_uInt16 aw;                          /**< advance width                      */
+        sal_Int16  lsb;                         /**< left sidebearing                   */
+        sal_uInt16 compflag;                    /**< 0- if non-composite, 1- otherwise  */
+        sal_uInt16 npoints;                     /**< number of points                   */
+        sal_uInt16 ncontours;                   /**< number of contours                 */
         /* */
-        uint32 newID;                       /**< used internally by the TTCR        */
+        sal_uInt32 newID;                       /**< used internally by the TTCR        */
     } GlyphData;
 
 /** Structure used by the TrueType Creator and CreateTTFromTTGlyphs() */
     typedef struct {
-        uint16 platformID;                  /**< Platform ID                                            */
-        uint16 encodingID;                  /**< Platform-specific encoding ID                          */
-        uint16 languageID;                  /**< Language ID                                            */
-        uint16 nameID;                      /**< Name ID                                                */
-        uint16 slen;                        /**< String length in bytes                                 */
-        byte  *sptr;                        /**< Pointer to string data (not zero-terminated!)          */
+        sal_uInt16 platformID;                  /**< Platform ID                                            */
+        sal_uInt16 encodingID;                  /**< Platform-specific encoding ID                          */
+        sal_uInt16 languageID;                  /**< Language ID                                            */
+        sal_uInt16 nameID;                      /**< Name ID                                                */
+        sal_uInt16 slen;                        /**< String length in bytes                                 */
+        sal_uInt8  *sptr;                        /**< Pointer to string data (not zero-terminated!)          */
     } NameRecord;
 
 
@@ -299,7 +251,7 @@ extern "C" {
 
     typedef struct {
         char *family;             /**< family name                                             */
-        uint16 *ufamily;          /**< family name UCS2                                         */
+        sal_uInt16 *ufamily;          /**< family name UCS2                                         */
         char *subfamily;          /**< subfamily name                                          */
         char *psname;             /**< PostScript name                                         */
         int   weight;             /**< value of WeightClass or 0 if can't be determined        */
@@ -323,12 +275,12 @@ extern "C" {
         int   winDescent;         /**< descender metric for Windows                            */
         int   symbolEncoded;      /**< 1: MS symbol encoded 0: not symbol encoded              */
         int   rangeFlag;          /**< if set to 1 Unicode Range flags are applicable          */
-        uint32 ur1;               /**< bits 0 - 31 of Unicode Range flags                      */
-        uint32 ur2;               /**< bits 32 - 63 of Unicode Range flags                     */
-        uint32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
-        uint32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
-        byte   panose[10];        /**< PANOSE classification number                            */
-        uint16 typeFlags;         /**< type flags (copyright information)                      */
+        sal_uInt32 ur1;               /**< bits 0 - 31 of Unicode Range flags                      */
+        sal_uInt32 ur2;               /**< bits 32 - 63 of Unicode Range flags                     */
+        sal_uInt32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
+        sal_uInt32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
+        sal_uInt8   panose[10];        /**< PANOSE classification number                            */
+        sal_uInt16 typeFlags;         /**< type flags (copyright information)                      */
     } TTGlobalFontInfo;
 
 /** Structure used by KernGlyphs()      */
@@ -340,12 +292,12 @@ extern "C" {
 
 /** ControlPoint structure used by GetTTGlyphPoints() */
     typedef struct {
-        uint32 flags;             /**< 00000000 00000000 e0000000 bbbbbbbb */
+        sal_uInt32 flags;             /**< 00000000 00000000 e0000000 bbbbbbbb */
         /**< b - byte flags from the glyf array  */
         /**< e == 0 - regular point              */
         /**< e == 1 - end contour                */
-        int16 x;                  /**< X coordinate in EmSquare units      */
-        int16 y;                  /**< Y coordinate in EmSquare units      */
+        sal_Int16 x;                  /**< X coordinate in EmSquare units      */
+        sal_Int16 y;                  /**< Y coordinate in EmSquare units      */
     } ControlPoint;
 
     typedef struct _TrueTypeFont TrueTypeFont;
@@ -367,12 +319,17 @@ extern "C" {
 /**
  * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
+ * on WIN32 the font has to be provided as a memory buffer and length
  * @param  facenum - logical font number within a TTC file. This value is ignored
  *                   for TrueType fonts
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-    int  OpenTTFont(const char *fname, uint32 facenum, TrueTypeFont**);
+#if defined WIN32
+    int OpenTTFont(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
+#else
+    int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
+#endif
 
 /**
  * TrueTypeFont destructor. Deallocates the memory.
@@ -393,7 +350,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    int GetTTGlyphPoints(TrueTypeFont *ttf, uint32 glyphID, ControlPoint **pointArray);
+    int GetTTGlyphPoints(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray);
 
 /**
  * Extracts raw glyph data from the 'glyf' table and returns it in an allocated
@@ -407,7 +364,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, uint32 glyphID);
+    GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID);
 
 #ifndef NO_LIST
 /**
@@ -425,7 +382,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    int GetTTGlyphComponents(TrueTypeFont *ttf, uint32 glyphID, list glyphlist);
+    int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, list glyphlist);
 #endif
 
 /**
@@ -470,7 +427,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, uint16 *glyphArray, byte *encoding, int nGlyphs, int wmode);
+    int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, sal_uInt16 *glyphArray, sal_uInt8 *encoding, int nGlyphs, int wmode);
 #endif
 
 #ifndef NO_TTCR
@@ -496,12 +453,12 @@ extern "C" {
  */
     int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                               const char    *fname,
-                              uint16        *glyphArray,
-                              byte          *encoding,
+                              sal_uInt16        *glyphArray,
+                              sal_uInt8          *encoding,
                               int            nGlyphs,
                               int            nNameRecs,
                               NameRecord    *nr,
-                              uint32        flags);
+                              sal_uInt32        flags);
 #endif
 
 #ifndef NO_TYPE42
@@ -528,8 +485,8 @@ extern "C" {
     int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
                                FILE          *outf,
                                const char    *psname,
-                               uint16        *glyphArray,
-                               byte          *encoding,
+                               sal_uInt16        *glyphArray,
+                               sal_uInt8          *encoding,
                                int            nGlyphs);
 #endif
 
@@ -544,7 +501,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, uint16 *glyphArray, int nGlyphs, int mode);
+    TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, int mode);
 
 #ifndef NO_MAPPERS
 /**
@@ -561,7 +518,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont *ttf, uint16 firstChar, int nChars, int mode);
+    TTSimpleGlyphMetrics *GetTTSimpleCharMetrics(TrueTypeFont *ttf, sal_uInt16 firstChar, int nChars, int mode);
 
 /**
  * Maps a Unicode (UCS-2) string to a glyph array. Returns the number of glyphs in the array,
@@ -577,11 +534,11 @@ extern "C" {
  *
  * glyphIDs of TrueType fonts are 2 byte positive numbers. glyphID of 0 denotes a missing
  * glyph and traditionally defaults to an empty square.
- * glyphArray should be at least sizeof(uint16) * nchars bytes long. If glyphArray is NULL
+ * glyphArray should be at least sizeof(sal_uInt16) * nchars bytes long. If glyphArray is NULL
  * MapString() replaces the UCS-2 characters in str with glyphIDs.
  * @ingroup sft
  */
-    int MapString(TrueTypeFont *ttf, uint16 *str, int nchars, uint16 *glyphArray, int bvertical);
+    int MapString(TrueTypeFont *ttf, sal_uInt16 *str, int nchars, sal_uInt16 *glyphArray, int bvertical);
 
 /**
  * Maps a Unicode (UCS-2) character to a glyph ID and returns it. Missing glyph has
@@ -592,7 +549,7 @@ extern "C" {
  * @return glyph ID, if the character is missing in the font, the return value is 0.
  * @ingroup sft
  */
-    uint16 MapChar(TrueTypeFont *ttf, uint16 ch, int bvertical);
+    sal_uInt16 MapChar(TrueTypeFont *ttf, sal_uInt16 ch, int bvertical);
 
 /**
  * Returns 0 when the font does not substitute vertical glyphs
@@ -628,7 +585,7 @@ extern "C" {
  * @ingroup sft
  *
  */
-    void KernGlyphs(TrueTypeFont *ttf, uint16 *glyphs, int nglyphs, int wmode, KernData *kern);
+    void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern);
 
 /**
  * Returns nonzero if font is a symbol encoded font
@@ -638,32 +595,32 @@ extern "C" {
 /*- private definitions */ /*FOLD00*/
 
     struct _TrueTypeFont {
-        uint32 tag;
+        sal_uInt32 tag;
 
-        char   *fname;
-        off_t  fsize;
-        byte   *ptr;
+        char        *fname;
+        sal_Int32   fsize;
+        sal_uInt8   *ptr;
 
-        char   *psname;
-        char   *family;
-        uint16  *ufamily;
-        char   *subfamily;
+        char        *psname;
+        char        *family;
+        sal_uInt16  *ufamily;
+        char        *subfamily;
 
-        uint32 ntables;
-        uint32 *goffsets;
-        int    nglyphs;
-        int    unitsPerEm;
-        int    numberOfHMetrics;
-        int    numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
-        byte   *cmap;
-        int    cmapType;
-        uint16 (*mapper)(const byte *, uint16);       /* character to glyphID translation function                          */
-        void   **tables;                              /* array of pointers to tables                                        */
-        uint32 *tlens;                                /* array of table lengths                                             */
-        int    kerntype;                              /* Defined in the KernType enum                                       */
-        uint32 nkern;                                 /* number of kern subtables                                           */
-        byte   **kerntables;                          /* array of pointers to kern subtables                                */
-        void   *pGSubstitution;                       /* info provided by GSUB for UseGSUB()                                */
+        sal_uInt32  ntables;
+        sal_uInt32  *goffsets;
+        sal_uInt32  nglyphs;
+        sal_uInt32  unitsPerEm;
+        sal_uInt32  numberOfHMetrics;
+        sal_uInt32  numOfLongVerMetrics;                   /* if this number is not 0, font has vertical metrics information */
+        sal_uInt8   *cmap;
+        int         cmapType;
+        sal_uInt16 (*mapper)(const sal_uInt8 *, sal_uInt16);       /* character to glyphID translation function                          */
+        void        **tables;                              /* array of pointers to tables                                        */
+        sal_uInt32  *tlens;                                /* array of table lengths                                             */
+        int         kerntype;                              /* Defined in the KernType enum                                       */
+        sal_uInt32  nkern;                                 /* number of kern subtables                                           */
+        sal_uInt8   **kerntables;                          /* array of pointers to kern subtables                                */
+        void        *pGSubstitution;                       /* info provided by GSUB for UseGSUB()                                */
     };
 
 #ifdef __cplusplus

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlat.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:02 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: xlat.h,v 1.1.1.1 2001-05-08 11:46:02 pl Exp $ */
+/* $Id: xlat.h,v 1.2 2002-08-02 12:11:34 pl Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -79,17 +79,17 @@ extern "C" {
 
 #include "sft.h"
 
-    uint16 TranslateChar12(uint16);
-    uint16 TranslateChar13(uint16);
-    uint16 TranslateChar14(uint16);
-    uint16 TranslateChar15(uint16);
-    uint16 TranslateChar16(uint16);
+    sal_uInt16 TranslateChar12(sal_uInt16);
+    sal_uInt16 TranslateChar13(sal_uInt16);
+    sal_uInt16 TranslateChar14(sal_uInt16);
+    sal_uInt16 TranslateChar15(sal_uInt16);
+    sal_uInt16 TranslateChar16(sal_uInt16);
 
-    void TranslateString12(uint16 *, uint16 *, uint32);
-    void TranslateString13(uint16 *, uint16 *, uint32);
-    void TranslateString14(uint16 *, uint16 *, uint32);
-    void TranslateString15(uint16 *, uint16 *, uint32);
-    void TranslateString16(uint16 *, uint16 *, uint32);
+    void TranslateString12(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
+    void TranslateString13(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
+    void TranslateString14(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
+    void TranslateString15(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
+    void TranslateString16(sal_uInt16 *, sal_uInt16 *, sal_uInt32);
 
 #ifdef __cplusplus
 }

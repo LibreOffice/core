@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsub.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-29 08:49:19 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@ extern "C"
 #include <map>
 #include <algorithm>
 
-typedef uint32 ULONG;
-typedef uint16 USHORT;
-typedef uint8 FT_Byte;
+typedef sal_uInt32 ULONG;
+typedef sal_uInt16 USHORT;
+typedef sal_uInt8 FT_Byte;
 
 typedef std::map<USHORT,USHORT> GlyphSubstitution;
 
@@ -86,9 +86,9 @@ inline long NEXT_Long( const unsigned char* &p )
     return nVal;
 }
 
-inline long NEXT_UShort( const unsigned char* &p )
+inline USHORT NEXT_UShort( const unsigned char* &p )
 {
-    long nVal = (p[0]<<8) + p[1];
+    USHORT nVal = (p[0]<<8) + p[1];
     p += 2;
     return nVal;
 }
@@ -128,7 +128,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
     {
         const ULONG nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
         const USHORT nOfsScriptTable= NEXT_UShort( pScriptHeader );
-        if( (nTag != nRequestedScript) && (nRequestedScript != 0) )
+        if( (nTag != (USHORT)nRequestedScript) && (nRequestedScript != 0) )
             continue;
 
         const FT_Byte* pScriptTable     = pGsubBase + nOfsScriptList + nOfsScriptTable;
@@ -139,7 +139,7 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile, unsigned char* pGsubBase,
         {
             const ULONG nTag    = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
             const USHORT nOffset= NEXT_UShort( pScriptTable );
-            if( (nTag != nRequestedLangsys) && (nRequestedLangsys != 0) )
+            if( (nTag != (USHORT)nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
             nLangsysOffset = nOffset;
             break;

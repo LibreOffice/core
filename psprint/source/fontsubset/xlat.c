@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlat.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:02 $
+ *  last change: $Author: pl $ $Date: 2002-08-02 12:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: xlat.c,v 1.1.1.1 2001-05-08 11:46:02 pl Exp $
+/* $Id: xlat.c,v 1.2 2002-08-02 12:11:33 pl Exp $
  *
  * Data translation from Unicode to MS encodings
  * If the host system provides this functionality
@@ -80,10 +80,10 @@
 
 #define MISSING_CODE 0
 
-static uint16 xlat(uint16pair p[], uint32 n, uint16 src)
+static sal_uInt16 xlat(sal_uInt16pair p[], sal_uInt32 n, sal_uInt16 src)
 {
     int l = 0, r = n - 1, i;
-    uint16 t, res = MISSING_CODE;
+    sal_uInt16 t, res = MISSING_CODE;
 
     do {
         i = (l + r) >> 1;
@@ -99,35 +99,35 @@ static uint16 xlat(uint16pair p[], uint32 n, uint16 src)
     return res;
 }
 
-uint16 TranslateChar12(uint16 src)
+sal_uInt16 TranslateChar12(sal_uInt16 src)
 {
     return xlat(xlat_1_2, sizeof(xlat_1_2) / sizeof(xlat_1_2[0]), src);
 }
 
-uint16 TranslateChar13(uint16 src)
+sal_uInt16 TranslateChar13(sal_uInt16 src)
 {
     return xlat(xlat_1_3, sizeof(xlat_1_3) / sizeof(xlat_1_3[0]), src);
 }
 
-uint16 TranslateChar14(uint16 src)
+sal_uInt16 TranslateChar14(sal_uInt16 src)
 {
     return xlat(xlat_1_4, sizeof(xlat_1_4) / sizeof(xlat_1_4[0]), src);
 }
 
-uint16 TranslateChar15(uint16 src)
+sal_uInt16 TranslateChar15(sal_uInt16 src)
 {
     return xlat(xlat_1_5, sizeof(xlat_1_5) / sizeof(xlat_1_5[0]), src);
 }
 
-uint16 TranslateChar16(uint16 src)
+sal_uInt16 TranslateChar16(sal_uInt16 src)
 {
     return xlat(xlat_1_6, sizeof(xlat_1_6) / sizeof(xlat_1_5[0]), src);
 }
 
-void TranslateString12(uint16 *src, uint16 *dst, uint32 n)
+void TranslateString12(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    int i;
-    uint16 lastS, lastD;
+    sal_uInt32 i;
+    sal_uInt16 lastS, lastD;
 
     if (n == 0) return;
 
@@ -142,10 +142,10 @@ void TranslateString12(uint16 *src, uint16 *dst, uint32 n)
     }
 }
 
-void TranslateString13(uint16 *src, uint16 *dst, uint32 n)
+void TranslateString13(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    int i;
-    uint16 lastS, lastD;
+    sal_uInt32 i;
+    sal_uInt16 lastS, lastD;
 
     if (n == 0) return;
 
@@ -160,10 +160,10 @@ void TranslateString13(uint16 *src, uint16 *dst, uint32 n)
     }
 }
 
-void TranslateString14(uint16 *src, uint16 *dst, uint32 n)
+void TranslateString14(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    int i;
-    uint16 lastS, lastD;
+    sal_uInt32 i;
+    sal_uInt16 lastS, lastD;
 
     if (n == 0) return;
 
@@ -178,10 +178,10 @@ void TranslateString14(uint16 *src, uint16 *dst, uint32 n)
     }
 }
 
-void TranslateString15(uint16 *src, uint16 *dst, uint32 n)
+void TranslateString15(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    int i;
-    uint16 lastS, lastD;
+    sal_uInt32 i;
+    sal_uInt16 lastS, lastD;
 
     if (n == 0) return;
 
@@ -196,10 +196,10 @@ void TranslateString15(uint16 *src, uint16 *dst, uint32 n)
     }
 }
 
-void TranslateString16(uint16 *src, uint16 *dst, uint32 n)
+void TranslateString16(sal_uInt16 *src, sal_uInt16 *dst, sal_uInt32 n)
 {
-    int i;
-    uint16 lastS, lastD;
+    sal_uInt32 i;
+    sal_uInt16 lastS, lastD;
 
     if (n == 0) return;
 
