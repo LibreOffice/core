@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 17:07:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 12:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1533,7 +1533,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnListContextMenu, const CommandEvent*, _pEvent)
                     ::rtl::OUString::createFromAscii("ParentWindow"), 0,
                     makeAny(VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent())), PropertyState_DIRECT_VALUE);
                 // the initial selection
-                SvLBoxEntry* pTopLevelSelected = m_pTreeView->getListBox()->GetCurEntry();
+                SvLBoxEntry* pTopLevelSelected = pEntry;
                 while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))
                     pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
                 ::rtl::OUString sInitialSelection;
