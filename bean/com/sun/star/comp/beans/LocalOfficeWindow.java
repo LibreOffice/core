@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeWindow.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,50 +296,5 @@ public class LocalOfficeWindow
      * @return The system window type.
      */
     private native int getNativeWindowSystemType();
-
-        //---------------------------------------------------------------------------
-        /** Helper class to watch calls into OOo with a timeout.
-         */
-        class CallWatchThread extends Thread
-        {
-                Thread aWatchedThread;
-                long nTimeout;
-
-                CallWatchThread( long nTimeout )
-                {
-                        this.aWatchedThread = Thread.currentThread();
-                        this.nTimeout = nTimeout;
-                        start();
-                }
-
-                void cancel()
-                        throws java.lang.InterruptedException
-                {
-                        Thread aThread = aWatchedThread;
-                        aWatchedThread = null;
-                        stop();
-
-                        if ( aThread.interrupted() )
-                                throw new InterruptedException();
-                }
-
-                public void run()
-                {
-                        while ( aWatchedThread != null )
-                        {
-                                try { sleep( nTimeout ); }
-                                catch ( java.lang.InterruptedException aExc )
-                                {}
-
-                                //synchronized
-                                {
-                                        if ( aWatchedThread != null )
-                                        {
-                                                aWatchedThread.interrupt();
-                                        }
-                                }
-                        }
-                }
-        };
 
 }
