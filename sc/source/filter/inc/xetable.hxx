@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:08:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
+#endif
+#ifndef SC_XEFORMULA_HXX
+#include "xeformula.hxx"
 #endif
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"

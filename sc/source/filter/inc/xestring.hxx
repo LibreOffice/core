@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestring.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:08:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,11 +250,15 @@ public:
     /** Returns the byte count the whole string will take on export. */
     sal_uInt32          GetSize() const;
 
+    /** Returns the specified character from the (already encoded) string. */
+    sal_uInt16          GetChar( sal_uInt16 nCharIdx ) const;
     /** Returns a hash value for the string. */
     sal_uInt16          GetHash() const;
 
     // streaming --------------------------------------------------------------
 
+    /** Writes the string length field (1 byte or 2 bytes). */
+    void                WriteLenField( XclExpStream& rStrm ) const;
     /** Writes the string flags field (1 byte). */
     void                WriteFlagField( XclExpStream& rStrm ) const;
     /** Writes 8-bit or 16-bit length field and string flags field. */
@@ -362,10 +366,6 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclExpString& rStrin
     rString.Write( rStrm );
     return rStrm;
 }
-
-// ----------------------------------------------------------------------------
-
-typedef ScfRef< XclExpString > XclExpStringRef;
 
 // ============================================================================
 
