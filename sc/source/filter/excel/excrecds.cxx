@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2000-10-26 11:32:20 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,8 @@
 
 //---------------------------------------------------- class ExcETabNumBuffer -
 
-ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc )
+ExcETabNumBuffer::ExcETabNumBuffer( ScDocument& rDoc ) :
+    bEnableLog( FALSE )
 {
     nScCnt = rDoc.GetTableCount();
     pBuffer = nScCnt ? new UINT32[ nScCnt ] : NULL;
@@ -190,11 +191,17 @@ BOOL ExcETabNumBuffer::IsExportTable( UINT16 nScTab ) const
 
 UINT16 ExcETabNumBuffer::GetExcTable( UINT16 nScTab ) const
 {
-    if( nScTab < nScCnt )
-        return (UINT16)(pBuffer[ nScTab ] & EXC_TABBUF_MASKTAB);
-    return EXC_TABBUF_INVALID;
+    return (nScTab < nScCnt) ? (UINT16)(pBuffer[ nScTab ] & EXC_TABBUF_MASKTAB) : EXC_TABBUF_INVALID;
 }
 
+void ExcETabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
+{
+    if( bEnableLog )
+    {
+        Append( nExcFirst );
+        Append( nExcLast );
+    }
+}
 
 
 

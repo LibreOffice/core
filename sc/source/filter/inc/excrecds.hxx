@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-30 13:41:45 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,11 @@ class ScProgress;
 //---------------------------------------------------- class ExcETabNumBuffer -
 // - stores the correct Excel table number for each Calc table
 
-class ExcETabNumBuffer
+class ExcETabNumBuffer : private UINT16List
 {
 private:
+    BOOL                        bEnableLog;
+
     UINT16                      nScCnt;
     UINT16                      nExcCnt;
     UINT16                      nExtCnt;
@@ -141,6 +143,16 @@ public:
     inline UINT16               GetScTabCount() const       { return nScCnt; }
     inline UINT16               GetExcTabCount() const      { return nExcCnt; }
     inline UINT16               GetExternTabCount() const   { return nExtCnt; }
+
+// for change tracking:
+                                // append table number pair, called by formula compiler
+    void                        AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast );
+                                // enables logging of excel table nums in every 3D-ref
+    inline void                 StartRefLog()       { UINT16List::Clear(); bEnableLog = TRUE; }
+                                // disables logging
+    inline void                 EndRefLog()         { bEnableLog = FALSE; }
+                                // returns the index list
+    inline const UINT16List&    GetRefLog() const   { return *this; }
 };
 
 
