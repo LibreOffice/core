@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:46:56 $
+ *  last change:$Date: 2003-09-08 11:52:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,20 @@
 
 package mod._fwk;
 
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import lib.StatusException;
+
 import lib.Status;
-import com.sun.star.uno.XInterface;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
+import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.frame.XDesktop;
-import util.SOfficeFactory;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -135,8 +137,6 @@ public class Desktop extends TestCase {
 
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
-
-        String url = util.utils.getFullTestURL("XDocumentInsertable.sxw");
 
         try {
             log.println( "creating a text document" );

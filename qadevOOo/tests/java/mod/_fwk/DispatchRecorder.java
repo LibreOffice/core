@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:47:07 $
+ *  last change:$Date: 2003-09-08 11:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,15 @@
 
 package mod._fwk;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+import util.SysUtils;
+
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XDispatchRecorderSupplier;
@@ -69,13 +78,6 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-import util.SysUtils;
 
 /**
 * Test for object that implements the following interfaces :

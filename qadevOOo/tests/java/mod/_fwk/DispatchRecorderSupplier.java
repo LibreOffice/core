@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorderSupplier.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:47:18 $
+ *  last change:$Date: 2003-09-08 11:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,16 @@
 
 package mod._fwk;
 
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import lib.StatusException;
+
 import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
-import com.sun.star.text.XTextDocument;
-import util.SOfficeFactory;
-import com.sun.star.frame.XDispatchRecorder;
-import com.sun.star.uno.UnoRuntime;
 
 /**
 * Test for object that implements the following interfaces :
@@ -93,7 +91,6 @@ public class DispatchRecorderSupplier extends TestCase {
         PrintWriter log ) throws StatusException {
 
         XInterface oObj = null;
-        Object recorder = null;
 
         try {
             oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
