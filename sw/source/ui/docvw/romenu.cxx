@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:33:32 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,11 +598,11 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
             {
                 //Versuchen die Originalgrafik zu speichern.
                 SfxMedium aIn( sGrfName, STREAM_READ | STREAM_NOCREATE,
-                                TRUE, TRUE );
+                                TRUE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
                     SfxMedium aOut( sPath, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                            FALSE, FALSE );
+                                            FALSE);
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         *aOut.GetOutStream() << *aIn.GetInStream();
@@ -635,6 +635,9 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/06 13:33:32  jp
+      should changes: don't use IniManager
+
       Revision 1.1.1.1  2000/09/18 17:14:35  hr
       initial import
 

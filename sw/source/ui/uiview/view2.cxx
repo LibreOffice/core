@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:32:55 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,7 +1245,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
         }
         if ( !pFilter )
         {
-            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, TRUE, 0, 0 );
+            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, 0, 0 );
             SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
             ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, FALSE );
             if ( nErr )
@@ -1254,7 +1254,7 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                 pMed->SetFilter( pFilter );
         }
         else
-            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, TRUE, pFilter, 0);
+            pMed = new SfxMedium(rFileName, STREAM_READ, TRUE, pFilter, 0);
     }
     else
     {

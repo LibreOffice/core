@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ BOOL SwGlossaryHdl::ImportGlossaries( const String& rName )
     if( rName.Len() )
     {
         const SfxFilter* pFilter = 0;
-        SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, TRUE, TRUE, 0, 0 );
+        SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, TRUE, 0, 0 );
         SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFilterContainer() );
         if( !aMatcher.GuessFilter( *pMed, &pFilter, FALSE ) )
         {
@@ -1012,6 +1012,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:34  hr
+    initial import
+
     Revision 1.150  2000/09/18 16:05:22  willem.vandorp
     OpenOffice header added.
 

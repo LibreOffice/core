@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: os $ $Date: 2000-10-17 15:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm, BOOL bCIdTarget )
                 ASSERT( !bCIdTarget,
                         "CopyLocalFile: file->net: CId-Flag gesetzt" );
                 SfxMedium aMedium( *pDest, STREAM_WRITE | STREAM_SHARE_DENYNONE,
-                                    FALSE, FALSE );
+                                    FALSE );
 
                 SvFileStream aCpy( aMedium.GetPhysicalName(), STREAM_WRITE );
                 aCpy << aTmp;
@@ -484,7 +484,7 @@ BOOL Writer::CopyLocalFileToINet( String& rFileNm, BOOL bCIdTarget )
                     "CopyLocalFile: cid->file: CId-Flag nicht gesetzt" );
 
             SfxMedium aMedium( *pSrc, STREAM_READ | STREAM_SHARE_DENYNONE,
-                                FALSE, TRUE );
+                                FALSE );
             if( aMedium.GetInStream() )
             {
                 // Eine CID-URL wird in eine Datei kopiert, wenn eine
@@ -701,11 +701,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.2 2000-10-17 15:13:50 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.103  2000/09/18 16:04:55  willem.vandorp
       OpenOffice header added.
 
