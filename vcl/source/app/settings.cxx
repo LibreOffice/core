@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-26 17:05:22 $
+ *  last change: $Author: ssa $ $Date: 2002-09-08 15:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,7 +567,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mnOptions                   = rData.mnOptions;
     mnHighContrast              = rData.mnHighContrast;
     mnUseSystemUIFonts          = rData.mnUseSystemUIFonts;
-    mnLayoutRTL                 = rData.mnLayoutRTL;
     }
 
 // -----------------------------------------------------------------------
@@ -647,7 +646,6 @@ void ImplStyleData::SetStandardStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
-    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -747,7 +745,6 @@ void ImplStyleData::SetStandardOS2Styles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
-    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -831,7 +828,6 @@ void ImplStyleData::SetStandardMacStyles()
     mnMenuBarHeight             = 14;
     mnHighContrast              = 0;
     mnUseSystemUIFonts          = 0;
-    mnLayoutRTL                 = ImplInitLayoutRTL();
 }
 
 // -----------------------------------------------------------------------
@@ -863,17 +859,6 @@ void ImplStyleData::SetStandardUnixStyles()
     mnBorderSize                = 3;
 }
 
-// -----------------------------------------------------------------------
-
-USHORT ImplStyleData::ImplInitLayoutRTL()
-{
-    // TODO: read window layout from configuration
-    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
-    if( pEnv )
-        return 1;
-    else
-        return 0;
-}
 // -----------------------------------------------------------------------
 
 StyleSettings::StyleSettings()
@@ -1040,7 +1025,6 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnTabControlStyle         == rSet.mpData->mnTabControlStyle)          &&
          (mpData->mnHighContrast            == rSet.mpData->mnHighContrast)             &&
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
-         (mpData->mnLayoutRTL               == rSet.mpData->mnLayoutRTL)                &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
@@ -1999,6 +1983,49 @@ void AllSettings::SetUILanguage( LanguageType eLang  )
         delete mpData->mpUII18nHelper;
         mpData->mpUII18nHelper = NULL;
     }
+}
+
+// -----------------------------------------------------------------------
+
+BOOL AllSettings::GetLayoutRTL() const
+{
+    static const char* pEnv = getenv("SAL_RTL_ENABLED" );
+
+    LanguageType aLang = LANGUAGE_DONTKNOW;
+    BOOL bRTL = FALSE;
+
+    ImplSVData* pSVData = ImplGetSVData();
+    if ( pSVData->maAppData.mpSettings )
+        aLang = pSVData->maAppData.mpSettings->GetUILanguage();
+
+    switch( aLang )
+    {
+        // languages with right-to-left UI
+        case LANGUAGE_ARABIC:
+        case LANGUAGE_ARABIC_SAUDI_ARABIA:
+        case LANGUAGE_ARABIC_IRAQ:
+        case LANGUAGE_ARABIC_EGYPT:
+        case LANGUAGE_ARABIC_LIBYA:
+        case LANGUAGE_ARABIC_ALGERIA:
+        case LANGUAGE_ARABIC_MOROCCO:
+        case LANGUAGE_ARABIC_TUNISIA:
+        case LANGUAGE_ARABIC_OMAN:
+        case LANGUAGE_ARABIC_YEMEN:
+        case LANGUAGE_ARABIC_SYRIA:
+        case LANGUAGE_ARABIC_JORDAN:
+        case LANGUAGE_ARABIC_LEBANON:
+        case LANGUAGE_ARABIC_KUWAIT:
+        case LANGUAGE_ARABIC_UAE:
+        case LANGUAGE_ARABIC_BAHRAIN:
+        case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_HEBREW:
+            bRTL = TRUE;
+            break;
+
+        default:
+            break;
+    }
+    return (bRTL || pEnv);
 }
 
 // -----------------------------------------------------------------------
