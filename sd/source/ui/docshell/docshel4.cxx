@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-31 15:24:57 $
+ *  last change: $Author: ka $ $Date: 2001-01-08 15:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,7 @@ BOOL SdDrawDocShell::Load( SvStorage * pStor )
 void SdDrawDocShell::HandsOff()
 {
     SfxInPlaceObject::HandsOff();
+    xPictureStorage = SvStorageRef();
     pDocStor = NULL;
 }
 

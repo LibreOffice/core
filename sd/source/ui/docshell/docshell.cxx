@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:59:16 $
+ *  last change: $Author: ka $ $Date: 2001-01-08 15:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _SFX_DOCFILE_HXX //autogen
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
@@ -502,24 +505,66 @@ void SdDrawDocShell::ApplySlotFilter() const
 
 SvStream* SdDrawDocShell::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
 {
-    rStreamInfo.mbDeleteAfterUse = FALSE;
-    SvStorage* pStor = GetStorage();
+    SvStorage*  pStor = GetMedium()->GetStorage();
+    SvStream*   pRet = NULL;
 
-    if (pStor && !pDocStor)
+    if( pStor )
     {
-        if (pStor->IsStream(pStarDrawDoc))
+        if( rStreamInfo.maUserData.Len() &&
+            ( rStreamInfo.maUserData.GetToken( 0, ':' ) ==
+              String( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package" ) ) ) )
         {
-            BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
-            DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
-        }
+            const String aPicturePath( rStreamInfo.maUserData.GetToken( 1, ':' ) );
 
-        xDocStream =  pStor->OpenStream(pStarDrawDoc3, STREAM_READ | STREAM_WRITE | STREAM_TRUNC);
-        xDocStream->SetVersion(pStor->GetVersion());
-        xDocStream->SetKey( pStor->GetKey() ); // Passwort setzen
-        pDocStor = pStor;
+            // graphic from picture stream in picture storage in XML package
+            if( aPicturePath.GetTokenCount( '/' ) == 2 )
+            {
+                const String aPictureStreamName( aPicturePath.GetToken( 1, '/' ) );
+
+                if( !xPictureStorage.Is() )
+                {
+                    const String aPictureStorageName( aPicturePath.GetToken( 0, '/' ) );
+
+                    if( pStor->IsContained( aPictureStorageName ) &&
+                        pStor->IsStorage( aPictureStorageName )  )
+                    {
+                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ | STREAM_WRITE );
+                    }
+                }
+
+                if( xPictureStorage.Is() &&
+                    xPictureStorage->IsContained( aPictureStreamName ) &&
+                    xPictureStorage->IsStream( aPictureStreamName ) )
+                {
+                    pRet = xPictureStorage->OpenStream( aPictureStreamName );
+                }
+            }
+
+            rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
+        }
+        else
+        {
+            // graphic from plain binary document stream
+            if( !pDocStor )
+            {
+                if( pStor->IsStream( pStarDrawDoc ) )
+                {
+                    BOOL bOK = pStor->Rename(pStarDrawDoc, pStarDrawDoc3);
+                    DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
+                }
+
+                xDocStream =  pStor->OpenStream( pStarDrawDoc3, STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+                xDocStream->SetVersion( pStor->GetVersion() );
+                xDocStream->SetKey( pStor->GetKey() );
+                pDocStor = pStor;
+            }
+
+            pRet = xDocStream;
+            rStreamInfo.mbDeleteAfterUse = FALSE;
+        }
     }
 
-    return xDocStream;
+    return pRet;
 }
 
 void SdDrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
