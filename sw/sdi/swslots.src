@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-25 12:11:35 $
+ *  last change: $Author: os $ $Date: 2002-07-31 08:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9879,34 +9879,9 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
     SlotName[ thai ] = "Close preview";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SfxSlotInfo FN_TO_FOOTNOTE_AREA
+{
+    SlotName = "Zur Fuﬂnote springen";
+    SlotName[ english_us ] = "Jump to Footnote";
+};
 
