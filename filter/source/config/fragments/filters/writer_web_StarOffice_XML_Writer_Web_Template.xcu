@@ -1,0 +1,42 @@
+    <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>6200</value></prop>
+        <prop oor:name="Type"><value>writer_web_StarOffice_XML_Writer_Web_Template</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>CXMLVWEB</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="pl">%productname% %formatversion% - Szablon stron WWW</value>
+            <value xml:lang="hu">%productname% %formatversion% HTML-sablon</value>
+            <value xml:lang="ja">%productname% %formatversion% HTML ドキュメントテンプレート</value>
+            <value xml:lang="es">%productname% %formatversion% - Plantilla HTML</value>
+            <value xml:lang="tr">%productname% %formatversion% HTML Taslağı</value>
+            <value xml:lang="ru">%productname% %formatversion% Шаблон Web-страниц</value>
+            <value xml:lang="th">%productname% %formatversion% HTML Template</value>
+            <value xml:lang="x-comment">%productname% %formatversion% HTML-Dokumentvorlage</value>
+            <value xml:lang="ca">%productname% %formatversion% HTML Template</value>
+            <value xml:lang="el">%productname% %formatversion% Πρότυπο HTML</value>
+            <value xml:lang="zh-CN">%productname% %formatversion% HTML 文档样式</value>
+            <value xml:lang="pt">%productname% %formatversion% Modelo de páginas Web</value>
+            <value xml:lang="cs">HTML šablona %productname% %formatversion%</value>
+            <value xml:lang="fr">%productname% %formatversion% Modèle HTLM</value>
+            <value xml:lang="ar">Writer/Web 6.0 قالب</value>
+            <value xml:lang="zh-TW">%productname% %formatversion% HTML 文件樣式</value>
+            <value xml:lang="sl">%productname% %formatversion% Predloga HTML</value>
+            <value xml:lang="fi">Writer/Web 6.0 -mallipohja</value>
+            <value xml:lang="hi-IN">%productname% %formatversion% HTML Template</value>
+            <value xml:lang="en-US">%productname% %formatversion% HTML Template</value>
+            <value xml:lang="sk">HTML šablóna %productname% %formatversion%</value>
+            <value xml:lang="he">‮תבנית %productname% %formatversion% HTML‬</value>
+            <value xml:lang="sv">%productname% %formatversion% HTML-dokumentmall</value>
+            <value xml:lang="da">%productname% %formatversion% HTML-skabelon</value>
+            <value xml:lang="de">%productname% %formatversion% HTML-Dokumentvorlage</value>
+            <value xml:lang="ko">%productname% %formatversion% HTML 서식 파일</value>
+            <value xml:lang="nl">%productname% %formatversion% Sjabloon voor webpagina</value>
+            <value xml:lang="pt-BR">Writer/Web 6.0 Vorlage</value>
+            <value xml:lang="it">%productname% %formatversion% Modello di documento HTML</value>
+            <value xml:lang="x-translate">%productname% %formatversion% HTML-Dokumentvorlage</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH OWN</value></prop>
+    </node>
