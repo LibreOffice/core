@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:07:07 $
+ *  last change: $Author: obo $ $Date: 2002-08-05 20:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ String RID_DB_COMMON_START + 0
     Text[ greek ] = "Ολοκλήρωση";
     Text[ korean ] = "μ™„μ„±(~R)";
     Text[ turkish ] = "~Oluώtur";
-    Text[ catalan ] = "C~reate";
+    Text[ catalan ] = "Cr~ea";
     Text[ finnish ] = "~Luo";
     Text[ thai ] = "ΰΈª~ΰΈ£ΰΉ‰ΰΈ²ΰΈ‡";
 };
@@ -119,7 +119,7 @@ String RID_DB_COMMON_START + 1
     Text[ greek ] = "Ακύρωση";
     Text[ korean ] = "μ·¨μ†";
     Text[ turkish ] = "~έptal";
-    Text[ catalan ] = "Cancel·la";
+    Text[ catalan ] = "~Cancel.la";
     Text[ finnish ] = "~Peruuta";
     Text[ thai ] = "~ΰΈΆΰΈΰΉ€ΰΈ¥ΰΈ΄ΰΈ";
 };
@@ -146,7 +146,7 @@ String RID_DB_COMMON_START + 2
     Text[ greek ] = "<< Πίσω";
     Text[ korean ] = "<< μ΄μ „(~B)";
     Text[ turkish ] = "<< Ge~ri";
-    Text[ catalan ] = "<< ~Back";
+    Text[ catalan ] = "<< ~Enrere";
     Text[ finnish ] = "<< Edellinen";
     Text[ thai ] = "<< ~ΰΈΰΈ¥ΰΈ±ΰΈΰΉ„ΰΈ›";
 };
@@ -173,7 +173,7 @@ String RID_DB_COMMON_START + 3
     Text[ greek ] = "Συνέχεια >>";
     Text[ korean ] = "λ‹¤μ(~N) >>";
     Text[ turkish ] = "~έleri >>";
-    Text[ catalan ] = "~Next >>";
+    Text[ catalan ] = "~Segόent >>";
     Text[ finnish ] = "~Seuraava >>";
     Text[ thai ] = "~ΰΈ–ΰΈ±ΰΈ”ΰΉ„ΰΈ› >>";
 };
@@ -200,7 +200,7 @@ String RID_DB_COMMON_START + 4
     Text[ greek ] = "Βάση ~δεδομένων";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤(~D)";
     Text[ turkish ] = "~Veritabanύ";
-    Text[ catalan ] = "~Database";
+    Text[ catalan ] = "~Base de dades";
     Text[ finnish ] = "~Tietokanta";
     Text[ thai ] = "~ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -228,7 +228,7 @@ String RID_DB_COMMON_START + 5
     Text[ korean ] = " ν‹°μ—λΈ” λª…μΉ­(~T)";
     Text[ turkish ] = "~Tablo adύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Table name";
+    Text[ catalan ] = "Nom de la ~taula";
     Text[ finnish ] = "T~aulukon nimi";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­~ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -255,7 +255,7 @@ String RID_DB_COMMON_START + 6
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την εκτέλεση του AutoPilot. Το AutoPilot θα τερματιστεί.";
     Text[ korean ] = "μλ™ νμΌλΏμ μ‹¤ν–‰ μ¤‘ μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤. μλ™ νμΌλΏμ΄ μΆ…λ£λ©λ‹λ‹¤";
     Text[ turkish ] = "OtoPilot ηalύώtύrύlύrken bir hata oluώtu. Otopilot kapatύlacak.";
-    Text[ catalan ] = "An error occurred while running the AutoPilot. The AutoPilot will be terminated.";
+    Text[ catalan ] = "S'ha produοt un error en executar l'AutoPilot. L'AutoPilot s'aturarΰ.";
     Text[ finnish ] = "Automaattisen ohjauksen suorituksessa on ilmenny virhe. Automaattinen ohjaus lopetetaan.";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΉ‰ΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈΰΈ¥ΰΈ²ΰΈ”ΰΈ‚ΰΈ“ΰΈ°ΰΉƒΰΈΰΉ‰ΰΈ‡ΰΈ²ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄  ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ΰΈΰΈ°ΰΈΆΰΈΈΰΈ•ΰΈ΄";
 };
@@ -282,7 +282,7 @@ String RID_DB_COMMON_START + 7
     Text[ greek ] = "Κατά την εκτέλεση του ΑυτοΠιλότου δεν επιτρέπεται να είναι ανοιχτή κάποια φόρμα. Παρακαλώ κλείστε τη φόρμα.";
     Text[ korean ] = "μλ™ νμΌλΏ μ‹¤ν–‰ μ¤‘ μ–‘μ‹μ„ μ—΄μ–΄μ„λ” μ•λ©λ‹λ‹¤. μ–‘μ‹μ„ λ‹«μ•„ μ£Όμ‹­μ‹μ¤.";
     Text[ turkish ] = "OtoPilot ηalύώύrken aηύk form bulunmamalύdύr. Lόtfen formu kapatύn.";
-    Text[ catalan ] = "A form cannot be open while running the AutoPilots. Please close the form.";
+    Text[ catalan ] = "No es pot obrir cap formulari mentre s'executa l'AutoPilot. Si us plau, tanqueu el formulari.";
     Text[ finnish ] = "Lomake ei voi olla avoin automaattista ohjausta suoritettaessa. Sulje lomake.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉ€ΰΈ›ΰΈ΄ΰΈ”ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΈ‚ΰΈ“ΰΈ°ΰΈΰΈ³ΰΈ¥ΰΈ±ΰΈ‡ΰΉƒΰΈΰΉ‰ΰΈ‡ΰΈ²ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄  ΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΈ›ΰΈ΄ΰΈ”ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -309,7 +309,7 @@ String RID_DB_COMMON_START + 8
     Text[ greek ] = "Δεν υπάρχει εγκατεστημένη βάση δεδομένων. Απαιτείται τουλάχιστον μια βάση δεδομένων για να εκκινήσετε τον ΑυτοΠιλότο για φόρμες.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ„¤μΉλμ§€ μ•μ•μµλ‹λ‹¤. μµμ†ν• ν•λ‚ μ΄μƒμ λ°μ΄ν„°λ² μ΄μ¤κ°€ μμ–΄μ•Ό μ–‘μ‹μ„ μ„ν• μλ™ νμΌλΏμ΄ μ‹μ‘λ  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Kurulmuώ veritabanύ yok. Form OtoPilot'unu baώlatabilmek iηin en az bir veritabanύ mevcut olmalύdύr.";
-    Text[ catalan ] = "A database has not been installed. At least one database is required before the AutoPilot for forms can be started.";
+    Text[ catalan ] = "No s'ha instal.lat cap base de dades. Com a mνnim hi ha d'haver una base de dades per executar l'Autopilot per a formularis.";
     Text[ finnish ] = "Tietokantoja ei ole asennettu. Lomakkeiden automaattisen ohjauksen kδyttδminen edellyttδδ, ettδ jδrjestelmδδn on asennettu vδhintδδn yksi tietokanta.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉ„ΰΈ”ΰΉ‰ΰΈ•ΰΈ΄ΰΈ”ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΈ™ΰΉ‰ΰΈ­ΰΈΆΰΈ—ΰΈµΰΉΰΈªΰΈΈΰΈ”ΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈΰΉΰΈ­ΰΈ™ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄";
 };
@@ -337,7 +337,7 @@ String RID_DB_COMMON_START + 9
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤μ— ν‘κ°€ μ—†μµλ‹λ‹¤.";
     Text[ turkish ] = "Veritabanύ tablo iηermiyor.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "The database does not contain any tables.";
+    Text[ catalan ] = "La base de dades no contι cap taula.";
     Text[ finnish ] = "Tietokannassa ei ole taulukoita.";
     Text[ thai ] = "ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΉƒΰΈ” ΰΉ†ΰΉ€ΰΈ¥ΰΈΆ";
 };
@@ -365,7 +365,7 @@ String RID_DB_COMMON_START + 10
     Text[ korean ] = "μ΄ μ λª©μ΄ μ΄λ―Έ λ°μ΄ν„°λ² μ΄μ¤μ— μμµλ‹λ‹¤. λ‹¤λ¥Έ μ λª©μ„ μ„ νƒν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Bu baώlύk veritabanύnda zaten mevcut. Lόtfen baώka bir baώlύk adύ seηiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "This title already exists in the database. Please enter another name.";
+    Text[ catalan ] = "Aquest tνtol ja existeix. Introduοu un altre nom.";
     Text[ finnish ] = "Otsikko on jo tietokannassa. Anna toinen nimi.";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ΰΈ™ΰΈµΰΉ‰ΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉƒΰΈ™ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉΰΈ¥ΰΉ‰ΰΈ§ ΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΉƒΰΈªΰΉΰΈΰΈ·ΰΉΰΈ­ΰΈ­ΰΈ·ΰΉΰΈ™";
 };
@@ -392,7 +392,7 @@ String RID_DB_COMMON_START + 11
     Text[ greek ] = "Ο τίτλος δεν επιτρέπεται να περιέχει κενά ή ειδικούς χαρακτήρες.";
     Text[ korean ] = "μ λª©μ— κ³µλ°±μ΄λ‚ νΉμλ¬Έμκ°€ λ“¤μ–΄κ°€μ„λ” μ•λ©λ‹λ‹¤.";
     Text[ turkish ] = "Baώlύkta boώluk ya da φzel karakterler bulunmamalύdύr.";
-    Text[ catalan ] = "The title must not contain any spaces or special characters.";
+    Text[ catalan ] = "El tνtol no pot contenir espais o carΰcters especials.";
     Text[ finnish ] = "Otsikossa ei saa olla vδlilyφntejδ tai erikoismerkkejδ.";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΈ£ΰΈ°ΰΈΆΰΈ°ΰΈ«ΰΉΰΈ²ΰΈ‡ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°ΰΈΰΈ΄ΰΉ€ΰΈ¨ΰΈ©ΰΉƒΰΈ” ΰΉ†";
 };
@@ -421,7 +421,7 @@ String RID_DB_COMMON_START + 12
     Text[ greek ] = "Δεν ήταν δυνατόν να ενημερωθεί η υπηρεσία βάσης δεδομένων (com.sun.star.data.DatabaseEngine).";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ μ„λΉ„μ¤(com.sun.star.data.DatabaseEngine)λ¥Ό μΈμ¤ν„΄μ¤ν™”ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ turkish ] = "Veritabanύ hizmeti (com.sun.star.data.DatabaseEngine) oluώturulamadύ.";
-    Text[ catalan ] = "The database service (com.sun.data.DatabaseEngine) could not be instantiated.";
+    Text[ catalan ] = "No s'ha pogut instanciar el servei de base de dades (com.sun.data.DatabaseEngine).";
     Text[ finnish ] = "Tietokantapalvelun (com.sun.data.DatabaseEngine) kδyttφ ei onnistunut.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΉƒΰΈ«ΰΉ‰ΰΉ€ΰΈ«ΰΉ‡ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈΰΈ£ΰΈ΄ΰΈΰΈ²ΰΈ£ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥(com.sun.data.DatabaseEngine) ";
 };
@@ -449,7 +449,7 @@ String RID_DB_COMMON_START + 13
     Text[ arabic ] = "ΚΪΠΡ έΚΝ ΗαΜΟζα Γζ ΗαΗΣΚέΣΗΡ ΗαγΝΟΟ.";
     Text[ turkish ] = "Seηilen tablo ya da sorgu aηύlamadύ.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "The selected table or query could not be opened.";
+    Text[ catalan ] = "No s'ha pogut obrir la taula o consulta seleccionada.";
     Text[ finnish ] = "Valittua taulukkoa tai kyselyδ ei voitu avata.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉ€ΰΈ›ΰΈ΄ΰΈ”ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΈ—ΰΈµΰΉΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ„ΰΈ”ΰΉ‰";
 };
@@ -477,7 +477,7 @@ String RID_DB_COMMON_START + 14
     Text[ chinese_traditional ] = "η„΅ζ³•ι€£η·ε°θ³‡ζ–™εΊ«οΌ";
     Text[ turkish ] = "A Connection to the database could not be established";
     Text[ arabic ] = "A Connection to the database could not be established";
-    Text[ catalan ] = "A Connection to the database could not be established";
+    Text[ catalan ] = "No s'ha pogut establir connexiσ amb la base de dades";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΈ•ΰΉΰΈ­ΰΈΰΈ±ΰΈΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈ”ΰΉ‰";
 };
 
@@ -504,7 +504,7 @@ String RID_DB_COMMON_START + 20
     Text[ chinese_traditional ] = "θªªζ(~H)";
     Text[ turkish ] = "~Help";
     Text[ arabic ] = "~Help";
-    Text[ catalan ] = "~Help";
+    Text[ catalan ] = "~Ajuda";
     Text[ thai ] = "~ΰΈΰΉΰΈ§ΰΈΆΰΉ€ΰΈ«ΰΈ¥ΰΈ·ΰΈ­";
 };
 
@@ -526,6 +526,7 @@ String RID_DB_COMMON_START + 21
     Text[ turkish ] = "Dur";
     Text[ arabic ] = "ΕνήΗέ";
     Text[ thai ] = "~ΰΈ«ΰΈΆΰΈΈΰΈ”";
+    Text[ catalan ] = "~Atura";
 };
 
 
@@ -702,7 +703,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ korean ] = "μ¤ν† νμΌλΏ κ·Έλ£Ή μ”μ†";
     Text[ turkish ] = "OtoPilot Grup φπesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPilot Group Element";
+    Text[ catalan ] = "Element de grup de l'AutoPilot";
     Text[ finnish ] = "Automaattinen ryhmδelementtien ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ‡ΰΈ„ΰΉΰΈ›ΰΈ£ΰΈ°ΰΈΰΈ­ΰΈΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -730,7 +731,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ greek ] = "Η βάση δεδομένων δεν περιέχει πίνακα.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤μ— ν‘κ°€ ν¬ν•¨λμ–΄ μμ§€ μ•μµλ‹λ‹¤.";
     Text[ turkish ] = "Veritabanύ tablo iηermiyor.";
-    Text[ catalan ] = "The database does not contain any tables.";
+    Text[ catalan ] = "La base de dades no contι taules.";
     Text[ finnish ] = "Tietokannassa ei ole taulukoita.";
     Text[ thai ] = "ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΉƒΰΈ” ΰΉ†ΰΉ€ΰΈ¥ΰΈΆ";
 };
@@ -758,7 +759,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ greek ] = "Δημιουργία ομάδας";
     Text[ korean ] = "κ·Έλ£Ή μ™„μ„±";
     Text[ turkish ] = "Grup oluώtur";
-    Text[ catalan ] = "Create Group";
+    Text[ catalan ] = "Crea un grup";
     Text[ finnish ] = "Luo ryhmδ";
     Text[ thai ] = "ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅";
 };
@@ -787,7 +788,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ greek ] = ": Επιλογή πίνακα";
     Text[ korean ] = ": μ‹νΈ μ„ νƒ";
     Text[ turkish ] = ": Tablo seηimi";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ finnish ] = ": Taulukon valinta";
     Text[ thai ] = ": ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -816,7 +817,7 @@ String RID_DB_GROUP_WIZARD_START + 4
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ": ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -845,7 +846,7 @@ String RID_DB_GROUP_WIZARD_START + 5
     Text[ korean ] = ": ν‘μ¤€ ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Standart alan seηimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Default Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp per defecte";
     Text[ finnish ] = ": Kentδn oletusvalinta";
     Text[ thai ] = ": ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -874,7 +875,7 @@ String RID_DB_GROUP_WIZARD_START + 6
     Text[ korean ] = ": ν•„λ“ μμΉ";
     Text[ turkish ] = ": Alan deπerleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Field Value";
+    Text[ catalan ] = ": Valor de camp";
     Text[ finnish ] = ": Kentδn arvo";
     Text[ thai ] = ": ΰΈ„ΰΉΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -903,7 +904,7 @@ String RID_DB_GROUP_WIZARD_START + 7
     Text[ korean ] = ": λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“";
     Text[ turkish ] = ": Veritabanύ alanύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Database Field";
+    Text[ catalan ] = ": Camp de la base de dades";
     Text[ finnish ] = ": Tietokannan kenttδ";
     Text[ thai ] = ": ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -931,7 +932,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ greek ] = ": Δημιουργία ομάδας επιλογής";
     Text[ korean ] = ": μµμ… κ·Έλ£Ή μ μ‘";
     Text[ turkish ] = ": Seηenek grubu oluώtur";
-    Text[ catalan ] = ": Create Option Group";
+    Text[ catalan ] = ": Crea un grup d'opcions";
     Text[ finnish ] = ": Luo valintaryhmδ";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -959,7 +960,7 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ greek ] = "Παρακαλώ εισάγετε όλα τα πεδία επιλογών σε αυτόν τον διάλογο.";
     Text[ korean ] = "μ΄ λ€ν™”μƒμμ— λª¨λ“  μµμ… ν•„λ“λ¥Ό μ…λ ¥ν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Bu pencerede tόm seηenek alanlarύnύ giriniz.";
-    Text[ catalan ] = "Enter all Option Fields into this dialog.";
+    Text[ catalan ] = "Introduοu tots els camps d'opciσ en aquest diΰleg.";
     Text[ finnish ] = "Syφtδ kaikki valintaikkunan valintakentδt.";
     Text[ thai ] = "ΰΉƒΰΈªΰΉΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ—ΰΈ±ΰΉ‰ΰΈ‡ΰΈ«ΰΈ΅ΰΈ”ΰΉƒΰΈ™ΰΉ„ΰΈ”ΰΈ­ΰΈ°ΰΈ¥ΰΉ‡ΰΈ­ΰΈΰΈ™ΰΈµΰΉ‰";
 };
@@ -987,7 +988,7 @@ String RID_DB_GROUP_WIZARD_START + 10
     Text[ greek ] = "Ποιές ονομασίες θέλετε να ισχύσουν για τα πεδία επιλογών;";
     Text[ korean ] = "μµμ… ν•„λ“λ“¤μ€ μ–΄λ–¤ μ΄λ¦„μ„ κ°€μ§κΉμ”?";
     Text[ turkish ] = "Seηenek alanlarύna hangi adlarύ vermek istiyorsunuz?";
-    Text[ catalan ] = "Which names do you want to give the Option Fields?";
+    Text[ catalan ] = "Quins noms voleu donar als camps d'opcions?";
     Text[ finnish ] = "Miten haluat nimetδ valintakentδt?";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ„ΰΈ«ΰΈ™ΰΈ—ΰΈµΰΉΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΉƒΰΈ«ΰΉ‰ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ?";
 };
@@ -1015,7 +1016,7 @@ String RID_DB_GROUP_WIZARD_START + 11
     Text[ greek ] = "Πεδία επιλ~ογών";
     Text[ korean ] = "μµμ… ν•„λ“(~O)";
     Text[ turkish ] = "~Seηenek alanlarύ";
-    Text[ catalan ] = "~Option Fields";
+    Text[ catalan ] = "Camps d'~Opcions";
     Text[ finnish ] = "~Valintakentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥~ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -1043,7 +1044,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ greek ] = "Θέλετε να είναι επιλεγμένο (ως προεπιλογή) κάποιο πεδίο επιλογής;";
     Text[ korean ] = "μµμ… ν•„λ“λ¥Ό κΈ°λ³ΈμΌλ΅ μ„ νƒν• κΉμ”?";
     Text[ turkish ] = "Bir seηenek alanύ standart olarak seηili olsun mu?";
-    Text[ catalan ] = "Should one option field be selected as a default?";
+    Text[ catalan ] = "Hi ha d'haver un camp d'opciσ seleccionat per defecte?";
     Text[ finnish ] = "Valitaanko yksi valintakenttδ oletusarvoksi?";
     Text[ thai ] = "ΰΈΰΈ°ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
 };
@@ -1072,7 +1073,7 @@ String RID_DB_GROUP_WIZARD_START + 13
     Text[ korean ] = "μ, λ‹¤μκ³Ό κ°™μ΄:";
     Text[ turkish ] = "Evet, aώaπύdaki:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Yes, the following:";
+    Text[ catalan ] = "Sν, el segόent:";
     Text[ finnish ] = "Kyllδ, seuraavat:";
     Text[ thai ] = "ΰΉƒΰΈΰΉ  ΰΈ•ΰΉΰΈ­ΰΉ„ΰΈ›ΰΈ™ΰΈµΰΉ‰:";
 };
@@ -1100,7 +1101,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ greek ] = "Όχι, να μην είναι επιλεγμένο κάποιο πεδίο.";
     Text[ korean ] = "μ•„λ‹μ¤, ν•„λ“λ¥Ό ν•λ‚λ„ μ„ νƒν•μ§€ μ•μµλ‹λ‹¤.";
     Text[ turkish ] = "Hayύr, hiηbir alan seηili olmamalύdύr.";
-    Text[ catalan ] = "No, one particular field is not going to be selected.";
+    Text[ catalan ] = "No, no s'ha de seleccionar cap camp concret.";
     Text[ finnish ] = "Ei, valittavia kenttiδ ei ole.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉƒΰΈΰΉ  ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈΰΈ°ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -1129,7 +1130,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ korean ] = "μµμ…μ„ μ„ νƒν•λ©΄ μµμ… κ·Έλ£Ήμ— νΉμ •ν• κ°’μ΄ μ§€μ •λ©λ‹λ‹¤.";
     Text[ turkish ] = "Bir seηenek belirlendiπinde, seηenek grubuna belirli bir deπer atanύr.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "When you select an option, the option group is given a specific value.";
+    Text[ catalan ] = "Quan seleccioneu una opciσ, s'assignarΰ al grup d'opcions un valor determinat.";
     Text[ finnish ] = "Kun valitset valinnan, valintaryhmδlle mδδritetδδn tietty arvo.";
     Text[ thai ] = "ΰΉ€ΰΈ΅ΰΈ·ΰΉΰΈ­ΰΈ„ΰΈΈΰΈ“ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ‚ΰΈ­ΰΈ‡ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ°ΰΉƒΰΈ«ΰΉ‰ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈ‰ΰΈΰΈ²ΰΈ°";
 };
@@ -1157,7 +1158,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ greek ] = "Ποιά τιμή θέλετε να αντιστοιχεί σε κάθε επιλογή;";
     Text[ korean ] = "μ–΄λ κ°’μ„ κ° μµμ…μ— μ§€μ •ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Her bir seηeneπe hangi deπeri atamak istiyorsunuz?";
-    Text[ catalan ] = "Which value do you want to assign to each option?";
+    Text[ catalan ] = "Quin valor voleu assignar a cada opciσ?";
     Text[ finnish ] = "Minkδ arvot haluat antaa valinnoille?";
     Text[ thai ] = "ΰΈ„ΰΉΰΈ²ΰΉ„ΰΈ«ΰΈ™ΰΈ—ΰΈµΰΉΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”ΰΉƒΰΈ™ΰΉΰΈ•ΰΉΰΈ¥ΰΈ°ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ?";
 };
@@ -1185,7 +1186,7 @@ String RID_DB_GROUP_WIZARD_START + 17
     Text[ greek ] = "Πεδία επιλ~ογών";
     Text[ korean ] = "μµμ… ν•„λ“(~O)";
     Text[ turkish ] = "~Seηenek alanlarύ";
-    Text[ catalan ] = "~Option Fields";
+    Text[ catalan ] = "Camps d'~Opcions";
     Text[ finnish ] = "~Valintakentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥~ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -1213,7 +1214,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή της ομάδας επιλογών σε ένα πεδίο βάσης δεδομένων ή να την χρησιμοποιήσετε για κάποια μελλοντική ενέργει?";
     Text[ korean ] = "μµμ… κ·Έλ£Ήμ κ°’μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ— μ €μ¥ν•κ±°λ‚ λλ” μ°¨ν›„λ΅μ μ‘μ—…μ— μ‚¬μ©ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Seηenek alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da bu deπeri daha sonra yapύlacak bir iώlemde kullanabilirsiniz.";
-    Text[ catalan ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
+    Text[ catalan ] = "Podeu desar el valor del grup d'opcions en un camp de base de dades o utilitzar-lo per una acciσ posterior.";
     Text[ finnish ] = "Voit joko tallentaa valintaryhmδn arvon tietokannan kenttδδn tai kδyttδδ sitδ myφhemmδssδ toiminnossa.";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉΰΈΰΉ‡ΰΉƒΰΈΰΉ‰ΰΈ΅ΰΈ±ΰΈ™ΰΈªΰΈ³ΰΈ«ΰΈ£ΰΈ±ΰΈΰΈΰΈ²ΰΈ£ΰΈΰΈ£ΰΈ°ΰΈ—ΰΈ³ΰΈ•ΰΉΰΈ­ΰΈ΅ΰΈ²";
 };
@@ -1241,7 +1242,7 @@ String RID_DB_GROUP_WIZARD_START + 19
     Text[ greek ] = "Θέλετε να αποθηκευτεί η τιμή σε ένα πεδίο βάσης δεδομένων;";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ— κ°’μ„ μ €μ¥ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Deπeri bir veritabanύ alanύnda kaydetmek istiyor musunuz?";
-    Text[ catalan ] = "Do you want to save the value in a database field?";
+    Text[ catalan ] = "Voleu desar el valor en un camp de la base de dades?";
     Text[ finnish ] = "Haluatko tallentaa arvon tietokannan kenttδδn?";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
 };
@@ -1269,7 +1270,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ greek ] = "Ναι, στο ακόλουθο πεδίο βάσης δεδομένων :";
     Text[ korean ] = "μ, λ‹¤μ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ—:";
     Text[ turkish ] = "Evet, aώaπύdaki veritabanύ alanύnda kaydedebilirsiniz :";
-    Text[ catalan ] = "Yes, save it in the following database field:";
+    Text[ catalan ] = "Sν, el vull desar en el segόent camp:";
     Text[ finnish ] = "Kyllδ, tallenna arvo seuraavaan tietokannan kenttδδn:";
     Text[ thai ] = "ΰΉƒΰΈΰΉ  ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ΅ΰΈ±ΰΈ™ΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ•ΰΉΰΈ­ΰΉ„ΰΈ›ΰΈ™ΰΈµΰΉ‰:";
 };
@@ -1297,7 +1298,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ greek ] = "Όχι, θέλω να αποθηκευτεί η τιμή μόνο στην φόρμα.";
     Text[ korean ] = "μ•„λ‹μ¤, κ°’μ„ μ–‘μ‹μ— μ €μ¥ν•κ² μµλ‹λ‹¤.";
     Text[ turkish ] = "Hayύr, deπeri yalnύzca form iηinde kaydetmek istiyorum.";
-    Text[ catalan ] = "No, I only want to save the value in the form.";
+    Text[ catalan ] = "No, nomιs vull desar el valor al formulari.";
     Text[ finnish ] = "Ei, haluan tallentaa vain lomakkeen arvon.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉƒΰΈΰΉ  ΰΈ‰ΰΈ±ΰΈ™ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈΰΈµΰΈΆΰΈ‡ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΉƒΰΈ™ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΉ€ΰΈ—ΰΉΰΈ²ΰΈ™ΰΈ±ΰΉ‰ΰΈ™";
 };
@@ -1325,7 +1326,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ greek ] = "Επιλέξτε την επιγραφή για την ομάδα επιλογών σας";
     Text[ korean ] = "μµμ… κ·Έλ£Ήμ— μ–΄λ λΌλ²¨μ„ μ§€μ •ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Seηenek grubunuza hangi resim altyazύsύ verilsin?";
-    Text[ catalan ] = "Which caption is to be given to your option group?";
+    Text[ catalan ] = "Quin tνtol ha de tenir el grup d'opcions?";
     Text[ finnish ] = "Mikδ on valintaryhmδn kuvaotsikko?";
     Text[ thai ] = "ΰΈ„ΰΈ³ΰΈΰΈ£ΰΈ£ΰΈΆΰΈ²ΰΈΆΰΈ ΰΈ²ΰΈΰΉ„ΰΈ«ΰΈ™ΰΈ—ΰΈµΰΉΰΉƒΰΈ«ΰΉ‰ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ‚ΰΈ­ΰΈ‡ΰΈ„ΰΈΈΰΈ“?";
 };
@@ -1353,7 +1354,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ greek ] = "Αυτά ήταν τα δεδομένα που απαιτούνται για την δημιουργία της ομάδας επιλογών.";
     Text[ korean ] = "μ΄κ²ƒμ΄ μµμ… κ·Έλ£Ή λ§λ“¤κΈ°μ— ν•„μ”ν• λª¨λ“  μ‚¬ν•­μ΄μ—μµλ‹λ‹¤.";
     Text[ turkish ] = "Seηenek grubunun oluώturulmasύ iηin gereken tόm bilgiler bunlardύr.";
-    Text[ catalan ] = "These were all details needed to create the option group.";
+    Text[ catalan ] = "Aquests sσn tots els detalls necessaris per crear un grup d'opcions.";
     Text[ finnish ] = "Kaikki valintaryhmδn luontiin tarvittavat tiedot on nyt mδδritetty.";
     Text[ thai ] = "ΰΉ€ΰΈ«ΰΈ¥ΰΉΰΈ²ΰΈ™ΰΈ±ΰΉΰΈ™ΰΈ„ΰΈ·ΰΈ­ΰΈ£ΰΈ²ΰΈΆΰΈ¥ΰΈ°ΰΉ€ΰΈ­ΰΈµΰΈΆΰΈ”ΰΈ—ΰΈ±ΰΉ‰ΰΈ‡ΰΈ«ΰΈ΅ΰΈ”ΰΈ—ΰΈµΰΉΰΈΰΈ³ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉƒΰΈ™ΰΈΰΈ²ΰΈ£ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅ΰΈ—ΰΈ²ΰΈ‡ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -1383,7 +1384,7 @@ String RID_DB_FORM_WIZARD_START + 0
     Text[ greek ] = "Φόρμες AutoPilot";
     Text[ korean ] = "μλ™ νμΌλΏ μ„μ‹ μ©μ§€";
     Text[ turkish ] = "Form OtoPilotu";
-    Text[ catalan ] = "AutoPilot Forms";
+    Text[ catalan ] = "Formularis de l'AutoPilot";
     Text[ finnish ] = "Automaattinen lomakkeiden ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -1411,7 +1412,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ greek ] = "Δεν είναι δυνατόν να χρησιμοποιηθεί αυτός ο τίτλος. Παρακαλώ επιλέξτε άλλον τίτλο.";
     Text[ korean ] = "μ΄ μ λª©μ€ μ‚¬μ©λ  μ μ—†μµλ‹λ‹¤. λ‹¤λ¥Έ μ λª©μ„ μ„ νƒν•μ‹­μ‹μ¤.";
     Text[ turkish ] = "Bu baώlύk kullanύlamύyor. Lόtfen baώka bir baώlύk adύ seηiniz.";
-    Text[ catalan ] = "This title can not be used. Please select a different one.";
+    Text[ catalan ] = "No es pot usar aquest tνtol. Escolliu-ne un altre.";
     Text[ finnish ] = "Tδtδ otsikkoa ei voi kδyttδδ. Valitse toinen otsikko.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉƒΰΈΰΉ‰ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ΰΈ™ΰΈµΰΉ‰ΰΉ„ΰΈ”ΰΉ‰ ΰΈΰΈ£ΰΈΈΰΈ“ΰΈ²ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ·ΰΉΰΈ­ΰΈ­ΰΈ·ΰΉΰΈ™ΰΈ—ΰΈµΰΉΰΉ„ΰΈ΅ΰΉΰΉ€ΰΈ«ΰΈ΅ΰΈ·ΰΈ­ΰΈ™ΰΈΰΈ±ΰΈ™";
 };
@@ -1439,7 +1440,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ greek ] = "Δημιουργία φόρμας";
     Text[ korean ] = "μ©μ§€ λ§λ“¤κΈ°";
     Text[ turkish ] = "Form oluώtur";
-    Text[ catalan ] = "Create Form";
+    Text[ catalan ] = "Crea un formulari";
     Text[ finnish ] = "Luo lomake";
     Text[ thai ] = "ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -1468,7 +1469,7 @@ String RID_DB_FORM_WIZARD_START + 3
     Text[ korean ] = "μ©μ§€_";
     Text[ turkish ] = "Form_";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Form_";
+    Text[ catalan ] = "Formulari_";
     Text[ finnish ] = "Lomake_";
     Text[ thai ] = "ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅_";
 };
@@ -1496,7 +1497,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ greek ] = "(Ημερομηνία)";
     Text[ korean ] = " (μΌμ)";
     Text[ turkish ] = "(Tarih)";
-    Text[ catalan ] = "(Date)";
+    Text[ catalan ] = "(Data)";
     Text[ finnish ] = "(Pδivδmδδrδ)";
     Text[ thai ] = "(ΰΈ§ΰΈ±ΰΈ™ΰΈ—ΰΈµΰΉ)";
 };
@@ -1524,7 +1525,7 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ greek ] = "(Ώρα)";
     Text[ korean ] = "(μ‹κ°)";
     Text[ turkish ] = "(Saat)";
-    Text[ catalan ] = "(Time)";
+    Text[ catalan ] = "(Hora)";
     Text[ finnish ] = "(Aika)";
     Text[ thai ] = "(ΰΉ€ΰΈ§ΰΈ¥ΰΈ²)";
 };
@@ -1552,7 +1553,7 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ greek ] = ": Επιλογή πίνακα";
     Text[ korean ] = "ν…μ΄λΈ” λ° μΏΌλ¦¬";
     Text[ turkish ] = ": Tablo seηimi";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ finnish ] = ": Taulukon valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -1580,7 +1581,7 @@ String RID_DB_FORM_WIZARD_START + 7
     Text[ greek ] = ": Επιλογή πεδίου";
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -1608,7 +1609,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ greek ] = ": Στοίχιση πεδίου";
     Text[ korean ] = ": ν•„λ“ μ •λ ¬";
     Text[ turkish ] = ": Alan hizalamasύ";
-    Text[ catalan ] = ": Field Alignment";
+    Text[ catalan ] = ": Alineaciσ de camp";
     Text[ finnish ] = ": Kentδn tasaus";
     Text[ thai ] = ": ΰΈΰΈ±ΰΈ”ΰΈ•ΰΈ³ΰΉΰΈ«ΰΈ™ΰΉΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -1636,7 +1637,7 @@ String RID_DB_FORM_WIZARD_START + 9
     Text[ greek ] = ": Πρότυπα";
     Text[ korean ] = ": ν…ν”λ¦Ώ";
     Text[ turkish ] = ": ήablonlar";
-    Text[ catalan ] = ": Styles";
+    Text[ catalan ] = ": Plantilles";
     Text[ finnish ] = ": Mallipohjat";
     Text[ thai ] = ": ΰΉΰΈ΅ΰΉΰΉΰΈΰΈ";
 };
@@ -1664,7 +1665,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ greek ] = ": Δημιουργία φόρμας";
     Text[ korean ] = ": μ©μ§€ λ§λ“¤κΈ°";
     Text[ turkish ] = ": Form oluώtur";
-    Text[ catalan ] = ": Create Form";
+    Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -1693,7 +1694,7 @@ String RID_DB_FORM_WIZARD_START + 11
     Text[ korean ] = "λ°μ΄ν„° κ΄€λ¦¬(~U)";
     Text[ turkish ] = "Veri kaynaπύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Data So~urce";
+    Text[ catalan ] = "F~ont de les dades";
     Text[ finnish ] = "Tieto~lδhde";
     Text[ thai ] = "ΰΉΰΈ«~ΰΈ¥ΰΉΰΈ‡ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -1721,7 +1722,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ greek ] = "Υπάρχοντα πεδία";
     Text[ korean ] = "κΈ°μ΅΄ ν•„λ“(~I)";
     Text[ turkish ] = "~Mevcut alanlar";
-    Text[ catalan ] = "Ex~isting Fields";
+    Text[ catalan ] = "Camps ex~istents";
     Text[ finnish ] = "~Nykyiset kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈ΅ΰΈµ~ΰΈ­ΰΈΆΰΈΉΰΉ";
 };
@@ -1749,7 +1750,7 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ greek ] = "Πεδία στη ~φόρμα";
     Text[ korean ] = "μ„μ‹ μ©μ§€ λ‚΄μ ν•„λ“";
     Text[ turkish ] = "Form iηindeki alanlar";
-    Text[ catalan ] = "Fields in Form";
+    Text[ catalan ] = "Camps del formulari";
     Text[ finnish ] = "Lomakkeen kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉƒΰΈ™ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -1777,7 +1778,7 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ greek ] = "~Στυλ";
     Text[ korean ] = "μ ν•(~L)";
     Text[ turkish ] = "~Biηim";
-    Text[ catalan ] = "~Style";
+    Text[ catalan ] = "~Format";
     Text[ finnish ] = "~Asettelu";
     Text[ thai ] = "ΰΉ€~ΰΈ„ΰΉ‰ΰΈ²ΰΉ‚ΰΈ„ΰΈ£ΰΈ‡";
 };
@@ -1805,7 +1806,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ greek ] = "~Προσανατολισμός στήλης";
     Text[ korean ] = "μ—΄ μ¤‘μ‹¬";
     Text[ turkish ] = "Sόtunlar halinde";
-    Text[ catalan ] = "Column oriented";
+    Text[ catalan ] = "Orientat a columna";
     Text[ finnish ] = "Sarakesuunnattu";
     Text[ thai ] = "ΰΈ§ΰΈ²ΰΈ‡ΰΉΰΈ™ΰΈ§ΰΈ„ΰΈ­ΰΈ¥ΰΈ±ΰΈ΅ΰΈ™ΰΉ";
 };
@@ -1833,7 +1834,7 @@ String RID_DB_FORM_WIZARD_START + 16
     Text[ greek ] = "Βελτιωμέν~ο";
     Text[ korean ] = "μµμ ν™”λ¨(~O)";
     Text[ turkish ] = "~Optimum";
-    Text[ catalan ] = "~Optimized";
+    Text[ catalan ] = "~Optimitzat";
     Text[ finnish ] = "~Optimoitu";
     Text[ thai ] = "~ΰΈ—ΰΈ³ΰΉƒΰΈ«ΰΉ‰ΰΉ€ΰΈ«ΰΈ΅ΰΈ²ΰΈ°ΰΈ—ΰΈµΰΉΰΈªΰΈΈΰΈ”";
 };
@@ -1890,7 +1891,7 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ korean ] = "ν‘μ /λ°μ΄ν„°(~D)";
     Text[ turkish ] = "Baώlύk / ~Veriler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Title / ~Data";
+    Text[ catalan ] = "Tνtol / ~Dades";
     Text[ finnish ] = "Otsikko/~tiedot";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡ / ~ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -1918,7 +1919,7 @@ String RID_DB_FORM_WIZARD_START + 19
     Text[ greek ] = "Σε παράθεση";
     Text[ korean ] = "λ³‘λ ¬(~T)";
     Text[ turkish ] = "~Yan yana";
-    Text[ catalan ] = "~Tile";
+    Text[ catalan ] = "~Tνtol";
     Text[ finnish ] = "~Vierekkδin";
     Text[ thai ] = "~ΰΈ‹ΰΉ‰ΰΈ­ΰΈ™ΰΈ—ΰΈ±ΰΈ";
 };
@@ -1946,7 +1947,7 @@ String RID_DB_FORM_WIZARD_START + 20
     Text[ greek ] = "Σε στοίβα";
     Text[ korean ] = "κ²ΉμΉ¨(~S)";
     Text[ turkish ] = "~άst όste";
-    Text[ catalan ] = "~Stacked";
+    Text[ catalan ] = "~Apilats";
     Text[ finnish ] = "~Pinottu";
     Text[ thai ] = "~ΰΈΰΈ­ΰΈ‡ΰΈ‹ΰΉ‰ΰΈ­ΰΈ™";
 };
@@ -1975,7 +1976,7 @@ String RID_DB_FORM_WIZARD_START + 21
     Text[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ(~P)";
     Text[ turkish ] = "~Sayfa biηimleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Page Style";
+    Text[ catalan ] = "~Estil de pΰgina";
     Text[ finnish ] = "~Sivutyylit";
     Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°~ΰΈ«ΰΈ™ΰΉ‰ΰΈ²";
 };
@@ -2003,7 +2004,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ greek ] = "Τίτλος εγγράφου";
     Text[ korean ] = "λ¬Έμ„ μ λª©μ„ μ…λ ¥ν•μ‹­μ‹μ¤";
     Text[ turkish ] = "~Belge baώlύπύ";
-    Text[ catalan ] = "~Document title";
+    Text[ catalan ] = "Tνtol del ~document";
     Text[ finnish ] = "Kirjoita otsikko";
     Text[ thai ] = "ΰΉƒΰΈªΰΉΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ·ΰΉΰΈ­ΰΈ‡";
 };
@@ -2031,7 +2032,7 @@ String RID_DB_FORM_WIZARD_START + 23
     Text[ greek ] = "Μετά τη~ν ολοκλήρωση...";
     Text[ korean ] = "μ™„μ„± ν›„(~A)...";
     Text[ turkish ] = "~Oluώturulduktan sonra...";
-    Text[ catalan ] = "~After completion...";
+    Text[ catalan ] = "~En acabar...";
     Text[ finnish ] = "~Valmistumisen jδlkeen";
     Text[ thai ] = "~ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡ΰΈΰΈ²ΰΈΰΉ€ΰΈªΰΈ£ΰΉ‡ΰΈΰΈªΰΈ΅ΰΈΰΈΉΰΈ£ΰΈ“ΰΉ...";
 };
@@ -2059,7 +2060,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ greek ] = "Άμε~ση χρήση εγγράφου";
     Text[ korean ] = "λ¬Έμ„ μ¦‰μ‹ μ‚¬μ©";
     Text[ turkish ] = "Belgeyi hemen kullan";
-    Text[ catalan ] = "use document immediately";
+    Text[ catalan ] = "utilitza el document immediatament";
     Text[ finnish ] = "kδytδ asiakirjaa heti";
     Text[ thai ] = "ΰΉƒΰΈΰΉ‰ΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£ΰΈ—ΰΈ±ΰΈ™ΰΈ—ΰΈµ";
 };
@@ -2087,7 +2088,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ greek ] = "~Αποθήκευση εγγράφου";
     Text[ korean ] = "λ¬Έμ„ μ €μ¥";
     Text[ turkish ] = "Belgeyi kaydet";
-    Text[ catalan ] = "save document";
+    Text[ catalan ] = "desa el document";
     Text[ finnish ] = "Tallenna asiakirja";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉ€ΰΈ­ΰΈΰΈªΰΈ²ΰΈ£";
 };
@@ -2114,7 +2115,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ arabic ] = "Κγ ΕδΤΗΑ ΗαΗΣΚγΗΡΙ ζΝέΩεΗ έν ήΗΪΟΙ ΗαΘνΗδΗΚ.";
     Text[ turkish ] = "Form oluώturuldu ve veritabanύna kaydedildi.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "The form has been created and saved in the database.";
+    Text[ catalan ] = "S'ha creat el formulari i s'ha desat en la base de dades.";
     Text[ finnish ] = "Lomake on luotu ja tallennettu tietokantaan.";
     Text[ thai ] = "ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΈ–ΰΈΉΰΈΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΉΰΈ¥ΰΈ°ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉƒΰΈ™ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -2141,7 +2142,7 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ chinese_traditional ] = "ε ±θ΅¨εη¨±ζ€ι•·δΈεΎ—θ¶…ι32ε€‹ε­—ε…ƒγ€‚";
     Text[ arabic ] = "νΜΘ ΓαΗ νÒνΟ Ψζα ΓΣγΗΑ ΗαΗΣΚγΗΡΙ Ϊδ 32 ΝΡέΗπ.";
     Text[ turkish ] = "Form adlarύ en fazla 32 karakterden oluώabilir.";
-    Text[ catalan ] = "Form names cannot be longer than 32 characters.";
+    Text[ catalan ] = "Els noms dels formularis no poden ser mιs llargs de 32 carΰcters.";
     Text[ finnish ] = "Lomakkeiden nimet eivδt saa olla yli 32 merkin pituisia.";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΆΰΈ²ΰΈ§ΰΉ„ΰΈ΅ΰΉΰΉ€ΰΈΰΈ΄ΰΈ™ 32 ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°";
 };
@@ -2168,7 +2169,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ chinese_traditional ] = "ζ¬„δ½ι‚ζ΅†";
     Text[ turkish ] = "Controlframes";
     Text[ arabic ] = "ίΗΟΡ ΗαΝήα΅ Γζ ΝΟζΟ ΗαΝήαΏΏΏΏ ήΗΡδ Ρήγ 47566";
-    Text[ catalan ] = "Field border";
+    Text[ catalan ] = "Vora de camp";
     Text[ finnish ] = "Kentδn reunat";
     Text[ thai ] = "ΰΉ€ΰΈªΰΉ‰ΰΈ™ΰΈ‚ΰΈ­ΰΈΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -2195,7 +2196,7 @@ String RID_DB_FORM_WIZARD_START + 29
     Text[ chinese_traditional ] = "η„΅ι‚ζ΅†";
     Text[ turkish ] = "No Border";
     Text[ arabic ] = "ΘΟζδ ΝΟζΟ΅ Γζ ΘΟζδ ίΗΟΡΏΏΏΏΏΏΏΏ ήΗΡδ Ρήγ 47565";
-    Text[ catalan ] = "No border";
+    Text[ catalan ] = "Sense vores";
     Text[ finnish ] = "Ei reunoja";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΉ€ΰΈªΰΉ‰ΰΈ™ΰΈ‚ΰΈ­ΰΈ";
 };
@@ -2223,7 +2224,7 @@ String RID_DB_FORM_WIZARD_START + 30
     Text[ chinese_traditional ] = "3D ε¤–θ§€";
     Text[ turkish ] = "3D Look";
     Text[ arabic ] = "γΩεΡ ΛαΗΛν ΗαΓΘΪΗΟ";
-    Text[ catalan ] = "3D Look";
+    Text[ catalan ] = "Aparenηa 3D";
     Text[ finnish ] = "Kolmiulotteinen nδkymδ";
     Text[ thai ] = "ΰΈ΅ΰΈ­ΰΈ‡ΰΉΰΈΰΈ 3 ΰΈ΅ΰΈ΄ΰΈ•ΰΈ΄";
 };
@@ -2250,7 +2251,7 @@ String RID_DB_FORM_WIZARD_START + 31
     Text[ chinese_traditional ] = "εΉ³ε‹";
     Text[ turkish ] = "Flat";
     Text[ arabic ] = "γΣΨψΝ";
-    Text[ catalan ] = "Flat";
+    Text[ catalan ] = "Pla";
     Text[ finnish ] = "Litteδ";
     Text[ thai ] = "ΰΉΰΈΰΈ™";
 };
@@ -2279,7 +2280,7 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ turkish ] = "Alignment";
     Text[ language_user1 ] = "άberschrift einer Option Button Gruppe ";
     Text[ arabic ] = "Alignment";
-    Text[ catalan ] = "Alignment";
+    Text[ catalan ] = "Alineaciσ";
     Text[ thai ] = "ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­";
 };
 
@@ -2307,7 +2308,7 @@ String RID_DB_FORM_WIZARD_START + 33
     Text[ turkish ] = "Align Labels on left Edge";
     Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on left Edge";
-    Text[ catalan ] = "Align Labels on left Edge";
+    Text[ catalan ] = "Esquerra";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ”ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΈ­ΰΈΰΈ‹ΰΉ‰ΰΈ²ΰΈΆ";
 };
 
@@ -2335,7 +2336,7 @@ String RID_DB_FORM_WIZARD_START + 34
     Text[ turkish ] = "Align Labels on right Edge";
     Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on right Edge";
-    Text[ catalan ] = "Align Labels on right Edge";
+    Text[ catalan ] = "Dreta";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ”ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΈ­ΰΈΰΈ‚ΰΈ§ΰΈ²";
 };
 
@@ -2362,7 +2363,7 @@ String RID_DB_FORM_WIZARD_START + 35
     Text[ chinese_traditional ] = "ε°ι½θ³‡ζ–™εΊ«ζ¬„δ½";
     Text[ turkish ] = "Arrangement of DB Fields";
     Text[ arabic ] = "Arrangement of DB Fields";
-    Text[ catalan ] = "Arrangement of DB Fields";
+    Text[ catalan ] = "Ajustament dels camps";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ”ΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ DB ";
 };
 
@@ -2389,7 +2390,7 @@ String RID_DB_FORM_WIZARD_START + 36
     Text[ chinese_traditional ] = "ε¨ζ¬„δ½ε…§ - ζ¨™η±¤ε‘ε·¦";
     Text[ turkish ] = "Columnar - Labels left";
     Text[ arabic ] = "Columnar - Labels left";
-    Text[ catalan ] = "Columnar - Labels left";
+    Text[ catalan ] = "Columna - Etiquetes a l'esquerra";
     Text[ language_user1 ] = "Help tip";
     Text[ thai ] = "ΰΉΰΈΰΈΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉΰΈ™ΰΈ§ΰΈ•ΰΈ£ΰΈ‡ - ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈ‹ΰΉ‰ΰΈ²ΰΈΆ";
 };
@@ -2417,7 +2418,7 @@ String RID_DB_FORM_WIZARD_START + 37
     Text[ chinese_traditional ] = "ε¨ζ¬„δ½ε…§ - ζ¨™η±¤ε‘δΈ";
     Text[ turkish ] = "Columnar - Labels on Top";
     Text[ arabic ] = "Columnar - Labels on Top";
-    Text[ catalan ] = "Columnar - Labels on Top";
+    Text[ catalan ] = "Columna - Etiquetes amunt";
     Text[ thai ] = "ΰΉΰΈΰΈΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉΰΈ™ΰΈ§ΰΈ•ΰΈ£ΰΈ‡ - ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈ”ΰΉ‰ΰΈ²ΰΈ™ΰΈΰΈ™";
 };
 
@@ -2444,7 +2445,7 @@ String RID_DB_FORM_WIZARD_START + 38
     Text[ chinese_traditional ] = "ε¨ζΆε΅ε…§ - ζ¨™η±¤ε‘ε·¦";
     Text[ turkish ] = "Inf Blocks - Labels left";
     Text[ arabic ] = "Inf Blocks - Labels left";
-    Text[ catalan ] = "Inf Blocks - Labels left";
+    Text[ catalan ] = "Blocs - Etiquetes a l'esquerra";
     Text[ language_user1 ] = "Help tip";
     Text[ thai ] = "ΰΉƒΰΈ™ΰΈΰΈ¥ΰΉ‡ΰΈ­ΰΈ„ - ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈ‹ΰΉ‰ΰΈ²ΰΈΆ";
 };
@@ -2472,7 +2473,7 @@ String RID_DB_FORM_WIZARD_START + 39
     Text[ chinese_traditional ] = "ε¨ζΆε΅ε…§ - ζ¨™η±¤ε‘δΈ";
     Text[ turkish ] = "In Blocks - Labels oben";
     Text[ arabic ] = "In Blocks - Labels oben";
-    Text[ catalan ] = "In Blocks - Labels oben";
+    Text[ catalan ] = "Bloc - Etiquetes amunt";
     Text[ language_user1 ] = "Help tip";
     Text[ thai ] = "ΰΉƒΰΈ™ΰΈΰΈ¥ΰΉ‡ΰΈ­ΰΈ„ - ΰΈ›ΰΉ‰ΰΈ²ΰΈΆΰΈΰΈ·ΰΉΰΈ­ΰΈ”ΰΉ‰ΰΈ²ΰΈ™ΰΈΰΈ™";
 };
@@ -2500,7 +2501,7 @@ String RID_DB_FORM_WIZARD_START + 40
     Text[ chinese_traditional ] = "η•¶δ½θ³‡ζ–™θ΅¨";
     Text[ turkish ] = "As Grid";
     Text[ arabic ] = "As Grid";
-    Text[ catalan ] = "As Grid";
+    Text[ catalan ] = "Com a quadrνcula";
     Text[ language_user1 ] = "Help tip";
     Text[ thai ] = "ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΉ€ΰΈªΰΉ‰ΰΈ™ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -2531,7 +2532,7 @@ String RID_DB_FORM_WIZARD_START + 45
     Text[ chinese_traditional ] = "ιΈζ“‡θ³‡ζ–™εΊ«";
     Text[ turkish ] = "Choose Database";
     Text[ arabic ] = "Choose Database";
-    Text[ catalan ] = "Choose Database";
+    Text[ catalan ] = "Selecciσ de la base de dades";
     Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
 
@@ -2560,7 +2561,7 @@ String RID_DB_FORM_WIZARD_START + 46
     Text[ chinese_traditional ] = "η‰εΌ";
     Text[ turkish ] = "Layout";
     Text[ arabic ] = "Layout";
-    Text[ catalan ] = "Layout";
+    Text[ catalan ] = "Disseny";
     Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ„ΰΉ‰ΰΈ²ΰΉ‚ΰΈ„ΰΈ£ΰΈ‡";
 };
 
@@ -2588,7 +2589,7 @@ String RID_DB_FORM_WIZARD_START + 47
     Text[ chinese_traditional ] = "ε®ζ";
     Text[ turkish ] = "Completion";
     Text[ arabic ] = "Completion";
-    Text[ catalan ] = "Completion";
+    Text[ catalan ] = "Acaba";
     Text[ thai ] = "ΰΉ€ΰΈªΰΈ£ΰΉ‡ΰΈΰΈªΰΈ΄ΰΉ‰ΰΈ™";
 };
 
@@ -2616,7 +2617,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text[ chinese_traditional ] = "δΊε…ƒζ¬„δ½ι΅―η¤Ί";
     Text[ turkish ] = "Presentation of Binary Fields";
     Text[ arabic ] = "Presentation of Binary Fields";
-    Text[ catalan ] = "Presentation of Binary Fields";
+    Text[ catalan ] = "Presentaciσ dels camps binaris";
     Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈΰΈ¥ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈΰΈ™ΰΈ²ΰΈ£ΰΈµ ";
 };
 
@@ -2644,7 +2645,7 @@ String RID_DB_FORM_WIZARD_START + 51
     Text[ chinese_traditional ] = "εΏ½η•¥δΊε…ƒζ¬„δ½";
     Text[ turkish ] = "Ignore Binary Fields";
     Text[ arabic ] = "Ignore Binary Fields";
-    Text[ catalan ] = "Ignore Binary Fields";
+    Text[ catalan ] = "Ignora els camps binaris";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΈΰΉ€ΰΈ‰ΰΈΆΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈΰΈ™ΰΈ²ΰΈ£ΰΈµ ";
 };
 
@@ -2672,7 +2673,7 @@ String RID_DB_FORM_WIZARD_START + 52
     Text[ chinese_traditional ] = "δΊε…ƒζ¬„δ½η•¶δ½ε–ε½Ά";
     Text[ turkish ] = "Binary Fields as Images";
     Text[ arabic ] = "Binary Fields as Images";
-    Text[ catalan ] = "Binary Fields as Images";
+    Text[ catalan ] = "Camps binaris com a imatges";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ„ΰΈΰΈ™ΰΈ²ΰΈ£ΰΈµΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈ£ΰΈΉΰΈ›ΰΈ ΰΈ²ΰΈ";
 };
 
@@ -2699,7 +2700,7 @@ String RID_DB_FORM_WIZARD_START + 55
     Text[ chinese_traditional ] = "θƒζ™―ε–η‰‡";
     Text[ turkish ] = "Background Picture";
     Text[ arabic ] = "ΥζΡΙ ΗαΞαένΙ";
-    Text[ catalan ] = "Background Image";
+    Text[ catalan ] = "Imatge de fons";
     Text[ finnish ] = "Taustakuva";
     Text[ thai ] = "ΰΈ ΰΈ²ΰΈΰΈΰΈ·ΰΉ‰ΰΈ™ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡";
 };
@@ -2756,7 +2757,7 @@ String RID_DB_FORM_WIZARD_START + 57
     Text[ chinese_traditional ] = "ζ΅η”¨ι΅―η¤Ίζ―”δΎ‹(~S)";
     Text[ turkish ] = "~Scaled";
     Text[ arabic ] = "~Scaled";
-    Text[ catalan ] = "~Scaled";
+    Text[ catalan ] = "~Escalat";
     Text[ finnish ] = "~Skaalattu";
     Text[ thai ] = "~ΰΈªΰΉ€ΰΈΰΈ¥";
 };
@@ -2784,7 +2785,7 @@ String RID_DB_FORM_WIZARD_START + 60
     Text[ chinese_traditional ] = "η›®ι„θ·―εΎ‘";
     Text[ turkish ] = "Directory Path";
     Text[ arabic ] = "Directory Path";
-    Text[ catalan ] = "Directory Path";
+    Text[ catalan ] = "Camν del directori";
     Text[ thai ] = "ΰΉ€ΰΈªΰΉ‰ΰΈ™ΰΈ—ΰΈ²ΰΈ‡ΰΉ„ΰΈ”ΰΉ€ΰΈ£ΰΉ‡ΰΈΰΈ—ΰΈ­ΰΈ£ΰΈµΰΉ";
 };
 
@@ -2813,7 +2814,7 @@ String RID_DB_FORM_WIZARD_START + 65
     Text[ chinese_traditional ] = "ε°θ©±ζ–Ήε΅ζƒηΈ®ε°γ€‚";
     Text[ turkish ] = "Dialog will be reduced";
     Text[ arabic ] = "Dialog will be reduced";
-    Text[ catalan ] = "Dialog will be reduced";
+    Text[ catalan ] = "El diΰleg ιs farΰ mιs petit";
     Text[ thai ] = "ΰΉ„ΰΈ”ΰΈ­ΰΈ°ΰΈ¥ΰΉ‡ΰΈ­ΰΈΰΈΰΈ°ΰΈ–ΰΈΉΰΈΰΈ¥ΰΈ”ΰΈ¥ΰΈ‡";
 };
 
@@ -2841,7 +2842,7 @@ String RID_DB_FORM_WIZARD_START + 66
     Text[ chinese_traditional ] = "ε°θ©±ζ–Ήε΅ζƒζ”Ύε¤§γ€‚";
     Text[ turkish ] = "Dialog will be enlarged";
     Text[ arabic ] = "Dialog will be enlarged";
-    Text[ catalan ] = "Dialog will be enlarged";
+    Text[ catalan ] = "El diΰleg ιs farΰ mιs gran";
     Text[ thai ] = "ΰΉ„ΰΈ”ΰΈ­ΰΈ°ΰΈ¥ΰΉ‡ΰΈ­ΰΈΰΈΰΈ°ΰΉƒΰΈ«ΰΈΰΉΰΈ‚ΰΈ¶ΰΉ‰ΰΈ™";
 };
 
@@ -2898,7 +2899,7 @@ String RID_DB_FORM_WIZARD_START + 71
     Text[ chinese_traditional ] = "Writer 6.0 ζ¨£εΌ";
     Text[ turkish ] = "Writer 6.0 Template";
     Text[ arabic ] = "Writer 6.0 Template";
-    Text[ catalan ] = "Writer 6.0 Template";
+    Text[ catalan ] = "Writer 6.0 Plantilla";
     Text[ thai ] = "ΰΉΰΈ΅ΰΉΰΉΰΈΰΈ Writer 6.0 ";
 };
 
@@ -2929,7 +2930,7 @@ String RID_DB_QUERY_WIZARD_START + 0
     Text[ greek ] = "ΑυτοΠιλότος - Ερώτημα";
     Text[ korean ] = "μ¤ν† νμΌλΏ μ§μ";
     Text[ turkish ] = "Sorgu OtoPilotu";
-    Text[ catalan ] = "AutoPilot Query";
+    Text[ catalan ] = "Consulta de l'AutoPilot";
     Text[ finnish ] = "Automaattinen kyselyn ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -2957,7 +2958,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ greek ] = "Δεν υπάρχει εγκατεστημένη βάση δεδομένων. Για την εκκίνηση του ΑυτοΠιλότου για ερωτήματα απαιτείται τουλάχιστον μια βάση δεδομένων.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ„¤μΉλμ–΄ μμ§€ μ•μµλ‹λ‹¤. μ§μ μλ™ νμΌλΏμ„ μ‹μ‘ν•κΈ° μ„ν•΄μ„λ”  λ°μ΄ν„°λ² μ΄μ¤κ°€ μµμ†ν• ν•λ‚λ” ν•„μ”ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Kurulmuώ veritabanύ yok. Sorgu OtoPilot'unu baώlatabilmek iηin en az bir veritabanύ mevcut olmalύdύr.";
-    Text[ catalan ] = "A database has not been installed.  There must be at least one database on the system before the AutoPilot Query can be started.";
+    Text[ catalan ] = "No s'ha instal.lat cap base de dades. Hi ha d'haver una base de dades per poder iniciar l'AutoPilot Query.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. Automaattista kyselyjen ohjausta varten jδrjestelmδssδ on oltava mδδritettynδ vδhintδδn yksi tietokanta.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈ•ΰΈ΄ΰΈ”ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡ ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΈ™ΰΉ‰ΰΈ­ΰΈΆΰΈ—ΰΈµΰΉΰΈªΰΈΈΰΈ”ΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄";
 };
@@ -2985,7 +2986,7 @@ String RID_DB_QUERY_WIZARD_START + 2
     Text[ greek ] = "Παρουσιάστηκε σφάλμα κατά την εκτέλεση ή την δημιουργία ερωτήματος.";
     Text[ korean ] = "μ§μλ¥Ό μ‹¤ν–‰ν•κ±°λ‚ μ§€μ •ν•  λ• μ¤λ¥κ°€ λ°μƒν–μµλ‹λ‹¤.";
     Text[ turkish ] = "Yόrόtmede ya da sorgu oluώturmada bir hata oluώtu.";
-    Text[ catalan ] = "An error occurred during the execution or defining of a query.";
+    Text[ catalan ] = "S'ha produοt un error en executar o definir una consulta.";
     Text[ finnish ] = "Kyselyn suorituksen tai mδδrityksen aikana on ilmennyt virhe.";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΉ‰ΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈΰΈ¥ΰΈ²ΰΈ”ΰΉƒΰΈ™ΰΈ£ΰΈ°ΰΈ«ΰΈ§ΰΉΰΈ²ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈΰΈ£ΰΈ°ΰΈ—ΰΈ³ΰΈΰΈ²ΰΈ£ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΈΰΈ²ΰΈ£ΰΈ£ΰΈ°ΰΈΰΈΈΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅";
 };
@@ -3014,7 +3015,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ korean ] = "μ§μκ°€ μµμ¤ν”λ΅λ¬μ— μ² ν•΄μ΅μµλ‹λ‹¤.!μ²";
     Text[ turkish ] = "Sorgu Explorer'da kaydedildi.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "The query has been saved in the Explorer.";
+    Text[ catalan ] = "S'ha desat la consulta en l'Explorer.";
     Text[ finnish ] = "Kysely on tallennettu resurssienhallintaan.";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΉƒΰΈ™ Explorer ΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -3042,7 +3043,7 @@ String RID_DB_QUERY_WIZARD_START + 4
     Text[ greek ] = "Παρουσιάστηκε σφάλμα. Δεν ήταν δυνατόν να αποθηκευτεί το ερώτημα.";
     Text[ korean ] = "μ¤λ¥ λ°μƒ. μ§μλ¥Ό μ €μ¥ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ turkish ] = "Bir hata oluώtu. Sorgu kaydedilemedi.";
-    Text[ catalan ] = "An error occurred. The query could not be saved.";
+    Text[ catalan ] = "S'ha produοt un error. No s'ha pogut desar la consulta.";
     Text[ finnish ] = "On ilmennyt virhe. Kyselyδ ei voitu tallentaa.";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΉ‰ΰΈ­ΰΈΰΈ΄ΰΈ”ΰΈΰΈ¥ΰΈ²ΰΈ” ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΉ„ΰΈ”ΰΉ‰";
 };
@@ -3070,7 +3071,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ greek ] = "Διπλό όνομα πεδίου. Υπάρχει ήδη ένα πεδίο με την ονομασία $1.";
     Text[ korean ] = "μ΄μ¤‘ ν•„λ“ λª…μΉ­. μ΄λ¦„μ΄ $1μΈ ν•„λ“κ°€ μ΄λ―Έ μ΅΄μ¬ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Alan adύ kullanύmda. $1 adύnda baώka bir alan mevcut.";
-    Text[ catalan ] = "Duplicate field name. A field named $1 already exists.";
+    Text[ catalan ] = "Duplica el nom del camp. Ja existeix un camp anomenat $1.";
     Text[ finnish ] = "Samat kenttien nimet. Kenttδ $1 on jo olemassa.";
     Text[ thai ] = "ΰΈ—ΰΈ³ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‹ΰΉ‰ΰΈ³ ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ $1 ΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -3098,7 +3099,7 @@ String RID_DB_QUERY_WIZARD_START + 6
     Text[ greek ] = "Ερώτημα_";
     Text[ korean ] = "μ§μ_";
     Text[ turkish ] = "Sorgu_";
-    Text[ catalan ] = "Query_";
+    Text[ catalan ] = "Consulta_";
     Text[ finnish ] = "Kysely_";
     Text[ thai ] = "ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅_";
 };
@@ -3126,7 +3127,7 @@ String RID_DB_QUERY_WIZARD_START + 7
     Text[ greek ] = "(κανένα)";
     Text[ korean ] = "(μ—†μ)";
     Text[ turkish ] = "(yok)";
-    Text[ catalan ] = "(none)";
+    Text[ catalan ] = "(cap)";
     Text[ finnish ] = "(ei mitδδn)";
     Text[ thai ] = "(ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµ)";
 };
@@ -3154,7 +3155,7 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text[ greek ] = "κενό";
     Text[ korean ] = "λΉ„μ–΄ μμ";
     Text[ turkish ] = "boώ";
-    Text[ catalan ] = "empty";
+    Text[ catalan ] = "buit";
     Text[ finnish ] = "tyhjδ";
     Text[ thai ] = "ΰΈ§ΰΉΰΈ²ΰΈ‡";
 };
@@ -3182,7 +3183,7 @@ String RID_DB_QUERY_WIZARD_START + 9
     Text[ greek ] = "όχι κενό";
     Text[ korean ] = "κ³µλ°± μ—†μ΄.";
     Text[ turkish ] = "boώ deπil";
-    Text[ catalan ] = "not empty";
+    Text[ catalan ] = "no buit";
     Text[ finnish ] = "ei tyhjδ";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈ§ΰΉΰΈ²ΰΈ‡";
 };
@@ -3210,7 +3211,7 @@ String RID_DB_QUERY_WIZARD_START + 10
     Text[ greek ] = "όπως";
     Text[ korean ] = "λ™μΌν•¨";
     Text[ turkish ] = "ώφyle";
-    Text[ catalan ] = "like";
+    Text[ catalan ] = "com";
     Text[ finnish ] = "samanlainen kuin";
     Text[ thai ] = "ΰΉ€ΰΈ«ΰΈ΅ΰΈ·ΰΈ­ΰΈ™";
 };
@@ -3238,7 +3239,7 @@ String RID_DB_QUERY_WIZARD_START + 11
     Text[ greek ] = "όχι όπως";
     Text[ korean ] = "μ§€μ •ν• μ΅°κ±΄κ³Ό λ‹¤λ¦„";
     Text[ turkish ] = "ώφyle deπil";
-    Text[ catalan ] = "not like";
+    Text[ catalan ] = "diferent";
     Text[ finnish ] = "ei samanlainen kuin";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉ€ΰΈ«ΰΈ΅ΰΈ·ΰΈ­ΰΈ™";
 };
@@ -3322,7 +3323,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ greek ] = ": Επιλογή πίνακα";
     Text[ korean ] = ": μ‹νΈ μ„ νƒ";
     Text[ turkish ] = ": Tablo seηimi";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ finnish ] = ": Taulukon valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -3350,7 +3351,7 @@ String RID_DB_QUERY_WIZARD_START + 15
     Text[ greek ] = ": Επιλογή πεδίου";
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ":ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -3379,7 +3380,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ korean ] = ": ν•„ν„°λ§";
     Text[ turkish ] = ": Filtreleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Filter";
+    Text[ catalan ] = ": Filtre";
     Text[ finnish ] = ": Suodatin";
     Text[ thai ] = ": ΰΈ•ΰΈ±ΰΈ§ΰΈΰΈ£ΰΈ­ΰΈ‡";
 };
@@ -3408,7 +3409,7 @@ String RID_DB_QUERY_WIZARD_START + 17
     Text[ korean ] = ": λ¶„λ¥";
     Text[ turkish ] = ": Sύralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Sorting";
+    Text[ catalan ] = ": Ordre";
     Text[ finnish ] = ": Lajitellaan";
     Text[ thai ] = ": ΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡";
 };
@@ -3437,7 +3438,7 @@ String RID_DB_QUERY_WIZARD_START + 18
     Text[ korean ] = ": μ™„μ„±";
     Text[ turkish ] = ": Oluώtur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Create";
+    Text[ catalan ] = ": Crea";
     Text[ finnish ] = ": Luo";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡";
 };
@@ -3465,7 +3466,7 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ greek ] = "Προεπισκόπηση";
     Text[ korean ] = "λ―Έλ¦¬λ³΄κΈ°(~P)";
     Text[ turkish ] = "~Φnizleme";
-    Text[ catalan ] = "~Preview";
+    Text[ catalan ] = "~Previsualitza";
     Text[ finnish ] = "~Esikatselu";
     Text[ thai ] = "ΰΉ~ΰΈªΰΈ”ΰΈ‡ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡";
 };
@@ -3494,7 +3495,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ korean ] = "λ°μ΄ν„° μ†μ¤";
     Text[ turkish ] = "Veri kaynaπύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Data Source";
+    Text[ catalan ] = "Font de dades";
     Text[ finnish ] = "Tietolδhde";
     Text[ thai ] = "ΰΉΰΈ«ΰΈ¥ΰΉΰΈ‡ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -3523,7 +3524,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ korean ] = "κΈ°μ΅΄ ν•„λ“(~E)";
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Existing Fields";
+    Text[ catalan ] = "~Camps existents";
     Text[ finnish ] = "~Nykyiset kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈ΅ΰΈµ~ΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -3551,7 +3552,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ greek ] = "Πεδί~α σε ερώτημα";
     Text[ korean ] = "μ§μμ— μλ” ν•„λ“";
     Text[ turkish ] = "Sorgu iηindeki alanlar";
-    Text[ catalan ] = "Fields in Query";
+    Text[ catalan ] = "Camps de la consulta";
     Text[ finnish ] = "Kyselyn kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉƒΰΈ™ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅";
 };
@@ -3580,7 +3581,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ korean ] = "ν•„ν„°λ§";
     Text[ turkish ] = "Filtreleme";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Filter";
+    Text[ catalan ] = "Filtre";
     Text[ finnish ] = "Suodatin";
     Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΈΰΈ£ΰΈ­ΰΈ‡";
 };
@@ -3608,7 +3609,7 @@ String RID_DB_QUERY_WIZARD_START + 24
     Text[ greek ] = "Σύνδεση";
     Text[ korean ] = "λ§ν¬";
     Text[ turkish ] = "Baπlantύ";
-    Text[ catalan ] = "Link";
+    Text[ catalan ] = "Enllaη";
     Text[ finnish ] = "Linkki";
     Text[ thai ] = "ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡";
 };
@@ -3637,7 +3638,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ korean ] = "ν•„λ“ λª…μΉ­";
     Text[ turkish ] = "Alan adύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Field name";
+    Text[ catalan ] = "Nom del camp";
     Text[ finnish ] = "Kentδn nimi";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -3665,7 +3666,7 @@ String RID_DB_QUERY_WIZARD_START + 26
     Text[ greek ] = "Συνθήκη";
     Text[ korean ] = "μ „μ  μ΅°κ±΄";
     Text[ turkish ] = "Koώul";
-    Text[ catalan ] = "Condition";
+    Text[ catalan ] = "Condiciσ";
     Text[ finnish ] = "Ehto";
     Text[ thai ] = "ΰΉ€ΰΈ‡ΰΈ·ΰΉΰΈ­ΰΈ™ΰΉ„ΰΈ‚";
 };
@@ -3693,7 +3694,7 @@ String RID_DB_QUERY_WIZARD_START + 27
     Text[ greek ] = "Τιμή";
     Text[ korean ] = "μμΉ";
     Text[ turkish ] = "Deπer";
-    Text[ catalan ] = "Value";
+    Text[ catalan ] = "Valor";
     Text[ finnish ] = "Arvo";
     Text[ thai ] = "ΰΈ„ΰΉΰΈ²";
 };
@@ -3722,7 +3723,7 @@ String RID_DB_QUERY_WIZARD_START + 28
     Text[ korean ] = "λ¶„λ¥";
     Text[ turkish ] = "Sύralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Sorting";
+    Text[ catalan ] = "Ordre";
     Text[ finnish ] = "Lajittelujδrjestys";
     Text[ thai ] = "ΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡ΰΈ¥ΰΈ³ΰΈ”ΰΈ±ΰΈ";
 };
@@ -3750,7 +3751,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ greek ] = "~Τίτλος ερωτήματος";
     Text[ korean ] = "μ§μ ν‘μ ";
     Text[ turkish ] = "Sorgu baώlύπύ";
-    Text[ catalan ] = "Query title";
+    Text[ catalan ] = "Tνtol de consulta";
     Text[ finnish ] = "Kyselyn otsikko";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅";
 };
@@ -3778,7 +3779,7 @@ String RID_DB_QUERY_WIZARD_START + 30
     Text[ greek ] = "Μετά την ολοκλήρωση...";
     Text[ korean ] = "μΆ…λ£ ν›„...";
     Text[ turkish ] = "Oluώturulduktan sonra...";
-    Text[ catalan ] = "After completion...";
+    Text[ catalan ] = "En acabar...";
     Text[ finnish ] = "Valmistumisen jδlkeen...";
     Text[ thai ] = "ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡ΰΈΰΈ²ΰΈΰΉ€ΰΈªΰΈ£ΰΉ‡ΰΈΰΈªΰΈ΅ΰΈΰΈΉΰΈ£ΰΈ“ΰΉ...";
 };
@@ -3806,7 +3807,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ greek ] = "Άμεση εκτέλεση ερωτήματος";
     Text[ korean ] = "μ§μ μ¦‰μ‹ μ‹¤μ‹";
     Text[ turkish ] = "Sorguyu hemen yόrόt";
-    Text[ catalan ] = "Execute query immediately";
+    Text[ catalan ] = "Executa immediatament la consulta";
     Text[ finnish ] = "Suorita kysely heti";
     Text[ thai ] = "ΰΈΰΈ£ΰΈ°ΰΈ—ΰΈ³ΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅ΰΈ—ΰΈ±ΰΈ™ΰΈ—ΰΈµ";
 };
@@ -3834,7 +3835,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ greek ] = "~Αποθήκευση ερωτήματος";
     Text[ korean ] = "μ§μ μ² ν•κΈ°";
     Text[ turkish ] = "Sorguyu kaydet";
-    Text[ catalan ] = "Save query";
+    Text[ catalan ] = "Desa la consulta";
     Text[ finnish ] = "Tallenna kysely";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉΰΈΰΈΰΈªΰΈ­ΰΈΰΈ–ΰΈ²ΰΈ΅";
 };
@@ -3864,7 +3865,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ greek ] = "ΑυτοΠιλότος - Αναφορές";
     Text[ korean ] = "μλ™ νμΌλΏ λ³΄κ³ μ„";
     Text[ turkish ] = "Rapor OtoPilotu";
-    Text[ catalan ] = "AutoPilot Report";
+    Text[ catalan ] = "Informe de l'AutoPilot";
     Text[ finnish ] = "Automaattinen raportin ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -3893,7 +3894,7 @@ String RID_DB_REPORT_WIZARD_START + 1
     Text[ korean ] = "λ³΄κ³ μ„λ¥Ό μµμ¤ν”λ΅λ¬μ— μ² ν•  μ μ—†μ—μµλ‹λ‹¤.";
     Text[ turkish ] = "Rapor, Explorer'da kaydedilemedi.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "The report could not be saved in the Explorer.";
+    Text[ catalan ] = "No s'ha pogut desar l'informe en l'Explorer.";
     Text[ finnish ] = "Raporttia ei voitu tallentaa resurssienhallintaan.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™ΰΉƒΰΈ™ Explorer ΰΉ„ΰΈ”ΰΉ‰";
 };
@@ -3921,7 +3922,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ greek ] = "Δεν υπάρχει βάση δεδομένων. Για την εκκίνηση του AutoPilot για αναφορές απαιτείται τουλάχιστον μία βάση δεδομένων.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ„¤μΉλμ–΄ μμ§€ μ•μµλ‹λ‹¤. μµμ†ν• ν•λ‚ μ΄μƒμ λ°μ΄ν„°λ² μ΄μ¤κ°€ μμ–΄μ•Ό λ¦¬ν¬νΈ μλ™ νμΌλΏμ„  μ‹μ‘ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Kurulmuώ veritabanύ yok. Rapor OtoPilot'unu baώlatabilmek iηin en az bir veritabanύ mevcut olmalύdύr.";
-    Text[ catalan ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para informes.";
+    Text[ catalan ] = "No hi ha cap base de dades instal.lada. En necessiteu una com a mνnim per iniciar l'Autopilot Report.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. Jδrjestelmδssδ on oltava vδhintδδn yksi tietokanta ennen kuin automaattista raportin ohjausta voi kδyttδδ.";
     Text[ thai ] = "ΰΈΆΰΈ±ΰΈ‡ΰΉ„ΰΈ΅ΰΉΰΉ„ΰΈ”ΰΉ‰ΰΈ•ΰΈ΄ΰΈ”ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈ΅ΰΈµΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΈ™ΰΉ‰ΰΈ­ΰΈΆΰΈ—ΰΈµΰΉΰΈªΰΈΈΰΈ”ΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈΰΈ™ΰΈ£ΰΈ°ΰΈΰΈΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -3950,7 +3951,7 @@ String RID_DB_REPORT_WIZARD_START + 3
     Text[ korean ] = "μ‹νΈ(~T)";
     Text[ turkish ] = "~Tablo";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Table";
+    Text[ catalan ] = "~Taula";
     Text[ finnish ] = "~Taulukko";
     Text[ thai ] = "~ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -3979,7 +3980,7 @@ String RID_DB_REPORT_WIZARD_START + 4
     Text[ korean ] = "λ‹¨(~M)";
     Text[ turkish ] = "~Sόtunlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Colu~mns";
+    Text[ catalan ] = "Colu~mnes";
     Text[ finnish ] = "Sarak~keet";
     Text[ thai ] = "ΰΈ„ΰΈ­ΰΈ¥ΰΈ±ΰΈ΅~ΰΈ™ΰΉ";
 };
@@ -4007,7 +4008,7 @@ String RID_DB_REPORT_WIZARD_START + 5
     Text[ greek ] = "Διάρθρωση A";
     Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ A";
     Text[ turkish ] = "~Anahat A";
-    Text[ catalan ] = "Outline A";
+    Text[ catalan ] = "Contorn A";
     Text[ finnish ] = "Jδsennys A";
     Text[ thai ] = "ΰΉ€ΰΈ„ΰΉ‰ΰΈ²ΰΈ£ΰΉΰΈ²ΰΈ‡ A";
 };
@@ -4035,7 +4036,7 @@ String RID_DB_REPORT_WIZARD_START + 6
     Text[ greek ] = "Αριστερά A";
     Text[ korean ] = "μΆμΈ΅ A";
     Text[ turkish ] = "S~ol A";
-    Text[ catalan ] = "Left A";
+    Text[ catalan ] = "Esquerra A";
     Text[ finnish ] = "Vasen A";
     Text[ thai ] = "ΰΈ‹ΰΉ‰ΰΈ²ΰΈΆ A";
 };
@@ -4063,7 +4064,7 @@ String RID_DB_REPORT_WIZARD_START + 7
     Text[ greek ] = "Αναφορά_";
     Text[ korean ] = "λ³΄κ³ μ„_";
     Text[ turkish ] = "Rapor_";
-    Text[ catalan ] = "Report_";
+    Text[ catalan ] = "Informe_";
     Text[ finnish ] = "Raportti_";
     Text[ thai ] = "ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™_";
 };
@@ -4091,7 +4092,7 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ greek ] = "(κανένα)";
     Text[ korean ] = "- μ •μλμ§€ μ•μ -";
     Text[ turkish ] = "(yok)";
-    Text[ catalan ] = "(none)";
+    Text[ catalan ] = "(cap)";
     Text[ finnish ] = "(ei mitδδn)";
     Text[ thai ] = "(ΰΉ„ΰΈ΅ΰΉΰΈ΅ΰΈµ)";
 };
@@ -4118,7 +4119,7 @@ String RID_DB_REPORT_WIZARD_START + 9
     Text[ polish ] = ": Wybσr tabeli";
     Text[ turkish ] = ": Tablo seηimi";
     Text[ arabic ] = ": ΚΝΟνΟ ΗαΜΟζα";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
 
@@ -4147,7 +4148,7 @@ String RID_DB_REPORT_WIZARD_START + 11
     Text[ greek ] = ": Διάρθρωση";
     Text[ korean ] = "κ·Έλ£Ήν™”";
     Text[ turkish ] = ": Yapύ";
-    Text[ catalan ] = ": Structure";
+    Text[ catalan ] = ": Estructura";
     Text[ finnish ] = ": Rakenne";
     Text[ thai ] = ": ΰΉ‚ΰΈ„ΰΈ£ΰΈ‡ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡";
 };
@@ -4176,7 +4177,7 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ korean ] = "μ •λ ¬ μµμ…";
     Text[ turkish ] = ": Sύralama seηenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Sort Options";
+    Text[ catalan ] = ": Ordena per opcions";
     Text[ finnish ] = ": Lajitteluvalinnat";
     Text[ thai ] = ": ΰΉ€ΰΈ£ΰΈµΰΈΆΰΈ‡ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈ";
 };
@@ -4204,7 +4205,7 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ greek ] = ": Επιλογή στυλ";
     Text[ korean ] = "λ μ΄μ•„μ›ƒ μ„ νƒ";
     Text[ turkish ] = ": Biηim seηimi";
-    Text[ catalan ] = ": Style Selection";
+    Text[ catalan ] = ": Estil de seleccions";
     Text[ finnish ] = ": Tyylin valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
 };
@@ -4232,7 +4233,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ polish ] = ": Style formatu";
     Text[ turkish ] = ": Format ώablonlarύ";
     Text[ arabic ] = ": ήζΗαΘ ΗαΚδΣνή";
-    Text[ catalan ] = ": Styles";
+    Text[ catalan ] = ": Estils";
     Text[ thai ] = ": ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
 };
 
@@ -4260,7 +4261,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ greek ] = ": Δημιουργία";
     Text[ korean ] = "λ°μ΄ν„° λ μ΄μ•„μ›ƒ";
     Text[ turkish ] = ": Oluώtur";
-    Text[ catalan ] = ": Create";
+    Text[ catalan ] = ": Crea";
     Text[ finnish ] = ": Luo";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡";
 };
@@ -4288,7 +4289,7 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text[ greek ] = "Προέλε~υση δεδομένων";
     Text[ korean ] = "λ¨Έλ¦¬κΈ€κ³Ό λ°”λ‹¥κΈ€ λ μ΄μ•„μ›ƒ";
     Text[ turkish ] = "Veri kaynaπύ";
-    Text[ catalan ] = "Data Source";
+    Text[ catalan ] = "Font de dades";
     Text[ finnish ] = "Tietolδhde";
     Text[ thai ] = "ΰΉΰΈ«ΰΈ¥ΰΉΰΈ‡ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -4317,7 +4318,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ greek ] = "Διάταξη πεδίων";
     Text[ korean ] = "ν•„λ“";
     Text[ turkish ] = "Alanlarύ dόzenle";
-    Text[ catalan ] = "Camps";
+    Text[ catalan ] = "Organitza els camps";
     Text[ finnish ] = "Jδrjestele kentδt";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ”ΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -4345,7 +4346,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ greek ] = "Ταξινόμη~ση";
     Text[ korean ] = "κΈ°μ¤€λ³„ μ •λ ¬";
     Text[ turkish ] = "~Sύralama";
-    Text[ catalan ] = "Ordena ~per";
+    Text[ catalan ] = "~Ordre";
     Text[ finnish ] = "~Lajitellaan";
     Text[ thai ] = "ΰΉ€~ΰΈ£ΰΈµΰΈΆΰΈ‡";
 };
@@ -4374,7 +4375,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ greek ] = "Στοίχιση";
     Text[ korean ] = "λ‘λ²μ§Έ κΈ°μ¤€";
     Text[ turkish ] = "~Hizalama";
-    Text[ catalan ] = "Despres p~er";
+    Text[ catalan ] = "~Alineaciσ";
     Text[ finnish ] = "~Tasaus";
     Text[ thai ] = "~ΰΈΰΈ±ΰΈ”ΰΈ•ΰΈ³ΰΉΰΈ«ΰΈ™ΰΉΰΈ‡";
 };
@@ -4403,7 +4404,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ greek ] = "Κατακόρυφα";
     Text[ korean ] = "λ§μ¶¤";
     Text[ turkish ] = "~Dikey";
-    Text[ catalan ] = "~Alineaciσ";
+    Text[ catalan ] = "~Vertical";
     Text[ finnish ] = "~Pystytaso";
     Text[ thai ] = "ΰΉΰΈ™ΰΈ§~ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡";
 };
@@ -4431,7 +4432,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ greek ] = "Οριζόντια";
     Text[ korean ] = "μ„Έλ΅";
     Text[ turkish ] = "~Yatay";
-    Text[ catalan ] = "~Landscape";
+    Text[ catalan ] = "~Apaisat";
     Text[ finnish ] = "~Vaakataso";
     Text[ thai ] = "ΰΉΰΈ™ΰΈ§~ΰΈ™ΰΈ­ΰΈ™";
 };
@@ -4459,7 +4460,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ greek ] = "~Στυλ";
     Text[ korean ] = "κ°€λ΅";
     Text[ turkish ] = "~Biηim";
-    Text[ catalan ] = "~Style";
+    Text[ catalan ] = "~Estil";
     Text[ finnish ] = "~Tyyli";
     Text[ thai ] = "~ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
 };
@@ -4488,7 +4489,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text[ polish ] = "~Z lewej B";
     Text[ turkish ] = "So~l B";
     Text[ arabic ] = "~νΣΗΡ B";
-    Text[ catalan ] = "L~eft B";
+    Text[ catalan ] = "Esq~uerra B";
     Text[ thai ] = "ΰΈ‹ΰΉ‰ΰΈ²~ΰΈΆ B";
 };
 
@@ -4515,7 +4516,7 @@ String RID_DB_REPORT_WIZARD_START + 29
     Text[ polish ] = "~Stopniowy";
     Text[ turkish ] = "~Girintilenmiώ";
     Text[ arabic ] = "~γΚΟΡΜ";
-    Text[ catalan ] = "~Indented";
+    Text[ catalan ] = "~Sagnat";
     Text[ thai ] = "ΰΉ€~ΰΈΆΰΈ·ΰΉ‰ΰΈ­ΰΈ‡";
 };
 
@@ -4542,7 +4543,7 @@ String RID_DB_REPORT_WIZARD_START + 30
     Text[ portuguese_brazilian ] = "~B?dig";
     Text[ turkish ] = "~έki yana yasla";
     Text[ arabic ] = "~ΦΘΨ";
-    Text[ catalan ] = "~Justified";
+    Text[ catalan ] = "~Justificat";
     Text[ thai ] = "~ΰΈΰΈ΄ΰΈ”ΰΈ‚ΰΈ­ΰΈ";
 };
 
@@ -4569,7 +4570,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ polish ] = "~Style formatu";
     Text[ turkish ] = "Format ώablonlarύ";
     Text[ arabic ] = "~ήζΗαΘ ΗαΚδΣνή";
-    Text[ catalan ] = "Styles";
+    Text[ catalan ] = "Estils";
     Text[ thai ] = "ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
 };
 
@@ -4599,7 +4600,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ korean ] = "μ–΄λ–¤ μΆ…λ¥μ λ³΄κ³ μ„λ¥Ό μ‘μ„±ν•μ‹κ² μµλ‹κΉ?";
     Text[ turkish ] = "~Raporun adύ";
     Text[ language_user1 ] = "EM2.Mai.01: Die gleiche άbersetzung wie fόr \"Nach der Fertigstellung...\".";
-    Text[ catalan ] = "~Name of Report";
+    Text[ catalan ] = "~Nom de l'informe";
     Text[ finnish ] = "Raportin ~nimi";
     Text[ thai ] = "~ΰΈΰΈ·ΰΉΰΈ­ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™";
 };
@@ -4628,7 +4629,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ greek ] = "Μετά την ολοκλήρωση...";
     Text[ korean ] = "λ³΄κ³ μ„ μ΄λ¦„";
     Text[ turkish ] = "Oluώturulduktan sonra...";
-    Text[ catalan ] = "Nom de l'~informe";
+    Text[ catalan ] = "En acab~ar...";
     Text[ finnish ] = "Valmistumisen ~jδlkeen";
     Text[ thai ] = "ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡ΰΈΰΈ²ΰΈΰΉ€ΰΈªΰΈ£ΰΉ‡ΰΈΰΈªΰΈ΅~ΰΈΰΈΉΰΈ£ΰΈ“ΰΉ...";
 };
@@ -4657,7 +4658,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ greek ] = "Εμφάνιση έκθεσης";
     Text[ korean ] = "λ¦¬ν¬νΈ ν‘μ‹";
     Text[ turkish ] = "Raporu gφrόntόle";
-    Text[ catalan ] = "display Report";
+    Text[ catalan ] = "visualitza l'informe";
     Text[ finnish ] = "Nδytδ raportti";
     Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈΰΈ¥ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™";
 };
@@ -4685,7 +4686,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ greek ] = "Αποθήκευση έκθεσης";
     Text[ korean ] = "λ¦¬ν¬νΈ μ² ν•κΈ°";
     Text[ turkish ] = "Raporu kaydet";
-    Text[ catalan ] = "save Report";
+    Text[ catalan ] = "desa l'informe";
     Text[ finnish ] = "Tallenna raportti";
     Text[ thai ] = "ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™";
 };
@@ -4711,7 +4712,7 @@ String RID_DB_REPORT_WIZARD_START + 36
     Text[ chinese_traditional ] = "ε‘δΈ";
     Text[ arabic ] = "ΚΥΗΪΟν";
     Text[ turkish ] = "Arta~n";
-    Text[ catalan ] = "~Ascendent";
+    Text[ catalan ] = "A;Z";
     Text[ finnish ] = "A;Z";
     Text[ thai ] = "ΰΈΰΈ²ΰΈ~ΰΈ™ΰΉ‰ΰΈ­ΰΈΆΰΉ„ΰΈ›ΰΈ«ΰΈ²ΰΈ΅ΰΈ²ΰΈ";
 };
@@ -4737,7 +4738,7 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text[ chinese_traditional ] = "ε‘δΈ‹";
     Text[ arabic ] = "νΜΘ ΓαΗ νÒνΟ Ψζα ΓΣγΗΑ ΗαΚήΡνΡ Ϊδ 32 ΝΡέΗπ.";
     Text[ turkish ] = "Rapor adlarύ en fazla 32 karakter olmalύdύr.";
-    Text[ catalan ] = "D~escendent";
+    Text[ catalan ] = "Els noms d'informe no poden ser mιs llargs de 32 carΰcters.";
     Text[ finnish ] = "Raporttien nimet eivδt saa olla yli 32 merkin pituisia.";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΈ£ΰΈ²ΰΈΆΰΈ‡ΰΈ²ΰΈ™ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΆΰΈ²ΰΈ§ΰΉ„ΰΈ΅ΰΉΰΉ€ΰΈΰΈ΄ΰΈ™ 32 ΰΈ•ΰΈ±ΰΈ§ΰΈ­ΰΈ±ΰΈΰΈ‚ΰΈ£ΰΈ°";
 };
@@ -4925,7 +4926,7 @@ String RID_DB_REPORT_WIZARD_START + 50
     Text[ chinese_traditional ] = "ηΎ¤ηµ„";
     Text[ turkish ] = "Groupings";
     Text[ arabic ] = "Groupings";
-    Text[ catalan ] = "Groupings";
+    Text[ catalan ] = ": Estructura";
     Text[ thai ] = "Groupings";
 };
 
@@ -5351,7 +5352,7 @@ String RID_DB_TABLE_WIZARD_START + 0
     Text[ greek ] = "Πίνακας AutoPilot";
     Text[ korean ] = "μλ™ νμΌλΏ ν‘";
     Text[ turkish ] = "Tablo OtoPilotu";
-    Text[ catalan ] = "AutoPilot Table";
+    Text[ catalan ] = "Taula de l'AutoPilot";
     Text[ finnish ] = "Automaattinen taulukon ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄";
 };
@@ -5379,7 +5380,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ greek ] = "Δεν υπάρχει εγκατεστημένη βάση δεδομένων. Απαιτείται τουλάχιστον μια βάση δεδομένων για να εκκινήσετε τον ΑυτοΠιλότο για πίνακες.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤κ°€ μ„¤μΉλμ–΄ μμ§€ μ•μµλ‹λ‹¤. ν‘μ— λ€ν•΄ μλ™ νμΌλΏμ„ μ‹μ‘ν•λ ¤λ©΄ μµμ† ν•λ‚μ λ°μ΄ν„°λ² μ΄μ¤κ°€ ν•„μ”ν•©λ‹λ‹¤.";
     Text[ turkish ] = "Kurulmuώ veritabanύ yok. Tablo OtoPilot'unu baώlatabilmek iηin en az bir veritabanύ mevcut olmalύdύr.";
-    Text[ catalan ] = "A database has not been installed. There must be at least one database so that the AutoPilot Table can be started.";
+    Text[ catalan ] = "No hi ha cap base de dades instal.lada. N'hi ha d'haver una com a mνnim per poder executar l'AutoPilot Table.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. Automaattista taulukoiden ohjausta varten jδrjestelmδssδ on oltava mδδritettynδ vδhintδδn yksi tietokanta.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉ„ΰΈ”ΰΉ‰ΰΈ•ΰΈ΄ΰΈ”ΰΈ•ΰΈ±ΰΉ‰ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈ­ΰΈΆΰΉΰΈ²ΰΈ‡ΰΈ™ΰΉ‰ΰΈ­ΰΈΆΰΈ—ΰΈµΰΉΰΈªΰΈΈΰΈ”ΰΈ«ΰΈ™ΰΈ¶ΰΉΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉ€ΰΈ£ΰΈ΄ΰΉΰΈ΅ΰΈ•ΰΉ‰ΰΈ™ΰΈΰΈ²ΰΈ£ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄";
 };
@@ -5407,7 +5408,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ greek ] = "Το όνομα $1 υπάρχει ήδη στη λίστα.";
     Text[ korean ] = "μ΄λ¦„ $1μ€ (λ”) μ΄λ―Έ λª©λ΅μ— μμµλ‹λ‹¤.";
     Text[ turkish ] = "Tanύtύcύ $1 listede mevcut.";
-    Text[ catalan ] = "This identifier $1 is already contained in the list.";
+    Text[ catalan ] = "L'identificador $1 ja existeix en la llista.";
     Text[ finnish ] = "Tunnus $1 on jo luettelossa.";
     Text[ thai ] = "ΰΈ•ΰΈ±ΰΈ§ΰΈ£ΰΈ°ΰΈΰΈΈ $1 ΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§ΰΉƒΰΈ™ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£";
 };
@@ -5435,7 +5436,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ greek ] = "Δεν ήταν δυνατόν να ανοιχτεί η βάση δεδομένων $1.";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ $1μ„οΌλ¥Ό) μ—΄ μ μ—†μ—μµλ‹λ‹¤.";
     Text[ turkish ] = "$1 veritabanύ aηύlamadύ.";
-    Text[ catalan ] = "The database $1 could not be opened.";
+    Text[ catalan ] = "No s'ha pogut obrir la base de dades $1.";
     Text[ finnish ] = "Tietokantaa $1 ei voitu avata.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΉ€ΰΈ›ΰΈ΄ΰΈ”ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ $1 ΰΉ„ΰΈ”ΰΉ‰";
 };
@@ -5463,7 +5464,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ greek ] = "Ο πίνακας δημιουργήθηκε.";
     Text[ korean ] = "ν‘κ°€ μƒμ„±λμ—μµλ‹λ‹¤.";
     Text[ turkish ] = "Tablo oluώturuldu.";
-    Text[ catalan ] = "The table has been created.";
+    Text[ catalan ] = "S'ha creat la taula.";
     Text[ finnish ] = "Taulukko on luotu.";
     Text[ thai ] = "ΰΈΆΰΈ±ΰΈ‡ΰΉ„ΰΈ΅ΰΉΰΉ„ΰΈ”ΰΉ‰ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5491,7 +5492,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ greek ] = "Δεν ήταν δυνατόν να δημιουργηθεί ο πίνακας.";
     Text[ korean ] = "ν‘κ°€ μƒμ„±λμ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ turkish ] = "Tablo oluώturulamadύ.";
-    Text[ catalan ] = "The table could not be created.";
+    Text[ catalan ] = "No s'ha pogut crear la taula.";
     Text[ finnish ] = "Taulukkoa ei voitu luoda.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΉ„ΰΈ”ΰΉ‰";
 };
@@ -5519,7 +5520,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ greek ] = ": Τύπος πίνακα";
     Text[ korean ] = ": ν‘ μ ν•";
     Text[ turkish ] = ": Tablo tipi";
-    Text[ catalan ] = ": Table type";
+    Text[ catalan ] = ": Tipus de taula";
     Text[ finnish ] = ": Taulukon tyyppi";
     Text[ thai ] = ": ΰΈΰΈ™ΰΈ΄ΰΈ”ΰΈ‚ΰΈ­ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5547,7 +5548,7 @@ String RID_DB_TABLE_WIZARD_START + 7
     Text[ greek ] = ": Επιλογή πεδίου";
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -5575,7 +5576,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ greek ] = ": Προσαρμοσμένα";
     Text[ korean ] = ": μ‚¬μ©μ μ„¤μ •";
     Text[ turkish ] = ": Φzelleώtirme";
-    Text[ catalan ] = ": Customization";
+    Text[ catalan ] = ": Personalitzaciσ";
     Text[ finnish ] = ": Mukautus";
     Text[ thai ] = ": ΰΈΰΈ³ΰΈ«ΰΈ™ΰΈ”ΰΉ€ΰΈ­ΰΈ‡";
 };
@@ -5603,7 +5604,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ greek ] = ": Δημιουργία πίνακα";
     Text[ korean ] = ": ν‘ λ§λ“¤κΈ°";
     Text[ turkish ] = ": Tablo oluώtur";
-    Text[ catalan ] = ": Create Table";
+    Text[ catalan ] = ": Crea una taula";
     Text[ finnish ] = ": Luo taulukko";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5632,7 +5633,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤";
     Text[ turkish ] = "Veritabanlar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Databases";
+    Text[ catalan ] = "Bases de dades";
     Text[ finnish ] = "Tietokannat";
     Text[ thai ] = "ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -5660,7 +5661,7 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text[ greek ] = "Πίνακας";
     Text[ korean ] = "μ‹νΈ(~T)";
     Text[ turkish ] = "~Tablo";
-    Text[ catalan ] = "~Table";
+    Text[ catalan ] = "~Taula";
     Text[ finnish ] = "~Taulukko";
     Text[ thai ] = "~ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5688,7 +5689,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ greek ] = "Πρόταση πεδίου";
     Text[ korean ] = "ν•„λ“ μ μ•(~P)";
     Text[ turkish ] = "~Φnerilen alanlar";
-    Text[ catalan ] = "~Proposed Fields";
+    Text[ catalan ] = "~Camps proposats";
     Text[ finnish ] = "~Ehdotetut kentδt";
     Text[ thai ] = "ΰΉ€~ΰΈªΰΈ™ΰΈ­ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -5716,7 +5717,7 @@ String RID_DB_TABLE_WIZARD_START + 13
     Text[ greek ] = "Εφαρμόστηκε";
     Text[ korean ] = "μΈμλ¨(~A)";
     Text[ turkish ] = "~Seηilen";
-    Text[ catalan ] = "~Applied";
+    Text[ catalan ] = "~Aplicats";
     Text[ finnish ] = "~Kδytφssδ";
     Text[ thai ] = "~ΰΈ›ΰΈ£ΰΈ°ΰΈΆΰΈΈΰΈΰΈ•ΰΉ";
 };
@@ -5744,7 +5745,7 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ greek ] = "Όνομα πεδίου";
     Text[ korean ] = "ν•„λ“ μ΄λ¦„(~F)";
     Text[ turkish ] = "~Alan adύ";
-    Text[ catalan ] = "~Field name";
+    Text[ catalan ] = "~Nom de camp";
     Text[ finnish ] = "~Kentδn nimi";
     Text[ thai ] = "ΰΈΰΈ·ΰΉΰΈ­ΰΉ€~ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -5772,7 +5773,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ greek ] = "Εφαρμογή";
     Text[ korean ] = "μΈμ(~A)";
     Text[ turkish ] = "~Seηilen";
-    Text[ catalan ] = "~Apply";
+    Text[ catalan ] = "~Aplica";
     Text[ finnish ] = "~Kδytδ";
     Text[ thai ] = "ΰΉƒ~ΰΈΰΉ‰";
 };
@@ -5800,7 +5801,7 @@ String RID_DB_TABLE_WIZARD_START + 16
     Text[ greek ] = "Μετά την ολοκλήρωση...";
     Text[ korean ] = "μ™„λ£ ν›„...";
     Text[ turkish ] = "Oluώturulduktan sonra...";
-    Text[ catalan ] = "After completion...";
+    Text[ catalan ] = "En acabar...";
     Text[ finnish ] = "Valmistumisen jδlkeen...";
     Text[ thai ] = "ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡ΰΈΰΈ²ΰΈΰΉ€ΰΈªΰΈ£ΰΉ‡ΰΈΰΈªΰΈ΅ΰΈΰΈΉΰΈ£ΰΈ“ΰΉ...";
 };
@@ -5829,7 +5830,7 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ korean ] = "ν‘μ— λ°μ΄ν„° μ…λ ¥";
     Text[ turkish ] = "~Verileri tabloya gir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Enter data into the table";
+    Text[ catalan ] = "Introdueix les dades en la taula";
     Text[ finnish ] = "Syφtδ tiedot taulukkoon";
     Text[ thai ] = "ΰΉƒΰΈªΰΉΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΉƒΰΈ™ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5857,7 +5858,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ greek ] = "Εμφάνιση πίν~ακα";
     Text[ korean ] = "ν‘ ν‘μ‹";
     Text[ turkish ] = "Tabloyu gφrόntόle";
-    Text[ catalan ] = "~Mostrar tabla";
+    Text[ catalan ] = "mostra la taula";
     Text[ finnish ] = "Nδytδ taulukko";
     Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5885,7 +5886,7 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ greek ] = "~Να μην γίνει εμφάνιση του πίνακα";
     Text[ korean ] = "μ‹νΈ ν‘μ‹ν•μ§€ μ•κΈ°";
     Text[ turkish ] = "Tabloyu gφrόntόleme";
-    Text[ catalan ] = "do not show table";
+    Text[ catalan ] = "No mostris la taula";
     Text[ finnish ] = "Δlδ nδytδ taulukkoa";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉΰΈªΰΈ”ΰΈ‡ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5916,7 +5917,7 @@ String RID_DB_GRID_WIZARD_START + 0
     Text[ korean ] = "μλ™ νμΌλΏ ν‘ μ”μ†";
     Text[ turkish ] = "OtoPilot Tablo φπesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPilot Table Element";
+    Text[ catalan ] = "Element de taula de l'AutoPilot";
     Text[ finnish ] = "Automaattinen taulukkoelementin ohjaus";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ‡ΰΈ„ΰΉΰΈ›ΰΈ£ΰΈ°ΰΈΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ ";
 };
@@ -5945,7 +5946,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ korean ] = "ν‘ μ”μ† λ§λ“¤κΈ°";
     Text[ turkish ] = "Tablo φπesi oluώtur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Create table element";
+    Text[ catalan ] = "Crea un element de taula";
     Text[ finnish ] = "Luo taulukkoelementti";
     Text[ thai ] = "ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ­ΰΈ‡ΰΈ„ΰΉΰΈ›ΰΈ£ΰΈ°ΰΈΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -5973,7 +5974,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ greek ] = "(Ημερομηνία)";
     Text[ korean ] = " (μΌμ)";
     Text[ turkish ] = "(Tarih)";
-    Text[ catalan ] = "(Date)";
+    Text[ catalan ] = "(Data)";
     Text[ finnish ] = "(Pδivδmδδrδ)";
     Text[ thai ] = "(ΰΈ§ΰΈ±ΰΈ™ΰΈ—ΰΈµΰΉ)";
 };
@@ -6001,7 +6002,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ greek ] = "(Ώρα)";
     Text[ korean ] = "(μ‹κ°)";
     Text[ turkish ] = "(Saat)";
-    Text[ catalan ] = "(time)";
+    Text[ catalan ] = "(Hora)";
     Text[ finnish ] = "(Aika)";
     Text[ thai ] = "(ΰΉ€ΰΈ§ΰΈ¥ΰΈ²)";
 };
@@ -6030,7 +6031,7 @@ String RID_DB_GRID_WIZARD_START + 4
     Text[ korean ] = "ν‘ μ”μ†";
     Text[ turkish ] = "Tablo φπesi_";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Table Element_";
+    Text[ catalan ] = "Element_ de la taula";
     Text[ finnish ] = "Taulukkoelementti_";
     Text[ thai ] = "ΰΈ­ΰΈ‡ΰΈ„ΰΉΰΈ›ΰΈ£ΰΈ°ΰΈΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡_";
 };
@@ -6058,7 +6059,7 @@ String RID_DB_GRID_WIZARD_START + 5
     Text[ greek ] = ": Επιλογή πίνακα";
     Text[ korean ] = ": ν‘ μ„ νƒ";
     Text[ turkish ] = ": Tablo seηimi";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ finnish ] = ": Taulukon valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -6086,7 +6087,7 @@ String RID_DB_GRID_WIZARD_START + 6
     Text[ greek ] = ": Επιλογή πεδίου";
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6114,7 +6115,7 @@ String RID_DB_GRID_WIZARD_START + 7
     Text[ greek ] = ": Στοίχιση πεδίου";
     Text[ korean ] = ": ν•„λ“ λ§μ¶¤";
     Text[ turkish ] = ": Alan hizalamasύ";
-    Text[ catalan ] = ": Field Alignment";
+    Text[ catalan ] = ": Alineaciσ de camp";
     Text[ finnish ] = ": Kentδn tasaus";
     Text[ thai ] = ": ΰΈΰΈ±ΰΈ”ΰΈ•ΰΈ³ΰΉΰΈ«ΰΈ™ΰΉΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6142,7 +6143,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ greek ] = ": Πρότυπα";
     Text[ korean ] = ": ν…ν”λ¦Ώ";
     Text[ turkish ] = ": ήablonlar";
-    Text[ catalan ] = ": Styles";
+    Text[ catalan ] = ": Estils";
     Text[ finnish ] = ": Tyylit";
     Text[ thai ] = ": ΰΈ¥ΰΈ±ΰΈΰΈ©ΰΈ“ΰΈ°";
 };
@@ -6170,7 +6171,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ greek ] = ": Δημιουργία φόρμας";
     Text[ korean ] = ": μ–‘μ‹ μ‘μ„±";
     Text[ turkish ] = ": Form oluώtur";
-    Text[ catalan ] = ": Create Form";
+    Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -6199,7 +6200,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤";
     Text[ turkish ] = "Veritabanύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Database";
+    Text[ catalan ] = "Base de dades";
     Text[ finnish ] = "Tietokanta";
     Text[ thai ] = "ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6227,7 +6228,7 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ greek ] = "Υπάρχοντα πεδία";
     Text[ korean ] = "κΈ°μ΅΄ ν•„λ“";
     Text[ turkish ] = "Mevcut alanlar";
-    Text[ catalan ] = "Existing fields";
+    Text[ catalan ] = "Camps existents";
     Text[ finnish ] = "Nykyiset kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -6255,7 +6256,7 @@ String RID_DB_GRID_WIZARD_START + 12
     Text[ greek ] = "Επιλεγμέν~α πεδία";
     Text[ korean ] = "μ„ νƒλ ν•„λ“";
     Text[ turkish ] = "~Seηilmiώ alanlar";
-    Text[ catalan ] = "Selected fields";
+    Text[ catalan ] = "Camps seleccionats";
     Text[ finnish ] = "Valitut kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6286,7 +6287,7 @@ String RID_DB_COMBO_WIZARD_START + 0
     Text[ korean ] = "μλ™ νμΌλΏ: - μ½¤λ³΄ μƒμ";
     Text[ turkish ] = "OtoPilot - Kombinasyon alanύ";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "AutoPilot - Combo Box";
+    Text[ catalan ] = "AutoPilot - Quadre combinat";
     Text[ finnish ] = "Automaattinen ohjaus - yhdistelmδruutu";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ - ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ„ΰΈ­ΰΈ΅ΰΉ‚ΰΈΰΉ‰ ";
 };
@@ -6314,7 +6315,7 @@ String RID_DB_COMBO_WIZARD_START + 1
     Text[ greek ] = "ΑυτοΠιλότος - Πεδίο λίστας";
     Text[ korean ] = "μλ™ νμΌλΏ - λª©λ΅ ν•„λ“";
     Text[ turkish ] = "OtoPilot - Liste alanύ";
-    Text[ catalan ] = "Auto Pilot - List field";
+    Text[ catalan ] = "Auto Pilot - Camp de llista";
     Text[ finnish ] = "Automaattinen ohjaus - luettelokentδt";
     Text[ thai ] = "ΰΈ™ΰΈ³ΰΈ£ΰΉΰΈ­ΰΈ‡ΰΈ­ΰΈ±ΰΈ•ΰΉ‚ΰΈ™ΰΈ΅ΰΈ±ΰΈ•ΰΈ΄ - ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£";
 };
@@ -6343,7 +6344,7 @@ String RID_DB_COMBO_WIZARD_START + 2
     Text[ korean ] = "μ»¨νΈλ΅¤ ν•„λ“ λ§λ“¤κΈ°";
     Text[ turkish ] = "Komut alanύ oluώtur";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Create Control";
+    Text[ catalan ] = "Crea un control";
     Text[ finnish ] = "Luo ohjain";
     Text[ thai ] = "ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΈ•ΰΈ±ΰΈ§ΰΈ„ΰΈ§ΰΈΰΈ„ΰΈΈΰΈ΅";
 };
@@ -6400,7 +6401,7 @@ String RID_DB_COMBO_WIZARD_START + 4
     Text[ korean ] = ": ν‘ μ„ νƒ";
     Text[ turkish ] = ": Tablo seηimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = ": Table Selection";
+    Text[ catalan ] = ": Selecciσ de taula";
     Text[ finnish ] = ": Taulukon valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡";
 };
@@ -6428,7 +6429,7 @@ String RID_DB_COMBO_WIZARD_START + 5
     Text[ greek ] = ": Επιλογή πεδίου";
     Text[ korean ] = ": ν•„λ“ μ„ νƒ";
     Text[ turkish ] = ": Alan seηimi";
-    Text[ catalan ] = ": Field Selection";
+    Text[ catalan ] = ": Selecciσ de camp";
     Text[ finnish ] = ": Kentδn valinta";
     Text[ thai ] = ": ΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6456,7 +6457,7 @@ String RID_DB_COMBO_WIZARD_START + 6
     Text[ greek ] = ": Σύνδεση πεδίου";
     Text[ korean ] = ": ν•„λ“ λ§ν¬";
     Text[ turkish ] = ": Alan baπlantύsύ";
-    Text[ catalan ] = ": Field Link";
+    Text[ catalan ] = ": Enllaη de camp";
     Text[ finnish ] = ": Kenttδlinkki";
     Text[ thai ] = ": ΰΈ•ΰΈ±ΰΈ§ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6484,7 +6485,7 @@ String RID_DB_COMBO_WIZARD_START + 7
     Text[ greek ] = ": Επεξεργασία δεδομένων";
     Text[ korean ] = ": λ°μ΄ν„° μ²λ¦¬";
     Text[ turkish ] = ": Veri iώlem";
-    Text[ catalan ] = ": Data Processing";
+    Text[ catalan ] = ": Processament de dades";
     Text[ finnish ] = ": Tietojen kδsittely";
     Text[ thai ] = ": ΰΈΰΈ³ΰΈ¥ΰΈ±ΰΈ‡ΰΈ›ΰΈ£ΰΈ°ΰΈ΅ΰΈ§ΰΈ¥ΰΈΰΈ¥ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6512,7 +6513,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ greek ] = ": Δημιουργία φόρμας";
     Text[ korean ] = ": μ–‘μ‹ μƒμ„±";
     Text[ turkish ] = ": Form oluώtur";
-    Text[ catalan ] = ": Create Form";
+    Text[ catalan ] = ": Crea un formulari";
     Text[ finnish ] = ": Luo lomake";
     Text[ thai ] = ": ΰΈªΰΈ£ΰΉ‰ΰΈ²ΰΈ‡ΰΉΰΈΰΈΰΈΰΈ­ΰΈ£ΰΉΰΈ΅";
 };
@@ -6540,7 +6541,7 @@ String RID_DB_COMBO_WIZARD_START + 9
     Text[ greek ] = "Πίνακας τιμών";
     Text[ korean ] = "κ°’ ν‘";
     Text[ turkish ] = "Deπer tablosu";
-    Text[ catalan ] = "Table of Values";
+    Text[ catalan ] = "Taula de valors";
     Text[ finnish ] = "Arvoluettelo";
     Text[ thai ] = "ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ„ΰΉΰΈ²";
 };
@@ -6568,7 +6569,7 @@ String RID_DB_COMBO_WIZARD_START + 10
     Text[ greek ] = "Πίνακας για περιεχόμενα ~λίστας";
     Text[ korean ] = "λª©λ΅ λ‚΄μ©ν‘ ";
     Text[ turkish ] = "Liste iηeriπi tablosu";
-    Text[ catalan ] = "Table for List Content";
+    Text[ catalan ] = "Taula per al contingut de la llista";
     Text[ finnish ] = "Luettelon sisδltφtaulukko";
     Text[ thai ] = "ΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²";
 };
@@ -6596,7 +6597,7 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ greek ] = "Υπάρχοντα πεδία";
     Text[ korean ] = "κΈ°μ΅΄ ν•„λ“";
     Text[ turkish ] = "~Mevcut alanlar";
-    Text[ catalan ] = "Existing Fields";
+    Text[ catalan ] = "Camps existents";
     Text[ finnish ] = "Nykyiset kentδt";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΈ΅ΰΈµΰΈ­ΰΈΆΰΈΉΰΉΰΉΰΈ¥ΰΉ‰ΰΈ§";
 };
@@ -6624,7 +6625,7 @@ String RID_DB_COMBO_WIZARD_START + 12
     Text[ greek ] = "Πεδίο εμφάνισης";
     Text[ korean ] = "ν‘μ‹ ν•„λ“";
     Text[ turkish ] = "~Gφrόntό alanύ";
-    Text[ catalan ] = "Display Field";
+    Text[ catalan ] = "Visualitza el camp";
     Text[ finnish ] = "Nδytδ kenttδ";
     Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈΰΈ¥ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6652,7 +6653,7 @@ String RID_DB_COMBO_WIZARD_START + 13
     Text[ greek ] = "Το περιεχόμενο του επιλεγμένου πεδίου εμφανίζεται στην λίστα του πεδίου συνδυασμού.";
     Text[ korean ] = "μ„ νƒλ ν•„λ“μ λ‚΄μ©μ΄ μ½¤λ³΄ν•„λ“μ λª©λ΅μ— ν‘μ‹λ©λ‹λ‹¤.";
     Text[ turkish ] = "Seηilen alanύn iηeriπi, kombinasyon alanύ listesinde gφrόntόlenecek.";
-    Text[ catalan ] = "The contents of the field selected will be shown in the combo box field list.";
+    Text[ catalan ] = "El contingut del camp seleccionat es mostrarΰ a la llista del camp combinat.";
     Text[ finnish ] = "Valitun kentδn sisδltφ nδytetδδn yhdistelmδruudun luettelossa.";
     Text[ thai ] = "ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ°ΰΈ–ΰΈΉΰΈΰΉΰΈªΰΈ”ΰΈ‡ΰΉƒΰΈ™ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ„ΰΈ­ΰΈ΅ΰΉ‚ΰΈΰΉ‰  ";
 };
@@ -6680,7 +6681,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ greek ] = "Το περιεχόμενο του επιλεγμένου πεδίου εμφανίζεται στο πεδίο λίστας όταν συμπίπτουν τα συνδεδεμένα πεδία.";
     Text[ korean ] = "λ§ν¬λ ν•„λ“κ°€ μΌμΉν•λ©΄, μ„ νƒλ ν•„λ“μ λ‚΄μ©μ΄ λª©λ΅ ν•„λ“μ— ν‘μ‹λ©λ‹λ‹¤οΌ";
     Text[ turkish ] = "Seηilen alanύn iηeriπi, baπlantύlύ alanlarύn eώleώmesi durumunda liste alanύnda gφrόntόlenir";
-    Text[ catalan ] = "The contents of the selected field will be shown if the linked fields are identical.";
+    Text[ catalan ] = "El contingut del camp seleccionat es mostrarΰ en el llistat si coincideixen els camps enllaηats.";
     Text[ finnish ] = "Valitun kentδn sisδltφ nδytetδδn luetteloruudussa, jos linkitetyt kentδt ovat identtiset.";
     Text[ thai ] = "ΰΉ€ΰΈ™ΰΈ·ΰΉ‰ΰΈ­ΰΈ«ΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΉ€ΰΈ¥ΰΈ·ΰΈ­ΰΈΰΈΰΈ°ΰΈ–ΰΈΉΰΈΰΉΰΈªΰΈ”ΰΈ‡ΰΉƒΰΈ™ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΈ–ΰΉ‰ΰΈ²ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ—ΰΈµΰΉΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΈ΅ΰΉ‚ΰΈΆΰΈ‡ΰΉ€ΰΈ«ΰΈ΅ΰΈ·ΰΈ­ΰΈ™ΰΈΰΈ±ΰΈ™";
 };
@@ -6708,7 +6709,7 @@ String RID_DB_COMBO_WIZARD_START + 15
     Text[ greek ] = "Πληροφορίες";
     Text[ korean ] = "μ •λ³΄";
     Text[ turkish ] = "Bilgi";
-    Text[ catalan ] = "Information";
+    Text[ catalan ] = "Informaciσ";
     Text[ finnish ] = "Tiedot";
     Text[ thai ] = "ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥";
 };
@@ -6736,7 +6737,7 @@ String RID_DB_COMBO_WIZARD_START + 16
     Text[ greek ] = "Πεδίο από τον ~Πίνακα τιμών";
     Text[ korean ] = "κ°’ ν‘λ΅λ¶€ν„°μ ν•„λ“";
     Text[ turkish ] = "Deπer tablosu alanύ";
-    Text[ catalan ] = "Field from the Value Table";
+    Text[ catalan ] = "Camp de la taula de valors";
     Text[ finnish ] = "Arvotaulukon kenttδ";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈΰΈ²ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ„ΰΉΰΈ²";
 };
@@ -6764,7 +6765,7 @@ String RID_DB_COMBO_WIZARD_START + 17
     Text[ greek ] = "Πεδίο από τον πίνακα ~λίστας";
     Text[ korean ] = "λª©λ΅ ν‘λ΅λ¶€ν„°μ ν•„λ“";
     Text[ turkish ] = "Liste tablosu alanύ";
-    Text[ catalan ] = "Field from the List Table";
+    Text[ catalan ] = "Camp de la taula de llistes";
     Text[ finnish ] = "Luettelotaulukon kenttδ";
     Text[ thai ] = "ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈΰΈ²ΰΈΰΈ•ΰΈ²ΰΈ£ΰΈ²ΰΈ‡ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£";
 };
@@ -6793,7 +6794,7 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ korean ] = "μ½¤λ³΄ μƒμμ κ°’μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ— μ €μ¥ν•κ±°λ‚ λλ” ν‘μ‹λ¥Ό μ„ν•΄μ„λ§ μ‚¬μ©ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Kombinasyon alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da yalnύzca gφrόntόleme iηin kullanabilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
+    Text[ catalan ] = "Podeu desar el valor dels quadres combinats a la base de dades o utilitzar-los nomιs per mostrar-los.";
     Text[ finnish ] = "Voit joko tallentaa yhdistelmδruudun kentδn arvon tietokannan kenttδδn tai nδyttδδ sen.";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ„ΰΈ­ΰΈ΅ΰΉ‚ΰΈΰΉ‰  ΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉΰΈΰΉ‡ΰΉƒΰΈΰΉ‰ΰΈ΅ΰΈ±ΰΈ™ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈ›ΰΈ£ΰΈ°ΰΈªΰΈ‡ΰΈ„ΰΉ";
 };
@@ -6821,7 +6822,7 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ greek ] = "Μπορείτε να αποθηκεύσετε την τιμή του πεδίου λίστας σε ένα πεδίο βάσης δεδομένων ή να το χρησιμοποιήσετε μόνο για την προβολή.";
     Text[ korean ] = "λª©λ΅ ν•„λ“μ κ°’μ„ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ— μ €μ¥ν•κ±°λ‚ λλ” ν‘μ‹λ¥Ό μ„ν•΄μ„λ§ μ‚¬μ©ν•  μ μμµλ‹λ‹¤.";
     Text[ turkish ] = "Liste alanύnύn deπerini bir veritabanύ alanύnda kaydedebilir ya da yalnύzca gφrόntόleme iηin kullanabilirsiniz.";
-    Text[ catalan ] = "You can either save the value of the list field in a database field or use it for display purposes.";
+    Text[ catalan ] = "Podeu desar el valor del llistat en un camp de la base de dades o utilitzar-lo nomιs per mostrar-lo.";
     Text[ finnish ] = "Voit joko tallentaa luettelokentδn arvon tietokannan kenttδδn tai nδyttδδ sen.";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈªΰΈ²ΰΈ΅ΰΈ²ΰΈ£ΰΈ–ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΈ‚ΰΈ­ΰΈ‡ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£ΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉΰΈΰΉ‡ΰΉƒΰΈΰΉ‰ΰΈ΅ΰΈ±ΰΈ™ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈ›ΰΈ£ΰΈ°ΰΈªΰΈ‡ΰΈ„ΰΉ";
 };
@@ -6849,7 +6850,7 @@ String RID_DB_COMBO_WIZARD_START + 20
     Text[ greek ] = "Θέλετε να αποθηκευτεί η τιμή σε ένα πεδίο βάσης δεδομένων;";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤ν•„λ“μ— κ°’μ„ μ €μ¥ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Deπeri bir veritabanύ alanύnda kaydetmek istiyor musunuz?";
-    Text[ catalan ] = "Do you want to save the value in a database field?";
+    Text[ catalan ] = "Voleu desar el valor en un camp de la base de dades?";
     Text[ finnish ] = "Haluatko tallentaa arvon tietokannan kenttδδn?";
     Text[ thai ] = "ΰΈ„ΰΈΈΰΈ“ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΈ„ΰΉΰΈ²ΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ«ΰΈ£ΰΈ·ΰΈ­ΰΉ„ΰΈ΅ΰΉ?";
 };
@@ -6877,7 +6878,7 @@ String RID_DB_COMBO_WIZARD_START + 21
     Text[ greek ] = "Ναι, στο ε~ξής πεδίο βάσης δεδομένων :";
     Text[ korean ] = "μ, λ‹¤μ λ°μ΄ν„°λ² μ΄μ¤ ν•„λ“μ—:";
     Text[ turkish ] = "~Evet, aώaπύda belirtilen veritabanύ alanύna kaydet :";
-    Text[ catalan ] = "Yes, save in the following database field :";
+    Text[ catalan ] = "Sν, desa-ho en el segόent camp :";
     Text[ finnish ] = "Kyllδ, tallenna arvo seuraavaan tietokannan kenttδδn:";
     Text[ thai ] = "ΰΉƒΰΈΰΉ  ΰΈΰΈ±ΰΈ™ΰΈ—ΰΈ¶ΰΈΰΉƒΰΈ™ΰΉ€ΰΈ‚ΰΈ•ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ‚ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ™ΰΈ‚ΰΉ‰ΰΈ­ΰΈ΅ΰΈΉΰΈ¥ΰΈ•ΰΉΰΈ­ΰΉ„ΰΈ›ΰΈ™ΰΈµΰΉ‰:";
 };
@@ -6905,7 +6906,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ greek ] = "Όχι, θέλω ~να χρησιμοποιήσω την τιμή μόνο για εμφάνιση.";
     Text[ korean ] = "μ•„λ‹μ¤, κ°’μ€ ν™”λ©΄μ— ν‘μ‹ν•κΈ° μ„ν•΄μ„λ§ μ‚¬μ©ν•κ³ μ ν•©λ‹λ‹¤.";
     Text[ turkish ] = "~Hayύr, deπeri yalnύzca gφrόntόleme iηin kullanmak istiyorum.";
-    Text[ catalan ] = "No, I only wish to use the value for display purposes";
+    Text[ catalan ] = "No, nomιs el vull mostrar.";
     Text[ finnish ] = "Ei, haluan vain nδyttδδ arvon.";
     Text[ thai ] = "ΰΉ„ΰΈ΅ΰΉΰΉƒΰΈΰΉ  ΰΈ‰ΰΈ±ΰΈ™ΰΈ•ΰΉ‰ΰΈ­ΰΈ‡ΰΈΰΈ²ΰΈ£ΰΉƒΰΈΰΉ‰ΰΈ„ΰΉΰΈ²ΰΉ€ΰΈΰΈ·ΰΉΰΈ­ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ§ΰΈ±ΰΈ•ΰΈ–ΰΈΈΰΈ›ΰΈ£ΰΈ°ΰΈªΰΈ‡ΰΈ„ΰΉΰΉ€ΰΈ—ΰΉΰΈ²ΰΈ™ΰΈ±ΰΉ‰ΰΈ™";
 };
