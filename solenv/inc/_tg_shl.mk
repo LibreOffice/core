@@ -214,13 +214,7 @@ $(SHL1TARGETN) : \
                     $(SHL1LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL1TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL1DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL1DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL1ICON)" != ""
@@ -243,9 +237,9 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1ADD_VERINFO)"!=""
      @-+echo #include "$(SHL1ADD_VERINFO)" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc		
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
@@ -336,24 +330,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -638,13 +614,7 @@ $(SHL2TARGETN) : \
                     $(SHL2LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL2TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL2DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL2DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL2ICON)" != ""
@@ -667,9 +637,9 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2ADD_VERINFO)"!=""
      @-+echo #include "$(SHL2ADD_VERINFO)" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
@@ -760,24 +730,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -1062,13 +1014,7 @@ $(SHL3TARGETN) : \
                     $(SHL3LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL3TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL3DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL3DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL3ICON)" != ""
@@ -1091,9 +1037,9 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3ADD_VERINFO)"!=""
      @-+echo #include "$(SHL3ADD_VERINFO)" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
@@ -1184,24 +1130,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -1486,13 +1414,7 @@ $(SHL4TARGETN) : \
                     $(SHL4LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL4TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL4DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL4DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL4ICON)" != ""
@@ -1515,9 +1437,9 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4ADD_VERINFO)"!=""
      @-+echo #include "$(SHL4ADD_VERINFO)" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
@@ -1608,24 +1530,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -1910,13 +1814,7 @@ $(SHL5TARGETN) : \
                     $(SHL5LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL5TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL5DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL5DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL5ICON)" != ""
@@ -1939,9 +1837,9 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5ADD_VERINFO)"!=""
      @-+echo #include "$(SHL5ADD_VERINFO)" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
@@ -2032,24 +1930,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -2334,13 +2214,7 @@ $(SHL6TARGETN) : \
                     $(SHL6LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL6TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL6DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL6DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL6ICON)" != ""
@@ -2363,9 +2237,9 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6ADD_VERINFO)"!=""
      @-+echo #include "$(SHL6ADD_VERINFO)" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
@@ -2456,24 +2330,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -2758,13 +2614,7 @@ $(SHL7TARGETN) : \
                     $(SHL7LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL7TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL7DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL7DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL7ICON)" != ""
@@ -2787,9 +2637,9 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7ADD_VERINFO)"!=""
      @-+echo #include "$(SHL7ADD_VERINFO)" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
@@ -2880,24 +2730,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -3182,13 +3014,7 @@ $(SHL8TARGETN) : \
                     $(SHL8LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL8TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL8DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL8DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL8ICON)" != ""
@@ -3211,9 +3037,9 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8ADD_VERINFO)"!=""
      @-+echo #include "$(SHL8ADD_VERINFO)" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
@@ -3304,24 +3130,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -3606,13 +3414,7 @@ $(SHL9TARGETN) : \
                     $(SHL9LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL9TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL9DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL9DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL9ICON)" != ""
@@ -3635,9 +3437,9 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9ADD_VERINFO)"!=""
      @-+echo #include "$(SHL9ADD_VERINFO)" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
@@ -3728,24 +3530,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
@@ -4030,13 +3814,7 @@ $(SHL10TARGETN) : \
                     $(SHL10LINKLIST) 
     @echo ------------------------------
     @echo Making: $(SHL10TARGETN)
-        @-+$(RM) $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj 
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)"=="GCC"
-            $(CXX) -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE
-            $(CXX) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF			# "$(COM)"=="GCC"
 .IF "$(SHL10DEFAULTRES)"!=""
     @+-$(RM) $(MISC)$/$(SHL10DEFAULTRES:b).rc >& $(NULLDEV)
 .IF "$(SHL10ICON)" != ""
@@ -4059,9 +3837,9 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10ADD_VERINFO)"!=""
      @-+echo #include "$(SHL10ADD_VERINFO)" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
-    @-+echo #define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
+    @-+echo \#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo \#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
@@ -4152,24 +3930,6 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
-.IF "$(OS)"=="SOLARIS"
-.IF "$(COM)"=="GCC"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ELSE		
-        $(CC) -c -KPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF		
-.ENDIF
-.IF "$(OS)"=="MACOSX"
-        $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
-        $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-.ENDIF
-.IF "$(OS)"=="IRIX"
-        $(CC) -c -fpic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-        @+if ( ! -e $(SOLARLIBDIR) ) mkdir $(SOLARLIBDIR)
-        @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
-.ENDIF			# "$(OS)"=="IRIX"
 .IF "$(OS)"=="MACOSX"
     @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
