@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:51:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,15 @@ public:
     */
     inline Any() SAL_THROW( () );
 
+    /** Templated ctor.  Sets a copy of the given value.
+
+        @param value value of the Any
+    */
+    template <typename T>
+    explicit inline Any( T const & value );
+    /// Ctor support for C++ bool.
+    explicit inline Any( bool value );
+
     /** Copy constructor: Sets value of the given any.
 
         @param rAny another any
@@ -200,6 +209,24 @@ public:
     inline const void * SAL_CALL getValue() const SAL_THROW( () )
         { return pData; }
 
+#if ! defined(EXCEPTIONS_OFF)
+    /** Provides a value of specified type, so you can easily write e.g.
+        <pre>
+        sal_Int32 myVal = myAny.get<sal_Int32>();
+        </pre>
+        Widening conversion without data loss is taken into account.
+        Throws a
+        <type scope="com::sun::star::uno">RuntimeException</type>
+        if the specified type cannot be provided.
+
+        @return value of specified type
+        @exception <type scope="com::sun::star::uno">RuntimeException</type>
+                   in case the specified type cannot be provided
+    */
+    template <typename T>
+    inline T get() const;
+#endif // ! defined(EXCEPTIONS_OFF)
+
     /** Sets a value. If the any already contains a value, that value will be destructed
         and its memory freed.
 
@@ -235,6 +262,15 @@ public:
     */
     inline sal_Bool SAL_CALL isExtractableTo( const Type & rType ) const SAL_THROW( () );
 
+    /** Tests whether this any can provide a value of specified type.
+        Widening conversion without data loss is taken into account.
+
+        @return true if this any can provide a value of specified type
+        (e.g. using >>= operator)
+    */
+    template <typename T>
+    inline bool has() const;
+
     /** Equality operator: compares two anys.
         The values need not be of equal type, e.g. a short integer is compared to a long integer.
 
@@ -249,6 +285,21 @@ public:
         @return true if both any contains unequal values
     */
     inline sal_Bool SAL_CALL operator != ( const Any & rAny ) const SAL_THROW( () );
+
+private:
+    // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
+    explicit Any( sal_uInt16 );
+#if defined(_MSC_VER)
+    // Omitting the following private declarations leads to an internal compiler
+    // error on MSVC (version 1310).
+    // not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
+#if ! defined(EXCEPTIONS_OFF)
+    template <>
+    sal_uInt16 get<sal_uInt16>() const;
+#endif // ! defined(EXCEPTIONS_OFF)
+    template <>
+    bool has<sal_uInt16>() const;
+#endif // defined(_MSC_VER)
 };
 
 /** Template function to generically construct an any from a C++ value.
@@ -275,6 +326,11 @@ class Type;
 */
 template< class C >
 inline void SAL_CALL operator <<= ( Any & rAny, const C & value ) SAL_THROW( () );
+
+// additionally for C++ bool:
+inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
+    SAL_THROW( () );
+
 /** Template binary >>= operator to assign a value from an any.
     If the any does not contain a value that can be assigned without data loss, then this
     operation will fail returning false.
