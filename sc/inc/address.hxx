@@ -2,9 +2,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $  $Date: 2004-06-04 10:00:39 $
+ *  last change: $Author: hr $  $Date: 2004-06-24 15:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,10 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-
 #include <limits>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 class ScDocument;
 
@@ -337,7 +339,7 @@ public:
     inline UINT32 GetBitfield() const { return nAddress; }
 };
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
 
 inline USHORT* ScAddressOldBitfieldConverter::RowPos() { return (USHORT*) &nAddress; }
 inline BYTE*   ScAddressOldBitfieldConverter::ColPos() { return (BYTE*) &nAddress + 2; }
