@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:37:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ ModalDialog DLG_EXPORT_JPG
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
         Text [ danish ] = "0: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
-        Text [ portuguese ] = "0: min. Qualidade\n100: max. Qualidade" ;
+        Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
         Text[ chinese_simplified ] = "1: ЧоІоЦКБї \n100: ЧојСЦКБї";
         Text[ russian ] = "1: низкое качество\n100: высокое качество";
         Text[ polish ] = "1: min. jakoњж\n100: maks. jakoњж";
@@ -277,5 +277,6 @@ ModalDialog DLG_EXPORT_JPG
     Text[ catalan ] = "Opciones JPEG";
     Text[ finnish ] = "JPEG-valinnat";
 };
+
 
 
