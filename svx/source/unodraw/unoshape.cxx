@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-14 11:38:52 $
+ *  last change: $Author: cl $ $Date: 2001-05-15 11:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,34 @@
 
 #ifndef _SVX_XFLFTRIT_HXX
 #include "xflftrit.hxx"
+#endif
+
+#ifndef _XTABLE_HXX
+#include "xtable.hxx"
+#endif
+
+#ifndef _SVX_XBTMPIT_HXX
+#include "xbtmpit.hxx"
+#endif
+
+#ifndef _SVX_XFLGRIT_HXX
+#include "xflgrit.hxx"
+#endif
+
+#ifndef _SVX_XFLHTIT_HXX
+#include "xflhtit.hxx"
+#endif
+
+#ifndef _SVX_XLNEDIT_HXX
+#include "xlnedit.hxx"
+#endif
+
+#ifndef _SVX_XLNSTIT_HXX
+#include "xlnstit.hxx"
+#endif
+
+#ifndef _SVX_XLNDSIT_HXX
+#include "xlndsit.hxx"
 #endif
 
 using namespace ::osl;
@@ -982,8 +1010,111 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& PropertyNa
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
     SfxItemSet aSet( pModel->GetItemPool(), (USHORT)nWID, (USHORT)nWID );
+
+    // check if an item with the given name and which id is inside the models
+    // pool or the stylesheet pool, if found its puttet in the itemse
     if( !SetFillAttribute( nWID, rName, aSet ) )
-        return sal_False;
+    {
+        // we did not find such item in one of the pools, so we check
+        // the property lists that are loaded for the model for items
+        // that support such.
+        String aStrName;
+        SvxUnogetInternalNameForItem( (sal_Int16)nWID, rName, aStrName );
+
+        switch( nWID )
+        {
+        case XATTR_FILLBITMAP:
+        {
+            XBitmapList* pBitmapList = pModel->GetBitmapList();
+            long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XBitmapEntry* pEntry = pBitmapList->Get( nPos );
+            XFillBitmapItem aBmpItem;
+            aBmpItem.SetWhich( XATTR_FILLBITMAP );
+            aBmpItem.SetName( rName );
+            aBmpItem.SetValue( pEntry->GetXBitmap() );
+            aSet.Put( aBmpItem );
+            break;
+        }
+        case XATTR_FILLGRADIENT:
+        {
+            XGradientList* pGradientList = pModel->GetGradientList();
+            long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XGradientEntry* pEntry = pGradientList->Get( nPos );
+            XFillGradientItem aGrdItem;
+            aGrdItem.SetWhich( XATTR_FILLGRADIENT );
+            aGrdItem.SetName( rName );
+            aGrdItem.SetValue( pEntry->GetGradient() );
+            aSet.Put( aGrdItem );
+            break;
+        }
+        case XATTR_FILLHATCH:
+        {
+            XHatchList* pHatchList = pModel->GetHatchList();
+            long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XHatchEntry* pEntry = pHatchList->Get( nPos );
+            XFillHatchItem aHatchItem;
+            aHatchItem.SetWhich( XATTR_FILLHATCH );
+            aHatchItem.SetName( rName );
+            aHatchItem.SetValue( pEntry->GetHatch() );
+            aSet.Put( aHatchItem );
+            break;
+        }
+        case XATTR_LINEEND:
+        case XATTR_LINESTART:
+        {
+            XLineEndList* pLineEndList = pModel->GetLineEndList();
+            long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XLineEndEntry* pEntry = pLineEndList->Get( nPos );
+            if( XATTR_LINEEND == nWID )
+            {
+                XLineEndItem aLEItem;
+                aLEItem.SetWhich( XATTR_LINEEND );
+                aLEItem.SetName( rName );
+                aLEItem.SetValue( pEntry->GetLineEnd() );
+                aSet.Put( aLEItem );
+            }
+            else
+            {
+                XLineStartItem aLSItem;
+                aLSItem.SetWhich( XATTR_LINESTART );
+                aLSItem.SetName( rName );
+                aLSItem.SetValue( pEntry->GetLineEnd() );
+                aSet.Put( aLSItem );
+            }
+
+            break;
+        }
+        case XATTR_LINEDASH:
+        {
+            XDashList* pDashList = pModel->GetDashList();
+            long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
+            if( nPos == -1 )
+                return sal_False;
+
+            XDashEntry* pEntry = pDashList->Get( nPos );
+            XLineDashItem aDashItem;
+            aDashItem.SetWhich( XATTR_LINEDASH );
+            aDashItem.SetName( rName );
+            aDashItem.SetValue( pEntry->GetDash() );
+            aSet.Put( aDashItem );
+            break;
+        }
+        default:
+            return sal_False;
+        }
+    }
 
     pObj->SetItemSetAndBroadcast(aSet);
 
