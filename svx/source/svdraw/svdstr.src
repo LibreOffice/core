@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:30:20 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5143,7 +5143,7 @@ String STR_EditMergeMergePoly
     Text[ japanese ] = "%O‚ğ‡‚í‚¹‚Ä1‚Â‚É‚·‚é";
     Text[ korean ] = "%O º´ÇÕ";
     Text[ chinese_simplified ] = "ÈÚºÏ %O";
-    Text[ chinese_traditional ] = "¦X¦} %O";
+    Text[ chinese_traditional ] = "¦X¨Ö %O";
     Text[ arabic ] = "ÏãÌ %O";
     Text[ turkish ] = "Birleştir: %O";
 };
@@ -5166,7 +5166,7 @@ String STR_EditMergeSubstractPoly
     Text[ japanese ] = "%O‚ğ1‚Â‚É‚µ‚½‚à‚Ì‚©‚ç‚Ü‚½ŠO‚·";
     Text[ korean ] = "%O °¨»ê";
     Text[ chinese_simplified ] = "·ÖÀë %O";
-    Text[ chinese_traditional ] = "´î¤Ö %O";
+    Text[ chinese_traditional ] = "´î¥h %O";
     Text[ arabic ] = "ØÑÍ %O";
     Text[ turkish ] = "%O çıkart";
 };
@@ -6492,7 +6492,7 @@ String STR_ViewCreateObj
     Text[ russian ] = "Ñîçäàòü %O";
     Text[ polish ] = "Utwórz %O";
     Text[ japanese ] = "%O‚Ìì¬";
-    Text[ chinese_traditional ] = "¥Í¦¨ %O";
+    Text[ chinese_traditional ] = "²£¥Í %O";
     Text[ arabic ] = "ÅäÔÇÁ %O";
     Text[ dutch ] = "%O maken";
     Text[ chinese_simplified ] = "Éú³É %O";
@@ -7027,7 +7027,7 @@ String STR_ItemValOFF
     Text[ russian ] = "âûêë.";
     Text[ polish ] = "wy³¹cz";
     Text[ japanese ] = "µÌ";
-    Text[ chinese_traditional ] = "¥¢¬¡";
+    Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "uit";
     Text[ chinese_simplified ] = "Ê§»î";
@@ -7289,7 +7289,7 @@ String STR_ItemValFITTOSIZENONE
     Text[ russian ] = "Âûêë.";
     Text[ polish ] = "Wy³¹cz";
     Text[ japanese ] = "µÌ";
-    Text[ chinese_traditional ] = "¥¢¬¡";
+    Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "Uit";
     Text[ chinese_simplified ] = "Ê§»î";
@@ -7367,7 +7367,7 @@ String STR_ItemValFITTOSIZERESIZEAT
     Text[ russian ] = "Ïğèìåíèòü æåñòêèå àòğèáóòû";
     Text[ polish ] = "Zastosuj twarde atrybuty";
     Text[ japanese ] = "è“®‚Å‘®«‚ğg—p";
-    Text[ chinese_traditional ] = "¨Ï¥Î¤â¤uÄİ©Ê";
+    Text[ chinese_traditional ] = "¨Ï¥Î¤â°ÊÄİ©Ê";
     Text[ language_user1 ] = " ";
     Text[ arabic ] = "ÇÓÊÎÏÇã ÓãÇÊ íÏæíÉ";
     Text[ dutch ] = "Gebruik vaste attributen";
@@ -7657,7 +7657,7 @@ String STR_ItemValTEXTANI_NONE
     Text[ russian ] = "âûêë.";
     Text[ polish ] = "wy³¹cz";
     Text[ japanese ] = "µÌ";
-    Text[ chinese_traditional ] = "¥¢¬¡";
+    Text[ chinese_traditional ] = "¤£¨Ï¥Î";
     Text[ arabic ] = "ÅíŞÇİ";
     Text[ dutch ] = "uit";
     Text[ chinese_simplified ] = "Ê§»î";
@@ -10050,7 +10050,7 @@ String SIP_XA_LINESTART
     Text[ portuguese_brazilian ] = "Linestart";
     Text[ japanese ] = "ü‚Ìn“_";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë";
-    Text[ chinese_traditional ] = "½u±ø¶}ºİ";
+    Text[ chinese_traditional ] = "½u±ø°_©l";
     Text[ arabic ] = "ÈÏÇíÉ ÇáÎØ";
     Text[ dutch ] = "Lijnbegin";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë";
@@ -10102,7 +10102,7 @@ String SIP_XA_LINESTARTWIDTH
     Text[ portuguese_brazilian ] = "Width of linestart";
     Text[ japanese ] = "ü‚Ìn“_‚Ì‘¾‚³";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë¿í¶È";
-    Text[ chinese_traditional ] = "½u±ø¶}ºİ¼e«×";
+    Text[ chinese_traditional ] = "½u±ø°_©l¼e«×";
     Text[ arabic ] = "ÚÑÖ ÈÏÇíÉ ÇáÎØ";
     Text[ dutch ] = "Dikte lijnbegin";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë¿í¶È";
@@ -10154,7 +10154,7 @@ String SIP_XA_LINESTARTCENTER
     Text[ portuguese_brazilian ] = "Center linestart";
     Text[ japanese ] = "ü‚Ìn“_‚ğ’†‰›‘µ‚¦";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë¾ÓÖĞ";
-    Text[ chinese_traditional ] = "½u±ø¶}ºİ¸m¤¤";
+    Text[ chinese_traditional ] = "½u±ø°_©l¸m¤¤";
     Text[ arabic ] = "ÈÏÇíÉ ÇáÎØ¡ ÊæÓíØ";
     Text[ dutch ] = "Lijnbegin gecentreerd";
     Text[ chinese_simplified ] = "ÏßÌõ¿ª¶Ë¾ÓÖĞ";
@@ -11459,7 +11459,7 @@ String SIP_XA_FORMTXTSTDFORM
     Text[ portuguese_brazilian ] = "Fontwork standard form";
     Text[ japanese ] = "Ì«İÄÜ°¸ •W€Ì«°Ñ";
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå±ê×¼¸ñÊ½";
-    Text[ chinese_traditional ] = "¬ü³N¦r«¬¼Ğ­ã®æ¦¡";
+    Text[ chinese_traditional ] = "¬ü³N¦r«¬¼Ğ·Ç®æ¦¡";
     Text[ arabic ] = "ÇÓÊãÇÑÉ Fontwork ÇáÇİÊÑÇÖíÉ";
     Text[ dutch ] = "Fontwork standaardvorm";
     Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå±ê×¼¸ñÊ½";
@@ -12849,7 +12849,7 @@ String SIP_SA_TEXT_ANIKIND
     Text[ portuguese_brazilian ] = "Ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "¬¡°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "²¾°Ê¼ĞÃD";
     Text[ arabic ] = "ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâ";
@@ -12875,7 +12875,7 @@ String SIP_SA_TEXT_ANIDIRECTION
     Text[ portuguese_brazilian ] = "Direction of ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚Ì•ûŒü";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄ·½Ïò";
-    Text[ chinese_traditional ] = "¼ĞÃD¬¡°Êªº¤è¦V";
+    Text[ chinese_traditional ] = "¼ĞÃD²¾°Êªº¤è¦V";
     Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Richting tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄ·½Ïò";
@@ -12901,7 +12901,7 @@ String SIP_SA_TEXT_ANISTARTINSIDE
     Text[ portuguese_brazilian ] = "Ticker start inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚Ìn‚Ü‚è";
     Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "¤º³¡¬¡°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "¤º³¡²¾°Ê¼ĞÃD";
     Text[ arabic ] = "ÈÏÁ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie vanaf midden";
     Text[ chinese_simplified ] = "ÄÚ²¿»î¶¯±êÌâ";
@@ -12927,7 +12927,7 @@ String SIP_SA_TEXT_ANISTOPINSIDE
     Text[ portuguese_brazilian ] = "Ticker stop inside";
     Text[ japanese ] = "˜g“à‚ÅÃ·½Ä ±ÆÒ°¼®İ‚ÌI‚í‚è";
     Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
-    Text[ chinese_traditional ] = "¤º³¡°±¤î¬¡°Ê¼ĞÃD";
+    Text[ chinese_traditional ] = "¤º³¡°±¤î²¾°Ê¼ĞÃD";
     Text[ arabic ] = "ÅíŞÇİ ÇáßÊÇÈÉ ÇáãÊÍÑß ÈÇáÏÇÎá";
     Text[ dutch ] = "Tekstanimatie stoppen vanaf midden";
     Text[ chinese_simplified ] = "ÄÚ²¿Í£Ö¹»î¶¯±êÌâ";
@@ -12954,7 +12954,7 @@ String SIP_SA_TEXT_ANICOUNT
     Text[ portuguese_brazilian ] = "Number of Ticker runs";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚ÌÙ°Ìß”";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÊıÄ¿";
-    Text[ chinese_traditional ] = "¬¡°Ê¼ĞÃDªº¼Æ¥Ø";
+    Text[ chinese_traditional ] = "²¾°Ê¼ĞÃDªº¼Æ¥Ø";
     Text[ arabic ] = "ÚÏÏ ÇáßÊÇÈÇÊ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Snelheid tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÊıÄ¿";
@@ -12980,7 +12980,7 @@ String SIP_SA_TEXT_ANIDELAY
     Text[ portuguese_brazilian ] = "Speed of ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚ÌisØ½ŞÑ";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄËÙ¶È";
-    Text[ chinese_traditional ] = "¬¡°Ê¤å¦rªº³t«×";
+    Text[ chinese_traditional ] = "²¾°Ê¤å¦rªº³t«×";
     Text[ arabic ] = "ÓÑÚÉ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Tijdsinsteloing tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄËÙ¶È";
@@ -13006,7 +13006,7 @@ String SIP_SA_TEXT_ANIAMOUNT
     Text[ portuguese_brazilian ] = "Step size of ticker";
     Text[ japanese ] = "Ã·½Ä±ÆÒ°¼®İ‚Ì½Ã¯ÌßŠÔŠu";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÃ¿²½¼ä¸ô";
-    Text[ chinese_traditional ] = "¬¡°Ê¼ĞÃDªº¨C¨B¶¡¹j";
+    Text[ chinese_traditional ] = "²¾°Ê¼ĞÃDªº¨C¨B¶¡¹j";
     Text[ arabic ] = "ÍÌã ÎØæÉ ÇáßÊÇÈÉ ÇáãÊÍÑßÉ";
     Text[ dutch ] = "Stapgrootte tekstanimatie";
     Text[ chinese_simplified ] = "»î¶¯±êÌâµÄÃ¿²½¼ä¸ô";
@@ -13060,7 +13060,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ japanese ] = "µ°Ä¼ª²Ìß’²®";
     Text[ korean ] = "Autoshape Adjustment";
     Text[ chinese_simplified ] = "ĞÎ×´×Ô¶¯µ÷ÊÊ";
-    Text[ chinese_traditional ] = "§Îª¬¦Û­q½ÕÓì";
+    Text[ chinese_traditional ] = "¹Ï¼Ë¦Û°Ê½Õ¾A";
     Text[ turkish ] = "SvDraw Autoshape Adjustment";
     Text[ arabic ] = "ÖÈØ ÇáÃÔßÇá ÇáÊáŞÇÆíÉ";
 };
@@ -15788,7 +15788,7 @@ String SIP_EE_PARA_TABS
     Text[ portuguese_brazilian ] = "Tabulators";
     Text[ japanese ] = "ÀÌŞ";
     Text[ chinese_simplified ] = "ÖÆ±í·û";
-    Text[ chinese_traditional ] = "¨îªí²Å";
+    Text[ chinese_traditional ] = "»sªí²Å";
     Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
     Text[ dutch ] = "Tabulatoren";
     Text[ chinese_simplified ] = "ÖÆ±í·û";
@@ -15962,7 +15962,7 @@ String SIP_EE_CHAR_STRIKEOUT
     Text = "Durchstreichung";
     Text [ ENGLISH ] = "Strike through" ;
     Text[ english_us ] = "Strikethrough";
-    Text[ portuguese ] = "Traçado";
+    Text[ portuguese ] = "Rasurado";
     Text[ russian ] = "Çà÷åğêèâàíèå";
     Text[ dutch ] = "Doorhalen";
     Text[ french ] = "Barré";
@@ -16187,7 +16187,7 @@ String SIP_EE_FEATURE_TAB
     Text[ portuguese_brazilian ] = "Tabulator";
     Text[ japanese ] = "ÀÌŞ";
     Text[ chinese_simplified ] = "ÖÆ±í·û";
-    Text[ chinese_traditional ] = "¨îªí²Å";
+    Text[ chinese_traditional ] = "»sªí²Å";
     Text[ arabic ] = "ÚáÇãÉ ÇáÌÏæáÉ";
     Text[ dutch ] = "Tabulator";
     Text[ chinese_simplified ] = "ÖÆ±í·û";
