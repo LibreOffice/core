@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-24 12:56:06 $
+ *  last change: $Author: fs $ $Date: 2001-09-27 16:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,8 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
     Timer                   maPreViewTimer;
     Graphic                 maGraphic;
     FileDialogHelper*       mpParent;
+
+    const short             m_nDialogType;
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
@@ -796,6 +798,7 @@ ErrCode FileDialogHelper_Impl::getGraphic( Graphic& rGraphic ) const
 FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
                                               const short nDialogType,
                                               sal_uInt32 nFlags )
+    :m_nDialogType( nDialogType )
 {
     OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
 
@@ -833,7 +836,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
 
     Sequence < Any > aServiceType(1);
 
-    switch ( nDialogType ) {
+    switch ( m_nDialogType ) {
     case FILEOPEN_SIMPLE:
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         break;
@@ -869,7 +872,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         mbHasLink = sal_True;
 
         // aPreviewTimer
-          maPreViewTimer.SetTimeout( 500 );
+        maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
         break;
     case FILEOPEN_PLAY:
@@ -884,7 +887,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* pParent,
         mbHasPreview = sal_True;
         mbHasLink = sal_True;
         // aPreviewTimer
-          maPreViewTimer.SetTimeout( 500 );
+        maPreViewTimer.SetTimeout( 500 );
         maPreViewTimer.SetTimeoutHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
         break;
 #if SUPD>639
@@ -1038,7 +1041,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             rpSet->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
         else
         {
-            if ( xCtrlAccess.is() )
+            if ( ( FILEOPEN_READONLY_VERSION == m_nDialogType ) && xCtrlAccess.is() )
             {
                 try
                 {
@@ -1047,7 +1050,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if ( ( aValue >>= bReadOnly ) && bReadOnly )
                         rpSet->Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
                 }
-                catch( IllegalArgumentException ){}
+                catch( IllegalArgumentException )
+                {
+                    DBG_ERROR( "FileDialogHelper_Impl::execute: caught an IllegalArgumentException!" );
+                }
             }
         }
         if ( mbHasVersions && xCtrlAccess.is() )
@@ -1522,7 +1528,7 @@ void FileDialogHelper_Impl::saveConfig()
     {
         sal_Bool bWriteConfig = sal_False;
         SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
-           String aUserData = String::CreateFromAscii( STD_CONFIG_STR );
+        String aUserData = String::CreateFromAscii( STD_CONFIG_STR );
 
         if ( aDlgOpt.Exists() )
         {
