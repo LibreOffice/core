@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:52:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,12 +563,12 @@ void ImportExcel::Note( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
         pD->SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
-                GetCurrScTab(), aIn.ReadByteString( TRUE ) );
+                GetCurrScTab(), ScPostIt( aIn.ReadByteString( TRUE ), pD ) );
     else
-        {
+    {
         bTabTruncated = TRUE;
             GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-        }
+    }
 
     pLastFormCell = NULL;
 }
