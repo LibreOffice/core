@@ -7387,6 +7387,33 @@ SfxBoolItem SendMail SID_MAIL_SENDDOC
     GroupId = GID_DOCUMENT;
 ]
 
+SfxBoolItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
+(SfxStringItem Recipient SID_MAIL_RECIPIENT,SfxStringItem Subject SID_MAIL_SUBJECT,SfxStringItem MailText SID_MAIL_TEXT,SfxUInt16Item Priority SID_MAIL_PRIORITY,SfxBoolItem AttachedDoc SID_MAIL_ATTACH,SfxStringItem AttachFiles SID_MAIL_ATTACH_FILE)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem SetOptions SID_SETOPTIONS
 ()
@@ -8767,6 +8794,61 @@ TbxImageItem ZoomToolBox SID_ZOOM_TOOLBOX
 //--------------------------------------------------------------------------
 SfxBoolItem ExportTo SID_EXPORTDOC
 (SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem ExportToPDF SID_EXPORTDOCASPDF
+(SfxStringItem URL SID_FILE_NAME )
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
+SfxBoolItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
+(SfxStringItem URL SID_FILE_NAME)
 [
     /* flags: */
     AutoUpdate = FALSE,
