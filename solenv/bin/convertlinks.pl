@@ -59,7 +59,9 @@ foreach $i (@files)
         print FILEOUT $_;
     }
     close FILEOUT;
+    chmod 0666, $i->{filename};
     rename "$i->{filename}.tmp", $i->{filename} || die "could not rename $i->{filename}.tmp to $i->{filename}";
+    chmod 0444, $i->{filename};
     $return = 0;
 }
 
