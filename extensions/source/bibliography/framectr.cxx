@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 12:39:05 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:30:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,23 +193,6 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
     throw (::com::sun::star::uno::RuntimeException)
 {
-    util::URL aURL;
-    aURL.Complete = C2U("0");
-    uno::Reference< XDispatchProvider >  xProv( pController->xFrame, UNO_QUERY );
-
-    if ( xProv.is() )
-    {
-        uno::Sequence<beans::PropertyValue> aArgs( 1 );
-        Any aValue;
-        aValue <<= C2U( "remove" );
-        aArgs[0].Value  = aValue;
-        aArgs[0].Name   = C2U( "command" );
-
-        uno::Reference< XDispatch >  aDisp = xProv->queryDispatch( aURL,  C2U("_menubar"), 0 );
-        if ( aDisp.is() )
-            aDisp->dispatch( aURL, aArgs );
-    }
-
     if ( pController )
         pController->getFrame()->removeFrameActionListener( this );
 }
@@ -259,6 +242,28 @@ BibFrameController_Impl::~BibFrameController_Impl()
     delete pDatMan;
     if(pBibMod)
         CloseBibModul(pBibMod);
+}
+
+::rtl::OUString SAL_CALL BibFrameController_Impl::getImplementationName() throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.extensions.Bibliography");
+}
+
+sal_Bool SAL_CALL BibFrameController_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return (
+            sServiceName.equalsAscii("com.sun.star.frame.Bibliography") ||
+            sServiceName.equalsAscii("com.sun.star.frame.Controller")
+           );
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL BibFrameController_Impl::getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException)
+{
+    // return only top level services ...
+    // base services are included there and should be asked by uno-rtti.
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > lNames(1);
+    lNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.Bibliography");
+    return lNames;
 }
 
 void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg ) throw (::com::sun::star::uno::RuntimeException)
