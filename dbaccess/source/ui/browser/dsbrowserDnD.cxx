@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:46:11 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 06:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1173,7 +1173,27 @@ namespace dbaui
                             else
                                 ::dbaui::composeTableName(xMeta,xProp,sOldName,sal_False);
 
-                            if((etQuery == eType || (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers())) ? sName != sNewName : !sNewName.equalsIgnoreAsciiCase(sName))
+                            // check if the new name is allowed
+                            if ( etQuery != eType && isSQL92CheckEnabled(xConnection) && xMeta.is() )
+                            {
+                                ::rtl::OUString sAlias = ::dbtools::convertName2SQLName(sNewName,xMeta->getExtraNameCharacters());
+                                if ( (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers())
+                                            ?
+                                            sAlias != sNewName
+                                            :
+                                    !sNewName.equalsIgnoreAsciiCase(sAlias))
+                                    {
+                                        String sError = ErrorBox(getView(), ModuleRes(ERROR_INVALID_TABLE_NAME)).GetMessText();
+                                        dbtools::throwGenericSQLException(sError, NULL);
+                                    }
+                            }
+
+                            if ( (etQuery == eType || (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()))
+                                            ?
+                                            sName != sNewName
+                                            :
+                                    !sNewName.equalsIgnoreAsciiCase(sName)
+                                )
                             {
                                 Reference<XRename> xRename(pData->xObject,UNO_QUERY);
                                 OSL_ENSURE(xRename.is(),"No Xrename interface!");
@@ -1368,6 +1388,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2002/07/09 12:46:11  oj
+ *  #99921# check if datasource allows to check names
+ *
  *  Revision 1.50  2002/07/08 09:47:23  oj
  *  #98087# check d&d entries
  *
