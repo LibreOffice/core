@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-10 08:22:27 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 14:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,11 @@
 #define RUNTIMEEXCEPTION                                ::com::sun::star::uno::RuntimeException
 #define EVENTOBJECT                                     ::com::sun::star::lang::EventObject
 
-#define BMKMENU_ITEMID_START    20000
-
 namespace framework
 {
 
 class BmkMenu;
+class AddonMenu;
 class MenuManager : public XSTATUSLISTENER      ,
                     public ThreadHelpBase           ,
                     public ::cppu::OWeakObject
@@ -137,9 +136,14 @@ class MenuManager : public XSTATUSLISTENER      ,
                      sal_Bool bDeleteChildren );
 
         MenuManager( REFERENCE< XFRAME >& rFrame,
-                     BmkMenu* pBmkMenu,
-                     sal_Bool bDelete,
-                     sal_Bool bDeleteChildren );
+                     BmkMenu*           pBmkMenu,
+                     sal_Bool           bDelete,
+                     sal_Bool           bDeleteChildren );
+
+        MenuManager( REFERENCE< XFRAME >& rFrame,
+                     AddonMenu*         pAddonMenu,
+                     sal_Bool           bDelete,
+                     sal_Bool           bDeleteChildren );
 
         virtual ~MenuManager();
 

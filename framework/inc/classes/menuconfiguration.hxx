@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:44:26 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 14:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,12 +95,19 @@
 
 #define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
 #define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
+#define ADDONS_POPUPMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_addons_popup" ))
+
+// Prepare for inclusion by framework and sfx
+// Please consider that there is a corresponding define also in sfxsids.hrc!! (SID_SFX_START)/(SID_ADDONS)
+#define FWK_SID_SFX_START 5000
+#define FWK_SID_ADDONS (FWK_SID_SFX_START+1678)
 
 const USHORT START_ITEMID_PICKLIST      = 4500;
 const USHORT END_ITEMID_PICKLIST        = 4599;
 const USHORT MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
 const USHORT START_ITEMID_WINDOWLIST    = 4600;
 const USHORT END_ITEMID_WINDOWLIST      = 4699;
+const USHORT ITEMID_ADDONLIST           = FWK_SID_ADDONS;
 
 namespace framework
 {
@@ -126,6 +133,10 @@ class MenuConfiguration
         PopupMenu* CreateBookmarkMenu(
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                 const ::rtl::OUString& aURL )
+            throw ( ::com::sun::star::lang::WrappedTargetException );
+
+        PopupMenu* CreateAddonMenu(
+                ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
         ToolBox* CreateToolBoxFromConfiguration(
