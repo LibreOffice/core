@@ -651,8 +651,8 @@ class TextAttributeDialog extends TextActionDialog
     {
         super.init( sExplanation, sText, sButtonText );
 
-        aForeground = Color.BLACK;
-        aBackground = Color.WHITE;
+        aForeground = Color.black;
+        aBackground = Color.white;
 
         JPanel aAttr = new JPanel();
         aAttr.setLayout( new BoxLayout( aAttr, BoxLayout.Y_AXIS ) );
