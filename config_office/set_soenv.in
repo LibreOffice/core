@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.33 $
-# Date:        $Date: 2005-01-14 11:35:31 $
+# Version:     $Revision: 1.34 $
+# Date:        $Date: 2005-01-18 14:35:28 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1413,6 +1413,7 @@ ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
 ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
+ToFile( "CUSTOM_IMAGE_SETS", "@CUSTOM_IMAGE_SETS@","e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 # [ed] 5/14/02 If we're building Aqua graphics, insert a C macro to indicate this.
 # There may be a better way to do this, like splitting unxmacxp into two, but
