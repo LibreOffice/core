@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:03:26 $
+ *  last change: $Author: dbo $ $Date: 2001-08-23 07:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,9 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
     OString strippedFileName(fileName.copy(fileName.lastIndexOf(SEPARATOR) + 1));
     OString tempName(strippedFileName.copy(0, strippedFileName.indexOf('.')));
     tempName += "_";
+    tempName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "_idlc_");
     OString regTmpName( makeTempName(tempName, "._idlc_"));
     regFileName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
-    regTmpName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "_idlc_");
 
     RegistryLoader              regLoader;
     RegistryTypeWriterLoader    writerLoader;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-20 10:44:50 $
+ *  last change: $Author: dbo $ $Date: 2001-08-23 07:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,12 @@ OString makeTempName(const OString& prefix, const OString& postfix)
 #else
     (void) mktemp(tmpFilePattern);
 #endif
-    if ( postfix.getLength() )
-        strcat(tmpFilePattern, postfix.getStr());
+    /** DBO (08/22/2002):
+        since mkstemp() creates the file, it won't be removed anywhere later appending a postfix.
+        Is the postfix necessarry?
+    */
+//      if ( postfix.getLength() )
+//          strcat(tmpFilePattern, postfix.getStr());
 #endif
 
 #ifdef __OS2__
