@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-16 18:08:06 $
+ *  last change: $Author: jp $ $Date: 2001-05-17 16:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2695,27 +2695,24 @@ void SwTransferable::FillClipFmtItem( SwWrtShell& rSh,
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_SVXB, nDest ))
         rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_SVXB );
 
-/*
+    SwTransferable *pClipboard = SW_MOD()->pClipboard;
     if( pClipboard )
     {
-        if( pClipboard->GetBufferType() & TRNSFR_DOCUMENT )
+        USHORT nResId;
+        if( pClipboard->eBufferType & TRNSFR_DOCUMENT )
             nResId = STR_PRIVATETEXT;
-        else if( pClipboard->GetBufferType() & TRNSFR_GRAPHIC )
+        else if( pClipboard->eBufferType & TRNSFR_GRAPHIC )
             nResId = STR_PRIVATEGRAPHIC;
-        else if( pClipboard->GetBufferType() == TRNSFR_OLE )
+        else if( pClipboard->eBufferType == TRNSFR_OLE )
             nResId = STR_PRIVATEOLE;
+        else
+            nResId = 0;
 
         if( nResId )
-        {
-            nPrivateFmt = SOT_FORMATSTR_ID_EMBED_SOURCE;
-            if( STR_PRIVATEOLE == nResId || STR_PRIVATEGRAPHIC == nResId )
-                // fuer den dummen Dialog (privates Format anzeigen)
-                rTypeLst.Insert( SvDataType( nPrivateFmt, MEDIUM_STORAGE ), 0 );
-
-        }
+            rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE,
+                                        SW_RES( nResId ) );
     }
     else
-*/
     {
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_EMBED_SOURCE, nDest ))
             rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
