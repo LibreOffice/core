@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2001-01-12 16:12:44 $
+#   last change: $Author: mtg $ $Date: 2001-03-21 14:57:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,35 +86,8 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        unobkm.cxx \
-        unoclbck.cxx \
-        unocrsrhelper.cxx\
-        unocoll.cxx \
-        unoevtlstnr.cxx \
-        unodraw.cxx \
-        unoevent.cxx \
-        unofield.cxx \
-        unoframe.cxx \
-        unoidx.cxx \
-        unomap.cxx \
-        unoobj.cxx \
-        unoobj2.cxx \
-        unoparagraph.cxx \
-        unoport.cxx \
-        unoportenum.cxx \
-        unoprnms.cxx \
-        unoredline.cxx \
-        unoredlines.cxx \
-        unorefmk.cxx \
-        unosett.cxx \
-        unosrch.cxx \
-        unostyle.cxx \
-        unotbl.cxx	\
-        unotext.cxx
-
-
 SLOFILES =	\
+        $(SLO)$/SwXTextDefaults.obj\
         $(SLO)$/unobkm.obj\
         $(SLO)$/unoclbck.obj\
         $(SLO)$/unoevent.obj\
@@ -142,7 +115,6 @@ SLOFILES =	\
         $(SLO)$/unostyle.obj\
         $(SLO)$/unotbl.obj \
         $(SLO)$/unotext.obj
-
 
 # --- Targets -------------------------------------------------------
 
