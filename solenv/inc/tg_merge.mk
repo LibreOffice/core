@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_merge.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-23 10:24:13 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:56:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ MKFILENAME:=tg_merge.mk
 
 # dependencies from *.ulf to par-files
 .IF "$(ULFPARFILES)"!=""
-$(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).ulf
+$(ULFPARFILES) : $(COMMONMISC)$/$(TARGET)$/$$(@:b).$(LANGFILEEXT)
 .ENDIF          # "$(PARFILES)"!=""
 
 .IF "$(ULFFILES)"!=""
