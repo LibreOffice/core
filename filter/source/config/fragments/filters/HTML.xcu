@@ -8,8 +8,8 @@
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
             <value xml:lang="de">HTML-Dokument</value>
-            <value xml:lang="en-US">HTML-Document</value>
-            <value xml:lang="x-translate">HTML-Document</value>
+            <value xml:lang="en-US">HTML Document</value>
+            <value xml:lang="x-translate">HTML Document</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT EXPORT ASYNCHRON PREFERRED</value></prop>
     </node>
