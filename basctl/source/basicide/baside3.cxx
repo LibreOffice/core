@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-27 18:03:04 $
+ *  last change: $Author: tbe $ $Date: 2001-08-17 14:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,9 @@ void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEditor->MouseButtonUp( rMEvt );
     SfxBindings& rBindings = BasicIDE::GetBindings();
-    if( (pEditor->GetMode() == VCDLGED_INSERT) && !pEditor->IsCreateOK() )
+    if( (pEditor->GetMode() == DLGED_INSERT) && !pEditor->IsCreateOK() )
     {
-        pEditor->SetMode( VCDLGED_SELECT );
+        pEditor->SetMode( DLGED_SELECT );
         rBindings.Invalidate( SID_CHOOSE_CONTROLS );
     }
     rBindings.Invalidate( SID_DOC_MODIFIED );
@@ -311,7 +311,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                 if( IDE_DLL()->GetShell()->GetFrame() )
                 {
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,
-                              (pEditor->GetMode() == VCDLGED_TEST) ? TRUE : FALSE) );
+                              (pEditor->GetMode() == DLGED_TEST) ? TRUE : FALSE) );
                 }
                 else
                     rSet.Put( SfxBoolItem( SID_DIALOG_TESTMODE,FALSE ));
@@ -321,28 +321,25 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
             case SID_CHOOSE_CONTROLS:
             {
                 SfxAllEnumItem aItem( SID_CHOOSE_CONTROLS );
-                if( GetEditor()->GetMode() == VCDLGED_SELECT )
+                if( GetEditor()->GetMode() == DLGED_SELECT )
                     aItem.SetValue( SVX_SNAP_SELECT );
                 else
                 {
                     USHORT nObj;
                     switch( pEditor->GetInsertObj() )
                     {
-                        case OBJ_DLG_CHECKBOX:      nObj = SVX_SNAP_CHECKBOX; break;
-                        case OBJ_DLG_RADIOBUTTON:   nObj = SVX_SNAP_RADIOBUTTON; break;
                         case OBJ_DLG_PUSHBUTTON:    nObj = SVX_SNAP_PUSHBUTTON; break;
-                        case OBJ_DLG_SPINBUTTON:    nObj = SVX_SNAP_SPINBUTTON; break;
-                        case OBJ_DLG_FIXEDTEXT:     nObj = SVX_SNAP_FIXEDTEXT; break;
-                        case OBJ_DLG_GROUPBOX:      nObj = SVX_SNAP_GROUPBOX; break;
-                        case OBJ_DLG_EDIT:          nObj = SVX_SNAP_EDIT; break;
+                        case OBJ_DLG_RADIOBUTTON:   nObj = SVX_SNAP_RADIOBUTTON; break;
+                        case OBJ_DLG_CHECKBOX:      nObj = SVX_SNAP_CHECKBOX; break;
                         case OBJ_DLG_LISTBOX:       nObj = SVX_SNAP_LISTBOX; break;
                         case OBJ_DLG_COMBOBOX:      nObj = SVX_SNAP_COMBOBOX; break;
-                        case OBJ_DLG_HSCROLLBAR:    nObj = SVX_SNAP_HSCROLLBAR; break;
-                        case OBJ_DLG_VSCROLLBAR:    nObj = SVX_SNAP_VSCROLLBAR; break;
-                        case OBJ_DLG_PREVIEW:       nObj = SVX_SNAP_PREVIEW; break;
-                        case OBJ_DLG_URLBUTTON:     nObj = SVX_SNAP_URLBUTTON; break;
+                        case OBJ_DLG_GROUPBOX:      nObj = SVX_SNAP_GROUPBOX; break;
+                        case OBJ_DLG_EDIT:          nObj = SVX_SNAP_EDIT; break;
+                        case OBJ_DLG_FIXEDTEXT:     nObj = SVX_SNAP_FIXEDTEXT; break;
                         case OBJ_DLG_IMAGECONTROL:  nObj = SVX_SNAP_IMAGECONTROL; break;
                         case OBJ_DLG_PROGRESSBAR:   nObj = SVX_SNAP_PROGRESSBAR; break;
+                        case OBJ_DLG_HSCROLLBAR:    nObj = SVX_SNAP_HSCROLLBAR; break;
+                        case OBJ_DLG_VSCROLLBAR:    nObj = SVX_SNAP_VSCROLLBAR; break;
                         case OBJ_DLG_HFIXEDLINE:    nObj = SVX_SNAP_HFIXEDLINE; break;
                         case OBJ_DLG_VFIXEDLINE:    nObj = SVX_SNAP_VFIXEDLINE; break;
                         default:                    nObj = 0;
@@ -397,109 +394,91 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             {
                 case SVX_SNAP_PUSHBUTTON:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_PUSHBUTTON );
                 }
                 break;
                 case SVX_SNAP_RADIOBUTTON:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_RADIOBUTTON );
                 }
                 break;
                 case SVX_SNAP_CHECKBOX:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_CHECKBOX);
-                }
-                break;
-                case SVX_SNAP_SPINBUTTON:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_SPINBUTTON );
-                }
-                break;
-                case SVX_SNAP_FIXEDTEXT:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_FIXEDTEXT );
-                }
-                break;
-                case SVX_SNAP_GROUPBOX:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_GROUPBOX );
                 }
                 break;
                 case SVX_SNAP_LISTBOX:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_LISTBOX );
                 }
                 break;
                 case SVX_SNAP_COMBOBOX:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_COMBOBOX );
+                }
+                break;
+                case SVX_SNAP_GROUPBOX:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_GROUPBOX );
                 }
                 break;
                 case SVX_SNAP_EDIT:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_EDIT );
                 }
                 break;
-                case SVX_SNAP_HSCROLLBAR:
+                case SVX_SNAP_FIXEDTEXT:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_HSCROLLBAR );
-                }
-                break;
-                case SVX_SNAP_VSCROLLBAR:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_VSCROLLBAR );
-                }
-                break;
-                case SVX_SNAP_PREVIEW:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_PREVIEW );
-                }
-                break;
-                case SVX_SNAP_URLBUTTON:
-                {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
-                    GetEditor()->SetInsertObj( OBJ_DLG_URLBUTTON );
-                }
-                break;
-                case SVX_SNAP_SELECT:
-                {
-                    GetEditor()->SetMode( VCDLGED_SELECT );
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_FIXEDTEXT );
                 }
                 break;
                 case SVX_SNAP_IMAGECONTROL:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_IMAGECONTROL );
                 }
                 break;
                 case SVX_SNAP_PROGRESSBAR:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_PROGRESSBAR );
+                }
+                break;
+                case SVX_SNAP_HSCROLLBAR:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_HSCROLLBAR );
+                }
+                break;
+                case SVX_SNAP_VSCROLLBAR:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_VSCROLLBAR );
                 }
                 break;
                 case SVX_SNAP_HFIXEDLINE:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_HFIXEDLINE );
                 }
                 break;
                 case SVX_SNAP_VFIXEDLINE:
                 {
-                    GetEditor()->SetMode( VCDLGED_INSERT );
+                    GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
+                }
+                break;
+                case SVX_SNAP_SELECT:
+                {
+                    GetEditor()->SetMode( DLGED_SELECT );
                 }
                 break;
             }
@@ -513,8 +492,8 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
 
         case SID_DIALOG_TESTMODE:
         {
-            VCDlgMode eOldMode = GetEditor()->GetMode();
-            GetEditor()->SetMode( VCDLGED_TEST );
+            DlgEdMode eOldMode = GetEditor()->GetMode();
+            GetEditor()->SetMode( DLGED_TEST );
             GetEditor()->SetMode( eOldMode );
             rReq.Done();
             BasicIDE::GetBindings().Invalidate( SID_DIALOG_TESTMODE );
