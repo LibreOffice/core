@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:48:13 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
         for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
         {
             SdrObject *pO = (*pObjs)[MSHORT(i)];
-            if ( pO->IsWriterFlyFrame() )
+            if ( pO->ISA(SwVirtFlyDrawObj) )
             {
                 SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                 if( pFly->IsFlyInCntFrm() )
@@ -462,7 +462,7 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
             ASSERT( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
-        aBoundRect = pSdrObj->GetBoundRect();
+        aBoundRect = pSdrObj->GetCurrentBoundRect();
     }
     else
     {
