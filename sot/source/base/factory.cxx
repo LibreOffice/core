@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: ka $ $Date: 2001-01-17 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <sotdata.hxx>
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#endif
+
 /************** class SotData_Impl *********************************************/
 /*************************************************************************
 |*    SotData_Impl::SotData_Impl
@@ -86,7 +90,7 @@ SotData_Impl::SotData_Impl()
     , pSotDataObjectFactory( NULL )
     , pEmptyList( NULL )
     , pSotDataMemberObjectFactory( NULL )
-    , pAtomList( NULL )
+    , pDataFlavorList( NULL )
 {
 }
 
@@ -162,14 +166,13 @@ void SotFactory::DeInit()
     pSotData->pObjectList = NULL;
     delete pSotData->pEmptyList;
     pSotData->pEmptyList = NULL;
-    if( pSotData->pAtomList )
+    if( pSotData->pDataFlavorList )
     {
 
-        ULONG nMax = pSotData->pAtomList->Count();
-        for( ULONG i = 0; i < nMax; i++ )
-            delete pSotData->pAtomList->GetObject( i );
-        delete pSotData->pAtomList;
-        pSotData->pAtomList = NULL;
+        for( ULONG i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
+            delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
+        delete pSotData->pDataFlavorList;
+        pSotData->pDataFlavorList = NULL;
     }
     //delete pSOTDATA();
     //SOTDATA() = NULL;

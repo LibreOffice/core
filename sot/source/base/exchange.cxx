@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-11 15:56:43 $
+ *  last change: $Author: ka $ $Date: 2001-01-17 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-
 #include <tools/string.hxx>
 #include <sotdata.hxx>
 #include <exchange.hxx>
@@ -76,155 +75,167 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
+#endif
+
+using namespace::com::sun::star::uno;
+using namespace::com::sun::star::datatransfer;
+
 /*
-    In dieser Tabelle stehen alle im Office verwendeten Format-Bezeichner.
+    In diesen Tabellen stehen alle im Office verwendeten MimeTypes,
+    Format-Bezeichner und Types.
     Die Tabelle ist nach den Formatstring-Ids sortiert und jede Id
     ist um genau 1 groesser als ihre Vorgaenger-Id, damit die Id als
     Tabellenindex benutzt werden kann.
 */
-
-static const sal_Char* aFormatArray_Impl[] =
+struct DataFlavorRepresentation
 {
-/*  0 SOT_FORMAT_SYSTEM_START*/             "",
-/*  1 SOT_FORMAT_STRING*/                   "Text",
-/*  2 SOT_FORMAT_BITMAP*/                   "Bitmap",
-/*  3 SOT_FORMAT_GDIMETAFILE*/              "GDIMetaFile",
-/*  4 SOT_FORMAT_PRIVATE*/                  "Private",
-/*  5 SOT_FORMAT_FILE*/                     "FileName",
-/*  6 SOT_FORMAT_FILE_LIST*/                "FileList",
-/*  7 EMPTY*/                               "",
-/*  8 EMPTY*/                               "",
-/*  9 EMPTY*/                               "",
-/* 10 SOT_FORMAT_RTF*/                      "Rich Text Format",
-
-/* 11 SOT_FORMATSTR_ID_DRAWING*/            "Drawing Format",
-/* 12 SOT_FORMATSTR_ID_SVXB*/               "SVXB (StarView Bitmap/Animation)",
-/* 13 SOT_FORMATSTR_ID_SVIM*/               "SVIM (StarView ImageMap)",
-/* 14 SOT_FORMATSTR_ID_XFA*/                "XFA (XOutDev FillAttr)",
-/* 15 SOT_FORMATSTR_ID_EDITENGINE*/         "EditEngineFormat",
-/* 16 SOT_FORMATSTR_ID_INTERNALLINK_STATE*/ "StatusInfo vom SvxInternalLink",
-/* 17 SOT_FORMATSTR_ID_SOLK*/               "SOLK (StarOffice Link)",
-/* 18 SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK*/  "Netscape Bookmark",
-/* 19 SOT_FORMATSTR_ID_TREELISTBOX*/        "SV_LBOX_DD_FORMAT",
-/* 20 SOT_FORMATSTR_ID_NATIVE*/             "Native",
-/* 21 SOT_FORMATSTR_ID_OWNERLINK*/          "OwnerLink",
-/* 22 SOT_FORMATSTR_ID_STARSERVER*/         "StarServerFormat",
-/* 23 SOT_FORMATSTR_ID_STAROBJECT*/         "StarObjectFormat",
-/* 24 SOT_FORMATSTR_ID_APPLETOBJECT*/       "Applet Object",
-/* 25 SOT_FORMATSTR_ID_PLUGIN_OBJECT*/      "PlugIn Object",
-/* 26 SOT_FORMATSTR_ID_STARWRITER_30*/      "StarWriter 3.0",
-/* 27 SOT_FORMATSTR_ID_STARWRITER_40*/      "StarWriter 4.0",
-/* 28 SOT_FORMATSTR_ID_STARWRITER_50*/      "StarWriter 5.0",
-/* 29 SOT_FORMATSTR_ID_STARWRITERWEB_40*/   "StarWriter/Web 4.0",
-/* 30 SOT_FORMATSTR_ID_STARWRITERWEB_50*/   "StarWriter/Web 5.0",
-/* 31 SOT_FORMATSTR_ID_STARWRITERGLOB_40*/  "StarWriter/Global 4.0",
-/* 32 SOT_FORMATSTR_ID_STARWRITERGLOB_50*/  "StarWriter/Global 5.0",
-/* 33 SOT_FORMATSTR_ID_STARDRAW*/           "StarDrawDocument",
-/* 34 SOT_FORMATSTR_ID_STARDRAW_40*/        "StarDrawDocument 4.0",
-/* 35 SOT_FORMATSTR_ID_STARIMPRESS_50*/     "StarImpress 5.0",
-/* 36 SOT_FORMATSTR_ID_STARDRAW_50*/        "StarDraw 5.0",
-/* 37 SOT_FORMATSTR_ID_STARCALC*/           "StarCalcDocument",
-/* 38 SOT_FORMATSTR_ID_STARCALC_40*/        "StarCalc 4.0",
-/* 39 SOT_FORMATSTR_ID_STARCALC_50*/        "StarCalc 5.0",
-/* 40 SOT_FORMATSTR_ID_STARCHART*/          "StarChartDocument",
-/* 41 SOT_FORMATSTR_ID_STARCHART_40*/       "StarChartDocument 4.0",
-/* 42 SOT_FORMATSTR_ID_STARCHART_50*/       "StarChart 5.0",
-/* 43 SOT_FORMATSTR_ID_STARIMAGE*/          "StarImageDocument",
-/* 44 SOT_FORMATSTR_ID_STARIMAGE_40*/       "StarImageDocument 4.0",
-/* 45 SOT_FORMATSTR_ID_STARIMAGE_50*/       "StarImage 5.0",
-/* 46 SOT_FORMATSTR_ID_STARMATH*/           "StarMath",
-/* 47 SOT_FORMATSTR_ID_STARMATH_40*/        "StarMathDocument 4.0",
-/* 48 SOT_FORMATSTR_ID_STARMATH_50*/        "StarMath 5.0",
-/* 49 SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC*/    "StarObjectPaintDocument",
-/* 50 SOT_FORMATSTR_ID_FILLED_AREA*/        "FilledArea",
-/* 51 SOT_FORMATSTR_ID_HTML*/               "HTML (HyperText Markup Language)",
-/* 52 SOT_FORMATSTR_ID_HTML_SIMPLE*/        "HTML Format",
-/* 53 SOT_FORMATSTR_ID_CHAOS*/              "FORMAT_CHAOS",
-/* 54 SOT_FORMATSTR_ID_CNT_MSGATTACHFILE*/  "CNT_MSGATTACHFILE_FORMAT",
-/* 55 SOT_FORMATSTR_ID_BIFF_5*/             "Biff5",
-/* 56 SOT_FORMATSTR_ID_BIFF__5*/            "Biff 5",
-/* 57 SOT_FORMATSTR_ID_SYLK*/               "Sylk",
-/* 58 SOT_FORMATSTR_ID_SYLK_BIGCAPS*/       "SYLK",
-/* 59 SOT_FORMATSTR_ID_LINK*/               "Link",
-/* 60 SOT_FORMATSTR_ID_DIF*/                "DIF",
-/* 61 SOT_FORMATSTR_ID_STARDRAW_TABBAR*/    "StarDraw TabBar",
-/* 62 SOT_FORMATSTR_ID_SONLK*/              "SONLK (StarOffice Navi Link)",
-/* 63 SOT_FORMATSTR_ID_MSWORD_DOC*/         "MSWordDoc",
-/* 64 SOT_FORMATSTR_ID_STAR_FRAMESET_DOC*/  "StarFrameSetDocument",
-/* 65 SOT_FORMATSTR_ID_OFFICE_DOC*/         "OfficeDocument",
-/* 66 SOT_FORMATSTR_ID_NOTES_DOCINFO*/      "NotesDocInfo",
-/* 67 SOT_FORMATSTR_ID_NOTES_HNOTE*/        "NoteshNote",
-/* 68 SOT_FORMATSTR_ID_NOTES_NATIVE*/       "Native",
-/* 69 SOT_FORMATSTR_ID_SFX_DOC*/            "SfxDocument",
-/* 70 SOT_FORMATSTR_ID_EVDF*/               "EVDF (Explorer View Dummy Format)",
-/* 71 SOT_FORMATSTR_ID_ESDF*/               "ESDF (Explorer Search Dummy Format)",
-/* 72 SOT_FORMATSTR_ID_IDF*/                "IDF (Iconview Dummy Format)",
-/* 73 SOT_FORMATSTR_ID_EFTP*/               "EFTP (Explorer Ftp File)",
-/* 74 SOT_FORMATSTR_ID_EFD*/                "EFD (Explorer Ftp Dir)",
-/* 75 SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH*/  "SvxFormFieldExch",
-/* 76 SOT_FORMATSTR_ID_EXTENDED_TABBAR*/    "ExtendedTabBar",
-/* 77 SOT_FORMATSTR_ID_SBA_DATAEXCHANGE*/   "SBA-DATAFORMAT",
-/* 78 SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE*/  "SBA-FIELDFORMAT",
-/* 79 SOT_FORMATSTR_ID_SBA_PRIVATE_URL*/    "SBA-PRIVATEURLFORMAT",
-/* 80 SOT_FORMATSTR_ID_SBA_TABED*/          "Tabed",
-/* 81 SOT_FORMATSTR_ID_SBA_TABID*/          "Tabid",
-/* 82 SOT_FORMATSTR_ID_SBA_JOIN*/           "SBA-JOINFORMAT",
-
-#ifdef MAC
-/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/   "Star OBJD",
-/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/  "Star LKSD",
-/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/       "Star EMBS",
-/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/        "Star LNKS",
-/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/       "Star EMBO",
-#else
-/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/   "Star Object Descriptor",
-/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/  "Star Link Source Descriptor",
-/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/       "Star Embed Source",
-/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/        "Star Link Source",
-/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/       "Star Embedded Object",
-#endif
-
-#ifdef WNT
-/* 88 SOT_FORMATSTR_ID_FILECONTENT*/        CFSTR_FILECONTENTS,
-/* 89 SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR*/  CFSTR_FILEDESCRIPTOR,
-/* 90 SOT_FORMATSTR_ID_FILENAME*/           CFSTR_FILENAME,
-#else
-/* 88 SOT_FORMATSTR_ID_FILECONTENT*/        "FileContents",
-/* 89 SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR*/  "FileGroupDescriptor",
-/* 90 SOT_FORMATSTR_ID_FILENAME*/           "FileName",
-#endif
-
-/* 91 SOT_FORMATSTR_ID_SD_OLE*/             "SD-OLE",
-/* 92 SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE*/   "Embedded Object",
-/* 93 SOT_FORMATSTR_ID_EMBED_SOURCE_OLE*/   "Embed Source",
-/* 94 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE*/   "Object Descriptor",
-/* 95 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR_OLE*/  "Link Source Descriptor",
-/* 96 SOT_FORMATSTR_ID_LINK_SOURCE_OLE*/    "Link Source",
-
-/* 97 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE*/   "SBA-CTRLFORMAT",
-/* 98 SOT_FORMATSTR_ID_OUTPLACE_OBJ*/       "OutPlace Object",
-/* 99 SOT_FORMATSTR_ID_CNT_OWN_CLIP*/       "CntOwnClipboard",
-/*100 SOT_FORMATSTR_ID_INET_IMAGE*/         "SO-INet-Image",
-/*101 SOT_FORMATSTR_ID_NETSCAPE_IMAGE*/     "Netscape Image Format",
-/*102 SOT_FORMATSTR_ID_SBA_FORMEXCHANGE*/   "SBA_FORMEXCHANGE",
-/*103 SOT_FORMATSTR_ID_SBA_REPORTEXCHANGE*/ "SBA_REPORTEXCHANGE",
-/*104 SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR*/ "UniformResourceLocator",
-
-/*105 SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50*/"StarChartDocument 5.0",
-/*106 SOT_FORMATSTR_ID_GRAPHOBJ*/           "Graphic Object",
-/*107 SOT_FORMATSTR_ID_DUMMY3*/             "SO_DUMMYFORMAT_3",
-/*108 SOT_FORMATSTR_ID_DUMMY4*/             "SO_DUMMYFORMAT_4"
+    const char*                         pMimeType;
+    const char*                         pName;
+    const ::com::sun::star::uno::Type*  pType;
 };
 
+// -----------------------------------------------------------------------------
+
+static const DataFlavorRepresentation aFormatArray_Impl[] =
+{
+/*  0 SOT_FORMAT_SYSTEM_START*/                 { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  1 SOT_FORMAT_STRING*/                       { "text/plain;charset=utf-16", "Text", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  2 SOT_FORMAT_BITMAP*/                       { "image/x-cf-dib", "Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  3 SOT_FORMAT_GDIMETAFILE*/                  { "GDIMetaFile", "GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  4 SOT_FORMAT_PRIVATE*/                      { "Private", "Private", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*  5 SOT_FORMAT_FILE*/                         { "FileName", "FileName", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  6 SOT_FORMAT_FILE_LIST*/                    { "FileList", "FileList", &::getCppuType( (const Sequence< ::rtl::OUString >*) 0 ) },
+/*  7 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  8 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*  9 EMPTY*/                                   { "", "", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 10 SOT_FORMAT_RTF*/                          { "text/richtext", "Rich Text Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 11 SOT_FORMATSTR_ID_DRAWING*/                { "Drawing Format", "Drawing Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 12 SOT_FORMATSTR_ID_SVXB*/                   { "SVXB (StarView Bitmap/Animation)", "SVXB (StarView Bitmap/Animation)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 13 SOT_FORMATSTR_ID_SVIM*/                   { "SVIM (StarView ImageMap)", "SVIM (StarView ImageMap)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 14 SOT_FORMATSTR_ID_XFA*/                    { "XFA (XOutDev FillAttr)", "XFA (XOutDev FillAttr)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 15 SOT_FORMATSTR_ID_EDITENGINE*/             { "EditEngineFormat", "EditEngineFormat", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                  //Type???
+/* 16 SOT_FORMATSTR_ID_INTERNALLINK_STATE*/     { "StatusInfo vom SvxInternalLink", "StatusInfo vom SvxInternalLink", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },      //Type???
+/* 17 SOT_FORMATSTR_ID_SOLK*/                   { "SOLK (StarOffice Link)", "SOLK (StarOffice Link)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 18 SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK*/      { "Netscape Bookmark", "Netscape Bookmark", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 19 SOT_FORMATSTR_ID_TREELISTBOX*/            { "SV_LBOX_DD_FORMAT", "SV_LBOX_DD_FORMAT", &::getCppuType( (const ::rtl::OUString*) 0 ) },                                     //Type???
+/* 20 SOT_FORMATSTR_ID_NATIVE*/                 { "Native", "Native", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                                      //Type???
+/* 21 SOT_FORMATSTR_ID_OWNERLINK*/              { "OwnerLink", "OwnerLink", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 22 SOT_FORMATSTR_ID_STARSERVER*/             { "StarServerFormat", "StarServerFormat", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                  //Type???
+/* 23 SOT_FORMATSTR_ID_STAROBJECT*/             { "StarObjectFormat", "StarObjectFormat", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                  //Type???
+/* 24 SOT_FORMATSTR_ID_APPLETOBJECT*/           { "Applet Object", "Applet Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                        //Type???
+/* 25 SOT_FORMATSTR_ID_PLUGIN_OBJECT*/          { "PlugIn Object", "PlugIn Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                                        //Type???
+/* 26 SOT_FORMATSTR_ID_STARWRITER_30*/          { "StarWriter 3.0", "StarWriter 3.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 27 SOT_FORMATSTR_ID_STARWRITER_40*/          { "StarWriter 4.0", "StarWriter 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 28 SOT_FORMATSTR_ID_STARWRITER_50*/          { "StarWriter 5.0", "StarWriter 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 29 SOT_FORMATSTR_ID_STARWRITERWEB_40*/       { "StarWriter/Web 4.0", "StarWriter/Web 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 30 SOT_FORMATSTR_ID_STARWRITERWEB_50*/       { "StarWriter/Web 5.0", "StarWriter/Web 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 31 SOT_FORMATSTR_ID_STARWRITERGLOB_40*/      { "StarWriter/Global 4.0", "StarWriter/Global 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 32 SOT_FORMATSTR_ID_STARWRITERGLOB_50*/      { "StarWriter/Global 5.0", "StarWriter/Global 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 33 SOT_FORMATSTR_ID_STARDRAW*/               { "StarDrawDocument", "StarDrawDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 34 SOT_FORMATSTR_ID_STARDRAW_40*/            { "StarDrawDocument 4.0", "StarDrawDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 35 SOT_FORMATSTR_ID_STARIMPRESS_50*/         { "StarImpress 5.0", "StarImpress 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 36 SOT_FORMATSTR_ID_STARDRAW_50*/            { "StarDraw 5.0", "StarDraw 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 37 SOT_FORMATSTR_ID_STARCALC*/               { "StarCalcDocument", "StarCalcDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 38 SOT_FORMATSTR_ID_STARCALC_40*/            { "StarCalc 4.0", "StarCalc 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 39 SOT_FORMATSTR_ID_STARCALC_50*/            { "StarCalc 5.0", "StarCalc 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 40 SOT_FORMATSTR_ID_STARCHART*/              { "StarChartDocument", "StarChartDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 41 SOT_FORMATSTR_ID_STARCHART_40*/           { "StarChartDocument 4.0", "StarChartDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 42 SOT_FORMATSTR_ID_STARCHART_50*/           { "StarChart 5.0", "StarChart 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 43 SOT_FORMATSTR_ID_STARIMAGE*/              { "StarImageDocument", "StarImageDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 44 SOT_FORMATSTR_ID_STARIMAGE_40*/           { "StarImageDocument 4.0", "StarImageDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 45 SOT_FORMATSTR_ID_STARIMAGE_50*/           { "StarImage 5.0", "StarImage 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 46 SOT_FORMATSTR_ID_STARMATH*/               { "StarMath", "StarMath", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 47 SOT_FORMATSTR_ID_STARMATH_40*/            { "StarMathDocument 4.0", "StarMathDocument 4.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 48 SOT_FORMATSTR_ID_STARMATH_50*/            { "StarMath 5.0", "StarMath 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 49 SOT_FORMATSTR_ID_STAROBJECT_PAINTDOC*/    { "StarObjectPaintDocument", "StarObjectPaintDocument", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 50 SOT_FORMATSTR_ID_FILLED_AREA*/            { "FilledArea", "FilledArea", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 51 SOT_FORMATSTR_ID_HTML*/                   { "HTML (HyperText Markup Language)", "HTML (HyperText Markup Language)", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 52 SOT_FORMATSTR_ID_HTML_SIMPLE*/            { "text/html", "HTML Format", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 53 SOT_FORMATSTR_ID_CHAOS*/                  { "FORMAT_CHAOS", "FORMAT_CHAOS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 54 SOT_FORMATSTR_ID_CNT_MSGATTACHFILE*/      { "CNT_MSGATTACHFILE_FORMAT", "CNT_MSGATTACHFILE_FORMAT", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },                  //Type???
+/* 55 SOT_FORMATSTR_ID_BIFF_5*/                 { "Biff5", "Biff5", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 56 SOT_FORMATSTR_ID_BIFF__5*/                { "Biff 5", "Biff 5", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 57 SOT_FORMATSTR_ID_SYLK*/                   { "Sylk", "Sylk", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 58 SOT_FORMATSTR_ID_SYLK_BIGCAPS*/           { "SYLK", "SYLK", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 59 SOT_FORMATSTR_ID_LINK*/                   { "Link", "Link", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 60 SOT_FORMATSTR_ID_DIF*/                    { "DIF", "DIF", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 61 SOT_FORMATSTR_ID_STARDRAW_TABBAR*/        { "StarDraw TabBar", "StarDraw TabBar", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 62 SOT_FORMATSTR_ID_SONLK*/                  { "SONLK (StarOffice Navi Link)", "SONLK (StarOffice Navi Link)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 63 SOT_FORMATSTR_ID_MSWORD_DOC*/             { "MSWordDoc", "MSWordDoc", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 64 SOT_FORMATSTR_ID_STAR_FRAMESET_DOC*/      { "StarFrameSetDocument", "StarFrameSetDocument", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 65 SOT_FORMATSTR_ID_OFFICE_DOC*/             { "OfficeDocument", "OfficeDocument", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 66 SOT_FORMATSTR_ID_NOTES_DOCINFO*/          { "NotesDocInfo", "NotesDocInfo", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 67 SOT_FORMATSTR_ID_NOTES_HNOTE*/            { "NoteshNote", "NoteshNote", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 68 SOT_FORMATSTR_ID_NOTES_NATIVE*/           { "Native", "Native", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 69 SOT_FORMATSTR_ID_SFX_DOC*/                { "SfxDocument", "SfxDocument", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 70 SOT_FORMATSTR_ID_EVDF*/                   { "EVDF (Explorer View Dummy Format)", "EVDF (Explorer View Dummy Format)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 71 SOT_FORMATSTR_ID_ESDF*/                   { "ESDF (Explorer Search Dummy Format)", "ESDF (Explorer Search Dummy Format)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 72 SOT_FORMATSTR_ID_IDF*/                    { "IDF (Iconview Dummy Format)", "IDF (Iconview Dummy Format)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 73 SOT_FORMATSTR_ID_EFTP*/                   { "EFTP (Explorer Ftp File)", "EFTP (Explorer Ftp File)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 74 SOT_FORMATSTR_ID_EFD*/                    { "EFD (Explorer Ftp Dir)", "EFD (Explorer Ftp Dir)", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 75 SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH*/      { "SvxFormFieldExch", "SvxFormFieldExch", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 76 SOT_FORMATSTR_ID_EXTENDED_TABBAR*/        { "ExtendedTabBar", "ExtendedTabBar", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 77 SOT_FORMATSTR_ID_SBA_DATAEXCHANGE*/       { "SBA-DATAFORMAT", "SBA-DATAFORMAT", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 78 SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE*/  { "SBA-FIELDFORMAT", "SBA-FIELDFORMAT", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 79 SOT_FORMATSTR_ID_SBA_PRIVATE_URL*/        { "SBA-PRIVATEURLFORMAT", "SBA-PRIVATEURLFORMAT", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 80 SOT_FORMATSTR_ID_SBA_TABED*/              { "Tabed", "Tabed", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 81 SOT_FORMATSTR_ID_SBA_TABID*/              { "Tabid", "Tabid", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 82 SOT_FORMATSTR_ID_SBA_JOIN*/               { "SBA-JOINFORMAT", "SBA-JOINFORMAT", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+#ifdef MAC
+/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/       { "Star OBJD", "Star OBJD", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/      { "Star LKSD", "Star LKSD", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "Star EMBS", "Star EMBS", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "Star LNKS", "Star LNKS", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "Star EMBO", "Star EMBO", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+#else                                   ;;
+/* 83 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR*/       { "Star Object Descriptor", "Star Object Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 84 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR*/      { "Star Link Source Descriptor", "Star Link Source Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 85 SOT_FORMATSTR_ID_EMBED_SOURCE*/           { "Star Embed Source", "Star Embed Source", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 86 SOT_FORMATSTR_ID_LINK_SOURCE*/            { "Star Link Source", "Star Link Source", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 87 SOT_FORMATSTR_ID_EMBEDDED_OBJ*/           { "Star Embedded Object", "Star Embedded Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+#endif
+#ifdef WNT
+/* 88 SOT_FORMATSTR_ID_FILECONTENT*/            { CFSTR_FILECONTENTS, CFSTR_FILECONTENTS, &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 89 SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR*/      { CFSTR_FILEDESCRIPTOR, CFSTR_FILEDESCRIPTOR, &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 90 SOT_FORMATSTR_ID_FILENAME*/               { CFSTR_FILENAME, CFSTR_FILENAME, &::getCppuType( (const ::rtl::OUString*) 0 ) },
+#else
+/* 88 SOT_FORMATSTR_ID_FILECONTENT*/            { "FileContents", "FileContents", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 89 SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR*/      { "FileGroupDescriptor", "FileGroupDescriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 90 SOT_FORMATSTR_ID_FILENAME*/               { "FileName", "FileName", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+#endif
+/* 91 SOT_FORMATSTR_ID_SD_OLE*/                 { "SD-OLE", "SD-OLE", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 92 SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE*/       { "Embedded Object", "Embedded Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 93 SOT_FORMATSTR_ID_EMBED_SOURCE_OLE*/       { "Embed Source", "Embed Source", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 94 SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE*/   { "Object Descriptor", "Object Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 95 SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR_OLE*/  { "Link Source Descriptor", "Link Source Descriptor", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 96 SOT_FORMATSTR_ID_LINK_SOURCE_OLE*/        { "Link Source", "Link Source", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/* 97 SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE*/   { "SBA-CTRLFORMAT", "SBA-CTRLFORMAT", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 98 SOT_FORMATSTR_ID_OUTPLACE_OBJ*/           { "OutPlace Object", "OutPlace Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/* 99 SOT_FORMATSTR_ID_CNT_OWN_CLIP*/           { "CntOwnClipboard", "CntOwnClipboard", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*100 SOT_FORMATSTR_ID_INET_IMAGE*/             { "SO-INet-Image", "SO-INet-Image", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*101 SOT_FORMATSTR_ID_NETSCAPE_IMAGE*/         { "Netscape Image Format", "Netscape Image Format", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*102 SOT_FORMATSTR_ID_SBA_FORMEXCHANGE*/       { "SBA_FORMEXCHANGE", "SBA_FORMEXCHANGE", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*103 SOT_FORMATSTR_ID_SBA_REPORTEXCHANGE*/     { "SBA_REPORTEXCHANGE", "SBA_REPORTEXCHANGE", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*104 SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR*/ { "UniformResourceLocator", "UniformResourceLocator", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*105 SOT_FORMATSTR_ID_STARCHARTDOCUMENT_50*/   { "StarChartDocument 5.0", "StarChartDocument 5.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*106 SOT_FORMATSTR_ID_GRAPHOBJ*/               { "Graphic Object", "Graphic Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*107 SOT_FORMATSTR_ID_DUMMY3*/                 { "SO_DUMMYFORMAT_3", "SO_DUMMYFORMAT_3", &::getCppuType( (const ::rtl::OUString*) 0 ) },
+/*108 SOT_FORMATSTR_ID_DUMMY4*/                 { "SO_DUMMYFORMAT_4", "SO_DUMMYFORMAT_4", &::getCppuType( (const ::rtl::OUString*) 0 ) }
+};
 
 //-----------------------------------------------------------------------
-//-----------------------------------------------------------------------
-static StringList & Init_Impl()
+
+static List& InitFormats_Impl()
 {
     SotData_Impl * pSotData = SOTDATA();
-    if( !pSotData->pAtomList )
-        StringList * pSL = pSotData->pAtomList = new StringList();
-    return *pSotData->pAtomList;
+    if( !pSotData->pDataFlavorList )
+        List* pL = pSotData->pDataFlavorList = new List();
+    return *pSotData->pDataFlavorList;
 }
 
 /*************************************************************************
@@ -238,27 +249,130 @@ ULONG SotExchange::RegisterFormatName( const String& rName )
     // teste zuerst die Standard - Name
     ULONG i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == rName.CompareToAscii( *(aFormatArray_Impl + i ) ) )
+        if( COMPARE_EQUAL == rName.CompareToAscii( aFormatArray_Impl[ i ].pName ) )
             return i;
 
     nMax = SOT_FORMATSTR_ID_USER_END;
     for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
-        if( COMPARE_EQUAL == rName.CompareToAscii( *(aFormatArray_Impl + i ) ) )
+        if( COMPARE_EQUAL == rName.CompareToAscii( aFormatArray_Impl[ i ].pName ) )
             return i;
 
     // dann in der dynamischen Liste
-    StringList & rSL = Init_Impl();
-    nMax = rSL.Count();
-    for( i = 0; i < nMax; i++ )
+    List& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
     {
-        String * pStr = rSL.GetObject( i );
-        if( pStr && *pStr == rName )
+        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        if( pFlavor && rName == String( pFlavor->HumanPresentableName ) )
             return i + SOT_FORMATSTR_ID_USER_END + 1;
     }
+
     // nMax ist der neue Platz
-    rSL.Insert( new String( rName ), LIST_APPEND );
+    DataFlavor* pNewFlavor = new DataFlavor;
+
+    pNewFlavor->MimeType = rName;
+    pNewFlavor->HumanPresentableName = rName;
+    pNewFlavor->DataType = ::getCppuType( (const ::rtl::OUString*) 0 );
+
+    rL.Insert( pNewFlavor, LIST_APPEND );
+
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
+
+/*************************************************************************
+|*
+|*    SotExchange::RegisterFormatName()
+|*
+|*    Beschreibung      CLIP.SDW
+*************************************************************************/
+ULONG SotExchange::RegisterFormat( const DataFlavor& rFlavor )
+{
+    ULONG nRet = GetFormat( rFlavor );
+
+    if( !nRet )
+    {
+        List& rL = InitFormats_Impl();
+        nRet = rL.Count() + SOT_FORMATSTR_ID_USER_END + 1;
+        rL.Insert( new DataFlavor( rFlavor ), LIST_APPEND );
+    }
+
+    return nRet;
+}
+
+/*************************************************************************
+|*
+|*    SotExchange::GetFormatDataFlavor()
+|*
+*************************************************************************/
+
+sal_Bool SotExchange::GetFormatDataFlavor( ULONG nFormat, DataFlavor& rFlavor )
+{
+    sal_Bool bRet;
+
+    if( SOT_FORMATSTR_ID_USER_END >= nFormat )
+    {
+        const DataFlavorRepresentation& rData = *( aFormatArray_Impl + nFormat );
+
+        rFlavor.MimeType = ::rtl::OUString::createFromAscii( rData.pMimeType );
+        rFlavor.HumanPresentableName = ::rtl::OUString::createFromAscii( rData.pName );
+        rFlavor.DataType = *rData.pType;
+
+        bRet = sal_True;
+    }
+    else
+    {
+        List& rL = InitFormats_Impl();
+
+        nFormat -= SOT_FORMATSTR_ID_USER_END + 1;
+
+        if( rL.Count() > nFormat )
+        {
+            rFlavor = *(DataFlavor*) rL.GetObject( nFormat );
+            bRet = sal_True;
+        }
+        else
+        {
+            rFlavor = DataFlavor();
+            bRet = sal_False;
+        }
+    }
+
+    DBG_ASSERT( bRet, "SotExchange::GetFormatDataFlavor(): DataFlavor not initialized" );
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
+|*    SotExchange::GetFormatName()
+|*
+|*    Beschreibung      CLIP.SDW
+*************************************************************************/
+ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
+{
+    // teste zuerst die Standard - Name
+    const String    aMimeType( rFlavor.MimeType );
+    ULONG           i, nMax = SOT_FORMAT_FILE_LIST;
+    for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
+        if( COMPARE_EQUAL == aMimeType.CompareToAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    nMax = SOT_FORMATSTR_ID_USER_END;
+    for( i = SOT_FORMAT_RTF; i <= nMax;  ++i )
+        if( COMPARE_EQUAL == aMimeType.CompareToAscii( aFormatArray_Impl[ i ].pMimeType ) )
+            return i;
+
+    // dann in der dynamischen Liste
+    List& rL = InitFormats_Impl();
+    for( i = 0, nMax = rL.Count(); i < nMax; i++ )
+    {
+        DataFlavor* pFlavor = (DataFlavor*) rL.GetObject( i );
+        if( pFlavor && rFlavor.MimeType == pFlavor->MimeType )
+            return i + SOT_FORMATSTR_ID_USER_END + 1;
+    }
+
+    return 0;
+}
+
 
 /*************************************************************************
 |*
@@ -268,18 +382,13 @@ ULONG SotExchange::RegisterFormatName( const String& rName )
 *************************************************************************/
 String SotExchange::GetFormatName( ULONG nFormat )
 {
-    String sRet;
-    if( SOT_FORMATSTR_ID_USER_END >= nFormat )
-        sRet.AppendAscii( *( aFormatArray_Impl + nFormat ) );
-    else
-    {
-        nFormat -= SOT_FORMATSTR_ID_USER_END + 1;
-        StringList & rSL = Init_Impl();
-        String* pStr;
-        if( rSL.Count() > nFormat && (pStr = rSL.GetObject( nFormat )) )
-            sRet = *pStr;
-    }
-    return sRet;
+    DataFlavor  aFlavor;
+    String      aRet;
+
+    if( GetFormatDataFlavor( nFormat, aFlavor ) )
+        aRet = aFlavor.HumanPresentableName;
+
+    return aRet;
 }
 
 /*************************************************************************
@@ -289,8 +398,5 @@ String SotExchange::GetFormatName( ULONG nFormat )
 *************************************************************************/
 ULONG SotExchange::GetMaxFormat( void )
 {
-    StringList & rSL = Init_Impl();
-    return SOT_FORMATSTR_ID_USER_END + rSL.Count();
+    return( SOT_FORMATSTR_ID_USER_END + InitFormats_Impl().Count() );
 }
-
-
