@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:00:37 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ String STR_GRADIENT
     Text[ japanese ] = "γ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³";
     Text[ chinese_traditional ] = "ε½©θ‰²ε–ζ΅";
     Text[ arabic ] = "ΚΟΡΜ Ηααζδ";
-    Text[ greek ] = "Διαβάθμιση χρώματος";
+    Text[ greek ] = "~Διαβάθ. χρώματος";
     Text[ korean ] = "κ·ΈλΌλ””μ–ΈνΈ";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
@@ -147,7 +147,7 @@ String STR_DESC_GRADIENT
     Text[ japanese ] = "γ“γ“γ«ζ–°γ—γ„γ‚°γƒ©γƒ‡γƒΌγ‚·γƒ§γƒ³γ®εε‰γ‚’ε…¥ε›γ—γΎγ™:";
     Text[ chinese_traditional ] = "θ«‹ζ‚¨θΌΈε…¥ζ–°ε½©θ‰²ε–ζ΅η„εη¨±οΌ";
     Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαΚΟΡΜ ΗαΜΟνΟ ααζδ:";
-    Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για τη νέα διαβάθμιση χρώματος:";
+    Text[ greek ] = "Παρακαλώ εισαγάγετε το όνομα για τη νέα διαβάθμιση χρώματος:";
     Text[ korean ] = "μƒ κ·ΈλΌλ””μ–ΈνΈμ μ΄λ¦„μ„ μ—¬κΈ°μ— μ…λ ¥ν•μ‹­μ‹μ¤:";
     Text[ turkish ] = "Yeni gradyan iηin bir ad girin:";
     Text[ language_user1 ] = " ";
@@ -311,8 +311,8 @@ String STR_DESC_NEW_BITMAP
     Text[ japanese ] = "γ“γ“γ«ζ–°γ—γ„γƒ“γƒƒγƒγƒγƒƒγƒ—γ®εε‰γ‚’ε…¥ε›γ—γΎγ™:";
     Text[ chinese_traditional ] = "θ«‹ζ‚¨θΌΈε…¥δΈ€ε€‹ζ–°ι»ι™£ε–η„εη¨±οΌ";
     Text[ arabic ] = "γδ έΦαί ΗίΚΘ ΗΣγ ΗαΥζΡΙ ΗαδήΨνΙ ΗαΜΟνΟΙ εδΗ:";
-    Text[ language_user1 ] = ":";
-    Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για το νέο bitmap:";
+    Text[ language_user1 ] = "; :";
+    Text[ greek ] = "Παρακαλώ εισαγάγετε το όνομα για το νέο bitmap:";
     Text[ korean ] = "μƒ λΉ„νΈλ§µμ μ΄λ¦„μ„ μ—¬κΈ°μ— μ…λ ¥ν•μ‹­μ‹μ¤:";
     Text[ turkish ] = "Yeni bit eώlem iηin bir ad girin:";
     Text[ catalan ] = "Introdueix aquν el nom per al nou bitmap:";
@@ -344,8 +344,8 @@ String STR_DESC_EXT_BITMAP
     Text[ japanese ] = "γ“γ“γ«ε¤–ιƒ¨γƒ“γƒƒγƒγƒγƒƒγƒ—γ®εε‰γ‚’ε…¥ε›γ—γΎγ™:";
     Text[ chinese_traditional ] = "θ«‹ζ‚¨θΌΈε…¥δΈ€ε€‹ε¤–δΎ†ι»ι™£ε–η„εη¨±οΌ";
     Text[ arabic ] = "γδ έΦαί ΗίΚΘ ΗΣγ ΗαΥζΡΙ ΗαδήΨνΙ ΗαΞΗΡΜνΙ εδΗ:";
-    Text[ language_user1 ] = ":";
-    Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για το εξωτερικό bitmap:";
+    Text[ language_user1 ] = "; :";
+    Text[ greek ] = "Παρακαλώ εισαγάγετε το όνομα για το εξωτερικό bitmap:";
     Text[ korean ] = "μ™Έλ¶€ λΉ„νΈλ§µμ μ΄λ¦„μ„ μ—¬κΈ°μ— μ…λ ¥ν•μ‹­μ‹μ¤:";
     Text[ turkish ] = "Harici bit eώlemin adύnύ girin:";
     Text[ catalan ] = "Introdueix aquν el nom per al bitmap extern:";
@@ -508,8 +508,8 @@ String STR_DESC_LINESTYLE
     Text[ japanese ] = "γ“γ“γ«ζ–°γ—γ„η·γ‚Ήγ‚Ώγ‚¤γƒ«γ®εε‰γ‚’ε…¥ε›γ—γΎγ™:";
     Text[ chinese_traditional ] = "θ«‹θΌΈε…¥δΈ€ε€‹ζ–°η·ζΆεΌζ¨£η„εη¨±οΌ";
     Text[ arabic ] = "γδ έΦαί ΗίΚΘ ΗΣγ ΗαδγΨ ΗαΜΟνΟ ααΞΨ εδΗ:";
-    Text[ language_user1 ] = ":";
-    Text[ greek ] = "Παρακαλώ εισάγετε το όνομα για το νέο στυλ γραμμής:";
+    Text[ language_user1 ] = "; :";
+    Text[ greek ] = "Παρακαλώ εισαγάγετε το όνομα για το νέο στυλ γραμμής:";
     Text[ korean ] = "μƒ μ„  μ¤νƒ€μΌμ μ΄λ¦„μ„ μ—¬κΈ°μ— μ…λ ¥ν•μ‹­μ‹μ¤:";
     Text[ turkish ] = "Yeni ηizgi biηimi iηin bir ad girin:";
     Text[ catalan ] = "Introdueix aquν el nom del nou estil de lνnia:";
@@ -769,7 +769,7 @@ String STR_ADD
     Text[ japanese ] = "θΏ½ε ";
     Text[ chinese_traditional ] = "ζ–°εΆ";
     Text[ arabic ] = "ΕΦΗέΙ";
-    Text[ greek ] = "Προσθήκη";
+    Text[ greek ] = " ροσθήκη";
     Text[ korean ] = "μ¶”κ°€";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
@@ -828,7 +828,7 @@ String STR_SAR_NOT_FOUND
     Text[ danish ] = "Sψgningen gav intet resultat.";
     Text[ swedish ] = "Sφkord hittades inte.";
     Text[ polish ] = "Szukane has³o nie zosta³o znalezione.";
-    Text[ portuguese_brazilian ] = "Expressγo nγo encontrada.";
+    Text[ portuguese_brazilian ] = "Nγo foi encontrada a chave da pesquisa";
     Text[ japanese ] = "ζ¤η΄Άγ‚­γƒΌγ―θ¦‹γ¤γ‹γ‚γΎγ›γ‚“γ€‚";
     Text[ korean ] = "κ²€μƒ‰ ν‚¤λ¥Ό μ°Ύμ§€ λª»ν–μµλ‹λ‹¤.";
     Text[ chinese_simplified ] = "ζ²΅ζ‰ζ‰Ύε°ζ‰€θ¦ζε―»η„ε†…ε®Ήγ€‚";
@@ -859,7 +859,7 @@ String STR_SAR_WRAP_FORWARD
     Text[ danish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
     Text[ swedish ] = "%PRODUCTNAME Impress har sφkt till slutet av presentationen. Vill du fortsδtta sφkningen i bφrjan?";
     Text[ polish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME Impress pesquisou atι o fim da apresentaηγo. Deseja continuar pelo inνcio? ";
     Text[ japanese ] = "%PRODUCTNAME Impress γ―γ€γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®ηµ‚γ‚γ‚γΎγ§ζ¤η΄Άγ—γΎγ—γγ€‚γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®ε§‹γ‚γ«ζ»γ£γ¦ζ¤η΄Άγ‚’η¶θ΅γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "%PRODUCTNAME Impress λ” ν”„λ μ  ν…μ΄μ…μ λκΉμ§€ κ²€μƒ‰ν–μµλ‹λ‹¤. μ‹μ‘μ—μ„ κ²€μƒ‰μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "%PRODUCTNAME Impress ε·²η»ζε―»θ‡³ζΌ”η¤Ίζ–‡η¨Ώη„ι΅µε°Ύγ€‚ζ‚¨θ¦η»§η»­δ»ζ–‡ζ΅£η„ι΅µι¦–δ½η½®ζε―»οΌ";
@@ -890,7 +890,7 @@ String STR_SAR_WRAP_BACKWARD
     Text[ danish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
     Text[ swedish ] = "%PRODUCTNAME Impress har sφkt till bφrjan av presentationen. Vill du fortsδtta sφkningen i slutet?";
     Text[ polish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME Impress pesquisou atι o inνcio da apresentaηγo. Deseja continuar pelo fim?";
     Text[ japanese ] = "%PRODUCTNAME Impress γ―γ€γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®ε§‹γ‚γΎγ§ζ¤η΄Άγ—γΎγ—γγ€‚γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®ηµ‚γ‚γ‚γ«ζ»γ£γ¦ζ¤η΄Άγ‚’η¶θ΅γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "%PRODUCTNAME Impress λ” ν”„λ μ  ν…μ΄μ…μ μ‹μ‘κΉμ§€ κ²€μƒ‰ν–μµλ‹λ‹¤. λμ—μ„ κ²€μƒ‰μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "%PRODUCTNAME Impress ε·²η»ζε―»ε°ζΌ”η¤Ίζ–‡η¨Ώη„εΌ€ε¤΄δ½η½®γ€‚ζ‚¨θ¦η»§η»­ζε―»θ‡³ζ–‡ζ΅£η„η»“ε°Ύδ½η½®οΌ";
@@ -921,7 +921,7 @@ String STR_SAR_WRAP_FORWARD_DRAW
     Text[ danish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
     Text[ swedish ] = "%PRODUCTNAME Draw har sφkt till slutet av dokumentet. Vill du fortsδtta sφkningen i bφrjan?";
     Text[ polish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME Draw pesquisou atι o fim da apresentaηγo. Deseja continuar pelo inνcio? ";
     Text[ japanese ] = "%PRODUCTNAME Draw γ―γ€γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ηµ‚γ‚γ‚γΎγ§ζ¤η΄Άγ—γΎγ—γγ€‚γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ε§‹γ‚γ«ζ»γ£γ¦ζ¤η΄Άγ‚’η¶θ΅γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "%PRODUCTNAME Draw λ¬Έμ„μ λκΉμ§€ κ²€μƒ‰ν–μµλ‹λ‹¤. μ‹μ‘μ—μ„ κ²€μƒ‰μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "%PRODUCTNAME Draw ε·²η»ζε―»θ‡³ζ–‡ζ΅£η„ι΅µε°Ύγ€‚ζ‚¨θ¦η»§η»­δ»ζ–‡ζ΅£η„ι΅µι¦–δ½η½®ζε―»οΌ";
@@ -952,7 +952,7 @@ String STR_SAR_WRAP_BACKWARD_DRAW
     Text[ danish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ swedish ] = "%PRODUCTNAME Draw har sφkt till bφrjan av dokumentet. Vill du fortsδtta sφkningen i slutet?";
     Text[ polish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ portuguese_brazilian ] = "O %PRODUCTNAME Draw pesquisou atι o inνcio da apresentaηγo. Deseja continuar pelo fim?";
     Text[ japanese ] = "%PRODUCTNAME Draw γ―γ€γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ε§‹γ‚γΎγ§ζ¤η΄Άγ—γΎγ—γγ€‚γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ηµ‚γ‚γ‚γ«ζ»γ£γ¦ζ¤η΄Άγ‚’η¶θ΅γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "%PRODUCTNAME Draw λ” λ¬Έμ„μ μ‹μ‘κΉμ§€ κ²€μƒ‰ν–μµλ‹λ‹¤. λμ—μ„ κ²€μƒ‰μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "%PRODUCTNAME Draw ε·²η»ζε―»θ‡³ζ–‡ζ΅£η„εΌ€ε¤΄δ½η½®γ€‚ζ‚¨θ¦η»§η»­ζε―»θ‡³ζ–‡ζ΅£η„η»“ε°Ύδ½η½®οΌ";
@@ -966,6 +966,7 @@ String STR_SAR_WRAP_BACKWARD_DRAW
     Text[ hindi ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
     Text[ slovak ] = "%PRODUCTNAME Draw hΔΎadal do zaΔiatku dokumentu. Chcete pokraΔovaΕ¥ na konci?";
 };
+
 
 
 
