@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:30:31 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 15:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,7 +478,7 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
         {
             ::rtl::OUString aDatabaseName(aTableName.getToken(0, aSeparator));
             sQuotedName += quoteName(sQuote, aDatabaseName);
-            sQuotedName.concat(::rtl::OUString(&aSeparator, 1));
+            sQuotedName = sQuotedName.concat(::rtl::OUString(&aSeparator, 1));
             aTableName.replaceAt(0, aDatabaseName.getLength() + 1, s_sEmptyString);
                 // have no "erase" so simulate this with replaceAt
         }
@@ -490,7 +490,7 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
             static ::rtl::OUString s_aGenericSep(&aGenericSep, 1);
                 // need a method on the OUString to cancat a single unicode character ....
             sQuotedName += quoteName(sQuote, aTableName.getToken(0, aGenericSep));
-            sQuotedName.concat(s_aGenericSep);
+            sQuotedName = sQuotedName.concat(s_aGenericSep);
             sQuotedName += quoteName(sQuote, aTableName.getToken(1, aGenericSep));
         }
         else
@@ -565,7 +565,6 @@ Reference< XNumberFormatsSupplier> getNumberFormats(
                 xReturn = Reference< XNumberFormatsSupplier>(*(Reference< XInterface >*)aSupplier.getValue(), UNO_QUERY);
         }
     }
-
     return xReturn;
 }
 
@@ -1064,6 +1063,9 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/11/03 13:30:31  oj
+ *  use stream for any
+ *
  *  Revision 1.4  2000/10/30 07:46:12  oj
  *  descriptors inserted
  *
