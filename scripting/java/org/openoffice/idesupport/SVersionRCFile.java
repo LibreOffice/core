@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-26 16:07:27 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 16:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,14 @@ public class SVersionRCFile {
 
             String name = tokens.nextToken();
             String path = tokens.nextToken();
-            if (path.startsWith(FILE_URL_PREFIX) == true)
+            if (path.startsWith(FILE_URL_PREFIX) == true) {
+                path = java.net.URLDecoder.decode(path);
+
                 path = path.substring(FILE_URL_PREFIX.length());
+
+                if (System.getProperty("os.name").startsWith("Windows"))
+                    path = path.replace('/', File.separatorChar);
+            }
 
             if (isValidPath(path) == true)
                 versions.put(name, path);
