@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:38:25 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 09:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ const sal_Int32 CSV_MINCOLWIDTH         = 5;
 const xub_StrLen CSV_MAXSTRLEN          = 0x7FFF;
 /** Transparency for header color of selected columns. */
 const sal_uInt16 CSV_HDR_TRANSPARENCY   = 85;
+/** Minimum distance to border for auto scroll. */
+const sal_Int32 CSV_SCROLL_DIST         = 3;
 
 //! TODO make string array dynamic
 const sal_Int32 CSV_PREVIEW_LINES       = 32; // maximum count of preview lines
@@ -302,10 +304,6 @@ inline void ScCsvEvent::Set( ScCsvEventType eType, sal_Int32 nPos, sal_Int32 nOl
 
 // ============================================================================
 
-const sal_Int32 SCROLL_DIST = 3;    /// Minimum distance to border for auto scroll.
-
-
-// ----------------------------------------------------------------------------
 
 /** Base class for the CSV ruler and the data grid control. Implements event handling. */
 class ScCsvControl : public Control

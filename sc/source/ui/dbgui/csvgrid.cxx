@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:39:47 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 09:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,14 +284,14 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
     sal_Int32 nNewPos = nPos;
     if( nNewPos != POS_INVALID )
     {
-        if( nNewPos < GetFirstVisPos() + SCROLL_DIST )
+        if( nNewPos < GetFirstVisPos() + CSV_SCROLL_DIST )
         {
-            sal_Int32 nScroll = (GetFirstVisPos() > 0) ? SCROLL_DIST : 0;
+            sal_Int32 nScroll = (GetFirstVisPos() > 0) ? CSV_SCROLL_DIST : 0;
             nNewPos = GetFirstVisPos() + nScroll;
         }
-        else if( nNewPos > GetLastVisPos() - SCROLL_DIST - 1L )
+        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
         {
-            sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? SCROLL_DIST : 0;
+            sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
             nNewPos = GetLastVisPos() - nScroll - 1;
         }
     }
@@ -688,11 +688,11 @@ void ScCsvGrid::MoveCursor( sal_uInt32 nColIndex )
     {
         sal_Int32 nPosBeg = GetColumnPos( nColIndex );
         sal_Int32 nPosEnd = GetColumnPos( nColIndex + 1 );
-        sal_Int32 nMinPos = Max( nPosBeg - SCROLL_DIST, 0L );
-        sal_Int32 nMaxPos = Min( nPosEnd - GetVisPosCount() + SCROLL_DIST + 1L, nMinPos );
-        if( nPosBeg - SCROLL_DIST + 1 <= GetFirstVisPos() )
+        sal_Int32 nMinPos = Max( nPosBeg - CSV_SCROLL_DIST, 0L );
+        sal_Int32 nMaxPos = Min( nPosEnd - GetVisPosCount() + CSV_SCROLL_DIST + 1L, nMinPos );
+        if( nPosBeg - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
             CommitRequest( CSVREQ_POSOFFSET, nMinPos );
-        else if( nPosEnd + SCROLL_DIST >= GetLastVisPos() )
+        else if( nPosEnd + CSV_SCROLL_DIST >= GetLastVisPos() )
             CommitRequest( CSVREQ_POSOFFSET, nMaxPos );
     }
     CommitRequest( CSVREQ_MOVEGRIDCURSOR, GetColumnPos( nColIndex ) );
@@ -860,7 +860,6 @@ void ScCsvGrid::MouseButtonDown( const MouseEvent& rMEvt )
             StartTracking( STARTTRACK_BUTTONREPEAT );
         }
     }
-
     EnableRepaint();
 }
 
@@ -955,7 +954,7 @@ void ScCsvGrid::Command( const CommandEvent& rCEvt )
             Point aPos( rCEvt.GetMousePosPixel() );
             sal_uInt32 nColIx = GetColumnFromX( aPos.X() );
             if( IsValidColumn( nColIx ) && !IsSelected( nColIx ) )
-                MouseButtonDown( MouseEvent( aPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );
+                DoSelectAction( nColIx, 0 );    // focus & select
             if( HasSelection() )
                 ExecutePopup( aPos );
         }
@@ -1181,10 +1180,14 @@ void ScCsvGrid::ImplDrawColumn( sal_uInt32 nColIndex )
 void ScCsvGrid::ImplDrawHorzScrolled( sal_Int32 nOldPos )
 {
     sal_Int32 nPos = GetFirstVisPos();
-    if( Abs( nPos - nOldPos ) > GetVisPosCount() / 2 )
-        InvalidateGfx();
     if( !IsValidGfx() || (nPos == nOldPos) )
         return;
+    if( Abs( nPos - nOldPos ) > GetVisPosCount() / 2 )
+    {
+        ImplDrawBackgrDev();
+        ImplDrawGridDev();
+        return;
+    }
 
     Point aSrc, aDest;
     sal_uInt32 nFirstColIx, nLastColIx;

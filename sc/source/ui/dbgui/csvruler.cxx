@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:39:48 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 09:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,14 +217,14 @@ sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
     sal_Int32 nNewPos = nPos;
     if( nNewPos != POS_INVALID )
     {
-        if( nNewPos < GetFirstVisPos() + SCROLL_DIST )
+        if( nNewPos < GetFirstVisPos() + CSV_SCROLL_DIST )
         {
-            sal_Int32 nScroll = (GetFirstVisPos() > 0) ? SCROLL_DIST : 0;
+            sal_Int32 nScroll = (GetFirstVisPos() > 0) ? CSV_SCROLL_DIST : 0;
             nNewPos = Max( nPos, GetFirstVisPos() + nScroll );
         }
-        else if( nNewPos > GetLastVisPos() - SCROLL_DIST - 1L )
+        else if( nNewPos > GetLastVisPos() - CSV_SCROLL_DIST - 1L )
         {
-            sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? SCROLL_DIST : 0;
+            sal_Int32 nScroll = (GetFirstVisPos() < GetMaxPosOffset()) ? CSV_SCROLL_DIST : 0;
             nNewPos = Min( nNewPos, GetLastVisPos() - nScroll - 1L );
         }
     }

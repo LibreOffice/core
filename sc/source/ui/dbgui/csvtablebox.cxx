@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 15:39:48 $
+ *  last change: $Author: dr $ $Date: 2002-07-12 09:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,10 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 {
     if( IsValidSplitPos( nPos ) )
     {
-        if( nPos - SCROLL_DIST + 1 <= GetFirstVisPos() )
-            CommitRequest( CSVREQ_POSOFFSET, nPos - SCROLL_DIST );
-        else if( nPos + SCROLL_DIST >= GetLastVisPos() )
-            CommitRequest( CSVREQ_POSOFFSET, nPos - GetVisPosCount() + SCROLL_DIST + 1 );
+        if( nPos - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
+            CommitRequest( CSVREQ_POSOFFSET, nPos - CSV_SCROLL_DIST );
+        else if( nPos + CSV_SCROLL_DIST >= GetLastVisPos() )
+            CommitRequest( CSVREQ_POSOFFSET, nPos - GetVisPosCount() + CSV_SCROLL_DIST + 1 );
     }
 }
 
