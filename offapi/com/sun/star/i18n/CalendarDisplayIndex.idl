@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarDisplayIndex.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module i18n {
 /**
     Values to be passed to <member>XCalendar::getDisplayName()</member>.
  */
-constants CalendarDisplayIndex
+published constants CalendarDisplayIndex
 {
     /// name of an AM/PM value
     const short AM_PM   = 0;
