@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:48:44 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ russian ] = "Расстановка переносов";
         Text[ greek ] = "Ухллбвйумьт";
         Text[ dutch ] = "Woordafbreking";
-        Text[ french ] = "Coupure de mots";
+        Text[ french ] = "Coupure des mots";
         Text[ spanish ] = "Separaciуn silбbica";
         Text[ italian ] = "Sillabazione";
         Text[ danish ] = "Hyphenation";
@@ -504,7 +504,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     Text[ russian ] = "Расстановка переносов";
     Text[ greek ] = "Ухллбвйумьт";
     Text[ dutch ] = "Woordafbreking";
-    Text[ french ] = "Coupure de mots";
+    Text[ french ] = "Coupure des mots";
     Text[ spanish ] = "Separaciуn silбbica";
     Text[ italian ] = "Sillabazione";
     Text[ danish ] = "Hyphenation";
@@ -998,7 +998,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ russian ] = "Минимальная длина слова для переноса: ";
         Text[ greek ] = "ЕлЬчйуфп мЮкпт лЭозт гйб фпн ухллбвйумь: ";
         Text[ dutch ] = "Minimale woordlengte voor woordafbreking: ";
-        Text[ french ] = "Longueur de mot minimum pour la coupure de mots : ";
+        Text[ french ] = "Longueur de mot minimum pour la coupure des mots : ";
         Text[ spanish ] = "Tamaсo mнnimo de palabra para separaciуn silбbica: ";
         Text[ italian ] = "Larghezza minima della parola prima della sillabazione: ";
         Text[ danish ] = "Minimal wordlength for hyphenation: ";
