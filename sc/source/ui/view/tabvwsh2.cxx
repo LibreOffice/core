@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:39:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             return;
         }
     }
-
 
     if ( nNewId == SID_DRAW_SELECT )
         nNewId = SID_OBJECT_SELECT;
