@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 09:04:51 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 17:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 
 #ifndef _SOLAR_H
@@ -286,11 +286,17 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
-OGroupManager::OGroupManager()
+OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
     :m_pCompGroup(new OGroup(ALL_COMPONENTS_GROUP_NAME))
+    ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);
 
+    increment(m_refCount);
+    {
+        _rxContainer->addContainerListener(this);
+    }
+    decrement(m_refCount);
 }
 
 //------------------------------------------------------------------
@@ -306,7 +312,7 @@ OGroupManager::~OGroupManager()
 void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
 {
     Reference<XContainer>  xContainer(evt.Source, UNO_QUERY);
-    if (xContainer.is())
+    if (xContainer.get() == m_xContainer.get())
     {
         DELETEZ(m_pCompGroup);
 
