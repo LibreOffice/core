@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-12 16:16:42 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5316,7 +5316,11 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
             {
                 bTextPropAtom = sal_False;
                 nCharCount = nStringLen - nCharAnzRead;
-                aParaPropSet = PPTParaPropSet();
+                // please fix the right hand side of
+                // PPTParaPropSet& PPTParaPropSet::operator=(PPTParaPropSet&),
+                // it should be a const reference
+                PPTParaPropSet aTmpPPTParaPropSet;
+                aParaPropSet = aTmpPPTParaPropSet;
                 DBG_ERROR( "SJ:PPTStyleTextPropReader::could not get this PPT_PST_StyleTextPropAtom by reading the paragraph attributes" );
             }
             PPTParaPropSet* pPara = new PPTParaPropSet( aParaPropSet );
