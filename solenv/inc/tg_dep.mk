@@ -17,7 +17,11 @@ ALLDEP .PHONY:
 .IF "$(GROUPSHELL:b:l)"=="4dos"
     @+-echo $(foreach,i,$(DEPFILES) $(shell +-del $i >& $(NULLDEV))) >& $(NULLDEV)
 .ELSE			# "$(GROUPSHELL:b)"=="4dos"
+.IF "$(GUI)"=="WNT"
+    @+-echo $(foreach,i,$(DEPFILES) $(shell +-del $i >& $(NULLDEV))) >& $(NULLDEV)
+.ELSE			# "$(GUI)"=="WNT"
     @+-$(RM) $(DEPFILES) >& $(NULLDEV)
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(GROUPSHELL:b)"=="4dos"
 .ENDIF			# "$(DEPFILES)" != ""
     +@echo ---
