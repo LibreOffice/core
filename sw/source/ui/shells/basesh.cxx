@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:04:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2455,6 +2455,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
     USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pOutSet = 0;
+    bool bDone = false;
     if(pArgs)
         pArgs->GetItemState( GetPool().GetWhich(nSlot), FALSE, &pItem );
 
@@ -2540,6 +2541,11 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
+            if(pOutSet)
+            {
+                rReq.Done(*pOutSet);
+                bDone = true;
+            }
             delete pDlg;
         }
         break;
@@ -2601,15 +2607,18 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                     pOutSet = pDlg->GetOutputItemSet();
                 }
             }
+            if(pOutSet)
+            {
+                rReq.Done(*pOutSet);
+                bDone = true;
+            }
             delete pDlg;
 
         }
         break;
         default:DBG_ERROR("falscher Dispatcher (basesh.cxx)");
     }
-    if(pOutSet)
-        rReq.Done(*pOutSet);
-    else
+    if(!bDone)
         rReq.Done();
 }
 
