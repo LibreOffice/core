@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-05 14:51:15 $
+ *  last change: $Author: obo $ $Date: 2002-07-09 15:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1641,25 +1641,31 @@ void ModulWindowLayout::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
         bool bChanged = aColor != m_aSyntaxColors[TT_IDENTIFIER];
         m_aSyntaxColors[TT_IDENTIFIER] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICNUMBER).nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_NUMBER];
+    if (bChanged || aColor != m_aSyntaxColors[TT_NUMBER])
+            bChanged = true;
         m_aSyntaxColors[TT_NUMBER] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICSTRING).nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_STRING];
+        if (bChanged || aColor != m_aSyntaxColors[TT_STRING])
+            bChanged = true;
         m_aSyntaxColors[TT_STRING] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICCOMMENT).
                        nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_COMMENT];
+        if (bChanged || aColor != m_aSyntaxColors[TT_COMMENT])
+            bChanged = true;
         m_aSyntaxColors[TT_COMMENT] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICERROR).nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_ERROR];
+        if (bChanged || aColor != m_aSyntaxColors[TT_ERROR])
+            bChanged = true;
         m_aSyntaxColors[TT_ERROR] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICOPERATOR).
                        nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_OPERATOR];
+        if (bChanged || aColor != m_aSyntaxColors[TT_OPERATOR])
+            bChanged = true;
         m_aSyntaxColors[TT_OPERATOR] = aColor;
         aColor = Color(m_aColorConfig.GetColorValue(svx::BASICKEYWORD).
                        nColor);
-        bChanged = bChanged || aColor != m_aSyntaxColors[TT_KEYWORD];
+        if (bChanged || aColor != m_aSyntaxColors[TT_KEYWORD])
+            bChanged = true;
         m_aSyntaxColors[TT_KEYWORD] = aColor;
         if (bChanged)
             updateSyntaxHighlighting();
