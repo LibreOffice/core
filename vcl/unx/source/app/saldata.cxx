@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:08:24 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:23:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,9 +792,13 @@ void SalXLib::Yield( BOOL bWait )
                 // #63862# da jetzt alle user-events ueber die interne
                 // queue kommen, wird die Kontrolle analog zum select
                 // gesteuerten Zweig einmal bei bWait abgegeben
+
+                /* #i9277# do not reschedule since performance gets down the
+                   the drain under heavy load
                 YieldMutexReleaser aReleaser;
-                if ( bWait )
-                    osl_yieldThread();
+                if ( bWait ) osl_yieldThread();
+                */
+
                 return;
             }
         }
