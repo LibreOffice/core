@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MacroExecMode.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:21:34 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 04:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,8 @@ constants MacroExecMode
     const short ALWAYS_EXECUTE = 2;
 
     //-------------------------------------------------------------------------
-    /** Use configuration to retrieve macro settings.
+    /** Use configuration to retrieve macro settings. In case a user confirmation
+        is required a dialog is output.
     */
 
     const short USE_CONFIG = 3;
@@ -103,6 +104,20 @@ constants MacroExecMode
     */
 
     const short ALWAYS_EXECUTE_NO_WARN = 4;
+
+    //-------------------------------------------------------------------------
+    /** Use configuration to retrieve macro settings. Treat cases when user confirmation
+        required as rejected.
+    */
+
+    const short USE_CONFIG_REJECT_CONFIRMATION = 5;
+
+    //-------------------------------------------------------------------------
+    /** Use configuration to retrieve macro settings. Mean cases when user confirmation
+        required as approved.
+    */
+
+    const short USE_CONFIG_APPROVE_CONFIRMATION = 6;
 
 };
 
