@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:35:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER2_HPP_
-#include <com/sun/star/form/XFormsSupplier2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -202,7 +199,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::i18n;
 using namespace ::xmloff::token;
 
@@ -692,11 +688,12 @@ void SwXMLExport::_ExportContent()
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xIAPage, GetFormExport() );
 
-            Reference<XFormsSupplier2> xFormSupp(xPage, UNO_QUERY);
-            DBG_ASSERT( xFormSupp.is(), "SwXMLExport::_ExportContent: no forms supplier?" );
-            if ( xFormSupp.is() && xFormSupp->hasForms() )
+            // #i36597# / 2004-12-13 / fs@openoffice.org
+            if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
+
+                GetFormExport()->exportXForms();
 
                 GetFormExport()->seekPage(xPage);
                 GetFormExport()->exportForms(xPage);
