@@ -1,4 +1,8 @@
 ..\inc\sw.lst %_DEST%\inc%_EXT%\sw.lst
+mkdir: %_DEST%\inc\%_EXT%\sw
+mkdir: %_DEST%\inc\%_EXT%\uno
+mkdir: %_DEST%\inc\%_EXT%\uno\one
+mkdir: %_DEST%\ucr\sw
 ..\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
 ..\inc\orntenum.hxx %_DEST%\inc%_EXT%\sw\orntenum.hxx
 ..\inc\horiornt.hxx %_DEST%\inc%_EXT%\sw\horiornt.hxx
@@ -22,9 +26,6 @@ touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\inc\swdll.hxx %_DEST%\inc%_EXT%\swdll.hxx
 ..\%__SRC%\lib\swweblib.lib %_DEST%\lib%_EXT%\swweblib.lib
-mkdir: %_DEST%\inc\%_EXT%\sw
-mkdir: %_DEST%\inc\%_EXT%\uno
-mkdir: %_DEST%\inc\%_EXT%\uno\one
 hedabu: ..\inc\swwebdll.hxx %_DEST%\inc%_EXT%\sw\swwebdll.hxx
 hedabu: ..\inc\swdll.hxx %_DEST%\inc%_EXT%\sw\swdll.hxx
 hedabu: ..\inc\swinter.h %_DEST%\inc%_EXT%\sw\swinter.h
@@ -49,7 +50,6 @@ hedabu: ..\%__SRC%\inc\sw\swtxview.h %_DEST%\inc%_EXT%\uno\one\swtxview.h
 hedabu: ..\%__SRC%\inc\sw\swservc.h %_DEST%\inc%_EXT%\uno\one\swservc.h
 hedabu: ..\%__SRC%\inc\sw\swmod.h %_DEST%\inc%_EXT%\uno\one\swmod.h
 
-mkdir: %_DEST%\ucr\sw
 ..\%__SRC%\ucr\*.ucr %_DEST%\ucr%_EXT%\sw\*.ucr
 
 
