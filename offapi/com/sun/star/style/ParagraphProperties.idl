@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-23 10:10:11 $
+ *  last change: $Author: tl $ $Date: 2002-08-28 08:27:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,22 +391,22 @@ service ParagraphProperties
     //-------------------------------------------------------------------------
     /** contains the left border of the object.
      */
-    [property] com::sun::star::table::BorderLine LeftBorder;
+    [property, optional] com::sun::star::table::BorderLine LeftBorder;
 
     //-------------------------------------------------------------------------
     /** contains the right border of the object.
      */
-    [property] com::sun::star::table::BorderLine RightBorder;
+    [property, optional] com::sun::star::table::BorderLine RightBorder;
 
     //-------------------------------------------------------------------------
     /** contains the top border of the object.
      */
-    [property] com::sun::star::table::BorderLine TopBorder;
+    [property, optional] com::sun::star::table::BorderLine TopBorder;
 
     //-------------------------------------------------------------------------
     /** contains the bottom border of the object.
      */
-    [property] com::sun::star::table::BorderLine BottomBorder;
+    [property, optional] com::sun::star::table::BorderLine BottomBorder;
 
     //-------------------------------------------------------------------------
     /** contains the distance from the border to the object.
