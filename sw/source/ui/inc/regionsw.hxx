@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-05-08 14:08:39 $
+ *  last change: $Author: ama $ $Date: 2002-06-07 13:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ class SwEditRegionDlg : public SfxModalDialog
     BOOL            bWeb            :1;
 
 
-    Image  BuildBitmap(BOOL bProtect,BOOL bHidden);
+    Image  BuildBitmap(BOOL bProtect,BOOL bHidden,BOOL bHighContrast);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     USHORT  FindArrPos(const SwSectionFmt* pFmt);
