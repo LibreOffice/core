@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-02 19:27:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-05 19:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ russian ] = "Κ Βΰψεμσ ρβεδενθώ: ρσμμϋ βΰλώς, κξςξπϋε ρβÿηΰνϋ ρ βνεψνθμθ ρρϋλκΰμθ, ΰ ςΰκζε τΰκςξπϋ οπεξαπΰηξβΰνθÿ βΰλώςϋ β τξπμσλΰυ ÿχεεκ οπεξαπΰηξβΰςό νεβξημξζνξ.";
     Text[ greek ] = "Συμβουλή: Η μετατροπή ενός ποσού νομίσματος το οποίο είναι συνδεδεμένο με εξωτερικές αναφορές όπως επίσης και παραγόντων μετατροπής νομίσματος οι οποίοι υπάρχουν σε τύπους δεν είναι δυνατή.";
     Text[ dutch ] = "Tip: Bedragen in valuta die verbonden zijn met externe links en valuta omrekeningsfactoren in celformules kunnen niet worden omgerekend.";
-    Text[ french ] = "Avertissement : Il est impossible de convertir les montants liιs ΰ des rιfιrences externes, de mκme que les facteurs de conversion inclus dans des cellules contenant des formules.";
+    Text[ french ] = "Avertissement : Il est impossible de convertir les montants provenant de liens externes, de mκme que les facteurs de conversion inclus dans les formules.";
     Text[ spanish ] = "Advertencia: No se pueden convertir los importes monetarios de referencias externas ni los factores de conversiσn de moneda en fσrmulas.";
     Text[ italian ] = "Nota: non θ possibile convertire gli importi monetari provenienti da riferimenti esterni, nonchι fattori di conversione monetaria in formule.";
     Text[ danish ] = "Henvisning: Det er ikke muligt at konvertere valutabelψb, som relaterer til eksterne referencer, og valutaomregningsfaktorer i celleformler.";
