@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtoutp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:22 $
+ *  last change: $Author: ama $ $Date: 2001-03-20 12:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ BOOL SwRootFrm::HasSameRect( const SwRect& rRect )
 // rSize muss in Pixel-Koordinaten vorliegen!
 BOOL SwLayVout::DoesFit( const Size &rNew )
 {
-    if( rNew.Height() > 50 )
+    if( rNew.Height() > 64 )
         return FALSE;
     if( rNew.Width() <= 0 || rNew.Height() <= 0 )
         return FALSE;
