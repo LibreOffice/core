@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-22 15:59:02 $
+ *  last change: $Author: sab $ $Date: 2002-10-11 07:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nDBType             = rData.nDBType;
     nIndex              = rData.nIndex;
     nExportIndex        = rData.nExportIndex;
+    bAutoFilter         = rData.bAutoFilter;
 
     for (i=0; i<MAXSORT; i++)
     {
@@ -595,6 +596,8 @@ BOOL ScDBData::operator== (const ScDBData& rData) const
          bKeepFmt   != rData.bKeepFmt   ||
          bIsAdvanced!= rData.bIsAdvanced||
          bStripData != rData.bStripData ||
+//       SAB: I think this should be here, but I don't want to break something
+//         bAutoFilter!= rData.bAutoFilter||
          ScRefreshTimer::operator!=( rData )
         )
         return FALSE;
