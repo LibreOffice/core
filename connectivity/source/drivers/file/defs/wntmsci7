@@ -2161,3 +2161,8 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?release@OStatement@file@connectivity@@WCI@AAXXZ
 ?release@OStatement@file@connectivity@@WCM@AAXXZ
 ?release@OStatement@file@connectivity@@WDA@AAXXZ
+??1OStatement_Base@file@connectivity@@MAE@XZ
+??_EOStatement_Base@file@connectivity@@ODE@AEPAXI@Z
+??_EOStatement_Base@file@connectivity@@OHA@AEPAXI@Z
+??_GOStatement_Base@file@connectivity@@MAEPAXI@Z
+?checkIndex@OResultSet@file@connectivity@@IAEXJ@Z
