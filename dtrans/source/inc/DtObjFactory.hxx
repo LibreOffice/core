@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DtObjFactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:36:30 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #endif
 
-#include <comdef.h>
+#include <systools/win32/comtools.hxx>
 
 //------------------------------------------------------------------------
 // deklarations
@@ -87,7 +87,7 @@ public:
     virtual IDataObjectPtr SAL_CALL createDataObjFromTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager,
                                                                    const com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable >& refXTransferable );
     virtual com::sun::star::uno::Reference< com::sun::star::datatransfer::XTransferable > SAL_CALL createTransferableFromDataObj(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager, IDataObject* pIDataObject );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aServiceManager, IDataObjectPtr pIDataObject );
 };
 
 #endif
