@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:02:17 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,11 @@
     				<author>AS</author>
 					<desc>Enable/disable automatic showing of the start help page for this office factory, if any document suitable for this factory is opened.</desc>
 				</info>
-				<value>false</value>
+				<!-- Attention: Because this feature must be enabled explicitly, we define the following:
+                     a) value = NIL        => feature disabled
+                     b) value = false/true => feature enabled but inactive/active
+                     default = a) => no value inside xcs!
+                -->
 			</prop>
 		</group>
 	</templates>
