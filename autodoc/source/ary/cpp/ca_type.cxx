@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ca_type.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ BuiltInType::inq_Get_Text( StreamStr &          o_rPreName,
         case TYSP_unsigned: o_rName << "unsigned "; break;
         case TYSP_signed:   o_rName << "signed ";   break;
 
-        // default: Does nothing.
+        default:            // Does nothing.
+                            ;
     }
     o_rName << sName;
 }
