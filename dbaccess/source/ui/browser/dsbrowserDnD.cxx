@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:33:32 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 #include <functional>
 // .........................................................................
 namespace dbaui
@@ -165,11 +168,80 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors )
     {
+        // check if we're a table or query container
+        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rEvt.maPosPixel );
+
+        if ( pHitEntry ) // no drop if no entry was hit ....
+        {
+            // it must be a container
+            EntryType eEntryType = getEntryType( pHitEntry );
+            Reference<XConnection> xConnection;
+            if ( eEntryType == etTableContainer && ensureConnection(pHitEntry,xConnection) && xConnection.is() )
+            {
+                Reference<XChild> xChild(xConnection,UNO_QUERY);
+                Reference<XStorable> xStore(xChild.is() ? xChild->getParent() : Reference<XInterface>(),UNO_QUERY);
+                // check for the concrete type
+                if ( xStore.is() && !xStore->isReadonly() && ::std::find_if(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(E_TABLE,sal_True)) != _rFlavors.end())
+                    return DND_ACTION_COPY;
+            }
+        }
+
         return DND_ACTION_NONE;
     }
     // -----------------------------------------------------------------------------
     sal_Int8 SbaTableQueryBrowser::executeDrop( const ExecuteDropEvent& _rEvt )
     {
+        SvLBoxEntry* pHitEntry = m_pTreeView->getListBox()->GetEntry( _rEvt.maPosPixel );
+        EntryType eEntryType = getEntryType( pHitEntry );
+        if (!isContainer(eEntryType))
+        {
+            DBG_ERROR("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
+                // queryDrop shoud not have allowed us to reach this situation ....
+            return DND_ACTION_NONE;
+        }
+        // a TransferableDataHelper for accessing the dropped data
+        TransferableDataHelper aDroppedData(_rEvt.maDropEvent.Transferable);
+
+
+        // reset the data of the previous async drop (if any)
+        if ( m_nAsyncDrop )
+            Application::RemoveUserEvent(m_nAsyncDrop);
+
+
+        m_nAsyncDrop = 0;
+        m_aAsyncDrop.aDroppedData.clear();
+        m_aAsyncDrop.nType          = E_TABLE;
+        m_aAsyncDrop.nAction        = _rEvt.mnAction;
+        m_aAsyncDrop.bError         = sal_False;
+        m_aAsyncDrop.bHtml          = sal_False;
+        m_aAsyncDrop.pDroppedAt     = NULL;
+        m_aAsyncDrop.aUrl           = ::rtl::OUString();
+
+
+        // loop through the available formats and see what we can do ...
+        // first we have to check if it is our own format, if not we have to copy the stream :-(
+        if ( ODataAccessObjectTransferable::canExtractObjectDescriptor(aDroppedData.GetDataFlavorExVector()) )
+        {
+            m_aAsyncDrop.aDroppedData   = ODataAccessObjectTransferable::extractObjectDescriptor(aDroppedData);
+            m_aAsyncDrop.pDroppedAt     = pHitEntry;
+
+            // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+            m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
+            return DND_ACTION_COPY;
+        }
+        else
+        {
+            Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+            if ( ensureConnection(pHitEntry, xDestConnection) && xDestConnection.is() && m_aTableCopyHelper.copyTagTable(aDroppedData,m_aAsyncDrop,xDestConnection) )
+            {
+                m_aAsyncDrop.pDroppedAt = pHitEntry;
+
+                // asyncron because we some dialogs and we aren't allowed to show them while in D&D
+                m_nAsyncDrop = Application::PostUserEvent(LINK(this, SbaTableQueryBrowser, OnAsyncDrop));
+                return DND_ACTION_COPY;
+            }
+        }
+
         return DND_ACTION_NONE;
     }
 
@@ -187,7 +259,6 @@ namespace dbaui
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isObject(eEntryType))
             return DND_ACTION_NONE;
-
 
         TransferableHelper* pTransfer = implCopyObject( pHitEntry, (etTable == eEntryType || etView == eEntryType) ? CommandType::TABLE : CommandType::QUERY);
         Reference< XTransferable> xEnsureDelete = pTransfer;
@@ -231,6 +302,40 @@ namespace dbaui
         aEnsureDelete   = pTransfer;
         if (pTransfer)
             pTransfer->CopyToClipboard(getView());
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
+    {
+        // first get the dest connection
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+        Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+        if (!ensureConnection(_rDesc.pDroppedAt, xDestConnection) )
+            return sal_False;
+
+        return m_aTableCopyHelper.copyTagTable(_rDesc, _bCheck,xDestConnection);
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK( SbaTableQueryBrowser, OnAsyncDrop, void*, NOTINTERESTEDIN )
+    {
+        m_nAsyncDrop = 0;
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        ::osl::MutexGuard aGuard(m_aMutex);
+
+
+        if ( m_aAsyncDrop.nType == E_TABLE )
+        {
+            Reference<XConnection> xDestConnection;  // supports the service sdb::connection
+            if ( ensureConnection(m_aAsyncDrop.pDroppedAt, xDestConnection) && xDestConnection.is() )
+            {
+                SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox()->GetRootLevelParent(m_aAsyncDrop.pDroppedAt);
+                m_aTableCopyHelper.asyncCopyTagTable(m_aAsyncDrop,getDataSourceAcessor( pDataSourceEntry ),xDestConnection);
+            }
+        }
+
+        m_aAsyncDrop.aDroppedData.clear();
+
+        return 0L;
     }
     // -----------------------------------------------------------------------------
     void SbaTableQueryBrowser::clearTreeModel()
