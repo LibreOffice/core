@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:49:07 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 08:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,51 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#include "registry/reader.hxx"
+#include "registry/version.h"
+
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
 #endif
+#include "methoddescription.hxx"
+
+#include <memory>
 
 using namespace com::sun::star;
+
+namespace {
+
+class Constructor:
+    public cppu::WeakImplHelper1< XServiceConstructorDescription >
+{
+public:
+    Constructor(
+        Reference< XHierarchicalNameAccess > const & manager,
+        rtl::OUString const & name, Sequence< sal_Int8 > const & bytes,
+        sal_uInt16 index):
+        m_desc(manager, name, bytes, index) {}
+
+    virtual ~Constructor() {}
+
+    virtual rtl::OUString SAL_CALL getName() throw (RuntimeException)
+    { return m_desc.getName(); }
+
+    virtual Sequence< Reference< XParameter > > SAL_CALL getParameters()
+        throw (RuntimeException)
+    { return m_desc.getParameters(); }
+
+    virtual Sequence< Reference<XCompoundTypeDescription > > SAL_CALL
+    getExceptions() throw (RuntimeException)
+    { return m_desc.getExceptions(); }
+
+private:
+    Constructor(Constructor &); // not implemented
+    void operator =(Constructor); // not implemented
+
+    stoc::registry_tdprovider::MethodDescription m_desc;
+};
+
+}
 
 namespace stoc_rdbtdp
 {
@@ -165,12 +205,6 @@ PropertyTypeDescriptionImpl::getPropertyTypeDescription()
 // virtual
 ServiceTypeDescriptionImpl::~ServiceTypeDescriptionImpl()
 {
-    delete _pMandatoryServices;
-    delete _pOptionalServices;
-    delete _pMandatoryInterfaces;
-    delete _pOptionalInterfaces;
-    delete _pProps;
-
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
@@ -198,7 +232,7 @@ ServiceTypeDescriptionImpl::getMandatoryServices()
     throw ( RuntimeException )
 {
     getReferences();
-    return *_pMandatoryServices;
+    return _aMandatoryServices;
 }
 
 //__________________________________________________________________________________________________
@@ -208,7 +242,7 @@ ServiceTypeDescriptionImpl::getOptionalServices()
     throw ( RuntimeException )
 {
     getReferences();
-    return *_pOptionalServices;
+    return _aOptionalServices;
 }
 
 //__________________________________________________________________________________________________
@@ -218,7 +252,7 @@ ServiceTypeDescriptionImpl::getMandatoryInterfaces()
     throw ( RuntimeException )
 {
     getReferences();
-    return *_pMandatoryInterfaces;
+    return _aMandatoryInterfaces;
 }
 
 //__________________________________________________________________________________________________
@@ -228,7 +262,7 @@ ServiceTypeDescriptionImpl::getOptionalInterfaces()
     throw ( RuntimeException )
 {
     getReferences();
-    return *_pOptionalInterfaces;
+    return _aOptionalInterfaces;
 }
 
 //__________________________________________________________________________________________________
@@ -237,115 +271,191 @@ Sequence< Reference< XPropertyTypeDescription > > SAL_CALL
 ServiceTypeDescriptionImpl::getProperties()
     throw ( RuntimeException )
 {
-    if ( !_pProps )
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
-
-        sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
-        Sequence< Reference< XPropertyTypeDescription > > * pTempProps =
-            new Sequence< Reference< XPropertyTypeDescription > >( nFields );
-        Reference< XPropertyTypeDescription > * pProps = pTempProps->getArray();
-
-        while ( nFields-- )
-        {
-            // name
-            OUStringBuffer aName( _aName );
-            aName.appendAscii( "." );
-            aName.append( aReader.getFieldName( nFields ) );
-
-            // type description
-            Reference< XTypeDescription > xTD;
-            try
-            {
-                _xTDMgr->getByHierarchicalName(
-                    aReader.getFieldType( nFields ).replace( '/', '.' ) )
-                        >>= xTD;
-            }
-            catch ( NoSuchElementException const & )
-            {
-            }
-            OSL_ENSURE( xTD.is(), "### no type description for property!" );
-
-            // flags
-            RTFieldAccess nFlags = aReader.getFieldAccess( nFields );
-
-            sal_Int16 nAttribs = 0;
-            if ( nFlags & RT_ACCESS_READONLY )
-                nAttribs |= beans::PropertyAttribute::READONLY;
-            if ( nFlags & RT_ACCESS_OPTIONAL )
-                nAttribs |= beans::PropertyAttribute::OPTIONAL;
-            if ( nFlags & RT_ACCESS_MAYBEVOID )
-                nAttribs |= beans::PropertyAttribute::MAYBEVOID;
-            if ( nFlags & RT_ACCESS_BOUND )
-                nAttribs |= beans::PropertyAttribute::BOUND;
-            if ( nFlags & RT_ACCESS_CONSTRAINED )
-                nAttribs |= beans::PropertyAttribute::CONSTRAINED;
-            if ( nFlags & RT_ACCESS_TRANSIENT )
-                nAttribs |= beans::PropertyAttribute::TRANSIENT;
-            if ( nFlags & RT_ACCESS_MAYBEAMBIGUOUS )
-                nAttribs |= beans::PropertyAttribute::MAYBEAMBIGUOUS;
-            if ( nFlags & RT_ACCESS_MAYBEDEFAULT )
-                nAttribs |= beans::PropertyAttribute::MAYBEDEFAULT;
-            if ( nFlags & RT_ACCESS_REMOVEABLE )
-                nAttribs |= beans::PropertyAttribute::REMOVEABLE;
-
-            OSL_ENSURE( !(nFlags & RT_ACCESS_PROPERTY),
-                        "### RT_ACCESS_PROPERTY is unexpected here!" );
-            OSL_ENSURE( !(nFlags & RT_ACCESS_ATTRIBUTE),
-                        "### RT_ACCESS_ATTRIBUTE is unexpected here!" );
-            OSL_ENSURE( !(nFlags & RT_ACCESS_CONST),
-                        "### RT_ACCESS_CONST is unexpected here!" );
-            // always set, unless RT_ACCESS_READONLY is set.
-            //OSL_ENSURE( !(nFlags & RT_ACCESS_READWRITE),
-            //            "### RT_ACCESS_READWRITE is unexpected here" );
-            OSL_ENSURE( !(nFlags & RT_ACCESS_DEFAULT),
-                        "### RT_ACCESS_DEAFAULT is unexpected here" );
-
-            pProps[ nFields ]
-                = new PropertyTypeDescriptionImpl( aName.makeStringAndClear(),
-                                                   xTD,
-                                                   nAttribs );
-        }
-
-        ClearableMutexGuard aGuard( getMutex() );
-        if ( _pProps )
-        {
-            aGuard.clear();
-            delete pTempProps;
-        }
-        else
-        {
-            _pProps = pTempProps;
+        MutexGuard guard(getMutex());
+        if (_pProps.get() != 0) {
+            return *_pProps;
         }
     }
 
+    typereg::Reader aReader(
+        _aBytes.getConstArray(), _aBytes.getLength(), false, TYPEREG_VERSION_1);
+
+    sal_uInt16 nFields = (sal_uInt16)aReader.getFieldCount();
+    std::auto_ptr< Sequence< Reference< XPropertyTypeDescription > > >
+        pTempProps(
+            new Sequence< Reference< XPropertyTypeDescription > >(nFields));
+    Reference< XPropertyTypeDescription > * pProps = pTempProps->getArray();
+
+    while ( nFields-- )
+    {
+        // name
+        OUStringBuffer aName( _aName );
+        aName.appendAscii( "." );
+        aName.append( aReader.getFieldName( nFields ) );
+
+        // type description
+        Reference< XTypeDescription > xTD;
+        try
+        {
+            _xTDMgr->getByHierarchicalName(
+                aReader.getFieldTypeName( nFields ).replace( '/', '.' ) )
+                    >>= xTD;
+        }
+        catch ( NoSuchElementException const & )
+        {
+        }
+        OSL_ENSURE( xTD.is(), "### no type description for property!" );
+
+        // flags
+        RTFieldAccess nFlags = aReader.getFieldFlags( nFields );
+
+        sal_Int16 nAttribs = 0;
+        if ( nFlags & RT_ACCESS_READONLY )
+            nAttribs |= beans::PropertyAttribute::READONLY;
+        if ( nFlags & RT_ACCESS_OPTIONAL )
+            nAttribs |= beans::PropertyAttribute::OPTIONAL;
+        if ( nFlags & RT_ACCESS_MAYBEVOID )
+            nAttribs |= beans::PropertyAttribute::MAYBEVOID;
+        if ( nFlags & RT_ACCESS_BOUND )
+            nAttribs |= beans::PropertyAttribute::BOUND;
+        if ( nFlags & RT_ACCESS_CONSTRAINED )
+            nAttribs |= beans::PropertyAttribute::CONSTRAINED;
+        if ( nFlags & RT_ACCESS_TRANSIENT )
+            nAttribs |= beans::PropertyAttribute::TRANSIENT;
+        if ( nFlags & RT_ACCESS_MAYBEAMBIGUOUS )
+            nAttribs |= beans::PropertyAttribute::MAYBEAMBIGUOUS;
+        if ( nFlags & RT_ACCESS_MAYBEDEFAULT )
+            nAttribs |= beans::PropertyAttribute::MAYBEDEFAULT;
+        if ( nFlags & RT_ACCESS_REMOVEABLE )
+            nAttribs |= beans::PropertyAttribute::REMOVEABLE;
+
+        OSL_ENSURE( !(nFlags & RT_ACCESS_PROPERTY),
+                    "### RT_ACCESS_PROPERTY is unexpected here!" );
+        OSL_ENSURE( !(nFlags & RT_ACCESS_ATTRIBUTE),
+                    "### RT_ACCESS_ATTRIBUTE is unexpected here!" );
+        OSL_ENSURE( !(nFlags & RT_ACCESS_CONST),
+                    "### RT_ACCESS_CONST is unexpected here!" );
+        // always set, unless RT_ACCESS_READONLY is set.
+        //OSL_ENSURE( !(nFlags & RT_ACCESS_READWRITE),
+        //            "### RT_ACCESS_READWRITE is unexpected here" );
+        OSL_ENSURE( !(nFlags & RT_ACCESS_DEFAULT),
+                    "### RT_ACCESS_DEAFAULT is unexpected here" );
+
+        pProps[ nFields ]
+            = new PropertyTypeDescriptionImpl( aName.makeStringAndClear(),
+                                               xTD,
+                                               nAttribs );
+    }
+
+    MutexGuard guard(getMutex());
+    if (_pProps.get() == 0) {
+        _pProps = pTempProps;
+    }
     return *_pProps;
+}
+
+sal_Bool ServiceTypeDescriptionImpl::isSingleInterfaceBased()
+    throw (RuntimeException)
+{
+    getReferences();
+    return _xInterfaceTD.is();
+}
+
+Reference< XInterfaceTypeDescription >
+ServiceTypeDescriptionImpl::getInterface() throw (RuntimeException) {
+    getReferences();
+    return _xInterfaceTD;
+}
+
+Sequence< Reference< XServiceConstructorDescription > >
+ServiceTypeDescriptionImpl::getConstructors() throw (RuntimeException) {
+    MutexGuard guard(getMutex());
+    if (_pCtors.get() == 0) {
+        typereg::Reader reader(
+            _aBytes.getConstArray(), _aBytes.getLength(), false,
+            TYPEREG_VERSION_1);
+        sal_uInt16 ctorCount = reader.getMethodCount();
+        std::auto_ptr< Sequence< Reference< XServiceConstructorDescription > > >
+            ctors(
+                new Sequence< Reference< XServiceConstructorDescription > >(
+                    ctorCount));
+        for (sal_uInt16 i = 0; i < ctorCount; ++i) {
+            (*ctors)[i] = new Constructor(
+                _xTDMgr, reader.getMethodName(i), _aBytes, i);
+        }
+        _pCtors = ctors;
+    }
+    return *_pCtors;
 }
 
 //__________________________________________________________________________________________________
 void ServiceTypeDescriptionImpl::getReferences()
     throw ( RuntimeException )
 {
-    if ( !_pMandatoryServices || !_pOptionalServices ||
-         !_pMandatoryInterfaces || !_pOptionalInterfaces )
     {
-        RegistryTypeReaderLoader aLoader;
-        RegistryTypeReader aReader(
-            aLoader, (const sal_uInt8 *)_aBytes.getConstArray(),
-            _aBytes.getLength(), sal_False );
-
-        sal_uInt32 nRefs = aReader.getReferenceCount();
-        Sequence< Reference < XServiceTypeDescription > > * pTempMS
-            = new Sequence< Reference < XServiceTypeDescription > >( nRefs );
-        Sequence< Reference < XServiceTypeDescription > > * pTempOS
-            = new Sequence< Reference < XServiceTypeDescription > >( nRefs );
-        Sequence< Reference < XInterfaceTypeDescription > > * pTempMI
-            = new Sequence< Reference < XInterfaceTypeDescription > >( nRefs );
-        Sequence< Reference < XInterfaceTypeDescription > > * pTempOI
-            = new Sequence< Reference < XInterfaceTypeDescription > >( nRefs );
+        MutexGuard guard(getMutex());
+        if (_bInitReferences) {
+            return;
+        }
+    }
+    typereg::Reader aReader(
+        _aBytes.getConstArray(), _aBytes.getLength(), false, TYPEREG_VERSION_1);
+    sal_uInt16 superTypes = aReader.getSuperTypeCount();
+    if (superTypes > 1) {
+        throw RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "Service has more than one supertype")),
+            static_cast< OWeakObject * >(this));
+    }
+    if (superTypes == 1) {
+        OUString aBaseName( aReader.getSuperTypeName(0).replace( '/', '.' ) );
+        if ( aReader.getReferenceCount() != 0
+             || aReader.getFieldCount() != 0 )
+            throw RuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "Service is single-interface--based but also has"
+                        " references and/or properties" ) ),
+                static_cast< OWeakObject * >( this ) );
+        Any aBase;
+        try
+        {
+            aBase = _xTDMgr->getByHierarchicalName( aBaseName );
+        }
+        catch ( NoSuchElementException const & e )
+        {
+            throw RuntimeException(
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.container.NoSuchElementException: " ) )
+                + e.Message,
+                static_cast< OWeakObject * >( this ) );
+        }
+        MutexGuard guard(getMutex());
+        if (!_bInitReferences) {
+            if ( !( aBase >>= _xInterfaceTD ) )
+                throw RuntimeException(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "Service is not based on interface" ) ),
+                    static_cast< OWeakObject * >( this ) );
+            OSL_ASSERT( _xInterfaceTD.is() );
+            _bInitReferences = true;
+        }
+    }
+    else
+    {
+        sal_uInt16 nRefs = aReader.getReferenceCount();
+        Sequence< Reference< XServiceTypeDescription > > aMandatoryServices(
+            nRefs);
+        Sequence< Reference< XServiceTypeDescription > > aOptionalServices(
+            nRefs);
+        Sequence< Reference< XInterfaceTypeDescription > > aMandatoryInterfaces(
+            nRefs);
+        Sequence< Reference< XInterfaceTypeDescription > > aOptionalInterfaces(
+            nRefs);
         sal_uInt32 nMS = 0;
         sal_uInt32 nOS = 0;
         sal_uInt32 nMI = 0;
@@ -353,145 +463,124 @@ void ServiceTypeDescriptionImpl::getReferences()
 
         while ( nRefs-- )
         {
-            RTReferenceType eType = aReader.getReferenceType( nRefs );
+            RTReferenceType eType = aReader.getReferenceSort( nRefs );
             switch ( eType )
             {
-                case RT_REF_EXPORTS: // service
+            case RT_REF_EXPORTS: // service
                 {
                     uno::Any aTypeDesc;
                     try
                     {
                         aTypeDesc = _xTDMgr->getByHierarchicalName(
-                            aReader.getReferenceName( nRefs )
-                                .replace( '/', '.' ) );
+                            aReader.getReferenceTypeName( nRefs ).replace(
+                                '/', '.' ) );
                     }
-                    catch ( NoSuchElementException const & )
+                    catch ( NoSuchElementException const & e )
                     {
+                        throw RuntimeException(
+                            OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.container."
+                                    "NoSuchElementException: " ) )
+                            + e.Message,
+                            static_cast< OWeakObject * >( this ) );
                     }
-                    OSL_ENSURE( aTypeDesc.hasValue(),
-                                "### no type description!" );
 
-                    RTFieldAccess nAccess = aReader.getReferenceAccess( nRefs );
+                    RTFieldAccess nAccess = aReader.getReferenceFlags( nRefs );
                     if ( nAccess & RT_ACCESS_OPTIONAL )
                     {
                         // optional service
-                        aTypeDesc >>= (*pTempOS)[ nOS ];
-                        OSL_ENSURE( (*pTempOS)[ nOS ].is(),
-                                    "### wrong type description type!" );
+                        if ( !( aTypeDesc >>= aOptionalServices[ nOS ] ) )
+                            throw RuntimeException(
+                                OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Service 'export' is not a service" ) ),
+                                static_cast< OWeakObject * >( this ) );
                         nOS++;
                     }
                     else
                     {
                         // mandatory service
-                        aTypeDesc >>= (*pTempMS)[ nMS ];
-                        OSL_ENSURE( (*pTempMS)[ nMS ].is(),
-                                    "### wrong type description type!" );
+                        if ( !( aTypeDesc >>= aMandatoryServices[ nMS ] ) )
+                            throw RuntimeException(
+                                OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Service 'export' is not a service" ) ),
+                                static_cast< OWeakObject * >( this ) );
                         nMS++;
                     }
                     break;
                 }
-                case RT_REF_SUPPORTS: // interface
+            case RT_REF_SUPPORTS: // interface
                 {
                     uno::Any aTypeDesc;
                     try
                     {
                         aTypeDesc = _xTDMgr->getByHierarchicalName(
-                            aReader.getReferenceName( nRefs )
-                                .replace( '/', '.' ) );
+                            aReader.getReferenceTypeName( nRefs ).replace(
+                                '/', '.' ) );
                     }
-                    catch ( NoSuchElementException const & )
+                    catch ( NoSuchElementException const & e )
                     {
+                        throw RuntimeException(
+                            OUString(
+                                RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.container."
+                                    "NoSuchElementException: " ) )
+                            + e.Message,
+                            static_cast< OWeakObject * >( this ) );
                     }
-                    OSL_ENSURE( aTypeDesc.hasValue(),
-                                "### no type description!" );
 
-                    RTFieldAccess nAccess = aReader.getReferenceAccess( nRefs );
+                    RTFieldAccess nAccess = aReader.getReferenceFlags( nRefs );
                     if ( nAccess & RT_ACCESS_OPTIONAL )
                     {
                         // optional interface
-                        aTypeDesc >>= (*pTempOI)[ nOI ];
-                        OSL_ENSURE( (*pTempOI)[ nOI ].is(),
-                                    "### wrong type description type!" );
+                        if ( !( aTypeDesc >>= aOptionalInterfaces[ nOI ] ) )
+                            throw RuntimeException(
+                                OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Service 'supports' is not an"
+                                        " interface" ) ),
+                                static_cast< OWeakObject * >( this ) );
                         nOI++;
                     }
                     else
                     {
                         // mandatory interface
-                        aTypeDesc >>= (*pTempMI)[ nMI ];
-                        OSL_ENSURE( (*pTempMI)[ nMI ].is(),
-                                    "### wrong type description type!" );
+                        if ( !( aTypeDesc >>= aMandatoryInterfaces[ nMI ] ) )
+                            throw RuntimeException(
+                                OUString(
+                                    RTL_CONSTASCII_USTRINGPARAM(
+                                        "Service 'supports' is not an"
+                                        " interface" ) ),
+                                static_cast< OWeakObject * >( this ) );
                         nMI++;
                     }
                     break;
                 }
-                case RT_REF_INVALID:
-                case RT_REF_OBSERVES:
-                case RT_REF_NEEDS:
-                default:
-                    OSL_ENSURE( sal_False,
-                                "### unsupported reference type!" );
-                    break;
+            case RT_REF_INVALID:
+            case RT_REF_OBSERVES:
+            case RT_REF_NEEDS:
+            default:
+                OSL_ENSURE( sal_False, "### unsupported reference type!" );
+                break;
             }
         }
+        aMandatoryServices.realloc( nMS );
+        aOptionalServices.realloc( nOS );
+        aMandatoryInterfaces.realloc( nMI );
+        aOptionalInterfaces.realloc( nOI );
 
-        {
-            ClearableMutexGuard aGuard( getMutex() );
-            if ( _pMandatoryServices )
-            {
-                aGuard.clear();
-                delete pTempMS;
-            }
-            else
-            {
-                pTempMS->realloc( nMS );
-                _pMandatoryServices = pTempMS;
-            }
-        }
-
-        {
-            ClearableMutexGuard aGuard( getMutex() );
-            if ( _pOptionalServices )
-            {
-                aGuard.clear();
-                delete pTempOS;
-            }
-            else
-            {
-                pTempOS->realloc( nOS );
-                _pOptionalServices = pTempOS;
-            }
-        }
-
-        {
-            ClearableMutexGuard aGuard( getMutex() );
-            if ( _pMandatoryInterfaces )
-            {
-                aGuard.clear();
-                delete pTempMI;
-            }
-            else
-            {
-                pTempMI->realloc( nMI );
-                _pMandatoryInterfaces = pTempMI;
-            }
-        }
-
-        {
-            ClearableMutexGuard aGuard( getMutex() );
-            if ( _pOptionalInterfaces )
-            {
-                aGuard.clear();
-                delete pTempOI;
-            }
-            else
-            {
-                pTempOI->realloc( nOI );
-                _pOptionalInterfaces = pTempOI;
-            }
+        MutexGuard guard(getMutex());
+        if (!_bInitReferences) {
+            _aMandatoryServices = aMandatoryServices;
+            _aOptionalServices = aOptionalServices;
+            _aMandatoryInterfaces = aMandatoryInterfaces;
+            _aOptionalInterfaces = aOptionalInterfaces;
+            _bInitReferences = true;
         }
     }
 }
 
+
 }
-
-
