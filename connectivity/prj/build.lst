@@ -1,4 +1,4 @@
-cn	connectivity	:	comphelper moz svtools dbtools NULL
+cn	connectivity	:	comphelper moz svtools NULL
 cn	connectivity							usr1	-	all	cn_mkout NULL
 cn	connectivity\source\types				nmake	-	all	cn_types NULL
 cn	connectivity\source\commontools			nmake	-	all	cn_cmtools NULL
