@@ -295,7 +295,8 @@
         <Language>c++</Language>
         <Status StatusValue="final"/>
         <SupportedService>com.sun.star.form.component.DatabaseFormattedField</SupportedService>
-        <SupportedService>com.sun.star.form.FormattedField</SupportedService>
+        <SupportedService>com.sun.star.form.component.FormattedField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
         <SupportedService>com.sun.star.form.FormComponent</SupportedService>
         <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
         <SupportedService>com.sun.star.awt.UnoControlFormattedFieldModel</SupportedService>
