@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-19 12:00:15 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,7 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
     OUString sPropertyName;
     OUString sPropertyValue;
     OUString sPropertyName2;
+    sal_Bool bSecurityChanged= sal_False;
     sal_Bool bDone= sal_False;
 
     if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")))
@@ -448,6 +449,7 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
     }
     else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("NetAccess")))
     {
+        bSecurityChanged= sal_True;
         sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode"));
         sal_Int32 val;
         if( Event.Element >>= val)
@@ -467,6 +469,7 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
     }
     else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("Security")))
     {
+        bSecurityChanged= sal_True;
         sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.security.disableSecurity"));
         sal_Bool val;
         if( Event.Element >>= val)
@@ -551,6 +554,50 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
                 if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:NewString")), Reference<XInterface>());
                 jsPrevValue= (jstring)pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
                 if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallStaticObjectMethod java.lang.System.setProperty")), Reference<XInterface>());
+            }
+        }
+
+        // If the settings for Security and NetAccess changed then we have to notify the SandboxSecurity
+        // SecurityManager
+        // call System.getSecurityManager()
+        if (bSecurityChanged)
+        {
+            jmethodID jmGetSecur= pJNIEnv->GetStaticMethodID( jcSystem,"getSecurityManager","()Ljava/lang/SecurityManager;");
+            if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetStaticMethodID java.lang.System.getSecurityManager")), Reference<XInterface>());
+            jobject joSecur= pJNIEnv->CallStaticObjectMethod( jcSystem, jmGetSecur);
+            if (joSecur != 0)
+            {
+                // Make sure the SecurityManager is our SandboxSecurity
+                // FindClass("com.sun.star.lib.sandbox.SandboxSecurityManager" only worked at the first time
+                // this code was executed. Maybe it is a security feature. However, all attempts to debug the
+                // SandboxSecurity class (maybe the VM invokes checkPackageAccess)  failed.
+//                  jclass jcSandboxSec= pJNIEnv->FindClass("com.sun.star.lib.sandbox.SandboxSecurity");
+//                  if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass com.sun.star.lib.sandbox.SandboxSecurity")), Reference<XInterface>());
+//                  jboolean bIsSand= pJNIEnv->IsInstanceOf( joSecur, jcSandboxSec);
+                // The SecurityManagers class Name must be com.sun.star.lib.sandbox.SandboxSecurity
+                jclass jcSec= pJNIEnv->GetObjectClass( joSecur);
+                jclass jcClass= pJNIEnv->FindClass("java/lang/Class");
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:FindClass java.lang.Class")), Reference<XInterface>());
+                jmethodID jmName= pJNIEnv->GetMethodID( jcClass,"getName","()Ljava/lang/String;");
+                if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID java.lang.Class.getName")), Reference<XInterface>());
+                jstring jsClass= (jstring) pJNIEnv->CallObjectMethod( jcSec, jmName);
+                const jchar* jcharName= pJNIEnv->GetStringChars( jsClass, NULL);
+                OUString sName( jcharName);
+                jboolean bIsSandbox;
+                if (sName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lib.sandbox.SandboxSecurity")))
+                    bIsSandbox= JNI_TRUE;
+                else
+                    bIsSandbox= JNI_FALSE;
+                pJNIEnv->ReleaseStringChars( jsClass, jcharName);
+
+                if (bIsSandbox == JNI_TRUE)
+                {
+                    // call SandboxSecurity.reset
+                    jmethodID jmReset= pJNIEnv->GetMethodID( jcSec,"reset","()V");
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:GetMethodID com.sun.star.lib.sandbox.SandboxSecurity.reset")), Reference<XInterface>());
+                    pJNIEnv->CallVoidMethod( joSecur, jmReset);
+                    if(pJNIEnv->ExceptionOccurred()) throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("JNI:CallVoidMethod com.sun.star.lib.sandbox.SandboxSecurity.reset")), Reference<XInterface>());
+                }
             }
         }
         if (bThreadAttached)
