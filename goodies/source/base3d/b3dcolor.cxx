@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcolor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _B3D_B3DCOLOR_HXX
 #include "b3dcolor.hxx"
