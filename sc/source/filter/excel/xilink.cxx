@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:58:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,8 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm )
 {
     sal_uInt16 nFlags;
     sal_uInt8 nLen;
-    rStrm >> nFlags >> mnStorageId >> nLen;
+
+    rStrm >> nFlags >> mnStorageId >> nLen ;
     rStrm.AppendUniString( maName, nLen );
 
     if( ::get_flag( nFlags, EXC_EXTN_BUILTIN ) || !::get_flag( nFlags, EXC_EXTN_OLE_OR_DDE ) )
@@ -134,6 +135,40 @@ XclImpExtName::XclImpExtName( XclImpStream& rStrm )
     }
     else
         meType = ::get_flagvalue( nFlags, EXC_EXTN_OLE, xlExtOLE, xlExtDDE );
+
+    if(meType == xlExtDDE && (rStrm.GetRecLeft() > 1))
+    {
+        sal_uInt8 nLastCol;
+        sal_uInt16 nLastRow;
+        rStrm >> nLastCol >> nLastRow;
+
+        if( nLastRow <= MAXROW && nLastCol <= MAXCOL )
+        {
+            mpDdeMatrix.reset( new XclImpCachedMatrix(nLastCol + 1, nLastRow + 1));
+
+            for( sal_uInt16 nRow = 0; nRow < nLastRow+1 && (rStrm.GetRecLeft() > 1); ++nRow )
+                for( sal_uInt16 nCol = 0; nCol < nLastCol+1 && (rStrm.GetRecLeft() > 1); ++nCol )
+                    mpDdeMatrix->AppendValue( new XclImpCachedValue( rStrm, nCol, nRow ));
+        }
+    }
+}
+
+
+void XclImpExtName::CreateDdeData( ScDocument& rDoc, const String& rApplic,const String& rTopic  )const
+{
+    rDoc.CreateDdeLink( rApplic, rTopic, GetName() );
+    sal_uInt16 nPosition;
+    if(!rDoc.FindDdeLink(rApplic, rTopic, GetName(), SC_DDE_IGNOREMODE, nPosition))
+        return ;
+
+    if(!mpDdeMatrix.get())
+        return ;
+
+    ScMatrix* pMatrix = NULL;
+    if(!(rDoc.CreateDdeLinkResultDimension(nPosition, mpDdeMatrix->GetColumns(), mpDdeMatrix->GetRows(), pMatrix)) || !pMatrix)
+        return ;
+
+    mpDdeMatrix->FillMatrix( rDoc, pMatrix);
 }
 
 
@@ -149,9 +184,7 @@ const XclImpExtName* XclImpExtNameList::GetName( sal_uInt16 nXclIndex ) const
 // Cached external cells ======================================================
 
 XclImpCrn::XclImpCrn( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow ) :
-    XclImpCachedValue( rStrm ),
-    mnCol( nCol ),
-    mnRow( nRow )
+    XclImpCachedValue( rStrm, nCol, nRow )
 {
 }
 
