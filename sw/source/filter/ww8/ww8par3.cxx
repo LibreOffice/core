@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:30:23 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@ sal_uInt8* WW8ListManager::GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms,
     return 0;                           // Sprm not found
 }
 
-class ListWithId : public ::std::unary_function<const WW8LSTInfo *, bool>
+class ListWithId : public std::unary_function<const WW8LSTInfo *, bool>
 {
 private:
     sal_uInt32 mnIdLst;
@@ -1371,7 +1371,7 @@ WW8ListManager::~WW8ListManager()
     unnamed lists are deleted when unused
     pLFOInfos are in any case destructed
     */
-    for(::std::vector<WW8LSTInfo *>::iterator aIter = maLSTInfos.begin();
+    for(std::vector<WW8LSTInfo *>::iterator aIter = maLSTInfos.begin();
         aIter != maLSTInfos.end(); ++aIter)
     {
         if ((*aIter)->pNumRule && !(*aIter)->bUsedInDoc &&
@@ -1379,7 +1379,6 @@ WW8ListManager::~WW8ListManager()
         {
             rDoc.DelNumRule((*aIter)->pNumRule->GetName());
         }
-//        delete *aIter, *aIter=0;
         delete *aIter;
     }
 
