@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 09:44:07 $
+ *  last change: $Author: er $ $Date: 2000-10-29 17:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XLOCALEDATA_HPP_
-#include <com/sun/star/lang/XLocaleData.hpp>
+#ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
+#include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 
 using namespace dbaccess;
@@ -125,6 +125,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 using namespace ::osl;
@@ -647,7 +648,7 @@ sal_Bool OQueryComposer::setANDCriteria(OSQLParseNode * pCondition,
 
 
 
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
             LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
             pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
@@ -697,7 +698,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
                 i++;
 
             // go forward
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
             LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (;i < pCondition->count();i++)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
@@ -737,7 +738,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
             }
 
             // go backward
-            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+            Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
             LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
             for (; i >= 0; i--)
                 pCondition->getChild(i)->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
@@ -755,7 +756,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
         PropertyValue aItem;
         ::rtl::OUString aValue;
         ::rtl::OUString aColumnName;
-        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
         LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
 
         pCondition->parseNodeToPredicateStr(aValue,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
@@ -779,7 +780,7 @@ sal_Bool OQueryComposer::setComparsionPredicate(OSQLParseNode * pCondition,
 
         // Feldnamen
         sal_uInt16 i;
-        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.lang.LocaleData")),UNO_QUERY);
+        Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
         LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
         for (i=0;i< pLhs->count();i++)
              pCondition->getChild(i)->parseNodeToPredicateStr(aName,m_xConnection->getMetaData(), xFormatter, m_aLocale,aData.decimalSeparator.toChar());
