@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-08-06 08:37:19 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,8 @@ public:
     ~SwAutoCompleteWord();
 
     BOOL InsertWord( const String& rWord, SwDoc& rDoc );
-    BOOL RemoveWord( const String& rWord );
-    BOOL SearchWord( const String& rWord, USHORT* pFndPos = 0 ) const;
 
     BOOL GetRange( const String& rWord, USHORT& rStt, USHORT& rEnd ) const;
-
-    BOOL SetToTop( const String& rWord );
 
     USHORT Count() const { return aWordLst.Count(); }
 
