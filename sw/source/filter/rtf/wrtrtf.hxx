@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:38:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ class SwRTFWriter : public Writer
 public:
     // --- public Member --------------------------------------------------
 
-    SwFlyFrmFmt* pFlyFmt;               // liegt der Node in einem FlyFrame,
+    const SwFlyFrmFmt* pFlyFmt; // liegt der Node in einem FlyFrame,
                                         // ist das Format gesetzt, sonst 0
     const SwPageDesc* pAktPageDesc;     // aktuell gesetzter PageDesc.
     USHORT nBkmkTabPos;             // akt. Position in der Bookmark-Tabelle
@@ -227,7 +227,7 @@ struct RTFSaveData
 {
     SwRTFWriter& rWrt;
     SwPaM* pOldPam, *pOldEnd;
-    SwFlyFrmFmt* pOldFlyFmt;
+    const SwFlyFrmFmt* pOldFlyFmt;
     const SwPageDesc* pOldPageDesc;
     const SfxItemSet* pOldAttrSet;          // akt. Attribute vom Node
 
@@ -245,7 +245,7 @@ struct RTFSaveData
 // einige Funktions-Deklarationen
 Writer& OutRTF_AsByteString( Writer& rWrt, const String& rStr );
 Writer& OutRTF_SwFmt( Writer& rWrt, const SwFmt& );
-Writer& OutRTF_SwTblNode( Writer& , SwTableNode & );
+Writer& OutRTF_SwTblNode(Writer& , const SwTableNode&);
 Writer& OutRTF_SwSectionNode( Writer& , SwSectionNode & );
 
 
@@ -262,6 +262,7 @@ Writer& OutRTF_SwFmtFooter( Writer& , const SfxPoolItem& );
 SvStream& OutComment( Writer& rWrt, const sal_Char* pStr );
     // zusaetzlich das bOutFmtAttr-Flag manipulieren
 SvStream& OutComment( Writer& rWrt, const sal_Char* pStr, BOOL bSetFlag );
+bool ExportAsInline(const SwFlyFrmFmt& rFlyFrmFmt);
 
 #endif  //  _WRTRTF_HXX
 
