@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2001-06-13 16:24:24 $
+#   last change: $Author: abi $ $Date: 2001-11-23 13:59:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,9 @@ NO_BSYMBOLIC=TRUE
 
 .IF "$(GUI)"=="WNT"
 CFLAGS+=/GR
+.ENDIF
+.IF "$(COM)"=="GCC"
+CFLAGSCXX+=-frtti
 .ENDIF
 
 .IF "$(SABLOT3RDLIB)"==""
