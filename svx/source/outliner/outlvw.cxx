@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-02 10:40:30 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ OutlinerView::OutlinerView( Outliner* pOut, Window* pWin )
 
     pOwner                      = pOut;
     ePrevMouseTarget            = MouseDontKnow;
-    bBeginDragAtMove            = FALSE;
+//  bBeginDragAtMove            = FALSE;
     bDDCursorVisible            = FALSE;
     bInDragMode                 = FALSE;
     nDDScrollLRBorderWidthWin   = 0;
@@ -407,9 +407,9 @@ BOOL __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
     if( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode())
         return pEditView->MouseMove( rMEvt );
 
-    if ( bBeginDragAtMove )
-        return TRUE;
-    else
+//  if ( bBeginDragAtMove )
+//      return TRUE;
+//  else
     {
         MouseTarget eTarget;
         ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
@@ -450,7 +450,7 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         else if( rMEvt.GetClicks() == 2 && bHasChilds )
             ImpToggleExpand( pPara );
 
-        bBeginDragAtMove = TRUE;
+//      bBeginDragAtMove = TRUE;
         aDDStartPosPix = rMEvt.GetPosPixel();
         aDDStartPosRef=pEditView->GetWindow()->PixelToLogic( aDDStartPosPix,pOwner->GetRefMapMode());
         return TRUE;
@@ -466,7 +466,7 @@ BOOL __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
         return pEditView->MouseButtonUp( rMEvt );
 
     MouseTarget eTarget;
-    bBeginDragAtMove = FALSE;
+//  bBeginDragAtMove = FALSE;
     ImpCheckMousePos( rMEvt.GetPosPixel(), eTarget );
     if ( eTarget == MouseOutside )
         return FALSE;
@@ -807,132 +807,11 @@ void OutlinerView::Indent( short nDiff )
         pOwner->UndoActionEnd( OLUNDO_DEPTH );
 }
 
-/* Soll Ersatz fuer AdjustHeight werden
-void OutlinerView::MoveParagraph( USHORT nPara, short nDiff, BOOL bWithChilds )
-{
-    if ( !nDiff || ( ( nDiff < 0 ) && ( (-nDiff) > nPara ) ) )
-        return;
-
-    BOOL bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( FALSE );
-
-    BOOL bUndo = !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
-    if ( bUndo )
-    {
-        pOwner->UndoActionStart( OLUNDO_MOVEPARAGRAPHS );
-        OutlinerUndoMoveParagraphs* pUndo = new OutlinerUndoMoveParagraphs( nPara, nEndPara, nDiff );
-    }
-
-    pOwner->GetBeginMovingHdl().Call( pOwner );
-
-}
-*/
-
 BOOL OutlinerView::AdjustHeight( long nDY )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    if ( !nDY )
-        return TRUE;
-
-    BOOL bUpdate = pOwner->pEditEngine->GetUpdateMode();
-    pOwner->pEditEngine->SetUpdateMode( FALSE );
-
-    OLUndoHeight* pUndo = NULL;
-#ifndef SVX_LIGHT
-    if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
-    {
-        pOwner->UndoActionStart( OLUNDO_HEIGHT );
-        pUndo = new OLUndoHeight( pOwner );
-        pUndo->nAbsCount = (USHORT)(pOwner->pParaList->GetParagraphCount());
-        pUndo->ppBulletTexts = pOwner->ImpCreateBulletArray();
-        pUndo->pDepths = pOwner->ImpCreateDepthArray();
-        pOwner->InsertUndo( pUndo );
-    }
-#endif
-
-    pOwner->GetBeginMovingHdl().Call( pOwner );
-
-    ParaRange aSel = ImpGetSelectedParagraphs( TRUE );
-
-    if ( nDY > 0 )
-    {
-        Paragraph* pLastPara = pOwner->pParaList->GetParagraph( aSel.nEndPara );
-        Paragraph* pInsertionPara = pLastPara;
-        nDY++;  // Para finden, _vor_ dem wir einfuegen muessen
-        long nDYTemp = nDY;
-        while( nDYTemp && pInsertionPara )
-        {
-            pInsertionPara = pOwner->pParaList->NextVisible( pInsertionPara );
-            nDYTemp--;
-        }
-        ULONG nInsertionPos = LIST_APPEND;
-        if ( pInsertionPara )
-            nInsertionPos = pOwner->pParaList->GetAbsPos( pInsertionPara );
-        if ( aSel.nStartPara != nInsertionPos )
-        {
-            pOwner->pParaList->MoveParagraphs( aSel.nStartPara, nInsertionPos, aSel.Len() );
-            pEditView->MoveParagraphs( Range( aSel.nStartPara, aSel.nEndPara ), (USHORT)nInsertionPos );
-            // pOwner->ImpSetBulletTextsFrom( nChangesStart, 0 );
-            USHORT nChangesStart = Min( (USHORT)aSel.nStartPara, (USHORT)nInsertionPos );
-            USHORT nParas = (USHORT)pOwner->pParaList->GetParagraphCount();
-            for ( USHORT n = nChangesStart; n < nParas; n++ )
-                pOwner->ImplCalcBulletText( n, FALSE, FALSE );
-        }
-
-        // ersten Absatz immer auf Ebene 0 stellen
-        if ( aSel.nStartPara == 0 )
-        {
-            Paragraph* pStartPara = pOwner->pParaList->GetParagraph( 0 );
-            if( pStartPara->GetDepth() != pOwner->GetMinDepth() )
-            {
-                pOwner->SetDepth( pStartPara, pOwner->GetMinDepth() );
-                if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
-                    pOwner->ImplSetLevelDependendStyleSheet( 0 );
-            }
-        }
-    }
-    else
-    {
-        Paragraph* pInsertionPara = pOwner->pParaList->GetParagraph( aSel.nStartPara );
-        long nDYTemp = -1 * nDY;
-        while( nDYTemp && pInsertionPara )
-        {
-            pInsertionPara = pOwner->pParaList->PrevVisible( pInsertionPara );
-            nDYTemp--;
-        }
-        ULONG nInsertionPos = 0;
-        if ( pInsertionPara )
-            nInsertionPos = pOwner->pParaList->GetAbsPos( pInsertionPara );
-        if ( aSel.nStartPara != nInsertionPos )
-        {
-            pOwner->pParaList->MoveParagraphs( aSel.nStartPara, nInsertionPos, aSel.Len() );
-            pEditView->MoveParagraphs( Range( aSel.nStartPara, aSel.nEndPara ), (USHORT)nInsertionPos);
-            // pOwner->ImpSetBulletTextsFrom( nChangesStart, 0 );
-            USHORT nChangesStart = Min( (USHORT)aSel.nStartPara, (USHORT)nInsertionPos );
-            USHORT nParas = (USHORT)pOwner->pParaList->GetParagraphCount();
-            for ( USHORT n = nChangesStart; n < nParas; n++ )
-                pOwner->ImplCalcBulletText( n, FALSE, FALSE );
-        }
-
-        // ersten Absatz immer auf Ebene 0 stellen
-        Paragraph* pStartPara = pOwner->pParaList->GetParagraph( 0 );
-        if( pStartPara->GetDepth() != pOwner->GetMinDepth() )
-        {
-            pOwner->SetDepth( pStartPara, pOwner->GetMinDepth() );
-            if ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
-                pOwner->ImplSetLevelDependendStyleSheet( 0 );
-        }
-    }
-
-    pEditView->SetEditEngineUpdateMode( bUpdate );
-    pEditView->ShowCursor();
-
-    pOwner->aEndMovingHdl.Call( pOwner );
-
-    if ( pUndo )
-        pOwner->UndoActionEnd( OLUNDO_HEIGHT );
-
-    return TRUE;
+    pEditView->MoveParagraphs( nDY );
+    return TRUE;    // remove return value...
 }
 
 void OutlinerView::AdjustDepth( Paragraph* pPara, short nDX, BOOL bWithChilds)
@@ -1326,12 +1205,7 @@ void OutlinerView::ImpPasted( ULONG nStart, ULONG nPrevParaCount, USHORT nSize)
 void OutlinerView::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
-
-    if( ( rCEvt.GetCommand() == COMMAND_STARTDRAG ) && bBeginDragAtMove )
-    {
-    }
-    else
-        pEditView->Command( rCEvt );
+    pEditView->Command( rCEvt );
 }
 
 
@@ -1800,4 +1674,3 @@ USHORT OutlinerView::GetSelectedScriptType() const
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelectedScriptType();
 }
-

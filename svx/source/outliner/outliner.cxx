@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-16 10:12:33 $
+ *  last change: $Author: mt $ $Date: 2001-08-17 10:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1490,6 +1490,8 @@ Outliner::Outliner( SfxItemPool* pPool, USHORT nMode )
     bFirstParaIsEmpty = TRUE;
 
     pEditEngine = new OutlinerEditEng( this, pPool );
+    pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
+    pEditEngine->SetEndMovingParagraphsHdl( LINK( this, Outliner, EndMovingParagraphsHdl ) );
 
     Init( nMode );
 }
@@ -1925,6 +1927,39 @@ IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
 
     ULONG nPara = pParaList->GetAbsPos( pPara );
     pEditEngine->ShowParagraph( (USHORT)nPara, pPara->IsVisible() );
+
+    return 0;
+}
+
+IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
+{
+    DBG_CHKTHIS(Outliner,0);
+
+    GetBeginMovingHdl().Call( this );
+
+    return 0;
+}
+
+IMPL_LINK( Outliner, EndMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
+{
+    DBG_CHKTHIS(Outliner,0);
+
+    pParaList->MoveParagraphs( pInfos->nStartPara, pInfos->nDestPara, pInfos->nEndPara - pInfos->nStartPara + 1 );
+    USHORT nChangesStart = Min( pInfos->nStartPara, pInfos->nDestPara );
+    USHORT nParas = (USHORT)pParaList->GetParagraphCount();
+    for ( USHORT n = nChangesStart; n < nParas; n++ )
+        ImplCalcBulletText( n, FALSE, FALSE );
+
+    // ersten Absatz immer auf Ebene 0 stellen
+    Paragraph* pStartPara = pParaList->GetParagraph( 0 );
+    if( pStartPara->GetDepth() != GetMinDepth() )
+    {
+        SetDepth( pStartPara, GetMinDepth() );
+        if ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT )
+            ImplSetLevelDependendStyleSheet( 0 );
+    }
+
+    aEndMovingHdl.Call( this );
 
     return 0;
 }
