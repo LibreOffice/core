@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:26:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,15 @@ namespace dbaccess
         void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, sal_Bool _bFireEvent = sal_True );
 
         void implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
+
+        /** sets the given result set type/concurrency at the given statement, while respecting
+            possibly related data source settings
+        */
+        void        setStatementResultSetType(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxStatement,
+            sal_Int32 _nDesiredResultSetType,
+            sal_Int32 _nDesiredResultSetConcurrency
+        );
     };
 
 
