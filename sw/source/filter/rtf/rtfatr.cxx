@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:04:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,7 +1293,10 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         String sURL( rURL.GetValue() );
         if( INET_MARK_TOKEN != sURL.GetChar(0) )
         {
-            INetURLObject aTmp( INetURLObject::AbsToRel( sURL ) );
+            INetURLObject aTmp( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+                                          sURL));
+
+
             sURL = aTmp.GetURLNoMark( INetURLObject::DECODE_UNAMBIGUOUS);
 /*          if( INET_PROT_FILE == aTmp.GetProtocol() )
             {
