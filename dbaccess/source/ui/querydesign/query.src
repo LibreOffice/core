@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,7 +1520,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         ToolBoxItem
         {
             Identifier = ID_EDIT_QUERY_SQL ;
