@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:58 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,11 +1305,19 @@ sal_Bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
     rOStm.WriteByteString( maStr, pData->meActualCharSet );
     rOStm   << mnIndex;
     rOStm   << mnLen;
+
+    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    rOStm << nLen;
+    for ( i = 0; i < nLen; i++ )
+    {
+        sal_Unicode nUni = maStr.GetChar( i );
+        rOStm << nUni;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1321,6 +1329,15 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm.ReadByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
+
+    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    {
+        sal_uInt16 nLen;
+        rIStm >> nLen;
+        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        while ( nLen-- )
+            rIStm >> *pBuffer++;
+    }
 }
 
 // ========================================================================
@@ -1437,7 +1454,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     const ULONG nAryLen = mpDXAry ? mnLen : 0;
 
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maStartPt;
     rOStm.WriteByteString( maStr, pData->meActualCharSet );
     rOStm   << mnIndex;
@@ -1446,6 +1463,14 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
     for( ULONG i = 0UL; i < nAryLen; i++ )
         rOStm << mpDXAry[ i ];
+
+    sal_uInt16 j, nLen = maStr.Len();                           // version 2
+    rOStm << nLen;
+    for ( j = 0; j < nLen; j++ )
+    {
+        sal_Unicode nUni = maStr.GetChar( j );
+        rOStm << nUni;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1474,6 +1499,15 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
     else
         mpDXAry = NULL;
+
+    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    {
+        sal_uInt16 nLen;
+        rIStm >> nLen;
+        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        while ( nLen-- )
+            rIStm >> *pBuffer++;
+    }
 }
 
 // ========================================================================
@@ -1540,12 +1574,20 @@ sal_Bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maPt;
     rOStm.WriteByteString( maStr, pData->meActualCharSet );
     rOStm   << mnWidth;
     rOStm   << mnIndex;
     rOStm   << mnLen;
+
+    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    rOStm << nLen;
+    for ( i = 0; i < nLen; i++ )
+    {
+        sal_Unicode nUni = maStr.GetChar( i );
+        rOStm << nUni;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1558,6 +1600,15 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnWidth;
     rIStm   >> mnIndex;
     rIStm   >> mnLen;
+
+    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    {
+        sal_uInt16 nLen;
+        rIStm >> nLen;
+        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        while ( nLen-- )
+            rIStm >> *pBuffer++;
+    }
 }
 
 // ========================================================================
@@ -1618,10 +1669,18 @@ sal_Bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
 
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    WRITE_BASE_COMPAT( rOStm, 1, pData );
+    WRITE_BASE_COMPAT( rOStm, 2, pData );
     rOStm   << maRect;
     rOStm.WriteByteString( maStr, pData->meActualCharSet );
     rOStm   << mnStyle;
+
+    sal_uInt16 i, nLen = maStr.Len();                           // version 2
+    rOStm << nLen;
+    for ( i = 0; i < nLen; i++ )
+    {
+        sal_Unicode nUni = maStr.GetChar( i );
+        rOStm << nUni;
+    }
 }
 
 // ------------------------------------------------------------------------
@@ -1632,6 +1691,15 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> maRect;
     rIStm.ReadByteString( maStr, pData->meActualCharSet );
     rIStm   >> mnStyle;
+
+    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    {
+        sal_uInt16 nLen;
+        rIStm >> nLen;
+        sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
+        while ( nLen-- )
+            rIStm >> *pBuffer++;
+    }
 }
 
 // ========================================================================
