@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-17 20:51:18 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6609,7 +6609,7 @@ String STR_ViewMarked
     Text [ spanish ] = "%O marcado" ;
     Text [ english_us ] = "%O selected" ;
     Text[ chinese_simplified ] = "已经选取 %O";
-    Text[ russian ] = "������� %O";
+    Text[ russian ] = "%O �������";
     Text[ polish ] = "Zaznaczono %O";
     Text[ japanese ] = "%O が選択されています";
     Text[ chinese_traditional ] = "已經選擇 %O";
@@ -13991,6 +13991,25 @@ String SIP_SA_XMLATTRIBUTES
     Text = "Benutzerdefinierte Attribute";
     Text [ ENGLISH ] = "User definied Attributes" ;
     Text[ english_us ] = "User definied Attributes";
+    Text[ portuguese ] = "User definied Attributes";
+    Text[ russian ] = "User definied Attributes";
+    Text[ greek ] = "User definied Attributes";
+    Text[ dutch ] = "User definied Attributes";
+    Text[ french ] = "Attributs utilisateur";
+    Text[ spanish ] = "Atributos definidos por el usuario";
+    Text[ finnish ] = "User definied Attributes";
+    Text[ italian ] = "User definied Attributes";
+    Text[ danish ] = "User definied Attributes";
+    Text[ swedish ] = "Anv�ndardefinierade attribut";
+    Text[ polish ] = "User definied Attributes";
+    Text[ portuguese_brazilian ] = "User definied Attributes";
+    Text[ japanese ] = "User definied Attributes";
+    Text[ korean ] = "User definied Attributes";
+    Text[ chinese_simplified ] = "使用者自定的属性";
+    Text[ chinese_traditional ] = "自訂的屬性";
+    Text[ turkish ] = "User definied Attributes";
+    Text[ arabic ] = "User definied Attributes";
+    Text[ catalan ] = "User definied Attributes";
 };
 
 String SIP_SA_RESERVE15
@@ -17711,6 +17730,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
