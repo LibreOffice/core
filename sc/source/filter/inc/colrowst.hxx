@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:51:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ private:
     BOOL                bDirty;     // noch nicht rausgehauen?
     BOOL                bSetByStandard;     // StandardWidth hat Vorrang vor DefColWidth!
 
-    void                _SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
+    void                _SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
 
     inline ScExtTabOptions& GetExtTabOpt()
                             { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
@@ -121,24 +121,24 @@ public:
     inline void         SetDefWidth( const UINT16 nNew, const BOOL bStandardWidth = FALSE );
     inline void         SetDefHeight( const UINT16 nNew );
 
-    inline void         Used( const UINT16 nCol, const UINT16 nRow );
+    inline void         Used( const SCCOL nCol, const SCROW nRow );
 
-    inline void         HideCol( const UINT16 nCol );
-    void                HideColRange( UINT16 nColFirst, UINT16 nColLast );
-    void                SetWidthRange( UINT16 nF, UINT16 nL, UINT16 nNew );
-    void                SetDefaultXF( UINT16 nColFirst, UINT16 nColLast, UINT16 nXF );
-    inline void         SetWidth( const UINT16 nCol, const INT32 nNew );
+    inline void         HideCol( const SCCOL nCol );
+    void                HideColRange( SCCOL nColFirst, SCCOL nColLast );
+    void                SetWidthRange( SCCOL nF, SCCOL nL, UINT16 nNew );
+    void                SetDefaultXF( SCCOL nColFirst, SCCOL nColLast, UINT16 nXF );
+    inline void         SetWidth( const SCCOL nCol, const INT32 nNew );
 
-    inline void         SetHeight( const UINT16 nRow, const UINT16 nNew );
-    inline void         HideRow( const UINT16 nRow );
-    inline void         SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
+    inline void         SetHeight( const SCROW nRow, const UINT16 nNew );
+    inline void         HideRow( const SCROW nRow );
+    inline void         SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
                                     // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
 
     inline UINT16       GetActivePane() const
                             { return pExtTabOpt ? pExtTabOpt->nActPane : 3; }
 
     void                ReadSplit( XclImpStream& rIn );
-    void                SetVisCorner( UINT16 nCol, UINT16 nRow );
+    void                SetVisCorner( SCCOL nCol, SCROW nRow );
     void                SetFrozen( const BOOL bFrozen );
     inline void         SetTabSelected( const BOOL bSelected )
                             { GetExtTabOpt().bSelected = bSelected; }
@@ -148,9 +148,9 @@ public:
                             { GetExtTabOpt().SetDimension( rDim ); }
 
     /** Inserts all column and row settings of the specified sheet, except the hidden flags. */
-    void                Apply( sal_uInt16 nScTab );
+    void                Apply( SCTAB nScTab );
     /** Sets the HIDDEN flags at all hidden columns and rows in the specified sheet. */
-    void                SetHiddenFlags( sal_uInt16 nScTab );
+    void                SetHiddenFlags( SCTAB nScTab );
 };
 
 
@@ -174,16 +174,16 @@ inline void ColRowSettings::SetDefHeight( const UINT16 n )
 }
 
 
-inline void ColRowSettings::SetWidth( const UINT16 nCol, const INT32 nNew )
+inline void ColRowSettings::SetWidth( const SCCOL nCol, const INT32 nNew )
 {
-    if( nCol <= MAXCOL )
+    if( ValidCol(nCol) )
         pWidth[ nCol ] = nNew;
 }
 
 
-inline void ColRowSettings::SetHeight( const UINT16 nRow, const UINT16 n )
+inline void ColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
 {
-    if( nRow <= MAXROW )
+    if( ValidRow(nRow) )
     {
         pHeight[ nRow ] = ( UINT16 ) ( ( double ) ( n & 0x7FFF ) * pExcRoot->fRowScale );
 
@@ -201,16 +201,16 @@ inline void ColRowSettings::SetHeight( const UINT16 nRow, const UINT16 n )
 }
 
 
-inline void ColRowSettings::HideCol( const UINT16 nCol )
+inline void ColRowSettings::HideCol( const SCCOL nCol )
 {
-    if( nCol <= MAXCOL )
+    if( ValidCol(nCol) )
         pColHidden[ nCol ] = TRUE;
 }
 
 
-inline void ColRowSettings::HideRow( const UINT16 nRow )
+inline void ColRowSettings::HideRow( const SCROW nRow )
 {
-    if( nRow <= MAXROW )
+    if( ValidRow(nRow) )
     {
         pRowFlags[ nRow ] |= ( ROWFLAG_HIDDEN | ROWFLAG_USED );
 
@@ -220,9 +220,9 @@ inline void ColRowSettings::HideRow( const UINT16 nRow )
 }
 
 
-inline void ColRowSettings::Used( const UINT16 nCol, const UINT16 nRow )
+inline void ColRowSettings::Used( const SCCOL nCol, const SCROW nRow )
 {
-    if( nCol <= MAXCOL && nRow <= MAXROW )
+    if( ValidCol(nCol) && ValidRow(nRow) )
     {
         pRowFlags[ nRow ] |= ROWFLAG_USED;
 
@@ -232,9 +232,9 @@ inline void ColRowSettings::Used( const UINT16 nCol, const UINT16 nRow )
 }
 
 
-inline void ColRowSettings::SetRowSettings( const UINT16 nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
+inline void ColRowSettings::SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
-    if( nRow <= MAXROW )
+    if( ValidRow(nRow) )
         _SetRowSettings( nRow, nExcelHeight, nGrbit );
 }
 
