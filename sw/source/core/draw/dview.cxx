@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: mib $ $Date: 2002-04-05 12:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,12 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
         const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
         if ( pPg->IsObjOrdNumsDirty() )
             pPg->RecalcObjOrdNums();
+
+#ifdef ACCESSIBLE_LAYOUT
+        rImp.DisposeAccessibleFrm( pFly );
+        rImp.AddAccessibleFrm( pFly );
+#endif
+
         if ( bBtm )
             ++nNewPos;
         BOOL bFound = FALSE;
@@ -423,6 +429,15 @@ void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                 pPg->SetObjectOrdNum( i, nNewPos );
                 pPg->RecalcObjOrdNums();
                 --i;    //keinen auslassen
+#ifdef ACCESSIBLE_LAYOUT
+                if ( bFly )
+                {
+                    const SwFlyFrm *pFF =
+                        static_cast< const SwVirtFlyDrawObj *>(pO)->GetFlyFrm();
+                    rImp.DisposeAccessibleFrm( pFF );
+                    rImp.AddAccessibleFrm( pFF );
+                }
+#endif
             }
         }
     }
