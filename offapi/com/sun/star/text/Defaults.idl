@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Defaults.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 15:49:54 $
+ *  last change: $Author: tl $ $Date: 2002-08-15 14:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,18 +61,20 @@
 #ifndef __com_sun_star_text_Defaults_idl__
 #define __com_sun_star_text_Defaults_idl__
 
-#ifndef __com_sun_star_style_ParagraphProperties_idl__
-#include <com/sun/star/style/ParagraphProperties.idl>
-#endif
-
 #ifndef __com_sun_star_style_CharacterProperties_idl__
 #include <com/sun/star/style/CharacterProperties.idl>
+#endif
+#ifndef __com_sun_star_style_ParagraphProperties_idl__
+#include <com/sun/star/style/ParagraphProperties.idl>
 #endif
 #ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
 #endif
 #ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
+#endif
+#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
@@ -85,15 +87,28 @@
 
 //=============================================================================
 
-/** provides default settings of a text document for paragraph and character properties.
+/** provides default settings of a text component for paragraph and
+    character properties.
  */
 service Defaults
 {
-    service com::sun::star::style::ParagraphProperties;
     service com::sun::star::style::CharacterProperties;
-    service com::sun::star::style::CharacterPropertiesAsian;
-    service com::sun::star::style::CharacterPropertiesComplex;
+
+    service com::sun::star::style::ParagraphProperties;
+
+    [optional] service com::sun::star::style::CharacterPropertiesAsian;
+
+    [optional] service com::sun::star::style::CharacterPropertiesComplex;
+
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
+
+
     interface com::sun::star::beans::XPropertySet;
+
+    //-----------------------------------------------------------------------------
+    /** default tab-distance to be used.
+     */
+    [property] long TabStopDistance;
 };
 
 //=============================================================================
