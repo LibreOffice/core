@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:06:59 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ void ScAccessibilityEditSource::UpdateData()
     mpAccessibleCellTextData->UpdateData();
 }
 
-SfxBroadcaster& ScAccessibilityEditSource::GetBroadcaster()
+SfxBroadcaster& ScAccessibilityEditSource::GetBroadcaster() const
 {
     return mpAccessibleCellTextData->GetBroadcaster();
 }

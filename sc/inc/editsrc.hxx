@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:05:13 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ public:
     virtual SvxViewForwarder*   GetViewForwarder();
     virtual SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool bCreate = sal_False );
     virtual void                UpdateData();
-    virtual SfxBroadcaster&     GetBroadcaster();
+    virtual SfxBroadcaster&     GetBroadcaster() const;
 
     void                        SetDoUpdateData(sal_Bool bValue);
     sal_Bool                    IsDirty() const;

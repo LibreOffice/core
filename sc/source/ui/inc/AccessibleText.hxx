@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:07:49 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,11 @@ public:
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
-    virtual SfxBroadcaster& GetBroadcaster();
+    virtual SfxBroadcaster& GetBroadcaster() const;
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
-    SfxBroadcaster maBroadcaster;
+    mutable SfxBroadcaster maBroadcaster;
     ScViewForwarder* mpViewForwarder;
     ScEditViewForwarder* mpEditViewForwarder;
     ScTabViewShell* mpViewShell;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:09:38 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool b
     return mpEditViewForwarder;
 }
 
-SfxBroadcaster& ScAccessibleCellTextData::GetBroadcaster()
+SfxBroadcaster& ScAccessibleCellTextData::GetBroadcaster() const
 {
     return maBroadcaster;
 }
