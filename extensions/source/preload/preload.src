@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:19:23 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ TabPage RID_TP_WELCOME
         Text[ polish ] = "Witamy w %PRODUCTNAME %PRODUCTVERSION OEM!\n\nAby uruchomiζ %PRODUCTNAME %PRODUCTVERSION OEM, naleΏy podaζ swoje dane w oknie dialogowym, ktσre bκdzie widoczne po wywietleniu umowy licencyjnej. W pliku Readme, zawartym w katalogu programu %PRODUCTNAME, znajdujΉ siκ waΏne wskazσwki dotyczΉce programu. NaleΏy je uwaΏnie przeczytaζ. Szczegσ³owe informacje podano w witrynie firmy Sun pod adresem\n\nhttp://www.sun.com/staroffice.\n\nPomoc techniczna i szkolenia:\n\nMoΏna uzyskaζ jednΉ (1) bezp³atnΉ telefonicznΉ us³ugκ zwiΉzanΉ z programem %PRODUCTNAME %PRODUCTVERSION (w ciΉgu 60 dni od daty zakupu) oraz bezp³atny dostκp do internetowego kursu \"Transitioning to the %PRODUCTNAME %PRODUCTVERSION Application Suite\" (WO-1605), dostκpnego w orodku Web Learning Center firmy Sun(tm)  (w ciΉgu 60 dni od daty zakupu). Aby skorzystaζ z tej oferty naleΏy odwiedziζ podanΉ niΏej witrynκ.\n\nhttp://www.sun.com/star/service\n\nMamy nadziejκ, Ώe praca z pakietem %PRODUCTNAME bκdzie przyjemna i owocna.";
         Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION OEM γΈγ‚γ†γ“γ\n\n%PRODUCTNAME %PRODUCTVERSION OEM γ‚’θµ·ε‹•γ™γ‚‹γ«γ―γ€γƒ©γ‚¤γ‚»γƒ³γ‚Ήθ¨±θ«Ύζ›Έγ®ζ–‡η« γ«η¶γγƒ€γ‚¤γ‚Άγƒ­γ‚°γƒγƒΌγ‚Έγ§γƒ¦γƒΌγ‚¶γƒΌγƒ‡γƒΌγ‚Ώγ‚’ε…¥ε›γ—γΎγ™γ€‚%PRODUCTNAME γγ‚¤γƒ³γ‚ΉγƒγƒΌγƒ«γ•γ‚γ¦γ„γ‚‹γƒ‡γ‚£γƒ¬γ‚―γƒγƒªγ® Readme γƒ•γ‚΅γ‚¤γƒ«γ§γ―γ€γ”δ½Ώη”¨γ«γ‚γγ£γ¦γ®ζ³¨ζ„η‚Ήγ‚’θΏ°γΉγ¦γ„γΎγ™γ€‚γ”δ½Ώη”¨γ«γªγ‚‹ε‰γ«γ€εΏ…γγθª­γΏγγ γ•γ„γ€‚θ©³η΄°ζƒ…ε ±γ―γ€Sun γ® webγ‚µγ‚¤γƒγΎγ§γ€‚\n\nhttp://www.sun.com/starsuite\n\nγ‚µγƒγƒΌγƒγ¨γƒγƒ¬γƒΌγƒ‹γƒ³γ‚°:\n\nGet FREE γ‚½γƒ•γƒγ‚¦γ‚§γ‚Άγ‚µγƒγƒΌγƒγ―γ”θ³Όε…¥ζ—¥γ‹γ‚‰60ζ—¥ι–“ζ‰εΉγ§γ™γ€‚γΎγ Sun(tm) Web Learning Center δΈ»ε‚¬ webγƒ™γƒΌγ‚Ήγ® %PRODUCTNAME γƒγƒ¬γƒΌγƒ‹γƒ³γ‚°γ‚³γƒΌγ‚Ήγ«γ¤γ„γ¦γ―γ€η™»ι²γ•γ‚γζ—¥γ‹γ‚‰90ζ—¥ι–“ FREE γ‚Άγ‚―γ‚»γ‚Ήγ§γγΎγ™γ€‚γµγ‚‹γ£γ¦γ”ε‚ε γγ γ•γ„γ€‚θ©³η΄°γ«γ¤γ„γ¦γ―γ€δ»¥δΈ‹γ® WebγƒγƒΌγ‚Έγ§γ”ζ΅ε†…η”³γ—δΈγ’γΎγ™γ€‚\n\nhttp://www.sun.com/star/service\n%PRODUCTNAME γƒγƒΌγƒ δΈ€ε";
         Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION OEMμ„ μ‹μ‘ν•©λ‹λ‹¤.\n\n %PRODUCTNAME %PRODUCTVERSION OEM μ„ μ‹μ‘ν•λ ¤λ©΄ μ°μ„  μ‚¬μ©μ μ‚¬μ©κ¶ κ³„μ•½μ„μ λ€ν™” μƒμμ—μ„ μ‚¬μ©μ κ°μΈ μ •λ³΄λ¥Ό μ…λ ¥ν•΄μ£Όμ‹­μ‹μ¤.\n\n %PRODUCTNAME μ ν’ λ””λ ‰ν† λ¦¬μ— μλ” Readme νμΌμ—λ” ν”„λ΅κ·Έλ¨μ— λ€ν• μ£Όμ” μ°Έκ³  μ‚¬ν•­μ΄ μλ΅λμ–΄ μμµλ‹λ‹¤. μ΄ μ°Έκ³  μ‚¬ν•­μ„ μ£ΌμκΉκ² μ½μ–΄λ³΄μ‹­μ‹μ¤.\n\nμ§€μ›:\n\nλ§¤λ§¤μΌλ΅λ¶€ν„° 60μΌκ°„ μ ν¨ν• λ¬΄λ£ μ†ν”„νΈμ›¨μ–΄ μ§€μ›μ„ λ°›μΌμ‹­μ‹μ¤. μμ„Έν• μ •λ³΄λ” Sunμ μΈν„°λ„· μ‚¬μ΄νΈμΈ http://www.sun.com/starsuite μ—μ„ λ³΄μ‹¤ μ μμµλ‹λ‹¤.\n\n%PRODUCTNAMEλ¥Ό μ‚¬μ©ν•μ—¬ λ©‹μλ” λ¬Έμ„λ¥Ό κΎΈλ©° λ³΄μ‹­μ‹μ¤.\n\n %PRODUCTNAME ν€ μΌλ™.";
-        Text[ chinese_simplified ] = "ζ¬ΆθΏε®‰θ£… %PRODUCTNAME %PRODUCTVERSION OEM\n\nε¨ε―ε¨ %PRODUCTNAME %PRODUCTVERSION OEM δΉ‹ε‰οΌθ―·ε¨θ®Έε―θ―ζ–‡ε­—δΉ‹εη„ε―Ήθ―ζ–Ήζ΅†ε†…θΎ“ε…¥ζ‚¨η„δΈªδΊΊζ•°ζ®γ€‚θ―·δ»”η»†ι…θ―»ε­ζ”Ύε¨ %PRODUCTNAME η›®ε½•δΉ‹ε†…η„ι‡θ¦η„ READEME ζ–‡ζ΅£γ€‚ζ‚¨δΉθƒ½ε¤θ®Ώι—® Sun η½‘ι΅µοΌι…θ―»θ―¦η»†η„η›Έε…³θµ„ζ–™οΌ\n\nhttp://www.sun.com/starsuite\n\nδ»θ΄­δΉ°δΉ‹ζ—¥θµ·ζ‚¨θƒ½ε¤δΊ«ζ‰ε…θ΄Ή60ε¤©η„ζ€ζ―ζ”―ζγ€‚ζ‘δ»¬ιΆ„η¥ζ‚¨θƒ½ε¤ι΅Ίε©γ€ζ„‰εΏ«ε°δ½Ώη”¨ %PRODUCTNAME γ€‚";
+        Text[ chinese_simplified ] = "ζ¬ΆθΏε®‰θ£… %PRODUCTNAME %PRODUCTVERSION OEM\n\nθ¦ε―ε¨ %PRODUCTNAME %PRODUCTVERSION OEMοΌθ―·ε¨θ®Έε―θ―ζ–‡ε­—δΉ‹εη„ε―Ήθ―ζ΅†ε†…θΎ“ε…¥ζ‚¨η„δΈªδΊΊζ•°ζ®γ€‚ %PRODUCTNAME η›®ε½•ε†…η„ README ζ–‡δ»¶ε…ε«ι‡θ¦η„δΏ΅ζ―γ€‚θ―·δ»”η»†ι…θ―»θΏ™δΊ›ζ–‡δ»¶οΏ½";
         Text[ chinese_traditional ] = "ζ­΅θΏδ½Ώη”¨ %PRODUCTNAME %PRODUCTVERSION OEM\n\nε¦‚ζθ¦ε•ε‹• %PRODUCTNAME %PRODUCTVERSION OEMοΌθ«‹ε¨θ¨±ε―θ­‰ε”θ­°δΉ‹εΎη„ε°θ©±ζ–Ήε΅δΈ­ιµε…¥ζ‚¨η„ε€‹δΊΊθ³‡ζ–™γ€‚%PRODUCTNAME η”Άε“η›®ι„θ®€ζ‘ζª”ζ΅δΈ­ε…ε«ι‡θ¦η„θ³‡θ¨γ€‚θ«‹δ»”η΄°ι–±θ®€ι€™δΊ›ζª”ζ΅γ€‚ζ‚¨δΉε―δ»¥ε¨ Sun η¶²η«™\n\nhttp://www.sun.com/starsuite ζ‰Ύε°θ©³η΄°η„θ³‡θ¨γ€‚\n\nεΎθ³Όθ²·θ»ι«”δΉ‹ζ—¥θµ·ζ‚¨θƒ½ε¤ η²εΎ—60ε¤©ε…θ²»η„ζ€θ΅“ζ”―ζ΄ζε‹™γ€‚ζ‘ε€‘ι η¥ζ‚¨θƒ½ε¤ ζ„‰εΏ«γ€ι †ε©ε°δ½Ώη”¨ %PRODUCTNAME γ€‚";
         Text[ turkish ] = "%PRODUCTNAME %PRODUCTVERSION OEM'a hoώ geldiniz. \n\n%PRODUCTNAME %PRODUCTVERSION OEM'a baώlamak iηin aώaπύdaki alana lisans numaranύzύ girin. Product dizini altύnda %PRODUCTNAME 'da konumlanmύώ olan Beni Oku dosyasύ φnemli bilgiler iηermekte. Bu dosyayύ dikkatlice okuyun. Detaylύ bilgiyi Sun'ύn Websitesinde bulabilirsiniz. \n\nhttp://www.sun.com/staroffice.\n\nDestek ve Eπitim:\n\n satύn aldύπύnύz tarihten itibaren 60 gόn iηin όcretsiz yazύlύm desteπi ve όcretsiz Web tabanlύ %PRODUCTNAME kurslarύ (kayύr tarihinden itibaren 90 gόn geηerli) elde edin. Bu avantajύ yakalamak iηin aώaπύdaki Web sayfasύnύ ziyaret edin.\n\nhttp://www.sun.com/star/service\n\nUmarύz %PRODUCTNAME ile ηalύώmaktan hoώlanacaksύnύz.";
         Text[ arabic ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
@@ -439,7 +439,7 @@ TabPage RID_TP_LICENSE
         Text[ korean ] = "μ„¤μΉλ¥Ό κ³„μ† μ§„ν–‰ν•κΈ° μ„ν•΄ λ‹¤μ λ‹¨κ³„λ¥Ό μ‹¤ν–‰ν•΄μ£Όμ‹­μ‹μ¤:";
         Text[ chinese_traditional ] = "θ«‹ε·θ΅δΈ‹ε—ε‹•δ½οΌδ»¥ηΉΌηΊε®‰θ£οΌ";
         Text[ french ] = "Suivez les ιtapes suivantes pour procιder ΰ l'installation :";
-        Text[ chinese_simplified ] = "θ―·ζ‰§θ΅δ»¥δΈ‹η„ζ“δ½οΌδ»¥η»§η»­ε®‰θ£…οΌ";
+        Text[ chinese_simplified ] = "θ―·ζ‰δΈ‹ε—ζ­¥ιª¤οΌη»§η»­ε®‰θ£…:οΌ";
         Text[ portuguese ] = "Leia o seguinte contrato de licenηa com atenηγo. Se usar a barra de deslocamento poderα visualizar o texto completo.";
         Text[ russian ] = "Οπξχθςΰιςε, οξζΰλσιρςΰ, ρλεδσώωεε λθφενηθξννξε ρξγλΰψενθε. Θροξλόησιςε οξλξρσ οπξκπσςκθ, χςξαϋ σβθδεςό ξρςΰλόνσώ χΰρςό ςεκρςΰ.";
         Text[ greek ] = "Παρακαλούμε ακολουθήστε αυτά τα βήματα για να προχωρήσετε με την εγκατάσταση:";
@@ -524,7 +524,7 @@ TabPage RID_TP_LICENSE
         Text[ french ] = "Prenez connaissance du contrat de licence. Servez-vous de la barre de dιfilement ou du bouton %PAGEDOWN afin d'afficher le texte en entier.";
         Text[ spanish ] = "Lea el siguiente contrato de licencia. Utilice la barra de desplazamiento o el botσn 'AvPag' para visualizar el texto entero.";
         Text[ japanese ] = "ζ¬΅γ®γƒ©γ‚¤γ‚»γƒ³γ‚Ήζ΅ι …γ‚’εΏ…γγθª­γΏγγ γ•γ„γ€‚γ‚Ήγ‚―γƒ­γƒΌγƒ«γƒγƒΌγ‚’ε‹•γ‹γ™γ‹γ€[%PAGEDOWN] γƒγ‚Ώγƒ³γ‚’ζΌγ™γ¨ζ®‹γ‚γ®ζ–‡η« γθ΅¨η¤Ίγ•γ‚γΎγ™γ€‚";
-        Text[ chinese_simplified ] = "θ―·ι…θ―»θ®Έε―θ―εθ®®δΈ­η„ε…¨ιƒ¨ζ΅ζ¬Ύγ€‚ι€θΏ‡ε·ζ†ζ–η‚Ήε‡» %PAGEDOWN ζ‰ι’®οΌι…θ―»θ®Έε―θ―εθ®®η„ε…¨ιƒ¨ε†…ε®Ήγ€‚";
+        Text[ chinese_simplified ] = "θ―·ε®ζ•΄ε°ι…θ―»θ®Έε―θ―εθ®®γ€‚θ―·δ½Ώη”¨ζ­¤ε―Ήθ―ζ΅†δΈ­η„ζ»ε¨ζ΅ζ–'%PAGEDOWN'ζ‰ι’®ζ¥ι…θ―»ε…¨ιƒ¨θ®Έε―θ―ζ–‡ε­—γ€‚";
         Text[ portuguese ] = "Clique no botγo '%1' se concordar com os termos do contrato de licenηa. Se nγo os aceitar clique no botγo '%2' e a instalaηγo serα cancelada.";
         Text[ russian ] = "Ερλθ βϋ οπθνθμΰεςε βρε σρλξβθÿ λθφενηθξννξγξ ρξγλΰψενθÿ, νΰζμθςε κνξοκσ '%1'. Ερλθ βϋ νε ρξγλΰρνϋ ρ ύςθμθ σρλξβθÿμθ, νΰζμθςε '%2', θ σρςΰνξβκΰ ασδες οπεκπΰωενΰ.";
         Text[ greek ] = "Διαβάστε προσεκτικά την παρακάτω άδεια χρήσης. Χρησιμοποιήστε τη γραμμή κύλισης ή το κουμπί '%PAGEDOWN' για να δείτε ολόκληρο το κείμενο.";
