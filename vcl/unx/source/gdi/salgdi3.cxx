@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 20:36:59 $
+ *  last change: $Author: cp $ $Date: 2000-12-14 12:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,11 +612,12 @@ ConvertTextItem16( XTextItem16* pTextItem,
         }
 
         // XXX FIXME
-        if ( nEncoding == RTL_TEXTENCODING_GB_2312 )
+        if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
+            || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
+        {
             for (int n_char = 0; n_char < m; n_char++ )
-            {
                 pTextChars[ n_char ] &= 0x7F;
-            }
+        }
 
     }
 }
