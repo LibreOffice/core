@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:48:13 $
+ *  last change: $Author: thb $ $Date: 2003-11-12 12:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ namespace basegfx
                             }
 
                             // call adaptive subdivide
-                            ::basegfx::curve::adaptiveSubdivide(aRetval, aBezier, fBound);
+                            ::basegfx::curve::adaptiveSubdivideByDistance(aRetval, aBezier, fBound);
                         }
                         else
                         {

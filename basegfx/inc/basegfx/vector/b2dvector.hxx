@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:56:09 $
+ *  last change: $Author: thb $ $Date: 2003-11-12 12:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,23 @@ namespace basegfx
                 The Scalar value of the two involved 2D Vectors
             */
             double scalar( const B2DVector& rVec ) const;
+
+            /** Calculate the length of the cross product with another 2D Vector
+
+                In 2D, returning an actual vector does not make much
+                sense here. The magnitude, although, can be readily
+                used for tasks such as angle calculations, since for
+                the returned value, the following equation holds:
+                retVal = getLength(this)*getLength(rVec)*sin(theta),
+                with theta being the angle between the two vectors.
+
+                @param rVec
+                The second 2D Vector
+
+                @return
+                The length of the cross product of the two involved 2D Vectors
+            */
+            double cross( const B2DVector& rVec ) const;
 
             /** Calculate the Angle with another 2D Vector
 
