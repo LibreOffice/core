@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:23:43 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,29 +100,16 @@ String STR_FLT_SGV
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+QueryBox RID_QB_SPELL_CONTINUE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    MESSAGE [ de ]= "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    MESSAGE [ en-US ] = "Continue checking at beginning of document?" ;
+};
+String STR_SPELLING_COMPLETED
+{
+    Text [ de ]= "Die Rechtschreibprüfung ist abgeschlossen!" ;
+    Text [ en-US ] = "The spellcheck is complete." ;
+};
 
