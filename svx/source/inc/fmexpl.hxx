@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-09 11:19:08 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,8 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
+    sal_Int8            implAcceptDrop( sal_Int8 _nAction, const Point& _rDropPos );
 
 public:
     FmExplorer(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&  _xORB, Window* pParent );
