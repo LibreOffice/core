@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:43:48 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 17:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ public:
 //    { SetBackground(); }
     ~SfxTopWindow_Impl( );
 
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual long        Notify( NotifyEvent& rEvt );
@@ -186,6 +187,14 @@ SfxTopWindow_Impl::SfxTopWindow_Impl( SfxTopFrame* pF )
 
 SfxTopWindow_Impl::~SfxTopWindow_Impl( )
 {
+}
+
+void SfxTopWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+    SfxWorkWindow *pWorkWin = pFrame->GetWorkWindow_Impl();
+    if ( pWorkWin )
+        pWorkWin->DataChanged_Impl( rDCEvt );
 }
 
 long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )

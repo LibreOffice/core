@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-24 15:26:53 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 17:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >          CreateDispatch( const String& );
 
     // Methoden f"ur alle Child-Fenster
+    void                    DataChanged_Impl( const DataChangedEvent& rDCEvt );
     void                    ReleaseChild_Impl( Window& rWindow );
     SfxChild_Impl*          RegisterChild_Impl( Window& rWindow, SfxChildAlignment eAlign, BOOL bCanGetFocus=FALSE );
     void                    ShowChilds_Impl();

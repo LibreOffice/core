@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:41:41 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 17:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3034,3 +3034,30 @@ void SfxWorkWindow::SetObjectBarCustomizeMode_Impl( BOOL bSet )
     }
 }
 
+void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
+{
+    if ( aStatBar.pStatusBar )
+    {
+        StatusBar* pBar = aStatBar.pStatusBar->GetStatusBar();
+        if ( pBar )
+            pBar->SetSizePixel( pBar->CalcWindowSizePixel() );
+    }
+
+    USHORT n;
+    for (n=0; n<SFX_OBJECTBAR_MAX; n++)
+    {
+        SfxToolBoxManager *pTbx = aObjBars[n].pTbx;
+        if ( pTbx )
+            pTbx->GetToolBox().DataChanged( rDCEvt );
+    }
+
+    USHORT nCount = pChildWins->Count();
+    for (n=0; n<nCount; n++)
+    {
+        SfxChildWin_Impl*pCW = (*pChildWins)[n];
+        if ( pCW && pCW->pWin )
+            pCW->pWin->GetWindow()->DataChanged( rDCEvt );
+    }
+
+    ArrangeChilds_Impl();
+}
