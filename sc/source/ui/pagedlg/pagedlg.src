@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:22:36 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ chinese_traditional ] = "¦C¦L­S³ò";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
-        Text[ korean ] = "ÀÎ¼â ¿µ¿ª";
+        Text[ korean ] = "ÀÎ¼â ¹üÀ§";
         Text[ turkish ] = "Yazdırma aralığı";
     };
     ListBox LB_PRINTAREA
@@ -669,7 +669,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ chinese_traditional ] = "½s¿è¦C¦L­S³ò";
     Text[ arabic ] = "ÊÍÑíÑ äØÇŞÇÊ ÇáØÈÇÚÉ";
     Text[ greek ] = "Åğåîåñãáóßá ğåñéï÷şí åêôığùóçò";
-    Text[ korean ] = "ÀÎ¼â ¿µ¿ª ÆíÁı";
+    Text[ korean ] = "ÀÎ¼â ¹üÀ§ ÆíÁı";
     Text[ turkish ] = "Yazdırma aralıklarını düzenle";
 };
 TabPage RID_SCPAGE_TABLE
