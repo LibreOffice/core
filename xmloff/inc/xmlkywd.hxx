@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-07 16:22:54 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,9 @@ XML_CONSTASCII_ACTION( sXML_background_stretch, "stretch" );
 XML_CONSTASCII_ACTION( sXML_bar, "bar" );
 XML_CONSTASCII_ACTION( sXML_base_cell_address, "base-cell-address");
 XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
+XML_CONSTASCII_ACTION( sXML_before_date_time, "before-date-time" );
 XML_CONSTASCII_ACTION( sXML_below , "below" );
+XML_CONSTASCII_ACTION( sXML_between_date_times, "between-date-times" );
 XML_CONSTASCII_ACTION( sXML_bevel , "bevel" );
 XML_CONSTASCII_ACTION( sXML_bibiliographic_type, "bibiliographic-type" );
 XML_CONSTASCII_ACTION( sXML_bibliography, "bibliography" );
@@ -335,6 +337,7 @@ XML_CONSTASCII_ACTION( sXML_cell_content_deletion, "cell-content-deletion");
 XML_CONSTASCII_ACTION( sXML_cell_count, "cell-count");
 XML_CONSTASCII_ACTION( sXML_cell_protect, "cell-protect");
 XML_CONSTASCII_ACTION( sXML_cell_range_address, "cell-range-address");
+XML_CONSTASCII_ACTION( sXML_cell_range_address_list, "cell-range-address-list");
 XML_CONSTASCII_ACTION( sXML_cell_range_source, "cell-range-source");
 XML_CONSTASCII_ACTION( sXML_center, "center" );
 XML_CONSTASCII_ACTION( sXML_chain_next_name, "chain-next-name" );
@@ -345,6 +348,8 @@ XML_CONSTASCII_ACTION( sXML_change_id, "change-id" );
 XML_CONSTASCII_ACTION( sXML_change_info, "change-info" );
 XML_CONSTASCII_ACTION( sXML_change_start, "change-start" );
 XML_CONSTASCII_ACTION( sXML_change_track_table_cell, "change-track-table-cell" );
+XML_CONSTASCII_ACTION( sXML_change_view_conditions, "change-view-conditions" );
+XML_CONSTASCII_ACTION( sXML_change_view_settings, "change-view-settings" );
 XML_CONSTASCII_ACTION( sXML_changed_region, "changed-region" );
 XML_CONSTASCII_ACTION( sXML_chapter, "chapter");
 XML_CONSTASCII_ACTION( sXML_char, "char" );
@@ -493,6 +498,7 @@ XML_CONSTASCII_ACTION( sXML_database_source_table, "database-source-table");
 XML_CONSTASCII_ACTION( sXML_date, "date" );
 XML_CONSTASCII_ACTION( sXML_date_adjust, "date-adjust" );
 XML_CONSTASCII_ACTION( sXML_date_style, "date-style" );
+XML_CONSTASCII_ACTION( sXML_date_time, "date-time" );
 XML_CONSTASCII_ACTION( sXML_date_value, "date-value");
 XML_CONSTASCII_ACTION( sXML_day, "day" );
 XML_CONSTASCII_ACTION( sXML_day_of_week, "day-of-week" );
@@ -592,6 +598,9 @@ XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
 XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
 XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
 XML_CONSTASCII_ACTION( sXML_eq, "eq");
+XML_CONSTASCII_ACTION( sXML_equal_author, "equal-author");
+XML_CONSTASCII_ACTION( sXML_equal_comment, "equal-comment");
+XML_CONSTASCII_ACTION( sXML_equal_date, "equal-date");
 XML_CONSTASCII_ACTION( sXML_era, "era" );
 XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
 XML_CONSTASCII_ACTION( sXML_error_category, "error-category" );
@@ -648,6 +657,7 @@ XML_CONSTASCII_ACTION( sXML_filter_condition, "filter-condition");
 XML_CONSTASCII_ACTION( sXML_filter_name, "filter-name" );
 XML_CONSTASCII_ACTION( sXML_filter_options, "filter-options" );
 XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
+XML_CONSTASCII_ACTION( sXML_first_date_time, "first-date-time");
 XML_CONSTASCII_ACTION( sXML_first_page, "first-page");
 XML_CONSTASCII_ACTION( sXML_first_page_number, "first-page-number");
 XML_CONSTASCII_ACTION( sXML_fit_to_size, "fit-to-size" );
@@ -818,6 +828,7 @@ XML_CONSTASCII_ACTION( sXML_image, "image" );
 XML_CONSTASCII_ACTION( sXML_image_count, "image-count" );
 XML_CONSTASCII_ACTION( sXML_implies, "implies" );
 XML_CONSTASCII_ACTION( sXML_in, "in");
+XML_CONSTASCII_ACTION( sXML_in_range, "in-range");
 XML_CONSTASCII_ACTION( sXML_inbook, "inbook" );
 XML_CONSTASCII_ACTION( sXML_incollection, "incollection" );
 XML_CONSTASCII_ACTION( sXML_increment, "increment" );
@@ -1073,6 +1084,7 @@ XML_CONSTASCII_ACTION( sXML_normal, "normal" );
 XML_CONSTASCII_ACTION( sXML_normals_direction, "normals-direction" );
 XML_CONSTASCII_ACTION( sXML_normals_kind, "normals-kind" );
 XML_CONSTASCII_ACTION( sXML_not, "not" );
+XML_CONSTASCII_ACTION( sXML_not_equal_date, "not-equal-date" );
 XML_CONSTASCII_ACTION( sXML_note, "note" );
 XML_CONSTASCII_ACTION( sXML_notes, "notes" );
 XML_CONSTASCII_ACTION( sXML_notin, "notin" );
@@ -1330,6 +1342,7 @@ XML_CONSTASCII_ACTION( sXML_sdev, "sdev" );
 XML_CONSTASCII_ACTION( sXML_search_criteria_must_apply_to_whole_cell, "search-criteria-must-apply-to-whole-cell" );
 XML_CONSTASCII_ACTION( sXML_sec, "sec" );
 XML_CONSTASCII_ACTION( sXML_sech, "sech" );
+XML_CONSTASCII_ACTION( sXML_second_date_time, "second-date-time" );
 XML_CONSTASCII_ACTION( sXML_seconds, "seconds" );
 XML_CONSTASCII_ACTION( sXML_section, "section" );
 XML_CONSTASCII_ACTION( sXML_section_desc, "section-desc" );
@@ -1378,12 +1391,17 @@ XML_CONSTASCII_ACTION( sXML_sheet_name, "sheet-name" );
 XML_CONSTASCII_ACTION( sXML_shininess, "shininess" );
 XML_CONSTASCII_ACTION( sXML_short, "short" );
 XML_CONSTASCII_ACTION( sXML_show, "show" );
+XML_CONSTASCII_ACTION( sXML_show_accepted_changes, "show-accepted-changes" );
+XML_CONSTASCII_ACTION( sXML_show_rejected_changes, "show-rejected-changes" );
+XML_CONSTASCII_ACTION( sXML_show_changes, "show-changes" );
 XML_CONSTASCII_ACTION( sXML_show_unit, "show-unit" );
 XML_CONSTASCII_ACTION( sXML_shows, "shows" );
 XML_CONSTASCII_ACTION( sXML_side_by_side, "side-by-side" );
 XML_CONSTASCII_ACTION( sXML_silver, "silver" );
 XML_CONSTASCII_ACTION( sXML_simple, "simple" );
 XML_CONSTASCII_ACTION( sXML_sin, "sin" );
+XML_CONSTASCII_ACTION( sXML_since_date_time, "since-date-time" );
+XML_CONSTASCII_ACTION( sXML_since_save, "since-save" );
 XML_CONSTASCII_ACTION( sXML_sinh, "sinh" );
 XML_CONSTASCII_ACTION( sXML_size, "size" );
 XML_CONSTASCII_ACTION( sXML_slide, "slide" );
@@ -1596,6 +1614,7 @@ XML_CONSTASCII_ACTION( sXML_url, "url" );
 XML_CONSTASCII_ACTION( sXML_use_caption, "use-caption" );
 XML_CONSTASCII_ACTION( sXML_use_cell_protection, "use-cell-protection" );
 XML_CONSTASCII_ACTION( sXML_use_chart_objects, "use-chart-objects" );
+XML_CONSTASCII_ACTION( sXML_use_condition, "use-condition" );
 XML_CONSTASCII_ACTION( sXML_use_draw_objects, "use-draw-objects" );
 XML_CONSTASCII_ACTION( sXML_use_floating_frames, "use-floating-frames" );
 XML_CONSTASCII_ACTION( sXML_use_graphics, "use-graphics" );
