@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:47:27 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _IPENV_HXX //autogen
@@ -1955,6 +1958,9 @@ SfxProgress* SfxViewFrame::GetProgress() const
 //--------------------------------------------------------------------
 void SfxViewFrame::ShowStatusText( const String& rText)
 {
+/* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
+             framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
+             extended to support a new interface to support ShowStatusText/HideStatusText
     SfxWorkWindow* pWorkWin = GetFrame()->GetWorkWindow_Impl();
     SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
     if ( pMgr )
@@ -1962,15 +1968,20 @@ void SfxViewFrame::ShowStatusText( const String& rText)
         pMgr->GetStatusBar()->HideItems();
         pMgr->GetStatusBar()->SetText( rText );
     }
+*/
 }
 
 //--------------------------------------------------------------------
 void SfxViewFrame::HideStatusText()
 {
+/* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
+             framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
+             extended to support a new interface to support ShowStatusText/HideStatusText
     SfxWorkWindow* pWorkWin = GetFrame()->GetWorkWindow_Impl();
     SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
     if ( pMgr )
         pMgr->GetStatusBar()->ShowItems();
+*/
 }
 
 
@@ -3492,16 +3503,43 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_TOGGLESTATUSBAR:
         {
-            SfxToolBoxConfig* pTbxCfg = GetObjectShell()->GetToolBoxConfig_Impl();
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                    GetFrame()->GetFrameInterface(),
+                    com::sun::star::uno::UNO_QUERY);
 
-            // Parameter auswerten
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), FALSE);
-            BOOL bShow = pShowItem  ? pShowItem->GetValue()
-                                    : !pTbxCfg->IsStatusBarVisible();
-            pTbxCfg->SetStatusBarVisible( bShow );
-            GetFrame()->GetWorkWindow_Impl()->UpdateObjectBars_Impl();
-            if ( !pShowItem )
-                rReq.AppendItem( SfxBoolItem( SID_TOGGLESTATUSBAR, bShow ) );
+            Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+            Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            if ( xPropSet.is() )
+            {
+                try
+                {
+                    Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                    aValue >>= xLayoutManager;
+                }
+                catch ( Exception& )
+                {
+                }
+            }
+
+            if ( xLayoutManager.is() )
+            {
+                rtl::OUString aStatusbarResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+                // Parameter auswerten
+                SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, rReq.GetSlot(), FALSE);
+                BOOL bShow( TRUE );
+                if ( !pShowItem )
+                    bShow = xLayoutManager->isElementVisible( aStatusbarResString );
+                else
+                    bShow = pShowItem->GetValue();
+
+                if ( bShow )
+                    xLayoutManager->showElement( aStatusbarResString );
+                else
+                    xLayoutManager->hideElement( aStatusbarResString );
+
+                if ( !pShowItem )
+                    rReq.AppendItem( SfxBoolItem( SID_TOGGLESTATUSBAR, bShow ) );
+            }
             rReq.Done();
             break;
         }
@@ -3610,7 +3648,21 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_TOGGLESTATUSBAR:
                 {
-                    rSet.Put( SfxBoolItem( nWhich, GetObjectShell()->GetToolBoxConfig_Impl()->IsStatusBarVisible() ) );
+                    com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                            GetFrame()->GetFrameInterface(),
+                            com::sun::star::uno::UNO_QUERY);
+                    com::sun::star::uno::Any aProp = xSet->getPropertyValue(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
+
+                    if ( !( aProp >>= xLayoutManager ))
+                        rSet.Put( SfxBoolItem( nWhich, FALSE ));
+                    else
+                    {
+                        rtl::OUString aStatusbarResString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/statusbar/statusbar" ));
+                        BOOL bShow = xLayoutManager->isElementVisible( aStatusbarResString );
+                        rSet.Put( SfxBoolItem( nWhich, bShow ));
+                    }
                     break;
                 }
 
