@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 18:22:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,11 @@ Module gid_Module_Prg_Impress_Bin
     ParentID = gid_Module_Prg_Impress;
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Extra_Cdeimpress,gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,gid_File_Oo_Office_Filter_Impress_Pkg,
+    Files = (gid_File_Extra_Cdeimpress,gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs,gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu,
     gid_File_Registry_Spool_Oo_Common_Impress_Xcu,gid_File_Registry_Spool_Oo_Setup_Impress_Xcu,
-    gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu);
+    gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu,
+    gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu);
 End
 
 Module gid_Module_Prg_Impress_Help
