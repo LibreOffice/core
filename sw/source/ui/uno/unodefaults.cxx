@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodefaults.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 14:37:52 $
+ *  last change: $Author: cl $ $Date: 2002-11-15 15:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,14 @@
 #ifndef _SVDMODEL_HXX
 #include <svx/svdmodel.hxx>
 #endif
+#include <svx/unoprov.hxx>
 #include <doc.hxx>
 
 /* -----------------------------13.03.01 14:16--------------------------------
 
  ---------------------------------------------------------------------------*/
 SwSvxUnoDrawPool::SwSvxUnoDrawPool( SwDoc* pDoc ) throw() :
-    SvxUnoDrawPool(pDoc->GetDrawModel()),
+    SvxUnoDrawPool(pDoc->GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),
     m_pDoc(pDoc)
 {
 }
