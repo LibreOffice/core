@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:34:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,7 @@ void SalFrame::SetIcon( USHORT nIcon )
         int iconSize = 32;
         if ( XGetIconSizes( _GetXDisplay(), _GetDisplay()->GetRootWindow(), &pIconSize, &nSizes ) )
         {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "SalFrame::SetIcon(): found %d IconSizes:\n", nSizes);
 #endif
             int i;
@@ -897,7 +897,7 @@ void SalFrame::SetIcon( USHORT nIcon )
                 if( pIconSize[i].max_width > iconSize )
                     iconSize = pIconSize[i].max_width;
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf(stderr, "min: %d, %d\nmax: %d, %d\ninc: %d, %d\n\n",
                         pIconSize[i].min_width, pIconSize[i].min_height,
                         pIconSize[i].max_width, pIconSize[i].max_height,
@@ -2159,7 +2159,7 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
 {
 
     DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( this );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DtIntegrator: %d\n", pIntegrator ? pIntegrator->GetDtType() : -1 );
 #endif
     if( pIntegrator )
@@ -3376,7 +3376,7 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
                 char* argv[2];
                 argv[0] = "/bin/sh";
                 argv[1] = const_cast<char*>(aExec.GetBuffer());
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
 #endif
                 XSetCommand( GetXDisplay(), GetShellWindow(), argv, 2 );
@@ -3386,7 +3386,7 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
 
             if( rWMAdaptor.getWindowManagerName().EqualsAscii( "Dtwm" ) )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "sending ShutDown message\n" );
 #endif
                 Application::EnableDialogCancel( TRUE );
