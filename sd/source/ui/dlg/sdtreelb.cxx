@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:20:15 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-
-#ifndef _URLBMK_HXX
-#include <svtools/urlbmk.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -106,6 +102,35 @@
 
 BOOL SdPageObjsTLB::bIsInDrag = FALSE;
 
+// -----------------------------------------
+// - SdPageObjsTLB::SdPageObjsTransferable -
+// -----------------------------------------
+
+SdPageObjsTLB::SdPageObjsTransferable::~SdPageObjsTransferable()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
+{
+    AddFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    SetINetBookmark( maBookmark, rFlavor );
+    return sal_True;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
+{
+    mrParent.DragFinished( nDropAction );
+}
 
 /*************************************************************************
 |*
@@ -124,7 +149,7 @@ SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
     aColor          ( COL_WHITE ),
     aImgOle         ( Bitmap( SdResId( BMP_OLE ) ), aColor ),
     aImgGraphic     ( Bitmap( SdResId( BMP_GRAPHIC ) ), aColor ),
-    pDropDocSh      ( NULL ),
+    pDropNavWin     ( NULL ),
     bOleSelected    ( FALSE ),
     bGraphicSelected( FALSE )
 {
@@ -435,32 +460,6 @@ String SdPageObjsTLB::GetSelectEntry()
 /*************************************************************************
 |*
 |* Selektierte Eintrage zurueckgeben
-|* (evtl. ueberfluessig, s.u.)
-|*
-\************************************************************************/
-/*
-
-List* SdPageObjsTLB::GetSelectEntryList()
-{
-    List*        pList  = NULL;
-    SvLBoxEntry* pEntry = NULL;
-
-    pEntry = FirstSelected();
-    if( pEntry )
-        pList = new List();
-
-    while( pEntry )
-    {
-        pList->Insert( new String( GetEntryText( pEntry ) ), LIST_APPEND );
-        pEntry = NextSelected( pEntry );
-    }
-
-    return( pList );
-}
-*/
-/*************************************************************************
-|*
-|* Selektierte Eintrage zurueckgeben
 |* nDepth == 0 -> Seiten
 |* nDepth == 1 -> Objekte
 |*
@@ -487,42 +486,6 @@ List* SdPageObjsTLB::GetSelectEntryList( USHORT nDepth )
     return( pList );
 }
 
-/*************************************************************************
-|*
-|* Alle Pages (und Objekte) des Docs zurueckgeben
-|*
-\************************************************************************/
-/*
-
-List* SdPageObjsTLB::GetBookmarkList()
-{
-    List* pList = NULL;
-
-    if( GetBookmarkDoc() )
-    {
-        SdPage*      pPage = NULL;
-        USHORT       nPage = 0;
-        const USHORT nMaxPages = pBookmarkDoc->GetSdPageCount( PK_STANDARD );
-
-        if( nMaxPages > 0 )
-            pList = new List();
-
-        while( nPage < nMaxPages )
-        {
-            pPage = pBookmarkDoc->GetSdPage( nPage, PK_STANDARD );
-            String* pNewName = new String( pPage->GetRealName() );
-
-            if( pPage->GetPageKind() == PK_STANDARD )
-            {
-                pList->Insert( pNewName, LIST_APPEND );
-            }
-            nPage++;
-        }
-    }
-
-    return( pList );
-}
-*/
 /*************************************************************************
 |*
 |* Alle Pages (und Objekte) des Docs zurueckgeben
@@ -808,157 +771,138 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput( rKEvt );
 }
 
-
 /*************************************************************************
 |*
-|* QueryDrop-Event
+|* StartDrag-Request
 |*
 \************************************************************************/
 
-BOOL __EXPORT SdPageObjsTLB::QueryDrop(DropEvent& rMEvt)
-{
-    BOOL bReturn = FALSE;
-
-    if (!bIsInDrag)
-    {
-        bReturn = DragServer::HasFormat(0, FORMAT_FILE);
-    }
-
-    return (bReturn);
-}
-
-
-
-/*************************************************************************
-|*
-|* Drop-Event
-|*
-\************************************************************************/
-
-BOOL __EXPORT SdPageObjsTLB::Drop(const DropEvent& rMEvt)
-{
-    BOOL bReturn = FALSE;
-
-    if (!bIsInDrag)
-    {
-        SdNavigatorWin* pNavWin = NULL;
-        USHORT nId = SID_NAVIGATOR;
-
-        if (pFrame->HasChildWindow(nId))
-            pNavWin = (SdNavigatorWin*) (pFrame->GetChildWindow(nId)->GetContextWindow( SD_MOD() ));
-
-        if (pNavWin && pNavWin == pParent)
-        {
-            // Drop im Navigator ausfuehren
-            bReturn = ((SdNavigatorWin*) pParent)->InsertFile(DragServer::PasteFile(0));
-        }
-    }
-
-    return (bReturn);
-}
-
-
-/*************************************************************************
-|*
-|* Command-Event
-|*
-\************************************************************************/
-
-void SdPageObjsTLB::Command(const CommandEvent& rCEvt)
+void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     SdNavigatorWin* pNavWin = NULL;
-    USHORT nId = SID_NAVIGATOR;
 
-    if (pFrame->HasChildWindow(nId))
-        pNavWin = (SdNavigatorWin*) (pFrame->GetChildWindow(nId)->GetContextWindow( SD_MOD() ));
+    if( pFrame->HasChildWindow( SID_NAVIGATOR ) )
+        pNavWin = (SdNavigatorWin*) ( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
 
-    if (rCEvt.GetCommand() & COMMAND_STARTDRAG &&
-        pNavWin && pNavWin == pParent &&
-        pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE)
+    if( pNavWin && pNavWin == pParent && pNavWin->GetNavigatorDragType() != NAVIGATOR_DRAGTYPE_NONE )
     {
         //  Aus dem ExecuteDrag heraus kann der Navigator geloescht werden
         //  (beim Umschalten auf einen anderen Dokument-Typ), das wuerde aber
         //  den StarView MouseMove-Handler, der Command() aufruft, umbringen.
         //  Deshalb Drag&Drop asynchron:
-        Application::PostUserEvent(STATIC_LINK(this, SdPageObjsTLB, ExecDragHdl));
-    }
-    else
-    {
-        SvTreeListBox::Command(rCEvt);
+        Application::PostUserEvent( STATIC_LINK( this, SdPageObjsTLB, ExecDragHdl ) );
     }
 }
 
-
 /*************************************************************************
 |*
-|* Drag ausfuehren
+|* Begin drag
 |*
 \************************************************************************/
 
 void SdPageObjsTLB::DoDrag()
 {
-    bIsInDrag = TRUE;
-    SdNavigatorWin* pNavWin = NULL;
-    USHORT nId = SID_NAVIGATOR;
+    pDropNavWin = ( pFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
+                  (SdNavigatorWin*)( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
+                  NULL;
 
-    if (pFrame->HasChildWindow(nId))
-        pNavWin = (SdNavigatorWin*) (pFrame->GetChildWindow(nId)->GetContextWindow( SD_MOD() ));
-
-    if (pNavWin)
+    if( pDropNavWin )
     {
-        // Const as const can
-        SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc;
-        pDropDocSh = pNonConstDoc->GetDocSh();
+        SdDrawDocShell*     pDocShell = ( (SdDrawDocument*) pDoc )->GetDocSh();
+        String              aURL( pDocShell->GetMedium()->GetPhysicalName() );
+        NavigatorDragType   eDragType = pDropNavWin->GetNavigatorDragType();
 
-        // Bookmark erzeugen
-        String aURL = pDropDocSh->GetMedium()->GetPhysicalName();
-        aURL = ::URIHelper::SmartRelToAbs( aURL, FALSE,
-                                           INetURLObject::WAS_ENCODED,
-                                           INetURLObject::DECODE_UNAMBIGUOUS );
+        aURL = ::URIHelper::SmartRelToAbs( aURL, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
+        aURL.Append( '#' );
+        aURL.Append( GetSelectEntry() );
 
-        aURL.Append( sal_Unicode('#') );
-        String aName(GetSelectEntry());
-        aURL.Append( aName );
-        INetBookmark aBookMark(aURL, aName);
+        INetBookmark    aBookmark( aURL, GetSelectEntry() );
+        sal_Int8        nDNDActions = DND_ACTION_COPY;
 
-        // Bookmark in SvData schreiben
-        SvData* pData = new SvData(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK,
-                                   MEDIUM_MEMORY | MEDIUM_STREAM);
-        BOOL bSet = aBookMark.SetData(*pData);
+        if( eDragType == NAVIGATOR_DRAGTYPE_LINK )
+            nDNDActions |= DND_ACTION_LINK;
 
-        // SvData in SvDataObject schreiben
-        SvDataMemberObjectRef pDataObj = new SvDataMemberObject();
-        pDataObj->Append(pData);
-
-        USHORT nOption = DRAG_COPYABLE;
-
-
-        if (pNavWin->GetNavigatorDragType() == NAVIGATOR_DRAGTYPE_LINK)
-        {
-            nOption |= DRAG_LINKABLE;
-        }
-
-        // Drag starten
         SvTreeListBox::ReleaseMouse();
-        DropAction eAct = pDataObj->ExecuteDrag(this, POINTER_MOVEDATA,
-                                                POINTER_COPYDATA, POINTER_LINKDATA,
-                                                nOption);
 
-        DragServer::Clear();
+        bIsInDrag = TRUE;
+        SD_MOD()->SetCurrentNavigatorDragDocShell( pDocShell );
+        SD_MOD()->SetCurrentNavigatorDragType( eDragType );
 
-        SdNavigatorWin* pNewNavWin = (SdNavigatorWin*) (pFrame->GetChildWindow(nId)->GetContextWindow( SD_MOD() ));
-
-        if( pNavWin == pNewNavWin)
-        {
-            // Navigator ist nicht zerstoert worden
-            MouseEvent aMEvt(pNavWin->GetPointerPosPixel());
-            SvTreeListBox::MouseButtonUp(aMEvt);
-        }
-        pDropDocSh = NULL;
-        bIsInDrag = FALSE;
+        // object is destroyed by internal reference mechanism
+        ( new SdPageObjsTLB::SdPageObjsTransferable( *this, aBookmark ) )->StartDrag( this, nDNDActions );
     }
 }
 
+/*************************************************************************
+|*
+|* Drag finished
+|*
+\************************************************************************/
+
+void SdPageObjsTLB::DragFinished( sal_uInt8 nDropAction )
+{
+    if( pFrame->HasChildWindow( SID_NAVIGATOR ) )
+    {
+        SdNavigatorWin* pNewNavWin = (SdNavigatorWin*) ( pFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+
+        if( pDropNavWin == pNewNavWin)
+        {
+            MouseEvent aMEvt( pDropNavWin->GetPointerPosPixel() );
+            SvTreeListBox::MouseButtonUp( aMEvt );
+        }
+    }
+
+    pDropNavWin = NULL;
+    SD_MOD()->SetCurrentNavigatorDragType( NAVIGATOR_DRAGTYPE_NONE );
+    SD_MOD()->SetCurrentNavigatorDragDocShell( NULL );
+
+    bIsInDrag = FALSE;
+}
+
+/*************************************************************************
+|*
+|* AcceptDrop-Event
+|*
+\************************************************************************/
+
+sal_Int8 SdPageObjsTLB::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    return( ( !bIsInDrag && IsDropFormatSupported( FORMAT_FILE ) ) ? rEvt.mnAction : DND_ACTION_NONE );
+}
+
+/*************************************************************************
+|*
+|* ExecuteDrop-Event
+|*
+\************************************************************************/
+
+sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
+{
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    if( !bIsInDrag )
+    {
+        SdNavigatorWin* pNavWin = NULL;
+        USHORT          nId = SID_NAVIGATOR;
+
+        if( pFrame->HasChildWindow( nId ) )
+            pNavWin = (SdNavigatorWin*)( pFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
+
+        if( pNavWin && ( pNavWin == pParent ) )
+        {
+            TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
+            String                  aFile;
+
+            if( aDataHelper.GetString( FORMAT_FILE, aFile ) &&
+                ( (SdNavigatorWin*) pParent)->InsertFile( aFile ) )
+            {
+                nRet = rEvt.mnAction;
+            }
+        }
+    }
+
+    return nRet;
+}
 
 /*************************************************************************
 |*

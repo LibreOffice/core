@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:24:32 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,19 +64,18 @@
 #if defined (WIN) || defined (WNT)
 #include <tools/svwin.h>
 #endif
-
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
-
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
 #include <sfx2/docfilt.hxx>
 #endif
-
 #ifndef _SFX_FCONTNR_HXX //autogen
 #include <sfx2/fcontnr.hxx>
 #endif
-
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
 #endif
@@ -304,25 +303,40 @@ SdrGrafObj* SdView::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
 IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
 {
-    BOOL bOK = FALSE;
-    const SfxFilter* pFilter = NULL;
+    INetURLObject aURL( aDropFile );
 
-    SfxMedium aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-    ErrCode nErr = SFX_APP()->GetFilterMatcher().
-                              GuessFilter(aSfxMedium, &pFilter, SFX_FILTER_IMPORT,
-                                          SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
+    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        String aURLStr;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aDropFile, aURLStr );
+        aURL = INetURLObject( aURLStr );
+    }
+
+    // get adjusted DropFile name
+    aDropFile = aURL.GetMainURL();
+
+    BOOL        bOK = FALSE;
+    const       SfxFilter* pFilter = NULL;
+    SfxMedium   aSfxMedium( aDropFile, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
+    ErrCode     nErr = SFX_APP()->GetFilterMatcher().GuessFilter(  aSfxMedium, &pFilter, SFX_FILTER_IMPORT,
+                                                                    SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
     if (pFilter && !nErr)
     {
         GraphicFilter*  pGraphicFilter = GetGrfFilter();
-        String          aFilterName( pFilter->GetFilterName() );
-        USHORT          nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
+        const String    aFilterName( pFilter->GetFilterName() );
+        const String    aLowerAsciiFileName( aDropFile.ToLowerAscii() );
+        const USHORT    nFormat = pGraphicFilter->GetImportFormatNumber(aFilterName);
 
-        if (aFilterName.EqualsAscii( "Text" )               ||
+        if( aFilterName.EqualsAscii( "Text" )               ||
             aFilterName.EqualsAscii( "Rich Text Format" )   ||
             aFilterName.EqualsAscii( "HTML" )               ||
-            aDropFile.ToLowerAscii().SearchAscii(".sdd") != STRING_NOTFOUND ||  //TODO: birnig!
-            aDropFile.ToLowerAscii().SearchAscii(".sda") != STRING_NOTFOUND )
+            aLowerAsciiFileName.SearchAscii(".sdd") != STRING_NOTFOUND ||
+            aLowerAsciiFileName.SearchAscii(".sda") != STRING_NOTFOUND ||
+            aLowerAsciiFileName.SearchAscii(".sxd") != STRING_NOTFOUND ||
+            aLowerAsciiFileName.SearchAscii(".sxi") != STRING_NOTFOUND ||
+            aLowerAsciiFileName.SearchAscii(".std") != STRING_NOTFOUND ||
+            aLowerAsciiFileName.SearchAscii(".sti") != STRING_NOTFOUND )
         {
             /******************************************************************
             * Eigenes Format, Text oder RTF

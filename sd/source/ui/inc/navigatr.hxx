@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-07 11:28:25 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-
 #ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
 #endif
@@ -76,6 +75,9 @@
 #endif
 #ifndef _SDTREELB_HXX
 #include "sdtreelb.hxx"
+#endif
+#ifndef _PRESENTATION_HXX
+#include "pres.hxx"
 #endif
 
 #define NAVSTATE_NONE           0x00000000
@@ -106,16 +108,6 @@
 class SdView;
 class SdDrawDocShell;
 class Menu;
-
-enum NavigatorDragType
-{
-    NAVIGATOR_DRAGTYPE_NONE,
-    NAVIGATOR_DRAGTYPE_URL,
-    NAVIGATOR_DRAGTYPE_LINK,
-    NAVIGATOR_DRAGTYPE_EMBEDDED
-};
-// Bitte mitpflegen !!!
-#define NAVIGATOR_DRAGTYPE_COUNT 4
 
 //------------------------------------------------------------------------
 
@@ -148,55 +140,55 @@ class SdNavigatorWin : public Window
  friend class SdPageNameControllerItem;
 
 private:
-    ToolBox         aToolbox;
-    SdPageObjsTLB   aTlbObjects;
-    ListBox         aLbDocs;
 
-    SdNavigatorChildWindow* pChildWinContext;
-    Size            aSize;
-    Size            aMinSize;
-    Size            aFltWinSize;
-    BOOL            bDocImported;
+    ToolBox                     aToolbox;
+    SdPageObjsTLB               aTlbObjects;
+    ListBox                     aLbDocs;
 
+    SdNavigatorChildWindow*     pChildWinContext;
+    Size                        aSize;
+    Size                        aMinSize;
+    Size                        aFltWinSize;
+    BOOL                        bDocImported;
     String                      aDropFileName;
     NavigatorDragType           eDragType;
     List*                       pDocList;
-
     SfxBindings*                pBindings;
     SdNavigatorControllerItem*  pNavigatorCtrlItem;
     SdPageNameControllerItem*   pPageNameCtrlItem;
 
-    //------------------------------------
+    USHORT                      GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
+    NavDocInfo*                 GetDocInfo();
 
-    DECL_LINK( GetFocusObjectsHdl, void * );
-    DECL_LINK( SelectToolboxHdl, void * );
-    DECL_LINK( ClickToolboxHdl, ToolBox * );
-    DECL_LINK( ClickPageHdl, void * );
-    DECL_LINK( ClickObjectHdl, void * );
-    DECL_LINK( SelectDocumentHdl, void * );
-    DECL_LINK( MenuSelectHdl, Menu * );
-
-    USHORT GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
-    NavDocInfo* GetDocInfo();
+                                DECL_LINK( GetFocusObjectsHdl, void * );
+                                DECL_LINK( SelectToolboxHdl, void * );
+                                DECL_LINK( ClickToolboxHdl, ToolBox * );
+                                DECL_LINK( ClickPageHdl, void * );
+                                DECL_LINK( ClickObjectHdl, void * );
+                                DECL_LINK( SelectDocumentHdl, void * );
+                                DECL_LINK( MenuSelectHdl, Menu * );
 
 protected:
-    virtual void    Resize();
-    virtual long    ParentNotify(NotifyEvent& rNEvt);
+
+    virtual void                Resize();
+    virtual long                ParentNotify(NotifyEvent& rNEvt);
 
 public:
-            SdNavigatorWin( Window* pParent,
-                            SdNavigatorChildWindow* pChildWinContext,
-                            const SdResId& rSdResId,
-                            SfxBindings* pBindings );
-            ~SdNavigatorWin();
+                                SdNavigatorWin( Window* pParent,
+                                    SdNavigatorChildWindow* pChildWinContext,
+                                    const SdResId& rSdResId,
+                                    SfxBindings* pBindings );
+                                ~SdNavigatorWin();
 
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    void    InitTreeLB( const SdDrawDocument* pDoc );
-    void    RefreshDocumentLB( const String* pDocName = NULL );
-    BOOL    InsertFile(const String& rFileName);
-    NavigatorDragType GetNavigatorDragType();
-    void    SetNavigatorDragType(NavigatorDragType eType) { eDragType = eType; }
-    SdDrawDocShell* GetDropDocSh();
+    virtual void                KeyInput( const KeyEvent& rKEvt );
+
+    void                        InitTreeLB( const SdDrawDocument* pDoc );
+    void                        RefreshDocumentLB( const String* pDocName = NULL );
+
+    BOOL                        InsertFile(const String& rFileName);
+
+    NavigatorDragType           GetNavigatorDragType();
+    void                        SetNavigatorDragType(NavigatorDragType eType) { eDragType = eType; }
 };
 
 /*************************************************************************

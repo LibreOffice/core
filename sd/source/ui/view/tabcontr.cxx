@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcontr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:25:44 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,34 @@
 
 #define SWITCH_TIMEOUT  20
 
+// -----------------------------------------
+// - SdTabControl::SdPageObjsTransferable -
+// -----------------------------------------
+
+SdTabControl::SdTabControlTransferable::~SdTabControlTransferable()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SdTabControl::SdTabControlTransferable::AddSupportedFormats()
+{
+    AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdTabControl::SdTabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdTabControl::SdTabControlTransferable::DragFinished( sal_Int8 nDropAction )
+{
+    mrParent.DragFinished( nDropAction );
+}
 
 /*************************************************************************
 |*
@@ -102,6 +130,8 @@
 
 SdTabControl::SdTabControl(SdDrawViewShell* pViewSh, Window* pParent) :
     TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE | WB_DRAG) ),
+    DragSourceHelper( this ),
+    DropTargetHelper( this ),
     pDrViewSh(pViewSh),
     bInternalMove(FALSE)
 {
@@ -170,97 +200,119 @@ void SdTabControl::DoubleClick()
     }
 }
 
-
 /*************************************************************************
 |*
-|* QueryDrop-Event
+|* StartDrag-Request
 |*
 \************************************************************************/
 
-BOOL SdTabControl::QueryDrop(DropEvent& rEvt)
+void SdTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
-    BOOL bReturn = FALSE;
+    bInternalMove = TRUE;
 
-    if ( rEvt.IsLeaveWindow() )
+    // object is delete by reference mechanismn
+    ( new SdTabControl::SdTabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_MOVE );
+}
+
+/*************************************************************************
+|*
+|* DragFinished
+|*
+\************************************************************************/
+
+void SdTabControl::DragFinished( sal_Int8 nDropAction )
+{
+    bInternalMove = FALSE;
+}
+
+/*************************************************************************
+|*
+|* AcceptDrop-Event
+|*
+\************************************************************************/
+
+sal_Int8 SdTabControl::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    sal_Int8 nRet = DND_ACTION_NONE;
+
+    if( rEvt.mbLeaving )
         EndSwitchPage();
 
-    if (!pDrViewSh->GetDocSh()->IsReadOnly())
+    if( !pDrViewSh->GetDocSh()->IsReadOnly() )
     {
         SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-        Point aPos = PixelToLogic( rEvt.GetPosPixel() );
+        Point           aPos( rEvt.maPosPixel );
 
-        if (bInternalMove)
+        if( bInternalMove )
         {
-            if ( rEvt.IsLeaveWindow() || pDrViewSh->GetEditMode() == EM_MASTERPAGE )
-            {
+            if( rEvt.mbLeaving || ( pDrViewSh->GetEditMode() == EM_MASTERPAGE ) )
                 HideDropPos();
-            }
             else
             {
-                ShowDropPos(aPos);
-                bReturn = TRUE;
+                ShowDropPos( aPos );
+                nRet = rEvt.mnAction;
             }
         }
         else
         {
             HideDropPos();
-            USHORT nPageId = GetPageId(aPos) - 1;
 
-            if ( nPageId >= 0 && pDoc->GetPage(nPageId) )
+            USHORT nPageId = GetPageId( aPos ) - 1;
+
+            if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
             {
                 SdWindow* pWindow = NULL;
-//!!!           bReturn = pDrViewSh->QueryDrop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
 
+                nRet = pDrViewSh->AcceptDrop( rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND );
                 SwitchPage( aPos );
             }
         }
     }
 
-    return (bReturn);
+    return nRet;
 }
 
 /*************************************************************************
 |*
-|* Drop-Event
+|* ExecuteDrop-Event
 |*
 \************************************************************************/
 
-BOOL SdTabControl::Drop(const DropEvent& rEvt)
+sal_Int8 SdTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    BOOL bReturn = FALSE;
     SdDrawDocument* pDoc = pDrViewSh->GetDoc();
-    Point aPos = PixelToLogic( rEvt.GetPosPixel() );
+    Point           aPos( rEvt.maPosPixel );
+    sal_Int8        nRet = DND_ACTION_NONE;
 
-    if (bInternalMove)
+    if( bInternalMove )
     {
-        USHORT nPageId = ShowDropPos(aPos) - 1;
+        USHORT nPageId = ShowDropPos( aPos ) - 1;
 
-        if ( pDrViewSh->IsSwitchPageAllowed() && pDoc->MovePages(nPageId) )
+        if( pDrViewSh->IsSwitchPageAllowed() && pDoc->MovePages( nPageId ) )
         {
             SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
-            pDispatcher->Execute(SID_SWITCHPAGE,
-                            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
         }
 
-        bReturn = TRUE;
+        nRet = rEvt.mnAction;
     }
     else
     {
-        USHORT nPageId = GetPageId(aPos) - 1;
+        USHORT nPageId = GetPageId( aPos ) - 1;
 
-        if ( nPageId >= 0 && pDoc->GetPage(nPageId) )
+        if( ( nPageId >= 0 ) && pDoc->GetPage( nPageId ) )
         {
             SdWindow* pWindow = NULL;
-//!!!       bReturn = pDrViewSh->Drop(rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND);
+
+            nRet = pDrViewSh->ExecuteDrop( rEvt, pWindow, nPageId, SDRLAYER_NOTFOUND );
         }
     }
 
     HideDropPos();
     EndSwitchPage();
 
-    return (bReturn);
+    return nRet;
 }
-
 
 /*************************************************************************
 |*
@@ -277,22 +329,6 @@ void SdTabControl::Command(const CommandEvent& rCEvt)
                                         RID_DRAW_PAGETAB_POPUP;
         SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
         pDispatcher->ExecutePopup( SdResId( nResId ) );
-    }
-    else if ( nCmd == COMMAND_STARTDRAG )
-    {
-        Region aRegion( Rectangle(0,0,0,0) );
-
-        if ( StartDrag(rCEvt, aRegion) )
-        {
-            // Eigenes Format anbieten (ohne es konkret zu unterstuetzen), so
-            // dass das ExecuteDrag auch ausgefuehrt wird (OS/2)
-            DragServer::CopyRequest(DragServer::RegisterFormatName(
-                String( RTL_CONSTASCII_USTRINGPARAM( "StarDraw TabBar" ))));
-
-            bInternalMove = TRUE;
-            ExecuteDrag( POINTER_MOVEDATA, POINTER_COPYDATA, DROP_MOVE, &aRegion );
-            bInternalMove = FALSE;
-        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,9 @@ SdModule::SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact)
     pTransferDrag(NULL),
     pImpressOptions(NULL),
     pDrawOptions(NULL),
-    pSearchItem(NULL)
+    pSearchItem(NULL),
+    eCurrentNavigatorDragType( NAVIGATOR_DRAGTYPE_NONE ),
+    pCurrentNavigatorDragDocShell( NULL )
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
     pSearchItem = new SvxSearchItem(ITEMID_SEARCH);

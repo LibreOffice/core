@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-07 11:28:13 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 #pragma hdrstop
 
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
 #ifndef _SFXIMGMGR_HXX //autogen
 #include <sfx2/imgmgr.hxx>
 #endif
@@ -90,6 +96,7 @@
 #include <vcl/menu.hxx>
 #endif
 
+#include "pres.hxx"
 #include "navigatr.hxx"
 #include "navichld.hxx"
 #include "navigatr.hrc"
@@ -528,14 +535,25 @@ void __EXPORT SdNavigatorWin::Resize()
 
 BOOL SdNavigatorWin::InsertFile(const String& rFileName)
 {
-    BOOL bReturn = TRUE;
+    INetURLObject   aURL( rFileName );
+    BOOL            bReturn = TRUE;
 
-    if (!rFileName.Len())
+    if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        String aURLStr;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aURLStr );
+        aURL = INetURLObject( aURLStr );
+    }
+
+    // get adjusted FileName
+    String aFileName( aURL.GetMainURL() );
+
+    if (!aFileName.Len())
     {
         /**********************************************************************
         * Wieder aktuelles Dokument anzeigen
         **********************************************************************/
-        aDropFileName = rFileName;
+        aDropFileName = aFileName;
     }
     else
     {
@@ -545,9 +563,9 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
         const SfxFilter* pFilter = NULL;
         ErrCode nErr = 0;
 
-        if (rFileName != aDropFileName)
+        if (aFileName != aDropFileName)
         {
-            SfxMedium aMed(rFileName, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
+            SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
             nErr = SFX_APP()->GetFilterMatcher().GuessFilter(aMed, &pFilter);
 
             if (pFilter->GetFilterContainer() !=
@@ -557,11 +575,11 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
             }
         }
 
-        if ((pFilter && !nErr) || rFileName == aDropFileName)
+        if ((pFilter && !nErr) || aFileName == aDropFileName)
         {
             // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird
             // ersteinmal nachgeschaut, ob es einen Storage enthaelt
-            SfxMedium* pMedium = new SfxMedium( rFileName,
+            SfxMedium* pMedium = new SfxMedium( aFileName,
                                                 STREAM_READ | STREAM_NOCREATE,
                                                 TRUE);                // Download
 
@@ -575,7 +593,7 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
                 if (pDropDoc)
                 {
                     aTlbObjects.Clear();
-                    aDropFileName = rFileName;
+                    aDropFileName = aFileName;
 
                     if( !aTlbObjects.IsEqualToDoc( pDropDoc ) )
                     {
@@ -708,18 +726,6 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 
     return( pInfo );
 }
-
-/*************************************************************************
-|*
-|* DocShell des gedroppten Dokuments
-|*
-\************************************************************************/
-
-SdDrawDocShell* SdNavigatorWin::GetDropDocSh()
-{
-    return(aTlbObjects.GetDropDocSh());
-}
-
 
 /*************************************************************************
 |*

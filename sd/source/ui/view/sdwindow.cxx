@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 12:38:30 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,7 +636,7 @@ double SdWindow::GetScrlPageHeight()
 
 /*************************************************************************
 |*
-|* Scrolling bei QueryDrop-Events
+|* Scrolling bei AcceptDrop-Events
 |*
 \************************************************************************/
 

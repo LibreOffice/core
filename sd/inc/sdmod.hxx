@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:31:22 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #define _SD_DLL             // fuer SD_MOD()
 #include "sddll.hxx"        // fuer SdModuleDummy
 #endif
-
 #ifndef _SD_GLOB_HXX
 #include "glob.hxx"
 #endif
@@ -89,6 +88,7 @@ class SvxErrorHandler;
 class EditFieldInfo;
 class SvFactory;
 class SdTransferable;
+class SdDrawDocShell;
 
 // ----------------------
 // - SdOptionStreamMode -
@@ -115,50 +115,56 @@ enum SdOptionStreamMode
 class SdModule : public SdModuleDummy, public SfxListener
 {
 protected:
-    SdOptions*          pImpressOptions;
-    SdOptions*          pDrawOptions;
-    SvxSearchItem*      pSearchItem;
-    SvStorageRef        xOptionStorage;
 
-    BOOL                bAutoSave;
-    BOOL                bWaterCan;
+    SdOptions*              pImpressOptions;
+    SdOptions*              pDrawOptions;
+    SvxSearchItem*          pSearchItem;
+    SvStorageRef            xOptionStorage;
+    const SdDrawDocShell*   pCurrentNavigatorDragDocShell;
+    NavigatorDragType       eCurrentNavigatorDragType;
+    BOOL                    bAutoSave;
+    BOOL                    bWaterCan;
 
-    virtual BOOL        QueryUnload();
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual BOOL            QueryUnload();
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
 public:
-    TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDAPP);
 
-                        SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact);
-    virtual             ~SdModule();
+                            TYPEINFO();
+                            SFX_DECL_INTERFACE(SD_IF_SDAPP);
+                            DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
-    SdTransferable*     pTransferClip;
-    SdTransferable*     pTransferDrag;
+                            SdModule(SvFactory* pDrawObjFact, SvFactory* pGraphicObjFact);
+    virtual                 ~SdModule();
 
-    void                Execute(SfxRequest& rReq);
-    void                GetState(SfxItemSet&);
+    SdTransferable*         pTransferClip;
+    SdTransferable*         pTransferDrag;
 
-    virtual SfxModule*  Load();
-    virtual void        Free();
+    void                    Execute(SfxRequest& rReq);
+    void                    GetState(SfxItemSet&);
 
-    virtual void        FillStatusBar(StatusBar& rBar);
+    virtual SfxModule*      Load();
+    virtual void            Free();
+
+    virtual void            FillStatusBar(StatusBar& rBar);
     virtual SfxFileDialog*  CreateDocFileDialog( ULONG nBits,
                                                  const SfxObjectFactory& rFact,
                                                  const SfxItemSet* pSet );
 
-    SdOptions*          GetSdOptions(DocumentType eDocType);
+    SdOptions*              GetSdOptions(DocumentType eDocType);
+    SvStorageStreamRef      GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
 
-    SvStorageStreamRef  GetOptionStream( const String& rOptionName,
-                                         SdOptionStreamMode eMode );
+    const SdDrawDocShell*   GetCurrentNavigatorDragDocShell() const { return pCurrentNavigatorDragDocShell; }
+    void                    SetCurrentNavigatorDragDocShell( const SdDrawDocShell* pDocShell ) { pCurrentNavigatorDragDocShell = pDocShell; }
 
-    BOOL                GetWaterCan() const { return bWaterCan; }
-    void                SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
+    NavigatorDragType       GetCurrentNavigatorDragType() const { return eCurrentNavigatorDragType; }
+    void                    SetCurrentNavigatorDragType( NavigatorDragType eDragType ) { eCurrentNavigatorDragType = eDragType; }
 
-    SvxSearchItem*      GetSearchItem() { return (pSearchItem); }
-    void                SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
+    BOOL                    GetWaterCan() const { return bWaterCan; }
+    void                    SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
 
-    DECL_LINK(CalcFieldValueHdl, EditFieldInfo*);
+    SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
+    void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
 
     //virtuelle Methoden fuer den Optionendialog
     virtual SfxItemSet*  CreateItemSet( USHORT nId );

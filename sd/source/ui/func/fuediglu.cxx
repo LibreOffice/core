@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,20 +352,7 @@ BOOL FuEditGluePoints::KeyInput(const KeyEvent& rKEvt)
 BOOL FuEditGluePoints::Command(const CommandEvent& rCEvt)
 {
     pView->SetActualWin( pWindow );
-
-    BOOL bReturn = FALSE;
-
-    if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        // Drag&Drop gibt es hier nicht
-        bReturn = TRUE;
-    }
-    else
-    {
-        bReturn = FuPoor::Command(rCEvt);
-    }
-
-    return bReturn;
+    return FuPoor::Command( rCEvt );
 }
 
 /*************************************************************************

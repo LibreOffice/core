@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,15 @@
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
-
 #ifndef _SVTREEBOX_HXX //autogen
 #include <svtools/svtreebx.hxx>
 #endif
-
+#ifndef _URLBMK_HXX
+#include <svtools/urlbmk.hxx>
+#endif
+#ifndef _TRANSFER_HXX //autogen
+#include <svtools/transfer.hxx>
+#endif
 #ifndef _REF_HXX //autogen
 #include <tools/ref.hxx>
 #endif
@@ -87,6 +91,7 @@ SV_DECL_REF(SdDrawDocShell)
 class SdDrawDocument;
 class SfxMedium;
 class SfxViewFrame;
+class SdNavigatorWin;
 
 /*************************************************************************
 |*
@@ -97,9 +102,35 @@ class SfxViewFrame;
 class SdPageObjsTLB : public SvTreeListBox
 {
 private:
+
     static BOOL             bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
+private:
+
+    // nested class to implement the TransferableHelper
+    class SdPageObjsTransferable : public TransferableHelper
+    {
+    private:
+
+        SdPageObjsTLB&      mrParent;
+        INetBookmark        maBookmark;
+
+        virtual             ~SdPageObjsTransferable();
+
+        virtual void        AddSupportedFormats();
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual void        DragFinished( sal_Int8 nDropAction );
+
+    public:
+
+                            SdPageObjsTransferable( SdPageObjsTLB& rParent, const INetBookmark& rBookmark ) :
+                                mrParent( rParent ), maBookmark( rBookmark ) {}
+    };
+
+    friend class SdPageObjsTLB::SdPageObjsTransferable;
+
 protected:
+
     Window*                 pParent;
     const SdDrawDocument*   pDoc;
     SdDrawDocument*         pBookmarkDoc;
@@ -114,42 +145,48 @@ protected:
     String                  aDocName;
     SdDrawDocShellRef       xBookmarkDocShRef;  // Zum Laden von Bookmarks
     SdDrawDocShell*         pDropDocSh;
+    SdNavigatorWin*         pDropNavWin;
     SfxViewFrame*           pFrame;
+
+    // DragSourceHelper
+    virtual void            StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+
+    // DropTargetHelper
+    virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
+    virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
     void                    DoDrag();
-    DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
+    void                    DragFinished( sal_uInt8 nDropAction );
+
+                            DECL_STATIC_LINK(SdPageObjsTLB, ExecDragHdl, void*);
 
 public:
-    SdPageObjsTLB( Window* pParent, const SdResId& rSdResId, BOOL bEnableDrop = FALSE );
-    ~SdPageObjsTLB();
 
-    virtual void    SelectHdl();
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual void    Command(const CommandEvent& rCEvt );
-    virtual BOOL    QueryDrop(DropEvent& rEvt);
-    virtual BOOL    Drop(const DropEvent& rEvt);
+                            SdPageObjsTLB( Window* pParent, const SdResId& rSdResId, BOOL bEnableDrop = FALSE );
+                            ~SdPageObjsTLB();
 
-    void            SetViewFrame( SfxViewFrame* pViewFrame ) { pFrame = pViewFrame; }
+    virtual void            SelectHdl();
+    virtual void            KeyInput( const KeyEvent& rKEvt );
 
-    void            Fill( const SdDrawDocument*, BOOL bAllPages,
-                          const String& rDocName );
-    void            Fill( const SdDrawDocument*, SfxMedium* pSfxMedium,
-                          const String& rDocName );
-    BOOL            IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
-    BOOL            HasSelectedChilds( const String& rName );
-    BOOL            SelectEntry( const String& rName );
-    String          GetSelectEntry();
-    List*           GetSelectEntryList( USHORT nDepth );
-    List*           GetBookmarkList( USHORT nType );
-    SdDrawDocument* GetBookmarkDoc(SfxMedium* pMedium = NULL);
-    SdDrawDocShell* GetDropDocSh() { return(pDropDocSh); }
-    void            CloseBookmarkDoc();
-    BOOL            IsOleSelected() const { return( bOleSelected ); }
-    BOOL            IsGraphicSelected() const { return( bGraphicSelected ); }
+    void                    SetViewFrame( SfxViewFrame* pViewFrame ) { pFrame = pViewFrame; }
+    SfxViewFrame*           GetViewFrame() const { return pFrame; }
 
-    static BOOL     IsInDrag()  { return bIsInDrag; }
+    void                    Fill( const SdDrawDocument*, BOOL bAllPages, const String& rDocName );
+    void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const String& rDocName );
+    BOOL                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
+    BOOL                    HasSelectedChilds( const String& rName );
+    BOOL                    SelectEntry( const String& rName );
+    String                  GetSelectEntry();
+    List*                   GetSelectEntryList( USHORT nDepth );
+    List*                   GetBookmarkList( USHORT nType );
+    SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
+    SdDrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
+    void                    CloseBookmarkDoc();
+    BOOL                    IsOleSelected() const { return( bOleSelected ); }
+    BOOL                    IsGraphicSelected() const { return( bGraphicSelected ); }
+
+    static BOOL             IsInDrag()  { return bIsInDrag; }
 };
 
 #endif      // _SDTREELB_HXX
-

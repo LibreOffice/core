@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 17:37:35 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,22 @@ SO2_DECL_REF(SvStorage)
 #endif
 
 using namespace ::com::sun::star;
+
+// ------------------------
+// - SdNavigatorDropEvent -
+// ------------------------
+
+struct SdNavigatorDropEvent : public ExecuteDropEvent
+{
+    SdWindow*               mpWin;
+    USHORT                  mnPage;
+    USHORT                  mnLayer;
+    const SdDrawDocShell*   mpNavigatorDragDocShell;
+
+                SdNavigatorDropEvent( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHORT nPage, USHORT nLayer,
+                                      const SdDrawDocShell* pNavigatorDragDocShell ) :
+                    ExecuteDropEvent( rEvt ), mpWin( pWin ), mnPage( nPage ), mnLayer( nLayer ), mpNavigatorDragDocShell( pNavigatorDragDocShell ) {}
+};
 
 /*************************************************************************
 |*
@@ -410,27 +426,23 @@ void __EXPORT SdView::DoPaste( Window* pWindow )
 
                 if( !InsertData( aDataHelper.GetTransferable(), aPos, nDnDAction, FALSE ) )
                 {
-                    DBG_ERROR( "INetBookmark not supported" );
-/* !!!
                     SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
 
                     if( pDrViewSh )
                     {
                         String          aEmptyStr;
                         INetBookmark    aINetBookmark( aEmptyStr, aEmptyStr );
-                        BOOL            bPasted = FALSE;
 
-                        if( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) )
-                            bPasted = TRUE;
-                        else if ( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
-                            bPasted = TRUE;
-                        else if( aINetBookmark.Paste( *aDataObj, SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) )
-                            bPasted = TRUE;
-
-                        if( bPasted )
+                        if( ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) ) ||
+                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR, aINetBookmark ) ) ||
+                            ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR ) &&
+                              aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR, aINetBookmark ) ) )
+                        {
                             pDrViewSh->InsertURLField( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), aEmptyStr, NULL );
+                        }
                     }
-*/
                 }
             }
         }
@@ -592,7 +604,7 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, SdWindow* pWin, USHORT
                 BOOL            bSBAFormat = pWin->IsDropFormatSupported( SOT_FORMATSTR_ID_SVX_FORMFIELDEXCH );
                 BOOL            bIsPresTarget = FALSE;
                 BOOL            nDefaultDrop = DND_ACTION_NONE;
-                //!!!DND BOOL nDefaultDrop = nRet = FmFormView::AcceptDrop( rEvt, pWin, nPage, nLayer );
+                //!!!DND BOOL   nDefaultDrop = nRet = FmFormView::AcceptDrop( rEvt, pWin, nPage, nLayer );
 
                 nDropAction = ( ( nDropAction & DND_ACTION_MOVE ) ? DND_ACTION_COPY : nDropAction );
 
@@ -699,7 +711,7 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
                 aRect.Union( pObj->GetLogicRect() );
             }
 
-            Point aPos = pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel );
+            Point aPos( pOLV->GetWindow()->PixelToLogic( rEvt.maPosPixel ) );
 
             if( aRect.IsInside( aPos ) )
             {
@@ -713,7 +725,6 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
             Point               aPos;
             SdDrawViewShell*    pDrViewSh = (SdDrawViewShell*) pDocSh->GetViewShell();
             SdrPage*            pPage = NULL;
-            SdTransferable*     pDragTransferable = SD_MOD()->pTransferDrag;
 
             if( pWin )
                 aPos = pWin->PixelToLogic( rEvt.maPosPixel );
@@ -724,155 +735,91 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
                 TransferableDataHelper  aDataHelper( rEvt.maDropEvent.Transferable );
                 String                  aTmpString1, aTmpString2;
                 INetBookmark            aINetBookmark( aTmpString1, aTmpString2 );
-                const ULONG             nCount = aDataHelper.GetFormatCount();
-                SdNavigatorWin*         pNavWin = NULL;
-                NavigatorDragType       eDragType = NAVIGATOR_DRAGTYPE_NONE;
 
-                if( pViewSh->GetViewFrame()->HasChildWindow( SID_NAVIGATOR ) )
-                    pNavWin = (SdNavigatorWin*)(pViewSh->GetViewFrame()->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
-
-                if( pNavWin && pNavWin->GetDropDocSh() )
-                    eDragType = pNavWin->GetNavigatorDragType();
-
-                if( eDragType == NAVIGATOR_DRAGTYPE_LINK || eDragType == NAVIGATOR_DRAGTYPE_EMBEDDED )
+                // insert bookmark
+                if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+                    aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
                 {
-/*!!!DND for Navigator
-                    List    aBookmarkList;
-                    String  aBookmark;
-                    String  aFile;
+                    const NavigatorDragType eDragType = SD_MOD()->GetCurrentNavigatorDragType();
 
-                    for( USHORT i = 0; i < nCount; i++ )
+                    if( eDragType == NAVIGATOR_DRAGTYPE_LINK || eDragType == NAVIGATOR_DRAGTYPE_EMBEDDED )
                     {
-                        // Bookmark-Liste fuellen
-                        if( aINetBookmark.PasteDragServer( i ) )
+                        // insert bookmark from own navigator (handled async. due to possible message box )
+                        Application::PostUserEvent( LINK( this, SdView, ExecuteNavigatorDrop ),
+                                                    new SdNavigatorDropEvent( rEvt, pWin, nPage, nLayer, SD_MOD()->GetCurrentNavigatorDragDocShell() ) );
+                        nRet = nDropAction;
+                    }
+                    else
+                    {
+                        SdrObject*      pPickObj = NULL;
+                        SdrPageView*    pPV = NULL;
+                        SdWindow*       pWindow = pViewSh->GetActiveWindow();
+                        USHORT          nHitLog = USHORT(pWindow->PixelToLogic(Size(HITPIX,0)).Width());
+
+                        if( PickObj( aPos, pPickObj, pPV ) )
                         {
-                            if( i==0 )
+                            // insert as clip action => jump
+                            String              aBookmark( aINetBookmark.GetURL() );
+                            SdAnimationInfo*    pInfo = pDoc->GetAnimationInfo( pPickObj );
+                            BOOL                bCreated = FALSE;
+
+                            if( aBookmark.Len() )
                             {
-                                aFile = aINetBookmark.GetURL().GetToken(0, '#');
-                            }
+                                presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
+                                String aDocName( aBookmark.GetToken( 0, '#' ) );
 
-                            aBookmark = aINetBookmark.GetURL().GetToken(1, '#');
-                            aBookmarkList.Insert(&aBookmark);
-                        }
-                    }
+                                if( pDocSh->GetMedium()->GetName() == aDocName || pDocSh->GetName() == aDocName )
+                                {
+                                    // Interner Sprung -> nur "#Bookmark" verwenden
+                                    aBookmark = aBookmark.GetToken( 1, '#' );
+                                    eClickAction = presentation::ClickAction_BOOKMARK;
+                                }
 
-                    SdPage* pPage = (SdPage*) GetPageViewPvNum(0)->GetPage();
-                    USHORT  nPgPos = 0xFFFF;
+                                if( !pInfo )
+                                {
+                                    pInfo = new SdAnimationInfo( pDoc );
+                                    pPickObj->InsertUserData( pInfo );
+                                    bCreated = TRUE;
+                                }
 
-                    if( !pPage->IsMasterPage() )
-                    {
-                        if( pPage->GetPageKind() == PK_STANDARD )
-                            nPgPos = pPage->GetPageNum() + 2;
-                        else if( pPage->GetPageKind() == PK_NOTES )
-                            nPgPos = pPage->GetPageNum() + 1;
-                    }
+                                // Undo-Action mit alten und neuen Groessen erzeugen
+                                SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(pDoc, pPickObj, bCreated);
+                                pAction->SetActive(pInfo->bActive, pInfo->bActive);
+                                pAction->SetEffect(pInfo->eEffect, pInfo->eEffect);
+                                pAction->SetTextEffect(pInfo->eTextEffect, pInfo->eTextEffect);
+                                pAction->SetSpeed(pInfo->eSpeed, pInfo->eSpeed);
+                                pAction->SetDim(pInfo->bDimPrevious, pInfo->bDimPrevious);
+                                pAction->SetDimColor(pInfo->aDimColor, pInfo->aDimColor);
+                                pAction->SetDimHide(pInfo->bDimHide, pInfo->bDimHide);
+                                pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
+                                pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
+                                pAction->SetBlueScreen(pInfo->aBlueScreen, pInfo->aBlueScreen);
+                                pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
+                                pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
+                                pAction->SetClickAction(pInfo->eClickAction, eClickAction);
+                                pAction->SetBookmark(pInfo->aBookmark, aBookmark);
+                                pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
+                                pAction->SetVerb(pInfo->nVerb, pInfo->nVerb);
+                                pAction->SetSecondEffect(pInfo->eSecondEffect, pInfo->eSecondEffect);
+                                pAction->SetSecondSpeed(pInfo->eSecondSpeed, pInfo->eSecondSpeed);
+                                pAction->SetSecondSoundOn(pInfo->bSecondSoundOn, pInfo->bSecondSoundOn);
+                                pAction->SetSecondPlayFull(pInfo->bSecondPlayFull, pInfo->bSecondPlayFull);
 
-                    // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
-                    // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
-                    // aufgenommen (bNameOK == FALSE -> Benutzer hat abgebrochen)
-                    List*   pExchangeList = NULL;
-                    BOOL    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
-                    BOOL    bLink = eDragType == NAVIGATOR_DRAGTYPE_LINK ? TRUE : FALSE;
-                    BOOL    bReplace = FALSE;
+                                String aString(SdResId(STR_UNDO_ANIMATION));
+                                pAction->SetComment(aString);
+                                pDocSh->GetUndoManager()->AddUndoAction(pAction);
+                                pInfo->eClickAction = eClickAction;
+                                pInfo->aBookmark = aBookmark;
+                                pDoc->SetChanged();
 
-                    // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt
-                    // handelt, wird eine Liste sowohl mit Seiten, als auch mit Objekten
-                    // gefuellt.
-                    // Sollten Seitennamen und Objektnamen identisch sein gibt es hier
-                    // natuerlich Probleme !!!
-
-                    if( bNameOK )
-                        bReturn = pDoc->InsertBookmark(&aBookmarkList, pExchangeList, bLink, bReplace, nPgPos, FALSE, pNavWin->GetDropDocSh(), TRUE, &aPos);
-
-                    // Loeschen der ExchangeList
-                    if( pExchangeList )
-                    {
-                        for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )
-                            delete (String*) p;
-
-                        delete pExchangeList;
-                    }
-*/
-                }
-                else
-                {
-                    SdrObject*      pPickObj = NULL;
-                    SdrPageView*    pPV = NULL;
-                    SdWindow*       pWindow = pViewSh->GetActiveWindow();
-                    USHORT          nHitLog = USHORT(pWindow->PixelToLogic(Size(HITPIX,0)).Width());
-
-                    if( PickObj( aPos, pPickObj, pPV ) )
-                    {
-                        aINetBookmark.PasteDragServer( 0 );
-
-                        String aBookmark( aINetBookmark.GetURL() );
-
-                        if( aBookmark.Len() )
-                        {
-                            presentation::ClickAction eClickAction = presentation::ClickAction_DOCUMENT;
-                            String aDocName(aBookmark.GetToken(0, '#'));
-
-                            if (pDocSh->GetMedium()->GetName() == aDocName || pDocSh->GetName() == aDocName)
-                            {
-                                // Interner Sprung -> nur "#Bookmark" verwenden
-                                aBookmark = aBookmark.GetToken(1, '#');
-                                eClickAction = presentation::ClickAction_BOOKMARK;
-                            }
-
-                            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pPickObj);
-
-                            BOOL bCreated = FALSE;
-
-                            if( !pInfo )
-                            {
-                                pInfo = new SdAnimationInfo( pDoc );
-                                pPickObj->InsertUserData( pInfo );
-                                bCreated = TRUE;
-                            }
-
-                            // Undo-Action mit alten und neuen Groessen erzeugen
-                            SdAnimationPrmsUndoAction* pAction = new SdAnimationPrmsUndoAction(pDoc, pPickObj, bCreated);
-                            pAction->SetActive(pInfo->bActive, pInfo->bActive);
-                            pAction->SetEffect(pInfo->eEffect, pInfo->eEffect);
-                            pAction->SetTextEffect(pInfo->eTextEffect, pInfo->eTextEffect);
-                            pAction->SetSpeed(pInfo->eSpeed, pInfo->eSpeed);
-                            pAction->SetDim(pInfo->bDimPrevious, pInfo->bDimPrevious);
-                            pAction->SetDimColor(pInfo->aDimColor, pInfo->aDimColor);
-                            pAction->SetDimHide(pInfo->bDimHide, pInfo->bDimHide);
-                            pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
-                            pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
-                            pAction->SetBlueScreen(pInfo->aBlueScreen, pInfo->aBlueScreen);
-                            pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
-                            pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
-                            pAction->SetClickAction(pInfo->eClickAction, eClickAction);
-                            pAction->SetBookmark(pInfo->aBookmark, aBookmark);
-                            pAction->SetInvisibleInPres(pInfo->bInvisibleInPresentation, TRUE);
-                            pAction->SetVerb(pInfo->nVerb, pInfo->nVerb);
-                            pAction->SetSecondEffect(pInfo->eSecondEffect, pInfo->eSecondEffect);
-                            pAction->SetSecondSpeed(pInfo->eSecondSpeed, pInfo->eSecondSpeed);
-                            pAction->SetSecondSoundOn(pInfo->bSecondSoundOn, pInfo->bSecondSoundOn);
-                            pAction->SetSecondPlayFull(pInfo->bSecondPlayFull, pInfo->bSecondPlayFull);
-
-                            String aString(SdResId(STR_UNDO_ANIMATION));
-                            pAction->SetComment(aString);
-                            pDocSh->GetUndoManager()->AddUndoAction(pAction);
-                            pInfo->eClickAction = eClickAction;
-                            pInfo->aBookmark = aBookmark;
-                            pDoc->SetChanged();
-                        }
-                    }
-                    else if( pViewSh->ISA( SdDrawViewShell ) )
-                    {
-                        /******************************************************
-                        * URLs als Buttons einfuegen
-                        ******************************************************/
-                        for (USHORT i = 0; i < nCount; i++)
-                        {
-                            if( aINetBookmark.PasteDragServer(i) )
-                            {
-                                ((SdDrawViewShell*)pViewSh)->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), String(), &aPos);
                                 nRet = nDropAction;
                             }
+                        }
+                        else if( pViewSh->ISA( SdDrawViewShell ) )
+                        {
+                            // insert as normal URL button
+                            ( (SdDrawViewShell*) pViewSh )->InsertURLButton( aINetBookmark.GetURL(), aINetBookmark.GetDescription(), String(), &aPos );
+                            nRet = nDropAction;
                         }
                     }
                 }
@@ -883,6 +830,72 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, SdWindow* pWin, USHO
     }
 
     return nRet;
+}
+
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( SdView, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEvent )
+{
+    TransferableDataHelper  aDataHelper( pSdNavigatorDropEvent->maDropEvent.Transferable );
+    INetBookmark            aINetBookmark;
+
+    if( pSdNavigatorDropEvent->mpNavigatorDragDocShell &&
+        aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
+    {
+        Point   aPos;
+        List    aBookmarkList;
+        String  aBookmark;
+        String  aFile;
+        SdPage* pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
+        USHORT  nPgPos = 0xFFFF;
+
+        if( pSdNavigatorDropEvent->mpWin )
+            aPos = pSdNavigatorDropEvent->mpWin->PixelToLogic( pSdNavigatorDropEvent->maPosPixel );
+
+        aFile = aINetBookmark.GetURL().GetToken( 0, '#' );
+        aBookmark = aINetBookmark.GetURL().GetToken( 1, '#' );
+        aBookmarkList.Insert( &aBookmark );
+
+        if( !pPage->IsMasterPage() )
+        {
+            if( pPage->GetPageKind() == PK_STANDARD )
+                nPgPos = pPage->GetPageNum() + 2;
+            else if( pPage->GetPageKind() == PK_NOTES )
+                nPgPos = pPage->GetPageNum() + 1;
+        }
+
+        // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
+        // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
+        // aufgenommen (bNameOK == FALSE -> Benutzer hat abgebrochen)
+        List*   pExchangeList = NULL;
+        BOOL    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
+        BOOL    bLink = ( SD_MOD()->GetCurrentNavigatorDragType() == NAVIGATOR_DRAGTYPE_LINK ? TRUE : FALSE );
+        BOOL    bReplace = FALSE;
+
+        // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt handelt,
+        // wird eine Liste sowohl mit Seiten, als auch mit Objekten gefuellt.
+        // Sollten Seitennamen und Objektnamen identisch sein gibt es hier natuerlich Probleme !!!
+        if( bNameOK )
+        {
+            pDoc->InsertBookmark( &aBookmarkList, pExchangeList,
+                                  bLink, bReplace, nPgPos, FALSE,
+                                  (SdDrawDocShell*) pSdNavigatorDropEvent->mpNavigatorDragDocShell,
+                                  TRUE, &aPos );
+        }
+
+        // Loeschen der ExchangeList
+        if( pExchangeList )
+        {
+            for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )
+                delete (String*) p;
+
+            delete pExchangeList;
+        }
+    }
+
+    delete pSdNavigatorDropEvent;
+
+    return 0;
 }
 
 /*************************************************************************

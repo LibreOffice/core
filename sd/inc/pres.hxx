@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pres.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-19 10:43:16 $
+ *  last change: $Author: ka $ $Date: 2001-04-04 16:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,15 @@ enum DocumentType
     DOCUMENT_TYPE_IMPRESS,
     DOCUMENT_TYPE_DRAW
 };
+
+enum NavigatorDragType
+{
+    NAVIGATOR_DRAGTYPE_NONE,
+    NAVIGATOR_DRAGTYPE_URL,
+    NAVIGATOR_DRAGTYPE_LINK,
+    NAVIGATOR_DRAGTYPE_EMBEDDED
+};
+#define NAVIGATOR_DRAGTYPE_COUNT 4
 
 #endif  // _PRESENTATION_HXX
 
