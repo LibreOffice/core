@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:55:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:18:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,16 +1307,21 @@ Reference< XOutputStream > SvXMLImport::GetStreamForGraphicObjectURLFromBase64()
 {
     ::rtl::OUString sRet;
 
-    if( IsPackageURL( rURL ) && xEmbeddedResolver.is() )
+    if( IsPackageURL( rURL ) )
     {
-        OUString sURL( rURL );
-        if( rClassId.getLength() )
+        if ( xEmbeddedResolver.is() )
         {
-            sURL += OUString( '!' );
-            sURL += rClassId;
+            OUString sURL( rURL );
+            if( rClassId.getLength() )
+            {
+                sURL += OUString( '!' );
+                sURL += rClassId;
+            }
+            sRet = xEmbeddedResolver->resolveEmbeddedObjectURL( sURL );
         }
-        sRet = xEmbeddedResolver->resolveEmbeddedObjectURL( sURL );
     }
+    else
+        sRet = GetAbsoluteReference( rURL );
 
     return sRet;
 }
