@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:45:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SVDFPPT_HXX //autogen
 #include <svx/svdfppt.hxx>
 #endif
+#ifndef _MSDFFDEF_HXX
+#include <svx/msdffdef.hxx>
+#endif
 #ifndef _SD_DIADEF_H
 #include <diadef.h>
 #endif
@@ -74,23 +77,15 @@
 #ifndef _MS_FILTERTRACER_HXX
 #include <svx/msfiltertracer.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+#ifndef _SD_PPT_ANIMATIONS_HXX
+#include <ppt/pptanimations.hxx>
+#endif
 
 class SdDrawDocument;
 class SfxMedium;
-
-#define PPT_TRANSITION_TYPE_NONE            0
-#define PPT_TRANSITION_TYPE_RANDOM          1
-#define PPT_TRANSITION_TYPE_BLINDS          2
-#define PPT_TRANSITION_TYPE_CHECKER         3
-#define PPT_TRANSITION_TYPE_COVER           4
-#define PPT_TRANSITION_TYPE_DISSOLVE        5
-#define PPT_TRANSITION_TYPE_FADE            6
-#define PPT_TRANSITION_TYPE_PULL            7
-#define PPT_TRANSITION_TYPE_RANDOM_BARS     8
-#define PPT_TRANSITION_TYPE_STRIPS          9
-#define PPT_TRANSITION_TYPE_WIPE           10
-#define PPT_TRANSITION_TYPE_ZOOM           11
-#define PPT_TRANSITION_TYPE_SPLIT          13
 
 /*************************************************************************
 |*
@@ -118,7 +113,7 @@ class ImplSdPPTImport : public SdrPowerPointImport
     SdrLayerID      nBackgroundObjectsLayerID;
 
     void            SetHeaderFooterPageSettings( SdPage* pPage, const PptSlidePersistEntry* pMasterPersist );
-    void            ImportPageEffect( SdPage* pPage );
+    void            ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed );
 
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiveInfoAtom* pIAtom, String aMacroName );
     void            FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationInfoAtom* pAnim );
@@ -127,9 +122,10 @@ class ImplSdPPTImport : public SdrPowerPointImport
     virtual         SdrObject* ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pText, SdPage* pPage,
                                             SfxStyleSheet*, SfxStyleSheet** ) const;
 
-    String          ReadSound( UINT32 nSoundRef ) const;
-
 public:
+
+    String          ReadSound( sal_uInt32 nSoundRef ) const;
+    String          ReadMedia( sal_uInt32 nMediaRef ) const;
 
     ImplSdPPTImport( SdDrawDocument* pDoc, SvStorage& rStorage, SfxMedium& rMed, PowerPointImportParam& );
     ~ImplSdPPTImport();
