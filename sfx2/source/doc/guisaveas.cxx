@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:25:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
     ::rtl::OUString aVersionCommentString = ::rtl::OUString::createFromAscii( "VersionComment" );
     ::rtl::OUString aAuthorString = ::rtl::OUString::createFromAscii( "Author" );
     ::rtl::OUString aInteractionHandlerString = ::rtl::OUString::createFromAscii( "InteractionHandler" );
+    ::rtl::OUString aStatusIndicatorString = ::rtl::OUString::createFromAscii( "StatusIndicator" );
 
     if ( GetMediaDescr().find( aVersionCommentString ) != GetMediaDescr().end() )
     {
@@ -586,6 +587,8 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
         aAcceptedArgs[ aAuthorString ] = GetMediaDescr()[ aAuthorString ];
     if ( GetMediaDescr().find( aInteractionHandlerString ) != GetMediaDescr().end() )
         aAcceptedArgs[ aInteractionHandlerString ] = GetMediaDescr()[ aInteractionHandlerString ];
+    if ( GetMediaDescr().find( aStatusIndicatorString ) != GetMediaDescr().end() )
+        aAcceptedArgs[ aStatusIndicatorString ] = GetMediaDescr()[ aStatusIndicatorString ];
 
     // remove unacceptable entry if there is any
     DBG_ASSERT( GetMediaDescr().size() == aAcceptedArgs.size(),
