@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-15 21:55:36 $
+ *  last change: $Author: os $ $Date: 2001-06-29 14:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,23 @@ TabPage RID_SFXPAGE_SAVE
     Hide = TRUE ;
     TEXT_SAVEPAGE
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedLine GB_SAVE
+    FixedLine LB_LOAD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Laden" ;
+        Text [ English ] = "Load" ;
+    };
+    CheckBox CB_LOAD_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 162 , 10 ) ;
+        Text = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
+        Text [ English ] = "Load user-define settings with the document" ;
+    };
+    FixedLine GB_SAVE
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Speichern" ;
         Text [ English ] = "Save" ;
@@ -127,7 +141,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_DOCINFO
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "E~igenschaften vorher bearbeiten" ;
         Text [ English ] = "~Edit document info before" ;
@@ -156,7 +170,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_BACKUP
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
         Text = "~Sicherungskopie immer erstellen" ;
         Text [ English ] = "~Backup copy always" ;
@@ -184,7 +198,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_AUTOSAVE
     {
-        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Automatisch speichern alle" ;
         Text [ English ] = "~Automatic save every" ;
@@ -213,7 +227,7 @@ TabPage RID_SFXPAGE_SAVE
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 115 , 42 ) ;
+        Pos = MAP_APPFONT ( 115 , 69 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -228,7 +242,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 139 , 44 ) ;
+        Pos = MAP_APPFONT ( 139 , 71 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text = "Minuten" ;
         Text [ English ] = "minutes" ;
@@ -256,7 +270,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_AUTOSAVEPROMPT
     {
-        Pos = MAP_APPFONT ( 22 , 58 ) ;
+        Pos = MAP_APPFONT ( 22 , 85 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text = "Mit ~Rückfrage" ;
         Text [ English ] = "~Prompt to save" ;
@@ -284,7 +298,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedLine GB_RELATIVE
     {
-        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "URLs relativ speichern" ;
         Text [ English ] = "Save URLs relative" ;
@@ -311,7 +325,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_FSYS
     {
-        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "im Da~teisystem" ;
         Text [ English ] = "on ~filesystem" ;
@@ -340,7 +354,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     CheckBox BTN_RELATIVE_INET
     {
-        Pos = MAP_APPFONT ( 136 , 83 ) ;
+        Pos = MAP_APPFONT ( 136 , 110 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         Text = "im Int~ernet" ;
         Text [ English ] = "~Internet" ;
@@ -367,7 +381,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedLine FL_FILTER
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Standard Dateiformat" ;
         Text [ English ] = "Standard file format" ;
@@ -394,7 +408,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_APP
     {
-        Pos = MAP_APPFONT ( 12 , 110 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "~Dokumenttyp" ;
         Text [ English ] = "Document type" ;
@@ -421,7 +435,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 110 ) ;
+        Pos = MAP_APPFONT ( 136 , 137 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Immer spei~chern als" ;
         Text [ English ] = "Always save as" ;
@@ -448,8 +462,8 @@ TabPage RID_SFXPAGE_SAVE
     };
     ListBox LB_APP
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
-        Size = MAP_APPFONT ( 108 , 58 ) ;
+        Pos = MAP_APPFONT ( 12 , 147 ) ;
+        Size = MAP_APPFONT ( 108 , 32 ) ;
         Border = TRUE;
         StringList =
         {
@@ -661,7 +675,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     ListBox LB_FILTER
     {
-        Pos = MAP_APPFONT ( 136 , 121 ) ;
+        Pos = MAP_APPFONT ( 136 , 147 ) ;
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         Sort = TRUE;
