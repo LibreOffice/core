@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipfmtitem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-29 18:11:47 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,9 @@
 #include <svtools/svstdarr.hxx>
 #include <clipfmtitem.hxx>
 
-
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_CLIPBOARDFORMATS_HPP_
+#include <drafts/com/sun/star/frame/status/ClipboardFormats.hpp>
+#endif
 
 struct SvxClipboardFmtItem_Impl
 {
@@ -81,7 +83,7 @@ struct SvxClipboardFmtItem_Impl
 
 String SvxClipboardFmtItem_Impl::sEmptyStr;
 
-TYPEINIT1( SvxClipboardFmtItem, SfxPoolItem );
+TYPEINIT1_AUTOFACTORY( SvxClipboardFmtItem, SfxPoolItem );
 
 SvxClipboardFmtItem_Impl::SvxClipboardFmtItem_Impl(
                             const SvxClipboardFmtItem_Impl& rCpy )
@@ -110,6 +112,42 @@ SvxClipboardFmtItem::SvxClipboardFmtItem( const SvxClipboardFmtItem& rCpy )
 SvxClipboardFmtItem::~SvxClipboardFmtItem()
 {
     delete pImpl;
+}
+
+BOOL SvxClipboardFmtItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    USHORT nCount = Count();
+
+    drafts::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+
+    aClipFormats.Identifiers.realloc( nCount );
+    aClipFormats.Names.realloc( nCount );
+    for ( USHORT n=0; n < nCount; n++ )
+    {
+        aClipFormats.Identifiers[n] = (sal_Int64)GetClipbrdFormatId( n );
+        aClipFormats.Names[n] = GetClipbrdFormatName( n );
+    }
+
+    rVal <<= aClipFormats;
+    return TRUE;
+}
+
+sal_Bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    drafts::com::sun::star::frame::status::ClipboardFormats aClipFormats;
+    if ( rVal >>= aClipFormats )
+    {
+        USHORT nCount = USHORT( aClipFormats.Identifiers.getLength() );
+
+        pImpl->aFmtIds.Remove( 0, pImpl->aFmtIds.Count() );
+        pImpl->aFmtNms.Remove( 0, pImpl->aFmtNms.Count() );
+        for ( USHORT n=0; n < nCount; n++ )
+            AddClipbrdFormat( ULONG( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
+
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 int SvxClipboardFmtItem::operator==( const SfxPoolItem& rComp ) const
