@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleChartDocumentView.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:07:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ module com {  module sun {  module star {  module chart {
 service AccessibleChartDocumentView
 {
     /** Base interface for being accessible.  It gives access to the
-        <type>XAccessibleContext</type> interface.
+        <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
+        interface.
     */
     interface ::com::sun::star::accessibility::XAccessible;
 
