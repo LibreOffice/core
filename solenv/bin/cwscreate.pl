@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-10-11 13:43:54 $
+#   last change: $Author: hr $ $Date: 2004-10-11 14:06:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.7 $ ';
+my $id_str = ' $Revision: 1.8 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -113,7 +113,7 @@ print "$script_name -- version: $script_rev\n";
 # support for setsolar style configuration
 my $b_server_wnt = 'r:/b_server/config';
 my $b_server_unx = $ENV{ENV_ROOT} . '/b_server/config' if defined $ENV{ENV_ROOT};
-$b_server_unx    = '/so/env/b_server/config' if ! -d $b_server_unx;
+$b_server_unx    = '/so/env/b_server/config' if ! defined $b_server_unx || ! -d $b_server_unx;
 
 #### globals #####
 
@@ -351,6 +351,9 @@ sub check_cvs_update {
 
 sub update_workspace {
     my $cws = shift;
+
+    defined $ENV{CWS_NO_UPDATE} && return 1;
+
     my $stand_dir = $ENV{SRC_ROOT};
     if (!opendir(SOURCES, $stand_dir)) {
         print_error ("Environment variable SRC_ROOT points to not accesible diretory: $!", 1)
