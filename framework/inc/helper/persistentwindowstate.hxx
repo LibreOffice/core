@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:15:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
-#include <com/sun/star/util/XCloseListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_CLOSEVETOEXCEPTION_HPP_
-#include <com/sun/star/util/CloseVetoException.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -149,28 +141,25 @@ namespace framework{
     @descr          It's a feature of our office. If a document window was created by ourself (and not from
                     any external process e.g. the office bean) we save and restore the window state of it
                     corresponding to the document service factory. That means: one instance of this class will be
-                    a listener on one frame which container window was created by ourself. In case we get
-                    the callback "queryClosing()" we try to find out which application module is used for this document
-                    and which state the container window has. During callback "notifyClosing()" we use this informations
-                    then to make it persistent inside the configuration package "org.openoffice.Setup".
-                    We are used for restoring such data too. The class TaskCreator inside the framework will
-                    initialize us with the frame, on which we must listen till it dies.
-                    So we can react for loading the first document in it and restore the data for this application module,
-                    which is represented by the new document ... or can make it persistent for this module again
-                    during closing the frame.
+                    a listener on one frame which container window was created by ourself.
+                    We listen for frame action events and everytimes a component will deattached from a frame
+                    we store its current position and size to the configuration. Everytimes a new component is
+                    attached to a frame first time(!) we restore this informations again.
 
     @base           ThreadHelpBase
-                        guarantee right initialized lock member during startup of instances of this class
+                        guarantee right initialized lock member during startup of instances of this class.
 
-    @devstatus      draft
+    @base           OWeakObject
+                        implements ref counting for this class.
+
+    @devstatus      ready
     @threadsafe     yes
-    @modified       02.07.2002 09:51, as96863
+    @modified       06.08.2004 08:41, as96863
 *//*-*************************************************************************************************************/
 class PersistentWindowState :   // interfaces
                                 public css::lang::XTypeProvider,
                                 public css::lang::XInitialization,
                                 public css::frame::XFrameActionListener, // => XEventListener
-                                public css::util::XCloseListener,        // => XEventListener
                                 // baseclasses (order neccessary for right initialization!)
                                 private ThreadHelpBase,
                                 public  ::cppu::OWeakObject
@@ -181,13 +170,10 @@ class PersistentWindowState :   // interfaces
     private:
 
         /// may we need an uno service manager to create own services
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
         /// reference to the frame which was created by the office himself
-        css::uno::Reference< css::frame::XFrame > m_xFrame;
-        /// we get the window state inside queryClosing() but save it inside notifyClosing(). This member hold it alive between these two calls.
-        ::rtl::OUString m_sWindowState;
-        /// to make the state persistent it's neccessary to know the document factory
-        SvtModuleOptions::EFactory m_eFactory;
+        css::uno::WeakReference< css::frame::XFrame > m_xFrame;
 
     //________________________________
     // interface
@@ -196,8 +182,8 @@ class PersistentWindowState :   // interfaces
 
         //____________________________
         // ctor/dtor
-                 PersistentWindowState( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~PersistentWindowState(                                                                        );
+                 PersistentWindowState(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        virtual ~PersistentWindowState(                                                                   );
 
         //____________________________
         // XInterface, XTypeProvider
@@ -206,35 +192,100 @@ class PersistentWindowState :   // interfaces
 
         //____________________________
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArguments ) throw (css::uno::Exception       ,
-                                                                                                         css::uno::RuntimeException);
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+            throw(css::uno::Exception       ,
+                  css::uno::RuntimeException);
 
         //____________________________
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& aEvent ) throw (css::uno::RuntimeException);
-
-        //____________________________
-        // XCloseListener
-        virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aSource        ,
-                                                   sal_Bool                bGetsOwnership ) throw (css::util::CloseVetoException,
-                                                                                                   css::uno::RuntimeException   );
-        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aSource        ) throw (css::uno::RuntimeException   );
+        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
+            throw(css::uno::RuntimeException);
 
         //____________________________
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw (css::uno::RuntimeException);
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
+            throw(css::uno::RuntimeException);
 
     //________________________________
     // helper
 
     private:
-        static sal_Bool        implst_getFrameProps ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory         ,
-                                                      const css::uno::Reference< css::frame::XFrame >&              xFrame           ,
-                                                            SvtModuleOptions::EFactory*                             pModule          ,
-                                                            css::uno::Reference< css::awt::XWindow >*               pContainerWindow );
-        static ::rtl::OUString implst_getWindowState( const css::uno::Reference< css::awt::XWindow >&               xWindow          );
-        static void            implst_setWindowState( const css::uno::Reference< css::awt::XWindow >&               xWindow          ,
-                                                      const ::rtl::OUString&                                        sWindowState     );
+
+        //____________________________
+        /** @short  identify the application module, which  is used behind the component
+                    of our frame.
+
+            @param  xSMGR
+                    needed to create needed uno resources.
+
+            @param  xFrame
+                    contains the component, wich must be identified.
+
+            @return [string]
+                    a module identifier for the current frame component.
+         */
+        static ::rtl::OUString implst_identifyModule(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+                                                     const css::uno::Reference< css::frame::XFrame >&              xFrame);
+
+        //____________________________
+        /** @short  retrieve the window state from the configuration.
+
+            @param  xSMGR
+                    needed to create the configuration access.
+
+            @param  sModuleName
+                    identifies the application module, where the
+                    information should be getted for.
+
+            @return [string]
+                    contains the information about position and size.
+         */
+        static ::rtl::OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
+                                                               const ::rtl::OUString&                                        sModuleName);
+
+        //____________________________
+        /** @short  retrieve the window state from the container window.
+
+            @param  xWindow
+                    must point to the container window of the frame.
+                    We use it VCL part here - because the toolkit doesnt
+                    provide the right functionality!
+
+            @return [string]
+                    contains the information about position and size.
+         */
+        static ::rtl::OUString implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow);
+
+        //____________________________
+        /** @short  restore the position and size on the container window.
+
+            @param  xSMGR
+                    needed to create the configuration access.
+
+            @param  sModuleName
+                    identifies the application module, where the
+                    information should be setted on.
+
+            @param  sWindowState
+                    contains the information about position and size.
+         */
+        static void implst_setWindowStateOnConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
+                                                  const ::rtl::OUString&                                        sModuleName   ,
+                                                  const ::rtl::OUString&                                        sWindowState  );
+
+        //____________________________
+        /** @short  restore the position and size on the container window.
+
+            @param  xWindow
+                    must point to the container window of the frame.
+                    We use it VCL part here - because the toolkit doesnt
+                    provide the right functionality!
+
+            @param  sWindowState
+                    contains the information about position and size.
+         */
+        static void implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
+                                                  const ::rtl::OUString&                          sWindowState);
 
 }; // class PersistentWindowState
 
