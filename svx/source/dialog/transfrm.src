@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:44:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición";
     };
     FixedText FT_POS_X
     {
@@ -138,6 +139,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "À§Ä¡ ~X";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición ~X";
     };
     FixedText FT_POS_Y
     {
@@ -166,6 +168,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "À§Ä¡ ~Y";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -226,6 +229,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
+        QuickHelpText[ catalan ] = "Punto base";
     };
     TriStateBox TSB_PROTECT
     {
@@ -255,6 +259,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "º¸È£(~P)";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Proteger";
     };
 
     GroupBox GB_ANCHOR
@@ -283,6 +288,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "À§Ä¡ °íÁ¤";
         Text[ turkish ] = "Sabitleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Anclaje";
     };
     FixedText FT_ANCHOR
     {
@@ -310,6 +316,7 @@ TabPage RID_SVXPAGE_POSITION
         Text[ korean ] = "±âÁØ À§Ä¡(~A)";
         Text[ turkish ] = "~Sabitleyici";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ancla";
     };
     ListBox LB_ANCHOR
     {
@@ -464,6 +471,13 @@ TabPage RID_SVXPAGE_POSITION
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Al párrafo" ; > ;
+        < "Como carácter" ; > ;
+        < "A la página" ; > ;
+        < "Al marco" ; > ;
+    };
     };
     FixedText FT_ORIENT
     {
@@ -548,7 +562,7 @@ TabPage RID_SVXPAGE_POSITION
             < "Du haut" ; > ;
             < "En haut" ; > ;
             < "Centré" ; > ;
-            < "Inférieur" ; > ;
+            < "En bas" ; > ;
             < "Décalage haut" ; > ;
             < "Caractère centré" ; > ;
             < "Décalage bas" ; > ;
@@ -751,6 +765,19 @@ TabPage RID_SVXPAGE_POSITION
         < " " ; > ;
         < " " ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Desde arriba" ; > ;
+        < "Arriba" ; > ;
+        < "Centrado" ; > ;
+        < "Abajo" ; > ;
+        < "Carácter arriba" ; > ;
+        < "Carácter centrado" ; > ;
+        < "Carácter abajo" ; > ;
+        < "Línea superior" ; > ;
+        < "Línea centrada" ; > ;
+        < "Línea inferior" ; > ;
+    };
     };
     Text[ chinese_simplified ] = "Î»ÖÃ";
     Text[ russian ] = "Ïîçèöèÿ";
@@ -762,6 +789,7 @@ TabPage RID_SVXPAGE_POSITION
     Text[ korean ] = "À§Ä¡";
     Text[ turkish ] = "Konum";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición";
 };
  // RID_SVXPAGE_SIZE ---------------------------------------------------------
 TabPage RID_SVXPAGE_SIZE
@@ -809,6 +837,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "Å©±â";
         Text[ turkish ] = "Boyut";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tamaño";
     };
     FixedText FT_WIDTH
     {
@@ -837,6 +866,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "³Êºñ(~D)";
         Text[ turkish ] = "~Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     FixedText FT_HEIGHT
     {
@@ -865,6 +895,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "³ôÀÌ(~E)";
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -925,6 +956,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
+        QuickHelpText[ catalan ] = "Punto base";
     };
     CheckBox CBX_SCALE
     {
@@ -952,6 +984,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "ºñÀ² À¯Áö(~K)";
         Text[ turkish ] = "~Eþitle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Igualar";
     };
     TriStateBox TSB_PROTECT
     {
@@ -981,6 +1014,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "º¸È£(~P)";
         Text[ turkish ] = "~Koru";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Proteger";
     };
 
     GroupBox GRP_ADJUST
@@ -1008,6 +1042,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ arabic ] = "ÖÈØ";
         Text[ turkish ] = "Ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
@@ -1035,6 +1070,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³Êºñ ¸ÂÃã(~F)";
         Text[ turkish ] = "Geniþliði, metne göre a~yarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajustar ~ancho al texto";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -1062,6 +1098,7 @@ TabPage RID_SVXPAGE_SIZE
         Text[ korean ] = "ÅØ½ºÆ®¿¡ ³ôÀÌ ¸ÂÃã(~H)";
         Text[ turkish ] = "Yüksekliði, metne göre a~yarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ajustar altura al texto";
     };
     Text[ chinese_simplified ] = "´óÐ¡";
     Text[ russian ] = "Ðàçìåð";
@@ -1073,6 +1110,7 @@ TabPage RID_SVXPAGE_SIZE
     Text[ korean ] = "Å©±â";
     Text[ turkish ] = "Boyut";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tamaño";
 };
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
 TabPage RID_SVXPAGE_ANGLE
@@ -1120,6 +1158,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "È¸ÀüÁ¡";
         Text[ turkish ] = "Eksen noktasý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Punto de rotación";
     };
     FixedText FT_POS_X
     {
@@ -1148,6 +1187,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "À§Ä¡ ~X";
         Text[ turkish ] = "~X konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición ~X";
     };
     FixedText FT_POS_Y
     {
@@ -1176,6 +1216,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "À§Ä¡ ~Y";
         Text[ turkish ] = "~Y konumu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Posición ~Y";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -1234,6 +1275,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "È¸Àü°¢";
         Text[ turkish ] = "Dönüþ açýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ángulo de rotación";
     };
     FixedText FT_ANGLE
     {
@@ -1262,6 +1304,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text[ korean ] = "°¢µµ(~A)";
         Text[ turkish ] = "~Açý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "An~gulo";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1298,6 +1341,7 @@ TabPage RID_SVXPAGE_ANGLE
         CustomUnitText[ korean ] = "µµ";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        CustomUnitText[ catalan ] = "grados";
     };
     Control CTL_RECT
     {
@@ -1328,6 +1372,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
+        QuickHelpText[ catalan ] = "Punto de rotación";
     };
     Control CTL_ANGLE
     {
@@ -1347,6 +1392,7 @@ TabPage RID_SVXPAGE_ANGLE
     Text[ korean ] = "°¢µµ";
     Text[ turkish ] = "Açý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ángulo";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -1390,6 +1436,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "¸ð¼­¸® °¢µµ";
         Text[ turkish ] = "Köþe çapý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Radio de ángulo";
     };
     FixedText FT_RADIUS
     {
@@ -1416,6 +1463,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "¹ÝÁö¸§(~R)";
         Text[ turkish ] = "~Çap";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ra~dio";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -1457,6 +1505,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "±â¿ï±â";
         Text[ turkish ] = "Duruþ eðimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Inclinar";
     };
     FixedText FT_ANGLE
     {
@@ -1483,6 +1532,7 @@ TabPage RID_SVXPAGE_SLANT
         Text[ korean ] = "°¢µµ(~A)";
         Text[ turkish ] = "~Açý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Á~ngulo";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -1521,6 +1571,7 @@ TabPage RID_SVXPAGE_SLANT
         CustomUnitText[ korean ] = "µµ";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
+        CustomUnitText[ catalan ] = "grados";
     };
     Text[ chinese_simplified ] = "ÇãÐ±ºÍ½Ç°ë¾¶";
     Text[ russian ] = "Íàêëîí / Ðàäèóñ çàêðóãëåííîãî óãëà";
@@ -1532,6 +1583,7 @@ TabPage RID_SVXPAGE_SLANT
     Text[ korean ] = "±â¿ï±â / ¸ð¼­¸® °¢µµ";
     Text[ turkish ] = "Duruþ eðimi / Köþe çapý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inclinación/Radio de ángulo";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -1587,6 +1639,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "À§Ä¡";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -1615,6 +1668,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "Å©±â";
                 Text[ turkish ] = "Boyut";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tamaño";
             };
             PageItem
             {
@@ -1643,6 +1697,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "È¸Àü";
                 Text[ turkish ] = "Dönüþ";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rotación";
             };
             PageItem
             {
@@ -1669,6 +1724,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text[ korean ] = "±â¿ï±â / ¸ð¼­¸® °¢µµ";
                 Text[ turkish ] = "Duruþ eðimi / Köþe çapý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Inclinación/Radio de ángulo";
             };
         };
     };
@@ -1682,5 +1738,6 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ korean ] = "À§Ä¡¿Í Å©±â";
     Text[ turkish ] = "Konum ve boyut";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Posición y tamaño";
 };
  // ********************************************************************** EOF
