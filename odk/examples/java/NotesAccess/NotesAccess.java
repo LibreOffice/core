@@ -58,7 +58,7 @@ public class NotesAccess implements Runnable {
       "<Office path>/program/classes/sandbox.jar;" +
       "<Office path>/program/classes/unoil.jar;" +
       "<Office path>/program/classes/juh.jar " +
-      "DocumentSaver \"<Connection>\" \"<Domino Host>\" \"<User>\" " +
+      "NotesAccess \"<Connection>\" \"<Domino Host>\" \"<User>\" " +
       "\"<Password>\" \"<Database>\"" );
       System.out.println( "\ne.g.:" );
       System.out.println(
@@ -67,7 +67,7 @@ public class NotesAccess implements Runnable {
       "d:/office60/program/classes/sandbox.jar;" +
       "d:/office60/program/classes/unoil.jar; " +
       "d:/office60/program/classes/juh.jar " +
-      "DocumentSaver \"uno:socket,host=localhost,port=8100;urp;" +
+      "NotesAccess \"uno:socket,host=localhost,port=8100;urp;" +
       "StarOffice.ServiceManager\"" +
       " \"\" \"\" \"\" " +
       "\"F:\\odk3.0.0\\examples\\java\\NotesAccess\\Stocks.nsf\"" );
@@ -207,7 +207,7 @@ public class NotesAccess implements Runnable {
       XSpreadsheet xspreadsheet = ( XSpreadsheet ) xindexaccess.getByIndex( 0 );
 
       Session session;
-      if ( stringHost != null ) {
+      if ( !stringHost.equals( "" ) ) {
         // Creating a Notes session for remote calls to the Domino classes.
         session = NotesFactory.createSession( stringHost, stringUser,
         stringPassword );
