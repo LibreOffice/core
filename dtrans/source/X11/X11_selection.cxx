@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:49:28 $
+ *  last change: $Author: pl $ $Date: 2001-01-31 18:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,19 @@
 #endif
 
 #include <X11_selection.hxx>
+#include <X11_clipboard.hxx>
 #include <X11_transferable.hxx>
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_DNDCONSTANTS_HPP_
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
+#include <com/sun/star/awt/MouseEvent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
+#include <com/sun/star/awt/MouseButton.hpp>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -86,6 +95,7 @@
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::awt;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
@@ -220,7 +230,9 @@ SelectionManager::SelectionManager() :
     m_nNoPosX( 0 ),
     m_nNoPosY( 0 ),
     m_nNoPosWidth( 0 ),
-    m_nNoPosHeight( 0 )
+    m_nNoPosHeight( 0 ),
+    m_bDropSent( false ),
+    m_bWaitingForPrimaryConversion( false )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
@@ -925,6 +937,27 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         }
     }
 
+    if( rRequest.selection == XA_PRIMARY    &&
+        m_bWaitingForPrimaryConversion      &&
+        m_xDragSourceListener.is() )
+    {
+        DragSourceDropEvent dsde;
+        dsde.DragSourceContext      = static_cast< XDragSourceContext* >(this);
+        dsde.DragSource             = static_cast< XDragSource* >(this);
+        if( aNotify.xselection.property != None )
+        {
+            dsde.DropAction         = DNDConstants::ACTION_COPY;
+            dsde.DropSuccess        = sal_True;
+        }
+        else
+        {
+            dsde.DropAction         = DNDConstants::ACTION_NONE;
+            dsde.DropSuccess        = sal_False;
+        }
+        m_xDragSourceListener->dragDropEnd( dsde );
+        m_xDragSourceListener.clear();
+    }
+
     XSendEvent( m_pDisplay, rRequest.requestor, False, 0, &aNotify );
 }
 
@@ -1409,7 +1442,6 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                 memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
                 m_aDropWindow = m_aDropProxy = None;
                 XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
-
             }
             // notify the listener
             DragSourceDropEvent dsde;
@@ -1443,6 +1475,88 @@ void SelectionManager::handleDragEvent( XEvent& rMessage )
                 dsde.UserAction         = m_nUserDragAction;
                 m_xDragSourceListener->dropActionChanged( dsde );
             }
+        }
+    }
+    else if(
+        ( rMessage.type == ButtonPress || rMessage.type == ButtonRelease ) &&
+        rMessage.xbutton.button == m_nDragButton )
+    {
+        bool bCancel = true;
+        if( m_aDropWindow != None )
+        {
+            if( m_nCurrentProtocolVersion >= 0 )
+            {
+                XEvent aEvent;
+                aEvent.type = ClientMessage;
+                aEvent.xclient.display      = m_pDisplay;
+                aEvent.xclient.format       = 32;
+                aEvent.xclient.message_type = m_nXdndDrop;
+                aEvent.xclient.window       = m_aDropWindow;
+                aEvent.xclient.data.l[0]    = m_aWindow;
+                aEvent.xclient.data.l[1]    = 0;
+                aEvent.xclient.data.l[2]    = rMessage.xbutton.time;
+                aEvent.xclient.data.l[3]    = 0;
+                aEvent.xclient.data.l[4]    = 0;
+
+                m_bDropSent                 = true;
+                m_nDropTimeout              = time( NULL );
+                XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+                bCancel = false;
+            }
+            else
+            {
+                // dropping on non XdndWindows: acquire ownership of
+                // PRIMARY and send a middle mouse button click down/up to
+                // target window
+                SelectionAdaptor* pAdaptor = getAdaptor( XA_PRIMARY );
+                if( pAdaptor )
+                {
+                    Window aDummy;
+                    XEvent aEvent;
+                    aEvent.type = ButtonPress;
+                    aEvent.xbutton.display      = m_pDisplay;
+                    aEvent.xbutton.window       = m_aDropWindow;
+                    aEvent.xbutton.root         = rMessage.xbutton.root;
+                    aEvent.xbutton.subwindow    = m_aDropWindow;
+                    aEvent.xbutton.time         = rMessage.xbutton.time+1;
+                    aEvent.xbutton.x_root       = rMessage.xbutton.x_root;
+                    aEvent.xbutton.y_root       = rMessage.xbutton.y_root;
+                    aEvent.xbutton.state        = rMessage.xbutton.state | Button2Mask;
+                    aEvent.xbutton.button       = Button2;
+                    aEvent.xbutton.same_screen  = True;
+                    XTranslateCoordinates( m_pDisplay,
+                                           rMessage.xbutton.root, m_aDropWindow,
+                                           rMessage.xbutton.x_root, rMessage.xbutton.y_root,
+                                           &aEvent.xbutton.x, &aEvent.xbutton.y,
+                                           &aDummy );
+                    XSendEvent( m_pDisplay, m_aDropWindow, False, ButtonPressMask, &aEvent );
+                    aEvent.xbutton.type   = ButtonRelease;
+                    aEvent.xbutton.time++;
+                    aEvent.xbutton.state &= ~Button2Mask;
+                    XSendEvent( m_pDisplay, m_aDropWindow, False, ButtonReleaseMask, &aEvent );
+
+                    m_bDropSent                 = true;
+                    m_nDropTimeout              = time( NULL );
+                    XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+                    m_bWaitingForPrimaryConversion  = true;
+                    m_bDropSent                     = true;
+                    m_nDropTimeout                  = time( NULL );
+                    // HACK :-)
+                    static_cast< X11Clipboard* >( pAdaptor )->setContents( m_xDragSourceTransferable, Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >() );
+                    bCancel = false;
+                }
+            }
+        }
+        if( bCancel )
+        {
+            // cancel drag
+            DragSourceDropEvent dsde;
+            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = DNDConstants::ACTION_NONE;
+            dsde.DropSuccess        = sal_False;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
         }
     }
 }
@@ -1745,23 +1859,61 @@ void SelectionManager::executeDrag(
         XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, m_aDragFlavors.getLength() );
         delete pTypes;
 
-        m_nSourceActions    = sourceActions;
-        m_nUserDragAction   = DNDConstants::ACTION_MOVE & m_nSourceActions;
-        m_bDropSent         = false;
+        m_nSourceActions                = sourceActions;
+        m_nUserDragAction               = DNDConstants::ACTION_MOVE & m_nSourceActions;
+        m_bDropSent                     = false;
+        m_bWaitingForPrimaryConversion  = false;
+        m_nDragButton                   = 1; // default to left button
+        if( trigger.Event.getValueTypeName().equalsAsciiL( "com.sun.star.awt.MouseEvent", 27 ) )
+        {
+            MouseEvent aEvent;
+            trigger.Event >>= aEvent;
+            if( aEvent.Buttons & MouseButton::LEFT )
+                m_nDragButton = Button1;
+            else if( aEvent.Buttons & MouseButton::RIGHT )
+                m_nDragButton = Button3;
+            else if( aEvent.Buttons & MouseButton::MIDDLE )
+                m_nDragButton = Button2;
+        }
 
         updateDragWindow( root_x, root_y, aRoot );
     }
 
     // do drag
     // m_xDragSourceListener will be cleared on finished drop
-    while( m_xDragSourceListener.is() )
+    while( m_xDragSourceListener.is() && ( ! m_bDropSent || time(NULL)-m_nDropTimeout < 5 ) )
         dispatchEvent( 200 );
 
-    // after drag
     {
         MutexGuard aGuard(m_aMutex);
 
-        m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
+        if( m_xDragSourceListener.is() )
+        {
+            DragSourceDropEvent dsde;
+            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = DNDConstants::ACTION_NONE;
+            dsde.DropSuccess        = sal_False;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
+        }
+
+
+        // cleanup after drag
+        if( m_bWaitingForPrimaryConversion )
+            getAdaptor( XA_PRIMARY )->clearTransferable();
+
+        m_bDropSent                         = false;
+        m_bWaitingForPrimaryConversion      = false;
+        m_aDropWindow                       = None;
+        m_aDropProxy                        = None;
+        m_nCurrentProtocolVersion           = nXdndProtocolRevision;
+        m_nNoPosX                           = 0;
+        m_nNoPosY                           = 0;
+        m_nNoPosWidth                       = 0;
+        m_nNoPosHeight                      = 0;
+
+        m_xDragSourceTransferable.clear();
         XUngrabPointer( m_pDisplay, CurrentTime );
         XSelectInput( m_pDisplay, aSource, PropertyChangeMask );
     }

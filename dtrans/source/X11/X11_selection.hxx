@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:49:28 $
+ *  last change: $Author: pl $ $Date: 2001-01-31 18:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,10 +306,12 @@ namespace x11 {
         // the rectangle the pointer must leave until a new XdndPosition should
         // be sent. empty unless the drop target told to fill
         int                         m_nNoPosX, m_nNoPosY, m_nNoPosWidth, m_nNoPosHeight;
+        int                         m_nDragButton;
         sal_Int8                    m_nUserDragAction;
         sal_Int8                    m_nSourceActions;
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
+        bool                        m_bWaitingForPrimaryConversion;
 
 
         // drag and drop
