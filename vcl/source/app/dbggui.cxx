@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:09:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1392,7 +1392,7 @@ void DbgDialogTest( Window* pWindow )
             XubString       aErrorText = aText;
             USHORT          nAccelPos;
             xub_Unicode     cAccel = 0;
-            if ( aErrorText > 128 )
+            if ( aErrorText.Len() > 128 )
             {
                 aErrorText.Erase( 128 );
                 aErrorText.AppendAscii( "..." );
