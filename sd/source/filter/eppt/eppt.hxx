@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:46:11 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,9 +1011,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                 ::com::sun::star::presentation::AnimationEffect eTextEffect,
                                 sal_uInt16 nOrder );
         void                ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eAction );
-        void                ImplWriteTextBundle( EscherPropertyContainer& rPropOpt,
-                                                    sal_Bool bDisableAutoGrowHeight = sal_False,
-                                                        sal_Bool bWriteEvenEmptyTextObjects = sal_False );
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );
@@ -1024,10 +1021,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                     PageType ePageType,
                                                         sal_Bool bMaster,
                                                             int nPageNumber = 0 );
-        sal_Bool            ImplIsAutoShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
-                                                    sal_Bool bIsGroup, sal_Int32 nAngle, sal_uInt32& nNewShapeType, sal_uInt32& nReplace, List& rAdjustmentList,
-                                                        Rectangle& rPolyBoundRect );
 
         ::com::sun::star::awt::Point        ImplMapPoint( const ::com::sun::star::awt::Point& );
         ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& );
