@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #define LB_DATASOURCES          2
 #define LB_CHARSET              3
 #define LB_TIMEOUT_UNIT         4
-#define LB_QUERIES              5
 
 #define ET_CONNECTURL           1
 #define ET_DATASOURCENAME       2
@@ -108,7 +107,7 @@
 #define GB_CONNECTION           1
 #define GB_DBASE_MAIN           2
 #define GB_TABLESUBSCRIPTION    3
-#define GB_QUERIES              4
+#define GB_COLLECTION           4
 
 #define CB_PASSWORD_REQUIRED    1
 #define CB_SHOWDELETEDROWS      2
@@ -129,6 +128,10 @@
 #define WND_SELECTORBORDER      2
 
 #define CTL_TABLESUBSCRIPTION   1
+#define CTL_COLLECTION          2
+
+#define TLB_ACTIONS             1
+
 
 //========================================================================
 // string ids (usually relative to other resources, that's why not necessarily unique)
@@ -152,6 +155,7 @@
 #define STR_PAGETITLE_ADO                   17
 #define STR_PAGETITLE_QUERIES               18
 #define STR_PAGETITLE_ADABAS_STATISTIC      19
+#define STR_PAGETITLE_DOCUMENTS             20
 
 //========================================================================
 // menu item ids
@@ -164,6 +168,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/04/20 13:38:06  oj
+ *  #85736# new checkbox for odbc
+ *
  *  Revision 1.12  2001/03/27 08:05:56  oj
  *  impl new page for adabas
  *

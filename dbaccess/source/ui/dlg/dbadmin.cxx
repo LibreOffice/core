@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 13:38:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
     AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
     AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
+    AddTabPage(PAGE_DOCUMENTLINKS, String(ResId(STR_PAGETITLE_DOCUMENTS)), ODocumentLinksPage::Create, NULL);
 
     // no local resources needed anymore
     FreeResource();
@@ -778,7 +779,7 @@ Reference<XConnection> ODbAdminDialog::createConnection()
                 try
                 {
                     xDriverManager = Reference< XDriverAccess >(getORB()->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                    DBG_ASSERT(xDriverManager.is(), "OTableTreeListBox::UpdateTableList : could not instantiate the driver manager, or it does not provide the necessary interface!");
+                    DBG_ASSERT(xDriverManager.is(), "ODbAdminDialog::createConnection: could not instantiate the driver manager, or it does not provide the necessary interface!");
                 }
                 catch (Exception& e)
                 {
@@ -911,10 +912,10 @@ sal_Bool ODbAdminDialog::isApplyable()
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::applyChangesAsync()
+void ODbAdminDialog::applyChangesAsync(sal_Int32 _nOnErrorPageId)
 {
     DBG_ASSERT(isApplyable(), "ODbAdminDialog::applyChangesAsync: invalid call!");
-    PostUserEvent(LINK(this, ODbAdminDialog, OnAsyncApplyChanges));
+    PostUserEvent(LINK(this, ODbAdminDialog, OnAsyncApplyChanges), reinterpret_cast<void*>(_nOnErrorPageId));
 }
 
 //-------------------------------------------------------------------------
@@ -943,9 +944,10 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
             static_cast<OTableSubscriptionPage&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OTableSubscriptionPage&>(_rPage).SetAdminDialog(this);
             break;
+        case PAGE_DOCUMENTLINKS:
         case PAGE_QUERYADMINISTRATION:
-            static_cast<OQueryAdministrationPage&>(_rPage).setServiceFactory(m_xORB);
-            static_cast<OQueryAdministrationPage&>(_rPage).SetAdminDialog(this);
+            static_cast<OCollectionPage&>(_rPage).setServiceFactory(m_xORB);
+            static_cast<OCollectionPage&>(_rPage).SetAdminDialog(this);
             break;
         case TAB_PAG_ADABAS_SETTINGS:
             static_cast<OAdabasAdminSettings&>(_rPage).SetAdminDialog(this);
@@ -1309,6 +1311,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     // remove the table/query tab pages
     RemoveTabPage(PAGE_TABLESUBSCRIPTION);
     RemoveTabPage(PAGE_QUERYADMINISTRATION);
+    RemoveTabPage(PAGE_DOCUMENTLINKS);
 
     // extract all relevant data from the property set of the data source
     translateProperties(_rxDatasource, *GetInputSetImpl());
@@ -1334,6 +1337,7 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
         OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
         AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
+        AddTabPage(PAGE_DOCUMENTLINKS, String(ResId(STR_PAGETITLE_DOCUMENTS)), ODocumentLinksPage::Create, NULL);
     }
 
     m_bResetting = sal_True;
@@ -2069,12 +2073,12 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges(const sal_Bool _bAc
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK(ODbAdminDialog, OnAsyncApplyChanges, void*, EMPTYARG)
+IMPL_LINK(ODbAdminDialog, OnAsyncApplyChanges, void*, _OnErrorResId)
 {
     SfxTabDialog::Ok();
     if (AR_KEEP != implApplyChanges())
     {
-        ShowPage(PAGE_QUERYADMINISTRATION);
+        ShowPage((sal_uInt16)reinterpret_cast<sal_Int32>(_OnErrorResId));
         return 1L;
     }
     return 0L;
@@ -2448,6 +2452,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2001/04/20 13:38:06  oj
+ *  #85736# new checkbox for odbc
+ *
  *  Revision 1.44  2001/04/04 10:38:43  oj
  *  reading uninitialized memory
  *

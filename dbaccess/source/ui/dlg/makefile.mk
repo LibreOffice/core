@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.14 $
+ #  $Revision: 1.15 $
  #
- #  last change: $Author: oj $ $Date: 2001-03-27 08:05:56 $
+ #  last change: $Author: fs $ $Date: 2001-04-26 11:40:21 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,8 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        missingdocdlg.src	\
+        doclinkdialog.src	\
         AdabasStat.src	\
         AdabasPage.src	\
         indexdialog.src	\
@@ -97,6 +99,8 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/missingdocdlg.obj	\
+        $(SLO)$/doclinkdialog.obj	\
         $(SLO)$/AdabasStat.obj	\
         $(SLO)$/AdabasPage.obj	\
         $(SLO)$/indexfieldscontrol.obj	\
@@ -127,6 +131,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.14  2001/03/27 08:05:56  oj
+ #	impl new page for adabas
+ #	
  #	Revision 1.13  2001/03/16 16:23:07  fs
  #	added index design related files
  #	
