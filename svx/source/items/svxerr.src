@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:28:54 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 15:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Resource RID_SVXERRCTX
         Text [ swedish ] = "$(ERR) vid användning av synonymordboken." ;
         Text [ danish ] = "$(ERR) ved brug af synonymordbogen." ;
         Text [ portuguese ] = "$(ERR) ao executar o dicionário de sinónimos." ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Ausführen des Thesaurus." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Ausf?ren des Thesaurus." ;
         Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚÊ¹ÓÃ´ÊµäÊ±¡£";
         Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè òåçàóğóñà.";
         Text[ polish ] = "$(ERR) przy wykonywaniu Tezaurusa.";
@@ -111,7 +111,7 @@ Resource RID_SVXERRCTX
         Text [ swedish ] = "$(ERR) vid utförandet av rättstavningskontrollen." ;
         Text [ danish ] = "$(ERR) under køring af stavekontrollen." ;
         Text [ portuguese ] = "$(ERR) ao executar a verificação ortográfica." ;
-        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Rechtschreibprüfung." ;
+        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausf?rung der Rechtschreibpr?ung." ;
         Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÊ±·¢Éú $(ERR) ¡£";
         Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè ïğîâåğêè ïğàâîïèñàíèÿ.";
         Text[ polish ] = "$(ERR) przy sprawdzaniu pisowni.";
@@ -141,7 +141,7 @@ Resource RID_SVXERRCTX
         Text [ swedish ] = "$(ERR) när avstavningen utfördes." ;
         Text [ danish ] = "$(ERR) under køring af orddelingen." ;
         Text [ portuguese ] = "$(ERR) ao executar a divisão silábica." ;
-        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Trennhilfe." ;
+        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausf?rung der Trennhilfe." ;
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÊ¹ÓÃÁ¬×Ö·ûÊ±¡£";
         Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè ğàññòîíîâêè ïåğåíîñîâ.";
         Text[ polish ] = "$(ERR) przy wykonywaniu dzielenia s³ów na sylaby.";
@@ -171,7 +171,7 @@ Resource RID_SVXERRCTX
         Text [ swedish ] = "$(ERR) när en ordbok skapades." ;
         Text [ danish ] = "$(ERR) under oprettelse af en ordbog." ;
         Text [ portuguese ] = "$(ERR) ao criar dicionário." ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines Wörterbuches." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines W?terbuches." ;
         Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ½¨Á¢Ò»¸ö´ÊµäÊ±¡£";
         Text[ russian ] = "$(ERR) ïğè ñîçäàíèè ñëîâàğÿ.";
         Text[ polish ] = "$(ERR) przy tworzeniu s³ownika.";
@@ -261,16 +261,16 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "Ingen synonymordbok är tillgänglig för det inställda språket.\nKontrollera Din installation och installera eventuellt det önskade språket." ;
         Text [ danish ] = "Synonymordbogen står ikke til rådighed for det indstillede sprog.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
         Text [ portuguese ] = "O dicionário de sinónimos não se encontra disponível para a língua especificada.\nConfira a sua instalação e, se necessário, instale a língua desejada." ;
-        Text [ portuguese_brazilian ] = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache" ;
+        Text [ portuguese_brazilian ] = "Ein Thesaurus f? die eingestellte Sprache ist nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache" ;
         Text[ chinese_simplified ] = "ÄúËùÉè¶¨µÄÓïÑÔÃ»ÓĞÏàÓ¦µÄ´Êµä¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒª£¬ÇëÄú°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
-        Text[ russian ] = "Äëÿ óñòàíîâëåííîãî ÿçûêà òåçàóğóñ íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
+        Text[ russian ] = "Äëÿ óñòàíîâëåííîãî ÿçûêà òåçàóğóñ íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ";
         Text[ polish ] = "Tezaurus jest niedostêpny dla wybranego jêzyka.\nProszê sprawdziæ instalacjê i zainstalowaæ potrzebny jêzyk.";
         Text[ japanese ] = "İ’è‚µ‚½Œ¾Œê‚Å—ŞŒê«“T‚Íg—p‚Å‚«‚Ü‚¹‚ñB\nÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÁª¯¸‚µ‚ÄA•K—v‚È‚ç‚ÎŠó–]‚ÌŒ¾Œê‚ğ²İ½Ä°Ù‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = "±z©Ò³]©wªº»y¨¥¨S¦³¬ÛÀ³ªºµü¨å¡C\n½Ğ±zÀË¬d¦w¸Ë¡M­Y¦³¥²­n¡M½Ğ¦w¸Ë©Ò­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
         Text[ arabic ] = "áÇ íæÌÏ ŞÇãæÓ ãÑÇÏİÇÊ ááÛÉ ÇáÊí Êã ÊÍÏíÏåÇ.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ Ëã ÇáŞíÇã ÈÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "ÄúËùÉè¶¨µÄÓïÑÔÃ»ÓĞÏàÓ¦µÄ´Êµä¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒª£¬ÇëÄú°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
-        Text[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß, åêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
+        Text[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß, åêôåëİóôå ôçí åãêáô";
         Text[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ ´ëÇÑ µ¿ÀÇ¾î »çÀüÀ» ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ÇÑ °ÍÀ» °Ë»çÇÑ ´ÙÀ½ ÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Ayarlanan dile ilişkin eşanlamlılar mevcut değil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
@@ -291,7 +291,7 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "$(ARG1) är inte tillgänglig för stavningskontrollen.\nKontrollera installationen och installera eventuellt det önskade språket." ;
         Text [ danish ] = "$(ARG1) står ikke til rådighed for kontrollen.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
         Text [ portuguese ] = "$(ARG1) não está disponível para a verificação ortográfica. \nConfira a sua instalação e, se necessário, instale a língua desejada." ;
-        Text [ portuguese_brazilian ] = "$(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache." ;
+        Text [ portuguese_brazilian ] = "$(ARG1) ist f? die Pr?ung nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache." ;
         Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
         Text[ russian ] = "$(ARG1) äëÿ ïğîâåğêè íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
         Text[ polish ] = "$(ARG1) jest dla sprawdzania pisowni niedostêpny.\nProszê sprawdziæ instalacjê i zainstalowaæ potrzebny jêzyk.";
@@ -300,7 +300,7 @@ Resource RID_SVXERRCODE
         Text[ arabic ] = "$(ARG1) ÛíÑ ãÊæİÑÉ ááÊÏŞíŞ ÇáÅãáÇÆí.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æŞã ÈÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ.";
         Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
-        Text[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõìåßôáé.";
+        Text[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõì?";
         Text[ korean ] = "$(ARG1)À»(¸¦) ¸ÂÃã¹ı °Ë»ç¿¡ ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n »ç¿ëÀÚÀÇ ¼³Ä¡¸¦ Á¡°ËÇÑ ´ÙÀ½, ÇÊ¿ä½Ã ¿ä±¸µÇ´Â  ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
@@ -321,7 +321,7 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "Rättstavningskontrollen är inte tillgänglig." ;
         Text [ danish ] = "Stavekontrollen står ikke til rådighed." ;
         Text [ portuguese ] = "A verificação ortográfica não está disponível." ;
-        Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist nicht verfügbar." ;
+        Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung ist nicht verf?bar." ;
         Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÆ´Ğ´¼ì²é¹¦ÄÜ¡£";
         Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ íåäîñòóïíà.";
         Text[ polish ] = "Sprawdzanie pisowni jest niedostêpne.";
@@ -351,7 +351,7 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "Avstavningshjälpen är inte tillgänglig." ;
         Text [ danish ] = "Orddelingen står ikke til rådighed." ;
         Text [ portuguese ] = "A separação silábica não está disponível." ;
-        Text [ portuguese_brazilian ] = "Die Trennhilfe ist nicht verfügbar." ;
+        Text [ portuguese_brazilian ] = "Die Trennhilfe ist nicht verf?bar." ;
         Text[ chinese_simplified ] = "Á¬×Ö·û²»´æÔÚ¡£";
         Text[ russian ] = "Ïîìîùü â ğàññòàíîâêå ïåğåíîñîâ íåäîñòóïíà.";
         Text[ polish ] = "Dzielenie wyrazów jest niedostêpne.";
@@ -381,7 +381,7 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte läsas." ;
         Text [ danish ] = "Det er ikke muligt at læse den personlige ordbog $(ARG1)." ;
         Text [ portuguese ] = "Impossível ler o dicionário pessoal $(ARG1)." ;
-        Text [ portuguese_brazilian ] = "Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden." ;
+        Text [ portuguese_brazilian ] = "Das pers?liche W?terbuch $(ARG1) kann nicht gelesen werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öË½ÈË´Êµä $(ARG1)¡£";
         Text[ russian ] = "Ïğî÷èòàòü ñëîâàğü ïîëüçîâàòåëÿ $(ARG1) íå óäàåòñÿ.";
         Text[ polish ] = "S³ownik u¿ytkownika $(ARG1) nie móg³ zostaæ odczytany.";
@@ -411,7 +411,7 @@ Resource RID_SVXERRCODE
         Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte skapas." ;
         Text [ danish ] = "Det er ikke muligt at oprette den personlige ordbog $(ARG1)." ;
         Text [ portuguese ] = "Impossível criar o dicionário pessoal $(ARG1)." ;
-        Text [ portuguese_brazilian ] = "Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden." ;
+        Text [ portuguese_brazilian ] = "Das pers?liche W?terbuch $(ARG1) kann nicht angelegt werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Ë½ÈË´Êµä $(ARG1)¡£";
         Text[ russian ] = "Ñîçäàòü ñëîâàğü ïîëüçîâàòåëÿ $(ARG1) íå óäàåòñÿ.";
         Text[ polish ] = "S³ownik u¿ytkownika $(ARG1) nie móg³ zostaæ odczytany.";
@@ -494,7 +494,7 @@ Resource RID_SVXERRCODE
         TEXT[ russian ] = "ßçûê äëÿ âûäåëåííîãî ïîíÿòèÿ íå óñòàíîâëåí.";
         TEXT[ italian ] = "Non è stata impostata la lingua per il termine selezionato.";
         TEXT[ danish ] = "Der er ikke indstillet et sprog ved det valgte udtryk.";
-        TEXT[ polish ] = "Nie ustawiono jêzyka przy wybranym haœle.";
+        TEXT[ polish ] = "Nie ustawiono jêzyka przy wybranym ha?le.";
         TEXT[ portuguese_brazilian ] = "There's no language at the selected object.";
         TEXT[ japanese ] = "‘I‘ğ‚µ‚½‚à‚Ì‚ÉŠY“–‚·‚éŒ¾Œê‚ª‚ ‚è‚Ü‚¹‚ñB";
         TEXT[ korean ] = "¼±ÅÃµÈ ¿ë¾î¿¡´Â ¾î¶² ¾ğ¾îµµ ¼³Á¤µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.";
