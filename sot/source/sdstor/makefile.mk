@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:52:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ TARGET=sdstor
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(SLO)$/unostorageholder.obj   \
         $(SLO)$/ucbstorage.obj         \
         $(SLO)$/stg.obj		\
         $(SLO)$/stgcache.obj \
@@ -87,7 +88,10 @@ SLOFILES =  \
         $(SLO)$/storinfo.obj	\
         $(SLO)$/storage.obj
 
-EXCEPTIONSFILES=$(SLO)$/ucbstorage.obj
+EXCEPTIONSFILES=	\
+        $(SLO)$/unostorageholder.obj\
+        $(SLO)$/ucbstorage.obj\
+        $(SLO)$/storage.obj
 
 # --- Targets -------------------------------------------------------
 
