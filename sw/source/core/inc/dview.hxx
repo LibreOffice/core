@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:54:21 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@ public:
     //const SdrMarkList& GetMarkList() const;
     //JP 06.10.98: 2. Versuch
     inline void ValidateMarkList() { FlushComeBackTimer(); }
+
+    // OD 18.06.2003 #108784# - method to replace marked/selected <SwDrawVirtObj>
+    // by its reference object for delete of selection and group selection
+    static void ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView );
 };
 
 
