@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:25:42 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ String STR_QUERY_UNDO_TABWINSHOW
     Text[ czech ] = "Přidat okno tabulky";
     Text[ hebrew ] = "Tabellenfenster hinzufügen";
     Text[ hindi ] = "सारणी विन्डो में जोड़ो";
+    Text[ slovak ] = "Pridať okno tabuľky";
 };
 
 String STR_QUERY_UNDO_MOVETABWIN
@@ -223,6 +224,7 @@ String STR_QUERY_UNDO_MOVETABWIN
     Text[ czech ] = "Přesunout okno tabulky";
     Text[ hebrew ] = "Tabellenfenster verschieben";
     Text[ hindi ] = "सारणी विन्डो का स्थान परिवर्तन करो";
+    Text[ slovak ] = "Presunúť okno tabuľky";
 };
 String STR_QUERY_UNDO_INSERTCONNECTION
 {
@@ -230,7 +232,7 @@ String STR_QUERY_UNDO_INSERTCONNECTION
     Text [ ENGLISH ] = "insert connection" ;
     Text [ english_us ] = "Insert Join" ;
     Text [ portuguese_brazilian ] = "Inserir uni�o" ;
-    Text [ swedish ] = "Infoga f�rbindelse" ;
+    Text [ swedish ] = "Infoga sammanslagning" ;
     Text [ danish ] = "Inds�t forbindelse" ;
     Text [ italian ] = "Inserisci collegamento" ;
     Text [ spanish ] = "Insertar una conexi�n" ;
@@ -255,6 +257,7 @@ String STR_QUERY_UNDO_INSERTCONNECTION
     Text[ czech ] = "Vložit spojení";
     Text[ hebrew ] = "Verbindung einfügen";
     Text[ hindi ] = "जाइन जोड़ो";
+    Text[ slovak ] = "Vložiť prepojenie";
 };
 
 String STR_QUERY_UNDO_REMOVECONNECTION
@@ -263,7 +266,7 @@ String STR_QUERY_UNDO_REMOVECONNECTION
     Text [ ENGLISH ] = "delete connection" ;
     Text [ english_us ] = "Delete Join" ;
     Text [ portuguese_brazilian ] = "Excluir uni�o" ;
-    Text [ swedish ] = "Radera f�rbindelse" ;
+    Text [ swedish ] = "Radera sammanslagning" ;
     Text [ danish ] = "Slet forbindelse" ;
     Text [ italian ] = "Termina collegamento" ;
     Text [ spanish ] = "Borrar la conexi�n" ;
@@ -288,6 +291,7 @@ String STR_QUERY_UNDO_REMOVECONNECTION
     Text[ czech ] = "Smazat spojení";
     Text[ hebrew ] = "Verbindung löschen";
     Text[ hindi ] = "जाइन मिटाओ";
+    Text[ slovak ] = "Zmazať spojenie";
 };
 
 String STR_QUERY_UNDO_SIZETABWIN
@@ -321,6 +325,7 @@ String STR_QUERY_UNDO_SIZETABWIN
     Text[ czech ] = "Změnit velikost okna tabulky";
     Text[ hebrew ] = "Tabellenfenster - Größe aendern";
     Text[ hindi ] = "सारणी विन्डो को पुनः परिमाण दो";
+    Text[ slovak ] = "Zmeniť veľkosť okna tabuľky";
 };
 String STR_QUERY_UNDO_TABFIELDDELETE
 {
@@ -354,6 +359,7 @@ String STR_QUERY_UNDO_TABFIELDDELETE
     Text[ czech ] = "Odstranit sloupec";
     Text[ hebrew ] = "‮מחיקת טור‬";
     Text[ hindi ] = "स्तंभ मिटाओ";
+    Text[ slovak ] = "Odstrániť stĺpec";
 };
 
 String STR_QUERY_UNDO_TABFIELDMOVED
@@ -385,6 +391,7 @@ String STR_QUERY_UNDO_TABFIELDMOVED
     Text[ czech ] = "Přesunout sloupec";
     Text[ hebrew ] = "Spalte verschieben";
     Text[ hindi ] = "Move column";
+    Text[ slovak ] = "Presunúť stĺpec";
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
@@ -419,6 +426,7 @@ String STR_QUERY_UNDO_TABFIELDCREATE
     Text[ czech ] = "Přidat sloupec";
     Text[ hebrew ] = "Spalte hinzufügen";
     Text[ hindi ] = "स्तंभ जोड़ो";
+    Text[ slovak ] = "Pridať stĺpec";
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
@@ -451,6 +459,7 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text[ czech ] = "Neplatný výraz, tabulka '$name$' neexistuje!";
     Text[ hebrew ] = "Der Ausdruck ist ungültig, da keine Tabelle '$name$' existiert ";
     Text[ hindi ] = "अमान्य वर्णन, '$name$' सारणी अस्तित्व में नहीं है !";
+    Text[ slovak ] = "Neplatný výraz, tabuľka '$name$' neexistuje!";
 };
 
 String RID_STR_FIELD_DOESNT_EXIST
@@ -484,6 +493,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ czech ] = "Neplatný výraz, pole '$name$' neexistuje!";
     Text[ hebrew ] = "Der Ausdruck ist ungültig, da der Feldname '$name$' nicht zugeordnet werden kann";
     Text[ hindi ] = "अमान्य वर्णन, '$name$' क्षेत्र नाम अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Neplatný výraz, pole s názvom '$name$' neexistuje.";
 };
 String RID_STR_TOMUCHTABLES
 {
@@ -516,6 +526,7 @@ String RID_STR_TOMUCHTABLES
     Text[ czech ] = "Dotaz pokrývá #num# tabulek. Avšak vybraný typ databáze může zpracovat nejvýše #maxnum# tabulek v jednom příkazu!";
     Text[ hebrew ] = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten ";
     Text[ hindi ] = "जानकारी #num# सारणियों को पर्याप्त करता है । चुने हुये लेखासंचय वर्ग, एक वाक्य में केवल #maxnum# सारणियों को प्रोसेस कर सकता है !";
+    Text[ slovak ] = "Dotaz zahŕňa #num# tabuliek.Ale vybraný typ databázy môže spracovať maximálne #maxnum# tabuľku(iek) v jednom zázname!";
 };
 
 String STR_QUERY_UNDO_TABWINDELETE
@@ -550,6 +561,7 @@ String STR_QUERY_UNDO_TABWINDELETE
     Text[ czech ] = "Smazat okno tabulky";
     Text[ hebrew ] = "Tabellenfenster löschen";
     Text[ hindi ] = "सारणी विन्डो को मिटाओ";
+    Text[ slovak ] = "Zmazať okno tabuľky";
 };
 
 String STR_QUERY_UNDO_MODIFY_CELL
@@ -560,7 +572,7 @@ String STR_QUERY_UNDO_MODIFY_CELL
     Text[ portuguese_brazilian ] = "Editar descri��o das colunas";
     Text[ portuguese ] = "Modificar descri��o das colunas";
     Text[ danish ] = "Modificer kolonnebeskrivelse";
-    Text[ french ] = "Modifier la description des colonnes";
+    Text[ french ] = "�diter la description des colonnes";
     Text[ swedish ] = "�ndra kolumnbeskrivning";
     Text[ dutch ] = "Kolombeschrijving wijzigen";
     Text[ spanish ] = "Modificar la descripci�n de las columnas";
@@ -583,6 +595,7 @@ String STR_QUERY_UNDO_MODIFY_CELL
     Text[ czech ] = "Upravit popis sloupce";
     Text[ hebrew ] = "Spaltenbeschreibung ändern";
     Text[ hindi ] = "स्तंभ विवरण का संपादन";
+    Text[ slovak ] = "Upraviť popis stĺpca";
 };
 String STR_QUERY_UNDO_SIZE_COLUMN
 {
@@ -615,6 +628,7 @@ String STR_QUERY_UNDO_SIZE_COLUMN
     Text[ czech ] = "Přizpůsobit šířku sloupce";
     Text[ hebrew ] = "Spaltenbreite ändern";
     Text[ hindi ] = "स्तंभ चौड़ाई व्यवस्था करो";
+    Text[ slovak ] = "Prispôsobiť šírku stĺpca";
 };
 String STR_QUERY_SORTTEXT
 {
@@ -647,6 +661,7 @@ String STR_QUERY_SORTTEXT
     Text[ czech ] = "(neseřazeno);vzestupně;sestupně";
     Text[ hebrew ] = "(nicht sortiert);aufsteigend;absteigend";
     Text[ hindi ] = "(सोर्ट नहीं की हुयी);आरोहण क्रम;अवरोहण क्रम";
+    Text[ slovak ] = "(nezoradené);vzostupne;zostupne";
 };
 
 String STR_QUERY_FUNCTIONS
@@ -681,6 +696,7 @@ String STR_QUERY_FUNCTIONS
     Text[ czech ] = "(žádná funkce);Average;Count;Maximum;Minimum;Sum;Group";
     Text[ hebrew ] = "(keine Funktion);Durchschnitt;Anzahl;Maximum;Minimum;Summe;Gruppierung";
     Text[ hindi ] = "(कोई फंक्शन नहीं);माध्य;गिनती;अधिकतम;न्यूनतम;जोड़;समूह";
+    Text[ slovak ] = "(bez funkcie);Priemer;počet;Maximum;Minimum;Suma;Skupina";
 };
 String STR_QUERY_NOTABLE
 {
@@ -711,6 +727,7 @@ String STR_QUERY_NOTABLE
     Text[ czech ] = "(žádná tabulka)";
     Text[ hebrew ] = "(keine Tabelle)";
     Text[ hindi ] = "(कोई सारणी नहीं)";
+    Text[ slovak ] = "(žiadna tabuľka)";
 };
 String STR_QRY_ORDERBY_UNRELATED
 {
@@ -743,6 +760,7 @@ String STR_QRY_ORDERBY_UNRELATED
     Text[ czech ] = "Databáze podporuje řazení jen u viditelných polí.";
     Text[ hebrew ] = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
     Text[ hindi ] = "लेखासंचय केवल दृष्टिगोचर क्षेत्रों को सोर्ट करने केलिए समर्थित है ।";
+    Text[ slovak ] = "Databáza podporuje triedenie len u viditeľných polí.";
 };
 Menu RID_QUERYFUNCTION_POPUPMENU
 {
@@ -781,6 +799,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ czech ] = "Funkce";
             Text[ hebrew ] = "Funktionen";
             Text[ hindi ] = "फंक्शन्";
+            Text[ slovak ] = "Funkcie";
         };
         MenuItem
         {
@@ -819,6 +838,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ czech ] = "Název tabulky";
             Text[ hebrew ] = "Tabellenname";
             Text[ hindi ] = "सारणी नाम";
+            Text[ slovak ] = "Názov tabuľky";
         };
         MenuItem
         {
@@ -853,6 +873,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ czech ] = "Alias";
             Text[ hebrew ] = "Aliasname";
             Text[ hindi ] = "उपनाम";
+            Text[ slovak ] = "Alias";
         };
         MenuItem
         {
@@ -891,6 +912,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ czech ] = "Jedinečné hodnoty";
             Text[ hebrew ] = "Eindeutige Werte";
             Text[ hindi ] = "अनोखा मूल्य";
+            Text[ slovak ] = "Jedinečné hodnoty";
         };
     };
 };
@@ -925,6 +947,7 @@ String STR_QUERY_HANDLETEXT
     Text[ czech ] = "Pole;Alias;Tabulka;Řadit;Viditelné;Funkce;Kritérium;Nebo;Nebo";
     Text[ hebrew ] = "Feld;Alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder";
     Text[ hindi ] = "क्षेत्र;उपनाम;सारणी;सोर्ट;दृष्टिगोचर;फंक्शन;सिद्धांत;अथवा;अथवा";
+    Text[ slovak ] = "Pole;Alias;Tabuľka;Zoradiť;Viditeľné;Funkcia;Kritérium;Alebo;Alebo";
 };
 
 String STR_QRY_TOO_MANY_COLUMNS
@@ -958,6 +981,7 @@ String STR_QRY_TOO_MANY_COLUMNS
     Text[ czech ] = "Příliš mnoho sloupců";
     Text[ hebrew ] = "Es sind zu viele Spalten vorhanden.";
     Text[ hindi ] = "There are too many columns.";
+    Text[ slovak ] = "Príliš mnoho stĺpcov.";
 };
 
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
@@ -989,6 +1013,7 @@ ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
     Message[ czech ] = "Podmínku nelze uplatnit na pole [*]";
     Message[ hebrew ] = "Eine Bedingung für Feld [*] ist nicht möglich";
     Message[ hindi ] = "[*] क्षेत्र केलिए शर्त को लागू नहीं कर सकते है";
+    Message[ slovak ] = "Podmienka nemôže byť uplatnená pre pole [*]";
 };
 String STR_QRY_TOO_LONG_STATEMENT
 {
@@ -1021,6 +1046,7 @@ String STR_QRY_TOO_LONG_STATEMENT
     Text[ czech ] = "Vytvořený SQL příkaz je příliš dlouhý.";
     Text[ hebrew ] = "Der erzeugte SQL Ausdruck ist zu lang.";
     Text[ hindi ] = "The SQL statement created is too long.";
+    Text[ slovak ] = "Vytvorený SQL príkaz je príliš dlhý.";
 };
 String STR_QRY_TOOCOMPLEX
 {
@@ -1054,6 +1080,7 @@ String STR_QRY_TOOCOMPLEX
     Text[ czech ] = "Příliš komplexní dotaz";
     Text[ hebrew ] = "Anfrage ist zu komplex";
     Text[ hindi ] = "Query is too complex";
+    Text[ slovak ] = "Dotaz je príliš zložitý";
 };
 String STR_QRY_NOSELECT
 {
@@ -1087,6 +1114,7 @@ String STR_QRY_NOSELECT
     Text[ czech ] = "Nic nebylo vybráno!";
     Text[ hebrew ] = "Es fehlt eine Selektion";
     Text[ hindi ] = "Nothing has been selected!";
+    Text[ slovak ] = "Nič nebolo vybrané!";
 };
 String STR_QRY_TOOMANYCOND
 {
@@ -1120,6 +1148,7 @@ String STR_QRY_TOOMANYCOND
     Text[ czech ] = "Příliš mnoho vyhledávacích kritérií";
     Text[ hebrew ] = "Zu viele Suchkriterien";
     Text[ hindi ] = "Too many search criteria";
+    Text[ slovak ] = "Príliš veľa vyhľadávacích kritérií";
 };
 String STR_QRY_SYNTAX
 {
@@ -1153,6 +1182,7 @@ String STR_QRY_SYNTAX
     Text[ czech ] = "Chyba v syntaxi SQL";
     Text[ hebrew ] = "Fehler in der SQL Syntax";
     Text[ hindi ] = "SQL syntax error";
+    Text[ slovak ] = "Chyba v syntaxi SQL";
 };
 ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
@@ -1183,6 +1213,7 @@ ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
     Message[ czech ] = "[*] nemůže být použito jako kritérium pro řazení.";
     Message[ hebrew ] = "Nach [*] kann nicht sortiert werden.";
     Message[ hindi ] = "[*] को सोर्ट सिद्धान्त की तरह नहीं उपयोग कर सकते है ।";
+    Message[ slovak ] = "[*] nemôže byť použité ako kritérium pre triedenie.";
 };
 String STR_QUERY_TRUE
 {
@@ -1214,6 +1245,7 @@ String STR_QUERY_TRUE
     Text[ czech ] = "TRUE";
     Text[ hebrew ] = "WAHR";
     Text[ hindi ] = "TRUE";
+    Text[ slovak ] = "TRUE";
 };
 String STR_QUERY_FALSE
 {
@@ -1245,6 +1277,7 @@ String STR_QUERY_FALSE
     Text[ czech ] = "FALSE";
     Text[ hebrew ] = "FALSCH";
     Text[ hindi ] = "FALSE";
+    Text[ slovak ] = "FALSE";
 };
 String STR_QRY_TOO_MANY_TABLES
 {
@@ -1277,6 +1310,7 @@ String STR_QRY_TOO_MANY_TABLES
     Text[ czech ] = "Příliš mnoho tabulek";
     Text[ hebrew ] = "Es sind zu viele Tabellen vorhanden.";
     Text[ hindi ] = "There are too many tables.";
+    Text[ slovak ] = "Príliš mnoho tabuliek.";
 };
 
 String STR_QRY_NATIVE
@@ -1312,6 +1346,7 @@ String STR_QRY_NATIVE
     Text[ czech ] = "Nevztahuje se na dotazy položené v nestandardním SQL jazyce platném jen pro tuto databázi.";
     Text[ hebrew ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen";
     Text[ hindi ] = "The statement will not be applied when querying in the SQL dialect of the database.";
+    Text[ slovak ] = "Príkaz nebude uplatnený počas dotazu v SQL dialekte databázy.";
 };
 ErrorBox ERR_QRY_AMB_FIELD
 {
@@ -1345,6 +1380,7 @@ ErrorBox ERR_QRY_AMB_FIELD
     Message[ czech ] = "Název pole nebyl nalezen, nebo není jedinečný.";
     Message[ hebrew ] = "Feldname nicht gefunden oder eindeutig";
     Message[ hindi ] = "क्षेत्र का नाम प्राप्त नहीं है अथवा अनोखा नहीं है";
+    Message[ slovak ] = "Názov poľa nemohol byť nájdený, alebo nieje unikátny";
 };
 String STR_QRY_ILLEGAL_JOIN
 {
@@ -1379,6 +1415,7 @@ String STR_QRY_ILLEGAL_JOIN
     Text[ czech ] = "Spoj (join) nelze zpracovat";
     Text[ hebrew ] = "Verknüpfung konnte nicht ausgeführt werden";
     Text[ hindi ] = "Join could not be processed";
+    Text[ slovak ] = "Spojenie nemohlo byť spracované.";
 };
 ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
 {
@@ -1473,6 +1510,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "संपादन";
+            Text[ slovak ] = "Upraviť";
         };
         ToolBoxItem
         {
@@ -1509,6 +1547,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "संपादन";
+            Text[ slovak ] = "Upraviť";
         };
         ToolBoxItem
         {
@@ -1540,6 +1579,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Uložit";
             Text[ hebrew ] = "‮שמירה‬";
             Text[ hindi ] = "संचित करो";
+            Text[ slovak ] = "Uložiť";
         };
         ToolBoxItem
         {
@@ -1571,6 +1611,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Uložit jako";
             Text[ hebrew ] = "‮שמירה בשם‬";
             Text[ hindi ] = "संचित करो जैसे";
+            Text[ slovak ] = "Uložiť ako";
         };
         ToolBoxItem
         {
@@ -1603,6 +1644,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Tisk";
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
+            Text[ slovak ] = "Tlač";
         };
         ToolBoxItem
         {
@@ -1676,6 +1718,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ czech ] = "Zobraz stromovou strukturu";
             Text[ hebrew ] = "Show Parse Tree";
             Text[ hindi ] = "Show Parse Tree";
+            Text[ slovak ] = "Ukázať Parsov strom";
         };
         ToolBoxItem
         {
@@ -1736,6 +1779,7 @@ QueryBox QUERY_DESIGN_SAVEMODIFIED
     Message[ czech ] = "Dotaz byl změněn.\nChcete změny uložit?";
     Message[ hebrew ] = "Die Abfrage wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "जानकारी को परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Dotaz bol zmenený.\nChcete uložiť zmeny?";
 };
 QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
 {
@@ -1767,6 +1811,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ czech ] = "Pohled na tabulky byl změněn.\nChcete změny uložit?";
     Message[ hebrew ] = "Die Tabellensicht wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Message[ hindi ] = "सारणी दृश्य में परिवर्तन किया है ।\nआप परिवर्तनों को संचित करना चाहते है ?";
+    Message[ slovak ] = "Pohľad na tabuľku bol zmenený.\nChcete uložiť zmeny?";
 };
 String STR_SVT_SQL_SYNTAX_ERROR
 {
@@ -1799,6 +1844,7 @@ String STR_SVT_SQL_SYNTAX_ERROR
     Text[ czech ] = "Syntaktická chyba v SQL příkazu";
     Text[ hebrew ] = "Syntaxfehler im SQL-Ausdruck";
     Text[ hindi ] = "SQL वाक्य में सिन्टॉक्स गलती";
+    Text[ slovak ] = "Syntaktická chyba v príkaze SQL";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
@@ -1829,6 +1875,7 @@ String STR_QUERYDESIGN_NO_VIEW_SUPPORT
     Text[ czech ] = "Tato databáze nepodporuje pohledy na tabulky!";
     Text[ hebrew ] = "Diese Datenbank unterstützt keine Tabellenansichten";
     Text[ hindi ] = "इस लेखासंचय में सारणी दृश्य समर्थित नहीं है!";
+    Text[ slovak ] = "Táto databáza nepodporuje pohľady na tabuľky!";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
@@ -1859,6 +1906,7 @@ String STR_QUERYDESIGN_NO_VIEW_ASK
     Text[ czech ] = "Chcete místo toho vytvořit dotaz?";
     Text[ hebrew ] = "Möchten Sie statt dessen eine Abfrage erzeugen?";
     Text[ hindi ] = "आप जानकारी को उत्पन्न करना चाहते है?";
+    Text[ slovak ] = "Určite chcete vytvoriť dotaz?";
 };
 
 ErrorBox ERR_QRY_NOSTATEMENT
@@ -1889,6 +1937,7 @@ ErrorBox ERR_QRY_NOSTATEMENT
     Message[ czech ] = "Nebylo možno vytvořit žádný dotaz.";
     Message[ hebrew ] = "Es konnte keine Abfrage erstellt werden";
     Message[ hindi ] = "कोई जानकारी को उत्पन्न नहीं कर सकते है ।";
+    Message[ slovak ] = "Nemohol byť vytvorený dotaz.";
 };
 
 ErrorBox ERR_QRY_NOCRITERIA
@@ -1919,6 +1968,7 @@ ErrorBox ERR_QRY_NOCRITERIA
     Message[ czech ] = "Nebylo možno vytvořit žádný dotaz, protože nebyla vybrána žádná pole.";
     Message[ hebrew ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewählt wurden";
     Message[ hindi ] = "कोई क्षेत्र को न चुनने के कारण कोई जानकारी को उत्पन्न नहीं कर सकते है ।";
+    Message[ slovak ] = "Nemohol byť vytvorený dotaz, pretože neboli vybrané žiadne polia.";
 };
 
 Menu RID_QUERY_DESIGN_MAIN_MENU
@@ -2024,6 +2074,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                         Text[ czech ] = "Zpět";
                         Text[ hebrew ] = "‮ביטול פעולה‬";
                         Text[ hindi ] = "अनावृत्ति";
+                        Text[ slovak ] = "Späť";
                     };
                 MenuItem
                 {
@@ -2057,6 +2108,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                         Text[ czech ] = "Znovu";
                         Text[ hebrew ] = "‮שחזור פעולה‬";
                         Text[ hindi ] = "फिर से करो";
+                        Text[ slovak ] = "Znovu";
                     };
                 MenuItem
                 {
@@ -2115,6 +2167,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ czech ] = "Ú~pravy";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
     MenuItem
     {
@@ -2176,6 +2229,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ hebrew ] = "‮תצוגה‬";
             Text[ portuguese_brazilian ] = "~View";
             Text[ hindi ] = "~View";
+            Text[ slovak ] = "~Zobraziť";
         };
     MenuItem
     {
@@ -2224,6 +2278,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ hebrew ] = "~Einfügen";
             Text[ portuguese_brazilian ] = "~Insert";
             Text[ hindi ] = "~Insert";
+            Text[ slovak ] = "Vlož~iť";
         };
 
     MenuItem
@@ -2274,6 +2329,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
             Text[ czech ] = "Nástroje";
             Text[ hebrew ] = "‮כלים‬";
             Text[ hindi ] = "~औज़ार";
+            Text[ slovak ] = "Nás~troje";
         };
         GLOBLMN_WINMN
         {
@@ -2312,6 +2368,7 @@ String STR_DATASOURCE_DELETED
     Text[ czech ] = "Odpovídající datový zdroj byl smazán. Proto nemohou být data vztahující se k tomuto zdroji uložena.";
     Text[ hebrew ] = "Die zugehörige Datenquelle wurde gelöscht. Es können keine dies bezüglichen Daten gespeichert werden.";
     Text[ hindi ] = "अनुरूप का ड़ॉटा मूल को मिटाया है । इसलिए, ड़ॉटा मूल के उपयुक्त ड़ॉटा को संचित नहीं कर सकते है ।";
+    Text[ slovak ] = "Zodpovedajúci zdroj dát bol zmazaný. Z tohto dôvodu dáta zodpovedajúce tomuto zdroju nemôžu byť uložené.";
 };
 
 String STR_QRY_COLUMN_NOT_FOUND
@@ -2342,6 +2399,7 @@ String STR_QRY_COLUMN_NOT_FOUND
     Text[ portuguese_brazilian ] = "The column '$name$' is unknown.";
     Text[ thai ] = "The column '$name$' is unknown.";
     Text[ hindi ] = "The column '$name$' is unknown.";
+    Text[ slovak ] = "Neznámy stĺpec '$name$'.";
 };
 
 String STR_QRY_JOIN_COLUMN_COMPARE
@@ -2372,6 +2430,7 @@ String STR_QRY_JOIN_COLUMN_COMPARE
     Text[ portuguese_brazilian ] = "Columns can only be compared using '='.";
     Text[ thai ] = "Columns can only be compared using '='.";
     Text[ hindi ] = "Columns can only be compared using '='.";
+    Text[ slovak ] = "Stĺpce môžu byť porovnávané len s použitím '='.";
 };
 
 String STR_QRY_LIKE_LEFT_NO_COLUMN
@@ -2402,6 +2461,7 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
     Text[ portuguese_brazilian ] = "You must use a column name before 'LIKE'.";
     Text[ thai ] = "You must use a column name before 'LIKE'.";
     Text[ hindi ] = "You must use a column name before 'LIKE'.";
+    Text[ slovak ] = "Pred 'LIKE' musíte použiť názov stĺpca.";
 };
 
 String STR_QRY_CHECK_CASESENSITIVE
@@ -2431,6 +2491,7 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text[ portuguese_brazilian ] = "The column could not be found. Please note that the database is case-sensitive.";
     Text[ thai ] = "The column could not be found. Please note that the database is case-sensitive.";
     Text[ hindi ] = "The column could not be found. Please note that the database is case-sensitive.";
+    Text[ slovak ] = "Stĺpec nebol nájdený. Prosím nezabudnite že databáza rozlišuje veľkosť písmen.";
 };
 
 String STR_QUERYDESIGN
@@ -2460,6 +2521,7 @@ String STR_QUERYDESIGN
     Text[ czech ] = "Návrh dotazu:";
     Text[ hebrew ] = "Abfrageentwurf";
     Text[ hindi ] = "Query Design:";
+    Text[ slovak ] = "Návrh dotazu:";
 };
 
 String STR_VIEWDESIGN
@@ -2489,7 +2551,10 @@ String STR_VIEWDESIGN
     Text[ czech ] = "Návrh zobrazení:";
     Text[ hebrew ] = "Ansichtsentwurf";
     Text[ hindi ] = "View Design:";
+    Text[ slovak ] = "Návrh pohľadu:";
 };
+
+
 
 
 
