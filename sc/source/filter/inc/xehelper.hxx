@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:51:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,8 +269,8 @@ private:
     typedef ScfDelList< XclExpCachedValue > XclExpCachedValueList;
 
     XclExpCachedValueList       maValueList;    /// The list containing the cached values.
-    USHORT                      mnScCols;       /// Calc column count of the value matrix.
-    USHORT                      mnScRows;       /// Calc row count of the value matrix.
+    SCSIZE                      mnScCols;       /// Calc column count of the value matrix.
+    SCSIZE                      mnScRows;       /// Calc row count of the value matrix.
 };
 
 
