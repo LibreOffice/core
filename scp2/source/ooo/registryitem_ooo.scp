@@ -2,9 +2,9 @@
 *
 *  $RCSfile: registryitem_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2004-05-03 07:35:36 $
+*  last change: $Author: kz $ $Date: 2004-06-11 17:54:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -394,6 +394,14 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "URLUpdateInfo";
     Value = "http://www.openoffice.org/dev_docs/source/download.html#newsoftware";
+End
+
+RegistryItem gid_Regitem_Software_Openoffice_Productname_Productversion_Path
+	ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
+	Subkey = "Software\OpenOffice.org\%PRODUCTNAME\%PRODUCTVERSION";
+	ModuleID = gid_Module_Root;
+	Name = "Path";
+	Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Sog
