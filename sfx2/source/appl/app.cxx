@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:59:46 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@
 #include "tbxctrl.hxx"
 #include "sfxdlg.hxx"
 #include "stbitem.hxx"
+#include "eventsupplier.hxx"
 
 #ifdef DBG_UTIL
 #include "tbxctrl.hxx"
@@ -414,8 +415,6 @@ SfxApplication* SfxApplication::GetOrCreate()
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();
-
-        pNew->NotifyEvent(SfxEventHint(SFX_EVENT_STARTAPP), sal_False);
     }
     return pApp;
 }
