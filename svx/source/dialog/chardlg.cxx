@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 07:45:07 $
+ *  last change: $Author: pb $ $Date: 2001-05-22 09:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4785,6 +4785,10 @@ void SvxCharPositionPage::Initialize()
     m_aHighLowEdit.SetModifyHdl( aLink );
     m_aFontSizeEdit.SetModifyHdl( aLink );
 
+    aLink = LINK( this, SvxCharPositionPage, LoseFocusHdl_Impl );
+    m_aHighLowEdit.SetLoseFocusHdl( aLink );
+    m_aFontSizeEdit.SetLoseFocusHdl( aLink );
+
     m_aHighLowRB.SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
     m_aFitToLineCB.SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
     m_aKerningLB.SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
@@ -4977,6 +4981,31 @@ IMPL_LINK( SvxCharPositionPage, KerningModifyHdl_Impl, MetricField*, EMPTYARG )
 
 IMPL_LINK( SvxCharPositionPage, PairKerningHdl_Impl, CheckBox*, EMPTYARG )
 {
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
+{
+    sal_Bool bHigh = m_aHighPosBtn.IsChecked();
+    sal_Bool bLow = m_aLowPosBtn.IsChecked();
+    DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
+
+    if ( &m_aHighLowEdit == pField )
+    {
+        if ( bLow )
+            m_nSubEsc = (short)m_aHighLowEdit.GetValue() * -1;
+        else
+            m_nSuperEsc = (short)m_aHighLowEdit.GetValue();
+    }
+    else if ( &m_aFontSizeEdit == pField )
+    {
+        if ( bLow )
+            m_nSubProp = (BYTE)m_aFontSizeEdit.GetValue();
+        else
+            m_nSuperProp = (BYTE)m_aFontSizeEdit.GetValue();
+    }
     return 0;
 }
 
@@ -5490,7 +5519,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( m_aScaleWidthMF.GetText() != m_aScaleWidthMF.GetSavedValue() )
     {
-        rSet.Put( SvxCharScaleWidthItem( m_aScaleWidthMF.GetValue(), nWhich ) );
+        rSet.Put( SvxCharScaleWidthItem( (USHORT)m_aScaleWidthMF.GetValue(), nWhich ) );
         bModified |= TRUE;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
