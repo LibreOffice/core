@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-06 12:39:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,9 @@ public:
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void PrepareAttributes();
 
+#if OSL_DEBUG_LEVEL
             void ToggleDebug() const;
+#endif
 
     void         SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree = TRUE );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
