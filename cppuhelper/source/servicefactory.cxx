@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jbu $ $Date: 2001-07-10 10:55:39 $
+ *  last change: $Author: jbu $ $Date: 2001-07-10 11:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,12 +337,6 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
                 xRegistry->open( rWriteRegistry, sal_False, sal_True );
             }
         }
-        else
-        {
-            throw Exception( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "createRegistryServiceFactory(): couldn't instantiate SimpleRegistry service" ) ),
-                             Reference< XInterface > () );
-        }
     }
     else if (rWriteRegistry.getLength() && rReadRegistry.getLength()) // default registry
     {
@@ -373,12 +367,6 @@ static Reference< lang::XMultiComponentFactory > createImplServiceFactory(
             {
                 xWriteReg->open( rWriteRegistry, sal_False, sal_True );
             }
-        }
-        else
-        {
-            throw Exception( OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "createRegistryServiceFactory(): couldn't instantiate SimpleRegistry service" ) ),
-                             Reference< XInterface > () );
         }
 
         Reference< registry::XSimpleRegistry > xReadReg( createSimpleRegistry( rBootstrapPath ) );
