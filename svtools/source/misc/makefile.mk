@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2004-01-06 19:31:21 $
+#   last change: $Author: obo $ $Date: 2004-03-19 12:27:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,6 +115,7 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
+    $(SLO)$/filenotation.obj    \
     $(SLO)$/productregistration.obj	\
     $(SLO)$/templatefoldercache.obj	\
     $(SLO)$/helpagentwindow.obj		\
