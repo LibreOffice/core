@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:32:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_EDITABLE_HXX
 #define SC_EDITABLE_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -82,12 +86,12 @@ public:
             ScEditableTester();
 
             // calls TestBlock
-            ScEditableTester( ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow );
+            ScEditableTester( ScDocument* pDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
 
             // calls TestSelectedBlock
             ScEditableTester( ScDocument* pDoc,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
 
             // calls TestRange
@@ -103,10 +107,10 @@ public:
 
             // Several calls to the Test... methods check if *all* of the ranges
             // are editable. For several independent checks, Reset() has to be used.
-    void    TestBlock( ScDocument* pDoc, USHORT nTab,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow );
+    void    TestBlock( ScDocument* pDoc, SCTAB nTab,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow );
     void    TestSelectedBlock( ScDocument* pDoc,
-                        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow,
+                        SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         const ScMarkData& rMark );
     void    TestRange( ScDocument* pDoc, const ScRange& rRange );
     void    TestSelection( ScDocument* pDoc, const ScMarkData& rMark );
