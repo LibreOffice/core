@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_commonclass.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:04:41 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@ public:
             throw( com::sun::star::uno::RuntimeException );
 protected:
         com::sun::star::lang::Locale   aLocale;
-        sal_Char* transliterationName;
-        sal_Char* implementationName;
+        const sal_Char* transliterationName;
+        const sal_Char* implementationName;
         sal_Bool useOffset;
 };
 
