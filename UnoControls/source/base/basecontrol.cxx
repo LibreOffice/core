@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontrol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ Sequence< Type > SAL_CALL BaseControl::getTypes() throw( RuntimeException )
         {
             // Create a static typecollection ...
             static OTypeCollection aTypeCollection  (   ::getCppuType(( const Reference< XPaintListener >*)NULL )   ,
+                                                          ::getCppuType(( const Reference< XWindowListener>*)NULL ) ,
                                                           ::getCppuType(( const Reference< XView            >*)NULL )   ,
                                                           ::getCppuType(( const Reference< XWindow      >*)NULL )   ,
                                                           ::getCppuType(( const Reference< XServiceInfo >*)NULL )   ,
@@ -286,6 +287,7 @@ Any SAL_CALL BaseControl::queryAggregation( const Type& aType ) throw( RuntimeEx
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
     Any aReturn ( ::cppu::queryInterface(   aType                                   ,
                                                static_cast< XPaintListener*> ( this )   ,
+                                               static_cast< XWindowListener*> ( this )  ,
                                                static_cast< XView*          > ( this )  ,
                                                static_cast< XWindow*        > ( this )  ,
                                                static_cast< XServiceInfo*   > ( this )  ,
@@ -446,6 +448,7 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
             if ( m_xGraphicsPeer.is() == sal_True )
             {
                 addPaintListener( this );
+                addWindowListener( this );
             }
 
             // PosSize_POSSIZE defined in <stardiv/uno/awt/window.hxx>
@@ -831,6 +834,7 @@ void SAL_CALL BaseControl::disposing( const EventObject& aSource ) throw( Runtim
     if ( m_xGraphicsPeer.is() == sal_True )
     {
         removePaintListener( this );
+        removeWindowListener( this );
         m_xGraphicsPeer = Reference< XGraphics >();
     }
 
@@ -853,6 +857,56 @@ void SAL_CALL BaseControl::windowPaint( const PaintEvent& aEvent ) throw( Runtim
     // - use the method "paint ()" for painting on a peer and a print device !!!
     // - see also "draw ()"
     impl_paint( 0, 0, m_xGraphicsPeer );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindowListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::windowResized( const WindowEvent& aEvent ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    m_nWidth    =   aEvent.Width    ;
+    m_nHeight   =   aEvent.Height   ;
+    WindowEvent aMappedEvent = aEvent;
+    aMappedEvent.X = 0;
+    aMappedEvent.Y = 0;
+    impl_recalcLayout( aMappedEvent );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindowListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::windowMoved( const WindowEvent& aEvent ) throw( RuntimeException )
+{
+    // Ready for multithreading
+    MutexGuard aGuard( m_aMutex );
+
+    m_nWidth    =   aEvent.Width    ;
+    m_nHeight   =   aEvent.Height   ;
+    WindowEvent aMappedEvent = aEvent;
+    aMappedEvent.X = 0;
+    aMappedEvent.Y = 0;
+    impl_recalcLayout( aMappedEvent );
+}
+
+//____________________________________________________________________________________________________________
+//  XWindowListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::windowShown( const EventObject& aEvent ) throw( RuntimeException )
+{
+}
+
+//____________________________________________________________________________________________________________
+//  XWindowListener
+//____________________________________________________________________________________________________________
+
+void SAL_CALL BaseControl::windowHidden( const EventObject& aEvent ) throw( RuntimeException )
+{
 }
 
 //____________________________________________________________________________________________________________
@@ -927,7 +981,7 @@ const sal_Int32& BaseControl::impl_getHeight()
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
     // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
-    // - if you will change the descriptor-values, you must override thid virtuell function
+    // - if you will change the descriptor-values, you must override this virtuell function
     // - the caller must release the memory for this dynamical descriptor !!!
 
     WindowDescriptor* pDescriptor = new WindowDescriptor ;
@@ -959,6 +1013,16 @@ void BaseControl::impl_paint(           sal_Int32               nX          ,
 //  protected method
 //____________________________________________________________________________________________________________
 
+void BaseControl::impl_recalcLayout( const WindowEvent& aEvent )
+{
+    // We need as virtual function to support automaticly resizing of derived controls!
+    // But we make it not pure virtual because it's not neccessary for all derived classes!
+}
+
+//____________________________________________________________________________________________________________
+//  protected method
+//____________________________________________________________________________________________________________
+
 Reference< XInterface > BaseControl::impl_getDelegator()
 {
     return m_xDelegator ;
@@ -975,6 +1039,7 @@ void BaseControl::impl_releasePeer()
         if ( m_xGraphicsPeer.is() == sal_True )
         {
             removePaintListener( this );
+            removeWindowListener( this );
             m_xGraphicsPeer = Reference< XGraphics >();
         }
 

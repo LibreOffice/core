@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontrol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,7 @@ struct IMPL_MutexContainer
 
 class BaseControl   : public UNO3_XSERVICEINFO
                     , public UNO3_XPAINTLISTENER
+                    , public UNO3_XWINDOWLISTENER
                     , public UNO3_XVIEW
                     , public UNO3_XWINDOW
                     , public UNO3_XCONTROL
@@ -1197,7 +1198,29 @@ public:
         @onerror    -
     */
 
-    virtual void SAL_CALL windowPaint( const UNO3_PAINTEVENT& rEvent    ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL windowPaint( const UNO3_PAINTEVENT& rEvent ) throw( UNO3_RUNTIMEEXCEPTION );
+
+    //________________________________________________________________________________________________________
+    //  XWindowListener
+    //________________________________________________________________________________________________________
+
+    /**_______________________________________________________________________________________________________
+        @short      -
+        @descr      -
+
+        @seealso    -
+
+        @param      -
+
+        @return     -
+
+        @onerror    -
+    */
+
+    virtual void SAL_CALL windowResized( const UNO3_WINDOWEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL windowMoved( const UNO3_WINDOWEVENT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL windowShown( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION );
+    virtual void SAL_CALL windowHidden( const UNO3_EVENTOBJECT& aEvent ) throw( UNO3_RUNTIMEEXCEPTION );
 
     //________________________________________________________________________________________________________
     //  impl but public method to register service
@@ -1345,6 +1368,21 @@ protected:
     virtual void impl_paint(        sal_Int32               nX          ,
                                     sal_Int32               nY          ,
                             const   UNO3_REFERENCE< UNO3_XGRAPHICS >&   xGraphics   );
+
+    /**_______________________________________________________________________________________________________
+        @short      -
+        @descr      -
+
+        @seealso    -
+
+        @param      -
+
+        @return     -
+
+        @onerror    -
+    */
+
+    virtual void impl_recalcLayout( const UNO3_WINDOWEVENT& aEvent );
 
     /**_______________________________________________________________________________________________________
         @short      -

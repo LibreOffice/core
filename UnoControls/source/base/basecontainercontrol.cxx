@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainercontrol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:33:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,9 +279,10 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
     }
     m_pControlInfoList->Clear();
 
+
     for ( nCount = 0; nCount < nCtrls; ++nCount )
     {
-        pCtrls [ nCount ] -> removeEventListener    ( this  ) ;
+        pCtrls [ nCount ] -> removeEventListener    ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
         pCtrls [ nCount ] -> dispose                (       ) ;
     }
 
@@ -330,7 +331,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 
         // initialize new control
         pNewControl->xControl->setContext       ( (OWeakObject*)this    ) ;
-        pNewControl->xControl->addEventListener (  this                 ) ;
+        pNewControl->xControl->addEventListener ( static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) ) ) ;
 
         // when container has a peer ...
         if (getPeer().is())
@@ -395,7 +396,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
             if ( rControl == pControl->xControl )
             {
                 //.is it found ... remove listener from control
-                pControl->xControl->removeEventListener ( this              ) ;
+                pControl->xControl->removeEventListener (static_cast< XEventListener* >( static_cast< XWindowListener* >( this ) )) ;
                 pControl->xControl->setContext          ( Reference< XInterface >  ()   ) ;
 
                 // ... free memory
