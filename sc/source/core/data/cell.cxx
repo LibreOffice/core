@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,7 +1259,24 @@ void ScFormulaCell::Interpret()
         return ;
 
     if( !pCode->GetCodeLen() && !pCode->GetError() )
+    {
+        // #i11719# no UPN and no error and no token code but result string present
+        // => interpretation of this cell during name-compilation and unknown names
+        // => can't exchange underlying code array in CompileTokenArray() /
+        // Compile() because interpreter's token iterator would crash.
+        // This should only be a temporary condition and, since we set an
+        // error, if ran into it again we'd bump into the dirty-clearing
+        // condition further down.
+        if ( !pCode->GetLen() && aErgString.Len() )
+        {
+            pCode->SetError( errNoCode );
+            // This is worth an assertion; if encountered in daily work
+            // documents we might need another solution. Or just confirm correctness.
+            DBG_ERRORFILE( "ScFormulaCell::Interpret: no UPN, no error, no token, but string" );
+            return;
+        }
         CompileTokenArray();
+    }
 
     if( pCode->GetCodeLen() && pDocument )
     {
