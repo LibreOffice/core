@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,23 +749,6 @@ struct WW8_DP_CALLOUT_TXTBOX
     WW8_DPHEAD dpheadPolyLine;  // 0x4c DPHEAD for a Polyline
     WW8_DP_POLYLINE dpPolyLine; // 0x48 DP for a polyline
 };
-
-struct WW8_DP_DEFAULTS
-{
-    WW8_DP_LINETYPE aLnt;
-    WW8_DP_FILL aFill;
-    WW8_DP_LINEEND aEpp;
-    WW8_DP_SHADOW aShd;
-    SVBT16 dzaOffset;       // 0x2a REVIEW davebu
-    SVBT16 dzaDescent;      // 0x2c REVIEW davebu
-    SVBT16 dzaLength;       // 0x2e REVIEW davebu
-
-    SVBT16 aBits3;
-//  UINT16 fRoundCorners : 1;   // 0x30 0001    1 if the textbox has rounded corners
-//  UINT16 zaShape : 15;        // 0x30 000fe   REVIEW davebu
-    SVBT16 dzaInternalMargin;   // 0x32 REVIEW davebu
-};
-
 
 struct WW8_PCD
 {
