@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-29 08:18:46 $
+ *  last change: $Author: ama $ $Date: 2001-10-17 11:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,8 +214,8 @@ BOOL SwLayCacheImpl::Read( SvStream& rStream )
         case SW_LAYCACHE_IO_REC_TABLE:
             aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
             aIo.OpenFlagRec();
-            aIo.GetStream() >> nOffset
-                            >> nIndex;
+            aIo.GetStream() >> nIndex
+                            >> nOffset;
             Insert( SW_LAYCACHE_IO_REC_TABLE, nIndex, (xub_StrLen)nOffset );
             aIo.CloseFlagRec();
             aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
@@ -763,6 +763,8 @@ BOOL SwLayHelper::CheckInsertPage()
 BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
 {
     BOOL bRet = FALSE;
+    BOOL bLongTab = FALSE;
+    ULONG nMaxRowPerPage;
     nNodeIndex -= nStartOfContent;
     USHORT nRows;
     if( rpFrm->IsTabFrm() )
@@ -776,6 +778,19 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
             pLow = pLow->GetNext();
         } while ( pLow );
         nParagraphCnt += nRows;
+        if( !pImpl && nParagraphCnt > nMaxParaPerPage + 10 )
+        {
+            SwFrm *pTmp = ((SwRowFrm*)((SwTabFrm*)rpFrm)->Lower()->GetNext())
+                          ->Lower();
+            USHORT nCnt = 0;
+            do
+            {
+                ++nCnt;
+                pTmp = pTmp->GetNext();
+            } while( pTmp );
+            nMaxRowPerPage = Max( ULONG(2), nMaxParaPerPage / nCnt );
+            bLongTab = TRUE;
+        }
     }
     else
         ++nParagraphCnt;
@@ -785,38 +800,57 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
           ( ++nIndex < pImpl->Count() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = FALSE;
+#ifdef DEBUG
+    ULONG nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+                        pImpl->GetBreakIndex(nIndex) : 0xffff;
+#endif
     if( !bFirst )
     {
         ULONG nRowCount = 0;
         do
         {
-            if( pImpl )
+            if( pImpl || bLongTab )
             {
+#ifdef DEBUG
+                ULONG nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
+                        pImpl->GetBreakIndex(nIndex) : 0xffff;
+#endif
                 xub_StrLen nOfst = STRING_LEN;
                 USHORT nType = SW_LAYCACHE_IO_REC_PAGES;
-                while( nIndex < pImpl->Count() &&
-                       pImpl->GetBreakIndex(nIndex) < nNodeIndex)
-                    ++nIndex;
-                if( nIndex < pImpl->Count() &&
-                    pImpl->GetBreakIndex(nIndex) == nNodeIndex )
+                if( bLongTab )
                 {
-                    nType = pImpl->GetBreakType( nIndex );
-                    nOfst = pImpl->GetBreakOfst( nIndex++ );
                     rbBreakAfter = sal_True;
+                    nOfst = nRowCount + nMaxRowPerPage;
                 }
+                else
+                {
+                    while( nIndex < pImpl->Count() &&
+                           pImpl->GetBreakIndex(nIndex) < nNodeIndex)
+                        ++nIndex;
+                    if( nIndex < pImpl->Count() &&
+                        pImpl->GetBreakIndex(nIndex) == nNodeIndex )
+                    {
+                        nType = pImpl->GetBreakType( nIndex );
+                        nOfst = pImpl->GetBreakOfst( nIndex++ );
+                        rbBreakAfter = sal_True;
+                    }
+                }
+
                 if( nOfst < STRING_LEN )
                 {
                     sal_Bool bSplit = sal_False;
                     sal_Bool bRepeat;
-                    if( rpFrm->IsTxtFrm() && SW_LAYCACHE_IO_REC_PARA == nType &&
+                    if( !bLongTab && rpFrm->IsTxtFrm() &&
+                        SW_LAYCACHE_IO_REC_PARA == nType &&
                         nOfst<((SwTxtFrm*)rpFrm)->GetTxtNode()->GetTxt().Len() )
                         bSplit = sal_True;
                     else if( rpFrm->IsTabFrm() && nRowCount < nOfst &&
-                             SW_LAYCACHE_IO_REC_TABLE == nType )
+                             ( bLongTab || SW_LAYCACHE_IO_REC_TABLE == nType ) )
                     {
                         bRepeat = ((SwTabFrm*)rpFrm)->
                                   GetTable()->IsHeadlineRepeat();
                         bSplit = nOfst < nRows;
+                        bLongTab = bLongTab && bSplit;
                     }
                     if( bSplit )
                     {
@@ -911,8 +945,8 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                         rpLay = rpLay->GetNextLayoutLeaf();
                 }
             }
-        } while( pImpl && nIndex < pImpl->Count() &&
-                 (*pImpl)[ nIndex ] == nNodeIndex );
+        } while( bLongTab || ( pImpl && nIndex < pImpl->Count() &&
+                 (*pImpl)[ nIndex ] == nNodeIndex ) );
     }
     bFirst = FALSE;
     return bRet;

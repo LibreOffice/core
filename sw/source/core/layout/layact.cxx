@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-05 09:37:40 $
+ *  last change: $Author: ama $ $Date: 2001-10-17 11:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,6 +901,7 @@ void SwLayAction::InternalAction()
                 if( bNoLoop )
                     pDoc->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
             }
+            CheckIdleEnd();
         }
         if ( !pPage && !IsInput() &&
              (pRoot->IsSuperfluous() || pRoot->IsAssertFlyPages()) )
@@ -947,8 +948,14 @@ void SwLayAction::InternalAction()
         SwPageFrm *pPg = pPage;
         XCHECKPAGE;
         const SwRect &rVis = pImp->GetShell()->VisArea();
-        while ( pPg && !(pPg->Frm().Top() >= rVis.Bottom() ||
-                         pPg->Frm().Left()>= rVis.Right()) )
+
+        while( pPg && pPg->Frm().Bottom() < rVis.Top() )
+            pPg = (SwPageFrm*)pPg->GetNext();
+        if( pPg != pPage )
+            pPg = pPg ? (SwPageFrm*)pPg->GetPrev() : pPage;
+
+        long nBottom = rVis.Bottom();
+        while ( pPg && pPg->Frm().Top() < nBottom )
         {
             XCHECKPAGE;
             while ( pPg->IsInvalidLayout() )
@@ -1744,6 +1751,10 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     if ( IsAgain() )
         return FALSE;
 
+    SwDoc* pDoc = pRoot->GetFmt()->GetDoc();
+    const BOOL bOldIdle = pDoc->IsIdleTimerActive();
+    pDoc->StopIdleTimer();
+
     BOOL bChanged = FALSE;
     FASTBOOL bPainted = FALSE;
 
@@ -1873,6 +1884,9 @@ BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
     }
 
     CheckWaitCrsr();
+
+    if ( bOldIdle )
+        pDoc->StartIdleTimer();
 
     //Heftige Abkuerzung!
     if ( pTab->IsLowersFormatted() &&
