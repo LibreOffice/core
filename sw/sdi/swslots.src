@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 20:42:56 $
+ *  last change: $Author: kz $ $Date: 2001-09-27 20:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3820,7 +3820,7 @@ SfxSlotInfo FN_INSERT_HARD_SPACE
     SlotName[ italian ] = "Inserisci spazio non divisibile";
     SlotName[ danish ] = "Indsæt hårdt mellemrum";
     SlotName[ swedish ] = "Infoga fast mellanrum";
-    SlotName[ polish ] = "Wstaw spacjê nie rozdzielaj¹c¹";
+    SlotName[ polish ] = "Wstaw spacjê nierozdzielaj¹c¹";
     SlotName[ portuguese_brazilian ] = "InsertNonBreakingSpace";
     SlotName[ japanese ] = "ä¿è­·ï½½ï¾ï¾Ÿï½°ï½½ã®æŒ¿å…¥";
     SlotName[ chinese_simplified ] = "æ’å…¥ä¿æŠ¤çš„ç©ºæ ¼å­—ç¬¦";
@@ -5072,7 +5072,7 @@ SfxSlotInfo FN_NUM_BULLET_OFF
     SlotName[ portuguese ] = "Desactivar numeração";
     SlotName[ russian ] = "Âûêëş÷èòü íóìåğàöèş";
     SlotName[ dutch ] = "Nummering uit";
-    SlotName[ french ] = "Désactiver puces ou numérotation";
+    SlotName[ french ] = "Désactiver la numérotation";
     SlotName[ spanish ] = "Desactivar numeración";
     SlotName[ italian ] = "Numerazione off";
     SlotName[ danish ] = "Deaktiver nummerering";
@@ -9281,7 +9281,7 @@ SfxSlotInfo SID_TEMPLATE_LOAD
 {
     SlotName = "Vorlagen laden";
     SlotName [ english ] =  "Vorlagen laden";
-    SlotName[ english_us ] = "Load Styles & Templates";
+    SlotName[ english_us ] = "Load Styles";
     SlotName[ portuguese ] = "Carregar estilos";
     SlotName[ russian ] = "Çàãğóçêà øàáëîíîâ è ñòèëåé";
     SlotName[ dutch ] = "Opmaakprofielen laden";
@@ -9498,18 +9498,18 @@ SfxSlotInfo FN_SECTION_APPENDNODE
     SlotName[ russian ] = "Append paragraph to section";
     SlotName[ greek ] = "Append paragraph to section";
     SlotName[ dutch ] = "Append paragraph to section";
-    SlotName[ french ] = "Append paragraph to section";
-    SlotName[ spanish ] = "Append paragraph to section";
+    SlotName[ french ] = "Ajouter le paragraphe à la section";
+    SlotName[ spanish ] = "Adjuntar párrafo al área";
     SlotName[ finnish ] = "Append paragraph to section";
     SlotName[ italian ] = "Append paragraph to section";
     SlotName[ danish ] = "Append paragraph to section";
-    SlotName[ swedish ] = "Append paragraph to section";
-    SlotName[ polish ] = "Append paragraph to section";
+    SlotName[ swedish ] = "Lägg till stycke till område";
+    SlotName[ polish ] = "Dodaj akapit do obszaru";
     SlotName[ portuguese_brazilian ] = "Append paragraph to section";
-    SlotName[ japanese ] = "Append paragraph to section";
+    SlotName[ japanese ] = "ç¯„å›²ã«æ®µè½ã‚’ä»˜ã‘åŠ ãˆã‚‹";
     SlotName[ korean ] = "Append paragraph to section";
-    SlotName[ chinese_simplified ] = "Append paragraph to section";
-    SlotName[ chinese_traditional ] = "Append paragraph to section";
+    SlotName[ chinese_simplified ] = "æ·»åŠ æ®µè½ç¼–å·";
+    SlotName[ chinese_traditional ] = "æ®µè½é™„åŠ åœ¨å€åŸŸ";
     SlotName[ turkish ] = "Append paragraph to section";
     SlotName[ arabic ] = "Append paragraph to section";
     SlotName[ catalan ] = "Append paragraph to section";
@@ -9518,23 +9518,23 @@ SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {
     SlotName = "Zahlenerkennung";
     SlotName [ english ] =  "Number recognition";
-    SlotName[ english_us ] = "Number recognition";
+    SlotName[ english_us ] = "Number Recognition";
     SlotName[ portuguese ] = "Number recognition";
     SlotName[ russian ] = "Number recognition";
     SlotName[ greek ] = "Number recognition";
     SlotName[ dutch ] = "Number recognition";
-    SlotName[ french ] = "Number recognition";
-    SlotName[ spanish ] = "Number recognition";
+    SlotName[ french ] = "Reconnaissance des nombres";
+    SlotName[ spanish ] = "Reconocimiento de número";
     SlotName[ finnish ] = "Number recognition";
     SlotName[ italian ] = "Number recognition";
     SlotName[ danish ] = "Number recognition";
-    SlotName[ swedish ] = "Number recognition";
-    SlotName[ polish ] = "Number recognition";
+    SlotName[ swedish ] = "Taligenkänning";
+    SlotName[ polish ] = "Identyfikacja numeru";
     SlotName[ portuguese_brazilian ] = "Number recognition";
-    SlotName[ japanese ] = "Number recognition";
+    SlotName[ japanese ] = "ç•ªå·èªè­˜";
     SlotName[ korean ] = "Number recognition";
-    SlotName[ chinese_simplified ] = "Number recognition";
-    SlotName[ chinese_traditional ] = "Number recognition";
+    SlotName[ chinese_simplified ] = "æ•°å­—è¯†åˆ«";
+    SlotName[ chinese_traditional ] = "æ•¸å­—è­˜åˆ¥";
     SlotName[ turkish ] = "Number recognition";
     SlotName[ arabic ] = "Number recognition";
     SlotName[ catalan ] = "Number recognition";
@@ -9548,22 +9548,23 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ russian ] = "Update Charts";
     SlotName[ greek ] = "Update Charts";
     SlotName[ dutch ] = "Update Charts";
-    SlotName[ french ] = "Update Charts";
-    SlotName[ spanish ] = "Update Charts";
+    SlotName[ french ] = "Actualiser les diagrammes";
+    SlotName[ spanish ] = "Actualizar diagramas";
     SlotName[ finnish ] = "Update Charts";
     SlotName[ italian ] = "Update Charts";
     SlotName[ danish ] = "Update Charts";
-    SlotName[ swedish ] = "Update Charts";
-    SlotName[ polish ] = "Update Charts";
+    SlotName[ swedish ] = "Uppdatera diagram";
+    SlotName[ polish ] = "Aktualizuj wykresy";
     SlotName[ portuguese_brazilian ] = "Update Charts";
-    SlotName[ japanese ] = "Update Charts";
+    SlotName[ japanese ] = "ï½¸ï¾ï¾—ï¾Œã®æ›´æ–°";
     SlotName[ korean ] = "Update Charts";
-    SlotName[ chinese_simplified ] = "Update Charts";
-    SlotName[ chinese_traditional ] = "Update Charts";
+    SlotName[ chinese_simplified ] = "æ›´æ–°å›¾è¡¨";
+    SlotName[ chinese_traditional ] = "æ›´æ–°åœ–è¡¨";
     SlotName[ turkish ] = "Update Charts";
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
