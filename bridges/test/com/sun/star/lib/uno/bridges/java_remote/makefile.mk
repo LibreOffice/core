@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2004-03-25 14:58:18 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:05:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := bridges
 TARGET := test_com_sun_star_lib_uno_bridges_javaremote
 
-PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/java_remote
+PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/javaremote
 JAVATESTFILES := \
     Bug92174_Test.java \
     Bug97697_Test.java \
@@ -73,7 +73,11 @@ JAVATESTFILES := \
     Bug110892_Test.java \
     Bug111153_Test.java \
     Bug114133_Test.java \
-    MethodIdTest.java
+    MethodIdTest.java \
+    PolyStructTest.java
+IDLTESTFILES := \
+    Bug98508_Test.idl \
+    PolyStructTest.idl
 JARFILES := juh.jar jurt.jar ridl.jar sandbox.jar
 
 .INCLUDE: javaunittest.mk
