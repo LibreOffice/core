@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.11 2000-11-15 14:01:52 mib Exp $
+	$Id: style.mod,v 1.12 2000-11-23 12:39:22 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -185,14 +185,22 @@
 							dot-dot-dash|wave|bold|bold-dotted|bold-dash|
 							bold-long-dash|bold-dot-dash|bold-dot-dot-dash|
 							bold-wave|double-wave|small-wave) #IMPLIED>
+<!ENTITY % fontColorOrColor "CDATA">
+<!ATTLIST style:properties style:text-underline-color %fontColorOrColor;
+						   #IMPLIED>
 <!ATTLIST style:properties fo:font-weight CDATA #IMPLIED>
-<!ATTLIST style:properties fo:font-weight-asian CDATA #IMPLIED>
-<!ATTLIST style:properties fo:font-weight-complex CDATA #IMPLIED>
+<!ATTLIST style:properties style:font-weight-asian CDATA #IMPLIED>
+<!ATTLIST style:properties style:font-weight-complex CDATA #IMPLIED>
 <!ATTLIST style:properties fo:score-spaces %boolean; #IMPLIED>
 <!ATTLIST style:properties style:letter-kerning %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-blinking %boolean; #IMPLIED>
 <!ATTLIST style:properties style:text-background-color %transparentOrColor;
 						   #IMPLIED>
+
+<!ATTLIST style:properties style:text-combine (none|letters|lines) #IMPLIED>
+<!ATTLIST style:properties style:text-combine-start-char %character; #IMPLIED>
+<!ATTLIST style:properties style:text-combine-end-char %character; #IMPLIED>
+<!ATTLIST style:properties style:text-emphasize CDATA #IMPLIED>
 
 <!-- paragraph properties -->
 <!ENTITY % nonNegativeLengthOrPercentageOrNormal "CDATA">
@@ -322,7 +330,6 @@
 <!ATTLIST style:properties fo:page-height %length; #IMPLIED>
 <!ATTLIST style:properties style:paper-tray-number %positiveNumberOrDefault; #IMPLIED>
 <!ATTLIST style:properties style:print-orientation (portrait|landscape) #IMPLIED>
-<!ATTLIST style:properties style:register-truth-ref-style-name %styleName; #IMPLIED>
 <!ATTLIST style:properties style:print CDATA #IMPLIED>
 <!ATTLIST style:properties style:print-page-order (ttb|ltr) #IMPLIED>
 <!ATTLIST style:properties style:first-page-number %positiveInteger; #IMPLIED>

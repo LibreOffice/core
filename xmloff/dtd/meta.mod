@@ -1,5 +1,5 @@
 <!--
-	$Id: meta.mod,v 1.2 2000-11-23 11:01:53 sab Exp $
+	$Id: meta.mod,v 1.3 2000-11-23 12:39:22 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -106,12 +106,13 @@
 
 <!ELEMENT meta:document-statistic EMPTY>
 <!ATTLIST meta:document-statistic meta:page-count %positiveInteger; #IMPLIED
-	meta:table-count %positiveInteger; #IMPLIED
-	meta:draw-count %positiveInteger; #IMPLIED
-	meta:ole-object-count %positiveInteger; #IMPLIED
-	meta:paragraph-count %positiveInteger; #IMPLIED
-	meta:word-count %positiveInteger; #IMPLIED
-	meta:character-count %positiveInteger; #IMPLIED
-	meta:row-count %positiveInteger; #IMPLIED
-	meta:cell-count %positiveInteger; #IMPLIED
+	meta:table-count %nonNegativeInteger; #IMPLIED
+	meta:draw-count %nonNegativeInteger; #IMPLIED
+	meta:image-count %nonNegativeInteger; #IMPLIED
+	meta:ole-object-count %nonNegativeInteger; #IMPLIED
+	meta:paragraph-count %nonNegativeInteger; #IMPLIED
+	meta:word-count %nonNegativeInteger; #IMPLIED
+	meta:character-count %nonNegativeInteger; #IMPLIED
+	meta:row-count %nonNegativeInteger; #IMPLIED
+	meta:cell-count %nonNegativeInteger; #IMPLIED
 	meta:object-count %positiveInteger; #IMPLIED>
