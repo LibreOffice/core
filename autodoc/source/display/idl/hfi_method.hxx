@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_method.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:27:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,8 @@ namespace csi
         class Parameter;
     }
 }
-class HF_IdlTypeText;
+
+class HF_FunctionDeclaration;
 
 class HF_IdlMethod : public HtmlFactory_Idl
 {
@@ -111,9 +112,15 @@ class HF_IdlMethod : public HtmlFactory_Idl
                             type_list &         i_rExceptions,
                             bool                i_bOneway,
                             bool                i_bEllipse ) const;
-    void                write_Param(
-                            HF_IdlTypeText &    o_type,
-                            Xml::Element &      o_names,
+//    void                write_Param(
+//                            HF_IdlTypeText &    o_type,
+//                            Xml::Element &      o_names,
+//                            const ary::idl::Parameter &
+//                                                i_param ) const;
+
+    Xml::Element *      write_Param(
+                            HF_FunctionDeclaration &
+                                                o_decl,
                             const ary::idl::Parameter &
                                                 i_param ) const;
     void                enter_ContentCell() const;
