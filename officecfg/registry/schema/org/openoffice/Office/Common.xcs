@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 14:44:44 $
+ *  last change: $Author: sj $ $Date: 2002-12-05 15:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3842,8 +3842,6 @@
 										<desc xml:lang="en-US">24 bit true color - Graphics are exported with a color resolution of 24 bit.</desc>
 									</info>
 								</enumeration>
-								<minInclusive oor:value="0"/>
-								<maxInclusive oor:value="7"/>
 							</constraints>
 							<value>0</value>
 						</prop>
@@ -3858,6 +3856,9 @@
 							<value>true</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  BMP-MS Windows - [dialog] BMP Options -->
 						</node-ref>
@@ -4111,6 +4112,9 @@
 							<value>0</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  MET-MS Windows - [dialog] MET Options -->
 						</node-ref>
@@ -4141,6 +4145,9 @@
 							<value>0</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  PCT-MS Windows - [dialog] PCT Options -->
 						</node-ref>
@@ -4249,6 +4256,9 @@
 							<value>0</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  SVM  - StarView Metafile - [dialog] SVM Options -->
 						</node-ref>
@@ -4279,6 +4289,9 @@
 							<value>0</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  WMF - MS Windows Metafile - [dialog] WMF Options -->
 						</node-ref>
@@ -4309,6 +4322,9 @@
 							<value>0</value>
 						</prop>
 						<node-ref oor:name="Size" oor:node-type="LogicalGraphicSize">
+							<info>
+								<desc xml:lang="en-US">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+							</info>
 							<!-- OldLocation: fltopt.ini -->
 							<!-- UIHints: File  Export  Filetype  EMF - Enhanced Metafile - [dialog] EMF Options -->
 						</node-ref>
