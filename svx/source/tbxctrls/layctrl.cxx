@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-04-04 16:03:15 $
+ *  last change: $Author: os $ $Date: 2002-05-21 14:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,15 @@ private:
     long            nMX;
     long            nMY;
     long            nTextHeight;
+    BOOL            bInitialKeyInput;
     ToolBox&        rTbx;
+
+    void UpdateSize_Impl( long nNewCol, long nNewLine);
 
 public:
                             TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
 
+    void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
     virtual void            MouseButtonUp( const MouseEvent& rMEvt );
@@ -126,8 +130,8 @@ public:
 TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) :
 
     SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
+    bInitialKeyInput(TRUE),
     rTbx(rParentTbx)
-
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     aLineColor = rStyles.GetWindowTextColor();
@@ -180,13 +184,8 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    Size    aWinSize = GetOutputSizePixel();
     long    nNewCol = 0;
     long    nNewLine = 0;
-    long    nMinCol = 0;
-    long    nMinLine = 0;
-    long    nMaxCol = 0;
-    long    nMaxLine = 0;
 
     if ( aPos.X() > 0 )
         nNewCol = aPos.X() / nMX + 1;
@@ -198,9 +197,19 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
     if ( nNewLine > 1000 )
         nNewLine = 1000;
 
+    UpdateSize_Impl( nNewCol, nNewLine);
+
+}
+/* -----------------------------15.05.2002 17:14------------------------------
+
+ ---------------------------------------------------------------------------*/
+void TableWindow::UpdateSize_Impl( long nNewCol, long nNewLine)
+{
+    Size  aWinSize = GetOutputSizePixel();
+    Point aWinPos = GetPosPixel();
+    Point aMaxPos = OutputToScreenPixel( GetDesktopRectPixel().BottomRight() );
     if ( (nWidth <= nNewCol) || (nHeight < nNewLine) )
     {
-        Point aMaxPos = OutputToScreenPixel( GetDesktopRectPixel().BottomRight() );
         long    nOff = 0;
 
         if ( nWidth <= nNewCol )
@@ -228,11 +237,15 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
         if ( nNewLine > nHeight )
             nNewLine = nHeight;
 
+        Size    aWinSize = GetOutputSizePixel();
         Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2-nOff,
                                aWinSize.Width(), aWinSize.Height() ) );
         SetOutputSizePixel( Size( nMX*nWidth-1, nMY*nHeight-1+nTextHeight ) );
     }
-
+    long    nMinCol = 0;
+    long    nMaxCol = 0;
+    long    nMinLine = 0;
+    long    nMaxLine = 0;
     if ( nNewCol < nCol )
     {
         nMinCol = nNewCol;
@@ -272,7 +285,61 @@ void TableWindow::MouseMove( const MouseEvent& rMEvt )
     }
     Update();
 }
+/* -----------------------------15.05.2002 14:22------------------------------
 
+ ---------------------------------------------------------------------------*/
+void TableWindow::KeyInput( const KeyEvent& rKEvt )
+{
+    BOOL bHandled = FALSE;
+    if(!rKEvt.GetKeyCode().GetModifier())
+    {
+        USHORT nKey = rKEvt.GetKeyCode().GetCode();
+        if( KEY_UP == nKey || KEY_DOWN == nKey ||
+            KEY_LEFT == nKey || KEY_RIGHT == nKey ||
+            KEY_RETURN == nKey )
+        {
+            bHandled = TRUE;
+            long nNewCol = nCol;
+            long nNewLine = nLine;
+            switch(nKey)
+            {
+                case KEY_UP :
+                    if(nNewLine)
+                        nNewLine--;
+                break;
+                case KEY_DOWN :
+                    nNewLine++;
+                break;
+                case KEY_LEFT :
+
+                    if(nNewCol)
+                        nNewCol--;
+                break;
+                case KEY_RIGHT :
+                    nNewCol++;
+                break;
+                case KEY_RETURN :
+                    if(IsMouseCaptured())
+                        ReleaseMouse();
+                    EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+                break;
+            }
+            //make sure that a table can initially be created
+            if(bInitialKeyInput)
+            {
+                bInitialKeyInput = FALSE;
+                if(!nNewLine)
+                    nNewLine = 1;
+                if(!nNewCol)
+                    nNewCol = 1;
+            }
+            UpdateSize_Impl( nNewCol, nNewLine);
+        }
+    }
+    if(!bHandled)
+        SfxPopupWindow::KeyInput(rKEvt);
+
+}
 // -----------------------------------------------------------------------
 
 void TableWindow::MouseButtonDown( const MouseEvent& rMEvt )
@@ -386,11 +453,14 @@ private:
     long            nWidth;
     long            nMX;
     long            nTextHeight;
+    BOOL            bInitialKeyInput;
     ToolBox&        rTbx;
 
+    void UpdateSize_Impl( long nNewCol );
 public:
                             ColumnsWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
 
+    void                    KeyInput( const KeyEvent& rKEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
     virtual void            MouseButtonUp( const MouseEvent& rMEvt );
@@ -407,6 +477,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
                             ToolBox& rParentTbx ) :
 
     SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
+    bInitialKeyInput(TRUE),
     rTbx(rParentTbx)
 
 {
@@ -457,16 +528,24 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
         return;
     }
 
-    Size    aWinSize = GetOutputSizePixel();
     long    nNewCol = 0;
-    long    nMinCol = 0;
-    long    nMaxCol = 0;
-
     if ( aPos.X() > 0 )
         nNewCol = aPos.X() / nMX + 1;
-
+    if ( aPos.Y() < 0 )
+        nNewCol = 0;
     if ( nNewCol > 20 )
         nNewCol = 20;
+    UpdateSize_Impl( nNewCol );
+}
+/* -----------------------------21.05.2002 16:16------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ColumnsWindow::UpdateSize_Impl( long nNewCol )
+{
+    Size    aWinSize = GetOutputSizePixel();
+    long    nMinCol = 0;
+    long    nMaxCol = 0;
+    Point aWinPos = GetPosPixel();
 
     if ( nWidth <= nNewCol )
     {
@@ -490,8 +569,6 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
         SetOutputSizePixel( Size( nMX*nWidth-1, aWinSize.Height() ) );
     }
 
-    if ( aPos.Y() < 0 )
-        nNewCol = 0;
 
     if ( nNewCol != nCol )
     {
@@ -515,13 +592,54 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
     }
     Update();
 }
-
 // -----------------------------------------------------------------------
 
 void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SfxPopupWindow::MouseButtonDown( rMEvt );
     CaptureMouse();
+}
+/* -----------------------------21.05.2002 16:11------------------------------
+
+ ---------------------------------------------------------------------------*/
+void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
+{
+    BOOL bHandled = FALSE;
+    if(!rKEvt.GetKeyCode().GetModifier())
+    {
+        USHORT nKey = rKEvt.GetKeyCode().GetCode();
+        if( KEY_LEFT == nKey || KEY_RIGHT == nKey ||
+            KEY_RETURN == nKey )
+        {
+            bHandled = TRUE;
+            long nNewCol = nCol;
+            switch(nKey)
+            {
+                case KEY_LEFT :
+                    if(nNewCol)
+                        nNewCol--;
+                break;
+                case KEY_RIGHT :
+                    nNewCol++;
+                break;
+                case KEY_RETURN :
+                    if(IsMouseCaptured())
+                        ReleaseMouse();
+                    EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL );
+                break;
+            }
+            //make sure that a table can initially be created
+            if(bInitialKeyInput)
+            {
+                bInitialKeyInput = FALSE;
+                if(!nNewCol)
+                    nNewCol = 1;
+            }
+            UpdateSize_Impl( nNewCol );
+        }
+    }
+    if(!bHandled)
+        SfxPopupWindow::KeyInput(rKEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -645,7 +763,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
     {
         ToolBox& rTbx = GetToolBox();
         TableWindow* pWin = new TableWindow( GetId(), GetBindings(), rTbx );
-        pWin->StartPopupMode( &rTbx, FALSE );
+        pWin->StartPopupMode( &rTbx, FLOATWIN_POPUPMODE_GRABFOCUS );
         return pWin;
     }
     return 0;
@@ -710,7 +828,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
     if(bEnabled)
     {
         pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
-        pWin->StartPopupMode( &GetToolBox(), FALSE );
+        pWin->StartPopupMode( &GetToolBox(), FLOATWIN_POPUPMODE_GRABFOCUS );
     }
     return pWin;
 }
