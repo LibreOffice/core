@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:43:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Correspondance et documents privés" ; > ;
         < "Formulaires et contrats" ; > ;
         < "Finances" ; > ;
-        < "Scolarité / Université" ; > ;
+        < "Éducation" ; > ;
         < "Arrière-plans de présentation" ; > ;
         < "Présentations" ; > ;
         < "Divers" ; > ;
@@ -279,11 +279,11 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ korean ] =
     {
-        < "±âº»" ; > ;
+        < "Ç¥ÁØ" ; > ;
         < "¾÷¹«¿ë¡¡Åë½Å£¡" ; > ;
-        < "±âÅ¸¡¡¾÷¹«¡¡¹®¼­" ; > ;
+        < "±âÅ¸ ¾÷¹« ¹®¼­" ; > ;
         < "°³ÀÎ¡¡Åë½Å³»¿ë°ú¡¡¹®¼­" ; > ;
-        < "¾ç½Ä°ú¡¡°è¾à" ; > ;
+        < "¾ç½Ä°ú Çù¾à" ; > ;
         < "È¸°è" ; > ;
         < "±³À°" ; > ;
         < "ÇÁ¸®Á¨Å×ÀÌ¼Ç¡¡¹è°æ" ; > ;
@@ -402,7 +402,7 @@ String RID_CNT_STR_WAITING
     Text[ polish ] = "Rozpocznie siê teraz inicjalizacja u¿ytych pierwszy raz szablonów";
     Text[ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚Í¡‰ñ‰‚ß‚Äg—p‚·‚é‚É‚ ‚½‚Á‚ÄA‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
-    Text[ korean ] = "%PRODUCTNAME ±¸¼º¿ä¼Ò´Â ¼³Ä¡ÇÑ ÈÄ ÀÌÁ¦ ÇÑ¹ø ÃÊ±âÈ­µË´Ï´Ù.";
+    Text[ korean ] = "¼­½Ä ÆÄÀÏÀÌ ÀÌÁ¦ 1È¸ »ç¿ëÀ» À§ÇÏ¿© ÇÑ ¹ø ¼³Ä¡µË´Ï´Ù.";
     Text[ chinese_simplified ] = "ÏÖÔÚÊ×´Î³õÊ¼»¯ĞèÒªÊ¹ÓÃµÄÑùÊ½ÎÄ¼ş¡£";
     Text[ chinese_traditional ] = "²{¦b­º¦¸ªì©l¤Æ»İ­n¨Ï¥Îªº¼Ë¦¡ÀÉ®×¡C";
     Text[ turkish ] = "Kurulumdan sonra %PRODUCTNAME bileşenleri şimdi yeniden başlatılacak.";
@@ -410,6 +410,7 @@ String RID_CNT_STR_WAITING
     Text[ catalan ] = "Los componentes de %PRODUCTNAME van a ser inicializados ahora tras la instalación.";
     Text[ finnish ] = "Alustetaan ohjelman %PRODUCTNAME osat ensimmäistä kertaa asennuksen jälkeen.";
 };
+
 
 
 
