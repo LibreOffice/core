@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:59:51 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,12 @@ SvxHatchTabPage::SvxHatchTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXHatchItem );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
     // Setzen der Linie auf None im OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aLbHatchings.SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl_Impl ) );
 
@@ -281,7 +281,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
 
     rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
     rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 }
 
@@ -405,7 +405,7 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rOutAttrs )
 
     rXFSet.Put ( ( XFillColorItem& )    rOutAttrs.Get(XATTR_FILLCOLOR) );
     rXFSet.Put ( ( XFillBackgroundItem&)rOutAttrs.Get(XATTR_FILLBACKGROUND) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 }
 
@@ -444,7 +444,7 @@ IMPL_LINK( SvxHatchTabPage, ModifiedHdl_Impl, void *, p )
                     aMtrAngle.GetValue() * 10 );
 
     rXFSet.Put( XFillHatchItem( String(), aXHatch ) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
     aCtlPreview.Invalidate();
 
@@ -523,7 +523,7 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
         */
         // ItemSet fuellen und an XOut weiterleiten
         rXFSet.Put( XFillHatchItem( String(), *pHatch ) );
-        XOut.SetFillAttr( aXFillAttr );
+        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreview.Invalidate();
         delete pHatch;

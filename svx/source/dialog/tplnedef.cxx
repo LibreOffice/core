@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplnedef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-23 14:22:29 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     rXLSet.Put( aXWidth );
     rXLSet.Put( aXDash );
     rXLSet.Put( aXColor );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aBtnAdd.SetClickHdl( LINK( this, SvxLineDefTabPage, ClickAddHdl_Impl ) );
     aBtnModify.SetClickHdl(
@@ -431,7 +431,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
         FillDialog_Impl();
 
         rXLSet.Put( XLineDashItem( String(), aDash ) );
-        XOut.SetLineAttr( aXLineAttr );
+        XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
         aCtlPreview.Invalidate();
 
@@ -977,7 +977,7 @@ void SvxLineDefTabPage::FillDash_Impl()
     aDash.SetDistance( GetCoreValue( aMtrDistance, ePoolUnit ) );
 
     rXLSet.Put( XLineDashItem( String(), aDash ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 }
 
 //------------------------------------------------------------------------

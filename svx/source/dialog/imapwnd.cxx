@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,11 @@ SdrObject* IMapWindow::CreateObj( const IMapObject* pIMapObj )
             aSet.Put( XLineColorItem( String(), Color( COL_BLACK ) ) );
         }
 
-        pSdrObj->SetAttributes( aSet, FALSE );
+//-/        pSdrObj->SetAttributes( aSet, FALSE );
+//-/        SdrBroadcastItemChange aItemChange(*pSdrObj);
+        pSdrObj->SetItemSetAndBroadcast(aSet);
+//-/        pSdrObj->BroadcastItemChange(aItemChange);
+
         pSdrObj->InsertUserData( new IMapUserData( pCloneIMapObj ) );
         pSdrObj->SetUserCall( GetSdrUserCall() );
     }

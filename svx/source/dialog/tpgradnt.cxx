@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,12 @@ SvxGradientTabPage::SvxGradientTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXGradientItem );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
     // Setzen der Linie auf None im OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // Handler ueberladen
     aLbGradients.SetSelectHdl(
@@ -466,7 +466,7 @@ IMPL_LINK( SvxGradientTabPage, ModifiedHdl_Impl, void *, pControl )
 
     // Anzeigen im XOutDev
     rXFSet.Put( XFillGradientItem( String(), aXGradient ) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
     aCtlPreview.Invalidate();
 
@@ -909,7 +909,7 @@ IMPL_LINK( SvxGradientTabPage, ChangeGradientHdl_Impl, void *, EMPTYARG )
 
         // ItemSet fuellen und an XOut weiterleiten
         rXFSet.Put( XFillGradientItem( String(), *pGradient ) );
-        XOut.SetFillAttr( aXFillAttr );
+        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreview.Invalidate();
         delete pGradient;

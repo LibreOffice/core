@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,11 @@ void SvxXConnectionPreview::Paint( const Rectangle& rRect )
 
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-    pEdgeObj->SetAttributes( rInAttrs, FALSE );
+//-/    pEdgeObj->SetAttributes( rInAttrs, FALSE );
+//-/    SdrBroadcastItemChange aItemChange(*pEdgeObj);
+    pEdgeObj->SetItemSetAndBroadcast(rInAttrs);
+//-/    pEdgeObj->BroadcastItemChange(aItemChange);
+
     Invalidate();
 }
 
@@ -305,17 +309,24 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 USHORT SvxXConnectionPreview::GetLineDeltaAnz()
 {
-    USHORT nCount = 0;
-    SfxItemSet aSet( rAttrs );
+//-/    USHORT nCount = 0;
+//-/    SfxItemSet aSet( rAttrs );
+//-/
+//-/    pEdgeObj->TakeAttributes( aSet, FALSE, FALSE );
+//-/
+//-/    if( aSet.GetItemState( SDRATTR_EDGELINEDELTAANZ ) != SFX_ITEM_DONTCARE )
+//-/    {
+//-/        nCount = ( ( const SdrEdgeLineDeltaAnzItem& ) aSet.
+//-/                    Get( SDRATTR_EDGELINEDELTAANZ ) ).GetValue();
+//-/    }
+//-/    return( nCount );
+    const SfxItemSet& rSet = pEdgeObj->GetItemSet();
+    sal_uInt16 nCount(0);
 
-    pEdgeObj->TakeAttributes( aSet, FALSE, FALSE );
+    if(SFX_ITEM_DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTAANZ))
+        nCount = ((const SdrEdgeLineDeltaAnzItem&)rSet.Get(SDRATTR_EDGELINEDELTAANZ)).GetValue();
 
-    if( aSet.GetItemState( SDRATTR_EDGELINEDELTAANZ ) != SFX_ITEM_DONTCARE )
-    {
-        nCount = ( ( const SdrEdgeLineDeltaAnzItem& ) aSet.
-                    Get( SDRATTR_EDGELINEDELTAANZ ) ).GetValue();
-    }
-    return( nCount );
+    return nCount;
 }
 
 /*************************************************************************

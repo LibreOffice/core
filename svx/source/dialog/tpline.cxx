@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-23 14:45:44 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ BOOL SvxLineTabPage::FillXLSet_Impl()
     UINT16 nVal = (UINT16)aMtrTransparent.GetValue();
     rXLSet.Put( XLineTransparenceItem( nVal ) );
 
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     return( TRUE );
 }
@@ -929,9 +929,15 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
                     pPage->NbcInsertObject(pObj);
                     pView->MarkObj(pObj,pPageView);
                     if(pSymbolAttr)
-                        pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
+                    {
+//-/                        pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
+                        pObj->SetItemSet(*pSymbolAttr);
+                    }
                     else
-                        pObj->NbcSetAttributes(rOutAttrs,FALSE);
+                    {
+//-/                        pObj->NbcSetAttributes(rOutAttrs,FALSE);
+                        pObj->SetItemSet(rOutAttrs);
+                    }
                     GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
 
                     aSymbolGraphic=Graphic(aMeta);
@@ -1409,7 +1415,7 @@ IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
     XLineTransparenceItem aItem( nVal );
 
     rXLSet.Put( XLineTransparenceItem( aItem ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aCtlPreview.Invalidate();
 
@@ -1521,9 +1527,15 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             pPage->NbcInsertObject(pObj);
             pView->MarkObj(pObj,pPageView);
             if(pSymbolAttr)
-                pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
+            {
+//-/                pObj->NbcSetAttributes(*pSymbolAttr,FALSE);
+                pObj->SetItemSet(*pSymbolAttr);
+            }
             else
-                pObj->NbcSetAttributes(rOutAttrs,FALSE);
+            {
+//-/                pObj->NbcSetAttributes(rOutAttrs,FALSE);
+                pObj->SetItemSet(rOutAttrs);
+            }
 
             Bitmap aBitmap(pView->GetAllMarkedBitmap());
             GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpshadow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:59:51 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     // Setzen der Linie auf None im OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aTsbShowShadow.SetClickHdl( LINK( this, SvxShadowTabPage, ClickShadowHdl_Impl ) );
     Link aLink = LINK( this, SvxShadowTabPage, ModifyShadowHdl_Impl );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 06:37:20 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ SvxBitmapTabPage::SvxBitmapTabPage
     // Setzen der Linie auf None im OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aBtnAdd.SetClickHdl( LINK( this, SvxBitmapTabPage, ClickAddHdl_Impl ) );
     aBtnImport.SetClickHdl(
@@ -338,7 +338,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet& rOutAttrs )
     // Bitmap holen und darstellen
     XFillBitmapItem aBmpItem( (const String &) String(), aBitmapCtl.GetXBitmap() );
     rXFSet.Put( aBmpItem );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     ChangeBitmapHdl_Impl( this );
@@ -472,7 +472,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         XFillBitmapItem aXBmpItem( (const String &) String(), *pXOBitmap );
         rXFSet.Put( aXBmpItem );
 
-        XOut.SetFillAttr( aXFillAttr );
+        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
         bBmpChanged = FALSE;
@@ -1010,7 +1010,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangePixelColorHdl_Impl, void *, EMPTYARG )
 
     // Bitmap holen und darstellen
     rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     bBmpChanged = TRUE;
@@ -1029,7 +1029,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, void *, EMPTYARG )
 
     // Bitmap holen und darstellen
     rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
     bBmpChanged = TRUE;
@@ -1047,7 +1047,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
 
         // Bitmap holen und darstellen
         rXFSet.Put( XFillBitmapItem( String(), aBitmapCtl.GetXBitmap() ) );
-        XOut.SetFillAttr( aXFillAttr );
+        XOut.SetFillAttr( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
         bBmpChanged = TRUE;

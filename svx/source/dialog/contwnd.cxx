@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,11 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
             aSet.Put( XFillColorItem( String(), TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
 
-            pPathObj->SetAttributes( aSet, FALSE );
+//-/            pPathObj->SetAttributes( aSet, FALSE );
+//-/            SdrBroadcastItemChange aItemChange(*pPathObj);
+            pPathObj->SetItemSetAndBroadcast(aSet);
+//-/            pPathObj->BroadcastItemChange(aItemChange);
+
             pPage->InsertObject( pPathObj );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:59:51 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,14 +167,14 @@ SvxColorTabPage::SvxColorTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXFillColorItem );
-    XOutOld.SetFillAttr( aXFillAttr );
-    XOutNew.SetFillAttr( aXFillAttr );
+    XOutOld.SetFillAttr( aXFillAttr.GetItemSet() );
+    XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
     // Setzen der Linie auf None im OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOutOld.SetLineAttr( aXLineAttr );
-    XOutNew.SetLineAttr( aXLineAttr );
+    XOutOld.SetLineAttr( aXLineAttr.GetItemSet() );
+    XOutNew.SetLineAttr( aXLineAttr.GetItemSet() );
 
     // Handler ueberladen
     aLbColor.SetSelectHdl(
@@ -253,8 +253,8 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& rSet )
 
                     // ItemSet fuellen und an XOut weiterleiten
                     rXFSet.Put( XFillColorItem( String(), aAktuellColor ) );
-                    XOutOld.SetFillAttr( aXFillAttr );
-                    XOutNew.SetFillAttr( aXFillAttr );
+                    XOutOld.SetFillAttr( aXFillAttr.GetItemSet() );
+                    XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
                     aCtlPreviewNew.Invalidate();
                     aCtlPreviewOld.Invalidate();
@@ -476,7 +476,7 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
         ConvertColorValues (aTmpColor, CM_RGB);
 
     rXFSet.Put( XFillColorItem( String(), aTmpColor ) );
-    XOutNew.SetFillAttr( aXFillAttr );
+    XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
     aCtlPreviewNew.Invalidate();
 
@@ -670,7 +670,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
         // ItemSet fuellen und an XOut weiterleiten
         rXFSet.Put( XFillColorItem( String(), aPreviewColor ) );
         //XOutOld.SetFillAttr( aXFillAttr );
-        XOutNew.SetFillAttr( aXFillAttr );
+        XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreviewNew.Invalidate();
     }
@@ -927,8 +927,8 @@ IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
 
         rXFSet.Put( XFillColorItem( String(),
                                     aLbColor.GetSelectEntryColor() ) );
-        XOutOld.SetFillAttr( aXFillAttr );
-        XOutNew.SetFillAttr( aXFillAttr );
+        XOutOld.SetFillAttr( aXFillAttr.GetItemSet() );
+        XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreviewOld.Invalidate();
         aCtlPreviewNew.Invalidate();
@@ -950,8 +950,8 @@ IMPL_LINK( SvxColorTabPage, SelectValSetHdl_Impl, void *, EMPTYARG )
 
         rXFSet.Put( XFillColorItem( String(),
                                     aLbColor.GetSelectEntryColor() ) );
-        XOutOld.SetFillAttr( aXFillAttr );
-        XOutNew.SetFillAttr( aXFillAttr );
+        XOutOld.SetFillAttr( aXFillAttr.GetItemSet() );
+        XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreviewOld.Invalidate();
         aCtlPreviewNew.Invalidate();
@@ -1123,8 +1123,8 @@ long SvxColorTabPage::ChangeColorHdl_Impl( void* )
 
         // ItemSet fuellen und an XOut weiterleiten
         rXFSet.Put( XFillColorItem( String(), pEntry->GetColor() ) );
-        XOutOld.SetFillAttr( aXFillAttr );
-        XOutNew.SetFillAttr( aXFillAttr );
+        XOutOld.SetFillAttr( aXFillAttr.GetItemSet() );
+        XOutNew.SetFillAttr( aXFillAttr.GetItemSet() );
 
         aCtlPreviewNew.Invalidate();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:59:51 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ IMPL_LINK(SvxTransparenceTabPage, ClickTransOffHdl_Impl, void *, EMPTYARG)
     // Preview
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
 
     InvalidatePreview( FALSE );
 
@@ -587,8 +587,8 @@ BOOL SvxTransparenceTabPage::InitPreview ( const SfxItemSet& rSet )
     rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
     rXFSet.Put ( ( XFillBitmapItem& )   rSet.Get(XATTR_FILLBITMAP) );
 
-    XOut.SetFillAttr( aXFillAttr );
-    XOutBmp.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
 
     bBitmap = ( ( ( XFillStyleItem& )rSet.Get(XATTR_FILLSTYLE) ).GetValue() == XFILL_BITMAP );
 
@@ -614,7 +614,7 @@ void SvxTransparenceTabPage::InvalidatePreview (BOOL bEnable)
         if ( bEnable )
         {
             aCtlBitmapPreview.Enable();
-            XOutBmp.SetFillAttr( aXFillAttr );
+            XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
         }
         else
             aCtlBitmapPreview.Disable();
@@ -625,7 +625,7 @@ void SvxTransparenceTabPage::InvalidatePreview (BOOL bEnable)
         if ( bEnable )
         {
             aCtlXRectPreview.Enable();
-            XOut.SetFillAttr( aXFillAttr );
+            XOut.SetFillAttr( aXFillAttr.GetItemSet() );
         }
         else
             aCtlXRectPreview.Disable();
@@ -759,14 +759,14 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     // Setzen Output-Devices
     rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );
     rXFSet.Put( XFillColorItem( String(), COL_BLACK ) );
-    XOut.SetFillAttr( aXFillAttr );
-    XOutBmp.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
 
     // Set line to None at the OutputDevice
     XLineAttrSetItem aXLineAttr( pXPool );
     aXLineAttr.GetItemSet().Put( XLineStyleItem( XLINE_NONE ) );
-    XOut.SetLineAttr( aXLineAttr );
-    XOutBmp.SetLineAttr( aXLineAttr );
+    XOut.SetLineAttr( aXLineAttr.GetItemSet() );
+    XOutBmp.SetLineAttr( aXLineAttr.GetItemSet() );
 
     aLbColor.SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyColorHdl_Impl ) );
     aLbHatchBckgrdColor.SetSelectHdl( LINK( this, SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl ) );
@@ -1815,8 +1815,8 @@ IMPL_LINK( SvxAreaTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
     aLbHatchBckgrdColor.Disable();
 
     rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
-    XOut.SetFillAttr( aXFillAttr );
-    XOutBmp.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
 
     aCtlXRectPreview.Invalidate();
     aCtlBitmapPreview.Invalidate();
@@ -1908,7 +1908,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyColorHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
@@ -2001,7 +2001,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyGradientHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
@@ -2099,7 +2099,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyHatchingHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
@@ -2128,7 +2128,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
@@ -2144,7 +2144,7 @@ IMPL_LINK( SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl, void *, EMPTYARG )
     XFillBackgroundItem aItem( aCbxHatchBckgrd.IsChecked() );
     rXFSet.Put ( aItem, XATTR_FILLBACKGROUND );
 
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     if( aLbHatchBckgrdColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
@@ -2264,7 +2264,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyBitmapHdl_Impl, void *, EMPTYARG )
     else
         rXFSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    XOutBmp.SetFillAttr( aXFillAttr );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlBitmapPreview.Invalidate();
 
     return( 0L );
@@ -2308,7 +2308,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
             nValue = (UINT16) aNumFldStepCount.GetValue();
     }
     rXFSet.Put( XGradientStepCountItem( nValue ) );
-    XOut.SetFillAttr( aXFillAttr );
+    XOut.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlXRectPreview.Invalidate();
 
     return( 0L );
@@ -2504,7 +2504,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyTileHdl_Impl, void *, p )
         rXFSet.Put( XFillBmpPosOffsetYItem( (UINT16) aMtrFldYOffset.GetValue() ) );
 
 
-    XOutBmp.SetFillAttr( aXFillAttr );
+    XOutBmp.SetFillAttr( aXFillAttr.GetItemSet() );
     aCtlBitmapPreview.Invalidate();
 
     return( 0L );

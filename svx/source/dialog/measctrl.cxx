@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,10 @@ SvxXMeasurePreview::SvxXMeasurePreview
     pModel = new SdrModel();
     pMeasureObj->SetModel( pModel );
 
-    pMeasureObj->SetAttributes( rInAttrs, FALSE );
+//-/    pMeasureObj->SetAttributes( rInAttrs, FALSE );
+//-/    SdrBroadcastItemChange aItemChange(*pMeasureObj);
+    pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
+//-/    pMeasureObj->BroadcastItemChange(aItemChange);
 
     Invalidate();
 }
@@ -149,7 +152,11 @@ void SvxXMeasurePreview::Paint( const Rectangle& rRect )
 
 void SvxXMeasurePreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-    pMeasureObj->SetAttributes( rInAttrs, FALSE );
+//-/    pMeasureObj->SetAttributes( rInAttrs, FALSE );
+//-/    SdrBroadcastItemChange aItemChange(*pMeasureObj);
+    pMeasureObj->SetItemSetAndBroadcast(rInAttrs);
+//-/    pMeasureObj->BroadcastItemChange(aItemChange);
+
     Invalidate();
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,11 +183,12 @@ void Svx3DPreviewControl::Construct()
     rCamera.SetAutoAdjustProjection(FALSE);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     Vector3D aLookAt;
-    Vector3D aCamPos(p3DView->DefaultCamPos().X (), p3DView->DefaultCamPos().Y (),
-        fCamZ < p3DView->DefaultCamPos().Z () ? p3DView->DefaultCamPos().Z () : fCamZ);
+    double fDefaultCamPosZ = p3DView->GetDefaultCamPosZ();
+    Vector3D aCamPos(0.0, 0.0, fCamZ < fDefaultCamPosZ ? fDefaultCamPosZ : fCamZ);
     rCamera.SetPosAndLookAt(aCamPos, aLookAt);
-    rCamera.SetFocalLength(p3DView->DefaultCamFocal());
-    rCamera.SetDefaults(p3DView->DefaultCamPos(), aLookAt, p3DView->DefaultCamFocal());
+    double fDefaultCamFocal = p3DView->GetDefaultCamFocal();
+    rCamera.SetFocalLength(fDefaultCamFocal);
+    rCamera.SetDefaults(Vector3D(0.0, 0.0, fDefaultCamPosZ), aLookAt, fDefaultCamFocal);
 
     pScene->SetCamera( rCamera );
     pFmPage->InsertObject( pScene );
@@ -208,7 +209,9 @@ void Svx3DPreviewControl::Construct()
     aSet.Put( XLineStyleItem( XLINE_NONE ) );
     aSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aSet.Put( XFillColorItem( String(), Color( COL_WHITE ) ) );
-    pScene->NbcSetAttributes( aSet, FALSE );
+
+//-/    pScene->NbcSetAttributes( aSet, FALSE );
+    pScene->SetItemSet(aSet);
 
     // Default-Attribute holen (ohne markiertes Objekt)
 //  SfxItemSet aDefaultSet = p3DView->Get3DAttributes();
@@ -278,7 +281,9 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
 
         if( p3DObj )
         {
-            p3DObj->TakeAttributes( aSet, FALSE, FALSE );
+//-/            p3DObj->TakeAttributes( aSet, FALSE, FALSE );
+            aSet.Put(p3DObj->GetItemSet());
+
             pScene->Remove3DObj( p3DObj );
             delete p3DObj;
             p3DObj = NULL;
@@ -315,7 +320,9 @@ void Svx3DPreviewControl::SetObjectType( UINT16 nType )
 
         // Rein in die Szene
         pScene->Insert3DObj( p3DObj );
-        p3DObj->NbcSetAttributes( aSet, FALSE );
+
+//-/        p3DObj->NbcSetAttributes( aSet, FALSE );
+        p3DObj->SetItemSet(aSet);
 
         // Refresh
         Resize();
