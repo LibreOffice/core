@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
-#ifndef _BDRANGE_HXX
-#include <BDRange.hxx>
+#ifndef _BGFX_RANGE_BASICRANGE_HXX
+#include <basegfx/range/basicrange.hxx>
 #endif
 
 namespace basegfx
@@ -76,8 +76,8 @@ namespace basegfx
     {
         class B2DRange
         {
-            BDRange                                 maRangeX;
-            BDRange                                 maRangeY;
+            ::basegfx::range::BasicRange            maRangeX;
+            ::basegfx::range::BasicRange            maRangeY;
 
         public:
             B2DRange()
@@ -137,6 +137,14 @@ namespace basegfx
                 return tuple::B2DTuple(
                     maRangeX.getRange(),
                     maRangeY.getRange()
+                    );
+            }
+
+            tuple::B2DTuple getCenter() const
+            {
+                return tuple::B2DTuple(
+                    maRangeX.getCenter(),
+                    maRangeY.getCenter()
                     );
             }
 

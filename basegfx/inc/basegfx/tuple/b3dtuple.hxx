@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:49 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,13 +192,15 @@ namespace basegfx
             // comparators with tolerance
             //////////////////////////////////////////////////////////////////////
 
-            sal_Bool EqualZero() const
+            sal_Bool equalZero() const
             {
                 return (this == &maEmptyTuple ||
-                    (::basegfx::numeric::fTools::equalZero(mfX) && ::basegfx::numeric::fTools::equalZero(mfY) && ::basegfx::numeric::fTools::equalZero(mfZ)));
+                    (::basegfx::numeric::fTools::equalZero(mfX)
+                    && ::basegfx::numeric::fTools::equalZero(mfY)
+                    && ::basegfx::numeric::fTools::equalZero(mfZ)));
             }
 
-            sal_Bool EqualZero(const double& rfSmallValue) const
+            sal_Bool equalZero(const double& rfSmallValue) const
             {
                 return (this == &maEmptyTuple ||
                     (::basegfx::numeric::fTools::equalZero(mfX, rfSmallValue)
@@ -206,7 +208,7 @@ namespace basegfx
                     && ::basegfx::numeric::fTools::equalZero(mfZ, rfSmallValue)));
             }
 
-            sal_Bool Equal(const B3DTuple& rTup) const
+            sal_Bool equal(const B3DTuple& rTup) const
             {
                 return (
                     ::basegfx::numeric::fTools::equal(mfX, rTup.mfX) &&
@@ -214,7 +216,7 @@ namespace basegfx
                     ::basegfx::numeric::fTools::equal(mfZ, rTup.mfZ));
             }
 
-            sal_Bool Equal(const B3DTuple& rTup, const double& rfSmallValue) const
+            sal_Bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
             {
                 return (
                     ::basegfx::numeric::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
@@ -281,12 +283,12 @@ namespace basegfx
 
             sal_Bool operator==( const B3DTuple& rTup ) const
             {
-                return Equal(rTup);
+                return equal(rTup);
             }
 
             sal_Bool operator!=( const B3DTuple& rTup ) const
             {
-                return !Equal(rTup);
+                return !equal(rTup);
             }
 
             B3DTuple& operator=( const B3DTuple& rTup )

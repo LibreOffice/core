@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dquadraticbezier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:27 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #ifndef _BGFX_CURVE_B2DQUADRATICBEZIER_HXX
 #include <basegfx/curve/b2dquadraticbezier.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX

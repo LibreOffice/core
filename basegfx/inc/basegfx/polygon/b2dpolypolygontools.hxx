@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:48:13 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,21 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
+    // predefinitions
     namespace polygon
     {
-        // predefinitions
         class B2DPolyPolygon;
     } // end of namespace polygon
+
+    // predefinitions
+    namespace range
+    {
+        class B2DRange;
+    } // end of namespace range
 
     namespace polygon
     {
@@ -108,7 +110,13 @@ namespace basegfx
                 sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
 
             // Subdivide all contained curves. Use distanceBound value if given.
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
+
+            // Subdivide all contained curves. Use distanceBound value if given.
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fAngleBound = 5.0);
+
+            // get size of PolyPolygon. Control vectors are included in that ranges.
+            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolyPolygon& rCandidate);
 
         } // end of namespace tools
     } // end of namespace polygon

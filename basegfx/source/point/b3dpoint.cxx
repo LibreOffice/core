@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,34 @@
 #include <basegfx/point/b3dpoint.hxx>
 #endif
 
+#ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
+#include <basegfx/matrix/b3dhommatrix.hxx>
+#endif
+
 namespace basegfx
 {
     namespace point
     {
+        B3DPoint& B3DPoint::operator*=( const ::basegfx::matrix::B3DHomMatrix& rMat )
+        {
+            const double fTempX(rMat.get(0,0)*mfX +
+                                rMat.get(0,1)*mfY +
+                                rMat.get(0,2)*mfZ +
+                                rMat.get(0,3));
+            const double fTempY(rMat.get(1,0)*mfX +
+                                rMat.get(1,1)*mfY +
+                                rMat.get(1,2)*mfZ +
+                                rMat.get(1,3));
+            const double fTempZ(rMat.get(2,0)*mfX +
+                                rMat.get(2,1)*mfY +
+                                rMat.get(2,2)*mfZ +
+                                rMat.get(2,3));
+            mfX = fTempX;
+            mfY = fTempY;
+            mfZ = fTempZ;
+
+            return *this;
+        }
     } // end of namespace point
 } // end of namespace basegfx
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:48 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,11 @@ namespace basegfx
     {
         class B2DPolygon;
     } // end of namespace polygon
+
+    namespace matrix
+    {
+        class B2DHomMatrix;
+    } // end of namespace matrix
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -107,8 +112,8 @@ namespace basegfx
             // polygon interface
             sal_uInt32 count() const;
 
-            B2DPolygon getPolygon(sal_uInt32 nIndex) const;
-            void setPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
+            B2DPolygon getB2DPolygon(sal_uInt32 nIndex) const;
+            void setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon);
 
             // test for curve
             sal_Bool areControlPointsUsed() const;
@@ -139,6 +144,9 @@ namespace basegfx
 
             // remove double points, at the begin/end and follow-ups, too
             void removeDoublePoints();
+
+            // apply transformation given in matrix form to the polygon
+            void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix);
         };
     } // end of namespace polygon
 } // end of namespace basegfx

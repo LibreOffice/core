@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:47 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@ namespace basegfx
     {
         class B2DVector;
     } // end of namespace vector
+
+    namespace matrix
+    {
+        class B2DHomMatrix;
+    } // end of namespace matrix
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -157,6 +162,9 @@ namespace basegfx
 
             // remove double points, at the begin/end and follow-ups, too
             void removeDoublePoints();
+
+            // apply transformation given in matrix form to the polygon
+            void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix);
         };
     } // end of namespace polygon
 } // end of namespace basegfx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:48:12 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,20 +70,17 @@
 #include <basegfx/vector/b2dvector.hxx>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
+    // predefinitions
     namespace polygon
     {
-        // predefinitions
         class B2DPolygon;
     } // end of namespace polygon
 
+    // predefinitions
     namespace range
     {
         class B2DRange;
@@ -125,7 +122,7 @@ namespace basegfx
             sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder = sal_False);
             sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::polygon::B2DPolygon& rPolygon, sal_Bool bWithBorder = sal_False);
 
-            // get size of polygon
+            // get size of polygon. Control vectors are included in that ranges.
             ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolygon& rCandidate);
 
             // get area of polygon
@@ -154,7 +151,10 @@ namespace basegfx
             ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
 
             // Subdivide all contained curves. Use distanceBound value if given.
-            ::basegfx::polygon::B2DPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound = 0.0);
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound = 0.0);
+
+            // Subdivide all contained curves. Use distanceBound value if given.
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolygon& rCandidate, double fAngleBound = 5.0);
 
             // Definitions for the cut flags used from the findCut methods
             typedef sal_uInt16 CutFlagValue;

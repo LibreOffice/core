@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:09:52 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -138,7 +142,7 @@ namespace basegfx
             // is none. Same for successor.
             sal_uInt32 getIndexOfPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
                 if(nIndex)
                 {
@@ -156,7 +160,7 @@ namespace basegfx
 
             sal_uInt32 getIndexOfSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
                 if(nIndex + 1L < rCandidate.count())
                 {
@@ -171,7 +175,7 @@ namespace basegfx
             sal_uInt32 getIndexOfDifferentPredecessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
                 sal_uInt32 nNewIndex(nIndex);
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
                 if(rCandidate.count() > 1)
                 {
@@ -191,7 +195,7 @@ namespace basegfx
             sal_uInt32 getIndexOfDifferentSuccessor(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rCandidate)
             {
                 sal_uInt32 nNewIndex(nIndex);
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
 
                 if(rCandidate.count() > 1)
                 {
@@ -223,7 +227,7 @@ namespace basegfx
 
             ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
             {
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
                 ::basegfx::vector::B2DVectorContinuity eRetval(::basegfx::vector::CONTINUITY_NONE);
 
                 if(rCandidate.count() > 1L && rCandidate.areControlPointsUsed())
@@ -238,7 +242,7 @@ namespace basegfx
                 return eRetval;
             }
 
-            ::basegfx::polygon::B2DPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound)
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound)
             {
                 ::basegfx::polygon::B2DPolygon aRetval(rCandidate);
 
@@ -294,6 +298,60 @@ namespace basegfx
 
                             // call adaptive subdivide
                             ::basegfx::curve::adaptiveSubdivideByDistance(aRetval, aBezier, fBound);
+                        }
+                        else
+                        {
+                            // no vectors used, add point
+                            aRetval.append(rCandidate.getB2DPoint(a));
+                        }
+                    }
+
+                    // check closed flag, aRetval was cleared and thus it may be invalid.
+                    if(aRetval.isClosed() != rCandidate.isClosed())
+                    {
+                        aRetval.setClosed(rCandidate.isClosed());
+                    }
+                }
+
+                return aRetval;
+            }
+
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolygon& rCandidate, double fAngleBound)
+            {
+                ::basegfx::polygon::B2DPolygon aRetval(rCandidate);
+
+                if(aRetval.areControlPointsUsed())
+                {
+                    const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                    aRetval.clear();
+
+                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                    {
+                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
+
+                        if(!aVectorA.equalZero() || !aVectorB.equalZero())
+                        {
+                            // vectors are used, get points
+                            const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
+                            ::basegfx::point::B2DPoint aPointA(rCandidate.getB2DPoint(a));
+                            ::basegfx::point::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
+
+                            // build CubicBezier segment
+                            ::basegfx::curve::B2DCubicBezier aBezier(
+                                aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
+
+                            // generate AngleBound
+                            double fBound(fAngleBound);
+
+                            // make sure angle bound is not too small
+                            if(::basegfx::numeric::fTools::less(fAngleBound, 0.1))
+                            {
+                                fAngleBound = 0.1;
+                            }
+
+                            // call adaptive subdivide
+                            ::basegfx::curve::adaptiveSubdivideByAngle(aRetval, aBezier, fBound);
                         }
                         else
                         {
@@ -387,10 +445,35 @@ namespace basegfx
                 ::basegfx::range::B2DRange aRetval;
                 const sal_uInt32 nPointCount(rCandidate.count());
 
-                for(sal_uInt32 a(0L); a < nPointCount; a++)
+                if(rCandidate.areControlPointsUsed())
                 {
-                    const ::basegfx::point::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
-                    aRetval.expand(aTestPoint);
+                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                    {
+                        const ::basegfx::point::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
+                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
+                        aRetval.expand(aTestPoint);
+
+                        if(!aVectorA.equalZero())
+                        {
+                            aRetval.expand(aTestPoint + aVectorA);
+                        }
+
+                        if(!aVectorB.equalZero())
+                        {
+                            const sal_uInt32 nNextIndex(getIndexOfSuccessor(a, rCandidate));
+                            const ::basegfx::point::B2DPoint aNextPoint(rCandidate.getB2DPoint(nNextIndex));
+                            aRetval.expand(aNextPoint + aVectorB);
+                        }
+                    }
+                }
+                else
+                {
+                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                    {
+                        const ::basegfx::point::B2DPoint aTestPoint(rCandidate.getB2DPoint(a));
+                        aRetval.expand(aTestPoint);
+                    }
                 }
 
                 return aRetval;
@@ -427,7 +510,7 @@ namespace basegfx
 
             double getEdgeLength(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
             {
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
                 double fRetval(0.0);
                 const sal_uInt32 nPointCount(rCandidate.count());
 
@@ -591,7 +674,7 @@ namespace basegfx
 
             ::basegfx::vector::B2DVectorOrientation getPointOrientation(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex)
             {
-                DBG_ASSERT(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
+                OSL_ENSURE(nIndex < rCandidate.count(), "getIndexOfPredecessor: Access to polygon out of range (!)");
                 ::basegfx::vector::B2DVectorOrientation eRetval(::basegfx::vector::ORIENTATION_NEUTRAL);
 
                 if(rCandidate.count() > 2)

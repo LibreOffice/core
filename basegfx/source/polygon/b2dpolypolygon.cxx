@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,16 @@
  *
  ************************************************************************/
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
 #endif
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
@@ -127,12 +127,12 @@ public:
         return sal_True;
     }
 
-    const ::basegfx::polygon::B2DPolygon& getPolygon(sal_uInt32 nIndex) const
+    const ::basegfx::polygon::B2DPolygon& getB2DPolygon(sal_uInt32 nIndex) const
     {
         return maPolygons[nIndex];
     }
 
-    void setPolygon(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rPolygon)
+    void setB2DPolygon(sal_uInt32 nIndex, const ::basegfx::polygon::B2DPolygon& rPolygon)
     {
         maPolygons[nIndex] = rPolygon;
     }
@@ -161,7 +161,7 @@ public:
 
             for(sal_uInt32 a(0L); a < nCount; a++)
             {
-                maPolygons.insert(aIndex, rPolyPolygon.getPolygon(a));
+                maPolygons.insert(aIndex, rPolyPolygon.getB2DPolygon(a));
                 aIndex++;
             }
         }
@@ -206,6 +206,14 @@ public:
         for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
         {
             maPolygons[a].removeDoublePoints();
+        }
+    }
+
+    void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix)
+    {
+        for(sal_uInt32 a(0L); a < maPolygons.size(); a++)
+        {
+            maPolygons[a].transform(rMatrix);
         }
     }
 };
@@ -294,21 +302,21 @@ namespace basegfx
             return mpPolyPolygon->count();
         }
 
-        B2DPolygon B2DPolyPolygon::getPolygon(sal_uInt32 nIndex) const
+        B2DPolygon B2DPolyPolygon::getB2DPolygon(sal_uInt32 nIndex) const
         {
-            DBG_ASSERT(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
 
-            return mpPolyPolygon->getPolygon(nIndex);
+            return mpPolyPolygon->getB2DPolygon(nIndex);
         }
 
-        void B2DPolyPolygon::setPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon)
+        void B2DPolyPolygon::setB2DPolygon(sal_uInt32 nIndex, const B2DPolygon& rPolygon)
         {
-            DBG_ASSERT(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolyPolygon->count(), "B2DPolyPolygon access outside range (!)");
 
-            if(mpPolyPolygon->getPolygon(nIndex) != rPolygon)
+            if(mpPolyPolygon->getB2DPolygon(nIndex) != rPolygon)
             {
                 implForceUniqueCopy();
-                mpPolyPolygon->setPolygon(nIndex, rPolygon);
+                mpPolyPolygon->setB2DPolygon(nIndex, rPolygon);
             }
         }
 
@@ -316,7 +324,7 @@ namespace basegfx
         {
             for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
             {
-                const ::basegfx::polygon::B2DPolygon& rPolygon = mpPolyPolygon->getPolygon(a);
+                const ::basegfx::polygon::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
                 if(rPolygon.areControlPointsUsed())
                 {
@@ -329,7 +337,7 @@ namespace basegfx
 
         void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPolygon, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
+            OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
 
             if(nCount)
             {
@@ -349,7 +357,7 @@ namespace basegfx
 
         void B2DPolyPolygon::insert(sal_uInt32 nIndex, const B2DPolyPolygon& rPolyPolygon)
         {
-            DBG_ASSERT(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
+            OSL_ENSURE(nIndex <= mpPolyPolygon->count(), "B2DPolyPolygon Insert outside range (!)");
 
             if(rPolyPolygon.count())
             {
@@ -369,7 +377,7 @@ namespace basegfx
 
         void B2DPolyPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex + nCount <= mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
+            OSL_ENSURE(nIndex + nCount <= mpPolyPolygon->count(), "B2DPolyPolygon Remove outside range (!)");
 
             if(nCount)
             {
@@ -401,7 +409,7 @@ namespace basegfx
             // no Polygon exists.
             for(sal_uInt32 a(0L); bRetval && a < mpPolyPolygon->count(); a++)
             {
-                if(!(mpPolyPolygon->getPolygon(a)).isClosed())
+                if(!(mpPolyPolygon->getB2DPolygon(a)).isClosed())
                 {
                     bRetval = sal_False;
                 }
@@ -431,7 +439,7 @@ namespace basegfx
 
             for(sal_uInt32 a(0L); !bRetval && a < mpPolyPolygon->count(); a++)
             {
-                if((mpPolyPolygon->getPolygon(a)).hasDoublePoints())
+                if((mpPolyPolygon->getB2DPolygon(a)).hasDoublePoints())
                 {
                     bRetval = sal_True;
                 }
@@ -447,6 +455,12 @@ namespace basegfx
                 implForceUniqueCopy();
                 mpPolyPolygon->removeDoublePoints();
             }
+        }
+
+        void B2DPolyPolygon::transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix)
+        {
+            implForceUniqueCopy();
+            mpPolyPolygon->transform(rMatrix);
         }
     } // end of namespace polygon
 } // end of namespace basegfx

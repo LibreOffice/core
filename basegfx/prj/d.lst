@@ -19,6 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\point
 ..\inc\basegfx\point\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\point\b3dhompoint.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\range
+..\inc\basegfx\range\basicrange.hxx %_DEST%\inc%_EXT%\basegfx\range\basicrange.hxx
 ..\inc\basegfx\range\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b1drange.hxx
 ..\inc\basegfx\range\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b2drange.hxx
 ..\inc\basegfx\range\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\range\b3drange.hxx
@@ -38,6 +39,10 @@ mkdir: %_DEST%\inc%_EXT%\basegfx\polygon
 ..\inc\basegfx\polygon\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygon.hxx
 ..\inc\basegfx\polygon\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolygontools.hxx
 ..\inc\basegfx\polygon\b2dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b2dpolypolygontools.hxx
+..\inc\basegfx\polygon\b3dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygon.hxx
+..\inc\basegfx\polygon\b3dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygon.hxx
+..\inc\basegfx\polygon\b3dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolygontools.hxx
+..\inc\basegfx\polygon\b3dpolypolygontools.hxx %_DEST%\inc%_EXT%\basegfx\polygon\b3dpolypolygontools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\basegfx\tuple
 ..\inc\basegfx\tuple\b2dtuple.hxx %_DEST%\inc%_EXT%\basegfx\tuple\b2dtuple.hxx

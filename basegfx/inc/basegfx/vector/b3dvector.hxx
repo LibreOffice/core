@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dvector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:26 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 
 namespace basegfx
 {
+    namespace matrix
+    {
+        // predeclaration
+        class B3DHomMatrix;
+    } // end of namespace matrix;
+
     namespace vector
     {
         /** Base Point class with three double values
@@ -127,6 +133,26 @@ namespace basegfx
 
             ~B3DVector()
             {}
+
+            /** *=operator to allow usage from B3DVector, too
+            */
+            B3DVector& operator*=( const B3DVector& rPnt )
+            {
+                mfX *= rPnt.mfX;
+                mfY *= rPnt.mfY;
+                mfZ *= rPnt.mfZ;
+                return *this;
+            }
+
+            /** *=operator to allow usage from B3DVector, too
+            */
+            B3DVector& operator*=(double t)
+            {
+                mfX *= t;
+                mfY *= t;
+                mfZ *= t;
+                return *this;
+            }
 
             /** assignment operator to allow assigning the results
                 of B3DTuple calculations
@@ -275,6 +301,13 @@ namespace basegfx
                 return ((mfX * rVec.mfX) + (mfY * rVec.mfY) + (mfZ * rVec.mfZ));
             }
 
+            /** Transform vector by given transformation matrix.
+
+                Since this is a vector, translational components of the
+                matrix are disregarded.
+            */
+            B3DVector& operator*=( const matrix::B3DHomMatrix& rMat );
+
             static const B3DVector& getEmptyVector()
             {
                 return (const B3DVector&) ::basegfx::tuple::B3DTuple::getEmptyTuple();
@@ -300,6 +333,13 @@ namespace basegfx
             B3DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX(), rNormalizedVec.getZ());
             return aPerpendicular;
         }
+
+        /** Transform vector by given transformation matrix.
+
+            Since this is a vector, translational components of the
+            matrix are disregarded.
+        */
+        B3DVector operator*( const matrix::B3DHomMatrix& rMat, const B3DVector& rVec );
 
         /** Calculate the Cross Product of two 3D Vectors
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:09:52 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <limits>
 #include <algorithm>
+
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 
 #include <basegfx/curve/b2dbeziertools.hxx>
 
@@ -148,7 +152,7 @@ namespace basegfx
             {
             public:
                 AngleErrorFunctor( const double& angleBounds ) :
-                    mfTanAngle( tan( angleBounds ) ),
+                    mfTanAngle( angleBounds * F_PI180 ),
                     mfLastTanAngle( ::std::numeric_limits<double>::max() )
                 {
                 }
@@ -213,14 +217,21 @@ namespace basegfx
 
                     double fCurrAngle( ::std::numeric_limits<double>::max() );
 
-                    if( !numeric::fTools::equalZero( scalarVecADDB ) )
-                        fCurrAngle = fabs( crossVecADDB / scalarVecADDB );
-
-                    if( !numeric::fTools::equalZero( scalarVecStartTangentAD ) )
-                        fCurrAngle = ::std::min( fCurrAngle, fabs( crossVecStartTangentAD / scalarVecStartTangentAD ) );
-
-                    if( !numeric::fTools::equalZero( scalarVecDBEndTangent ) )
-                        fCurrAngle = ::std::min( fCurrAngle, fabs( crossVecDBEndTangent / scalarVecDBEndTangent ) );
+                    // anyone has zero denominator? then we're at
+                    // +infinity, anyway
+                    if( !numeric::fTools::equalZero( scalarVecADDB ) &&
+                        !numeric::fTools::equalZero( scalarVecStartTangentAD ) &&
+                        !numeric::fTools::equalZero( scalarVecDBEndTangent ) )
+                    {
+                        if( scalarVecADDB > 0.0 &&
+                            scalarVecStartTangentAD > 0.0 &&
+                            scalarVecDBEndTangent > 0.0 )
+                        {
+                            fCurrAngle = ::std::max( fabs( atan2( crossVecADDB, scalarVecADDB ) ),
+                                                      ::std::max( fabs( atan2( crossVecStartTangentAD, scalarVecStartTangentAD ) ),
+                                                                     fabs( atan2( crossVecDBEndTangent, scalarVecDBEndTangent ) ) ) );
+                        }
+                    }
 
                     // stop if error measure does not improve anymore. This is a
                     // safety guard against floating point inaccuracies.
@@ -261,7 +272,7 @@ namespace basegfx
                prevent endless looping.
             */
             template < class ErrorFunctor > int ImplAdaptiveSubdivide( polygon::B2DPolygon&           rPoly,
-                                                                       const ErrorFunctor&            rErrorFunctor,
+                                                                       ErrorFunctor                   rErrorFunctor,
                                                                        const double P1x, const double P1y,
                                                                        const double P2x, const double P2y,
                                                                        const double P3x, const double P3y,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-11 09:48:14 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace basegfx
 
                 for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
-                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getPolygon(a);
+                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
 
                     if(aCandidate.count() > 2L)
                     {
@@ -121,7 +121,7 @@ namespace basegfx
                         {
                             if(b != a)
                             {
-                                ::basegfx::polygon::B2DPolygon aComparePolygon = rCandidate.getPolygon(b);
+                                ::basegfx::polygon::B2DPolygon aComparePolygon = rCandidate.getB2DPolygon(b);
 
                                 if(::basegfx::polygon::tools::isInside(aComparePolygon, aTestPoint))
                                 {
@@ -139,7 +139,7 @@ namespace basegfx
                             aCandidate.flip();
 
                             // write back changed polygon
-                            rCandidate.setPolygon(a, aCandidate);
+                            rCandidate.setB2DPolygon(a, aCandidate);
                         }
 
                         // remember the index if it's the outmost polygon
@@ -154,7 +154,7 @@ namespace basegfx
                 // if the outmost polygon is not the first, move it in front
                 if(bIndexOfOutmostPolygonSet && nIndexOfOutmostPolygon > 0L)
                 {
-                    ::basegfx::polygon::B2DPolygon aOutmostPolygon = rCandidate.getPolygon(nIndexOfOutmostPolygon);
+                    ::basegfx::polygon::B2DPolygon aOutmostPolygon = rCandidate.getB2DPolygon(nIndexOfOutmostPolygon);
                     rCandidate.remove(nIndexOfOutmostPolygon);
                     rCandidate.insert(0L, aOutmostPolygon);
                 }
@@ -173,7 +173,7 @@ namespace basegfx
                 aCutter.getPolyPolygon(rCandidate);
             }
 
-            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound)
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByDistance(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound)
             {
                 ::basegfx::polygon::B2DPolyPolygon aRetval(rCandidate);
 
@@ -183,12 +183,12 @@ namespace basegfx
 
                     for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
                     {
-                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getPolygon(a);
+                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
 
                         if(aCandidate.areControlPointsUsed())
                         {
-                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivide(aCandidate, fDistanceBound);
-                            aRetval.setPolygon(a, aCandidate);
+                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound);
+                            aRetval.setB2DPolygon(a, aCandidate);
                         }
                     }
                 }
@@ -196,6 +196,42 @@ namespace basegfx
                 return aRetval;
             }
 
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivideByAngle(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fAngleBound)
+            {
+                ::basegfx::polygon::B2DPolyPolygon aRetval(rCandidate);
+
+                if(aRetval.areControlPointsUsed())
+                {
+                    const sal_uInt32 nPolygonCount(aRetval.count());
+
+                    for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                    {
+                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+
+                        if(aCandidate.areControlPointsUsed())
+                        {
+                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound);
+                            aRetval.setB2DPolygon(a, aCandidate);
+                        }
+                    }
+                }
+
+                return aRetval;
+            }
+
+            ::basegfx::range::B2DRange getRange(const ::basegfx::polygon::B2DPolyPolygon& rCandidate)
+            {
+                ::basegfx::range::B2DRange aRetval;
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+                {
+                    ::basegfx::polygon::B2DPolygon aCandidate = rCandidate.getB2DPolygon(a);
+                    aRetval.expand(::basegfx::polygon::tools::getRange(aCandidate));
+                }
+
+                return aRetval;
+            }
         } // end of namespace tools
     } // end of namespace polygon
 } // end of namespace basegfx

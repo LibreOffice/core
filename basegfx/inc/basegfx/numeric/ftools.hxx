@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-05 12:25:38 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,34 @@
 #ifndef _INC_MATH
 #include <math.h>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+// standard PI defines from solar.h, but we do not want to link against tools
+
+#ifndef F_PI
+#define F_PI        3.14159265358979323846
+#endif
+#ifndef F_PI2
+#define F_PI2       1.57079632679489661923
+#endif
+#ifndef F_PI4
+#define F_PI4       0.785398163397448309616
+#endif
+#ifndef F_PI180
+#define F_PI180     0.01745329251994
+#endif
+#ifndef F_PI1800
+#define F_PI1800    0.001745329251994
+#endif
+#ifndef F_PI18000
+#define F_PI18000   0.0001745329251994
+#endif
+#ifndef F_2PI
+#define F_2PI       6.28318530717958647694
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// fTools defines
 
 namespace basegfx
 {

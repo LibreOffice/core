@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:24 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 
 namespace basegfx
 {
+    namespace matrix
+    {
+        // predeclaration
+        class B3DHomMatrix;
+    } // end of namespace matrix;
+
     namespace point
     {
         /** Base Point class with three double values
@@ -128,6 +134,26 @@ namespace basegfx
             ~B3DPoint()
             {}
 
+            /** *=operator to allow usage from B3DPoint, too
+            */
+            B3DPoint& operator*=( const B3DPoint& rPnt )
+            {
+                mfX *= rPnt.mfX;
+                mfY *= rPnt.mfY;
+                mfZ *= rPnt.mfZ;
+                return *this;
+            }
+
+            /** *=operator to allow usage from B3DPoint, too
+            */
+            B3DPoint& operator*=(double t)
+            {
+                mfX *= t;
+                mfY *= t;
+                mfZ *= t;
+                return *this;
+            }
+
             /** assignment operator to allow assigning the results
                 of B3DTuple calculations
             */
@@ -138,6 +164,13 @@ namespace basegfx
                 mfZ = rVec.getZ();
                 return *this;
             }
+
+            /** Transform point by given transformation matrix.
+
+                The translational components of the matrix are, in
+                contrast to B3DVector, applied.
+            */
+            B3DPoint& operator*=( const ::basegfx::matrix::B3DHomMatrix& rMat );
 
             static const B3DPoint& getEmptyPoint()
             {

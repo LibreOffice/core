@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2003-11-12 12:09:51 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,24 @@ namespace basegfx
 
             ~B2DVector()
             {}
+
+            /** *=operator to allow usage from B2DVector, too
+            */
+            B2DVector& operator*=( const B2DVector& rPnt )
+            {
+                mfX *= rPnt.mfX;
+                mfY *= rPnt.mfY;
+                return *this;
+            }
+
+            /** *=operator to allow usage from B2DVector, too
+            */
+            B2DVector& operator*=(double t)
+            {
+                mfX *= t;
+                mfY *= t;
+                return *this;
+            }
 
             /** assignment operator to allow assigning the results
                 of B2DTuple calculations

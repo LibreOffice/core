@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _BGFX_RANGE_B1DRANGE_HXX
 #define _BGFX_RANGE_B1DRANGE_HXX
 
-#ifndef _BDRANGE_HXX
-#include <BDRange.hxx>
+#ifndef _BGFX_RANGE_BASICRANGE_HXX
+#include <basegfx/range/basicrange.hxx>
 #endif
 
 namespace basegfx
@@ -72,7 +72,7 @@ namespace basegfx
     {
         class B1DRange
         {
-            BDRange                                 maRange;
+            ::basegfx::range::BasicRange                    maRange;
 
         public:
             B1DRange()
@@ -117,6 +117,11 @@ namespace basegfx
             double getRange() const
             {
                 return maRange.getRange();
+            }
+
+            double getCenter() const
+            {
+                return maRange.getCenter();
             }
 
             sal_Bool isInside(double fValue) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:23 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,24 @@ namespace basegfx
 
             ~B2DPoint()
             {}
+
+            /** *=operator to allow usage from B2DPoint, too
+            */
+            B2DPoint& operator*=( const B2DPoint& rPnt )
+            {
+                mfX *= rPnt.mfX;
+                mfY *= rPnt.mfY;
+                return *this;
+            }
+
+            /** *=operator to allow usage from B2DPoint, too
+            */
+            B2DPoint& operator*=(double t)
+            {
+                mfX *= t;
+                mfY *= t;
+                return *this;
+            }
 
             /** assignment operator to allow assigning the results
                 of B2DTuple calculations

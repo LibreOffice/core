@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:51 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,16 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
-#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
@@ -532,7 +536,7 @@ namespace basegfx
         {
             for(sal_uInt32 a(0L); a < rPolyPolygon.count(); a++)
             {
-                B2DPolygon aCandidate = rPolyPolygon.getPolygon(a);
+                B2DPolygon aCandidate = rPolyPolygon.getB2DPolygon(a);
                 aCandidate.removeDoublePoints();
 
                 if(!aCandidate.isClosed() || aCandidate.count() < 3)
@@ -593,7 +597,7 @@ namespace basegfx
 
             while(maNotClosedPolygons.count())
             {
-                rPolyPolygon.append(maNotClosedPolygons.getPolygon(0L));
+                rPolyPolygon.append(maNotClosedPolygons.getB2DPolygon(0L));
                 maNotClosedPolygons.remove(0L);
             }
         }

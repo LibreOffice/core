@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygon.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
+ *  last change: $Author: aw $ $Date: 2003-11-26 14:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
-#include <basegfx/polygon/b2dpolygon.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
+#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
@@ -73,6 +73,10 @@
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
 #include <basegfx/vector/b2dvector.hxx>
+#endif
+
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #include <vector>
@@ -92,6 +96,7 @@ public:
     const ::basegfx::point::B2DPoint& getCoordinate() const { return maPoint; }
     void setCoordinate(const ::basegfx::point::B2DPoint& rValue) { if(rValue != maPoint) maPoint = rValue; }
     sal_Bool operator==(const CoordinateData2D& rData ) const { return (maPoint == rData.getCoordinate()); }
+    void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix) { maPoint *= rMatrix; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -225,6 +230,17 @@ public:
                 // if different, step forward
                 nIndex++;
             }
+        }
+    }
+
+    void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix)
+    {
+        CoordinateData2DVector::iterator aStart(maVector.begin());
+        CoordinateData2DVector::iterator aEnd(maVector.end());
+
+        for(; aStart != aEnd; aStart++)
+        {
+            aStart->transform(rMatrix);
         }
     }
 };
@@ -922,6 +938,48 @@ public:
             maPoints.removeDoublePointsWholeTrack();
         }
     }
+
+    void transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix)
+    {
+        if(mpControlVector)
+        {
+            for(sal_uInt32 a(0L); a < maPoints.count(); a++)
+            {
+                ::basegfx::point::B2DPoint aCandidate = maPoints.getCoordinate(a);
+
+                if(mpControlVector->isUsed())
+                {
+                    const ::basegfx::vector::B2DVector& rVectorA(mpControlVector->getVectorA(a));
+                    const ::basegfx::vector::B2DVector& rVectorB(mpControlVector->getVectorB(a));
+
+                    if(!rVectorA.equalZero())
+                    {
+                        ::basegfx::vector::B2DVector aVectorA(rMatrix * rVectorA);
+                        mpControlVector->setVectorA(a, aVectorA);
+                    }
+
+                    if(!rVectorB.equalZero())
+                    {
+                        ::basegfx::vector::B2DVector aVectorB(rMatrix * rVectorB);
+                        mpControlVector->setVectorB(a, aVectorB);
+                    }
+                }
+
+                aCandidate *= rMatrix;
+                maPoints.setCoordinate(a, aCandidate);
+            }
+
+            if(!mpControlVector->isUsed())
+            {
+                delete mpControlVector;
+                mpControlVector = 0L;
+            }
+        }
+        else
+        {
+            maPoints.transform(rMatrix);
+        }
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -957,7 +1015,7 @@ namespace basegfx
         B2DPolygon::B2DPolygon(const B2DPolygon& rPolygon, sal_uInt32 nIndex, sal_uInt32 nCount)
         :   mpPolygon(new ImplB2DPolygon(*rPolygon.mpPolygon, nIndex, nCount))
         {
-            DBG_ASSERT(nIndex + nCount > rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
+            OSL_ENSURE(nIndex + nCount > rPolygon.mpPolygon->count(), "B2DPolygon constructor outside range (!)");
         }
 
         B2DPolygon::~B2DPolygon()
@@ -1016,14 +1074,14 @@ namespace basegfx
 
         ::basegfx::point::B2DPoint B2DPolygon::getB2DPoint(sal_uInt32 nIndex) const
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             return mpPolygon->getPoint(nIndex);
         }
 
         void B2DPolygon::setB2DPoint(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rValue)
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             if(mpPolygon->getPoint(nIndex) != rValue)
             {
@@ -1034,7 +1092,7 @@ namespace basegfx
 
         void B2DPolygon::insert(sal_uInt32 nIndex, const ::basegfx::point::B2DPoint& rPoint, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
+            OSL_ENSURE(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
 
             if(nCount)
             {
@@ -1054,14 +1112,14 @@ namespace basegfx
 
         ::basegfx::vector::B2DVector B2DPolygon::getControlVectorA(sal_uInt32 nIndex) const
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             return mpPolygon->getControlVectorA(nIndex);
         }
 
         void B2DPolygon::setControlVectorA(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             if(mpPolygon->getControlVectorA(nIndex) != rValue)
             {
@@ -1072,14 +1130,14 @@ namespace basegfx
 
         ::basegfx::vector::B2DVector B2DPolygon::getControlVectorB(sal_uInt32 nIndex) const
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             return mpPolygon->getControlVectorB(nIndex);
         }
 
         void B2DPolygon::setControlVectorB(sal_uInt32 nIndex, const ::basegfx::vector::B2DVector& rValue)
         {
-            DBG_ASSERT(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
+            OSL_ENSURE(nIndex < mpPolygon->count(), "B2DPolygon access outside range (!)");
 
             if(mpPolygon->getControlVectorB(nIndex) != rValue)
             {
@@ -1095,7 +1153,7 @@ namespace basegfx
 
         void B2DPolygon::insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
+            OSL_ENSURE(nIndex <= mpPolygon->count(), "B2DPolygon Insert outside range (!)");
 
             if(rPoly.count())
             {
@@ -1112,7 +1170,7 @@ namespace basegfx
                 }
                 else
                 {
-                    DBG_ASSERT(nIndex2 + nCount > rPoly.mpPolygon->count(), "B2DPolygon Insert outside range (!)");
+                    OSL_ENSURE(nIndex2 + nCount > rPoly.mpPolygon->count(), "B2DPolygon Insert outside range (!)");
                     ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex2, nCount);
                     mpPolygon->insert(nIndex, aTempPoly);
                 }
@@ -1136,7 +1194,7 @@ namespace basegfx
                 }
                 else
                 {
-                    DBG_ASSERT(nIndex + nCount > rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
+                    OSL_ENSURE(nIndex + nCount > rPoly.mpPolygon->count(), "B2DPolygon Append outside range (!)");
                     ImplB2DPolygon aTempPoly(*rPoly.mpPolygon, nIndex, nCount);
                     mpPolygon->insert(mpPolygon->count(), aTempPoly);
                 }
@@ -1145,7 +1203,7 @@ namespace basegfx
 
         void B2DPolygon::remove(sal_uInt32 nIndex, sal_uInt32 nCount)
         {
-            DBG_ASSERT(nIndex + nCount <= mpPolygon->count(), "B2DPolygon Remove outside range (!)");
+            OSL_ENSURE(nIndex + nCount <= mpPolygon->count(), "B2DPolygon Remove outside range (!)");
 
             if(nCount)
             {
@@ -1204,6 +1262,15 @@ namespace basegfx
                 implForceUniqueCopy();
                 mpPolygon->removeDoublePointsAtBeginEnd();
                 mpPolygon->removeDoublePointsWholeTrack();
+            }
+        }
+
+        void B2DPolygon::transform(const ::basegfx::matrix::B2DHomMatrix& rMatrix)
+        {
+            if(mpPolygon->count())
+            {
+                implForceUniqueCopy();
+                mpPolygon->transform(rMatrix);
             }
         }
     } // end of namespace polygon
