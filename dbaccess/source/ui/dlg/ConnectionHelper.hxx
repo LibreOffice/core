@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:57:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ namespace dbaui
 
     class IAdminHelper;
 
-
     class OConnectionHelper : public OGenericAdministrationPage
     {
         sal_Bool            m_bUserGrabFocus : 1;
@@ -148,12 +147,10 @@ namespace dbaui
         sal_Bool        commitURL();
 
         /** opens the FileOpen dialog and asks for a FileName
-            @param  _sFilterName
-                The filter name.
-            @param  _sExtension
-                The filter extension.
+            @param  _aFileOpen
+                Executes the file open dialog, which must be filled from caller.
         */
-        void askForFileName(const ::rtl::OUString& _sFilterName, const ::rtl::OUString& _sExtension);
+        void askForFileName(::sfx2::FileDialogHelper& _aFileOpen);
 
            virtual void SetServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
         {
