@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2002-11-05 09:06:52 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,9 @@ service Desktop
     interface XComponentLoader;
 
     //-------------------------------------------------------------------------
-    /** provides listener support for events on currently loaded documents
+    /** @deprecated This interface is a documentation error. It was never thought to be supported
+                    by this service. Please use the service <type cope="com::sun::star::frame">GlobalEventBroadcaster</type>
+                    instead of this interface.
      */
     interface com::sun::star::document::XEventBroadcaster;
 };
