@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:41:27 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
         {
             // calc Symbol- and Textrect
-            long nSymbolSize    = pDev->GetTextHeight();
+            long nSymbolSize    = pDev->GetTextHeight() / 2 + 1;
             aInRect.Right()    -= 5;
             aInRect.Left()      = aInRect.Right() - nSymbolSize;
             aSize.Width()      -= ( 5 + nSymbolSize );
