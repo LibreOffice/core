@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 16:03:32 $
+ *  last change: $Author: ka $ $Date: 2002-10-09 15:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             {
                 const String aNewName( aDlg.GetTitle() );
 
-                if( aNewName != aOldName )
+                if( aNewName.Len() && ( aNewName != aOldName ) )
                 {
                     String  aName( aNewName );
                     USHORT  nCount = 0;
@@ -417,7 +417,7 @@ void GalleryBrowser1::ImplExecute( USHORT nId )
             {
                 String aName( pTheme->GetName() );
 
-                if( aName != aData.aEditedTitle )
+                if( aData.aEditedTitle.Len() && aName != aData.aEditedTitle )
                 {
                     const String    aOldName( aName );
                     String          aName( aData.aEditedTitle );
@@ -662,7 +662,7 @@ IMPL_LINK( GalleryBrowser1, ClickNewThemeHdl, void*, p )
         {
             String aName( pTheme->GetName() );
 
-            if( aName != aData.aEditedTitle )
+            if( aData.aEditedTitle.Len() && ( aName != aData.aEditedTitle ) )
             {
                 const String    aOldName( aName );
                 String          aName( aData.aEditedTitle );
