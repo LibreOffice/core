@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-04 00:10:12 $
+#   last change: $Author: hr $ $Date: 2002-08-27 11:59:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,12 +76,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(OS)"!="MACOSX"
+.IF "$(GUIBASE)"!="aqua"
 
 dummy:
-    @echo "Nothing to build for this platform"
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
 
-.ELSE		# "$(OS)"!="MACOSX"
+.ELSE		# "$(GUIBASE)"!="aqua"
 
 SLOFILES=	\
         $(SLO)/salframe.obj		\
@@ -97,7 +97,7 @@ OBJFILES=	\
         $(OBJ)/VCLWindow.obj
 .ENDIF
 
-.ENDIF		# "$(OS)"!="MACOSX"
+.ENDIF		# "$(GUIBASE)"!="aqua"
 
 # --- Targets ------------------------------------------------------
 
