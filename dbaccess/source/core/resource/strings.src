@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:09:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,35 +292,128 @@ String RID_STR_COULDNOTLOAD_MANAGER
     Text[ slovenian ] = "Ni mogoƒçe vzpostaviti povezave z zunanjim virom podatkov. Upravitelja SDBC-gonilnikov ni mogoƒçe nalo≈æiti.";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_STR_ONLY_QUERY
+{
+    Text = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
+    Text [ english_us ] = "The given command is not a SELECT statement.\n Only queries are allowed.";
+};
+String RID_STR_NO_VALUE_CHANGED
+{
+    Text = "Es wurden keine Werte ver‰ndert.";
+    Text [ english_us ] = "No values were modified.";
+};
+String RID_STR_NO_XROWUPDATE
+{
+    Text = "Es konnten keine Werte eingef¸gt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterst¸tzt.";
+    Text [ english_us ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
+};
+String RID_STR_NO_XRESULTSETUPDATE
+{
+    Text = "Es konnten keine Werte eingef¸gt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterst¸tzt.";
+    Text [ english_us ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
+};
+String RID_STR_NO_UPDATE_MISSING_CONDITION
+{
+    Text = "Die Werte konnten nicht ver‰ndert, auf Grund einer fehlenden Bedingung.";
+    Text [ english_us ] = "Values could not be modified, due to a missing condition statement.";
+};
+String RID_STR_NO_COLUMN_ADD
+{
+    Text = "Das Hinzuf¸gen von Spalten wird nicht unterst¸tzt.";
+    Text [ english_us ] = "The adding of columns is not supported.";
+};
+String RID_STR_NO_COLUMN_DROP
+{
+    Text = "Das Lˆschen von Spalten wird nicht unterst¸tzt.";
+    Text [ english_us ] = "The dropping of columns is not supported.";
+};
+String RID_STR_NO_CONDITION_FOR_PK
+{
+    Text = "Es konnte keine WHERE-Bedingung f¸r den Prim‰rschl¸ssel erstellt werden.";
+    Text [ english_us ] = "The WHERE condition could not be created for the primary key.";
+};
+String RID_STR_COLUMN_UNKNOWN_PROP
+{
+    Text = "Die Spalte unterst¸tzt die Eigenschaft '%value' nicht.";
+    Text [ english_us ] = "The column does not support the property '%value'.";
+};
+String RID_STR_COLUMN_NOT_SEARCHABLE
+{
+    Text = "In dieser Spalte kann nicht gesucht werden.";
+    Text [ english_us ] = "The column is not searchable!";
+};
+String RID_STR_NOT_SEQUENCE_INT8
+{
+    Text = "Der Wert der Spalten ist nicht vom Type Sequence<sal_Int8>.";
+    Text [ english_us ] = "The value of the columns is not of the type Sequence<sal_Int8>.";
+};
+String RID_STR_COLUMN_NOT_VALID
+{
+    Text = "Die Spalte ist nicht g¸ltig.";
+    Text [ english_us ] = "The column is not valid.";
+};
+String RID_STR_COLUMN_MUST_VISIBLE
+{
+    Text = "Die Spalte '%name' muﬂ als Spalte sichtbar sein.";
+    Text [ english_us ] = "The column '%name' must be visible as a column.";
+};
+String RID_STR_NO_XQUERIESSUPPLIER
+{
+    Text = "Die Schnittstelle XQueriesSupplier ist nicht verf¸gbar.";
+    Text [ english_us ] = "The interface XQueriesSupplier is not available.";
+};
+String RID_STR_NOT_SUPPORTED_BY_DRIVER
+{
+    Text = "Der Treiber unterst¸tzt diese Funktion nicht.";
+    Text [ english_us ] = "The driver does not support this function.";
+};
+String RID_STR_NO_ABS_ZERO
+{
+    Text = "Ein 'absolute(0)' Aufruf ist nicht erlaubt.";
+    Text [ english_us ] = "An 'absolute(0)' call is not allowed.";
+};
+String RID_STR_NO_RELATIVE
+{
+    Text = "Eine relative Positionierung ist in diesem Status nicht erlaubt.";
+    Text [ english_us ] = "Relative positioning is not allowed in this state.";
+};
+String RID_STR_NO_REFESH_AFTERLAST
+{
+    Text = "Eine Zeile kann nicht aktualisiert werden, wenn das ResultSet hinter der letzten Zeile steht.";
+    Text [ english_us ] = "A row  cannot be refreshed when the ResultSet is positioned after  the last row.";
+};
+String RID_STR_NO_MOVETOINSERTROW_CALLED
+{
+    Text = "Das Einf¸gen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die Einf¸gezeile bewegt.";
+    Text [ english_us ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
+};
+String RID_STR_NO_UPDATEROW
+{
+    Text = "Eine Zeile kann in diesem Status nicht ver‰ndert werden.";
+    Text [ english_us ] = "A row cannot be modified in this state";
+};
+String RID_STR_NO_DELETEROW
+{
+    Text = "Eine Zeile kann in diesem Status nicht gelˆscht werden.";
+    Text [ english_us ] = "A row cannot be deleted in this state.";
+};
+String RID_STR_NO_TABLE_RENAME
+{
+    Text = "Der Treiber unterst¸tzt das Umbenennen einer Tabelle nicht.";
+    Text [ english_us ] = "The driver does not support table renaming.";
+};
+String RID_STR_NO_ALTER_COLUMN_DEF
+{
+    Text = "Der Treiber unterst¸tzt das Ver‰ndern einer Spaltendefinition nicht.";
+    Text [ english_us ] = "The driver does not support the modification of column descriptions.";
+};
+String RID_STR_COLUMN_ALTER_BY_NAME
+{
+    Text = "Der Treiber unterst¸tzt das Ver‰ndern einer Spaltendefinition, anhand des Namens, nicht.";
+    Text [ english_us ] = "The driver does not support the modification of column descriptions by changing the name.";
+};
+String RID_STR_COLUMN_ALTER_BY_INDEX
+{
+    Text = "Der Treiber unterst¸tzt das Ver‰ndern einer Spaltendefinition, anhand des Indexes, nicht.";
+    Text [ english_us ] = "The driver does not support the modification of column descriptions by changing the  index.";
+};
