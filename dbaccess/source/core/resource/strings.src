@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-17 20:17:19 $
+ *  last change: $Author: rt $ $Date: 2001-08-21 21:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,12 +120,12 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ portuguese ] = "A tabela $name$ já existe. Como foi filtrada, não se encontra visível.";
     Text[ russian ] = "Òàáëèöà $name$ óæå ñóùåñòâóåò. Îíà íå âèäíà èç-çà ôèëüòğàöèè.";
     Text[ greek ] = "Ï ğßíáêáò $name$ õğÜñ÷åé Şäç. ¸÷åé öéëôñáñéóôåß!";
-    Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij werd alleen gefilterd!";
+    Text[ dutch ] = "Tabel $name$ bestaat reeds. Hij is alleen niet zichtbaar omdat hij werd uitgefilterd!";
     Text[ french ] = "La table $name$ existe déjà ; comme elle a été filtrée, elle n'est pas visible.";
     Text[ spanish ] = "La tabla $name$ ya existe. ¡No se puede ver porque ha sido filtrada!";
     Text[ italian ] = "Il nome della tabella $name$ esiste già; non è visibile in quanto è stato filtrato.";
     Text[ danish ] = "the table $name$ already exists. She is only filtered!";
-    Text[ swedish ] = "Tabellen $name$ finns redan. Den har filtrerats!";
+    Text[ swedish ] = "Tabellen $name$ finns redan. Den är inte synlig eftersom den har filtrerats bort.";
     Text[ polish ] = "Tabela $name$ ju¿ istenieje. Zosta³a ona przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ $name$ ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ï¾Œï½¨ï¾™ï¾€ã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“ã€‚";
@@ -163,6 +163,7 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
     Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
+
 
 
 
