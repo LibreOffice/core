@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 16:14:35 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,61 +81,6 @@ import java.util.*;
  */
 public class FileHelper
 {
-    // ____________________
-
-    /**
-     * Copy the (complete!) content of one file to another file.
-     *
-     * @param aSource
-     *        means the source file, which should be copied.
-     *
-     * @param aDestination
-     *        means the destination file
-     *
-     * @throws  An IOException if it occures during execution of this method
-     *          by calling other methods internaly.
-     */
-    public static void atomicFileCopy(java.io.File aSource     ,
-                                      java.io.File aDestination)
-        throws java.io.IOException
-    {
-        System.out.println("TODO: must be adapted to java 1.3 and support cygwin shells :-(");
-        System.exit(-1);
-
-        /*TODO_JAVA
-        Solution I : using nio.channel locks doesnt exists for java 1.3  :-(
-        Solution II: using system call "cp" cant work with cygwin shells :-(
-
-        boolean bOK = false;
-        try
-        {
-            java.lang.Runtime aRunner = java.lang.Runtime.getRuntime();
-
-            java.lang.String[] lCommands = new java.lang.String[3];
-            lCommands[0] = "cp";
-            lCommands[1] = aSource.getAbsolutePath();
-            lCommands[2] = aDestination.getAbsolutePath();
-
-            java.lang.Process aProc = aRunner.exec(lCommands);
-            aProc.waitFor();
-
-            bOK = (aProc.exitValue()==0);
-        }
-        catch(java.lang.Throwable ex)
-            { bOK = false; }
-
-        if (!bOK)
-        {
-            java.lang.String sMsg = "atomic copy from \"";
-            sMsg += aSource.getAbsolutePath();
-            sMsg += "\" to \"";
-            sMsg += aDestination.getAbsolutePath();
-            sMsg += "\" failed.";
-            throw new java.io.IOException(sMsg);
-        }
-        */
-    }
-
     // ____________________
 
     /**
@@ -348,35 +293,31 @@ public class FileHelper
      */
     public static java.lang.String convertName2FileName(String sName)
     {
-        char             c         = '_';
-        java.lang.String sFileName = sName;
+        int    i       = 0;
+        int    nLength = sName.length();
+        char[] lBuffer = sName.toCharArray();
 
-        sFileName = sFileName.replace('\\',c);
-        sFileName = sFileName.replace('/' ,c);
-        sFileName = sFileName.replace('&' ,c);
-        sFileName = sFileName.replace(':' ,c);
-        sFileName = sFileName.replace(';' ,c);
-        sFileName = sFileName.replace('.' ,c);
-        sFileName = sFileName.replace(' ' ,c);
-        sFileName = sFileName.replace('-' ,c);
-        sFileName = sFileName.replace('+' ,c);
-        sFileName = sFileName.replace('#' ,c);
-        sFileName = sFileName.replace('*' ,c);
-        sFileName = sFileName.replace('~' ,c);
-        sFileName = sFileName.replace('?' ,c);
-        sFileName = sFileName.replace('!' ,c);
-        sFileName = sFileName.replace('=' ,c);
-        sFileName = sFileName.replace('(' ,c);
-        sFileName = sFileName.replace(')' ,c);
-        sFileName = sFileName.replace('[' ,c);
-        sFileName = sFileName.replace(']' ,c);
-        sFileName = sFileName.replace('{' ,c);
-        sFileName = sFileName.replace('}' ,c);
-        sFileName = sFileName.replace('%' ,c);
-        sFileName = sFileName.replace('$' ,c);
-        sFileName = sFileName.replace('§' ,c);
+        java.lang.StringBuffer sNewName = new java.lang.StringBuffer(nLength);
+        for (i=0; i<nLength; ++i)
+        {
+            char c = lBuffer[i];
+            if (
+                c>=48 && c<=57      // 0-9
+                &&
+                c>=97 && c<=122     // a-z
+                &&
+                c>=65 && c<=90      // A-Z
+               )
+            {
+                sNewName.append(c);
+            }
+            else
+            {
+                sNewName.append("_");
+            }
+        }
 
-        return sFileName;
+        return sNewName.toString();
     }
 
     //___________________________________________
@@ -466,7 +407,46 @@ public class FileHelper
 
     //___________________________________________
 
-    /** writes the given string buffer into the specified file.
+    /** reads the complete file, using the right encoding,
+     *  into the given string buffer.
+     *
+     *  @param  aFile
+     *          must point to a system file, which must exist.
+     *          e.g.: "c:\temp\test.txt"
+     *                "/tmp/test.txt"
+     *
+     *  @param  sEncoding
+     *          will be used to encode the string content
+     *          inside the file.
+     *          e.g.: "UTF8"
+     *
+     *  @param  sBuffer
+     *          used to return the file content.
+     *
+     *  @throw  [IOException]
+     *          - if the file couldnt be opened
+     *          - if the file does not use the right encoding
+     */
+    public static void readEncodedBufferFromFile(java.io.File           aFile    ,
+                                                 java.lang.String       sEncoding,
+                                                 java.lang.StringBuffer sBuffer  )
+        throws java.io.IOException
+    {
+        java.io.FileInputStream   aByteStream    = new java.io.FileInputStream(aFile.getAbsolutePath());
+        java.io.InputStreamReader aEncodedReader = new java.io.InputStreamReader(aByteStream, sEncoding);
+        char[]                    aEncodedBuffer = new char[4096];
+        int                       nReadCount     = 0;
+
+        while((nReadCount=aEncodedReader.read(aEncodedBuffer))>0)
+            sBuffer.append(aEncodedBuffer, 0, nReadCount);
+
+        aEncodedReader.close();
+    }
+
+    //___________________________________________
+
+    /** writes the given string buffer into the specified file
+     *  using the specified encoding.
      *
      *  Further it can be set, if the file should be expanded
      *  or replaced by this new string buffer.
@@ -476,28 +456,32 @@ public class FileHelper
      *          e.g.: "c:\temp\test.txt"
      *                "/tmp/test.txt"
      *
+     *  @param  sEncoding
+     *          will be used to encode the string content inside the file.
+     *          e.g.: "UTF8"
+     *
      *  @param  bAppend
      *          specify if an already existing file will be
      *          expanded or replaced.
      *
-     *  @param  sEncoding
-     *          will be used to encode the string content inside the file.
-     *          e.g.: "UTF-8"
-     *
-     *  @param  sText
+     *  @param  sBuffer
      *          the new string content for this file.
      */
-    public static void writeTextToFile(java.io.File     aFile    ,
-                                       boolean          bAppend  ,
-                                       java.lang.String sEncoding,
-                                       java.lang.String sText    )
+    public static void writeEncodedBufferToFile(java.io.File           aFile    ,
+                                                java.lang.String       sEncoding,
+                                                boolean                bAppend  ,
+                                                java.lang.StringBuffer sBuffer  )
         throws java.io.IOException
     {
-        java.io.FileOutputStream   aStream = new java.io.FileOutputStream(aFile.getAbsolutePath(), bAppend);
-        java.io.OutputStreamWriter aWriter = new java.io.OutputStreamWriter(aStream, sEncoding);
-        aWriter.write(sText, 0, sText.length());
-        aWriter.flush();
-        aWriter.close();
+        java.io.FileOutputStream   aByteStream    = new java.io.FileOutputStream(aFile.getAbsolutePath(), bAppend);
+        java.io.OutputStreamWriter aEncodedWriter = new java.io.OutputStreamWriter(aByteStream, sEncoding);
+
+        java.lang.String sTemp = sBuffer.toString();
+        aEncodedWriter.write(sTemp, 0, sTemp.length());
+
+        aEncodedWriter.flush();
+        aEncodedWriter.close();
+
         if (!aFile.exists())
             throw new java.io.IOException("File \""+aFile.getAbsolutePath()+"\" not written correctly.");
     }
