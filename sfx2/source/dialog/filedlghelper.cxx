@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:34:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     // ask for the password
                     SfxPasswordDialog aPasswordDlg( NULL );
                     aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-                    BOOL bOK = FALSE;
                     short nRet = aPasswordDlg.Execute();
                     if ( RET_OK == nRet )
                     {
@@ -1999,7 +1998,9 @@ namespace
             }
             catch( const Exception& e )
             {
+#ifndef GCC
                 e;  // make compiler happy
+#endif
             }
         }
 
