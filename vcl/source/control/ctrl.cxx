@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:47:19 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,15 +328,9 @@ long Control::Notify( NotifyEvent& rNEvt )
         if ( !mbHasFocus )
         {
             mbHasFocus = TRUE;
-            ImplDelData aDelData;
-            ImplAddDel( &aDelData );
-            ImplCallEventListeners( VCLEVENT_CONTROL_GETFOCUS );
-            if ( aDelData.IsDelete() )
+            if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
+                // been destroyed within the handler
                 return TRUE;
-            maGetFocusHdl.Call( this );
-            if ( aDelData.IsDelete() )
-                return TRUE;
-            ImplRemoveDel( &aDelData );
         }
     }
     else
@@ -347,15 +341,9 @@ long Control::Notify( NotifyEvent& rNEvt )
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
                 mbHasFocus = FALSE;
-                ImplDelData aDelData;
-                ImplAddDel( &aDelData );
-                ImplCallEventListeners( VCLEVENT_CONTROL_LOSEFOCUS );
-                if ( aDelData.IsDelete() )
+                if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
+                    // been destroyed within the handler
                     return TRUE;
-                maLoseFocusHdl.Call( this );
-                if ( aDelData.IsDelete() )
-                    return TRUE;
-                ImplRemoveDel( &aDelData );
             }
         }
     }
@@ -405,6 +393,27 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
         aRect.Move( aRel.Left(), aRel.Top() );
         mpLayoutData->m_aUnicodeBoundRects.push_back( aRect );
     }
+}
+
+// -----------------------------------------------------------------
+
+BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHandler, void* pCaller )
+{
+    ImplDelData aCheckDelete;
+    ImplAddDel( &aCheckDelete );
+
+    ImplCallEventListeners( nEvent );
+    if ( !aCheckDelete.IsDelete() )
+    {
+        rHandler.Call( pCaller );
+
+        if ( !aCheckDelete.IsDelete() )
+        {
+            ImplRemoveDel( &aCheckDelete );
+            return FALSE;
+        }
+    }
+    return TRUE;
 }
 
 // -----------------------------------------------------------------
