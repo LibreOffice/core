@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:38:37 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,19 +87,25 @@
 #include "drtxtob.hxx"
 #include "drawview.hxx"
 #include "viewdata.hxx"
-#include "textdlgs.hxx"
+//CHINA001 #include "textdlgs.hxx"
 #include "scresid.hxx"
 
-
+#include "scabstdlg.hxx" //CHINA00
 //------------------------------------------------------------------------
 
 BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
-    ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
-                                     &rArgs,
-                                     pViewData->GetSfxDocShell() );
+//CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
+//CHINA001  &rArgs,
+//CHINA001  pViewData->GetSfxDocShell() );
+//CHINA001
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+    SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
+                                                        pViewData->GetSfxDocShell(),ResId(RID_SCDLG_CHAR) );
+    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
@@ -137,9 +143,14 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     aNewAttr.Put( SvxWidowsItem() );
     aNewAttr.Put( SvxOrphansItem() );
 
-    ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
-                                               &aNewAttr );
+//CHINA001  ScParagraphDlg* pDlg = new ScParagraphDlg( pViewData->GetDialogParent(),
+//CHINA001  &aNewAttr );
+//CHINA001
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
+    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, ResId(RID_SCDLG_PARAGRAPH));
+    DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
