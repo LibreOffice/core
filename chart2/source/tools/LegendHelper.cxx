@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-08 17:40:38 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <drafts/com/sun/star/chart2/XChartDocument.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 
@@ -76,8 +80,8 @@ namespace chart
 // static
 rtl::OUString LegendHelper::getIdentifierForLegend()
 {
-    static rtl::OUString m_aIdentifier( C2U( "@legend" ) );
-    return m_aIdentifier;
+    static rtl::OUString aIdentifier( C2U( "@legend" ) );
+    return aIdentifier;
 }
 
 // static
@@ -89,12 +93,52 @@ uno::Reference< chart2::XLegend > LegendHelper::getLegend(
     uno::Reference< chart2::XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getDiagram());
-        if( xDia.is())
-            xResult.set( xDia->getLegend() );
+        try
+        {
+            uno::Reference< chart2::XDiagram > xDia( xChartDoc->getDiagram());
+            if( xDia.is())
+                xResult.set( xDia->getLegend() );
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+
     }
 
     return xResult;
+}
+
+// static
+void LegendHelper::defaultFillEmptyLegend(
+    const uno::Reference< chart2::XLegend > & xLegend,
+    const uno::Reference< chart2::XDiagram > & xDiagram )
+{
+    if( xLegend.is() &&
+        xDiagram.is() )
+    {
+        try
+        {
+            uno::Reference< chart2::XDataSeriesTreeParent > xRoot( xDiagram->getTree());
+
+            uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren( xRoot->getChildren());
+            for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
+            {
+                uno::Reference< lang::XServiceInfo > xInfo( aChildren[ i ], uno::UNO_QUERY );
+                if( xInfo.is() &&
+                    xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.ChartTypeGroup" )))
+                {
+                    uno::Reference< chart2::XLegendEntry > xEntry( xInfo, uno::UNO_QUERY );
+                    if( xEntry.is())
+                        xLegend->registerEntry( xEntry );
+                }
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
 }
 
 //.............................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-08 17:40:39 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,10 @@
  ************************************************************************/
 #include "VLegend.hxx"
 #include "macros.hxx"
+#include "PropertyMapper.hxx"
 #include "CommonConverters.hxx"
+#include "VLegendSymbolFactory.hxx"
+#include "chartview/ObjectIdentifier.hxx"
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
@@ -80,6 +83,16 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
 #include <drafts/com/sun/star/chart2/XDataSource.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPEGROUP_HPP_
+#include <drafts/com/sun/star/chart2/XChartTypeGroup.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XIDENTIFIABLE_HPP_
+#include <drafts/com/sun/star/chart2/XIdentifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_HPP_
+#include <com/sun/star/drawing/LineJoint.hpp>
+#endif
+
 
 // header for class Matrix3D
 #ifndef _B2D_MATRIX3D_HXX
@@ -114,6 +127,10 @@ namespace
 
 ::rtl::OUString lcl_getLabelForSeries( const uno::Reference< chart2::XDataSource > & xSource )
 {
+//     uno::Reference< beans::XPropertySet > xProp( xSource, uno::UNO_QUERY );
+//     ::rtl::OUString aStr;
+//     xProp->getPropertyValue( C2U("Identifier")) >>= aStr;
+//     return aStr;
     ::rtl::OUString aResult;
 
     if( xSource.is())
@@ -136,6 +153,69 @@ namespace
     }
 
     return aResult;
+}
+
+/** creates a symbol shape that is returned and added to the given
+    xShapeContainer The adding to the container may have to be done here, if you
+    use group shapes, because you can only add shapes to a group that itself has
+    been added to an XShapes before.
+ */
+uno::Reference< drawing::XShape > lcl_getSymbol(
+    const uno::Reference< chart2::XChartTypeGroup > & xChartTypeGroup,
+    const uno::Reference< beans::XPropertySet > & xSeriesProp,
+    const uno::Reference< lang::XMultiServiceFactory > & xFact,
+    const uno::Reference< drawing::XShapes > & xShapeContainer )
+{
+    uno::Reference< drawing::XShape > xResult;
+
+    if( xChartTypeGroup.is())
+    {
+        uno::Reference< chart2::XChartType > xType( xChartTypeGroup->getChartType());
+        if( xType.is())
+        {
+            ::rtl::OUString aChartType( xType->getChartType());
+
+            sal_Int32 nColor = 0x191970; // midnight blue
+
+            if( xSeriesProp.is() )
+            {
+                xSeriesProp->getPropertyValue( C2U("Color")) >>= nColor;
+            }
+            xResult.set( xFact->createInstance(
+                             C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
+            xShapeContainer->add( xResult );
+            uno::Reference< drawing::XShapes > xGroup( xResult, uno::UNO_QUERY );
+            if( ! xGroup.is())
+                return uno::Reference< drawing::XShape >();
+
+            xShapeContainer->add( xResult );
+
+            chart2::LegendSymbolStyle eSymbolStyle = chart2::LegendSymbolStyle_BOX;
+
+            // todo: offer UNO components that support the given service-name
+            // and are capable of creating data representations as well as
+            // legend symbols
+
+            if( aChartType.equals( C2U( "com.sun.star.chart2.BarChart" )) ||
+                aChartType.equals( C2U( "com.sun.star.chart2.AreaChart" )) ||
+                aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
+            {
+                eSymbolStyle = chart2::LegendSymbolStyle_BOX;
+            }
+            else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
+            {
+                eSymbolStyle = chart2::LegendSymbolStyle_LINE;
+            }
+
+            ::chart::VLegendSymbolFactory::createSymbol( xGroup, eSymbolStyle, xFact, xSeriesProp );
+        }
+    }
+    else
+    {
+        OSL_ENSURE( false, "No ChartTypeGroup!" );
+    }
+
+    return xResult;
 }
 
 } // anonymous namespace
@@ -163,6 +243,7 @@ void SAL_CALL VLegend::init(
 void VLegend::createLegendEntries(
     const uno::Reference< drawing::XShapes > & xShapeContainer,
     const uno::Reference< chart2::XDataSeriesTreeParent > & xParent,
+    const uno::Reference< chart2::XDataSeriesTreeParent > & xRootParent,
     sal_Int32 & nOutCurrentHeight )
 {
     if( ! xParent.is())
@@ -171,16 +252,30 @@ void VLegend::createLegendEntries(
     const sal_Int32 nXOffset = 100;
     const sal_Int32 nYOffset = 100;
 
+    uno::Reference< chart2::XChartTypeGroup > xChartTypeGroup( xRootParent, uno::UNO_QUERY );
     uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
         xParent->getChildren());
+
+    // CharacterProperties
+
+    tPropertyNameValueMap aValueMap;
+    uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
+    if( xLegendProp.is())
+    {
+        tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForCharacterProperties();
+        PropertyMapper::getValueMap( aValueMap, aNameMap, xLegendProp );
+    }
 
     for( sal_Int32 nI = 0; nI < aChildren.getLength(); ++nI )
     {
         uno::Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ nI ], uno::UNO_QUERY );
         if( xNewParent.is())
         {
+            // If there should be lines between two stacking groups, this would
+            // be the place to create and place them.
+
             // recurse !
-            createLegendEntries( xShapeContainer, xNewParent, nOutCurrentHeight );
+            createLegendEntries( xShapeContainer, xNewParent, xRootParent, nOutCurrentHeight );
         }
         else
         {
@@ -195,57 +290,51 @@ void VLegend::createLegendEntries(
 
                 xShapeContainer->add( xEntry );
 
-                ::rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "<none>" ));
+                ::rtl::OUString aName;
                 uno::Reference< chart2::XDataSource > xSeriesSource(
                     aChildren[ nI ], uno::UNO_QUERY );
                 if( xSeriesSource.is())
                     aName = lcl_getLabelForSeries( xSeriesSource );
 
                 uno::Reference< beans::XPropertySet > xTextProp( xEntry, uno::UNO_QUERY );
-                if( xTextProp.is())
-                {
-                    drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-                    drawing::TextVerticalAdjust eVertAdjust( drawing::TextVerticalAdjust_TOP );
-
-                    xTextProp->setPropertyValue( C2U("CharHeight"), uno::makeAny( (float)(10.0)));
-                    xTextProp->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny( sal_True ));
-                    xTextProp->setPropertyValue( C2U("TextAutoGrowWidth"), uno::makeAny( sal_True ));
-                    xTextProp->setPropertyValue( C2U("TextHorizontalAdjust"), uno::makeAny( eHorizAdjust ));
-                    xTextProp->setPropertyValue( C2U("TextVerticalAdjust"), uno::makeAny( eVertAdjust ));
-                }
-
                 uno::Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
                 if( xRange.is())
                 {
                     xRange->setString( aName );
                 }
 
+                if( xTextProp.is())
+                {
+                    drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
+                    drawing::TextVerticalAdjust eVertAdjust( drawing::TextVerticalAdjust_TOP );
+                    xTextProp->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny( sal_True ));
+                    xTextProp->setPropertyValue( C2U("TextAutoGrowWidth"), uno::makeAny( sal_True ));
+                    xTextProp->setPropertyValue( C2U("TextHorizontalAdjust"), uno::makeAny( eHorizAdjust ));
+                    xTextProp->setPropertyValue( C2U("TextVerticalAdjust"), uno::makeAny( eVertAdjust ));
+
+                    tNameSequence aPropNames;
+                    tAnySequence aPropValues;
+                    PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
+                    PropertyMapper::setMultiProperties( aPropNames, aPropValues, xEntry );
+                }
+
                 awt::Size aTextSize( xEntry->getSize());
-                xEntry->setPosition( awt::Point( 2*nXOffset + aTextSize.Height, nYOffset + nOutCurrentHeight ));
+                xEntry->setPosition( awt::Point( 2*nXOffset + 2 * aTextSize.Height, nYOffset + nOutCurrentHeight ));
 
                 // symbol
                 uno::Reference< drawing::XShape > xSymbol(
-                    m_xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
-
-                if( ! xSymbol.is())
-                    continue;
-
-                sal_Int32 nSymbolWidth = aTextSize.Height * 8 / 10;
-                sal_Int32 nDiff = (aTextSize.Height - nSymbolWidth) / 2;
-                xShapeContainer->add( xSymbol );
-                xSymbol->setSize( awt::Size( nSymbolWidth, nSymbolWidth ));
-                xSymbol->setPosition( awt::Point( nXOffset + nDiff,
-                                                  nYOffset + nOutCurrentHeight + nDiff ));
-
-                uno::Reference< beans::XPropertySet > xSymbolProp( xSymbol, uno::UNO_QUERY );
-                uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
-                if( xSymbolProp.is() &&
-                    xSeriesProp.is() )
+                    lcl_getSymbol( xChartTypeGroup,
+                                   uno::Reference< beans::XPropertySet >(
+                                       xSeriesSource, uno::UNO_QUERY ),
+                                   m_xShapeFactory,
+                                   xShapeContainer));
+                if( xSymbol.is())
                 {
-                    xSymbolProp->setPropertyValue(
-                        C2U("FillColor"),
-                        xSeriesProp->getPropertyValue( C2U("Color")));
+                    sal_Int32 nSymbolHeight = aTextSize.Height * 75 / 100;
+                    sal_Int32 nDiff = (aTextSize.Height - nSymbolHeight) / 2;
+                    xSymbol->setSize( awt::Size( 2 * nSymbolHeight, nSymbolHeight ));
+                    xSymbol->setPosition( awt::Point( nXOffset + nDiff,
+                                                      nYOffset + nOutCurrentHeight + nDiff ));
                 }
 
                 nOutCurrentHeight += aTextSize.Height;
@@ -279,17 +368,49 @@ void VLegend::createShapes()
                 C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY );
         m_xTarget->add( m_xShape );
 
+        // set Name
+        {
+            uno::Reference< beans::XPropertySet > xShapeProp( m_xShape, uno::UNO_QUERY );
+            uno::Reference< chart2::XIdentifiable > xLegendIdent( m_xLegend, uno::UNO_QUERY );
+            if( xShapeProp.is() &&
+                xLegendIdent.is())
+            {
+                rtl::OUString aCID = ObjectIdentifier::createClassifiedIdentifier(
+                    OBJECTTYPE_LEGEND, xLegendIdent->getIdentifier() );
+                xShapeProp->setPropertyValue( C2U("Name"), uno::makeAny( aCID ));
+            }
+        }
+
         uno::Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
         if( xLegendContainer.is())
         {
             uno::Reference< drawing::XShape > xBorder(
                 m_xShapeFactory->createInstance(
                     C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
+
+            tPropertyNameValueMap aValueMap;
+
+            // Get Line- and FillProperties from model legend
+            uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
+            if( xLegendProp.is())
+            {
+                tMakePropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForFillProperties();
+                const tMakePropertyNameMap& rLinePropMap = PropertyMapper::getPropertyNameMapForLineProperties();
+                aNameMap.insert( rLinePropMap.begin(), rLinePropMap.end());
+
+                PropertyMapper::getValueMap( aValueMap, aNameMap, xLegendProp );
+                aValueMap[ C2U("LineJoint") ] = uno::makeAny( drawing::LineJoint_ROUND );
+            }
+
             if( xBorder.is())
             {
                 xLegendContainer->add( xBorder );
-                awt::Point aPos( 0, 0 );
-                xBorder->setPosition( aPos );
+
+                // apply legend properties
+                tNameSequence aPropNames;
+                tAnySequence aPropValues;
+                PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
+                PropertyMapper::setMultiProperties( aPropNames, aPropValues, xBorder );
             }
 
             const sal_Int32 nVerticalPadding = 200;
@@ -304,7 +425,7 @@ void VLegend::createShapes()
                 uno::Reference< chart2::XDataSeriesTreeParent > xGroup( aEntries[ nI ], uno::UNO_QUERY );
                 if( xGroup.is())
                 {
-                    createLegendEntries( xLegendContainer, xGroup, nCurrentHeight );
+                    createLegendEntries( xLegendContainer, xGroup, xGroup, nCurrentHeight );
                 }
 
                 // separator between chart type groups
@@ -316,11 +437,21 @@ void VLegend::createShapes()
 
                     if( xSeparator.is())
                     {
-                        nCurrentHeight += nSeparatorDist;
+                        sal_Int32 nLineWidth = 0;
+                        if( xLegendProp.is())
+                            xLegendProp->getPropertyValue( C2U("LineWidth")) >>= nLineWidth;
+
+                        nCurrentHeight += nSeparatorDist + nLineWidth/2;
                         xLegendContainer->add( xSeparator );
                         xSeparator->setSize( awt::Size( aSize.Width, 0 ));
                         xSeparator->setPosition( awt::Point( 0, nCurrentHeight ));
-                        nCurrentHeight += nSeparatorDist;
+                        nCurrentHeight += nSeparatorDist + nLineWidth/2;
+
+                        // apply legend properties
+                        tNameSequence aPropNames;
+                        tAnySequence aPropValues;
+                        PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
+                        PropertyMapper::setMultiProperties( aPropNames, aPropValues, xSeparator );
                     }
                 }
             }

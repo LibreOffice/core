@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+#   last change: $Author: bm $ $Date: 2003-10-09 16:46:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES =  \
             $(SLO)$/PlotterBase.obj \
             $(SLO)$/VDataSeries.obj \
             $(SLO)$/VLegend.obj \
+            $(SLO)$/VLegendSymbolFactory.obj \
             $(SLO)$/VTitle.obj \
             $(SLO)$/ChartView.obj
 

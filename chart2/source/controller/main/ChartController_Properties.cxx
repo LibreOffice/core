@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:43 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,18 @@
 
 #include "SchSlotIds.hxx"
 
+#include "macros.hxx"
 #include "dlg_ObjectProperties.hxx"
 #include "ViewElementListProvider.hxx"
 #include "DataPointItemConverter.hxx"
 #include "AxisItemConverter.hxx"
 #include "MultipleChartConverters.hxx"
 #include "TitleItemConverter.hxx"
+#include "LegendItemConverter.hxx"
 #include "ChartModelHelper.hxx"
 #include "MeterHelper.hxx"
-#include "macros.hxx"
 #include "TitleHelper.hxx"
+#include "LegendHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
 #include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
@@ -139,7 +141,9 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
                 }
                 break;
             case OBJECTTYPE_LEGEND:
-                    break;
+                if( LegendHelper::getIdentifierForLegend().equals( aParticleID ) )
+                    xObjectProperties.set( LegendHelper::getLegend( xModel ), uno::UNO_QUERY );
+                break;
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;
             case OBJECTTYPE_DIAGRAM:
@@ -262,6 +266,9 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
                                                                   rDrawModel );
                     break;
             case OBJECTTYPE_LEGEND:
+                pItemConverter = new wrapper::LegendItemConverter( xObjectProperties,
+                                                                   rDrawModel.GetItemPool(),
+                                                                   rDrawModel );
                     break;
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;

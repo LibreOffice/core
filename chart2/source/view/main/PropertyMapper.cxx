@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ void PropertyMapper::setMappedProperties(
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
     else
@@ -110,7 +110,7 @@ void PropertyMapper::setMappedProperties(
             }
             catch( uno::Exception& e )
             {
-                e;
+                ASSERT_EXCEPTION( e );
             }
         }
     }
@@ -137,7 +137,7 @@ void PropertyMapper::getValueMap(
         }
         catch( uno::Exception& e )
         {
-            e;
+            ASSERT_EXCEPTION( e );
         }
     }
 }
@@ -330,6 +330,44 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties(
 }
 
 //static
+const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
+{
+    //shape property -- chart model object property
+    static tMakePropertyNameMap m_aShapePropertyMapForLineSeriesProperties =
+        tMakePropertyNameMap
+        ( C2U( "LineStyle" ), C2U("LineStyle") )
+        ( C2U( "LineWidth" ), C2U("LineWidth") )
+        ( C2U( "LineDash" ), C2U("LineDash") )
+        ( C2U( "LineColor" ), C2U("Color") )
+        ( C2U( "LineTransparence" ), C2U("Transparency") )
+//         ( C2U( "LineJoint" ), C2U("LineJoint") )
+        ;
+    return m_aShapePropertyMapForLineSeriesProperties;
+}
+
+//static
+const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
+{
+    //shape property -- chart model object property
+    static tMakePropertyNameMap m_aShapePropertyMapForFilledSeriesProperties =
+        tMakePropertyNameMap
+        ( C2U( "FillStyle" ), C2U("FillStyle") )
+        ( C2U( "FillColor" ), C2U("Color") )
+        ( C2U( "FillTransparence" ), C2U("Transparency") )
+        ( C2U( "FillGradient" ), C2U("Gradient") )
+        ( C2U( "FillHatch" ), C2U("Hatch") )
+
+        ( C2U( "LineStyle" ), C2U("BorderStyle") )
+        ( C2U( "LineWidth" ), C2U("BorderWidth") )
+        ( C2U( "LineDash" ), C2U("BorderDash") )
+        ( C2U( "LineColor" ), C2U("BorderColor") )
+        ( C2U( "LineTransparence" ), C2U("BorderTransparency") )
+//         ( C2U( "LineJoint" ), C2U("LineJoint") )
+        ;
+    return m_aShapePropertyMapForFilledSeriesProperties;
+}
+
+//static
 void PropertyMapper::setMultiProperties(
                   const tNameSequence& rNames
                 , const tAnySequence&  rValues
@@ -349,7 +387,7 @@ void PropertyMapper::setMultiProperties(
     }
     catch( uno::Exception& e )
     {
-        e;
+        ASSERT_EXCEPTION( e );
     }
 }
 

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: LegendHelper.hxx,v $
+ *  $RCSfile: LegendItemConverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:41 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,58 +58,47 @@
  *
  *
  ************************************************************************/
-#ifndef _CHART2_TOOLS_LEGENDHELPER_HXX
-#define _CHART2_TOOLS_LEGENDHELPER_HXX
+#ifndef CHART_LEGENDITEMCONVERTER_HXX
+#define CHART_LEGENDITEMCONVERTER_HXX
 
-// header for class OUString
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+#include "ItemConverter.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
-#include <drafts/com/sun/star/chart2/XLegend.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
-#include <drafts/com/sun/star/chart2/XDiagram.hpp>
-#endif
+#include <vector>
 
-//.............................................................................
+class SdrModel;
+
 namespace chart
 {
-//.............................................................................
+namespace wrapper
+{
 
-//-----------------------------------------------------------------------------
-/**
-*/
-
-class LegendHelper
+class LegendItemConverter :
+        public ::comphelper::ItemConverter
 {
 public:
-    static rtl::OUString getIdentifierForLegend();
-
-    static ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend >
-        getLegend( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::frame::XModel >& xModel );
-
-    /** fills the legend given with XChartTypeGroup elements as XLegendEntry
-        objects.
-
-        Note: In, e.g., a standard bar chart the legend contains only one entry,
-        which is the chart type group.  To display all series in the legend, you
-        have to get all XDataSeries in the tree starting at the chart type group
-     */
-    static void defaultFillEmptyLegend(
+    LegendItemConverter(
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend > & xLegend,
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
+        ::com::sun::star::beans::XPropertySet > & rPropertySet,
+        SfxItemPool& rItemPool,
+        SdrModel& rDrawModel );
+    virtual ~LegendItemConverter();
+
+    virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;
+    virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
+
+protected:
+    virtual const USHORT * GetWhichPairs() const;
+    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
+
+    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const;
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const;
+
+private:
+    ::std::vector< ItemConverter * >    m_aConverters;
 };
 
-//.............................................................................
-} //namespace chart
-//.............................................................................
+} //  namespace wrapper
+} //  namespace chart
+
+// CHART_LEGENDITEMCONVERTER_HXX
 #endif

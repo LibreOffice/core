@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "algohelper.hxx"
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
+#include "CharacterProperties.hxx"
 #include "UserDefinedProperties.hxx"
 #include "LegendHelper.hxx"
 
@@ -107,6 +108,8 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
         ::chart::LineProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ false );
         ::chart::FillProperties::AddPropertiesToVector(
+            aProperties, /* bIncludeStyleProperties = */ false );
+        ::chart::CharacterProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ false );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
@@ -212,6 +215,9 @@ uno::Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
             aStaticDefaults,
             /* bIncludeStyleProperties = */ false );
         FillProperties::AddDefaultsToMap(
+            aStaticDefaults,
+            /* bIncludeStyleProperties = */ false );
+        CharacterProperties::AddDefaultsToMap(
             aStaticDefaults,
             /* bIncludeStyleProperties = */ false );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-08 17:40:39 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ protected:
             ::com::sun::star::drawing::XShapes > & xShapeContainer,
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xParent,
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > & xRootParent,
         sal_Int32 & nOutCurrentHeight );
 
 private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:18 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "CartesianCoordinateSystem.hxx"
 #include "BoundedCoordinateSystem.hxx"
 #include "MeterHelper.hxx"
+#include "LegendHelper.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -240,7 +241,7 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
         uno::UNO_QUERY );
 
     xDia->setLegend( xLegend );
-    fillEmptyLegend( xLegend, xDia );
+    LegendHelper::defaultFillEmptyLegend( xLegend, xDia );
 
     return xDia;
 }
@@ -254,7 +255,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const Reference< chart2::XDiagra
 
     Reference< chart2::XLegend > xLegend( xDiagram->getLegend());
     lcl_FlushLegend( xLegend );
-    fillEmptyLegend( xLegend, xDiagram );
+    LegendHelper::defaultFillEmptyLegend( xLegend, xDiagram );
 }
 
 // ________________________________________
@@ -551,32 +552,6 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
     aRoot->addChild( aChartTypeNode );
 
     return aRoot;
-}
-
-// finds all chart type groups in the given diagram tree and adds them to the
-// legend
-void ChartTypeTemplate::fillEmptyLegend(
-    const Reference< chart2::XLegend > & xLegend,
-    const Reference< chart2::XDiagram > & xDiagram )
-{
-    if( xLegend.is() &&
-        xDiagram.is() )
-    {
-        Reference< chart2::XDataSeriesTreeParent > xRoot( xDiagram->getTree());
-
-        Sequence< Reference< chart2::XDataSeriesTreeNode > > aChildren( xRoot->getChildren());
-        for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
-        {
-            Reference< lang::XServiceInfo > xInfo( aChildren[ i ], uno::UNO_QUERY );
-            if( xInfo.is() &&
-                xInfo->supportsService( C2U( "drafts.com.sun.star.chart2.ChartTypeGroup" )))
-            {
-                Reference< chart2::XLegendEntry > xEntry( xInfo, uno::UNO_QUERY );
-                if( xEntry.is())
-                    xLegend->registerEntry( xEntry );
-            }
-        }
-    }
 }
 
 void ChartTypeTemplate::setStackModeAtTree(

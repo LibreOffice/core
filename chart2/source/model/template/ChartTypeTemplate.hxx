@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,6 @@ protected:
             const ::com::sun::star::uno::Reference<
                 ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
-
-    virtual void fillEmptyLegend(
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XLegend > & xLegend,
-        const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XDiagram > & xDiagram );
 
     // helper methods
     // --------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMapper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:33 $
+ *  last change: $Author: bm $ $Date: 2003-10-09 16:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,8 @@ public:
     static const tMakePropertyNameMap& getPropertyNameMapForFillProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineProperties();
 
+    static const tMakePropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
+    static const tMakePropertyNameMap& getPropertyNameMapForLineSeriesProperties();
 };
 
 //.............................................................................
