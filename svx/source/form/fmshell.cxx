@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:38:12 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,6 @@ sal_uInt16 ControllerSlotMap[] =    // slots des Controllers
     SID_FM_EDIT,
     SID_FM_LISTBOX,
     SID_FM_COMBOBOX,
-    SID_FM_URLBUTTON,
     SID_FM_DBGRID,
     SID_FM_IMAGEBUTTON,
     SID_FM_FILECONTROL,
@@ -722,7 +721,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_GROUPBOX:
         case SID_FM_LISTBOX:
         case SID_FM_COMBOBOX:
-        case SID_FM_URLBUTTON:
         case SID_FM_EDIT:
         case SID_FM_DBGRID:
         case SID_FM_IMAGEBUTTON:
@@ -912,7 +910,6 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_RADIOBUTTON   :
         case SID_FM_CONVERTTO_GROUPBOX      :
         case SID_FM_CONVERTTO_COMBOBOX      :
-        case SID_FM_CONVERTTO_GRID          :
         case SID_FM_CONVERTTO_IMAGEBUTTON   :
         case SID_FM_CONVERTTO_FILECONTROL   :
         case SID_FM_CONVERTTO_DATE          :
@@ -1618,7 +1615,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
             case SID_FM_RADIOBUTTON:
             case SID_FM_COMBOBOX:
-            case SID_FM_URLBUTTON:
             case SID_FM_GROUPBOX:
             case SID_FM_CHECKBOX:
             case SID_FM_PUSHBUTTON:
@@ -1788,7 +1784,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_RADIOBUTTON   :
             case SID_FM_CONVERTTO_GROUPBOX      :
             case SID_FM_CONVERTTO_COMBOBOX      :
-            case SID_FM_CONVERTTO_GRID          :
             case SID_FM_CONVERTTO_IMAGEBUTTON   :
             case SID_FM_CONVERTTO_FILECONTROL   :
             case SID_FM_CONVERTTO_DATE          :
