@@ -2,9 +2,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:58:36 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 15:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,6 @@
  *
  *
  ************************************************************************/
- //============================================================================
- // Dialogfenster Zielwertsuche
- //
- // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
- //
- // $Workfile:   solvrdlg.src  $
- //   $Author: hr $
- //     $Date: 2003-07-17 12:58:36 $
- // $Revision: 1.22 $
- //  $Logfile:   T:/sc/source/ui/src/solvrdlg.srv  $
- //----------------------------------------------------------------------------
 
 #include "solvrdlg.hrc"
 ModelessDialog RID_SCDLG_SOLVER
@@ -486,39 +475,5 @@ ModelessDialog RID_SCDLG_SOLVER
     Text[ hindi ] = "गोल सीक";
     Text[ slovak ] = "Vyhľadanie cieľa";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
