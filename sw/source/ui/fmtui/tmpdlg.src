@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:00 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -153,6 +154,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "अक्षर प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -184,6 +186,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -215,6 +218,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ czech ] = "Asijský formát";
                 Text[ hebrew ] = "Asiatisches Layout";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
+                Text[ slovak ] = "Ázijské rozloženie";
             };
             PageItem
             {
@@ -248,6 +252,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
         };
     };
@@ -266,6 +271,7 @@ TabDialog DLG_TEMPLATE_1
     Text[ czech ] = "Styl znaku";
     Text[ hebrew ] = "Zeichenvorlage";
     Text[ hindi ] = "अक्षर शैली";
+    Text[ slovak ] = "Štýl znaku";
 };
 TabDialog DLG_TEMPLATE_2
 {
@@ -323,6 +329,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Odsazení a vzdálenost";
                 Text[ hebrew ] = "‮שוליים ורווחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
+                Text[ slovak ] = "Odsadenie a vzdialenosť";
             };
             PageItem
             {
@@ -355,6 +362,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Zarovnání";
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
+                Text[ slovak ] = "Zarovnanie";
             };
             PageItem
             {
@@ -389,6 +397,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Tok textu";
                 Text[ hebrew ] = "‮זרימת טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् धारा";
+                Text[ slovak ] = "Tok textu";
             };
             PageItem
             {
@@ -419,6 +428,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Asijská typografie";
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
+                Text[ slovak ] = "Ázijská typografia";
             };
             PageItem
             {
@@ -452,6 +462,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Písmo";
                 Text[ hebrew ] = "‮גופן‬";
                 Text[ hindi ] = "अक्षर";
+                Text[ slovak ] = "Písmo";
             };
             PageItem
             {
@@ -485,6 +496,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Efekty pro písmo";
                 Text[ hebrew ] = "‮אפקטים לגופנים‬";
                 Text[ hindi ] = "अक्षर प्रभाव";
+                Text[ slovak ] = "Efekty pre písmo";
             };
             PageItem
             {
@@ -516,6 +528,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -547,6 +560,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Asijský formát";
                 Text[ hebrew ] = "Asiatisches Layout";
                 Text[ hindi ] = "ऐशियन अभिन्यास";
+                Text[ slovak ] = "Ázijské rozloženie";
             };
             PageItem
             {
@@ -578,6 +592,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Číslování";
                 Text[ hebrew ] = "‮מיספור‬";
                 Text[ hindi ] = "संख्या देना";
+                Text[ slovak ] = "Číslovanie";
             };
             PageItem
             {
@@ -611,6 +626,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Tabulátory";
                 Text[ hebrew ] = "Tabulatoren";
                 Text[ hindi ] = "टॉब्स";
+                Text[ slovak ] = "Tabulátory";
             };
             PageItem
             {
@@ -644,6 +660,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Iniciála";
                 Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
                 Text[ hindi ] = "बड़े अक्षरों को हटाओ ";
+                Text[ slovak ] = "Stránkovanie veľkými písmenami";
             };
             PageItem
             {
@@ -677,6 +694,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -710,6 +728,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -742,6 +761,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ czech ] = "Podmínka";
                 Text[ hebrew ] = "Bedingung";
                 Text[ hindi ] = "शर्त";
+                Text[ slovak ] = "Podmienka";
             };
         };
     };
@@ -760,6 +780,7 @@ TabDialog DLG_TEMPLATE_2
     Text[ czech ] = "Styl odstavce";
     Text[ hebrew ] = "Absatzvorlage";
     Text[ hindi ] = "परिच्छेद शैली";
+    Text[ slovak ] = "Štýl odstavca";
 };
 TabDialog DLG_TEMPLATE_4
 {
@@ -834,6 +855,7 @@ TabDialog DLG_TEMPLATE_4
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             /*            PageItem
             {
@@ -951,6 +973,7 @@ TabDialog DLG_TEMPLATE_4
     Text[ czech ] = "Styl stránky";
     Text[ hebrew ] = "‮סגנון‬";
     Text[ hindi ] = "पृष्ठ शैली";
+    Text[ slovak ] = "Štýl stránky";
 };
 String STR_PAGE_STD
 {
@@ -982,6 +1005,7 @@ String STR_PAGE_STD
     Text[ czech ] = "Stránka";
     Text[ hebrew ] = "‮דף‬";
     Text[ hindi ] = "पृष्ठ";
+    Text[ slovak ] = "Stránka";
 };
 String STR_PAGE_BORDER
 {
@@ -1013,6 +1037,7 @@ String STR_PAGE_BORDER
     Text[ czech ] = "Okraje";
     Text[ hebrew ] = "‮מסגרות‬";
     Text[ hindi ] = "किनारें";
+    Text[ slovak ] = "Okraje";
 };
 String STR_PAGE_HEADER
 {
@@ -1044,6 +1069,7 @@ String STR_PAGE_HEADER
     Text[ czech ] = "Záhlaví";
     Text[ hebrew ] = "‮כותרת עליונה‬";
     Text[ hindi ] = "पृष्ठ के ऊपर की टीका";
+    Text[ slovak ] = "Záhlavie";
 };
 String STR_PAGE_FOOTER
 {
@@ -1076,6 +1102,7 @@ String STR_PAGE_FOOTER
     Text[ czech ] = "Zápatí";
     Text[ hebrew ] = "‮כותרת תחתונה‬";
     Text[ hindi ] = "पृष्ठ के अधोभाग की टीका";
+    Text[ slovak ] = "Zápätie";
 };
 String STR_PAGE_TEXTGRID
 {
@@ -1105,6 +1132,7 @@ String STR_PAGE_TEXTGRID
     Text[ czech ] = "Mřížka textu";
     Text[ hebrew ] = "Textraster";
     Text[ hindi ] = "Text Grid";
+    Text[ slovak ] = "Textová mriežka";
 };
 String STR_PAGE_COLUMN
 {
@@ -1136,6 +1164,7 @@ String STR_PAGE_COLUMN
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
+    Text[ slovak ] = "Stĺpce";
 };
 String STR_PAGE_FOOTNOTE
 {
@@ -1168,6 +1197,7 @@ String STR_PAGE_FOOTNOTE
     Text[ czech ] = "Poznámka pod čarou";
     Text[ hebrew ] = "‮הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+    Text[ slovak ] = "Poznámka pod čiarou";
 };
 TabDialog DLG_TEMPLATE_3
 {
@@ -1224,6 +1254,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Typ";
                 Text[ hebrew ] = "‮סוג‬";
                 Text[ hindi ] = "वर्ग";
+                Text[ slovak ] = "Typ";
             };
             PageItem
             {
@@ -1257,6 +1288,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
             PageItem
             {
@@ -1290,6 +1322,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Obtékání textu";
                 Text[ hebrew ] = "‮שבורת שורות‬";
                 Text[ hindi ] = "लपेटना";
+                Text[ slovak ] = "Obtekanie textu";
             };
             PageItem
             {
@@ -1323,6 +1356,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Pozadí";
                 Text[ hebrew ] = "‮רקע‬";
                 Text[ hindi ] = "पृष्ठभाग";
+                Text[ slovak ] = "Pozadie";
             };
             PageItem
             {
@@ -1356,6 +1390,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Okraje";
                 Text[ hebrew ] = "‮מסגרות‬";
                 Text[ hindi ] = "किनारें";
+                Text[ slovak ] = "Okraje";
             };
             PageItem
             {
@@ -1389,6 +1424,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Sloupce";
                 Text[ hebrew ] = "‮טורים‬";
                 Text[ hindi ] = "स्तंभें";
+                Text[ slovak ] = "Stĺpce";
             };
             PageItem
             {
@@ -1420,6 +1456,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ czech ] = "Makro";
                 Text[ hebrew ] = "‮הפעלת מאקרו‬";
                 Text[ hindi ] = "मॉक्रो";
+                Text[ slovak ] = "Makro";
             };
         };
     };
@@ -1447,6 +1484,7 @@ TabDialog DLG_TEMPLATE_3
     Text[ czech ] = "Styl rámce";
     Text[ hebrew ] = "Rahmenvorlage";
     Text[ hindi ] = "फ्रेम शैली";
+    Text[ slovak ] = "Štýl ohraničenia";
 };
 TabDialog DLG_TEMPLATE_5
 {
@@ -1489,6 +1527,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Odrážky";
                 Text[ hebrew ] = "Bullets";
                 Text[ hindi ] = "बुल्लेट्स";
+                Text[ slovak ] = "Odrážky";
             };
             PageItem
             {
@@ -1520,6 +1559,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Styl číslování";
                 Text[ hebrew ] = "Nummerierungsart";
                 Text[ hindi ] = "संख्या देने का शैली";
+                Text[ slovak ] = "Štýl číslovania";
             };
             PageItem
             {
@@ -1551,6 +1591,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Osnova";
                 Text[ hebrew ] = "‮מסגרת‬";
                 Text[ hindi ] = "बाहरी रूपरेखा";
+                Text[ slovak ] = "Osnova";
             };
             PageItem
             {
@@ -1582,6 +1623,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Obrázky";
                 Text[ hebrew ] = "‮גרפיקה‬";
                 Text[ hindi ] = "सुचित्र";
+                Text[ slovak ] = "Obrázky";
             };
             PageItem
             {
@@ -1613,6 +1655,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Umístění";
                 Text[ hebrew ] = "‮מיקום‬";
                 Text[ hindi ] = "स्थान";
+                Text[ slovak ] = "Umiestnenie";
             };
             PageItem
             {
@@ -1644,6 +1687,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
         };
     };
@@ -1672,7 +1716,10 @@ TabDialog DLG_TEMPLATE_5
     Text[ czech ] = "Styl číslování";
     Text[ hebrew ] = "Nummerierungsvorlage";
     Text[ hindi ] = "संख्या देने का शैली";
+    Text[ slovak ] = "Štýl číslovania";
 };
+
+
 
 
 
