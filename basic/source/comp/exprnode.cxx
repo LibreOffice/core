@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-10 13:02:15 $
+ *  last change: $Author: ab $ $Date: 2001-05-14 14:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,7 @@ void SbiExprNode::FoldConstants()
                 double nl = pLeft->nVal;
                 double nr = pRight->nVal;
                 long ll, lr;
+                long llMod, lrMod;
                 if( ( eTok >= AND && eTok <= EQV )
                    || eTok == IDIV || eTok == MOD )
                 {
@@ -359,6 +360,8 @@ void SbiExprNode::FoldConstants()
                     else
                     if( nr < SbxMINLNG ) err = TRUE, nr = SbxMINLNG;
                     ll = (long) nl; lr = (long) nr;
+                    llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
+                    lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
                     if( err )
                     {
                         pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
@@ -424,7 +427,7 @@ void SbiExprNode::FoldConstants()
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
                             bError = TRUE;
-                        } else nVal = ll % lr;
+                        } else nVal = llMod % lrMod;
                         eType = SbxLONG; break;
                     case AND:
                         nVal = (double) ( ll & lr ); eType = SbxLONG; break;
