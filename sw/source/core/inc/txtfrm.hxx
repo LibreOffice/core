@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:13:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ public:
     inline void        ManipOfst ( const USHORT nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
-           SwTxtFrm   *GetFrmAtOfst( const xub_StrLen nOfst );
+           // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
+    SwTxtFrm&   GetFrmAtOfst( const xub_StrLen nOfst );
     // Wenn es einen Follow gibt und wir selbst keinen Text enthalten:
     inline sal_Bool IsEmptyMaster() const
         { return GetFollow() && !GetFollow()->GetOfst(); }
