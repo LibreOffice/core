@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:53:52 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 21:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
     Text [ dutch ] = "Postvak UIT is vol" ;
     Text[ chinese_simplified ] = "Êä³ö»º³åÇøÒçÂú";
     Text[ russian ] = "Óñòğîéñòâî âûäà÷è çàïîëíåíî";
-    Text[ polish ] = "Zasobnik wyj?ciowy zape³niony";
+    Text[ polish ] = "Zasobnik wyjœciowy zape³niony";
     Text[ japanese ] = "ˆóü±³ÄÌß¯Ä—p‚Ì—eŠí‚ª‚¢‚Á‚Ï‚¢‚Å‚·B";
     Text[ chinese_traditional ] = "¿é¥X½w½Ä°Ï·¸º¡";
     Text[ arabic ] = "ÏÑÌ ÇáÅÎÑÇÌ ããÊáÆ";
@@ -726,7 +726,7 @@ String STR_SVT_PRNDLG_DEFPRINTER
     Text [ dutch ] = "Standaardprinter" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏ´òÓ¡»ú";
     Text[ russian ] = "Ñòàíäàğòíûé ïğèíòåğ";
-    Text[ polish ] = "Drukarka domy?lna";
+    Text[ polish ] = "Drukarka domyœlna";
     Text[ japanese ] = "•W€ÌßØİÀ";
     Text[ chinese_traditional ] = "Àq»{¦Lªí¾÷";
     Text[ arabic ] = "ÇáØÇÈÚÉ ÇáÇİÊÑÇÖíÉ";
@@ -862,7 +862,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Text [ dutch ] = "~Eigenschappen..." ;
         Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
         Text[ russian ] = "~Ñâîéñòâà...";
-        Text[ polish ] = "W³a?ciwo?ci...";
+        Text[ polish ] = "W³aœciwoœci...";
         Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
         Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
@@ -1034,3 +1034,4 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     Text[ catalan ] = "Configurar impresora";
     Text[ finnish ] = "Tulostimen asetukset";
 };
+
