@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-22 20:14:26 $
+ *  last change: $Author: af $ $Date: 2002-05-24 13:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ String RID_SVXSTR_A11Y_3D_MATERIAL_COLOR
 String RID_SVXSTR_A11Y_TEXT_COLOR
 {
     Text = "Textfarbe" ;
-    Text[ ENGLISH ] = "text color" ;
-    Text[ ENGLISH_US ] = "text color" ;
+    Text[ ENGLISH ] = "Text color" ;
+    Text[ ENGLISH_US ] = "Text color" ;
     Text[ portuguese ] = "text color";
     Text[ russian ] = "text color";
     Text[ greek ] = "text color";
@@ -116,8 +116,8 @@ String RID_SVXSTR_A11Y_TEXT_COLOR
 String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 {
     Text = "Hintergrundfarbe" ;
-    Text[ ENGLISH ] = "background color" ;
-    Text[ ENGLISH_US ] = "background color" ;
+    Text[ ENGLISH ] = "Background color" ;
+    Text[ ENGLISH_US ] = "Background color" ;
     Text[ portuguese ] = "background color";
     Text[ russian ] = "background color";
     Text[ greek ] = "background color";
@@ -141,9 +141,9 @@ String RID_SVXSTR_A11Y_BACKGROUND_COLOR
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 {
-    Text = "keiner" ;
-    Text[ ENGLISH ] = "none" ;
-    Text[ ENGLISH_US ] = "none" ;
+    Text = "Keiner" ;
+    Text[ ENGLISH ] = "None" ;
+    Text[ ENGLISH_US ] = "None" ;
     Text[ portuguese ] = "none";
     Text[ russian ] = "none";
     Text[ greek ] = "none";
@@ -167,9 +167,9 @@ String RID_SVXSTR_A11Y_FILLSTYLE_NONE
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 {
-    Text = "ausgefüllt" ;
-    Text[ ENGLISH ] = "solid" ;
-    Text[ ENGLISH_US ] = "solid" ;
+    Text = "Ausgefüllt" ;
+    Text[ ENGLISH ] = "Solid" ;
+    Text[ ENGLISH_US ] = "Solid" ;
     Text[ portuguese ] = "solid";
     Text[ russian ] = "solid";
     Text[ greek ] = "solid";
@@ -193,9 +193,9 @@ String RID_SVXSTR_A11Y_FILLSTYLE_SOLID
 };
 String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
-    Text = "schraffiert" ;
-    Text[ ENGLISH ] = "hatch" ;
-    Text[ ENGLISH_US ] = "With hatching" ;
+    Text = "Schraffiert" ;
+    Text[ ENGLISH ] = "Hatching" ;
+    Text[ ENGLISH_US ] = "Hatching" ;
     Text[ portuguese ] = "hatch";
     Text[ russian ] = "hatch";
     Text[ greek ] = "hatch";
@@ -220,8 +220,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 {
     Text = "Verlauf" ;
-    Text[ ENGLISH ] = "gradient" ;
-    Text[ ENGLISH_US ] = "gradient" ;
+    Text[ ENGLISH ] = "Gradient" ;
+    Text[ ENGLISH_US ] = "Gradient" ;
     Text[ portuguese ] = "gradient";
     Text[ russian ] = "gradient";
     Text[ greek ] = "gradient";
@@ -246,8 +246,8 @@ String RID_SVXSTR_A11Y_FILLSTYLE_GRADIENT
 String RID_SVXSTR_A11Y_FILLSTYLE_BITMAP
 {
     Text = "Bitmap" ;
-    Text[ ENGLISH ] = "bitmap" ;
-    Text[ ENGLISH_US ] = "bitmap" ;
+    Text[ ENGLISH ] = "Bitmap" ;
+    Text[ ENGLISH_US ] = "Bitmap" ;
     Text[ portuguese ] = "bitmap";
     Text[ russian ] = "bitmap";
     Text[ greek ] = "bitmap";
@@ -903,7 +903,7 @@ String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
 String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 {
     Text = "Kontrollelement der Kontur" ;
-    Text [ english_us ] = "Graph control" ;
+    Text [ english_us ] = "Contour control" ;
     Text[ portuguese ] = "Graph control";
     Text[ russian ] = "Graph control";
     Text[ greek ] = "Graph control";
@@ -928,8 +928,8 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
 {
-    Text = "Hier können Sie die Kontur bearbeiten" ;
-    Text [ english_us ] = "Editing of a graph." ;
+    Text = "Kontur bearbeiten" ;
+    Text [ english_us ] = "Edit contour" ;
     Text[ portuguese ] = "Editing of a graph";
     Text[ russian ] = "Editing of a graph";
     Text[ greek ] = "Editing of a graph";
