@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:52:47 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 19:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,12 +1367,14 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
 
 void ScInputHandler::RemoveAdjust()
 {
-
     //  harte Ausrichtungs-Attribute loeschen
 
     BOOL bUndo = pEngine->IsUndoEnabled();
     if ( bUndo )
         pEngine->EnableUndo( FALSE );
+
+    //  RemoveParaAttribs removes all paragraph attributes, including EE_PARA_JUST
+#if 0
     BOOL bChange = FALSE;
     USHORT nCount = pEngine->GetParagraphCount();
     for (USHORT i=0; i<nCount; i++)
@@ -1386,6 +1388,12 @@ void ScInputHandler::RemoveAdjust()
             bChange = TRUE;
         }
     }
+#endif
+
+    //  #89403# non-default paragraph attributes (e.g. from clipboard)
+    //  must be turned into character attributes
+    pEngine->RemoveParaAttribs();
+
     if ( bUndo )
         pEngine->EnableUndo( TRUE );
 
@@ -1930,6 +1938,8 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
     if ( bModified && !bForget )            // was wird eingeben (Text/Objekt) ?
     {
+        //! find common (cell) attributes before RemoveAdjust?
+
         RemoveAdjust();     // clear adjustment ParaAttribs
 
         if ( bSpellErrors || pEngine->GetParagraphCount() > 1 )

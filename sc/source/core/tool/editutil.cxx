@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:28:50 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 19:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <vcl/outdev.hxx>
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
+#endif
+#ifndef _SVSTDARR_USHORTS
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 #endif
 
 #include "editutil.hxx"
@@ -400,6 +404,75 @@ void ScEditEngineDefaulter::SetTextNewDefaults( const String& rText,
     SetDefaults( rSet, bRememberCopy );
 }
 
+
+void ScEditEngineDefaulter::RemoveParaAttribs()
+{
+    SfxItemSet* pCharItems = NULL;
+    USHORT nParCount = GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
+    {
+        const SfxItemSet& rParaAttribs = GetParaAttribs( nPar );
+        USHORT nWhich;
+        for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
+        {
+            const SfxPoolItem* pParaItem;
+            if ( rParaAttribs.GetItemState( nWhich, FALSE, &pParaItem ) == SFX_ITEM_SET )
+            {
+                //  if defaults are set, use only items that are different from default
+                if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
+                {
+                    if (!pCharItems)
+                        pCharItems = new SfxItemSet( GetEmptyItemSet() );
+                    pCharItems->Put( *pParaItem );
+                }
+            }
+        }
+
+        if ( pCharItems )
+        {
+            SvUShorts aPortions;
+            GetPortions( nPar, aPortions );
+
+            //  loop through the portions of the paragraph, and set only those items
+            //  that are not overridden by existing character attributes
+
+            USHORT nPCount = aPortions.Count();
+            USHORT nStart = 0;
+            for ( USHORT nPos=0; nPos<nPCount; nPos++ )
+            {
+                USHORT nEnd = aPortions.GetObject( nPos );
+                ESelection aSel( nPar, nStart, nPar, nEnd );
+                SfxItemSet aOldCharAttrs = GetAttribs( aSel );
+                SfxItemSet aNewCharAttrs = *pCharItems;
+                for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
+                {
+                    //  Clear those items that are different from existing character attributes.
+                    //  Where no character attributes are set, GetAttribs returns the paragraph attributes.
+                    const SfxPoolItem* pItem;
+                    if ( aNewCharAttrs.GetItemState( nWhich, FALSE, &pItem ) == SFX_ITEM_SET &&
+                         *pItem != aOldCharAttrs.Get(nWhich) )
+                    {
+                        aNewCharAttrs.ClearItem(nWhich);
+                    }
+                }
+                if ( aNewCharAttrs.Count() )
+                    QuickSetAttribs( aNewCharAttrs, aSel );
+
+                nStart = nEnd;
+            }
+
+            DELETEZ( pCharItems );
+        }
+
+        if ( rParaAttribs.Count() )
+        {
+            //  clear all paragraph attributes (including defaults),
+            //  so they are not contained in resulting EditTextObjects
+
+            SetParaAttribs( nPar, SfxItemSet( *rParaAttribs.GetPool(), rParaAttribs.GetRanges() ) );
+        }
+    }
+}
 
 //------------------------------------------------------------------------
 
