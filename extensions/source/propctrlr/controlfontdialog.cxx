@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlfontdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
 #include "pcrstrings.hxx"
 #endif
-#ifndef _EXTENSIONS_PROPCTRLR_PROPCONTROLLER_HXX_
-#include "propcontroller.hxx"
+#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "pcrcommon.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OControlFontDialog()
