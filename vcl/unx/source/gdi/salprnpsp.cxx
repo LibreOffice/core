@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-18 17:30:48 $
+ *  last change: $Author: pl $ $Date: 2000-11-23 17:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,8 +589,8 @@ BOOL SalInfoPrinter::SetData(
                 }
                 aData.m_aContext.setValue( pKey, pValue );
             }
-            else
-                return FALSE;
+            // if printer has no InputSlot key simply ignore this setting
+            // (e.g. SGENPRT has no InputSlot)
         }
 
         // merge orientation if necessary
