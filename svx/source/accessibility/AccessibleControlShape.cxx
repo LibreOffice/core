@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleControlShape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-29 16:51:40 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 07:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,18 @@
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
 #include <com/sun/star/drawing/XControlShape.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
-
+#endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _SVDOUNO_HXX
+#include "svdouno.hxx"
+#endif
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
 
@@ -80,6 +90,9 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::reflection::XProxyFactory;
+using ::com::sun::star::uno::XAggregation;
+using ::com::sun::star::lang::XComponent;
 
 //=====  internal  ============================================================
 
@@ -92,6 +105,7 @@ AccessibleControlShape::AccessibleControlShape (const ::com::sun::star::uno::Ref
     :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
     ,   mbListeningForName( sal_False )
     ,   mbListeningForDesc( sal_False )
+    ,   mbDisposeNativeContext( sal_False )
 {
 }
 
@@ -100,10 +114,106 @@ AccessibleControlShape::AccessibleControlShape (const ::com::sun::star::uno::Ref
 
 AccessibleControlShape::~AccessibleControlShape (void)
 {
+    if ( m_xControlContextProxy.is() )
+        m_xControlContextProxy->setDelegator( NULL );
+    m_xControlContextProxy.clear();
+        // this should remove the _one_and_only_ "real" reference (means not delegated to
+    // ourself) to this proxy, and thus delete it
 }
 
+//=============================================================================
+SdrObject* AccessibleControlShape::getSdrObject() const
+{
+    OSL_ENSURE( sal_False, "AccessibleControlShape::getSdrObject: not implemented yet!" );
+    // TODO
+    return NULL;
+}
 
+//-----------------------------------------------------------------------------
+void AccessibleControlShape::Init()
+{
+    AccessibleShape::Init();
 
+    OSL_ENSURE( !m_xControlContextProxy.is(), "AccessibleControlShape::Init: already initialized!" );
+    try
+    {
+        // What we need to do here is merge the functionality of the AccessibleContext of our UNO control
+        // with our own AccessibleContext-related functionality.
+        //
+        // The problem is that we do not know the interfaces our "inner" context supports - this may be any
+        // XAccessibleXXX interface (or even any other) which makes sense for it.
+        //
+        // In theory, we could implement all possible interfaces ourself, and re-route all functionality to
+        // the inner context (except those we implement ourself, like XAccessibleComponent). But this is in no
+        // way future-proof - as soon as an inner context appears which implements an additional interface,
+        // we would need to adjust our implementation to support this new interface, too. Bad idea.
+        //
+        // The usual solution for such a problem is aggregation. Aggregation means using UNO's own meachnisms
+        // for merging an inner with an outer component, an get a component which behaves as it is exactly one.
+        // This is what XAggregation is for. Unfortunately, aggregation requires _exact_ control over the ref count
+        // of the inner object, which we do not have at all.
+        // Bad, too.
+        //
+        // But there is a solution: com.sun.star.reflection.ProxyFactory. This service is able to create a proxy
+        // for any component, which supports _exactly_ the same interfaces as the component. In addition, it can
+        // be aggregated, as by definition the proxy's ref count is exactly one when returned from the factory.
+        // Sounds better. Though this yields the problem of slightly degraded performance, it's the only solution
+        // I'm aware of at the moment .....
+        //
+        // 98750 - 30.04.2002 - fs@openoffice.org
+        //
+
+        // get the control which belongs to our model (relative to our view)
+        const Window* pViewWindow = mrShapeTreeInfo.GetWindow();
+        SdrUnoObj* pUnoObjectImpl = PTR_CAST( SdrUnoObj, getSdrObject() );
+        OSL_ENSURE( pViewWindow && pUnoObjectImpl, "AccessibleControlShape::Init: no view, or no SdrUnoObj!" );
+
+        if ( pViewWindow && pUnoObjectImpl )
+        {
+            // get the context of the control - it will be our "inner" context
+            Reference< XAccessible > xControlAccessible( pUnoObjectImpl->GetUnoControl( pViewWindow ), uno::UNO_QUERY );
+            Reference< XAccessibleContext > xNativeControlContext;
+            if ( xControlAccessible.is() )
+                xNativeControlContext = xControlAccessible->getAccessibleContext();
+
+            // get a proxy for this context
+            // first a factory for the proxy
+            Reference< XProxyFactory > xFactory;
+            xFactory = xFactory.query( ::comphelper::createProcessComponent(
+                ::rtl::OUString::createFromAscii( "com.sun.star.reflection.ProxyFactory" ) ) );
+            OSL_ENSURE( xFactory.is(), "AccessibleControlShape::Init: could not create a proxy factory!" );
+            // then the proxy itself
+            if ( xFactory.is() && xNativeControlContext.is() )
+            {
+                m_xControlContextProxy = xFactory->createProxy( xNativeControlContext );
+
+                // aggregate the proxy
+                osl_incrementInterlockedCount( &m_refCount );
+                if ( m_xControlContextProxy.is() )
+                {
+                    // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
+                    // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
+                    m_xControlContextProxy->setDelegator( *this );
+                }
+                osl_decrementInterlockedCount( &m_refCount );
+
+                mbDisposeNativeContext = sal_True;
+
+                // Finally, we need to add ourself as dispose listener to the native context. In case it is disposed,
+                // we need to dispose ourself, too. With a "real" aggregation (i.e. not using a proxy), this would be
+                // done automatically, as every access to the XComponent interface of the aggregated object would
+                // be re-routed to ourself. But with aggregating a proxy only we have to take care for this ourself.
+                mxNativeContextComponent = mxNativeContextComponent.query( xNativeControlContext );
+                if ( mxNativeContextComponent.is() )
+                    mxNativeContextComponent->addEventListener( static_cast< AccessibleControlShape_Base* >( this ) );
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "AccessibleControlShape::Init: could not \"aggregate\" the controls XAccessibleContext!" );
+    }
+}
 
 //=====  XAccessible  =========================================================
 
@@ -111,12 +221,8 @@ Reference<XAccessibleContext> SAL_CALL
     AccessibleControlShape::getAccessibleContext (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Here will later be the control shape asked for its control and that
-    // for its accessibility object.
     return AccessibleShape::getAccessibleContext ();
 }
-
-
 
 
 //=====  XServiceInfo  ========================================================
@@ -251,15 +357,25 @@ void SAL_CALL AccessibleControlShape::propertyChange( const beans::PropertyChang
         CommitChange( nEventId, uno::makeAny( sNewValue ), uno::Any() );
             // TODO: check this in reality: If the name is changed from non-empty to empty, this means
             // that we remove ourself as listener _while_we_are_within_the_listener_call_. Don't know
-            // if the common implementation in cppuhelper can correctly handle this!
+            // if the common implementation in cppuhelper can correctly handles this!
     }
 }
 
 //--------------------------------------------------------------------
 void SAL_CALL AccessibleControlShape::disposing (const lang::EventObject& _rSource) throw (uno::RuntimeException)
 {
-    // simply disambiguate
-    AccessibleShape::disposing( _rSource );
+    // did it come from our inner context (the real one, not it's proxy!)?
+    if ( _rSource.Source == mxNativeContextComponent )
+    {
+        // if our "pseudo-aggregated" inner context does not live anymore, we don't want to live, too
+        mbDisposeNativeContext = sal_False;
+        dispose();
+        // TODO: The dispose call here is not sufficient. The native context is disposed whenever the design mode
+        // is switched. In this case, we need to remove and re-insert our XAccessible into our parent, to
+        // reflect this change.
+    }
+    else
+        AccessibleShape::disposing( _rSource );
 }
 
 //--------------------------------------------------------------------
@@ -318,12 +434,21 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     mxControlModel.clear();
     mxModelPropsMeta.clear();
 
+    // forward the disposel to our inner context
+    if ( mbDisposeNativeContext )
+    {
+        Reference< XComponent > xInnerComponent;
+        if ( ::comphelper::query_aggregation( m_xControlContextProxy, xInnerComponent ) )
+            xInnerComponent->dispose();
+        mbDisposeNativeContext = sal_False;
+    }
+
     // let the base do it's stuff
-    AccessibleShape::dispose();
+    AccessibleShape::disposing();
 }
 
 //--------------------------------------------------------------------
-sal_Bool AccessibleControlShape::ensureControlModelAccess() const SAL_THROW(())
+sal_Bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
 {
     if ( mxControlModel.is() )
         return sal_True;
@@ -332,10 +457,10 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() const SAL_THROW(())
     {
         Reference< drawing::XControlShape > xShape( mxShape, uno::UNO_QUERY );
         if ( xShape.is() )
-            const_cast< AccessibleControlShape* >( this )->mxControlModel = mxControlModel.query( xShape->getControl() );
+            mxControlModel = mxControlModel.query( xShape->getControl() );
 
         if ( mxControlModel.is() )
-            const_cast< AccessibleControlShape* >( this )->mxModelPropsMeta = mxControlModel->getPropertySetInfo();
+            mxModelPropsMeta = mxControlModel->getPropertySetInfo();
     }
     catch( const uno::Exception& e )
     {
@@ -352,7 +477,7 @@ sal_Bool AccessibleControlShape::ensureControlModelAccess() const SAL_THROW(())
     ::rtl::OUString sReturn;
     try
     {
-        if ( ensureControlModelAccess() )
+        if ( const_cast< AccessibleControlShape* >( this ) ->ensureControlModelAccess() )
         {
             if ( !mxModelPropsMeta.is() ||  mxModelPropsMeta->hasPropertyByName( _rPropertyName ) )
                 // ask only if a) the control does not have a PropertySetInfo object or b) it has, and the
