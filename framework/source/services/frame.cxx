@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: as $ $Date: 2001-08-10 11:54:29 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_sName                     (                                                   )
         ,   m_bIsFrameTop               ( sal_True                                          ) // I think we are top without a parent ... and there is no parent yet!
         ,   m_bConnected                ( sal_False                                         ) // There exist no component inside of use => sal_False, we are not connected!
+        ,   m_nExternalLockCount        ( 0                                                 )
 {
     // Check incoming parameter to avoid against wrong initialization.
     LOG_ASSERT2( implcp_ctor( xFactory ), "Frame::Frame()", "Invalid parameter detected!" )
@@ -1843,6 +1844,75 @@ void SAL_CALL Frame::disposing( const css::lang::EventObject& aEvent ) throw( cs
         aWriteLock.lock();
         m_xContainerWindow = css::uno::Reference< css::awt::XWindow >();
     }
+}
+
+/*-************************************************************************************************************//**
+    @interface  com.sun.star.document.XActionLockable
+    @short      implement locking of frame/task from outside
+    @descr      Sometimes we have problems to decide if closing of task is allowed. Because; frame/task
+                could be used for pending loading jobs. So you can lock this object from outside and
+                prevent instance against closing during using! But - don't do it in a wrong or expensive manner.
+                Otherwise task couldn't die anymore!!!
+
+    @seealso    interface XActionLockable
+    @seeelso    method BaseDispatcher::implts_loadIt()
+    @seeelso    method Desktop::loadComponentFromURL()
+
+    @param      -
+    @return     true if frame/task is locked
+                false otherwise
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+sal_Bool SAL_CALL Frame::isActionLocked() throw( css::uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    return( m_nExternalLockCount>0 );
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::addActionLock() throw( css::uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    ++m_nExternalLockCount;
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException )
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+
+    LOG_ASSERT2( m_nExternalLockCount<=0, "Frame::removeActionLock()", "Wrong using of frame lock detected! You remove a unregistered lock ... " )
+    if( m_nExternalLockCount>0 )
+    {
+        --m_nExternalLockCount;
+    }
+}
+
+//*****************************************************************************************************************
+void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeException )
+{
+    LOG_WARNING( "Frame::resetActionLocks()", "Not supported yet!" )
+}
+
+//*****************************************************************************************************************
+sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
+{
+    LOG_WARNING( "Frame::resetActionLocks()", "Not supported yet!" )
+    return 0;
 }
 
 /*-****************************************************************************************************//**

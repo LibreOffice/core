@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:28:04 $
+ *  last change: $Author: as $ $Date: 2001-08-16 09:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,10 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -275,6 +279,7 @@ enum EActiveState
                 XTopWindowListener
                 XFocusListener
                 XEventListener
+                XActionLockable
 
     @base       MutexBase
                 ThreadHelpBase
@@ -298,6 +303,7 @@ class Frame :   // interfaces
                 public  css::awt::XWindowListener                   ,   // => XEventListener
                 public  css::awt::XTopWindowListener                ,
                 public  css::awt::XFocusListener                    ,
+                public  css::document::XActionLockable              ,
                 // base classes
                 // Order is neccessary for right initialization of this class!
                 public  ThreadHelpBase                              ,   // helper for own threadsafe code
@@ -423,6 +429,15 @@ class Frame :   // interfaces
                                                                                                                          css::uno::Sequence< ::rtl::OUString >& lDescriptions ) throw( css::uno::RuntimeException );
         virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(                                                            ) throw( css::uno::RuntimeException );
 
+        //---------------------------------------------------------------------------------------------------------
+        //  XActionLockable
+        //---------------------------------------------------------------------------------------------------------
+        virtual sal_Bool    SAL_CALL isActionLocked  (                 ) throw( css::uno::RuntimeException );
+        virtual void        SAL_CALL addActionLock   (                 ) throw( css::uno::RuntimeException );
+        virtual void        SAL_CALL removeActionLock(                 ) throw( css::uno::RuntimeException );
+        virtual void        SAL_CALL setActionLocks  ( sal_Int16 nLock ) throw( css::uno::RuntimeException );
+        virtual sal_Int16   SAL_CALL resetActionLocks(                 ) throw( css::uno::RuntimeException );
+
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
@@ -545,6 +560,7 @@ class Frame :   // interfaces
         ::rtl::OUString                                                         m_sName                             ;   /// name of this frame
         sal_Bool                                                                m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
         sal_Bool                                                                m_bConnected                        ;   /// due to FrameActionEvent
+        sal_Int16                                                               m_nExternalLockCount                ;
 
     protected:
 
@@ -578,6 +594,12 @@ class Frame :   // interfaces
         {
             ReadGuard aReadLock( m_aLock );
             return m_xParent;
+        }
+
+        inline sal_Int16 impl_getExternalLockCount()
+        {
+            ReadGuard aReadLock( m_aLock );
+            return m_nExternalLockCount;
         }
 
 };      // class Frame
