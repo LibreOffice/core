@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2001-10-16 10:05:45 $
+#   last change: $Author: vg $ $Date: 2002-01-10 17:18:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.40 $ ';
+$id_str = ' $Revision: 1.41 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -364,18 +364,11 @@ sub mark_platform {
 
 #
 # Convert path from abstract (with '\' and/or '/' delimiters)
-# to system-dependent
+# to system-independent
 #
 sub CorrectPath {
     $_ = shift;
-    if ($ENV{GUI} eq 'UNX') {
-        s/\\/\//g;
-    } elsif (   ($ENV{GUI} eq 'WNT') ||
-                ($ENV{GUI} eq 'WIN') ||
-                ($ENV{GUI} eq 'MACOSX') ||
-                ($ENV{GUI} eq 'OS2')) {
-        s/\//\\/g;
-    };
+    s/\\/\//g;
     return $_;
 };
 
