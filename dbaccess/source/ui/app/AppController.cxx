@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:07:07 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 09:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,17 +578,18 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    sal_Bool bCheck = sal_True;
+    sal_Bool bCanSuspend = sal_True;
+
     if ( m_bSuspended != bSuspend )
     {
-        m_bSuspended = bSuspend;
         if ( bSuspend && !suspendDocuments( bSuspend ))
             return sal_False;
 
         Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
         Reference<XStorable> xStor(getModel(),UNO_QUERY);
 
-        if  (   xStor.is()
+        if  (   bSuspend
+            &&  xStor.is()
             &&  !xStor->isReadonly()
             &&  (   m_bCurrentlyModified
                 ||  (   xModi.is()
@@ -601,17 +602,21 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
             {
                 case RET_YES:
                     Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
-                    bCheck = !xModi->isModified(); // when we save the table this must be false else some press cancel
+                    bCanSuspend = !xModi->isModified();
+                    // when we save the document this must be false else some press cancel
                     break;
                 case RET_CANCEL:
-                    bCheck = sal_False;
+                    bCanSuspend = sal_False;
                 default:
                     break;
             }
         }
     }
 
-    return bCheck;
+    if ( bCanSuspend )
+        m_bSuspended = bSuspend;
+
+    return bCanSuspend;
 }
 // -----------------------------------------------------------------------------
 FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
@@ -1935,18 +1940,19 @@ void OApplicationController::renameEntry()
                         }
                     }
                     break;
+                case E_TABLE:
+                    if ( !ensureConnection( xConnection, sal_True ) )
+                        break;
+                    // NO break
                 case E_QUERY:
                     if ( xContainer->hasByName(*aList.begin()) )
                     {
                         xRename.set(xContainer->getByName(*aList.begin()),UNO_QUERY);
-                        aDlg.reset( new OSaveAsDlg(getView(),CommandType::QUERY,xContainer,xConnection->getMetaData(),xConnection,*aList.begin(),SAD_TITLE_RENAME) );
-                    }
-                    break;
-                case E_TABLE:
-                    if ( xContainer->hasByName(*aList.begin()) )
-                    {
-                        xRename.set(xContainer->getByName(*aList.begin()),UNO_QUERY);
-                        aDlg.reset( new OSaveAsDlg(getView(),CommandType::TABLE,xContainer,xConnection->getMetaData(),xConnection,*aList.begin(),SAD_TITLE_RENAME) );
+                        sal_Int32 nCommandType = eType == E_QUERY ? CommandType::QUERY : CommandType::TABLE;
+                        aDlg.reset( new OSaveAsDlg(
+                            getView(), nCommandType, xContainer,
+                            xConnection.is() ? xConnection->getMetaData() : Reference< XDatabaseMetaData >(),
+                            xConnection, *aList.begin(), SAD_TITLE_RENAME) );
                     }
                     break;
             }
