@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:36:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 13:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,6 +900,67 @@ sal_uInt32 PPTWriter::ImplMasterSlideListContainer( SvStream* pStrm )
         }
     }
     return nSize;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const sal_uInt32 nType,
+    const String& rStringVer0, const String& rStringVer1, const String& rStringVer2, const String& rStringVer3 )
+{
+    sal_uInt32 nHyperId = ++mnExEmbed;
+    maHyperlink.Insert( new EPPTHyperlink( rBookmarkURL, nType ), LIST_APPEND );
+
+    *mpExEmbed  << (sal_uInt16)0xf
+                << (sal_uInt16)EPP_ExHyperlink
+                << (sal_uInt32)0;
+    sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
+    *mpExEmbed  << (sal_uInt16)0
+                << (sal_uInt16)EPP_ExHyperlinkAtom
+                << (sal_uInt32)4
+                << nHyperId;
+
+    sal_uInt16 i, nStringLen;
+    nStringLen = rStringVer0.Len();
+    if ( nStringLen )
+    {
+        *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nStringLen * 2 );
+        for ( i = 0; i < nStringLen; i++ )
+        {
+            *mpExEmbed << rStringVer0.GetChar( i );
+        }
+    }
+    nStringLen = rStringVer1.Len();
+    if ( nStringLen )
+    {
+        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x10 ) << (sal_uInt32)( nStringLen * 2 );
+        for ( i = 0; i < nStringLen; i++ )
+        {
+            *mpExEmbed << rStringVer1.GetChar( i );
+        }
+    }
+    nStringLen = rStringVer2.Len();
+    if ( nStringLen )
+    {
+        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x20 ) << (sal_uInt32)( nStringLen * 2 );
+        for ( i = 0; i < nStringLen; i++ )
+        {
+            *mpExEmbed << rStringVer2.GetChar( i );
+        }
+    }
+    nStringLen = rStringVer3.Len();
+    if ( nStringLen )
+    {
+        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x30 ) << (sal_uInt32)( nStringLen * 2 );
+        for ( i = 0; i < nStringLen; i++ )
+        {
+            *mpExEmbed << rStringVer3.GetChar( i );
+        }
+    }
+    nHyperSize = mpExEmbed->Tell() - nHyperStart;
+    mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
+    *mpExEmbed  << nHyperSize;
+    mpExEmbed->SeekRel( nHyperSize );
+    return nHyperId;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -2022,6 +2083,7 @@ struct FieldEntry
     sal_uInt32  nFieldType;
     sal_uInt32  nFieldStartPos;
     sal_uInt32  nFieldEndPos;
+    String      aRepresentation;
     String      aFieldUrl;
 
     FieldEntry( sal_uInt32 nType, sal_uInt32 nStart, sal_uInt32 nEnd )
@@ -2029,13 +2091,6 @@ struct FieldEntry
         nFieldType = nType;
         nFieldStartPos = nStart;
         nFieldEndPos = nEnd;
-    }
-    FieldEntry( FieldEntry& rFieldEntry )
-    {
-        nFieldType = rFieldEntry.nFieldType;
-        nFieldStartPos = rFieldEntry.nFieldStartPos;
-        nFieldEndPos = rFieldEntry.nFieldEndPos;
-        aFieldUrl = rFieldEntry.aFieldUrl;
     }
 };
 
@@ -2093,9 +2148,11 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         {
             mpFieldEntry = new FieldEntry( nFieldType, 0, mnTextSize );
             if ( ( nFieldType >> 28 == 4 ) )
-                mpFieldEntry->aFieldUrl = aString;
+            {
+                mpFieldEntry->aRepresentation = aString;
+                mpFieldEntry->aFieldUrl = aURL;
+            }
         }
-
         sal_Bool bSymbol = FALSE;
 
         if ( bPropSetsValid && ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontCharSet" ) ), FALSE ) )
@@ -3228,31 +3285,49 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                         break;
                         case 4 :
                         {
-                            sal_uInt32 nHyperId = ++mnExEmbed;
+                            sal_uInt32 nPageIndex = 0;
+                            String aPageUrl;
+                            String aEmpty;
+                            String aFile( pFieldEntry->aFieldUrl );
+                            INetURLObject aUrl( pFieldEntry->aFieldUrl );
+                            if ( INET_PROT_FILE == aUrl.GetProtocol() )
+                                aFile = aUrl.PathToFileName();
+                            else if ( pFieldEntry->aFieldUrl.GetChar( 0 ) == '#' )
+                            {
+                                String aPage( INetURLObject::decode( pFieldEntry->aFieldUrl, '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                                aPage.Erase( 0, 1 );
+                                for ( String* pStr = (String*)maSlideNameList.First(); pStr; pStr = (String*)maSlideNameList.Next(), nPageIndex++ )
+                                {
+                                    if ( *pStr == aPage )
+                                    {
+                                        String aEmpty;
+                                        aPageUrl = UniString::CreateFromInt32( 256 + nPageIndex );
+                                        aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( "," ) ) );
+                                        aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
+                                        aPageUrl.Append( String( RTL_CONSTASCII_USTRINGPARAM( ",Slide " ) ) );
+                                        aPageUrl.Append( String::CreateFromInt32( nPageIndex + 1 ) );
+                                    }
+                                }
+                            }
+                            sal_uInt32 nHyperId;
+                            if ( aPageUrl.Len() )
+                                nHyperId = ImplInsertBookmarkURL( aPageUrl, 1 | ( nPageIndex << 8 ) | ( 1 << 31 ), pFieldEntry->aRepresentation, aEmpty, aEmpty, aPageUrl );
+                            else
+                                nHyperId = ImplInsertBookmarkURL( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ), aFile, pFieldEntry->aFieldUrl, aEmpty, aEmpty );
 
                             rOut << (sal_uInt32)( ( EPP_InteractiveInfo << 16 ) | 0xf ) << (sal_uInt32)24
                                  << (sal_uInt32)( EPP_InteractiveInfoAtom << 16 ) << (sal_uInt32)16
-                                 << (sal_uInt32)0                                    // soundref
-                                 << nHyperId                                     // hyperlink id
-                                 << (sal_uInt8)4                                      // hyperlink action
-                                 << (sal_uInt8)0                                      // ole verb
-                                 << (sal_uInt8)0                                      // jump
-                                 << (sal_uInt8)0                                      // flags
-                                 << (sal_uInt8)8                                      // hyperlink type ?
+                                 << (sal_uInt32)0                                   // soundref
+                                 << nHyperId                                        // hyperlink id
+                                 << (sal_uInt8)4                                    // hyperlink action
+                                 << (sal_uInt8)0                                    // ole verb
+                                 << (sal_uInt8)0                                    // jump
+                                 << (sal_uInt8)0                                    // flags
+                                 << (sal_uInt8)8                                    // hyperlink type ?
                                  << (sal_uInt8)0 << (sal_uInt8)0 << (sal_uInt8)0
                                  << (sal_uInt32)( EPP_TxInteractiveInfoAtom << 16 ) << (sal_uInt32)8
                                  << (sal_uInt32)( pFieldEntry->nFieldStartPos )
                                  << (sal_uInt32)( pFieldEntry->nFieldEndPos );
-
-                            maHyperlink.Insert( new EPPTHyperlink( pFieldEntry->aFieldUrl, 2 | ( nHyperId << 8 ) ), LIST_APPEND );
-
-                            *mpExEmbed  << (sal_uInt16)0xf
-                                        << (sal_uInt16)EPP_ExHyperlink
-                                        << (sal_uInt32)12
-                                        << (sal_uInt16)0
-                                        << (sal_uInt16)EPP_ExHyperlinkAtom
-                                        << (sal_uInt32)4
-                                        << nHyperId;
                         }
                         default:
                         break;
@@ -4028,37 +4103,15 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                     {
                         // Bookmark ist ein link zu einer Dokumentseite
                         nAction = 4;
-                        nHyperLinkID = ++mnExEmbed;                 //( maHyperlink.Count() + 1 ) << 1;
                         nHyperLinkType = 7;
-                        String  aHyperString = UniString::CreateFromInt32( 256 + nIndex );
+
+                        String aEmpty;
+                        String aHyperString = UniString::CreateFromInt32( 256 + nIndex );
                         aHyperString.Append( String( RTL_CONSTASCII_USTRINGPARAM( "," ) ) );
                         aHyperString.Append( String::CreateFromInt32( nIndex + 1 ) );
                         aHyperString.Append( String( RTL_CONSTASCII_USTRINGPARAM( ",Slide " ) ) );
                         aHyperString.Append( String::CreateFromInt32( nIndex + 1 ) );
-                        maHyperlink.Insert( new EPPTHyperlink( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ) ), LIST_APPEND );
-
-                        *mpExEmbed  << (sal_uInt16)0xf
-                                    << (sal_uInt16)EPP_ExHyperlink
-                                    << (sal_uInt32)0;
-                        sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
-                        *mpExEmbed  << (sal_uInt16)0
-                                    << (sal_uInt16)EPP_ExHyperlinkAtom
-                                    << (sal_uInt32)4
-                                    << nHyperLinkID;
-
-                        sal_uInt16 i, nBookmarkLen = aBookmark.Len();
-                        *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nBookmarkLen * 2 );
-                        for ( i = 0; i < nBookmarkLen; i++ )
-                            *mpExEmbed << aBookmark.GetChar( i );
-
-                        *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x30 ) << (sal_uInt32)( aHyperString.Len() * 2 );
-                        for ( i = 0; i < aHyperString.Len(); i++ )
-                            *mpExEmbed << aHyperString.GetChar( i );
-
-                        nHyperSize = mpExEmbed->Tell() - nHyperStart;
-                        mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
-                        *mpExEmbed  << nHyperSize;
-                        mpExEmbed->SeekRel( nHyperSize );
+                        nHyperLinkID = ImplInsertBookmarkURL( aHyperString, 1 | ( nIndex << 8 ) | ( 1 << 31 ), aBookmark, aEmpty, aEmpty, aHyperString );
                     }
                 }
             }
@@ -4073,37 +4126,14 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
                 if ( aBookmark.Len() )
                 {
                     nAction = 4;
-                    nHyperLinkID = ++mnExEmbed;
                     nHyperLinkType = 8;
-                    maHyperlink.Insert( new EPPTHyperlink( aBookmark, 2 | ( 1 << 31 ) ), LIST_APPEND );
-                    *mpExEmbed  << (sal_uInt16)0xf
-                                << (sal_uInt16)EPP_ExHyperlink
-                                << (sal_uInt32)0;
-                    sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
-                    *mpExEmbed  << (sal_uInt16)0
-                                << (sal_uInt16)EPP_ExHyperlinkAtom
-                                << (sal_uInt32)4
-                                << nHyperLinkID;
 
+                    String aEmpty;
                     String aFile( aBookmark );
                     INetURLObject aUrl( aBookmark );
                     if ( INET_PROT_FILE == aUrl.GetProtocol() )
                         aFile = aUrl.PathToFileName();
-
-                    sal_uInt16 i, nFileLen = aFile.Len();
-                    *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nFileLen * 2 );
-                    for ( i = 0; i < nFileLen; i++ )
-                        *mpExEmbed << aFile.GetChar( i );
-
-                    sal_uInt16 nBookmarkLen = aBookmark.Len();
-                    *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x10 ) << (sal_uInt32)( nBookmarkLen * 2 );
-                    for ( i = 0; i < nBookmarkLen; i++ )
-                        *mpExEmbed << aBookmark.GetChar( i );
-
-                    nHyperSize = mpExEmbed->Tell() - nHyperStart;
-                    mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
-                    *mpExEmbed  << nHyperSize;
-                    mpExEmbed->SeekRel( nHyperSize );
+                    nHyperLinkID = ImplInsertBookmarkURL( aBookmark, 2 | ( 1 << 31 ), aFile, aBookmark, aEmpty, aEmpty );
                 }
             }
         }
@@ -4613,6 +4643,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );            // Flags: Connector | HasSpt
                     aPropOpt.CreateFillProperties( mXPropSet, sal_True );
+                    ImplWriteTextBundle( aPropOpt );
                 }
                 else
                 {
@@ -4623,7 +4654,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CircleEndAngle" ) ) ) )
                         continue;
                     nEndAngle = *( (sal_Int32*)mAny.getValue() );
-
                     ::com::sun::star::awt::Point aPoint( mXShape->getPosition() );
                     ::com::sun::star::awt::Size  aSize( mXShape->getSize() );
                     ::com::sun::star::awt::Point aStart, aEnd, aCenter;
@@ -4639,6 +4669,20 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aEnd.X += aCenter.X;
                     aEnd.Y += aCenter.Y;
                     Polygon aPolygon( aRect, Point( aStart.X, aStart.Y ), Point( aEnd.X, aEnd.Y ), ePolyKind );
+                    sal_Bool bNeedText = sal_True;
+                    if ( mnAngle )
+                    {
+                        aPolygon.Rotate( aRect.TopLeft(), (sal_uInt16)( mnAngle / 10 ) );
+                        if ( ImplGetText() )
+                        {
+                            mpPptEscherEx->EnterGroup( NULL );
+                            nGroupLevel = mpPptEscherEx->GetGroupLevel();
+                            bNeedText = sal_False;
+                            bAdditionalText = TRUE;
+                            mnTextSize = 0;
+                        }
+                        mnAngle = 0;
+                    }
                     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                     ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );       // Flags: Connector | HasSpt
                     ::com::sun::star::awt::Rectangle aNewRect;
@@ -4662,8 +4706,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     maRect = ImplMapRectangle( aNewRect );
                     maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
                     maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
+                    if ( bNeedText )
+                        ImplWriteTextBundle( aPropOpt );
                 }
-                ImplWriteTextBundle( aPropOpt );
             }
             else if ( mType == "drawing.Control" )
             {
