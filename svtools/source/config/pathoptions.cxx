@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-06 12:48:06 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 09:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,6 @@ class SvtPathOptions_Impl : public utl::ConfigItem
 private:
     String          m_aAddinPath;
     String          m_aAutoCorrectPath;
-    String          m_aAutoPilotPath;
     String          m_aAutoTextPath;
     String          m_aBackupPath;
     String          m_aBasicPath;
@@ -195,7 +194,6 @@ private:
     String          m_aHelpPath;
     String          m_aLinguisticPath;
     String          m_aModulePath;
-    String          m_aNewMenuPath;
     String          m_aPalettePath;
     String          m_aPluginPath;
     String          m_aStoragePath;
@@ -234,7 +232,6 @@ public:
     // get the pathes, not const because of using a mutex
     const String&   GetAddinPath() { return GetPath( &SvtPathOptions_Impl::m_aAddinPath ); }
     const String&   GetAutoCorrectPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath); }
-    const String&   GetAutoPilotPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoPilotPath); }
     const String&   GetAutoTextPath() { return GetPath( &SvtPathOptions_Impl::m_aAutoTextPath); }
     const String&   GetBackupPath() { return GetPath( &SvtPathOptions_Impl::m_aBackupPath); }
     const String&   GetBasicPath() { return GetPath( &SvtPathOptions_Impl::m_aBasicPath); }
@@ -248,7 +245,6 @@ public:
     const String&   GetHelpPath() { return GetPath( &SvtPathOptions_Impl::m_aHelpPath); }
     const String&   GetLinguisticPath() { return GetPath( &SvtPathOptions_Impl::m_aLinguisticPath); }
     const String&   GetModulePath() { return GetPath( &SvtPathOptions_Impl::m_aModulePath); }
-    const String&   GetNewMenuPath() { return GetPath( &SvtPathOptions_Impl::m_aNewMenuPath); }
     const String&   GetPalettePath() { return GetPath( &SvtPathOptions_Impl::m_aPalettePath); }
     const String&   GetPluginPath() { return GetPath( &SvtPathOptions_Impl::m_aPluginPath); }
     const String&   GetStoragePath() { return GetPath( &SvtPathOptions_Impl::m_aStoragePath); }
@@ -261,7 +257,6 @@ public:
     // set the pathes
     void            SetAddinPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAddinPath, rPath ); }
     void            SetAutoCorrectPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoCorrectPath, rPath ); }
-    void            SetAutoPilotPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoPilotPath, rPath ); }
     void            SetAutoTextPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aAutoTextPath, rPath ); }
     void            SetBackupPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBackupPath, rPath ); }
     void            SetBasicPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aBasicPath, rPath ); }
@@ -275,7 +270,6 @@ public:
     void            SetHelpPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aHelpPath, rPath ); }
     void            SetLinguisticPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aLinguisticPath, rPath ); }
     void            SetModulePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aModulePath, rPath ); }
-    void            SetNewMenuPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aNewMenuPath, rPath ); }
     void            SetPalettePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPalettePath, rPath ); }
     void            SetPluginPath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aPluginPath, rPath ); }
     void            SetStoragePath( const String& rPath ) { SetPath( &SvtPathOptions_Impl::m_aStoragePath, rPath ); }
@@ -305,16 +299,11 @@ Sequence< OUString > GetPathPropertyNames()
     {
         "Addin",            // PATH_ADDIN
         "AutoCorrect",      // PATH_AUTOCORRECT
-        "AutoPilot",        // PATH_AUTOPILOT
         "AutoText",         // PATH_AUTOTEXT
         "Backup",           // PATH_BACKUP
         "Basic",            // PATH_BASIC
         "Bitmap",           // PATH_BITMAP
         "Config",           // PATH_CONFIG
-#if SUPD < 615
-//!!! (pb) hack till 615
-        "Temp",             // PATH_DATABASE
-#endif
         "Dictionary",       // PATH_DICTIONARY
         "Favorite",         // PATH_FAVORITES
         "Filter",           // PATH_FILTER
@@ -323,16 +312,11 @@ Sequence< OUString > GetPathPropertyNames()
         "Help",             // PATH_HELP
         "Linguistic",       // PATH_LINGUISTIC
         "Module",           // PATH_MODULE
-        "New",              // PATH_NEWMENU
         "Palette",          // PATH_PALETTE
         "Plugin",           // PATH_PLUGIN
         "Storage",          // PATH_STORAGE
         "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
-#if SUPD < 615
-//!!! (pb) hack till 615
-        "Temp",             // PATH_TRASH
-#endif
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
         "Work"              // PATH_WORK
@@ -952,15 +936,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                 {
                     case SvtPathOptions::PATH_ADDIN:        m_aAddinPath = String( aFullPath );         break;
                     case SvtPathOptions::PATH_AUTOCORRECT:  m_aAutoCorrectPath = String( aFullPath );   break;
-                    case SvtPathOptions::PATH_AUTOPILOT:    m_aAutoPilotPath = String( aFullPath );     break;
                     case SvtPathOptions::PATH_AUTOTEXT:     m_aAutoTextPath = String( aFullPath );      break;
                     case SvtPathOptions::PATH_BACKUP:       m_aBackupPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_BASIC:        m_aBasicPath = String( aFullPath );         break;
                     case SvtPathOptions::PATH_BITMAP:       m_aBitmapPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_CONFIG:       m_aConfigPath = String( aFullPath );        break;
-#if SUPD < 615
-                    case SvtPathOptions::PATH_DATABASE:                                                 break;
-#endif
                     case SvtPathOptions::PATH_DICTIONARY:   m_aDictionaryPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_FAVORITES:    m_aFavoritesPath = String( aFullPath );     break;
                     case SvtPathOptions::PATH_FILTER:       m_aFilterPath = String( aFullPath );        break;
@@ -969,15 +949,11 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                     case SvtPathOptions::PATH_HELP:         m_aHelpPath = String( aFullPath );          break;
                     case SvtPathOptions::PATH_LINGUISTIC:   m_aLinguisticPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_MODULE:       m_aModulePath = String( aFullPath );        break;
-                    case SvtPathOptions::PATH_NEWMENU:      m_aNewMenuPath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_PALETTE:      m_aPalettePath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_PLUGIN:       m_aPluginPath = String( aFullPath );        break;
                     case SvtPathOptions::PATH_STORAGE:      m_aStoragePath = String( aFullPath );       break;
                     case SvtPathOptions::PATH_TEMP:         m_aTempPath = String( aFullPath );          break;
                     case SvtPathOptions::PATH_TEMPLATE:     m_aTemplatePath = String( aFullPath );      break;
-#if SUPD < 615
-                    case SvtPathOptions::PATH_TRASH:                                                    break;
-#endif
                     case SvtPathOptions::PATH_USERCONFIG:   m_aUserConfigPath = String( aFullPath );    break;
                     case SvtPathOptions::PATH_USERDICTIONARY: m_aUserDictionaryPath = String( aFullPath );break;
                     case SvtPathOptions::PATH_WORK:         m_aWorkPath = String( aFullPath );          break;
@@ -1018,14 +994,9 @@ void SvtPathOptions_Impl::Commit()
 
             // single pathes
             case SvtPathOptions::PATH_ADDIN:            aTempStr = OUString( m_aAddinPath );            break;
-            case SvtPathOptions::PATH_AUTOPILOT:        aTempStr = OUString( m_aAutoPilotPath );        break;
             case SvtPathOptions::PATH_BACKUP:           aTempStr = OUString( m_aBackupPath );           break;
             case SvtPathOptions::PATH_BITMAP:           aTempStr = OUString( m_aBitmapPath );           break;
             case SvtPathOptions::PATH_CONFIG:           aTempStr = OUString( m_aConfigPath );           break;
-#if SUPD < 615
-//!!! (pb) hack till 615
-            case SvtPathOptions::PATH_DATABASE:         aTempStr = OUString( m_aTempPath );             break;
-#endif
             case SvtPathOptions::PATH_DICTIONARY:       aTempStr = OUString( m_aDictionaryPath );       break;
             case SvtPathOptions::PATH_FAVORITES:        aTempStr = OUString( m_aFavoritesPath );        break;
             case SvtPathOptions::PATH_FILTER:           aTempStr = OUString( m_aFilterPath );           break;
@@ -1033,14 +1004,9 @@ void SvtPathOptions_Impl::Commit()
             case SvtPathOptions::PATH_HELP:             aTempStr = OUString( m_aHelpPath );             break;
             case SvtPathOptions::PATH_LINGUISTIC:       aTempStr = OUString( m_aLinguisticPath );       break;
             case SvtPathOptions::PATH_MODULE:           aTempStr = OUString( m_aModulePath );           break;
-            case SvtPathOptions::PATH_NEWMENU:          aTempStr = OUString( m_aNewMenuPath );          break;
             case SvtPathOptions::PATH_PALETTE:          aTempStr = OUString( m_aPalettePath );          break;
             case SvtPathOptions::PATH_STORAGE:          aTempStr = OUString( m_aStoragePath );          break;
             case SvtPathOptions::PATH_TEMP:             aTempStr = OUString( m_aTempPath );             break;
-#if SUPD < 615
-//!!! (pb) hack till 615
-            case SvtPathOptions::PATH_TRASH:            aTempStr = OUString( m_aTempPath );             break;
-#endif
             case SvtPathOptions::PATH_USERCONFIG:       aTempStr = OUString( m_aUserConfigPath );       break;
             case SvtPathOptions::PATH_USERDICTIONARY:   aTempStr = OUString( m_aUserDictionaryPath );   break;
             case SvtPathOptions::PATH_WORK:             aTempStr = OUString( m_aWorkPath );             break;
@@ -1115,13 +1081,6 @@ const String& SvtPathOptions::GetAddinPath() const
 const String& SvtPathOptions::GetAutoCorrectPath() const
 {
     return pImp->GetAutoCorrectPath();
-}
-
-// -----------------------------------------------------------------------
-
-const String& SvtPathOptions::GetAutoPilotPath() const
-{
-    return pImp->GetAutoPilotPath();
 }
 
 // -----------------------------------------------------------------------
@@ -1217,13 +1176,6 @@ const String& SvtPathOptions::GetModulePath() const
 
 // -----------------------------------------------------------------------
 
-const String& SvtPathOptions::GetNewMenuPath() const
-{
-    return pImp->GetNewMenuPath();
-}
-
-// -----------------------------------------------------------------------
-
 const String& SvtPathOptions::GetPalettePath() const
 {
     return pImp->GetPalettePath();
@@ -1290,13 +1242,6 @@ void SvtPathOptions::SetAddinPath( const String& rPath )
 void SvtPathOptions::SetAutoCorrectPath( const String& rPath )
 {
     pImp->SetAutoCorrectPath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtPathOptions::SetAutoPilotPath( const String& rPath )
-{
-    pImp->SetAutoPilotPath( rPath );
 }
 
 // -----------------------------------------------------------------------
@@ -1388,13 +1333,6 @@ void SvtPathOptions::SetLinguisticPath( const String& rPath )
 void SvtPathOptions::SetModulePath( const String& rPath )
 {
     pImp->SetModulePath( rPath );
-}
-
-// -----------------------------------------------------------------------
-
-void SvtPathOptions::SetNewMenuPath( const String& rPath )
-{
-    pImp->SetNewMenuPath( rPath );
 }
 
 // -----------------------------------------------------------------------
@@ -1508,15 +1446,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             {
                 case PATH_ADDIN:        aPath = GetAddinPath();         break;
                 case PATH_AUTOCORRECT:  aPath = GetAutoCorrectPath();   break;
-                case PATH_AUTOPILOT:    aPath = GetAutoPilotPath();     break;
                 case PATH_AUTOTEXT:     aPath = GetAutoTextPath();      break;
                 case PATH_BACKUP:       aPath = GetBackupPath();        break;
                 case PATH_BASIC:        aPath = GetBasicPath();         break;
                 case PATH_BITMAP:       aPath = GetBitmapPath();        break;
                 case PATH_CONFIG:       aPath = GetConfigPath();        break;
-#if SUPD < 615
-                case PATH_DATABASE:     DBG_ERRORFILE( "invalid path" );break;
-#endif
                 case PATH_DICTIONARY:   aPath = GetDictionaryPath();    break;
                 case PATH_FAVORITES:    aPath = GetFavoritesPath();     break;
                 case PATH_FILTER:       aPath = GetFilterPath();        break;
@@ -1525,15 +1459,11 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_HELP:         aPath = GetHelpPath();          break;
                 case PATH_LINGUISTIC:   aPath = GetLinguisticPath();    break;
                 case PATH_MODULE:       aPath = GetModulePath();        break;
-                case PATH_NEWMENU:      aPath = GetNewMenuPath();       break;
                 case PATH_PALETTE:      aPath = GetPalettePath();       break;
                 case PATH_PLUGIN:       aPath = GetPluginPath();        break;
                 case PATH_STORAGE:      aPath = GetStoragePath();       break;
                 case PATH_TEMP:         aPath = GetTempPath();          break;
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
-#if SUPD < 615
-                case PATH_TRASH:        DBG_ERRORFILE( "invalid path" );break;
-#endif
                 case PATH_WORK:         aPath = GetWorkPath();          break;
             }
 
@@ -1600,7 +1530,6 @@ sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceNa
     else
         return sal_False;
 }
-
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-08 13:30:41 $
+ *  last change: $Author: pb $ $Date: 2001-06-29 09:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,27 +105,25 @@ using namespace com::sun::star::uno;
 
 #define DEFAULTPATH__ADDIN          0
 #define DEFAULTPATH__AUTOCORRECT    1
-#define DEFAULTPATH__AUTOPILOT      2
-#define DEFAULTPATH__AUTOTEXT       3
-#define DEFAULTPATH__BACKUP         4
-#define DEFAULTPATH__BASIC          5
-#define DEFAULTPATH__BITMAP         6
-#define DEFAULTPATH__CONFIG         7
-#define DEFAULTPATH__DICTIONARY     8
-#define DEFAULTPATH__FAVORITES      9
-#define DEFAULTPATH__FILTER         10
-#define DEFAULTPATH__GALLERY        11
-#define DEFAULTPATH__GRAPHIC        12
-#define DEFAULTPATH__HELP           13
-#define DEFAULTPATH__LINGUISTIC     14
-#define DEFAULTPATH__MODULE         15
-#define DEFAULTPATH__NEWMENU        16
-#define DEFAULTPATH__PALETTE        17
-#define DEFAULTPATH__PLUGIN         18
-#define DEFAULTPATH__TEMPLATE       19
-#define DEFAULTPATH__USERCONFIG     20
-#define DEFAULTPATH__USERDICTIONARY 21
-#define DEFAULTPATH__WORK           22
+#define DEFAULTPATH__AUTOTEXT       2
+#define DEFAULTPATH__BACKUP         3
+#define DEFAULTPATH__BASIC          4
+#define DEFAULTPATH__BITMAP         5
+#define DEFAULTPATH__CONFIG         6
+#define DEFAULTPATH__DICTIONARY     7
+#define DEFAULTPATH__FAVORITES      8
+#define DEFAULTPATH__FILTER         9
+#define DEFAULTPATH__GALLERY        10
+#define DEFAULTPATH__GRAPHIC        11
+#define DEFAULTPATH__HELP           12
+#define DEFAULTPATH__LINGUISTIC     13
+#define DEFAULTPATH__MODULE         14
+#define DEFAULTPATH__PALETTE        15
+#define DEFAULTPATH__PLUGIN         16
+#define DEFAULTPATH__TEMPLATE       17
+#define DEFAULTPATH__USERCONFIG     18
+#define DEFAULTPATH__USERDICTIONARY 19
+#define DEFAULTPATH__WORK           20
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -134,7 +132,6 @@ class SvtDefaultOptions_Impl : public utl::ConfigItem
 public:
     String          m_aAddinPath;
     String          m_aAutoCorrectPath;
-    String          m_aAutoPilotPath;
     String          m_aAutoTextPath;
     String          m_aBackupPath;
     String          m_aBasicPath;
@@ -148,7 +145,6 @@ public:
     String          m_aHelpPath;
     String          m_aLinguisticPath;
     String          m_aModulePath;
-    String          m_aNewMenuPath;
     String          m_aPalettePath;
     String          m_aPluginPath;
     String          m_aTemplatePath;
@@ -179,15 +175,11 @@ static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
 {
     SvtPathOptions::PATH_ADDIN,         &SvtDefaultOptions_Impl::m_aAddinPath,
     SvtPathOptions::PATH_AUTOCORRECT,   &SvtDefaultOptions_Impl::m_aAutoCorrectPath,
-    SvtPathOptions::PATH_AUTOPILOT,     &SvtDefaultOptions_Impl::m_aAutoPilotPath,
     SvtPathOptions::PATH_AUTOTEXT,      &SvtDefaultOptions_Impl::m_aAutoTextPath,
     SvtPathOptions::PATH_BACKUP,        &SvtDefaultOptions_Impl::m_aBackupPath,
     SvtPathOptions::PATH_BASIC,         &SvtDefaultOptions_Impl::m_aBasicPath,
     SvtPathOptions::PATH_BITMAP,        &SvtDefaultOptions_Impl::m_aBitmapPath,
     SvtPathOptions::PATH_CONFIG,        &SvtDefaultOptions_Impl::m_aConfigPath,
-#if SUPD<615
-    SvtPathOptions::PATH_DATABASE,      NULL,
-#endif
     SvtPathOptions::PATH_DICTIONARY,    &SvtDefaultOptions_Impl::m_aDictionaryPath,
     SvtPathOptions::PATH_FAVORITES,     &SvtDefaultOptions_Impl::m_aFavoritesPath,
     SvtPathOptions::PATH_FILTER,        &SvtDefaultOptions_Impl::m_aFilterPath,
@@ -196,14 +188,10 @@ static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
     SvtPathOptions::PATH_HELP,          &SvtDefaultOptions_Impl::m_aHelpPath,
     SvtPathOptions::PATH_LINGUISTIC,    &SvtDefaultOptions_Impl::m_aLinguisticPath,
     SvtPathOptions::PATH_MODULE,        &SvtDefaultOptions_Impl::m_aModulePath,
-    SvtPathOptions::PATH_NEWMENU,       &SvtDefaultOptions_Impl::m_aNewMenuPath,
     SvtPathOptions::PATH_PALETTE,       &SvtDefaultOptions_Impl::m_aPalettePath,
     SvtPathOptions::PATH_PLUGIN,        &SvtDefaultOptions_Impl::m_aPluginPath,
     SvtPathOptions::PATH_TEMP,          NULL,
     SvtPathOptions::PATH_TEMPLATE,      &SvtDefaultOptions_Impl::m_aTemplatePath,
-#if SUPD<615
-    SvtPathOptions::PATH_TRASH,         NULL,
-#endif
     SvtPathOptions::PATH_USERCONFIG,    &SvtDefaultOptions_Impl::m_aUserConfigPath,
     SvtPathOptions::PATH_USERDICTIONARY,&SvtDefaultOptions_Impl::m_aUserDictionaryPath,
     SvtPathOptions::PATH_WORK,          &SvtDefaultOptions_Impl::m_aWorkPath
@@ -217,7 +205,6 @@ Sequence< OUString > GetDefaultPropertyNames()
     {
         "Addin",            // PATH_ADDIN
         "AutoCorrect",      // PATH_AUTOCORRECT
-        "AutoPilot",        // PATH_AUTOPILOT
         "AutoText",         // PATH_AUTOTEXT
         "Backup",           // PATH_BACKUP
         "Basic",            // PATH_BASIC
@@ -231,7 +218,6 @@ Sequence< OUString > GetDefaultPropertyNames()
         "Help",             // PATH_HELP
         "Linguistic",       // PATH_LINGUISTIC
         "Module",           // PATH_MODULE
-        "New",              // PATH_NEWMENU
         "Palette",          // PATH_PALETTE
         "Plugin",           // PATH_PLUGIN
         "Template",         // PATH_TEMPLATE
@@ -335,7 +321,6 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                 {
                     case DEFAULTPATH__ADDIN:            m_aAddinPath = String( aFullPath );         break;
                     case DEFAULTPATH__AUTOCORRECT:      m_aAutoCorrectPath = String( aFullPath );   break;
-                    case DEFAULTPATH__AUTOPILOT:        m_aAutoPilotPath = String( aFullPath );     break;
                     case DEFAULTPATH__AUTOTEXT:         m_aAutoTextPath = String( aFullPath );      break;
                     case DEFAULTPATH__BACKUP:           m_aBackupPath = String( aFullPath );        break;
                     case DEFAULTPATH__BASIC:            m_aBasicPath = String( aFullPath );         break;
@@ -349,7 +334,6 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                     case DEFAULTPATH__HELP:             m_aHelpPath = String( aFullPath );          break;
                     case DEFAULTPATH__LINGUISTIC:       m_aLinguisticPath = String( aFullPath );    break;
                     case DEFAULTPATH__MODULE:           m_aModulePath = String( aFullPath );        break;
-                    case DEFAULTPATH__NEWMENU:          m_aNewMenuPath = String( aFullPath );       break;
                     case DEFAULTPATH__PALETTE:          m_aPalettePath = String( aFullPath );       break;
                     case DEFAULTPATH__PLUGIN:           m_aPluginPath = String( aFullPath );        break;
                     case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
