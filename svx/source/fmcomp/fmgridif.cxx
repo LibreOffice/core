@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-12 10:59:05 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,11 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-
-#ifndef _FM_IMPLEMENTATION_IDS_HXX_
-#include "fmimplids.hxx"
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef SVX_FORM_SDBDATACOLUMN_HXX
 #include "sdbdatacolumn.hxx"
@@ -455,7 +454,17 @@ Sequence< Type> SAL_CALL FmXGridControl::getTypes(  ) throw(RuntimeException)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL FmXGridControl::getImplementationId(  ) throw(RuntimeException)
 {
-    return ::form::OImplementationIds::getImplementationId(getTypes());
+    static ::cppu::OImplementationId* pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 // XServiceInfo
@@ -1061,7 +1070,17 @@ Sequence< Type> SAL_CALL FmXGridPeer::getTypes(  ) throw(RuntimeException)
 //------------------------------------------------------------------
 Sequence<sal_Int8> SAL_CALL FmXGridPeer::getImplementationId(  ) throw(RuntimeException)
 {
-    return ::form::OImplementationIds::getImplementationId(getTypes());
+    static ::cppu::OImplementationId* pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 
 //------------------------------------------------------------------
