@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-13 12:17:23 $
+ *  last change: $Author: aw $ $Date: 2002-11-28 12:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,11 @@
 #include "svdundo.hxx"
 #include "dialmgr.hxx"
 #include "xflftrit.hxx"
+
+// #105678#
+#ifndef _SVDOPATH_HXX
+#include "svdopath.hxx"
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1510,82 +1515,223 @@ SdrMarkView* SdrHdlList::GetView() const
     return pImpl->pView;
 }
 
+// #105678# Help struct for re-sorting handles
+struct ImplHdlAndIndex
+{
+    SdrHdl*                     mpHdl;
+    sal_uInt32                  mnIndex;
+};
+
+// #105678# Help method for sorting handles taking care of OrdNums, keeping order in
+// single objects and re-sorting polygon handles intuitively
+extern "C" int __LOADONCALLAPI ImplSortHdlFunc( const void* pVoid1, const void* pVoid2 )
+{
+    const ImplHdlAndIndex* p1 = (ImplHdlAndIndex*)pVoid1;
+    const ImplHdlAndIndex* p2 = (ImplHdlAndIndex*)pVoid2;
+
+    if(p1->mpHdl->GetObj() == p2->mpHdl->GetObj())
+    {
+        if(p1->mpHdl->GetObj() && p1->mpHdl->GetObj()->ISA(SdrPathObj))
+        {
+            // same object and a path object
+            if((p1->mpHdl->GetKind() == HDL_POLY || p1->mpHdl->GetKind() == HDL_BWGT)
+                && (p2->mpHdl->GetKind() == HDL_POLY || p2->mpHdl->GetKind() == HDL_BWGT))
+            {
+                // both handles are point or control handles
+                sal_uInt32 nInd1 = (p1->mpHdl->GetPolyNum() << 16) | p1->mpHdl->GetPointNum();
+                sal_uInt32 nInd2 = (p2->mpHdl->GetPolyNum() << 16) | p2->mpHdl->GetPointNum();
+
+                if(nInd1 < nInd2)
+                {
+                    return -1;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+        }
+    }
+    else
+    {
+        if(!p1->mpHdl->GetObj())
+        {
+            return -1;
+        }
+        else if(!p2->mpHdl->GetObj())
+        {
+            return 1;
+        }
+        else
+        {
+            // different objects, use OrdNum for sort
+            const sal_uInt32 nOrdNum1 = p1->mpHdl->GetObj()->GetOrdNum();
+            const sal_uInt32 nOrdNum2 = p2->mpHdl->GetObj()->GetOrdNum();
+
+            if(nOrdNum1 < nOrdNum2)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+    }
+
+    // fallback to indices
+    if(p1->mnIndex < p2->mnIndex)
+    {
+        return -1;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #97016# II
 
 void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
 {
+    // security correction
     if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND && pImpl->mnFocusIndex >= GetHdlCount())
         pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
 
-    sal_uInt32 nNewHdlNum(pImpl->mnFocusIndex);
-    sal_uInt32 nDeathCounter(aList.Count());
-
-    do {
-        if(bForward)
-        {
-            if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND)
-            {
-                if(pImpl->mnFocusIndex == aList.Count() - 1)
-                    nNewHdlNum = CONTAINER_ENTRY_NOTFOUND;
-                else
-                    nNewHdlNum++;
-            }
-            else
-            {
-                nNewHdlNum = 0;
-            }
-        }
-        else
-        {
-            if(pImpl->mnFocusIndex != CONTAINER_ENTRY_NOTFOUND)
-            {
-                if(pImpl->mnFocusIndex == 0)
-                    nNewHdlNum = CONTAINER_ENTRY_NOTFOUND;
-                else
-                    nNewHdlNum--;
-            }
-            else
-            {
-                nNewHdlNum = aList.Count() - 1;
-            }
-        }
-
-        if(nDeathCounter)
-            nDeathCounter--;
-
-    } while(
-        nDeathCounter &&
-        nNewHdlNum != pImpl->mnFocusIndex
-        && nNewHdlNum != CONTAINER_ENTRY_NOTFOUND
-        && GetHdl(nNewHdlNum) != 0L
-        && !GetHdl(nNewHdlNum)->IsFocusHdl());
-
-    if(pImpl->mnFocusIndex != nNewHdlNum)
+    if(aList.Count())
     {
-        SdrHdl* pOld = GetHdl(pImpl->mnFocusIndex);
-        pImpl->mnFocusIndex = nNewHdlNum;
+        // take care of old handle
+        const sal_uInt32 nOldHdlNum(pImpl->mnFocusIndex);
+        SdrHdl* pOld = GetHdl(nOldHdlNum);
         sal_Bool bRefresh(sal_False);
 
         if(pOld)
         {
+            // switch off old handle
+            pImpl->mnFocusIndex = CONTAINER_ENTRY_NOTFOUND;
             pOld->Touch();
             bRefresh = sal_True;
         }
 
-        SdrHdl* pNew = GetHdl(pImpl->mnFocusIndex);
+        // #105678# Alloc pointer array for sorted handle list
+        ImplHdlAndIndex* pHdlAndIndex = new ImplHdlAndIndex[aList.Count()];
 
-        if(pNew)
+        // #105678# build sorted handle list
+        for(sal_uInt32 a(0); a < aList.Count(); a++)
         {
-            pNew->Touch();
-            bRefresh = sal_True;
+            pHdlAndIndex[a].mpHdl = (SdrHdl*)aList.GetObject(a);
+            pHdlAndIndex[a].mnIndex = a;
         }
 
+        // #105678# qsort all entries
+        qsort(pHdlAndIndex, aList.Count(), sizeof(ImplHdlAndIndex), ImplSortHdlFunc);
+
+        // #105678# look for old num in sorted array
+        sal_uInt32 nOldHdl(nOldHdlNum);
+
+        if(nOldHdlNum != CONTAINER_ENTRY_NOTFOUND)
+        {
+            const SdrHdl* pOld = GetHdl(nOldHdlNum);
+
+            for(a = 0; a < aList.Count(); a++)
+            {
+                if(pHdlAndIndex[a].mpHdl == pOld)
+                {
+                    nOldHdl = a;
+                    break;
+                }
+            }
+        }
+
+        // #105678# build new HdlNum
+        sal_uInt32 nNewHdl(nOldHdl);
+
+        // #105678# do the focus travel
+        if(bForward)
+        {
+            if(nOldHdl != CONTAINER_ENTRY_NOTFOUND)
+            {
+                if(nOldHdl == aList.Count() - 1)
+                {
+                    // end forward run
+                    nNewHdl = CONTAINER_ENTRY_NOTFOUND;
+                }
+                else
+                {
+                    // simply the next handle
+                    nNewHdl++;
+                }
+            }
+            else
+            {
+                // start forward run at first entry
+                nNewHdl = 0;
+            }
+        }
+        else
+        {
+            if(nOldHdl == CONTAINER_ENTRY_NOTFOUND)
+            {
+                // start backward run at last entry
+                nNewHdl = aList.Count() - 1;
+
+            }
+            else
+            {
+                if(nOldHdl == 0)
+                {
+                    // end backward run
+                    nNewHdl = CONTAINER_ENTRY_NOTFOUND;
+                }
+                else
+                {
+                    // simply the previous handle
+                    nNewHdl--;
+                }
+            }
+        }
+
+        // #105678# build new HdlNum
+        sal_uInt32 nNewHdlNum(nNewHdl);
+
+        // look for old num in sorted array
+        if(nNewHdl != CONTAINER_ENTRY_NOTFOUND)
+        {
+            SdrHdl* pNew = pHdlAndIndex[nNewHdl].mpHdl;
+
+            for(a = 0; a < aList.Count(); a++)
+            {
+                if((SdrHdl*)aList.GetObject(a) == pNew)
+                {
+                    nNewHdlNum = a;
+                    break;
+                }
+            }
+        }
+
+        // take care of next handle
+        if(nOldHdlNum != nNewHdlNum)
+        {
+            pImpl->mnFocusIndex = nNewHdlNum;
+            SdrHdl* pNew = GetHdl(pImpl->mnFocusIndex);
+
+            if(pNew)
+            {
+                pNew->Touch();
+                bRefresh = sal_True;
+            }
+        }
+
+        // if something has changed do a handle refresh
         if(bRefresh)
         {
             if(pImpl->pView)
                 pImpl->pView->RefreshAllIAOManagers();
         }
+
+        // #105678# free mem again
+        delete pHdlAndIndex;
     }
 }
 
