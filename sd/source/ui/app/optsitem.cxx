@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-02 11:13:06 $
+ *  last change: $Author: sj $ $Date: 2001-04-24 11:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,6 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
 {
     SetStartWithTemplate( pOpts->IsStartWithTemplate() );
     SetStartWithActualPage( pOpts->IsStartWithActualPage() );
-    SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
 
     if( pView )
     {
@@ -705,6 +704,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetPreviewQuality( pView->GetPreviewDrawMode() );
         SetSolidDragging( pView->IsSolidDragging() );
         SetSolidMarkHdl( pView->IsSolidMarkHdl() );
+        SetSummationOfParagraphs( pView->IsSummationOfParagraphs() );
     }
     else
     {
@@ -721,6 +721,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT nWhich, SdOptions* pOpts, FrameView
         SetPreviewQuality( pOpts->GetPreviewQuality() );
         SetSolidDragging( pOpts->IsSolidDragging() );
         SetSolidMarkHdl( pOpts->IsSolidMarkHdl() );
+        SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
     }
 }
 
