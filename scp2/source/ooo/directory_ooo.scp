@@ -347,6 +347,11 @@ Directory gid_Dir_Share_Readme
     DosName = "readme";
 End
 
+Directory gid_Dir_Share_Userinstall
+    ParentID = gid_Dir_Share;
+    DosName = "userinstall";
+End
+
 Directory gid_Dir_Fonts
     ParentID = gid_Dir_Share;
     DosName = "fonts";
