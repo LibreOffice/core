@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-12 05:27:15 $
+ *  last change: $Author: nn $ $Date: 2001-04-26 19:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,6 +633,7 @@ SfxURLBox::SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart
         bAutoCompleteMode( FALSE ),
         bOnlyDirectories( FALSE ),
         bCtrlClick( FALSE ),
+        bHistoryDisabled( FALSE ),
         pCtx( 0 ),
         eSmartProtocol( eSmart )
 {
