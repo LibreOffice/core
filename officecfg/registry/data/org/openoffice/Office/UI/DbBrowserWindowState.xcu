@@ -24,6 +24,27 @@
      <value>true</value>
     </prop>
    </node>
+   <node oor:name="private:resource/toolbar/browserobjectbar" oor:op="replace">
+    <prop oor:name="DockPos" oor:type="xs:string">
+     <value>0,1</value>
+    </prop>
+    <prop oor:name="Docked" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+    <prop oor:name="DockingArea" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="Style" oor:type="xs:int">
+     <value>0</value>
+    </prop>
+    <prop oor:name="UIName" oor:type="xs:string">
+     <value xml:lang="en-US">Table Data</value>
+     <value xml:lang="de">Tabellenansicht</value>
+    </prop>
+    <prop oor:name="Visible" oor:type="xs:boolean">
+     <value>true</value>
+    </prop>
+   </node>
    <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
     <prop oor:name="DockPos" oor:type="xs:string">
      <value>0,1</value>
@@ -38,8 +59,8 @@
      <value>0</value>
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Standard</value>
-     <value xml:lang="de">Standard</value>
+     <value xml:lang="en-US">Table Data View</value>
+     <value xml:lang="de">Tabellendatenansicht</value>
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
