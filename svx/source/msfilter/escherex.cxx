@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:15:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1754,27 +1754,6 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndPoint ) )
                     {
                         aEndPoint = *(::com::sun::star::awt::Point*)aAny.getValue();
-                        sal_Bool bUseConnections = sal_True;
-
-                        /* #i11701# SJ: There is a bug in our API - in Writer documents the EdgeStartPoint
-                        and EdgeEndPoint properties are in TWIPs instead of 100TH_MM. This is also wrong
-                        in our xml file format, but CL do not want to change the file format
-                        before 6y and OOo2.0. So there is only following HACK which has to be removed if
-                        the file format is fixed by i13778#
-                        */
-                        SdrObject* pCon = GetSdrObjectFromXShape( rXShape );
-                        if ( pCon )
-                        {
-                            SdrModel* pMod = pCon->GetModel();
-                            if ( pMod && ( pMod->GetScaleUnit() == MAP_TWIP ) )
-                            {
-                                Point aStart( OutputDevice::LogicToLogic( Point( aStartPoint.X, aStartPoint.Y ), MAP_TWIP, MAP_100TH_MM ) );
-                                Point aEnd( OutputDevice::LogicToLogic( Point( aEndPoint.X, aEndPoint.Y ), MAP_TWIP, MAP_100TH_MM ) );
-                                aStartPoint = com::sun::star::awt::Point( aStart.X(), aStart.Y() );
-                                aEndPoint = com::sun::star::awt::Point( aEnd.X(), aEnd.Y() );
-                                bUseConnections = sal_False;
-                            }
-                        }
 
                         rShapeFlags = SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT;
                         rGeoRect = ::com::sun::star::awt::Rectangle( aStartPoint.X, aStartPoint.Y,
@@ -1794,13 +1773,10 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                         sal_uInt32 nAdjustValue1, nAdjustValue2, nAdjustValue3;
                         nAdjustValue1 = nAdjustValue2 = nAdjustValue3 = 0x2a30;
 
-                        if( bUseConnections )
-                        {
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeStartConnection ) )
-                                aAny >>= aShapeA;
-                            if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndConnection ) )
-                                aAny >>= aShapeB;
-                        }
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeStartConnection ) )
+                            aAny >>= aShapeA;
+                        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndConnection ) )
+                            aAny >>= aShapeB;
 /*
                         if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine1Delta" ) ) ) )
                         {
