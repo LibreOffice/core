@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:15:53 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,12 +381,18 @@ SalData::SalData()
 
 SalData::~SalData()
 {
+    DeleteDisplays();
+}
+
+void SalData::DeleteDisplays()
+{
     while( SalDisplays_.Count() )
         delete SalDisplays_.Remove( (ULONG)0 );
 
     delete pXLib_;
-    pDefDisp_ = NULL;
-    pCurDisp_ = NULL;
+    pXLib_      = NULL;
+    pDefDisp_   = NULL;
+    pCurDisp_   = NULL;
 }
 
 long SalData::Close() const
@@ -429,6 +435,9 @@ XubString SalData::GetCommandLineParam( USHORT nParam ) const
 
 SalDisplay *SalData::GetDisplay( Display *pDisplay )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "shutting down display\n" );
+#endif
     SalDisplay *pSalDisplay = SalDisplays_.First();
     while( pSalDisplay && pSalDisplay->GetDisplay() != pDisplay )
         pSalDisplay = SalDisplays_.Next();
@@ -507,11 +516,6 @@ SalXLib::~SalXLib()
     // close 'wakeup' pipe.
     close (pTimeoutFDS_[0]);
     close (pTimeoutFDS_[1]);
-
-// completetly disabled Bug Nr. #47319 -> segv while using xsuntransport=shmem
-// #ifdef SAL_XT
-//  XtDestroyApplicationContext( pApplicationContext_ );
-// #endif
 }
 
 
@@ -527,7 +531,7 @@ void SalXLib::Init( int *pArgc, char *ppArgv[] )
      * try in this order:
      *  o  -display command line parameter,
      *  o  $DISPLAY environment variable
-     *  o  defualt display
+     *  o  default display
      */
 
     Display *pDisp = NULL;
