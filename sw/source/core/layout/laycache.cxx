@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:47:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,10 +704,16 @@ ULONG SwLayHelper::CalcPageCount()
 BOOL SwLayHelper::CheckInsertPage()
 {
     FASTBOOL bEnd = 0 == rpPage->GetNext();
-    const SwAttrSet *pAttr = rpFrm->GetAttrSet();
-    const SvxFmtBreakItem &rBrk = pAttr->GetBreak();
-    const SwFmtPageDesc &rDesc = pAttr->GetPageDesc();
-    const SwPageDesc *pDesc = rDesc.GetPageDesc();
+    const SwAttrSet* pAttr = rpFrm->GetAttrSet();
+    const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
+    const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
+    // --> FME 2004-10-26 #118195# Do not evaluate page description if frame
+    // is a follow frame!
+    const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
+                              SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?
+                              0 :
+                              rDesc.GetPageDesc();
+    // <--
 
     BOOL bBrk = nParagraphCnt > nMaxParaPerPage || rbBreakAfter;
     rbBreakAfter = rBrk.GetBreak() == SVX_BREAK_PAGE_AFTER ||
@@ -726,15 +732,15 @@ BOOL SwLayHelper::CheckInsertPage()
             if ( 0 != (nPgNum = rDesc.GetNumOffset()) )
                 ((SwRootFrm*)rpPage->GetUpper())->SetVirtPageNum(TRUE);
         }
-        BOOL bOdd = !rpPage->OnRightPage();
+        BOOL bNextPageOdd = !rpPage->OnRightPage();
         BOOL bInsertEmpty = FALSE;
-        if( nPgNum && bOdd != ( ( nPgNum % 2 ) != 0 ) )
+        if( nPgNum && bNextPageOdd != ( ( nPgNum % 2 ) != 0 ) )
         {
-            bOdd = !bOdd;
+            bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = TRUE;
         }
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
-                         bOdd, bInsertEmpty, FALSE, rpPage->GetNext() );
+                         bNextPageOdd, bInsertEmpty, FALSE, rpPage->GetNext() );
         if ( bEnd )
         {
             ASSERT( rpPage->GetNext(), "Keine neue Seite?" );
