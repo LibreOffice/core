@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keyevent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cp $ $Date: 2002-02-27 12:30:16 $
+ *  last change: $Author: ssa $ $Date: 2002-04-08 16:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #include <event.hxx>
 
 KeyEvent::KeyEvent (const KeyEvent& rKeyEvent) :
@@ -100,5 +103,14 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
     }
 
     return aClone;
+}
+
+
+// -------------------------------------------------------
+
+const Point&   HelpEvent::GetMousePosPixel() const
+{
+    DBG_ASSERT( !mbKeyboardActivated, "Keyboard help has no mouse position !");
+    return maPos;
 }
 
