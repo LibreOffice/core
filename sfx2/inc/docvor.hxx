@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:22 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 14:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,13 +106,8 @@ protected:
                             SvLBoxEntry *&pNewParent, ULONG &);
     virtual void RequestingChilds( SvLBoxEntry* pParent );
     virtual long ExpandingHdl();
-#if SUPD < 306
     virtual BOOL Drop( const DropEvent& rEvt );
-    virtual BOOL QueryDrop( const DropEvent& rEvt );
-#else
-    virtual BOOL Drop( DropEvent& rEvt );
     virtual BOOL QueryDrop( DropEvent& rEvt );
-#endif
     virtual DragDropMode NotifyBeginDrag(SvLBoxEntry *);
     virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
     virtual void Command( const CommandEvent& rCEvt );

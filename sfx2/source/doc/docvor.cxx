@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-28 19:30:30 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 14:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,7 +1037,7 @@ BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rTe
 
 //-------------------------------------------------------------------------
 
-BOOL SfxOrganizeListBox_Impl::Drop( DropEvent& rEvt )
+BOOL SfxOrganizeListBox_Impl::Drop( const DropEvent& rEvt )
 
 /*  [Beschreibung]
 
@@ -1436,7 +1436,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
 {
     String aPath;
     ULONG nBits = bOpen ? WB_OPEN | WB_3DLOOK : WB_SAVEAS | WB_3DLOOK;
-    SfxSimpleFileDialog* pFileDlg = new SfxSimpleFileDialog( pDialog, nBits );
+    SfxFileDialog* pFileDlg = new SfxFileDialog( pDialog, nBits );
     pFileDlg->SetDefaultExt( DEFINE_CONST_UNICODE( "vor" ) );
     pFileDlg->AddFilter( String( SfxResId( STR_FILTERNAME_ALL ) ), DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
     const String aFilter( SfxResId( STR_TEMPLATE_FILTER ) );
@@ -1937,7 +1937,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 */
 {
-    SfxSimpleFileDialog *pFileDlg = new SfxSimpleFileDialog( pDialog, WB_OPEN );
+    SfxFileDialog *pFileDlg = new SfxFileDialog( pDialog, WB_OPEN );
     const SfxObjectFactory& rFact = SfxObjectFactory::GetDefaultFactory();
     USHORT nMax = rFact.GetFilterCount();
     for ( USHORT i = 0; i < nMax; ++i )
