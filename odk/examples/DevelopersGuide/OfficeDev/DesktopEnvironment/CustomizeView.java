@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomizeView.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:33:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,29 +37,15 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// interfaces
-import com.sun.star.frame.XStatusListener;
-import com.sun.star.frame.XFrameActionListener;
+import com.sun.star.uno.UnoRuntime;
 
-// UI classes
 import java.awt.*;
 import javax.swing.*;
-
-// events
-import com.sun.star.frame.FrameActionEvent;
-import com.sun.star.frame.FrameAction;
-import com.sun.star.lang.EventObject;
-
-// base classes/helper
 import java.lang.String;
 import java.awt.event.*;
 import java.awt.*;
-import com.sun.star.uno.UnoRuntime;
 
 // __________ Implementation __________
 
