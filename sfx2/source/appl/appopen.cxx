@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 13:15:48 $
+ *  last change: $Author: pb $ $Date: 2001-10-24 11:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,11 +970,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         rReq.SetArgs( *(SfxAllItemSet*)pSet );
         rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
         rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
+        rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
         delete pSet;
 
         if ( pURLList->Count() > 1 )
         {
-            rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
+            if ( nSID == SID_OPENTEMPLATE )
+                rReq.AppendItem( SfxBoolItem( SID_TEMPLATE, FALSE ) );
 
             for ( USHORT i = 0; i < pURLList->Count(); ++i )
             {
@@ -997,8 +999,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURL ) );
             delete pURLList;
         }
-
-        rReq.AppendItem( SfxStringItem( SID_REFERER, String::CreateFromAscii(SFX_REFERER_USER) ) );
     }
 
     if ( SID_OPENURL == nSID )
