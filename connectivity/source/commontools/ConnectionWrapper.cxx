@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-13 13:44:06 $
+ *  last change: $Author: fs $ $Date: 2002-08-15 08:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,43 @@ OConnectionWrapper::~OConnectionWrapper()
     if (m_xProxyConnection.is())
         m_xProxyConnection->setDelegator(NULL);
 }
+
 // XServiceInfo
 // --------------------------------------------------------------------------------
-IMPLEMENT_SERVICE_INFO(OConnectionWrapper, "com.sun.star.sdbc.drivers.OConnectionWrapper", "com.sun.star.sdbc.Connection")
+::rtl::OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.drivers.OConnectionWrapper" ) );
+}
+
+// --------------------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    // first collect the services which are supported by our aggregate
+    Sequence< ::rtl::OUString > aSupported;
+    Reference< XServiceInfo > xAggregatedServices;
+    ::comphelper::query_aggregation( m_xProxyConnection, xAggregatedServices );
+    if ( xAggregatedServices.is() )
+        aSupported = xAggregatedServices->getSupportedServiceNames();
+
+    // append our own service, if necessary
+    ::rtl::OUString sConnectionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.Connection" ) );
+    if ( 0 == ::comphelper::findValue( aSupported, sConnectionService, sal_True ).getLength() )
+    {
+        sal_Int32 nLen = aSupported.getLength();
+        aSupported.realloc( nLen + 1 );
+        aSupported[ nLen ] = sConnectionService;
+    }
+
+    // outta here
+    return aSupported;
+}
+
+// --------------------------------------------------------------------------------
+sal_Bool SAL_CALL OConnectionWrapper::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::comphelper::findValue( getSupportedServiceNames(), _rServiceName, sal_True ).getLength() != 0;
+}
+
 // --------------------------------------------------------------------------------
 Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
