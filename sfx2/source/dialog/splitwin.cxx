@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-12 13:06:37 $
+ *  last change: $Author: mba $ $Date: 2002-04-30 08:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,11 +606,12 @@ void SfxSplitWindow::MoveWindow( SfxDockingWindow* pDockWin, const Size& rSize,
         // alles eine Zeile nach vorne!
         nLine--;
     }
+/*
     else if ( nLine == nL && nPos > nP )
     {
         nPos--;
     }
-
+*/
     RemoveWindow( pDockWin );
     InsertWindow( pDockWin, rSize, nLine, nPos, bNewLine );
 }

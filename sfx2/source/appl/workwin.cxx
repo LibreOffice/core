@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-24 16:42:13 $
+ *  last change: $Author: mba $ $Date: 2002-04-30 08:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1874,7 +1874,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                     {
                         case SFX_ALIGN_TOP:
                             // Objekt-Toolboxen kommen immer zuletzt
-                            if ( bTbx || n <= nPos)
+                            //if ( bTbx || n <= nPos)
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
@@ -1897,7 +1897,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_BOTTOM:
                             // Objekt-Toolboxen kommen immer zuletzt
-                            if ( bTbx || n <= nPos)
+                            //if ( bTbx || n <= nPos)
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
@@ -1920,7 +1920,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_LEFT:
                             // Toolboxen kommen immer zuletzt
-                            if (bTbx || n <= nPos)
+                            //if (bTbx || n <= nPos)
                                 aInnerRect.Left() += pCli->aSize.Width();
                             break;
 
@@ -1942,7 +1942,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_RIGHT:
                             // Toolboxen kommen immer zuletzt
-                            if (bTbx || n <= nPos)
+                            //if (bTbx || n <= nPos)
                                 aInnerRect.Right() -= pCli->aSize.Width();
                             break;
 
