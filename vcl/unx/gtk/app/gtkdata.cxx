@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:57:02 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,19 @@ GdkCursor *GtkSalDisplay::getCursor( PointerStyle ePointerStyle )
             MAKE_CURSOR( POINTER_AUTOSCROLL_NSWE, asnswe_ );
             MAKE_CURSOR( POINTER_AIRBRUSH, airbrush_ );
             MAKE_CURSOR( POINTER_TEXT_VERTICAL, vertcurs_ );
+
+            // --> FME 2004-07-30 #i32329# Enhanced table selection
+            MAKE_CURSOR( POINTER_TAB_SELECT_S, tblsels_ );
+            MAKE_CURSOR( POINTER_TAB_SELECT_E, tblsele_ );
+            MAKE_CURSOR( POINTER_TAB_SELECT_SE, tblselse_ );
+            MAKE_CURSOR( POINTER_TAB_SELECT_W, tblselw_ );
+            MAKE_CURSOR( POINTER_TAB_SELECT_SW, tblselsw_ );
+            // <--
+
+            // --> FME 2004-08-16 #i20119# Paintbrush tool
+            MAKE_CURSOR( POINTER_PAINTBRUSH, paintbrush_ );
+            // <--
+
         default:
             fprintf( stderr, "pointer %d not implemented", ePointerStyle );
             break;
