@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:41:32 $
+ *  last change: $Author: cl $ $Date: 2001-07-13 10:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1839,7 +1839,7 @@ uno::Sequence< uno::Type > SAL_CALL getStaticTypes() throw()
 // uno::XInterface
 uno::Any SAL_CALL SvxUnoText::queryAggregation( const uno::Type & rType ) throw( uno::RuntimeException )
 {
-    uno::Any aAny( SvxUnoText::queryAggregation( rType ) );
+    uno::Any aAny( SvxUnoTextBase::queryAggregation( rType ) );
     if( !aAny.hasValue() )
         aAny = OWeakAggObject::queryAggregation( rType );
 
