@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cl $ $Date: 2000-11-08 12:41:52 $
+#   last change: $Author: cl $ $Date: 2001-01-12 16:24:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/pkgurl.obj \
         $(SLO)$/sdxmlwrp.obj
 
 # --- Targets --------------------------------------------------------------
