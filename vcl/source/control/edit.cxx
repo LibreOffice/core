@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-27 11:26:49 $
+ *  last change: $Author: pl $ $Date: 2002-10-01 15:43:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         DrawText( aPos, aText, nStart, nEnd - nStart, pVector, pDisplayText );
 
         if( pDXBuffer )
-            delete pDXBuffer;
+            delete [] pDXBuffer;
         return;
     }
 
@@ -699,7 +699,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         pCursor->Show();
 
     if( pDXBuffer )
-        delete pDXBuffer;
+        delete [] pDXBuffer;
 }
 
 // -----------------------------------------------------------------------
@@ -950,7 +950,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
     pCursor->Show();
 
     if( pDXBuffer )
-        delete pDXBuffer;
+        delete [] pDXBuffer;
 }
 
 // -----------------------------------------------------------------------
@@ -1027,7 +1027,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
     }
 
     if( pDXBuffer )
-        delete pDXBuffer;
+        delete [] pDXBuffer;
 
     return nIndex;
 }
