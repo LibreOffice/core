@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:48:35 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_simplified ] = "µ¥Έφ±κΗ©(~S)";
         Text[ russian ] = "Ξςδελόνΰÿ νΰκλεικΰ";
         Text[ polish ] = "Poj~edyncza etykieta";
-        Text[ japanese ] = "ΧΝήΩ‚P–‡‚Έ‚Β(~S)";
+        Text[ japanese ] = "‚P–‡‚ΜΧΝήΩ(~S)";
         Text[ chinese_traditional ] = "³ζ­Σ¶KΌΠ(~S)";
         Text[ arabic ] = "ΘΨΗήΙ ΪδζδΙ γέΡΟΙ";
         Text[ greek ] = "Μεμονωμένη ετικέτα";
