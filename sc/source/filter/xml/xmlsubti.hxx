@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #endif
 #include <list>
 
+#ifndef _SC_XMLTABLESHAPERESIZER_HXX
+#include "XMLTableShapeResizer.hxx"
+#endif
+
 class ScXMLImport;
 
 const nDefaultRowCount = 20;
@@ -147,6 +151,8 @@ class ScMyTables
 private:
     ScXMLImport&                        rImport;
 
+    ScMyShapeResizer                    aResizeShapes;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
     rtl::OUString                       sCurrentSheetName;
@@ -188,6 +194,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
                                         GetCurrentXShapes();
     sal_Bool                            HasDrawPage();
+    void                                AddShape(com::sun::star::uno::Reference <com::sun::star::drawing::XShape>& rShape,
+                                                com::sun::star::table::CellAddress& rAddress, sal_Int32 nY);
 };
 
 #endif

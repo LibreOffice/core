@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,8 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
     nTableCount( 0 ),
     nCurrentSheet( -1 ),
-    nCurrentDrawPage( -1 )
+    nCurrentDrawPage( -1 ),
+    aResizeShapes(rTempImport)
 {
     aTableVec.resize(nDefaultTabCount, NULL);
 }
@@ -647,6 +648,7 @@ void ScMyTables::DeleteTable()
             xProtectable->protect(sKey);
         }
     }
+    aResizeShapes.ResizeShapes(xCurrentSheet);
 }
 
 table::CellAddress ScMyTables::GetRealCellPos()
@@ -700,4 +702,10 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
 sal_Bool ScMyTables::HasDrawPage()
 {
     return !((nCurrentSheet != nCurrentDrawPage) || !xDrawPage.is());
+}
+
+void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
+    com::sun::star::table::CellAddress& rAddress, sal_Int32 nY)
+{
+    aResizeShapes.AddShape(rShape, rAddress, nY);
 }
