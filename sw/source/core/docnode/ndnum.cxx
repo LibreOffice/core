@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:06:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,22 +82,6 @@
 #endif
 
 
-//-------------------------------------------------------
-// Gliederung
-
-struct _OutlinePara
-{
-    SwNodeNum aNum;
-    const SwNodes& rNds;
-    BYTE nMin, nNewLevel;
-    // OD 21.11.2002 #100043# - array to remember, which level numbering
-    // has to be started.
-    bool aStartLevel[ MAXLEVEL ];
-
-    _OutlinePara( const SwNodes& rNodes, USHORT nSttPos, BYTE nOld, BYTE nNew );
-    BOOL UpdateOutline( SwTxtNode& rTxtNd );
-};
-
 _SV_IMPL_SORTAR_ALG( SwOutlineNodes, SwNodePtr )
 BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 {
@@ -147,182 +131,6 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
     return FALSE;
 }
 
-
-_OutlinePara::_OutlinePara( const SwNodes& rNodes, USHORT nSttPos,
-                            BYTE nOld, BYTE nNew )
-    : rNds( rNodes ),
-    aNum( IsShowNum(nNew) ? nNew : 0 ),
-    nMin( Min( nOld, nNew )),
-    nNewLevel( nNew )
-{
-    // OD 25.11.2002 #100043# - init <aStartLevel[]> with defaults, only valid
-    // if update of outline numbering started at first outline numbering node.
-    for ( int i = 0; i < MAXLEVEL; ++i)
-        aStartLevel[i] = true;
-
-    // hole vom Vorgaenger die aktuelle Nummerierung
-    SwNode* pNd;
-    ULONG nEndOfExtras = rNds.GetEndOfExtras().GetIndex();
-    if ( nSttPos &&
-         (pNd = rNds.GetOutLineNds()[ --nSttPos ])->GetIndex() > nEndOfExtras &&
-         static_cast<SwTxtNode*>(pNd)->GetOutlineNum()
-       )
-    {
-        const SwNodeNum* pNum = ((SwTxtNode*)pNd)->GetOutlineNum();
-#ifdef TASK_59308
-        if( ! pNum->IsNum() )
-        {
-            // dann suche den mit richtigem Level:
-            BYTE nSrchLvl = aNum.GetLevel();
-            pNum = 0;
-            while( nSttPos-- )
-            {
-                if( ( pNd = rNds.GetOutLineNds()[ nSttPos ])->
-                    GetIndex() < nEndOfExtras )
-                    break;
-
-                if( 0 != ( pNum = ((SwTxtNode*)pNd)->GetOutlineNum() ))
-                {
-                    // uebergeordnete Ebene
-                    if( nSrchLvl > pNum->GetRealLevel())
-                    {
-                        pNum = 0;
-                        break;
-                    }
-                    // gleiche Ebene und kein NO_NUMLEVEL
-                    if( nSrchLvl == pNum->GetRealLevel()
-                        && pNum->IsNum())
-                        break;
-
-                    pNum = 0;
-                }
-            }
-        }
-
-#endif
-        if( pNum )
-        {
-            aNum = *pNum;
-            aNum.SetStart( FALSE );
-            aNum.SetSetValue( USHRT_MAX );
-        }
-
-        if( aNum.GetLevel()+1 < MAXLEVEL )
-        {
-            memset( aNum.GetLevelVal() + (aNum.GetLevel()+1), 0,
-                    (MAXLEVEL - (aNum.GetLevel()+1)) * sizeof(aNum.GetLevelVal()[0]) );
-        }
-        // OD 22.11.2002 #100043# - init array <aStartLevel[]>, not starting at
-        // first outline numbering node.
-        aStartLevel[ pNum->GetLevel() ] = false;
-        USHORT nHighestLevelFound = pNum->GetLevel();
-        while ( pNum->GetLevel() > 0 && nSttPos-- )
-        {
-            pNd = rNds.GetOutLineNds()[ nSttPos ];
-            if ( pNd->GetIndex() < nEndOfExtras )
-                break;
-            pNum = static_cast<SwTxtNode*>(pNd)->GetOutlineNum();
-            if ( pNum && pNum->GetLevel() < nHighestLevelFound )
-            {
-                aStartLevel[ pNum->GetLevel() ] = false;
-                nHighestLevelFound = pNum->GetLevel();
-            }
-        }
-    }
-}
-
-BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
-{
-    // alle die ausserhalb des Fliesstextes liegen, NO_NUM zuweisen.
-    if( rTxtNd.GetIndex() < rNds.GetEndOfExtras().GetIndex() )
-    {
-        BOOL bTmpNoNum = ! aNum.IsNum();
-        aNum.SetNoNum( TRUE );
-        rTxtNd.UpdateNum( aNum ); // #115901#
-        aNum.SetNoNum( bTmpNoNum );
-
-        return TRUE;
-    }
-
-    BYTE nLevel = rTxtNd.GetTxtColl()->GetOutlineLevel();
-    BOOL bRet = !(nMin > nLevel);
-    if( bRet )
-    {
-        // existierte am Node schon eine Nummerierung ??
-        // dann erfrage den "User definierten Wert"
-        USHORT nSetValue;
-        const SwNumRule* pOutlRule = rTxtNd.GetDoc()->GetOutlineNumRule();
-        const SwNodeNum* pOutlNum = rTxtNd.GetOutlineNum();
-
-#ifdef TASK_59308
-        if( pOutlNum && ! pOutlNum->IsNum() &&
-            pOutlNum->GetRealLevel() == nLevel )
-        {
-            // diesen nicht mit numerieren
-            BYTE nTmpLevel = aNum.GetLevel();
-            aNum.SetLevel( pOutlNum->GetLevel() );
-            rTxtNd.UpdateOutlineNum( aNum );
-            aNum.SetLevel( nTmpLevel );
-            return TRUE;
-        }
-#endif
-
-        // OD 21.11.2002 #100043# - determine, if level numbering has to be started.
-        // OD 09.12.2002 #106070# - correct outline numbering, even for the
-        // first heading. Thus, state of <aStartLevel[]> always has to be
-        // consulted, not only on level change.
-        if( aStartLevel[ nLevel ] )
-        {
-            nSetValue= pOutlRule->Get( nLevel ).GetStart();
-            // OD 21.11.2002 #100043# - reset <aStartLevel[nLevel]>
-            aStartLevel[ nLevel ] = false;
-        }
-        else
-        {
-            const SwNodeNum * pNum = rTxtNd.GetNum();
-
-            nSetValue = aNum.GetLevelVal()[ nLevel ];
-
-            if (! pNum || ! (pNum->IsNum()))
-                nSetValue += 1;
-        }
-
-         // alle unter dem neuen Level liegenden auf 0 setzen
-        if( aNum.GetLevel() > nLevel && nLevel+1 < MAXLEVEL
-            /* ??? && NO_NUM > nNewLevel */ )
-        {
-            memset( aNum.GetLevelVal() + (nLevel+1), 0,
-                    (MAXLEVEL - ( nLevel+1 )) * sizeof(aNum.GetLevelVal()[0]) );
-            // OD 22.11.2002 #100043# - all next level numberings have to be started.
-            for ( int i = nLevel+1; i < MAXLEVEL; ++i)
-                aStartLevel[i] = true;
-        }
-
-        if( pOutlNum && USHRT_MAX != pOutlNum->GetSetValue() )
-            aNum.SetSetValue( nSetValue = pOutlNum->GetSetValue() );
-
-        aNum.GetLevelVal()[ nLevel ] = nSetValue;
-        aNum.SetLevel( nLevel );
-        rTxtNd.UpdateNum( aNum );
-        aNum.SetSetValue( USHRT_MAX );
-    }
-    return bRet;
-}
-
-
-
-BOOL lcl_UpdateOutline( const SwNodePtr& rpNd, void* pPara )
-{
-    _OutlinePara* pOutlPara = (_OutlinePara*)pPara;
-    SwTxtNode* pTxtNd = rpNd->GetTxtNode();
-    ASSERT( pTxtNd, "kein TextNode als OutlineNode !" );
-
-    return pOutlPara->UpdateOutline( *pTxtNd );
-}
-
-
-
-
 void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
                                  BYTE nNewLevel )
 {
@@ -359,34 +167,6 @@ void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel,
     else if( !bSeekIdx )        // Update und Index nicht gefunden ??
         return ;
 
-#if 0
-    if (GetDoc()->IsOldNumbering())
-    {
-        _OutlinePara aPara( *this, nSttPos, nOldLevel, nNewLevel );
-        pOutlineNds->ForEach( nSttPos, pOutlineNds->Count(),
-                              lcl_UpdateOutline, &aPara );
-
-        //FEATURE::CONDCOLL
-        {
-            SwCntntNode* pCNd;
-            ULONG nSttNd = rNd.GetIndex();
-            if( NO_NUMBERING != nNewLevel )
-                ++nSttPos;
-
-            ULONG nChkCount = ( nSttPos < pOutlineNds->Count()
-                                ? (*pOutlineNds)[ nSttPos ]->GetIndex()
-                                : GetEndOfContent().GetIndex()  )
-                - nSttNd;
-            for( ; nChkCount--; ++nSttNd )
-                if( 0 != (pCNd = (*this)[ nSttNd ]->GetCntntNode() ) &&
-                    RES_CONDTXTFMTCOLL == pCNd->GetFmtColl()->Which() )
-                    pCNd->ChkCondColl();
-        }
-        //FEATURE::CONDCOLL
-
-    }
-    else // #111955#
-#endif
     {
         SwTxtNode & rTxtNd = (SwTxtNode &) rNd;
         SwPaM aPam(rTxtNd); // #115901#
