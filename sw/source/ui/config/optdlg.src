@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 00:01:23 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ TabPage TP_CONTENT_OPT
         Text[ turkish ] = "Right aligned";
         Text[ arabic ] = "Right aligned";
         Text[ catalan ] = "Right aligned";
+        Text[ thai ] = "Right aligned";
     };
     ListBox LB_VMETRIC
     {
@@ -1635,7 +1636,7 @@ TabPage TP_STD_FONT
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ÇÝÊÑÇÖí";
         Text[ greek ] = "ÐñïåðéëïãÞ";
-        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
+        Text[ korean ] = "ê¸°ë³¸ ê°’(~D)";
         Text[ turkish ] = "S~tandart";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Oletusarvo";
