@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 21:40:01 $
+ *  last change: $Author: mtg $ $Date: 2001-07-26 16:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 class SwView;
 class SwViewOption;
 class SwPrintOptions;
+class SwDoc;
+class SwPagePreViewPrtData;
+
 /******************************************************************************
  *
  ******************************************************************************/
@@ -140,8 +143,11 @@ class SwXPrintSettings :public comphelper::ChainablePropertySet,
 {
     friend class SwXDocumentSettings;
 protected:
-    sal_Bool                        bWeb            : 1;
-    SwPrintOptions* pPrtOpt;
+    sal_Bool        mbWeb:1, mbPreviewDataChanged;
+    SwDoc*          mpDoc;
+    SwPrintOptions* mpPrtOpt;
+    SwPagePreViewPrtData *mpPreViewData;
+    const SwPagePreViewPrtData *mpConstPreViewData;
     virtual void _preSetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
     virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
@@ -156,7 +162,7 @@ protected:
     virtual void _postGetValues ()
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 public:
-    SwXPrintSettings(sal_Bool bWeb);
+    SwXPrintSettings(sal_Bool bWeb, SwDoc *pShell);
     virtual ~SwXPrintSettings();
 
     // XInterface
