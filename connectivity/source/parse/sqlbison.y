@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.1.1.1 2000-09-18 16:14:28 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.2 2000-10-17 08:37:23 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2000-09-18 16:14:28 $ $Revision: 1.1.1.1 $
+//	$Author: oj $ $Date: 2000-10-17 08:37:23 $ $Revision: 1.2 $
 //
 // Description:
 //
@@ -3305,7 +3305,12 @@ OSQLParser::~OSQLParser()
 
 	DBG_DTOR(OSQLParser,NULL);
 }
-
+// -------------------------------------------------------------------------
+void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
+{
+	::osl::MutexGuard aGuard(s_aMutex);
+	m_pParseTree = pNewParseTree;
+}
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParser::parseTree(String& rErrorMessage,
 									 const String& rStatement,
@@ -3315,6 +3320,8 @@ OSQLParseNode* OSQLParser::parseTree(String& rErrorMessage,
 
 	// Guard the parsing
 	::osl::MutexGuard aGuard(s_aMutex);
+	// must be reset
+	xxx_pGLOBAL_SQLPARSER = this;
 
 	// defines how to scan
 	s_pScanner->SetRule(s_pScanner->GetSQLRule()); // initial
