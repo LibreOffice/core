@@ -31,8 +31,8 @@
 <DoubleQuotationStart>"</DoubleQuotationStart>
 <DoubleQuotationEnd>"</DoubleQuotationEnd>
 </Markers>
-<TimeAM>AM</TimeAM>
-<TimePM>PM</TimePM>
+<TimeAM>เช้า</TimeAM>
+<TimePM>บ่าย</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT>
@@ -327,13 +327,13 @@
 <Eras>
 <Era>
 <EraID>bc</EraID>
-<DefaultAbbrvName>ปีก่อนคริสต์กาลที่</DefaultAbbrvName>
-<DefaultFullName>ปีก่อนคริสต์กาลที่</DefaultFullName>
+<DefaultAbbrvName>ปีก่อนคริสตกาลที่</DefaultAbbrvName>
+<DefaultFullName>ปีก่อนคริสตกาลที่</DefaultFullName>
 </Era>
 <Era>
 <EraID>ad</EraID>
 <DefaultAbbrvName>ค.ศ.</DefaultAbbrvName>
-<DefaultFullName>ค.ศ.</DefaultFullName>
+<DefaultFullName>คริสตศักราช</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
@@ -444,13 +444,13 @@
 <Eras>
 <Era>
 <EraID>before</EraID>
-<DefaultAbbrvName>Dummy</DefaultAbbrvName>
-<DefaultFullName>Dummy</DefaultFullName>
+<DefaultAbbrvName>ปีก่อนพุทธกาลที่</DefaultAbbrvName>
+<DefaultFullName>ปีก่อนพุทธกาลที่</DefaultFullName>
 </Era>
 <Era>
 <EraID>after</EraID>
 <DefaultAbbrvName>พ.ศ.</DefaultAbbrvName>
-<DefaultFullName>พ.ศ.</DefaultFullName>
+<DefaultFullName>พุทธศักราช</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek>
@@ -461,24 +461,24 @@
 </LC_CALENDAR>
 <LC_CURRENCY>
 <Currency default="true" usedInCompatibleFormatCodes="true">
-<CurrencyID>฿</CurrencyID>
+<CurrencyID>BAHT</CurrencyID>
 <CurrencySymbol>฿</CurrencySymbol>
 <BankSymbol>THB</BankSymbol>
-<CurrencyName>Baht</CurrencyName>
+<CurrencyName>บาท</CurrencyName>
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
 <LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
 <ReservedWords>
-<trueWord>เธ^เธฃเธดเธ?</trueWord>
-<falseWord>เน?เธ-เน?เธ^</falseWord>
-<quarter1Word>เน?เธ*เธฃเธกเธฒเธชเธ-เธตเน^ 1</quarter1Word>
-<quarter2Word>เน?เธ*เธฃเธกเธฒเธชเธ-เธตเน^ 2</quarter2Word>
-<quarter3Word>เน?เธ*เธฃเธกเธฒเธชเธ-เธตเน^ 3</quarter3Word>
-<quarter4Word>เน?เธ*เธฃเธกเธฒเธชเธ-เธตเน^ 4</quarter4Word>
-<aboveWord>เน?เธซเธ?เธทเธญ</aboveWord>
-<belowWord>เนfเธ*เน?</belowWord>
+<trueWord>จริง</trueWord>
+<falseWord>เท็จ</falseWord>
+<quarter1Word>ไตรมาศที่ 1</quarter1Word>
+<quarter2Word>ไตรมาศที่ 2</quarter2Word>
+<quarter3Word>ไตรมาศที่ 3</quarter3Word>
+<quarter4Word>ไตรมาศที่ 4</quarter4Word>
+<aboveWord>ข้างบน</aboveWord>
+<belowWord>ข้างใต้</belowWord>
 <quarter1Abbreviation>Q1</quarter1Abbreviation>
 <quarter2Abbreviation>Q2</quarter2Abbreviation>
 <quarter3Abbreviation>Q3</quarter3Abbreviation>
