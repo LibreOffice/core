@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:38:09 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,22 +84,16 @@
 #ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
 #endif
+
+#include <sfx2/objsh.hxx>
+
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
-#endif
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
 #endif
 
 #ifndef _SC_EXPFTEXT_HXX
 #include "expftext.hxx"
 #endif
-
-#ifndef SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-#define SO2_DECL_SVEMBEDDEDOBJECT_DEFINED
-SO2_DECL_REF(SvEmbeddedObject)
-#endif
-
 
 class ScViewData;
 class ScDocument;
@@ -146,7 +140,7 @@ private:
     ScViewData&         rViewData;
     ScDocument&         rDoc;
     ScDocShell*         pDocShTables;
-    SvEmbeddedObjectRef aDocShTablesRef;
+    SfxObjectShellRef   aDocShTablesRef;
 
     USHORT              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
