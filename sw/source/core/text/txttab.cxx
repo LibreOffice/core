@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-11-30 15:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 
 
 
-const SvxTabStop *SwLineInfo::GetTabStop( const KSHORT nLinePos,
-    const KSHORT nLeft, const KSHORT nRight ) const
+const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nLinePos,
+    const SwTwips nLeft, const SwTwips nRight ) const
 {
     // Mit den KSHORTs aufpassen, falls nLinePos < nLeft
     SwTwips nPos = nLinePos;
@@ -153,12 +153,12 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf ) const
         In dieser Methode wird zwischen beiden Koordinatensystemen
         konvertiert (vgl. rInf.GetTabPos).
        */
-        const KSHORT nTabLeft = KSHORT(pFrm->Frm().Left()) +
-                     KSHORT(pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft());
+        const SwTwips nTabLeft = pFrm->Frm().Left() +
+                     pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft();
                 //    + KSHORT(pFrm->GetTxtNode()->GetLeftMarginWithNum( sal_True ));
-        const KSHORT nLinePos = KSHORT(GetLeftMargin());
-        const KSHORT nLineTab = nLinePos + nTabPos;
-        const KSHORT nRight = KSHORT(Right());
+        const SwTwips nLinePos = GetLeftMargin();
+        const SwTwips nLineTab = nLinePos + nTabPos;
+        const SwTwips nRight = Right();
         SwTwips nNextPos;
         const SvxTabStop* pTabStop =
             aLineInf.GetTabStop( nLineTab, nTabLeft, nRight );
