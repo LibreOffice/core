@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:46:46 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 10:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 194 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 100 ) ;
         TabStop = TRUE ;
+    };
+    String STR_SELECT
+    {
+        Text = "Auswahl";
+//      Text [ english ] = "Choice";
+//      Text [ english_us ] = "Choice";
     };
     ScrollBar WND_HSCROLL
     {

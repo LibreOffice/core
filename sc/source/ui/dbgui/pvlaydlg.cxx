@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-05 13:45:10 $
+ *  last change: $Author: sab $ $Date: 2002-08-06 10:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aWndCol         ( this, ScResId( WND_COL ),    TYPE_COL,    &aFtCol ),
         aFtData         ( this, ScResId( FT_DATA ) ),
         aWndData        ( this, ScResId( WND_DATA ),   TYPE_DATA,   &aFtData ),
-        aWndSelect      ( this, ScResId( WND_SELECT ), TYPE_SELECT, NULL ),
+        aWndSelect      ( this, ScResId( WND_SELECT ), TYPE_SELECT, String(ScResId(STR_SELECT)) ),
 
         aPtrArrow       ( POINTER_ARROW ),
         aPtrField       ( POINTER_PIVOT_FIELD ),
