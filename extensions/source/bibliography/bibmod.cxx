@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-01 12:46:59 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@
 #include "datman.hxx"
 #include "bibconfig.hxx"
 static PtrBibModul pBibModul=NULL;
-static nBibModulCount=0;
+static sal_uInt32 nBibModulCount=0;
 
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
