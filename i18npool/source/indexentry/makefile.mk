@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.7 $
+#*  $Revision: 1.8 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-26 17:06:09 $
+#*  last change: $Author: er $ $Date: 2002-03-28 00:31:40 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -76,7 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=   \
             $(SLO)$/indexentrysupplier.obj \
-            $(SLO)$/indexentrysupplier_cjk.obj \
+            $(SLO)$/indexentrysupplier_asian.obj \
             $(SLO)$/indexentrysupplier_zh_pinyin.obj \
             $(SLO)$/indexentrysupplier_zh_stroke.obj \
             $(SLO)$/indexentrysupplier_zh_radical.obj \
@@ -84,11 +84,11 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_zh_TW_radical.obj \
             $(SLO)$/indexentrysupplier_zh_TW_stroke.obj \
             $(SLO)$/indexentrysupplier_ko_dict.obj \
-            $(SLO)$/indexentrysupplier_euro.obj \
+            $(SLO)$/indexentrysupplier_western.obj \
             $(SLO)$/indexentrysupplier_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_da_alphanumeric.obj \
             $(SLO)$/indexentrysupplier_nl_alphanumeric.obj \
-            $(SLO)$/indexentrysupplier_unicode.obj
+            $(SLO)$/indexentrysupplier_default.obj
 
 
 # --- Targets ------------------------------------------------------
