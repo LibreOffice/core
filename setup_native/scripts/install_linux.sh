@@ -72,7 +72,7 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core-*" ! -name "*-menus-*" ! -name "adabas*" ! -name "j2re*" -print`
+RPMLIST=`find $PACKAGE_PATH -type f -name "*.rpm" ! -name "*-core-*" ! -name "*-menus-*" ! -name "adabas*" ! -name "j2re*" ! -name "*-gnome*" -print`
 CORERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-core-*" -print`
 PREFIX=`rpm -qlp $CORERPM | head -n1`
 
@@ -81,8 +81,19 @@ then
     error "No core package found in directory $PACKAGE_PATH"
 fi
 
+# Do not install gnome-integration package on systems without GNOME
+# check for /bin/rpm first, otherwise the rpm database is most likly empty anyway
+if [ -x /bin/rpm ]
+then
+  /bin/rpm -q gnome-vfs2 >/dev/null
+  if [ $? -eq 0 ]
+  then
+    GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
+  fi
+fi
+
 echo "Packages found:"
-for i in $CORERPM $RPMLIST; do
+for i in $CORERPM $RPMLIST $GNOMERPM; do
   echo `basename $i`
 done
 
@@ -101,16 +112,9 @@ then
     cannot_install "Directory $INSTALLDIR exists and is not empty or cannot be removed"
 fi
 
-# We expect that $RPM_DB_PATH does not exist, however if it is empty we ignore it
-RPM_DB_PATH=$HOME/.RPM_OFFICEDATABASE
-if [ -d $RPM_DB_PATH ]
-then
-    rmdir $RPM_DB_PATH
-fi
-if [ -d $RPM_DB_PATH ]
-then
-    cannot_install "rpm database does already exist $RPM_DB_PATH"
-fi
+# We expect that rpm_DB_PATH does not exist, however if it is empty we ignore it
+#RPM_DB_PATH=$HOME/.RPM_OFFICEDATABASE
+RPM_DB_PATH=$INSTALLDIR/.RPM_OFFICEDATABASE
 
 #
 # Perform the installation
@@ -125,7 +129,7 @@ echo "Path to the packages:       " $PACKAGE_PATH
 echo "Path to the installation:   " $INSTALLDIR
 
 # Creating directories
-mkdir $RPM_DB_PATH
+mkdir -p $RPM_DB_PATH
 # XXX why ? XXX
 chmod 700 $RPM_DB_PATH
 if [ ! -d $RPM_DB_PATH ]
@@ -136,8 +140,11 @@ fi
 # Creating RPM database and initializing
 rpm --initdb --dbpath $RPM_DB_PATH
 echo "Installing the RPMs"
-rpm --install --nodeps -vh --relocate $PREFIX=$INSTALLDIR --dbpath $RPM_DB_PATH $CORERPM
-rpm --install --nodeps -vh --relocate $PREFIX=$INSTALLDIR --dbpath $RPM_DB_PATH $RPMLIST
+
+# inject a second slash to the last path segment to avoid rpm 3 concatination bug
+NEWPREFIX=`echo $INSTALLDIR | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
+rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $CORERPM
+rpm --install --nodeps -vh --relocate $PREFIX=$NEWPREFIX --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
 
 #
 # Create a link into the users home directory
@@ -150,6 +157,10 @@ then
   rm -f $HOME/soffice
   ln -s $INSTALLDIR/program/soffice $HOME/soffice
 fi
+
+# patch the "bootstraprc" to create a self-containing installation
+mv $INSTALLDIR/program/bootstraprc $INSTALLDIR/program/bootstraprc.orig
+sed 's/UserInstallation=$SYSUSERCONFIG\/.staroffice8/UserInstallation=$ORIGIN\/..\/UserInstallation/g' $INSTALLDIR/program/bootstraprc.orig > $INSTALLDIR/program/bootstraprc
 
 echo
 echo "Installation done ..."
