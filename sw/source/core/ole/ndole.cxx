@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:00:16 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@
 #include <ndole.hxx>
 #endif
 
+#include <comphelper/classids.hxx>
 #include <vcl/graph.hxx>
 #include <sot/formats.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -811,12 +812,10 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
                 aArea.SetSize( Size( 5000,  5000 ) );
             // TODO/LATER: set replacement graphic for dead object
             // It looks as if it should work even without the object, because the replace will be generated automatically
-            // The only possible problem might be that we will try to create the object again and again
-            //xObj = new SvDeathObject( aArea );
-            // It would be better to make the code fit for the fact that no object is available!
-            // Of course we also must prevent permanent calls to this function
+            ::rtl::OUString aName;
+            xObj = p->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_DUMMY_CLASSID ).GetByteSequence(), aName );
         }
-        else
+        // else
         {
             xOLERef.Assign( xObj, xOLERef.GetViewAspect() );
             xOLERef.AssignToContainer( &p->GetEmbeddedObjectContainer(), aName );
