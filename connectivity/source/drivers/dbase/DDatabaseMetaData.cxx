@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:05:37 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 08:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,13 +190,6 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
         aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
         aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length,scale"));
         aRow[15] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)15);
-        aRows.push_back(aRow);
-
-        aRow[1] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("NUMERIC"));
-        aRow[2] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(DataType::NUMERIC);
-        aRow[3] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
-        aRow[6] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator(::rtl::OUString::createFromAscii("length,scale"));
-        aRow[15] = new ODatabaseMetaDataResultSet::ORowSetValueDecorator((sal_Int32)20);
         aRows.push_back(aRow);
     }
 
