@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:10:45 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 11:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,13 @@ ModalDialog DLG_EXPORT_PIX
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 144 ) ;
+    Size = MAP_APPFONT ( 178 , 135 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    GroupBox GRP_COLORS
+    FixedLine GRP_COLORS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 45 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Farbauflˆsung" ;
         Text [ ENGLISH ] = "Color resolution" ;
         Text [ english_us ] = "Color resolution" ;
@@ -387,10 +387,10 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "CodificaciÛn RLE";
         Text[ finnish ] = "RLE-koodaus";
     };
-    GroupBox GRP_MODE_PIX
+    FixedLine GRP_MODE_PIX
     {
-        Pos = MAP_APPFONT ( 6 , 51 ) ;
-        Size = MAP_APPFONT ( 110 , 87 ) ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
         Text = "Modus" ;
         Text [ ENGLISH ] = "Mode" ;
         Text [ english_us ] = "Mode" ;
@@ -417,8 +417,8 @@ ModalDialog DLG_EXPORT_PIX
     };
     RadioButton RB_ORIGINAL_PIX
     {
-        Pos = MAP_APPFONT ( 12 , 60 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         Text = "~Original" ;
         Text [ ENGLISH ] = "~Original" ;
         TabStop = TRUE ;
@@ -446,8 +446,8 @@ ModalDialog DLG_EXPORT_PIX
     };
     RadioButton RB_RES_PIX
     {
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
-        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
         Text = "~Auflˆsung" ;
         Text [ ENGLISH ] = "~Resolution" ;
         TabStop = TRUE ;
@@ -475,7 +475,7 @@ ModalDialog DLG_EXPORT_PIX
     };
     ComboBox CBB_RES_PIX
     {
-        Pos = MAP_APPFONT ( 70 , 75 ) ;
+        Pos = MAP_APPFONT ( 70 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -489,8 +489,8 @@ ModalDialog DLG_EXPORT_PIX
     };
     RadioButton RB_SIZE_PIX
     {
-        Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         Text = "~Grˆﬂe" ;
         Text [ ENGLISH ] = "~Size" ;
         TabStop = TRUE ;
@@ -519,24 +519,7 @@ ModalDialog DLG_EXPORT_PIX
     MetricField MTF_SIZEX_PIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 105 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 100 ;
-        Maximum = 99999 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        First = 100 ;
-        Last = 99999 ;
-        SpinSize = 100 ;
-    };
-    MetricField MTF_SIZEY_PIX
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 120 ) ;
+        Pos = MAP_APPFONT ( 60 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -552,7 +535,7 @@ ModalDialog DLG_EXPORT_PIX
     };
     FixedText FT_SIZEX_PIX
     {
-        Pos = MAP_APPFONT ( 18 , 106 ) ;
+        Pos = MAP_APPFONT ( 18 , 102 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
         Text = "Breite" ;
         Text [ ENGLISH ] = "Width" ;
@@ -578,9 +561,26 @@ ModalDialog DLG_EXPORT_PIX
         Text[ catalan ] = "Ancho";
         Text[ finnish ] = "Leveys";
     };
+    MetricField MTF_SIZEY_PIX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 117 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
     FixedText FT_SIZEY_PIX
     {
-        Pos = MAP_APPFONT ( 18 , 121 ) ;
+        Pos = MAP_APPFONT ( 18 , 118 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
         Text = "Hˆhe" ;
         Text [ ENGLISH ] = "Height" ;
@@ -630,150 +630,42 @@ ModalDialog DLG_EXPORT_VEC
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 178 , 98 ) ;
+    Size = MAP_APPFONT ( 178 , 89 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    MetricField MTF_SIZEX_VEC
+
+    FixedLine GRP_MODE_VEC
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 59 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 100 ;
-        Maximum = 99999 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        First = 100 ;
-        Last = 99999 ;
-        SpinSize = 100 ;
-    };
-    MetricField MTF_SIZEY_VEC
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 100 ;
-        Maximum = 99999 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_MM ;
-        First = 100 ;
-        Last = 99999 ;
-        SpinSize = 100 ;
-    };
-    GroupBox GRP_SIZE_VEC
-    {
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
-        Size = MAP_APPFONT ( 110 , 44 ) ;
-        Text = "Grˆﬂe" ;
-        Text [ ENGLISH ] = "Size" ;
-        Text [ dutch ] = "Grootte" ;
-        Text [ english_us ] = "Size" ;
-        Text [ italian ] = "Dimensione" ;
-        Text [ spanish ] = "TamaÒo" ;
-        Text [ french ] = "Taille" ;
-        Text [ swedish ] = "Storlek" ;
-        Text [ danish ] = "St¯rrelse" ;
-        Text [ portuguese_brazilian ] = "Grˆﬂe" ;
-        Text [ portuguese ] = "Tamanho" ;
-        Text[ chinese_simplified ] = "¥Û–°";
-        Text[ russian ] = "–‡ÁÏÂ";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "ª≤Ωﬁ";
-        Text[ chinese_traditional ] = "§j§p";
-        Text[ arabic ] = "«·ÕÃ„";
-        Text[ greek ] = "Ã›„ÂËÔÚ";
-        Text[ korean ] = "≈©±‚";
-        Text[ turkish ] = "B¸y¸kl¸k";
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ swedish ] = "L‰ge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ russian ] = "–ÂÊËÏ";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "”∞ƒﬁ";
+        Text[ chinese_traditional ] = "º“¶°";
+        Text[ arabic ] = "«·Ê÷⁄";
+        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "∏µÂ";
+        Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "TamaÒo";
-        Text[ finnish ] = "Koko";
-    };
-    FixedText FT_SIZEX_VEC
-    {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Breite" ;
-        Text [ ENGLISH ] = "Width" ;
-        Text [ dutch ] = "Breedte" ;
-        Text [ english_us ] = "Width" ;
-        Text [ italian ] = "Larghezza" ;
-        Text [ spanish ] = "Ancho" ;
-        Text [ french ] = "Largeur" ;
-        Text [ swedish ] = "Bredd" ;
-        Text [ danish ] = "Bredde" ;
-        Text [ portuguese ] = "Largura" ;
-        Text [ portuguese_brazilian ] = "Breite" ;
-        Text[ chinese_simplified ] = "øÌ∂»";
-        Text[ russian ] = "ÿËËÌ‡";
-        Text[ polish ] = "Szer.";
-        Text[ japanese ] = "ïù";
-        Text[ chinese_traditional ] = "ºe´◊";
-        Text[ arabic ] = "«·⁄—÷";
-        Text[ greek ] = "–Î‹ÙÔÚ";
-        Text[ korean ] = "≥ ∫Ò";
-        Text[ turkish ] = "Geni˛lik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ancho";
-        Text[ finnish ] = "Leveys";
-    };
-    FixedText FT_SIZEY_VEC
-    {
-        Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "Hˆhe" ;
-        Text [ ENGLISH ] = "Height" ;
-        Text [ english_us ] = "Height" ;
-        Text [ italian ] = "Altezza" ;
-        Text [ spanish ] = "Altura" ;
-        Text [ french ] = "Hauteur" ;
-        Text [ dutch ] = "Hoogte" ;
-        Text [ swedish ] = "Hˆjd" ;
-        Text [ danish ] = "H¯jde" ;
-        Text [ portuguese_brazilian ] = "Hˆhe" ;
-        Text [ portuguese ] = "Altura" ;
-        Text[ chinese_simplified ] = "∏ﬂ∂»";
-        Text[ russian ] = "¬˚ÒÓÚ‡";
-        Text[ polish ] = "Wys.";
-        Text[ japanese ] = "çÇÇ≥";
-        Text[ chinese_traditional ] = "∞™´◊";
-        Text[ arabic ] = "«·«— ›«⁄";
-        Text[ greek ] = "æ¯ÔÚ";
-        Text[ korean ] = "≥Ù¿Ã";
-        Text[ turkish ] = "Y¸kseklik";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Altura";
-        Text[ finnish ] = "Korkeus";
-    };
-    OKButton BTN_OK_VEC
-    {
-        Pos = MAP_APPFONT ( 122 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL_VEC
-    {
-        Pos = MAP_APPFONT ( 122 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP_VEC
-    {
-        Pos = MAP_APPFONT ( 122 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
+        Text[ catalan ] = "Modo";
+        Text[ finnish ] = "Tila";
     };
     RadioButton RB_ORIGINAL_VEC
     {
-        Pos = MAP_APPFONT ( 12 , 12 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         Text = "~Original" ;
         Text [ ENGLISH ] = "~Original" ;
         TabStop = TRUE ;
@@ -801,8 +693,8 @@ ModalDialog DLG_EXPORT_VEC
     };
     RadioButton RB_SIZE_VEC
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 98 , 10 ) ;
         Text = "~Grˆﬂe" ;
         Text [ ENGLISH ] = "~Size" ;
         TabStop = TRUE ;
@@ -828,32 +720,141 @@ ModalDialog DLG_EXPORT_VEC
         Text[ catalan ] = "~TamaÒo";
         Text[ finnish ] = "~Koko";
     };
-    GroupBox GRP_MODE_VEC
+    FixedLine GRP_SIZE_VEC
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 42 ) ;
-        Text = "Modus" ;
-        Text [ ENGLISH ] = "Mode" ;
-        Text [ dutch ] = "Modus" ;
-        Text [ english_us ] = "Mode" ;
-        Text [ italian ] = "Modo" ;
-        Text [ spanish ] = "Modo" ;
-        Text [ french ] = "Mode" ;
-        Text [ swedish ] = "L‰ge" ;
-        Text [ danish ] = "Modus" ;
-        Text [ portuguese_brazilian ] = "Modus" ;
-        Text [ portuguese ] = "Modo" ;
-        Text[ chinese_simplified ] = "ƒ£ Ω";
-        Text[ russian ] = "–ÂÊËÏ";
-        Text[ polish ] = "Tryb";
-        Text[ japanese ] = "”∞ƒﬁ";
-        Text[ chinese_traditional ] = "º“¶°";
-        Text[ arabic ] = "«·Ê÷⁄";
-        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
-        Text[ korean ] = "∏µÂ";
-        Text[ turkish ] = "Kip";
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text = "Grˆﬂe" ;
+        Text [ ENGLISH ] = "Size" ;
+        Text [ dutch ] = "Grootte" ;
+        Text [ english_us ] = "Size" ;
+        Text [ italian ] = "Dimensione" ;
+        Text [ spanish ] = "TamaÒo" ;
+        Text [ french ] = "Taille" ;
+        Text [ swedish ] = "Storlek" ;
+        Text [ danish ] = "St¯rrelse" ;
+        Text [ portuguese_brazilian ] = "Grˆﬂe" ;
+        Text [ portuguese ] = "Tamanho" ;
+        Text[ chinese_simplified ] = "¥Û–°";
+        Text[ russian ] = "–‡ÁÏÂ";
+        Text[ polish ] = "Rozmiar";
+        Text[ japanese ] = "ª≤Ωﬁ";
+        Text[ chinese_traditional ] = "§j§p";
+        Text[ arabic ] = "«·ÕÃ„";
+        Text[ greek ] = "Ã›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚";
+        Text[ turkish ] = "B¸y¸kl¸k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Modo";
-        Text[ finnish ] = "Tila";
+        Text[ catalan ] = "TamaÒo";
+        Text[ finnish ] = "Koko";
+    };
+    FixedText FT_SIZEX_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Breite" ;
+        Text [ ENGLISH ] = "Width" ;
+        Text [ dutch ] = "Breedte" ;
+        Text [ english_us ] = "Width" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
+        Text [ swedish ] = "Bredd" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ portuguese ] = "Largura" ;
+        Text [ portuguese_brazilian ] = "Breite" ;
+        Text[ chinese_simplified ] = "øÌ∂»";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "ïù";
+        Text[ chinese_traditional ] = "ºe´◊";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò";
+        Text[ turkish ] = "Geni˛lik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
+        Text[ finnish ] = "Leveys";
+    };
+    MetricField MTF_SIZEX_VEC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 55 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    FixedText FT_SIZEY_VEC
+    {
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Text = "Hˆhe" ;
+        Text [ ENGLISH ] = "Height" ;
+        Text [ english_us ] = "Height" ;
+        Text [ italian ] = "Altezza" ;
+        Text [ spanish ] = "Altura" ;
+        Text [ french ] = "Hauteur" ;
+        Text [ dutch ] = "Hoogte" ;
+        Text [ swedish ] = "Hˆjd" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ portuguese_brazilian ] = "Hˆhe" ;
+        Text [ portuguese ] = "Altura" ;
+        Text[ chinese_simplified ] = "∏ﬂ∂»";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥";
+        Text[ chinese_traditional ] = "∞™´◊";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã";
+        Text[ turkish ] = "Y¸kseklik";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura";
+        Text[ finnish ] = "Korkeus";
+    };
+    MetricField MTF_SIZEY_VEC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 71 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 100 ;
+        Maximum = 99999 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = 100 ;
+        Last = 99999 ;
+        SpinSize = 100 ;
+    };
+    OKButton BTN_OK_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP_VEC
+    {
+        Pos = MAP_APPFONT ( 122 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
     };
 };

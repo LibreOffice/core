@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgexpor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-05 20:42:24 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 11:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 
 /*************************************************************************
@@ -87,7 +86,7 @@ private:
 
     ListBox             aLbColors;
     CheckBox            aCbxRLE;
-    GroupBox            aGrpColors;
+    FixedLine           aGrpColors;
 
     RadioButton         aRbOriginal;
     RadioButton         aRbRes;
@@ -96,7 +95,7 @@ private:
     MetricField         aMtfSizeX;
     FixedText           aFtSizeY;
     MetricField         aMtfSizeY;
-    GroupBox            aGrpMode;
+    FixedLine           aGrpMode;
     ComboBox            aCbbRes;
 
     FilterConfigItem*   pConfigItem;
@@ -130,13 +129,13 @@ private:
 
     RadioButton         aRbOriginal;
     RadioButton         aRbSize;
-    GroupBox            aGrpMode;
+    FixedLine           aGrpMode;
 
     FixedText           aFtSizeX;
     MetricField         aMtfSizeX;
     FixedText           aFtSizeY;
     MetricField         aMtfSizeY;
-    GroupBox            aGrpSize;
+    FixedLine           aGrpSize;
 
     FilterConfigItem*   pConfigItem;
     ResMgr*             pMgr;
