@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-28 08:42:38 $
+ *  last change: $Author: jp $ $Date: 2001-04-09 13:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4151,7 +4151,7 @@ SfxItemPresentation SvxCharRotateItem::GetPresentation(
             {
                 rText = SVX_RESSTR( RID_SVXITEMS_CHARROTATE );
                 rText.SearchAndReplaceAscii( "$(ARG1)",
-                            String::CreateFromInt32( GetValue() ));
+                            String::CreateFromInt32( GetValue() / 10 ));
                 if( IsFitToLine() )
                     rText += SVX_RESSTR( RID_SVXITEMS_CHARROTATE_FITLINE );
             }
