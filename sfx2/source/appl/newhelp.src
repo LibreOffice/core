@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:52:20 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ Window WIN_HELP_INDEX
                 Text[ czech ] = "Obsah";
                 Text[ hebrew ] = "‮תוכן עיניינים‬";
                 Text[ hindi ] = "विषयसूची";
+                Text[ slovak ] = "Obsah";
             };
             PageItem
             {
@@ -148,6 +149,7 @@ Window WIN_HELP_INDEX
                 Text[ czech ] = "Rejstřík";
                 Text[ hebrew ] = "‮אינדקס‬";
                 Text[ hindi ] = "अनुक्रमणिका";
+                Text[ slovak ] = "Index";
             };
             PageItem
             {
@@ -169,7 +171,7 @@ Window WIN_HELP_INDEX
                 Text[ japanese ] = "検索";
                 Text[ korean ] = "검색";
                 Text[ chinese_simplified ] = "搜寻";
-                Text[ chinese_traditional ] = "搜尋";
+                Text[ chinese_traditional ] = "尋找";
                 Text[ turkish ] = "Ara";
                 Text[ arabic ] = "���";
                 Text[ catalan ] = "Cerca";
@@ -179,6 +181,7 @@ Window WIN_HELP_INDEX
                 Text[ czech ] = "Hledat";
                 Text[ hebrew ] = "‮חיפוש‬";
                 Text[ hindi ] = "अन्वेषण";
+                Text[ slovak ] = "Nájsť";
             };
             PageItem
             {
@@ -209,6 +212,7 @@ Window WIN_HELP_INDEX
                 Text[ czech ] = "Záložky";
                 Text[ hebrew ] = "‮סימניות‬";
                 Text[ hindi ] = "पृष्ठसंकेतें";
+                Text[ slovak ] = "Záložky";
             };
         };
     };
@@ -249,6 +253,7 @@ TabPage TP_HELP_INDEX
         Text[ czech ] = "Hledaný výraz";
         Text[ hebrew ] = "‮מילת חיפוש‬";
         Text[ hindi ] = "~अन्वेषण विषय";
+        Text[ slovak ] = "Hľadaný výra~z";
     };
     ComboBox CB_INDEX
     {
@@ -285,6 +290,7 @@ TabPage TP_HELP_INDEX
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
+        Text[ slovak ] = "~Zobraziť";
     };
 };
 
@@ -323,6 +329,7 @@ TabPage TP_HELP_SEARCH
         Text[ czech ] = "Hledaný výraz";
         Text[ hebrew ] = "‮מילת חיפוש‬";
         Text[ hindi ] = "अ~न्वेषण विषय";
+        Text[ slovak ] = "~Hľadaný výraz";
     };
     ComboBox ED_SEARCH
     {
@@ -351,7 +358,7 @@ TabPage TP_HELP_SEARCH
         Text[ japanese ] = "検索(~F)";
         Text[ korean ] = "찾기(~F)";
         Text[ chinese_simplified ] = "搜寻(~F)";
-        Text[ chinese_traditional ] = "搜尋(~F)";
+        Text[ chinese_traditional ] = "尋找(~F)";
         Text[ turkish ] = "~Ara";
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Cerca";
@@ -360,6 +367,7 @@ TabPage TP_HELP_SEARCH
         Text[ czech ] = "Najít";
         Text[ hebrew ] = "‮חיפוש‬";
         Text[ hindi ] = "~अन्वेषण";
+        Text[ slovak ] = "~Nájsť";
     };
     CheckBox CB_FULLWORDS
     {
@@ -390,6 +398,7 @@ TabPage TP_HELP_SEARCH
         Text[ czech ] = "Pouze celá slova";
         Text[ hebrew ] = "‮מילים שלמות בלבד‬";
         Text[ hindi ] = "केवल ~सम्पूर्ण शब्द";
+        Text[ slovak ] = "Iba ~celé slová";
     };
     CheckBox CB_SCOPE
     {
@@ -411,7 +420,7 @@ TabPage TP_HELP_SEARCH
         Text[ japanese ] = "タイトルのみを検索(~H)";
         Text[ korean ] = "제목에서만 찾아보기(~H)";
         Text[ chinese_simplified ] = "仅在大标题范围内搜寻(~H)";
-        Text[ chinese_traditional ] = "僅在標頭範圍內搜尋(~H)";
+        Text[ chinese_traditional ] = "僅在標頭範圍內尋找(~H)";
         Text[ turkish ] = "~Sadece ba�l�klar� ara";
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "Cerca nom�s els ~t�tols";
@@ -420,6 +429,7 @@ TabPage TP_HELP_SEARCH
         Text[ czech ] = "Hledat pouze v nadpisech";
         Text[ hebrew ] = "‮חיפוש בכותרות בלבד‬";
         Text[ hindi ] = "केवल ~शीर्षकों में अन्वेषण करो";
+        Text[ slovak ] = "~Hľadať iba v nadpisoch";
     };
     ListBox LB_RESULT
     {
@@ -456,6 +466,7 @@ TabPage TP_HELP_SEARCH
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
+        Text[ slovak ] = "~Zobraziť";
     };
 };
 
@@ -494,6 +505,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ czech ] = "Záložky";
         Text[ hebrew ] = "‮סימניות‬";
         Text[ hindi ] = "~पृष्ठसंकेत";
+        Text[ slovak ] = "Zálož~ky";
     };
     ListBox LB_BOOKMARKS
     {
@@ -531,6 +543,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "~दिखाओ";
+        Text[ slovak ] = "~Zobraziť";
     };
 };
 
@@ -651,6 +664,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ czech ] = "Nápověda %PRODUCTNAME";
     Text[ hebrew ] = "‮עזרה ל%PRODUCTNAME ‬";
     Text[ hindi ] = "%PRODUCTNAME सहायता";
+    Text[ slovak ] = "Pomocník %PRODUCTNAME";
 };
 String STR_HELP_BUTTON_INDEX_ON
 {
@@ -679,6 +693,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ czech ] = "Zobrazit navigační lištu";
     Text[ hebrew ] = "‮הצגת חלון הניווט‬";
     Text[ hindi ] = "Show Navigation Pane";
+    Text[ slovak ] = "Zobraziť navigačnú lištu";
 };
 String STR_HELP_BUTTON_INDEX_OFF
 {
@@ -707,6 +722,7 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text[ czech ] = "Skrýt navigační lištu";
     Text[ hebrew ] = "‮הסתרת חלון הניווט‬";
     Text[ hindi ] = "नाविगेशन् पट्टी को छिपाओ ";
+    Text[ slovak ] = "Skryť navigačnú lištu";
 };
 String STR_HELP_BUTTON_START
 {
@@ -735,6 +751,7 @@ String STR_HELP_BUTTON_START
     Text[ czech ] = "První stránka";
     Text[ hebrew ] = "‮הדף הראשון‬";
     Text[ hindi ] = "पहिला पृष्ठ";
+    Text[ slovak ] = "Prvá stránka";
 };
 String STR_HELP_BUTTON_PREV
 {
@@ -763,6 +780,7 @@ String STR_HELP_BUTTON_PREV
     Text[ czech ] = "Předchozí stránka";
     Text[ hebrew ] = "‮הדף הקודם‬";
     Text[ hindi ] = "पिछला पृष्ठ";
+    Text[ slovak ] = "Predchádzajúca strana";
 };
 String STR_HELP_BUTTON_NEXT
 {
@@ -791,6 +809,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ czech ] = "Další stránka";
     Text[ hebrew ] = "‮הדף הבא‬";
     Text[ hindi ] = "अगला पृष्ठ";
+    Text[ slovak ] = "Ďalšia strana";
 };
 String STR_HELP_BUTTON_PRINT
 {
@@ -819,6 +838,7 @@ String STR_HELP_BUTTON_PRINT
     Text[ czech ] = "Tisk...";
     Text[ hebrew ] = "‮הדפסה...‬";
     Text[ hindi ] = "छपाई...";
+    Text[ slovak ] = "Tlač...";
 };
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
@@ -847,6 +867,7 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text[ czech ] = "Přidat k záložkám...";
     Text[ hebrew ] = "‮הוספה לסימניות...‬";
     Text[ hindi ] = "पृष्ठसंकेतों में जोड़ो...";
+    Text[ slovak ] = "Pridať k záložkám...";
 };
 String STR_HELP_BUTTON_SEARCHDIALOG
 {
@@ -867,7 +888,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ japanese ] = "検索...";
     Text[ korean ] = "찾기...";
     Text[ chinese_simplified ] = "搜寻...";
-    Text[ chinese_traditional ] = "搜尋...";
+    Text[ chinese_traditional ] = "尋找...";
     Text[ turkish ] = "Bul...";
     Text[ arabic ] = "Find...";
     Text[ catalan ] = "Cerca...";
@@ -875,6 +896,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ czech ] = "Najít...";
     Text[ hebrew ] = "‮חיפוס...‬";
     Text[ hindi ] = "अन्वेषण...";
+    Text[ slovak ] = "Nájsť...";
 };
 String STR_HELP_BUTTON_SOURCEVIEW
 {
@@ -905,6 +927,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ czech ] = "Zdrojový HTML text";
     Text[ hebrew ] = "‮קוד HTML‬";
     Text[ hindi ] = "HTML मूल";
+    Text[ slovak ] = "Zdrojový HTML text";
 };
 
 String STR_HELP_FIRST_MESSAGE
@@ -934,6 +957,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ czech ] = "Spouští se nápověda...";
     Text[ hebrew ] = "‮איתחול עזרה מתבצע...‬";
     Text[ hindi ] = "सहायता प्रारंभ हुआ है...";
+    Text[ slovak ] = "Spúšťa sa pomocník...";
 };
 String STR_HELP_FIRST_HTML
 {
@@ -966,6 +990,7 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
     Text[ czech ] = "Vybrat text";
     Text[ hebrew ] = "‮בחירת טקסט‬";
     Text[ hindi ] = "Select Text";
+    Text[ slovak ] = "Vybrať text";
 };
 ModalDialog DLG_HELP_ADDBOOKMARK
 {
@@ -1010,6 +1035,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ czech ] = "Záložka:";
         TEXT[ hebrew ] = ":‮סימניה‬";
         TEXT[ hindi ] = "पृष्ठसंकेत:";
+        TEXT[ slovak ] = "Záložka:";
     };
     Edit ED_BOOKMARK_TITLE
     {
@@ -1067,6 +1093,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ czech ] = "Přejmenovat záložku";
         TEXT[ hebrew ] = "‮שינוי שם סימניה‬";
         TEXT[ hindi ] = "पृष्ठसंकेत को पुनः नाम दो";
+        TEXT[ slovak ] = "Premenovať záložku";
     };
     TEXT[ english_us ] = "Add to Bookmarks";
     TEXT[ portuguese ] = "Adicionar marcador";
@@ -1092,6 +1119,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ czech ] = "Přidat k záložkám";
     TEXT[ hebrew ] = "‮הוספה לסימניות‬";
     TEXT[ hindi ] = "पृष्ठसंकेतों में जोड़ो";
+    TEXT[ slovak ] = "Pridať k záložkám";
 };
 
 Menu MENU_HELP_BOOKMARKS
@@ -1128,6 +1156,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ czech ] = "Zobrazit";
             Text[ hebrew ] = "‮תצוגה‬";
             Text[ hindi ] = "दिखाओ";
+            Text[ slovak ] = "~Zobraziť";
         };
         MenuItem
         {
@@ -1163,6 +1192,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ czech ] = "Přejmenovat...";
             Text[ hebrew ] = "‮שינוי שם...‬";
             Text[ hindi ] = "पुनः नाम दो...";
+            Text[ slovak ] = "Premenovať...";
         };
         MenuItem
         {
@@ -1194,6 +1224,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ czech ] = "Smazat";
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "मिटाओ";
+            Text[ slovak ] = "Zmazať";
         };
     };
 };
@@ -1228,6 +1259,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ czech ] = "Žádná témata nebyla nenalezena.";
     MESSAGE[ hebrew ] = "‮לא אותרו נושאים‬";
     MESSAGE[ hindi ] = "कोई विषय नहीं मिला ।";
+    MESSAGE[ slovak ] = "Žiadne témy neboli nájdené.";
 };
 
 Image IMG_HELP_TOOLBOX_HC_INDEX_ON
@@ -1367,6 +1399,8 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+
+
 
 
 
