@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: od $ $Date: 2002-10-24 09:42:37 $
+ *  last change: $Author: od $ $Date: 2002-11-01 11:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,10 +582,15 @@ void SwFrm::ChgSize( const Size& aNewSize )
             }
             else
             {
-                if ( nDiff > 0 )
-                    Grow( nDiff );
-                else
-                    Shrink( -nDiff );
+                // OD 24.10.2002 #97265# - grow/shrink not for neighbour frames
+                // NOTE: neighbour frames are cell and column frames.
+                if ( !bNeighb )
+                {
+                    if ( nDiff > 0 )
+                        Grow( nDiff );
+                    else
+                        Shrink( -nDiff );
+                }
                 // Auch wenn das Grow/Shrink noch nicht die gewuenschte Breite eingestellt hat,
                 // wie z.B. beim Aufruf durch ChgColumns, um die Spaltenbreiten einzustellen,
                 // wird die Breite jetzt gesetzt.
@@ -2503,117 +2508,164 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
 {
+    // no change of lower properties for root frame or if no lower exists.
     if ( IsRootFrm() || !Lower() )
         return;
 
-    BOOL bInvaCntnt = TRUE; //Einmal die Seite benachrichtigen.
-    SwFrm *pFrm = Lower();
+    // declare and init <SwFrm* pLowerFrm> with first lower
+    SwFrm *pLowerFrm = Lower();
 
-    const BOOL bHeightChgd = rOldSize.Height() != Prt().Height();
-    const BOOL bWidthChgd  = rOldSize.Width()  != Prt().Width();
+    // declare and init const booleans <bHeightChgd> and <bWidthChg>
+    const bool bHeightChgd = rOldSize.Height() != Prt().Height();
+    const bool bWidthChgd  = rOldSize.Width()  != Prt().Width();
 
+    // declare and init variables <bVert>, <bRev> and <fnRect>
     SWRECTFN( this )
-    if( IsBodyFrm() && IsInDocBody() && !Lower()->IsColumnFrm()
-        && !( bVert ? bHeightChgd : bWidthChgd )
-        && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) )
+
+    // handle special case as short cut:
+    // if method called for a body frame belonging to the flow text body
+    //  and the first lower of the body isn't a column frame (body contains real content)
+    //  and its fixed size (in vertical layout its height; in horizontal layout its
+    //      width) doesn't changed
+    //  and the body frame doesn't belong to a locked section,
+    // then only invalidate lowers that are influence by the change.
+    // "Only" the variable size (in vertical layout its width; in horizontal
+    // layout its height) of body frame has changed.
+    if ( IsBodyFrm() && IsInDocBody() &&
+         !Lower()->IsColumnFrm() &&
+         !( bVert ? bHeightChgd : bWidthChgd ) &&
+         ( !IsInSct() || !FindSctFrm()->IsColLocked() )
+       )
     {
+        // Determine page frame the body frame belongs to.
         SwPageFrm *pPage = FindPageFrm();
-        if( pFrm )
+        // Determine last lower by traveling through them using <GetNext()>.
+        // During travel check each section frame, if it will be sized to
+        // maximum. If Yes, invalidate size of section frame and set
+        // corresponding flags at the page.
+        do
         {
-            do
+            if( pLowerFrm->IsSctFrm() &&((SwSectionFrm*)pLowerFrm)->_ToMaximize() )
             {
-                if( pFrm->IsSctFrm() &&((SwSectionFrm*)pFrm)->_ToMaximize() )
-                {
-                    pFrm->_InvalidateSize();
-                    pFrm->InvalidatePage( pPage );
-                }
-                if( pFrm->GetNext() )
-                    pFrm = pFrm->GetNext();
-                else
-                    break;
-            } while( TRUE );
-            while( pFrm->IsSctFrm() && !((SwSectionFrm*)pFrm)->GetSection() &&
-                   pFrm->GetPrev() )
-                pFrm = pFrm->GetPrev();
-            if( pFrm->IsSctFrm() )
-                pFrm = ((SwSectionFrm*)pFrm)->GetSection() &&
-                       !((SwSectionFrm*)pFrm)->ToMaximize( FALSE ) ?
-                       ((SwSectionFrm*)pFrm)->FindLastCntnt() : NULL;
-        }
-        if ( pFrm )
+                pLowerFrm->_InvalidateSize();
+                pLowerFrm->InvalidatePage( pPage );
+            }
+            if( pLowerFrm->GetNext() )
+                pLowerFrm = pLowerFrm->GetNext();
+            else
+                break;
+        } while( TRUE );
+        // If found last lower is a section frame containing no section
+        // (section frame isn't valid and will be deleted in the future),
+        // travel backwards.
+        while( pLowerFrm->IsSctFrm() && !((SwSectionFrm*)pLowerFrm)->GetSection() &&
+               pLowerFrm->GetPrev() )
+            pLowerFrm = pLowerFrm->GetPrev();
+        // If found last lower is a section frame, set <pLowerFrm> to its last
+        // content, if the section frame is valid and is not sized to maximum.
+        // Otherwise set <pLowerFrm> to NULL - In this case body frame only
+        //      contains invalid section frames.
+        if( pLowerFrm->IsSctFrm() )
+            pLowerFrm = ((SwSectionFrm*)pLowerFrm)->GetSection() &&
+                   !((SwSectionFrm*)pLowerFrm)->ToMaximize( FALSE ) ?
+                   ((SwSectionFrm*)pLowerFrm)->FindLastCntnt() : NULL;
+
+        // continue with found last lower, probably the last content of a section
+        if ( pLowerFrm )
         {
-            if ( pFrm->IsInTab() )
-                pFrm = pFrm->FindTabFrm();
-            SwTwips nOldHeight = bVert ? rOldSize.Height() : rOldSize.Width();
+            // If <pLowerFrm> is in a table frame, set <pLowerFrm> to this table
+            // frame and continue.
+            if ( pLowerFrm->IsInTab() )
+            {
+                // OD 28.10.2002 #97265# - safeguard for setting <pLowerFrm> to
+                // its table frame - check, if the table frame is also a lower
+                // of the body frame, in order to assure that <pLowerFrm> is not
+                // set to a frame, which is an *upper* of the body frame.
+                SwFrm* pTableFrm = pLowerFrm->FindTabFrm();
+                if ( IsAnLower( pTableFrm ) )
+                {
+                    pLowerFrm = pTableFrm;
+                }
+            }
+            // Check, if variable size of body frame has grown
+            // OD 28.10.2002 #97265# - correct check, if variable size has grown.
+            //SwTwips nOldHeight = bVert ? rOldSize.Height() : rOldSize.Width();
+            SwTwips nOldHeight = bVert ? rOldSize.Width() : rOldSize.Height();
             if( nOldHeight < (Prt().*fnRect->fnGetHeight)() )
             {
-                //Wenn der Body gewachsen ist, genuegt es den auf den letzten
-                //und den darauf folgenden geeignet zu invalidieren.
-                pFrm->_InvalidateAll();
-                pFrm->InvalidatePage( pPage );
-                if( !pFrm->IsFlowFrm() ||
-                    !SwFlowFrm::CastFlowFrm( pFrm )->HasFollow() )
-                    pFrm->InvalidateNextPos( TRUE );
-                if ( pFrm->IsTxtFrm() )
-                    ((SwCntntFrm*)pFrm)->Prepare( PREP_ADJUST_FRM );
-                if ( pFrm->IsInSct() )
+                // If variable size of body frame has grown, only found last lower
+                // and the position of the its next have to be invalidated.
+                pLowerFrm->_InvalidateAll();
+                pLowerFrm->InvalidatePage( pPage );
+                if( !pLowerFrm->IsFlowFrm() ||
+                    !SwFlowFrm::CastFlowFrm( pLowerFrm )->HasFollow() )
+                    pLowerFrm->InvalidateNextPos( TRUE );
+                if ( pLowerFrm->IsTxtFrm() )
+                    ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
+                if ( pLowerFrm->IsInSct() )
                 {
-                    pFrm = pFrm->FindSctFrm();
-                    if( IsAnLower( pFrm ) )
+                    pLowerFrm = pLowerFrm->FindSctFrm();
+                    if( IsAnLower( pLowerFrm ) )
                     {
-                        pFrm->_InvalidateSize();
-                        pFrm->InvalidatePage( pPage );
+                        pLowerFrm->_InvalidateSize();
+                        pLowerFrm->InvalidatePage( pPage );
                     }
                 }
             }
             else
             {
-                //Anderfalls werden alle herausragenden in ihrer Position
-                //invalidiert und nur der letzte noch (teilweise) passende
-                //Adjustiert.
+                // variable size of body frame has shrinked. Thus, invalidate
+                // all lowers not matching the new body size and the dedicated
+                // new last lower.
                 if( bVert )
                 {
                     SwTwips nBot = Frm().Left() + Prt().Left();
-                    while ( pFrm->GetPrev() && pFrm->Frm().Left() < nBot )
+                    while ( pLowerFrm->GetPrev() && pLowerFrm->Frm().Left() < nBot )
                     {
-                        pFrm->_InvalidateAll();
-                        pFrm->InvalidatePage( pPage );
-                        pFrm = pFrm->GetPrev();
+                        pLowerFrm->_InvalidateAll();
+                        pLowerFrm->InvalidatePage( pPage );
+                        pLowerFrm = pLowerFrm->GetPrev();
                     }
                 }
                 else
                 {
                     SwTwips nBot = Frm().Top() + Prt().Bottom();
-                    while ( pFrm->GetPrev() && pFrm->Frm().Top() > nBot )
+                    while ( pLowerFrm->GetPrev() && pLowerFrm->Frm().Top() > nBot )
                     {
-                        pFrm->_InvalidateAll();
-                        pFrm->InvalidatePage( pPage );
-                        pFrm = pFrm->GetPrev();
+                        pLowerFrm->_InvalidateAll();
+                        pLowerFrm->InvalidatePage( pPage );
+                        pLowerFrm = pLowerFrm->GetPrev();
                     }
                 }
-                if ( pFrm )
+                if ( pLowerFrm )
                 {
-                    pFrm->_InvalidateSize();
-                    pFrm->InvalidatePage( pPage );
-                    if ( pFrm->IsTxtFrm() )
-                        ((SwCntntFrm*)pFrm)->Prepare( PREP_ADJUST_FRM );
-                    if ( pFrm->IsInSct() )
+                    pLowerFrm->_InvalidateSize();
+                    pLowerFrm->InvalidatePage( pPage );
+                    if ( pLowerFrm->IsTxtFrm() )
+                        ((SwCntntFrm*)pLowerFrm)->Prepare( PREP_ADJUST_FRM );
+                    if ( pLowerFrm->IsInSct() )
                     {
-                        pFrm = pFrm->FindSctFrm();
-                        if( IsAnLower( pFrm ) )
+                        pLowerFrm = pLowerFrm->FindSctFrm();
+                        if( IsAnLower( pLowerFrm ) )
                         {
-                            pFrm->_InvalidateSize();
-                            pFrm->InvalidatePage( pPage );
+                            pLowerFrm->_InvalidateSize();
+                            pLowerFrm->InvalidatePage( pPage );
                         }
                     }
                 }
             }
         }
         return;
-    }
+    } // end of { special case }
 
-    BOOL  bFixChgd, bVarChgd;
-    if( bVert == pFrm->IsNeighbourFrm() )
+
+    // Invalidate page for content only once.
+    bool bInvaPageForCntnt = true;
+
+    // Declare booleans <bFixChgd> and <bVarChgd>, indicating for text frame
+    // adjustment, if fixed/variable size has changed.
+    bool bFixChgd, bVarChgd;
+    if( bVert == pLowerFrm->IsNeighbourFrm() )
     {
         bFixChgd = bWidthChgd;
         bVarChgd = bHeightChgd;
@@ -2623,106 +2675,228 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         bFixChgd = bHeightChgd;
         bVarChgd = bWidthChgd;
     }
-    USHORT nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT): ~FRM_NEIGHBOUR;
-    USHORT nFixHeight= bVert ? ~(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC) :
-                               FRM_NEIGHBOUR;
-    while ( pFrm )
-    {   //TxtFrms werden invalidiert, andere werden nur proportional angepasst.
-        if ( pFrm->IsTxtFrm() )
+
+    // Declare const unsigned short <nFixWidth> and init it this frame types
+    // which has fixed width in vertical respectively horizontal layout.
+    // In vertical layout these are neighbour frames (cell and column frames),
+    //      header frames and footer frames.
+    // In horizontal layout these are all frames, which aren't neighbour frames.
+    const USHORT nFixWidth = bVert ? (FRM_NEIGHBOUR | FRM_HEADFOOT)
+                                   : ~FRM_NEIGHBOUR;
+
+    // Declare const unsigned short <nFixHeight> and init it this frame types
+    // which has fixed height in vertical respectively horizontal layout.
+    // In vertical layout these are all frames, which aren't neighbour frames,
+    //      header frames, footer frames, body frames or foot note container frames.
+    // In horizontal layout these are neighbour frames.
+    const USHORT nFixHeight= bVert ? ~(FRM_NEIGHBOUR | FRM_HEADFOOT | FRM_BODYFTNC)
+                                   : FRM_NEIGHBOUR;
+
+    // Travel through all lowers using <GetNext()>
+    while ( pLowerFrm )
+    {
+        if ( pLowerFrm->IsTxtFrm() )
         {
+            // Text frames will only be invalidated - prepare invalidation
             if ( bFixChgd )
-                ((SwCntntFrm*)pFrm)->Prepare( PREP_FIXSIZE_CHG );
+                static_cast<SwCntntFrm*>(pLowerFrm)->Prepare( PREP_FIXSIZE_CHG );
             if ( bVarChgd )
-                ((SwCntntFrm*)pFrm)->Prepare( PREP_ADJUST_FRM );
+                static_cast<SwCntntFrm*>(pLowerFrm)->Prepare( PREP_ADJUST_FRM );
         }
         else
         {
-            USHORT nType = pFrm->GetType();
+            // If lower isn't a table, row, cell or section frame, adjust its
+            // frame size.
+            USHORT nType = pLowerFrm->GetType();
             if ( !(nType & (FRM_TAB|FRM_ROW|FRM_CELL|FRM_SECTION)) )
             {
                 if ( bWidthChgd )
                 {
                     if( nType & nFixWidth )
-                        pFrm->Frm().Width( Prt().Width() );
-                    else if( rOldSize.Width() && !pFrm->IsFtnFrm() )
-                        pFrm->Frm().Width( (pFrm->Frm().Width() * Prt().Width()) /
-                                        rOldSize.Width() );
+                    {
+                        // Considering previous conditions:
+                        // In vertical layout set width of column, header and
+                        // footer frames to its upper width.
+                        // In horizontal layout set width of header, footer,
+                        // foot note container, foot note, body and no-text
+                        // frames to its upper width.
+                        pLowerFrm->Frm().Width( Prt().Width() );
+                    }
+                    else if( rOldSize.Width() && !pLowerFrm->IsFtnFrm() )
+                    {
+                        // Adjust frame width proportional, if lower isn't a
+                        // foot note frame and condition <nType & nFixWidth>
+                        // isn't true.
+                        // Considering previous conditions:
+                        // In vertical layout these are foot note container,
+                        // body and no-text frames.
+                        // In horizontal layout these are column and no-text frames.
+                        // OD 24.10.2002 #97265# - <double> calculation
+                        // Perform <double> calculation of new width, if
+                        // one of the coefficients is greater than 50000
+                        SwTwips nNewWidth;
+                        if ( (pLowerFrm->Frm().Width() > 50000) ||
+                             (Prt().Width() > 50000) )
+                        {
+                            double nNewWidthTmp =
+                                ( double(pLowerFrm->Frm().Width())
+                                  * double(Prt().Width()) )
+                                / double(rOldSize.Width());
+                            nNewWidth = SwTwips(nNewWidthTmp);
+                        }
+                        else
+                        {
+                            nNewWidth =
+                                (pLowerFrm->Frm().Width() * Prt().Width()) / rOldSize.Width();
+                        }
+                        pLowerFrm->Frm().Width( nNewWidth );
+                    }
                 }
                 if ( bHeightChgd )
                 {
                     if( nType & nFixHeight )
                     {
-                        pFrm->Frm().Height( Prt().Height() );
+                        // Considering previous conditions:
+                        // In vertical layout set height of foot note and
+                        // no-text frames to its upper height.
+                        // In horizontal layout set height of column frames
+                        // to its upper height.
+                        pLowerFrm->Frm().Height( Prt().Height() );
                     }
-                    /// OD 01.10.2002 #102211#
-                    /// add conditions <!pFrm->IsHeaderFrm()> and <!pFrm->IsFooterFrm()>
-                    /// in order to avoid that the <Grow> of header or footer
-                    /// are overwritten.
+                    // OD 01.10.2002 #102211#
+                    // add conditions <!pLowerFrm->IsHeaderFrm()> and
+                    // <!pLowerFrm->IsFooterFrm()> in order to avoid that
+                    // the <Grow> of header or footer are overwritten.
+                    // NOTE: Height of header/footer frame is determined by contents.
                     else if ( rOldSize.Height() &&
-                              !pFrm->IsFtnFrm() &&
-                              !pFrm->IsHeaderFrm() &&
-                              !pFrm->IsFooterFrm()
+                              !pLowerFrm->IsFtnFrm() &&
+                              !pLowerFrm->IsHeaderFrm() &&
+                              !pLowerFrm->IsFooterFrm()
                             )
                     {
-                        SwTwips nNewHeight = ( pFrm->Frm().Height()
-                                         * Prt().Height() ) / rOldSize.Height();
-                        if( !pFrm->GetNext() )
+                        // Adjust frame height proportional, if lower isn't a
+                        // foot note, a header or a footer frame and
+                        // condition <nType & nFixHeight> isn't true.
+                        // Considering previous conditions:
+                        // In vertical layout these are column, foot note container,
+                        // body and no-text frames.
+                        // In horizontal layout these are column, foot note
+                        // container, body and no-text frames.
+
+                        // OD 29.10.2002 #97265# - special case for page lowers
+                        // The page lowers that have to be adjusted on page height
+                        // change are the body frame and the foot note container
+                        // frame.
+                        // In vertical layout the height of both is directly
+                        // adjusted to the page height change.
+                        // In horizontal layout the height of the body frame is
+                        // directly adjsuted to the page height change and the
+                        // foot note frame height isn't touched, because its
+                        // determined by its content.
+                        if ( IsPageFrm() )
                         {
-                            SwTwips nSum = Prt().Height();
-                            SwFrm* pTmp = Lower();
-                            while( pTmp->GetNext() )
+                            ASSERT( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm(),
+                                    "ChgLowersProp - only for body or foot note container" );
+                            if ( pLowerFrm->IsBodyFrm() || pLowerFrm->IsFtnContFrm() )
                             {
-                                if( !pTmp->IsFtnContFrm() || !pTmp->IsVertical() )
-                                    nSum -= pTmp->Frm().Height();
-                                pTmp = pTmp->GetNext();
+                                if ( IsVertical() || pLowerFrm->IsBodyFrm() )
+                                {
+                                    SwTwips nNewHeight =
+                                            pLowerFrm->Frm().Height() +
+                                            ( Prt().Height() - rOldSize.Height() );
+                                    if ( nNewHeight < 0)
+                                    {
+                                            ASSERT( !(pLowerFrm->Frm().Height()>0),
+                                                    "ChgLowersProg - negative height for lower.");
+                                            nNewHeight = 0;
+                                    }
+                                    pLowerFrm->Frm().Height( nNewHeight );
+                                }
                             }
-                            if( nSum - nNewHeight == 1 &&
-                                nSum == pFrm->Frm().Height() )
-                                nNewHeight = nSum;
                         }
-                        pFrm->Frm().Height( nNewHeight );
+                        else
+                        {
+                            SwTwips nNewHeight;
+                            // OD 24.10.2002 #97265# - <double> calculation
+                            // Perform <double> calculation of new height, if
+                            // one of the coefficients is greater than 50000
+                            if ( (pLowerFrm->Frm().Height() > 50000) ||
+                                 (Prt().Height() > 50000) )
+                            {
+                                double nNewHeightTmp =
+                                    ( double(pLowerFrm->Frm().Height())
+                                      * double(Prt().Height()) )
+                                    / double(rOldSize.Height());
+                                nNewHeight = SwTwips(nNewHeightTmp);
+                            }
+                            else
+                            {
+                                nNewHeight = ( pLowerFrm->Frm().Height()
+                                             * Prt().Height() ) / rOldSize.Height();
+                            }
+                            if( !pLowerFrm->GetNext() )
+                            {
+                                SwTwips nSum = Prt().Height();
+                                SwFrm* pTmp = Lower();
+                                while( pTmp->GetNext() )
+                                {
+                                    if( !pTmp->IsFtnContFrm() || !pTmp->IsVertical() )
+                                        nSum -= pTmp->Frm().Height();
+                                    pTmp = pTmp->GetNext();
+                                }
+                                if( nSum - nNewHeight == 1 &&
+                                    nSum == pLowerFrm->Frm().Height() )
+                                    nNewHeight = nSum;
+                            }
+                            pLowerFrm->Frm().Height( nNewHeight );
+                        }
                     }
                 }
             }
-        }
-        pFrm->_InvalidateAll();
-        if ( bInvaCntnt && pFrm->IsCntntFrm() )
-            pFrm->InvalidatePage();
+        } // end of else { NOT text frame }
 
-        if ( !pFrm->GetNext() && pFrm->IsRetoucheFrm() )
+        pLowerFrm->_InvalidateAll();
+        if ( bInvaPageForCntnt && pLowerFrm->IsCntntFrm() )
+        {
+            pLowerFrm->InvalidatePage();
+            bInvaPageForCntnt = false;
+        }
+
+        if ( !pLowerFrm->GetNext() && pLowerFrm->IsRetoucheFrm() )
         {
             //Wenn ein Wachstum stattgefunden hat, und die untergeordneten
             //zur Retouche faehig sind (derzeit Tab, Section und Cntnt), so
             //trigger ich sie an.
             if ( rOldSize.Height() < Prt().SSize().Height() ||
                  rOldSize.Width() < Prt().SSize().Width() )
-                pFrm->SetRetouche();
+                pLowerFrm->SetRetouche();
         }
-        pFrm = pFrm->GetNext();
+        pLowerFrm = pLowerFrm->GetNext();
     }
 
     // finally adjust the columns if width is set to auto
-
-    const SwFmtCol* pColAttr = NULL;
-
-    if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
-           Lower()->IsColumnFrm() )
     {
-        // get column attribute
-        if ( IsPageBodyFrm() )
-        {
-            ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
-            pColAttr = &GetUpper()->GetFmt()->GetCol();
-        }
-        else
-        {
-            ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
-            pColAttr = &GetFmt()->GetCol();
-        }
-    }
+        const SwFmtCol* pColAttr = NULL;
 
-    if ( pColAttr && pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
-        AdjustColumns( pColAttr, sal_False, sal_True );
+        if ( ( bVert && bHeightChgd || ! bVert && bWidthChgd ) &&
+               Lower()->IsColumnFrm() )
+        {
+            // get column attribute
+            if ( IsPageBodyFrm() )
+            {
+                ASSERT( GetUpper()->IsPageFrm(), "Upper is not page frame" )
+                pColAttr = &GetUpper()->GetFmt()->GetCol();
+            }
+            else
+            {
+                ASSERT( IsFlyFrm() || IsSctFrm(), "Columns not in fly or section" )
+                pColAttr = &GetFmt()->GetCol();
+            }
+        }
+
+        if ( pColAttr && pColAttr->IsOrtho() && pColAttr->GetNumCols() > 1 )
+            AdjustColumns( pColAttr, sal_False, sal_True );
+    }
 }
 
 /*************************************************************************
