@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 09:12:01 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 14:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,7 @@ private:
     void                    setDefaultValues();
 
     void                    preExecute();
-    void                    postExecute();
+    void                    postExecute( sal_Int16 _nResult );
     sal_Int16               implDoExecute();
 
     void                    pushBackPicker();
@@ -1155,17 +1155,19 @@ void FileDialogHelper_Impl::popPicker()
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::preExecute()
 {
-    loadConfig();
-    setDefaultValues();
-    enablePasswordBox();
-    updateFilterOptionsBox();
-    pushBackPicker();
+    loadConfig( );
+    setDefaultValues( );
+    enablePasswordBox( );
+    updateFilterOptionsBox( );
+    pushBackPicker( );
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::postExecute()
+void FileDialogHelper_Impl::postExecute( sal_Int16 _nResult )
 {
     popPicker();
+    if ( ExecutableDialogResults::CANCEL != _nResult )
+        saveConfig();
 }
 
 // ------------------------------------------------------------------------
@@ -1196,7 +1198,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         }
     }
 
-    postExecute();
+    postExecute( nRet );
 
     return nRet;
 }
@@ -1214,8 +1216,6 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
     if ( ExecutableDialogResults::CANCEL != implDoExecute() )
     {
-        saveConfig();
-
         // create an itemset
         rpSet = new SfxAllItemSet( SFX_APP()->GetPool() );
 
@@ -1336,7 +1336,6 @@ ErrCode FileDialogHelper_Impl::execute()
         return ERRCODE_ABORT;
     else
     {
-        saveConfig();
         return ERRCODE_NONE;
     }
 }
@@ -1779,7 +1778,7 @@ void FileDialogHelper_Impl::loadConfig()
                 aValue <<= bShowPreview;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
-                if ( ! maPath.getLength() )
+                if ( !maPath.getLength() )
                     setPath( getInitPath( aUserData, 2 ) );
 
                 if ( ! maCurFilter.getLength() )
@@ -1794,6 +1793,9 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( IllegalArgumentException ){}
         }
+
+        if ( !maPath.getLength() )
+            setPath( SvtPathOptions().GetGraphicPath() );
     }
     else
     {
@@ -1824,6 +1826,9 @@ void FileDialogHelper_Impl::loadConfig()
             }
             catch( IllegalArgumentException ){}
         }
+
+        if ( !maPath.getLength() )
+            setPath( SvtPathOptions().GetWorkPath() );
     }
 }
 
