@@ -2,9 +2,11 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.table.*;
 import javax.swing.event.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.beans.*;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Exception;
@@ -12,57 +14,216 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
+
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.frame.XModel;
-import com.sun.star.container.XEnumeration;
 import com.sun.star.beans.*;
-import com.sun.star.util.XMacroExpander;
+import com.sun.star.script.XInvocation;
 
 import com.sun.star.lib.uno.helper.PropertySet;
 
 import drafts.com.sun.star.script.framework.browse.XBrowseNode;
 import drafts.com.sun.star.script.framework.browse.BrowseNodeTypes;
 import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import drafts.com.sun.star.script.framework.provider.XScript;
+import drafts.com.sun.star.script.framework.provider.XScriptProvider;
 
-public class ScriptSelector extends JFrame implements ActionListener {
+public class ScriptSelector {
 
-    private XBrowseNode myrootnode = null;
-    private JButton runButton, editButton, deleteButton;
-    private JTextField textField;
+    private static final int BIG_GAP = 10;
+    private static final int MED_GAP = 5;
 
-    public ScriptSelector(XScriptContext ctxt)
+    public static String go(final XScriptContext ctxt)
     {
-        //super("Script Selector Prototype");
-        // myrootnode = new RootBrowseNode(ctxt);
+        String result = "";
 
         try {
-            String serviceName = "drafts.com.sun.star.script." +
-                "framework.provider.MasterScriptProvider";
+            XBrowseNode root = getRootNode(ctxt);
 
-            XComponentContext xcc = ctxt.getComponentContext();
-            XMultiComponentFactory xmcf = xcc.getServiceManager();
+            final ScriptSelectorPanel selectorPanel =
+                new ScriptSelectorPanel(root);
 
-            Object serviceObj =
-                xmcf.createInstanceWithContext(serviceName, xcc);
+            final JOptionPane optionPane = new JOptionPane(
+                 selectorPanel,
+                 JOptionPane.PLAIN_MESSAGE,
+                 JOptionPane.OK_CANCEL_OPTION);
 
-            myrootnode = (XBrowseNode)UnoRuntime.queryInterface(
-                XBrowseNode.class, serviceObj);
+            final JDialog dialog = new JDialog();
+            dialog.setModal(true);
+            dialog.setContentPane(optionPane);
+            dialog.setDefaultCloseOperation(
+                JDialog.DO_NOTHING_ON_CLOSE);
+
+            optionPane.addPropertyChangeListener(
+                new PropertyChangeListener() {
+                    public void propertyChange(java.beans.PropertyChangeEvent e)
+                    {
+                        String prop = e.getPropertyName();
+
+                        if (dialog.isVisible()
+                            && (e.getSource() == optionPane)
+                            && (prop.equals(JOptionPane.VALUE_PROPERTY))) {
+                                dialog.setVisible(false);
+                        }
+                    }
+                }
+            );
+
+            dialog.pack();
+            dialog.setSize(375, 350);
+            dialog.setVisible(true);
+
+            int value = ((Integer)optionPane.getValue()).intValue();
+            if (value == JOptionPane.YES_OPTION) {
+                result = selectorPanel.textField.getText();
+            }
         }
-        catch (Exception e) {
+        catch (com.sun.star.uno.RuntimeException rue) {
+            rue.printStackTrace();
+        }
+        catch (java.lang.Exception e) {
             e.printStackTrace();
-            return;
         }
-
-        initUI();
+        return result;
     }
 
-    public static void go(XScriptContext ctxt)
+    public static void showOrganizer(final XScriptContext ctxt)
     {
         try {
-           ScriptSelector client = new ScriptSelector(ctxt);
-           client.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-           client.show();
+            XBrowseNode root = getRootNode(ctxt);
+
+            final XScriptProvider msp =
+                (XScriptProvider)UnoRuntime.queryInterface(
+                 XScriptProvider.class, root);
+
+            final JFrame client = new JFrame("Script");
+
+            final ScriptSelectorPanel selectorPanel =
+                new ScriptSelectorPanel(root);
+
+            final JButton runButton, closeButton, assignButton,
+                          editButton, deleteButton;
+
+            runButton = new JButton("Run");
+            runButton.setEnabled(false);
+
+            closeButton = new JButton("Close");
+
+            JPanel northButtons =
+                new JPanel(new GridLayout(2, 1, MED_GAP, MED_GAP));
+
+            northButtons.add(runButton);
+            northButtons.add(closeButton);
+
+            assignButton = new JButton("Assign");
+            assignButton.setEnabled(false);
+
+            editButton = new JButton("Edit");
+            editButton.setEnabled(false);
+
+            deleteButton = new JButton("Delete");
+            deleteButton.setEnabled(false);
+
+            JPanel southButtons =
+                new JPanel(new GridLayout(3, 1, MED_GAP, MED_GAP));
+
+            // southButtons.add(assignButton);
+            southButtons.add(editButton);
+            // southButtons.add(deleteButton);
+
+            selectorPanel.tree.addTreeSelectionListener(
+                new TreeSelectionListener() {
+                    public void valueChanged(TreeSelectionEvent e) {
+                        XBrowseNode xbn = selectorPanel.getSelection();
+                        XPropertySet props = (XPropertySet)
+                            UnoRuntime.queryInterface(XPropertySet.class, xbn);
+
+                        checkEnabled(props, "Deletable", deleteButton);
+                        checkEnabled(props, "Editable", editButton);
+
+                        if (xbn.getType() == BrowseNodeTypes.SCRIPT)
+                        {
+                            runButton.setEnabled(true);
+                        }
+                        else
+                        {
+                            runButton.setEnabled(false);
+                        }
+                    }
+                }
+            );
+
+            ActionListener listener = new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    if (event.getSource() == runButton) {
+                        String uri = selectorPanel.textField.getText();
+
+                        try {
+                            XScript script = msp.getScript(uri);
+
+                            Object[][] out = new Object[1][0];
+                            out[0] = new Object[0];
+
+                            short[][] num = new short[1][0];
+                            num[0] = new short[0];
+
+                            script.invoke(new Object[0], num, out);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (event.getSource() == closeButton) {
+                        client.dispose();
+                    }
+                    else if (event.getSource() == editButton) {
+                        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                            selectorPanel.tree.getLastSelectedPathComponent();
+
+                        if (node == null) return;
+
+                        Object obj = node.getUserObject();
+                        XInvocation inv =
+                            (XInvocation)UnoRuntime.queryInterface(
+                            XInvocation.class, obj);
+                        Object[] args = new Object[] { ctxt };
+                        try {
+                            inv.invoke("Editable", args,
+                                new short[0][0], new Object[0][0]);
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if (event.getSource() == assignButton) {
+                    }
+                    else if (event.getSource() == deleteButton) {
+                    }
+                }
+            };
+
+            runButton.addActionListener(listener);
+            closeButton.addActionListener(listener);
+            assignButton.addActionListener(listener);
+            editButton.addActionListener(listener);
+            deleteButton.addActionListener(listener);
+
+            JPanel buttonPanel = new JPanel(new BorderLayout());
+            buttonPanel.add(northButtons, BorderLayout.NORTH);
+            buttonPanel.add(southButtons, BorderLayout.SOUTH);
+
+            JPanel mainPanel = new JPanel(new BorderLayout(MED_GAP, MED_GAP));
+            mainPanel.setBorder(
+                new EmptyBorder(BIG_GAP, BIG_GAP, BIG_GAP, BIG_GAP));
+            mainPanel.add(selectorPanel, BorderLayout.CENTER);
+            mainPanel.add(buttonPanel, BorderLayout.EAST);
+
+            client.getContentPane().add(mainPanel);
+            client.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            client.setSize(375, 350);
+
+            client.show();
         }
         catch (com.sun.star.uno.RuntimeException rue) {
             rue.printStackTrace();
@@ -72,13 +233,97 @@ public class ScriptSelector extends JFrame implements ActionListener {
         }
     }
 
-    private void initUI() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+    private static void checkEnabled(XPropertySet props, String name,
+        JButton button)
+    {
+        boolean enable = false;
 
-        DefaultMutableTreeNode top = new DefaultMutableTreeNode(myrootnode);
+        try
+        {
+            if (props != null)
+            {
+                Object o = props.getPropertyValue(name);
+                enable = AnyConverter.toBoolean(
+                    props.getPropertyValue(name));
+            }
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae)
+        {
+            // leave enable set to false
+        }
+        catch (com.sun.star.beans.UnknownPropertyException upe)
+        {
+            // leave enable set to false
+        }
+        catch (com.sun.star.lang.WrappedTargetException wte)
+        {
+            // leave enable set to false
+        }
+
+        button.setEnabled(enable);
+    }
+
+    private static XBrowseNode getRootNode(XScriptContext ctxt) {
+
+        XBrowseNode result = null;
+
+        try {
+            String serviceName = "drafts.com.sun.star.script." +
+                "framework.provider.MasterScriptProvider";
+
+            XComponentContext xcc = ctxt.getComponentContext();
+            XMultiComponentFactory xmcf = xcc.getServiceManager();
+
+            Any[] args = new Any[1];
+            args[0] = new Any(new Type(XModel.class), ctxt.getDocument());
+
+            Object serviceObj = xmcf.createInstanceWithArgumentsAndContext(
+                serviceName, args, xcc);
+
+            result = (XBrowseNode)UnoRuntime.queryInterface(
+                XBrowseNode.class, serviceObj);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+}
+
+class ScriptSelectorPanel extends JPanel {
+
+    private XBrowseNode myrootnode = null;
+    public JTextField textField;
+    public JTree tree;
+
+    public ScriptSelectorPanel(XBrowseNode root)
+    {
+        this.myrootnode = root;
+        initUI();
+    }
+
+    public XBrowseNode getSelection() {
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+            tree.getLastSelectedPathComponent();
+
+        if (node == null) {
+            return null;
+        }
+
+        return (XBrowseNode)node.getUserObject();
+    }
+
+    private void initUI() {
+        setLayout(new BorderLayout());
+
+        DefaultMutableTreeNode top =
+            new DefaultMutableTreeNode(myrootnode) {
+                public String toString() {
+                    return ((XBrowseNode)getUserObject()).getName();
+                }
+            };
         initNodes(myrootnode, top);
-        final JTree tree = new JTree(top);
+        tree = new JTree(top);
 
         tree.setCellRenderer(new ScriptTreeRenderer());
 
@@ -87,17 +332,9 @@ public class ScriptSelector extends JFrame implements ActionListener {
 
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             public void valueChanged(TreeSelectionEvent e) {
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode)
-                    tree.getLastSelectedPathComponent();
-
-                if (node == null) return;
-
-                XBrowseNode xbn = (XBrowseNode)node.getUserObject();
+                XBrowseNode xbn = getSelection();
                 XPropertySet props = (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, xbn);
-
-                checkEnabled(props, "Deletable", deleteButton);
-                checkEnabled(props, "Editable", editButton);
 
                 String str = xbn.getName();
                 if (xbn.getType() == BrowseNodeTypes.SCRIPT && props != null)
@@ -111,95 +348,15 @@ public class ScriptSelector extends JFrame implements ActionListener {
                     }
                 }
                 textField.setText(str);
-
-                if (xbn.getType() == BrowseNodeTypes.SCRIPT)
-                {
-                    runButton.setEnabled(true);
-                }
-                else
-                {
-                    runButton.setEnabled(false);
-                }
-            }
-
-            private void checkEnabled(XPropertySet props, String name,
-                JButton button)
-            {
-                boolean enable = false;
-
-                try
-                {
-                    if (props != null)
-                    {
-                        Object o = props.getPropertyValue(name);
-                        enable = AnyConverter.toBoolean(
-                            props.getPropertyValue(name));
-                    }
-                }
-                catch (com.sun.star.lang.IllegalArgumentException iae)
-                {
-                    // leave enable set to false
-                }
-                catch (com.sun.star.beans.UnknownPropertyException upe)
-                {
-                    // leave enable set to false
-                }
-                catch (com.sun.star.lang.WrappedTargetException wte)
-                {
-                    // leave enable set to false
-                }
-
-                button.setEnabled(enable);
             }
         });
 
         JScrollPane scroller = new JScrollPane(tree);
-        panel.add(scroller, BorderLayout.CENTER);
+        add(scroller, BorderLayout.CENTER);
 
-        // JTable table = new JTable(new ScriptTableModel(myrootnode));
-        // JScrollPane tableScroller = new JScrollPane(table);
-        // panel.add(tableScroller, BorderLayout.NORTH);
-
-        JPanel lowerPanel = new JPanel();
         textField = new JTextField();
-        lowerPanel.setLayout(new BorderLayout());
-        lowerPanel.add(textField, BorderLayout.NORTH);
-
-        JPanel buttonPanel = new JPanel();
-        runButton = new JButton("Run");
-        runButton.addActionListener(this);
-        runButton.setEnabled(false);
-
-        editButton = new JButton("Edit");
-        editButton.addActionListener(this);
-        editButton.setEnabled(false);
-
-        deleteButton = new JButton("Delete");
-        deleteButton.addActionListener(this);
-        deleteButton.setEnabled(false);
-
-        buttonPanel.add(runButton);
-        buttonPanel.add(editButton);
-        buttonPanel.add(deleteButton);
-        lowerPanel.add(buttonPanel, BorderLayout.SOUTH);
-
-        panel.add(lowerPanel, BorderLayout.SOUTH);
-
-        getContentPane().add(panel);
+        add(textField, BorderLayout.SOUTH);
         setSize(600, 300);
-    }
-
-    public void actionPerformed(ActionEvent event) {
-        if (event.getSource() == runButton) {
-            String uri = textField.getText();
-
-            // XScript script = msp.getScript(uri);
-            // script.invoke();
-        }
-        else if (event.getSource() == editButton) {
-        }
-        else if (event.getSource() == deleteButton) {
-        }
     }
 
     private void initNodes(XBrowseNode parent, DefaultMutableTreeNode top) {
@@ -207,210 +364,29 @@ public class ScriptSelector extends JFrame implements ActionListener {
         {
             return;
         }
-        System.err.println("initNodes parent = " + parent.getName() );
+
         XBrowseNode[] children = parent.getChildNodes();
 
         try {
-        if (children != null) {
-            for (int i = 0; i < children.length; i++) {
-                if ( children[i] != null )
-                {
-                    System.err.println("initNodes child is " + children[ i ].getName() );
+            if (children != null) {
+                for (int i = 0; i < children.length; i++) {
+                    if ( children[i] == null )
+                    {
+                        continue;
+                    }
+                    DefaultMutableTreeNode newNode =
+                        new DefaultMutableTreeNode(children[i]) {
+                            public String toString() {
+                                return ((XBrowseNode)getUserObject()).getName();
+                            }
+                        };
+                    top.add(newNode);
+                    initNodes(children[i], newNode);
                 }
-                else
-                {
-                    System.err.println("initNodes child " + i + " is null " );
-                    continue;
-                }
-                DefaultMutableTreeNode newNode =
-                    new DefaultMutableTreeNode(children[i]) {
-                    public String toString(){ return ( (XBrowseNode)getUserObject() ).getName(); } };
-                top.add(newNode);
-                initNodes(children[i], newNode);
             }
         }
-        } catch (java.lang.Exception e) { e.printStackTrace(); }
-    }
-}
-
-class RootBrowseNode implements XBrowseNode {
-
-    private Collection nodes = new ArrayList();
-
-    public RootBrowseNode(XScriptContext ctxt) {
-
-        Object serviceObj = ctxt.getComponentContext().getValueByName(
-            "/singletons/com.sun.star.util.theMacroExpander");
-
-        try {
-            XMacroExpander me = (XMacroExpander) AnyConverter.toObject(
-                new Type(XMacroExpander.class), serviceObj);
-
-            MyMasterScriptProvider msp;
-
-            msp = new MyMasterScriptProvider(ctxt, me.expandMacros(
-                "${$SYSBINDIR/bootstraprc::BaseInstallation}/share"), "share");
-            nodes.add(msp);
-
-            msp = new MyMasterScriptProvider(ctxt, me.expandMacros(
-                "${$SYSBINDIR/bootstraprc::UserInstallation}/user"), "user");
-            nodes.add(msp);
-
-            XEnumeration docs =
-                ctxt.getDesktop().getComponents().createEnumeration();
-
-            while (docs.hasMoreElements())
-            {
-                Object o = docs.nextElement();
-                XComponent comp = (XComponent)AnyConverter.toObject(
-                    new Type(XComponent.class), o);
-
-                XModel doc =
-                    (XModel)UnoRuntime.queryInterface(XModel.class, comp);
-
-                msp = new MyMasterScriptProvider(doc, ctxt);
-                nodes.add(msp);
-            }
-        }
-        catch (Exception e) {
-            System.err.println("Error creating RootNode: " + e.getMessage());
-        }
-    }
-
-    public String getName() {
-        return "soffice";
-    }
-
-    public XBrowseNode[] getChildNodes() {
-        return (XBrowseNode[])nodes.toArray(new XBrowseNode[0]);
-    }
-
-    public boolean hasChildNodes() {
-        return true;
-    }
-
-    public short getType() {
-        return BrowseNodeTypes.ROOT;
-    }
-
-    public String toString() {
-        return getName();
-    }
-}
-
-class MyMasterScriptProvider implements XBrowseNode {
-
-    private Collection nodes = new ArrayList();
-    private XModel model;
-    private String path;
-    private String name;
-    private XComponentContext xcc;
-    private XMultiComponentFactory xmcf;
-
-    public MyMasterScriptProvider(XScriptContext ctxt, String path, String name)
-    {
-        this.path = path;
-        this.name = name;
-
-        xcc = ctxt.getComponentContext();
-        xmcf = xcc.getServiceManager();
-
-        String[] languages = {"Java", "BeanShell", "JavaScript"};
-
-        for (int i = 0; i < languages.length; i++)
-        {
-            createScriptProvider(languages[i]);
-        }
-    }
-
-    public MyMasterScriptProvider(XModel model, XScriptContext ctxt)
-    {
-        this.model = model;
-        this.name = model.getURL();
-        this.name = this.name.substring(this.name.lastIndexOf("/") + 1);
-
-        xcc = ctxt.getComponentContext();
-        xmcf = xcc.getServiceManager();
-
-        String[] languages = {"Java", "BeanShell", "JavaScript"};
-
-        for (int i = 0; i < languages.length; i++)
-        {
-            createScriptProvider(languages[i]);
-        }
-    }
-
-    private void createScriptProvider(String language) {
-
-        Any[] args = new Any[1];
-
-        if (path != null)
-        {
-            args[0] = new Any(new Type(String.class), path);
-        }
-        else if (model != null)
-        {
-            System.out.println("creating property set for: " + model.getURL());
-            XPropertySet props = new InvocationPropertySet(model);
-            System.out.println("property set created");
-            args[0] = new Any(new Type(XPropertySet.class), props);
-            System.out.println("and stuffed into Any");
-        }
-
-        try {
-            String serviceName = "drafts.com.sun.star.script." +
-                "framework.provider.ScriptProviderFor" + language;
-
-            System.out.println("now createInstance");
-            Object serviceObj = xmcf.createInstanceWithArgumentsAndContext(
-                serviceName, args, xcc);
-
-            XBrowseNode xbn = (XBrowseNode)UnoRuntime.queryInterface(
-                XBrowseNode.class, serviceObj);
-
-            nodes.add(xbn);
-        }
-        catch (com.sun.star.uno.Exception e) {
+        catch (java.lang.Exception e) {
             e.printStackTrace();
-            System.err.println("Error creating SPFor" + language + ": " + e);
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public XBrowseNode[] getChildNodes() {
-        return (XBrowseNode[])nodes.toArray(new XBrowseNode[0]);
-    }
-
-    public boolean hasChildNodes() {
-        return true;
-    }
-
-    public short getType() {
-        return BrowseNodeTypes.CONTAINER;
-    }
-
-    public String toString() {
-        return getName();
-    }
-
-    public class InvocationPropertySet extends PropertySet {
-        public XModel model;
-        public int id = 7;
-        public String uri;
-
-        public InvocationPropertySet(XModel model) {
-            this.model = model;
-            this.uri = model.getURL();
-
-            registerProperty("SCRIPTING_DOC_REF", new Type(XModel.class),
-                (short)0, "model");
-            registerProperty("SCRIPTING_DOC_STORAGE_ID", new Type(int.class),
-                (short)0, "id");
-            registerProperty("SCRIPTING_DOC_URI", new Type(String.class),
-                (short)0, "uri");
         }
     }
 }
@@ -454,63 +430,5 @@ class ScriptTreeRenderer extends DefaultTreeCellRenderer {
         }
 
         return this;
-    }
-}
-
-class ScriptTableModel extends AbstractTableModel {
-    final String[] columnNames = {"Name", "Full Name"};
-    private Vector scripts;
-
-    public ScriptTableModel(XBrowseNode myrootnode) {
-        scripts = new Vector();
-        addScriptNodes(myrootnode);
-    }
-
-    private void addScriptNodes(XBrowseNode root) {
-        XBrowseNode[] nodes = root.getChildNodes();
-
-        if (nodes != null) {
-            for (int i = 0; i < nodes.length; i++) {
-                if (nodes[i].getType() == BrowseNodeTypes.SCRIPT) {
-                    scripts.addElement(nodes[i]);
-                }
-                else {
-                    addScriptNodes(nodes[i]);
-                }
-            }
-        }
-    }
-
-    public int getColumnCount() {
-        return columnNames.length;
-    }
-
-    public int getRowCount() {
-        return scripts.size();
-    }
-
-    public String getColumnName(int col) {
-        return columnNames[col];
-    }
-
-    public Object getValueAt(int row, int col) {
-        String result = "";
-
-        XBrowseNode xbn = (XBrowseNode)scripts.elementAt(row);
-
-        if (col == 0)
-            result = xbn.getName();
-        else if (col == 1)
-            result = xbn.getName();
-
-        return result;
-    }
-
-    public boolean isCellEditable(int row, int col) {
-        return false;
-    }
-
-    public void setValueAt(Object value, int row, int col) {
-        return;
     }
 }

@@ -8,8 +8,8 @@
                 Prototype Script Selector GUI for StarOffice
             </description>
         </locale>
-        <functionname value="ScriptSelector.go"/>
-        <logicalname value="ScriptSelector.go"/>
+        <functionname value="ScriptSelector.showOrganizer"/>
+        <logicalname value="ScriptSelector.showOrganizer"/>
         <languagedepprops>
           <prop name="classpath" value="selector.jar"/>
         </languagedepprops>

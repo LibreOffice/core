@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-09-10 10:51:13 $
+#   last change: $Author: toconnor $ $Date: 2003-10-15 17:17:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,32 +123,6 @@
   <!-- ===================== Build the examples ========================= -->
   <target name="buildexamples" depends="patchesJS">
 
-    <mkdir dir="${out}/class/examples/java/debugger"/>
-    <javac srcdir="${prj}/examples/java/debugger"
-           destdir="${out}/class/examples/java/debugger"
-              includes="*.java"
-           classpathref="debuggerclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
-
-    <copy todir="${out}/class/examples/java/debugger">
-        <fileset dir="${prj}/examples/java/debugger">
-            <include name="**/*.java"/>
-            <include name="*.xml"/>
-        </fileset>
-    </copy>
-
-    <jar jarfile="${out}/class/examples/java/debugger/debugger.jar"
-        basedir="${out}/class/examples/java/debugger" includes="*.class">
-        <manifest>
-            <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-        </manifest>
-    </jar>
-
-    <delete>
-        <fileset dir="${out}/class/examples/java/debugger" includes="*.class"/>
-    </delete>
-
     <mkdir dir="${out}/class/examples/java/selector"/>
     <javac srcdir="${prj}/examples/java/selector"
            destdir="${out}/class/examples/java/selector"
@@ -204,25 +178,6 @@
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
 
-    <mkdir dir="${out}/class/examples/java/ScriptFrmwrkHelper"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/ScriptFrmwrkHelper/"
-              includes="**/ScriptFrmwrkHelper.java" classpathref="scriptexampleclasspath"
-       debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy todir="${out}/class/examples/java/ScriptFrmwrkHelper/">
-        <fileset dir="${prj}/examples/java/">
-            <include name="**/ScriptFrmwrkHelper.java"/>
-        </fileset>
-    </copy>
-    <copy file="${prj}/examples/java/ScriptFrameWkHelperParcel.xml" tofile="${out}/class/examples/java/ScriptFrmwrkHelper/parcel-descriptor.xml"/>
-    <jar jarfile="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar"
-        basedir="${out}/class/examples/java/ScriptFrmwrkHelper"
-        includes="**/*.java,**/*.class,**/*.xml"
-        excludes="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar">
-        <manifest>
-            <attribute name="Built-By" value="Sun Microsystems"/>
-            <attribute name="ScriptFramework-Version" value="${sfversion}"/>
-        </manifest>
-    </jar>
   </target>
 
   <!-- ====================== Clean Generated Files ===================== -->
