@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:03:46 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 09:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1911,7 +1911,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
-                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int16)0));
+                                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny((sal_Int32)0));
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,::cppu::bool2any(sal_False));
                                 }
                                 catch(Exception&)
@@ -2144,7 +2144,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                 {
                     throw e;
                 }
-                catch (...)
+                catch (Exception&)
                 {
                     throw SQLException();
                 }
@@ -2294,7 +2294,7 @@ void SAL_CALL ORowSet::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) th
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2308,7 +2308,7 @@ void SAL_CALL ORowSet::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlTyp
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2321,7 +2321,7 @@ void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2334,7 +2334,7 @@ void SAL_CALL ORowSet::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQL
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2347,7 +2347,7 @@ void SAL_CALL ORowSet::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(S
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2360,7 +2360,7 @@ void SAL_CALL ORowSet::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQL
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2373,7 +2373,7 @@ void SAL_CALL ORowSet::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(SQ
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2386,7 +2386,7 @@ void SAL_CALL ORowSet::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLEx
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2399,7 +2399,7 @@ void SAL_CALL ORowSet::setDouble( sal_Int32 parameterIndex, double x ) throw(SQL
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2412,7 +2412,7 @@ void SAL_CALL ORowSet::setString( sal_Int32 parameterIndex, const ::rtl::OUStrin
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2425,7 +2425,7 @@ void SAL_CALL ORowSet::setBytes( sal_Int32 parameterIndex, const Sequence< sal_I
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2438,7 +2438,7 @@ void SAL_CALL ORowSet::setDate( sal_Int32 parameterIndex, const ::com::sun::star
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2451,7 +2451,7 @@ void SAL_CALL ORowSet::setTime( sal_Int32 parameterIndex, const ::com::sun::star
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2464,7 +2464,7 @@ void SAL_CALL ORowSet::setTimestamp( sal_Int32 parameterIndex, const ::com::sun:
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2477,7 +2477,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2488,7 +2488,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
         m_aParameterRow[parameterIndex-1] = aData;
         x->closeInput();
     }
-    catch( ... )
+    catch( Exception& )
     {
         throw SQLException();
     }
@@ -2500,7 +2500,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2516,7 +2516,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         m_aParameterRow[parameterIndex-1].setTypeKind(DataType::LONGVARCHAR);
         x->closeInput();
     }
-    catch( ... )
+    catch( Exception& )
     {
         throw SQLException();
     }
@@ -2528,7 +2528,7 @@ void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x ) throw
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
@@ -2596,7 +2596,7 @@ void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x ) throw
                     throw SQLException();
             }
         }
-        catch( ... )
+        catch( Exception& )
         {
             throw SQLException();
         }
@@ -2609,7 +2609,7 @@ void SAL_CALL ORowSet::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x
         throw DisposedException();
     else if (parameterIndex < 1)
         throw SQLException();
-    else if (m_aParameterRow.size() < parameterIndex)
+    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
         m_aParameterRow.resize(parameterIndex);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
