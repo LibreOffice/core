@@ -3429,6 +3429,17 @@ echo "$as_me: error: found version \"$_gcc_version\", use version 3+ of the gcc 
    fi
    echo "$as_me:$LINENO: result: checked (gcc $_gcc_version)" >&5
 echo "${ECHO_T}checked (gcc $_gcc_version)" >&6
+   if test "$_os" = "SunOS"; then
+      echo "$as_me:$LINENO: checking gcc linker" >&5
+echo $ECHO_N "checking gcc linker... $ECHO_C" >&6
+      if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
+          { { echo "$as_me:$LINENO: error: failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris" >&5
+echo "$as_me: error: failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris" >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+      echo "$as_me:$LINENO: result: ok (GNU ld)" >&5
+echo "${ECHO_T}ok (GNU ld)" >&6
+   fi
 fi
 
 echo "$as_me:$LINENO: checking the GNU make version" >&5
