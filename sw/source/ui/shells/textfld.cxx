@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 09:11:05 $
+ *  last change: $Author: os $ $Date: 2002-11-13 09:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 nInsertSubType = DI_TITEL;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_AUTHOR  :
-                nInsertType = TYP_AUTHORFLD;
+                nInsertType = TYP_DOCINFOFLD;
+                nInsertSubType = DI_CREATE|DI_SUB_AUTHOR;
 
 FIELD_INSERT:
             {
