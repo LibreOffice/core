@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFootnoteProperties.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:45:31 $
+ *  last change:$Date: 2003-09-08 12:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,14 @@
 
 package mod._sw;
 
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XFootnote;
 import com.sun.star.text.XFootnotesSupplier;
@@ -71,12 +77,6 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 
 /**
@@ -127,11 +127,6 @@ public class SwXFootnoteProperties extends TestCase {
             TestParameters Param, PrintWriter log ) throws StatusException {
         XFootnotesSupplier oInterface = null;
         XInterface oObj = null;
-        XComponentLoader oCLoader = null;
-        XDesktop oDesktop = null;
-        String oObjLog = null;
-        boolean bOK = true;
-        boolean result = true;
         XFootnote oFootnote;
 
         log.println( "Creating a test environment" );
