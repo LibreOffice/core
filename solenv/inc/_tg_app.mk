@@ -44,7 +44,7 @@ APP1STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP1TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP1LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP1TARGETN:b)_linkinc.ls
@@ -239,7 +239,7 @@ APP2STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP2TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP2LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP2TARGETN:b)_linkinc.ls
@@ -434,7 +434,7 @@ APP3STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP3TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP3LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP3TARGETN:b)_linkinc.ls
@@ -629,7 +629,7 @@ APP4STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP4TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP4LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP4TARGETN:b)_linkinc.ls
@@ -824,7 +824,7 @@ APP5STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP5TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP5LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP5TARGETN:b)_linkinc.ls
@@ -1019,7 +1019,7 @@ APP6STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP6TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP6LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP6TARGETN:b)_linkinc.ls
@@ -1214,7 +1214,7 @@ APP7STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP7TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP7LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP7TARGETN:b)_linkinc.ls
@@ -1409,7 +1409,7 @@ APP8STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP8TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP8LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP8TARGETN:b)_linkinc.ls
@@ -1604,7 +1604,7 @@ APP9STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP9TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP9LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP9TARGETN:b)_linkinc.ls
@@ -1799,7 +1799,7 @@ APP10STDLIBS+=$(STATICLIB)
 .IF "$(GUI)"=="WNT"
 $(MISC)$/$(APP10TARGET)_linkinc.ls .PHONY:
     @+-$(RM) $@ >& $(NULLDEV)
-    +sed -f $(COMMON_ENV_TOOLS)\chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
+    +sed -f $(COMMON_ENV_TOOLS)$/chrel.sed $(foreach,i,$(APP10LIBS) $(i:s/.lib/.lin/)) >> $@
 .ENDIF
 
 LINKINCTARGETS+=$(MISC)$/$(APP10TARGETN:b)_linkinc.ls

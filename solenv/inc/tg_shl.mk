@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-07 17:38:08 $
+#   last change: $Author: hjs $ $Date: 2002-03-26 18:22:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,7 @@ SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 .IF "$(COMP$(TNR)TYPELIST)"==""
 
 #fallback
-LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml))
+LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml"))
 .IF "$(LOCAL$(TNR)DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -321,7 +321,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL$(TNR)DEFAULTRES)"!=""
@@ -330,15 +330,22 @@ $(SHL$(TNR)TARGETN) : \
     @-+echo 1 ICON $(SHL$(TNR)ICON) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)"!=""
 .IF "$(SHL$(TNR)ALLRES)"!=""
-    +$(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
+    +$(COPY) $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -427,9 +434,9 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL$(TNR)TARGET).lnk del $(MISC)$/$(SHL$(TNR)TARGET).lnk
-        +if exist $(MISC)$/$(SHL$(TNR)TARGET).lst del $(MISC)$/$(SHL$(TNR)TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL$(TNR)TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX) \
         $(SHL$(TNR)STACK) $(MAPFILE) \
@@ -441,7 +448,7 @@ $(SHL$(TNR)TARGETN) : \
         $(STDSHL) \
         $(SHL$(TNR)LINKRES) \
         ) >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
-        +type $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -625,8 +632,8 @@ $(SHL$(TNR)IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
     -def:$(SHL$(TNR)DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL$(TNR)TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL$(TNR)TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"

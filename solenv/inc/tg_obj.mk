@@ -6,9 +6,9 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    +echo. $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) >> $@
+    +$(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) >> $@
     @+$(TYPE) $@ | tr -d ï\n\rï > $@
-    @+echo. >> $@
+    @+$(ECHONL) >> $@
 .ELSE			# "$(COM)"=="GCC"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
@@ -35,7 +35,7 @@ $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +echo. $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i)) >> $@
+    +$(ECHONL) $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i)) >> $@
 .ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
@@ -57,7 +57,7 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    +echo. $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    +$(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
 .ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)

@@ -28,7 +28,7 @@ SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .IF "$(COMP1TYPELIST)"==""
 
 #fallback
-LOCAL1DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml))
+LOCAL1DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml"))
 .IF "$(LOCAL1DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -221,7 +221,7 @@ $(SHL1TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL1DEFAULTRES)"!=""
@@ -230,15 +230,22 @@ $(SHL1TARGETN) : \
     @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
 .IF "$(SHL1ALLRES)"!=""
-    +$(COPY) /b $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
+    +$(COPY) $(SHL1ALLRES:s/res /res+/) $(SHL1LINKRES)
 .ENDIF			# "$(SHL1ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -327,9 +334,9 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL1TARGET).lnk del $(MISC)$/$(SHL1TARGET).lnk
-        +if exist $(MISC)$/$(SHL1TARGET).lst del $(MISC)$/$(SHL1TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL1TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL1TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL1BASEX) \
         $(SHL1STACK) $(MAPFILE) \
@@ -341,7 +348,7 @@ $(SHL1TARGETN) : \
         $(STDSHL) \
         $(SHL1LINKRES) \
         ) >> $(MISC)$/$(SHL1TARGET).lnk
-        +type $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL1TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -477,7 +484,7 @@ SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 .IF "$(COMP2TYPELIST)"==""
 
 #fallback
-LOCAL2DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml))
+LOCAL2DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml"))
 .IF "$(LOCAL2DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -670,7 +677,7 @@ $(SHL2TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL2DEFAULTRES)"!=""
@@ -679,15 +686,22 @@ $(SHL2TARGETN) : \
     @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
 .IF "$(SHL2ALLRES)"!=""
-    +$(COPY) /b $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
+    +$(COPY) $(SHL2ALLRES:s/res /res+/) $(SHL2LINKRES)
 .ENDIF			# "$(SHL2ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -776,9 +790,9 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL2TARGET).lnk del $(MISC)$/$(SHL2TARGET).lnk
-        +if exist $(MISC)$/$(SHL2TARGET).lst del $(MISC)$/$(SHL2TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL2TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL2TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL2BASEX) \
         $(SHL2STACK) $(MAPFILE) \
@@ -790,7 +804,7 @@ $(SHL2TARGETN) : \
         $(STDSHL) \
         $(SHL2LINKRES) \
         ) >> $(MISC)$/$(SHL2TARGET).lnk
-        +type $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL2TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -926,7 +940,7 @@ SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 .IF "$(COMP3TYPELIST)"==""
 
 #fallback
-LOCAL3DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml))
+LOCAL3DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml"))
 .IF "$(LOCAL3DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -1119,7 +1133,7 @@ $(SHL3TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL3DEFAULTRES)"!=""
@@ -1128,15 +1142,22 @@ $(SHL3TARGETN) : \
     @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
 .IF "$(SHL3ALLRES)"!=""
-    +$(COPY) /b $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
+    +$(COPY) $(SHL3ALLRES:s/res /res+/) $(SHL3LINKRES)
 .ENDIF			# "$(SHL3ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -1225,9 +1246,9 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL3TARGET).lnk del $(MISC)$/$(SHL3TARGET).lnk
-        +if exist $(MISC)$/$(SHL3TARGET).lst del $(MISC)$/$(SHL3TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL3TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL3TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL3BASEX) \
         $(SHL3STACK) $(MAPFILE) \
@@ -1239,7 +1260,7 @@ $(SHL3TARGETN) : \
         $(STDSHL) \
         $(SHL3LINKRES) \
         ) >> $(MISC)$/$(SHL3TARGET).lnk
-        +type $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL3TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -1375,7 +1396,7 @@ SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 .IF "$(COMP4TYPELIST)"==""
 
 #fallback
-LOCAL4DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml))
+LOCAL4DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml"))
 .IF "$(LOCAL4DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -1568,7 +1589,7 @@ $(SHL4TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL4DEFAULTRES)"!=""
@@ -1577,15 +1598,22 @@ $(SHL4TARGETN) : \
     @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
 .IF "$(SHL4ALLRES)"!=""
-    +$(COPY) /b $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
+    +$(COPY) $(SHL4ALLRES:s/res /res+/) $(SHL4LINKRES)
 .ENDIF			# "$(SHL4ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -1674,9 +1702,9 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL4TARGET).lnk del $(MISC)$/$(SHL4TARGET).lnk
-        +if exist $(MISC)$/$(SHL4TARGET).lst del $(MISC)$/$(SHL4TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL4TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL4TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL4BASEX) \
         $(SHL4STACK) $(MAPFILE) \
@@ -1688,7 +1716,7 @@ $(SHL4TARGETN) : \
         $(STDSHL) \
         $(SHL4LINKRES) \
         ) >> $(MISC)$/$(SHL4TARGET).lnk
-        +type $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL4TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -1824,7 +1852,7 @@ SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 .IF "$(COMP5TYPELIST)"==""
 
 #fallback
-LOCAL5DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml))
+LOCAL5DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml"))
 .IF "$(LOCAL5DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -2017,7 +2045,7 @@ $(SHL5TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL5DEFAULTRES)"!=""
@@ -2026,15 +2054,22 @@ $(SHL5TARGETN) : \
     @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
 .IF "$(SHL5ALLRES)"!=""
-    +$(COPY) /b $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
+    +$(COPY) $(SHL5ALLRES:s/res /res+/) $(SHL5LINKRES)
 .ENDIF			# "$(SHL5ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -2123,9 +2158,9 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL5TARGET).lnk del $(MISC)$/$(SHL5TARGET).lnk
-        +if exist $(MISC)$/$(SHL5TARGET).lst del $(MISC)$/$(SHL5TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL5TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL5TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL5BASEX) \
         $(SHL5STACK) $(MAPFILE) \
@@ -2137,7 +2172,7 @@ $(SHL5TARGETN) : \
         $(STDSHL) \
         $(SHL5LINKRES) \
         ) >> $(MISC)$/$(SHL5TARGET).lnk
-        +type $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL5TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2273,7 +2308,7 @@ SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 .IF "$(COMP6TYPELIST)"==""
 
 #fallback
-LOCAL6DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml))
+LOCAL6DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml"))
 .IF "$(LOCAL6DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -2466,7 +2501,7 @@ $(SHL6TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL6DEFAULTRES)"!=""
@@ -2475,15 +2510,22 @@ $(SHL6TARGETN) : \
     @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
 .IF "$(SHL6ALLRES)"!=""
-    +$(COPY) /b $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
+    +$(COPY) $(SHL6ALLRES:s/res /res+/) $(SHL6LINKRES)
 .ENDIF			# "$(SHL6ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -2572,9 +2614,9 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL6TARGET).lnk del $(MISC)$/$(SHL6TARGET).lnk
-        +if exist $(MISC)$/$(SHL6TARGET).lst del $(MISC)$/$(SHL6TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL6TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL6TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL6BASEX) \
         $(SHL6STACK) $(MAPFILE) \
@@ -2586,7 +2628,7 @@ $(SHL6TARGETN) : \
         $(STDSHL) \
         $(SHL6LINKRES) \
         ) >> $(MISC)$/$(SHL6TARGET).lnk
-        +type $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL6TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2722,7 +2764,7 @@ SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 .IF "$(COMP7TYPELIST)"==""
 
 #fallback
-LOCAL7DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml))
+LOCAL7DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml"))
 .IF "$(LOCAL7DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -2915,7 +2957,7 @@ $(SHL7TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL7DEFAULTRES)"!=""
@@ -2924,15 +2966,22 @@ $(SHL7TARGETN) : \
     @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
 .IF "$(SHL7ALLRES)"!=""
-    +$(COPY) /b $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
+    +$(COPY) $(SHL7ALLRES:s/res /res+/) $(SHL7LINKRES)
 .ENDIF			# "$(SHL7ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -3021,9 +3070,9 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL7TARGET).lnk del $(MISC)$/$(SHL7TARGET).lnk
-        +if exist $(MISC)$/$(SHL7TARGET).lst del $(MISC)$/$(SHL7TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL7TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL7TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL7BASEX) \
         $(SHL7STACK) $(MAPFILE) \
@@ -3035,7 +3084,7 @@ $(SHL7TARGETN) : \
         $(STDSHL) \
         $(SHL7LINKRES) \
         ) >> $(MISC)$/$(SHL7TARGET).lnk
-        +type $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL7TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3171,7 +3220,7 @@ SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 .IF "$(COMP8TYPELIST)"==""
 
 #fallback
-LOCAL8DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml))
+LOCAL8DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml"))
 .IF "$(LOCAL8DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -3364,7 +3413,7 @@ $(SHL8TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL8DEFAULTRES)"!=""
@@ -3373,15 +3422,22 @@ $(SHL8TARGETN) : \
     @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
 .IF "$(SHL8ALLRES)"!=""
-    +$(COPY) /b $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
+    +$(COPY) $(SHL8ALLRES:s/res /res+/) $(SHL8LINKRES)
 .ENDIF			# "$(SHL8ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -3470,9 +3526,9 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL8TARGET).lnk del $(MISC)$/$(SHL8TARGET).lnk
-        +if exist $(MISC)$/$(SHL8TARGET).lst del $(MISC)$/$(SHL8TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL8TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL8TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL8BASEX) \
         $(SHL8STACK) $(MAPFILE) \
@@ -3484,7 +3540,7 @@ $(SHL8TARGETN) : \
         $(STDSHL) \
         $(SHL8LINKRES) \
         ) >> $(MISC)$/$(SHL8TARGET).lnk
-        +type $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL8TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3620,7 +3676,7 @@ SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 .IF "$(COMP9TYPELIST)"==""
 
 #fallback
-LOCAL9DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml))
+LOCAL9DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml"))
 .IF "$(LOCAL9DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -3813,7 +3869,7 @@ $(SHL9TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL9DEFAULTRES)"!=""
@@ -3822,15 +3878,22 @@ $(SHL9TARGETN) : \
     @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
 .IF "$(SHL9ALLRES)"!=""
-    +$(COPY) /b $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
+    +$(COPY) $(SHL9ALLRES:s/res /res+/) $(SHL9LINKRES)
 .ENDIF			# "$(SHL9ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -3919,9 +3982,9 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL9TARGET).lnk del $(MISC)$/$(SHL9TARGET).lnk
-        +if exist $(MISC)$/$(SHL9TARGET).lst del $(MISC)$/$(SHL9TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL9TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL9TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL9BASEX) \
         $(SHL9STACK) $(MAPFILE) \
@@ -3933,7 +3996,7 @@ $(SHL9TARGETN) : \
         $(STDSHL) \
         $(SHL9LINKRES) \
         ) >> $(MISC)$/$(SHL9TARGET).lnk
-        +type $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL9TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -4069,7 +4132,7 @@ SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 .IF "$(COMP10TYPELIST)"==""
 
 #fallback
-LOCAL10DESC:=$(subst,/,$/ $(shell find . -name {$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml))
+LOCAL10DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml"))
 .IF "$(LOCAL10DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -4262,7 +4325,7 @@ $(SHL10TARGETN) : \
 .IF "$(COM)"=="GCC"
             gcc -c -o$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ELSE
-            cl -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
+            $(CC) -c -Fo$(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.obj -DWNT $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(UPDATER)"=="YES"
 .IF "$(SHL10DEFAULTRES)"!=""
@@ -4271,15 +4334,22 @@ $(SHL10TARGETN) : \
     @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
+.IF "$(USE_SHELL)"!="4nt"
+    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
      @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+.ENDIF			# "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 -I$(SOLARTESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
 .IF "$(SHL10ALLRES)"!=""
-    +$(COPY) /b $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
+    +$(COPY) $(SHL10ALLRES:s/res /res+/) $(SHL10LINKRES)
 .ENDIF			# "$(SHL10ALLRES)"!=""
 .IF "$(linkinc)"==""
 .IF "$(USE_DEFFILE)"!=""
@@ -4368,9 +4438,9 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(BOTH)"!=""
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(linkinc)"==""
-        +if exist $(MISC)$/$(SHL10TARGET).lnk del $(MISC)$/$(SHL10TARGET).lnk
-        +if exist $(MISC)$/$(SHL10TARGET).lst del $(MISC)$/$(SHL10TARGET).lst
-        +type $(mktmp \
+        +-$(RM) del $(MISC)$/$(SHL10TARGET).lnk
+        +-$(RM) $(MISC)$/$(SHL10TARGET).lst
+        +$(TYPE) $(mktmp \
         $(LINKFLAGS) \
         $(LINKFLAGSSHL) $(SHL10BASEX) \
         $(SHL10STACK) $(MAPFILE) \
@@ -4382,7 +4452,7 @@ $(SHL10TARGETN) : \
         $(STDSHL) \
         $(SHL10LINKRES) \
         ) >> $(MISC)$/$(SHL10TARGET).lnk
-        +type $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
+        +$(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(LINK) @$(MISC)$/$(SHL10TARGET).lnk
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(GUI)" == "WNT"
@@ -4519,8 +4589,8 @@ $(SHL1IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
     -def:$(SHL1DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL1TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL1TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4569,8 +4639,8 @@ $(SHL2IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
     -def:$(SHL2DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL2TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL2TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4619,8 +4689,8 @@ $(SHL3IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
     -def:$(SHL3DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL3TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL3TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4669,8 +4739,8 @@ $(SHL4IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
     -def:$(SHL4DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL4TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL4TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4719,8 +4789,8 @@ $(SHL5IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
     -def:$(SHL5DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL5TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL5TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4769,8 +4839,8 @@ $(SHL6IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
     -def:$(SHL6DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL6TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL6TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4819,8 +4889,8 @@ $(SHL7IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
     -def:$(SHL7DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL7TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL7TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4869,8 +4939,8 @@ $(SHL8IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
     -def:$(SHL8DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL8TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL8TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4919,8 +4989,8 @@ $(SHL9IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
     -def:$(SHL9DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL9TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL9TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
@@ -4969,8 +5039,8 @@ $(SHL10IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL10IMPLIBN) \
     -def:$(SHL10DEF) )
 .ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL10TARGETN) to get $@
+    +-if exist $@ $(TOUCH) $@
+    +-if not exist $@ echo rebuild $(SHL10TARGETN) to get $@
 .ENDIF			# "$(GUI)" == "WNT"
 .ELSE
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
