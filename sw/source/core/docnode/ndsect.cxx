@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: os $ $Date: 2000-10-25 14:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,7 +611,8 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 }
 
 void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
-                        const SfxItemSet* pAttr )
+                        const SfxItemSet* pAttr,
+                        sal_Bool bPreventLinkUpdate )
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
@@ -706,7 +707,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     }
 
     if( bUpdate )
-        pSection->CreateLink( CREATE_UPDATE );
+        pSection->CreateLink( bPreventLinkUpdate ? CREATE_CONNECT : CREATE_UPDATE );
     else if( !pSection->IsLinkType() && pSection->IsConnected() )
     {
         pSection->Disconnect();

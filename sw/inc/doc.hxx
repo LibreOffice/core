@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:04:44 $
+ *  last change: $Author: os $ $Date: 2000-10-25 14:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,7 +1486,7 @@ public:
     const SwSectionFmts& GetSections() const { return *pSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
     void DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes = sal_False );
-    void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0 );
+    void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0, sal_Bool bPreventLinkUpdate = FALSE);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
         // Passwort fuer geschuetzte Bereiche erfragen/setzen
