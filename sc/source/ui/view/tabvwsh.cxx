@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:38:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/app.hxx>
+#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -123,6 +124,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SID_SEARCH_DLG);
     SFX_CHILDWINDOW_REGISTRATION(SID_HYPERLINK_DIALOG);
     SFX_CHILDWINDOW_REGISTRATION(GalleryChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION( ::avmedia::MediaPlayer::GetChildWindowId() );
 }
 
 SFX_IMPL_VIEWFACTORY( ScTabViewShell, ScResId(STR_NONAME) )
