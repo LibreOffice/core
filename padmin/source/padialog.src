@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:10:10 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3201,7 +3201,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ finnish ] = "Faksiyhteyksien komentorivi suoritetaan seuraavasti: kunkin l�hetetyn faksin osalta komentorivill� oleva merkkijono \"(TMP)\" korvataan v�liaikaistiedostolla ja komentorivill� oleva merkkijono \"(PHONE)\" korvataan faksinumerolla. Jos \"(TMP)\" on komentorivill�, PostScript-koodi toimitetaan tiedoston kautta, muussa tapauksessa normaalisy�tteen� eli v�litysyhteytt� k�ytt�en.";
         Text[ italian ] = "La riga comandi degli apparecchi fax verr� impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verr� sostituito da un file temporaneo e \"(PHONE)\" sar� sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verr� trasmesso a un file, altrimenti verr� trasemsso come immissione standard (cio� come pipe).";
         Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ swedish ] = "Kommandoraden f�r faxanslutningar bearbetas p� f�ljande s�tt: p� varje fax som skickas ers�tts \"(TMP)\" och \"(PHONE)\" i kommandoraden av en tempor�r fil resp. av faxnumret. Om \"(TMP)\" f�rekommer i kommandoraden �verf�rs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s som pipe).";
+        Text[ swedish ] = "Kommandoraden f�r faxanslutningar bearbetas p� f�ljande s�tt: p� varje fax som skickas ers�tts \"(TMP)\" och \"(PHONE)\" i kommandoraden av en tempor�r fil resp. av faxnumret. Om \"(TMP)\" f�rekommer i kommandoraden �verf�rs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s. som pipe).";
         Text[ polish ] = "Wiersz polece� w po��czeniach faksowych przetwarzany jest w nast�puj�cy spos�b: Podczas wysy�ania faksu, \"(TMP)\" w wierszu polece� zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je�eli wiersz polece� zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domy�lnie (tzn. jako potok (pipe)).";
         Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ japanese ] = "Fax 機でのコマンド行は次のように実行されます: Fax 送信するたびに、コマンド行の \"(TMP)\" は一時ファイルで、\"(PHONE)\" はファックス番号で置換されます。コマンド行に \"(TMP)\" があると、PostScript コードはファイルに読み込まれます。そうでない場合は、標準回路の入力、つまりパイプライン処理が行われます。";
