@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:06 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
