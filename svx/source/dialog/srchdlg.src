@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text [ english_us ] = "Find & Replace" ;
     Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
     Text[ russian ] = "Íàéòè è çàìåíèòü";
-    Text[ polish ] = "ZnajdŸ i zamieñ";
+    Text[ polish ] = "Znajd? i zamieñ";
     Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
     Text[ chinese_traditional ] = "·j´M©M´À¥N";
     Text[ arabic ] = "ÈÍË æÇÓÊÈÏÇá";
@@ -371,7 +371,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Bac~kwards" ;
         Text [ norwegian ] = "Bako~ver" ;
         Text [ italian ] = "I~ndietro" ;
-        Text [ portuguese_brazilian ] = "Para átr~s" ;
+        Text [ portuguese_brazilian ] = "Para ?tr~s" ;
         Text [ portuguese ] = "~Para trás" ;
         Text [ finnish ] = "~Taaksepäin" ;
         Text [ danish ] = "Tilbage" ;
@@ -401,7 +401,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Select~ions" ;
         Text [ norwegian ] = "Alternativ~er" ;
         Text [ italian ] = "Solo nella selez~ione" ;
-        Text [ portuguese_brazilian ] = "Sele~ções" ;
+        Text [ portuguese_brazilian ] = "Sele~??s" ;
         Text [ portuguese ] = "Apenas ~selecção activa" ;
         Text [ finnish ] = "~Vain nykyinen valinta" ;
         Text [ danish ] = "Kun det markerede" ;
@@ -497,7 +497,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ french ] = "R~echerche de similarité" ;
         Text [ swedish ] = "Likh~etssökning" ;
         Text [ danish ] = "Søg lignende" ;
-        Text [ portuguese_brazilian ] = "~Ähnlichkeitssuche" ;
+        Text [ portuguese_brazilian ] = "~?hnlichkeitssuche" ;
         Text [ portuguese ] = "Pro~cura por semelhança" ;
         Text[ chinese_simplified ] = "ÀàËÆËÑÑ°(~I)";
         Text[ russian ] = "Ïîèñê ïîõîæèõ";
@@ -536,7 +536,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ italian ] = "Larghezza intera/ridotta";
         Text[ danish ] = "Match half/full width forms";
         Text[ swedish ] = "Halv-/normalbreda former";
-        Text[ polish ] = "Zwyk³a/po³owa szerokoœci";
+        Text[ polish ] = "Zwyk³a/po³owa szeroko?ci";
         Text[ portuguese_brazilian ] = "Match half/full width forms";
         Text[ japanese ] = "”¼Šp‚Æ‘SŠp‚ğ‹æ•Ê";
         Text[ korean ] = "¹İÆø/ÀüÆø Çü½Ä";
@@ -619,7 +619,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "F~ormulas" ;
         Text [ norwegian ] = "F~ormler" ;
         Text [ italian ] = "F~ormule" ;
-        Text [ portuguese_brazilian ] = "F~órmulas" ;
+        Text [ portuguese_brazilian ] = "F~?mulas" ;
         Text [ portuguese ] = "F~órmulas" ;
         Text [ finnish ] = "Kaavat" ;
         Text [ danish ] = "Formler" ;
@@ -661,7 +661,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Hide = TRUE ;
         Text[ chinese_simplified ] = "ÊıÖµ(~V)";
         Text[ russian ] = "çíà÷åíèÿõ";
-        Text[ polish ] = "wartoœc~iach";
+        Text[ polish ] = "warto?c~iach";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáŞíã";
@@ -679,7 +679,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "~Notes" ;
         Text [ norwegian ] = "~Notes" ;
         Text [ italian ] = "~Note" ;
-        Text [ portuguese_brazilian ] = "~Observações" ;
+        Text [ portuguese_brazilian ] = "~Observa??s" ;
         Text [ portuguese ] = "~Anotações" ;
         Text [ finnish ] = "~Huomautukset" ;
         Text [ danish ] = "Noter" ;
@@ -909,7 +909,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ËÑÑ°È«²¿(~A)";
         Text[ russian ] = "Íàéòè âñå";
-        Text[ polish ] = "~ZnajdŸ wszystkie";
+        Text[ polish ] = "~Znajd? wszystkie";
         Text[ japanese ] = "‚·‚×‚ÄŒŸõ(~A)";
         Text[ chinese_traditional ] = "·j´M¥ş³¡(~A)";
         Text[ arabic ] = "ÇáÈÍË Úä Çáßá";
@@ -1175,7 +1175,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text [ ENGLISH ] = "Comple~te Cells" ;
         Text [ norwegian ] = "Fullf~ør Celler" ;
         Text [ italian ] = "Celle intere" ;
-        Text [ portuguese_brazilian ] = "Células Comple~tas" ;
+        Text [ portuguese_brazilian ] = "C?lulas Comple~tas" ;
         Text [ portuguese ] = "Só células com~pletas" ;
         Text [ finnish ] = "~Kaikki solut" ;
         Text [ danish ] = "Kun hele rækker" ;
