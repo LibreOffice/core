@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:35:09 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1847,7 +1847,28 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
         m_pColumnName->SetText(pFieldDescr->GetName());
 
     if(m_pType)
-        m_pType->SelectEntryPos(pFieldDescr->GetType());
+    {
+        USHORT nPos = m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName));
+        if(nPos == LISTBOX_ENTRY_NOTFOUND)
+        {
+            const OTypeInfoMap* pMap = getTypeInfo();
+            OTypeInfoMap::const_iterator aIter = pMap->find(pFieldDescr->getTypeInfo()->nType);
+            if(aIter == pMap->end())
+            {
+                aIter = pMap->begin();
+                if(pFieldDescr->GetPrecision() > aIter->second->nPrecision)
+                    pFieldDescr->SetPrecision(aIter->second->nPrecision);
+                if(pFieldDescr->GetScale() > aIter->second->nMaximumScale)
+                    pFieldDescr->SetScale(0);
+                if(!aIter->second->bNullable && pFieldDescr->IsNullable())
+                    pFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
+                if(!aIter->second->bAutoIncrement && pFieldDescr->IsAutoIncrement())
+                    pFieldDescr->SetAutoIncrement(sal_False);
+            }
+            pFieldDescr->SetType(aIter->second);
+        }
+        m_pType->SelectEntry(pFieldDescr->getTypeInfo()->aUIName);
+    }
 
 
     //////////////////////////////////////////////////////////////////////
