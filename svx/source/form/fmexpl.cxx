@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 15:02:22 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2215,58 +2215,8 @@ sal_Bool FmExplorer::IsFormComponentEntry( SvLBoxEntry* pEntry )
 }
 
 //------------------------------------------------------------------------
-sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 FmExplorer::implAcceptDrop( sal_Int8 _nAction, const Point& _rDropPos )
 {
-    Point aDropPos = rEvt.maPosPixel;
-
-    // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
-    if (rEvt.mbLeaving)
-    {
-        if (m_aDropActionTimer.IsActive())
-            m_aDropActionTimer.Stop();
-    } else
-    {
-        sal_Bool bNeedTrigger = sal_False;
-        // auf dem ersten Eintrag ?
-        if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
-        {
-            m_aDropActionType = DA_SCROLLUP;
-            bNeedTrigger = sal_True;
-        } else
-            // auf dem letzten (bzw. in dem Bereich, den ein Eintrag einnehmen wuerde, wenn er unten genau buendig
-            // abschliessen wuerde) ?
-            if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
-            {
-                m_aDropActionType = DA_SCROLLDOWN;
-                bNeedTrigger = sal_True;
-            } else
-            {   // auf einem Entry mit Childs, der nicht aufgeklappt ist ?
-                SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
-                if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
-                {
-                    // -> aufklappen
-                    m_aDropActionType = DA_EXPANDNODE;
-                    bNeedTrigger = sal_True;
-                }
-            }
-
-        if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
-        {
-            // neu anfangen zu zaehlen
-            m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // die Pos merken, da ich auch AcceptDrops bekomme, wenn sich die Maus gar nicht bewegt hat
-            m_aTimerTriggered = aDropPos;
-            // und den Timer los
-            if (!m_aDropActionTimer.IsActive()) // gibt es den Timer schon ?
-            {
-                m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
-                m_aDropActionTimer.Start();
-            }
-        } else if (!bNeedTrigger)
-            m_aDropActionTimer.Stop();
-    }
-
-
     //////////////////////////////////////////////////////////////////////
     // Hat das Object das richtige Format?
     if (!m_aControlExchange.isDragSource())
@@ -2281,20 +2231,20 @@ sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
     sal_Bool bForeignShellOrPage =
                 m_aControlExchange->getShell() != GetExplModel()->GetFormShell()
             ||  m_aControlExchange->getPage() != GetExplModel()->GetFormPage();
-    if (bForeignShellOrPage || (bHasHiddenControlsFormat && (DND_ACTION_COPY == rEvt.mnAction)))
+    if (bForeignShellOrPage || (bHasHiddenControlsFormat && (DND_ACTION_COPY == _nAction)))
     {
         // crossing shell/page boundaries, we can exchange hidden controls only
         if (!bHasHiddenControlsFormat)
             return DND_ACTION_NONE;
 
-        SvLBoxEntry* pDropTarget = GetEntry(aDropPos);
+        SvLBoxEntry* pDropTarget = GetEntry(_rDropPos);
         if (!pDropTarget || (pDropTarget == m_pRootEntry) || !IsFormEntry(pDropTarget))
             return DND_ACTION_NONE;
 
         return DND_ACTION_COPY;
     }
 
-    if (DND_ACTION_MOVE != rEvt.mnAction) // 'normal' controls within a shell are moved only (never copied)
+    if (DND_ACTION_MOVE != _nAction) // 'normal' controls within a shell are moved only (never copied)
         return DND_ACTION_NONE;
 
     if (m_bDragDataDirty)
@@ -2315,7 +2265,7 @@ sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
     DBG_ASSERT(aDropped.size() >= 1, "FmExplorer::AcceptDrop : keine Eintraege !");
 
     // das Ziel des Droppens (plus einige Daten, die ich nicht in jeder Schleife ermitteln will)
-    SvLBoxEntry* pDropTarget = GetEntry( aDropPos );
+    SvLBoxEntry* pDropTarget = GetEntry( _rDropPos );
     if (!pDropTarget)
         return DND_ACTION_NONE;
 
@@ -2380,8 +2330,67 @@ sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
 }
 
 //------------------------------------------------------------------------
+sal_Int8 FmExplorer::AcceptDrop( const AcceptDropEvent& rEvt )
+{
+    Point aDropPos = rEvt.maPosPixel;
+
+    // kuemmern wir uns erst mal um moeglich DropActions (Scrollen und Aufklappen)
+    if (rEvt.mbLeaving)
+    {
+        if (m_aDropActionTimer.IsActive())
+            m_aDropActionTimer.Stop();
+    } else
+    {
+        sal_Bool bNeedTrigger = sal_False;
+        // auf dem ersten Eintrag ?
+        if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
+        {
+            m_aDropActionType = DA_SCROLLUP;
+            bNeedTrigger = sal_True;
+        } else
+            // auf dem letzten (bzw. in dem Bereich, den ein Eintrag einnehmen wuerde, wenn er unten genau buendig
+            // abschliessen wuerde) ?
+            if ((aDropPos.Y() < GetSizePixel().Height()) && (aDropPos.Y() >= GetSizePixel().Height() - GetEntryHeight()))
+            {
+                m_aDropActionType = DA_SCROLLDOWN;
+                bNeedTrigger = sal_True;
+            } else
+            {   // auf einem Entry mit Childs, der nicht aufgeklappt ist ?
+                SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
+                if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
+                {
+                    // -> aufklappen
+                    m_aDropActionType = DA_EXPANDNODE;
+                    bNeedTrigger = sal_True;
+                }
+            }
+
+        if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
+        {
+            // neu anfangen zu zaehlen
+            m_aTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
+            // die Pos merken, da ich auch AcceptDrops bekomme, wenn sich die Maus gar nicht bewegt hat
+            m_aTimerTriggered = aDropPos;
+            // und den Timer los
+            if (!m_aDropActionTimer.IsActive()) // gibt es den Timer schon ?
+            {
+                m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
+                m_aDropActionTimer.Start();
+            }
+        } else if (!bNeedTrigger)
+            m_aDropActionTimer.Stop();
+    }
+
+    return implAcceptDrop( rEvt.mnAction, aDropPos );
+}
+
+//------------------------------------------------------------------------
 sal_Int8 FmExplorer::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
+    if ( DND_ACTION_NONE == implAcceptDrop( rEvt.mnAction, rEvt.maPosPixel ) )
+        // under some platforms, it may happen that ExecuteDrop is called though AcceptDrop returned DND_ACTION_NONE
+        return DND_ACTION_NONE;
+
     // ware schlecht, wenn nach dem Droppen noch gescrollt wird ...
     if (m_aDropActionTimer.IsActive())
         m_aDropActionTimer.Stop();
