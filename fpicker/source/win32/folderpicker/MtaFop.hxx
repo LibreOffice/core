@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 08:07:04 $
+ *  last change: $Author: tra $ $Date: 2002-03-27 10:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,17 +92,12 @@ class CAutoPathBuff
 public:
     CAutoPathBuff( size_t size = 0 )
     {
-        if ( !size )
-        {
-            if ( IsWin2000( ) )
-                size = 32000; // max path length under Win2000
-            else
-                size = MAX_PATH;
-        }
+        if (0 == size)
+            size = 32000; // max path length under Win2000
 
-        pBuff = new sal_Unicode[ size ];
-        OSL_POSTCOND( pBuff, \
-            "Could not allocate path buffer" );
+        pBuff = new sal_Unicode[size];
+
+        OSL_POSTCOND(pBuff,"Could not allocate path buffer");
     }
 
     ~CAutoPathBuff( )
