@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-09 10:32:02 $
+ *  last change: $Author: mt $ $Date: 2002-09-11 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,7 +310,7 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
     if ( mpVScrollBar )
     {
         ULONG nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
-        mpVScrollBar->SetRange( Range( 0, (long)nTextHeight ) );
+        mpVScrollBar->SetRange( Range( 0, (long)nTextHeight-1 ) );
     }
     if ( mpHScrollBar )
     {
@@ -318,7 +318,7 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
         // Es gibt kein Notify bei Breiten-Aenderung...
 //      ULONG nW = Max( (ULONG)mpTextWindow->GetOutputSizePixel().Width()*5, (ULONG)nTextWidth );
 //      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
-        mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth ) );
+        mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
     }
 }
 
@@ -548,7 +548,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( nWidth != mnTextWidth )
                 {
                     mnTextWidth = nWidth;
-                    mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth ) );
+                    mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
                     ImpSetHScrollBarThumbPos();
                 }
             }
