@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:07:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ class SwRect;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
 class SwFmtHoriOrient;
+// OD 2004-03-23 #i26701#
+class SwAnchoredObject;
 
 namespace objectpositioning
 {
@@ -90,24 +92,24 @@ namespace objectpositioning
     {
         private:
             // object to be positioned
-            SdrObject&  mrDrawObj;
+            SdrObject& mrDrawObj;
 
          // information about object
             // does the object represents a Writer fly frame
-            bool        mbIsObjFly;
-            // frame the object belongs to; NULL, if !<mbObjIsFly>
-            SwFrm* mpFrmOfObj;
+            bool mbIsObjFly;
+            // OD 2004-03-23 #i26791# - anchored object the object belongs to;
+            SwAnchoredObject* mpAnchoredObj;
             // frame the object is anchored at
             SwFrm* mpAnchorFrm;
             // contact object
-            SwContact*  mpContact;
+            SwContact* mpContact;
             // frame format
             const SwFrmFmt* mpFrmFmt;
 
             /** determine information about object
 
                 OD 30.07.2003 #110978#
-                member <mbIsObjFly>, <mpFrmOfObj>, <mpAnchorFrm>, <mpContact>
+                member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrm>, <mpContact>
                 and <mpFrmFmt> are set
 
                 @author OD
@@ -120,11 +122,11 @@ namespace objectpositioning
 
          // accessors for object and its corresponding data/information
             SdrObject& GetObject() const;
-            bool       IsObjFly() const;
-            SwFrm*     GetFrmOfObj() const;
-            SwFrm&     GetAnchorFrm() const;
+            bool IsObjFly() const;
+            SwAnchoredObject& GetAnchoredObj() const;
+            SwFrm& GetAnchorFrm() const;
             SwContact& GetContact() const;
-            const SwFrmFmt&  GetFrmFmt() const;
+            const SwFrmFmt& GetFrmFmt() const;
 
          // virtual methods providing data for to character anchored objects.
             virtual bool IsAnchoredToChar() const;
@@ -153,13 +155,15 @@ namespace objectpositioning
                                           SwTwips&      _orAlignAreaOffset ) const;
 
         // *********************************************************************
+        // --> OD 2004-06-17 #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
             SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
                                     const SwFrm& _rPageAlignLayFrm,
                                     const SwVertOrient     _eVertOrient,
                                     const SwRelationOrient _eRelOrient,
                                     const SwTwips          _nVertPos,
                                     const SvxLRSpaceItem& _rLRSpacing,
-                                    const SvxULSpaceItem& _rULSpacing ) const;
+                                    const SvxULSpaceItem& _rULSpacing,
+                                    SwTwips& _roVertOffsetToFrmAnchorPos ) const;
 
         // *********************************************************************
             /** adjust calculated vertical in order to keep object inside
@@ -180,6 +184,9 @@ namespace objectpositioning
 
         // *********************************************************************
             /** calculate relative horizontal position
+
+                --> OD 2004-06-17 #i26791# - add output parameter
+                <_roHoriOffsetToFrmAnchorPos>
 
                 @author OD
 
@@ -208,6 +215,10 @@ namespace objectpositioning
                 @param _nRelPosY
                 input parameter - relative vertical position
 
+                @param _roHoriOffsetToFrmAnchorPos
+                output parameter - 'horizontal' offset to frame anchor position
+                according to the alignment
+
                 @return relative horizontal position in SwTwips
             */
             SwTwips _CalcRelPosX( const SwFrm& _rHoriOrientFrm,
@@ -216,7 +227,8 @@ namespace objectpositioning
                                   const SvxLRSpaceItem& _rLRSpacing,
                                   const SvxULSpaceItem& _rULSpacing,
                                   const bool _bObjWrapThrough,
-                                  const SwTwips _nRelPosY
+                                  const SwTwips _nRelPosY,
+                                  SwTwips& _roHoriOffsetToFrmAnchorPos
                                 ) const;
 
         // *********************************************************************
