@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:29:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3040,7 +3040,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                 Rectangle aEmpty;
                                                 aShapeHd.SeekToBegOfRecord( rStCtrl );
                                                 aProcessData.nGroupingFlags = 0;
-                                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty );
+                                                sal_Int32 nShapeId;
+                                                SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, aEmpty, aEmpty, 0, &nShapeId );
                                                 if ( pObj )
                                                 {
                                                     // maybe this is an animated textobj
@@ -3059,6 +3060,9 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                                                         }
                                                     }
                                                     pRet->NbcInsertObject( pObj );
+
+                                                    if( nShapeId )
+                                                        insertShapeId( nShapeId, pObj );
                                                 }
                                             }
                                             aShapeHd.SeekToEndOfRecord( rStCtrl );
