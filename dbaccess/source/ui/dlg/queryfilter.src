@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -421,7 +421,7 @@ ModalDialog DLG_FILTERCRIT
         Text = "Kriterien" ;
         Text [ ENGLISH ] = "Search criteria" ;
         Text [ norwegian ] = "Search criteria" ;
-        Text [ italian ] = "Criteri di ricerca" ;
+        Text [ italian ] = "Criteri" ;
         Text [ portuguese_brazilian ] = "Procurar crit?rios" ;
         Text [ portuguese ] = "CritÈrios" ;
         Text [ finnish ] = "Ehto" ;
@@ -435,7 +435,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ russian ] = " ËÚÂËË";
         Text[ polish ] = "Kryteria";
         Text[ japanese ] = "èåè";
-        Text[ chinese_traditional ] = "≠S≥Ú";
+        Text[ chinese_traditional ] = "±¯•Û";
         Text[ arabic ] = "«·„⁄«ÌÌ—";
         Text[ greek ] = " ÒÈÙﬁÒÈ·";
         Text[ korean ] = "±‚¡ÿ";
@@ -534,5 +534,6 @@ ModalDialog DLG_FILTERCRIT
     Text[ catalan ] = "Filtro";
     Text[ finnish ] = "Suodatin";
 };
+
 
 
