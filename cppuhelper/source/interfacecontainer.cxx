@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interfacecontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:48:07 $
+ *  last change: $Author: jbu $ $Date: 2001-02-05 13:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,23 @@ XInterface * OInterfaceIteratorHelper::next()
     }
     // exception
     return 0;
+}
+
+void OInterfaceIteratorHelper::remove()
+{
+    if( bIsList )
+    {
+        OSL_ASSERT( nRemain >= 0 &&
+                    nRemain < ((const Sequence< Reference< XInterface > >*)pData)->getLength() );
+        XInterface * p =
+            ((const Sequence< Reference< XInterface > >*)pData)->getConstArray()[nRemain].get();
+        rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >( &p ) );
+    }
+    else
+    {
+        OSL_ASSERT( 0 == nRemain );
+        rCont.removeInterface( * reinterpret_cast< const Reference< XInterface > * >(&pData));
+    }
 }
 
 //===================================================================
