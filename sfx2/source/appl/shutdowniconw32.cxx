@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hro $ $Date: 2002-11-19 17:06:41 $
+ *  last change: $Author: hro $ $Date: 2002-11-29 12:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include <svtools/moduleoptions.hxx>
 #endif
 
-#include <shutdownicon.hxx>
-#include <app.hrc>
+#include "shutdownicon.hxx"
+#include "app.hrc"
 #include <shlobj.h>
 #include <objidl.h>
 #include <stdio.h>
@@ -128,6 +128,8 @@ using namespace ::osl;
 #define ICON_MATH_DOCUMENT              15
 #define ICON_TEMPLATE                   16
 #define ICON_MACROLIBRARY               17
+#define ICON_CONFIGURATION              18
+#define ICON_OPEN                       19
 #define ICON_SETUP                      500
 
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
@@ -242,7 +244,7 @@ static HMENU createSystrayMenu( )
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
-    addMenuItem( hMenu, IDM_OPEN,   0, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, false );
+    addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true );
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false );
     addMenuItem( hMenu, -1,         0, OUString(), pos, false );
