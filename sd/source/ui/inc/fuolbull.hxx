@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuolbull.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,36 +59,46 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUOLBULL_HXX
-#define _SD_FUOLBULL_HXX
+#ifndef SD_FU_OUTLINE_BULLET_HXX
+#define SD_FU_OUTLINE_BULLET_HXX
 
-#ifndef _SD_FUOUTL_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class SdViewShell;
-class SdView;
-class SdWindow;
 class SdDrawDocument;
 class SfxRequest;
+
+namespace sd {
+
+class View;
+class ViewShell;
+class Window;
 
 /*************************************************************************
 |*
 |* Bulletfunktionen im Outlinermodus
 |*
 \************************************************************************/
-class FuOutlineBullet : public FuPoor
+
+class FuOutlineBullet
+    : public FuPoor
 {
 public:
     TYPEINFO();
 
-    FuOutlineBullet(SdViewShell* pViewShell, SdWindow* pWin, SdView* pView,
-                    SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuOutlineBullet();
+    FuOutlineBullet (
+        ViewShell* pViewShell,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuOutlineBullet (void);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 };
 
+} // end of namespace sd
 
-#endif      // _SD_FUOLBULL_HXX
+#endif

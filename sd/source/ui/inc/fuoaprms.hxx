@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:25:50 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,29 +59,36 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUOAPRMS_HXX
-#define _SD_FUOAPRMS_HXX
+#ifndef SD_FU_OBJECT_ANIMATION_PARAMETERS
+#define SD_FU_OBJECT_ANIMATION_PARAMETERS
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuObjectAnimationParameters : public FuPoor
+namespace sd {
+
+class FuObjectAnimationParameters
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuObjectAnimationParameters(SdViewShell* pViewSh, SdWindow* pWin,
-                                SdView* pView, SdDrawDocument* pDoc,
-                                SfxRequest& rReq);
-    virtual ~FuObjectAnimationParameters();
+    FuObjectAnimationParameters (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuObjectAnimationParameters (void);
 
     virtual void Activate();        // Function aktivieren
     virtual void Deactivate();      // Function deaktivieren
-
 };
 
-#endif // _SD_FUOAPRMS_HXX
+} // end of namespace sd
+
+#endif
 
 
 
