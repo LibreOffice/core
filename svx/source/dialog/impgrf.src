@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:27:02 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text [ dutch ] = "~Voorbeeld" ;
         Text [ spanish ] = "~Previsualización" ;
         Text [ english_us ] = "Pr~eview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ(~E)";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ(~E)";
         Text[ russian ] = "Ïðîñìîòð";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËÞ­°(~E)";
