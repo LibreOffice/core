@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,6 @@
 #include <fmtanchr.hxx>
 #endif
 
-using namespace ::com::sun::star;
 TYPEINIT1(SwFEShell,SwEditShell)
 
 /***********************************************************************
@@ -810,21 +809,16 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
     return nRet;
 }
 
-SwFEShell::SwFEShell( SwDoc *pDoc,
-        uno::Reference<linguistic::XSpellChecker1> &xSpell,
-        uno::Reference<linguistic::XHyphenator> &xHyph,
-                         Window *pWin,
-                         SwRootFrm *pMaster, const SwViewOption *pOpt )
-    : SwEditShell( pDoc, xSpell, xHyph, pWin, pMaster, pOpt ),
-    pChainFrom( 0 ),
-    pChainTo( 0 )
+SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWin,
+                     SwRootFrm *pMaster, const SwViewOption *pOpt )
+    : SwEditShell( rDoc, pWin, pMaster, pOpt ),
+    pChainFrom( 0 ), pChainTo( 0 )
 {
 }
 
-SwFEShell::SwFEShell( SwEditShell *pShell, Window *pWin )
-    : SwEditShell( pShell, pWin ),
-    pChainFrom( 0 ),
-    pChainTo( 0 )
+SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWin )
+    : SwEditShell( rShell, pWin ),
+    pChainFrom( 0 ), pChainTo( 0 )
 {
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 12:18:57 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,11 +413,10 @@ public:
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
 
-    String                  GetSelectionTextParam(  BOOL bCompleteWords,
-                                                BOOL bEraseTrail,
-                                                BOOL bExtendedDelimiter = FALSE );
+    String                  GetSelectionTextParam( BOOL bCompleteWords,
+                                                   BOOL bEraseTrail );
     virtual BOOL            HasSelection( BOOL  bText ) const;
-    virtual String          GetSelectionText( BOOL bCompleteWords );
+    virtual String          GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual USHORT          PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void            MarginChanged();
 

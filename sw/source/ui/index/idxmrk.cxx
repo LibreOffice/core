@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:18:04 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void SwIndexMarkDlg::InitControls()
         if (nCnt < 2)
         {
             bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False, sal_True);
+            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
             aEntryED.SetText(aOrgStr);
 
             //alle gleichen Eintraege aufzunehmen darf nur im Body und auch da nur
@@ -384,7 +384,7 @@ void    SwIndexMarkDlg::Activate()
         if (nCnt < 2)
         {
             bSelected = !pSh->HasSelection();
-            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False, sal_True);
+            aOrgStr = pSh->GetView().GetSelectionTextParam(sal_True, sal_False);
             aEntryED.SetText(aOrgStr);
 
             //alle gleichen Eintraege aufzunehmen darf nur im Body und auch da nur
@@ -1754,6 +1754,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/20 14:18:04  os
+    use comphelper methods
+
     Revision 1.1.1.1  2000/09/18 17:14:44  hr
     initial import
 

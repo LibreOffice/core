@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,9 @@
 
 #pragma hdrstop
 
-#include "hintids.hxx"
-
+#ifndef _HINTIDS_HXX
+#include <hintids.hxx>
+#endif
 
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -81,21 +82,49 @@
 #ifndef _PVPRTDAT_HXX
 #include <pvprtdat.hxx>
 #endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _ROOTFRM_HXX
+#include <rootfrm.hxx>
+#endif
+#ifndef _VIEWIMP_HXX
+#include <viewimp.hxx>
+#endif
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+#ifndef _SWPRTOPT_HXX
+#include <swprtopt.hxx> // SwPrtOptions
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _PTQUEUE_HXX
+#include <ptqueue.hxx>
+#endif
+#ifndef _SWREGION_HXX
+#include <swregion.hxx>
+#endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
+#ifndef _FNTCACHE_HXX
+#include <fntcache.hxx>
+#endif
 
-#include "doc.hxx"
-#include "viewsh.hxx"
-#include "pagefrm.hxx"
-#include "rootfrm.hxx"
-#include "viewimp.hxx"
-#include "viewopt.hxx"
-#include "swprtopt.hxx" // SwPrtOptions
-#include "statstr.hrc"  // Text fuer SfxProgress
-#include "fldbas.hxx"
-#include "ptqueue.hxx"
-#include "swregion.hxx"
-#include "hints.hxx"
-#include "fntcache.hxx"
-#include "comcore.hrc"
+#ifndef _STATSTR_HRC
+#include <statstr.hrc>  // Text fuer SfxProgress
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 
 const SwTwips nXFree = 142;     // == 0.25 cm
 const SwTwips nYFree = 142;
@@ -544,7 +573,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
             "MinSeite groesser MaxSeite." );
 
     // eine neue Shell fuer den Printer erzeugen
-    ViewShell aShell( this, 0 );
+    ViewShell aShell( *this, 0 );
 
     aShell.pRef = new SfxPrinter( *pPrt );
 
@@ -895,7 +924,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             "MinSeite groesser MaxSeite." );
 
     // eine neue Shell fuer den Printer erzeugen
-    ViewShell aShell( this, 0 );
+    ViewShell aShell( *this, 0 );
     aShell.pRef = new SfxPrinter( *pPrt );
 
     SET_CURR_SHELL( &aShell );
@@ -1242,6 +1271,9 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:29  hr
+      initial import
+
       Revision 1.74  2000/09/18 16:04:37  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 09:46:57 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,8 +443,7 @@ ULONG SwReader::Read( const Reader& rOptions )
             ViewShell* pVSh = 0;
             if( pDoc->GetRootFrm() && !pDoc->GetEditShell( &pVSh ) && !pVSh )
             {
-                ViewShell aVSh( pDoc, ::GetSpellChecker(), ::GetHyphenator(),
-                                0, 0 );
+                ViewShell aVSh( *pDoc, 0, 0 );
 
                 SET_CURR_SHELL( &aVSh );
                 pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL, TRUE, FALSE );
@@ -1097,6 +1096,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/27 09:46:57  jp
+      use the new FileStatHelper class
+
       Revision 1.1.1.1  2000/09/19 10:59:15  hr
       initial import
 

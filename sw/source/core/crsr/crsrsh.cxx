@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,6 @@
 #include <fmteiro.hxx>
 #endif
 
-using namespace ::com::sun::star;
 
 TYPEINIT2(SwCrsrShell,ViewShell,SwModify);
 
@@ -2236,13 +2235,13 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
  * Alle Ansichten eines Dokumentes stehen im Ring der Shells.
  */
 
-SwCrsrShell::SwCrsrShell( SwCrsrShell * pShell, Window *pWin )
-    : ViewShell( pShell, pWin ),
+SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pWin )
+    : ViewShell( rShell, pWin ),
     SwModify( 0 )
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
-    pCurCrsr = new SwShellCrsr( *this, *(pShell->pCurCrsr->GetPoint()) );
+    pCurCrsr = new SwShellCrsr( *this, *(rShell.pCurCrsr->GetPoint()) );
     pCurCrsr->GetCntntNode()->Add( this );
     pCrsrStk = 0;
     pTblCrsr = 0;
@@ -2270,11 +2269,9 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell * pShell, Window *pWin )
  * der normale Constructor
  */
 
-SwCrsrShell::SwCrsrShell( SwDoc *pDoc,
-                 uno::Reference< linguistic::XSpellChecker1> xSpell,
-                 uno::Reference< linguistic::XHyphenator> xHyph,
-                 Window *pWin, SwRootFrm *pRoot, const SwViewOption *pOpt )
-    : ViewShell( pDoc, xSpell, xHyph, pWin, pOpt ),
+SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRoot,
+                            const SwViewOption *pOpt )
+    : ViewShell( rDoc, pWin, pOpt ),
     SwModify( 0 )
 {
     SET_CURR_SHELL( this );
@@ -2282,7 +2279,7 @@ SwCrsrShell::SwCrsrShell( SwDoc *pDoc,
      * Erzeugen des initialen Cursors, wird auf die erste
      * Inhaltsposition gesetzt
      */
-    SwNodes& rNds = pDoc->GetNodes();
+    SwNodes& rNds = rDoc.GetNodes();
 
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:41:54 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,9 +216,6 @@
 #ifndef _WRTSH_HRC
 #include <wrtsh.hrc>
 #endif
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
 
 #define COMMON_INI_LIST \
         rView(rShell),\
@@ -1451,8 +1448,8 @@ void SwWrtShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Unicode cChar )
  * eine Art kontrollierter copy ctor
  */
 
-SwWrtShell::SwWrtShell(SwWrtShell *pSh, Window *pWin, SwView &rShell) :
-     SwFEShell( pSh,pWin ),
+SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *pWin, SwView &rShell )
+    : SwFEShell( rSh, pWin ),
      COMMON_INI_LIST
 {
     BITFLD_INI_LIST
@@ -1462,12 +1459,9 @@ SwWrtShell::SwWrtShell(SwWrtShell *pSh, Window *pWin, SwView &rShell) :
 }
 
 
-SwWrtShell::SwWrtShell(SwDoc *pDoc,
-                       uno::Reference< linguistic::XSpellChecker1 > &xSpell,
-                       uno::Reference< linguistic::XHyphenator > &xHyph,
-                       Window *pWin, SwView &rShell, SwRootFrm *pRoot,
-                       const SwViewOption *pViewOpt )
-    : SwFEShell(pDoc, xSpell, xHyph, pWin, pRoot, pViewOpt),
+SwWrtShell::SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
+                        SwRootFrm *pRoot, const SwViewOption *pViewOpt )
+    : SwFEShell( rDoc, pWin, pRoot, pViewOpt),
       COMMON_INI_LIST
 {
     BITFLD_INI_LIST
@@ -1575,6 +1569,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.2  2000/10/06 13:41:54  jp
+   should changes: don't use IniManager
+
    Revision 1.1.1.1  2000/09/18 17:14:53  hr
    initial import
 

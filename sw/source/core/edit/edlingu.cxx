@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,12 +347,15 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 {
     if( GetSh() )
         return;
-     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = xProp.is() ?
-        *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
-    xSpeller = pShell->GetSpellChecker();
-    if (xSpeller.is())
+     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+    sal_Bool bIsWrapReverse = xProp.is()
+                ? *(sal_Bool*)xProp->getPropertyValue(
+                                    S2U(UPN_IS_WRAP_REVERSE) ).getValue()
+                : sal_False;
+
+    xSpeller = ::GetSpellChecker();
+    if ( xSpeller.is() )
         _Start( pShell, eStart, eEnd, bIsWrapReverse );
 }
 
@@ -366,7 +369,7 @@ void SwSpellIter::Start( SwEditShell *pShell, SwDocPositions eStart,
 uno::Reference< uno::XInterface >
     SwSpellIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 {
- uno::Reference< uno::XInterface >  xSpellRet;
+     uno::Reference< uno::XInterface >  xSpellRet;
     SwEditShell *pSh = GetSh();
     if( !pSh )
         return xSpellRet;
@@ -376,12 +379,12 @@ uno::Reference< uno::XInterface >
     ASSERT( GetEnd(), "SwEditShell::SpellContinue() ohne Start?");
 
     sal_Bool bGoOn = sal_True;
-    do
-    {
+    do {
         SwPaM *pCrsr = pSh->GetCrsr();
         if ( !pCrsr->HasMark() )
             pCrsr->SetMark();
-     uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
+
+        uno::Reference< beans::XPropertySet >  xProp( GetLinguPropertySet() );
         sal_Bool bRev = xProp.is() ?
             *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
         if( bRev )
@@ -442,9 +445,10 @@ uno::Reference< uno::XInterface >
 
 sal_Bool SwHyphIter::IsAuto()
 {
- uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    return xProp.is() ?
-        *(sal_Bool*)xProp->getPropertyValue( S2U(UPN_IS_HYPH_AUTO) ).getValue() : sal_False;
+    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
+    return xProp.is() ? *(sal_Bool*)xProp->getPropertyValue(
+                                S2U(UPN_IS_HYPH_AUTO) ).getValue()
+                      : sal_False;
 }
 
 

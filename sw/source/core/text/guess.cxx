@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,22 +67,30 @@
 
 #include <ctype.h>
 
-#include "errhdl.hxx"   // ASSERTs
-#include "segmentc.hxx"
-
-#include "txtcfg.hxx"
-#include "guess.hxx"
-#include "inftxt.hxx"   // SwTxtSizeInfo, SwTxtFormatInfo
-#include "swfont.hxx"
-#include "breakit.hxx"
-#include "viewsh.hxx"
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>   // ASSERTs
+#endif
+#ifndef _TXTCFG_HXX
+#include <txtcfg.hxx>
+#endif
+#ifndef _GUESS_HXX
+#include <guess.hxx>
+#endif
+#ifndef _INFTXT_HXX
+#include <inftxt.hxx>   // SwTxtSizeInfo, SwTxtFormatInfo
+#endif
+#ifndef _SWFONT_HXX
+#include <swfont.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_TEXT_BREAKTYPE_HPP_
 #include <com/sun/star/text/BreakType.hpp>
-#endif
-
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -410,8 +418,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             Reference< XHyphenator >  xHyph;
             if( bHyph )
             {
-                xHyph = rInf.GetVsh() ? rInf.GetVsh()->GetHyphenator()
-                                      : ::GetHyphenator();
+                xHyph = ::GetHyphenator();
                 aHyphOpt = LineBreakHyphenationOptions( xHyph, nHyphPos );
             }
             LineBreakResults aResult = pBreakIt->xBreak->getLineBreak( rInf.GetTxt(),
@@ -432,9 +439,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
                 static BOOL bTest = FALSE;
                 if( bTest && bHyph && nHyphPos )
                 {
-                    WordSelection::ResetWordDelimiter();
-                    xub_StrLen nWrdStart = WordSelection::GoStartWord( rInf.GetTxt(), nHyphPos );
-                    xub_StrLen nLen = WordSelection::GoEndWord( rInf.GetTxt(), nWrdStart ) - nWrdStart;
+//JP 25.10.00: "WordSelection" class is removed - use the breakiterator
+//                  WordSelection::ResetWordDelimiter();
+//                  xub_StrLen nWrdStart = WordSelection::GoStartWord( rInf.GetTxt(), nHyphPos );
+//                  xub_StrLen nLen = WordSelection::GoEndWord( rInf.GetTxt(), nWrdStart ) - nWrdStart;
                     if( nLen )
 
                     {

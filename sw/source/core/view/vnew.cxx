@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-28 11:30:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,32 +116,6 @@
 #include <ndindex.hxx>
 #endif
 
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XSPELLALTERNATIVES_HXX_
-//#include <smart/com/sun/star/linguistic/XSpellAlternatives.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_SPELLFAILURE_HXX_
-//#include <smart/com/sun/star/linguistic/SpellFailure.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HXX_
-//#include <smart/com/sun/star/linguistic/XSpellChecker1.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XALTERNATIVESPELLING_HXX_
-//#include <smart/com/sun/star/linguistic/XAlternativeSpelling.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENSSUPPLIER_HXX_
-//#include <smart/com/sun/star/linguistic/XPossibleHyphensSupplier.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HXX_
-//#include <smart/com/sun/star/linguistic/XHyphenator.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XPOSSIBLEHYPHENS_HXX_
-//#include <smart/com/sun/star/linguistic/XPossibleHyphens.hxx>
-//#endif
-//#ifndef _SMART_COM_SUN_STAR_LINGUISTIC_XHYPHENATEDWORD_HXX_
-//#include <smart/com/sun/star/linguistic/XHyphenatedWord.hxx>
-//#endif
-
-using namespace ::com::sun::star;
 /*************************************************************************
 |*
 |*  ViewShell::Init()
@@ -218,19 +192,15 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 |*
 |*************************************************************************/
 
-ViewShell::ViewShell( SwDoc *pDocument,
-           uno::Reference< linguistic::XSpellChecker1> xSpell,
-           uno::Reference< linguistic::XHyphenator> xHyph,
-           Window *pWindow, const SwViewOption *pNewOpt,
-           OutputDevice *pOutput, long nFlags ) :
-    pDoc( pDocument ),
-    xSpell( xSpell ),
-    xHyph ( xHyph ),
+ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
+                        const SwViewOption *pNewOpt, OutputDevice *pOutput,
+                        long nFlags )
+    : pDoc( &rDocument ),
     pOpt( 0 ),
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)pDocument->GetPrt(TRUE)),
+                            : (OutputDevice*)rDocument.GetPrt(TRUE)),
     pRef( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
@@ -272,23 +242,21 @@ ViewShell::ViewShell( SwDoc *pDocument,
 |*
 |*************************************************************************/
 
-ViewShell::ViewShell( ViewShell *pShell, Window *pWindow,
-                    OutputDevice *pOutput, long nFlags ) :
-    Ring( pShell ),
-    pDoc( pShell->GetDoc() ),
+ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
+                        OutputDevice *pOutput, long nFlags ) :
+    Ring( &rShell ),
+    pDoc( rShell.GetDoc() ),
     pWin( pWindow ),
     pOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
-                            : (OutputDevice*)pShell->GetDoc()->GetPrt(TRUE)),
+                            : (OutputDevice*)rShell.GetDoc()->GetPrt(TRUE)),
     pRef( 0 ),
-    xSpell( pShell->GetSpellChecker() ),
-    xHyph( pShell->GetHyphenator() ),
     pOpt( 0 ),
     nStartAction( 0 ),
     nLockPaint( 0 ),
     pSfxViewShell( 0 ),
     pImp( new SwViewImp( this ) ),
-    aBrowseBorder( pShell->GetBrowseBorder() )
+    aBrowseBorder( rShell.GetBrowseBorder() )
 {
     bPaintWorks = bEnableSmooth = TRUE;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
@@ -301,7 +269,7 @@ ViewShell::ViewShell( ViewShell *pShell, Window *pWindow,
     BOOL bModified = pDoc->IsModified();
 
     pOutput = pOut;
-    Init( pShell->GetViewOptions() );   //verstellt ggf. das Outdev (InitPrt())
+    Init( rShell.GetViewOptions() );    //verstellt ggf. das Outdev (InitPrt())
     pOut = pOutput;
 
     ((SwHiddenTxtFieldType*)pDoc->GetSysFldType( RES_HIDDENTXTFLD ))->
@@ -416,6 +384,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/28 11:30:29  jp
+      remove old code of using no graphicobject
+
       Revision 1.1.1.1  2000/09/19 00:08:29  hr
       initial import
 

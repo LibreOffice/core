@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,14 +964,13 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
         }
 
         // eine ViewShell darauf
-        pShell = new ViewShell( pPrtDoc, ::GetSpellChecker(), ::GetHyphenator(),
-                                0, pOpt );
+        pShell = new ViewShell( *pPrtDoc, 0, pOpt );
         pPrtDoc->SetRefForDocShell( 0 );
     }
     else
     {
         pPrtDoc = GetDoc();
-        pShell = new ViewShell( this, 0 );
+        pShell = new ViewShell( *this, 0 );
     }
 
     {   //Zusaetzlicher Scope, damit die CurrShell vor dem zerstoeren der
@@ -1140,10 +1139,8 @@ BOOL ViewShell::Prt( SwPrtOptions& rOptions, SfxProgress& rProgress )
                 lcl_GetPostIts( pDoc, aPostItFields );
                 pPostItDoc   = new SwDoc;
                 pPostItDoc->SetPrt( pPrt );
-                pPostItShell = new ViewShell( pPostItDoc,
-                                              pShell->GetSpellChecker(),
-                                              pShell->GetHyphenator(),
-                                              0, pShell->GetViewOptions() );
+                pPostItShell = new ViewShell( *pPostItDoc, 0,
+                                               pShell->GetViewOptions() );
                 // Wenn PostIts am Dokumentenende gedruckt werden sollen,
                 // die Druckreihenfolge allerdings umgekehrt ist, dann hier
                 if ( ( rOptions.nPrintPostIts == POSTITS_ENDDOC ) &&
@@ -1428,13 +1425,10 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt,
     //eine, dann legen wir uns eine neue Sicht an, oder das Doc hat noch
     //keine, dann erzeugen wir die erste Sicht.
     ViewShell *pSh;
-    if ( pDoc->GetRootFrm() && pDoc->GetRootFrm()->GetCurrShell() )
-        pSh = new ViewShell( pDoc->GetRootFrm()->GetCurrShell(), 0, pOleOut );
+    if( pDoc->GetRootFrm() && pDoc->GetRootFrm()->GetCurrShell() )
+        pSh = new ViewShell( *pDoc->GetRootFrm()->GetCurrShell(), 0, pOleOut );
     else
-    {
-        pSh = new ViewShell( pDoc, ::GetSpellChecker(), ::GetHyphenator(),
-                             0, pOpt, pOleOut );
-    }
+        pSh = new ViewShell( *pDoc, 0, pOpt, pOleOut );
 
     {
         SET_CURR_SHELL( pSh );
@@ -1561,6 +1555,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:29  hr
+      initial import
+
       Revision 1.193  2000/09/18 16:04:38  willem.vandorp
       OpenOffice header added.
 

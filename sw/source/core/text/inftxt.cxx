@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:17:59 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
-#endif
-#ifndef _OFF_APP_HXX
-#include <offmgr/app.hxx>
 #endif
 #ifndef _LINGU_LNGPROPS_HHX_
 #include <lingu/lngprops.hxx>
@@ -836,9 +833,8 @@ sal_Bool SwTxtFormatInfo::IsHyphenate() const
     LanguageType eTmp = GetFont()->GetLanguage();
     if( LANGUAGE_DONTKNOW == eTmp || LANGUAGE_NONE == eTmp )
         return sal_False;
-    uno::Reference< linguistic::XHyphenator > xHyph = GetVsh() ? GetVsh()->GetHyphenator() :
-                           OFF_APP()->GetHyphenator();
 
+    uno::Reference< linguistic::XHyphenator > xHyph = ::GetHyphenator();
     if (bInterHyph && xHyph.is())
         SvxSpellWrapper::CheckHyphLang( xHyph, eTmp );
 

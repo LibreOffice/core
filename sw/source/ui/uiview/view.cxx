@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-12 11:18:06 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::scanner;
 using namespace ::rtl;
+
 #define C2U(cChar) OUString::createFromAscii(cChar)
 #define C2S(cChar) String::CreateFromAscii(cChar)
 
@@ -833,26 +834,25 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     if(PTR_CAST( SwView, pOldSh))
     {
-        pWrtShell = new SwWrtShell(((SwView*)pOldSh)->pWrtShell, pEditWin, *this);
+        pWrtShell = new SwWrtShell( *((SwView*)pOldSh)->pWrtShell,
+                                    pEditWin, *this);
 //MA: Das kann doch nur zu einem GPF fuehren!
 //      nSelectionType = ((SwView*)pOldSh)->nSelectionType;
     }
     else
     {
-        SwDoc *pDoc = ((SwDocShell*)pDocSh)->GetDoc();
+        SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
         if( PTR_CAST(SwSrcView, pOldSh) || pWebDShell )
-            pDoc->SetBrowseMode( sal_True );
+            rDoc.SetBrowseMode( sal_True );
 
         //Fuer den BrowseMode wollen wir keinen Factor uebernehmen.
-        if( pDoc->IsBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
+        if( rDoc.IsBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )
         {
             aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
             aUsrPref.SetZoom( 100 );
         }
-        pWrtShell = new SwWrtShell( pDoc, ::GetSpellChecker(), ::GetHyphenator(),
-                                    pEditWin, *this,
-                                    0, &aUsrPref);
+        pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, 0, &aUsrPref );
     }
 
     // JP 05.02.99: Bug 61495 - damit unter anderem das HLineal im
@@ -1183,32 +1183,23 @@ sal_Bool SwView::HasSelection( sal_Bool  bText ) const
 
 --------------------------------------------------*/
 
-String SwView::GetSelectionText( sal_Bool bComplete )
+String SwView::GetSelectionText( sal_Bool bCompleteWrds )
 {
-    return GetSelectionTextParam( bComplete, sal_True );
+    return GetSelectionTextParam( bCompleteWrds, sal_True );
 }
 
 /*-----------------09/16/97 09:50am-----------------
 
 --------------------------------------------------*/
-String  SwView::GetSelectionTextParam(  sal_Bool bComplete,
-                                            sal_Bool bEraseTrail,
-                                            sal_Bool bExtendedDelimiter )
+String  SwView::GetSelectionTextParam( sal_Bool bCompleteWrd,
+                                       sal_Bool bEraseTrail )
 {
     String sReturn;
-
-    if (bComplete && !GetWrtShell().HasSelection())
-    {
-        const char sDelimiter[] = " \t\n\r";
-        const char sExtDelimiter[] = " \t\n\r.,:;()<>{}";
-        WordSelection::SetWordDelimiter(bExtendedDelimiter ?
-                                            sExtDelimiter : sDelimiter);
+    if( bCompleteWrds && !GetWrtShell().HasSelection() )
         GetWrtShell().SelWrd();
-        WordSelection::ResetWordDelimiter();
-    }
 
-    GetWrtShell().GetSelectedText(sReturn);
-    if(bEraseTrail)
+    GetWrtShell().GetSelectedText( sReturn );
+    if( bEraseTrail )
         sReturn.EraseTrailingChars();
     return sReturn;
 }

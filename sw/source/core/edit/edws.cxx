@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,27 +95,23 @@
 #include <swundo.hxx>
 #endif
 
-using namespace ::com::sun::star;
-
 /********************************************************
  * Ctor/Dtor
  ********************************************************/
 // verkleideter Copy-Constructor
 
 
-SwEditShell::SwEditShell( SwEditShell *pEdSH, Window *pWin )
-    : SwCrsrShell( pEdSH, pWin )
+SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWin )
+    : SwCrsrShell( rEdSH, pWin )
 {
 }
 
 // ctor/dtor
 
 
-SwEditShell::SwEditShell(SwDoc *pDoc,
-    uno::Reference< linguistic::XSpellChecker1 >  xSpell,
-    uno::Reference< linguistic::XHyphenator >  xHyph,
-    Window *pWin, SwRootFrm *pRootFrm, const SwViewOption *pOpt )
-    : SwCrsrShell(pDoc, xSpell, xHyph, pWin, pRootFrm, pOpt)
+SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWin, SwRootFrm *pRootFrm,
+                            const SwViewOption *pOpt )
+    : SwCrsrShell( rDoc, pWin, pRootFrm, pOpt)
 {
     GetDoc()->DoUndo();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:24:06 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1489,13 +1489,11 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pFrame, SfxViewShell* pOldSh):
     }
 
     if( pVS )
-        pNew = new ViewShell( pVS, &aViewWin, 0, VSHELLFLAG_ISPREVIEW );
+        pNew = new ViewShell( *pVS, &aViewWin, 0, VSHELLFLAG_ISPREVIEW );
     else
-    {
-        SwDoc* pDoc = ((SwDocShell*)pFrame->GetObjectShell())->GetDoc();
-        pNew = new ViewShell( pDoc, ::GetSpellChecker(), ::GetHyphenator(),
-                              &aViewWin, 0, 0, VSHELLFLAG_ISPREVIEW );
-    }
+        pNew = new ViewShell(
+                *((SwDocShell*)pFrame->GetObjectShell())->GetDoc(),
+                &aViewWin, 0, 0, VSHELLFLAG_ISPREVIEW );
 
     aViewWin.SetViewShell( pNew );
     pNew->SetSfxViewShell( this );
@@ -2220,6 +2218,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/28 15:24:06  os
+      use of configuration service in view options
+
       Revision 1.1.1.1  2000/09/18 17:14:48  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,6 @@ struct SwCallMouseEvent;
 class DropEvent;
 struct ChartSelectionInfo;
 
-#ifndef _COM_SUN_STAR_LINGUISTIC_XSPELLCHECKER1_HPP_
-#include <com/sun/star/linguistic/XSpellChecker1.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
-#endif
 
 class SwWrtShell: public SwFEShell
 {
@@ -436,15 +430,10 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     //ctoren, der erstere ist eine Art kontrollierter copy ctor fuer weitere
     //Sichten auf ein Dokument
-    SwWrtShell( SwWrtShell *, Window *pWin, SwView &rShell);
-    SwWrtShell( SwDoc *pDoc,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic::XSpellChecker1 >&,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::linguistic::XHyphenator >&,
-                Window *pWin, SwView &rShell,
+    SwWrtShell( SwWrtShell&, Window *pWin, SwView &rShell);
+    SwWrtShell( SwDoc& rDoc, Window *pWin, SwView &rShell,
                 SwRootFrm* pMaster = 0, const SwViewOption *pViewOpt = 0);
-    ~SwWrtShell();
+    virtual ~SwWrtShell();
 
 private:
 

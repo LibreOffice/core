@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,8 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
     if( rTxt.Len() < 4 || pFnt->IsSymbol(pVsh) )
         return 0;
     ASSERT( IsHyphenate(), "SwTxtFormatter::HyphWord: why?" );
-    Reference< XHyphenator >  xHyph = GetVsh() ? GetVsh()->GetHyphenator() :
-        ::GetHyphenator();
-    Reference< XHyphenatedWord >    xHyphWord;
+    Reference< XHyphenator >  xHyph = ::GetHyphenator();
+    Reference< XHyphenatedWord > xHyphWord;
 
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
