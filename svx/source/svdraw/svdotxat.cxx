@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 07:58:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-30 08:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@
 #endif
 
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <svx/postitem.hxx>
+#include <postitem.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
