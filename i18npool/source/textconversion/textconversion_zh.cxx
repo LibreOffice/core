@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_zh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:16:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ OUString SAL_CALL getCharConversion(const OUString& aText, sal_Int32 nStartPos, 
     return OUString( newStr->buffer, nLength);
 }
 
-OUString SAL_CALL getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
+OUString SAL_CALL TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, sal_Bool toSChinese, sal_Int32 nConversionOptions)
 {
     sal_Int32 dictLen = 0;
     const sal_Unicode *wordData = getSTC_WordData(dictLen);
@@ -159,7 +159,7 @@ OUString SAL_CALL getWordConversion(const OUString& aText, sal_Int32 nStartPos, 
         }
     }
 
-    if (!wordData || !index || !entry) // no word mapping defined, do char2char conversion.
+    if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
 
     rtl_uString * newStr = x_rtl_uString_new_WithLength( nLength*2 ); // defined in x_rtl_ustring.h
@@ -170,13 +170,41 @@ OUString SAL_CALL getWordConversion(const OUString& aText, sal_Int32 nStartPos, 
         if (len > maxLen)
             len = maxLen;
         for (; len > 0 && ! found; len--) {
-            if (index[len+1] - index[len] > 0) {
+            OUString word = aText.copy(nStartPos + currPos, len);
+            sal_Int32 current = 0;
+            // user dictionary
+            if (xCDL.is()) {
+                Sequence < OUString > conversions;
+                try {
+                    conversions = xCDL->queryConversions(word, 0, len,
+                            aLocale, ConversionDictionaryType::SCHINESE_TCHINESE,
+                            /*toSChinese ?*/ ConversionDirection_FROM_LEFT /*: ConversionDirection_FROM_RIGHT*/,
+                            nConversionOptions);
+                }
+                catch ( NoSupportException & ) {
+                    // clear reference (when there is no user dictionary) in order
+                    // to not always have to catch this exception again
+                    // in further calls. (save time)
+                    xCDL = 0;
+                }
+                catch (...) {
+                    // catch all other exceptions to allow
+                    // querying the system dictionary in the next line
+                }
+                if (conversions.getLength() > 0) {
+                    while (current < conversions[0].getLength())
+                        newStr->buffer[count++] = conversions[0][current++];
+                    currPos += word.getLength();
+                    found = sal_True;
+                }
+            }
+
+            if (!found && index[len+1] - index[len] > 0) {
                 sal_Int32 bottom = (sal_Int32) index[len];
                 sal_Int32 top = (sal_Int32) index[len+1] - 1;
-                OUString word = aText.copy(nStartPos + currPos, len);
 
                 while (bottom <= top && !found) {
-                    sal_Int32 current = (top + bottom) / 2;
+                    current = (top + bottom) / 2;
                     const sal_Int32 result = word.compareTo(wordData + entry[current]);
                     if (result < 0)
                         top = current - 1;
@@ -221,44 +249,22 @@ TextConversion_zh::getConversions( const OUString& aText, sal_Int32 nStartPos, s
 
 OUString SAL_CALL
 TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
-    const Locale& aLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
+    const Locale& rLocale, sal_Int16 nConversionType, sal_Int32 nConversionOptions)
     throw(  RuntimeException, IllegalArgumentException, NoSupportException )
 {
-    if (aLocale.Language.equalsAscii("zh") &&
+    if (rLocale.Language.equalsAscii("zh") &&
             ( nConversionType == TextConversionType::TO_SCHINESE ||
             nConversionType == TextConversionType::TO_TCHINESE) ) {
 
-        OUString result;
-        sal_Bool c2c = nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER;
+        aLocale=rLocale;
         sal_Bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
 
-        // user dictionary
-        if (xCDL.is() && (!c2c || nLength == 1)) {
-            Sequence < OUString > conversions;
-            try {
-                conversions = xCDL->queryConversions(aText, nStartPos, nLength,
-                        aLocale, ConversionDictionaryType::SCHINESE_TCHINESE,
-                        /*toSChinese ?*/ ConversionDirection_FROM_LEFT /*: ConversionDirection_FROM_RIGHT*/,
-                        nConversionOptions);
-            }
-            catch (...) {
-                // catch all exceptions (especially the NoSupportException
-                // when there is no user defined dictionary!)
-                // to allow querying the system dictionary in the next line
-            }
-            if (conversions.getLength() > 0)
-                result = conversions[0];
-        }
-
-        // system word to word dictionary
-        if (!c2c && nLength > 1 && result.getLength() == 0)
-            result = getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
-
-        // system char to char dictionary
-        if (result.getLength() == 0)
-            result = getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
-
-        return result;
+        if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
+            // char to char dictionary
+            return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
+        else
+            // word to word dictionary
+            return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
     } else
         throw NoSupportException(); // Conversion type is not supported in this service.
 }
