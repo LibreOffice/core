@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-18 09:33:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,16 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
+#endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #include "bibbeam.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
@@ -255,17 +265,25 @@ void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw
 
 SV_IMPL_PTRARR( BibToolBarListenerArr, BibToolBarListenerPtr);
 
-BibToolBar::BibToolBar(Window* pParent, WinBits nStyle):
+BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
     aFtSource(this,WB_VCENTER),
     aLBSource(this,WB_DROPDOWN),
     aFtQuery(this,WB_VCENTER),
     aEdQuery(this),
-    aImgLst(BibResId(  RID_TOOLBAR_IMGLIST       )),
+    aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aImgLstHC(BibResId(RID_TOOLBAR_IMGLIST_HC  )),
+    aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
+    aBigImgLstHC(BibResId( RID_TOOLBAR_BIGIMGLIST_HC )),
     nSelMenuItem(0),
-    nMenuId(0)
+    nMenuId(0),
+    aLayoutManager( aLink ),
+    nSymbolSet( SFX_SYMBOLS_SMALL ),
+    nOutStyle( 0 )
 {
+    nSymbolSet = GetCurrentSymbolSet();
+    nOutStyle  = SvtMiscOptions().GetToolboxStyle();
+
     ApplyImageList();
     SetStyle(GetStyle()|nStyle);
     SetOutStyle(TOOLBOX_STYLE_FLAT);
@@ -276,6 +294,9 @@ BibToolBar::BibToolBar(Window* pParent, WinBits nStyle):
     aLBSource.SetDropDownLineCount(9);
     aLBSource.Show();
     aLBSource.SetSelectHdl(LINK( this, BibToolBar, SelHdl));
+
+    SvtMiscOptions().AddListener( LINK( this, BibToolBar, OptionsChanged_Impl ) );
+    Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
     aTimer.SetTimeoutHdl(LINK( this, BibToolBar, SendSelHdl));
     aTimer.SetTimeout(400);
@@ -306,6 +327,8 @@ BibToolBar::BibToolBar(Window* pParent, WinBits nStyle):
 
 BibToolBar::~BibToolBar()
 {
+    SvtMiscOptions().RemoveListener( LINK( this, BibToolBar, OptionsChanged_Impl ) );
+    Application::RemoveEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
     ::bib::RemoveFromTaskPaneList( this );
 }
 
@@ -602,13 +625,100 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
     ToolBox::DataChanged( rDCEvt );
 }
 /* -----------------------------07.05.2002 15:09------------------------------
-
  ---------------------------------------------------------------------------*/
+
+IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, pVoid )
+{
+    sal_Bool bRebuildToolBar = sal_False;
+    if ( nSymbolSet != GetCurrentSymbolSet() )
+    {
+        nSymbolSet = GetCurrentSymbolSet();
+        bRebuildToolBar = sal_True;
+    }
+    else if ( nOutStyle != SvtMiscOptions().GetToolboxStyle() )
+    {
+        nOutStyle = SvtMiscOptions().GetToolboxStyle();
+        SetOutStyle( nOutStyle );
+        bRebuildToolBar = sal_True;
+    }
+
+    if ( bRebuildToolBar )
+        RebuildToolbar();
+
+    return 0L;
+}
+
+//-----------------------------------------------------------------------------
+
+IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, pVoid )
+{
+    // Check if toolbar button size have changed and we have to use system settings
+    sal_Int16 eSymbolSet = GetCurrentSymbolSet();
+    if ( eSymbolSet != nSymbolSet )
+    {
+        nSymbolSet = eSymbolSet;
+        RebuildToolbar();
+    }
+
+    return 0L;
+}
+
+//-----------------------------------------------------------------------------
+
+sal_Int16 BibToolBar::GetCurrentSymbolSet()
+{
+    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    return eOptSymbolSet;
+}
+
+//-----------------------------------------------------------------------------
+void BibToolBar::RebuildToolbar()
+{
+    ApplyImageList();
+    // We have to call parent asynchronously as SetSize works also asynchronously!
+    Application::PostUserEvent( aLayoutManager, 0 );
+}
+
+//-----------------------------------------------------------------------------
+
 void BibToolBar::ApplyImageList()
 {
-    ImageList& rList = GetDisplayBackground().GetColor().IsDark()? aImgLstHC : aImgLst;
+    ImageList& rList = ( nSymbolSet == SFX_SYMBOLS_SMALL ) ?
+                       ( GetDisplayBackground().GetColor().IsDark() ? aImgLstHC : aImgLst ) :
+                       ( GetDisplayBackground().GetColor().IsDark() ? aBigImgLstHC : aBigImgLst );
+
     SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
     SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
     SetItemImage(TBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
+    AdjustToolBox();
 }
 
+void BibToolBar::AdjustToolBox()
+{
+    Size aOldSize = GetSizePixel();
+    Size aSize = CalcWindowSizePixel();
+    if ( !aSize.Width() )
+        aSize.Width() = aOldSize.Width();
+    else if ( !aSize.Height() )
+        aSize.Height() = aOldSize.Height();
+
+    Size aTbSize = GetSizePixel();
+    if ( aSize.Width() && aSize.Width() != aTbSize.Width() ||
+         aSize.Height() && aSize.Height() != aTbSize.Height() )
+    {
+        SetPosSizePixel( GetPosPixel(), aSize );
+        Invalidate();
+    }
+}
