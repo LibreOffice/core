@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:27:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,7 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 //========================================================================
@@ -2912,7 +2912,7 @@ BOOL lcl_FontChangedHint( const SfxHint &rHint )
     }
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
     FillList();
     return FontNameBox::CreateAccessible();
