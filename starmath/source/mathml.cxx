@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:12:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,6 +416,43 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
     return nError;
 }
 
+SmXMLImport::SmXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    sal_uInt16 nImportFlags)
+:   SvXMLImport( xServiceFactory, nImportFlags ),
+    pMathElemTokenMap(0),
+    pPresLayoutElemTokenMap(0),
+    pPresElemTokenMap(0),
+    pPresScriptEmptyElemTokenMap(0),
+    pPresTableElemTokenMap(0),
+    pPresLayoutAttrTokenMap(0),
+    pFencedAttrTokenMap(0),
+    pOperatorAttrTokenMap(0),
+    pColorTokenMap(0),
+    pAnnotationAttrTokenMap(0),
+    bSuccess(sal_False)
+{
+}
+
+SmXMLImport::SmXMLImport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
+    const rtl::OUString &rFileName)
+:   SvXMLImport( xServiceFactory, rModel ) ,
+    pMathElemTokenMap(0),
+    pPresLayoutElemTokenMap(0),
+    pPresElemTokenMap(0),
+    pPresScriptEmptyElemTokenMap(0),
+    pPresTableElemTokenMap(0),
+    pPresLayoutAttrTokenMap(0),
+    pFencedAttrTokenMap(0),
+    pOperatorAttrTokenMap(0),
+    pColorTokenMap(0),
+    pAnnotationAttrTokenMap(0),
+    bSuccess(sal_False)
+{
+}
+
 const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
 {
     static uno::Sequence< sal_Int8 > * pSeq = 0;
@@ -430,6 +467,28 @@ const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
         }
     }
     return *pSeq;
+}
+
+// #110680#
+SmXMLExport::SmXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    sal_uInt16 nExportFlags)
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_MATH, nExportFlags ) ,
+    pTree(0) ,
+    bSuccess(sal_False)
+{
+}
+
+// #110680#
+SmXMLExport::SmXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const SmNode *pIn,
+    const rtl::OUString &rFileName,
+    com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler> &rHandler)
+:   SvXMLExport( xServiceFactory, rFileName, rHandler ),
+    pTree(pIn),
+    bSuccess(sal_False)
+{
 }
 
 const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
@@ -465,7 +524,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport(IMPORT_ALL);
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLImport(IMPORT_ALL);
+    return (cppu::OWeakObject*)new SmXMLImport(rSMgr, IMPORT_ALL);
 }
 
 OUString SAL_CALL SmXMLExport_getImplementationName() throw()
@@ -485,7 +546,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_ALL );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_ALL );
 }
 
 OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
@@ -505,7 +568,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( IMPORT_META );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_META );
+    return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_META );
 }
 
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
@@ -525,7 +590,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
 }
 
 OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
@@ -545,7 +612,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLImport( IMPORT_SETTINGS );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLImport( IMPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
@@ -570,7 +639,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_CONTENT );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_CONTENT );
 }
 
 // XServiceInfo
@@ -628,7 +699,9 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
+    // #110680#
+    // return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
+    return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
 
@@ -959,10 +1032,6 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
 
     return bRet;
 }
-
-SmXMLExport::SmXMLExport(sal_uInt16 nExportFlags) : SvXMLExport(MAP_INCH, XML_MATH, nExportFlags) , pTree(0) ,
-    bSuccess(sal_False)
-{}
 
 sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
