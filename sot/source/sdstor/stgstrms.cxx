@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,7 @@ void StgTmpStrm::SetSize( ULONG n )
             ULONG i = nEndOfData;
             if( i )
             {
-                void* p = new BYTE[ 4096 ];
+                BYTE* p = new BYTE[ 4096 ];
                 Seek( 0L );
                 while( i )
                 {
@@ -1157,7 +1157,7 @@ void StgTmpStrm::SetSize( ULONG n )
                     else
                         break;
                 }
-                delete p;
+                delete [] p;
             }
             if( !i && n > nEndOfData )
             {
