@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:54:47 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ModalDialog DLG_OPTIONS
         Text [ french ] = "1 : qualit� min.\n100 : qualit� max." ;
         Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
-        Text [ danish ] = "~1: min. kvalitet\n100: maks. kvalitet" ;
+        Text [ danish ] = "1: min. kvalitet\n100: maks. kvalitet" ;
         Text [ portuguese_brazilian ] = "0: Qualidade min.\n100: Qualidade m�x." ;
         Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
         Text[ chinese_simplified ] = "1: 最差质量 \n100: 最佳质量";
@@ -106,6 +106,8 @@ ModalDialog DLG_OPTIONS
         Text[ hebrew ] = "1: min. Qualität\n100: max. Qualität";
         Text[ hindi ] = "1: min. quality\n100: max. quality";
         Text[ slovak ] = "1: min. kvalita\n100: max. kvalita";
+        Text[ hungarian ] = "1: legrosszabb minőség\n100: legjobb minőség";
+        Text[ slovenian ] = "1: min. kakovost\n100: maks. kakovost";
     };
     NumericField NUM_FLD_QUALITY
     {
@@ -238,11 +240,11 @@ ModalDialog DLG_OPTIONS
     Text[ korean ] = "Macromedia Flash (SWF) 옵션";
     Text[ turkish ] = "Macromedia Flash (SWF) Se�enekleri";
     Text[ thai ] = "Flash Options";
-    Text[ greek ] = "Flash Options";
+    Text[ greek ] = "�������� Macromedia Flash (SWF)";
     Text[ dutch ] = "Flash Options";
     Text[ french ] = "Options Macromedia Flash (SWF)";
     Text[ finnish ] = "Flash Options";
-    Text[ danish ] = "Flash Options";
+    Text[ danish ] = "Indstillinger for Macromedia Flash (SWF)";
     Text[ chinese_simplified ] = "Macromedia Flash (SWF) 选项";
     Text[ chinese_traditional ] = "Macromedia Flash (SWF) 選項";
     Text[ arabic ] = "Flash Options";
@@ -251,7 +253,10 @@ ModalDialog DLG_OPTIONS
     Text[ hebrew ] = "Flash Optionen";
     Text[ hindi ] = "Macromedia Flash (SWF) Options";
     Text[ slovak ] = "Macromedia Flash (SWF) voľby";
+    Text[ hungarian ] = "Macromedia Flash (SWF) beállítások";
+    Text[ slovenian ] = "Možnosti za Macromedia Flash (SWF)";
 };
+
 
 
 
