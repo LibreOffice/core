@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-21 12:34:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:02:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include "zoomitem.hxx"
 #include "dialmgr.hxx"
 
+#ifndef _SVX_ZOOM_DEF_HXX
+#include "zoom_def.hxx"
+#endif
 // static ----------------------------------------------------------------
 
 static USHORT pRanges[] =
