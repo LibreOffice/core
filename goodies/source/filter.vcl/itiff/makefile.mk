@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: thb $ $Date: 2001-12-06 14:18:05 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:14:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=goodies
 TARGET=itiff
 DEPTARGET=vitiff
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=eeng_pch
-PROJECTPCHSOURCE=eeng_pch
-
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -89,7 +84,7 @@ SLOFILES =  $(SLO)$/itiff.obj    \
 
 SHL1TARGET=     iti$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     itiff
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(CPPULIB)
+SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB)
 SHL1DEPN=       $(LB)$/itiff.lib
 SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
 
@@ -97,21 +92,11 @@ SHL1LIBS=       $(SLB)$/itiff.lib # $(LB)$/rtftoken.lib
 SHL1OBJS=       $(SLO)$/itiff.obj
 .ENDIF
 
+SHL1VERSIONMAP=exports.map
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1BASE=0x1c000000
+
+DEF1NAME=$(SHL1TARGET)
+
+# ==========================================================================
 
 .INCLUDE :  target.mk
-
-# THB: exports list goodies checked for 6.0 Final 6.12.2001
-.IF "$(GUI)"=="WNT"
-
-$(MISC)$/$(SHL1TARGET).def: makefile.mk
-    @echo -------------------------------------------
-    @echo DEF-File erstellen
-    @echo LIBRARY     $(DLLNAME)                   >$@
-    @echo DESCRIPTION 'Svx RTF DLL'                >>$@
-    @echo DATA                READ WRITE NONSHARED >>$@
-    @echo EXPORTS                                  >>$@
-    @echo     GraphicImport                        >>$@
-
-.ENDIF
