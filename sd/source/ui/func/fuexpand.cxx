@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:02:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ FuExpandPage::FuExpandPage (
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) pDoc->GetStyleSheetPool());
         pOutl->SetMinDepth(0);
 
-        SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(0);
+        SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
         USHORT nActualPageNum = pActualPage->GetPageNum();
         SdPage* pActualNotesPage = (SdPage*) pDoc->GetPage(nActualPageNum + 1);
         SdrTextObj* pActualOutline = (SdrTextObj*) pActualPage->GetPresObj(PRESOBJ_OUTLINE);
@@ -207,11 +207,10 @@ FuExpandPage::FuExpandPage (
                     pView->AddUndo(new SdrUndoNewPage(*pPage));
 
                     // MasterPage der aktuellen Seite verwenden
-                    USHORT nPgNum = pActualPage->GetMasterPageNum(0);
-                    pPage->InsertMasterPage(nPgNum);
+                    pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
                     pPage->SetAutoLayout(AUTOLAYOUT_ENUM, TRUE);
-                    pPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // Notiz-Seite
                     SdPage* pNotesPage = (SdPage*) pDoc->AllocPage(FALSE);
@@ -229,11 +228,10 @@ FuExpandPage::FuExpandPage (
                     pView->AddUndo(new SdrUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
-                    nPgNum = pActualNotesPage->GetMasterPageNum(0);
-                    pNotesPage->InsertMasterPage(nPgNum);
+                    pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), TRUE);
-                    pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
+                    pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
