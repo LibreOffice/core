@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:06:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 
-#include "InvocationCtxProperties.hxx"
 #include "ProviderCache.hxx"
 
 namespace func_provider
