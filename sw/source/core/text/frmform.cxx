@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-27 06:16:44 $
+ *  last change: $Author: fme $ $Date: 2001-08-07 07:22:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,8 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
     }
 
 #ifndef PRODUCT
-    else
+    else if ( pFoll->GetValidPrtAreaFlag() ||
+              pFoll->GetValidSizeFlag() )
     {
         pFoll->CalcFtnFlag();
         ASSERT( !pFoll->HasFtn(), "Missing FtnFlag." );
