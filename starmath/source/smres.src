@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-19 21:26:32 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5209,7 +5209,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "οξδξανξ θλθ πΰβνξ";
                 Text[ polish ] = "jest podobny lub rσwny";
                 Text[ japanese ] = "ζΌΈι€²η„γ«η­‰γ—γ„";
-                Text[ chinese_traditional ] = "η›ΈδΌΌδΊζ–η­‰ζ–Ό";
+                Text[ chinese_traditional ] = "η›ΈδΌΌζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "γΤΗΘε Γζ γΣΗζν";
                 Text[ greek ] = "είναι όμοιο ή ίσο με";
                 Text[ korean ] = "μ μ‚¬ν•κ±°λ‚ κ°™λ‹¤";
@@ -5237,7 +5237,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "οΰπΰλλελόνξ";
                 Text[ polish ] = "jest rσwnoleg³y do";
                 Text[ japanese ] = "εΉ³θ΅";
-                Text[ chinese_traditional ] = "εΉ³θ΅δΊ";
+                Text[ chinese_traditional ] = "εΉ³θ΅ζ–Ό";
                 Text[ arabic ] = "γΚζΗÒν γΪ";
                 Text[ greek ] = "είναι παράλληλο προς";
                 Text[ korean ] = "μ— ν‰ν–‰μΌλ΅";
@@ -5265,7 +5265,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "ξπςξγξνΰλόνξ";
                 Text[ polish ] = "jest prostopad³y do";
                 Text[ japanese ] = "ε‚η›΄";
-                Text[ chinese_traditional ] = "η›΄θ§’δΊ";
+                Text[ chinese_traditional ] = "η›΄θ§’ζ–Ό";
                 Text[ arabic ] = "γΚΪΗγΟ Ϊαμ";
                 Text[ greek ] = "σχηματίζει ορθή γωνία με";
                 Text[ korean ] = "μ— μ§κ°μΌλ΅";
@@ -5354,7 +5354,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "οξδξανξ";
                 Text[ polish ] = "jest podobny do";
                 Text[ japanese ] = "η›ΈδΌΌ";
-                Text[ chinese_traditional ] = "η›ΈδΌΌδΊ";
+                Text[ chinese_traditional ] = "η›ΈδΌΌζ–Ό";
                 Text[ arabic ] = "γΤΗΘε α";
                 Text[ greek ] = "είναι όμοιο με";
                 Text[ korean ] = "μ— μ μ‚¬";
@@ -5474,7 +5474,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ russian ] = "οπξοξπφθξνΰλόνξ";
                 Text[ polish ] = "jest proporcjonalny do";
                 Text[ japanese ] = "ζ―”δΎ‹";
-                Text[ chinese_traditional ] = "ζζ―”δΎ‹δΊ";
+                Text[ chinese_traditional ] = "ζζ―”δΎ‹ζ–Ό";
                 Text[ arabic ] = "γΚδΗΣΘ γΪ";
                 Text[ greek ] = "είναι ανάλογο προς";
                 Text[ korean ] = "μ— λΉ„λ΅€";
@@ -11329,6 +11329,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Pδδtyφkalurivi";
 };
+
 
 
 
