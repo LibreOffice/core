@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:23:47 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,8 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (0 != c)
         {
-            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString(
+                              exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding RuntimeException: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );
         }
@@ -275,7 +276,8 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (0 != c)
         {
-            OString cstr( ::rtl::OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OString cstr( ::rtl::OUStringToOString(
+                              exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             jni_env->ThrowNew( c, cstr.getStr() );
         }
