@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:49 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,16 +330,6 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
 
     if (bRet)
     {
-        if( !pDoc )
-        {
-            pDoc = new SdDrawDocument(eDocType, this);
-            SetModel(new SdXImpressDocument(this));
-            SetPool( &pDoc->GetItemPool() );
-            pUndoManager = new SfxUndoManager;
-            UpdateTablePointers();
-            SetStyleFamily(5);       //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
-        }
-
         if( !bSdDataObj )
             pDoc->NewOrLoadCompleted(NEW_DOC);  // otherwise calling
                                                 // NewOrLoadCompleted(NEW_LOADED) in
@@ -379,18 +369,11 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
     {
         SfxItemSet* pSet = GetMedium()->GetItemSet();
 
-        pDoc = new SdDrawDocument( eDocType, this );
-        SetModel( new SdXImpressDocument( this ) );
-
         if( pSet && ( SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) &&
             ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
             pDoc->SetStarDrawPreviewMode( TRUE );
         }
-
-        SetPool( &pDoc->GetItemPool() );
-        pUndoManager = new SfxUndoManager;
-        SetStyleFamily( 5 ); //CL: eigentlich SFX_STYLE_FAMILY_PSEUDO
 
         bRet = SfxInPlaceObject::Load( pStore );
 
@@ -426,8 +409,11 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
     {
         UpdateTablePointers();
 
-        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) &&
-            SfxInPlaceObject::GetVisArea().IsEmpty() )
+        // #108451# If we're an embedded OLE object, use tight bounds
+        // for our visArea. No point in showing the user lots of empty
+        // space. Had to remove the check for empty VisArea below,
+        // since XML load always sets a VisArea before.
+        if( ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ) && SfxInPlaceObject::GetVisArea( ASPECT_CONTENT ).IsEmpty() )
         {
             SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
 
