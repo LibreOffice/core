@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2000-12-20 16:31:49 $
+#   last change: $Author: cl $ $Date: 2001-01-12 16:13:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,6 +118,10 @@ IDLFILES=\
     HatchStyle.idl\
     HomogenMatrix.idl\
     HomogenMatrixLine.idl\
+    HomogenMatrix3.idl\
+    HomogenMatrixLine3.idl\
+    HomogenMatrix4.idl\
+    HomogenMatrixLine4.idl\
     HorizontalDimensioning.idl\
     Layer.idl\
     LayerManager.idl\
