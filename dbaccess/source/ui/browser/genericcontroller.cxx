@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-12 13:56:51 $
+ *  last change: $Author: fs $ $Date: 2001-02-19 12:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,11 @@ void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, 
 // -----------------------------------------------------------------------------
 void OGenericUnoController::InvalidateFeature_Impl()
 {
+#ifdef DBG_UTIL
+    static sal_Int32 s_nRecursions = 0;
+    ++s_nRecursions;
+#endif
+
     sal_Bool bEmpty = sal_True;
     FeaturePair aNextFeature;
     {
@@ -395,10 +400,12 @@ void OGenericUnoController::InvalidateFeature_Impl()
     while(!bEmpty)
     {
         if(aNextFeature.nId == -1)
+        {
             InvalidateAll_Impl();
+            break;
+        }
         else
         {
-
             sal_Bool bFound = sal_False;
             SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             for(;aIter != m_aSupportedFeatures.end();++aIter)
@@ -413,15 +420,19 @@ void OGenericUnoController::InvalidateFeature_Impl()
             if(!bFound)
                 ImplInvalidateTBItem(aNextFeature.nId, GetState(aNextFeature.nId));
         }
-        {
-            ::osl::MutexGuard aGuard( m_aFeatureMutex);
-            m_aFeaturesToInvalidate.pop_front();
-            bEmpty = m_aFeaturesToInvalidate.empty();
-            if (!bEmpty)
-                aNextFeature = m_aFeaturesToInvalidate.front();
-        }
+
+        ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        m_aFeaturesToInvalidate.pop_front();
+        bEmpty = m_aFeaturesToInvalidate.empty();
+        if (!bEmpty)
+            aNextFeature = m_aFeaturesToInvalidate.front();
     }
+
+#ifdef DBG_UTIL
+    --s_nRecursions;
+#endif
 }
+
 // -----------------------------------------------------------------------
 void OGenericUnoController::InvalidateFeature(sal_uInt16 _nId, const Reference< ::com::sun::star::frame::XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
@@ -499,6 +510,7 @@ void OGenericUnoController::InvalidateAll_Impl()
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
+        DBG_ASSERT(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
         m_aFeaturesToInvalidate.pop_front();
         if(!m_aFeaturesToInvalidate.empty())
             m_aAsyncInvalidateAll.Call();
