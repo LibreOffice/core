@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,20 @@ struct RTFPlainAttrMapIds
             nUnderline,
             nWeight,
             nWordlineMode,
-            nAutoKerning
+            nAutoKerning,
+            nCJKFont,
+            nCJKFontHeight,
+            nCJKLanguage,
+            nCJKPosture,
+            nCJKWeight,
+            nCTLFont,
+            nCTLFontHeight,
+            nCTLLanguage,
+            nCTLPosture,
+            nCTLWeight,
+            nEmphasis,
+            nTwoLines,
+            nRuby
             ;
     RTFPlainAttrMapIds( const SfxItemPool& rPool );
 };
@@ -250,7 +263,8 @@ class SvxRTFParser : public SvRTFParser
     BOOL    bCalcValue : 1;         // TRUE - Twipwerte an APP anpassen
     BOOL    bPardTokenRead : 1;     // TRUE - Token \pard wurde erkannt
     BOOL    bReadDocInfo : 1;       // TRUE - DocInfo mit einlesen
-
+    BOOL    bIsLeftToRightDef : 1;  // TRUE - in LeftToRight char run def.
+                                    // FALSE - in RightToLeft char run def.
 
 
     void ClearColorTbl();
@@ -358,6 +372,9 @@ protected:
         // wird USHRT_MAX returnt, ansonsten die Anzahl der umgewandelten Ze.
     xub_StrLen HexToBin( String& rToken );
 
+        // got WhichId for latin/asian/complex character attributes
+    USHORT GetAttrWhichID( USHORT eType, USHORT nSlotId );
+
 public:
 
     virtual SvParserState CallParser(); // Aufruf des Parsers
@@ -449,11 +466,14 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.1.1.1 2000-09-18 17:01:01 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.2 2000-11-10 11:34:57 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:01:01  hr
+      initial import
+
       Revision 1.42  2000/09/18 12:41:51  willem.vandorp
       OpenOffice header added.
 

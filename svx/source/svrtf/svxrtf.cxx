@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-08 16:00:25 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,8 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
 {
     bNewDoc = bReadNewDoc;
 
-    bChkStyleAttr = FALSE;
-    bCalcValue = FALSE;
-    bReadDocInfo = FALSE;
+    bChkStyleAttr = bCalcValue = bReadDocInfo = FALSE;
+    bIsLeftToRightDef = TRUE;
 
     {
         RTFPlainAttrMapIds aTmp( rPool );
@@ -1325,6 +1324,20 @@ RTFPlainAttrMapIds::RTFPlainAttrMapIds( const SfxItemPool& rPool )
     nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, FALSE );
     nWordlineMode = rPool.GetTrueWhich( SID_ATTR_CHAR_WORDLINEMODE, FALSE );
     nAutoKerning = rPool.GetTrueWhich( SID_ATTR_CHAR_AUTOKERN, FALSE );
+
+    nCJKFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, FALSE );
+    nCJKFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, FALSE );
+    nCJKLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_LANGUAGE, FALSE );
+    nCJKPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, FALSE );
+    nCJKWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, FALSE );
+    nCTLFont = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, FALSE );
+    nCTLFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, FALSE );
+    nCTLLanguage = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_LANGUAGE, FALSE );
+    nCTLPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, FALSE );
+    nCTLWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, FALSE );
+    nEmphasis = rPool.GetTrueWhich( SID_ATTR_CHAR_EMPHASISMARK, FALSE );
+    nTwoLines = rPool.GetTrueWhich( SID_ATTR_CHAR_TWO_LINES, FALSE );
+    nRuby = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_RUBY, FALSE );
 }
 
 RTFPardAttrMapIds ::RTFPardAttrMapIds ( const SfxItemPool& rPool )

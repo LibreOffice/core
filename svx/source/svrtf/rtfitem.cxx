@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2000-11-10 11:34:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #define ITEMID_HYPHENZONE   0
 #define ITEMID_FMTBREAK     0
 #define ITEMID_ADJUST       0
+#define ITEMID_EMPHASISMARK 0
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
@@ -130,6 +131,7 @@
 #include "nhypitem.hxx"
 #include "lcolitem.hxx"
 #include "blnkitem.hxx"
+#include "emphitem.hxx"
 
 #include "pbinitem.hxx"
 #include "sizeitem.hxx"
@@ -164,7 +166,6 @@
 #include "svxrtf.hxx"
 
 
-
 #define BRACELEFT   '{'
 #define BRACERIGHT  '}'
 
@@ -186,6 +187,71 @@ inline const SvxULSpaceItem& GetULSpace(const SfxItemSet& rSet,USHORT nId,BOOL b
 #define PARDID      ((RTFPardAttrMapIds*)aPardMap.GetData())
 #define PLAINID     ((RTFPlainAttrMapIds*)aPlainMap.GetData())
 
+
+enum RTF_CharTypeDef
+{
+    NOTDEF_CHARTYPE,
+    LOW_CHARTYPE,
+    HIGH_CHARTYPE,
+    DOUBLEBYTE_CHARTYPE
+};
+
+
+USHORT SvxRTFParser::GetAttrWhichID( USHORT eType, USHORT nSlotId )
+{
+    const USHORT *pNormal = 0, *pCJK = 0, *pCTL = 0;
+    const RTFPlainAttrMapIds* pIds = (RTFPlainAttrMapIds*)aPlainMap.GetData();
+    switch( nSlotId )
+    {
+    case SID_ATTR_CHAR_FONT:
+        pNormal = &pIds->nFont;
+        pCJK = &pIds->nCJKFont;
+        pCTL = &pIds->nCTLFont;
+        break;
+
+    case SID_ATTR_CHAR_FONTHEIGHT:
+        pNormal = &pIds->nFontHeight;
+        pCJK = &pIds->nCJKFontHeight;
+        pCTL = &pIds->nCTLFontHeight;
+        break;
+
+    case SID_ATTR_CHAR_POSTURE:
+        pNormal = &pIds->nPosture;
+        pCJK = &pIds->nCJKPosture;
+        pCTL = &pIds->nCTLPosture;
+        break;
+
+    case SID_ATTR_CHAR_WEIGHT:
+        pNormal = &pIds->nWeight;
+        pCJK = &pIds->nCJKWeight;
+        pCTL = &pIds->nCTLWeight;
+        break;
+
+    case SID_ATTR_CHAR_LANGUAGE:
+        pNormal = &pIds->nLanguage;
+        pCJK = &pIds->nCJKLanguage;
+        pCTL = &pIds->nCTLLanguage;
+        break;
+
+    default:
+       DBG_ASSERT( FALSE, "wrong call to GetAttrWhichId" );
+       return 0;
+    }
+
+    nSlotId = 0;
+
+    if( DOUBLEBYTE_CHARTYPE == eType )
+    {
+        if( bIsLeftToRightDef )
+            nSlotId = *pCJK;
+    }
+    else if( !bIsLeftToRightDef )
+        nSlotId = *pCTL;
+    else
+        nSlotId = *pNormal;
+    return nSlotId;
+}
+
 // --------------------
 
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
@@ -194,7 +260,10 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     int bFirstToken = TRUE, bWeiter = TRUE;
     USHORT nStyleNo = 0;        // default
     FontUnderline eUnderline;
+    FontEmphasisMark eEmphasis;
     bPardTokenRead = FALSE;
+    RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
+    USHORT nWhichId;
 
     int bChkStkPos = !bNewGroup && aAttrStack.Top();
 
@@ -486,14 +555,14 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
 
 /*  */
-
             case RTF_B:
-                if( PLAINID->nWeight &&
+                if( 0 != ( nWhichId =
+                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_WEIGHT )) &&
                     IsAttrSttPos() )    // nicht im Textfluss ?
                 {
                     pSet->Put( SvxWeightItem(
-                        nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL,
-                        PLAINID->nWeight ));
+                                nTokenValue ? WEIGHT_BOLD : WEIGHT_NORMAL,
+                                nWhichId ));
                 }
                 break;
 
@@ -587,18 +656,22 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 break;
 
             case RTF_F:
-                if( PLAINID->nFont )
+            case RTF_AF:
+                if( 0 != ( nWhichId =
+                            GetAttrWhichID( eCharType, SID_ATTR_CHAR_FONT )) )
                 {
                     const Font& rSVFont = GetFont( USHORT(nTokenValue) );
                     pSet->Put( SvxFontItem( rSVFont.GetFamily(),
                         rSVFont.GetName(), rSVFont.GetStyleName(),
                         rSVFont.GetPitch(), rSVFont.GetCharSet(),
-                        PLAINID->nFont ));
+                        nWhichId ));
                 }
                 break;
 
             case RTF_FS:
-                if( PLAINID->nFontHeight )
+            case RTF_AFS:
+                if( 0 != ( nWhichId =
+                    GetAttrWhichID( eCharType, SID_ATTR_CHAR_FONTHEIGHT )) )
                 {
                     if( -1 == nTokenValue )
                         nTokenValue = 240;
@@ -607,18 +680,19 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     if( IsCalcValue() )
                         CalcValue();
                     SvxFontHeightItem aFH( (const USHORT)nTokenValue, 100,
-                                            PLAINID->nFontHeight );
+                                            nWhichId );
                     pSet->Put( aFH );
                 }
                 break;
 
             case RTF_I:
-                if( PLAINID->nPosture &&
+                if( 0 != ( nWhichId =
+                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_POSTURE )) &&
                     IsAttrSttPos() )        // nicht im Textfluss ?
                 {
                     pSet->Put( SvxPostureItem(
-                        nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
-                        PLAINID->nPosture ));
+                                nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
+                                nWhichId ));
                 }
                 break;
 
@@ -650,11 +724,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 }
                 break;
 
-            case RTF_STRIKEDL:
+            case RTF_STRIKED:
                 if( PLAINID->nCrossedOut )      // nicht im Textfluss ?
                 {
                     pSet->Put( SvxCrossedOutItem(
-                        STRIKEOUT_DOUBLE, PLAINID->nCrossedOut ));
+                        nTokenValue ? STRIKEOUT_DOUBLE : STRIKEOUT_NONE,
+                        PLAINID->nCrossedOut ));
                 }
                 break;
 
@@ -775,6 +850,47 @@ ATTR_SETUNDERLINE:
                 {
                     pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
                                 PLAINID->nLanguage ));
+                }
+                break;
+
+            case RTF_LANGFE:
+                if( PLAINID->nCJKLanguage )
+                {
+                    pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
+                                                PLAINID->nCJKLanguage ));
+                }
+                break;
+            case RTF_ALANG:
+                if( 0 != ( nWhichId =
+                        GetAttrWhichID( eCharType, SID_ATTR_CHAR_LANGUAGE )) )
+                {
+                    pSet->Put( SvxLanguageItem( (LanguageType)nTokenValue,
+                                                    nWhichId ));
+                }
+                break;
+
+            case RTF_RTLCH:     bIsLeftToRightDef = FALSE;          break;
+            case RTF_LTRCH:     bIsLeftToRightDef = TRUE;           break;
+
+            case RTF_LOCH:      eCharType = LOW_CHARTYPE;           break;
+            case RTF_HICH:      eCharType = HIGH_CHARTYPE;          break;
+            case RTF_DBCH:      eCharType = DOUBLEBYTE_CHARTYPE;    break;
+
+
+            case RTF_ACCNONE:
+                eEmphasis = EMPHASISMARK_NONE;
+                goto ATTR_SETEMPHASIS;
+            case RTF_ACCDOT:
+                eEmphasis = EMPHASISMARK_DOTS_ABOVE;
+                goto ATTR_SETEMPHASIS;
+
+            case RTF_ACCCOMMA:
+                eEmphasis = EMPHASISMARK_SIDE_DOTS;
+ATTR_SETEMPHASIS:
+                if( PLAINID->nEmphasis )
+                {
+                    pSet->Put( SvxEmphasisMarkItem( eEmphasis,
+                                                       PLAINID->nEmphasis ));
                 }
                 break;
 
@@ -1532,10 +1648,14 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
     if( !bNewDoc )
         return;
 
+    USHORT nWhichId;
+    BOOL bLefToRight = TRUE;
     switch( nToken )
     {
+    case RTF_ADEFF: bLefToRight = FALSE;  // no break!
     case RTF_DEFF:
-        if( PLAINID->nFont )
+
+        if( 0 != ( nWhichId = GetAttrWhichID( 0, SID_ATTR_CHAR_FONT )))
         {
             if( -1 == nValue )
                 nValue = 0;
@@ -1544,17 +1664,18 @@ void SvxRTFParser::SetDefault( int nToken, short nValue )
                     rSVFont.GetFamily(), rSVFont.GetName(),
                     rSVFont.GetStyleName(), rSVFont.GetPitch(),
                     rSVFont.GetCharSet(),
-                    PLAINID->nFont ));
+                    nWhichId ));
         }
         break;
 
+    case RTF_ADEFLANG:  bLefToRight = FALSE;  // no break!
     case RTF_DEFLANG:
         // default Language merken
-        if( PLAINID->nLanguage &&  -1 != nValue )
+        if( -1 != nValue &&
+            0 != ( nWhichId = GetAttrWhichID( 0, SID_ATTR_CHAR_LANGUAGE )))
         {
             pAttrPool->SetPoolDefaultItem(
-                SvxLanguageItem( (const LanguageType)nValue,
-                    PLAINID->nLanguage ));
+                SvxLanguageItem( (const LanguageType)nValue, nWhichId ));
         }
         break;
 
