@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-11 21:04:03 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 21:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2847,7 +2847,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ spanish ] = "Separaciуn ma~nual" ;
         Text [ english_us ] = "Custom h~yphens" ;
         Text[ chinese_simplified ] = "и‡Єе®љзљ„иїће­—з¬¦(~Y)";
-        Text[ russian ] = "Мягкие переносы";
+        Text[ russian ] = "Переносы пользователя";
         Text[ polish ] = "Indywidualne znaki podziaіu";
         Text[ japanese ] = "пЅїпѕЊпѕ„пѕЉпЅІпѕЊпѕќ(~Y)";
         Text[ chinese_traditional ] = "и‡ЄиЁ‚зљ„йЂЈе­—з¬¦(~Y)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
