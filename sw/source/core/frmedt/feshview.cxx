@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 14:53:25 $
+ *  last change: $Author: os $ $Date: 2002-06-28 09:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2894,7 +2894,7 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 pObj->SetItemSet(aSet);
             }
 
-            String aText(SW_RESSTR(STR_POOLCOLL_LABEL_FRAME));
+            String aText = SW_RESSTR(STR_POOLCOLL_LABEL_FRAME);
             ((SdrCaptionObj*)pObj)->SetText(aText);
             ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
             ((SdrCaptionObj*)pObj)->SetTailPos(
@@ -2905,7 +2905,7 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
             SdrTextObj* pText = (SdrTextObj*)pObj;
             pText->SetLogicRect(aRect);
 
-            String aText(SW_RESSTR(STR_POOLCOLL_LABEL_FRAME));
+            String aText = SW_RESSTR(STR_POOLCOLL_LABEL_FRAME);
             pText->SetText(aText);
 
             sal_Bool bVertical = (SID_DRAW_TEXT_VERTICAL == nSlotId);
