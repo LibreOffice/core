@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-03 13:05:32 $
+ *  last change: $Author: ssa $ $Date: 2002-06-03 16:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,6 +598,7 @@ void Window::ImplInitData( WindowType nType )
     mbExtTextInput      = FALSE;        // TRUE: ExtTextInput-Mode is active
     mbInFocusHdl        = FALSE;        // TRUE: Innerhalb vom GetFocus-Handler
     mbCreatedWithToolkit = FALSE;
+    mbSuppressAccessibilityEvents = FALSE; // TRUE: do not send any accessibility events
 
 #ifdef REMOTE_APPSERVER
     mpRmEvents          = NULL;
@@ -5763,7 +5764,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpBorderWindow->mbNoParentUpdate = bOldUpdate;
         }
         else if ( mbFrame )
+        {
+            mbSuppressAccessibilityEvents = TRUE;
             mpFrame->Show( FALSE );
+        }
 
         StateChanged( STATE_CHANGE_VISIBLE );
 
@@ -5860,6 +5864,9 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mpBorderWindow->Show( TRUE, nFlags );
         else if ( mbFrame )
         {
+            DBG_ASSERT( !mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
+            mbSuppressAccessibilityEvents = FALSE;
+
             mbPaintFrame = TRUE;
             mpFrame->Show( TRUE );
 
@@ -5920,7 +5927,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
     // to avoid creation event to be send twice a NULL handle is passed if this (frame)window was already registered
     ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE,
-        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() ) ? NULL : this );
+        ( bNativeFrameRegistered || !ImplIsAccessibleCandidate() || !bVisible) ? NULL : this );
 }
 
 // -----------------------------------------------------------------------
@@ -6943,12 +6950,16 @@ void Window::SetText( const XubString& rStr )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+    String oldTitle( maText );
     maText = rStr;
 
     if ( mpBorderWindow )
         mpBorderWindow->SetText( rStr );
     else if ( mbFrame )
+    {
         mpFrame->SetTitle( rStr );
+        ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
+    }
 
     StateChanged( STATE_CHANGE_TEXT );
 }
@@ -7592,6 +7603,7 @@ Window* Window::GetAccessibleParentWindow() const
     }
     return pParent;
 }
+
 /*
 USHORT Window::GetAccessibleChildWindowCount()
 {
@@ -7795,7 +7807,11 @@ String Window::GetAccessibleName() const
     }
     else
     {
-        aAccessibleName = GetText();
+        Window *pLabel = GetLabeledBy();
+        if( pLabel )
+            aAccessibleName = pLabel->GetText();
+        else
+            aAccessibleName = GetText();
     }
 
     return aAccessibleName;
@@ -7825,6 +7841,23 @@ String Window::GetAccessibleDescription() const
     return aAccessibleDescription;
 }
 
+BOOL Window::IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath )
+{
+    if( !bTraverseParentPath )
+        return mbSuppressAccessibilityEvents;
+    else
+    {
+        Window *pParent = this;
+        while ( pParent )
+        {
+            if( pParent->mbSuppressAccessibilityEvents )
+                return TRUE;
+            else
+                pParent = pParent->GetParent();
+        }
+        return FALSE;
+    }
+}
 
 // returns background color used in this control
 // false: could not determine color
