@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 05:58:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ String S_POINTER_OUTSIDE_APPWIN
     Text[ italian ] = "Pointer not located in application window at '($Arg1)'";
     Text[ danish ] = "Pointer not located in application window at '($Arg1)'";
     Text[ swedish ] = "Pointer not located in application window at '($Arg1)'";
-    Text[ polish ] = "Pointer poza obszarem okna aplikacji przy '($Arg1)' ";
+    Text[ polish ] = "Pointer poza obszarem okna aplikacji przy '($Arg1)'";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "Pointer not located in application window at '($Arg1)'";
     Text[ korean ] = "'($Arg1)'의 응용프로그램 창에 포인터가 없습니다.";
