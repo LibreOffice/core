@@ -2,9 +2,9 @@
  *
  *  $RCSfile: native_share.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-11 17:08:46 $
+ *  last change: $Author: dbo $ $Date: 2003-05-08 12:41:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #using <mscorlib.dll>
 #using "cli_ure.dll"
-#using "cli_udkapi.dll"
+#using "cli_types.dll"
 
 #include <vcclr.h>
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2003-03-28 10:17:51 $
+#   last change: $Author: dbo $ $Date: 2003-05-08 12:41:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,3 @@ CSCFLAGS += -o
 CSCFLAGS += -debug+ -checked+ -define:DEBUG -define:TRACE
 
 .ENDIF
-
-###### climaker ######
-
-CLIMAKER_FLAGS =
-.IF "$(debug)" != ""
-CLIMAKER_FLAGS += --verbose
-.ENDIF
-

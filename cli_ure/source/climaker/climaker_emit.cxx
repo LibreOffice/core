@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-25 15:14:33 $
+ *  last change: $Author: dbo $ $Date: 2003-05-08 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,8 @@ Assembly * TypeEmitter::type_resolve(
     ::System::Object * sender, ::System::ResolveEventArgs * args )
 {
     ::System::String * cts_name = args->get_Name();
-    ::System::Type * ret_type = m_module_builder->GetType( cts_name, false );
+    ::System::Type * ret_type = m_module_builder->GetType(
+        cts_name, false /* no exc */ );
     if (0 == ret_type)
     {
         iface_entry * entry = dynamic_cast< iface_entry * >(
@@ -191,7 +192,8 @@ Assembly * TypeEmitter::type_resolve(
         sal_Int32 len = m_extra_assemblies->get_Length();
         for ( sal_Int32 pos = 0; pos < len; ++pos )
         {
-            ret_type = m_extra_assemblies[ pos ]->GetType( cts_name, false );
+            ret_type = m_extra_assemblies[ pos ]->GetType(
+                cts_name, false /* no exc */ );
             if (0 != ret_type)
             {
                 if (g_verbose)
@@ -1551,6 +1553,7 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                 xType, UNO_QUERY_THROW ) );
     case TypeClass_SERVICE:
     case TypeClass_MODULE:
+    case TypeClass_SINGLETON:
         // ignore these
         return 0;
     default:

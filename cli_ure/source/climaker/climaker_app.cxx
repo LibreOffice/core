@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:41 $
+ *  last change: $Author: dbo $ $Date: 2003-05-08 12:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include "osl/process.h"
 #include "osl/file.hxx"
+#include "osl/thread.h"
 #include "cppuhelper/shlib.hxx"
 #include "cppuhelper/bootstrap.hxx"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -227,23 +228,29 @@ Reference< registry::XSimpleRegistry > open_registries(
 //------------------------------------------------------------------------------
 static char const s_usingText [] =
 "\n"
-"using: climaker <switches> [registry-file-1 registry-file-2 ...]\n\n"
+"using: climaker <switches> [registry-file-1 registry-file-2 ...]\n"
+"\n"
 "switches:\n"
-" -O <output-file>            output assembly (default is unotypes.dll)\n"
-" -T <type1[;type2;...]>      types to be generated (if none is given,\n"
-"                             then all types\n"
-"                             of given registries are created\n"
-" -X <extra-rdb>              extra rdb to saturate referenced types in given\n"
-"                             registry-file(s)\n"
-"                             these types will not be generated into\n"
-"                             output assembly\n"
-" -r, --reference <assembly>  reference meta-data from assembly\n"
+" -O, --out <output-file>     output assembly file;\n"
+"                             defaults to cli_unotypes.dll if more than one\n"
+"                             registry-file is given, else <registry-file>.dll\n"
+" -T, --types                 types to be generated (if none is given,\n"
+"   <type1[;type2;...]>       then all types of given registries are emitted\n"
+" -X, --extra <rdb-file>      additional rdb to saturate referenced types in\n"
+"                             given registry file(s); these types will not be\n"
+"                             emitted into the output assembly file\n"
+" -r, --reference             reference metadata from assembly file\n"
+"   <assembly-file>\n"
 " --version <version>         sets assembly version\n"
 " --product <name>            sets assembly product name\n"
 " --description <text>        sets assembly description text\n"
 " -v, --verbose               verbose output to stdout\n"
-" -h, --help                  this message\n\n"
-"example: climaker -O my_types.dll -r udkapi.dll -X udkapi.rdb my_types.rdb\n"
+" -h, --help                  this message\n"
+"\n"
+"example: climaker --out cli_mytypes.dll \\\n"
+"                  --reference cli_types.dll \\\n"
+"                  --extra types.rdb \\\n"
+"                  mytypes.rdb\n"
 "\n";
 
 }
@@ -267,11 +274,13 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     {
         OUString str_help = OUSTR("help");
         OUString str_verbose = OUSTR("verbose");
+        OUString str_out = OUSTR("out");
         OUString str_reference = OUSTR("reference");
+        OUString str_types = OUSTR("types");
+        OUString str_extra = OUSTR("extra");
         OUString str_version = OUSTR("version");
         OUString str_product = OUSTR("product");
         OUString str_description = OUSTR("description");
-        OUString str_empty;
 
         OUString output;
         vector< OUString > mandatory_registries;
@@ -293,7 +302,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             {
                 g_verbose = true;
             }
-            else if (read_argument( &cmd_arg, 'T', str_empty, &nPos ))
+            else if (read_argument( &cmd_arg, 'T', str_types, &nPos ))
             {
                 sal_Int32 index = 0;
                 do
@@ -303,7 +312,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                 }
                 while (index >= 0);
             }
-            else if (read_argument( &cmd_arg, 'X', str_empty, &nPos ))
+            else if (read_argument( &cmd_arg, 'X', str_extra, &nPos ))
             {
                 extra_registries.push_back(
                     path_make_absolute_file_url( cmd_arg ) );
@@ -317,7 +326,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
                      !read_argument( &product, '\0', str_product, &nPos ) &&
                      !read_argument(
                          &description, '\0', str_description, &nPos ) &&
-                     !read_argument( &output, 'O', str_empty, &nPos ))
+                     !read_argument( &output, 'O', str_out, &nPos ))
             {
                 OSL_VERIFY(
                     osl_Process_E_None == osl_getCommandArg(
@@ -347,17 +356,26 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             UNO_QUERY_THROW );
 
         // get rdb tdprovider factory
-        Reference< lang::XSingleComponentFactory > xFac(
+        Reference< lang::XSingleComponentFactory > xTDprov_factory(
             ::cppu::loadSharedLibComponentFactory(
+//                 OUSTR("regtypeprov.uno" SAL_DLLEXTENSION), OUString(),
                 OUSTR("rdbtdp"), OUString(),
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
                 Reference< lang::XMultiServiceFactory >(
                     xContext->getServiceManager(), UNO_QUERY ),
-                Reference< registry::XRegistryKey >() ), UNO_QUERY_THROW );
-        // create registry td provider
+                Reference< registry::XRegistryKey >() ), UNO_QUERY );
+        if (! xTDprov_factory.is())
+        {
+            throw RuntimeException(
+                OUSTR("cannot get registry typedescription provider: "
+                      "regtypeprov.uno" SAL_DLLEXTENSION "!"),
+                Reference< XInterface >() );
+        }
+
+        // create registry td provider for mandatory registry files
         Any arg( makeAny( open_registries( mandatory_registries, xContext ) ) );
         Reference< XInterface > xTD_provider(
-            xFac->createInstanceWithArgumentsAndContext(
+            xTDprov_factory->createInstanceWithArgumentsAndContext(
                 Sequence< Any >( &arg, 1 ), xContext ) );
         // insert provider to tdmgr
         Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
@@ -368,7 +386,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         {
             arg = makeAny( open_registries( extra_registries, xContext ) );
             provider = makeAny(
-                xFac->createInstanceWithArgumentsAndContext(
+                xTDprov_factory->createInstanceWithArgumentsAndContext(
                     Sequence< Any >( &arg, 1 ), xContext ) );
             xSet->insert( provider );
             OSL_ASSERT( xSet->has( provider ) );
@@ -387,7 +405,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
             }
             else
             {
-                output = OUSTR("unotypes");
+                output = OUSTR("cli_unotypes");
             }
         }
         output = path_make_absolute_file_url( output );
@@ -517,7 +535,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     catch (Exception & exc)
     {
         OString msg(
-            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OUStringToOString( exc.Message, osl_getThreadTextEncoding() ) );
         fprintf(
             stderr, "\n> error: %s\n> dying abnormally...\n", msg.getStr() );
         ret = 1;
@@ -526,7 +544,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     {
         OString msg( OUStringToOString(
                          String_to_ustring( exc->ToString() ),
-                         RTL_TEXTENCODING_ASCII_US ) );
+                         osl_getThreadTextEncoding() ) );
         fprintf(
             stderr,
             "\n> error: .NET exception occured: %s\n> dying abnormally...",
@@ -543,7 +561,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
     catch (Exception & exc)
     {
         OString msg(
-            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OUStringToOString( exc.Message, osl_getThreadTextEncoding() ) );
         fprintf(
             stderr,
             "\n> error disposing component context: %s\n"

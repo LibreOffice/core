@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2003-04-25 14:04:53 $
+#   last change: $Author: dbo $ $Date: 2003-05-08 12:41:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,10 +74,8 @@ TARGET = cli_ure
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-CLI_URE = $(OUT)$/bin$/cli_ure.dll
-
 ALLTAR : \
-    $(CLI_URE)
+    $(OUT)$/bin$/cli_ure.dll
 
 CSFILES = \
     uno$/QueryInterface.cs						\
@@ -89,13 +87,14 @@ CSFILES = \
     uno$/util$/WeakBase.cs						\
     uno$/util$/WeakComponentBase.cs					\
     uno$/util$/ServiceBase.cs					\
-    uno$/util$/ServiceFactory.cs
+    uno$/util$/ServiceFactory.cs					\
+    uno$/util$/DeployedTypeResolver.cs
 
-$(CLI_URE) : $(CLI_UDKAPI) $(CSFILES)
-    +csc.exe $(CSCFLAGS) \
+$(OUT)$/bin$/cli_ure.dll : $(CSFILES) $(OUT)$/bin$/cli_types.dll
+    +csc $(CSCFLAGS) \
         -target:library \
         -out:$@ \
-        -reference:$(CLI_UDKAPI) \
+        -reference:$(OUT)$/bin$/cli_types.dll \
         -reference:System.dll \
         $(CSFILES) 
 

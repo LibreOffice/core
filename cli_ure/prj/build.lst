@@ -1,4 +1,4 @@
-ure	cli_ure	:	cppuhelper cppu sal codemaker offapi udkapi NULL
+ure	cli_ure	:	cppuhelper cppu sal codemaker offapi NULL
 ure	cli_ure						usr1	-	all	tt_mkout NULL
 ure	cli_ure\source\climaker				nmake	-	all	ure_source_climaker NULL
 ure	cli_ure\unotypes				nmake	-	all	ure_unotypes ure_source_climaker NULL

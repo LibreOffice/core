@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dbo $ $Date: 2003-04-25 15:14:34 $
+#   last change: $Author: dbo $ $Date: 2003-05-08 12:41:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,27 +69,25 @@ PRJNAME = cli_ure
 # for dummy
 TARGET = cli_ure
 
+CLIMAKERFLAGS =
+.IF "$(debug)" != ""
+CLIMAKERFLAGS += --verbose
+.ENDIF
+
 .INCLUDE : settings.mk
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
 ALLTAR : \
-    $(CLI_OFFAPI)
+    $(OUT)$/bin$/cli_types.dll
 
-$(CLI_UDKAPI) : $(SOLARBINDIR)$/udkapi.rdb $(CLIMAKER)
-    +$(CLIMAKER) -O $@ $(CLIMAKER_FLAGS) \
-    --version "3.1.0.0" \
-    --product "OpenOffice.org SDK" \
-    --description "This assembly contains UNO-API metadata of the OpenOffice.org Software Development Kit (SDK)." \
-    $(SOLARBINDIR)$/udkapi.rdb
-
-$(CLI_OFFAPI) : $(CLI_UDKAPI) $(SOLARBINDIR)$/offapi.rdb $(CLIMAKER)
-    +$(CLIMAKER) -O $@ $(CLIMAKER_FLAGS) \
-    --version "1.0.0.0" \
-    --product "OpenOffice.org SDK" \
-    --description "This assembly contains API metadata of the OpenOffice.org Software Development Kit (SDK)." \
-    --reference $(CLI_UDKAPI) \
-    -X $(SOLARBINDIR)$/udkapi.rdb $(SOLARBINDIR)$/offapi.rdb
+$(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
+    +$(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \
+        --out $@ \
+        --version "1.0.0.0" \
+        --product "OpenOffice.org SDK" \
+        --description "This assembly contains API metadata of the OpenOffice.org Software Development Kit (SDK)." \
+        $(SOLARBINDIR)$/types_doc.rdb
 
 .ENDIF

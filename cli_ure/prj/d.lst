@@ -1,4 +1,5 @@
 ..\%__SRC%\bin\climaker.exe %_DEST%\bin%_EXT%\climaker.exe
 ..\%__SRC%\bin\climaker.pdb %_DEST%\bin%_EXT%\climaker.pdb
 
-..\%__SRC%\bin\cli_* %_DEST%\bin%_EXT%\cli_*
+..\%__SRC%\bin\cli_*.dll %_DEST%\bin%_EXT%\cli_*.dll
+..\%__SRC%\bin\cli_*.pdb %_DEST%\bin%_EXT%\cli_*.pdb
