@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.27 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-14 19:32:45 $
+ *  $Revision: 1.28 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-14 22:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,17 +257,25 @@ static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 
 // =======================================================================
 
-static OSErr ClipRegionBegin ( SalGraphicsDataPtr rSalGraphicsData )
+static OSErr BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
 {
     if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
          && ( rSalGraphicsData->mhClipRgn != NULL )
        )
     {
-        Rect aPortRect;
+        Rect aClipRect;
 
-        GetPortBounds( rSalGraphicsData->mpCGrafPort, &aPortRect);
+        // Get the port bounds from our current region handle
 
-        ClipRect( &aPortRect );
+        GetRegionBounds( rSalGraphicsData->mhClipRgn, &aClipRect );
+
+        // Erase the clip rectangle that we got from our current region
+
+        EraseRect( &aClipRect );
+
+        // Clip to a rectangle that we got from our current region
+
+        ClipRect( &aClipRect );
 
         // Was there an error after clipping to a rectangle?
 
@@ -275,14 +283,16 @@ static OSErr ClipRegionBegin ( SalGraphicsDataPtr rSalGraphicsData )
     } // if
 
     return rSalGraphicsData->mnMacOSErr;
-} // ClipRegionBegin
+} // BeginClip
 
 // -----------------------------------------------------------------------
 
-static OSErr ClipRegionEnd ( SalGraphicsDataPtr rSalGraphicsData )
+static OSErr EndClip ( SalGraphicsDataPtr rSalGraphicsData )
 {
     if ( rSalGraphicsData->mhClipRgn != NULL )
     {
+        // Set the clip region
+
         SetClip( rSalGraphicsData->mhClipRgn );
 
         // Was there an error after setting the clipping region?
@@ -295,7 +305,7 @@ static OSErr ClipRegionEnd ( SalGraphicsDataPtr rSalGraphicsData )
     } // if
 
     return rSalGraphicsData->mnMacOSErr;
-} // ClipRegionEnd
+} // EndClip
 
 // =======================================================================
 
@@ -353,6 +363,26 @@ static OSErr CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
     return rSalGraphicsData->mnMacOSErr;
 } // CloseQDPort
+
+// =======================================================================
+
+// =======================================================================
+
+static short SelectCopyMode ( const SalGraphicsDataPtr pSalGraphicsData )
+{
+    short nCopyMode = 0;
+
+    if ( pSalGraphicsData->mnPenMode == patCopy )
+    {
+        nCopyMode = srcCopy;
+    } // if
+    else
+    {
+        nCopyMode = srcXor;
+    } // else
+
+    return nCopyMode;
+} // SelectCopyMode
 
 // =======================================================================
 
@@ -745,7 +775,7 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
     if ( aQDErr == noErr )
     {
-        aQDErr = ClipRegionBegin( &maGraphicsData );
+        aQDErr = BeginClip( &maGraphicsData );
 
         if ( aQDErr == noErr )
         {
@@ -753,7 +783,7 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
             SetCPixel( nX, nY, &aPixelRGBColor );
 
-            ClipRegionEnd( &maGraphicsData );
+            EndClip( &maGraphicsData );
         } // if
 
         CloseQDPort( &maGraphicsData );
@@ -770,7 +800,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
     if ( aQDErr == noErr )
     {
-        aQDErr = ClipRegionBegin( &maGraphicsData );
+        aQDErr = BeginClip( &maGraphicsData );
 
         if ( aQDErr == noErr )
         {
@@ -780,7 +810,7 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
             SetCPixel( nX, nY, &aPixelRGBColor );
 
-            ClipRegionEnd( &maGraphicsData );
+            EndClip( &maGraphicsData );
         } // if
 
         CloseQDPort( &maGraphicsData );
@@ -797,7 +827,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
     if ( aQDErr == noErr )
     {
-        aQDErr = ClipRegionBegin( &maGraphicsData );
+        aQDErr = BeginClip( &maGraphicsData );
 
         if ( aQDErr == noErr )
         {
@@ -830,7 +860,7 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
             SetPortPenMode( pCGraf, nPortPenMode );
 
-            ClipRegionEnd( &maGraphicsData );
+            EndClip( &maGraphicsData );
         } // if
 
         CloseQDPort( &maGraphicsData );
@@ -847,7 +877,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 
     if ( aQDErr == noErr )
     {
-        aQDErr = ClipRegionBegin( &maGraphicsData );
+        aQDErr = BeginClip( &maGraphicsData );
 
         if ( aQDErr == noErr )
         {
@@ -890,7 +920,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
                 PaintRect( &aRect );
             } // else
 
-            ClipRegionEnd( &maGraphicsData );
+            EndClip( &maGraphicsData );
         } // if
 
         CloseQDPort( &maGraphicsData );
@@ -909,7 +939,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
         if ( aQDErr == noErr )
         {
-            aQDErr = ClipRegionBegin( &maGraphicsData );
+            aQDErr = BeginClip( &maGraphicsData );
 
             if ( aQDErr == noErr )
             {
@@ -960,7 +990,7 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
                 SetPortPenMode( pCGraf, nPortPenMode );
 
-                ClipRegionEnd( &maGraphicsData );
+                EndClip( &maGraphicsData );
             } // if
 
             CloseQDPort( &maGraphicsData );
@@ -980,7 +1010,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
         if ( aQDErr == noErr )
         {
-            aQDErr = ClipRegionBegin( &maGraphicsData );
+            aQDErr = BeginClip( &maGraphicsData );
 
             if ( aQDErr == noErr )
             {
@@ -1032,7 +1062,7 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
                 SetPortPenMode( pCGraf, nPortPenMode );
 
-                ClipRegionEnd( &maGraphicsData );
+                EndClip( &maGraphicsData );
             } // if
 
             CloseQDPort( &maGraphicsData );
@@ -1060,7 +1090,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
 
         if ( aQDErr == noErr )
         {
-            aQDErr = ClipRegionBegin( &maGraphicsData );
+            aQDErr = BeginClip( &maGraphicsData );
 
             if ( aQDErr == noErr )
             {
@@ -1096,14 +1126,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
 
                         CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
 
-                        if ( maGraphicsData.mnPenMode == patCopy )
-                        {
-                            nCopyMode = srcCopy;
-                        } // if
-                        else
-                        {
-                            nCopyMode = srcXor;
-                        } // else
+                        nCopyMode = SelectCopyMode( &maGraphicsData );
 
                         // Now we can call QD CopyBits to copy the bits from source rectangle
                         // to the destination rectangle
@@ -1142,7 +1165,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
                     } // if
                 } // if
 
-                ClipRegionEnd( &maGraphicsData );
+                EndClip( &maGraphicsData );
             } // if
 
             CloseQDPort( &maGraphicsData );
