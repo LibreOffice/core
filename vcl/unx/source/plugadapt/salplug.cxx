@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-02 14:55:50 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,10 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                      pInst );
 #endif
             if( pInst )
+            {
                 pCloseModule = aMod;
+                GetSalData()->m_pPlugin = aMod;
+            }
             else
                 osl_unloadModule( aMod );
         }
