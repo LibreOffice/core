@@ -1,0 +1,274 @@
+/*************************************************************************
+ *
+ *  $RCSfile: adtabdlg.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:15:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+
+#ifndef DBAUI_ADTABDLG_HRC
+#include "adtabdlg.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+
+ModelessDialog DLG_JOIN_TABADD
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = DLG_JOIN_TABADD ;
+    Size = MAP_APPFONT ( 178 , 155 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Tabellen hinzufügen : Tabellen hinzuf³gen */
+    Text = "Tabellen hinzufügen" ;
+    Text [ ENGLISH ] = "Add tables" ;
+    Text [ NORWEGIAN ] = "Add tables" ;
+    Text [ DANISH ] = "Tilføj tabeller" ;
+    Text [ ENGLISH_US ] = "Add Tables" ;
+    Text [ SPANISH ] = "Añadir tablas" ;
+    Text [ FINNISH ] = "Lisõõ taulukot" ;
+    Text [ FRENCH ] = "Ajouter des tables" ;
+    Text [ ITALIAN ] = "Aggiungi tabelle" ;
+    Text [ DUTCH ] = "Tabellen toevoegen" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Acrescentar tabelas" ;
+    Text [ SWEDISH ] = "Lägg till tabeller" ;
+    Text [ PORTUGUESE ] = "Adicionar tabelas" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+
+    FixedText FT_TABLE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "~Tabellenname" ;
+        Text [ ENGLISH ] = "~Table name" ;
+        Text [ NORWEGIAN ] = "~Table name" ;
+        Text [ DANISH ] = "Tabelnavn" ;
+        Text [ ENGLISH_US ] = "~Table name" ;
+        Text [ SPANISH ] = "~Nombre de la tabla" ;
+        Text [ FINNISH ] = "~Taulukon nimi" ;
+        Text [ FRENCH ] = "~Nom de la table" ;
+        Text [ ITALIAN ] = "Nome ~tabella" ;
+        Text [ DUTCH ] = "~Tabelnaam" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Nome da tabela" ;
+        Text [ SWEDISH ] = "~Tabellnamn" ;
+        Text [ PORTUGUESE ] = "~Nome da tabela" ;
+        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
+        Text[ russian ] = "Èìÿ òàáëèöû";
+        Text[ polish ] = "Nazwa tabeli";
+        Text[ japanese ] = "Ã°ÌÞÙ–¼(~T)";
+        Text[ chinese_traditional ] = "ªí®æ¦WºÙ(~T)";
+        Text[ arabic ] = "ÇÓã ÇáÌÏæá";
+        Text[ dutch ] = "~Tabelnaam";
+        Text[ chinese_simplified ] = "±í¸ñÃû³Æ(~T)";
+        Text[ greek ] = "¼íïìá ðßíáêá";
+        Text[ korean ] = "Å×ÀÌºí ÀÌ¸§(~T)";
+        Text[ turkish ] = "Tablo adý";
+        Text[ language_user1 ] = " ";
+    };
+    Control LB_TABLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 100 , 115 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_ADDTABLE
+    {
+        Pos = MAP_APPFONT ( 123 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
+        Text = "Hinzu~fügen" ;
+        Text [ ENGLISH ] = "Add" ;
+        Text [ NORWEGIAN ] = "Add" ;
+        Text [ DANISH ] = "Tilføj" ;
+        Text [ ENGLISH_US ] = "~Add" ;
+        Text [ SPANISH ] = "~Añadir" ;
+        Text [ FINNISH ] = "Lisõõ" ;
+        Text [ FRENCH ] = "~Ajouter" ;
+        Text [ ITALIAN ] = "~Aggiungi" ;
+        Text [ DUTCH ] = "Toe~voegen" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Acrescentar" ;
+        Text [ SWEDISH ] = "~Lägg till" ;
+        Text [ PORTUGUESE ] = "Adicionar" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "ÐÂÔö(~A)";
+        Text[ russian ] = "Äîáàâèòü";
+        Text[ polish ] = "Dodaj";
+        Text[ japanese ] = "’Ç‰Á(~A)";
+        Text[ chinese_traditional ] = "¼W¥[(~A)";
+        Text[ arabic ] = "ÅÖÇÝÉ";
+        Text[ dutch ] = "Toe~voegen";
+        Text[ chinese_simplified ] = "ÐÂÔö(~A)";
+        Text[ greek ] = "~ÐñïóèÞêç";
+        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ turkish ] = "Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    CancelButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 123 , 22 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        HelpId = HID_JOINSH_ADDTAB_CLOSE;
+        /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+        Text = "S~chließen" ;
+        Text [ ENGLISH ] = "Close" ;
+        Text [ norwegian ] = "Lukk" ;
+        Text [ italian ] = "Chiudi" ;
+        Text [ portuguese_brazilian ] = "Fechar" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ finnish ] = "Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "F~ermer" ;
+        Text [ swedish ] = "~Stäng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "~Çàêðûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇÞ";
+        Text[ dutch ] = "~Sluiten";
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´Ý±â(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 123 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_TABLE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 111 , 146 ) ;
+        Text = "Tabelle" ;
+        Text [ ENGLISH ] = "Table" ;
+        Text [ NORWEGIAN ] = "Table" ;
+        Text [ DANISH ] = "Tabel" ;
+        Text [ ENGLISH_US ] = "Table" ;
+        Text [ SPANISH ] = "Tabla" ;
+        Text [ FINNISH ] = "Taulukko" ;
+        Text [ FRENCH ] = "Table" ;
+        Text [ ITALIAN ] = "Tabella" ;
+        Text [ DUTCH ] = "Tabel" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Tabela" ;
+        Text [ SWEDISH ] = "Tabell" ;
+        Text [ PORTUGUESE ] = "Tabela" ;
+        Text[ chinese_simplified ] = "±í¸ñ";
+        Text[ russian ] = "Òàáëèöà";
+        Text[ polish ] = "Tabela";
+        Text[ japanese ] = "Ã°ÌÞÙ";
+        Text[ chinese_traditional ] = "ªí®æ";
+        Text[ arabic ] = "ÇáÌÏæá";
+        Text[ dutch ] = "Tabel";
+        Text[ chinese_simplified ] = "±í¸ñ";
+        Text[ greek ] = "Ðßíáêáò";
+        Text[ korean ] = "Å×ÀÌºí";
+        Text[ turkish ] = "Tablo";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_DEFAULT
+    {
+        Text = "<Standard>" ;
+        Text [ ENGLISH ] = "<default>" ;
+        Text [ NORWEGIAN ] = "<default>" ;
+        Text [ DANISH ] = "<standard>" ;
+        Text [ ENGLISH_US ] = "<default>" ;
+        Text [ SPANISH ] = "<predeterminado>" ;
+        Text [ FINNISH ] = "<oletus>" ;
+        Text [ FRENCH ] = "<Par défaut>" ;
+        Text [ ITALIAN ] = "<default>" ;
+        Text [ DUTCH ] = "<Standaard>" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "<padrÒo>" ;
+        Text [ SWEDISH ] = "<standard>" ;
+        Text [ PORTUGUESE ] = "<padrão>" ;
+        Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
+        Text[ russian ] = "<ñòàíäàðò>";
+        Text[ polish ] = "<Domyœlnie>";
+        Text[ japanese ] = "<•W€>";
+        Text[ chinese_traditional ] = "<Àq»{>";
+        Text[ arabic ] = "<ÇÝÊÑÇÖí>";
+        Text[ dutch ] = "<Standaard>";
+        Text[ chinese_simplified ] = "<Ä¬ÈÏ>";
+        Text[ greek ] = "<ÐñïåðéëïãÞ>";
+        Text[ korean ] = "<±âº»>";
+        Text[ turkish ] = "<Standart>";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "ÐÂÔö±í¸ñ";
+    Text[ russian ] = "Äîáàâèòü òàáëèöû";
+    Text[ polish ] = "Dodaj tabelê";
+    Text[ japanese ] = "Ã°ÌÞÙ‚Ì’Ç‰Á";
+    Text[ chinese_traditional ] = "¼W¥[ªí®æ";
+    Text[ arabic ] = "ÅÖÇÝÉ ÌÏÇæá";
+    Text[ dutch ] = "Tabellen toevoegen";
+    Text[ chinese_simplified ] = "ÐÂÔö±í¸ñ";
+    Text[ greek ] = "ÐñïóèÞêç ðßíáêá";
+    Text[ korean ] = "Å×ÀÌºí Ãß°¡";
+    Text[ turkish ] = "Tablo ekle";
+    Text[ language_user1 ] = " ";
+};
