@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-04 16:17:54 $
+ *  last change: $Author: sj $ $Date: 2002-09-16 09:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ static sal_Bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv
 
         if ( rTree.GetChar( 0 ) == (sal_Unicode)'/' )
             i++;
-        if ( rTree.GetChar( rTree.Len() - 1 ) == (sal_Unicode)'/' );
+        if ( rTree.GetChar( rTree.Len() - 1 ) == (sal_Unicode)'/' )
             nTokenCount--;
 
         Any aAny;
@@ -352,6 +352,10 @@ sal_Bool FilterConfigItem::ReadBool( const OUString& rKey, sal_Bool bDefault )
     {
         aAny >>= bRetValue;
     }
+    PropertyValue aBool;
+    aBool.Name = rKey;
+    aBool.Value <<= bRetValue;
+    WritePropertyValue( aFilterData, aBool );
     return bRetValue;
 }
 
@@ -368,6 +372,10 @@ sal_Int32 FilterConfigItem::ReadInt32( const OUString& rKey, sal_Int32 nDefault 
     {
         aAny >>= nRetValue;
     }
+    PropertyValue aInt32;
+    aInt32.Name = rKey;
+    aInt32.Value <<= nRetValue;
+    WritePropertyValue( aFilterData, aInt32 );
     return nRetValue;
 }
 
@@ -405,6 +413,14 @@ Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
     {
         DBG_ERROR( "FilterConfigItem::ReadSize - could not read PropertyValue" );
     }
+    PropertyValue aWidth;
+    aWidth.Name = sWidth;
+    aWidth.Value <<= aRetValue.Width;
+    WritePropertyValue( aFilterData, aWidth );
+    PropertyValue aHeight;
+    aHeight.Name = sHeight;
+    aHeight.Value <<= aRetValue.Height;
+    WritePropertyValue( aFilterData, aHeight );
     return aRetValue;
 }
 
@@ -421,6 +437,10 @@ OUString FilterConfigItem::ReadString( const OUString& rKey, const OUString& rDe
     {
         aAny >>= aRetValue;
     }
+    PropertyValue aString;
+    aString.Name = rKey;
+    aString.Value <<= aRetValue;
+    WritePropertyValue( aFilterData, aString );
     return aRetValue;
 }
 
