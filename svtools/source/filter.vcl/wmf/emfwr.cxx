@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-12 13:29:08 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 14:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,8 +390,9 @@ void EMFWriter::ImplCheckTextAttr()
     {
         const Font&     rFont = maVDev.GetFont();
         String          aFontName( rFont.GetName() );
-        INT32           i, nWeight;
-        BYTE            nPitchAndFamily;
+        sal_Int32       nWeight;
+        sal_uInt16      i;
+        sal_uInt8       nPitchAndFamily;
 
         ImplBeginRecord( WIN_EMR_EXTCREATEFONTINDIRECTW );
         (*mpStm) << mnTextHandle;
@@ -564,19 +565,24 @@ void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose )
 {
     if( rPoly.GetSize() )
     {
-        if( bClose )
-            ImplCheckFillAttr();
+        if( rPoly.HasFlags() )
+            ImplWritePath( rPoly, bClose );
+        else
+        {
+            if( bClose )
+                ImplCheckFillAttr();
 
-        ImplCheckLineAttr();
+            ImplCheckLineAttr();
 
-        ImplBeginRecord( bClose ? WIN_EMR_POLYGON : WIN_EMR_POLYLINE );
-        ImplWriteRect( rPoly.GetBoundRect() );
-        (*mpStm) << (UINT32) rPoly.GetSize();
+            ImplBeginRecord( bClose ? WIN_EMR_POLYGON : WIN_EMR_POLYLINE );
+            ImplWriteRect( rPoly.GetBoundRect() );
+            (*mpStm) << (UINT32) rPoly.GetSize();
 
-        for( USHORT i = 0; i < rPoly.GetSize(); i++ )
-            ImplWritePoint( rPoly[ i ] );
+            for( USHORT i = 0; i < rPoly.GetSize(); i++ )
+                ImplWritePoint( rPoly[ i ] );
 
-        ImplEndRecord();
+            ImplEndRecord();
+        }
     }
 }
 
@@ -584,7 +590,7 @@ void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose )
 
 void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
 {
-    const UINT32 nPolyCount = rPolyPoly.Count();
+    sal_uInt16 n, i, nPolyCount = rPolyPoly.Count();
 
     if( nPolyCount )
     {
@@ -592,35 +598,117 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
             ImplWritePolygonRecord( rPolyPoly[ 0 ], TRUE );
         else
         {
-            UINT32 nTotalPoints = 0, i;
+            sal_Bool    bHasFlags = sal_False;
+            sal_uInt32  nTotalPoints = 0;
 
             for( i = 0; i < nPolyCount; i++ )
+            {
                 nTotalPoints += rPolyPoly[ i ].GetSize();
-
+                if ( rPolyPoly[ i ].HasFlags() )
+                    bHasFlags = sal_True;
+            }
             if( nTotalPoints )
             {
-                ImplCheckFillAttr();
-                ImplCheckLineAttr();
-
-                ImplBeginRecord( WIN_EMR_POLYPOLYGON );
-                ImplWriteRect( rPolyPoly.GetBoundRect() );
-                (*mpStm) << nPolyCount << nTotalPoints;
-
-                for( i = 0; i < nPolyCount; i++ )
-                    (*mpStm) << (UINT32) rPolyPoly[ i ].GetSize();
-
-                for( i = 0; i < nPolyCount; i++ )
+                if ( bHasFlags )
+                    ImplWritePath( rPolyPoly, sal_True );
+                else
                 {
-                    const Polygon& rPoly = rPolyPoly[ i ];
+                    ImplCheckFillAttr();
+                    ImplCheckLineAttr();
 
-                    for( USHORT n = 0; n < rPoly.GetSize(); n++ )
-                        ImplWritePoint( rPoly[ n ] );
+                    ImplBeginRecord( WIN_EMR_POLYPOLYGON );
+                    ImplWriteRect( rPolyPoly.GetBoundRect() );
+                    (*mpStm) << (sal_uInt32)nPolyCount << nTotalPoints;
+
+                    for( i = 0; i < nPolyCount; i++ )
+                        (*mpStm) << (sal_uInt32)rPolyPoly[ i ].GetSize();
+
+                    for( i = 0; i < nPolyCount; i++ )
+                    {
+                        const Polygon& rPoly = rPolyPoly[ i ];
+
+                        for( n = 0; n < rPoly.GetSize(); n++ )
+                            ImplWritePoint( rPoly[ n ] );
+                    }
+                    ImplEndRecord();
                 }
+            }
+        }
+    }
+}
 
+// -----------------------------------------------------------------------------
+
+void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
+{
+    if ( bClosed )
+        ImplCheckFillAttr();
+    ImplCheckLineAttr();
+
+    ImplBeginRecord( WIN_EMR_BEGINPATH );
+    ImplEndRecord();
+
+    sal_uInt16 i, n, o, nPolyCount = rPolyPoly.Count();
+    for ( i = 0; i < nPolyCount; i++ )
+    {
+        n = 0;
+        const Polygon& rPoly = rPolyPoly[ i ];
+        while ( n < rPoly.GetSize() )
+        {
+            sal_uInt16 nBezPoints = 0;
+            if ( n )
+            {
+                while ( ( ( nBezPoints + n + 2 ) < rPoly.GetSize() ) && ( rPoly.GetFlags( nBezPoints + n ) == POLY_CONTROL ) )
+                    nBezPoints += 3;
+            }
+            if ( nBezPoints )
+            {
+                ImplBeginRecord( WIN_EMR_POLYBEZIERTO );
+                Polygon aNewPoly( nBezPoints + 1 );
+                aNewPoly[ 0 ] = rPoly[ n - 1 ];
+                for ( o = 0; o < nBezPoints; o++ )
+                    aNewPoly[ o + 1 ] = rPoly[ n + o ];
+                ImplWriteRect( aNewPoly.GetBoundRect() );
+                (*mpStm) << (sal_uInt32)nBezPoints;
+                for( o = 1; o < aNewPoly.GetSize(); o++ )
+                    ImplWritePoint( aNewPoly[ o ] );
+                ImplEndRecord();
+                n += nBezPoints;
+            }
+            else
+            {
+                sal_uInt16 nPoints = 1;
+                while( ( nPoints + n ) < rPoly.GetSize() && ( rPoly.GetFlags( nPoints + n ) != POLY_CONTROL ) )
+                    nPoints++;
+                ImplBeginRecord( WIN_EMR_MOVETOEX );
+                ImplWritePoint( rPoly[ n ] );
+                ImplEndRecord();
+                if ( nPoints > 1 )
+                {
+                    ImplBeginRecord( WIN_EMR_POLYLINETO );
+                    Polygon aNewPoly( nPoints );
+                    aNewPoly[ 0 ] = rPoly[ n ];
+                    for ( o = 1; o < nPoints; o++ )
+                        aNewPoly[ o ] = rPoly[ n + o ];
+                    ImplWriteRect( aNewPoly.GetBoundRect() );
+                    (*mpStm) << (sal_uInt32)( nPoints - 1 );
+                    for( o = 1; o < aNewPoly.GetSize(); o++ )
+                        ImplWritePoint( aNewPoly[ o ] );
+                    ImplEndRecord();
+                }
+                n += nPoints;
+            }
+            if ( bClosed && ( n == rPoly.GetSize() ) )
+            {
+                ImplBeginRecord( WIN_EMR_CLOSEFIGURE );
                 ImplEndRecord();
             }
         }
     }
+    ImplBeginRecord( WIN_EMR_ENDPATH );
+    ImplEndRecord();
+    ImplBeginRecord( bClosed ? WIN_EMR_FILLPATH : WIN_EMR_STROKEPATH );
+    ImplEndRecord();
 }
 
 // -----------------------------------------------------------------------------

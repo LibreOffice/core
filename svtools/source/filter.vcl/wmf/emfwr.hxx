@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:00 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 14:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ private:
     void                ImplWritePoint( const Point& rPoint );
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const Rectangle& rRect );
+    void                ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClose );
     void                ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose );
     void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
     void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
