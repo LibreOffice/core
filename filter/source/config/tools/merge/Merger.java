@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Merger.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 10:47:18 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.filter.config.tools.merge;
 
 //_______________________________________________
@@ -206,7 +205,7 @@ public class Merger
     public synchronized void merge()
         throws java.lang.Exception
     {
-        java.lang.StringBuffer sBuffer  = new java.lang.StringBuffer(100000);
+        java.lang.StringBuffer sBuffer  = new java.lang.StringBuffer(1000000);
         java.lang.String       sPackage = m_aCfg.getString(PROP_PKG);
 
         m_aLog.setGlobalInfo("create package \""+sPackage+"\" ...");
@@ -273,14 +272,15 @@ public class Merger
 
                 nItemCount += lFragments.size();
 
-                sBuffer.append(
-                    getFragments(
-                        new java.io.File(m_aFragmentsDir, sSubDir),
-                        sSetName,
-                        lFragments,
-                        1));
+                getFragments(
+                    new java.io.File(m_aFragmentsDir, sSubDir),
+                    sSetName,
+                    lFragments,
+                    1,
+                    sBuffer);
             }
-            catch(java.util.NoSuchElementException exIgnore) { continue; }
+            catch(java.util.NoSuchElementException exIgnore)
+                { continue; }
         }
 
         m_aLog.setDetailedInfo("generate package footer ... ");
@@ -298,42 +298,23 @@ public class Merger
 
         java.io.File aPackage = new File(sPackage);
         m_aLog.setGlobalInfo("write temp package \""+aPackage.getPath()); // TODO encoding must be readed from the configuration
-        FileHelper.writeTextToFile(aPackage, false, "UTF-8", sBuffer.toString()); // check for success is done inside this method!
-
-/*
-        java.lang.String sExtPkg      = m_aCfg.getString(PROP_EXTENSION_XCU);
-        java.io.File     aTempPackage = FileHelper.createUniqueFile(m_aTempDir, sPackage, sExtPkg);
-        java.io.File     aPackage     = new java.io.File(m_aOutDir, sPackage+"."+sExtPkg);
-
-        // TODO encoding must came from configuration ...
-        m_aLog.setGlobalInfo("write temp package \""+aTempPackage.getPath());
-        FileHelper.writeTextToFile(aTempPackage, false, "UTF-8", sBuffer.toString());
-
-        // TODO copy aTempPackage => aPackage
-        m_aLog.setGlobalInfo("copy temp package \""+aTempPackage.getPath()+"\" => \""+aPackage.getPath()+"\"");
-        boolean bExists = aPackage.exists();
-        if (bExists)
-            bExists = !aPackage.delete();
-        if (bExists)
-            throw new java.io.IOException("Old package \""+aPackage.getPath()+"\" couldn't be removed.");
-        FileHelper.atomicFileCopy(aTempPackage, aPackage);
-*/
+        FileHelper.writeEncodedBufferToFile(aPackage, "UTF-8", false, sBuffer); // check for success is done inside this method!
     }
 
     //-------------------------------------------
     /** TODO */
-    private java.lang.String getFragments(java.io.File     aDir       ,
-                                          java.lang.String sSetName   ,
-                                          java.util.Vector lFragments ,
-                                          int              nPrettyTabs)
+    private void getFragments(java.io.File           aDir       ,
+                              java.lang.String       sSetName   ,
+                              java.util.Vector       lFragments ,
+                              int                    nPrettyTabs,
+                              java.lang.StringBuffer sBuffer    )
         throws java.lang.Exception
     {
-        java.lang.StringBuffer sBuffer    = new java.lang.StringBuffer(10000);
         java.util.Enumeration  pFragments = lFragments.elements();
         java.lang.String       sExtXcu    = m_aCfg.getString(PROP_EXTENSION_XCU);
 
         if (lFragments.size()<1)
-            return new java.lang.String();
+            return;
 
         for (int tabs=0; tabs<nPrettyTabs; ++tabs)
             sBuffer.append("\t");
@@ -360,22 +341,14 @@ public class Merger
             // used reader objects. Let it break this method too. Our calli is interested
             // on such errors :-)
             m_aLog.setDetailedInfo("merge fragment \""+aFragment.getPath()+"\" ...");
-            java.io.BufferedReader aRBuffer = new java.io.BufferedReader(new java.io.FileReader(aFragment));
-            java.lang.String       sLine    = null;
-            while((sLine=aRBuffer.readLine())!=null)
-            {
-                for (int tabs=0; tabs<nPrettyTabs; ++tabs)
-                    sBuffer.append("\t");
-                sBuffer.append(sLine+"\n");
-            }
-            aRBuffer.close();
+            FileHelper.readEncodedBufferFromFile(aFragment, "UTF-8", sBuffer);
+
+            sBuffer.append("\n");
         }
 
         --nPrettyTabs;
         for (int tabs=0; tabs<nPrettyTabs; ++tabs)
             sBuffer.append("\t");
         sBuffer.append("</node>\n");
-
-        return sBuffer.toString();
     }
 }
