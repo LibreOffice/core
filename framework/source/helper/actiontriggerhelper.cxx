@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actiontriggerhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 07:45:19 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 07:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #endif
 
 
-const USHORT START_ITEMID = 20000;
+const USHORT START_ITEMID = 1000;
 
 using namespace rtl;
 using namespace vos;
