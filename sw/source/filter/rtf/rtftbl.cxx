@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2001-03-01 17:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,8 @@ void SwRTFParser::ReadTable( int nToken )
 
 
     SwHoriOrient eAdjust = HORI_LEFT;       // default fuer Tabellen
-    USHORT nLSpace = 0, nBrdDist = MIN_BORDER_DIST;
+    SwTwips nLSpace = 0;
+    USHORT nBrdDist = MIN_BORDER_DIST;
     SwVertOrient eVerOrient = VERT_NONE;
     long nLineHeight = 0;
     USHORT nBoxCnt = aMergeBoxes.Count()-1;
@@ -272,12 +273,9 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_CLVERTALB:     eVerOrient = VERT_BOTTOM;   break;
 
         case RTF_TRLEFT:
-            if( 0 <= nTokenValue )
-            {
-                if( HORI_LEFT == eAdjust )
-                    eAdjust = HORI_LEFT_AND_WIDTH;
-                nLSpace = (USHORT)nTokenValue;
-            }
+            if( HORI_LEFT == eAdjust )
+                eAdjust = HORI_LEFT_AND_WIDTH;
+            nLSpace = nTokenValue;
             nTblSz = nTokenValue;
             break;
 
@@ -777,6 +775,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:56  hr
+      initial import
+
       Revision 1.64  2000/09/18 16:04:51  willem.vandorp
       OpenOffice header added.
 
