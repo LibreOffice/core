@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-16 10:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,6 +323,11 @@ void OQuery_LINUX::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const A
         m_eDoingCurrently = SETTING_PROPERTIES;
         OAutoActionReset(this);
         m_xCommandDefinition->setPropertyValue(sAggPropName, _rValue);
+
+        if ( PROPERTY_ID_COMMAND == _nHandle )
+            // the columns are out of date if we are based on a new statement ....
+            // 90573 - 16.08.2001 - frank.schoenheit@sun.com
+            m_bColumnsOutOfDate = sal_True;
     }
 }
 
