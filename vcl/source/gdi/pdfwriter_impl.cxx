@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:05:14 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ public:
     void rotate( double angle );
     void translate( double tx, double ty );
 
-    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer );
+    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack = NULL );
 
     Point transform( const Point& rPoint );
 };
@@ -331,7 +331,7 @@ void Matrix3::translate( double tx, double ty )
     f[5] += ty;
 }
 
-void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
+void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer, Point* pBack )
 {
     appendDouble( f[0], rBuffer );
     rBuffer.append( ' ' );
@@ -341,7 +341,7 @@ void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
     rBuffer.append( ' ' );
     appendDouble( f[3], rBuffer );
     rBuffer.append( ' ' );
-    rPage.appendPoint( Point( (long)f[4], (long)f[5] ), rBuffer );
+    rPage.appendPoint( Point( (long)f[4], (long)f[5] ), rBuffer, false, pBack );
 }
 
 
@@ -3064,7 +3064,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 aMat.scale( fXScale, 1.0 );
                 aMat.rotate( fAngle );
                 aMat.translate( aPos.X(), aPos.Y() );
-                aMat.append( m_aPages.back(), aLine );
+                aMat.append( m_aPages.back(), aLine, &aCumulativePos );
                 aLine.append( " Tm\r\n" );
                 aLastPos = aPos;
                 bFirst = false;
