@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scheduler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:25:13 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,11 @@ namespace sdr
             // list of events
             EventList                                       maList;
 
+            // flag-array
+            // Flag which remembers if this timer is paused. Default
+            // is false.
+            unsigned                                        mbIsPaused : 1;
+
         public:
             // constructor/destructor
             Scheduler();
@@ -172,6 +177,10 @@ namespace sdr
             // insert/remove events, wrapper to EventList methods
             void InsertEvent(Event* pNew);
             void RemoveEvent(Event* pOld);
+
+            // get/set pause
+            bool IsPaused() const { return mbIsPaused; }
+            void SetPaused(bool bNew);
         };
     } // end of namespace animation
 } // end of namespace sdr
