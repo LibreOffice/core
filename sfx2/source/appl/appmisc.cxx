@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 09:46:00 $
+ *  last change: $Author: pb $ $Date: 2000-11-28 09:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,15 +1040,15 @@ Config* SfxApplication::GetFilterIni()
 {
     if ( !pAppData_Impl->pFilterIni )
     {
-        // load modules path from configuration
-        String aIniFile( SvtPathOptions().GetModulePath() );
-        ::rtl::OUString aTemp;
-        // convert to normalized path
-        if ( ::osl::FileBase::normalizePath( aIniFile, aTemp ) == osl::FileBase::E_None )
+        OStartupInfo aInfo;
+        ::rtl::OUString aApplicationName;
+        // get the path of the executable
+        if ( aInfo.getExecutableFile( aApplicationName ) == OStartupInfo::E_None )
         {
+            // cut the name of the executable
+            ::rtl::OUString aIniFile = aApplicationName.copy( 0, aApplicationName.lastIndexOf( '/' ) );
             // append the name of the filter ini
-            aIniFile = aTemp;
-            aIniFile += DEFINE_CONST_UNICODE( "/install.ini" );
+            aIniFile += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/install.ini" ) );
             // and create the Config instance
             pAppData_Impl->pFilterIni = new Config( aIniFile );
         }
