@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,6 @@ namespace dbaui
         virtual void setStatement(const ::rtl::OUString& _rsStatement) = 0;
         // returns the current sql statement
         virtual ::rtl::OUString getStatement() = 0;
-        /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
-    protected:
-        // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
-        //
     };
 }
 #endif // DBAUI_QUERYVIEW_HXX

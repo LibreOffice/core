@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:13:06 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,13 @@ namespace dbaui
     class OQueryDesignView;
     class OQueryTextView;
     class OAddTableDlg;
+    class OQueryContainerWindow;
     class OQueryViewSwitch
     {
         OQueryDesignView*   m_pDesignView;
         OQueryTextView*     m_pTextView;
     public:
-        OQueryViewSwitch(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryViewSwitch();
 
         virtual sal_Bool isCutAllowed();
@@ -93,7 +94,7 @@ namespace dbaui
         // returns the current sql statement
         virtual ::rtl::OUString getStatement();
         /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        virtual void Construct();
         virtual void initialize();
         // show the text or the design view
         void switchView();
@@ -107,13 +108,14 @@ namespace dbaui
         void clearDesignView();
         void GetFocus();
 
-        OQueryDesignView*   getRealView() const { return m_pDesignView; }
+        OQueryDesignView*       getDesignView() const { return m_pDesignView; }
+        OQueryContainerWindow*  getContainer() const;
 
         void SetPosSizePixel( Point _rPt,Size _rSize);
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect);
     };
 }
 #endif // DBAUI_QUERYVIEWSWITCH_HXX

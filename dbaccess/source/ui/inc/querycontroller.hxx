@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 11:54:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
 #include "ParseContext.hxx"
 #endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
 
 
 class VCLXWindow;
@@ -129,8 +132,6 @@ namespace dbaui
         ::rtl::OUString m_sUpdateSchemaName;  // schema for update data
         ::rtl::OUString m_sUpdateTableName;   // table for update data
         ::rtl::OUString m_sName;            // name of the query
-
-        OQueryContainerWindow*              m_pWindow;          // temporary window
 
         sal_Int32       m_nVisibleRows;     // which rows the selection browse should show
         sal_Int32       m_nSplitPos;        // the position of the splitter
@@ -162,16 +163,16 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId);
         virtual ToolBox* CreateToolBox(Window* pParent);
 
-        OQueryView* getQueryView() { return static_cast<OQueryView*>(m_pView); }
         virtual void        reconnect( sal_Bool _bUI );
+
+
+        OQueryContainerWindow*  getContainer() { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         ~OQueryController();
         ::std::vector<OTableFieldDesc*>*        getTableFieldDesc()         { return &m_vTableFieldDesc; }
-
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getComponentWindow();
 
         virtual void    setModified(sal_Bool _bModified=sal_True);
 
@@ -223,6 +224,7 @@ namespace dbaui
 
     protected:
         virtual OTableWindowData* createTableWindowData();
+        virtual OJoinDesignView*    getJoinView();
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:45 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace dbaui
         virtual void setReadOnly(sal_Bool _bReadOnly);
         // set the statement for representation
         /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        virtual void Construct();
         virtual void initialize();
 
         virtual void SaveTabWinUIConfig(OTableWindow* pWin);
@@ -122,7 +122,7 @@ namespace dbaui
         void SaveUIConfig();
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect);
         DECL_LINK( SplitHdl, void* );
     };
 }

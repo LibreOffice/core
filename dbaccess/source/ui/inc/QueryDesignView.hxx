@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:44:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ namespace dbaui
     class OTableConnection;
     class OQueryTableConnectionData;
     class OConnectionLineData;
+    class OQueryContainerWindow;
 
     class OQueryDesignView : public OQueryView
     {
@@ -172,7 +173,7 @@ namespace dbaui
 
         sal_Int32   GetColumnFormatKey(const ::connectivity::OSQLParseNode* pColumnRef);
     public:
-        OQueryDesignView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        OQueryDesignView(OQueryContainerWindow* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryDesignView();
 
         virtual sal_Bool isCutAllowed();
@@ -190,7 +191,7 @@ namespace dbaui
         // returns the current sql statement
         virtual ::rtl::OUString getStatement();
         /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        virtual void Construct();
         virtual void initialize();
         // window overloads
         virtual long        PreNotify( NotifyEvent& rNEvt );
@@ -220,7 +221,7 @@ namespace dbaui
         void startTimer();
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect);
         DECL_LINK( SplitHdl, void* );
     };
 }

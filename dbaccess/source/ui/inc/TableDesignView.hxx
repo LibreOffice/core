@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:50:32 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ namespace dbaui
 
 
         // return the Rectangle where I can paint myself
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect);
 
     public:
         OTableDesignView(   Window* pParent,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:29:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ namespace dbaui
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         SbaGridControl*         m_pVclControl;  // our grid's VCL representation
@@ -127,10 +128,12 @@ namespace dbaui
         void    showStatus( const String& _rStatus );
         void    hideStatus();
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >     getContainer() { return m_xMe; }
+
     protected:
         virtual long PreNotify( NotifyEvent& rNEvt );
         virtual void GetFocus();
-        virtual void resizeControl(Rectangle& rRect);
+        virtual void resizeDocumentView(Rectangle& rRect);
     };
 
     class BrowserViewStatusDisplay

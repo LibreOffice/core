@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 11:55:40 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ namespace dbaui
     protected:
         virtual OTableWindowData* createTableWindowData() = 0;
         virtual void AddSupportedFeatures();
+
+        virtual OJoinDesignView*    getJoinView();
     };
 }
 #endif // DBAUI_JOINCONTROLLER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:13:06 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,69 +64,20 @@
 #ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
 #endif
-#ifndef DBAUI_QUERYVIEWSWITCH_HXX
-#include "QueryViewSwitch.hxx"
-#endif
-#ifndef _SV_DOCKWIN_HXX
-#include <vcl/dockwin.hxx>
-#endif
-
 
 class Splitter;
-
 namespace dbaui
 {
-    // tempoaray class until the beamer is implemented
-    class OBeamer : public DockingWindow
-    {
-    public:
-        OBeamer(Window* _pParent) : DockingWindow(_pParent,0){}
-    };
-
-    class OQueryViewSwitch;
-    class OQueryContainerWindow : public Window
-    {
-        OQueryViewSwitch*   m_pView;
-        OBeamer*            m_pBeamer;
-        Splitter*           m_pSplitter;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
-
-        DECL_LINK( SplitHdl, void* );
-    public:
-        OQueryContainerWindow(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-        ~OQueryContainerWindow();
-
-        virtual void        Resize();
-        virtual long        PreNotify( NotifyEvent& rNEvt );
-
-        // show the beamer
-        void    showPreview(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
-            // called when the beamer has been disposed
-        void    disposingPreview();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                getPreviewFrame() const { return m_xBeamer; }
-
-        void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
-        OQueryViewSwitch* getView() { return m_pView; }
-        void switchView();
-
-        virtual void GetFocus();
-    };
-    // end of temp classes
-
     class OSqlEdit;
     class OQueryTextView : public Window
     {
         friend class OQueryViewSwitch;
         OSqlEdit*   m_pEdit;
-        ToolBox*    m_pToolBox; // the toolbox is owned by OQueryDesignView
     public:
-        OQueryTextView(Window* pParent,ToolBox* _pToolBox);
+        OQueryTextView( OQueryContainerWindow* pParent );
         virtual ~OQueryTextView();
 
         virtual void GetFocus();
@@ -144,10 +95,10 @@ namespace dbaui
         // set the statement for representation
         virtual void setStatement(const ::rtl::OUString& _rsStatement);
         virtual ::rtl::OUString getStatement();
-        /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
         // allow access to our edit
         OSqlEdit* getSqlEdit() const { return m_pEdit; }
+
+        OQueryContainerWindow*  getContainerWindow() { return static_cast< OQueryContainerWindow* >( GetParent() ); }
     protected:
         virtual void Resize();
     };
