@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:47:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ struct FmGridHeaderData
     Point                   aDropPosPixel;
     sal_Int8                nDropAction;
     Reference< XInterface > xDroppedStatement;
+    Reference< XInterface > xDroppedResultSet;
 };
 
 //==============================================================================
@@ -404,6 +405,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     ::rtl::OUString sDatasouce, sCommand, sFieldName;
     sal_Int32       nCommandType = CommandType::COMMAND;
     Reference< XPreparedStatement >     xStatement;
+    Reference< XResultSet >             xResultSet;
     Reference< XPropertySet >           xField;
     Reference< XConnection >            xConnection;
 
@@ -453,7 +455,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
             DBG_ASSERT(xServiceInfo.is() && xServiceInfo->supportsService(SRV_SDB_CONNECTION), "FmGridHeader::ExecuteDrop: invalid connection (no database access connection !)");
 #endif
 
-            Reference< XNameAccess >    xFields;
+            Reference< XNameAccess > xFields;
             switch (nCommandType)
             {
                 case CommandType::TABLE:
@@ -480,7 +482,8 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                     Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
                     xStatProps->setPropertyValue(rtl::OUString::createFromAscii("MaxRows"), makeAny(sal_Int32(0)));
 
-                    Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
+                    xResultSet = xStatement->executeQuery();
+                    Reference< XColumnsSupplier >  xSupplyCols(xResultSet, UNO_QUERY);
                     if (xSupplyCols.is())
                         xFields = xSupplyCols->getColumns();
                 }
@@ -505,6 +508,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         m_pImpl->nDropAction = _rEvt.mnAction;
         m_pImpl->aDropPosPixel = _rEvt.maPosPixel;
         m_pImpl->xDroppedStatement = xStatement;
+        m_pImpl->xDroppedResultSet = xResultSet;
 
         PostUserEvent(LINK(this, FmGridHeader, OnAsyncExecuteDrop));
     }
@@ -541,6 +545,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
             xNumberFormats = xSupplier->getNumberFormats();
         if (!xNumberFormats.is())
         {
+            ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
             ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
             return 0L;
         }
@@ -557,12 +562,10 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
             case DataType::BINARY:
             case DataType::VARBINARY:
             case DataType::OTHER:
+                ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
                 ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
                 return 0L;
         }
-
-        sal_Int32 nFormatKey;
-        xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
 
         // Erstellen der Column
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
@@ -671,6 +674,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
         if (!xCol.is() || (bDateNTimeCol && !xSecondCol.is()))
         {
             ::comphelper::disposeComponent(xCol);   // in case only the creation of the second column failed
+            ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
             ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
             return 0L;
         }
@@ -686,8 +690,12 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
 
         if (nPreferedType == SID_FM_NUMERICFIELD)
         {
-            // set properties for numerix field
+            // set properties for numeric field
+            Reference< XPropertySetInfo > xPSI( xField->getPropertySetInfo() );
+            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_FORMATKEY ) )
             {
+                sal_Int32 nFormatKey;
+                xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
                 Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
                 xCol->setPropertyValue(FM_PROP_DECIMAL_ACCURACY,aScaleVal);
             }
@@ -779,10 +787,12 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, NOTINTERESTEDIN )
     catch (Exception&)
     {
         DBG_ERROR("FmGridHeader::OnAsyncExecuteDrop: caught an exception while creatin' the column !");
+        ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
         ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
         return 0L;
     }
 
+    ::comphelper::disposeComponent(m_pImpl->xDroppedResultSet);
     ::comphelper::disposeComponent(m_pImpl->xDroppedStatement);
     return 1L;
 }
