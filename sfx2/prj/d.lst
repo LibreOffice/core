@@ -66,6 +66,8 @@ hedabu: ..\inc\exchobj.hxx %_DEST%\inc%_EXT%\sfx2\exchobj.hxx
 hedabu: ..\inc\expfile.hxx %_DEST%\inc%_EXT%\sfx2\expfile.hxx
 hedabu: ..\inc\explorer.hxx %_DEST%\inc%_EXT%\sfx2\explorer.hxx
 hedabu: ..\inc\exptypes.hxx %_DEST%\inc%_EXT%\sfx2\exptypes.hxx
+hedabu: ..\inc\fsetvwsh.hxx %_DEST%\inc%_EXT%\sfx2\fsetvwsh.hxx
+hedabu: ..\inc\fsetobsh.hxx %_DEST%\inc%_EXT%\sfx2\fsetobsh.hxx
 hedabu: ..\inc\fcontnr.hxx %_DEST%\inc%_EXT%\sfx2\fcontnr.hxx
 hedabu: ..\inc\frame.hxx %_DEST%\inc%_EXT%\sfx2\frame.hxx
 hedabu: ..\inc\frameobj.hxx %_DEST%\inc%_EXT%\sfx2\frameobj.hxx
