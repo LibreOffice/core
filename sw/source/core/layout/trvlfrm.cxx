@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2002-03-15 11:47:59 $
+ *  last change: $Author: fme $ $Date: 2002-08-19 11:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2261,7 +2261,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                     (aSubRect.*fnRect->fnSetLeft)( lLeft );
                     (aSubRect.*fnRect->fnSetRight)( lRight );
                     (aSubRect.*fnRect->fnSetTop)( aTmpBottom );
-                    (aSubRect.*fnRect->fnSetBottom)( aTmpTop - 1 );
+                    (aSubRect.*fnRect->fnSetBottom)( aTmpTop );
                     Sub( aRegion, aSubRect );
                 }
                 //and the last line
@@ -2343,7 +2343,7 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
             if( (aEndFrm.*fnRect->fnGetTop)() != nTmp )
             {
                 aSubRect = aEndFrm;
-                (aSubRect.*fnRect->fnSetBottom)( nTmp - 1 );
+                (aSubRect.*fnRect->fnSetBottom)( nTmp );
                 Sub( aRegion, aSubRect );
             }
             aSubRect = aEndRect;
