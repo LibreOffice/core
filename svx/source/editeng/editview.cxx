@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:52 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 13:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
+#endif
+#ifndef _LINGUISTIC_LNGPROPS_HHX_
+#include <linguistic/lngprops.hxx>
 #endif
 
 using namespace rtl;
@@ -983,8 +986,25 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
 
         // Gibt es Replace-Vorschlaege?
         String aSelected( GetSelected() );
+        //
+        // restrict the maximal number of suggestions displayed
+        // in the context menu.
+        // Note: That could of course be done by clipping the
+        // resulting sequence but the current third party
+        // implementations result differs greatly if the number of
+        // suggestions to be retuned gets changed. Statistically
+        // it gets much better if told to return e.g. only 7 strings
+        // than returning e.g. 16 suggestions and using only the
+        // first 7. Thus we hand down the value to use to that
+        // implementation here by providing an additional parameter.
+        Sequence< PropertyValue > aPropVals(1);
+        PropertyValue &rVal = aPropVals.getArray()[0];
+        rVal.Name = OUString::createFromAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS );
+        rVal.Value <<= (INT16) 7;
+        //
+        // Gibt es Replace-Vorschlaege?
         Reference< XSpellAlternatives >  xSpellAlt =
-                xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), Sequence< PropertyValue >() );
+                xSpeller->spell( aSelected, PIMPEE->GetLanguage( aPaM2 ), aPropVals );
 
         // Other language???
         LanguageType nCorrLang = LANGUAGE_NONE;
