@@ -2,9 +2,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2004-11-26 18:36:05 $
+#   last change: $Author: rt $ $Date: 2004-12-16 10:45:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ package installer::windows::assembly;
 
 use installer::files;
 use installer::globals;
+use installer::worker;
 use installer::windows::idtglobal;
 
 ##############################################################
@@ -211,31 +212,6 @@ sub get_msiassembly_file_by_gid
     return $onefile;
 }
 
-##############################################################
-# Collecting all files with flag ASSEMBLY.
-##############################################################
-
-sub collect_all_assemblyfiles
-{
-    my ($filesref) = @_;
-
-    my @assemblyfiles = ();
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        my $onefile = ${$filesref}[$i];
-        my $styles = "";
-        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'} };
-
-        if ( $styles =~ /\bASSEMBLY\b/ )
-        {
-            push( @assemblyfiles, $onefile );
-        }
-    }
-
-    return \@assemblyfiles;
-}
-
 ####################################################################################
 # Creating the file MsiAssembly.idt dynamically
 # Content:
@@ -248,7 +224,7 @@ sub create_msiassembly_table
 {
     my ($filesref, $basedir) = @_;
 
-    $installer::globals::msiassemblyfiles = collect_all_assemblyfiles($filesref);
+    $installer::globals::msiassemblyfiles = installer::worker::collect_all_items_with_special_flag($filesref, "ASSEMBLY");
 
     my @msiassemblytable = ();
 
