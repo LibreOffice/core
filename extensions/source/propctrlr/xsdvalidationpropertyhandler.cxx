@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:14:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,11 +245,27 @@ namespace pcr
                 addInt32PropertyDescription( aProperties, PROPERTY_XSD_TOTAL_DIGITS,    MAYBEVOID );
                 addInt32PropertyDescription( aProperties, PROPERTY_XSD_FRACTION_DIGITS, MAYBEVOID );
 
-                // facets common for different types
-                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE, MAYBEVOID );
-                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE, MAYBEVOID );
-                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE, MAYBEVOID );
-                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE, MAYBEVOID );
+                // facets for different types
+                addInt16PropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE_INT, MAYBEVOID );
+                addInt16PropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE_INT, MAYBEVOID );
+                addInt16PropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE_INT, MAYBEVOID );
+                addInt16PropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE_INT, MAYBEVOID );
+                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE, MAYBEVOID );
+                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE, MAYBEVOID );
+                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE, MAYBEVOID );
+                addDoublePropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE, MAYBEVOID );
+                addDatePropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE_DATE, MAYBEVOID );
+                addDatePropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE_DATE, MAYBEVOID );
+                addDatePropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE_DATE, MAYBEVOID );
+                addDatePropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE_DATE, MAYBEVOID );
+                addTimePropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE_TIME, MAYBEVOID );
+                addTimePropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE_TIME, MAYBEVOID );
+                addTimePropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE_TIME, MAYBEVOID );
+                addTimePropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE_TIME, MAYBEVOID );
+                addDateTimePropertyDescription( aProperties, PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME, MAYBEVOID );
+                addDateTimePropertyDescription( aProperties, PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME, MAYBEVOID );
+                addDateTimePropertyDescription( aProperties, PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME, MAYBEVOID );
+                addDateTimePropertyDescription( aProperties, PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME, MAYBEVOID );
             }
         }
 
@@ -337,8 +353,27 @@ namespace pcr
             ::rtl::OUString aFacets[] = {
                 PROPERTY_XSD_WHITESPACES, PROPERTY_XSD_PATTERN,
                 PROPERTY_XSD_LENGTH, PROPERTY_XSD_MIN_LENGTH, PROPERTY_XSD_MAX_LENGTH, PROPERTY_XSD_TOTAL_DIGITS,
-                PROPERTY_XSD_FRACTION_DIGITS, PROPERTY_XSD_MAX_INCLUSIVE, PROPERTY_XSD_MAX_EXCLUSIVE,
-                PROPERTY_XSD_MIN_INCLUSIVE, PROPERTY_XSD_MIN_EXCLUSIVE
+                PROPERTY_XSD_FRACTION_DIGITS,
+                PROPERTY_XSD_MAX_INCLUSIVE_INT,
+                PROPERTY_XSD_MAX_EXCLUSIVE_INT,
+                PROPERTY_XSD_MIN_INCLUSIVE_INT,
+                PROPERTY_XSD_MIN_EXCLUSIVE_INT,
+                PROPERTY_XSD_MAX_INCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MIN_INCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DOUBLE,
+                PROPERTY_XSD_MAX_INCLUSIVE_DATE,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DATE,
+                PROPERTY_XSD_MIN_INCLUSIVE_DATE,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DATE,
+                PROPERTY_XSD_MAX_INCLUSIVE_TIME,
+                PROPERTY_XSD_MAX_EXCLUSIVE_TIME,
+                PROPERTY_XSD_MIN_INCLUSIVE_TIME,
+                PROPERTY_XSD_MIN_EXCLUSIVE_TIME,
+                PROPERTY_XSD_MAX_INCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MAX_EXCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MIN_INCLUSIVE_DATE_TIME,
+                PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME
             };
 
             sal_Int32 i=0;
@@ -350,27 +385,6 @@ namespace pcr
             {
                 showPropertyUI( _pUpdater, *pLoop, xDataType.is() && xDataType->hasFacet( *pLoop ) );
                 _pUpdater->enablePropertyUI( *pLoop, !bIsBasicType );
-            }
-
-            //------------------------------------------------------------
-            // some properties which we support (namely (Min|Max)(In|Ex)clusive) are of different
-            // type, depending on the which data type our introspectee is currently bound to.
-            // We need to update this information in our base class' meta data, as it's used
-            // for, for instance, string conversion
-            ::rtl::OUString sDynamicTypeFacets[] = {
-                PROPERTY_XSD_MAX_INCLUSIVE, PROPERTY_XSD_MAX_EXCLUSIVE,
-                PROPERTY_XSD_MIN_INCLUSIVE, PROPERTY_XSD_MIN_EXCLUSIVE
-            };
-            for ( i = 0, pLoop = sDynamicTypeFacets;
-                  i < sizeof( sDynamicTypeFacets ) / sizeof( sDynamicTypeFacets[0] );
-                  ++i, ++pLoop
-                )
-            {
-                if ( xDataType.is() && xDataType->hasFacet( *pLoop ) )
-                    changeTypeOfSupportedProperty(
-                        m_pInfoService->getPropertyId( *pLoop ),
-                        xDataType->getFacetType( *pLoop )
-                    );
             }
         }
         break;
@@ -429,51 +443,58 @@ namespace pcr
             _rDescriptor.nDigits = 0;
             break;
 
-        case PROPERTY_ID_XSD_MAX_INCLUSIVE:
-        case PROPERTY_ID_XSD_MAX_EXCLUSIVE:
-        case PROPERTY_ID_XSD_MIN_INCLUSIVE:
-        case PROPERTY_ID_XSD_MIN_EXCLUSIVE:
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_INT:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_INT:
         {
+            _rDescriptor.eControlType = BCT_NUMFIELD;
+            _rDescriptor.nDigits = 0;
+
+            // handle limits for various 'INT' types according to
+            // their actual semantics (year, month, day)
+
             ::rtl::Reference< XSDDataType > xDataType( m_pHelper->getValidatingDataType() );
             sal_Int16 nTypeClass = xDataType.is() ? xDataType->classify() : DataTypeClass::STRING;
 
-            switch ( nTypeClass )
-            {
-            case DataTypeClass::DECIMAL:
-            case DataTypeClass::FLOAT:
-            case DataTypeClass::DOUBLE:
-                _rDescriptor.eControlType = BCT_NUMFIELD;
-                // TODO/eForms: do we have "auto-digits"?
-                break;
-            case DataTypeClass::DATE:
-                _rDescriptor.eControlType = BCT_DATEFIELD;
-                break;
-            case DataTypeClass::TIME:
-                _rDescriptor.eControlType = BCT_TIMEFIELD;
-                break;
-            case DataTypeClass::DATETIME:
-                _rDescriptor.eControlType = BCT_DATETIME;
-                break;
-            case DataTypeClass::gYear:
-            case DataTypeClass::gMonth:
-            case DataTypeClass::gDay:
-                _rDescriptor.eControlType = BCT_NUMFIELD;
-                _rDescriptor.bHaveMinMax = sal_True;
-                _rDescriptor.nDigits = 0;
-                _rDescriptor.nMinValue = DataTypeClass::gYear == nTypeClass ? 0 : 1;
-                _rDescriptor.nMaxValue = ::std::numeric_limits< sal_Int32 >::max();
-                if ( DataTypeClass::gMonth == nTypeClass )
-                    _rDescriptor.nMaxValue = 12;
-                else if ( DataTypeClass::gDay == nTypeClass )
-                    _rDescriptor.nMaxValue = 31;
-                break;
-            default:
-//                OSL_ENSURE( !xDataType.is(), "XSDValidationPropertyHandler::describePropertyUI: This type does not have this property!" );
-                _rDescriptor.eControlType = BCT_NUMFIELD;
-                break;
-            }
+            _rDescriptor.bHaveMinMax = sal_True;
+            _rDescriptor.nMinValue = DataTypeClass::gYear == nTypeClass ? 0 : 1;
+            _rDescriptor.nMaxValue = ::std::numeric_limits< sal_Int32 >::max();
+            if ( DataTypeClass::gMonth == nTypeClass )
+                _rDescriptor.nMaxValue = 12;
+            else if ( DataTypeClass::gDay == nTypeClass )
+                _rDescriptor.nMaxValue = 31;
         }
         break;
+
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DOUBLE:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DOUBLE:
+            _rDescriptor.eControlType = BCT_NUMFIELD;
+            // TODO/eForms: do we have "auto-digits"?
+            break;
+
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE:
+            _rDescriptor.eControlType = BCT_DATEFIELD;
+            break;
+
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_TIME:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_TIME:
+            _rDescriptor.eControlType = BCT_TIMEFIELD;
+            break;
+
+        case PROPERTY_ID_XSD_MAX_INCLUSIVE_DATE_TIME:
+        case PROPERTY_ID_XSD_MAX_EXCLUSIVE_DATE_TIME:
+        case PROPERTY_ID_XSD_MIN_INCLUSIVE_DATE_TIME:
+        case PROPERTY_ID_XSD_MIN_EXCLUSIVE_DATE_TIME:
+            _rDescriptor.eControlType = BCT_DATETIME;
+            break;
 
         default:
             DBG_ERROR( "XSDValidationPropertyHandler::describePropertyUI: cannot handle this property!" );
@@ -652,9 +673,9 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL XSDValidationPropertyHandler::updateDependentProperties( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater )
+    void SAL_CALL XSDValidationPropertyHandler::actuatingPropertyChanged( PropertyId _nActuatingPropId, const Any& _rNewValue, const Any& _rOldValue, IPropertyBrowserUI* _pUpdater, bool _bFirstTimeInit )
     {
-        OSL_ENSURE( m_pHelper.get(), "XSDValidationPropertyHandler::updateDependentProperties: we don't have any ActuatingProperties!" );
+        OSL_ENSURE( m_pHelper.get(), "XSDValidationPropertyHandler::actuatingPropertyChanged: we don't have any ActuatingProperties!" );
         if ( !m_pHelper.get() )
             return;
 
@@ -679,8 +700,14 @@ namespace pcr
         break;
 
         default:
-            DBG_ERROR( "XSDValidationPropertyHandler::updateDependentProperties: cannot handle this property!" );
+            DBG_ERROR( "XSDValidationPropertyHandler::actuatingPropertyChanged: cannot handle this property!" );
+            return;
         }
+
+        // in both cases, we need to care for the current value of the XSD_DATA_TYPE property,
+        // and update the FormatKey of the formatted field we're inspecting (if any)
+        if ( !_bFirstTimeInit && m_pHelper->isInspectingFormattedField() )
+            m_pHelper->findDefaultFormatForIntrospectee();
     }
 
     //--------------------------------------------------------------------
