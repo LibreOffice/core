@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:55:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,8 @@ struct SbPublicEntry;
 class SbiImage {
     friend class SbiCodeGen;            // Compiler-Klassen, die die private-
 
-    SbxArrayRef    rTypes;          //
+    SbxArrayRef    rTypes;          // User defined types
+    SbxArrayRef    rEnums;          // Enum types
     UINT16*        pStringOff;      // StringId-Offsets
     sal_Unicode*   pStrings;        // StringPool
     char*          pCode;           // Code-Image
@@ -94,6 +95,7 @@ class SbiImage {
     void AddString( const String& );// String zufuegen
     void AddCode( char*, USHORT );  // Codeblock dazu
     void AddType(SbxObject *);      // User-Type mit aufnehmen
+    void AddEnum(SbxObject *);      // Register enum type
 
 public:
     String aName;                   // Makroname
@@ -116,6 +118,8 @@ public:
     String      GetString( short nId ) const;
     //const char* GetString( short nId ) const;
     const SbxObject*  FindType (String aTypeName) const;
+
+    SbxArrayRef GetEnums()          { return rEnums; }
 
     void        SetFlag( USHORT n ) { nFlags |= n;      }
     USHORT      GetFlag( USHORT n ) const { return nFlags & n; }
