@@ -2,9 +2,9 @@
 #
 #   $RCSfile: profiles.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:28:48 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:46:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,6 +152,21 @@ sub add_profile_into_filelist
     push(@{$filesarrayref}, \%profile);
 }
 
+###################################################
+# Including Windows line ends in ini files
+# Profiles on Windows shall have \r\n line ends
+###################################################
+
+sub include_windows_lineends
+{
+    my ($onefile) = @_;
+
+    for ( my $i = 0; $i <= $#{$onefile}; $i++ )
+    {
+        ${$onefile}[$i] =~ s/\r?\n$/\r\n/;
+    }
+}
+
 ####################################
 # Create profiles
 ####################################
@@ -209,6 +224,11 @@ sub create_profiles
 
         # Sorting the array @onefile
         my $onefileref = sorting_profile(\@onefile);
+
+        if ( $installer::globals::iswin && $installer::globals::plat =~ /cygwin/i)      # Windows line ends only for Cygwin
+        {
+            include_windows_lineends($onefileref);
+        }
 
         # Saving the profile as a file
         $completeprofilename = $profilesdir . $installer::globals::separator . $profilename;
