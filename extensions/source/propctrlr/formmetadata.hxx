@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:53 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ namespace pcr
         String                  getPropertyTranslation(sal_Int32 _nId) const;
         sal_Int32               getPropertyHelpId(sal_Int32 _nId) const;
         sal_Int16               getPropertyPos(sal_Int32 _nId) const;
-        sal_Bool                getPropertyMultiFlag(sal_Int32 _nId) const;
         sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const;
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 getPropertyEnumRepresentations(sal_Int32 _nId) const;
@@ -134,9 +133,11 @@ namespace pcr
     //= UI flags (for all browseable properties)
     //========================================================================
 
-    const sal_uInt32 PROP_NONE_VISIBLE              = 0x00000000;
-    const sal_uInt32 PROP_FORM_VISIBLE              = 0x00000001;
-    const sal_uInt32 PROP_DIALOG_VISIBLE            = 0x00000002;
+#define PROP_FLAG_NONE              0x00000000  // no special flag
+#define PROP_FLAG_FORM_VISIBLE      0x00000001  // the property is visible when inspecting a form object
+#define PROP_FLAG_DIALOG_VISIBLE    0x00000002  // the property is visible when inspecting a dialog object
+#define PROP_FLAG_VIRTUAL_PROP      0x00000004  // the property is a "virtual" property
+#define PROP_FLAG_DATA_PROPERTY     0x00000008  // the property is to appear on the "Data" page
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -223,8 +224,8 @@ namespace pcr
     #define PROPERTY_ID_SUBMIT_TARGET        81
     #define PROPERTY_ID_SUBMIT_METHOD        82
     #define PROPERTY_ID_SUBMIT_ENCODING      83
-    #define PROPERTY_ID_DEFAULT_CHECKED      84
-    #define PROPERTY_ID_DEFAULT_BUTTON       85
+    #define PROPERTY_ID_DEFAULTCHECKED       84
+    #define PROPERTY_ID_DEFAULTBUTTON        85
     #define PROPERTY_ID_IMAGE_URL            86
     #define PROPERTY_ID_DEFAULT_SELECT_SEQ   87
     #define PROPERTY_ID_ECHO_CHAR            88
@@ -260,6 +261,9 @@ namespace pcr
     #define PROPERTY_ID_PUSHBUTTONTYPE       118
     #define PROPERTY_ID_EFFECTIVE_VALUE      119
     #define PROPERTY_ID_TEXT                 120
+    #define PROPERTY_ID_BOUND_CELL           121
+    #define PROPERTY_ID_LIST_CELL_RANGE      122
+    #define PROPERTY_ID_CELL_EXCHANGE_TYPE   123
 
 //............................................................................
 } // namespace pcr
