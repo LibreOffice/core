@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 08:47:39 $
+ *  last change: $Author: os $ $Date: 2001-04-22 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2260,7 +2260,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIXPROP
     {
-        Pos = MAP_APPFONT ( 18 , 146 ) ;
+        Pos = MAP_APPFONT ( 18 , 151 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "F~ix, proportional" ;
         Text [ English ] = "F~ix, proportional" ;
@@ -2286,7 +2286,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_FIXPROP
     {
-        Pos = MAP_APPFONT ( 93 , 146 ) ;
+        Pos = MAP_APPFONT ( 93 , 151 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
         Text = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus" ;
         Text [ English ] = "Changes of a row and column respectively will affect the whole table" ;
@@ -2313,7 +2313,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_VAR
     {
-        Pos = MAP_APPFONT ( 18 , 159 ) ;
+        Pos = MAP_APPFONT ( 18 , 169 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Variabel" ;
         Text [ English ] = "~Variable" ;
@@ -2339,7 +2339,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     FixedText FT_VAR
     {
-        Pos = MAP_APPFONT ( 93 , 159 ) ;
+        Pos = MAP_APPFONT ( 93 , 169 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
         Text = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengröße aus" ;
         Text [ English ] = "Changes of a row and column respectively will affect the table size" ;
