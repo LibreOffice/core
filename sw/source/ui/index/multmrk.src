@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:20:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ ModalDialog DLG_MULTMRK
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     FixedText FT_ENTRY
     {
@@ -153,6 +154,7 @@ ModalDialog DLG_MULTMRK
         Text[ czech ] = "Rejstřík";
         Text[ hebrew ] = "Verzeichnis";
         Text[ hindi ] = "अनुक्रमणिका";
+        Text[ slovak ] = "Obsah";
     };
     FixedText FT_TEXT
     {
@@ -195,6 +197,7 @@ ModalDialog DLG_MULTMRK
         Text[ czech ] = "Položka";
         Text[ hebrew ] = "‮שורה‬";
         Text[ hindi ] = "प्रविष्टि";
+        Text[ slovak ] = "Položka";
     };
     ListBox LB_TOX
     {
@@ -234,7 +237,10 @@ ModalDialog DLG_MULTMRK
     Text[ czech ] = "Značky rejstříku";
     Text[ hebrew ] = "Verzeichnismarkierungen";
     Text[ hindi ] = "अनुक्रमणिका चिह्न";
+    Text[ slovak ] = "Značky obsahu";
 };
+
+
 
 
 
