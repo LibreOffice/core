@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-28 15:02:50 $
+ *  last change: $Author: mt $ $Date: 2001-05-03 08:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,7 @@ void Impl_IMEInfos::DestroyAttribs()
 {
     delete pAttribs;
     pAttribs = NULL;
+    nLen = 0;
 }
 
 // =======================================================================
