@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:45:46 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,12 +224,13 @@ Reference<XInterface > OSingleFactoryHelper::createInstanceEveryTime(
     }
     else if( pCreateFunction )
     {
-#if OSL_DEBUG_LEVEL > 1
         if (xContext.is())
         {
-           OSL_TRACE( "### ignoring context calling OSingleFactoryHelper::createInstanceEveryTime()!\n" );
+            Reference< lang::XMultiServiceFactory > xContextMgr(
+                xContext->getServiceManager(), UNO_QUERY );
+            if (xContextMgr.is())
+                return (*pCreateFunction)( xContextMgr );
         }
-#endif
         return (*pCreateFunction)( xSMgr );
     }
     else
