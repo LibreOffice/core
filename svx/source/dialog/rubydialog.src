@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 10:32:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ japanese ] = "ÙËŞ•¶š";
         Text[ korean ] = "·çºñ ÅØ½ºÆ®";
         Text[ chinese_simplified ] = "Æ´Òô»ò×¢Òô·ûºÅ";
-        Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
+        Text[ chinese_traditional ] = "µù­µ²Å¸¹";
         Text[ turkish ] = "Ruby text";
         Text[ arabic ] = "äÕ \"ÑæÈí\"";
         Text[ catalan ] = "Texto ruby";
@@ -597,10 +597,10 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ swedish ] = "~Teckenformatmall för ruby-text";
         Text[ polish ] = "Styl znaków u¿ytych w transliteracji";
         Text[ portuguese_brazilian ] = "Character style for ruby text";
-        Text[ japanese ] = "ÙËŞ•¶š‚Ég‚¤•¶š½À²Ù";
+        Text[ japanese ] = "ÙËŞ—p•¶š½À²Ù";
         Text[ korean ] = "·çºñ ÅØ½ºÆ®ÀÇ ¹®ÀÚ À¯Çü";
         Text[ chinese_simplified ] = "Æ´Òô»ò×¢Òô·ûºÅµÄ×Ö·ûÑùÊ½";
-        Text[ chinese_traditional ] = "ª`­µ²Å¸¹¦r¤¸¼Ë¦¡";
+        Text[ chinese_traditional ] = "µù­µ²Å¸¹ªº¦r¤¸¼Ë¦¡";
         Text[ turkish ] = "Character style for ruby text";
         Text[ arabic ] = "äãØ ÇáÃÍÑİ áäÕ \"ÑæÈí\"";
         Text[ catalan ] = "Estilo de carácter para texto ruby";
@@ -738,21 +738,22 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ greek ] = "Öùíçôéêüò ÷áñáêôŞñáò ïäŞãçóçò";
     Text[ dutch ] = "Fonetisch teken";
     Text[ french ] = "Ruby";
-    Text[ spanish ] = "Carácter fonético guía";
+    Text[ spanish ] = "Ruby";
     Text[ italian ] = "Testo Ruby";
     Text[ danish ] = "Ruby";
-    Text[ swedish ] = "Fonetiskt hjälptecken";
+    Text[ swedish ] = "Ruby";
     Text[ polish ] = "Ruby";
     Text[ portuguese_brazilian ] = "Ruby";
     Text[ japanese ] = "ÙËŞ";
     Text[ korean ] = "·çºñ";
     Text[ chinese_simplified ] = "Æ´ÒôºÍ×¢Òô·ûºÅ";
-    Text[ chinese_traditional ] = "ª`­µ²Å¸¹";
+    Text[ chinese_traditional ] = "µù­µ²Å¸¹";
     Text[ turkish ] = "Ruby";
     Text[ arabic ] = "Ïáíá ÕæÊí";
     Text[ catalan ] = "Carácter fonético guía";
     Text[ finnish ] = "Phonetisches Leitzeichen";
 };
+
 
 
 
