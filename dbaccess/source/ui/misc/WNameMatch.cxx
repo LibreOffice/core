@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:59:05 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,12 @@ void OWizNameMatching::ActivatePage( )
 
     m_CTRL_LEFT.FillListBox(*m_pParent->getSrcVector());
     m_CTRL_RIGHT.FillListBox(*m_pParent->getDestVector());
+
+    m_ibColumn_up.Enable( m_CTRL_LEFT.GetEntryCount() > 1 );
+    m_ibColumn_down.Enable( m_CTRL_LEFT.GetEntryCount() > 1 );
+
+    m_ibColumn_up_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
+    m_ibColumn_down_right.Enable( m_CTRL_RIGHT.GetEntryCount() > 1 );
 
 
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_False);
