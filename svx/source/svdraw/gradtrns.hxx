@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gradtrns.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2001-01-16 13:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,26 +91,13 @@ public:
 
 class GradTransformer
 {
-    // private members to hold necessary data
-    Rectangle                   aBoundRect;
-    Point                       aCenter;
-    double                      fGradientAngle;
-    double                      fObjectAngle;
-    Vector2D                    aStartPos;
-    Vector2D                    aEndPos;
-    Vector2D                    aCenterPos;
-    unsigned                    bInnerOuterChanged : 1;
-    unsigned                    bDoCorrectOffset : 1;
-    unsigned                    bDoCorrectRotation : 1;
-
-    // private helping functions
-    void CreateRotatedBoundRect(double fRotVec);
-
 public:
     GradTransformer() {}
 
-    void GradToVec(GradTransGradient& rG, GradTransVector& rV, const SdrObject* pObj);
-    void VecToGrad(GradTransVector& rV, GradTransGradient& rG, GradTransGradient& rGOld, const SdrObject* pObj, BOOL bMoveSingle, BOOL bMoveFirst);
+    void GradToVec(GradTransGradient& rG, GradTransVector& rV,
+        const SdrObject* pObj);
+    void VecToGrad(GradTransVector& rV, GradTransGradient& rG,
+        GradTransGradient& rGOld, const SdrObject* pObj, BOOL bMoveSingle, BOOL bMoveFirst);
 };
 
 #endif  _GRADTRANS_HXX
