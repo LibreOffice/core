@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:30:35 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,6 +798,9 @@ public:
     BOOL            HasValueData( USHORT nCol, USHORT nRow, USHORT nTab ) const;
     USHORT          GetErrorData(USHORT nCol, USHORT nRow, USHORT nTab) const;
     BOOL            HasStringCells( const ScRange& rRange ) const;
+
+    /** Returns true, if there is any data to create a selection list for rPos. */
+    BOOL            HasSelectionData( USHORT nCol, USHORT nRow, USHORT nTab ) const;
 
     BOOL            ExtendMerge( USHORT nStartCol, USHORT nStartRow,
                                 USHORT& rEndCol, USHORT& rEndRow, USHORT nTab,
