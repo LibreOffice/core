@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class SwContentTree : public SvTreeListBox
     SwWrtShell*         pActiveShell;   // die aktive oder eine konst. offene View
     SwNavigationConfig* pConfig;
 
-    USHORT              nActiveBlock;
+    sal_Int32           nActiveBlock;
     USHORT              nHiddenBlock;
     USHORT              nRootType;
     USHORT              nLastSelType;
@@ -134,7 +134,7 @@ class SwContentTree : public SvTreeListBox
     void                FindActiveTypeAndRemoveUserData();
 
 protected:
-    virtual void    Command( const CommandEvent& rCEvt );
+//  virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -171,6 +171,9 @@ protected:
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(BOOL bSet) {bIsInDrag = bSet;}
 
+    virtual PopupMenu* CreateContextMenu( void );
+    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
+
 public:
     SwContentTree(Window* pParent, const ResId& rResId);
     ~SwContentTree();
@@ -195,7 +198,7 @@ public:
     static BOOL     IsInDrag() {return bIsInDrag;}
     BOOL            IsInternalDrag() const {return bIsInternalDrag != 0;}
 
-    USHORT          GetActiveBlock() const {return nActiveBlock;}
+    sal_Int32       GetActiveBlock() const {return nActiveBlock;}
 
     BYTE            GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(BYTE nSet);
@@ -213,7 +216,7 @@ public:
     SwWrtShell*         GetHiddenWrtShell() {return pHiddenShell;}
 
     DECL_LINK( ContentDoubleClickHdl, SwContentTree * );
-    DECL_LINK( PopupHdl, Menu* );
+//  DECL_LINK( PopupHdl, Menu* );
     DECL_LINK( TimerUpdate, Timer * );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
@@ -267,7 +270,6 @@ protected:
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
     virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
@@ -313,6 +315,8 @@ protected:
     static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, SwGlobalTree*);
 
+    virtual PopupMenu* CreateContextMenu( void );
+    virtual void    ExcecuteContextMenuAction( USHORT nSelectedPopupEntry );
 public:
     SwGlobalTree(Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
