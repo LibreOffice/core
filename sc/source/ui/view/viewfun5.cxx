@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:39:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ using namespace com::sun::star;
 
 BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
-                    USHORT nPosX, USHORT nPosY, Point* pLogicPos, BOOL bLink, BOOL bAllowDialogs )
+                    SCCOL nPosX, SCROW nPosY, Point* pLogicPos, BOOL bLink, BOOL bAllowDialogs )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( TRUE );
@@ -150,16 +150,15 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
             ScDocument* pDoc = GetViewData()->GetDocument();
-            USHORT nTab = GetViewData()->GetTabNo();
-            USHORT i;
+            SCTAB nTab = GetViewData()->GetTabNo();
             long nXT = 0;
-            for (i=0; i<nPosX; i++)
+            for (SCCOL i=0; i<nPosX; i++)
                 nXT += pDoc->GetColWidth(i,nTab);
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
             long nYT = 0;
-            for (i=0; i<nPosY; i++)
-                nYT += pDoc->FastGetRowHeight(i,nTab);
+            for (SCROW j=0; j<nPosY; j++)
+                nYT += pDoc->FastGetRowHeight(j,nTab);
             aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
         }
     }
@@ -193,7 +192,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 if (xDocShRef->DoLoad(xStore))
                 {
                     ScDocument* pSrcDoc = xDocShRef->GetDocument();
-                    USHORT nSrcTab = pSrcDoc->GetVisibleTab();
+                    SCTAB nSrcTab = pSrcDoc->GetVisibleTab();
                     if (!pSrcDoc->HasTable(nSrcTab))
                         nSrcTab = 0;
 
@@ -201,11 +200,15 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     aSrcMark.SelectOneTable( nSrcTab );         // for CopyToClip
                     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
 
-                    USHORT nFirstCol, nFirstRow, nLastCol, nLastRow;
+                    SCCOL nFirstCol, nLastCol;
+                    SCROW nFirstRow, nLastRow;
                     if ( pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
                         pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
-                        nFirstCol = nFirstRow = nLastCol = nLastRow = 0;
+                        {
+                        nFirstCol = nLastCol = 0;
+                        nFirstRow = nLastRow = 0;
+                        }
                     pSrcDoc->CopyToClip( nFirstCol, nFirstRow, nLastCol, nLastRow,
                                             FALSE, pClipDoc, FALSE, &aSrcMark );
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
@@ -293,7 +296,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
             ScDocument* pDoc = pDocSh->GetDocument();
-            USHORT nTab = GetViewData()->GetTabNo();
+            SCTAB nTab = GetViewData()->GetTabNo();
 
             ClickCursor(nPosX, nPosY, FALSE);               // set cursor position
 
@@ -447,7 +450,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
 #endif
             ScDocument* pDoc = GetViewData()->GetDocument();
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
-            USHORT nSrcTab = 0;     // Biff5 in clipboard: always sheet 0
+            SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
 
             SfxMedium aMed( pStor, TRUE );
@@ -485,11 +488,15 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 else
                 {
                     DBG_ERROR("no dimension");  //! possible?
-                    USHORT nFirstCol, nFirstRow, nLastCol, nLastRow;
+                    SCCOL nFirstCol, nLastCol;
+                    SCROW nFirstRow, nLastRow;
                     if ( pInsDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
                         pInsDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
-                        nFirstCol = nFirstRow = nLastCol = nLastRow = 0;
+                    {
+                        nFirstCol = nLastCol = 0;
+                        nFirstRow = nLastRow = 0;
+                    }
                     aSource = ScRange( nFirstCol, nFirstRow, nSrcTab,
                                         nLastCol, nLastRow, nSrcTab );
                 }
@@ -635,13 +642,13 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
 
     //  mark range
 
-    USHORT nTab = GetViewData()->GetTabNo();
-    USHORT nCurX = GetViewData()->GetCurX();
-    USHORT nCurY = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData()->GetTabNo();
+    SCCOL nCurX = GetViewData()->GetCurX();
+    SCROW nCurY = GetViewData()->GetCurY();
     HideAllCursors();
     DoneBlockMode();
     InitBlockMode( nCurX, nCurY, nTab );
-    MarkCursor( nCurX+nCols-1, nCurY+nRows-1, nTab );
+    MarkCursor( nCurX+static_cast<SCCOL>(nCols)-1, nCurY+static_cast<SCROW>(nRows)-1, nTab );
     ShowAllCursors();
 
     //  enter formula
