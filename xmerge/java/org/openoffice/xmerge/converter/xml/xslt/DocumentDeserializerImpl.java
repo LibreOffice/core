@@ -86,6 +86,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.Source;
+
 
 //
 //import org.apache.xalan.serialize.Serializer;
@@ -113,7 +117,7 @@ import java.io.FileNotFoundException;
  *  @author      Aidan Butler
  */
 public final class DocumentDeserializerImpl
-    implements  DocumentDeserializer {
+    implements  DocumentDeserializer,URIResolver {
 
     /**  A <code>ConvertData</code> object assigned to this object. */
     private InputStream is = null;
@@ -176,6 +180,28 @@ public final class DocumentDeserializerImpl
     return sxwDoc;
     }
 
+ public Source resolve(String href,String base)
+    throws TransformerException{
+        //System.out.println("\nhref "+href+"\nbase "+base);
+        if (href !=null){
+        if(href.equals("javax.xml.transform.dom.DOMSource")|| href.equals(""))
+            return null;
+        try{
+            ConverterInfo ci = pluginFactory.getConverterInfo();
+            String newhRef ="jar:"+ci.getJarName()+"!/"+href;
+            //System.out.println("\n Looking For "+ newhRef);
+            StreamSource sheetFile= new StreamSource(newhRef);
+            return sheetFile;
+        }
+        catch (Exception e){
+            System.out.println("\nException in Xslt Resolver " +e);
+            return null;
+        }
+        }
+        else
+        return null;
+    }
+
      /*
      * This method performs the xslt transformation on the supplied Dom Tree.
      *
@@ -218,6 +244,7 @@ public final class DocumentDeserializerImpl
 
            //call the tranformer using the XSL, Source and Result dom.
           TransformerFactory tFactory = TransformerFactory.newInstance();
+          tFactory.setURIResolver(this);
           Transformer transformer = tFactory.newTransformer(xslDomSource);
           transformer.transform(xmlDomSource,new StreamResult(baos));
           /*
