@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.sdi,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:41:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ SfxVoidItem TaskPaneApplyToAllSlides SID_TP_APPLY_TO_ALL_SLIDES
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
@@ -94,7 +94,7 @@ SfxVoidItem TaskPaneApplyToSelectedSlides SID_TP_APPLY_TO_SELECTED_SLIDES
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
@@ -119,7 +119,7 @@ SfxVoidItem TaskPaneUseForNewPresentations SID_TP_USE_FOR_NEW_PRESENTATIONS
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
@@ -144,7 +144,7 @@ SfxVoidItem TaskPaneShowSmallPreview SID_TP_SHOW_SMALL_PREVIEW
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
@@ -170,7 +170,7 @@ SfxVoidItem TaskPaneShowLargePreview SID_TP_SHOW_LARGE_PREVIEW
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
+    Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
