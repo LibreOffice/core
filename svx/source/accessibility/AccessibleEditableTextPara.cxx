@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-12 17:17:19 $
+ *  last change: $Author: thb $ $Date: 2002-08-16 11:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,9 @@ namespace accessibility
         }
         else
         {
-            throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No selection available")),
-                                        uno::Reference< uno::XInterface >
-                                        ( static_cast< ::cppu::OWeakObject* >
-                                          ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
+            // #102234# No exception, just set to 'invalid'
+            nStartIndex = -1;
+            nEndIndex = -1;
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-09 15:50:29 $
+ *  last change: $Author: thb $ $Date: 2002-08-16 11:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ namespace accessibility
                    nStartIndex >= 0 && nStartIndex <= USHRT_MAX &&
                    nEndPara >= 0 && nEndPara <= USHRT_MAX &&
                    nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
-                   "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
+                   "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
         return ESelection( static_cast< USHORT >(nStartPara), static_cast< USHORT >(nStartIndex),
                            static_cast< USHORT >(nEndPara), static_cast< USHORT >(nEndIndex) );
@@ -189,13 +189,16 @@ namespace accessibility
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
         sal_Int32                   GetParagraphCount() const;
-        EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const;
+        EPosition                   Index2Internal( sal_Int32 nFlatIndex ) const { return ImpCalcInternal( nFlatIndex, false); }
+        EPosition                   Range2Internal( sal_Int32 nFlatIndex ) const { return ImpCalcInternal( nFlatIndex, true); }
         sal_Bool                    SetSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                                   sal_Int32 nEndPara, sal_Int32 nEndIndex );
         sal_Bool                    CopyText( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                                               sal_Int32 nEndPara, sal_Int32 nEndIndex );
 
     private:
+
+        EPosition                   ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
 
         // our frontend class (the one implementing the actual
         // interface). That's not necessarily the one containing the impl
@@ -286,7 +289,7 @@ namespace accessibility
         return maTextParagraph.GetTextForwarder().GetParagraphCount();
     }
 
-    EPosition AccessibleStaticTextBase_Impl::Index2Internal( sal_Int32 nFlatIndex ) const
+    EPosition AccessibleStaticTextBase_Impl::ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const
     {
         if( nFlatIndex < 0 )
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds")),
@@ -294,7 +297,7 @@ namespace accessibility
         // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
 
         sal_Int32 nCurrPara, nCurrIndex, nParas, nCurrCount;
-        for( nCurrPara=0, nParas=GetParagraphCount(), nCurrIndex=0; nCurrPara<nParas; ++nCurrPara )
+        for( nCurrPara=0, nParas=GetParagraphCount(), nCurrCount=0, nCurrIndex=0; nCurrPara<nParas; ++nCurrPara )
         {
             nCurrCount = GetParagraph( nCurrPara ).getCharacterCount();
             nCurrIndex += nCurrCount;
@@ -308,6 +311,17 @@ namespace accessibility
 
                 return EPosition( static_cast< USHORT >(nCurrPara), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
             }
+        }
+
+        // #102170# Allow one-past the end for ranges
+        if( bExclusive && nCurrIndex == nFlatIndex )
+        {
+            // check overflow
+            DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= USHRT_MAX &&
+                       nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
+                       "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
+
+            return EPosition( static_cast< USHORT >(nCurrPara-1), static_cast< USHORT >(nFlatIndex - nCurrIndex + nCurrCount) );
         }
 
         // not found? Out of bounds
@@ -623,8 +637,8 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aStartIndex( mpImpl->Index2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Index2Internal(nEndIndex) );
+        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
+        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
 
         return mpImpl->SetSelection( aStartIndex.nPara, aStartIndex.nIndex,
                                      aEndIndex.nPara, aEndIndex.nIndex );
@@ -646,8 +660,11 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aStartIndex( mpImpl->Index2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Index2Internal(nEndIndex) );
+        if( nStartIndex > nEndIndex )
+            ::std::swap(nStartIndex, nEndIndex);
+
+        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
+        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
 
         // #102170# Special case: start and end paragraph are identical
         if( aStartIndex.nPara == aEndIndex.nPara )
@@ -676,7 +693,7 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
@@ -692,7 +709,7 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         if( AccessibleTextType::PARAGRAPH == aTextType &&
             aPos.nPara > 0 )
@@ -709,7 +726,7 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aPos( mpImpl->Index2Internal(nIndex) );
+        EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
         if( AccessibleTextType::PARAGRAPH == aTextType &&
             aPos.nPara + 1 < mpImpl->GetParagraphCount() )
@@ -726,8 +743,11 @@ namespace accessibility
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        EPosition aStartIndex( mpImpl->Index2Internal(nStartIndex) );
-        EPosition aEndIndex( mpImpl->Index2Internal(nEndIndex) );
+        if( nStartIndex > nEndIndex )
+            ::std::swap(nStartIndex, nEndIndex);
+
+        EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
+        EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
 
         return mpImpl->CopyText( aStartIndex.nPara, aStartIndex.nIndex,
                                  aEndIndex.nPara, aEndIndex.nIndex );
