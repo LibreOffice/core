@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:57:39 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1210,6 +1210,7 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     int nCharPos = -1;
     Point aNewPos( 0, 0 );
     GlyphItem aPrevItem;
+    rtl_TextEncoding aFontEnc = mrPrinterGfx.GetFontMgr().getFontEncoding( mnFontID );
     for(;;)
     {
         bool bRightToLeft;
@@ -1218,6 +1219,10 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
 
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         int nGlyphIndex = cChar;  // printer glyphs = unicode
+        // symbol font aliasing: 0x0020-0x00ff -> 0xf020 -> 0xf0ff
+        if( aFontEnc == RTL_TEXTENCODING_SYMBOL )
+            if( cChar < 256 )
+                cChar += 0xf000;
 
         // update fallback_runs if needed
         psp::CharacterMetric aMetric;
