@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ void ScXMLDatabaseRangeContext::EndElement()
                                     aSourceType <<= nSourceType;
                                     aImportDescriptor[i].Value = aSourceType;
                                 }
-                                else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NATIVE)))
+                                else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISNATIVE)))
                                 {
                                     uno::Any aNative;
                                     aNative = ::cppu::bool2any(bNative);
