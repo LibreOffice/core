@@ -70,7 +70,7 @@ Dim bAssignFileName as Boolean
 						End If
 						CurFileContent = &quot;&quot;
 						CurFileName = NewList(n,0)													
-						If NewList(n,1) = &quot;vor&quot; Then
+						If (FieldInList(NewList(n,1), XMLTemplateList())) Then
 							CurFileContent = GetRealFileContent(oDocInfo, CurFileName)
 							t = SearchArrayforPartString(CurFileContent, XMLTemplateContentList())
 						 	bAssignFileName = (t &gt; -1)
@@ -150,6 +150,16 @@ Sub AddCollectionPath(ApplIndex as Integer, DocIndex as Integer, RecursiveIndex 
 End Sub
 
 
+Function SetExtension(LocExtension) as String
+	if (Instr(LocExtension, &quot;vnd.sun.xml.impress&quot;)) &gt; 0 then
+		SetExtension() = &quot;vor|sti&quot;
+	elseif (Instr(LocExtension, &quot;vnd.sun.xml.writer&quot;)) &gt; 0 then
+		SetExtension() = &quot;vor|stw&quot;	
+	elseif (Instr(LocExtension, &quot;vnd.sun.xml.calc&quot;)) &gt; 0 then
+		SetExtension() = &quot;vor|stc&quot;
+	endif
+End Function
+
 Sub AddFilterNameToPathItem(ApplIndex as Integer, CollectIndex as Integer, sFiltername() as String, DistIndex as Integer)
 Dim iKey as Integer
 Dim CurListString as String
@@ -160,7 +170,7 @@ Dim LocXMLTemplateContent as String
 	CurListString = PathCollection(CollectIndex, 2)
 	LocExtension = sFilterName(iKey +DistIndex, 0)
 	If Len(LocExtension) &gt; SBMAXEXTENSIONLENGTH Then 			&apos; 7 == Length of two extensions like &apos;sda|sdd
-		LocExtension = &quot;vor&quot;
+		LocExtension = SetExtension(LocExtension)
 		LocContentString = sFilterName(iKey +DistIndex, 0)
 		LocContentString = ReplaceString(LocContentString, &quot;|&quot;, &quot;;&quot;)
 		LocXMLTemplateContent = PathCollection(CollectIndex, 3)
@@ -310,7 +320,7 @@ Dim sPrevMimeTypeorExtension as String
 			sViewPath = ConvertFromUrl(sSourceUrl) 	&apos; CutPathView(sSourceUrl, 70)
 			ImportDialog.LabelCurDocument.Label = Str(i+1) &amp; &quot;/&quot; &amp; MaxFileIndex + 1 &amp; &quot;  (&quot; &amp; sViewPath &amp; &quot;)&quot;
 			Select Case lcase(sExtension)
-				Case &quot;sxw&quot;, &quot;sxc&quot;, &quot;sxi&quot;, &quot;sxd&quot;, &quot;sxs&quot;, &quot;sxm&quot;
+				Case &quot;oot&quot;, &quot;oos&quot;, &quot;oop&quot;, &quot;ood&quot;, &quot;oom&quot;, &quot;oof&quot; 
 					SourceStemDir = RTrimStr(Applications(ApplIndex,SBDOCSOURCE), &quot;/&quot;)
 					TargetStemDir = RTrimStr(Applications(ApplIndex,SBDOCTARGET), &quot;/&quot;)
 				Case Else 								&apos; Templates and Helper-Applications remain
@@ -425,7 +435,7 @@ Dim s as Integer
 		FirstList(i,1) = SecList(s,1)
 		sLocExtension = lcase(FirstList(i,1))
 		Select Case sLocExtension
-			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;
+			Case &quot;sdw&quot;, &quot;sdc&quot;, &quot;sda&quot;, &quot;sdd&quot;, &quot;smf&quot;, &quot;sgl&quot;, &quot;doc&quot;, &quot;xls&quot;, &quot;ppt&quot;, &quot;sxi&quot; , &quot;sxw&quot; , &quot;sxd&quot; , &quot;sxg&quot; , &quot;sxm&quot; , &quot;sxc&quot; 
 				AbsDocuFound = AbsDocuFound + 1
 			Case else
 				AbsTemplateFound = AbsTemplateFound + 1
