@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-15 10:03:38 $
+ *  last change: $Author: cl $ $Date: 2002-01-25 14:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,10 @@ beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& Proper
     }
     else
     {
+        SdrObject* pObj = mpShape->GetSdrObject();
+        if( pObj == NULL || ( pObj->GetPage()->IsMasterPage() && pObj->IsEmptyPresObj() ) )
+            return beans::PropertyState_DEFAULT_VALUE;
+
         return mpShape->_getPropertyState( PropertyName );
     }
 }
