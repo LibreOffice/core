@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:16:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 #include <sot/factory.hxx>
@@ -464,6 +461,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
 
     SwWrtShell &rSh = GetShell();
     USHORT nId = rReq.GetSlot();
+    sal_Bool bIgnore = sal_False;
     switch( nId )
     {
         case SID_CUT:
@@ -530,10 +528,12 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         SwTransferable::PasteFormat( rSh, aDataHelper,
                                         ((SfxUInt32Item*)pFmt)->GetValue() );
 
+                        //Done() has to be called before the shell has been removed
+                        rReq.Done();
+                        bIgnore = sal_True;
                         if( rSh.IsFrmSelected() || rSh.IsObjSelected())
                             rSh.EnterSelFrmMode();
                         pView->AttrChangedNotify( &rSh );
-                        rReq.Done();
                     }
                 }
             }
@@ -556,6 +556,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if ( nRet && rReq.IsRecording() )
                     {
                         rReq.Ignore();
+                        bIgnore = sal_True;
                         SfxRequest aReq( rView.GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
                         aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
                         aReq.Done();
@@ -573,7 +574,8 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             DBG_ERROR("falscher Dispatcher");
             return;
     }
-    rReq.Done();
+    if(!bIgnore)
+        rReq.Done();
 }
 
 /*--------------------------------------------------------------------
