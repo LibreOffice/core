@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:54:04 $
+#   last change: $Author: rt $ $Date: 2004-08-23 13:18:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -247,6 +247,14 @@ $(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs 
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.vb : $(PRJ)$/examples$/%.vb 
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIREXAMPLES)$/%.cs : $(PRJ)$/examples$/%.cs 
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
 
