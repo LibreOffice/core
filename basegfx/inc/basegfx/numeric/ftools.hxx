@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:05 $
+ *  last change: $Author: thb $ $Date: 2004-03-15 14:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,29 +95,29 @@
 #define F_2PI       6.28318530717958647694
 #endif
 
-/** Round double to nearest integer
-
-    @return the nearest integer
- */
-inline sal_Int32 fround( double fVal )
-{
-    return fVal > 0.0 ? static_cast<sal_Int32>( fVal + .5 ) : -static_cast<sal_Int32>( -fVal + .5 );
-}
-
-/** Round double to nearest integer
-
-    @return the nearest 64 bit integer
- */
-inline sal_Int64 fround64( double fVal )
-{
-    return fVal > 0.0 ? static_cast<sal_Int64>( fVal + .5 ) : -static_cast<sal_Int64>( -fVal + .5 );
-}
-
 //////////////////////////////////////////////////////////////////////////////
 // fTools defines
 
 namespace basegfx
 {
+    /** Round double to nearest integer
+
+    @return the nearest integer
+    */
+    inline sal_Int32 fround( double fVal )
+    {
+        return fVal > 0.0 ? static_cast<sal_Int32>( fVal + .5 ) : -static_cast<sal_Int32>( -fVal + .5 );
+    }
+
+    /** Round double to nearest integer
+
+    @return the nearest 64 bit integer
+    */
+    inline sal_Int64 fround64( double fVal )
+    {
+        return fVal > 0.0 ? static_cast<sal_Int64>( fVal + .5 ) : -static_cast<sal_Int64>( -fVal + .5 );
+    }
+
     class fTools
     {
         static double                                   mfSmallValue;
