@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-05 12:35:56 $
+#   last change: $Author: hjs $ $Date: 2001-11-07 14:31:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 .IF "$(UPDATER)"!=""
 %minor.mk :
 .IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
-    @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc >& $(NULLDEV)
+    @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT) >& $(NULLDEV)
     @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(UPD)minor.mk >& $(NULLDEV)
 .ELSE			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+echo "#"
