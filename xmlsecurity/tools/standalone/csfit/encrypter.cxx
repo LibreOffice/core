@@ -2,9 +2,9 @@
  *
  *  $RCSfile: encrypter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-15 08:22:31 $
+ *  last change: $Author: mmi $ $Date: 2004-08-06 03:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Create encryption template
         Reference< XInterface > tplElement =
-            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.xsec.XMLElementWrapper" ) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl" ) , xContext ) ;
         OSL_ENSURE( tplElement.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.XMLElementWrapper\"" ) ;
@@ -202,7 +202,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Create encryption target element
         Reference< XInterface > tarElement =
-            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.xsec.XMLElementWrapper" ) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl" ) , xContext ) ;
         OSL_ENSURE( tarElement.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.XMLElementWrapper\"" ) ;
@@ -227,7 +227,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Encryption template
         Reference< XInterface > enctpl =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLEncryptionTemplate"), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.crypto.XMLEncryptionTemplate"), xContext ) ;
         OSL_ENSURE( enctpl.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.XMLEncryptionTemplate\"" ) ;
@@ -244,7 +244,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.SecurityEnvironment"), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;
@@ -272,7 +272,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Security Context
         Reference< XInterface > xmlsecctx =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLSecurityContext"), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_NssImpl"), xContext ) ;
         OSL_ENSURE( xmlsecctx.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.XMLSecurityContext\"" ) ;
@@ -286,7 +286,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Get encrypter
         Reference< XInterface > xmlencrypter =
-            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.xsec.XMLEncryption"), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLEncryption_NssImpl"), xContext ) ;
         OSL_ENSURE( xmlencrypter.is() ,
             "Encryptor - "
             "Cannot get service instance of \"xsec.XMLEncryption\"" ) ;
