@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-08 16:38:04 $
+ *  last change: $Author: ab $ $Date: 2002-10-30 09:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,12 @@ SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 
 #define IDE_VIEWSHELL_FLAGS     SFX_VIEW_MAXIMIZE_FIRST|SFX_VIEW_CAN_PRINT|SFX_VIEW_NO_NEWWINDOW
 
+
+// Hack for #101048
+static sal_Int32 GnBasicIDEShellCount;
+sal_Int32 getBasicIDEShellCount( void )
+    { return GnBasicIDEShellCount; }
+
 BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, Window * ):
         SfxViewShell( pFrame, IDE_VIEWSHELL_FLAGS ),
         aHScrollBar( &GetViewFrame()->GetWindow(), WinBits( WB_HSCROLL | WB_DRAG ) ),
@@ -153,6 +159,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, Window * ):
         m_bAppBasicModified( FALSE )
 {
     Init();
+    GnBasicIDEShellCount++;
 }
 
 
@@ -164,8 +171,8 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame *pFrame, const BasicIDEShell & rView)
         m_bAppBasicModified( FALSE )
 {
     DBG_ERROR( "Zweite Ansicht auf Debugger nicht moeglich!" );
+    GnBasicIDEShellCount++;
 }
-
 
 
 BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame, SfxViewShell* /* pOldShell */ ) :
@@ -176,6 +183,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame, SfxViewShell* /* pOldShell *
         m_bAppBasicModified( FALSE )
 {
     Init();
+    GnBasicIDEShellCount++;
 }
 
 
@@ -260,6 +268,8 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
 
     SFX_APP()->LeaveBasicCall();
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = FALSE;
+
+    GnBasicIDEShellCount--;
 }
 
 sal_Bool BasicIDEShell::HasBasic() const
