@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:35:29 $
+ *  last change: $Author: fs $ $Date: 2001-09-24 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef SVTOOLS_INSTRM_HXX
 #include "instrm.hxx"
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -95,6 +98,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::vos;
+using namespace ::utl;
 
 #define PERSISTENT_SERVICE_NAME     ::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier");
 
@@ -252,14 +256,40 @@ Reference< XNumberFormats > SAL_CALL SvNumberFormatsSupplierServiceObject::getNu
 }
 
 //-------------------------------------------------------------------------
+sal_Int64 SAL_CALL SvNumberFormatsSupplierServiceObject::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException)
+{
+    sal_Int64 nReturn = SvNumberFormatsSupplierObj::getSomething( aIdentifier );
+    if ( nReturn )
+        // if somebody accesses internals then we should have the formatter
+        implEnsureFormatter();
+    return nReturn;
+}
+
+//-------------------------------------------------------------------------
 void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
 {
     if (!m_pOwnFormatter)
     {
-        DBG_ERROR("SvNumberFormatsSupplierServiceObject::implEnsureFormatter : forced to initialize with a default language !");
-            // you should use XMultiServiceFactory::createInstanceWithArguments (with an Locale as parameter)
-        m_pOwnFormatter = new SvNumberFormatter(m_xORB, LANGUAGE_ENGLISH_US);
-        SetNumberFormatter(m_pOwnFormatter);
+        // get the office's UI locale
+        Any aOfficeLocale = ConfigManager::GetDirectConfigProperty( ConfigManager::LOCALE );
+        ::rtl::OUString sOfficeLocale;
+#ifdef DBG_UTIL
+        sal_Bool bSuccess =
+#endif
+        aOfficeLocale >>= sOfficeLocale;
+        DBG_ASSERT( bSuccess, "SvNumberFormatsSupplierServiceObject::implEnsureFormatter: invalid Locale property!" );
+
+        // build an css.util.Locale
+        sal_Int32 nSepPos = sOfficeLocale.indexOf( '-' );
+        Locale aExtracted;
+        aExtracted.Language = sOfficeLocale.copy( 0, nSepPos );
+        aExtracted.Country = sOfficeLocale.copy( nSepPos + 1 );
+
+        // initi with this locale
+        Sequence< Any > aFakedInitProps( 1 );
+        aFakedInitProps[0] <<= aExtracted;
+
+        initialize( aFakedInitProps );
     }
 }
 

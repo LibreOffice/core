@@ -2,9 +2,9 @@
  *
  *  $RCSfile: supservs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-11 16:09:41 $
+ *  last change: $Author: fs $ $Date: 2001-09-24 14:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@ public:
                 getNumberFormatSettings() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL
                 getNumberFormats() throw(::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnler
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     void implEnsureFormatter();
