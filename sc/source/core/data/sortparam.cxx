@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortparam.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:47:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include "sortparam.hxx"
 #include "global.hxx"
+#include "address.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -102,7 +103,10 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 
 void ScSortParam::Clear()
 {
-    nCol1=nRow1=nCol2=nRow2=nDestTab=nDestCol=nDestRow=nUserIndex = 0;
+    nCol1=nCol2=nDestCol = 0;
+    nRow1=nRow2=nDestRow = 0;
+    nDestTab = 0;
+    nUserIndex = 0;
     bHasHeader=bCaseSens=bUserDef = FALSE;
     bByRow=bIncludePattern=bInplace = TRUE;
     aCollatorLocale = ::com::sun::star::lang::Locale();
@@ -220,7 +224,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
     for (i=0; i<MAXSORT; i++)
         if (rOld.bDoSort[i])
         {
-            USHORT nThisField = rOld.nField[i];
+            SCCOLROW nThisField = rOld.nField[i];
             BOOL bDouble = FALSE;
             for (USHORT j=0; j<nNewCount; j++)
                 if ( nField[j] == nThisField )
@@ -247,7 +251,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 
 //------------------------------------------------------------------------
 
-ScSortParam::ScSortParam( const ScQueryParam& rParam, USHORT nCol ) :
+ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nRow2(rParam.nRow2),nCol2(nCol),
         bHasHeader(rParam.bHasHeader),bCaseSens(rParam.bCaseSens),
 //! TODO: what about Locale and Algorithm?
@@ -272,8 +276,8 @@ void ScSortParam::MoveToDest()
 {
     if (!bInplace)
     {
-        short nDifX = ((short) nDestCol) - ((short) nCol1);
-        short nDifY = ((short) nDestRow) - ((short) nRow1);
+        SCsCOL nDifX = ((SCsCOL) nDestCol) - ((SCsCOL) nCol1);
+        SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
 
         nCol1 += nDifX;
         nRow1 += nDifY;
