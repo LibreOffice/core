@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:01:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1199,6 +1199,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
 sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                            const sal_Bool bInFooterOrHeader )
 {
+    // pCurrFly is set, if pCurrFrm is inside a fly frame
     if( pNew != pCurrFly )
     {
         // #102344# Ignore connectors which have one or more connections
@@ -1232,29 +1233,43 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             }
         }
 
-        sal_Bool bEvade = !pCurrFly  //Selbst nicht im Fly -> allen ausweichen.
-                 //Den Lowern ist auszuweichen.
-            || Is_Lower_Of(((SwVirtFlyDrawObj*)pCurrFly)->GetFlyFrm(), pNew);
+        // bEvade: consider pNew, if we are not inside a fly
+        //         consider pNew, if pNew is lower of pCurrFly
+        sal_Bool bEvade = !pCurrFly
+                       || Is_Lower_Of(((SwVirtFlyDrawObj*)pCurrFly)->GetFlyFrm(), pNew);
+
         if ( !bEvade )
         {
+            // We are currently inside a fly frame and pNew is not
+            // inside this fly frame. We can do some more checks if
+            // we have to consider pNew.
+
+            // If bTopRule is not set, we ignore the frame types.
+            // We directly check the z-order
             if ( !bTopRule )
-                bEvade = sal_True; // nur an der Paint-Ordnung interessiert
+                bEvade = sal_True;
             else
             {
                 // innerhalb von verketteten Flys wird nur Lowern ausgewichen
                 const SwFmtChain &rChain = ((SwContact*)GetUserCall(pCurrFly))->GetFmt()->GetChain();
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
                 {
-                    // Ausweichregel fuer Text:
                     const SwFmtAnchor& rNewA =
                         ((SwContact*)GetUserCall(pNew))->GetFmt()->GetAnchor();
                     const SwFmtAnchor& rCurrA =
                         ((SwContact*)GetUserCall(pCurrFly))->GetFmt()->GetAnchor();
+
+                    // If pCurrFly is anchored as character, its content
+                    // does not wrap around pNew
                     if( FLY_IN_CNTNT == rCurrA.GetAnchorId() )
-                        return sal_False; // Zeichengebundene weichen nur Lowern aus.
+                        return sal_False;
+
+                    // If pNew is anchored to page and pCurrFly is not anchored
+                    // to page, the content of pCurrFly does not wrap around pNew
+                    // If both pNew and pCurrFly are anchored to page, we can do
+                    // some more checks
                     if( FLY_PAGE == rNewA.GetAnchorId() )
-                    {   //Chg: Seitengebundenen wird nur noch von anderen
-                        // seitengebundenen ausgewichen!
+                    {
                         if( FLY_PAGE == rCurrA.GetAnchorId() )
                             bEvade = sal_True;
                         else
@@ -1275,6 +1290,7 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                                 rCurrA.GetCntntAnchor()->nNode.GetIndex();
                 }
             }
+
             // aber: es wird niemals einem hierarchisch untergeordnetem
             // ausgewichen und ausserdem braucht nur bei Ueberlappung
             // ausgewichen werden.
@@ -1286,6 +1302,7 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                     bEvade = sal_False;
             }
         }
+
         if ( bEvade )
         {
             const SwFmtAnchor& rNewA =
@@ -1311,11 +1328,21 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                     aPos = pNew->GetCurrentBoundRect().TopLeft();
                 pTmp = GetVirtualUpper( pTmp, aPos );
             }
-            if( pCurrFrm->GetNext() != pTmp &&
-                IsFrmInSameKontext( pTmp, pCurrFrm ) )
+
+            const SwFrm* pHeader = 0;
+            if ( pCurrFrm->GetNext() != pTmp &&
+                    ( IsFrmInSameKontext( pTmp, pCurrFrm ) ||
+                        // --> #i13832#, #i24135# wrap around objects in page header
+                        ( !pCurrFrm->GetTxtNode()->GetDoc()->IsFormerTextWrapping() &&
+                          0 != ( pHeader = pTmp->FindFooterOrHeader() ) &&
+                          !pHeader->IsFooterFrm() &&
+                          pCurrFrm->IsInDocBody() ) ) )
+                        // <--
             {
-                if( FLY_AT_FLY == rNewA.GetAnchorId() ) // LAYER_IMPL
-                    return sal_True;  // Rahmengebundenen ausweichen.
+                if( pHeader || FLY_AT_FLY == rNewA.GetAnchorId() )
+                    return sal_True;
+
+                // Compare indices:
                 // Den Index des anderen erhalten wir immer ueber das Ankerattr.
                 ULONG nTmpIndex = rNewA.GetCntntAnchor()->nNode.GetIndex();
                 // Jetzt wird noch ueberprueft, ob der aktuelle Absatz vor dem
@@ -1350,8 +1377,17 @@ SwFlyList *SwTxtFly::InitFlyList()
 
     const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
     const MSHORT nCount = pSorted ? pSorted->Count() : 0;
+    // --> #108724# Page header/footer content doesn't have to wrap around
+    //              floating screen objects
+    const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
+    const SwDoc* pDoc = pCurrFrm->GetTxtNode()->GetDoc();
+    const sal_Bool bWrapAllowed = pDoc->IsFormerTextWrapping() ||
+                                ( !pCurrFrm->IsInFtn() && !bFooterHeader );
+    // <--
+
     bOn = sal_False;
-    if( nCount )
+
+    if( nCount && bWrapAllowed )
     {
         pFlyList = new SwFlyList( 10, 10 );
 
@@ -1362,7 +1398,6 @@ SwFlyList *SwTxtFly::InitFlyList()
         SWRECTFN( pCurrFrm )
         const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
-        const sal_Bool bFooter = pCurrFrm->IsInFtn();
         const sal_Bool bR2L = pCurrFrm->IsRightToLeft();
 
         for( MSHORT i = 0; i < nCount; i++ )
@@ -1371,7 +1406,7 @@ SwFlyList *SwTxtFly::InitFlyList()
             const SwRect aBound( GetBoundRect( pO ) );
 
             // OD 2004-01-15 #110582# - do not consider hidden objects
-            if ( !pCurrFrm->GetTxtNode()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) ||
+            if ( !pDoc->IsVisibleLayerId( pO->GetLayer() ) ||
                  nRight < (aBound.*fnRect->fnGetLeft)() ||
                  (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
                                      (aBound.*fnRect->fnGetBottom)() ) > 0 ||
@@ -1380,8 +1415,7 @@ SwFlyList *SwTxtFly::InitFlyList()
                 continue;
             }
 
-            if( GetTop( pO, pCurrFrm->IsInFtn(),
-                        0 != pCurrFrm->FindFooterOrHeader() ) )
+            if( GetTop( pO, pCurrFrm->IsInFtn(), bFooterHeader ) )
             {
                 // OD 11.03.2003 #107862# - adjust insert position:
                 // overlapping objects should be sorted from left to right and
