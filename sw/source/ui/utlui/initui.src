@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:45:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:55:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1787,7 +1787,7 @@ String STR_AUTH_TYPE_CUSTOM5
 
 String STR_AUTH_FIELD_IDENTIFIER
 {
-    Text = "~Kurzbezeichnung" ;
+    Text = "Kurzbezeichnung" ;
     Text [ ENGLISH ] = "Identifier" ;
     Text[ english_us ] = "Short name";
     Text[ portuguese ] = "~Abreviatura";
@@ -1813,7 +1813,7 @@ String STR_AUTH_FIELD_IDENTIFIER
 };
 String STR_AUTH_FIELD_AUTHORITY_TYPE
 {
-    Text = "~Typ" ;
+    Text = "Typ" ;
     Text [ ENGLISH ] = "Type" ;
     Text[ english_us ] = "Type";
     Text[ portuguese ] = "~Tipo";
@@ -1866,9 +1866,9 @@ String STR_AUTH_FIELD_ADDRESS
 };
 String STR_AUTH_FIELD_ANNOTE
 {
-    Text = "~Anmerkung" ;
+    Text = "Anmerkung" ;
     Text [ ENGLISH ] = "Annotation" ;
-    Text[ english_us ] = "Ann~otation";
+    Text[ english_us ] = "Annotation";
     Text[ portuguese ] = "Ob~servaзгo";
     Text[ russian ] = " омментарий";
     Text[ greek ] = "–бсбфёсзуз";
@@ -1892,7 +1892,7 @@ String STR_AUTH_FIELD_ANNOTE
 };
 String STR_AUTH_FIELD_AUTHOR
 {
-    Text = "A~utor(en)" ;
+    Text = "Autor(en)" ;
     Text [ ENGLISH ] = "Author(s)" ;
     Text[ english_us ] = "Author(s)";
     Text[ portuguese ] = "~Autor(es)";
@@ -1919,7 +1919,7 @@ String STR_AUTH_FIELD_AUTHOR
 };
 String STR_AUTH_FIELD_BOOKTITLE
 {
-    Text = "Bu~chtitel" ;
+    Text = "Buchtitel" ;
     Text [ ENGLISH ] = "Book title" ;
     Text[ english_us ] = "Book title";
     Text[ portuguese ] = "Tнtu~lo do livro";
@@ -1946,7 +1946,7 @@ String STR_AUTH_FIELD_BOOKTITLE
 };
 String STR_AUTH_FIELD_CHAPTER
 {
-    Text = "Ka~pitel" ;
+    Text = "Kapitel" ;
     Text [ ENGLISH ] = "Chapter" ;
     Text[ english_us ] = "Chapter";
     Text[ portuguese ] = "Ca~pнtulo";
@@ -1973,7 +1973,7 @@ String STR_AUTH_FIELD_CHAPTER
 };
 String STR_AUTH_FIELD_EDITION
 {
-    Text = "Aus~gabe" ;
+    Text = "Ausgabe" ;
     Text [ ENGLISH ] = "Edition" ;
     Text[ english_us ] = "Edition";
     Text[ portuguese ] = "Ed~iзгo";
@@ -2000,7 +2000,7 @@ String STR_AUTH_FIELD_EDITION
 };
 String STR_AUTH_FIELD_EDITOR
 {
-    Text = "Herausge~ber" ;
+    Text = "Herausgeber" ;
     Text [ ENGLISH ] = "Editor" ;
     Text[ english_us ] = "Editor";
     Text[ portuguese ] = "~Editor";
@@ -2027,7 +2027,7 @@ String STR_AUTH_FIELD_EDITOR
 };
 String STR_AUTH_FIELD_HOWPUBLISHED
 {
-    Text = "Au~sgabeart" ;
+    Text = "Ausgabeart" ;
     Text [ ENGLISH ] = "How published" ;
     Text[ english_us ] = "Publication type";
     Text[ portuguese ] = "~Tipo de ediзгo";
@@ -2054,7 +2054,7 @@ String STR_AUTH_FIELD_HOWPUBLISHED
 };
 String STR_AUTH_FIELD_INSTITUTION
 {
-    Text = "~Institution" ;
+    Text = "Institution" ;
     Text [ ENGLISH ] = "Institution" ;
     Text[ english_us ] = "Institution";
     Text[ portuguese ] = "~Instituiзгo";
@@ -2081,7 +2081,7 @@ String STR_AUTH_FIELD_INSTITUTION
 };
 String STR_AUTH_FIELD_JOURNAL
 {
-    Text = "~Zeitschrift" ;
+    Text = "Zeitschrift" ;
     Text [ ENGLISH ] = "Journal" ;
     Text[ english_us ] = "Journal";
     Text[ portuguese ] = "~Revista";
@@ -2108,7 +2108,7 @@ String STR_AUTH_FIELD_JOURNAL
 };
 String STR_AUTH_FIELD_MONTH
 {
-    Text = "~Monat" ;
+    Text = "Monat" ;
     Text [ ENGLISH ] = "Month" ;
     Text[ english_us ] = "Month";
     Text[ portuguese ] = "~Mкs";
@@ -2135,9 +2135,8 @@ String STR_AUTH_FIELD_MONTH
 };
 String STR_AUTH_FIELD_NOTE
 {
-    Text = "~Notiz" ;
-    Text [ ENGLISH ] = "Note" ;
-    Text[ english_us ] = "Not~e";
+    Text = "Notiz" ;
+    Text[ english_us ] = "Note";
     Text[ portuguese ] = "~Anotaзгo";
     Text[ russian ] = "ѕримечание";
     Text[ greek ] = "”змеящуз";
@@ -2162,7 +2161,7 @@ String STR_AUTH_FIELD_NOTE
 };
 String STR_AUTH_FIELD_NUMBER
 {
-    Text = "Numme~r" ;
+    Text = "Nummer" ;
     Text [ ENGLISH ] = "Number" ;
     Text[ english_us ] = "Number";
     Text[ portuguese ] = "~Nъmero";
@@ -2189,7 +2188,7 @@ String STR_AUTH_FIELD_NUMBER
 };
 String STR_AUTH_FIELD_ORGANIZATIONS
 {
-    Text = "~Organisation" ;
+    Text = "Organisation" ;
     Text [ ENGLISH ] = "Organization" ;
     Text[ english_us ] = "Organization";
     Text[ portuguese ] = "~Organizaзгo";
@@ -2243,7 +2242,7 @@ String STR_AUTH_FIELD_PAGES
 };
 String STR_AUTH_FIELD_PUBLISHER
 {
-    Text = "Ver~lag" ;
+    Text = "Verlag" ;
     Text [ ENGLISH ] = "Publisher" ;
     Text[ english_us ] = "Publisher";
     Text[ portuguese ] = "E~ditora";
@@ -2270,7 +2269,7 @@ String STR_AUTH_FIELD_PUBLISHER
 };
 String STR_AUTH_FIELD_SCHOOL
 {
-    Text = "Hochschule/Universit~дt" ;
+    Text = "Hochschule/Universitдt" ;
     Text [ ENGLISH ] = "University" ;
     Text[ english_us ] = "University";
     Text[ portuguese ] = "Escola superior/Uni~versidade";
@@ -2297,7 +2296,7 @@ String STR_AUTH_FIELD_SCHOOL
 };
 String STR_AUTH_FIELD_SERIES
 {
-    Text = "Ser~ie";
+    Text = "Serie";
     Text[English]= "Series";
     Text[ english_us ] = "Series";
     Text[ portuguese ] = "~Sйrie";
@@ -2323,7 +2322,7 @@ String STR_AUTH_FIELD_SERIES
 };
 String STR_AUTH_FIELD_TITLE
 {
-    Text = "Tit~el" ;
+    Text = "Titel" ;
     Text [ ENGLISH ] = "Title" ;
     Text[ english_us ] = "Title";
     Text[ portuguese ] = "Tнtu~lo";
@@ -2403,7 +2402,7 @@ String STR_AUTH_FIELD_VOLUME
 };
 String STR_AUTH_FIELD_YEAR
 {
-    Text = "~Jahr" ;
+    Text = "Jahr" ;
     Text [ ENGLISH ] = "Year" ;
     Text[ english_us ] = "Year";
     Text[ portuguese ] = "~Ano";
@@ -2456,9 +2455,8 @@ String STR_AUTH_FIELD_URL
 };
 String STR_AUTH_FIELD_CUSTOM1
 {
-    Text = "Benutzerfeld~1" ;
-    Text [ ENGLISH ] = "Custom1" ;
-    Text[ english_us ] = "User-defined~1";
+    Text = "Benutzerfeld1" ;
+    Text[ english_us ] = "User-defined1";
     Text[ portuguese ] = "Campo de utilizador~1";
     Text[ russian ] = "ѕоле пользовател€1";
     Text[ greek ] = "–едяп чсёуфз~1";
@@ -2483,9 +2481,8 @@ String STR_AUTH_FIELD_CUSTOM1
 };
 String STR_AUTH_FIELD_CUSTOM2
 {
-    Text = "Benutzerfeld~2" ;
-    Text [ ENGLISH ] = "Custom2" ;
-    Text[ english_us ] = "User-defined~2";
+    Text = "Benutzerfeld2" ;
+    Text[ english_us ] = "User-defined2";
     Text[ portuguese ] = "Campo de utilizador~2";
     Text[ russian ] = "ѕоле пользовател€2";
     Text[ greek ] = "–едяп чсёуфз~2";
@@ -2510,9 +2507,8 @@ String STR_AUTH_FIELD_CUSTOM2
 };
 String STR_AUTH_FIELD_CUSTOM3
 {
-    Text = "Benutzerfeld~3" ;
-    Text [ ENGLISH ] = "Custom3" ;
-    Text[ english_us ] = "User-defined~3";
+    Text = "Benutzerfeld3" ;
+    Text[ english_us ] = "User-defined3";
     Text[ portuguese ] = "Campo de utilizador~3";
     Text[ russian ] = "ѕоле пользовател€3";
     Text[ greek ] = "–едяп чсёуфз~3";
@@ -2537,9 +2533,8 @@ String STR_AUTH_FIELD_CUSTOM3
 };
 String STR_AUTH_FIELD_CUSTOM4
 {
-    Text = "Benutzerfeld~4" ;
-    Text [ ENGLISH ] = "Custom4" ;
-    Text[ english_us ] = "User-defined~4";
+    Text = "Benutzerfeld4" ;
+    Text[ english_us ] = "User-defined4";
     Text[ portuguese ] = "Campo de utilizador~4";
     Text[ russian ] = "ѕоле пользовател€4";
     Text[ greek ] = "–едяп чсёуфз~4";
@@ -2564,9 +2559,9 @@ String STR_AUTH_FIELD_CUSTOM4
 };
 String STR_AUTH_FIELD_CUSTOM5
 {
-    Text = "Benutzerfeld~5" ;
+    Text = "Benutzerfeld5" ;
     Text [ ENGLISH ] = "Custom5" ;
-    Text[ english_us ] = "User-defined~5";
+    Text[ english_us ] = "User-defined5";
     Text[ portuguese ] = "Campo de utilizador~5";
     Text[ russian ] = "ѕоле пользовател€5";
     Text[ greek ] = "–едяп чсёуфз~5";
