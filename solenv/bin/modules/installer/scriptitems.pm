@@ -213,6 +213,40 @@ sub remove_delete_only_files_from_productlists
 }
 
 #############################################################################
+# Files with flag NOT_IN_SUITE do not need to be packed into
+# Suite installation sets
+#############################################################################
+
+sub remove_notinsuite_files_from_productlists
+{
+    my ($productarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_notinsuite_files_from_productlists : $#{$productarrayref}"); }
+
+    my @newitems = ();
+
+    for ( my $i = 0; $i <= $#{$productarrayref}; $i++ )
+    {
+        my $oneitem = ${$productarrayref}[$i];
+        my $styles = "";
+
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if (!($styles =~ /\bNOT_IN_SUITE\b/))
+        {
+            push(@newitems, $oneitem);
+        }
+        else
+        {
+            my $infoline = "INFO: Flag NOT_IN_SUITE \-\> Removing $oneitem->{'gid'} from file list.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+        }
+    }
+
+    return \@newitems;
+}
+
+#############################################################################
 # Registryitems for Uninstall have to be removed
 #############################################################################
 
