@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 10:52:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,8 @@ using namespace ::utl;
 #define STR_SELECT      ::rtl::OUString::createFromAscii("SELECT ")
 #define STR_FROM        ::rtl::OUString::createFromAscii(" FROM ")
 #define STR_WHERE       ::rtl::OUString::createFromAscii(" WHERE ")
+#define STR_GROUP_BY    ::rtl::OUString::createFromAscii(" GROUP BY ")
+#define STR_HAVING      ::rtl::OUString::createFromAscii(" HAVING ")
 #define STR_ORDER_BY    ::rtl::OUString::createFromAscii(" ORDER BY ")
 #define STR_AND         ::rtl::OUString::createFromAscii(" AND ")
 #define STR_LIKE        ::rtl::OUString::createFromAscii(" LIKE ")
@@ -431,7 +433,14 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     if(xStmt.is())
     {
         ::rtl::OUString sSql = m_aWorkSql;
-        sSql += STR_WHERE;
+        ::rtl::OUString sGroupBy = getGroupBy();
+        if(sGroupBy.getLength())
+        {
+            sSql += sGroupBy;
+            sSql += STR_HAVING;
+        }
+        else
+            sSql += STR_WHERE;
         sSql += ::rtl::OUString::createFromAscii(" 0 = 1");
 
         Reference<XResultSetMetaDataSupplier> xResMetaDataSup;
@@ -452,7 +461,6 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
                 if(i <= aCols->size())
                 {
-                    aNames.push_back(sName);
                     if(aFind == aCols->end())
                     { // here we have to make the assumption that the postion is correct
                         OSQLColumns::iterator aFind2 = aCols->begin() + i-1;
@@ -460,12 +468,16 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
                         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
                         {
                             ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                            pColumn->setName(sName);
+                            if(sName.getLength())
+                                pColumn->setName(sName);
+                            else
+                                xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
                             pColumn->setRealName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_REALNAME)));
                             pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
                             (*aCols)[i-1] = pColumn;
                         }
                     }
+                    aNames.push_back(sName);
                 }
             }
         }
@@ -698,6 +710,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     // add the filter and the sort order
     aSql2 += getComposedFilter();
+    aSql2 += getGroupBy();
     aSql2 += getComposedSort();
 
     resetIterator(aSql2);
@@ -756,6 +769,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
 
     // add the filter and the sort order
     aSql += getComposedFilter();
+    aSql += getGroupBy();
     aSql += getComposedSort();
 
     resetIterator(aSql);
@@ -771,6 +785,7 @@ void SAL_CALL OQueryComposer::setFilter( const ::rtl::OUString& filter ) throw(S
 
     // add the filter and the sort order
     aSql += getComposedFilter();
+    aSql += getGroupBy();
     aSql += getComposedSort();
 
     resetIterator(aSql);

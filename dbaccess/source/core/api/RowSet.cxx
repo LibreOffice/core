@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-19 12:52:27 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,6 +1598,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                                 m_aCurrentRow,
                                                                                 m_pCache->getEnd());
                             aColumns->push_back(pColumn);
+                            if(!sName.getLength())
+                            {
+                                if(xColumn.is())
+                                    xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                                else
+                                    sName = ::rtl::OUString::createFromAscii("Expression1");
+                            }
                             pColumn->setName(sName);
                             aNames.push_back(sName);
                             m_aDataColumns.push_back(pColumn);

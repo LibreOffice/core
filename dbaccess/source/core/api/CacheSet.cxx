@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     m_bDeleted = xPrep->executeUpdate() > 0;
 }
 // -------------------------------------------------------------------------
-void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter,const ORowSetValue& _rValue) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter,const ORowSetValue& _rValue) throw(SQLException, RuntimeException)
 {
     if(!_rValue.isNull())
     {
@@ -602,6 +602,205 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         }
 
     }
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::wasNull(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->wasNull();
+}
+// -------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OCacheSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getString(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getBoolean(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int8 SAL_CALL OCacheSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getByte(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int16 SAL_CALL OCacheSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getShort(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OCacheSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getInt(columnIndex);
+}
+// -------------------------------------------------------------------------
+sal_Int64 SAL_CALL OCacheSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getLong(columnIndex);
+}
+// -------------------------------------------------------------------------
+float SAL_CALL OCacheSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getFloat(columnIndex);
+}
+// -------------------------------------------------------------------------
+double SAL_CALL OCacheSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getDouble(columnIndex);
+}
+// -------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL OCacheSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getBytes(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::Date SAL_CALL OCacheSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getDate(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::Time SAL_CALL OCacheSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getTime(columnIndex);
+}
+// -------------------------------------------------------------------------
+::com::sun::star::util::DateTime SAL_CALL OCacheSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getTimestamp(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getBinaryStream(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< ::com::sun::star::io::XInputStream > SAL_CALL OCacheSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getCharacterStream(columnIndex);
+}
+// -------------------------------------------------------------------------
+Any SAL_CALL OCacheSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getObject(columnIndex,typeMap);
+}
+// -------------------------------------------------------------------------
+Reference< XRef > SAL_CALL OCacheSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getRef(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XBlob > SAL_CALL OCacheSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getBlob(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XClob > SAL_CALL OCacheSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getClob(columnIndex);
+}
+// -------------------------------------------------------------------------
+Reference< XArray > SAL_CALL OCacheSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverRow->getArray(columnIndex);
+}
+// -------------------------------------------------------------------------
+// XResultSet
+sal_Bool SAL_CALL OCacheSet::next(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->next();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->isBeforeFirst();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::isAfterLast(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->isAfterLast();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::isFirst(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->isFirst();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->isLast();
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OCacheSet::beforeFirst(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_xDriverSet->beforeFirst();
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OCacheSet::afterLast(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    m_xDriverSet->afterLast();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::first(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->first();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::last(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->last();
+}
+// -------------------------------------------------------------------------
+sal_Int32 SAL_CALL OCacheSet::getRow(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->getRow();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->absolute(row);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->relative(rows);
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    return m_xDriverSet->previous();
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OCacheSet::refreshRow(  ) throw(SQLException, RuntimeException)
+{
+    m_xDriverSet->refreshRow();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::rowUpdated(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->rowUpdated();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::rowInserted(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->rowInserted();
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->rowDeleted();
+}
+// -------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException, RuntimeException)
+{
+    return m_xDriverSet->getStatement();
 }
 // -----------------------------------------------------------------------------
 

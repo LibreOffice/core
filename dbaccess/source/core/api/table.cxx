@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:21:39 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 07:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,23 +157,26 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,const OConfigurati
 {
     DBG_CTOR(ODBTable, NULL);
     osl_incrementInterlockedCount( &m_refCount );
+    try
+    {
+        DBG_ASSERT(m_xMetaData.is(), "ODBTable::ODBTable : invalid conn !");
+        DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
+        // register our properties
+        construct();
+        refreshColumns();
 
-    DBG_ASSERT(m_xMetaData.is(), "ODBTable::ODBTable : invalid conn !");
-    DBG_ASSERT(_rName.getLength(), "ODBTable::ODBTable : name !");
-    // register our properties
-    construct();
-    refreshColumns();
-    //  refreshKeys();
-    //  refreshIndexes();
+        // load the settings from the configuration
+        if(m_aConfigurationNode.isValid())
+            // our own settings
+            loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
-    // load the settings from the configuration
-    if(m_aConfigurationNode.isValid())
-        // our own settings
-        loadFrom(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
-
-    // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
-    // (see getFastPropertyValue)
-    m_nPrivileges = -1;
+        // we don't collect the privileges here, this is potentially expensive. Instead we determine them on request.
+        // (see getFastPropertyValue)
+        m_nPrivileges = -1;
+    }
+    catch(Exception&)
+    {
+    }
     osl_decrementInterlockedCount( &m_refCount );
 
     // TODO : think about collecting the privileges here, as we can't ensure that in getFastPropertyValue, where
