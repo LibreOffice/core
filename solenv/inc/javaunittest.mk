@@ -2,9 +2,9 @@
 #
 #   $RCSfile: javaunittest.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 02:41:44 $
+#   last change: $Author: rt $ $Date: 2004-07-23 15:10:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,7 @@ $(MISC)$/$(TARGET).javamaker.flag: $(MISC)$/$(TARGET).rdb
     $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD $< -X$(SOLARBINDIR)$/types.rdb
     $(TOUCH) $@
 
-$(MISC)$/$(TARGET).rdb: \
+$(MISC)$/$(TARGET).rdb .ERRREMOVE: \
         $(foreach,i,$(IDLTESTFILES) $(subst,.idl,.urd $(MISC)$/$(TARGET)$/$i))
     - rm $@
     $(REGMERGE) $@ /UCR $<
