@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:40:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,6 +1068,9 @@ BOOL SwDoc::RemoveInvisibleContent()
         for( n = rSectFmts.Count(); n; )
         {
             SwSectionFmt* pSectFmt = rSectFmts[ --n ];
+            // don't add sections in Undo/Redo
+            if( !pSectFmt->IsInNodesArr())
+                continue;
             SwSection* pSect = pSectFmt->GetSection();
             if( pSect->CalcHiddenFlag() )
             {
