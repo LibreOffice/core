@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change:$Date: 2004-11-02 11:34:05 $
+ *  last change:$Date: 2004-12-10 17:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ import share.DescEntry;
 import share.LogWriter;
 
 import util.DynamicClassLoader;
+import util.utils;
 
 
 /**
@@ -142,6 +143,7 @@ public class OfficeProvider implements AppProvider {
     public Object getManager(lib.TestParameters param) {
         String errorMessage = null;
         boolean bAppExecutionHasWarning = false;
+        debug = param.getBool("DebugIsActive");
 
         String additionalArgs = (String) param.get(
             "AdditionalConnectionArguments");
@@ -159,7 +161,6 @@ public class OfficeProvider implements AppProvider {
             System.out.print("Connecting the Office with " + cncstr);
         }
 
-        debug = param.getBool("DebugIsActive");
 
         XMultiServiceFactory msf = connectOffice(cncstr);
 
@@ -383,7 +384,8 @@ public class OfficeProvider implements AppProvider {
             exc = je.getMessage();
         }
 
-        if (debug && exc.length() != 0) {
+        if (debug && exc != null && exc.length() != 0) {
+            if (exc == null) exc="";
             System.out.println("Could not connect an Office. " + exc);
         }
 
@@ -580,7 +582,7 @@ public class OfficeProvider implements AppProvider {
             sysDir = dir.substring("file://".length());
         }
 
-        sysDir = sysDir.replaceAll("%20", " ");
+        sysDir = utils.replaceAll13(sysDir, "%20", " ");
 
         // append '/' if not there (e.g. linux)
         if (sysDir.charAt(sysDir.length() - 1) != '/') {
