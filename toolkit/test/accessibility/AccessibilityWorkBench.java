@@ -203,8 +203,10 @@ public class AccessibilityWorkBench
         //  Buttons.
         aConnectButton = createButton ("Connect", "connect");
         aLoadButton = createButton ("Load", "load");
-        aRunButton = createButton ("Run", "run");
         aUpdateButton = createButton ("Update", "update");
+        aShapesButton = createButton ("Shapes", "shapes");
+        aExpandButton = createButton ("Expand", "expand");
+        aTextButton = createButton("Text", "text");
         aQuitButton = createButton ("Quit", "quit");
 
         maMainPanel.setLayout (aLayout);
@@ -237,16 +239,15 @@ public class AccessibilityWorkBench
 
     protected void initialize ()
     {
-        // Clear the accessibility tree.
-        if (maTree != null)
-            maTree.clear ();
-
         // Delete the graphical representations.
         if (maCanvas != null)
             maCanvas.clear ();
 
-        // Add entries for open documents to tree.
-        addOpenDocumentsToTree ();
+        // create new model (with new documents)
+        AccessibilityTreeModel aModel =
+            new AccessibilityTreeModel( createTreeModelRoot() );
+        aModel.setCanvas( maCanvas );
+        maTree.setModel( aModel );
 
         //        if (office != null && office.getDesktop() != null)
         //  office.getDesktop().addTerminateListener (this);
@@ -264,7 +265,6 @@ public class AccessibilityWorkBench
         }
         else if (e.getActionCommand().equals("quit"))
         {
-            maTree.clear();
             System.exit (0);
         }
         else if (e.getActionCommand().equals("load"))
@@ -276,19 +276,24 @@ public class AccessibilityWorkBench
             else
             {
                 println (".");
-                XWindow xWindow = office.getCurrentWindow (mxModel);
-                XAccessible xRoot = office.getAccessibleRoot (xWindow);
-                maTree.addDocument (xRoot, msFileName);
+                initialize();
             }
-        }
-        else if (e.getActionCommand().equals("run"))
-        {
-            run (mxModel);
         }
         else if (e.getActionCommand().equals("update"))
         {
             initialize ();
-            run (mxModel);
+        }
+        else if (e.getActionCommand().equals("shapes"))
+        {
+            maTree.expandShapes();
+        }
+        else if (e.getActionCommand().equals("expand"))
+        {
+            maTree.expandAll();
+        }
+        else if (e.getActionCommand().equals("text"))
+        {
+            Canvas.bPaintText = ! Canvas.bPaintText;
         }
         else
         {
@@ -299,107 +304,23 @@ public class AccessibilityWorkBench
 
 
 
-    public void test (XModel xModel)
+    /** Create an AccessibilityTreeModel root which contains the documents */
+    private Object createTreeModelRoot()
     {
-        println ("Test:");
-        try
-        {
-            if (xModel == null)
-            {
-                XDrawView xView = office.getCurrentView ();
-                if (xView == null)
-                    println ("no current view");
-                else
-                    xModel = office.getModel (xView);
-            }
-            info.showProperties (xModel);
+        Vector aRoots = new Vector();
 
-            XWindow xWindow = office.getCurrentWindow (xModel);
-            if (xWindow != null)
-            {
-                println ("current window:");
-                com.sun.star.awt.Rectangle aRectangle = xWindow.getPosSize();
-                println (aRectangle.X + " " + aRectangle.Y + " "
-                    + aRectangle.Width + " " + aRectangle.Height);
-            }
-            else
-                println ("Can't get window");
-
-            XPropertySet xSet = (XPropertySet) UnoRuntime.queryInterface (
-                XPropertySet.class, xModel);
-            if (xSet != null)
-            {
-                com.sun.star.awt.Rectangle aRectangle =
-                    (com.sun.star.awt.Rectangle) xSet.getPropertyValue (
-                        "VisibleArea");
-                println (aRectangle.X + " " + aRectangle.Y + " "
-                    + aRectangle.Width + " " + aRectangle.Height);
-            }
-            else
-                println ("model does not support XPropertySet");
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception in test: " + e);
-        }
-        println ("Test finished.");
-    }
-
-
-
-
-    /** Get the accessibility tree for the specified model.
-    */
-    protected  void run (XModel xModel)
-    {
-        try
-        {
-            addListeners (xModel);
-            XWindow xWindow = office.getCurrentWindow (xModel);
-            XAccessible xRoot = office.getAccessibleRoot (xWindow);
-            if (xRoot != null)
-            {
-                println ("window is accessible");
-            }
-            else
-            {
-                println ("window is not accessible.");
-                return;
-            }
-
-            message ("creating accessibility tree");
-            maTree.createTree (xRoot);
-            maTree.expandShapes ();
-        }
-        catch (Exception e)
-        {
-            System.out.println ("caught exception in run: " + e);
-        }
-    }
-
-
-
-
-
-    /** Experimental. Add list of currently open (and named) documents to
-        the tree widget.
-    */
-    public void addOpenDocumentsToTree ()
-    {
         try
         {
             XDesktop xDesktop = office.getDesktop();
             if (xDesktop == null)
             {
-                println ("can't get desktop to retrieve open documents");
-                return;
+                return "ERROR: Can't connect. (No desktop)";
             }
 
             XEnumerationAccess xEA = xDesktop.getComponents();
             if (xEA == null)
             {
-                println ("Can't get list of components from desktop");
-                return;
+                return "ERROR: Can't get components";
             }
             XEnumeration xE = xEA.createEnumeration();
             while (xE.hasMoreElements())
@@ -413,10 +334,13 @@ public class AccessibilityWorkBench
                     println (xModel.getURL());
                     XWindow xWindow = office.getCurrentWindow (xModel);
                     XAccessible xRoot = office.getAccessibleRoot (xWindow);
-                    maTree.addDocument (xRoot, xModel.getURL());
+
+                    // create document node
+                    aRoots.add(
+                        AccessibilityTreeModel.createDefaultNode(xRoot) );
                 }
                 else
-                    println ("can't cast component to model");
+                    aRoots.add( "can't cast component to model" );
             }
             println ("finished getting named documents");
         }
@@ -424,7 +348,13 @@ public class AccessibilityWorkBench
         {
             System.out.println ("caught exception while getting document names: " + e);
         }
+
+        // create root node
+        AccTreeNode aNode = new AccTreeNode( aRoots, "Accessibility Tree" );
+        AccessibilityTreeModel.addDefaultHandlers( aNode );
+        return aNode;
     }
+
 
 
 
@@ -617,5 +547,7 @@ public class AccessibilityWorkBench
         aQuitButton,
         aLoadButton,
         aUpdateButton,
-        aRunButton;
+        aExpandButton,
+        aShapesButton,
+        aTextButton;
 }

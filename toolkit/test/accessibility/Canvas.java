@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
 
 /** This canvas displays accessible objects graphically.  Each accessible
     object with graphical representation is represented by an
@@ -17,10 +18,13 @@ class Canvas
     public final int nMaximumWidth = 1000;
     public final int nMaximumHeight = 1000;
 
+    public static boolean bPaintText = false;
+
     public Canvas (MessageInterface aMessageDisplay, JTree aTree)
     {
         super (true);
         maObjects = new Vector ();
+        maContexts = new Vector ();
         addMouseListener (this);
         addMouseMotionListener (this);
         maBoundingBox = new Rectangle (0,0,100,100);
@@ -35,18 +39,45 @@ class Canvas
 
     public void addAccessible (AccessibleObject aObject)
     {
-        maObjects.add (aObject);
+        if( maObjects.indexOf( aObject ) == -1 )
+        {
+            maObjects.add (aObject);
+            maContexts.add (aObject.getContext());
+        }
         maBoundingBox = maBoundingBox.union (aObject.getBBox());
     }
 
     public void removeAccessible (AccessibleObject aObject)
     {
         maObjects.remove (aObject);
+        maContexts.remove (aObject.getContext());
+    }
+
+
+    public void addContext(XAccessibleContext xContext, TreePath aPath)
+    {
+        if( maContexts.indexOf( xContext ) == -1 )
+            addAccessible( new AccessibleObject( xContext, aPath ) );
+    }
+
+    public void removeContext(XAccessibleContext xContext)
+    {
+        int i = maContexts.indexOf( xContext );
+        if( i != -1 )
+            removeAccessible( (AccessibleObject)maObjects.elementAt( i ) );
+    }
+
+    public void updateContext(XAccessibleContext aContext)
+    {
+        int i = maContexts.indexOf( aContext );
+        if( i != -1 )
+            ((AccessibleObject)maObjects.elementAt( i )).update();
     }
 
     public void clear ()
     {
         maObjects.clear();
+        maContexts.clear();
     }
 
     public void paintComponent (Graphics g)
@@ -160,7 +191,7 @@ class Canvas
             maActiveObject.select ();
             maMessageDisplay.message ("mouse moved to " + e.getX() + "," + e.getY() + ": "
                 +maActiveObject.toString());
-            System.out.println (maActiveObject.getPath());
+            System.out.println ("path: " + maActiveObject.getPath());
 
             if (maTree != null)
             {
@@ -182,7 +213,8 @@ class Canvas
     protected AccessibleObject
         maActiveObject;
     protected Vector
-        maObjects;
+        maObjects,
+        maContexts;
     protected Rectangle
         maBoundingBox;
     protected JTree

@@ -29,18 +29,33 @@ JAR_FILES =		\
     java_uno.jar
 
 JAVA_FILES = \
-    AccessibilityWorkBench.java	\
-    AccessibleObject.java		\
-    AccessibleTreeCellRenderer.java		\
+    AccTreeNode.java			\
     AccessibilityTree.java		\
+    AccessibilityTreeModel.java \
+    AccessibilityWorkBench.java	\
+    AccessibleActionHandler.java	\
+    AccessibleComponentHandler.java	\
+    AccessibleContextHandler.java	\
+    AccessibleEditableTextHandler.java	\
+    AccessibleExtendedComponentHandler.java	\
+    AccessibleHyperlinkHandler.java	\
+    AccessibleHypertextHandler.java	\
+    AccessibleImageHandler.java	\
+    AccessibleObject.java		\
+    AccessibleTableHandler.java	\
+    AccessibleTextHandler.java	\
+    AccessibleTreeCellRenderer.java		\
+    AccessibleTreeHandler.java	\
     Canvas.java					\
-    InformationWriter.java		\
     FrameActionListener.java	\
+    InformationWriter.java		\
     MessageInterface.java		\
+    NodeHandler.java			\
     OfficeConnection.java		\
     Print.java					\
     SimpleOffice.java			\
-    TreeNode.java
+    VectorHandler.java
+
 
 JAVA_CLASSPATHS := 			\
     .						\
@@ -56,15 +71,15 @@ JFLAGS = -deprecation -classpath $(CLASSPATH)
 
 AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
 
+
 # Create a jar file of all files neccessary to build and run the work bench.
 dist:
     jar -cf AccessibilityWorkBench.jar \
         $(JAVA_FILES)\
-        $(JAVA_FILES:b:+".class")
+        *.class
+#		$(JAVA_FILES:b:+".class")
 
 # Example of how to run the work bench.
 run:
     $(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER) -f $(FILE_NAME)
 
-javap:
-    javap -classpath $(CLASSPATH) drafts.com.sun.star.accessibility.XAccessibleContext
