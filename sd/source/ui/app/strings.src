@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-17 20:15:23 $
+ *  last change: $Author: aw $ $Date: 2001-08-21 15:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5719,6 +5719,12 @@ String STR_WARN_DEL_SEL_PAGE
     Text[ turkish ] = "Bu iþlem seçilen sayfayý siler. \nSayfa çizim nesneleri içeriyor!";
     Text[ catalan ] = "Esta acción elimina la página seleccionada. \n¡La página contiene objetos de dibujo!";
     Text[ finnish ] = "Tämä toiminto poistaa valitun sivun.\nHuomautus: sivulla on piirrosobjekteja.";
+};
+
+String STR_WARN_DEL_UNDO_STACK
+{
+    Text = "Diese Aktion löscht die Liste der Arbeitsschritte, die rückgängig gemacht werden können. Bisher gemachte Änderungen am Dokument bleiben erhalten, können jedoch nicht mehr rückgängig gemacht werden. Wollen Sie fortfahren und die neue Seitenvorlage zuweisen?" ;
+    Text [ ENGLISH ] = "This action will delete the list of undoable actions. Changes on the document made up to now are maintained, but cannot be taken back. Do You want to continue and assign the new page layout?" ;
 };
 
 String STR_DEL_SHAPE
