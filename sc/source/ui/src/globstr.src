@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:14:53 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6840,7 +6840,7 @@ Resource RID_GLOBSTR
         Text [ danish ] = "Det er ikke muligt kun at ændre en del af en matrix." ;
         Text [ portuguese ] = "Impossível alterar uma parte da matriz." ;
         Text [ portuguese_brazilian ] = "Parte de uma matriz não pode ser modificada." ;
-        Text[ chinese_simplified ] = "æ‚¨æ— æ³•åªæ›´æ”¹çŸ©é˜µçš„ä¸€éƒ¨åˆ†ã€‚";
+        Text[ chinese_simplified ] = "æ— æ³•çŸ¥æ›´æ”¹çŸ©é˜µçš„ä¸€éƒ¨åˆ†ã€‚";
         Text[ russian ] = "Íåâîçìîæíî èçìåíèòü ÷àñòü ìàññèâà.";
         Text[ polish ] = "Czêœæ macierzy nie mo¿e byæ zmodyfikowana.";
         Text[ japanese ] = "è¡Œåˆ—ã¯éƒ¨åˆ†å¤‰æ›´ã§ãã¾ã›ã‚“ã€‚";
@@ -9493,6 +9493,7 @@ Resource RID_GLOBSTR
     {
         Text = "Tabelle wenden" ;
         Text [ english_us ] = "Flip sheet" ;
+        Text[ chinese_simplified ] = "ç¿»è½¬è¡¨æ ¼";
     };
     String STR_CHART_MAINTITLE
     {
