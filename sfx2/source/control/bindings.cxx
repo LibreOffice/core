@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:02:43 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@
 #include "sfx.hrc"
 #include "sfxuno.hxx"
 #include "topfrm.hxx"
+#include "cfgmgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -2759,4 +2760,23 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
     }
 
     return FALSE;
+}
+
+SfxImageManager* SfxBindings::GetImageManager() const
+{
+    return pDispatcher->GetFrame()->GetImageManager();
+}
+
+SfxToolBoxConfig* SfxBindings::GetToolBoxConfig() const
+{
+    return pDispatcher->GetFrame()->GetObjectShell()->GetToolBoxConfig_Impl();
+}
+
+SfxConfigManager* SfxBindings::GetConfigManager( USHORT nType ) const
+{
+    SfxConfigManager *pMgr = pDispatcher->GetFrame()->GetObjectShell()->GetConfigManager();
+    if ( pMgr && pMgr->HasConfigItem( nType ) )
+        return pMgr;
+    else
+        return SFX_APP()->GetConfigManager_Impl();
 }
