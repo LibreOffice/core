@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:41:45 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,19 @@
 #include <statstr.hrc>          // StatLine-String
 #endif
 
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+
+// -> #111827#
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
+#endif
+
+#include <comcore.hrc>
+#include <SwUndoTOXChange.hxx>
+// <- #111827#
+
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
 // Autoren
@@ -445,17 +458,39 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
     {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
         USHORT nUndoSize = pUndos->Count();
         xub_StrLen nInsPos = pPos->nContent.GetIndex();
-        SwUndoInsert * pUndo;
+        SwUndoInsert * pUndo = NULL; // #111827#
         CharClass& rCC = GetAppCharClass();
 
-        if( 0 == nUndoSize || UNDO_INSERT !=
-                ( pUndo = (SwUndoInsert*)(*pUndos)[ --nUndoSize ])->GetId() ||
-            !pUndo->CanGrouping( *pPos ))
+        // -> #111827#
+        bool bNewUndo = false;
+        if( 0 == nUndoSize)
+            bNewUndo = true;
+        else
+        {
+            pUndo = (SwUndoInsert*)(*pUndos)[ --nUndoSize ];
+
+            switch (pUndo->GetId())
+            {
+            case UNDO_INSERT:
+            case UNDO_TYPING:
+                bNewUndo = !pUndo->CanGrouping( *pPos );
+
+                break;
+
+            default:
+                bNewUndo = true;
+            }
+        }
+        // <- #111827#
+
+        if (bNewUndo)
         {
             pUndo = new SwUndoInsert( pPos->nNode, nInsPos, 0,
                             !rCC.isLetterNumeric( rStr, 0 ) );
             AppendUndo( pUndo );
         }
+
+        pNode->Insert( rStr, pPos->nContent, nInsMode );
 
         for( xub_StrLen i = 0; i < rStr.Len(); ++i )
         {
@@ -468,7 +503,6 @@ BOOL SwDoc::Insert( const SwPaM &rRg, const String &rStr, BOOL bHintExpand )
                 AppendUndo( pUndo );
             }
         }
-        pNode->Insert( rStr, pPos->nContent, nInsMode );
     }
 
     if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
@@ -1215,6 +1249,144 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable )
         AppendUndo( pUndo );
     }
 }
+
+void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
+{
+    if (DoesUndo())
+    {
+        SfxItemSet aSet(rSet);
+
+        aSet.Differentiate(rFmt.GetAttrSet());
+
+        SfxItemSet aOldSet(rFmt.GetAttrSet());
+        aOldSet.Put(aSet);
+
+        SfxItemIter aIter(aSet);
+
+        const SfxPoolItem * pItem = aIter.FirstItem();
+        while (pItem != NULL)
+        {
+            aOldSet.InvalidateItem(pItem->Which());
+
+            pItem = aIter.NextItem();
+        }
+
+        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rFmt);
+
+        AppendUndo(pUndo);
+    }
+
+    rFmt.SetAttr(rSet);
+
+}
+
+void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
+{
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoFmtAttr(rFmt.GetAttr(rItem.Which()), rFmt);
+
+        AppendUndo(pUndo);
+    }
+
+    rFmt.SetAttr(rItem);
+
+}
+
+void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
+{
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoTOXChange(&rTOX, rNew);
+
+        AppendUndo(pUndo);
+    }
+
+    rTOX = rNew;
+}
+
+// #111827#
+String SwDoc::GetPaMDescr(const SwPaM & rPam) const
+{
+    String aResult;
+    bool bOK = false;
+
+    if (rPam.GetNode(TRUE) == rPam.GetNode(FALSE))
+    {
+        SwTxtNode * pTxtNode = rPam.GetNode(TRUE)->GetTxtNode();
+
+        if (0 != pTxtNode)
+        {
+            xub_StrLen nStart = rPam.Start()->nContent.GetIndex();
+            xub_StrLen nEnd = rPam.End()->nContent.GetIndex();
+
+            aResult += String(SW_RES(STR_START_QUOTE));
+            aResult += ShortenString(pTxtNode->GetTxt().
+                                     Copy(nStart, nEnd - nStart),
+                                     nUndoStringLength,
+                                     String(SW_RES(STR_LDOTS)));
+            aResult += String(SW_RES(STR_END_QUOTE));
+
+            bOK = true;
+        }
+    }
+    else if (0 != rPam.GetNode(TRUE))
+    {
+        if (0 != rPam.GetNode(FALSE))
+            aResult += String(SW_RES(STR_PARAGRAPHS));
+
+        bOK = true;
+    }
+
+    if (! bOK)
+        aResult += String("??", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+// -> #111840#
+BOOL SwDoc::IsChar(const SwPosition & rPos)
+{
+    SwNode & rNode = rPos.nNode.GetNode();
+
+    return rNode.IsTxtNode();
+}
+
+xub_Unicode SwDoc::GetChar(const SwPosition & rPos)
+{
+    SwNode & rNode = rPos.nNode.GetNode();
+    xub_Unicode aResult = 0;
+
+    ASSERT(IsChar(rPos), "no text at position!");
+
+    aResult = rNode.GetTxtNode()->GetTxt().GetChar(rPos.nContent.GetIndex());
+
+    return aResult;
+}
+
+SwField * SwDoc::GetField(const SwPosition & rPos)
+{
+    SwField * pResult = NULL;
+    xub_Unicode aChar;
+
+    SwTxtFld * pAttr = rPos.nNode.GetNode().GetTxtNode()->
+        GetTxtFld(rPos.nContent);
+
+    if (pAttr)
+        pResult = (SwField *) pAttr->GetFld().GetFld();
+
+    return pResult;
+}
+
+SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
+{
+    SwTxtNode *pNode = rPos.nNode.GetNode().GetTxtNode();
+    if( pNode )
+        return pNode->GetTxtFld( rPos.nContent );
+    else
+        return 0;
+}
+// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {
