@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:43:29 $
+ *  last change: $Author: ssa $ $Date: 2002-07-12 15:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
+#ifndef _SV_WRKWIN_HXX
+#include <wrkwin.hxx>
+#endif
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
@@ -195,6 +198,25 @@ static void ImplSalGetWorkArea( HWND hWnd, RECT *pRect )
     static int winVerChecked = 0;
     static int winVerOk = 0;
 
+    // check if we or our parent is fullscreen, then the taskbar should be ignored
+    bool bIgnoreTaskbar = false;
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if( pFrame )
+    {
+        Window *pWin = ((Window*)pFrame->maFrameData.mpInst);
+        while( pWin )
+        {
+            WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? (WorkWindow *) pWin : NULL;
+            if( pWorkWin && pWorkWin->mbReallyVisible && pWorkWin->mbFullScreenMode )
+            {
+                bIgnoreTaskbar = true;
+                break;
+            }
+            else
+                pWin = pWin->mpParent;
+        }
+    }
+
     if( !winVerChecked )
     {
         winVerChecked = 1;
@@ -223,7 +245,16 @@ static void ImplSalGetWorkArea( HWND hWnd, RECT *pRect )
     {
         static int nMonitors = GetSystemMetrics( SM_CMONITORS );
         if( nMonitors == 1 )
-            SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+        {
+            if( bIgnoreTaskbar )
+            {
+                pRect->left = pRect->top = 0;
+                pRect->right   = GetSystemMetrics( SM_CXSCREEN );
+                pRect->bottom  = GetSystemMetrics( SM_CYSCREEN );
+            }
+            else
+                SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+        }
         else
         {
             pRect->left = GetSystemMetrics( SM_XVIRTUALSCREEN );
@@ -234,22 +265,33 @@ static void ImplSalGetWorkArea( HWND hWnd, RECT *pRect )
             // virtualscreen does not take taskbar into account, so use the corresponding
             // diffs between screen and workarea from the default screen
             // however, this is still not perfect: the taskbar might not be on the primary screen
+            if( !bIgnoreTaskbar )
+            {
+                RECT wRect, scrRect;
+                SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
+                scrRect.left = 0;
+                scrRect.top = 0;
+                scrRect.right = GetSystemMetrics( SM_CXSCREEN );
+                scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
 
-            RECT wRect, scrRect;
-            SystemParametersInfo( SPI_GETWORKAREA, 0, &wRect, 0 );
-            scrRect.left = 0;
-            scrRect.top = 0;
-            scrRect.right = GetSystemMetrics( SM_CXSCREEN );
-            scrRect.bottom = GetSystemMetrics( SM_CYSCREEN );
-
-            pRect->left += wRect.left;
-            pRect->top += wRect.top;
-            pRect->right -= scrRect.right - wRect.right;
-            pRect->bottom -= scrRect.bottom - wRect.bottom;
+                pRect->left += wRect.left;
+                pRect->top += wRect.top;
+                pRect->right -= scrRect.right - wRect.right;
+                pRect->bottom -= scrRect.bottom - wRect.bottom;
+            }
         }
     }
     else
-        SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+    {
+        if( bIgnoreTaskbar )
+        {
+            pRect->left = pRect->top = 0;
+            pRect->right   = GetSystemMetrics( SM_CXSCREEN );
+            pRect->bottom  = GetSystemMetrics( SM_CYSCREEN );
+        }
+        else
+            SystemParametersInfo( SPI_GETWORKAREA, 0, pRect, 0 );
+    }
 }
 
 // =======================================================================
@@ -3478,18 +3520,27 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
     int cx = aPt.x - aRect.left;
     pFrame->maGeometry.nTopDecoration = aPt.y - aRect.top;
 
-    pFrame->maGeometry.nLeftDecoration += cx;
-    pFrame->maGeometry.nRightDecoration += cx;
+    pFrame->maGeometry.nLeftDecoration = cx;
+    pFrame->maGeometry.nRightDecoration = cx;
 
     pFrame->maGeometry.nX = aPt.x;
     pFrame->maGeometry.nY = aPt.y;
 
     RECT aInnerRect;
     GetClientRect( hWnd, &aInnerRect );
-    pFrame->maGeometry.nBottomDecoration += aRect.bottom - aPt.y - aInnerRect.bottom;
+    if( aInnerRect.bottom ) // may be zero if window was not shown yet
+        pFrame->maGeometry.nBottomDecoration += aRect.bottom - aPt.y - aInnerRect.bottom;
+    else
+        // bottom border is typically the same as left/right
+        pFrame->maGeometry.nBottomDecoration = pFrame->maGeometry.nLeftDecoration;
 
-    pFrame->maGeometry.nWidth  = aInnerRect.right - aInnerRect.left;
-    pFrame->maGeometry.nHeight = aInnerRect.bottom - aInnerRect.top;
+    int nWidth  = aRect.right - aRect.left
+        - pFrame->maGeometry.nRightDecoration - pFrame->maGeometry.nLeftDecoration;
+    int nHeight = aRect.bottom - aRect.top
+        - pFrame->maGeometry.nBottomDecoration - pFrame->maGeometry.nTopDecoration;
+    // clamp to zero
+    pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
+    pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
 }
 
 // -----------------------------------------------------------------------
