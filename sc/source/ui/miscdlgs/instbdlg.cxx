@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-08 09:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ void ScInsertTableDlg::Init_Impl()
     USHORT  nTabSelCount = rMark.GetSelectCount();
 
     aNfCount.SetText( String::CreateFromInt32(nTableCount) );
+    aNfCount.SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
 
     if(nTableCount==1)
     {
@@ -184,15 +185,18 @@ void ScInsertTableDlg::SetNewTable_Impl()
 {
     if (aBtnNew.IsChecked() )
     {
-        aEdName     .Enable();
-        aFtName     .Enable();
+        aNfCount    .Enable();
         aFtCount    .Enable();
         aLbTables   .Disable();
         aFtPath     .Disable();
         aBtnBrowse  .Disable();
         aBtnLink    .Disable();
 
-        if(nTableCount==1)  aNfCount.Enable();
+        if(nTableCount==1)
+        {
+            aEdName.Enable();
+            aFtName.Enable();
+        }
     }
 }
 
