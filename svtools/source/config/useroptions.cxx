@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2001-09-26 15:46:24 $
+ *  last change: $Author: os $ $Date: 2001-09-28 09:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ private:
     const String&   GetToken( StrPtr pPtr );
     void            SetToken( StrPtr pPtr, const String& rNewToken );
     void            InitFullName();
+    void            Load();
 
 public:
     SvtUserOptions_Impl();
@@ -264,9 +265,20 @@ void SvtUserOptions_Impl::InitFullName()
 // -----------------------------------------------------------------------
 
 SvtUserOptions_Impl::SvtUserOptions_Impl() :
-
     ConfigItem( OUString::createFromAscii("UserProfile") )
-
+{
+    Load();
+    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
+    OUString aLocale;
+    if ( aAny >>= aLocale )
+        m_aLocale = String( aLocale );
+    else
+    {
+        DBG_ERRORFILE( "no locale found" );
+    }
+}
+// -----------------------------------------------------------------------
+void SvtUserOptions_Impl::Load()
 {
     Sequence< OUString > aNames = GetUserPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -312,17 +324,7 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         }
     }
     InitFullName();
-
-    Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
-    OUString aLocale;
-    if ( aAny >>= aLocale )
-        m_aLocale = String( aLocale );
-    else
-    {
-        DBG_ERRORFILE( "no locale found" );
-    }
 }
-
 // -----------------------------------------------------------------------
 
 void SvtUserOptions_Impl::Commit()
@@ -375,7 +377,7 @@ const String& SvtUserOptions_Impl::GetFullName()
 
 void SvtUserOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames )
 {
-    DBG_ERRORFILE( "properties have been changed" );
+    Load();
 }
 
 // class SvtUserOptions --------------------------------------------------
