@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:39:30 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 07:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+
 #include <bastypes.hxx>
 #include <sbxitem.hxx>
 
@@ -94,6 +95,9 @@
 
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
 #include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -760,7 +764,38 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     if ( pButton == &aRunButton )
     {
         StoreMacroDescription();
-        if ( nMode == MACROCHOOSER_RECORDING )
+
+        // #116444# check security settings before macro execution
+        if ( nMode == MACROCHOOSER_ALL )
+        {
+            SbMethod* pMethod = GetMacro();
+            if ( pMethod )
+            {
+                SbModule* pModule = pMethod->GetModule();
+                if ( pModule )
+                {
+                    StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+                    if ( pBasic )
+                    {
+                        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+                        if ( pBasMgr )
+                        {
+                            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                            if ( pShell )
+                            {
+                                pShell->AdjustMacroMode( String() );
+                                if ( pShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                                {
+                                    WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
+                                    return 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if ( nMode == MACROCHOOSER_RECORDING )
         {
             BOOL bValid = BasicIDE::IsValidSbxName( aMacroNameEdit.GetText() );
             if ( !bValid )
