@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Dataimport.java,v $
 *
-*  $Revision: 1.31 $
+*  $Revision: 1.32 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:58:45 $
+*  last change: $Author: vg $ $Date: 2005-03-08 15:40:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -84,6 +84,7 @@ import com.sun.star.wizards.document.*;
 import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.InvalidQueryException;
 import com.sun.star.uno.Exception;
+import com.sun.star.awt.XReschedule;
 
 public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionListener{ // extends ReportWizard
 
@@ -185,6 +186,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             createWindowPeer(CurReportDocument.xWindowPeer);
             calculateDialogPosition(CurReportDocument.xFrame.getComponentWindow().getPosSize());
             xWindow.setVisible(true);
+            xReschedule.reschedule();
             return;
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -230,6 +232,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         xComponent.dispose();
         CurReportDocument.CurDBMetaData.dispose();
     }
+
 
     public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument) {
         CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
@@ -404,6 +407,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             if (iCounter % 10 == 0) {
                 sProgressCurRecord = JavaTools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
                 setControlProperty("lblCurProgress", "Label", sProgressCurRecord);
+                super.xReschedule.reschedule();
             }
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
