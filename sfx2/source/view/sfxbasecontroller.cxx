@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-14 13:05:50 $
+ *  last change: $Author: mba $ $Date: 2001-03-28 16:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,4 +637,9 @@ void SfxBaseController::ReleaseShell_Impl()
 SfxViewShell* SfxBaseController::GetViewShell_Impl() const
 {
     return m_pData->m_pViewShell;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL SfxBaseController::getStatusIndicator(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > ();
 }
