@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheupdatelistener.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:09:08 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 11:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
 #define __FILTER_CONFIG_CACHEUPDATELISTENER_HXX_
 
@@ -83,8 +82,8 @@
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #endif
 
-#ifndef _COMPHELPER_SINGLETONREF_HXX_
-#include <comphelper/singletonref.hxx>
+#ifndef _SALHELPER_SINGLETONREF_HXX_
+#include <salhelper/singletonref.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
@@ -126,7 +125,7 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  reference(!) to the singleton filter cache implementation,
                     which should be updated by this thread. */
-        ::comphelper::SingletonRef< FilterCache > m_rCache;
+        ::salhelper::SingletonRef< FilterCache > m_rCache;
 
         /** @short  reference to the global event broadcaster, which is usde to find
                     out, when the first office document was opened successfully. */
