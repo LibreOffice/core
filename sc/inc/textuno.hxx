@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-31 17:56:45 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 09:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ class ScCellTextCursor : public SvxUnoTextCursor
 public:
                             ScCellTextCursor(const ScCellTextCursor& rOther);
                             ScCellTextCursor(ScCellObj& rText);
-    virtual                 ~ScCellTextCursor();
+        virtual                                 ~ScCellTextCursor() throw();
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -337,7 +337,7 @@ private:
 public:
                             ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther);
                             ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText);
-    virtual                 ~ScHeaderFooterTextCursor();
+        virtual                                 ~ScHeaderFooterTextCursor() throw();
 
                             // SvxUnoTextCursor methods reimplemented here:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
@@ -381,7 +381,7 @@ class ScEditEngineTextObj : public ScSimpleEditSourceHelper, public SvxUnoText
 {
 public:
                         ScEditEngineTextObj();
-    virtual             ~ScEditEngineTextObj();
+        virtual                         ~ScEditEngineTextObj() throw();
 
     void                SetText( const String& rStr );
     void                SetText( const EditTextObject& rTextObject );
@@ -429,7 +429,7 @@ class ScCellTextObj : public ScCellTextData, public SvxUnoText
 {
 public:
                 ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP);
-    virtual     ~ScCellTextObj();
+        virtual         ~ScCellTextObj() throw();
 };
 
 

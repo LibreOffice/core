@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:49:46 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 09:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ScPageObj::ScPageObj( SdrPage* pPage ) :
 {
 }
 
-ScPageObj::~ScPageObj()
+ScPageObj::~ScPageObj() throw()
 {
 }
 

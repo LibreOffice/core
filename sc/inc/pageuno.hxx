@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:49:31 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 09:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class ScPageObj : public SvxFmDrawPage
 {
 public:
                             ScPageObj( SdrPage* pPage );
-    virtual                 ~ScPageObj();
+        virtual                                 ~ScPageObj() throw();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                             _CreateShape( SdrObject *pObj ) const throw();

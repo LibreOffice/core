@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-23 17:42:06 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 09:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,7 @@ ScCellTextCursor::ScCellTextCursor(ScCellObj& rText) :
     rTextObj.acquire();
 }
 
-ScCellTextCursor::~ScCellTextCursor()
+ScCellTextCursor::~ScCellTextCursor() throw()
 {
     rTextObj.release();
 }
@@ -788,7 +788,7 @@ ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(ScHeaderFooterTextObj& rText)
     rTextObj.acquire();
 }
 
-ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor()
+ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw()
 {
     rTextObj.release();
 }
@@ -1083,7 +1083,7 @@ ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
 {
 }
 
-ScCellTextObj::~ScCellTextObj()
+ScCellTextObj::~ScCellTextObj() throw()
 {
 }
 
