@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:28:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& rBC,
         }
         catch( ::com::sun::star::uno::RuntimeException& r )
         {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             DBG_ERROR( aError.GetBuffer() );
