@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-09 14:38:46 $
+ *  last change: $Author: cl $ $Date: 2002-02-26 10:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
                 rSet.Put( SvxContourItem(FALSE) );
                 rSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
                 rSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-                rSet.Put( SvxColorItem( Color(COL_BLACK)) );
+                rSet.Put( SvxColorItem( Color(COL_AUTO)) );
                 rSet.Put( SvxAdjustItem(SVX_ADJUST_LEFT) );
                 rSet.Put( XLineStyleItem(XLINE_NONE) );
                 rSet.Put( XFillStyleItem(XFILL_NONE) );
@@ -489,7 +489,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxContourItem(FALSE));
         rTitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
         rTitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rTitleSet.Put(SvxColorItem( Color(COL_BLACK)));
+        rTitleSet.Put(SvxColorItem( Color(COL_AUTO)));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
@@ -532,7 +532,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put(SvxContourItem(FALSE));
         rSubtitleSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
         rSubtitleSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rSubtitleSet.Put(SvxColorItem( Color(COL_BLACK)));
+        rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO)));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
         rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
@@ -577,7 +577,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxContourItem(FALSE) );
         rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE) );
         rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE) );
-        rNotesSet.Put( SvxColorItem( Color(COL_BLACK)) );
+        rNotesSet.Put( SvxColorItem( Color(COL_AUTO)) );
         rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
     }
 
@@ -1364,7 +1364,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             aNumberFormat.SetBulletFont(&rBulletFont);
             aNumberFormat.SetBulletChar( 0x25CF ); // StarBats: 0xF000 + 34
             aNumberFormat.SetBulletRelSize(45);
-            aNumberFormat.SetBulletColor(Color(COL_BLACK));
+            aNumberFormat.SetBulletColor(Color(COL_AUTO));
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
@@ -1445,7 +1445,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         {
             // Gliederungs-Vorlage
             SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
-            aNumberFormat.SetBulletColor(Color(COL_BLACK));
+            aNumberFormat.SetBulletColor(Color(COL_AUTO));
             aNumberFormat.SetStart(1);
             aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
@@ -1524,7 +1524,7 @@ Font SdStyleSheetPool::GetBulletFont() const
     aBulletFont.SetItalic(ITALIC_NONE);
     aBulletFont.SetOutline(FALSE);
     aBulletFont.SetShadow(FALSE);
-    aBulletFont.SetColor(Color(COL_BLACK));
+    aBulletFont.SetColor(Color(COL_AUTO));
     aBulletFont.SetTransparent(TRUE);
 
     return aBulletFont;

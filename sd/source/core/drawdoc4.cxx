@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-20 11:04:28 $
+ *  last change: $Author: cl $ $Date: 2002-02-26 11:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE));
     rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE));
     rISet.Put(SvxCharReliefItem(RELIEF_NONE));
-    rISet.Put(SvxColorItem(RGB_Color(COL_BLACK)));
+    rISet.Put(SvxColorItem(Color(COL_AUTO)));
 
                     // Absatzattribute (Edit Engine)
     rISet.Put(SvxLRSpaceItem());
@@ -1394,7 +1394,7 @@ void SdDrawDocument::SetTextDefaults() const
     aNumberFormat.SetBulletFont(&aBulletFont);
     aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
     aNumberFormat.SetBulletRelSize(45);
-    aNumberFormat.SetBulletColor(RGB_Color(COL_BLACK));
+    aNumberFormat.SetBulletColor(Color(COL_AUTO));
     aNumberFormat.SetStart(1);
     aNumberFormat.SetNumAdjust(SVX_ADJUST_LEFT);
 
