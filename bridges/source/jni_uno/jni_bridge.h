@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,8 @@ struct Bridge
         JNI_context const & jni, uno_Any * uno_exc ) const;
     void call_java(
         jobject javaI,
-        JNI_interface_type_info const * info, sal_Int32 function_pos,
+        typelib_InterfaceTypeDescription * iface_td,
+        sal_Int32 local_member_index, sal_Int32 function_pos_offset,
         typelib_TypeDescriptionReference * return_type,
         typelib_MethodParameter * params, sal_Int32 nParams,
         void * uno_ret, void * uno_args [], uno_Any ** uno_exc ) const;
