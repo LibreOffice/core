@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-03-19 18:29:05 $
+ *  last change: $Author: er $ $Date: 2001-03-20 18:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ ImpSvNumFor::ImpSvNumFor()
     aI.nCntPost = 0;
     aI.nCntExp = 0;
     pColor = NULL;
+    nDBNum = 0;
 }
 
 ImpSvNumFor::~ImpSvNumFor()
@@ -273,6 +274,7 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor )
     aI.Copy( rNumFor.aI, nAnzStrings );
     pColor = rNumFor.pColor;
     sColorName = rNumFor.sColorName;
+    nDBNum = rNumFor.nDBNum;
 }
 
 void ImpSvNumFor::Save(SvStream& rStream) const
@@ -375,9 +377,18 @@ void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
 
 enum Sc_FormatSymbolType
 {
-    SYMBOLTYPE_FORMAT    = -1,              // TeilFormatstring
-    SYMBOLTYPE_COLOR     = -2,              // Farbe
-    SYMBOLTYPE_ERROR     = -3               // Fehler
+    SYMBOLTYPE_FORMAT   = -1,       // subformat string
+    SYMBOLTYPE_COLOR    = -2,       // color
+    SYMBOLTYPE_ERROR    = -3,       // error
+    SYMBOLTYPE_DBNUM1   = -4,       // DoubleByteNumber, represent numbers
+    SYMBOLTYPE_DBNUM2   = -5,       // using Chinese or other digits
+    SYMBOLTYPE_DBNUM3   = -6,
+    SYMBOLTYPE_DBNUM4   = -7,
+    SYMBOLTYPE_DBNUM5   = -8,
+    SYMBOLTYPE_DBNUM6   = -9,
+    SYMBOLTYPE_DBNUM7   = -10,
+    SYMBOLTYPE_DBNUM8   = -11,
+    SYMBOLTYPE_DBNUM9   = -12
 };
 
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
@@ -426,6 +437,15 @@ BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
     switch ( nSymbolType )
     {
         case SYMBOLTYPE_COLOR :
+        case SYMBOLTYPE_DBNUM1 :
+        case SYMBOLTYPE_DBNUM2 :
+        case SYMBOLTYPE_DBNUM3 :
+        case SYMBOLTYPE_DBNUM4 :
+        case SYMBOLTYPE_DBNUM5 :
+        case SYMBOLTYPE_DBNUM6 :
+        case SYMBOLTYPE_DBNUM7 :
+        case SYMBOLTYPE_DBNUM8 :
+        case SYMBOLTYPE_DBNUM9 :
             return TRUE;
     }
     return FALSE;
@@ -544,31 +564,55 @@ SvNumberformat::SvNumberformat(String& rString,
                 }
                 nPosOld = nPos;                     // position before string
             }
-            else if (eSymbolType == SYMBOLTYPE_COLOR)
+            else if ( lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) )
             {
-                if ( NumFor[nIndex].GetColor() != NULL )
-                {                                   // error, more than one color
-                    bCancel = TRUE;                 // break for
-                    nCheckPos = nPosOld;
-                }
-                else
+                switch ( eSymbolType )
                 {
-                    NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
-                    if (NumFor[nIndex].GetColor() == NULL)
-                    {                                   // error
-                        bCancel = TRUE;                 // break for
-                        nCheckPos = nPosOld;
-                    }
-                    else
+                    case SYMBOLTYPE_COLOR :
                     {
-                        rString.Erase(nPosOld,nPos-nPosOld);
-                        rString.Insert(sStr,nPosOld);
-                        nPos = nPosOld + sStr.Len();
-                        rString.Insert(']', nPos);
-                        rString.Insert('[', nPosOld);
-                        nPos += 2;
-                        nPosOld = nPos;                 // position before string
+                        if ( NumFor[nIndex].GetColor() != NULL )
+                        {                           // error, more than one color
+                            bCancel = TRUE;         // break for
+                            nCheckPos = nPosOld;
+                        }
+                        else
+                        {
+                            NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
+                            if (NumFor[nIndex].GetColor() == NULL)
+                            {                       // error
+                                bCancel = TRUE;     // break for
+                                nCheckPos = nPosOld;
+                            }
+                        }
                     }
+                    break;
+                    case SYMBOLTYPE_DBNUM1 :
+                    case SYMBOLTYPE_DBNUM2 :
+                    case SYMBOLTYPE_DBNUM3 :
+                    case SYMBOLTYPE_DBNUM4 :
+                    case SYMBOLTYPE_DBNUM5 :
+                    case SYMBOLTYPE_DBNUM6 :
+                    case SYMBOLTYPE_DBNUM7 :
+                    case SYMBOLTYPE_DBNUM8 :
+                    case SYMBOLTYPE_DBNUM9 :
+                    {
+                        sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
+                        //! eSymbolType is negative
+                        BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
+                        sStr += '0' + nNum;
+                        NumFor[nIndex].SetDBNum( nNum );
+                    }
+                    break;
+                }
+                if ( !bCancel )
+                {
+                    rString.Erase(nPosOld,nPos-nPosOld);
+                    rString.Insert(sStr,nPosOld);
+                    nPos = nPosOld + sStr.Len();
+                    rString.Insert(']', nPos);
+                    rString.Insert('[', nPosOld);
+                    nPos += 2;
+                    nPosOld = nPos;     // position before string
                 }
             }
         } while ( !bCancel && lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) );
@@ -731,7 +775,7 @@ SvNumberformat::~SvNumberformat()
 // Alter Zustand | gelesenes Zeichen | Aktion                | Neuer Zustand
 //---------------+-------------------+-----------------------+---------------
 // SsStart       | ;                 | Pos--                 | SsGetString
-//               | [                 | Symbol += Zeichen     | SsGetColCon
+//               | [                 | Symbol += Zeichen     | SsGetBracketed
 //               | ]                 | Fehler                | SsStop
 //               | BLANK             |                       |
 //               | Sonst             | Symbol += Zeichen     | SsGetString
@@ -739,18 +783,18 @@ SvNumberformat::~SvNumberformat()
 // SsGetString   | ;                 |                       | SsStop
 //               | Sonst             | Symbol+=Zeichen       |
 //---------------+-------------------+-----------------------+---------------
-// SsGetColCon   | <, > =            | del [                 |
+// SsGetBracketed| <, > =            | del [                 |
 //               |                   | Symbol += Zeichen     | SsGetCon
 //               | BLANK             |                       |
 //               | h, H, m, M, s, S  | Symbol += Zeichen     | SsGetTime
 //               | sonst             | del [                 |
-//               |                   | Symbol += Zeichen     | SsGetCol
+//               |                   | Symbol += Zeichen     | SsGetPrefix
 //---------------+-------------------+-----------------------+---------------
 // SsGetTime     | ]                 | Symbol += Zeichen     | SsGetString
 //               | h, H, m, M, s, S  | Symbol += Zeichen, *  | SsGetString
-//               | sonst             | del [; Symbol+=Zeichen| SsGetCol
+//               | sonst             | del [; Symbol+=Zeichen| SsGetPrefix
 //---------------+-------------------+-----------------------+---------------
-// SsGetCol      | ]                 |                       | SsStop
+// SsGetPrefix   | ]                 |                       | SsStop
 //               | sonst             | Symbol += Zeichen     |
 //---------------+-------------------+-----------------------+---------------
 // SsGetCon      | >, =              | Symbol+=Zeichen       |
@@ -761,13 +805,13 @@ SvNumberformat::~SvNumberformat()
 
 enum ScanState
 {
-    SsStop      = 0,
-    SsStart     = 1,
-    SsGetCon    = 2,                        // Bedingung
-    SsGetString = 3,                        // Format
-    SsGetCol    = 4,                        // Farbe
-    SsGetTime   = 5,                        // [MM] fuer Zeiten
-    SsGetColCon = 6                         // noch unentschieden
+    SsStop,
+    SsStart,
+    SsGetCon,           // condition
+    SsGetString,        // format string
+    SsGetPrefix,        // color or DBNumN
+    SsGetTime,          // [HH] for time
+    SsGetBracketed      // any [...] not decided yet
 };
 
 
@@ -818,7 +862,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
             {
                 if (cToken == '[')
                 {
-                    eState = SsGetColCon;
+                    eState = SsGetBracketed;
                     sSymbol += cToken;
                 }
                 else if (cToken == ';')
@@ -846,7 +890,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 }
             }
             break;
-            case SsGetColCon:
+            case SsGetBracketed:
             {
                 switch (cToken)
                 {
@@ -875,7 +919,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     }
                     break;
                     case '$' :
-                    {   // Waehrung ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                    {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
                         eType = SYMBOLTYPE_FORMAT;
                         sSymbol += cToken;
                         eState = SsGetString;
@@ -890,8 +934,20 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     default:
                     {
-                        sal_Unicode cUpper = rChrCls().toUpper( rString, nPos-1, 1 ).GetChar(0);
-                        if (cUpper == pKeywords[NF_KEY_H].GetChar(0)    ||  // H
+                        static const String aDBNum( RTL_CONSTASCII_USTRINGPARAM( "DBNUM" ) );
+                        String aUpper( rChrCls().toUpper( rString, nPos-1, aDBNum.Len() ) );
+                        sal_Unicode cUpper = aUpper.GetChar(0);
+                        sal_Unicode cNum = rString.GetChar( nPos-1+aDBNum.Len() );
+                        if ( aUpper == aDBNum && '1' <= cNum && cNum <= '9' )
+                        {
+                            sSymbol.EraseAllChars('[');
+                            sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
+                            nPos += aDBNum.Len()+1;
+                            //! SymbolType is negative
+                            eType = SYMBOLTYPE_DBNUM1 - (cNum - '1');
+                            eState = SsGetPrefix;
+                        }
+                        else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
                             cUpper == pKeywords[NF_KEY_MI].GetChar(0)   ||  // M
                             cUpper == pKeywords[NF_KEY_S].GetChar(0)    )   // S
                         {
@@ -904,7 +960,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol.EraseAllChars('[');
                             sSymbol += cToken;
                             eType = SYMBOLTYPE_COLOR;
-                            eState = SsGetCol;
+                            eState = SsGetPrefix;
                         }
                     }
                     break;
@@ -943,7 +999,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         {
                             sSymbol.EraseAllChars('[');
                             sSymbol += cToken;
-                            eState = SsGetCol;
+                            eState = SsGetPrefix;
                         }
                     }
                     else
@@ -951,7 +1007,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         sSymbol.EraseAllChars('[');
                         sSymbol += cToken;
                         eType = SYMBOLTYPE_COLOR;
-                        eState = SsGetCol;
+                        eState = SsGetPrefix;
                     }
                 }
             }
@@ -1019,7 +1075,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 }
             }
             break;
-            case SsGetCol:
+            case SsGetPrefix:
             {
                 if (cToken == ']')
                     eState = SsStop;
@@ -1864,16 +1920,20 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     sStr.Erase();
                 else
                 {
+//! TODO: DoubleToString with DBNumN
                     char aBuf[100];
                     sprintf( aBuf, "%.f", fNum );   // simple rounded integer
                     sStr.AssignAscii( aBuf );
                 }
-                sFrac = String::CreateFromInt32(nFrac);
-                sDiv = String::CreateFromInt32(nDiv);
                 if (rInfo.nCntPre > 0 && nFrac == 0)
                 {
                     sFrac.Erase();
                     sDiv.Erase();
+                }
+                else
+                {
+                    sFrac = IntToString( nIx, nFrac );
+                    sDiv = IntToString( nIx, nDiv );
                 }
 
                 USHORT j = nAnz-1;                  // letztes Symbol->rueckw.
@@ -2080,6 +2140,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
+//! TODO: DoubleToString with DBNumN
     SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', int(nCntPost));
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
@@ -2194,34 +2255,22 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_MI:                 // M
-                OutString += String::CreateFromInt32(nMin);
+                OutString += IntToString( nIx, nMin );
             break;
             case NF_KEY_MMI:                // MM
-            {
-                if (nMin < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nMin);
-            }
+                OutString += IntToString( nIx, nMin, 2 );
             break;
             case NF_KEY_H:                  // H
-                OutString += String::CreateFromInt32(nHour);
+                OutString += IntToString( nIx, nHour );
             break;
             case NF_KEY_HH:                 // HH
-            {
-                if (nHour < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nHour);
-            }
+                OutString += IntToString( nIx, nHour, 2 );
             break;
             case NF_KEY_S:                  // S
-                OutString += String::CreateFromInt32(nSec);
+                OutString += IntToString( nIx, nSec );
             break;
             case NF_KEY_SS:                 // SS
-            {
-                if (nSec < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nSec);
-            }
+                OutString += IntToString( nIx, nSec, 2 );
             break;
             default:
             break;
@@ -2377,15 +2426,15 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 OutString += rInfo.sStrArray[i];
                 break;
             case NF_KEY_M:                  // M
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::MONTH ) + 1 );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_MM:                 // MM
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_MMM:                // MMM
@@ -2432,15 +2481,15 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_D:                  // D
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::DAY_OF_MONTH ) );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_DD:                 // DD
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_DDD:                // DDD
@@ -2473,9 +2522,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -2486,7 +2533,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal );
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -2495,7 +2542,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal );
             }
             break;
             case NF_KEY_EEC:                // EE
@@ -2503,9 +2550,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_NN:                 // NN
@@ -2533,8 +2578,10 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
             }
             break;
             case NF_KEY_WW :                // WW
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::WEEK_OF_YEAR ) );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR );
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_G:                  // G
                 lcl_SvNumberformat_AppendEraG( OutString, rCal );
@@ -2560,9 +2607,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     nVal, 1 );
 //! TODO: what about negative values? abs and append era?
                 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
         }
@@ -2621,6 +2666,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         nSeconds = (ULONG)floor( fTime );
 
     String sSecStr;
+//! TODO: DoubleToString with DBNumN
     SolarMath::DoubleToString(sSecStr, fTime-nSeconds, 'F', rInfo.nCntPost);
     sSecStr.EraseLeadingChars('0');
     sSecStr.EraseLeadingChars('.');
@@ -2728,45 +2774,37 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_MI:                 // M
-                OutString += String::CreateFromInt32(nMin);
+                OutString += IntToString( nIx, nMin );
             break;
             case NF_KEY_MMI:                // MM
             {
                 if (nMin < 10)
                     OutString += '0';
-                OutString += String::CreateFromInt32(nMin);
+                OutString += IntToString( nIx, nMin );
             }
             break;
             case NF_KEY_H:                  // H
-                OutString += String::CreateFromInt32(nHour);
+                OutString += IntToString( nIx, nHour );
             break;
             case NF_KEY_HH:                 // HH
-            {
-                if (nHour < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nHour);
-            }
+                OutString += IntToString( nIx, nHour, 2 );
             break;
             case NF_KEY_S:                  // S
-                OutString += String::CreateFromInt32(nSec);
+                OutString += IntToString( nIx, nSec );
             break;
             case NF_KEY_SS:                 // SS
-            {
-                if (nSec < 10)
-                    OutString += '0';
-                OutString += String::CreateFromInt32(nSec);
-            }
+                OutString += IntToString( nIx, nSec, 2 );
             break;
             case NF_KEY_M:                  // M
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::MONTH ) + 1 );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_MM:                 // MM
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::MONTH ) + 1;
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_MMM:                // MMM
@@ -2808,20 +2846,20 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 if (rInfo.nTypeArray[i] == NF_KEY_QQ)
                 {
                     OutString += ' ';
-                    OutString += String::CreateFromInt32(aDateTime.GetYear());
+                    OutString += IntToString( nIx, aDateTime.GetYear() );
                 }
             }
             break;
             case NF_KEY_D:                  // D
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::DAY_OF_MONTH ) );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_DD:                 // DD
             {
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_DDD:                // DDD
@@ -2854,9 +2892,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
                 if ( 99 < nVal )
                     nVal %= 100;
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -2867,7 +2903,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 if ( bOtherCalendar )
                     SwitchToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal );
                 if ( bOtherCalendar )
                     SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
             }
@@ -2876,7 +2912,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal );
             }
             break;
             case NF_KEY_EEC:                // EE
@@ -2884,9 +2920,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             {
 //! TODO: what about negative values? abs and append era?
                 sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
             case NF_KEY_NN:                 // NN
@@ -2912,8 +2946,10 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             }
             break;
             case NF_KEY_WW :                // WW
-                OutString += String::CreateFromInt32( rCal.getValue(
-                    CalendarFieldIndex::WEEK_OF_YEAR ) );
+            {
+                sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::WEEK_OF_YEAR );
+                OutString += IntToString( nIx, nVal );
+            }
             break;
             case NF_KEY_G:                  // G
                 lcl_SvNumberformat_AppendEraG( OutString, rCal );
@@ -2939,9 +2975,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     nVal, 1 );
 //! TODO: what about negative values? abs and append era?
                 nVal = rCal.getValue( CalendarFieldIndex::YEAR );
-                if ( nVal < 10 )
-                    OutString += '0';
-                OutString += String::CreateFromInt32( nVal );
+                OutString += IntToString( nIx, nVal, 2 );
             }
             break;
         }
@@ -3706,6 +3740,42 @@ String SvNumberformat::GetMappedFormatstring(
         }
     }
     return aStr;
+}
+
+
+String SvNumberformat::GetDBNumString( BYTE nNum, sal_Int32 nVal, USHORT nMinDigits ) const
+{
+    if ( nNum )
+    {
+//! TODO: DoubleByte Chinese and other digits
+        return GetDBNumString( 0, nVal, nMinDigits );   // yes, one recursion for now
+    }
+    if ( nMinDigits )
+    {
+        if ( nMinDigits == 2 )
+        {   // speed up the most common case
+            if ( 0 <= nVal && nVal < 10 )
+            {
+                String aStr;
+                sal_Unicode* p = aStr.AllocBuffer( 2 );
+                *p++ = '0';
+                *p = sal_Unicode( '0' + nVal );
+                return aStr;
+            }
+            return String::CreateFromInt32( nVal );
+        }
+        else
+        {
+            String aValStr( String::CreateFromInt32( nVal ) );
+            if ( aValStr.Len() >= nMinDigits )
+                return aValStr;
+            String aStr;
+            aStr.Fill( nMinDigits - aValStr.Len(), '0' );
+            aStr += aValStr;
+            return aStr;
+        }
+    }
+    return String::CreateFromInt32( nVal );
 }
 
 
