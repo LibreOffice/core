@@ -150,9 +150,10 @@ double AreaPositionHelper::getLogicGrounding() const
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bNoArea )
+AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel, bool bCategoryXAxis, bool bNoArea )
         : VSeriesPlotter( xChartTypeModel )
         , m_pPosHelper( new AreaPositionHelper() )
+        , m_bCategoryXAxis(bCategoryXAxis)
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel) )
@@ -564,7 +565,7 @@ void AreaChart::createShapes()
                 (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                 //collect data point information (logic coordinates, style ):
-                double fLogicX       = (*aSeriesIter)->getX(nIndex);
+                double fLogicX       = m_bCategoryXAxis ? nIndex : (*aSeriesIter)->getX(nIndex);
                 double fLogicY       = (*aSeriesIter)->getY(nIndex);
                 if( ::rtl::math::isNan(fLogicY) )
                     fLogicY=0;//@todo maybe there is another grounding ?? - for sum 0 is right

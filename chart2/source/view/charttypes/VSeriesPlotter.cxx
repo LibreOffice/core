@@ -522,11 +522,11 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter( const uno::Reference<XChart
     if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.BarChart")) )
         pRet = new BarChart(xChartTypeModel);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.AreaChart")) )
-        pRet = new AreaChart(xChartTypeModel);
+        pRet = new AreaChart(xChartTypeModel,true);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.LineChart")) )
-        pRet = new AreaChart(xChartTypeModel,true);
+        pRet = new AreaChart(xChartTypeModel,true,true);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.ScatterChart")) )
-        pRet = new AreaChart(xChartTypeModel,true);
+        pRet = new AreaChart(xChartTypeModel,false,true);
     else if( aChartType.equalsIgnoreAsciiCase(C2U("com.sun.star.chart2.PieChart")) )
         pRet = new PieChart(xChartTypeModel);
     else

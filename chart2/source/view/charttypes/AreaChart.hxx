@@ -21,7 +21,7 @@ class AreaChart : public VSeriesPlotter
 public:
     AreaChart( const ::com::sun::star::uno::Reference<
              ::drafts::com::sun::star::chart2::XChartType >& xChartTypeModel
-             , bool bNoArea=false );
+             , bool bCategoryXAxis, bool bNoArea=false );
     virtual ~AreaChart();
 
     //-------------------------------------------------------------------------
@@ -58,6 +58,8 @@ private: //methods
 
 private: //member
     AreaPositionHelper*                 m_pPosHelper;
+
+    bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
