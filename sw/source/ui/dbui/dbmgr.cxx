@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 14:29:45 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,6 @@
 #endif
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
-#endif
-#ifndef _SDB_SDBCURS_HXX //autogen
-#include <sdb/sdbcurs.hxx>
 #endif
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
