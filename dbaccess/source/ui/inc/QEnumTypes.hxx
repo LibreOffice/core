@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:57:31 $
+ *  last change: $Author: oj $ $Date: 2002-08-30 11:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,12 @@ namespace dbaui
     };
     enum EFunctionType
     {
-        FKT_AGGREGATE=0,
-        FKT_OTHER    ,
-        FKT_NONE     ,
-        FKT_CONDITION    // wenn dieser Fkt.Typ gesetzt handelt es sich um EXISTS oder UNIQUE, der FieldName enthält das gesamte Statement
+        FKT_NONE        =0x00000000,
+        FKT_OTHER       =0x00000001,
+        FKT_AGGREGATE   =0x00000002,
+        FKT_CONDITION   =0x00000004,
+        FKT_NUMERIC     =0x00000008
+        // wenn dieser Fkt.Typ gesetzt handelt es sich um EXISTS oder UNIQUE, der FieldName enthält das gesamte Statement
     };
 
     enum EConnectionSide
