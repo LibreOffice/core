@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,21 @@ struct XclFontData
 };
 
 
-// Style (XF) data ============================================================
+// Cell formatting data (XF) ==================================================
+
+/** Contains all cell protection attributes. */
+struct XclCellProt
+{
+    bool                        mbLocked;       /// true = Locked against editing.
+    bool                        mbHidden;       /// true = Formula is hidden.
+
+    explicit                    XclCellProt();
+};
+
+bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight );
+
+
+// ----------------------------------------------------------------------------
 
 /** Horizontal alignment of cell contents. */
 enum XclHorAlign
@@ -172,7 +186,9 @@ enum XclHorAlign
     xlHAlignFill                    = 0x04,
     xlHAlignJustify                 = 0x05,
     xlHAlignCenterAcrSel            = 0x06,
-    xlHAlignDistrib                 = 0x07
+    xlHAlignDistrib                 = 0x07,
+    xlHAlign_Default                = xlHAlignGeneral
+
 };
 
 /** Vertical alignment of cell contents. */
@@ -182,7 +198,8 @@ enum XclVerAlign
     xlVAlignCenter                  = 0x01,
     xlVAlignBottom                  = 0x02,
     xlVAlignJustify                 = 0x03,
-    xlVAlignDistrib                 = 0x04
+    xlVAlignDistrib                 = 0x04,
+    xlVAlign_Default                = xlVAlignBottom
 };
 
 /** Text orientation. */
@@ -192,7 +209,7 @@ enum XclTextOrient
     xlTextOrientTopBottom           = 0x01,
     xlTextOrient90ccw               = 0x02,
     xlTextOrient90cw                = 0x03,
-    xlTextOrientRot                 = 0x04
+    xlTextOrient_Default            = xlTextOrientNoRot
 };
 
 /** CTL text direction. */
@@ -200,7 +217,95 @@ enum XclTextDirection
 {
     xlTextDirContext                = 0x00,
     xlTextDirLTR                    = 0x01,
-    xlTextDirRTL                    = 0x02
+    xlTextDirRTL                    = 0x02,
+    xlTextDir_Default               = xlTextDirContext
+};
+
+/** Contains all cell alignment attributes. */
+struct XclCellAlign
+{
+    XclHorAlign                 meHorAlign;     /// Horizontal alignment.
+    XclVerAlign                 meVerAlign;     /// Vertical alignment.
+    XclTextDirection            meTextDir;      /// CTL text direction.
+    XclTextOrient               meOrient;       /// Text orientation.
+    sal_uInt8                   mnRotation;     /// Text rotation angle.
+    sal_uInt8                   mnIndent;       /// Indentation.
+    bool                        mbWrapped;      /// true = Multi-line text.
+
+    explicit                    XclCellAlign();
+};
+
+bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight );
+
+
+// ----------------------------------------------------------------------------
+
+/** Contains color and line style for each cell border line. */
+struct XclCellBorder
+{
+    sal_uInt16                  mnLeftColor;    /// Palette index for left line.
+    sal_uInt16                  mnRightColor;   /// Palette index for right line.
+    sal_uInt16                  mnTopColor;     /// Palette index for top line.
+    sal_uInt16                  mnBottomColor;  /// Palette index for bottom line.
+    sal_uInt8                   mnLeftLine;     /// Style of left line.
+    sal_uInt8                   mnRightLine;    /// Style of right line.
+    sal_uInt8                   mnTopLine;      /// Style of top line.
+    sal_uInt8                   mnBottomLine;   /// Style of bottom line.
+
+    explicit                    XclCellBorder();
+};
+
+bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight );
+
+
+// ----------------------------------------------------------------------------
+
+/** Contains background colors and pattern for a cell. */
+struct XclCellArea
+{
+    sal_uInt16                  mnForeColor;    /// Palette index to foreground color.
+    sal_uInt16                  mnBackColor;    /// Palette index to background color.
+    sal_uInt8                   mnPattern;      /// Fill pattern.
+
+    explicit                    XclCellArea();
+
+    /** Returns true, if the area represents transparent state. */
+    bool                        IsTransparent() const;
+};
+
+bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight );
+
+
+// ----------------------------------------------------------------------------
+
+/** Contains base members for XF record import/export.
+    @In detail this class stores the XF type (cell/style), the index to the parent
+    style XF and all "attribute used" flags, which reflect the state of specific
+    attribute groups (true = user has changed the attributes). */
+class XclXFBase
+{
+protected:
+    sal_uInt16                  mnParent;           /// Index to parent style XF.
+    bool                        mbCellXF;           /// true = cell XF, false = style XF.
+    bool                        mbProtUsed;         /// true = cell protection used.
+    bool                        mbFontUsed;         /// true = font index used.
+    bool                        mbFmtUsed;          /// true = number format used.
+    bool                        mbAlignUsed;        /// true = alignment used.
+    bool                        mbBorderUsed;       /// true = border data used.
+    bool                        mbAreaUsed;         /// true = area data used.
+
+public:
+    explicit                    XclXFBase( bool bCellXF );
+
+    /** Sets all "attribute used" flags to the passed state. */
+    void                        SetAllUsedFlags( bool bUsed );
+
+    inline bool                 IsCellXF() const    { return mbCellXF; }
+    inline bool                 IsStyleXF() const   { return !IsCellXF(); }
+
+protected:
+    /** Returns true, if this object is equal to the passed. */
+    bool                        Equals( const XclXFBase& rCmp ) const;
 };
 
 
