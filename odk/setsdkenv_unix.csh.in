@@ -3,6 +3,9 @@
 # This script sets all enviroment variables, which are necessary for building 
 # the examples of the Office Development Kit.
 # The Script was developed for the operating systems Solaris and Linux.
+set setscript=`history 1 | sed "s/.*source //"`
+set sdkdir=`dirname ${bla}`
+unset setscript
 
 # The SDK name
 setenv OO_SDK_NAME @OO_SDK_NAME@
@@ -56,9 +59,9 @@ if ( $?OO_SDK_OUTPUT_DIR ) then
 endif
 
 # check platform and set appropriate variables
-switch (`./config.guess | cut -d"-" -f3,4`)
+switch (`${sdkdir}/config.guess | cut -d"-" -f3,4`)
   case "solaris*":
-    if ( `./config.guess | cut -d"-" -f1` == "sparc" ) then
+    if ( `${sdkdir}/config.guess | cut -d"-" -f1` == "sparc" ) then
         set directoryname=solsparc
 	set platform=Solaris Sparc
     else
@@ -74,9 +77,12 @@ switch (`./config.guess | cut -d"-" -f3,4`)
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
+
   case "linux-gnu":
-    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    if ( $?OO_SDK_CPP_HOME == 0) then
+	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    endif
 
     set directoryname=linux
     set exampleout=LINUXexample.out
@@ -89,9 +95,12 @@ switch (`./config.guess | cut -d"-" -f3,4`)
 	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
     endif
   breaksw
+
   case "darwin":
-    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    if ( $?OO_SDK_CPP_HOME == 0) then
+	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    endif
 
     set directoryname=macosx
     set exampleout=MACOSXexample.out
@@ -104,9 +113,12 @@ switch (`./config.guess | cut -d"-" -f3,4`)
 	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${DYLD_LIBRARY_PATH}
     endif
   breaksw
+
   case "freebsd":
-    set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
-    setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    if ( $?OO_SDK_CPP_HOME == 0) then
+	set sdk_gxx_include_path=`echo "#include <cstring>" | ${OO_SDK_CPP_HOME}/g++ -E -xc++ - | sed -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+	setenv SDK_GXX_INCLUDE_PATH ${sdk_gxx_include_path}
+    endif
 
     set directoryname=freebsd
     set exampleout=FREEBSDexample.out
@@ -190,6 +202,7 @@ echo " * Auto deployment = ${SDK_AUTO_DEPLOYMENT}"
 echo " *"
 echo " ************************************************************************"
 
+unset sdkdir
 unset directoryname
 unset exampleout
 unset platform
