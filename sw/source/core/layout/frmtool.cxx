@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:20:50 $
+ *  last change: $Author: ama $ $Date: 2001-11-06 09:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2505,6 +2505,29 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld )
 |*  NotifyBackground()
 |*
 |*************************************************************************/
+
+void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
+{
+    SwTwips nBottom = rRect.Bottom();
+    while( pFrm )
+    {
+        if( pFrm->IsLayoutFrm() )
+        {
+            if( rRect.IsOver( pFrm->Frm() ) )
+                lcl_CheckFlowBack( ((SwLayoutFrm*)pFrm)->Lower(), rRect );
+        }
+        else if( !pFrm->GetNext() && nBottom > pFrm->Frm().Bottom() )
+        {
+            if( pFrm->IsCntntFrm() && ((SwCntntFrm*)pFrm)->HasFollow() )
+                pFrm->InvalidateSize();
+            else
+                pFrm->InvalidateNextPos();
+        }
+        pFrm = pFrm->GetNext();
+    }
+}
+
+
 #pragma optimize("",off)
 
 void MA_FASTCALL lcl_NotifyCntnt( SdrObject *pThis, SwCntntFrm *pCnt,
@@ -2578,6 +2601,9 @@ void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
     SwCntntFrm *pCnt = 0;
     if ( pArea )
     {
+        if( PREP_FLY_ARRIVE != eHint )
+            lcl_CheckFlowBack( pArea, rRect );
+
         //Es reagieren sowieso nur die auf den Anker folgenden auf den Fly, also
         //brauchen diese nicht abgeklappert werden.
         //Ausnahme sind ist natuerlich das LEAVE, denn der Fly koennte ja von
