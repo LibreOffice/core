@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-19 11:31:23 $
+#   last change: $Author: hr $ $Date: 2004-02-03 12:03:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -175,6 +175,7 @@ IDLFILES=\
     RecentFunctions.idl\
     ResultEvent.idl\
     Scenarios.idl\
+    Shape.idl\
     SheetCell.idl\
     SheetCellCursor.idl\
     SheetCellRange.idl\
