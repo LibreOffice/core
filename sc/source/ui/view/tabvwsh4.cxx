@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:54:20 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,6 +852,9 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
 
     if ( eOST!=eCurOST || bForce )
     {
+        BOOL bCellBrush = FALSE;    // "format paint brush" allowed for cells
+        BOOL bDrawBrush = FALSE;    // "format paint brush" allowed for drawing objects
+
         if(eCurOST!=OST_NONE) RemoveSubShell();
 
         if (pFormShell && !bFormShellAtTop)
@@ -863,6 +866,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     {
                         AddSubShell(*pCellShell);
                         if(bPgBrk) AddSubShell(*pPageBreakShell);
+                        bCellBrush = TRUE;
                     }
                     break;
             case    OST_Editing:
@@ -901,6 +905,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pDrawShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pDrawShell);
+                        bDrawBrush = TRUE;
                     }
                     break;
 
@@ -913,6 +918,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pDrawFormShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pDrawFormShell);
+                        bDrawBrush = TRUE;
                     }
                     break;
 
@@ -925,6 +931,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pChartShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pChartShell);
+                        bDrawBrush = TRUE;
                     }
                     break;
 
@@ -937,6 +944,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pOleObjectShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pOleObjectShell);
+                        bDrawBrush = TRUE;
                     }
                     break;
 
@@ -949,6 +957,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pGraphicShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pGraphicShell);
+                        bDrawBrush = TRUE;
                     }
                     break;
 
@@ -963,6 +972,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pPivotShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pPivotShell);
+                        bCellBrush = TRUE;
                     }
                     break;
             case    OST_Auditing:
@@ -978,6 +988,7 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                             pAuditingShell->SetRepeatTarget( &aTarget );
                         }
                         AddSubShell(*pAuditingShell);
+                        bCellBrush = TRUE;
                     }
                     break;
             default:
@@ -989,6 +1000,10 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
             AddSubShell(*pFormShell);               // add on top of own subshells
 
         eCurOST=eOST;
+
+        // abort "format paint brush" when switching to an incompatible shell
+        if ( ( GetBrushDocument() && !bCellBrush ) || ( GetDrawBrushSet() && !bDrawBrush ) )
+            ResetBrushDocument();
     }
 }
 
