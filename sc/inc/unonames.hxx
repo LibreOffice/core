@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 13:43:21 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,7 @@
 #define SC_UNONAME_STBFUNC          "StatusBarFunction"
 #define SC_UNONAME_ULISTS           "UserLists"
 #define SC_UNONAME_USETABCOL        "UseTabCol"
+#define SC_UNONAME_PRMETRICS        "UsePrinterMetrics"
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"

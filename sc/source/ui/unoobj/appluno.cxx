@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:47:15 $
+ *  last change: $Author: nn $ $Date: 2001-05-14 19:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@ const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_SCALE),    0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNONAME_STBFUNC),  0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNONAME_ULISTS),   0,  &getCppuType((uno::Sequence<rtl::OUString>*)0), 0},
+        {MAP_CHAR_LEN(SC_UNONAME_PRMETRICS),0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNONAME_USETABCOL),0,  &getBooleanCppuType(),              0},
         {0,0,0,0}
     };
@@ -514,6 +515,11 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         aInpOpt.SetUseTabCol( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         bSaveInp = TRUE;
     }
+    else if (aString.EqualsAscii( SC_UNONAME_PRMETRICS ))
+    {
+        aInpOpt.SetTextWysiwyg( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        bSaveInp = TRUE;
+    }
     else if (aString.EqualsAscii( SC_UNONAME_METRIC ))
     {
         aAppOpt.SetAppMetric( (FieldUnit) ScUnoHelpFunctions::GetInt16FromAny( aValue ) );
@@ -600,6 +606,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
     else if (aString.EqualsAscii( SC_UNONAME_MOVESEL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetMoveSelection() );
     else if (aString.EqualsAscii( SC_UNONAME_RANGEFIN )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetRangeFinder() );
     else if (aString.EqualsAscii( SC_UNONAME_USETABCOL )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetUseTabCol() );
+    else if (aString.EqualsAscii( SC_UNONAME_PRMETRICS )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetTextWysiwyg() );
     else if (aString.EqualsAscii( SC_UNONAME_METRIC ))  aRet <<= (sal_Int16) aAppOpt.GetAppMetric();
     else if (aString.EqualsAscii( SC_UNONAME_MOVEDIR )) aRet <<= (sal_Int16) aInpOpt.GetMoveDir();
     else if (aString.EqualsAscii( SC_UNONAME_STBFUNC )) aRet <<= (sal_Int16) aAppOpt.GetStatusFunc();
