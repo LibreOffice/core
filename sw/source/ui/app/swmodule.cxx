@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 06:30:41 $
+ *  last change: $Author: os $ $Date: 2000-10-12 08:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,6 @@
 #include "barcfg.hxx"
 
 #include <app.hrc>
-#include "cfgid.h"
 
 ResMgr *pSwResMgr = 0;
 sal_Bool    bNoInterrupt    = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 07:10:51 $
+ *  last change: $Author: os $ $Date: 2000-10-12 08:23:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,6 @@
 #ifndef _GLOBALS_H
 #include <globals.h>        // globale Konstanten z.B.
 #endif
-#ifndef _CFGID_H
-#include <cfgid.h>
-#endif
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
@@ -314,7 +311,6 @@ using namespace ::com::sun::star;
 SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 {
     SFX_CHILDWINDOW_REGISTRATION(SvxHyperlinkDlgWrapper::GetChildWindowId());
-    SFX_STATUSBAR_REGISTRATION(SW_RES(CFG_STATUSBAR));
 }
 
 /*------------------------------------------------------------------------
