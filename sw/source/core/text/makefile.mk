@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ama $ $Date: 2001-03-05 12:53:30 $
+#   last change: $Author: svesik $ $Date: 2001-05-14 12:03:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,6 +181,13 @@ SLOFILES =  \
 .IF "$(product)$(cap)" == ""
 SLOFILES +=  \
         $(SLO)$/txtio.obj
+.ENDIF
+
+.IF "$(CPUNAME)" == "SPARC"
+.IF "$(OS)" == "NETBSD"
+NOOPTFILES = \
+    $(SLO)$/txtftn.obj
+.ENDIF
 .ENDIF
 
 # --- Tagets -------------------------------------------------------
