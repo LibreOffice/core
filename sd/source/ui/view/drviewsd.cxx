@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:32:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void DrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
 void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
 {
     UINT32 nState = NAVSTATE_NONE;
-    USHORT nCurrentPage;
+    USHORT nCurrentPage = 0;
     USHORT nFirstPage = 0;
     USHORT nLastPage;
     BOOL   bEndless = FALSE;
@@ -268,9 +268,12 @@ void DrawViewShell::GetNavigatorWinState( SfxItemSet& rSet )
     {
         nState |= NAVBTN_PEN_DISABLED | NAVTLB_UPDATE;
 
-        nCurrentPage = ( pActualPage->GetPageNum() - 1 ) / 2;
+        if (pActualPage != NULL)
+        {
+            nCurrentPage = ( pActualPage->GetPageNum() - 1 ) / 2;
+            aPageName = pActualPage->GetName();
+        }
         nLastPage = GetDoc()->GetSdPageCount( ePageKind ) - 1;
-        aPageName = pActualPage->GetName();
     }
 
     // erste Seite / vorherige Seite
