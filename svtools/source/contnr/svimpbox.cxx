@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:45:29 $
+ *  last change: $Author: dv $ $Date: 2001-07-13 13:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,10 +923,10 @@ void SvImpLBox::RepaintSelectionItems()
 
     long nEntryHeight = pView->GetEntryHeight();
 
-    USHORT nCount = nVisibleCount;
+    ULONG nCount = nVisibleCount;
     long nY = 0;
     SvLBoxEntry* pEntry = pStartEntry;
-    for( USHORT n=0; n< nCount && pEntry; n++ )
+    for( ULONG n=0; n< nCount && pEntry; n++ )
     {
         pView->PaintEntry1( pEntry, nY, 0xffff ); //wg. ItemsetBrowser SV_LBOXTAB_SHOW_SELECTION );
         nY += nEntryHeight;
@@ -969,8 +969,8 @@ void SvImpLBox::DrawNet()
     pView->SetLineColor( aCol );
     Point aPos1, aPos2;
     USHORT nDistance;
-    USHORT nMax = nVisibleCount + nOffs + 1;
-    for( USHORT n=0; n< nMax && pEntry; n++ )
+    ULONG nMax = nVisibleCount + nOffs + 1;
+    for( ULONG n=0; n< nMax && pEntry; n++ )
     {
         if( pView->IsExpanded(pEntry) )
         {
@@ -1312,7 +1312,7 @@ void SvImpLBox::FillView()
 
 void SvImpLBox::ShowVerSBar()
 {
-    USHORT bVerBar = pView->nWindowStyle & WB_VSCROLL;
+    ULONG bVerBar = pView->nWindowStyle & WB_VSCROLL;
     ULONG nVis;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
