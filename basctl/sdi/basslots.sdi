@@ -1,0 +1,18 @@
+import "sfxslots.ilb"
+
+module
+"BD25A480-30AB-101C-A17D-000024021828"
+"C049C7E0-30AB-101C-A17D-000024021828"
+BasItems
+[
+HelpText( "Bas-Items" )
+SlotIdFile( "basslots.hrc" )
+TypeLibFile( "basslots.tlb" )
+]
+{
+    //=========================================================================
+
+//  include "baside.sdi"
+
+}
+

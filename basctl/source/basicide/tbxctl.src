@@ -1,0 +1,619 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbxctl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svx/svxids.hrc"
+#include "tbxctl.hrc"
+#include "helpid.hrc"
+FloatingWindow RID_TBXCONTROLS
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_BASICIDE_CONTROLS ;
+    Text = "Kontrollfelder" ;
+    Text [ ENGLISH ] = "Controls" ;
+    Text [ english_us ] = "Controls" ;
+    Text [ swedish ] = "Kontrollfält" ;
+    Text [ danish ] = "Kontrolelementer" ;
+    Text [ italian ] = "Campi di controllo" ;
+    Text [ spanish ] = "Campos de control" ;
+    Text [ french ] = "Eléments de contrôle" ;
+    Text [ dutch ] = "Controlevelden" ;
+    Text [ portuguese_brazilian ] = "Kontrollfelder" ;
+    Text [ portuguese ] = "Campos de controlo" ;
+    String RID_TOOLBOX
+    {
+        Text = "Kontrollfelder" ;
+        Text [ ENGLISH ] = "Controls" ;
+        Text [ dutch ] = "Controlevelden" ;
+        Text [ english_us ] = "Controls" ;
+        Text [ swedish ] = "Kontrollfält" ;
+        Text [ danish ] = "Kontrolelementer" ;
+        Text [ italian ] = "Campi di controllo" ;
+        Text [ spanish ] = "Campos de control" ;
+        Text [ french ] = "Eléments de contrôle" ;
+        Text [ portuguese ] = "Campos de controlo" ;
+        Text [ portuguese_brazilian ] = "Kontrollfelder" ;
+        Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+        Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
+        Text[ polish ] = "Pola kontrolne";
+        Text[ japanese ] = "ºİÄÛ°Ù";
+        Text[ chinese_traditional ] = "±±¨î¶µ";
+        Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
+        Text[ greek ] = "Ğåäßá åëİã÷ïõ";
+        Text[ korean ] = "ÄÁÆ®·Ñ";
+        Text[ turkish ] = "Komut alanları";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "¿ØÖÆ×Ö¶Î";
+    Text[ russian ] = "İëåìåíòû óïğàâëåíèÿ";
+    Text[ polish ] = "Pola kontrolne";
+    Text[ japanese ] = "ºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "±±¨î¶µ";
+    Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
+    Text[ greek ] = "Ğåäßá åëİã÷ïõ";
+    Text[ korean ] = "ÄÁÆ®·Ñ";
+    Text[ turkish ] = "Komut alanları";
+    Text[ language_user1 ] = " ";
+};
+ToolBox RID_TOOLBOX
+{
+    SVLook = TRUE ;
+     // HelpId = HID_BASICIDE_CONTROLS ;
+    LineCount = 2 ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_PUSHBUTTON ;
+            Identifier = SID_INSERT_PUSHBUTTON ;
+            RadioCheck = TRUE ;
+            Text = "CommandButton" ;
+            Text [ english_us ] = "Command Button" ;
+            Text [ italian ] = "Pulsante di comando" ;
+            Text [ spanish ] = "Botón de comando" ;
+            Text [ french ] = "Bouton de commande" ;
+            Text [ dutch ] = "CommandButton" ;
+            Text [ swedish ] = "Kommandoknapp" ;
+            Text [ danish ] = "Kommandoknap" ;
+            Text [ portuguese ] = "Botão de comando" ;
+            Text [ portuguese_brazilian ] = "CommandButton" ;
+            /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
+            Text[ chinese_simplified ] = "ÃüÁî°´Å¥";
+            Text[ russian ] = "Êíîïêà êîìàíäû";
+            Text[ polish ] = "Przycisk polecenia";
+            Text[ japanese ] = "ºÏİÄŞÎŞÀİ";
+            Text[ chinese_traditional ] = "©R¥O«ö¶s";
+            Text[ arabic ] = "ÒÑ ÖÛØ";
+            Text[ greek ] = "Ğåäßï åğéëïãŞò åíôïëŞò";
+            Text[ korean ] = "¸í·É ¹öÆ°";
+            Text[ turkish ] = "Komut düğmesi";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_CHECKBOX ;
+            Identifier = SID_INSERT_CHECKBOX ;
+            RadioCheck = TRUE ;
+            Text = "CheckBox" ;
+            Text [ english_us ] = "Check Box" ;
+            Text [ italian ] = "Casella di controllo" ;
+            Text [ spanish ] = "Casilla de verificación" ;
+            Text [ french ] = "Case à cocher" ;
+            Text [ dutch ] = "CheckBox" ;
+            Text [ swedish ] = "CheckBox" ;
+            Text [ danish ] = "Afkrydsningsfelt" ;
+            Text [ portuguese ] = "Caixa de verificação" ;
+            Text [ portuguese_brazilian ] = "CheckBox" ;
+            /* ### ACHTUNG: Neuer Text in Resource? CheckBox einfügen : CheckBox einf³gen */
+            Text[ chinese_simplified ] = "¸´Ñ¡¿ò";
+            Text[ russian ] = "Êíîïêà ïğîâåğêè";
+            Text[ polish ] = "Pole wyboru";
+            Text[ japanese ] = "Áª¯¸ÎŞ¯¸½";
+            Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
+            Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
+            Text[ greek ] = "Ğåäßï åëİã÷ïõ";
+            Text[ korean ] = "Ã¼Å© ¹Ú½º";
+            Text[ turkish ] = "Seçme kutusu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_FIXEDTEXT ;
+            Identifier = SID_INSERT_FIXEDTEXT ;
+            RadioCheck = TRUE ;
+            Text = "Label" ;
+            Text [ english_us ] = "Label" ;
+            Text [ italian ] = "Testo fisso" ;
+            Text [ spanish ] = "Etiqueta" ;
+            Text [ french ] = "Étiquette" ;
+            Text [ dutch ] = "Label" ;
+            Text [ swedish ] = "Etikett" ;
+            Text [ danish ] = "Etiket" ;
+            Text [ portuguese ] = "Etiqueta" ;
+            Text [ portuguese_brazilian ] = "Label" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Label einfügen : Label einf³gen */
+            Text[ chinese_simplified ] = "±êÇ©";
+            Text[ russian ] = "Íàäïèñü";
+            Text[ polish ] = "Etykieta";
+            Text[ japanese ] = "×ÍŞÙ";
+            Text[ chinese_traditional ] = "¼ĞÅÒ";
+            Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ";
+            Text[ greek ] = "ÅğéãñáöŞ";
+            Text[ korean ] = "¶óº§";
+            Text[ turkish ] = "Etiket";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_LISTBOX ;
+            Identifier = SID_INSERT_LISTBOX ;
+            RadioCheck = TRUE ;
+            Text = "ListBox" ;
+            Text [ english_us ] = "List Box" ;
+            Text [ italian ] = "Casella di riepilogo" ;
+            Text [ spanish ] = "Listado" ;
+            Text [ french ] = "Zone de liste" ;
+            Text [ dutch ] = "ListBox" ;
+            Text [ swedish ] = "ListBox" ;
+            Text [ danish ] = "Liste" ;
+            Text [ portuguese ] = "Caixa de listagem" ;
+            Text [ portuguese_brazilian ] = "ListBox" ;
+            /* ### ACHTUNG: Neuer Text in Resource? ListBox einfügen : ListBox einf³gen */
+            Text[ chinese_simplified ] = "ÁĞ±í¿ò";
+            Text[ russian ] = "Ïîëå ñïèñêà";
+            Text[ polish ] = "Pole listy";
+            Text[ japanese ] = "Ø½ÄÎŞ¯¸½";
+            Text[ chinese_traditional ] = "²M³æ¤è®Ø";
+            Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
+            Text[ greek ] = "Ğåäßï ëßóôáò";
+            Text[ korean ] = "¸®½ºÆ® ¹Ú½º";
+            Text[ turkish ] = "Liste kutusu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_HSCROLLBAR ;
+            Identifier = SID_INSERT_HSCROLLBAR ;
+            RadioCheck = TRUE ;
+            Text = "HScrollBar" ;
+            Text [ dutch ] = "HScrollBar" ;
+            Text [ english_us ] = "Horiz. Scrollbar" ;
+            Text [ italian ] = "Barra di scorrimento oriz." ;
+            Text [ spanish ] = "BarraDesplazHoriz." ;
+            Text [ french ] = "Barre de défilement horiz." ;
+            Text [ swedish ] = "HRullningslist" ;
+            Text [ danish ] = "Vandret rullepanel" ;
+            Text [ portuguese ] = "Barra de deslocamento horiz." ;
+            Text [ portuguese_brazilian ] = "HScrollBar" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Horizontale ScrollBar einfügen : Horizontale ScrollBar einf³gen */
+            Text[ chinese_simplified ] = "Ë®Æ½Ïò¹ö¶¯À¸";
+            Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
+            Text[ polish ] = "Poziomy pasek przewijania";
+            Text[ japanese ] = "…•½½¸Û°ÙÊŞ°";
+            Text[ chinese_traditional ] = "¾î¦V¨÷¶b";
+            Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÃİŞíÇğ";
+            Text[ greek ] = "Ïñéæüíôéá ãñáììŞ êıëéóçò";
+            Text[ korean ] = "¼öÆò ½ºÅ©·Ñ ¸·´ë";
+            Text[ turkish ] = "Yatay kaydırma çubuğu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_GROUPBOX ;
+            Identifier = SID_INSERT_GROUPBOX ;
+            RadioCheck = TRUE ;
+            Text = "FrameControl" ;
+            Text [ dutch ] = "FrameControl" ;
+            Text [ english_us ] = "Frame Control" ;
+            Text [ italian ] = "FrameControl" ;
+            Text [ spanish ] = "FrameControl" ;
+            Text [ french ] = "FrameControl" ;
+            Text [ swedish ] = "FrameControl" ;
+            Text [ danish ] = "FrameControl" ;
+            Text [ portuguese ] = "FrameControl" ;
+            Text [ portuguese_brazilian ] = "FrameControl" ;
+            /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
+            Text[ chinese_simplified ] = "¿ò¿ØÖÆ";
+            Text[ russian ] = "FrameControl";
+            Text[ polish ] = "FrameControl";
+            Text[ japanese ] = "ÌÚ°ÑºİÄÛ°Ù";
+            Text[ chinese_traditional ] = "°T®Ø±±¨î¶µ";
+            Text[ arabic ] = "Frame Control";
+            Text[ greek ] = "Frame Control";
+            Text[ korean ] = "ÇÁ·¹ÀÓ ÄÁÆ®·Ñ";
+            Text[ turkish ] = "FrameControl";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_URLBUTTON ;
+            Identifier = SID_INSERT_URLBUTTON ;
+            RadioCheck = TRUE ;
+            /* Uniform Resource Locator (internet) */
+            Text = "URL-Button" ;
+            Text [ dutch ] = "URL-button" ;
+            Text [ english_us ] = "URL Button" ;
+            Text [ italian ] = "Pulsante URL" ;
+            Text [ spanish ] = "Botón URL" ;
+            Text [ french ] = "Bouton URL" ;
+            Text [ swedish ] = "URL-knapp" ;
+            Text [ danish ] = "URL-knap" ;
+            Text [ portuguese ] = "Botão URL" ;
+            Text [ portuguese_brazilian ] = "URL-Button" ;
+            /* ### ACHTUNG: Neuer Text in Resource? URL-Button einfügen : URL-Button einf³gen */
+            Text[ chinese_simplified ] = "URL °´Å¥";
+            Text[ russian ] = "Êíîïêà URL";
+            Text[ polish ] = "Przycisk URL";
+            Text[ japanese ] = "URLÎŞÀİ";
+            Text[ chinese_traditional ] = "URL «ö¶s";
+            Text[ arabic ] = "ãİÊÇÍ URL";
+            Text[ greek ] = "Ğåäßï åğéëïãŞò URL";
+            Text[ korean ] = "URL ¹öÆ°";
+            Text[ turkish ] = "URL düğmesi";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            HelpId = SID_SHOW_BROWSER ;
+            Identifier = SID_SHOW_BROWSER ;
+            Text = "Eigenschaften" ;
+            Text [ ENGLISH ] = "Browser" ;
+            Text [ norwegian ] = "Browser" ;
+            Text [ italian ] = "Proprietà" ;
+            Text [ portuguese_brazilian ] = "Paginar" ;
+            Text [ portuguese ] = "Propriedades" ;
+            Text [ finnish ] = "Selain" ;
+            Text [ danish ] = "Egenskaber" ;
+            Text [ french ] = "Propriétés" ;
+            Text [ swedish ] = "Egenskaper" ;
+            Text [ dutch ] = "Eigenschappen" ;
+            Text [ spanish ] = "Propiedades" ;
+            Text [ english_us ] = "Properties" ;
+            Text[ chinese_simplified ] = "ÊôĞÔ";
+            Text[ russian ] = "Ñâîéñòâà";
+            Text[ polish ] = "W³aœciwoœci";
+            Text[ japanese ] = "ÌßÛÊßÃ¨";
+            Text[ chinese_traditional ] = "Äİ©Ê";
+            Text[ arabic ] = "ÎÕÇÆÕ";
+            Text[ greek ] = "Éäéüôçôåò";
+            Text[ korean ] = "µî·ÏÁ¤º¸";
+            Text[ turkish ] = "Özellikler";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_SHOW_HIDDEN ;
+            Identifier = SID_SHOW_HIDDEN ;
+            Text = "Unsichtbare Kontrollelemente anzeigen" ;
+            Text [ English ] = "Unsichtbare Kontrollelemente anzeigen" ;
+            Text [ portuguese ] = "Mostrar controlos invísiveis" ;
+            Text [ english_us ] = "Show Hidden Controls" ;
+            Text [ portuguese_brazilian ] = "Unsichtbare Kontrollelemente anzeigen" ;
+            Text [ swedish ] = "Visa osynliga kontrollelement" ;
+            Text [ danish ] = "Vis usynlige kontrolelementer" ;
+            Text [ italian ] = "Mostra gli elementi di controllo invisibili" ;
+            Text [ spanish ] = "Mostrar elementos de control invisibles" ;
+            Text [ french ] = "Afficher les éléments de contrôle invisibles" ;
+            Text [ dutch ] = "Onzichtbare controle-elementen weergeven" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾ÒşÈëµÄ¿ØÖÆ";
+            Text[ russian ] = "Ïîêàçàòü ñêğûòûå ıëåìåíòû óïğàâëåíèÿ";
+            Text[ polish ] = "Poka¿ ukryte pola kontrolne";
+            Text[ japanese ] = "”ñ•\\¦‚ÌºİÄÛ°Ù—v‘f‚ğ•\\¦";
+            Text[ chinese_traditional ] = "Åã¥ÜÁô¤Jªº±±¨î¤¸¥ó";
+            Text[ arabic ] = "ÅÙåÇÑ ÚäÇÕÑ ÇáÊÍßã ÇáãÎİíÉ";
+            Text[ greek ] = "ÅìöÜíéóç ìç ïñáôşí óôïé÷åßùí åëİã÷ïõ";
+            Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ º¸±â";
+            Text[ turkish ] = "Gizli komut alanlarını görüntüle";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_SPINBUTTON ;
+            Identifier = SID_INSERT_SPINBUTTON ;
+            RadioCheck = TRUE ;
+            Text = "SpinButton" ;
+            Text [ dutch ] = "SpinButton" ;
+            Text [ english_us ] = "Spin Button" ;
+            Text [ italian ] = "Pulsante di selezione" ;
+            Text [ spanish ] = "Botón de selección" ;
+            Text [ french ] = "Compteur" ;
+            Text [ swedish ] = "SpinButton" ;
+            Text [ danish ] = "Rulleknap" ;
+            Text [ portuguese ] = "Botão de rotação" ;
+            Text [ portuguese_brazilian ] = "SpinButton" ;
+            /* ### ACHTUNG: Neuer Text in Resource? SpinButton einfügen : SpinButton einf³gen */
+            Text[ chinese_simplified ] = "Ñ¡Öµ°´Å¥";
+            Text[ russian ] = "Êíîïêà ñ÷åò÷èêà";
+            Text[ polish ] = "Przycisk pokrêt³a";
+            Text[ japanese ] = "½ËßİÎŞÀİ";
+            Text[ chinese_traditional ] = "½Õ¸`«ö¶s";
+            Text[ arabic ] = "ÒÑ ÒíÇÏÉ æäŞÕÇä";
+            Text[ greek ] = "Ğåäßï åğéëïãŞò";
+            Text[ korean ] = "È¸Àü ¹öÆ°";
+            Text[ turkish ] = "Değer kutusu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_RADIOBUTTON ;
+            Identifier = SID_INSERT_RADIOBUTTON ;
+            RadioCheck = TRUE ;
+            Text = "OptionButton" ;
+            Text [ dutch ] = "OptionButton" ;
+            Text [ english_us ] = "Option Button" ;
+            Text [ italian ] = "Pulsante di scelta" ;
+            Text [ spanish ] = "Botón de opción" ;
+            Text [ french ] = "Bouton radio" ;
+            Text [ swedish ] = "Alternativknapp" ;
+            Text [ danish ] = "Alternativknap" ;
+            Text [ portuguese ] = "Botão de opção" ;
+            Text [ portuguese_brazilian ] = "OptionButton" ;
+            /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
+            Text[ chinese_simplified ] = "Ñ¡Ïî°´Å¥";
+            Text[ russian ] = "Êíîïêà ïàğàìåòğîâ";
+            Text[ polish ] = "Przycisk opcji";
+            Text[ japanese ] = "×¼ŞµÎŞÀİ";
+            Text[ chinese_traditional ] = "¿ï¶µ«ö¶s";
+            Text[ arabic ] = "ÒÑ ÎíÇÑ";
+            Text[ greek ] = "Ğåäßï åğéëïãŞò";
+            Text[ korean ] = "¿É¼Ç ¹öÆ°";
+            Text[ turkish ] = "Seçenek düğmesi";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_EDIT ;
+            Identifier = SID_INSERT_EDIT ;
+            RadioCheck = TRUE ;
+            Text = "TextBox" ;
+            Text [ dutch ] = "TextBox" ;
+            Text [ english_us ] = "Text Box" ;
+            Text [ italian ] = "Casella di testo" ;
+            Text [ spanish ] = "Cuadro de texto" ;
+            Text [ french ] = "Zone de texte" ;
+            Text [ swedish ] = "TextBox" ;
+            Text [ danish ] = "Tekstboks" ;
+            Text [ portuguese ] = "Caixa de texto" ;
+            Text [ portuguese_brazilian ] = "TextBox" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Edit einfügen : Edit einf³gen */
+            Text[ chinese_simplified ] = "ÎÄ×Ö¿ò";
+            Text[ russian ] = "Òåêñòîâîå ïîëå";
+            Text[ polish ] = "Pole tekstowe";
+            Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+            Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+            Text[ arabic ] = "ãÑÈÚ äÕ";
+            Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+            Text[ korean ] = "ÅØ½ºÆ® ¹Ú½º";
+            Text[ turkish ] = "Metin kutusu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_COMBOBOX ;
+            Identifier = SID_INSERT_COMBOBOX ;
+            RadioCheck = TRUE ;
+            Text = "ComboBox" ;
+            Text [ ENGLISH ] = "ComboBox" ;
+            Text [ dutch ] = "ComboBox" ;
+            Text [ english_us ] = "Combo Box" ;
+            Text [ italian ] = "Casella combinata" ;
+            Text [ spanish ] = "Cuadro combinado" ;
+            Text [ french ] = "Zone combinée" ;
+            Text [ swedish ] = "ComboBox" ;
+            Text [ danish ] = "Kombinationsboks" ;
+            Text [ portuguese ] = "Caixa de combinação" ;
+            Text [ portuguese_brazilian ] = "ComboBox" ;
+            /* ### ACHTUNG: Neuer Text in Resource? ComboBox einfügen : ComboBox einf³gen */
+            Text[ chinese_simplified ] = "×éºÏ¿ò";
+            Text[ russian ] = "Ïîëå ñî ñïèñêîì";
+            Text[ polish ] = "Pole kombi";
+            Text[ japanese ] = "ºİÎŞÎŞ¯¸½";
+            Text[ chinese_traditional ] = "²Õ¦X¤è¶ô";
+            Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
+            Text[ greek ] = "Ğåäßï óõíäõáóìïı";
+            Text[ korean ] = "ÄŞº¸ ¹Ú½º";
+            Text[ turkish ] = "Kombinasyon alanı";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_VSCROLLBAR ;
+            Identifier = SID_INSERT_VSCROLLBAR ;
+            RadioCheck = TRUE ;
+            Text = "VScrollBar" ;
+            Text [ english_us ] = "Vert. Scrollbar" ;
+            Text [ italian ] = "Barra di scorrimento vert." ;
+            Text [ spanish ] = "Barra de desplazamiento vert." ;
+            Text [ french ] = "Barre de défilement vert." ;
+            Text [ dutch ] = "VScrollBar" ;
+            Text [ swedish ] = "VRullningslist" ;
+            Text [ danish ] = "Lodret rullepanel" ;
+            Text [ portuguese ] = "Barra de deslocamento vert." ;
+            Text [ portuguese_brazilian ] = "VScrollBar" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Vertikale ScrollBar einfügen : Vertikale ScrollBar einf³gen */
+            Text[ chinese_simplified ] = "×İÏò¹ö¶¯À¸";
+            Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
+            Text[ polish ] = "Pionowy pasek przewijania";
+            Text[ japanese ] = "‚’¼½¸Û°ÙÊŞ°";
+            Text[ chinese_traditional ] = "Áa¦V¨÷¶b";
+            Text[ arabic ] = "ÔÑíØ ÊÍÑíß ÇáÕİÍÉ ÑÃÓíÇğ";
+            Text[ greek ] = "Êáôáêüñõöç ãñáììŞ êıëéóçò";
+            Text[ korean ] = "¼öÁ÷ ½ºÅ©·Ñ ¸·´ë";
+            Text[ turkish ] = "Dikey kaydırma çubuğu";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_PREVIEW ;
+            Identifier = SID_INSERT_PREVIEW ;
+            RadioCheck = TRUE ;
+            Text = "Preview" ;
+            Text [ dutch ] = "Voorbeeld" ;
+            Text [ english_us ] = "Preview" ;
+            Text [ italian ] = "Anteprima" ;
+            Text [ spanish ] = "Previsualización" ;
+            Text [ french ] = "Aperçu" ;
+            Text [ swedish ] = "Förhandsvisning" ;
+            Text [ danish ] = "Eksempel" ;
+            Text [ portuguese ] = "Previsualizar" ;
+            Text [ portuguese_brazilian ] = "Preview" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Preview einfügen : Preview einf³gen */
+            Text[ chinese_simplified ] = "Ô¤ÊÓ";
+            Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
+            Text[ polish ] = "Podgl¹d";
+            Text[ japanese ] = "ÌßÚËŞ­°";
+            Text[ chinese_traditional ] = "¹wÄı";
+            Text[ arabic ] = "ãÚÇíäÉ";
+            Text[ greek ] = "Ğñïåğéóêüğçóç";
+            Text[ korean ] = "¹Ì¸®º¸±â";
+            Text[ turkish ] = "Önizleme";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_OBJECT_SELECT ;
+            Identifier = SID_OBJECT_SELECT ;
+            RadioCheck = TRUE ;
+            Text = "Auswahl" ;
+            Text [ ENGLISH ] = "Select" ;
+            Text [ norwegian ] = "Select" ;
+            Text [ italian ] = "Seleziona" ;
+            Text [ portuguese_brazilian ] = "Selecionar" ;
+            Text [ portuguese ] = "Seleccionar" ;
+            Text [ finnish ] = "Valitse " ;
+            Text [ danish ] = "Marker" ;
+            Text [ french ] = "Sélection" ;
+            Text [ swedish ] = "Urval" ;
+            Text [ dutch ] = "Selectie" ;
+            Text [ spanish ] = "Selección" ;
+            Text [ english_us ] = "Select" ;
+            Text[ chinese_simplified ] = "Ñ¡Ôñ";
+            Text[ russian ] = "Âûáîğ";
+            Text[ polish ] = "Wybór";
+            Text[ japanese ] = "‘I‘ğ";
+            Text[ chinese_traditional ] = "¿ï¾Ü";
+            Text[ arabic ] = "ÇÎÊíÇÑ";
+            Text[ greek ] = "ÅğéëïãŞ";
+            Text[ korean ] = "¼±ÅÃ";
+            Text[ turkish ] = "Seçim";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+        ToolBoxItem
+        {
+            HelpId = SID_DIALOG_TESTMODE ;
+            Identifier = SID_DIALOG_TESTMODE ;
+            Text = "Testmodus aktivieren" ;
+            Text [ ENGLISH ] = "Activate testmode" ;
+            Text [ norwegian ] = "Activate testmode" ;
+            Text [ italian ] = "Attiva modo testo" ;
+            Text [ portuguese_brazilian ] = "Ativar modoteste" ;
+            Text [ portuguese ] = "Activar modo Teste" ;
+            Text [ finnish ] = "Valitse testaustila" ;
+            Text [ danish ] = "Aktiver testtilstand" ;
+            Text [ french ] = "Activer le mode Test" ;
+            Text [ swedish ] = "Aktivera testläget" ;
+            Text [ dutch ] = "Testmodus inschakelen" ;
+            Text [ spanish ] = "Activar modo prueba" ;
+            Text [ english_us ] = "Activate Test Mode" ;
+            Text[ chinese_simplified ] = "¼¤»îÊÔÑéÄ£Ê½";
+            Text[ russian ] = "Àêòèâèğîâàòü ğåæèì òåñòà";
+            Text[ polish ] = "Uaktywnij tryb sprawdzania";
+            Text[ japanese ] = "Ã½ÄÓ°ÄŞ‚ğ±¸Ã¨ÌŞ‚É‚·‚é";
+            Text[ chinese_traditional ] = "¿E¬¡¸ÕÅç¼Ò¦¡";
+            Text[ arabic ] = "ÊäÔíØ æÖÚ ÇáÇÎÊÈÇÑ";
+            Text[ greek ] = "Åíåñãïğïßçóç êáôÜóôáóçò äïêéìŞò";
+            Text[ korean ] = "Å×½ºÆ® ¸ğµå È°¼º";
+            Text[ turkish ] = "Deneme kipini etkinleştir";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_SHOW_FORMS ;
+            Identifier = SID_SHOW_FORMS ;
+            Text = "Form-Dialog anzeigen" ;
+            Text [ English ] = "Form-Dialog anzeigen" ;
+            Text [ portuguese ] = "Ver caixa de diálogo para formulários" ;
+            Text [ english_us ] = "Show Form Dialog" ;
+            Text [ portuguese_brazilian ] = "Form-Dialog anzeigen" ;
+            Text [ swedish ] = "Visa form dialog" ;
+            Text [ danish ] = "Vis form-dialog" ;
+            Text [ italian ] = "Mostra dialogo per formulari" ;
+            Text [ spanish ] = "Mostrar diálogo para formularios" ;
+            Text [ french ] = "Afficher la boîte de dialogue de formulaires" ;
+            Text [ dutch ] = "Vormdialoog weergeven" ;
+            Text[ chinese_simplified ] = "ÏÔÊ¾±í¸ñ¶Ô»°¿ò";
+            Text[ russian ] = "Ïîêàçàòü äèàëîã ôîğìû";
+            Text[ polish ] = "Poka¿ dialog formularza";
+            Text[ japanese ] = "Ì«°Ñ‚ÌÀŞ²±Û¸Ş‚ğ•\\¦";
+            Text[ chinese_traditional ] = "Åã¥Üªí®æ¹ï¸Ü¤è¶ô";
+            Text[ arabic ] = "ÅÙåÇÑ ãÑÈÚ ÍæÇÑ ÇáÇÓÊãÇÑÉ";
+            Text[ greek ] = "ÅìöÜíéóç äéáëüãïõ öüñìáò";
+            Text[ korean ] = "Æû ´ëÈ­»óÀÚ º¸±â";
+            Text[ turkish ] = "Biçim diyaloğunu görüntüle";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};

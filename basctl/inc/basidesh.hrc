@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ *  $RCSfile: basidesh.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _BASIDESH_HRC
+#define _BASIDESH_HRC
+
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
+
+// #define SID_BASICIDE_START               ( SID_OBJ3_START )
+
+// Resource-ID's...
+#ifndef _SVX_NOIDERESIDS
+
+#define RID_BASICIDE_OBJECTBAR          ( RID_BASICIDE_START +  0 )
+
+#define RID_BMP_APPICON                 ( RID_BASICIDE_START +  1 )
+#define RID_BMP_BRKPNT0                 ( RID_BASICIDE_START +  2 )
+#define RID_BMP_BRKPNT1                 ( RID_BASICIDE_START +  3 )
+
+#define RID_EDT_WATCHEDIT               ( RID_BASICIDE_START +  4 )
+#define RID_ICO_MDIWINDOW               ( RID_BASICIDE_START +  5 )
+#define RID_IMG_MARKER                  ( RID_BASICIDE_START +  6 )
+#define RID_IMGLST_OBJECTS              ( RID_BASICIDE_START +  7 )
+#define RID_IMGBTN_REMOVEWATCH          ( RID_BASICIDE_START +  8 )
+#define RID_IMGBTN_GOTOCALL             ( RID_BASICIDE_START +  9 )
+#define RID_POPUP_BRKDLG                ( RID_BASICIDE_START + 10 )
+#define RID_POPUP_BRKPROPS              ( RID_BASICIDE_START + 11 )
+#define RID_POPUP_TABBAR                ( RID_BASICIDE_START + 12 )
+#define RID_TD_ORGANIZE                 ( RID_BASICIDE_START + 36 )
+#define RID_TP_MODULS                   ( RID_BASICIDE_START + 37 )
+#define RID_TP_LIBS                     ( RID_BASICIDE_START + 38 )
+#define RID_RES_CHECKBITMAPS            ( RID_BASICIDE_START + 39 )
+#define RID_DLG_LIBS                    ( RID_BASICIDE_START + 40 )
+#define RID_IMG_LOCKED                  ( RID_BASICIDE_START + 41 )
+#define RID_DLG_NEWLIB                  ( RID_BASICIDE_START + 42 )
+
+#define RID_STR_CANNOTCLOSE             ( RID_BASICIDE_START + 13 )
+#define RID_STR_IDENAME                 ( RID_BASICIDE_START + 14 )
+#define RID_STR_INITIDE                 ( RID_BASICIDE_START + 15 )
+#define RID_STR_STACKNAME               ( RID_BASICIDE_START + 16 )
+#define RID_STR_WATCHNAME               ( RID_BASICIDE_START + 17 )
+#define RID_STR_REMOVEWATCH             ( RID_BASICIDE_START + 18 )
+#define RID_STR_OPEN                    ( RID_BASICIDE_START + 20 )
+#define RID_STR_SAVE                    ( RID_BASICIDE_START + 21 )
+#define RID_STR_RUNTIMEERROR            ( RID_BASICIDE_START + 22 )
+#define RID_STR_COMPILEERROR            ( RID_BASICIDE_START + 23 )
+#define RID_STR_STDDIALOGNAME           ( RID_BASICIDE_START + 24 )
+#define RID_STR_STDMACRONAME            ( RID_BASICIDE_START + 25 )
+#define RID_STR_STDJAVAFUNCTIONNAME     ( RID_BASICIDE_START + 26 )
+#define RID_STR_STDMODULENAME           ( RID_BASICIDE_START + 27 )
+#define RID_STR_ALL                     ( RID_BASICIDE_START + 28 )
+#define RID_STR_CLOSE                   ( RID_BASICIDE_START + 29 )
+#define RID_STR_PAGE                    ( RID_BASICIDE_START + 30 )
+#define RID_STR_BADSBXNAME              ( RID_BASICIDE_START + 31 )
+#define RID_STR_STDLIBNAME              ( RID_BASICIDE_START + 32 )
+#define RID_STR_ERROROPENSTORAGE        ( RID_BASICIDE_START + 33 )
+#define RID_STR_NOLIBINSTORAGE          ( RID_BASICIDE_START + 34 )
+#define RID_STR_SBXNAMEALLREADYUSED     ( RID_BASICIDE_START + 35 )
+#define RID_STR_REPLACESTDLIB           ( RID_BASICIDE_START + 41 )
+#define RID_STR_SBXNAMEALLREADYUSED2    ( RID_BASICIDE_START + 42 )
+#define RID_STR_SEARCHNOTFOUND          ( RID_BASICIDE_START + 43 )
+#define RID_STR_SEARCHREPLACES          ( RID_BASICIDE_START + 44 )
+#define RID_STR_CANNOTCHANGENAMESTDLIB  ( RID_BASICIDE_START + 45 )
+#define RID_STR_CANNOTCHANGENAMEREFLIB  ( RID_BASICIDE_START + 46 )
+#define RID_STR_CANNOTUNLOADSTDLIB      ( RID_BASICIDE_START + 47 )
+#define RID_STR_GENERATESOURCE          ( RID_BASICIDE_START + 48 )
+#define RID_STR_REFNOTPOSSIBLE          ( RID_BASICIDE_START + 49 )
+#define RID_STR_FILEEXISTS              ( RID_BASICIDE_START + 50 )
+#define RID_STR_ERROROPENLIB            ( RID_BASICIDE_START + 55 )
+#define RID_STR_STDJAVAMODULENAME       ( RID_BASICIDE_START + 56 )
+#define RID_STR_NEWLIB                  ( RID_BASICIDE_START + 57 )
+#define RID_STR_NEWMOD                  ( RID_BASICIDE_START + 58 )
+#define RID_STR_NEWDLG                  ( RID_BASICIDE_START + 59 )
+#define RID_STR_LIBNAMETOLONG           ( RID_BASICIDE_START + 60 )
+
+#define RID_IMGLST_LAYOUT               ( RID_BASICIDE_START + 49 )
+
+#define RID_STR_FILENAME                ( RID_BASICIDE_START + 81 )
+#define RID_STR_APPENDLIBS              ( RID_BASICIDE_START + 82 )
+#define RID_STR_QUERYDELMACRO           ( RID_BASICIDE_START + 83 )
+#define RID_STR_QUERYDELDIALOG          ( RID_BASICIDE_START + 84 )
+#define RID_STR_QUERYDELLIB             ( RID_BASICIDE_START + 85 )
+#define RID_STR_QUERYDELLIBREF          ( RID_BASICIDE_START + 86 )
+#define RID_STR_QUERYDELMODULE          ( RID_BASICIDE_START + 87 )
+#define RID_STR_BASIC                   ( RID_BASICIDE_START + 88 )
+#define RID_STR_DOC                     ( RID_BASICIDE_START + 89 )
+#define RID_STR_MACRONAMEREQ            ( RID_BASICIDE_START + 90 )
+#define RID_STR_WILLSTOPPRG             ( RID_BASICIDE_START + 91 )
+#define RID_STR_STACK                   ( RID_BASICIDE_START + 92 )
+#define RID_STR_OBJNOTFOUND             ( RID_BASICIDE_START + 93 )
+#define RID_STR_COULDNTREAD             ( RID_BASICIDE_START + 94 )
+#define RID_STR_COULDNTWRITE            ( RID_BASICIDE_START + 95 )
+#define RID_STR_WRONGPASSWORD           ( RID_BASICIDE_START + 96 )
+#define RID_STR_LINE                    ( RID_BASICIDE_START + 97 )
+#define RID_STR_COLUMN                  ( RID_BASICIDE_START + 98 )
+#define RID_STR_SOURCETOBIG             ( RID_BASICIDE_START + 99 )
+
+#define RID_STR_SEARCHALLMODULES        ( RID_BASICIDE_START + 1 )
+#define RID_STR_SEARCHFROMSTART         ( RID_BASICIDE_START + 2 )
+#define RID_STR_NOMODULE                ( RID_BASICIDE_START + 3 )
+#define RID_STR_FILTER_ALLFILES         ( RID_BASICIDE_START + 4 )
+
+// MacroDlg:        ( RID_BASICIDE_START + 50 )
+// MacroOptionsDlg: ( RID_BASICIDE_START + 55 )
+// TbxControls:     ( RID_BASICIDE_START + 65 )
+// ObjectDlg:       ( RID_BASICIDE_START + 70 )
+// BreakPointDlg:   ( RID_BASICIDE_START + 80 )
+
+#endif  // _SVX_NOIDERESIDS
+
+#endif  // _BASIDESH_HRC

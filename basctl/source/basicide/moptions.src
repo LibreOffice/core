@@ -1,0 +1,262 @@
+/*************************************************************************
+ *
+ *  $RCSfile: moptions.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "helpid.hrc"
+#include <moptions.hrc>
+ModalDialog RID_MACROOPTIONS
+{
+     // HelpId = HID_MACRO_OPTIONS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 224 , 121 ) ;
+    Text = "Beschreibung" ;
+    Text [ English ] = "Description" ;
+    Text [ norwegian ] = "Beskrivelse" ;
+    Text [ italian ] = "Descrizione" ;
+    Text [ portuguese_brazilian ] = "DescriÁ„o" ;
+    Text [ portuguese ] = "DescriÁ„o" ;
+    Text [ finnish ] = "Kuvaus" ;
+    Text [ danish ] = "Beskrivelse" ;
+    Text [ french ] = "Description" ;
+    Text [ swedish ] = "Beskrivning" ;
+    Text [ dutch ] = "Beschrijving" ;
+    Text [ spanish ] = "DescripciÛn" ;
+    Text [ english_us ] = "Description" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    FixedText RID_FT_SBXNAME
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+    };
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 168 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 168 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton RID_PB_HELP
+    {
+        Pos = MAP_APPFONT ( 168 , 53 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText RID_FT_DESCR
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 69 , 10 ) ;
+        Text = "Beschreibung" ;
+        Text [ ENGLISH ] = "Description" ;
+        Text [ norwegian ] = "Beskrivelse" ;
+        Text [ italian ] = "Descrizione" ;
+        Text [ portuguese_brazilian ] = "DescriÁ„o" ;
+        Text [ portuguese ] = "DescriÁ„o" ;
+        Text [ finnish ] = "Kuvaus" ;
+        Text [ danish ] = "Beskrivelse" ;
+        Text [ french ] = "Description" ;
+        Text [ swedish ] = "Beskrivning" ;
+        Text [ dutch ] = "Beschrijving" ;
+        Text [ spanish ] = "DescripciÛn" ;
+        Text [ english_us ] = "Description" ;
+        Text[ chinese_simplified ] = "Àµ√˜";
+        Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+        Text[ polish ] = "Opis";
+        Text[ japanese ] = "ê‡ñæ";
+        Text[ chinese_traditional ] = "¥y≠z";
+        Text[ arabic ] = "«·Ê’›";
+        Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
+        Text[ korean ] = "º≥∏Ì";
+        Text[ turkish ] = "AÁ˝klama";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit RID_ME_DESCR
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 154 , 36 ) ;
+        TabStop = TRUE ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    GroupBox RID_GB_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 73 ) ;
+        Size = MAP_APPFONT ( 212 , 42 ) ;
+        Text = "Hilfe-Informationen" ;
+        Text [ ENGLISH ] = "Help informations" ;
+        Text [ norwegian ] = "Help informations" ;
+        Text [ italian ] = "Informazioni sulla Guida" ;
+        Text [ portuguese_brazilian ] = "InformaÁıes do ajuda" ;
+        Text [ portuguese ] = "InformaÁıes - Ajuda" ;
+        Text [ finnish ] = "Ohjetietoja" ;
+        Text [ danish ] = "HjÊlp-information" ;
+        Text [ french ] = "Informations - Aide" ;
+        Text [ swedish ] = "Hj‰lp-information" ;
+        Text [ dutch ] = "Help informatie" ;
+        Text [ spanish ] = "Informaciones - Ayuda" ;
+        Text [ english_us ] = "Help information" ;
+        Text[ chinese_simplified ] = "«Û÷˙◊ ¡œ";
+        Text[ russian ] = "œÓÏÓ˘¸-ËÌÙÓÏ‡ˆËˇ";
+        Text[ polish ] = "Pomoc-Informacje";
+        Text[ japanese ] = "ÕŸÃﬂèÓïÒ";
+        Text[ chinese_traditional ] = "ª°©˙∏Í∞T";
+        Text[ arabic ] = "„⁄·Ê„«  ⁄‰ «·„”«⁄œ…";
+        Text[ greek ] = "–ÎÁÒÔˆÔÒﬂÂÚ ‚ÔﬁËÂÈ·Ú";
+        Text[ korean ] = "µµøÚ∏ª ¡§∫∏";
+        Text[ turkish ] = "Yard˝m bilgileri";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText RID_FT_HELPID
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 9 , 83 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Hilfe-Identifikation" ;
+        Text [ ENGLISH ] = "Help identification" ;
+        Text [ norwegian ] = "Help identification" ;
+        Text [ italian ] = "Identifica la Guida" ;
+        Text [ portuguese_brazilian ] = "IdentificaÁ„o do ajuda" ;
+        Text [ portuguese ] = "Ajuda - IdentificaÁ„o" ;
+        Text [ finnish ] = "Ohjetunnus" ;
+        Text [ danish ] = "HjÊlp-identifikation" ;
+        Text [ french ] = "Identification de l'aide" ;
+        Text [ swedish ] = "Hj‰lp-identifikation" ;
+        Text [ dutch ] = "Help identificatie" ;
+        Text [ spanish ] = "IdentificaciÛn de ayuda" ;
+        Text [ english_us ] = "Help ID" ;
+        Text[ chinese_simplified ] = "«Û÷˙ ∂±∑˚";
+        Text[ russian ] = "»‰ÂÌÚËÙËÍ‡ˆËˇ ÔÓÏÓ˘Ë";
+        Text[ polish ] = "Identyfikacja pomocy";
+        Text[ japanese ] = "ÕŸÃﬂID";
+        Text[ chinese_traditional ] = "ª°©˙√—ßO≤≈";
+        Text[ arabic ] = " ⁄—Ì› «·„”«⁄œ…";
+        Text[ greek ] = "‘·ıÙ¸ÙÁÙ· ‚ÔﬁËÂÈ·Ú";
+        Text[ korean ] = "µµøÚ∏ª ID";
+        Text[ turkish ] = "Yard˝m tan˝t˝c˝s˝";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField RID_NF_HELPID
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 95 , 83 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+        Minimum = 0 ;
+        Maximum = 0xFFFFFFFF ;
+    };
+    FixedText RID_FT_HELPNAME
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 9 , 99 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Hilfe-Dateiname" ;
+        Text [ ENGLISH ] = "Help filename" ;
+        Text [ norwegian ] = "Help filename" ;
+        Text [ italian ] = "Nome file della Guida" ;
+        Text [ portuguese_brazilian ] = "Nome de arquivo do ajuda" ;
+        Text [ portuguese ] = "Nome do ficheiro de ajuda" ;
+        Text [ finnish ] = "Ohjetiedoston nimi" ;
+        Text [ danish ] = "HjÊlp-filnavn" ;
+        Text [ french ] = "Nom du fichier de l'aide" ;
+        Text [ swedish ] = "Hj‰lp-filnamn" ;
+        Text [ dutch ] = "Help-bestandsnaam" ;
+        Text [ spanish ] = "Nombre del archivo de ayuda" ;
+        Text [ english_us ] = "Help file name" ;
+        Text[ chinese_simplified ] = "«Û÷˙Œƒº˛√˚";
+        Text[ russian ] = "»Ïˇ Ù‡ÈÎ‡ ÔÓÏÓ˘Ë";
+        Text[ polish ] = "Nazwa pliku-Pomoc";
+        Text[ japanese ] = "ÕŸÃﬂÇÃÃß≤Ÿñº";
+        Text[ chinese_traditional ] = "ª°©˙¿…Æ◊¶W";
+        Text[ arabic ] = "«”„ „·› «·„”«⁄œ…";
+        Text[ greek ] = "ºÌÔÏ· ·Ò˜ÂﬂÔı ‚ÔﬁËÂÈ·Ú";
+        Text[ korean ] = "µµøÚ∏ª ∆ƒ¿œ∏Ì";
+        Text[ turkish ] = "Yard˝m dosyas˝ ad˝";
+        Text[ language_user1 ] = " ";
+    };
+    Edit RID_ED_HELPNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 95 , 99 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    Text[ chinese_simplified ] = "Àµ√˜";
+    Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+    Text[ polish ] = "Opis";
+    Text[ japanese ] = "ê‡ñæ";
+    Text[ chinese_traditional ] = "¥y≠z";
+    Text[ arabic ] = "«·Ê’›";
+    Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
+    Text[ korean ] = "º≥∏Ì";
+    Text[ turkish ] = "AÁ˝klama";
+    Text[ language_user1 ] = " ";
+};

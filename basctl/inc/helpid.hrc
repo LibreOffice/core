@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  $RCSfile: helpid.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _BASCTL_HELPID_HRC
+#define _BASCTL_HELPID_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svtools/solar.hrc>
+
+// Help-Ids --------------------------------------------------------------
+
+#define HID_BASICIDE_TOOLBOX                    (HID_BASICIDE_START +   0)
+#define HID_BASICIDE_OBJECTS                    (HID_BASICIDE_START +   1)
+#define HID_MACRO_OPTIONS                       (HID_BASICIDE_START +   2)
+#define HID_BASICIDE_BRKPNTS                    (HID_BASICIDE_START +   3)
+#define HID_BASICIDE_MODULS                     (HID_BASICIDE_START +   4)
+#define HID_BASICIDE_LIBS_TP                    (HID_BASICIDE_START +   5)
+#define HID_BASICIDE_LIBS_DLG                   (HID_BASICIDE_START +   6)
+#define HID_BASICIDE_CONTROLS                   (HID_BASICIDE_START +   7)
+#define HID_BASICIDE_MACROS                     (HID_BASICIDE_START +   8)
+#define HID_BASICIDE_LIBS                       (HID_BASICIDE_START +   9)
+#define HID_BASICIDE_ORG_TC                     (HID_BASICIDE_START +  10)
+
+#define HID_BASICIDE_MODULES_TREE               (HID_BASICIDE_START +  11)
+#define HID_BASICIDE_LIBS_TREE                  (HID_BASICIDE_START +  12)
+#define HID_BASICIDE_LIBSDLG_TREE               (HID_BASICIDE_START +  13)
+#define HID_BASICIDE_OBJECTCAT                  (HID_BASICIDE_START +  14)
+
+#define HID_BASICIDE_PROP_BROWSER               (HID_BASICIDE_START +  15)
+
+#define HID_BASICIDE_PROP_BROWSER_LBOX          (HID_BASICIDE_START +  16)
+
+#define HID_BASICIDE_OBJCAT_SHOW                (HID_BASICIDE_START +  17)
+#define HID_BASICIDE_OBJCAT_PROPS               (HID_BASICIDE_START +  18)
+#define HID_BASICIDE_OBJCAT_HELP                (HID_BASICIDE_START +  19)
+
+#define HID_BASICIDE_BRKDLG                     (HID_BASICIDE_START +  20)
+#define HID_BASICIDE_ACTIV                      (HID_BASICIDE_START +  21)
+#define HID_BASICIDE_BRKPROPS                   (HID_BASICIDE_START +  22)
+#define HID_BASICIDE_REMOVEWATCH                (HID_BASICIDE_START +  23)
+#define HID_BASICIDE_GOTOALL                    (HID_BASICIDE_START +  24)
+
+#define HID_BASICIDE_MODULWINDOW                (HID_BASICIDE_START +  25)
+#define HID_BASICIDE_DIALOGWINDOW               (HID_BASICIDE_START +  26)
+
+
+#endif
+

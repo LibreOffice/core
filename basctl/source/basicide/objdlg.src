@@ -1,0 +1,257 @@
+/*************************************************************************
+ *
+ *  $RCSfile: objdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <objdlg.hrc>
+#include <helpid.hrc>
+FloatingWindow RID_BASICIDE_OBJCAT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 191 , 179 ) ;
+    Text = "Objekte" ;
+    Text [ English ] = "Objets" ;
+    Text [ norwegian ] = "Objets" ;
+    Text [ italian ] = "Oggetti" ;
+    Text [ portuguese_brazilian ] = "Objetos" ;
+    Text [ portuguese ] = "Objectos" ;
+    Text [ finnish ] = "Objektit" ;
+    Text [ danish ] = "Objekter" ;
+    Text [ french ] = "Objets" ;
+    Text [ swedish ] = "Objekt" ;
+    Text [ dutch ] = "Objecten" ;
+    Text [ spanish ] = "Objetos" ;
+    Text [ english_us ] = "Objects" ;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Zoomable = TRUE ;
+    Hide = TRUE ;
+    ClipChildren = TRUE ;
+    Control RID_TLB_MACROS
+    {
+        HelpId = HID_BASICIDE_OBJECTCAT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 24 ) ;
+        Size = MAP_APPFONT ( 185 , 126 ) ;
+        TabStop = TRUE ;
+    };
+    /*
+    PushButton RID_PB_SHOW
+    {
+        Pos = MAP_APPFONT ( 3, 6 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text = "Zeigen" ;
+        Text [ English ] = "Show" ;
+        Text [ norwegian ] = "Show" ;
+        Text [ italian ] = "Mostra" ;
+        Text [ portuguese_brazilian ] = "Mostrar" ;
+        Text [ portuguese ] = "Apresentar" ;
+        Text [ finnish ] = "N‰yt‰" ;
+        Text [ danish ] = "Vis" ;
+        Text [ french ] = "Afficher" ;
+        Text [ swedish ] = "Visa" ;
+        Text [ dutch ] = "Beel~d" ;
+        Text [ spanish ] = "Mostrar" ;
+        Text [ english_us ] = "Show" ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 56, 6 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        Text = "Beschreibung..." ;
+        Text [ English ] = "Description..." ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_LITTLEHELP
+    {
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        Size = MAP_APPFONT ( 14 , 12 ) ;
+        Text = "?" ;
+        Text [ English ] = "?" ;
+        Text [ norwegian ] = "?" ;
+        Text [ italian ] = "?" ;
+        Text [ portuguese_brazilian ] = "?" ;
+        Text [ portuguese ] = "?" ;
+        Text [ finnish ] = "?" ;
+        Text [ danish ] = "?" ;
+        Text [ french ] = "?" ;
+        Text [ swedish ] = "?" ;
+        Text [ dutch ] = "?" ;
+        Text [ spanish ] = "?" ;
+        Text [ english_us ] = "?" ;
+        TabStop = TRUE ;
+    };
+*/
+    ToolBox RID_TB_TOOLBOX
+    {
+        HelpId = HID_BASICIDE_OBJECTS ;
+        SVLook = TRUE ;
+        Align = BOXALIGN_TOP ;
+        Pos = MAP_APPFONT ( 4 , 6 ) ;
+        ItemImageList = ImageList
+        {
+            ImageBitmap = Bitmap { FILE = "images3.bmp" ; };
+            MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+            IdList =
+            {
+                TBITEM_SHOW ;
+                TBITEM_PROPS ;
+                TBITEM_HELP ;
+            };
+        };
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBITEM_SHOW ;
+                HelpId = HID_BASICIDE_OBJCAT_SHOW ;
+                Text = "Zeigen" ;
+                Text [ English ] = "Show" ;
+                Text [ norwegian ] = "Show" ;
+                Text [ italian ] = "Mostra" ;
+                Text [ portuguese_brazilian ] = "Mostrar" ;
+                Text [ portuguese ] = "Mostrar" ;
+                Text [ finnish ] = "N‰yt‰" ;
+                Text [ danish ] = "Vis" ;
+                Text [ french ] = "Afficher" ;
+                Text [ swedish ] = "Visa" ;
+                Text [ dutch ] = "Weergeven" ;
+                Text [ spanish ] = "Mostrar" ;
+                Text [ english_us ] = "Show" ;
+                Text[ chinese_simplified ] = "œ‘ æ";
+                Text[ russian ] = "œÓÍ‡Á‡Ú¸";
+                Text[ polish ] = "Pokaø";
+                Text[ japanese ] = "ï\\é¶";
+                Text[ chinese_traditional ] = "≈„•‹";
+                Text[ arabic ] = "⁄—÷";
+                Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ";
+                Text[ korean ] = "∫∏¿Ã±‚";
+                Text[ turkish ] = "Gˆr¸nt¸le";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBITEM_PROPS ;
+                HelpId = HID_BASICIDE_OBJCAT_PROPS ;
+                Text = "Beschreibung" ;
+                Text [ English ] = "Description" ;
+                Text [ portuguese ] = "DescriÁ„o" ;
+                Text [ english_us ] = "Description" ;
+                Text [ portuguese_brazilian ] = "Beschreibung" ;
+                Text [ swedish ] = "Beskrivning" ;
+                Text [ danish ] = "Beskrivelse" ;
+                Text [ italian ] = "Descrizione" ;
+                Text [ spanish ] = "DescripciÛn" ;
+                Text [ french ] = "Description" ;
+                Text [ dutch ] = "Beschrijving" ;
+                Text[ chinese_simplified ] = "Àµ√˜";
+                Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+                Text[ polish ] = "Opis";
+                Text[ japanese ] = "ê‡ñæ";
+                Text[ chinese_traditional ] = "¥y≠z";
+                Text[ arabic ] = "«·Ê’›";
+                Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
+                Text[ korean ] = "º≥∏Ì";
+                Text[ turkish ] = "AÁ˝klama";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBITEM_HELP ;
+                HelpId = HID_BASICIDE_OBJCAT_HELP ;
+                Text = "Hilfe" ;
+                Text [ English ] = "Help" ;
+                Text [ portuguese ] = "Ajuda" ;
+                Text [ english_us ] = "Help" ;
+                Text [ portuguese_brazilian ] = "Hilfe" ;
+                Text [ swedish ] = "Hj‰lp" ;
+                Text [ danish ] = "HjÊlp" ;
+                Text [ italian ] = "Guida" ;
+                Text [ spanish ] = "Ayuda" ;
+                Text [ french ] = "Aide" ;
+                Text [ dutch ] = "Help" ;
+                Text[ chinese_simplified ] = "«Û÷˙";
+                Text[ russian ] = "—Ô‡‚Í‡";
+                Text[ polish ] = "Pomoc";
+                Text[ japanese ] = "ÕŸÃﬂ";
+                Text[ chinese_traditional ] = "ª°©˙";
+                Text[ arabic ] = "„”«⁄œ…";
+                Text[ greek ] = "¬ÔﬁËÂÈ·";
+                Text[ korean ] = "µµøÚ∏ª";
+                Text[ turkish ] = "Yard˝m";
+            };
+        };
+    };
+    FixedText RID_FT_MACRODESCR
+    {
+        WordBreak = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 156 ) ;
+        Size = MAP_APPFONT ( 185 , 18 ) ;
+    };
+    Text[ chinese_simplified ] = "∂‘œÛ";
+    Text[ russian ] = "Œ·˙ÂÍÚ˚";
+    Text[ polish ] = "Obiekty";
+    Text[ japanese ] = "µÃﬁºﬁ™∏ƒ";
+    Text[ chinese_traditional ] = "™´•Û";
+    Text[ arabic ] = "ﬂ«∆‰« ";
+    Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌ·";
+    Text[ korean ] = "∞≥√º";
+    Text[ turkish ] = "Nesneler";
+};

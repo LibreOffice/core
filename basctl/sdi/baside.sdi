@@ -1,0 +1,434 @@
+import "svxslots.ilb"
+
+module
+"6706E0E7-FB05-101B-804c-04021c007002"
+"6806E0E7-FB05-101B-804c-04021c007002"
+BasicIDE
+[
+HelpText( "SFx --- BasicIDE" )
+SlotIdFile( "basidesh.hrc" )
+]
+{
+//  item String                 SbxItem;
+//  item String                 SvxSearchItem;
+//  item String                 SvxSizeItem;
+/*
+    enum SvxChooseControlEnum
+    {
+        SVX_SNAP_PUSHBUTTON,
+        SVX_SNAP_CHECKBOX,
+        SVX_SNAP_RADIOBUTTON,
+        SVX_SNAP_SPINBUTTON,
+        SVX_SNAP_FIXEDTEXT,
+        SVX_SNAP_GROUPBOX,
+        SVX_SNAP_LISTBOX,
+        SVX_SNAP_COMBOBOX,
+        SVX_SNAP_EDIT,
+        SVX_SNAP_HSCROLLBAR,
+        SVX_SNAP_VSCROLLBAR,
+        SVX_SNAP_PREVIEW,
+        SVX_SNAP_SELECT,
+        SVX_SNAP_NOTHING
+    }
+    item SvxChooseControlEnum   SvxChooseControlItem;
+*/
+    interface BasicIDEView: Object
+    [
+        uuid = "D88DF7A2-EE63-11d0-89CA-008029E4B0B1";
+    ]
+    {
+    }
+
+    shell BasicIDEShell
+    {
+        import BasicIDEView [Automation];
+
+        // ========================================================
+        // Current, je nach aktuellem Fenster:
+        // ========================================================
+        SID_BASICIDE_HIDECURPAGE
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_DELETECURRENT
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_RENAMECURRENT
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_CUT
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_COPY
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_PASTE
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_UNDO
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_REDO
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_DELETE
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_BACKSPACE
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_SEARCH_OPTIONS
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        SID_SEARCH_ITEM
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        FID_SEARCH_NOW
+        [
+            ExecMethod  = ExecuteCurrent;
+            StateMethod = GetState;
+        ]
+
+        // ========================================================
+        // Gloabl: Egal, welches Fenster gerade aktiv ist:
+        // ========================================================
+        SID_BASICIDE_LIBSELECTOR
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_LIBSELECTED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_LIBLOADED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_LIBREMOVED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_SBXDELETED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_SBXINSERTED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_SBXRENAMED
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_SHOWSBX
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_NEWWINDOW
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_DOCINFO
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_SAVEDOC
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_SAVEASDOC
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        // Ab hier normal...
+        SID_BASICIDE_CHOOSEMACRO
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_MODULEDLG
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_OBJCAT
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_CREATEMACRO
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_EDITMACRO
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_NAMECHANGEDONTAB
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_STOREMODULESOURCE
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_STOREALLMODULESOURCES
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_UPDATEMODULESOURCE
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_UPDATEALLMODULESOURCES
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICSTOP
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_NEWMODULE
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_NEWJAVAMODULE
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_NEWDIALOG
+        [
+            ExecMethod  = ExecuteGlobal;
+            StateMethod = GetState;
+        ]
+
+        // ========================================================
+        // Nur, wenn BasicFenster oben
+        // ========================================================
+        SID_BASICRUN
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICCOMPILE
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICLOAD
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICSAVEAS
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_MATCHGROUP
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICSTEPINTO
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICSTEPOVER
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICSTEPOUT
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_TOGGLEBRKPNT
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_ADDWATCH
+        [
+            ExecMethod  = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_REMOVEWATCH
+        [
+            ExecMethod      = ExecuteBasic;
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_BRKPNTSCHANGED
+        [
+            ExecMethod      = ExecuteBasic;
+            StateMethod     = GetState;
+        ]
+
+        // ========================================================
+        // Nur, wenn Dialogfenster oben
+        // ========================================================
+        SID_CHOOSE_CONTROLS
+        [
+            PseudoSlots     = TRUE;         // Enum-Slots automatisch erzeugen
+            PseudoPrefix    = SID_INSERT;
+            ExecMethod      = ExecuteDialog;
+            StateMethod     = GetState;
+        ]
+
+        SID_DIALOG_TESTMODE
+        [
+            ExecMethod      = ExecuteDialog;
+            StateMethod     = GetState;
+        ]
+
+        SID_SHOW_HIDDEN
+        [
+            ExecMethod      = ExecuteDialog;
+            StateMethod     = GetState;
+        ]
+
+        SID_SHOW_FORMS
+        [
+            ExecMethod      = ExecuteDialog;
+            StateMethod     = GetState;
+        ]
+
+        SID_BASICIDE_STAT_POS
+        [
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_STAT_DATE
+        [
+            StateMethod = GetState;
+        ]
+
+        SID_BASICIDE_STAT_TITLE
+        [
+            StateMethod = GetState;
+        ]
+
+        SID_DOC_MODIFIED
+        [
+            StateMethod = GetState;
+        ]
+
+        SID_ATTR_INSERT
+        [
+            StateMethod = GetState;
+        ]
+
+        SID_ATTR_SIZE
+        [
+            StateMethod = GetState;
+        ]
+    }
+
+    interface BasicIDEDocument: Object
+    [
+        uuid = "D88DF7A1-EE63-11d0-89CA-008029E4B0B1";
+    ]
+    {
+    }
+
+    shell BasicDocShell
+    {
+        import BasicIDEDocument [Automation];
+    }
+}
+

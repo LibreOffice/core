@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ *  $RCSfile: brkdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "helpid.hrc"
+#include <brkdlg.hrc>
+ModalDialog RID_BASICIDE_BREAKPOINTDLG
+{
+     // HelpId = HID_BASICIDE_BRKPNTS ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 178 , 116 ) ;
+    Text = "Haltepunkte" ;
+    Text [ ENGLISH ] = "Breakpoints" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;
+    ComboBox RID_CB_BRKPOINTS
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 110 , 70 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton RID_PB_OK
+    {
+        Pos = MAP_APPFONT ( 122 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton RID_PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 122 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton RID_PB_NEW
+    {
+        Pos = MAP_APPFONT ( 122 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Neu" ;
+        Text [ ENGLISH ] = "New" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Nieuw" ;
+        Text [ english_us ] = "New" ;
+        Text [ italian ] = "Nuovo" ;
+        Text [ spanish ] = "Nuevo" ;
+        Text [ french ] = "Nouveau" ;
+        Text [ swedish ] = "Ny" ;
+        Text [ danish ] = "Ny" ;
+        Text [ portuguese ] = "Novo" ;
+        Text [ portuguese_brazilian ] = "Novo" ;
+        Text[ chinese_simplified ] = "–¬Ω®";
+        Text[ russian ] = "—ÓÁ‰‡Ú¸";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "êVãK";
+        Text[ chinese_traditional ] = "∂}±“∑s¿…";
+        Text[ arabic ] = "ÃœÌœ";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+        Text[ korean ] = "ªı∑Œ";
+        Text[ turkish ] = "Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton RID_PB_DEL
+    {
+        Pos = MAP_APPFONT ( 122 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Lˆschen : L˜schen */
+        Text = "Lˆschen" ;
+        Text [ ENGLISH ] = "Delete" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Wissen" ;
+        Text [ english_us ] = "Delete" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ spanish ] = "Eliminar" ;
+        Text [ french ] = "Supprimer" ;
+        Text [ swedish ] = "Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ portuguese ] = "Eliminar" ;
+        Text [ portuguese_brazilian ] = "Lˆschen" ;
+        Text[ chinese_simplified ] = "…æ≥˝";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "UsuÒ";
+        Text[ japanese ] = "çÌèú";
+        Text[ chinese_traditional ] = "ßR∞£";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox RID_CHKB_ACTIVE
+    {
+        Pos = MAP_APPFONT ( 6 , 87 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Text = "Aktiv" ;
+        Text [ ENGLISH ] = "Active" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Active" ;
+        Text [ italian ] = "Attivo" ;
+        Text [ spanish ] = "Activo" ;
+        Text [ french ] = "Actif" ;
+        Text [ dutch ] = "Actief" ;
+        Text [ swedish ] = "Aktiv" ;
+        Text [ danish ] = "Aktiv" ;
+        Text [ portuguese_brazilian ] = "Aktiv" ;
+        Text [ portuguese ] = "Activo" ;
+        Text[ chinese_simplified ] = "º§ªÓ";
+        Text[ russian ] = "¿ÍÚË‚Ì˚È";
+        Text[ polish ] = "Aktywny";
+        Text[ japanese ] = "±∏√®Ãﬁ";
+        Text[ chinese_traditional ] = "øE¨°";
+        Text[ arabic ] = "‰‘ÿ";
+        Text[ greek ] = "≈ÌÂÒ„‹";
+        Text[ korean ] = "»∞º∫";
+        Text[ turkish ] = "Etkin";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText RID_FT_PASS
+    {
+        Pos = MAP_APPFONT ( 6 , 102 ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text = "Durchlauf:" ;
+        Text [ English ] = "Pass Count:" ;
+        Text [ english_us ] = "Pass Count:" ;
+        Text [ portuguese_brazilian ] = "Durchlauf:" ;
+        Text [ swedish ] = "Passager:" ;
+        Text [ danish ] = "Genneml¯b:" ;
+        Text [ italian ] = "Passaggi:" ;
+        Text [ spanish ] = "AdaptaciÛn:" ;
+        Text [ french ] = "Adaptation :" ;
+        Text [ dutch ] = "Doorloop:" ;
+        Text [ portuguese ] = "AdaptaÁ„o:" ;
+        Text[ chinese_simplified ] = "¥©Õ∏£∫";
+        Text[ russian ] = "œÓ„ÓÌÓ‚:";
+        Text[ polish ] = "Przep≥yw tekstu:";
+        Text[ japanese ] = "ê‹ÇËï‘ÇµÇ»Çµ:";
+        Text[ chinese_traditional ] = "¨Ô≥z°G";
+        Text[ arabic ] = "⁄»—:";
+        Text[ greek ] = "ƒÈ· Ï›ÛÔı:";
+        Text[ korean ] = "∆–Ω∫ »Ωºˆ:";
+        Text[ turkish ] = "Pass count:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText RID_FT_BRKPOINTS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Haltepunkte" ;
+        Text [ ENGLISH ] = "Breakpoints" ;
+        Text [ english_us ] = "Breakpoints" ;
+        Text [ italian ] = "Punti di interruzione" ;
+        Text [ spanish ] = "Puntos de ruptura" ;
+        Text [ french ] = "Points d'arrÍt" ;
+        Text [ dutch ] = "Stoppunten" ;
+        Text [ swedish ] = "Brytpunkter" ;
+        Text [ danish ] = "Pausepunkter" ;
+        Text [ portuguese_brazilian ] = "Haltepunkte" ;
+        Text [ portuguese ] = "Pontos de ruptura" ;
+        Text[ chinese_simplified ] = "÷–÷πµ„";
+        Text[ russian ] = "“Ó˜ÍË ÓÒÚ‡ÌÓ‚‡";
+        Text[ polish ] = "Punkty przerwania";
+        Text[ japanese ] = "Ãﬁ⁄∞∏Œﬂ≤›ƒ";
+        Text[ chinese_traditional ] = "§§§Ó¬I";
+        Text[ arabic ] = "‰ﬁ«ÿ «·≈Ìﬁ«›";
+        Text[ greek ] = "”ÁÏÂﬂ· ‰È·ÍÔﬁÚ";
+        Text[ korean ] = "¡ﬂ¥‹¡°";
+        Text[ turkish ] = "Kesme noktalar˝";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField RID_FLD_PASS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 41 , 100 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Breakpoints" ;
+    Text [ italian ] = "Punto di interruzione" ;
+    Text [ spanish ] = "Puntos de ruptura" ;
+    Text [ french ] = "Points d'arrÍt" ;
+    Text [ dutch ] = "Stoppunten" ;
+    Text [ swedish ] = "Brytpunkter" ;
+    Text [ danish ] = "Pausepunkter" ;
+    Text [ portuguese_brazilian ] = "Haltepunkte" ;
+    Text [ portuguese ] = "Pontos de ruptura" ;
+    Text[ chinese_simplified ] = "÷–÷πµ„";
+    Text[ russian ] = "“Ó˜ÍË ÓÒÚ‡ÌÓ‚‡";
+    Text[ polish ] = "Punkty przerwania";
+    Text[ japanese ] = "Ãﬁ⁄∞∏Œﬂ≤›ƒ";
+    Text[ chinese_traditional ] = "§§§Ó¬I";
+    Text[ arabic ] = "‰ﬁ«ÿ «·≈Ìﬁ«›";
+    Text[ greek ] = "”ÁÏÂﬂ· ‰È·ÍÔﬁÚ";
+    Text[ korean ] = "¡ﬂ¥‹¡°";
+    Text[ turkish ] = "Kesme noktalar˝";
+    Text[ language_user1 ] = " ";
+};
