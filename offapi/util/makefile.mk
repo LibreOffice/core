@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 15:04:59 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:59:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,6 +91,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csscbackend.db\
     $(UCR)$/csscbxml.db\
     $(UCR)$/cssdatatransfer.db \
+    $(UCR)$/cssdeployment.db \
     $(UCR)$/cssdclipboard.db \
     $(UCR)$/cssddnd.db \
     $(UCR)$/cssdocument.db \
