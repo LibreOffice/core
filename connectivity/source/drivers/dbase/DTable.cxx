@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 10:33:26 $
+ *  last change: $Author: oj $ $Date: 2001-11-16 08:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1939,8 +1939,8 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
 
     FileClose();
     construct();
-    if(m_pColumns)
-        m_pColumns->refresh();
+//  if(m_pColumns)
+//      m_pColumns->refresh();
 }
 // -----------------------------------------------------------------------------
 String ODbaseTable::createTempFile()
