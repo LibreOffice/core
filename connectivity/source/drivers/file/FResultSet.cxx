@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:34:19 $
+ *  last change: $Author: oj $ $Date: 2000-10-10 06:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ sal_Int32 SAL_CALL OResultSet::getRow(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    sal_Int32 nPos = (*m_aRow)[0];
+    sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = m_aBookmarkToPos.find(nPos);
     OSL_ENSHURE(aIter != m_aBookmarkToPos.end(),"OResultSet::getRow() invalid bookmark!");
     return aIter != m_aBookmarkToPos.end() ? aIter->second : 0;
@@ -721,13 +721,13 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
 void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
-    (*m_aInsertRow)[0] = (*m_aRow)[0];
+    (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
     m_aRow = m_aInsertRow;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nPos = (*m_aRow)[0];
+    sal_Int32 nPos = (sal_Int32)(*m_aRow)[0];
     m_bRowDeleted = m_pTable->DeleteRow(m_xColumns.getBody());
     if(m_bRowDeleted && m_pFileSet)
     {
@@ -1400,7 +1400,7 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
             if(bDataFound && !m_aRow->isDeleted())
             {
                 ++nCurPos;
-                m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+                m_aBookmarkToPos[(sal_Int32)(*m_aRow)[0]] = nCurPos;
             }
             else if(!bDataFound)
             {
@@ -1437,8 +1437,8 @@ BOOL OResultSet::SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOf
             bDone = FALSE;
     }
 
-    if(bDataFound && bDone && m_aBookmarkToPos.find((*m_aRow)[0]) == m_aBookmarkToPos.end())
-        m_aBookmarkToPos[(*m_aRow)[0]] = (nRowPos +1);
+    if(bDataFound && bDone && m_aBookmarkToPos.find((sal_Int32)(*m_aRow)[0]) == m_aBookmarkToPos.end())
+        m_aBookmarkToPos[(sal_Int32)(*m_aRow)[0]] = (nRowPos +1);
 
     return bDataFound;
 }
@@ -1486,7 +1486,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
         if(bDataFound && !m_aRow->isDeleted())
         {
             ++nCurPos;
-            m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+            m_aBookmarkToPos[(sal_Int32)(*m_aRow)[0]] = nCurPos;
             --nNewOffset;
         }
         // now move to that row we need and don't count deleted rows
@@ -1496,7 +1496,7 @@ sal_Bool OResultSet::moveAbsolute(sal_Int32 _nOffset,sal_Bool _bRetrieveData)
             if(bDataFound && !m_aRow->isDeleted())
             {
                 ++nCurPos;
-                m_aBookmarkToPos[(*m_aRow)[0]] = nCurPos;
+                m_aBookmarkToPos[(sal_Int32)(*m_aRow)[0]] = nCurPos;
                 --nNewOffset;
             }
         }
