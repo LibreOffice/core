@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:59:18 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,14 +90,14 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ dutch ] = "~Kolomopmaak..." ;
             Text [ spanish ] = "Formateado de ~columnas..." ;
             Text [ english_us ] = "Column ~Format..." ;
-            Text[ chinese_simplified ] = "ÁĞ¸ñÊ½...";
+            Text[ chinese_simplified ] = "ÁĞ¸ñÊ½(~F)...";
             Text[ russian ] = "Ôîğìàò êîëîíîê...";
             Text[ polish ] = "Formatowanie kolumn...";
             Text[ japanese ] = "—ñ‚Ì‘®(~F)...";
             Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
-            Text[ korean ] = "¿­ Æ÷¸ËÆÃ...";
+            Text[ korean ] = "¿­ Æ÷¸ËÆÃ(~F)...";
             Text[ turkish ] = "Sütun formatı...";
         };
         MenuItem
@@ -116,14 +116,14 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ italian ] = "~Larghezza colonna..." ;
             Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
             Text [ portuguese ] = "~Largura de coluna..." ;
-            Text[ chinese_simplified ] = "ÁĞ¿í...";
+            Text[ chinese_simplified ] = "ÁĞ¿í(~W)...";
             Text[ russian ] = "Øèğèíà êîëîíîê...";
             Text[ polish ] = "Szerokoœæ kolumn...";
             Text[ japanese ] = "—ñ•(~W)...";
             Text[ chinese_traditional ] = "Äæ¼e(~W)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
             Text[ greek ] = "ĞëÜôïò óôŞëçò...";
-            Text[ korean ] = "¿­ ³Êºñ...";
+            Text[ korean ] = "¿­ ³Êºñ(~W)...";
             Text[ turkish ] = "Sütun genişliği...";
         };
         MenuItem
@@ -132,6 +132,24 @@ Menu RID_SBA_GRID_COLCTXMENU
             HelpID = HID_BROWSER_COLUMNINFO ;
             Text = "Spaltenb~eschreibung kopieren";
             Text [ ENGLISH ] = "Copy column d~escription" ;
+            Text[ english_us ] = "Copy Column D~escription";
+            Text[ portuguese ] = "Copy column d~escription";
+            Text[ russian ] = "Copy column d~escription";
+            Text[ greek ] = "Copy column d~escription";
+            Text[ dutch ] = "Copy column d~escription";
+            Text[ french ] = "Copy column d~escription";
+            Text[ spanish ] = "Copy column d~escription";
+            Text[ italian ] = "Copia la ~descrizione della colonna";
+            Text[ danish ] = "Copy column d~escription";
+            Text[ swedish ] = "Kopiera kolumnb~eskrivning";
+            Text[ polish ] = "Copy column d~escription";
+            Text[ portuguese_brazilian ] = "Copy column d~escription";
+            Text[ japanese ] = "—ñ‚ÌŒ©o‚µ‚ğºËß°";
+            Text[ korean ] = "Copy column d~escription";
+            Text[ chinese_simplified ] = "Copy column d~escription";
+            Text[ chinese_traditional ] = "½Æ»s¦C¼ĞÃD";
+            Text[ turkish ] = "Copy column d~escription";
+            Text[ arabic ] = "Copy column d~escription";
         };
     };
 };
