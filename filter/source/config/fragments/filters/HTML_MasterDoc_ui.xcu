@@ -1,0 +1,6 @@
+    <node oor:name="HTML_MasterDoc" oor:finalized="false" oor:mandatory="false">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">HTML Document (%productname% Master Document)</value>
+            <value xml:lang="de">HTML-Dokument (%productname% Globaldokument)</value>
+        </prop>
+    </node>
