@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 15:12:02 $
+ *  last change: $Author: mba $ $Date: 2001-10-12 15:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(inst) any longer" );
             nReplaceLength = REPLACELENGTH_INST;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aInstPath, aReplacement );
+            aReplacement = m_aInstPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -472,7 +472,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(user) any longer" );
             nReplaceLength = REPLACELENGTH_USERPATH;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aUserPath, aReplacement );
+            aReplacement = m_aUserPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -482,7 +482,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
             bConvertLocal = TRUE;
             DBG_ERROR( "Don't use $(prog) any longer" );
             nReplaceLength = REPLACELENGTH_PROG;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aProgPath, aReplacement );
+            aReplacement = m_aProgPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -491,7 +491,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_USERPATH;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aUserPath, aReplacement );
+            aReplacement = m_aUserPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -500,7 +500,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_PROGPATH;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aProgPath, aReplacement );
+            aReplacement = m_aProgPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
@@ -509,7 +509,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         {
             bConvertLocal = TRUE;
             nReplaceLength = REPLACELENGTH_INSTPATH;
-            ::osl::FileBase::getFileURLFromSystemPath( m_aInstPath, aReplacement );
+            aReplacement = m_aInstPath;
         }
         else
         // -------------------------------------------------------------------------------------------------------------------
