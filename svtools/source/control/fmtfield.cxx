@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 09:20:40 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using namespace ::com::sun::star::util;
 // regulaerer Ausdruck, um komplette Zahlen und alles, was waehrend der Eingabe einer kompletten Zahl als Fragment vorkommt,
 // abzudecken :
 // [+/-][{ziffer}*.]*{ziffer}*[,{ziffer}*][e[+/-]{ziffer}*]
-const char __FAR_DATA szNumericInput[] = "_[\\x2D\\x2B]?([0-9]*\\x++)*[0-9]*(\\x##[0-9]*)?(e[\\x2D\\x2B]?[0-9]*)?_";
+const char __FAR_DATA szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
     // (die beiden _ sind fuer die Normierung, damit kann ich erzwingen, dass nie ein Teilstring gefunden wird)
 
 //==============================================================================
@@ -878,7 +878,6 @@ void DoubleNumericField::ResetConformanceTester()
     String sDescription = String::CreateFromAscii(szNumericInput);
     // the thousands and the decimal separator are language dependent
     const SvNumberformat* pFormatEntry = ImplGetFormatter()->GetEntry(m_nFormatKey);
-    char cSepHexCode[3];
 
     unsigned char cSeparatorThousand = ',';
     unsigned char cSeparatorDecimal = '.';
@@ -891,19 +890,19 @@ void DoubleNumericField::ResetConformanceTester()
         String sSeparator = aLocaleInfo.getNumThousandSep();
         if (sSeparator.Len())
             cSeparatorThousand = sSeparator.GetBuffer()[0];
-        // TODO: for real unicode we need the possibility to search for regular expressions allowing something like "\x????"
-        // (4 digits instead of 2)
 
         sSeparator = aLocaleInfo.getNumDecimalSep();
         if (sSeparator.Len())
             cSeparatorDecimal = sSeparator.GetBuffer()[0];
     }
 
-    sprintf(cSepHexCode, "%0X", cSeparatorThousand);
-    sDescription.SearchAndReplaceAscii("++", String::CreateFromAscii(cSepHexCode));
+    String sReplaceWith((sal_Unicode)'\\');
+    sReplaceWith += (sal_Unicode)cSeparatorThousand;
+    sDescription.SearchAndReplaceAscii("\\,", sReplaceWith);
 
-    sprintf(cSepHexCode, "%0X", cSeparatorDecimal);
-    sDescription.SearchAndReplaceAscii("##", String::CreateFromAscii(cSepHexCode));
+    sReplaceWith = (sal_Unicode)'\\';
+    sReplaceWith += (sal_Unicode)cSeparatorDecimal;
+    sDescription.SearchAndReplaceAscii("\\.", sReplaceWith);
 
     delete m_pConformanceTester;
 
