@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 13:43:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _WRTSH_HXX
 #define _WRTSH_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
@@ -78,8 +82,6 @@ class Window;
 class OutputDevice;
 class SbxArray;
 class SwDoc;
-class SvInPlaceObjectRef;
-class SvEmbeddedObjectRef;
 class SpellCheck;
 class SwViewOption;
 class SwFlyFrmAttrMgr;
@@ -339,19 +341,20 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
                     BOOL bRule = FALSE );
     //OLE
-    void    Insert(     SvInPlaceObjectRef *pObj,        // != 0 fuer Clipboard
+    void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 fuer Clipboard
+                          const svt::EmbeddedObjectRef&,
                           SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
                           BOOL bActivate = TRUE,
                           USHORT nSlotId = 0,       // SlotId fuer Dialog
                           SfxRequest* pReq = 0 );
 
-    BOOL    InsertOle   ( SvInPlaceObjectRef aRef  );   // In die Core einfuegen.
+    BOOL    InsertOleObject( const svt::EmbeddedObjectRef& xObj );
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
     BOOL    IsOLEObj() const { return GetCntType() == CNT_OLE;}
-    virtual void CalcAndSetScale( SvEmbeddedObjectRef xObj,
+    virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0 );
-    virtual void ConnectObj( SvInPlaceObjectRef xIPObj, const SwRect &rPrt,
+    virtual void ConnectObj( svt::EmbeddedObjectRef&  xIPObj, const SwRect &rPrt,
                              const SwRect &rFrm );
     DECL_LINK( ChartSelectionHdl, ChartSelectionInfo * );
 
