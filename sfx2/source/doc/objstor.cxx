@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-12 08:21:13 $
+ *  last change: $Author: mba $ $Date: 2002-04-12 10:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,17 +1448,30 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
         xExporter->setSourceDocument( xComp );
         com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aOldArgs ( GetModel()->getArgs() );
         const com::sun::star::beans::PropertyValue * pOldValue = aOldArgs.getConstArray();
+
         com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aArgs ( aOldArgs.getLength() + 1 );
         com::sun::star::beans::PropertyValue * pNewValue = aArgs.getArray();
+
         // put in the REAL file name, and copy all PropertyValues
+        const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
+        BOOL bHasStream = FALSE;
         for ( sal_Int32 i = 0, nEnd = aOldArgs.getLength(); i < nEnd; i++ )
         {
             pNewValue[i] = pOldValue[i];
-            if ( pOldValue [i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
+            if ( pOldValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FileName" ) ) )
                 pNewValue[i].Value <<= OUString ( rMedium.GetName() );
+            if ( pOldValue[i].Name == sOutputStream )
+                bHasStream = sal_True;
         }
-        pNewValue[i].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
-        pNewValue[i].Value <<= Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+
+        if ( !bHasStream )
+        {
+            pNewValue[i].Name = sOutputStream;
+            pNewValue[i].Value <<= Reference < com::sun::star::io::XOutputStream > ( new utl::OOutputStreamWrapper ( *rMedium.GetOutStream() ) );
+        }
+        else
+            aArgs.realloc ( i-1 );
+
         xFilter->filter( aArgs );
         return sal_True;
     }
@@ -1743,8 +1756,8 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
         }
     }
 
-    if( SFX_ITEM_SET != aParams->GetItemState(SID_PACK) && SvtSaveOptions().IsSaveUnpacked() )
-        aParams->Put( SfxBoolItem( SID_PACK, sal_False ) );
+    if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
+        aParams->Put( SfxBoolItem( SID_UNPACK, sal_False ) );
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,aParams))
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: mav $ $Date: 2002-04-05 07:55:25 $
+ *  last change: $Author: mba $ $Date: 2002-04-12 10:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,8 +1394,8 @@ void SfxMedium::Transfer_Impl()
 
         if ( pFilter && SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() )
         {
-            SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
-            if ( pItem && !pItem->GetValue() )
+            SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_UNPACK, sal_False);
+            if ( pItem && pItem->GetValue() )
             {
                 // this file must be stored without packing into a JAR file
                 // check for an existing unpacked storage
@@ -2662,8 +2662,8 @@ void SfxMedium::CreateTempFile()
     ResetError();
 
     SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
-    if ( pSegmentSize || pItem && !pItem->GetValue() )
+    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_UNPACK, sal_False);
+    if ( pSegmentSize || pItem && pItem->GetValue() )
     {
         pImp->pTempFile = new ::utl::TempFile();
     }
@@ -2720,8 +2720,8 @@ void SfxMedium::CreateTempFileNoCopy()
         delete pImp->pTempFile;
 
     SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
-    if ( pSegmentSize || pItem && !pItem->GetValue() )
+    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_UNPACK, sal_False);
+    if ( pSegmentSize || pItem && pItem->GetValue() )
     {
         pImp->pTempFile = new ::utl::TempFile();
     }
