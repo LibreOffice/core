@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: vg $ $Date: 2002-10-25 12:48:48 $
+#   last change: $Author: vg $ $Date: 2002-11-19 15:10:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.66 $ ';
+$id_str = ' $Revision: 1.67 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -257,7 +257,7 @@ sub BuildAll {
             if ($cmd_file) {
                 print "$deliver_commando\n";
             } else {
-                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj));
+                system ("$deliver_commando") if (!$show && ($Prj ne $CurrentPrj) && !$deliver);
             };
             print $check_error_string;
             &RemoveFromDependencies($Prj, \%ParentDepsHash);
