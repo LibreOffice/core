@@ -157,6 +157,7 @@ BEGIN
     @functioncalls = ();
 
     $ismultilingual = 0;
+    @multilanguagemodules = ();
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
@@ -180,6 +181,8 @@ BEGIN
     $cab_file_per_component = 0;
     $cabfilecompressionlevel = 2;
     $number_of_cabfiles = 4;    # only for $fix_number_of_cab_files = 1
+    $include_cab_in_msi = 0;
+    $msidatabasename = "";
 
     $updatepack = 0;
 
@@ -189,6 +192,9 @@ BEGIN
     $javafilename = "";
     $javafilename2 = "";
     $javafilename3 = "";
+    $javafile = "";
+    $adafile = "";
+
 
     $starttime = "";
 
@@ -212,10 +218,19 @@ BEGIN
         $unzippath = "unzip.exe";           # Has to be in the path: r:\btw\unzip.exe
         $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
         $checksumfile = "so_checksum.exe";
-        $separator = "\\";
-        $pathseparator = "\;";
+        if ( $plat =~ /cygwin/i )
+        {
+            $separator = "/";
+            $pathseparator = "\:";
+            $quote = "\'";
+        }
+        else
+        {
+            $separator = "\\";
+            $pathseparator = "\;";
+            $quote = "\"";
+        }
         $libextension = "\.dll";
-        $quote = "\"";
         $isunix = 0;
         $iswin = 1;
         $wrapcmd = "";
