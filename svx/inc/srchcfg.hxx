@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:27:54 $
+ *  last change: $Author: os $ $Date: 2001-05-07 10:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,17 @@ struct SvxSearchEngineData
     rtl::OUString   sAndPrefix;
     rtl::OUString   sAndSuffix;
     rtl::OUString   sAndSeparator;
-    sal_Int16       nAndCaseMatch;
+    sal_Int32       nAndCaseMatch;
 
     rtl::OUString   sOrPrefix;
     rtl::OUString   sOrSuffix;
     rtl::OUString   sOrSeparator;
-    sal_Int16       nOrCaseMatch;
+    sal_Int32       nOrCaseMatch;
 
     rtl::OUString   sExactPrefix;
     rtl::OUString   sExactSuffix;
     rtl::OUString   sExactSeparator;
-    sal_Int16       nExactCaseMatch;
+    sal_Int32       nExactCaseMatch;
 
     SvxSearchEngineData() :
         nAndCaseMatch(0),
