@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="develop" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
 Public oDBShapeList() as Object
@@ -441,7 +441,7 @@ Dim n as Integer
 Dim oColumn as Object
 Dim aPoint as New com.sun.star.awt.Point
 Dim aSize as New com.sun.star.awt.Size
-	oDocument.LockControllers()
+&apos;	oDocument.LockControllers()
 	If bControlsareCreated Then
 		ShapesToNirwana()
 	End If
@@ -465,7 +465,7 @@ Dim aSize as New com.sun.star.awt.Size
 		End If
 		oProgressbar.Value = n
 	next n
-	oDocument.UnlockControllers()	
+&apos;	oDocument.UnlockControllers()	
 End Function
 
 

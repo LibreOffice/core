@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="FormWizard" script:language="StarBasic">Option Explicit
 
 Public DocumentName as String
 Public FormPath as String
@@ -65,7 +65,7 @@ Dim i as Integer
 Dim SelCount as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-	bDebug = False
+	bDebug = True
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If

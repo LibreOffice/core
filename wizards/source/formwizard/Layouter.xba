@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
 
 Public oProgressbar as Object
 Public ProgressValue as Integer
@@ -103,9 +103,7 @@ Dim i as Integer
 		Case cTabled
 			PositionGridControl(MaxIndex)
 		Case Else
-			oDocument.LockControllers()
 			PositionControls(MaxIndex)
-			oDocument.UnlockControllers()
 	End Select
 	ToggleLayoutPage(True)
 	oProgressbar.End
@@ -148,10 +146,10 @@ Dim oLocPeer as Object
 	XPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterX
 	YPixelFactor = 100000/oLocPeer.GetInfo.PixelPerMeterY
 	aLabelSize = GetPeerSize(oLabelModel, oLocControl, &quot;The quick brown fox...&quot;)
-	nTCHeight = aLabelSize.Height * YPixelFactor
+	nTCHeight = (aLabelSize.Height+1) * YPixelFactor
 	aTBSize = GetPeerSize(oTBModel, oLocControl, &quot;The quick brown fox...&quot;)
-	nDBRefHeight = aTBSize.Height * YPixelFactor
-	LabelDiffHeight = Clng((aTBSize.Height - aLabelSize.Height)/2) * YPixelFactor
+	nDBRefHeight = (aTBSize.Height+1) * YPixelFactor
+	LabelDiffHeight = Clng((nDBRefHeight - nTCHeight)/2)
 	oDrawPage.Remove(oLabelShape)
 	oDrawPage.Remove(oTBShape)
 End Sub
@@ -187,7 +185,6 @@ Dim sLocText as String
 	oModel = oEvent.Source.Model
 	SwitchBorderMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
-	oDocument.LockControllers
 
 &apos; Todo: Auch unsichtbare Controls müssen eine neue Border bekommen
 &apos; Am besten wird hierbei das dynamische Array oDBShapeList() abgegriffen
@@ -206,6 +203,7 @@ WIZARDERROR:
 		Resume LOCERROR
 		LOCERROR:		
 	End If
+	ToggleLayoutPage(True)
 End Sub
 
 
@@ -219,7 +217,6 @@ Dim oModel as Object
 	oModel = oEvent.Source.Model
 	SwitchAlignMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
-	oDocument.LockControllers()
 	If OldAlignMode &lt;&gt; CurAlignMode Then
 		For i = 0 To MaxIndex
 			oTCShapeList(i).GetControl.Align = CurAlignmode
@@ -232,14 +229,14 @@ Dim oModel as Object
 			oTCShapeList(i).Size = oSize
 		Next i
 	End If
+
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
 		Msgbox(sMsgErrMsg, 16, GetProductName())
 		Resume LOCERROR
 		LOCERROR:		
 	End If
-&apos;	oDocument.UnlockControllers()
-&apos;	ToggleLayoutPage(True)
+	ToggleLayoutPage(True)
 End Sub
 
 
@@ -248,7 +245,6 @@ Dim oModel as Object
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
 	oModel = oEvent.Source.Model
 	SwitchArrangementButtons(Val(Right(oModel.Name,1)))
 	oModel.State = 1
@@ -306,9 +302,12 @@ End Sub
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
 	oDialogModel.Enabled = bDoEnable
 	If bDoEnable Then
+		oDocument.UnlockControllers()
 		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
 		ToggleAlignGroup(bDoEnable)
 		ToggleBorderGroup(bDoEnable)
+	Else
+		oDocument.LockControllers()	
 	End If
 	If Not IsMissing(FocusControlName) Then
 		DlgFormDB.GetControl(FocusControlName).SetFocus()

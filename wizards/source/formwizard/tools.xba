@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
-<script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
+ <script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
 
@@ -145,11 +145,9 @@ Dim OldIndex as Integer
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
 	If CurIndex &lt;&gt; OldIndex Then	
 		ToggleLayoutPage(False)
-		oDocument.LockControllers
 		SetImportStyle()
 		ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
 		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
-		oDocument.UnlockControllers()
 	End If
 WIZARDERROR:
 	If Err &lt;&gt; 0 Then	
