@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:51:03 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,14 +448,15 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PrinterInfo& rInfo
 const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 {
     const PPDParser* pNewParser = NULL;
-#ifdef ENABLE_CUPS
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
     OUString aPrinter;
+
     if( rPrinter.compareToAscii( "CUPS:", 5 ) == 0 )
         aPrinter = rPrinter.copy( 5 );
     else
         aPrinter = rPrinter;
+
+#ifdef ENABLE_CUPS
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     OString aPrinterName( OUStringToOString( aPrinter, aEncoding ) );
 
     const char* pPPDFile = m_pCUPSWrapper->cupsGetPPD( aPrinterName.getStr() );
