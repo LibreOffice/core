@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:36:41 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 22:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole daty";
             Text[ portuguese_brazilian ] = "DateField";
             Text[ japanese ] = "日付ﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "DateField";
+            Text[ korean ] = "데이터 필드";
             Text[ chinese_simplified ] = "日期字段";
             Text[ chinese_traditional ] = "日期欄位";
             Text[ turkish ] = "DateField";
@@ -383,7 +383,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole numeryczne";
             Text[ portuguese_brazilian ] = "NumericField";
             Text[ japanese ] = "番号ﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "NumericField";
+            Text[ korean ] = "수치 필드";
             Text[ chinese_simplified ] = "数字字段";
             Text[ chinese_traditional ] = "數字欄位";
             Text[ turkish ] = "NumericField";
@@ -411,7 +411,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole sformatowane";
             Text[ portuguese_brazilian ] = "FormattedField";
             Text[ japanese ] = "書式設定されたﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "FormattedField";
+            Text[ korean ] = "서식 지정된 필드";
             Text[ chinese_simplified ] = "格式化的字段";
             Text[ chinese_traditional ] = "格式化的字段";
             Text[ turkish ] = "FormattedField";
@@ -439,7 +439,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Wyb�r plik�w";
             Text[ portuguese_brazilian ] = "FileControl";
             Text[ japanese ] = "ﾌｧｲﾙの選択";
-            Text[ korean ] = "FileControl";
+            Text[ korean ] = "파일 컨트롤";
             Text[ chinese_simplified ] = "选择文件";
             Text[ chinese_traditional ] = "選取檔案";
             Text[ turkish ] = "FileControl";
@@ -702,7 +702,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole godziny";
             Text[ portuguese_brazilian ] = "TimeField";
             Text[ japanese ] = "時刻ﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "TimeField";
+            Text[ korean ] = "시간 필드";
             Text[ chinese_simplified ] = "时间字段";
             Text[ chinese_traditional ] = "時間欄位";
             Text[ turkish ] = "TimeField";
@@ -730,7 +730,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole waluty";
             Text[ portuguese_brazilian ] = "CurrencyField";
             Text[ japanese ] = "通貨ﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "CurrencyField";
+            Text[ korean ] = "통화 필드";
             Text[ chinese_simplified ] = "货币字段";
             Text[ chinese_traditional ] = "貨幣欄位";
             Text[ turkish ] = "CurrencyField";
@@ -758,7 +758,7 @@ ToolBox RID_TOOLBOX
             Text[ polish ] = "Pole maski";
             Text[ portuguese_brazilian ] = "PatternField";
             Text[ japanese ] = "ﾊﾟﾀｰﾝﾌｨｰﾙﾄﾞ";
-            Text[ korean ] = "PatternField";
+            Text[ korean ] = "패턴 필드";
             Text[ chinese_simplified ] = "掩码字段";
             Text[ chinese_traditional ] = "遮罩欄位";
             Text[ turkish ] = "PatternField";
@@ -827,6 +827,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
