@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:09:48 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,13 +310,13 @@ STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::AddRef()
 STDMETHODIMP_(ULONG) EmbedProviderFactory_Impl::Release()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex());
-    m_refCount--;
-    if (m_refCount == 0)
+    sal_Int32 nCount = --m_refCount;
+    if ( nCount == 0 )
     {
         delete this;
     }
 
-    return m_refCount;
+    return nCount;
 }
 
 STDMETHODIMP EmbedProviderFactory_Impl::CreateInstance(IUnknown FAR* punkOuter,
