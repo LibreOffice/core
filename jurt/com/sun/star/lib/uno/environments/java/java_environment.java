@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-16 18:01:25 $
+ *  last change: $Author: kr $ $Date: 2001-02-26 18:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-01-16 18:01:25 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-26 18:26:36 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -212,15 +212,16 @@ public class java_environment implements IEnvironment, Disposable {
         Holder(String oId, Object object) {
             _oId    = oId;
             _object = object;
+            _refCount = 1;
         }
 
-        void incRefCount() {
+        synchronized void incRefCount() {
               if(DEBUG) System.err.println("##### " + getClass().getName() + ".incRefCount:" + _refCount);
 
             ++ _refCount;
         }
 
-        void decRefCount() {
+        synchronized void decRefCount() {
               if(DEBUG) System.err.println("##### " + getClass().getName() + ".decRefCount:" + _refCount);
 
             -- _refCount;
@@ -317,23 +318,25 @@ public class java_environment implements IEnvironment, Disposable {
 
         String keyName = oId[0] + type;
 
-        // get the holder
-        Holder holder = (Holder)_objects.get(keyName);
+        synchronized(_objects) {
+            // get the holder
+            Holder holder = (Holder)_objects.get(keyName);
 
-        if(DEBUG)
-            System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + type);
+            if(DEBUG)
+                System.err.println("##### " + getClass().getName() + ".registerInterface:" + object + " " + oId[0] + " " + type);
 
-        if(holder == null) {
-            holder = new Holder(keyName, object);
+            if(holder == null) {
+                holder = new Holder(keyName, object);
 
-            _objects.put(keyName, holder);
+                _objects.put(keyName, holder);
+            }
+            else
+                holder.incRefCount();
+
+            object = holder.xxgetObject(type);
         }
 
-        // get the holder again, so we dont have to guard this section and are thread safe
-        holder = (Holder)_objects.get(keyName);
-        holder.incRefCount();
-
-        return holder.xxgetObject(type);
+        return object;
     }
 
     /**
@@ -345,11 +348,13 @@ public class java_environment implements IEnvironment, Disposable {
      */
     public void revokeInterface(String oId, Type type) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".revokeInterface:" + oId + " " + type);
-        Holder holder = (Holder)_objects.get(oId + type);
-        if(holder != null)
-            holder.decRefCount();
-        else
-            System.err.println("java_environment.revokeInterface - unknown oid:" + oId + " " + type);
+        synchronized(_objects) {
+            Holder holder = (Holder)_objects.get(oId + type);
+            if(holder != null)
+                holder.decRefCount();
+            else
+                System.err.println("java_environment.revokeInterface - unknown oid:" + oId + " " + type);
+        }
     }
 
     /**
