@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:41:27 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _WW8SCAN_HXX
 #include "ww8scan.hxx"
+#endif
+#ifndef WW_FIELDS_HXX
+#include "fields.hxx"
 #endif
 
 // einige Forward Deklarationen
@@ -583,8 +586,8 @@ public:
     void Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
         bool bFlyFmt = false);
     bool GetNumberFmt(const SwField& rFld, String& rStr);
-    void OutField( const SwField* pFld, BYTE nFldType, const String& rFldCmd,
-        BYTE nMode = WRITEFIELD_ALL );
+    void OutField(const SwField* pFld, ww::eField eFldType,
+        const String& rFldCmd, BYTE nMode = WRITEFIELD_ALL);
     void StartCommentOutput( const String& rName );
     void EndCommentOutput(   const String& rName );
     void OutGrf( const SwNoTxtNode* pNd );
@@ -675,7 +678,6 @@ public:
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
     bool MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
         SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, bool bBiDi);
-
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
     void InsAsString16( const String& rStr )
@@ -701,6 +703,7 @@ public:
     void pop_charpropstart();
     xub_StrLen top_charpropstart() const;
     bool empty_charpropstart() const;
+    void GetCurrentItems(WW8Bytes &rItems) const;
 private:
     //No copying
     SwWW8Writer(const SwWW8Writer&);
@@ -921,7 +924,6 @@ public:
 
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const = 0;
     virtual const SfxPoolItem& GetItem( USHORT nWhich ) const = 0;
-    virtual void GetItems( WW8Bytes& rItems ) const;
     void StartURL(const String &rUrl, const String &rTarget);
     void EndURL();
 };
@@ -995,6 +997,8 @@ Writer& OutWW8_SwFmtHoriOrient( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutWW8_SwFmtVertOrient( Writer& rWrt, const SfxPoolItem& rHt );
 
 sal_uInt16 GetWordFirstLineOffset(const SwNumFmt &rFmt);
+//A bit of a bag on the side for now
+String FieldString(ww::eField eIndex);
 String BookmarkToWord(const String &rBookmark);
 #endif  //  _WRTWW8_HXX
 
