@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-16 12:58:52 $
+#   last change: $Author: hjs $ $Date: 2002-08-16 15:30:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,9 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+
+NO_HID_FILES=app.src
+.EXPORT : NO_HID_FILES
 
 # --- Imagelisten --------------------------------------------------
 
