@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:49 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,15 +73,13 @@
 
 #include "docinf.hxx"
 #include "frmhtmlw.hxx"
-#include "fsetobsh.hxx"
 #include "evntconf.hxx"
 #include "frame.hxx"
 #include "app.hxx"
 #include "viewfrm.hxx"
-#include "fsetvwsh.hxx"
 #include "docfile.hxx"
 #include "sfxresid.hxx"
-
+#include "objsh.hxx"
 #include "sfx.hrc"
 #include "bastyp.hrc"
 
@@ -110,23 +108,6 @@ const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
 #else
 const sal_Char __FAR_DATA SfxFrameHTMLWriter::sNewLine[] = "\015\012";
 #endif
-
-/*  */
-
-SfxFrameHTMLWriter::SfxFrameHTMLWriter() :
-    pStrm( 0 ),
-    nNestCnt( 0 )
-{
-    aFill.Fill( 20, '\t' );
-}
-
-
-SfxFrameHTMLWriter::~SfxFrameHTMLWriter()
-{
-    DBG_ASSERT( !pStrm, "Stream ist noch da!" );
-}
-
-/*  */
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const sal_Char *pIndent,
@@ -289,43 +270,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm,
         }
     }
 }
-
-
-/*  */
-
-ULONG SfxFrameHTMLWriter::Write(
-    SfxFrameSetObjectShell *pDocShell, SvStream& rOut,
-    const SfxFrameSetDescriptor* pSet, BOOL bFlatten, SfxFrame* pTopFrame )
-{
-    if( !pSet ) pSet = pDocShell->GetFrameSetDescriptor();
-
-    // Initalisierung
-    pDoc = pDocShell;
-    pStrm = &rOut;
-    nNestCnt = 0;
-
-    // get text encoding
-    const sal_Char *pCharSet =
-        rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
-    rtl_TextEncoding eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-
-    // Header ausgeben
-    OutHeader( eDestEnc );
-
-    // Frameset augeben
-    Out_FrameSetDescriptor( pSet, bFlatten, pTopFrame, eDestEnc );
-
-    // Footer ausgeben
-    OutFooter();
-
-    // Deinitialisierung
-    pStrm = 0;
-
-    return 0;
-}
-
-/*  */
-
+/*
 void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
 {
     // <HTML>
@@ -341,166 +286,7 @@ void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
 
 //! OutScript();            // Hier fehlen noch die Scripten im Header
 }
-
-/*  */
-
-void SfxFrameHTMLWriter::Out_FrameSetDescriptor(
-    const SfxFrameSetDescriptor *pFSet, BOOL bFlatten, SfxFrame* pTopFrame,
-    rtl_TextEncoding eDestEnc, String *pNonConvertableChars )
-{
-    USHORT i, j;
-
-    ByteString aRows, aCols;        // die Rows/Cols-Spezifikationen
-
-    // aus der ersten Line eine ROWS/COLS-Spezifikation erstellen
-    ByteString aSpec;
-    USHORT nFrames = pFSet->GetFrameCount();
-    for( i=0; i<nFrames; i++ )
-    {
-        const SfxFrameDescriptor* pFrame = pFSet->GetFrame( i );
-
-        if( i>0 )
-            aSpec += ',';
-
-        if ( pFrame->GetWidth() != 1 || pFrame->GetSizeSelector() != SIZE_REL )
-            aSpec +=
-                ByteString::CreateFromInt32( (sal_Int32)pFrame->GetWidth() );
-        switch( pFrame->GetSizeSelector() )
-        {
-            case    SIZE_PERCENT:   aSpec += '%';   break;
-            case    SIZE_REL:       aSpec += '*';   break;
-        }
-    }
-    if( pFSet->IsColSet() )
-        aCols = aSpec;
-    else
-        aRows = aSpec;
-
-    // <FRAMESET> ausgeben
-    ByteString sOut( '<' );
-    sOut += sHTML_frameset;
-
-    // ROWS/COLS, wie zuvor gesetzt
-    if( aRows.Len() )
-        ((((sOut += ' ') += sHTML_O_rows) += "=\"") += aRows) += '\"';
-    if( aCols.Len() )
-        ((((sOut += ' ') += sHTML_O_cols) += "=\"") += aCols) += '\"';
-
-    // frame border (MS+Netscape-Erweiterung)
-    if ( pFSet->IsFrameBorderSet() )
-    {
-        const sal_Char * pStr =
-            pFSet->IsFrameBorderOn() ? sHTML_SC_yes : sHTML_SC_no;
-        if( pStr )
-            (((sOut += ' ') += sHTML_O_frameborder) += '=') += pStr;
-    }
-
-    // frame spacing (MS-Erweiterung), nur wenn es gesetzt ist
-    // MBA: jetzt in Netscape-Syntax!
-    if ( pFSet->IsFrameSpacingSet() )
-    {
-        long nFrameSpacing = pFSet->GetFrameSpacing();
-        (((sOut += ' ') += sHTML_O_border) += '=')
-            += ByteString::CreateFromInt32( nFrameSpacing );
-    }
-
-    OutNestSpace();
-
-    // frame color (Netscape-Erweiterung)
-    if ( pFSet->GetWallpaper() )
-    {
-        ((sOut += ' ') += sHTML_O_bordercolor) += '=';
-        Strm() << sOut.GetBuffer();
-        HTMLOutFuncs::Out_Color( Strm(), pFSet->GetWallpaper()->GetColor(), eDestEnc );
-    }
-    else
-        Strm() << sOut.GetBuffer();
-
-    if ( pFSet->IsRootFrameSet() )
-    {
-        SfxEventConfiguration* pECfg = SFX_APP()->GetEventConfig();
-        SvxMacroTableDtor *pMacTable =
-            pECfg ? pECfg->GetDocEventTable( pDoc ) : 0;
-
-        if( pMacTable && pMacTable->Count() )
-            HTMLOutFuncs::Out_Events( Strm(), *pMacTable, aFrameSetEventTable,
-                              FALSE, eDestEnc ); // BOOL - BASIC schreiben oder nicht
-    }
-
-    Strm() << '>' << sNewLine;
-
-    nNestCnt++;     // jetzt sind wir eine Ebene tiefer
-
-    nFrames = pFSet->GetFrameCount();
-    for( j=0; j<nFrames; j++ )
-    {
-        // wenn der Frame in Wirklichkeit ein Frameset ist, geben wir das
-        // Frameset aus und sind fertig
-        SfxFrameDescriptor* pDesc = pFSet->GetFrame(j);
-        SfxFrameSetDescriptor* pSet = pDesc->GetFrameSet();
-        if( pSet && !pSet->IsRootFrameSet() )
-        {
-            Out_FrameSetDescriptor( pSet, bFlatten, pTopFrame, eDestEnc, pNonConvertableChars );
-        }
-        else
-        {
-            OutNestSpace();
-            ByteString sOut( '<' );
-            sOut += sHTML_frame;
-            Strm() << sOut.GetBuffer();
-            Out_FrameDescriptor( Strm(), pDesc, bFlatten, pTopFrame, eDestEnc, pNonConvertableChars );
-            Strm() << '>' << sNewLine;
-        }
-    }
-
-    nNestCnt--;     // und wieder eine Ebene hoeher
-
-    OutNestSpace();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_frameset, FALSE ) << sNewLine;
-}
-
-String SfxFrameHTMLWriter::CreateDataURL(
-    SfxFrameSetObjectShell *pDoc, const SfxFrameSetDescriptor* pSet,
-    SfxFrame* pTopFrame )
-{
-    SvMemoryStream aStream;
-    SfxFrameHTMLWriter().Write(
-        pDoc, aStream, pSet, TRUE, pTopFrame );
-    // TODO: MAX_STRLEN or USHRT_MAX?
-    ByteString aData( (sal_Char*)aStream.GetData(), (USHORT) Min(
-        (ULONG)USHRT_MAX, aStream.Tell()) );
-    String sEncoded(
-        INetURLObject::encode( aData, INetURLObject::PART_URIC, '%',
-                               INetURLObject::ENCODE_ALL ) );
-    String aURL( String::CreateFromAscii("data:text/html,") );
-    aURL += sEncoded;
-    return aURL;
-}
-
-
-String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
-{
-    String aRet;
-    SfxObjectShell* pShell = pFrame->GetCurrentDocument();
-    SfxViewShell* pView = pFrame->GetCurrentViewFrame()->GetViewShell();
-    if( pView && !pView->IsImplementedAsFrameset_Impl() )
-    {
-        SfxFrameSetViewShell* pFShell = PTR_CAST( SfxFrameSetViewShell, pView );
-        if( pFShell && pFShell->GetDescriptor()->CheckContent() )
-        {
-            SfxFrameSetObjectShell *pFObjShell = PTR_CAST( SfxFrameSetObjectShell, pShell );
-            aRet = CreateDataURL( pFObjShell, pFShell->GetDescriptor(), pFrame );
-        }
-    }
-
-    if( !aRet.Len() && pShell )
-    {
-        aRet = pShell->GetMedium()->GetName();
-//!(dv)     CntAnchor::ToPresentationURL( aRet );
-    }
-
-    return aRet;
-}
+*/
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
     SvStream& rOut, const SfxFrameDescriptor *pFrame, BOOL bFlatten,
@@ -510,18 +296,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
 
     ByteString sOut;
 
-    String aURL;
-    if( pFSet && pFSet->IsRootFrameSet() && pFSet->CheckContent() && bFlatten)
-    {
-        SfxFrame* pSubFrame = pTopFrame->SearchFrame_Impl(
-            pFrame->GetItemId(), TRUE );
-        SfxFrameSetObjectShell* pSh =
-            (SfxFrameSetObjectShell*)
-            ( pSubFrame ? pSubFrame->GetCurrentDocument() : 0 );
-        if( pSh )
-            aURL = CreateDataURL( pSh, pFSet, pTopFrame );
-    }
-    if( !aURL.Len() ) aURL = bFlatten ?
+    String aURL = bFlatten ?
         pFrame->GetActualURL().GetMainURL( INetURLObject::DECODE_TO_IURI ) :
         pFrame->GetURL().GetMainURL( INetURLObject::DECODE_TO_IURI );
     if( aURL.Len() )
@@ -584,6 +359,19 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
     }
     else
         rOut << sOut.GetBuffer();
+}
+
+String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
+{
+    String aRet;
+    SfxObjectShell* pShell = pFrame->GetCurrentDocument();
+    if( !aRet.Len() && pShell )
+    {
+        aRet = pShell->GetMedium()->GetName();
+//!(dv)     CntAnchor::ToPresentationURL( aRet );
+    }
+
+    return aRet;
 }
 
 
