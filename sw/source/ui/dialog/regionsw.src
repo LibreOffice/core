@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:04:38 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
     Text [ finnish ] = "~Piilotettu" ; \
     Text [ danish ] = "Skjul" ; \
     Text [ french ] = "~Masquer" ; \
-    Text [ swedish ] = "Döl~j" ; \
+    Text [ swedish ] = "D~ölj" ; \
     Text [ dutch ] = "~Verbergen" ; \
     Text [ spanish ] = "~Ocultar" ; \
     Text [ english_us ] = "H~idden" ; \
@@ -126,7 +126,7 @@
     Text [ spanish ] = "Con ~condición" ; \
     Text [ french ] = "Sous ~condition" ; \
     Text [ dutch ] = "~Met conditie" ; \
-    Text [ swedish ] = "~Med villkor" ; \
+    Text [ swedish ] = "Med v~illkor" ; \
     Text [ danish ] = "Med betingelse" ; \
     Text [ portuguese ] = "~Com condição" ; \
     Text [ portuguese_brazilian ] = "M~it Bedingung" ; \
@@ -344,7 +344,7 @@
     Text[ russian ] = "Ïàğîëåì";    \
     Text[ greek ] = "With password";    \
     Text[ dutch ] = "~Met wachtwoord";  \
-    Text[ french ] = "Avec ~mot de passe";  \
+    Text[ french ] = "Avec mot de passe";   \
     Text[ spanish ] = "~Con contraseña";    \
     Text[ finnish ] = "~Mit Passwort";  \
     Text[ italian ] = "With password";  \
@@ -354,7 +354,7 @@
     Text[ portuguese_brazilian ] = "With password"; \
     Text[ japanese ] = "Êß½Ü°ÄŞ‚ğg—p"; \
     Text[ korean ] = "With password";   \
-    Text[ chinese_simplified ] = "²ÉÓÃÃÜÂë";    \
+    Text[ chinese_simplified ] = "Ê¹ÓÃÃÜÂë";    \
     Text[ chinese_traditional ] = "ªş¥[±K½X";   \
     Text[ turkish ] = "With password";  \
     Text[ arabic ] = "With password";   \
@@ -789,15 +789,15 @@ InfoBox REG_WRONG_PASSWORD
     Message [ english_us ] = "The password entered is invalid." ;
     Message [ italian ] = "È stata impostata una password errata" ;
     Message [ spanish ] = "Se empleó una contraseña falsa." ;
-    Message [ french ] = "Le mot de passe indiqué est incorrect." ;
-    Message [ swedish ] = "Det inmatade lösenordet är felaktigt" ;
+    Message [ french ] = "Le mot de passe saisi n'est pas correct." ;
+    Message [ swedish ] = "Det angivna lösenordet är felaktigt." ;
     Message [ danish ] = "Den indtastede adgangskode er forkert." ;
     Message [ portuguese ] = "A senha especificada está errada." ;
     Message [ portuguese_brazilian ] = "Es wurde ein falsches Passwort gesetzt" ;
-    Message[ chinese_simplified ] = "ÊäÈëµÄÃÜÂë´íÎó¡£";
+    Message[ chinese_simplified ] = "ÊäÈëÁËÒ»¸ö´íÎóµÄÃÜÂë¡£";
     Message[ russian ] = "Ââåäåí íåïğàâèëüíûé ïàğîëü.";
-    Message[ polish ] = "Zosta³o wpisane nieprawid³owe has³o.";
-    Message[ japanese ] = "“ü—Í‚³‚ê‚½Êß½Ü°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
+    Message[ polish ] = "Wpisano nieprawid³owe has³o.";
+    Message[ japanese ] = "“ü—Í‚µ‚½Êß½Ü°ÄŞ‚Í³‚µ‚­‚ ‚è‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¿é¤Jªº±K½XµL®Ä¡C";
     Message[ arabic ] = "Êã ÅÏÎÇá ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ.";
     Message[ greek ] = "ÅéóáãùãŞ Üêõñïõ êùäéêïı ğñüóâáóçò.";
@@ -823,8 +823,8 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message [ dutch ] = "Er werd geen wachtwoord gedefinieerd." ;
     Message[ chinese_simplified ] = "»¹Î´Éè¶¨ÃÜÂë¡£";
     Message[ russian ] = "Ïàğîëü íå óñòàíîâëåí.";
-    Message[ polish ] = "Has³o nie zosta³o wpisane.";
-    Message[ japanese ] = "Êß½Ü°ÄŞ‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Message[ polish ] = "Brak has³a.";
+    Message[ japanese ] = "Êß½Ü°ÄŞ‚Íİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "ÁÙ¥¼³]©w±K½X¡C";
     Message[ arabic ] = "áã íÊã ÅÏÎÇá ßáãÉ ÇáÓÑ.";
     Message[ greek ] = "Äåí êáèïñßóôçêå êùäéêüò ğñüóâáóçò.";
@@ -1823,3 +1823,4 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
