@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scabstdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 11:36:44 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,12 @@ public:
     virtual void    FillLabelData( LabelData& rLabelData ) const = 0;
 };
 
+class AbstractScDPShowDetailDlg : public VclAbstractDialog  //add for ScDPShowDetailDlg
+{
+public:
+    virtual String  GetDimensionName() const = 0;
+};
+
 class AbstractScNewScenarioDlg : public VclAbstractDialog  //add for ScNewScenarioDlg
 {
 public:
@@ -412,6 +418,10 @@ public:
                                                                 const ScDPFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout ) = 0;
+
+    virtual AbstractScDPShowDetailDlg * CreateScDPShowDetailDlg( Window* pParent, const ResId& rResId,
+                                                                ScDPObject& rDPObj,
+                                                                USHORT nOrient ) = 0;
 
     virtual AbstractScNewScenarioDlg * CreateScNewScenarioDlg ( Window* pParent, const String& rName, //add for ScNewScenarioDlg
                                                                 const ResId& rResId,
