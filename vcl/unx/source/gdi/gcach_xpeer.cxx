@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:57:11 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <rtl/ustring.hxx>
 #include <osl/module.h>
+#include <osl/thread.h>
 using namespace rtl;
 
 #include <gcach_xpeer.hxx>
@@ -138,7 +139,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     if( !pRenderLib ) {
 #ifdef DEBUG
         fprintf( stderr, "Display can do XRender, but no %s installed.\n"
-            "Please install for improved display performance\n", xrenderLibraryName.getStr() );
+            "Please install for improved display performance\n", OUStringToOString( xrenderLibraryName.getStr(), osl_getThreadTextEncoding() ).getStr() );
 #endif
         return;
     }
@@ -296,12 +297,12 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
 
         case XRENDER_KIND:
             {
+#if 0   // TODO: reenable when it works without problems
                 Glyph nGlyphId = (Glyph)rGlyphData.GetExtPointer();
                 // XRenderFreeGlyphs not implemented yet for version<=0.2
                 // #108209# disabled because of crash potential,
                 // the glyph leak is not too bad because they will
                 // be cleaned up when the glyphset is released
-#if 0   // TODO: reenable when it works without problems
                 if( nRenderVersion >= 0x05 )
                     (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
 #endif
@@ -331,7 +332,7 @@ bool X11GlyphPeer::ForcedAntialiasing( const ServerFont& rServerFont ) const
 GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
 {
     if( !mbUsingXRender )
-        return NULL;
+        return 0;
 
     GlyphSet aGlyphSet;
 
@@ -354,12 +355,12 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont )
                     rServerFont.SetExtended( XRENDER_KIND, (void*)aGlyphSet );
                 }
                 else
-                    aGlyphSet = NULL;
+                    aGlyphSet = 0;
             }
             break;
 
         default:
-            aGlyphSet = NULL;
+            aGlyphSet = 0;
             break;
     }
 
