@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:20:39 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1303,8 +1303,8 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::
 //  XPrintable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter)
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
+
 {
     // object already disposed?
     if ( impl_isDisposed() )
@@ -1316,13 +1316,13 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
     if ( !pViewFrm )
         return;
-    SfxViewShell *pViewSh = pViewFrm->GetViewShell();
-    SfxPrinter *pPrinter = pViewSh->GetPrinter(sal_True);
+    pViewSh = pViewFrm->GetViewShell();
+    pPrinter = pViewSh->GetPrinter(sal_True);
     if ( !pPrinter )
         return;
 
     // new Printer-Name available?
-    sal_uInt16 nChangeFlags = 0;
+    nChangeFlags = 0;
     sal_Int32 lDummy;
     for ( int n = 0; n < rPrinter.getLength(); ++n )
     {
@@ -1414,9 +1414,18 @@ void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
     while ( pDocPrinter->IsPrinting() )
         Application::Yield();
+}
 
+void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter)
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    SfxViewShell* pViewSh = NULL;
+    SfxPrinter* pPrinter = NULL;
+    sal_uInt16 nChangeFlags = 0;
+    impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
     // set new printer
-    pViewSh->SetPrinter( pPrinter, nChangeFlags );
+    if ( pViewSh && pPrinter )
+        pViewSh->SetPrinter( pPrinter, nChangeFlags );
 }
 
 //________________________________________________________________________________________________________
