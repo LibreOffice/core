@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:28:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 OResultSet::OResultSet(OStatement_Base* pStmt, connectivity::OSQLParseTreeIterator&   _aSQLIterator )
     : OResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-    ,m_aStatement((OWeakObject*)pStmt)
+    ,m_xStatement(*pStmt)
     ,m_nRowPos(0)
     ,m_xMetaData(NULL)
     ,m_nIsAlwaysFalseQuery(sal_False)
@@ -202,7 +202,7 @@ void OResultSet::disposing(void)
 
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    m_aStatement    = NULL;
+    m_xStatement    = NULL;
     m_xMetaData     = NULL;
     m_pParseTree    = NULL;
     m_xColumns      = NULL;
@@ -616,7 +616,7 @@ Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException
 
 
     OSL_TRACE("In/Out: OResultSet::getStatement" );
-    return m_aStatement.get();
+    return m_xStatement;
 }
 // -------------------------------------------------------------------------
 
