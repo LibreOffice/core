@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiltdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 08:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #define _PFILTDLG_CXX
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 
 //==================================================================
 
@@ -248,6 +252,13 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             ScQueryEntry& rEntry = theQueryData.GetEntry(i);
 
             String  aValStr      = *rEntry.pStr;
+            if (!rEntry.bQueryByString && aValStr == EMPTY_STRING)
+            {
+                if (rEntry.nVal == SC_EMPTYFIELDS)
+                    aValStr = aStrEmpty;
+                else if (rEntry.nVal == SC_NONEMPTYFIELDS)
+                    aValStr = aStrNotEmpty;
+            }
             USHORT  nCondPos     = (USHORT)rEntry.eOp;
             USHORT  nFieldSelPos = GetFieldSelPos( rEntry.nField );
 
@@ -255,6 +266,8 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
             aCondLbArr [i]->SelectEntryPos( nCondPos );
             UpdateValueList( i+1 );
             aValueEdArr[i]->SetText( aValStr );
+            if (aValStr == aStrEmpty || aValStr == aStrNotEmpty)
+                aCondLbArr[i]->Disable();
         }
         else
         {
