@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-04 17:28:20 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@
 #endif
 #ifndef _BINDCTX_HXX //autogen
 #include <so3/bindctx.hxx>
-#endif
-#ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -1147,7 +1144,11 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 
     rGA.SetMirrorFlags( nMirror );
 
-//  const SwCropGrf   &rSet.GetCropGrf(BOOL bInP) const
+    const SwCropGrf& rCrop = rSet.GetCropGrf();
+    rGA.SetCrop( TWIP_TO_MM100( rCrop.GetLeft() ),
+                 TWIP_TO_MM100( rCrop.GetTop() ),
+                 TWIP_TO_MM100( rCrop.GetRight() ),
+                 TWIP_TO_MM100( rCrop.GetBottom() ));
 
     const SwRotationGrf& rRotation = rSet.GetRotationGrf();
     rGA.SetRotation( rRotation.GetValue() );
