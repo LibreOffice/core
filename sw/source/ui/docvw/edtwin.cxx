@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 18:31:16 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 10:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,13 +981,17 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
+    if( !bIsDocReadOnly && !rSh.IsSelFrmMode() && !rSh.IsObjSelected() )
     {
-        USHORT nKey = 0;
-        USHORT tmp = rKEvt.GetKeyCode().GetCode();
-        if (tmp == KEY_UP) nKey = KEY_LEFT;
-        else if (tmp == KEY_DOWN) nKey = KEY_RIGHT;
-        else if (tmp == KEY_LEFT) nKey = KEY_DOWN;
-        else if (tmp == KEY_RIGHT) nKey = KEY_UP;
+        //JP 21.2.2002: must changed from switch to if, because the Linux
+        // compiler has problem with the code. Has to remove if the new general
+        // handler exist.
+        USHORT nKey = rKEvt.GetKeyCode().GetCode();
+        if( KEY_UP == nKey ) nKey = KEY_LEFT;
+        else if( KEY_DOWN == nKey ) nKey = KEY_RIGHT;
+        else if( KEY_LEFT == nKey ) nKey = KEY_DOWN;
+        else if( KEY_RIGHT == nKey ) nKey = KEY_UP;
+        else nKey = 0;
 
         if( nKey && rSh.IsInVerticalText() )
         {
@@ -1078,11 +1082,11 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     SW_KeyState eKeyState = bIsDocReadOnly ? KS_CheckDocReadOnlyKeys
                                            : KS_CheckKey,
                 eNextKeyState = KS_Ende;
+    BYTE nDir;
 
     while( KS_Ende != eKeyState )
     {
         SW_KeyState eFlyState = KS_KeyToView;
-        BYTE nDir;
 
         switch( eKeyState )
         {
