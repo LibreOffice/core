@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,7 @@ String RID_SVXSTR_LIGHTBLUE
     Text [ italian ] = "Blu chiaro" ;
     Text [ portuguese_brazilian ] = "Azul claro" ;
     Text [ portuguese ] = "Azul-claro" ;
-    Text [ french ] = "Bleu roi" ;
+    Text [ french ] = "Bleu clair" ;
     Text [ dutch ] = "Lichtblauw" ;
     Text [ spanish ] = "Azul claro" ;
     Text [ danish ] = "Lyseblе" ;
@@ -3130,7 +3130,7 @@ String RID_SVXSTR_GRDT8
     Text[ russian ] = "Эллипсоидная: серо-голубой/голубой";
     Text[ greek ] = "Еллейш. мрле-гксй/мрле бнпйч.";
     Text[ dutch ] = "Ellips grijsblauw/lichtblauw";
-    Text[ french ] = "Ellipsoпde gris bleu/bleu roi";
+    Text[ french ] = "Ellipsoпde gris bleu/bleu clair";
     Text[ spanish ] = "Elipsoide azul gris/azul claro";
     Text[ italian ] = "Ellissoidale blu-grigio/celeste";
     Text[ danish ] = "Ellipsoide blеgrе/lyseblе";
