@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostorageholder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:28:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& aEvent )
 
     uno::Sequence< uno::Any > aArg( 2 );
     aArg[0] <<= ::rtl::OUString( aTmpStorFile.GetURL() );
-    aArg[1] <<= embed::ElementModes::ELEMENT_READWRITE;
+    aArg[1] <<= embed::ElementModes::READWRITE;
     uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArg ), uno::UNO_QUERY );
 
     OSL_ENSURE( xTempStorage.is(), "Can't open storage!\n" );
