@@ -207,7 +207,7 @@ hedabu: ..\inc\pageitem.hxx %_DEST%\inc%_EXT%\svx\pageitem.hxx
 hedabu: ..\inc\paperinf.hxx %_DEST%\inc%_EXT%\svx\paperinf.hxx
 #hedabu: ..\inc\paragrph.hxx %_DEST%\inc%_EXT%\svx\paragrph.hxx
 hedabu: ..\inc\paraprev.hxx %_DEST%\inc%_EXT%\svx\paraprev.hxx
-#hedabu: ..\inc\passwd.hxx %_DEST%\inc%_EXT%\svx\passwd.hxx
+hedabu: ..\inc\passwd.hxx %_DEST%\inc%_EXT%\svx\passwd.hxx
 hedabu: ..\inc\pbinitem.hxx %_DEST%\inc%_EXT%\svx\pbinitem.hxx
 hedabu: ..\inc\pmdlitem.hxx %_DEST%\inc%_EXT%\svx\pmdlitem.hxx
 hedabu: ..\inc\pntobj3d.hxx %_DEST%\inc%_EXT%\svx\pntobj3d.hxx
