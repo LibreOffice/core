@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 17:34:41 $
+ *  last change: $Author: pluby $ $Date: 2000-10-23 15:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,7 +353,11 @@ namespace stoc_javavm {
         time_t clock = time(NULL);
         tzset();
         tmData = localtime(&clock);
+#ifdef MACOSX
+        char * p = tmData->tm_zone;
+#else
         char * p = tzname[0];
+#endif
 
         if (!strcmp(TIMEZONE, p))
             pjvm->pushProp(OUString::createFromAscii("user.timezone=ECT"));
