@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:59:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:51:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,11 @@ using namespace ::rtl;
 // - SVGExport -
 // -------------
 
-SVGExport::SVGExport( const Reference< XDocumentHandler >& rxHandler ) :
-        SvXMLExport( OUString(), rxHandler )
+// #110680#
+SVGExport::SVGExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const Reference< XDocumentHandler >& rxHandler )
+:   SvXMLExport( xServiceFactory, OUString(), rxHandler )
 {
     GetDocHandler()->startDocument();
 }
@@ -186,7 +189,10 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                 {
                     mbPresentation = Reference< XPresentationSupplier >( mxSrcDoc, UNO_QUERY ).is();
                     mpObjects = new ObjectMap;
-                    mpSVGExport = new SVGExport( xDocHandler );
+
+                    // #110680#
+                    // mpSVGExport = new SVGExport( xDocHandler );
+                    mpSVGExport = new SVGExport( xServiceFactory, xDocHandler );
 
                     if( nPageToExport < 0 || nPageToExport >= xDrawPages->getCount() )
                         nPageToExport = SVG_EXPORT_ALLPAGES;
