@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:10:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,7 @@
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
@@ -134,9 +132,6 @@
 #ifndef _HINTS_HXX
 #include <hints.hxx>
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
-#endif
 #ifndef _SWBASLNK_HXX
 #include <swbaslnk.hxx>
 #endif
@@ -149,6 +144,17 @@
 #ifndef _PAM_HXX
 #include <pam.hxx>
 #endif
+
+#include <unotools/ucbstreamhelper.hxx>
+
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+
+using namespace com::sun::star;
 
 // --------------------
 // SwGrfNode
@@ -242,7 +248,7 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                     nNewType = OBJECT_CLIENT_DDE;
                 else
                 {
-                    so3::MakeLnkName( sCmd, 0, rGrfName, aEmptyStr, &rFltName );
+                    sfx2::MakeLnkName( sCmd, 0, rGrfName, aEmptyStr, &rFltName );
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
@@ -464,7 +470,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
 
     short nRet = 0;
     bInSwapIn = TRUE;
-    SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
+    SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
     if( pLink )
     {
         if( GRAPHIC_NONE == aGrfObj.GetType() ||
@@ -494,31 +500,28 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             nRet = (short)aGrfObj.SwapIn();
         else
         {
-            SvStorageRef refRoot = GetDoc()->GetDocStorage();
-            ASSERT( refRoot.Is(), "Kein Storage am Doc" );
-            if( refRoot.Is() )
+            uno::Reference < embed::XStorage > refRoot = GetDoc()->GetDocStorage();
+            ASSERT( refRoot.is(), "Kein Storage am Doc" );
+            if( refRoot.is() )
             {
-                String aStrmName, aPicStgName;
-                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-                SvStorageRef refPics = aPicStgName.Len()
-                       ? refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE )
-                    : &refRoot;
-                if( refPics->GetError() == SVSTREAM_OK )
+                try
                 {
-                    SvStorageStreamRef refStrm =
-                        refPics->OpenStream( aStrmName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
-                    if( refStrm->GetError() == SVSTREAM_OK )
-                    {
-                        refStrm->SetVersion( refRoot->GetVersion() );
-                        if( bGraphic ? aGrfObj.SwapIn( refStrm )
-                                     : ImportGraphic( *refStrm ) )
-                            nRet = 1;
-                    }
+                    String aStrmName, aPicStgName;
+                    BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+                    uno::Reference < embed::XStorage > refPics = refRoot;
+                    if ( aPicStgName.Len() )
+                        refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
+                    uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
+                    SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
+                    if( bGraphic ? aGrfObj.SwapIn( pStrm ) : ImportGraphic( *pStrm ) )
+                        nRet = 1;
+                }
+                catch ( uno::Exception& )
+                {
                 }
             }
         }
+
         if( 1 == nRet )
         {
             SwMsgPoolItem aMsg( RES_GRAPHIC_SWAPIN );
@@ -590,6 +593,9 @@ void SwGrfNode::SaveCompleted( BOOL bClear )
 
 BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
 {
+    DBG_ERROR("Code removed!");
+    //TODO/LATER: seems that this code is for binary format only!
+    /*
     if( !refLink.Is() )
     {
         BOOL bGraphic = TRUE; // Does the graphic stream (if it exists)
@@ -747,8 +753,7 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
                         if( pRoot == pDocStg )
                         {
                             if( aGrfObj.SwapOut( refStrm ) &&
-                                ( refStrm->Commit() | refPics->Commit()
-                                  /*| pRoot->Commit()*/ ))
+                                ( refStrm->Commit() | refPics->Commit() ))
                             {
                                 SetStreamName( aDstStrmName );
                                 bRes = TRUE;
@@ -756,8 +761,7 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
                         }
                         else if( ((Graphic&)aGrfObj.GetGraphic()).
                                                 WriteEmbedded( *refStrm )
-                                && ( refStrm->Commit() | refPics->Commit()
-                                  /*| pRoot->Commit()*/ ))
+                                && ( refStrm->Commit() | refPics->Commit() ))
                         {
                             if( bIsSwapOut )
                                 aGrfObj.SwapOut();
@@ -771,7 +775,7 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
             // Da fehlte doch was?
             return FALSE;
         }
-    }
+    }*/
     // Schon drin im Storage oder Linked
     return TRUE;
 }
@@ -792,8 +796,8 @@ BOOL SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
             if( refLink->GetLinkManager()->GetDisplayNames(
                     refLink, &sApp, &sTopic, &sItem ) )
             {
-                ( *pFileNm = sApp ) += so3::cTokenSeperator;
-                ( *pFileNm += sTopic ) += so3::cTokenSeperator;
+                ( *pFileNm = sApp ) += sfx2::cTokenSeperator;
+                ( *pFileNm += sTopic ) += sfx2::cTokenSeperator;
                 *pFileNm += sItem;
                 pFilterNm->AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
                 bRet = TRUE;
@@ -850,7 +854,7 @@ BOOL SwGrfNode::RestorePersistentData()
 
 void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
 {
-    refLink = new SwBaseLink( so3::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
+    refLink = new SwBaseLink( sfx2::LINKUPDATE_ONCALL, FORMAT_GDIMETAFILE, this );
     SwDoc* pDoc = GetDoc();
     if( GetNodes().IsDocNodes() )
     {
@@ -859,8 +863,8 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
         {
             USHORT nTmp = 0;
             String sApp, sTopic, sItem;
-            sApp = rGrfName.GetToken( 0, so3::cTokenSeperator, nTmp );
-            sTopic = rGrfName.GetToken( 0, so3::cTokenSeperator, nTmp );
+            sApp = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
+            sTopic = rGrfName.GetToken( 0, sfx2::cTokenSeperator, nTmp );
             sItem = rGrfName.Copy( nTmp );
             pDoc->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
@@ -888,7 +892,7 @@ void SwGrfNode::ReleaseLink()
 //      if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
         {
             bInSwapIn = TRUE;
-            SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
+            SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
             pLink->SwapIn( TRUE, TRUE );
             bInSwapIn = FALSE;
         }
@@ -987,22 +991,26 @@ void SwGrfNode::DelStreamName()
     if( HasStreamName() )
     {
         // Dann die Grafik im Storage loeschen
-        SvStorage* pDocStg = GetDoc()->GetDocStorage();
-        if( pDocStg )
+        uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
+        if( xDocStg.is() )
         {
-            String aPicStgName, aStrmName;
-            GetStreamStorageNames( aStrmName, aPicStgName );
-            SvStorageRef refPics = aPicStgName.Len()
-                ? pDocStg->OpenStorage( aPicStgName,
-                    STREAM_READWRITE | STREAM_SHARE_DENYALL )
-                : pDocStg;
-            if( refPics->GetError() == SVSTREAM_OK )
+            try
             {
-                refPics->Remove( aStrmName );
-                refPics->Commit();
-                refPics->ResetError();  // Falls wir ReadOnly waren
+                String aPicStgName, aStrmName;
+                GetStreamStorageNames( aStrmName, aPicStgName );
+                uno::Reference < embed::XStorage > refPics = xDocStg;
+                if ( aPicStgName.Len() )
+                    refPics = xDocStg->openStorageElement( aPicStgName, embed::ElementModes::READWRITE );
+                refPics->removeElement( aStrmName );
+                uno::Reference < embed::XTransactedObject > xTrans( refPics, uno::UNO_QUERY );
+                if ( xTrans.is() )
+                    xTrans->commit();
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
+
         aGrfObj.SetUserData();
     }
 }
@@ -1054,32 +1062,29 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwGrfNode* pThis = (SwGrfNode*)this;
 
     Graphic aTmpGrf;
-    SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
+    SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
     if( !pLink && HasStreamName() )
     {
-        SvStorageRef refRoot = pThis->GetDoc()->GetDocStorage();
-        ASSERT( refRoot.Is(), "Kein Storage am Doc" );
-        if( refRoot.Is() )
+        uno::Reference < embed::XStorage > refRoot = pThis->GetDoc()->GetDocStorage();
+        if( refRoot.is() )
         {
-            String aStrmName, aPicStgName;
-            BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-            SvStorageRef refPics = aPicStgName.Len()
-                   ? refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE )
-                : &refRoot;
-            if( refPics->GetError() == SVSTREAM_OK )
+            try
             {
-                SvStorageStreamRef refStrm = refPics->OpenStream( aStrmName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
-                if( refStrm->GetError() == SVSTREAM_OK )
-                {
-                    refStrm->SetVersion( refRoot->GetVersion() );
-                    if( bGraphic )
-                        aTmpGrf.SwapIn( refStrm );
-                    else
-                        GetGrfFilter()->ImportGraphic( aTmpGrf, String(),
-                                                       *refStrm );
-                }
+                String aPicStgName, aStrmName;
+                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+                uno::Reference < embed::XStorage > refPics = refRoot;
+                if ( aPicStgName.Len() )
+                    refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
+                uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
+                SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
+                if( bGraphic )
+                    aTmpGrf.SwapIn( pStrm );
+                else
+                    GetGrfFilter()->ImportGraphic( aTmpGrf, String(),
+                                                    *pStrm );
+            }
+            catch ( uno::Exception& )
+            {
             }
         }
     }
@@ -1090,7 +1095,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
-    const so3::SvLinkManager& rMgr = GetDoc()->GetLinkManager();
+    const sfx2::SvLinkManager& rMgr = GetDoc()->GetLinkManager();
     String sFile, sFilter;
     if( IsLinkedFile() )
         rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
@@ -1098,7 +1103,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     {
         String sTmp1, sTmp2;
         rMgr.GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
-        so3::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
+        sfx2::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
         sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
     }
 
@@ -1143,42 +1148,41 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 
         if( HasStreamName() )
         {
-            SvStorageRef refRoot = GetDoc()->GetDocStorage();
-            ASSERT( refRoot.Is(), "Kein Storage am Doc" );
-            if( refRoot.Is() )
+            uno::Reference < embed::XStorage > refRoot = GetDoc()->GetDocStorage();
+            if( refRoot.is() )
             {
-                String aStrmName, aPicStgName;
-                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
-                SvStorageRef refPics = aPicStgName.Len()
-                    ? refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE )
-                    : &refRoot;
-                if( refPics->GetError() == SVSTREAM_OK )
+                try
                 {
-                    SvStream* pTmp = refPics->OpenStream( aStrmName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
+                    String aPicStgName, aStrmName;
+                    BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+                    uno::Reference < embed::XStorage > refPics = refRoot;
+                    if ( aPicStgName.Len() )
+                        refPics = refRoot->openStorageElement( aPicStgName, embed::ElementModes::READ );
+                    uno::Reference < io::XStream > refStrm = refPics->openStreamElement( aStrmName, embed::ElementModes::READ );
+                    SvStream* pStrm = utl::UcbStreamHelper::CreateStream( refStrm );
+
                     BOOL bDelStrm = TRUE;
-                    if( pTmp->GetError() == SVSTREAM_OK )
+                    if( pGrfObj->IsInSwapOut() )
+                        pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
+                    else
                     {
-                        if( pGrfObj->IsInSwapOut() )
-                            pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
+                        if( bGraphic )
+                        {
+                            pRet = pStrm;
+                            bDelStrm = FALSE;
+                        }
                         else
                         {
-                            if( bGraphic )
-                            {
-                                pRet = pTmp;
-                                bDelStrm = FALSE;
-                                pRet->SetVersion( refRoot->GetVersion() );
-                            }
-                            else
-                            {
-                                ImportGraphic( *pTmp );
-                                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
-                            }
+                            ImportGraphic( *pStrm );
+                            pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
                         }
                     }
+
                     if( bDelStrm )
-                        delete pTmp;
+                        delete pStrm;
+                }
+                catch ( uno::Exception& )
+                {
                 }
             }
         }
@@ -1195,12 +1199,12 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     {
         // alle Graphic-Links mit dem Namen aus dem Cache loeschen
         const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
-        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         String sFileNm;
         for( USHORT n = rLnks.Count(); n; )
         {
-            ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm ) &&
                 pLnk->ISA( SwBaseLink ) && 0 != ( pGrfNd =
