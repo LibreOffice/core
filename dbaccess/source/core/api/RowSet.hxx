@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 11:23:52 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,9 @@ namespace dbaccess
             throws an RowSetVetoException if one of the listeners vetoed
         */
         void    approveExecution() throw (::com::sun::star::sdb::RowSetVetoException, ::com::sun::star::uno::RuntimeException);
+
+        /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
+        void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, sal_Bool _bFireEvent = sal_True );
     };
 
 
@@ -451,6 +454,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.20  2001/04/06 11:23:52  oj
+    #85809# getStatement now returns null
+
     Revision 1.19  2001/04/06 10:19:13  oj
     no correct handling of approve listener
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 06:21:02 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 09:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     sal_Int32 nBT   = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
     // sdb.RowSet Properties
-    registerMayBeVoidProperty(PROPERTY_ACTIVECONNECTION,PROPERTY_ID_ACTIVECONNECTION,   PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT,  &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
+    registerMayBeVoidProperty(PROPERTY_ACTIVECONNECTION,PROPERTY_ID_ACTIVECONNECTION,   PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
     registerProperty(PROPERTY_DATASOURCENAME,       PROPERTY_ID_DATASOURCENAME,         PropertyAttribute::BOUND,       &m_aDataSourceName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_COMMAND,              PROPERTY_ID_COMMAND,                PropertyAttribute::BOUND,       &m_aCommand,            ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_COMMANDTYPE,          PROPERTY_ID_COMMANDTYPE,            PropertyAttribute::BOUND,       &m_nCommandType,        ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -324,7 +324,6 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarable,      ::getBooleanCppuType());
     registerProperty(PROPERTY_CANUPDATEINSERTEDROWS,PROPERTY_ID_CANUPDATEINSERTEDROWS,  nRT,                            &m_bCanUpdateInsertedRows,      ::getBooleanCppuType());
     // sdbc.ResultSet Properties
-    //  registerProperty(PROPERTY_CURSORNAME,           PROPERTY_ID_CURSORNAME,             PropertyAttribute::READONLY,    &m_aCursorName,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::TRANSIENT,   &m_nResultSetConcurrency,::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::TRANSIENT,   &m_nResultSetType,      ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_FETCHDIRECTION,       PROPERTY_ID_FETCHDIRECTION,         PropertyAttribute::TRANSIENT,   &m_nFetchDirection,     ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -367,52 +366,18 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     switch(nHandle)
     {
         case PROPERTY_ID_ACTIVECONNECTION:
-            // remove as event listener
-            try
-            {
-                Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
-                if (xComponent.is())
-                {
-                    Reference<XEventListener> xEvt;
-                    query_aggregation(this,xEvt);
-                    xComponent->removeEventListener(xEvt);
-                }
-            }
-            catch(Exception&) // doesn't matter here
-            {
-            }
-
-            // if we owned the connection, dispose it
-            if(m_bOwnConnection)
-                ::comphelper::disposeComponent(m_xActiveConnection);
+            // the new connection
+            m_aActiveConnection >>= m_xActiveConnection;
+            setActiveConnection(m_xActiveConnection, sal_False);
 
             m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
 
-            // we have to dispose our querycomposer
-            try
-            {
-                Reference< XComponent > xComp(m_xComposer, UNO_QUERY);
-                if (xComp.is())
-                    xComp->dispose();
-                m_xComposer = NULL;
-            }
-            catch(Exception&) // doesn't matter here
-            {
-            }
-
-            ::cppu::extractInterface(m_xActiveConnection,m_aActiveConnection);
-            {
-                Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
-                if (xComponent.is())
-                {
-                    Reference<XEventListener> xEvt;
-                    query_aggregation(this,xEvt);
-                    xComponent->addEventListener(xEvt);
-                }
-            }
+            // the composer depends on the connection, do dispose the old composer
+            ::comphelper::disposeComponent(m_xComposer);
             break;
+
         case PROPERTY_ID_APPLYFILTER:
             m_bCreateStatement = sal_True;
             break;
@@ -704,8 +669,54 @@ void ORowSet::freeResources()
         m_aOldRow       = NULL;
     }
 }
-// -------------------------------------------------------------------------
 
+// -------------------------------------------------------------------------
+void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, sal_Bool _bFireEvent )
+{
+    if (_rxNewConn.get() == m_xActiveConnection.get())
+        // nothing to do
+        return;
+
+    // remove the event listener for the old connection
+    Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference<XEventListener> xListener;
+        query_aggregation(this, xListener);
+        xComponent->removeEventListener(xListener);
+    }
+
+    // if we owned the connection, dispose it
+    if(m_bOwnConnection)
+        ::comphelper::disposeComponent(m_xActiveConnection);
+
+    // for firing the PropertyChangeEvent
+    sal_Int32 nHandle = PROPERTY_ID_ACTIVECONNECTION;
+    Any aOldConnection; aOldConnection <<= m_xActiveConnection;
+    Any aNewConnection; aNewConnection <<= _rxNewConn;
+
+    // set the new connection
+    m_xActiveConnection = _rxNewConn;
+    if (m_xActiveConnection.is())
+        m_aActiveConnection <<= m_xActiveConnection;
+    else
+        m_aActiveConnection.clear();
+
+    // fire the event
+    if (_bFireEvent)
+        fire(&nHandle, &aOldConnection, &aNewConnection, 1, sal_False);
+
+    // register as event listener for the new connection
+    xComponent = Reference< XComponent >(m_xActiveConnection, UNO_QUERY);
+    if (xComponent.is())
+    {
+        Reference<XEventListener> xListener;
+        query_aggregation(this, xListener);
+        xComponent->addEventListener(xListener);
+    }
+}
+
+// -------------------------------------------------------------------------
 // ::com::sun::star::XEventListener
 void SAL_CALL ORowSet::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
@@ -716,15 +727,7 @@ void SAL_CALL ORowSet::disposing( const ::com::sun::star::lang::EventObject& Sou
         close();
         {
             MutexGuard aGuard( m_aMutex );
-            Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
-            if (xComponent.is())
-            {
-                Reference<XEventListener> xEvt;
-                query_aggregation(this,xEvt);
-                xComponent->removeEventListener(xEvt);
-            }
-            m_xActiveConnection = NULL;
-            m_aActiveConnection = Any();
+            setActiveConnection( Reference< XConnection >() );
         }
     }
 }
@@ -1687,7 +1690,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         // calc the connection to be used
         if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
             // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-            m_xActiveConnection = NULL;
+            setActiveConnection(Reference< XConnection >());
         calcConnection(_rxHandler);
         m_bRebuildConnOnExecute = sal_False;
 
@@ -1790,7 +1793,7 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
     // calc the connection to be used
     if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
         // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
-        m_xActiveConnection = NULL;
+        setActiveConnection(Reference< XConnection>());
 
     calcConnection(NULL);
     m_bRebuildConnOnExecute = sal_False;
@@ -2179,6 +2182,7 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
     MutexGuard aGuard(m_aMutex);
     if (!m_xActiveConnection.is())
     {
+        Reference< XConnection > xNewConn;
         if (m_aDataSourceName.len())
         {
             // is it a file url?
@@ -2191,15 +2195,14 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                     {
                         Reference< XCompletedConnection> xComplConn(Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(m_aDataSourceName), UNO_QUERY);
                         if(xComplConn.is())
-                            m_xActiveConnection = xComplConn->connectWithCompletion(_rxHandler);
+                            xNewConn = xComplConn->connectWithCompletion(_rxHandler);
                     }
                     else
                     {
                         Reference< XDataSource >  xDataSource(Reference< XNamingService > (xNamingContext, UNO_QUERY)->getRegisteredObject(m_aDataSourceName), UNO_QUERY);
                         if (xDataSource.is())
-                            m_xActiveConnection = xDataSource->getConnection(m_aUser, m_aPassword);
+                            xNewConn = xDataSource->getConnection(m_aUser, m_aPassword);
                     }
-                    m_bOwnConnection = sal_True;
                 }
                 catch (SQLException &e)
                 {
@@ -2211,14 +2214,9 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
                 }
             }
         }
-        // listen if the connection disappears
-        Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
-        if (xComponent.is())
-        {
-            Reference<XEventListener> xEvt;
-            query_aggregation(this,xEvt);
-            xComponent->addEventListener(xEvt);
-        }
+
+        setActiveConnection(xNewConn);
+        m_bOwnConnection = sal_True;
     }
     return m_xActiveConnection;
 }
