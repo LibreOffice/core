@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-11-05 19:06:24 $
+ *  last change: $Author: nn $ $Date: 2001-11-06 14:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2243,7 +2243,10 @@ void ScAttrArray::CopyArea( USHORT nStartRow, USHORT nEndRow, short nDy, ScAttrA
             rAttrArray.SetPatternArea(nDestStart,
                             Min((USHORT)(pData[i].nRow + nDy), nDestEnd), pNewPattern);
         }
-        nDestStart = Max(nDestStart, (USHORT)(pData[i].nRow + nDy + 1));
+
+        // when pasting from clipboard and skipping filtered rows, the adjusted end position
+        // can be negative
+        nDestStart = Max((short)nDestStart, (short)(pData[i].nRow + nDy + 1));
     }
 }
 
@@ -2283,7 +2286,10 @@ void ScAttrArray::CopyAreaSafe( USHORT nStartRow, USHORT nEndRow, short nDy, ScA
             rAttrArray.SetPatternAreaSafe(nDestStart,
                             Min((USHORT)(pData[i].nRow + nDy), nDestEnd), pNewPattern, FALSE);
         }
-        nDestStart = Max(nDestStart, (USHORT)(pData[i].nRow + nDy + 1));
+
+        // when pasting from clipboard and skipping filtered rows, the adjusted end position
+        // can be negative
+        nDestStart = Max((short)nDestStart, (short)(pData[i].nRow + nDy + 1));
     }
 }
 
