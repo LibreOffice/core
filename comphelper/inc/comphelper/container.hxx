@@ -2,9 +2,9 @@
  *
  *  $RCSfile: container.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 14:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _COMPHELPER_CONTAINER_HXX_
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 //.........................................................................
@@ -126,6 +126,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1.1.1  2000/09/29 11:28:15  fs
+ *  initial import
+ *
  *
  *  Revision 1.0 29.09.00 09:01:05  fs
  ************************************************************************/
