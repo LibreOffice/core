@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-30 16:41:23 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 13:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,24 +182,6 @@ Size WMFReader::ReadYXExt()
     short nW, nH;
     *pWMF >> nH >> nW;
     return Size( nW, nH );
-}
-
-// ------------------------------------------------------------------------
-
-Font WMFReader::GetUnicodeEscapeFont() const
-{
-    Font aCurrent = pOut->GetFont();
-    if ( nUnicodeEscapeFont == 1 )
-    {
-        aCurrent.SetName( String( ByteString( "StarSymbol" ), RTL_TEXTENCODING_UTF8 ) );
-        aCurrent.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-    }
-    else if ( nUnicodeEscapeFont == 2 )
-    {
-        aCurrent.SetName( String( ByteString( "OpenSymbol" ), RTL_TEXTENCODING_UTF8 ) );
-        aCurrent.SetCharSet( RTL_TEXTENCODING_MS_1252 );
-    }
-    return aCurrent;
 }
 
 // ------------------------------------------------------------------------
@@ -446,12 +428,6 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 String aText( pChar, nLength, pOut->GetCharSet() );
                 delete[] pChar;
                 Point aPosition( ReadYX() );
-                if ( aText.Len() == aUnicodeEscapeString.Len() )
-                {
-                    aText = aUnicodeEscapeString;
-                    pOut->SetFont( GetUnicodeEscapeFont() );
-                }
-                aUnicodeEscapeString = String();
                 pOut->DrawText( aPosition, aText );
             }
         }
@@ -486,13 +462,6 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 String aText( pChar, (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
                 nNewTextLen = aText.Len();                                              // less character (japanese version), so the
                 delete[] pChar;                                                         // dxAry will not fit
-
-                if ( aText.Len() == aUnicodeEscapeString.Len() )
-                {
-                    aText = aUnicodeEscapeString;
-                    pOut->SetFont( GetUnicodeEscapeFont() );
-                }
-                aUnicodeEscapeString = String();
 
                 if ( nNewTextLen )
                 {
@@ -881,23 +850,30 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                             switch( nEsc )
                             {
                                 case PRIVATE_ESCAPE_UNICODE :
-                                {
-                                    sal_uInt32 nStrLen = nEscLen >> 1;
-                                    if ( nStrLen )
+                                {   // we will use text instead of polygons only if we have the correct font
+                                    if ( aVDev.IsFontAvailable( pOut->GetFont().GetName() ) )
                                     {
-#ifdef __BIGENDIAN
-                                        String aUniString;
-                                        sal_Unicode* pUniString = aUniString.AllocBuffer( (sal_uInt16)nStrLen );
-                                        const sal_uInt8* pTmp = (sal_uInt8*)pData;
-                                        sal_uInt32 i;
-                                        for ( i = 0; i < nStrLen; i++, pTmp += 2 )
-                                            *pUniString++ = pTmp[ 0 ] | ( pTmp[ 1 ] << 8 );
-#else
-                                        String aUniString( (const sal_Unicode*)pData, (sal_uInt16)nStrLen );
-#endif
-                                        aUnicodeEscapeString = aUniString;
-                                        nUnicodeEscapeAction = nCurrentAction;
-                                        nUnicodeEscapeFont = nEscLen & 1 ? pData[ nStrLen << 1 ] : 0;
+                                        Point  aPt;
+                                        String aString;
+                                        sal_uInt32  i, nStringLen, nDXCount;
+                                        sal_Int32* pDXAry = NULL;
+                                        SvMemoryStream aMemoryStream( nEscLen );
+                                        aMemoryStream.Write( pData, nEscLen );
+                                        aMemoryStream.Seek( STREAM_SEEK_TO_BEGIN );
+                                        aMemoryStream >> aPt.X()
+                                                      >> aPt.Y()
+                                                      >> nStringLen;
+                                        sal_Unicode* pBuf = aString.AllocBuffer( (sal_uInt16)nStringLen );
+                                        for ( i = 0; i < nStringLen; i++ )
+                                            aMemoryStream >> pBuf[ i ];
+                                        aMemoryStream >> nDXCount;
+                                        if ( nDXCount )
+                                            pDXAry = new sal_Int32[ nDXCount ];
+                                        for  ( i = 0; i < nDXCount; i++ )
+                                            aMemoryStream >> pDXAry[ i ];
+                                        aMemoryStream >> nSkipActions;
+                                        pOut->DrawText( aPt, aString, pDXAry );
+                                        delete[] pDXAry;
                                     }
                                 }
                                 break;
@@ -1020,6 +996,7 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
     USHORT  nFunction;
     ULONG   nPos, nPercent, nLastPercent;
 
+    nSkipActions = 0;
     nCurrentAction = 0;
     nUnicodeEscapeAction = 0;
 
@@ -1067,8 +1044,10 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
                 {
                     pOut->ResolveBitmapActions( aBmpSaveList );
                 }
-
-                ReadRecordParams( nFunction );
+                if ( !nSkipActions )
+                    ReadRecordParams( nFunction );
+                else
+                    nSkipActions--;
                 pWMF->Seek( nPos += nRecSize * 2 );
             }
         }

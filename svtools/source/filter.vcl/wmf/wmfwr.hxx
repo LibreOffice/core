@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-19 10:57:50 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 13:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,9 +186,8 @@ private:
     void WMFRecord_DeleteObject(USHORT nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle & rRect);
     void WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_Int8* pData );
-    void WMFRecord_Escape_Unicode( const String& rStr );
+    sal_Bool WMFRecord_Escape_Unicode( const Point& rPoint, const String& rStr, const long * pDXAry );
     void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, const long * pDXAry);
-    void WMFRecord_ExtTextOut(const Point & rPoint, const String & rString, ULONG nWidth);
 
     void TrueExtTextOut(const Point & rPoint, const String & rString,
         const ByteString & rByteString, const long * pDXAry);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-30 16:40:55 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 13:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ struct LOGFONTW
 
 #define W_MFCOMMENT             15
 
-#define PRIVATE_ESCAPE_UNICODE  1
+#define PRIVATE_ESCAPE_UNICODE  2
 
 //============================ WMFReader ==================================
 
@@ -740,13 +740,13 @@ class WMFReader : public WinMtf
 {
 private:
 
+    VirtualDevice   aVDev;  // just for the purpose of "IsFontAvailable"
     UINT16          nUnitsPerInch;
     sal_uInt32      nRecSize;
 
+    sal_uInt32      nSkipActions;
     sal_uInt32      nCurrentAction;
     sal_uInt32      nUnicodeEscapeAction;
-    String          aUnicodeEscapeString;
-    sal_Int8        nUnicodeEscapeFont;
 
     // Liesst den Kopf der WMF-Datei
     BOOL            ReadHeader();
@@ -759,7 +759,6 @@ private:
     Rectangle       ReadRectangle();            // Liesst und konvertiert ein Rechteck
     Size            ReadYXExt();
     sal_Bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
-    Font            GetUnicodeEscapeFont() const;
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-30 16:42:05 $
+ *  last change: $Author: sj $ $Date: 2002-11-01 13:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@
 
 #define W_MFCOMMENT         15
 
-#define PRIVATE_ESCAPE_UNICODE  1
+#define PRIVATE_ESCAPE_UNICODE          2
 
 //========================== Methoden von WMFWriter ==========================
 
@@ -570,10 +570,15 @@ void WMFWriter::WMFRecord_Escape( sal_uInt32 nEsc, sal_uInt32 nLen, const sal_In
         *pWMF << (sal_uInt8)0;          // pad byte
 }
 
-void WMFWriter::WMFRecord_Escape_Unicode( const String& rUniStr )
+/* if return value is true, then a complete unicode string and also a polygon replacement has been written,
+    so there is no more action necessary
+*/
+sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String& rUniStr, const sal_Int32* pDXAry )
 {
-    sal_uInt32 i, nLen = rUniStr.Len();
-    if ( nLen )
+    sal_Bool bEscapeUsed = sal_False;
+
+    sal_uInt32 i, nStringLen = rUniStr.Len();
+    if ( nStringLen )
     {
         // first we will check if a comment is necessary
         if ( aSrcFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )     // symbol is always byte character, so there is no unicode loss
@@ -583,27 +588,57 @@ void WMFWriter::WMFRecord_Escape_Unicode( const String& rUniStr )
             ByteString aByteStr( rUniStr, aSrcFont.GetCharSet() );
             String     aUniStr2( aByteStr, aSrcFont.GetCharSet() );
             const sal_Unicode* pConversion = aUniStr2.GetBuffer();  // this is the unicode array after bytestring <-> unistring conversion
-            for ( i = 0; i < nLen; i++ )
+            for ( i = 0; i < nStringLen; i++ )
             {
                 if ( *pBuf++ != *pConversion++ )
                     break;
             }
-            if ( i != nLen )    // after conversion the characters are not original, so we will store the unicode string
-            {
-                pBuf = rUniStr.GetBuffer();
-                SvMemoryStream aMemoryStream( nLen * 2 );
-                for ( i = 0; i < nLen; i++ )
-                    aMemoryStream << *pBuf++;
-                sal_Char cUsedFont = 0;
-                if ( aSrcFont.GetName().EqualsIgnoreCaseAscii("starsymbol") )
-                    cUsedFont = 1;
-                else if ( aSrcFont.GetName().EqualsIgnoreCaseAscii("opensymbol") )
-                    cUsedFont = 2;
-                aMemoryStream << cUsedFont;
-                WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nLen * 2 + 1, (const sal_Int8*)aMemoryStream.GetData() );
+            if ( ( i != nStringLen ) || IsStarSymbol( aSrcFont.GetName() ) )    // after conversion the characters are not original, so we
+            {                                                                   // will store the unicode string and a polypoly replacement
+                Color aOldFillColor( aSrcFillColor );
+                Color aOldLineColor( aSrcLineColor );
+                aSrcFillColor = aSrcTextColor;
+                aSrcLineColor = Color( COL_TRANSPARENT );
+                SetLineAndFillAttr();
+                pVirDev->SetFont( aSrcFont );
+                std::vector<PolyPolygon> aPolyPolyVec;
+                if ( pVirDev->GetTextOutlines( aPolyPolyVec, rUniStr ) )
+                {
+                    sal_uInt32 nDXCount = pDXAry ? nStringLen : 0;
+                    sal_uInt32 nSkipActions = aPolyPolyVec.size();
+                    sal_Int32 nStrmLen = 8 +
+                                           + sizeof( nStringLen ) + ( nStringLen * 2 )
+                                           + sizeof( nDXCount ) + ( nDXCount * 4 )
+                                           + sizeof( nSkipActions );
+
+                    SvMemoryStream aMemoryStream( nStrmLen );
+                    Point aPt( pVirDev->LogicToLogic( rPoint, aSrcMapMode, aTargetMapMode ) );
+                    aMemoryStream << aPt.X()
+                                  << aPt.Y()
+                                  << nStringLen;
+                    for ( i = 0; i < nStringLen; i++ )
+                        aMemoryStream << rUniStr.GetChar( (sal_uInt16)i );
+                    aMemoryStream << nDXCount;
+                    for ( i = 0; i < nDXCount; i++ )
+                        aMemoryStream << pDXAry[ i ];
+                    aMemoryStream << nSkipActions;
+                    WMFRecord_Escape( PRIVATE_ESCAPE_UNICODE, nStrmLen, (const sal_Int8*)aMemoryStream.GetData() );
+
+                    std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
+                    while ( aIter != aPolyPolyVec.end() )
+                    {
+                        PolyPolygon aPolyPoly( *aIter++ );
+                        aPolyPoly.Move( rPoint.X(), rPoint.Y() );
+                        WMFRecord_PolyPolygon( aPolyPoly );
+                    }
+                    aSrcFillColor = aOldFillColor;
+                    aSrcLineColor = aOldLineColor;
+                    bEscapeUsed = sal_True;
+                }
             }
         }
     }
+    return bEscapeUsed;
 }
 
 void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
@@ -616,56 +651,9 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint,
         WMFRecord_TextOut(rPoint, rString);
         return;
     }
-    if (IsStarSymbol(aSrcFont.GetName()))
-    {
-        if (!pConvert)
-            pConvert = CreateStarSymbolToMSMultiFont();
-        xub_StrLen nIndex = 0;
-        String sEditable(rString);
-        Point aPoint(rPoint);
-        while (nIndex < sEditable.Len())
-        {
-            ByteString aString;
-            xub_StrLen nOldIndex = nIndex;
-            String sFont = pConvert->ConvertString(sEditable, nIndex);
-            if (sFont.Len())
-            {
-                aSrcFont.SetName(sFont);
-                SetAllAttr();
-                for (xub_StrLen i=nOldIndex; i < nIndex; i++)
-                    aString.Append(static_cast<sal_Char>(sEditable.GetChar(i)));
-            }
-            else
-            {
-                aSrcFont.SetName(String::CreateFromAscii("Times New Roman"));
-                SetAllAttr();
-                aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
-                    gsl_getSystemTextEncoding());
-            }
-            if (xub_StrLen nLen = (nIndex-nOldIndex) == 1)
-            {
-                ByteString sTemp;
-                sTemp.Append(static_cast<sal_Char>(
-                    sEditable.GetChar(nOldIndex)));
-                TrueTextOut(aPoint, sTemp);
-            }
-            else
-            {
-                String sTemp(sEditable, nOldIndex, nLen);
-                TrueExtTextOut(aPoint, sTemp, aString, pDXAry+nOldIndex);
-            }
-
-            for (xub_StrLen nI=nOldIndex;nI < nIndex;nI++)
-                aPoint.X() += pDXAry[nI];
-        }
-    }
-    else
-    {
-        SetAllAttr();
-        rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-        ByteString aByteString(rString, eChrSet);
-        TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
-    }
+    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
+    ByteString aByteString(rString, eChrSet);
+    TrueExtTextOut(rPoint,rString,aByteString,pDXAry);
 }
 
 void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
@@ -705,29 +693,6 @@ void WMFWriter::TrueExtTextOut( const Point & rPoint, const String & rString,
     delete[] pConvertedDXAry;
     UpdateRecordHeader();
 }
-
-
-void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rString, ULONG nWidth )
-{
-    USHORT nLen,i;
-    long * pDXAry;
-    sal_Int32   nNormSize;
-
-    pVirDev->SetFont( aSrcFont );
-    nLen = rString.Len();
-    pDXAry = new long[ nLen ];
-    nNormSize = pVirDev->GetTextArray( rString, pDXAry );
-    if ( nLen <= 1 || nNormSize ==(long)nWidth )
-        WMFRecord_ExtTextOut( rPoint, rString, (const long*)NULL );
-    else
-    {
-        for ( i = 0; i < ( nLen - 1 ); i++ )
-            pDXAry[ i ] = pDXAry[ i ] * ( (long)nWidth ) / nNormSize;
-        WMFRecord_ExtTextOut( rPoint, rString, pDXAry );
-    }
-    delete[] pDXAry;
-}
-
 
 void WMFWriter::WMFRecord_LineTo(const Point & rPoint)
 {
@@ -982,48 +947,9 @@ void WMFWriter::WMFRecord_StretchDIB( const Point & rPoint, const Size & rSize,
 
 void WMFWriter::WMFRecord_TextOut(const Point & rPoint, const String & rStr)
 {
-    if (IsStarSymbol(aSrcFont.GetName()))
-    {
-        if (!pConvert)
-            pConvert = CreateStarSymbolToMSMultiFont();
-        long *pDXAry = new long[rStr.Len()];
-        pVirDev->SetFont(aSrcFont);
-        pVirDev->GetTextArray(rStr, pDXAry);
-        xub_StrLen nIndex = 0;
-        String sEditable(rStr);
-        Point aPoint(rPoint);
-        while (nIndex < sEditable.Len())
-        {
-            ByteString aString;
-            xub_StrLen nOldIndex = nIndex;
-            String sFont = pConvert->ConvertString(sEditable, nIndex);
-            if (sFont.Len())
-            {
-                aSrcFont.SetName(sFont);
-                SetAllAttr();
-                for (xub_StrLen i=nOldIndex; i < nIndex; i++)
-                    aString.Append(static_cast<sal_Char>(sEditable.GetChar(i)));
-            }
-            else
-            {
-                aSrcFont.SetName(String::CreateFromAscii("Times New Roman"));
-                SetAllAttr();
-                aString = ByteString(sEditable, nOldIndex, nIndex - nOldIndex,
-                    gsl_getSystemTextEncoding());
-            }
-            TrueTextOut(aPoint, aString);
-            for (xub_StrLen nI=nOldIndex;nI < nIndex;nI++)
-                aPoint.X() += pDXAry[nI];
-        }
-        delete[] pDXAry;
-    }
-    else
-    {
-        SetAllAttr();
-        rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-        ByteString aString( rStr, eChrSet );
-        TrueTextOut(rPoint, aString);
-    }
+    rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
+    ByteString aString( rStr, eChrSet );
+    TrueTextOut(rPoint, aString);
 }
 
 void WMFWriter::TrueTextOut(const Point & rPoint, const ByteString& rString)
@@ -1323,8 +1249,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    WMFRecord_Escape_Unicode( aTemp );
-                    WMFRecord_TextOut( pA->GetPoint(), aTemp );
+                    SetAllAttr();
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, NULL ) )
+                        WMFRecord_TextOut( pA->GetPoint(), aTemp );
                 }
                 break;
 
@@ -1333,8 +1260,9 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
 
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    WMFRecord_Escape_Unicode( aTemp );
-                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
+                    SetAllAttr();
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pA->GetDXArray() ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetDXArray() );
                 }
                 break;
 
@@ -1342,8 +1270,22 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
-                    WMFRecord_Escape_Unicode( aTemp );
-                    WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pA->GetWidth() );
+
+                    sal_uInt16 nLen,i;
+                    sal_Int32 nNormSize;
+
+                    pVirDev->SetFont( aSrcFont );
+                    nLen = aTemp.Len();
+                    sal_Int32* pDXAry = nLen ? new long[ nLen ] : NULL;
+                    nNormSize = pVirDev->GetTextArray( aTemp, pDXAry );
+                    for ( i = 0; i < ( nLen - 1 ); i++ )
+                        pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
+                    if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
+                        delete pDXAry, pDXAry = NULL;
+                    SetAllAttr();
+                    if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry ) )
+                        WMFRecord_ExtTextOut( pA->GetPoint(), aTemp, pDXAry );
+                    delete[] pDXAry;
                 }
                 break;
 
