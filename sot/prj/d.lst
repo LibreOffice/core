@@ -1,5 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\sot
-hedabu: ..\inc\clsids.hxx %_DEST%\inc%_EXT%\sot\clsid.hxx
+hedabu: ..\inc\clsids.hxx %_DEST%\inc%_EXT%\sot\clsids.hxx
 hedabu: ..\inc\object.hxx %_DEST%\inc%_EXT%\sot\object.hxx
 hedabu: ..\inc\factory.hxx %_DEST%\inc%_EXT%\sot\factory.hxx
 hedabu: ..\inc\sotdata.hxx %_DEST%\inc%_EXT%\sot\sotdata.hxx
