@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:56:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,7 +442,6 @@ void SdrGluePointList::DrawAll(OutputDevice& rOut, const SdrObject* pObj) const
     if (nAnz!=0)
     {
         Color aBackPenColor(COL_WHITE);
-        Color aForePenColor(COL_LIGHTBLUE);
 
         FASTBOOL bMapMerk=rOut.IsMapModeEnabled();
         rOut.SetLineColor( aBackPenColor );
@@ -476,11 +475,13 @@ void SdrGluePointList::DrawAll(OutputDevice& rOut, const SdrObject* pObj) const
             rOut.EnableMapMode(bMapMerk);
         }
 
-        rOut.SetLineColor( aForePenColor );
-
         for (nNum=0; nNum<nAnz; nNum++)
         {
             const SdrGluePoint* pGP=GetObject(nNum);
+
+            // #i38892#
+            rOut.SetLineColor( pGP->IsUserDefined() ? COL_LIGHTBLUE : COL_BLACK );
+
             Point aPt(pObj!=NULL ? pGP->GetAbsolutePos(*pObj) : pGP->GetPos());
             aPt=rOut.LogicToPixel(aPt);
             rOut.EnableMapMode(FALSE);
