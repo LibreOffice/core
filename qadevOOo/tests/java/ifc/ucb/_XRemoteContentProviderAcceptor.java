@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRemoteContentProviderAcceptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:35 $
+ *  last change:$Date: 2003-05-27 12:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XRemoteContentProviderAcceptor;
 import com.sun.star.ucb.XRemoteContentProviderDoneListener;
 import lib.MultiMethodTest;
@@ -102,7 +103,7 @@ public class _XRemoteContentProviderAcceptor extends MultiMethodTest {
         boolean res = false;
 
         String[] template = new String[]{"file"};
-        res = oObj.addRemoteContentProvider("ContentID",tParam.getMSF(),
+        res = oObj.addRemoteContentProvider("ContentID",(XMultiServiceFactory)tParam.getMSF(),
             template,aDoneListener);
 
         tRes.tested("addRemoteContentProvider()",res);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDataContainer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:37 $
+ *  last change:$Date: 2003-05-27 12:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XDataContainer;
 import lib.MultiMethodTest;
 
@@ -144,7 +145,7 @@ public class _XDataContainer extends MultiMethodTest {
     * Has <b>OK</b> status if no runtime exseptions occured.
     */
     public void _setDataURL() {
-        dataURL = util.utils.getOfficeTemp(tParam.getMSF()) ;
+        dataURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
         oObj.setDataURL(dataURL) ;
         tRes.tested("setDataURL()", true) ;
     }

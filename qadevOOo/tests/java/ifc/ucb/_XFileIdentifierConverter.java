@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFileIdentifierConverter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:37 $
+ *  last change:$Date: 2003-05-27 12:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XFileIdentifierConverter;
 import lib.MultiMethodTest;
 
@@ -89,7 +90,7 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * same location). <p>
      */
     public void _getFileProviderLocality() {
-        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         log.println("Using: "+baseURL);
         int loc = oObj.getFileProviderLocality(baseURL);
         log.println("Getting: "+loc);
@@ -103,9 +104,9 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * representation of the URL passed. <p>
      */
     public void _getSystemPathFromFileURL() {
-        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         log.println("Using (Base): "+baseURL);
-        String sysURL = util.utils.getOfficeTempDirSys(tParam.getMSF());
+        String sysURL = util.utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF());
         log.println("Using (System): "+sysURL);
         String get = oObj.getSystemPathFromFileURL(baseURL);
         log.println("Getting: "+get);
@@ -120,9 +121,9 @@ public class _XFileIdentifierConverter extends MultiMethodTest {
      * of the system dependent path passed. <p>
      */
     public void _getFileURLFromSystemPath() {
-        String baseURL = util.utils.getOfficeTemp(tParam.getMSF());
+        String baseURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
         log.println("Using (Base): "+baseURL);
-        String sysURL = util.utils.getOfficeTempDirSys(tParam.getMSF());
+        String sysURL = util.utils.getOfficeTempDirSys((XMultiServiceFactory)tParam.getMSF());
         log.println("Using (System): "+sysURL);
         String get = oObj.getFileURLFromSystemPath(sysURL,sysURL);
         log.println("Getting: "+get);
