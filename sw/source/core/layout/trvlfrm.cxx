@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 15:31:47 $
+ *  last change: $Author: ama $ $Date: 2001-10-17 10:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,8 +1360,9 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
     //Damit wir uns nicht tot suchen (und vor allem nicht zuviel formatieren)
     //gehen wir schon mal von der richtigen Seite aus.
     SwLayoutFrm *pPage = (SwLayoutFrm*)Lower();
-    while ( pPage && pPage->Frm().Bottom() < rPoint.Y() )
-        pPage = (SwLayoutFrm*)pPage->GetNext();
+    if( pPage )
+        while( pPage->GetNext() && pPage->Frm().Bottom() < rPoint.Y() )
+            pPage = (SwLayoutFrm*)pPage->GetNext();
 
     const SwCntntFrm *pCnt = pPage ? pPage->ContainsCntnt() : ContainsCntnt();
     while ( pCnt && !pCnt->IsInDocBody() )

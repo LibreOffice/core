@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-26 15:56:01 $
+ *  last change: $Author: ama $ $Date: 2001-10-17 10:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1709,7 +1709,12 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     while( !rpEnd->IsCellFrm() )
         rpEnd = rpEnd->GetUpper();
     while ( rpEnd->Frm().Left() > nEX )
-        rpEnd = rpEnd->GetPrevLayoutLeaf();
+    {
+        const SwLayoutFrm* pTmp = rpEnd->GetPrevLayoutLeaf();
+        if( !pTmp || !pTab->IsAnLower( pTmp ) )
+            break;
+        rpEnd = pTmp;
+    }
 
     if( !bChkProtected )    // geschuetzte Zellen beachten ?
         return;
