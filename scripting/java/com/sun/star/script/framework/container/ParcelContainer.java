@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContainer.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 15:56:06 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 package com.sun.star.script.framework.container;
 
@@ -431,19 +430,15 @@ public class ParcelContainer implements XNameAccess
                 for ( int  i = 0; i < children.length; i++)
                 {
                     LogUtils.DEBUG("Processing " + children[ i ] );
-                    // TODO remove this once ucb workarounds are removed
-                    if (  !children[ i ].endsWith("this_is_a_dummy_stream_just_there_as_a_workaround_for_a_temporary_limitation_of_the_storage_api_implementation" ) )
+                    try
                     {
-                        try
-                        {
-                            loadParcel( children[ i ] );
-                        }
-                        catch (java.lang.Exception e)
-                        {
-                            // print an error message and move on to
-                            // the next parcel
-                            LogUtils.DEBUG("ParcelContainer.loadParcels caught " + e.getClass().getName() + " exception loading parcel " + children[i] + ": " + e.getMessage() );
-                        }
+                        loadParcel( children[ i ] );
+                    }
+                    catch (java.lang.Exception e)
+                    {
+                        // print an error message and move on to
+                        // the next parcel
+                        LogUtils.DEBUG("ParcelContainer.loadParcels caught " + e.getClass().getName() + " exception loading parcel " + children[i] + ": " + e.getMessage() );
                     }
                 }
             }
@@ -485,7 +480,7 @@ public class ParcelContainer implements XNameAccess
 
             ParcelDescriptor pd = new ParcelDescriptor();
             pd.setLanguage( language );
-            String parcelDesc = PathUtils.make_url( pathToParcel, "parcel-descriptor.xml" );
+            String parcelDesc = PathUtils.make_url( pathToParcel, ParcelDescriptor.PARCEL_DESCRIPTOR_NAME );
             XSimpleFileAccess2 xSFA2 = ( XSimpleFileAccess2 )
                 UnoRuntime.queryInterface( XSimpleFileAccess2.class, m_xSFA );
             if ( xSFA2 != null )
@@ -515,7 +510,7 @@ public class ParcelContainer implements XNameAccess
 
         String name = null;
 
-        String parcelDescUrl =  PathUtils.make_url( parcelUrl,  "parcel-descriptor.xml");
+        String parcelDescUrl =  PathUtils.make_url( parcelUrl,  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME );
         Parcel parcel = null;
 
         XInputStream xis = null;
