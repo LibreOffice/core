@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-27 09:07:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 class AccessibleStateSetHelperImpl
 {
