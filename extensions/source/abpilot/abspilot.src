@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2002-11-04 17:45:34 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ greek ] = "LDAP address data";
         Text[ dutch ] = "LDAP adresbestand";
         Text[ french ] = "Stock des adresses LDAP";
-        Text[ spanish ] = "LDAP Direcciones";
+        Text[ spanish ] = "Datos de las direcciones LDAP ";
         Text[ finnish ] = "LDAP address data";
         Text[ italian ] = "Dati Rubrica LDAP";
         Text[ danish ] = "LDAP-adressesæt";
@@ -245,7 +245,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ greek ] = "Outlook address book";
         Text[ dutch ] = "Outlook adresboek";
         Text[ french ] = "Carnet d'adresses Outlook";
-        Text[ spanish ] = "Libreta de direcciones Outlook";
+        Text[ spanish ] = "Libreta de direcciones de Outlook";
         Text[ finnish ] = "Outlook address book";
         Text[ italian ] = "Rubrica Outlook";
         Text[ danish ] = "Outlook-adressekartotek";
@@ -679,7 +679,7 @@ TabPage RID_PAGE_FINAL
         Text[ greek ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ dutch ] = "Dat waren alle benodigde gegevens voor de integratie van uw asdresgegevens in %PRODUCTNAME.\n\nVermeld nu nog de naam waaronder de gegevensbron in %PRODUCTNAME moet worden geregistreerd.";
         Text[ french ] = "Toutes les informations requises pour l'intégration des données des adresses dans %PRODUCTNAME sont à présent réunies.\n\nSaisissez maintenant le nom sous lequel enregistrer la source de données dans %PRODUCTNAME.";
-        Text[ spanish ] = "Ya se dispone de la información necesaria para integrar los datos de las direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que desee registrar la fuente de datos en %PRODUCTNAME.";
+        Text[ spanish ] = "Ahora dispone de la información necesaria para integrar los datos de las direcciones en %PRODUCTNAME.\n\nIndique ahora el nombre con el que desee registrar la fuente de datos en %PRODUCTNAME.";
         Text[ finnish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ italian ] = "Queste informazioni erano necessarie per integrare i dati della Rubrica in %PRODUCTNAME.\n\nIndicate ancora il nome con cui volete registrare la sorgente dati in %PRODUCTNAME.";
         Text[ danish ] = "Du har nu angivet alle de oplysninger, som er nødvendige for at integrere dine adressedata i %PRODUCTNAME.\n\nIndtast nu det navn, som datakilden skal registreres under i %PRODUCTNAME.";
@@ -772,7 +772,7 @@ Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";
     Text[ greek ] = "Data Source Title";
     Text[ dutch ] = "Titel gegevensbron";
     Text[ french ] = "Titre de la source de données";
-    Text[ spanish ] = "Título de fuentes de datos";
+    Text[ spanish ] = "Título de la fuente de datos";
     Text[ finnish ] = "Data Source Title";
     Text[ italian ] = "Sorgenti dati Titel";
     Text[ danish ] = "Datakildenavn";
@@ -1030,7 +1030,7 @@ String RID_STR_ABP_SUCCESS
     Text[ greek ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ dutch ] = "Uw exter adresboek werd met succes in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
     Text[ french ] = "Le carnet d'adresses externe a été enregistré dans %PRODUCTNAME.\nLes données des adresses sont à présent utilisables comme les autres sources de données.";
-    Text[ spanish ] = "Su libreta de direcciones externa se registró satisfactoriamente en %PRODUCTNAME.\nAhora puede usar sus datos de direcciones como cualquier otra fuente de datos.";
+    Text[ spanish ] = "La libreta de direcciones externa se ha registrado en %PRODUCTNAME.\nAhora puede utilizar los datos de las direcciones como cualquier otra fuente de datos.";
     Text[ finnish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
     Text[ italian ] = "La vostra Rubrica esterna è stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della Rubrica come qualsiasi altra sorgente dati.";
     Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemført.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
@@ -1057,6 +1057,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2002/11/04 17:45:34  rt
+ *  Merge SRX644: 04.11.02 - 18:41:19
+ *
  *  Revision 1.33  2002/10/28 08:55:31  fs
  *  #i8720# not referring to 'Netscape 6.x', but to 'Netscape' only
  *
