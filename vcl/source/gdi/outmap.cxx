@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:33:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 
 #include <limits.h>
 
-#define _SV_OUTMAP_CXX
-
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -80,7 +78,7 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-#ifndef _POLY_HXX
+#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
