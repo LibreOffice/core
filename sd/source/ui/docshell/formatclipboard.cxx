@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:08:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 11:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void SdFormatClipboard::Copy( ::sd::View& rDrawView, bool bPersistentCopy )
     this->Erase();
     m_bPersistentCopy = bPersistentCopy;
 
-    const SdrMarkList& rMarkList = rDrawView.GetMarkList();
+    const SdrMarkList& rMarkList = rDrawView.GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
         BOOL bOnlyHardAttr = FALSE;
@@ -180,7 +180,7 @@ void SdFormatClipboard::Copy( ::sd::View& rDrawView, bool bPersistentCopy )
 void SdFormatClipboard::Paste( ::sd::View& rDrawView
                               , bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
-    if( !rDrawView.HasMarked() )
+    if( !rDrawView.AreObjectsMarked() )
     {
         if(!m_bPersistentCopy)
             this->Erase();
@@ -191,7 +191,7 @@ void SdFormatClipboard::Paste( ::sd::View& rDrawView
 
     bool bWrongTargetType = false;
     {
-        const SdrMarkList& rMarkList = rDrawView.GetMarkList();
+        const SdrMarkList& rMarkList = rDrawView.GetMarkedObjectList();
         if( rMarkList.GetMarkCount() != 1 )
             bWrongTargetType = true;
         else
