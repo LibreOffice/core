@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-15 13:31:34 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 12:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2096,6 +2096,12 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
                 0x01070010,
                 0x01070140,
                 0x01070230,
+
+
+                0x01070350,
+                0x01070420,
+                0x01070500,
+
     // i2916
     // RndStdIds: FLY_AUTO_CNTNT: 1
     //
@@ -2111,10 +2117,6 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN)
                 0x01080423,
                 0x01080503,
 
-
-                0x01070350,
-                0x01070420,
-                0x01070500,
 
     // RndStdIds: FLY_IN_CNTNT: 2
     //
