@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 10:01:58 $
+ *  last change: $Author: kso $ $Date: 2000-12-05 14:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2528,11 +2528,16 @@ shell::remove( sal_Int32 CommandId,
 
 
 sal_Bool SAL_CALL
-shell::ensuredir( const rtl::OUString& aUnqPath )
+shell::ensuredir( const rtl::OUString& rUnqPath )
 {
-    sal_Int32 nPos = 4; // start after "//./"
+    rtl::OUString aUnqPath;
+    if ( rUnqPath[ rUnqPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+        aUnqPath = rUnqPath.copy( 0, rUnqPath.getLength() - 1 );
+    else
+        aUnqPath = rUnqPath;
 
-    while ( ( nPos != - 1 ) && ( nPos != aUnqPath.getLength() - 1 ) )
+    sal_Int32 nPos = 3; // start after "//./"
+    while ( nPos != - 1 )
     {
         nPos = aUnqPath.indexOf( '/', nPos + 1 );
 
@@ -2541,6 +2546,7 @@ shell::ensuredir( const rtl::OUString& aUnqPath )
                             : aUnqPath.copy( 0, nPos );
 
         osl::FileBase::RC nError = osl::Directory::create( aPath );
+
         if ( nError == osl::FileBase::E_None )
         {
             // created.
@@ -2548,7 +2554,15 @@ shell::ensuredir( const rtl::OUString& aUnqPath )
             notifyInsert( getContentEventListeners( aPrtPath ),aPath );
         }
         else if ( nError != osl::FileBase::E_EXIST )
+        {
+            // Workaround for drives.
+            if ( ( nError == osl::FileBase::E_ACCES ) &&
+                 ( aPath.getLength() == 6 ) &&
+                 ( aPath[ aPath.getLength() - 1 ] == sal_Unicode( ':' ) ) )
+                return true;
+
             return false;
+        }
     }
 
     return true;
