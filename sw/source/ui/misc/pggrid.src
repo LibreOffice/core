@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-04-16 10:59:43 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 164 , 8 ) ;
         Text = "Raster" ;
         Text [ english_us ] = "Grid" ;
+        Text[ portuguese ] = "Grid";
+        Text[ russian ] = "Grid";
+        Text[ greek ] = "Grid";
+        Text[ dutch ] = "Grid";
+        Text[ french ] = "Grille";
+        Text[ spanish ] = "Cuadr�cula";
+        Text[ finnish ] = "Grid";
+        Text[ italian ] = "Griglia";
+        Text[ danish ] = "Grid";
+        Text[ swedish ] = "Raster";
+        Text[ polish ] = "Grid";
+        Text[ portuguese_brazilian ] = "Grid";
+        Text[ japanese ] = "グリッド線";
+        Text[ korean ] = "문자 수/열 수 외곽선";
+        Text[ chinese_simplified ] = "格子线";
+        Text[ chinese_traditional ] = "格子線";
+        Text[ turkish ] = "Grid";
+        Text[ arabic ] = "Grid";
+        Text[ catalan ] = "Grid";
     };
     RadioButton     RB_NOGRID
     {
@@ -80,6 +99,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text = "Kein Raster" ;
         Text [ english_us ] = "No grid" ;
+        Text[ portuguese ] = "No grid";
+        Text[ russian ] = "No grid";
+        Text[ greek ] = "No grid";
+        Text[ dutch ] = "No grid";
+        Text[ french ] = "Aucune grille";
+        Text[ spanish ] = "Sin cuadr�cula";
+        Text[ finnish ] = "No grid";
+        Text[ italian ] = "Nessuna griglia";
+        Text[ danish ] = "No grid";
+        Text[ swedish ] = "Inget raster";
+        Text[ polish ] = "No grid";
+        Text[ portuguese_brazilian ] = "No grid";
+        Text[ japanese ] = "グリッド線なし";
+        Text[ korean ] = "문자 수/열 수 외곽선 없음";
+        Text[ chinese_simplified ] = "不使用格子线";
+        Text[ chinese_traditional ] = "不使用格子線";
+        Text[ turkish ] = "No grid";
+        Text[ arabic ] = "No grid";
+        Text[ catalan ] = "No grid";
     };
     RadioButton     RB_LINESGRID
     {
@@ -87,6 +125,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text = "Raster (nur Linien)" ;
         Text [ english_us ] = "Grid (lines only)" ;
+        Text[ portuguese ] = "Grid (lines only)";
+        Text[ russian ] = "Grid (lines only)";
+        Text[ greek ] = "Grid (lines only)";
+        Text[ dutch ] = "Grid (lines only)";
+        Text[ french ] = "Grille (uniquement les lignes)";
+        Text[ spanish ] = "Cuadr�cula (s�lo l�neas)";
+        Text[ finnish ] = "Grid (lines only)";
+        Text[ italian ] = "Griglia (solo linee)";
+        Text[ danish ] = "Grid (lines only)";
+        Text[ swedish ] = "Raster (bara linjer)";
+        Text[ polish ] = "Grid (lines only)";
+        Text[ portuguese_brazilian ] = "Grid (lines only)";
+        Text[ japanese ] = "グリッド線 (行グリッド線のみ)";
+        Text[ korean ] = "문자 수/열 수 외곽선(줄 만)";
+        Text[ chinese_simplified ] = "格子线(仅线条)";
+        Text[ chinese_traditional ] = "格子線(僅線條)";
+        Text[ turkish ] = "Grid (lines only)";
+        Text[ arabic ] = "Grid (lines only)";
+        Text[ catalan ] = "Grid (lines only)";
     };
     RadioButton     RB_CHARSGRID
     {
@@ -94,6 +151,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 158 , 10 ) ;
         Text = "Raster (Linien und Zeichen)" ;
         Text [ english_us ] = "Grid (lines and characters)" ;
+        Text[ portuguese ] = "Grid (lines and characters)";
+        Text[ russian ] = "Grid (lines and characters)";
+        Text[ greek ] = "Grid (lines and characters)";
+        Text[ dutch ] = "Grid (lines and characters)";
+        Text[ french ] = "Grille (lignes et caract�res)";
+        Text[ spanish ] = "Cuadr�cula (l�neas y caracteres)";
+        Text[ finnish ] = "Grid (lines and characters)";
+        Text[ italian ] = "Griglia (linee e caratteri)";
+        Text[ danish ] = "Grid (lines and characters)";
+        Text[ swedish ] = "Raster (linjer och tecken)";
+        Text[ polish ] = "Grid (lines and characters)";
+        Text[ portuguese_brazilian ] = "Grid (lines and characters)";
+        Text[ japanese ] = "グリッド線 (行グリッド線と文字グリッド線)";
+        Text[ korean ] = "문자 수/열 수 외곽선(줄과 문자)";
+        Text[ chinese_simplified ] = "格子线(线条和字符)";
+        Text[ chinese_traditional ] = "格子線(線條和字元)";
+        Text[ turkish ] = "Grid (lines and characters)";
+        Text[ arabic ] = "Grid (lines and characters)";
+        Text[ catalan ] = "Grid (lines and characters)";
     };
     Window          WN_EXAMPLE
     {
@@ -106,6 +182,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Rasterlayout" ;
         Text [ english_us ] = "Grid layout" ;
+        Text[ portuguese ] = "Grid layout";
+        Text[ russian ] = "Grid layout";
+        Text[ greek ] = "Grid layout";
+        Text[ dutch ] = "Grid layout";
+        Text[ french ] = "Quadrillage";
+        Text[ spanish ] = "Dise�o de cuadr�cula";
+        Text[ finnish ] = "Grid layout";
+        Text[ italian ] = "Layout griglia";
+        Text[ danish ] = "Grid layout";
+        Text[ swedish ] = "Rasterlayout";
+        Text[ polish ] = "Grid layout";
+        Text[ portuguese_brazilian ] = "Grid layout";
+        Text[ japanese ] = "グリッド線の設定";
+        Text[ korean ] = "문자 수/열 수 외곽선 설정";
+        Text[ chinese_simplified ] = "格子线版式";
+        Text[ chinese_traditional ] = "格子線版式";
+        Text[ turkish ] = "Grid layout";
+        Text[ arabic ] = "Grid layout";
+        Text[ catalan ] = "Grid layout";
     };
     FixedText       FT_LINESPERPAGE
     {
@@ -113,6 +208,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Text = "Zeilen pro Seite" ;
         Text [ english_us ] = "Lines per page" ;
+        Text[ portuguese ] = "Lines per page";
+        Text[ russian ] = "Lines per page";
+        Text[ greek ] = "Lines per page";
+        Text[ dutch ] = "Lines per page";
+        Text[ french ] = "Lignes par page";
+        Text[ spanish ] = "L�neas por p�gina";
+        Text[ finnish ] = "Lines per page";
+        Text[ italian ] = "Righe per pagina";
+        Text[ danish ] = "Lines per page";
+        Text[ swedish ] = "Rader per sida";
+        Text[ polish ] = "Lines per page";
+        Text[ portuguese_brazilian ] = "Lines per page";
+        Text[ japanese ] = "ページ単位の行数";
+        Text[ korean ] = "한 페이지 당 열 수";
+        Text[ chinese_simplified ] = "每页的行数";
+        Text[ chinese_traditional ] = "毎頁的行數";
+        Text[ turkish ] = "Lines per page";
+        Text[ arabic ] = "Lines per page";
+        Text[ catalan ] = "Lines per page";
     };
     NumericField    NF_LINESPERPAGE
     {
@@ -136,6 +250,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Basistextgr��e" ;
         Text [ english_us ] = "Base text size" ;
+        Text[ portuguese ] = "Base text size";
+        Text[ russian ] = "Base text size";
+        Text[ greek ] = "Base text size";
+        Text[ dutch ] = "Base text size";
+        Text[ french ] = "Taille du texte de base";
+        Text[ spanish ] = "Tama�o texto base";
+        Text[ finnish ] = "Base text size";
+        Text[ italian ] = "Dimensioni testo base";
+        Text[ danish ] = "Base text size";
+        Text[ swedish ] = "Storlek bastext";
+        Text[ polish ] = "Base text size";
+        Text[ portuguese_brazilian ] = "Base text size";
+        Text[ japanese ] = "対象文字列のサイズ";
+        Text[ korean ] = "기본 텍스트 크기";
+        Text[ chinese_simplified ] = "主文字的大小";
+        Text[ chinese_traditional ] = "主文字的大小";
+        Text[ turkish ] = "Base text size";
+        Text[ arabic ] = "Base text size";
+        Text[ catalan ] = "Base text size";
     };
     MetricField     MF_TEXTSIZE
     {
@@ -160,6 +293,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Text = "Zeichen pro Zeile" ;
         Text [ english_us ] = "Characters per line" ;
+        Text[ portuguese ] = "Characters per line";
+        Text[ russian ] = "Characters per line";
+        Text[ greek ] = "Characters per line";
+        Text[ dutch ] = "Characters per line";
+        Text[ french ] = "Caract�res par ligne";
+        Text[ spanish ] = "Caracteres por l�nea";
+        Text[ finnish ] = "Characters per line";
+        Text[ italian ] = "Caratteri per riga";
+        Text[ danish ] = "Characters per line";
+        Text[ swedish ] = "Tecken per rad";
+        Text[ polish ] = "Characters per line";
+        Text[ portuguese_brazilian ] = "Characters per line";
+        Text[ japanese ] = "行単位の文字数";
+        Text[ korean ] = "한 열당 문자 수";
+        Text[ chinese_simplified ] = "每行的字数";
+        Text[ chinese_traditional ] = "毎行的字數";
+        Text[ turkish ] = "Characters per line";
+        Text[ arabic ] = "Characters per line";
+        Text[ catalan ] = "Characters per line";
     };
     NumericField    NF_CHARSPERLINE
     {
@@ -183,6 +335,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Ruby-Textgr��e" ;
         Text [ english_us ] = "Ruby text size" ;
+        Text[ portuguese ] = "Ruby text size";
+        Text[ russian ] = "Ruby text size";
+        Text[ greek ] = "Ruby text size";
+        Text[ dutch ] = "Ruby text size";
+        Text[ french ] = "Taille du texte Ruby";
+        Text[ spanish ] = "Tama�o texto Ruby";
+        Text[ finnish ] = "Ruby text size";
+        Text[ italian ] = "Dimens. testo Ruby";
+        Text[ danish ] = "Ruby text size";
+        Text[ swedish ] = "Storlek ruby-text";
+        Text[ polish ] = "Ruby text size";
+        Text[ portuguese_brazilian ] = "Ruby text size";
+        Text[ japanese ] = "ルビ文字のサイズ";
+        Text[ korean ] = "루비 텍스트 크기";
+        Text[ chinese_simplified ] = "拼音文字的大小";
+        Text[ chinese_traditional ] = "注音符號的大小";
+        Text[ turkish ] = "Ruby text size";
+        Text[ arabic ] = "Ruby text size";
+        Text[ catalan ] = "Ruby text size";
     };
     MetricField     MF_RUBYSIZE
     {
@@ -207,6 +378,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Ruby-Text unter/links vom Basistext" ;
         Text [ english_us ] = "Ruby text below/left from base text" ;
+        Text[ portuguese ] = "Ruby text below/left from base text";
+        Text[ russian ] = "Ruby text below/left from base text";
+        Text[ greek ] = "Ruby text below/left from base text";
+        Text[ dutch ] = "Ruby text below/left from base text";
+        Text[ french ] = "Texte Ruby en bas/� gauche du texte de base";
+        Text[ spanish ] = "Texto Ruby debajo/a la izquierda del texto base";
+        Text[ finnish ] = "Ruby text below/left from base text";
+        Text[ italian ] = "Testo Ruby in basso/a sinistra dal testo base";
+        Text[ danish ] = "Ruby text below/left from base text";
+        Text[ swedish ] = "Ruby-text nedanf�r/till v�nster om bastext";
+        Text[ polish ] = "Ruby text below/left from base text";
+        Text[ portuguese_brazilian ] = "Ruby text below/left from base text";
+        Text[ japanese ] = "ルビ文字を対象文字列の下(横書き)または左(縦書き)に設定する";
+        Text[ korean ] = "기본 텍스트로부터 루비 텍스트를 아래/왼쪽";
+        Text[ chinese_simplified ] = "拼音文字在主文字的左下方";
+        Text[ chinese_traditional ] = "注音符號在主文字的左下方";
+        Text[ turkish ] = "Ruby text below/left from base text";
+        Text[ arabic ] = "Ruby text below/left from base text";
+        Text[ catalan ] = "Ruby text below/left from base text";
     };
     FixedLine       FL_DISPLAY
     {
@@ -214,6 +404,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Rasterdarstellung" ;
         Text [ english_us ] = "Grid display" ;
+        Text[ portuguese ] = "Grid display";
+        Text[ russian ] = "Grid display";
+        Text[ greek ] = "Grid display";
+        Text[ dutch ] = "Grid display";
+        Text[ french ] = "Repr�sentation de la grille";
+        Text[ spanish ] = "Representaci�n de la cuadr�cula";
+        Text[ finnish ] = "Grid display";
+        Text[ italian ] = "Vista griglia";
+        Text[ danish ] = "Grid display";
+        Text[ swedish ] = "Rastervisning";
+        Text[ polish ] = "Grid display";
+        Text[ portuguese_brazilian ] = "Grid display";
+        Text[ japanese ] = "グリッド線の表示";
+        Text[ korean ] = "문자 수/열 수 외곽선 표시";
+        Text[ chinese_simplified ] = "显示格子线";
+        Text[ chinese_traditional ] = "顯示格子線";
+        Text[ turkish ] = "Grid display";
+        Text[ arabic ] = "Grid display";
+        Text[ catalan ] = "Grid display";
     };
     CheckBox        CB_DISPLAY
     {
@@ -221,6 +430,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Text = "Raster anzeigen" ;
         Text [ english_us ] = "Display grid" ;
+        Text[ portuguese ] = "Display grid";
+        Text[ russian ] = "Display grid";
+        Text[ greek ] = "Display grid";
+        Text[ dutch ] = "Display grid";
+        Text[ french ] = "Afficher la grille";
+        Text[ spanish ] = "Mostrar cuadr�cula";
+        Text[ finnish ] = "Display grid";
+        Text[ italian ] = "Mostra griglia";
+        Text[ danish ] = "Display grid";
+        Text[ swedish ] = "Visa raster";
+        Text[ polish ] = "Display grid";
+        Text[ portuguese_brazilian ] = "Display grid";
+        Text[ japanese ] = "グリッド線を表示する";
+        Text[ korean ] = "문자 수/열 수 외곽선 표시";
+        Text[ chinese_simplified ] = "显示格子线";
+        Text[ chinese_traditional ] = "顯示格子線";
+        Text[ turkish ] = "Display grid";
+        Text[ arabic ] = "Display grid";
+        Text[ catalan ] = "Display grid";
     };
     CheckBox        CB_PRINT
     {
@@ -228,6 +456,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Text = "Raster ausdrucken" ;
         Text [ english_us ] = "Print grid" ;
+        Text[ portuguese ] = "Print grid";
+        Text[ russian ] = "Print grid";
+        Text[ greek ] = "Print grid";
+        Text[ dutch ] = "Print grid";
+        Text[ french ] = "Imprimer la grille";
+        Text[ spanish ] = "Imprimir cuadr�cula";
+        Text[ finnish ] = "Print grid";
+        Text[ italian ] = "Stampa griglia";
+        Text[ danish ] = "Print grid";
+        Text[ swedish ] = "Skriv ut raster";
+        Text[ polish ] = "Print grid";
+        Text[ portuguese_brazilian ] = "Print grid";
+        Text[ japanese ] = "グリッド線を印刷する";
+        Text[ korean ] = "문자 수/열 수 외곽선 인쇄";
+        Text[ chinese_simplified ] = "打印格子线";
+        Text[ chinese_traditional ] = "列印格子線";
+        Text[ turkish ] = "Print grid";
+        Text[ arabic ] = "Print grid";
+        Text[ catalan ] = "Print grid";
     };
     FixedText       FT_COLOR
     {
@@ -235,6 +482,25 @@ TabPage TP_TEXTGRID_PAGE
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Text = "Rasterfarbe" ;
         Text [ english_us ] = "Grid color" ;
+        Text[ portuguese ] = "Grid color";
+        Text[ russian ] = "Grid color";
+        Text[ greek ] = "Grid color";
+        Text[ dutch ] = "Grid color";
+        Text[ french ] = "Couleur de la grille";
+        Text[ spanish ] = "Color de la cuadr�cula";
+        Text[ finnish ] = "Grid color";
+        Text[ italian ] = "Colore griglia";
+        Text[ danish ] = "Grid color";
+        Text[ swedish ] = "Rasterf�rg";
+        Text[ polish ] = "Grid color";
+        Text[ portuguese_brazilian ] = "Grid color";
+        Text[ japanese ] = "グリッド線の色";
+        Text[ korean ] = "문자 수/열 수 외곽선 색";
+        Text[ chinese_simplified ] = "格子线的颜色";
+        Text[ chinese_traditional ] = "格子線的顔色";
+        Text[ turkish ] = "Grid color";
+        Text[ arabic ] = "Grid color";
+        Text[ catalan ] = "Grid color";
     };
     ListBox         LB_COLOR
     {
