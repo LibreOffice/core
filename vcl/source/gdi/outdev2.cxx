@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 14:22:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 10:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,65 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
             if ( pMaskBmp )
             {
-                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(), *pMaskBmp->ImplGetSalBitmap(), this );
+                // #4919452# reduce operation area to bounds of
+                // cliprect. since masked transparency involves
+                // creation of a large vdev and copying the screen
+                // content into that (slooow read from framebuffer),
+                // that should considerably increase performance for
+                // large bitmaps and small clippings.
+
+                // Note that this optimisation is a workaround for a
+                // Writer peculiarity, namely, to decompose background
+                // graphics into myriads of disjunct, tiny
+                // rectangles. That otherwise kills us here, since for
+                // transparent output, SAL always prepares the whole
+                // bitmap, if aPosAry contains the whole bitmap (and
+                // it's _not_ to blame for that).
+
+                // Note the call to ImplPixelToDevicePixel(), since
+                // aPosAry already contains the mnOutOff-offsets, they
+                // also have to be applied to the region
+                Rectangle aClipRegionBounds( ImplPixelToDevicePixel(maRegion).GetBoundRect() );
+
+                // TODO: Also respect scaling (that's a bit tricky,
+                // since the source points have to move fractional
+                // amounts (which is not possible, thus has to be
+                // emulated by increases copy area)
+                // const double nScaleX( aPosAry.mnDestWidth / aPosAry.mnSrcWidth );
+                // const double nScaleY( aPosAry.mnDestHeight / aPosAry.mnSrcHeight );
+
+                // for now, only identity scales allowed
+                if( !aClipRegionBounds.IsEmpty() &&
+                    aPosAry.mnDestWidth == aPosAry.mnSrcWidth &&
+                    aPosAry.mnDestHeight == aPosAry.mnSrcHeight )
+                {
+                    // now intersect dest rect with clip region
+                    aClipRegionBounds.Intersection( Rectangle( aPosAry.mnDestX,
+                                                               aPosAry.mnDestY,
+                                                               aPosAry.mnDestX + aPosAry.mnDestWidth - 1,
+                                                               aPosAry.mnDestY + aPosAry.mnDestHeight - 1 ) );
+
+                    // Note: I could theoretically optimize away the
+                    // DrawBitmap below, if the region is empty
+                    // here. Unfortunately, cannot rule out that
+                    // somebody relies on the side effects.
+                    if( !aClipRegionBounds.IsEmpty() )
+                    {
+                        aPosAry.mnSrcX += aClipRegionBounds.Left() - aPosAry.mnDestX;
+                        aPosAry.mnSrcY += aClipRegionBounds.Top() - aPosAry.mnDestY;
+                        aPosAry.mnSrcWidth = aClipRegionBounds.GetWidth();
+                        aPosAry.mnSrcHeight = aClipRegionBounds.GetHeight();
+
+                        aPosAry.mnDestX = aClipRegionBounds.Left();
+                        aPosAry.mnDestY = aClipRegionBounds.Top();
+                        aPosAry.mnDestWidth = aClipRegionBounds.GetWidth();
+                        aPosAry.mnDestHeight = aClipRegionBounds.GetHeight();
+                    }
+                }
+
+                mpGraphics->DrawBitmap( &aPosAry, *pImpBmp->ImplGetSalBitmap(),
+                                        *pMaskBmp->ImplGetSalBitmap(),
+                                        this );
 
                 // #110958# Paint mask to alpha channel. Luckily, the
                 // black and white representation of the mask maps to
