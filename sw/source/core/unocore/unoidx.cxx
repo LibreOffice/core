@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-06-27 13:48:31 $
+ *  last change: $Author: os $ $Date: 2001-07-12 10:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,38 +437,6 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
             {
                 OUString sNewName;
                 aValue >>= sNewName;
-                ShellResource* pShellRes = ViewShell::GetShellRes();
-                switch(eTOXType)
-                {
-                    case TOX_CONTENT :
-                        if(!sNewName.compareToAscii("Table of Contents"))
-                            sNewName = pShellRes->aTOXContentName;
-                    break;
-                    case TOX_INDEX  :
-                        if(!sNewName.compareToAscii("Alphabetical Index"))
-                            sNewName = pShellRes->aTOXIndexName;
-                    break;
-                    case TOX_USER:
-                        if(!sNewName.compareToAscii("User-Defined"))
-                            sNewName = pShellRes->aTOXUserName;
-                    break;
-                    case TOX_ILLUSTRATIONS:
-                        if(!sNewName.compareToAscii("Illustration Index"))
-                            sNewName = pShellRes->aTOXIllustrationsName;
-                    break;
-                    case TOX_OBJECTS:
-                        if(!sNewName.compareToAscii("Table of Objects"))
-                            sNewName = pShellRes->aTOXObjectsName;
-                    break;
-                    case TOX_TABLES:
-                        if(!sNewName.compareToAscii("Index of Tables"))
-                            sNewName = pShellRes->aTOXTablesName;
-                    break;
-                    case TOX_AUTHORITIES:
-                        if(!sNewName.compareToAscii("Bibliography"))
-                            sNewName = pShellRes->aTOXAuthoritiesName;
-                    break;
-                }
                 pTOXBase->SetTitle(sNewName);
             }
             break;
@@ -1652,7 +1620,7 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                     aMark.SetSecondaryKey(lcl_AnyToString(aValue));
                 break;
                 case WID_MAIN_ENTRY:
-                    aMark.SetMainEntry(*(sal_Bool*)aValue.getValue());
+                    aMark.SetMainEntry(lcl_AnyToBool(aValue));
                 break;
             }
 
@@ -1728,7 +1696,7 @@ void SwXDocumentIndexMark::setPropertyValue(const OUString& rPropertyName,
                 sUserIndexName = lcl_AnyToString(aValue);
             break;
             case WID_MAIN_ENTRY:
-                bMainEntry = *(sal_Bool*)aValue.getValue();
+                bMainEntry = lcl_AnyToBool(aValue);
             break;
         }
     }
@@ -2147,12 +2115,13 @@ void SwXIndexStyleAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
         throw IndexOutOfBoundsException();
     SwTOXBase* pTOXBase = bDescriptor ? &rParent.GetProperties_Impl()->GetTOXBase() :
             (SwTOXBaseSection*)pSectFmt->GetSection();
-    if(rElement.getValueType() != ::getCppuType((uno::Sequence<OUString>*)0))
-        throw IllegalArgumentException();
-    const uno::Sequence<OUString>* pSeq = (const uno::Sequence<OUString>*)rElement.getValue();
 
-    sal_uInt16 nStyles = pSeq->getLength();
-    const OUString* pStyles = pSeq->getConstArray();
+    uno::Sequence<OUString> aSeq;
+    if(!(rElement >>= aSeq))
+        throw IllegalArgumentException();
+
+    sal_uInt16 nStyles = aSeq.getLength();
+    const OUString* pStyles = aSeq.getConstArray();
     String sSetStyles;
     for(sal_uInt16 i = 0; i < nStyles; i++)
     {
@@ -2278,13 +2247,14 @@ void SwXIndexTokenAccess_Impl::replaceByIndex(sal_Int32 nIndex, const uno::Any& 
     if(nIndex < 0 ||
         (nIndex > pTOXBase->GetTOXForm().GetFormMax()))
             throw IndexOutOfBoundsException();
-    if(rElement.getValueType() != ::getCppuType((uno::Sequence<PropertyValues>*)0))
+
+    uno::Sequence<PropertyValues> aSeq;
+    if(!(rElement >>= aSeq))
         throw IllegalArgumentException();
-    const uno::Sequence<PropertyValues>* pSeq = (uno::Sequence<PropertyValues>* )rElement.getValue();
 
     String sPattern;
-    sal_uInt16 nTokens = pSeq->getLength();
-    const PropertyValues* pTokens = pSeq->getConstArray();
+    sal_uInt16 nTokens = aSeq.getLength();
+    const PropertyValues* pTokens = aSeq.getConstArray();
     for(sal_uInt16 i = 0; i < nTokens; i++)
     {
         const PropertyValue* pProperties = pTokens[i].getConstArray();
