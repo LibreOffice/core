@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:04:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,22 +608,33 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
         // remember the column selection
         SetToggledSelectedColumn(nSelectedColId);
 
-        if ( isAccessibleAlive( ) )
+        if ( isAccessibleAlive() )
         {
-            m_pImpl->commitTableEvent(  TABLE_MODEL_CHANGED,
-                                        com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
-                                                                                                    0,
-                                                                                                    GetRowCount(),
-                                                                                                    nOldPos,
-                                                                                                    nOldPos) ),
-                                        com::sun::star::uno::Any());
-            m_pImpl->commitTableEvent(  TABLE_MODEL_CHANGED,
-                                        com::sun::star::uno::makeAny( AccessibleTableModelChange(   INSERT,
-                                                                                                    0,
-                                                                                                    GetRowCount(),
-                                                                                                    nPos,
-                                                                                                    nPos) ),
-                                        com::sun::star::uno::Any());
+            commitTableEvent(
+                TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange(
+                            DELETE,
+                            0,
+                            GetRowCount(),
+                            nOldPos,
+                            nOldPos
+                        )
+                ),
+                Any()
+            );
+
+            commitTableEvent(
+                TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange(
+                            INSERT,
+                            0,
+                            GetRowCount(),
+                            nPos,
+                            nPos
+                        )
+                ),
+                Any()
+            );
         }
     }
 
@@ -694,11 +705,13 @@ void BrowseBox::SetColumnTitle( USHORT nItemId, const String& rTitle )
                 Invalidate( Rectangle( Point(0,0),
                     Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
         }
-        if ( isAccessibleAlive( ) )
+
+        if ( isAccessibleAlive() )
         {
-            m_pImpl->commitTableEvent(  TABLE_COLUMN_DESCRIPTION_CHANGED,
-                                    com::sun::star::uno::makeAny( sNew ),
-                                    com::sun::star::uno::makeAny( sOld ));
+            commitTableEvent(   TABLE_COLUMN_DESCRIPTION_CHANGED,
+                makeAny( sNew ),
+                makeAny( sOld )
+            );
         }
     }
 }
@@ -894,21 +907,26 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
             SetColumnWidth( GetColumnId( nPos - 1 ), LONG_MAX );
     }
 
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
+        commitTableEvent(
+            TABLE_MODEL_CHANGED,
+            makeAny( AccessibleTableModelChange(    DELETE,
+                                                    0,
+                                                    GetRowCount(),
+                                                    nPos,
+                                                    nPos
+                                               )
+            ),
+            Any()
+        );
 
-        m_pImpl->commitTableEvent(  TABLE_MODEL_CHANGED,
-                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
-                                                                                                0,
-                                                                                                GetRowCount(),
-                                                                                                nPos,
-                                                                                                nPos) ),
-                                    com::sun::star::uno::Any());
-
-
-        m_pImpl->m_pAccessible->commitHeaderBarEvent(CHILD,
-                                                     com::sun::star::uno::Any(),
-                                                     com::sun::star::uno::makeAny(CreateAccessibleColumnHeader(nPos)));
+        commitHeaderBarEvent(
+            CHILD,
+            Any(),
+            makeAny( CreateAccessibleColumnHeader( nPos ) ),
+            sal_True
+        );
     }
 }
 
@@ -947,30 +965,37 @@ void BrowseBox::RemoveColumns()
         Control::Invalidate();
     }
 
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
         if ( pCols->Count() != nOldCount )
         {
             // all columns should be removed, so we remove the column header bar and append it again
             // to avoid to notify every column remove
-            commitBrowseBoxEvent(CHILD,
-                                com::sun::star::uno::Any(),
-                                com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_COLUMNHEADERBAR)));
+            commitBrowseBoxEvent(
+                CHILD,
+                Any(),
+                makeAny(m_pImpl->getAccessibleHeaderBar(BBTYPE_COLUMNHEADERBAR))
+            );
+
             // and now append it again
-            commitBrowseBoxEvent(CHILD,
-                                com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_COLUMNHEADERBAR)),
-                                com::sun::star::uno::Any());
+            commitBrowseBoxEvent(
+                CHILD,
+                makeAny(m_pImpl->getAccessibleHeaderBar(BBTYPE_COLUMNHEADERBAR)),
+                Any()
+            );
 
             // notify a table model change
-            m_pImpl->commitTableEvent( TABLE_MODEL_CHANGED,
-                                            makeAny( AccessibleTableModelChange( DELETE,
-                                                0,
-                                                GetRowCount(),
-                                                0,
-                                                nOldCount)
-                                            ),
-                                            Any()
-                                        );
+            commitTableEvent(
+                TABLE_MODEL_CHANGED,
+                makeAny ( AccessibleTableModelChange( DELETE,
+                                0,
+                                GetRowCount(),
+                                0,
+                                nOldCount
+                            )
+                        ),
+                Any()
+            );
         }
     }
 }
@@ -1319,30 +1344,37 @@ void BrowseBox::Clear()
     SetNoSelection();
     DoShowCursor( "Clear" );
     CursorMoved();
-    if ( isAccessibleAlive( ) )
+
+    if ( isAccessibleAlive() )
     {
         // all rows should be removed, so we remove the row header bar and append it again
         // to avoid to notify every row remove
         if ( nOldRowCount != nRowCount )
         {
-            commitBrowseBoxEvent(CHILD,
-                                com::sun::star::uno::Any(),
-                                com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_ROWHEADERBAR)));
+            commitBrowseBoxEvent(
+                CHILD,
+                Any(),
+                makeAny( m_pImpl->getAccessibleHeaderBar( BBTYPE_ROWHEADERBAR ) )
+            );
+
             // and now append it again
-            commitBrowseBoxEvent(CHILD,
-                                com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_ROWHEADERBAR)),
-                                com::sun::star::uno::Any());
+            commitBrowseBoxEvent(
+                CHILD,
+                makeAny( m_pImpl->getAccessibleHeaderBar( BBTYPE_ROWHEADERBAR ) ),
+                Any()
+            );
 
             // notify a table model change
-            m_pImpl->commitTableEvent( TABLE_MODEL_CHANGED,
-                                            makeAny( AccessibleTableModelChange( DELETE,
-                                                0,
-                                                nOldRowCount,
-                                                0,
-                                                GetColumnCount())
-                                            ),
-                                            Any()
-                                        );
+            commitTableEvent(
+                TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange( DELETE,
+                    0,
+                    nOldRowCount,
+                    0,
+                    GetColumnCount())
+                ),
+                Any()
+            );
         }
     }
 }
@@ -1427,21 +1459,29 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
 
     DoShowCursor( "RowInserted" );
     // notify accessible that rows were inserted
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
-        m_pImpl->commitTableEvent(  TABLE_MODEL_CHANGED,
-                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   INSERT,
-                                                                                                nRow,
-                                                                                                nRow + nNumRows,
-                                                                                                0,
-                                                                                                GetColumnCount()) ),
-                                    com::sun::star::uno::Any());
+        commitTableEvent(
+            TABLE_MODEL_CHANGED,
+            makeAny( AccessibleTableModelChange(
+                        INSERT,
+                        nRow,
+                        nRow + nNumRows,
+                        0,
+                        GetColumnCount()
+                    )
+            ),
+            Any()
+        );
+
         for (sal_Int32 i = nRow+1 ; i <= nRowCount ; ++i)
         {
-            m_pImpl->m_pAccessible->commitHeaderBarEvent(CHILD,
-                                                         com::sun::star::uno::makeAny(CreateAccessibleRowHeader(i)),
-                                                         com::sun::star::uno::Any(),
-                                                         sal_False);
+            commitHeaderBarEvent(
+                CHILD,
+                makeAny( CreateAccessibleRowHeader( i ) ),
+                Any(),
+                sal_False
+            );
         }
     }
 
@@ -1560,42 +1600,60 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
         AutoSizeLastColumn();
     }
 
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
         if ( nRowCount == 0 )
         {
             // all columns should be removed, so we remove the column header bar and append it again
             // to avoid to notify every column remove
-            commitBrowseBoxEvent(CHILD,
-                                 com::sun::star::uno::Any(),
-                                 com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_ROWHEADERBAR)));
+            commitBrowseBoxEvent(
+                CHILD,
+                Any(),
+                makeAny( m_pImpl->getAccessibleHeaderBar( BBTYPE_ROWHEADERBAR ) )
+            );
+
             // and now append it again
-            commitBrowseBoxEvent(CHILD,
-                                 com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getHeaderBar(BBTYPE_ROWHEADERBAR)),
-                                 com::sun::star::uno::Any());
-            commitBrowseBoxEvent(CHILD,
-                             com::sun::star::uno::Any(),
-                             com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getTable()));
+            commitBrowseBoxEvent(
+                CHILD,
+                makeAny(m_pImpl->getAccessibleHeaderBar(BBTYPE_ROWHEADERBAR)),
+                Any()
+            );
+            commitBrowseBoxEvent(
+                CHILD,
+                Any(),
+                makeAny( m_pImpl->getAccessibleTable() )
+            );
+
             // and now append it again
-            commitBrowseBoxEvent(CHILD,
-                                 com::sun::star::uno::makeAny(m_pImpl->m_pAccessible->getTable()),
-                                 com::sun::star::uno::Any());
+            commitBrowseBoxEvent(
+                CHILD,
+                makeAny( m_pImpl->getAccessibleTable() ),
+                Any()
+            );
         }
         else
         {
-            m_pImpl->commitTableEvent(  TABLE_MODEL_CHANGED,
-                            com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
-                                                                                        nRow,
-                                                                                        nRow + nNumRows,
-                                                                                        0,
-                                                                                        GetColumnCount()) ),
-                            com::sun::star::uno::Any());
+            commitTableEvent(
+                TABLE_MODEL_CHANGED,
+                makeAny( AccessibleTableModelChange(
+                            DELETE,
+                            nRow,
+                            nRow + nNumRows,
+                            0,
+                            GetColumnCount()
+                            )
+                ),
+                Any()
+            );
+
             for (sal_Int32 i = nRow+1 ; i <= (nRow+nNumRows) ; ++i)
             {
-                m_pImpl->m_pAccessible->commitHeaderBarEvent(CHILD,
-                                                             com::sun::star::uno::Any(),
-                                                             com::sun::star::uno::makeAny(CreateAccessibleRowHeader(i)),
-                                                             sal_False);
+                commitHeaderBarEvent(
+                    CHILD,
+                    Any(),
+                    makeAny( CreateAccessibleRowHeader( i ) ),
+                    sal_False
+                );
             }
         }
     }
@@ -1818,11 +1876,13 @@ void BrowseBox::SetNoSelection()
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
 
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
-        m_pImpl->m_pAccessible->commitTableEvent(SELECTION_CHANGED,
-                                            com::sun::star::uno::Any(),
-                                            com::sun::star::uno::Any());
+        commitTableEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any()
+        );
     }
 }
 
@@ -1853,11 +1913,13 @@ void BrowseBox::SetSelection( const MultiSelection &rSel )
     ToggleSelection();
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
 
-    if ( isAccessibleAlive( ) )
+    if ( isAccessibleAlive() )
     {
-        m_pImpl->m_pAccessible->commitTableEvent(SELECTION_CHANGED,
-                                            com::sun::star::uno::Any(),
-                                            com::sun::star::uno::Any());
+        commitTableEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any()
+        );
     }
 }
 
@@ -1904,19 +1966,27 @@ void BrowseBox::SelectAll()
 
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
-    if ( isAccessibleAlive( ) )
+
+    if ( isAccessibleAlive() )
     {
-        m_pImpl->m_pAccessible->commitTableEvent(SELECTION_CHANGED,
-                                            com::sun::star::uno::Any(),
-                                            com::sun::star::uno::Any());
-        m_pImpl->m_pAccessible->commitHeaderBarEvent(SELECTION_CHANGED,
-                                                     com::sun::star::uno::Any(),
-                                                     com::sun::star::uno::Any(),
-                                                     sal_True); // column header event
-        m_pImpl->m_pAccessible->commitHeaderBarEvent(SELECTION_CHANGED,
-                                                     com::sun::star::uno::Any(),
-                                                     com::sun::star::uno::Any(),
-                                                     sal_False); // row header event
+        commitTableEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any()
+        );
+        commitHeaderBarEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any(),
+            sal_True
+        ); // column header event
+
+        commitHeaderBarEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any(),
+            sal_False
+        ); // row header event
     }
 }
 
@@ -1977,15 +2047,20 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
 
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
-    if ( isAccessibleAlive( ) )
+
+    if ( isAccessibleAlive() )
     {
-        m_pImpl->m_pAccessible->commitTableEvent(SELECTION_CHANGED,
-                                            com::sun::star::uno::Any(),
-                                            com::sun::star::uno::Any());
-        m_pImpl->m_pAccessible->commitHeaderBarEvent(SELECTION_CHANGED,
-                                                     com::sun::star::uno::Any(),
-                                                     com::sun::star::uno::Any(),
-                                                     sal_False); // row header event
+        commitTableEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any()
+        );
+        commitHeaderBarEvent(
+            SELECTION_CHANGED,
+            Any(),
+            Any(),
+            sal_False
+        ); // row header event
     }
 }
 
@@ -2048,15 +2123,19 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
         else
             bSelect = TRUE;
 
-        if ( isAccessibleAlive( ) )
+        if ( isAccessibleAlive() )
         {
-            m_pImpl->m_pAccessible->commitTableEvent(SELECTION_CHANGED,
-                                                com::sun::star::uno::Any(),
-                                                com::sun::star::uno::Any());
-            m_pImpl->m_pAccessible->commitHeaderBarEvent(SELECTION_CHANGED,
-                                                     com::sun::star::uno::Any(),
-                                                     com::sun::star::uno::Any(),
-                                                     sal_True); // column header event
+            commitTableEvent(
+                SELECTION_CHANGED,
+                Any(),
+                Any()
+            );
+            commitHeaderBarEvent(
+                SELECTION_CHANGED,
+                Any(),
+                Any(),
+                sal_True
+            ); // column header event
         }
     }
 
@@ -2713,10 +2792,12 @@ void BrowseBox::CursorMoved()
     // before implementing more here, please adjust the EditBrowseBox
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    if ( isAccessibleAlive( ) && HasFocus() )
-        commitTableEvent(ACTIVE_DESCENDANT_CHANGED,
-                         com::sun::star::uno::makeAny( CreateAccessibleCell( GetCurRow(),GetColumnPos( GetCurColumnId() ) ) ),
-                         com::sun::star::uno::Any());
+    if ( isAccessibleAlive() && HasFocus() )
+        commitTableEvent(
+            ACTIVE_DESCENDANT_CHANGED,
+            makeAny( CreateAccessibleCell( GetCurRow(),GetColumnPos( GetCurColumnId() ) ) ),
+            Any()
+        );
 }
 
 //-------------------------------------------------------------------
