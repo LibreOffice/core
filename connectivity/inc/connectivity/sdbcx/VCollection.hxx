@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:14:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #define _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE9_HXX_
-#include <cppuhelper/implbase9.hxx>
+#ifndef _CPPUHELPER_IMPLBASE10_HXX_
+#include <cppuhelper/implbase10.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -113,6 +113,10 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
+
 
 namespace connectivity
 {
@@ -122,9 +126,10 @@ namespace connectivity
         // the class OCollection is base class for collections :-)
         // all elements <strong> must </strong> support the XNamed interface
 
-        typedef ::cppu::WeakImplHelper9< ::com::sun::star::container::XNameAccess,
+        typedef ::cppu::WeakImplHelper10< ::com::sun::star::container::XNameAccess,
                                          ::com::sun::star::container::XIndexAccess,
                                          ::com::sun::star::container::XEnumerationAccess,
+                                         ::com::sun::star::container::XContainer,
                                          ::com::sun::star::sdbc::XColumnLocate,
                                          ::com::sun::star::util::XRefreshable,
                                          ::com::sun::star::sdbcx::XDataDescriptorFactory,
@@ -147,6 +152,7 @@ namespace connectivity
             ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
             ObjectMap                               m_aNameMap;         // hold the elements and a name
 
+            ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
             ::cppu::OInterfaceContainerHelper       m_aRefreshListeners;
             ::cppu::OWeakObject&                    m_rParent;          // parent of the collection
             ::osl::Mutex&                           m_rMutex;           // mutex of the parent
@@ -237,6 +243,9 @@ namespace connectivity
             virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+            // ::com::sun::star::container::XContainer
+            virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }

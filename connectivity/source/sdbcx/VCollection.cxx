@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:28:04 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace comphelper;
+using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -89,6 +90,7 @@ IMPLEMENT_SERVICE_INFO(OCollection,"com.sun.star.sdbcx.VContainer" , "com.sun.st
 OCollection::OCollection(::cppu::OWeakObject& _rParent,sal_Bool _bCase, ::osl::Mutex& _rMutex,const ::std::vector< ::rtl::OUString> &_rVector)
                      : m_rParent(_rParent)
                      ,m_rMutex(_rMutex)
+                     ,m_aContainerListeners(_rMutex)
                      ,m_aRefreshListeners(_rMutex)
                      ,m_aNameMap(_bCase)
 {
@@ -111,6 +113,7 @@ void OCollection::clear_NoDispose()
 // -------------------------------------------------------------------------
 void OCollection::disposing(void)
 {
+    m_aContainerListeners.disposeAndClear(EventObject(static_cast<XWeak*>(this)));
     m_aRefreshListeners.disposeAndClear(EventObject(static_cast<XWeak*>(this)));
 
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -227,6 +230,11 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
                 pDescriptor->setNew(sal_False);
         }
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(xName->getName(),WeakReference< XNamed >(xName))));
+        // notify our container listeners
+        ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(xName->getName()), makeAny(xName), Any());
+        OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+        while (aListenerLoop.hasMoreElements())
+            static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
     }
 }
 // -------------------------------------------------------------------------
@@ -245,8 +253,15 @@ void SAL_CALL OCollection::dropByName( const ::rtl::OUString& elementName ) thro
         {
             m_aElements.erase(m_aElements.begin()+i);
             m_aNameMap.erase(aIter);
+            break; // no duplicates possible
         }
     }
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
+        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
@@ -255,8 +270,15 @@ void SAL_CALL OCollection::dropByIndex( sal_Int32 index ) throw(SQLException, In
     if(index <0 || index > getCount())
         throw IndexOutOfBoundsException(::rtl::OUString(),*this);
 
+    ::rtl::OUString elementName = m_aElements[index]->first;
     m_aNameMap.erase(m_aElements[index]);
     m_aElements.erase(m_aElements.begin()+index);
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(elementName), Any(), Any());
+        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OCollection::findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -273,4 +295,17 @@ Reference< XEnumeration > SAL_CALL OCollection::createEnumeration(  ) throw(Runt
     ::osl::MutexGuard aGuard(m_rMutex);
     return new OEnumerationByIndex( static_cast< XIndexAccess*>(this));
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL OCollection::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+{
+    m_aContainerListeners.addInterface(_rxListener);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OCollection::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+{
+    m_aContainerListeners.removeInterface(_rxListener);
+}
+// -----------------------------------------------------------------------------
+
 
