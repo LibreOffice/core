@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 12:53:22 $
+#   last change: $Author: kz $ $Date: 2004-05-19 10:40:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ IDLFILES=\
     CaptionType.idl\
     CircleKind.idl\
     ClosedBezierShape.idl\
-    color.idl\
     ColorMode.idl\
     ConnectionType.idl\
     ConnectorProperties.idl\
