@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-13 18:10:17 $
+#   last change: $Author: hr $ $Date: 2004-12-14 11:27:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@
 package Cvs;
 use strict;
 
+use Carp;
 use CwsConfig;
 
 ##### constructor ####
