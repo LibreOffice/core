@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:17:49 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,7 @@ TabPage RID_SCPAGE_CALC
         Text [ norwegian ] = "~Iterations" ;
         Text [ italian ] = "~Iterazioni" ;
         Text [ portuguese_brazilian ] = "~Iterations" ;
-        Text [ portuguese ] = "~Iteracções" ;
+        Text [ portuguese ] = "~Iterações" ;
         Text [ finnish ] = "~Iterations" ;
         Text [ danish ] = "Iterationer" ;
         Text [ french ] = "~Itérations" ;
@@ -875,7 +875,7 @@ TabPage RID_SCPAGE_CALC
         Text[ russian ] = "Óñëîâèÿ ïîèñêà = è <> äîëæíû ğàñïğîñòğàíÿòüñÿ íà âñş ÿ÷åéêó";
         Text[ polish ] = "Kryt~eria wyszukiwania = i <> musz¹ odnosiæ siê do ca³ych komórek";
         Text[ japanese ] = "ŒŸõğŒ = ‚Æ <> ‚Í‚·‚×‚Ä‚Ì¾Ù‚É“K—p(~W)";
-        Text[ chinese_traditional ] = "´M§ä½d³ò = ©M <> ¥²¶·¾A¥Î¥ş³¡ªºÀx¦s®æ(~W)";
+        Text[ chinese_traditional ] = "·j´M½d³ò = ©M <> ¥²¶·¾A¥Î¥ş³¡ªºÀx¦s®æ(~W)";
         Text[ arabic ] = "íÌÈ Ãä ÊäØÈŞ ãÚÇííÑ ÇáÈÍË = æ <> Úáì ÎáÇíÇ ßÇãáÉ";
         Text[ greek ] = "Ôá êñéôŞñéá áíáæŞôçóçò = êáé <> ğñİğåé íá ôáéñéÜæïõí ìå ïëüêëçñá êåëéÜ";
         Text[ korean ] = "Ã£±â ±âÁØÀÎ  = °ú <> Àº ÀüÃ¼ ¼¿¿¡ Àû¿ëµÇ¾î¾ß¸¸ ÇÕ´Ï´Ù.(~W)";
@@ -1097,7 +1097,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ norwegian ] = "Remo~ve" ;
         Text [ italian ] = "Elimina" ;
         Text [ portuguese_brazilian ] = "Remo~ver" ;
-        Text [ portuguese ] = "Remo~ver" ;
+        Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
         Text [ french ] = "~Supprimer" ;
@@ -1888,7 +1888,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ dutch ] = "H~orizontale schuifbalk" ;
         Text [ spanish ] = "Barra de desplazamiento ~horizontal" ;
         Text [ english_us ] = "Hori~zontal scroll" ;
-        Text[ chinese_simplified ] = "ºáÏò¹ö¶¯¸Ë(~H)";
+        Text[ chinese_simplified ] = "Ë®Æ½¹ö¶¯Ìõ(~H)";
         Text[ russian ] = "Ãîğèçîíòàëüíàÿ ïîëîñà ïğîêğóòêè";
         Text[ polish ] = "Poziomy pasek przewijania obrazu";
         Text[ japanese ] = "…•½½¸Û°ÙÊŞ°(~H)";
@@ -1917,7 +1917,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ dutch ] = "~Verticale schuifbalk" ;
         Text [ spanish ] = "Barra de desplazamiento ~vertical" ;
         Text [ english_us ] = "~Vertical scroll" ;
-        Text[ chinese_simplified ] = "×İÏò¹ö¶¯¸Ë(~V)";
+        Text[ chinese_simplified ] = "´¹Ö±¹ö¶¯Ìõ(~V)";
         Text[ russian ] = "Âåğòèêàëüíàÿ ïîëîñà ïğîêğóòêè";
         Text[ polish ] = "Piono~wy pasek przesuwania obrazu";
         Text[ japanese ] = "‚’¼½¸Û°ÙÊŞ°(~V)";
@@ -2638,7 +2638,7 @@ TabPage RID_SCPAGE_INPUT
         Text [ french ] = "Affichage des références en ~couleur" ;
         Text [ dutch ] = "~Verwijzingen in kleur weergeven" ;
         Text [ portuguese ] = "~Mostrar referências com cor" ;
-        Text[ chinese_simplified ] = "ÓÃ²ÊÉ«ÏÔÊ¾ÒıÓÃ(~S)";
+        Text[ chinese_simplified ] = "ÓÃ²ÊÉ«ÏÔÊ¾ÒıÓÃÄÚÈİ(~S)";
         Text[ russian ] = "Ïîêàçàòü ññûëêè â öâåòå";
         Text[ polish ] = "Poka¿ odwo³ania w kolorze";
         Text[ japanese ] = "QÆ‚ğF‚Å•\\¦(~S)";
@@ -2665,7 +2665,7 @@ TabPage RID_SCPAGE_INPUT
         Text [ french ] = "Expansion de la plage de ~références si insertion de colonnes ou lignes" ;
         Text [ dutch ] = "Ver~wijzingen bij invoegen van kolommen/rijen aan de randen verbreden" ;
         Text [ portuguese ] = "Expandir ~referências para as margens ao inserir colunas ou linhas " ;
-        Text[ chinese_simplified ] = "ÔÚ²åÈëĞĞÁĞÊ±Ì×ÓÃÒıÓÃ(~R)";
+        Text[ chinese_simplified ] = "ÔÚ²åÈëĞĞÁĞÊ±Ì×ÓÃÒıÓÃÄÚÈİ(~R)";
         Text[ russian ] = "Ğàñòÿãèâàòü ññûëêè ïğè âñòàâêå íîâûõ ñòîëáöîâ/ñòğîê";
         Text[ polish ] = "Rozszerz odwo³ania przy wstawia~niu kolumn i wierszy do ich krawêdzi";
         Text[ japanese ] = "—ñ/s‚Ì‘}“üŒã‚ÉQÆ‚ğC³(~R)";
