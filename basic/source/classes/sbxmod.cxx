@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:52:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include <hilight.hxx>
 #include <basrdll.hxx>
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 // for the bsearch
 #ifdef WNT
@@ -721,6 +724,9 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
                 DBG_ASSERT(pINST->nCallLvl==0,"BASIC-Call-Level > 0")
                 delete pINST, pINST = NULL, bDelInst = FALSE;
+
+                // #i30690
+                vos::OGuard aSolarGuard( Application::GetSolarMutex() );
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();
