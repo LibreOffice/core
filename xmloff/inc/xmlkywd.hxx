@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-25 14:28:40 $
+ *  last change: $Author: pw $ $Date: 2000-10-26 14:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,6 +952,7 @@ XML_CONSTASCII_ACTION( sXML_stroke_color , "stroke-color" );
 XML_CONSTASCII_ACTION( sXML_stroke_dasharray , "stroke-dasharray" );
 XML_CONSTASCII_ACTION( sXML_stroke_linejoin , "stroke-linejoin" );
 XML_CONSTASCII_ACTION( sXML_stroke_width, "stroke-width" );
+XML_CONSTASCII_ACTION( sXML_stroke_opacity, "stroke-opacity" );
 XML_CONSTASCII_ACTION( sXML_style, "style" );
 XML_CONSTASCII_ACTION( sXML_style_name, "style-name" );
 XML_CONSTASCII_ACTION( sXML_styles, "styles" );
