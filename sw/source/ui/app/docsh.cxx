@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:55:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,7 +1091,7 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
         const SwFmtPageDesc &rDesc = pNd->GetSwAttrSet().GetPageDesc();
         const SwPageDesc* pDesc = rDesc.GetPageDesc();
         if( !pDesc )
-            pDesc = &pDoc->GetPageDesc( 0 );
+            pDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
 
         //Das Format wird evtl. von der virtuellen Seitennummer bestimmt.
         const USHORT nPgNum = rDesc.GetNumOffset();
