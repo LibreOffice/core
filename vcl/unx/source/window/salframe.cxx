@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-03 11:35:23 $
+ *  last change: $Author: pl $ $Date: 2001-12-06 11:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,6 +954,12 @@ void SalFrame::Show( BOOL bVisible )
                     _GetDisplay()->getWMAdaptor()->changeReferenceFrame( *it, this );
             }
         }
+        /*
+         *  leave SHOWSTATE_UNKNOWN as this indicates first mapping
+         *  and is only reset int HandleSizeEvent
+         */
+        if( maFrameData.nShowState_ != SHOWSTATE_UNKNOWN )
+            maFrameData.nShowState_ = SHOWSTATE_NORMAL;
     }
     else
     {
@@ -3058,6 +3064,17 @@ long SalFrameData::Dispatch( XEvent *pEvent )
             case MapNotify:
                 if( pEvent->xmap.window == GetShellWindow() )
                 {
+                    if( nShowState_ == SHOWSTATE_HIDDEN )
+                    {
+                        /*
+                         *  #95097# workaround for (at least) KWin 2.2.2
+                         *  which will map windows that were once transient
+                         *  even if they are withdrawn when the respective
+                         *  document is mapped.
+                         */
+                        XUnmapWindow( GetXDisplay(), GetShellWindow() );
+                        break;
+                    }
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
                     nRet = TRUE;
