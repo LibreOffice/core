@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2002-06-19 13:18:14 $
+ *  last change: $Author: os $ $Date: 2002-06-21 14:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5647,7 +5647,7 @@
         <value xml:lang="th">Text Encoded (%productname% Master Document)</value>
       </prop>
       <prop oor:name="Data">
-        <value>8,writer_Text,com.sun.star.text.GlobalDocument,,67,TEXT_DLG,0,,</value>
+        <value>8,writer_Text,com.sun.star.text.GlobalDocument,,67,TEXT_DLG,0,,com.sun.star.comp.Writer.FilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="HTML" oor:op="replace">
@@ -5830,7 +5830,7 @@
         <value xml:lang="th">Text Encoded (%productname% Writer/Web)</value>
       </prop>
       <prop oor:name="Data">
-        <value>11,writer_Text,com.sun.star.text.WebDocument,,67,TEXT_DLG,0,,</value>
+        <value>11,writer_Text,com.sun.star.text.WebDocument,,67,TEXT_DLG,0,,com.sun.star.comp.Writer.FilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="Ami Pro 1.x-3.1 (W4W)" oor:op="replace">
@@ -6322,7 +6322,7 @@
         <value xml:lang="th">Text Encoded</value>
       </prop>
       <prop oor:name="Data">
-        <value>17,writer_Text_encoded,com.sun.star.text.TextDocument,,67,TEXT_DLG,0,,</value>
+        <value>17,writer_Text_encoded,com.sun.star.text.TextDocument,,67,TEXT_DLG,0,,com.sun.star.comp.Writer.FilterOptionsDialog</value>
       </prop>
     </node>
     <node oor:name="WordPerfect (Win) 7.0 (W4W)" oor:op="replace">
