@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:26 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModelessDialog RID_SCDLG_FILTER
     Text [ ENGLISH ] = "Standard Filter" ;
     Text [ norwegian ] = "Standard Filter" ;
     Text [ italian ] = "Filtro standard" ;
-    Text [ portuguese_brazilian ] = "Filtro Padr?o" ;
+    Text [ portuguese_brazilian ] = "Filtro Padrão" ;
     Text [ portuguese ] = "Filtro padrão" ;
     Text [ finnish ] = "Oletussuodatin" ;
     Text [ danish ] = "Standardfilter" ;
@@ -111,6 +111,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Operador";
         Text[ thai ] = "à¸•à¸±à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
+        Text[ czech ] = "OperÃ¡tor";
+        Text[ hebrew ] = "VerknÃ¼pfung";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤°à¥à¤¤à¤•";
     };
     FixedText FT_FIELD
     {
@@ -120,7 +123,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Fieldname" ;
         Text [ norwegian ] = "Fieldname" ;
         Text [ italian ] = "Nome di campo" ;
-        Text [ portuguese_brazilian ] = "Nome de campo" ;
+        Text [ portuguese_brazilian ] = "Nome do campo" ;
         Text [ portuguese ] = "Nome do campo" ;
         Text [ finnish ] = "Kentän nimi" ;
         Text [ danish ] = "Feltnavn" ;
@@ -141,6 +144,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom del camp";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "NÃ¡zev pole";
+        Text[ hebrew ] = "Feldname";
+        Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¤¾ à¤¨à¤¾à¤®";
     };
     FixedText FT_COND
     {
@@ -150,7 +156,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Condition" ;
         Text [ norwegian ] = "Vilkår" ;
         Text [ italian ] = "Condizione" ;
-        Text [ portuguese_brazilian ] = "condi??o" ;
+        Text [ portuguese_brazilian ] = "Condição" ;
         Text [ portuguese ] = "Condição" ;
         Text [ finnish ] = "Ehto" ;
         Text [ danish ] = "Betingelse" ;
@@ -171,6 +177,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condició";
         Text[ thai ] = "à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
+        Text[ czech ] = "PodmÃ­nka";
+        Text[ hebrew ] = "Bedingung";
+        Text[ hindi ] = "à¤¶à¤°à¥à¤¤";
     };
     FixedText FT_VAL
     {
@@ -201,6 +210,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor";
         Text[ thai ] = "à¸„à¹ˆà¸²";
+        Text[ czech ] = "Hodnota";
+        Text[ hebrew ] = "Wert";
+        Text[ hindi ] = "à¤®à¥‚à¤²à¥à¤¯";
     };
     ListBox LB_OP1
     {
@@ -231,7 +243,7 @@ ModelessDialog RID_SCDLG_FILTER
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "UND" ; Default ; > ;
+            < "E" ; Default ; > ;
             < "OU" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -286,7 +298,7 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ polish ] =
     {
-            < "ORAZ" ; Default ; > ;
+            < "i" ; Default ; > ;
         < "LUB" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -333,6 +345,21 @@ ModelessDialog RID_SCDLG_FILTER
     {
          < "à¹à¸¥à¸°" ; Default ; > ;
         < "à¸«à¸£à¸·à¸­" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "UND" ; Default ; > ;
+        < "ODER" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     };
     ListBox LB_OP2
@@ -364,7 +391,7 @@ ModelessDialog RID_SCDLG_FILTER
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "UND" ; Default ; > ;
+            < "E" ; Default ; > ;
             < "OU" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -419,7 +446,7 @@ ModelessDialog RID_SCDLG_FILTER
     };
     StringList [ polish ] =
     {
-            < "ORAZ" ; Default ; > ;
+            < "i" ; Default ; > ;
         < "LUB" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -466,6 +493,21 @@ ModelessDialog RID_SCDLG_FILTER
     {
          < "à¹à¸¥à¸°" ; Default ; > ;
         < "à¸«à¸£à¸·à¸­" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "UND" ; Default ; > ;
+        < "ODER" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -559,10 +601,10 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "gr?te" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "gr?te %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
+            < "O maior" ; Default ; > ;
+            < "O menor" ; Default ; > ;
+            < "A maior %" ; Default ; > ;
+            < "A menor %" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -676,10 +718,10 @@ ModelessDialog RID_SCDLG_FILTER
         < "<=" ; Default ; > ;
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
-        < "najwiêkszy" ; Default ; > ;
-        < "Najmniejszy" ; Default ; > ;
-        < "najwiêkszy %" ; Default ; > ;
-        < "Najmniejszy %" ; Default ; > ;
+        < "Najwiêksze" ; Default ; > ;
+        < "Najmniejsze" ; Default ; > ;
+        < "Najwiêksze %" ; Default ; > ;
+        < "Najmniejsze %" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -810,6 +852,24 @@ ModelessDialog RID_SCDLG_FILTER
         < "à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
         < "à¹ƒà¸«à¸à¹ˆà¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
         < "à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
     };
     };
     ListBox LB_COND2
@@ -879,10 +939,10 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "gr?te" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "gr?te %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
+            < "O maior" ; Default ; > ;
+            < "O menor" ; Default ; > ;
+            < "A maior %" ; Default ; > ;
+            < "A menor %" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -996,10 +1056,10 @@ ModelessDialog RID_SCDLG_FILTER
         < "<=" ; Default ; > ;
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
-        < "najwiêkszy" ; Default ; > ;
-        < "najmniejszy" ; Default ; > ;
-        < "najwiêkszy %" ; Default ; > ;
-        < "najmniejszy %" ; Default ; > ;
+        < "Najwiêksze" ; Default ; > ;
+        < "Najmniejsze" ; Default ; > ;
+        < "Najwiêksze %" ; Default ; > ;
+        < "Najmniejsze %" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -1130,6 +1190,45 @@ ModelessDialog RID_SCDLG_FILTER
         < "à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
         < "à¹ƒà¸«à¸à¹ˆà¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
         < "à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "NejvÄ›tÅ¡Ã­" ; Default ; > ;
+        < "NejmenÅ¡Ã­" ; Default ; > ;
+        < "NejvÄ›tÅ¡Ã­ %" ; Default ; > ;
+        < "NejmenÅ¡Ã­ %" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "grÃ¶ÃŸte" ; Default ; > ;
+        < "kleinste" ; Default ; > ;
+        < "grÃ¶ÃŸte %" ; Default ; > ;
+        < "kleinste %" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; Default ; > ;
+        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®" ; Default ; > ;
+        < "à¤…à¤§à¤¿à¤•à¤¤à¤® %" ; Default ; > ;
+        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤® %" ; Default ; > ;
     };
     };
     ListBox LB_COND3
@@ -1199,10 +1298,10 @@ ModelessDialog RID_SCDLG_FILTER
             < "<=" ; Default ; > ;
             < ">=" ; Default ; > ;
             < "<>" ; Default ; > ;
-            < "gr?te" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "gr?te %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
+            < "O maior" ; Default ; > ;
+            < "O menor" ; Default ; > ;
+            < "A maior %" ; Default ; > ;
+            < "A menor %" ; Default ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -1316,10 +1415,10 @@ ModelessDialog RID_SCDLG_FILTER
         < "<=" ; Default ; > ;
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
-        < "najwiêkszy" ; Default ; > ;
-        < "najmniejszy" ; Default ; > ;
-        < "najwiêkszy %" ; Default ; > ;
-        < "najmniejszy %" ; Default ; > ;
+        < "Najwiêksze" ; Default ; > ;
+        < "Najmniejsze" ; Default ; > ;
+        < "Najwiêksze %" ; Default ; > ;
+        < "Najmniejsze %" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -1451,6 +1550,45 @@ ModelessDialog RID_SCDLG_FILTER
         < "à¹ƒà¸«à¸à¹ˆà¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
         < "à¹€à¸¥à¹‡à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” %" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "NejvÄ›tÅ¡Ã­" ; Default ; > ;
+        < "NejmenÅ¡Ã­" ; Default ; > ;
+        < "NejvÄ›tÅ¡Ã­ %" ; Default ; > ;
+        < "NejmenÅ¡Ã­ %" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "grÃ¶ÃŸte" ; Default ; > ;
+        < "kleinste" ; Default ; > ;
+        < "grÃ¶ÃŸte %" ; Default ; > ;
+        < "kleinste %" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; Default ; > ;
+        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®" ; Default ; > ;
+        < "à¤…à¤§à¤¿à¤•à¤¤à¤® %" ; Default ; > ;
+        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤® %" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -1491,15 +1629,18 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ danish ] = "Filterkriterier";
         Text[ swedish ] = "Filterkriterier";
         Text[ polish ] = "Kryteria filtrowania";
-        Text[ portuguese_brazilian ] = "Filter criteria";
+        Text[ portuguese_brazilian ] = "Critérios do filtro";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿æ¡ä»¶";
         Text[ korean ] = "í•„í„° ê¸°ì¤€";
         Text[ chinese_simplified ] = "ç­›é€‰æ¡ä»¶";
         Text[ chinese_traditional ] = "ç¯©é¸æ¢ä»¶";
-        Text[ turkish ] = "Filter criteria";
+        Text[ turkish ] = "Filtre ölçütü";
         Text[ arabic ] = "Filter criteria";
         Text[ catalan ] = "Criteri del filtre";
         Text[ thai ] = "à¹€à¸à¸“à¸‘à¹Œà¹€à¸£à¸µà¸¢à¸‡à¸¥à¸³à¸”à¸±à¸š";
+        Text[ czech ] = "KritÃ©ria filtru";
+        Text[ hebrew ] = "Filterkriterien";
+        Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤";
     };
     CheckBox BTN_CASE
     {
@@ -1510,7 +1651,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
+        Text [ portuguese_brazilian ] = "~Diferenciar maiúsculas/minúsculas" ;
         Text [ portuguese ] = "~Maiúsculas/minúsculas" ;
         Text [ finnish ] = "Sama ~kirjainkoko" ;
         Text [ danish ] = "Store og små bogstaver" ;
@@ -1522,7 +1663,7 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¤§å°å†™(~S)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Wielkie i ma³e litery";
+        Text[ polish ] = "~Uwzglêdnij wielkoœæ liter";
         Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~S)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "å¤§å°å¯«(~S)";
@@ -1532,6 +1673,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
+        Text[ czech ] = "RozliÅ¡ovat malÃ¡/velkÃ¡ pÃ­smena";
+        Text[ hebrew ] = "~GroÃŸ-/Kleinschreibung";
+        Text[ hindi ] = "à¤•à¥‡à¤¸ ~à¤¸à¤šà¥‡à¤¤à¤¨";
     };
     CheckBox BTN_REGEXP
     {
@@ -1542,7 +1686,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "~Espressione regolare" ;
-        Text [ portuguese_brazilian ] = "~Express?o regular" ;
+        Text [ portuguese_brazilian ] = "~Expressão regular" ;
         Text [ portuguese ] = "~Expressão regular" ;
         Text [ finnish ] = "~Säännöllinen lauseke" ;
         Text [ danish ] = "Regulært udtryk" ;
@@ -1554,7 +1698,7 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~E)";
         Text[ russian ] = "Ğåãóëÿğíîå âûğàæåíèå";
-        Text[ polish ] = "Wyra~¿enie regularne";
+        Text[ polish ] = "Wyra¿~enie regularne";
         Text[ japanese ] = "æ­£è¦è¡¨ç¾(~E)";
         Text[ chinese_traditional ] = "å¸¸è¦è¡¨é”(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
@@ -1564,6 +1708,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Expressió habitual";
         Text[ thai ] = "à¸à¸²à¸£~à¸­à¸˜à¸´à¸šà¸²à¸¢à¸›à¸à¸•à¸´";
+        Text[ czech ] = "RegulÃ¡rnÃ­ vÃ½raz";
+        Text[ hebrew ] = "â€®×‘×™×˜×•×™×™× ×¨×’×•×œ×¨×™×™×â€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤¯à¤®à¤¿à¤¤ ~à¤µà¤°à¥à¤£à¤¨";
     };
     CheckBox BTN_HEADER
     {
@@ -1574,7 +1721,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
-        Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
+        Text [ portuguese_brazilian ] = "O Intervalo ~contém cabeçalhos das colunas" ;
         Text [ portuguese ] = "A área ~contém cabeçalhos de colunas" ;
         Text [ finnish ] = "~Alue sisältää sarakeotsikot" ;
         Text [ danish ] = "Område indholder kolonneoverskrifter" ;
@@ -1586,16 +1733,19 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~C)";
         Text[ russian ] = "Îáëàñòü ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
-        Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
+        Text[ polish ] = "Zakre~s zawiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~C)";
         Text[ chinese_traditional ] = "ç¯„åœåŒ…å«æ¬„æ¨™ç±¤(~C)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
         Text[ korean ] = "ë²”ìœ„ì— ì—´ ë ˆì´ë¸”ì„ í¬í•¨(~C)";
-        Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
+        Text[ turkish ] = "Sütun etiketleri içerik alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'àrea conté capçaleres de ~columna";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Oblast obsahuje zÃ¡hlavÃ­ sloupcÅ¯";
+        Text[ hebrew ] = "Bereich enthÃ¤lt ~Spaltenbeschriftungen";
+        Text[ hindi ] = "à¤«à¥ˆà¤²à¤¾à¤µ ~à¤¸à¥à¤¤à¤‚à¤­ à¤¶à¥€à¤°à¥à¤·à¤•à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
     };
     CheckBox BTN_UNIQUE
     {
@@ -1606,7 +1756,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~?nico" ;
+        Text [ portuguese_brazilian ] = "Sem d~uplicação" ;
         Text [ portuguese ] = "~Único" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -1618,7 +1768,7 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä¸ç”Ÿæˆå¤ä»¶(~N)";
         Text[ russian ] = "Áåç ïîâòîğåíèé";
-        Text[ polish ] = "Bez duplikatów";
+        Text[ polish ] = "~Bez duplikatów";
         Text[ japanese ] = "é‡è¤‡ãªã—(~N)";
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
@@ -1628,6 +1778,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¸—à¸³à¸‹à¹‰à¸³";
+        Text[ czech ] = "Bez duplikÃ¡tÅ¯";
+        Text[ hebrew ] = "Keine ~Duplikate";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¦à¥à¤µà¤¿à¤¤à¥€à¤¯à¤¾ à¤µà¥ƒà¤¤à¥à¤¤à¤¿ ~à¤¨à¤¹à¥€à¤‚";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -1638,7 +1791,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Write ~result to" ;
         Text [ norwegian ] = "Write ~result to" ;
         Text [ italian ] = "Scrivere il ~risultato del filtro in" ;
-        Text [ portuguese_brazilian ] = "Gravar ~resultado em" ;
+        Text [ portuguese_brazilian ] = "Copiar ~resultados para..." ;
         Text [ portuguese ] = "Gravar ~resultado em" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen..." ;
         Text [ danish ] = "Filterresultat-output til" ;
@@ -1650,16 +1803,19 @@ ModelessDialog RID_SCDLG_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å°†ç­›é€‰ç»“æœå¤åˆ¶åˆ°(~R)...";
         Text[ russian ] = "Êîïèğîâàòü ğåçóëüòàò â";
-        Text[ polish ] = "Kopiuj rezultaty filtrowania do";
+        Text[ polish ] = "Kopiuj wyniki ~do...";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿çµæœã®è²¼ã‚Šä»˜ã‘å…ˆ(~R)";
         Text[ chinese_traditional ] = "è¤‡è£½ç¯©é¸çµæœåˆ°(~R)...";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáÊÕİíÉ Åáì";
         Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí óôï";
         Text[ korean ] = "ë‹¤ìŒìœ¼ë¡œ ê²°ê³¼ ë³µì‚¬(~R)";
-        Text[ turkish ] = "Sonuçların görüntüleneceği ~yer";
+        Text[ turkish ] = "Sonuçların görüntüleneceği ~yer...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Copia els ~resultats a...";
         Text[ thai ] = "~à¸œà¸¥à¸à¸²à¸£à¸„à¸±à¸”à¸¥à¸­à¸à¹„à¸›à¸¢à¸±à¸‡...";
+        Text[ czech ] = "kopÃ­rovat vÃ½sledky do...";
+        Text[ hebrew ] = "Filterergebnis ~ausgeben nach";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ ~à¤¨à¤¤à¥€à¤œà¥‹à¤‚ à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿...";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -1670,7 +1826,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "~Persistent" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Keep filter criteria" ;
-        Text [ portuguese_brazilian ] = "~Persistent" ;
+        Text [ portuguese_brazilian ] = "~Manter critérios do filtro" ;
         Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
@@ -1680,7 +1836,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese ] = "~Manter critérios" ;
         Text[ chinese_simplified ] = "ä¿ç•™ç­›é€‰æ¡ä»¶(~K)";
         Text[ russian ] = "Ñîõğàíèòü óñëîâèÿ ôèëüòğà";
-        Text[ polish ] = "Zachowaj kryteria";
+        Text[ polish ] = "~Zachowaj kryteria filtrowania";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ç¯„å›²ã¨ãƒªãƒ³ã‚¯ã™ã‚‹(~K)";
         Text[ chinese_traditional ] = "ä¿ç•™ç¯©é¸æ¢ä»¶(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
@@ -1691,6 +1847,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ catalan ] = "~Conserva els criteris de filtre";
         Text[ finnish ] = "~Säilytä suodatusehto";
         Text[ thai ] = "à¹€~à¸à¹‡à¸šà¹€à¸à¸“à¸‘à¹Œà¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+        Text[ czech ] = "Ponechat kritÃ©ria filtru";
+        Text[ hebrew ] = "~Persistent";
+        Text[ hindi ] = "~à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤ ~à¤°à¤–à¥‹";
     };
     ListBox LB_COPY_AREA
     {
@@ -1717,7 +1876,7 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -1739,6 +1898,9 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedLine FL_OPTIONS
     {
@@ -1749,7 +1911,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -1770,6 +1932,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "Options";
     };
     FixedText FT_DBAREA
     {
@@ -1780,7 +1945,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "dummy" ;
         Text [ norwegian ] = "dummy" ;
         Text [ italian ] = "fittizio" ;
-        Text [ portuguese_brazilian ] = "falso" ;
+        Text [ portuguese_brazilian ] = "fictício" ;
         Text [ portuguese ] = "Simulador" ;
         Text [ finnish ] = "tyhjä" ;
         Text [ danish ] = "dummy" ;
@@ -1802,6 +1967,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "babau";
         Text[ thai ] = "à¸«à¸¸à¹ˆà¸™";
+        Text[ czech ] = "dummy";
+        Text[ hebrew ] = "dummy";
+        Text[ hindi ] = "à¤¬à¤¨à¤¾à¤µà¤Ÿà¥€";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -1812,7 +1980,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati:" ;
-        Text [ portuguese_brazilian ] = "?rea de dados:" ;
+        Text [ portuguese_brazilian ] = "Intervalo de dados:" ;
         Text [ portuguese ] = "Área de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "Dataområde:" ;
@@ -1823,7 +1991,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "æ•°æ®åŒºåŸŸï¼š";
         Text[ russian ] = "Äèàïàçîí äàííûõ:";
-        Text[ polish ] = "Obszar danych:";
+        Text[ polish ] = "Zakres danych:";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²:";
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
@@ -1833,6 +2001,9 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
+        Text[ czech ] = "DatovÃ¡ oblast:";
+        Text[ hebrew ] = "Datenbereich:";
+        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ:";
     };
     OKButton BTN_OK
     {
@@ -1868,11 +2039,14 @@ ModelessDialog RID_SCDLG_FILTER
     Text[ chinese_traditional ] = "æ¨™æº–ç¯©é¸";
     Text[ arabic ] = "İáÊÑ ŞíÇÓí";
     Text[ greek ] = "Ößëôñï ğñïåğéëïãŞò";
-    Text[ korean ] = "í‘œì¤€í•„í„°";
+    Text[ korean ] = "í‘œì¤€ í•„í„°";
     Text[ turkish ] = "Standart filtre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtre estàndard";
     Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸¡à¸²à¸•à¸£à¸à¸²à¸™";
+    Text[ czech ] = "StandardnÃ­ filtr";
+    Text[ hebrew ] = "Standardfilter";
+    Text[ hindi ] = "à¤¸à¥à¤Ÿà¤¾à¤¨à¥à¤¡à¤°à¥à¤¡ à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤°";
 };
  //============================================================================
 ModelessDialog RID_SCDLG_SPEC_FILTER
@@ -1886,7 +2060,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text [ ENGLISH ] = "Special Filter" ;
     Text [ norwegian ] = "Special Filter" ;
     Text [ italian ] = "Filtro speciale" ;
-    Text [ portuguese_brazilian ] = "Filtro Especial" ;
+    Text [ portuguese_brazilian ] = "Filtro Avançado" ;
     Text [ portuguese ] = "Filtro especial" ;
     Text [ finnish ] = "Erityisssuodatus" ;
     Text [ danish ] = "Specialfilter" ;
@@ -1905,7 +2079,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Read ~filter criteria from" ;
         Text [ norwegian ] = "Read ~filter criteria from" ;
         Text [ italian ] = "Leggi i criteri di ~filtro da" ;
-        Text [ portuguese_brazilian ] = "Lerd ~crit?rios de filtro de" ;
+        Text [ portuguese_brazilian ] = "Ler os ~critérios do filtro a partir de" ;
         Text [ portuguese ] = "~Critérios de filtro encontram-se em" ;
         Text [ finnish ] = "~Lue suodatusehdot kohteesta" ;
         Text [ danish ] = "Filterkriterier befinder sig i" ;
@@ -1916,7 +2090,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ english_us ] = "Read ~filter criteria from" ;
         Text[ chinese_simplified ] = "ç­›é€‰æ¡ä»¶æ¥è‡ª(~F)";
         Text[ russian ] = "Êğèòåğèè ôèëüòğà";
-        Text[ polish ] = "Kryteria filtrowania znajduj¹ siê w";
+        Text[ polish ] = "Wczytaj ~kryteria filtrowania z";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿æ¡ä»¶ã«ã™ã‚‹ç¯„å›²(~F)";
         Text[ chinese_traditional ] = "ç¯©é¸æ¢ä»¶ä¾†è‡ª(~F)";
         Text[ arabic ] = "ãÚÇííÑ ÇáÊÕİíÉ ÊæÌÏ İí";
@@ -1926,6 +2100,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Llegeix els criteris de ~filtre des de";
         Text[ thai ] = "à¸­à¹ˆà¸²à¸™à¹€à¸à¸“à¸‘à¹Œ~à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸ˆà¸²à¸";
+        Text[ czech ] = "NaÄÃ­st parametry filtru z";
+        Text[ hebrew ] = "~Filterkriterien befinden sich in";
+        Text[ hindi ] = "à¤¸à¥‡ ~à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤ à¤ªà¤¢à¤¼à¥‹";
     };
     ListBox LB_CRITERIA_AREA
     {
@@ -1950,7 +2127,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -1972,6 +2149,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     CheckBox BTN_CASE
     {
@@ -1982,7 +2162,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
+        Text [ portuguese_brazilian ] = "Diferen~ciar maiúsculas/minúsculas" ;
         Text [ portuguese ] = "~Maiúsculas/minúsculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og små bogstaver" ;
@@ -1994,7 +2174,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¤§å°å†™(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Wielkie i ma³e litery";
+        Text[ polish ] = "~Uwzglêdnij wielkoœæ liter";
         Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~C)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "å¤§å°å¯«(~C)";
@@ -2004,6 +2184,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
+        Text[ czech ] = "RozliÅ¡ovat velkÃ¡/malÃ¡ pÃ­smena";
+        Text[ hebrew ] = "~GroÃŸ-/Kleinschreibung";
+        Text[ hindi ] = "~à¤•à¥‡à¤¸ à¤¸à¤šà¥‡à¤¤à¤¨";
     };
     CheckBox BTN_REGEXP
     {
@@ -2014,7 +2197,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "~Espressione regolare" ;
-        Text [ portuguese_brazilian ] = "~Express?o regular" ;
+        Text [ portuguese_brazilian ] = "~Expressões regulares" ;
         Text [ portuguese ] = "~Expressão regular" ;
         Text [ finnish ] = "~Säännölliset lausekkeet" ;
         Text [ danish ] = "Regulært udtryk" ;
@@ -2026,7 +2209,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~E)";
         Text[ russian ] = "Ğåãóëÿğíîå âûğàæåíèå";
-        Text[ polish ] = "Wyra~¿enie regularne";
+        Text[ polish ] = "Wyra¿~enie regularne";
         Text[ japanese ] = "æ­£è¦è¡¨ç¾(~E)";
         Text[ chinese_traditional ] = "å¸¸è¦è¡¨é”(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
@@ -2036,6 +2219,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Expressions ~habituals";
         Text[ thai ] = "~à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸›à¸à¸•à¸´";
+        Text[ czech ] = "RegulÃ¡rnÃ­ vÃ½razy";
+        Text[ hebrew ] = "â€®×‘×™×˜×•×™×™× ×¨×’×•×œ×¨×™×™×â€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤¯à¤®à¤¿à¤¤ ~à¤µà¤°à¥à¤£à¤¨";
     };
     CheckBox BTN_HEADER
     {
@@ -2046,7 +2232,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Area ~contains column headers" ;
         Text [ norwegian ] = "Area ~contains column headers" ;
         Text [ italian ] = "L'area ~contiene intestazioni colonna" ;
-        Text [ portuguese_brazilian ] = "A ?rea ~cont?m cabe?alhos de colunas" ;
+        Text [ portuguese_brazilian ] = "Contém cabeçalhos das ~colunas" ;
         Text [ portuguese ] = "Contém ~cabeçalhos para colunas" ;
         Text [ finnish ] = "~Sisältää sarakeotsikot" ;
         Text [ danish ] = "Indeholder kolonneoverskrifter" ;
@@ -2058,16 +2244,19 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åŒºåŸŸåŒ…å«åˆ—æ ‡é¢˜(~O)";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
-        Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
+        Text[ polish ] = "Z~awiera nag³ówki kolumn";
         Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~O)";
         Text[ chinese_traditional ] = "ç¯„åœåŒ…å«æ¬„æ¨™ç±¤(~O)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
         Text[ korean ] = "ë²”ìœ„ì— ì—´ ë ˆì´ë¸”ì„ í¬í•¨(~O)";
-        Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
+        Text[ turkish ] = "Sütun etiketleri içerik aralığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~nté capçaleres de columna";
         Text[ thai ] = "~à¸¡à¸µà¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Obsahuje zÃ¡hlavÃ­ sloupcÅ¯";
+        Text[ hebrew ] = "Bereich enthÃ¤lt ~SpaltenkÃ¶pfe";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­ à¤¶à¥€à¤°à¥à¤·à¤•à¥‹à¤‚ à¤•à¥‹ à¤¸~à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾ à¤¹à¥ˆ";
     };
     CheckBox BTN_UNIQUE
     {
@@ -2078,7 +2267,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~?nico" ;
+        Text [ portuguese_brazilian ] = "Sem d~uplicação" ;
         Text [ portuguese ] = "~Único" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -2090,7 +2279,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä¸ç”Ÿæˆå¤ä»¶(~N)";
         Text[ russian ] = "Áåç ïîâòîğåíèé";
-        Text[ polish ] = "Bez duplikatów";
+        Text[ polish ] = "~Bez duplikatów";
         Text[ japanese ] = "é‡è¤‡ãªã—(~N)";
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
@@ -2100,6 +2289,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¸—à¸³à¸‹à¹‰à¸³";
+        Text[ czech ] = "Bez duplikÃ¡tÅ¯";
+        Text[ hebrew ] = "Keine ~Duplikate";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¦à¥à¤µà¤¿à¤¤à¥€à¤¯à¤¾ à¤µà¥ƒà¤¤à¥à¤¤à¤¿ ~à¤¨à¤¹à¥€à¤‚";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -2110,7 +2302,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Write ~result to" ;
         Text [ norwegian ] = "Write ~result to" ;
         Text [ italian ] = "Scrivere il ~risultato del filtro in" ;
-        Text [ portuguese_brazilian ] = "Gravar ~resultado em" ;
+        Text [ portuguese_brazilian ] = "Copiar ~resultados para" ;
         Text [ portuguese ] = "Copiar ~resultados para" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
         Text [ danish ] = "Filterresultat-output til" ;
@@ -2122,7 +2314,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å°†ç­›é€‰ç»“æœå¤åˆ¶åˆ°(~P)...";
         Text[ russian ] = "Ğåçóëüòàò ôèëüòğà â";
-        Text[ polish ] = "Kopiuj rezultaty filtrowania do";
+        Text[ polish ] = "Kopiuj wyniki ~do...";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿çµæœã®è²¼ã‚Šä»˜ã‘å…ˆ(~P)";
         Text[ chinese_traditional ] = "è¤‡è£½ç¯©é¸çµæœåˆ°(~P)...";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáÊÕİíÉ Åáì";
@@ -2132,6 +2324,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~pia els resultats a";
         Text[ thai ] = "à¸œà¸¥à¸à¸²à¸£à¸„à¸±à¸”~à¸¥à¸­à¸à¹„à¸›à¸¢à¸±à¸‡";
+        Text[ czech ] = "KopÃ­rovat vÃ½sledky do";
+        Text[ hebrew ] = "Filterergebnis ~ausgeben nach";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ à¤¨à¤¤à¥€à¤œà¥‹à¤‚ à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿~à¤²à¤¿à¤ªà¤¿";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -2142,7 +2337,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "~Persistent" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Keep filter criteria" ;
-        Text [ portuguese_brazilian ] = "~Persistent" ;
+        Text [ portuguese_brazilian ] = "~Manter critérios do filtro" ;
         Text [ swedish ] = "~Behåll filterkriterier" ;
         Text [ danish ] = "Persistent" ;
         Text [ italian ] = "Mantieni criteri" ;
@@ -2152,7 +2347,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese ] = "~Manter critérios" ;
         Text[ chinese_simplified ] = "ä¿ç•™ç­›é€‰æ¡ä»¶(~K)";
         Text[ russian ] = "Ñîõğàíèòü óñëîâèÿ ôèëüòğà";
-        Text[ polish ] = "Zachowaj kryteria";
+        Text[ polish ] = "Zachowaj kryteria ~filtrowania";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ç¯„å›²ã¨ãƒªãƒ³ã‚¯ã™ã‚‹(~K)";
         Text[ chinese_traditional ] = "ä¿ç•™ç¯©é¸æ¢ä»¶(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
@@ -2163,6 +2358,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ catalan ] = "~Conserva els criteris de filtre";
         Text[ finnish ] = "~Säilytä suodatusehto";
         Text[ thai ] = "à¹€~à¸à¹‡à¸šà¹€à¸à¸“à¸‘à¹Œà¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+        Text[ czech ] = "Ponechat kritÃ©ria filtru";
+        Text[ hebrew ] = "~Persistent";
+        Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤ ~à¤°à¤–à¥‹";
     };
     ListBox LB_COPY_AREA
     {
@@ -2189,7 +2387,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -2211,6 +2409,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedLine FL_OPTIONS
     {
@@ -2221,7 +2422,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -2242,6 +2443,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
     };
     FixedText FT_DBAREA
     {
@@ -2252,7 +2456,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "dummy" ;
         Text [ norwegian ] = "dummy" ;
         Text [ italian ] = "fittizio" ;
-        Text [ portuguese_brazilian ] = "falso" ;
+        Text [ portuguese_brazilian ] = "fictício" ;
         Text [ portuguese ] = "Simulador" ;
         Text [ finnish ] = "tyhjä" ;
         Text [ danish ] = "dummy" ;
@@ -2274,6 +2478,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "babau";
         Text[ thai ] = "à¸«à¸¸à¹ˆà¸™";
+        Text[ czech ] = "dummy";
+        Text[ hebrew ] = "dummy";
+        Text[ hindi ] = "à¤¬à¤¨à¤¾à¤µà¤Ÿà¥€";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -2284,7 +2491,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati" ;
-        Text [ portuguese_brazilian ] = "?rea de dados:" ;
+        Text [ portuguese_brazilian ] = "Intervalo de dados:" ;
         Text [ portuguese ] = "Área de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "Dataområde:" ;
@@ -2295,7 +2502,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "æ•°æ®åŒºåŸŸï¼š";
         Text[ russian ] = "Äèàïàçîí äàííûõ:";
-        Text[ polish ] = "Obszar danych:";
+        Text[ polish ] = "Zakres danych:";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²:";
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
@@ -2305,6 +2512,9 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
+        Text[ czech ] = "DatovÃ¡ oblast:";
+        Text[ hebrew ] = "Datenbereich:";
+        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ:";
     };
     OKButton BTN_OK
     {
@@ -2335,16 +2545,19 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     };
     Text[ chinese_simplified ] = "é«˜çº§ç­›é€‰";
     Text[ russian ] = "Ğàñøèğåííûé ôèëüòğ";
-    Text[ polish ] = "Filtr specjalny";
+    Text[ polish ] = "Filtr zaawansowany";
     Text[ japanese ] = "ç‰¹æ®Šãƒ•ã‚£ãƒ«ã‚¿";
     Text[ chinese_traditional ] = "é€²éšç¯©é¸";
     Text[ arabic ] = "İáÊÑ ÎÇÕ";
     Text[ greek ] = "Åéäéêü ößëôñï";
     Text[ korean ] = "ê³ ê¸‰í•„í„°";
-    Text[ turkish ] = "Özel filtre";
+    Text[ turkish ] = "İleri düzey Filtre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtre avançat";
     Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸‚à¸±à¹‰à¸™à¸ªà¸¹à¸‡";
+    Text[ czech ] = "RozÅ¡Ã­Å™enÃ½ filtr";
+    Text[ hebrew ] = "Spezialfilter";
+    Text[ hindi ] = "à¤‰à¤šà¥à¤š à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤°";
 };
  //============================================================================
 ModalDialog RID_SCDLG_PIVOTFILTER
@@ -2398,6 +2611,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Operador";
         Text[ thai ] = "à¸•à¸±à¸§à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
+        Text[ czech ] = "OperÃ¡tor";
+        Text[ hebrew ] = "VerknÃ¼pfung";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤°à¥à¤¤à¤•";
     };
     FixedText FT_FIELD
     {
@@ -2407,7 +2623,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Fieldname" ;
         Text [ norwegian ] = "Fieldname" ;
         Text [ italian ] = "Nome di campo" ;
-        Text [ portuguese_brazilian ] = "Nome de campo" ;
+        Text [ portuguese_brazilian ] = "Nome do campo" ;
         Text [ portuguese ] = "Nome de campo" ;
         Text [ finnish ] = "Kentän nimi" ;
         Text [ danish ] = "Feltnavn" ;
@@ -2428,6 +2644,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom del camp";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "NÃ¡zev pole";
+        Text[ hebrew ] = "Feldname";
+        Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤¨à¤¾à¤®";
     };
     FixedText FT_COND
     {
@@ -2437,7 +2656,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Condition" ;
         Text [ norwegian ] = "Vilkår" ;
         Text [ italian ] = "Condizione" ;
-        Text [ portuguese_brazilian ] = "condi??o" ;
+        Text [ portuguese_brazilian ] = "Condição" ;
         Text [ portuguese ] = "Condição" ;
         Text [ finnish ] = "Ehto" ;
         Text [ danish ] = "Betingelse" ;
@@ -2458,6 +2677,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condició";
         Text[ thai ] = "à¹€à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
+        Text[ czech ] = "PodmÃ­nka";
+        Text[ hebrew ] = "Bedingung";
+        Text[ hindi ] = "à¤¶à¤°à¥à¤¤";
     };
     FixedText FT_VAL
     {
@@ -2488,6 +2710,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Valor";
         Text[ thai ] = "à¸„à¹ˆà¸²";
+        Text[ czech ] = "Hodnota";
+        Text[ hebrew ] = "Wert";
+        Text[ hindi ] = "à¤®à¥‚à¤²à¥à¤¯";
     };
     ListBox LB_OP1
     {
@@ -2518,7 +2743,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "UND" ; Default ; > ;
+            < "E" ; Default ; > ;
             < "OU" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -2573,7 +2798,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ polish ] =
     {
-            < "ORAZ" ; Default ; > ;
+            < "i" ; Default ; > ;
         < "LUB" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -2620,6 +2845,21 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
          < "à¹à¸¥à¸°" ; Default ; > ;
         < "à¸«à¸£à¸·à¸­" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "UND" ; Default ; > ;
+        < "ODER" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     };
     ListBox LB_OP2
@@ -2651,7 +2891,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "UND" ; Default ; > ;
+            < "E" ; Default ; > ;
             < "OU" ; Default ; > ;
         };
         StringList [ portuguese ] =
@@ -2706,7 +2946,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     };
     StringList [ polish ] =
     {
-            < "ORAZ" ; Default ; > ;
+            < "i" ; Default ; > ;
         < "LUB" ; Default ; > ;
     };
     StringList [ japanese ] =
@@ -2753,6 +2993,21 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
          < "à¹à¸¥à¸°" ; Default ; > ;
         < "à¸«à¸£à¸·à¸­" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "UND" ; Default ; > ;
+        < "ODER" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -3011,6 +3266,33 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ListBox LB_COND2
     {
@@ -3236,6 +3518,33 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < "<>" ; Default ; > ;
     };
     StringList [ thai ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hindi ] =
     {
          < "=" ; Default ; > ;
         < "<" ; Default ; > ;
@@ -3477,6 +3786,33 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -3517,15 +3853,18 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ danish ] = "Filterkriterier";
         Text[ swedish ] = "Filterkriterier";
         Text[ polish ] = "Kryteria filtrowania";
-        Text[ portuguese_brazilian ] = "Filter criteria";
+        Text[ portuguese_brazilian ] = "Critérios do filtro";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿æ¡ä»¶";
         Text[ korean ] = "í•„í„° ê¸°ì¤€";
         Text[ chinese_simplified ] = "ç­›é€‰æ¡ä»¶";
         Text[ chinese_traditional ] = "ç¯©é¸æ¢ä»¶";
-        Text[ turkish ] = "Filter criteria";
+        Text[ turkish ] = "Filtre ölçütü";
         Text[ arabic ] = "Filter criteria";
         Text[ catalan ] = "Criteri del filtre";
         Text[ thai ] = "à¸„à¹‰à¸™à¸«à¸²à¹€à¸à¸“à¸‘à¹Œ";
+        Text[ czech ] = "KritÃ©ria filtru";
+        Text[ hebrew ] = "Filterkriterien";
+        Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤¨à¥à¤¤";
     };
     CheckBox BTN_CASE
     {
@@ -3536,7 +3875,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Case sensitive" ;
         Text [ norwegian ] = "~Case sensitive" ;
         Text [ italian ] = "~Maiuscole/minuscole" ;
-        Text [ portuguese_brazilian ] = "~Sens?vel a mai?culas/min?culas" ;
+        Text [ portuguese_brazilian ] = "Diferen~ciar maiúsculas/minúsculas" ;
         Text [ portuguese ] = "~Maiúsculas/minúsculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
         Text [ danish ] = "Store og små bogstaver" ;
@@ -3548,7 +3887,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å­—æ¯å¤§å°å†™(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Wielkie i ma³e litery";
+        Text[ polish ] = "~Uwzglêdnij wielkoœæ liter";
         Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~C)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "å¤§å°å¯«(~C)";
@@ -3558,6 +3897,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
         Text[ catalan ] = "Distingeix entre ~majúscules i minúscules";
         Text[ thai ] = "~à¸•à¸£à¸‡à¸•à¸²à¸¡à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹ƒà¸«à¸à¹ˆ-à¹€à¸¥à¹‡à¸";
+        Text[ czech ] = "RozliÅ¡ovat velkÃ¡/malÃ¡ pÃ­smena";
+        Text[ hebrew ] = "~GroÃŸ-/Kleinschreibung";
+        Text[ hindi ] = "~à¤•à¥‡à¤¸ à¤¸à¤šà¥‡à¤¤à¤¨";
     };
     CheckBox BTN_REGEXP
     {
@@ -3568,7 +3910,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Regular expression" ;
         Text [ norwegian ] = "~Regular expression" ;
         Text [ italian ] = "~Espressione regolare" ;
-        Text [ portuguese_brazilian ] = "~Express?o regular" ;
+        Text [ portuguese_brazilian ] = "~Expressão regular" ;
         Text [ portuguese ] = "~Expressão regular" ;
         Text [ finnish ] = "~Säännöllinen lauseke" ;
         Text [ danish ] = "Regulært udtryk" ;
@@ -3580,7 +3922,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¸¸è§„è¡¨è¾¾(~R)";
         Text[ russian ] = "Ğåãóëÿğíîå âûğàæåíèå";
-        Text[ polish ] = "Wyra¿enie regularne";
+        Text[ polish ] = "Wyra¿enie ~regularne";
         Text[ japanese ] = "æ­£è¦è¡¨ç¾(~R)";
         Text[ chinese_traditional ] = "å¸¸è¦è¡¨é”(~R)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
@@ -3590,6 +3932,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Expressió ~habitual";
         Text[ thai ] = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢~à¸›à¸à¸•à¸´";
+        Text[ czech ] = "RegulÃ¡rnÃ­ vÃ½raz";
+        Text[ hebrew ] = "â€®×‘×™×˜×•×™×™× ×¨×’×•×œ×¨×™×™×â€¬";
+        Text[ hindi ] = "~à¤¨à¤¿à¤¯à¤®à¤¿à¤¤ à¤µà¤°à¥à¤£à¤¨";
     };
     CheckBox BTN_UNIQUE
     {
@@ -3600,7 +3945,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "~Unique" ;
         Text [ norwegian ] = "~Unique" ;
         Text [ italian ] = "~Univoco" ;
-        Text [ portuguese_brazilian ] = "~?nico" ;
+        Text [ portuguese_brazilian ] = "Sem d~uplicação" ;
         Text [ portuguese ] = "~Único" ;
         Text [ finnish ] = "~Ei monistusta" ;
         Text [ danish ] = "Kun unikke poster" ;
@@ -3612,7 +3957,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä¸ç”Ÿæˆå¤ä»¶(~N)";
         Text[ russian ] = "Áåç ïîâòîğåíèé";
-        Text[ polish ] = "Bez duplikatów";
+        Text[ polish ] = "~Bez duplikatów";
         Text[ japanese ] = "é‡è¤‡ãªã—(~N)";
         Text[ chinese_traditional ] = "ä¸ç”¢ç”Ÿå‚™ä»½(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
@@ -3622,6 +3967,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sense ~duplicats";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¸—à¸³à¸‹à¹‰à¸³";
+        Text[ czech ] = "Bez duplikÃ¡tÅ¯";
+        Text[ hebrew ] = "Keine ~Duplikate";
+        Text[ hindi ] = "à¤•à¥‹à¤ˆ à¤¦à¥à¤µà¤¿à¤¤à¥€à¤¯à¤¾ à¤µà¥ƒà¤¤à¥à¤¤à¤¿ ~à¤¨à¤¹à¥€à¤‚";
     };
     FixedLine FL_OPTIONS
     {
@@ -3632,7 +3980,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Options" ;
         Text [ norwegian ] = "Options" ;
         Text [ italian ] = "Opzioni" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
         Text [ portuguese ] = "Opções" ;
         Text [ finnish ] = "Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
@@ -3653,6 +4001,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
     };
     FixedText FT_DBAREA
     {
@@ -3663,7 +4014,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "dummy" ;
         Text [ norwegian ] = "dummy" ;
         Text [ italian ] = "dummy" ;
-        Text [ portuguese_brazilian ] = "falso" ;
+        Text [ portuguese_brazilian ] = "fictício" ;
         Text [ portuguese ] = "Simulador" ;
         Text [ finnish ] = "tyhjä" ;
         Text [ danish ] = "dummy" ;
@@ -3685,6 +4036,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "babau";
         Text[ thai ] = "à¸«à¸¸à¹ˆà¸™";
+        Text[ czech ] = "dummy";
+        Text[ hebrew ] = "dummy";
+        Text[ hindi ] = "à¤¬à¤¨à¤¾à¤µà¤Ÿà¥€";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -3695,7 +4049,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ ENGLISH ] = "Data area:" ;
         Text [ norwegian ] = "Data area:" ;
         Text [ italian ] = "Area dati:" ;
-        Text [ portuguese_brazilian ] = "?rea de dados:" ;
+        Text [ portuguese_brazilian ] = "Intervalo de dados:" ;
         Text [ portuguese ] = "Área de dados:" ;
         Text [ finnish ] = "Tietoalue:" ;
         Text [ danish ] = "Dataområde:" ;
@@ -3706,7 +4060,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ english_us ] = "Data range:" ;
         Text[ chinese_simplified ] = "æ•°æ®åŒºåŸŸ:";
         Text[ russian ] = "Äèàïàçîí äàííûõ:";
-        Text[ polish ] = "Obszar danych:";
+        Text[ polish ] = "Zakres danych:";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ç¯„å›²:";
         Text[ chinese_traditional ] = "è³‡æ–™å€åŸŸï¼š";
         Text[ arabic ] = "äØÇŞ ÇáÈíÇäÇÊ:";
@@ -3716,6 +4070,9 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de dades:";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
+        Text[ czech ] = "DatovÃ½ rozsah:";
+        Text[ hebrew ] = "Datenbereich:";
+        Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤«à¥ˆà¤²à¤¾à¤µ:";
     };
     OKButton BTN_OK
     {
@@ -3756,7 +4113,23 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtre";
     Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+    Text[ czech ] = "Filtr";
+    Text[ hebrew ] = "â€®×¡×™× ×•×Ÿâ€¬";
+    Text[ hindi ] = "à¤«à¤¿à¤²à¥à¤Ÿà¤°";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
