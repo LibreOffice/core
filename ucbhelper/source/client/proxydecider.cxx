@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxydecider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-05 08:43:24 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
  *************************************************************************/
 
+#include <utility>
 #include <vector>
 
 #ifndef _OSL_MUTEX_HXX_
@@ -133,6 +134,9 @@ public:
 };
 
 //=========================================================================
+typedef std::pair< WildCard, WildCard > NoProxyListEntry;
+
+//=========================================================================
 class InternetProxyDecider_Impl :
     public cppu::WeakImplHelper1< util::XChangesListener >
 {
@@ -142,8 +146,12 @@ class InternetProxyDecider_Impl :
     const InternetProxyServer                m_aEmptyProxy;
     sal_Int32                                m_nProxyType;
     uno::Reference< util::XChangesNotifier > m_xNotifier;
-    std::vector< WildCard >                  m_aNoProxyList;
+    std::vector< NoProxyListEntry >          m_aNoProxyList;
 
+private:
+    bool shouldUseProxy( const rtl::OUString & rHost,
+                         sal_Int32 nPort,
+                         bool bUseFullyQualified ) const;
 public:
     InternetProxyDecider_Impl(
         const uno::Reference< lang::XMultiServiceFactory >& rxSMgr );
@@ -461,6 +469,39 @@ void InternetProxyDecider_Impl::dispose()
 }
 
 //=========================================================================
+bool InternetProxyDecider_Impl::shouldUseProxy( const rtl::OUString & rHost,
+                                                sal_Int32 nPort,
+                                                bool bUseFullyQualified ) const
+{
+    rtl::OUStringBuffer aBuffer( rHost );
+    aBuffer.append( sal_Unicode( ':' ) );
+    aBuffer.append( rtl::OUString::valueOf( nPort ) );
+    const rtl::OUString aHostAndPort( aBuffer.makeStringAndClear() );
+
+    std::vector< NoProxyListEntry >::const_iterator it
+        = m_aNoProxyList.begin();
+    const std::vector< NoProxyListEntry >::const_iterator end
+        = m_aNoProxyList.end();
+
+    while ( it != end )
+    {
+        if ( bUseFullyQualified )
+        {
+            if ( (*it).second.Matches( aHostAndPort ) )
+                return false;
+        }
+        else
+        {
+            if ( (*it).first.Matches( aHostAndPort ) )
+                return false;
+        }
+        it++;
+    }
+
+    return true;
+}
+
+//=========================================================================
 const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
                                             const rtl::OUString & rProtocol,
                                             const rtl::OUString & rHost,
@@ -476,34 +517,44 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
 
     if ( rHost.getLength() && m_aNoProxyList.size() )
     {
-        // #104401#
-        // Obtain fully qualified hostname. This might be quite expensive
-        // (DNS lookup).
+        //////////////////////////////////////////////////////////////////
+        // First, try direct hostname match - #110515#
+        //////////////////////////////////////////////////////////////////
+
+        if ( !shouldUseProxy( rHost, nPort, false ) )
+            return m_aEmptyProxy;
+
+        //////////////////////////////////////////////////////////////////
+        // Second, try match against full qualified hostname - #104401#
+        //////////////////////////////////////////////////////////////////
+
+        // This might be quite expensive (DNS lookup).
         const osl::SocketAddr aAddr( rHost, nPort );
-        rtl::OUString aHost( aAddr.getHostname().toAsciiLowerCase() );
-        // #104401#
+        rtl::OUString aFullyQualifiedHost(
+            aAddr.getHostname().toAsciiLowerCase() );
 
         // Error resolving name? -> fallback.
-        if ( !aHost.getLength() )
-            aHost = rHost;
+        if ( !aFullyQualifiedHost.getLength() )
+            aFullyQualifiedHost = rHost;
 
-        rtl::OUStringBuffer aBuffer( aHost );
-        aBuffer.append( sal_Unicode( ':' ) );
-        aBuffer.append( rtl::OUString::valueOf( nPort ) );
-        const rtl::OUString aHostAndPort( aBuffer );
-
-        std::vector< WildCard >::const_iterator it
-            = m_aNoProxyList.begin();
-        const std::vector< WildCard >::const_iterator end
-            = m_aNoProxyList.end();
-
-        while ( it != end )
+        if ( aFullyQualifiedHost != rHost )
         {
-            if ( (*it).Matches( aHostAndPort ) )
+            if ( !shouldUseProxy( aFullyQualifiedHost, nPort, false ) )
                 return m_aEmptyProxy;
-
-            it++;
         }
+
+        //////////////////////////////////////////////////////////////////
+        // Third, try match of fully qualified entries in no-proxy lit
+        // against full qualified hostname
+        //
+        // Example:
+        // list: staroffice-doc -> full: xyz.germany.sun.com
+        // in:   staroffice-doc.germany.sun.com -> full: xyz.germany.sun.com
+        //
+        //////////////////////////////////////////////////////////////////
+
+        if ( !shouldUseProxy( aFullyQualifiedHost, nPort, true ) )
+            return m_aEmptyProxy;
     }
 
     if ( rProtocol.toAsciiLowerCase()
@@ -651,10 +702,56 @@ void InternetProxyDecider_Impl::setNoProxyList(
 
             if ( aToken.getLength() )
             {
-                if ( aToken.indexOf( ':' ) == -1 )
-                    aToken += rtl::OUString::createFromAscii( ":*" );
+                rtl::OUString aServer;
+                rtl::OUString aPort;
+                sal_Int32 nColonPos = aToken.indexOf( ':' );
+                if ( nColonPos == -1 )
+                {
+                    // No port given, server pattern equals current token
+                    aPort = rtl::OUString::createFromAscii( "*" );
+                    if ( aToken.indexOf( '*' ) == -1 )
+                    {
+                        // pattern describes exactly one server
+                        aServer = aToken;
+                    }
 
-                m_aNoProxyList.push_back( WildCard( aToken ) );
+                    aToken += rtl::OUString::createFromAscii( ":*" );
+                }
+                else
+                {
+                    // Port given, extract server pattern
+                    sal_Int32 nAsterixPos = aToken.indexOf( '*' );
+                    aPort = aToken.copy( nColonPos + 1 );
+                    if ( nAsterixPos < nColonPos )
+                    {
+                        // pattern describes exactly one server
+                        aServer = aToken.copy( 0, nColonPos );
+                    }
+                }
+
+                rtl::OUStringBuffer aFullyQualifiedHost;
+                if ( aServer.getLength() )
+                {
+                    // Remember fully qualified server name if current list
+                    // entry specifies exactly one non-fully qualified server
+                    // name.
+
+                    // This might be quite expensive (DNS lookup).
+                    const osl::SocketAddr aAddr( aServer, 0 );
+                    rtl::OUString aTmp = aAddr.getHostname().toAsciiLowerCase();
+                    if ( aTmp != aServer.toAsciiLowerCase() )
+                    {
+                        aFullyQualifiedHost.append( aTmp );
+                        aFullyQualifiedHost.appendAscii( ":" );
+                        aFullyQualifiedHost.append( aPort );
+                    }
+                }
+
+                m_aNoProxyList.push_back(
+                    NoProxyListEntry( WildCard( aToken ),
+                                      WildCard(
+                                        aFullyQualifiedHost
+                                            .makeStringAndClear() ) ) );
             }
 
             if ( nEnd != nLen )
