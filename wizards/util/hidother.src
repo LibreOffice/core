@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:45:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,16 +1449,17 @@ hidspecial HID { HelpID = HID_DLGTABLE_OPTPRIVATE; };
 hidspecial HID { HelpID = HID_DLGTABLE_LBTABLES; };
 #define HID_DLGTABLE_FIELDSAVAILABLE         41209
 hidspecial HID { HelpID = HID_DLGTABLE_FIELDSAVAILABLE; };
-#define HID_DLGTABLE_FIELDSSELECTED          41210
-hidspecial HID { HelpID = HID_DLGTABLE_FIELDSSELECTED; };
-#define HID_DLGTABLE_CMDMOVESELECTED         41211
+#define HID_DLGTABLE_CMDMOVESELECTED         41210
 hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVESELECTED; };
-#define HID_DLGTABLE_CMDMOVEALL              41212
+#define HID_DLGTABLE_CMDMOVEALL              41211
 hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVEALL; };
-#define HID_DLGTABLE_CMDREMOVESELECTED       41213
+#define HID_DLGTABLE_CMDREMOVESELECTED       41212
 hidspecial HID { HelpID = HID_DLGTABLE_CMDREMOVESELECTED; };
-#define HID_DLGTABLE_CMDREMOVEALL            41214
+#define HID_DLGTABLE_CMDREMOVEALL            41213
 hidspecial HID { HelpID = HID_DLGTABLE_CMDREMOVEALL; };
+#define HID_DLGTABLE_FIELDSSELECTED          41214
+hidspecial HID { HelpID = HID_DLGTABLE_FIELDSSELECTED; };
+
 #define HID_DLGTABLE_CMDMOVEUP        41215
 hidspecial HID { HelpID = HID_DLGTABLE_CMDMOVEUP; };
 #define HID_DLGTABLE_CMDMOVEDOWN        41216
@@ -1510,6 +1511,10 @@ hidspecial HID { HelpID = HID_DLGTABLE_OPT_MODIFYTABLE; };
 hidspecial HID { HelpID = HID_DLGTABLE_OPT_WORKWITHTABLE; };
 #define HID_DLGTABLE_OPT_STARTFORMWIZARD        41243
 hidspecial HID { HelpID = HID_DLGTABLE_OPT_STARTFORMWIZARD; };
+#define HID_DLGTABLE_LST_CATALOG        41244
+hidspecial HID { HelpID = HID_DLGTABLE_LST_CATALOG; };
+#define HID_DLGTABLE_LST_SCHEMA         41245
+hidspecial HID { HelpID = HID_DLGTABLE_LST_SCHEMA; };
 
 
 
