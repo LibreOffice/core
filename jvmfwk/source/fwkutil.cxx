@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:01:02 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,11 @@ rtl::OUString findPlugin(const rtl::OUString & plugin)
         {
             rtl::OUString url;
 #ifdef UNX
+#ifdef MACOSX
+            rtl::OUString path = rtl::OUString::createFromAscii("DYLD_LIBRARY_PATH");
+#else
             rtl::OUString path = rtl::OUString::createFromAscii("LD_LIBRARY_PATH");
+#endif
             rtl::OUString env_path;
             oslProcessError err = osl_getEnvironment(path.pData, &env_path.pData);
             if (err != osl_Process_E_None && err != osl_Process_E_NotFound)
