@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:44:10 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,10 @@
 #ifndef _SWDOCSH_HXX
 #include <docsh.hxx>
 #endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
+#endif
+
 
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
@@ -1352,5 +1356,82 @@ void SwAutoTextEventDescriptor::getByName(
                     rMacro = *pMacro;
             }
         }
+    }
+}
+
+
+
+void SwGlossaries::RemoveFileFromList( const String& rGroup )
+{
+    if(pGlosArr)
+    {
+        const sal_uInt16 nCount = pGlosArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
+        {
+            String *pTmp = (*pGlosArr)[i];
+            if(*pTmp == rGroup)
+            {
+                //UNO-Objekt fuer die Gruppe aus dem Array loeschen
+                rtl::OUString aUName = rGroup;
+                sal_uInt16 nXCount = aGlosGroupArr.Count();
+                for(sal_uInt16 j = 0; j < nXCount; ++j)
+                {
+                    STAR_REFERENCE( text::XAutoTextGroup ) * pxGroup =
+                                                aGlosGroupArr.GetObject(j);
+                    STAR_REFERENCE( container::XNamed )  xNamed( *pxGroup,
+                                                    UNO_NMSPC::UNO_QUERY);
+
+                    if( xNamed->getName() == aUName )
+                    {
+                        STAR_NMSPC::text::XAutoTextGroup* pGroup = pxGroup->get();
+                        ((SwXAutoTextGroup*)pGroup)->Invalidate();
+                        aGlosGroupArr.Remove(j);
+                        delete pxGroup;
+                        break;
+                    }
+                }
+                // alle UNO-Objekte fuer enthaltene Entries loeschen - rueckwaerts!
+                nXCount = aGlosEntryArr.Count();
+                for(j = nXCount; j; --j)
+                {
+                    STAR_REFERENCE( uno::XInterface ) * pxEntry =
+                                                aGlosEntryArr.GetObject(j);
+                    STAR_REFERENCE( lang::XUnoTunnel )  xTunnel(*pxEntry,
+                                                        UNO_NMSPC::UNO_QUERY);
+                    SwXAutoTextEntry* pEntry = (SwXAutoTextEntry*)
+                                xTunnel->getSomething(SwXAutoTextEntry::getUnoTunnelId());
+                    if(pEntry->GetGroupName() == rGroup)
+                    {
+                        pEntry->Invalidate();
+                        aGlosEntryArr.Remove(j);
+                        delete pxEntry;
+                    }
+                }
+
+                pGlosArr->Remove(i);
+                delete pTmp;
+                break;
+            }
+        }
+    }
+}
+
+void SwGlossaries::InvalidateUNOOjects()
+{
+    USHORT i, nCount = aGlosGroupArr.Count();
+    for( i = 0; i < nCount; ++i )
+    {
+        STAR_NMSPC::text::XAutoTextGroup* pGroup = aGlosGroupArr.GetObject(i)->get();
+        ((SwXAutoTextGroup*)pGroup)->Invalidate();
+    }
+    nCount = aGlosEntryArr.Count();
+    for(i = 0; i < nCount; ++i)
+    {
+        STAR_REFERENCE( uno::XInterface ) * pxEntry = aGlosEntryArr.GetObject(i);
+        STAR_REFERENCE( lang::XUnoTunnel ) xTunnel(*pxEntry, UNO_NMSPC::UNO_QUERY);
+        DBG_ASSERT(xTunnel.is(), "No tunnel for SwXAutoTextEntry?");
+        SwXAutoTextEntry* pEntry = (SwXAutoTextEntry*)
+                    xTunnel->getSomething(SwXAutoTextEntry::getUnoTunnelId());
+        pEntry->Invalidate();
     }
 }
