@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@ public:
     */
     virtual void LateInit (void);
 
+    /** Callback function for general slot calls.
+    */
+    virtual void Execute (SfxRequest& rRequest);
 };
 
 } // end of namespace sd
