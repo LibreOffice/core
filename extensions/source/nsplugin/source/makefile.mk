@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 15:19:15 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:41:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,11 @@ dummy:
 .ELSE           # "$(ENABLE_GTK)"==""
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
 INC+= -DNP_LINUX
+.IF "$(SYSTEM_MOZILLA)" == "YES"
+INCPRE=-I$(MOZ_INC)/nspr -I$(MOZ_INC)/java -I$(MOZ_INC)/plugin
+# not sure about -DMOZ_X11 but otheriwse some struct member don't exist...
+CFLAGS+=-DSYSTEM_MOZILLA -DMOZ_X11
+.ENDIF
 .ENDIF
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
