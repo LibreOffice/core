@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:18:31 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,12 +512,6 @@ void TextView::ImpHighlight( const TextSelection& rSel )
                         Point aPnt2( GetWindowPos( aBottomRight ) );
 
                         Rectangle aRect( aPnt1, aPnt2 );
-                        /*! (pb) NOOLDSV
-                        if ( bInvertSelection )
-                            mpWindow->InvertRect( aRect );
-                        else
-                            mpWindow->HighlightRect( aRect );
-                        */
                         mpWindow->Invert( aRect );
                     }
                 }
