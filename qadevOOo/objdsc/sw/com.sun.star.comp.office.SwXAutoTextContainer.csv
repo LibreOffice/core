@@ -1,6 +1,8 @@
 "SwXAutoTextContainer";"com::sun::star::container::XNameAccess";"getByName()"
 "SwXAutoTextContainer";"com::sun::star::container::XNameAccess";"getElementNames()"
 "SwXAutoTextContainer";"com::sun::star::container::XNameAccess";"hasByName()"
+"SwXAutoTextContainer";"com::sun::star::container::XIndexAccess#optional";"getCount()"
+"SwXAutoTextContainer";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
 "SwXAutoTextContainer";"com::sun::star::container::XElementAccess";"getElementType()"
 "SwXAutoTextContainer";"com::sun::star::container::XElementAccess";"hasElements()"
 "SwXAutoTextContainer";"com::sun::star::text::XAutoTextContainer";"insertNewByName()"
