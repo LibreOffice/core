@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-04-27 22:44:26 $
+ *  last change: $Author: er $ $Date: 2001-05-15 21:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2855,7 +2855,7 @@ void ScInterpreter::ScMatch()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             USHORT nDelta, nR, nC;
             if (nCol1 == nCol2)                         // spaltenweise
             {
@@ -3090,7 +3090,7 @@ void ScInterpreter::ScCountIf()
                     !(pFormatter->IsNumberFormat(
                         *rEntry.pStr, nIndex, rEntry.nVal));
                 if ( rEntry.bQueryByString )
-                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             }
             else
             {
@@ -3260,7 +3260,7 @@ void ScInterpreter::ScSumIf()
                     !(pFormatter->IsNumberFormat(
                         *rEntry.pStr, nIndex, rEntry.nVal));
                 if ( rEntry.bQueryByString )
-                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                    rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             }
             double fSum = 0.0;
             double fMem = 0.0;
@@ -3503,7 +3503,7 @@ void ScInterpreter::ScLookup()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat1)
             {
                 if (rEntry.bQueryByString)
@@ -3926,7 +3926,7 @@ void ScInterpreter::ScHLookup()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
                 USHORT nMatCount = nC;
@@ -4168,7 +4168,7 @@ void ScInterpreter::ScVLookup()
                 }
             }
             if ( rEntry.bQueryByString )
-                rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
                 USHORT nMatCount = nR;
@@ -4425,7 +4425,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam)
                             rEntry.bQueryByString = !pFormatter->IsNumberFormat(
                                 *rEntry.pStr, nIndex, rEntry.nVal );
                             if ( rEntry.bQueryByString && !rParam.bRegExp )
-                                rParam.bRegExp = MayBeRegExp( *rEntry.pStr );
+                                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
                         }
                         else
                             break;  // for
@@ -5233,7 +5233,10 @@ void ScInterpreter::ScSearch()
             SetNoValue();
         else
         {
-            utl::SearchParam sPar(SearchStr, utl::SearchParam::SRCH_REGEXP, FALSE, FALSE, FALSE);
+            utl::SearchParam::SearchType eSearchType =
+                (MayBeRegExp( SearchStr, pDok ) ?
+                utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL);
+            utl::SearchParam sPar(SearchStr, eSearchType, FALSE, FALSE, FALSE);
             utl::TextSearch sT( sPar, *ScGlobal::pCharClass );
             int nBool = sT.SearchFrwrd(sStr, &nPos, &nEndPos);
             if (!nBool)
@@ -5435,10 +5438,12 @@ void ScInterpreter::ScErrorType()
 }
 
 
-BOOL ScInterpreter::MayBeRegExp( const String& rStr )
+BOOL ScInterpreter::MayBeRegExp( const String& rStr, const ScDocument* pDoc  )
 {
     if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
         return FALSE;   // einzelnes Metazeichen kann keine RegExp sein
+    if ( pDoc && !pDoc->GetDocOptions().IsFormulaRegexEnabled() )
+        return FALSE;
     static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
     const sal_Unicode* p1 = rStr.GetBuffer();
     sal_Unicode c1;

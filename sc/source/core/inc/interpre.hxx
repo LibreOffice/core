@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-03-13 15:27:59 $
+ *  last change: $Author: er $ $Date: 2001-05-15 21:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,13 @@ public:
 #endif
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
-    static BOOL MayBeRegExp( const String& );   // vielleicht regular expression?
+
+    /// Could string be a regular expression?
+    /// If pDoc!=NULL the document options are taken into account and if
+    /// RegularExpressions are disabled the function returns FALSE regardless
+    /// of the string content.
+    static BOOL MayBeRegExp( const String& rStr, const ScDocument* pDoc );
+
 private:
     static ScTokenStack*    pGlobalStack;
     static ScErrorStack*    pGlobalErrorStack;
