@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-10 15:44:47 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 14:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1668,7 +1668,7 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
         OUString aUName = mxExactName->getExactName( aUNonCaseName );
         if( mxUnoAccess.is() )
         {
-            if( aUName.len() )
+            if( aUName.getLength() )
             {
                 if( mxUnoAccess->hasProperty( aUName, PropertyConcept::ALL - PropertyConcept::DANGEROUS ) )
                 {
@@ -1745,7 +1745,7 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
         }
         else if( mxInvocation.is() )
         {
-            if( aUName.len() )
+            if( aUName.getLength() )
             {
                 if( mxInvocation->hasProperty( aUName ) )
                 {

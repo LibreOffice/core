@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 13:54:25 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 14:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ OUString findUserInDescription( const OUString& aDescription )
         lastIndex = index + 1;
 
         sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
-        OUString left = token.copy(0, eindex).toLowerCase().trim();
+        OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
         OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
                             INetURLObject::DECODE_WITH_CHARSET );
 
