@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:27:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3825,6 +3825,193 @@
 							<desc xml:lang="tr">Specifies the notes.</desc>
 							<desc xml:lang="th">Specifies the notes.</desc>
 							<desc xml:lang="hi-IN">Specifies the notes.</desc>
+						</info>
+					</prop>
+				</group>
+			</group>
+			<group oor:name="com.sun.star.comp.sdbc.evoab.OEvoabDriver">
+				<info>
+					<desc xml:lang="en-US">Specifies the driver settings for the evolution database driver.</desc>
+				</info>
+				<group oor:name="EvolutionPreferences">
+					<info>
+						<desc xml:lang="en-US">Specifies the evolution preferences.</desc>
+					</info>
+					<prop oor:name="FullPathExportingCommand" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the evolution full path exporting command name.</desc>
+						</info>
+						<value/>
+						<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
+					</prop>
+				</group>
+				<group oor:name="ColumnAliases">
+					<info>
+						<desc xml:lang="en-US">Specifies the column alias names used.</desc>
+					</info>
+					<prop oor:name="FirstName" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the first name.</desc>
+						</info>
+					</prop>
+					<prop oor:name="LastName" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the last name.</desc>
+						</info>
+					</prop>
+					<prop oor:name="DisplayName" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the display name.</desc>
+						</info>
+					</prop>
+					<prop oor:name="NickName" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the nickname.</desc>
+						</info>
+					</prop>
+					<prop oor:name="PrimaryEmail" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the primary email.</desc>
+						</info>
+					</prop>
+					<prop oor:name="SecondEmail" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the first name.</desc>
+						</info>
+					</prop>
+					<prop oor:name="PreferMailFormat" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the perfered mail format.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkPhone" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the phone at work.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomePhone" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the phone at home.</desc>
+						</info>
+					</prop>
+					<prop oor:name="FaxNumber" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the fax number.</desc>
+						</info>
+					</prop>
+					<prop oor:name="PagerNumber" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the pager number.</desc>
+						</info>
+					</prop>
+					<prop oor:name="CellularNumber" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the cellular number.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeAddress" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the home address.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeAddress2" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the 2nd home address.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeCity" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the home city.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeState" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the home state.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeZipCode" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the home ZIP code.</desc>
+						</info>
+					</prop>
+					<prop oor:name="HomeCountry" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the home country.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkAddress" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the work address.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkAddress2" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the 2nd work address.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkCity" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the work city.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkState" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the work state.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkZipCode" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the work ZIP code.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WorkCountry" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the work country.</desc>
+						</info>
+					</prop>
+					<prop oor:name="JobTitle" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the job title.</desc>
+						</info>
+					</prop>
+					<prop oor:name="Department" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the department.</desc>
+						</info>
+					</prop>
+					<prop oor:name="Company" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the company.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WebPage1" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the 1st webpage.</desc>
+						</info>
+					</prop>
+					<prop oor:name="WebPage2" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the 2nd webpage.</desc>
+						</info>
+					</prop>
+					<prop oor:name="BirthYear" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the birth year.</desc>
+						</info>
+					</prop>
+					<prop oor:name="BirthMonth" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the birth month.</desc>
+						</info>
+					</prop>
+					<prop oor:name="BirthDay" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the birth day.</desc>
+						</info>
+					</prop>
+					<prop oor:name="Notes" oor:type="xs:string">
+						<info>
+							<desc xml:lang="en-US">Specifies the notes.</desc>
 						</info>
 					</prop>
 				</group>
