@@ -67,6 +67,7 @@ Dim bAssignFileName as Boolean
 							ReadCollectionPaths() = False
 							Exit Function
 						End If
+						CurFileContent = &quot;&quot;
 						CurFileName = NewList(n,0)													
 						If NewList(n,1) = &quot;vor&quot; Then
 							CurFileContent = GetRealFileContent(oDocInfo, CurFileName)
@@ -83,6 +84,9 @@ Dim bAssignFileName as Boolean
 								a = a + 1
 								NewList(a,0) = CurFileName
 								NewList(a,1) = CurExtension
+								If CurFileContent = &quot;&quot; Then
+									CurFileContent = CurExtension
+								End If
 								ApplIndex = GetApplicationIndex(CurFileContent, sFiltername())
 								NewContentList(a) = ApplIndex
 							End If
