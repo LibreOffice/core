@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFontStylesContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,11 @@ enum XMLFontStyleAttrTokens
 
 static __FAR_DATA SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_FO, XML_FONT_FAMILY,
+    { XML_NAMESPACE_SVG, XML_FONT_FAMILY,
             XML_TOK_FONT_STYLE_ATTR_FAMILY },
     { XML_NAMESPACE_STYLE, XML_FONT_FAMILY_GENERIC,
             XML_TOK_FONT_STYLE_ATTR_FAMILY_GENERIC },
-    { XML_NAMESPACE_STYLE, XML_FONT_STYLE_NAME,
+    { XML_NAMESPACE_STYLE, XML_FONT_ADORNMENTS,
             XML_TOK_FONT_STYLE_ATTR_STYLENAME },
     { XML_NAMESPACE_STYLE, XML_FONT_PITCH,
             XML_TOK_FONT_STYLE_ATTR_PITCH },
@@ -270,7 +270,7 @@ SvXMLStyleContext *XMLFontStylesContext::CreateStyleChildContext(
 {
     SvXMLStyleContext *pStyle;
     if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_FONT_DECL ) )
+        IsXMLToken( rLocalName, XML_FONT_FACE ) )
     {
         pStyle = new XMLFontStyleContext_Impl( GetImport(), nPrefix,
                                                rLocalName, xAttrList, *this );
