@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:26:53 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #endif
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
-#endif // _SV_SALLAYOUT_HXX
+#endif
 
 typedef unsigned short sal_MultiByte;
 
@@ -155,7 +155,7 @@ class ExtendedFontStruct : public SvRefBase
 
         int                 LoadEncoding( rtl_TextEncoding nEncoding );
         FontPitch           GetSpacing( rtl_TextEncoding nEncoding );
-        Bool                GetFontBoundingBox( XCharStruct *pCharStruct,
+        bool                GetFontBoundingBox( XCharStruct *pCharStruct,
                                     int *pAscent, int *pDescent ) ;
 
         sal_Size            GetDefaultWidth();
@@ -171,12 +171,12 @@ class ExtendedFontStruct : public SvRefBase
                                     const Size& rPixelSize, sal_Bool bVertical,
                                     ExtendedXlfd* pXlfd );
                             ~ExtendedFontStruct();
-        Bool                Match( const ExtendedXlfd *pXlfd,
+        bool                Match( const ExtendedXlfd *pXlfd,
                                     const Size& rPixelSize, sal_Bool bVertical ) const;
         XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
         XFontStruct*        GetFontStruct( sal_Unicode nChar,
                                     rtl_TextEncoding *pEncoding );
-        Bool                ToImplFontMetricData( ImplFontMetricData *pMetric );
+        bool                ToImplFontMetricData( ImplFontMetricData *pMetric );
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
         sal_Size            GetCharWidth( sal_Unicode,
                                     sal_Int32* pPhysWidth, sal_Int32* pLogWidth );
