@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 09:00:36 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:50:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,9 +413,8 @@ String STR_UNDO_DRAGDROP
 };
 String STR_INSERTGRAPHIC
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grafik einfügen : Grafik einf³gen */
     Text [ de ] = "Grafik einfügen" ;
-    Text [ en-US ] = "Insert Graphics" ;
+    Text [ en-US ] = "Insert picture" ;
 };
 String STR_LINESTYLE
 {
