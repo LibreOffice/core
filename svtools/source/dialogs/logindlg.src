@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-15 18:49:08 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 08:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,18 +323,18 @@ ModalDialog DLG_LOGIN
         Size = MAP_APPFONT ( 197 , 8 ) ;
         Text = "Anmelden" ;
         Text [ English ] = "Connect" ;
-        Text [ english_us ] = "Login" ;
+        Text [ english_us ] = "Log in" ;
         Text [ portuguese_brazilian ] = "Anmelden" ;
         Text [ swedish ] = "Logga in" ;
         Text [ danish ] = "Login" ;
-        Text [ italian ] = "Log in" ;
+        Text [ italian ] = "Login" ;
         Text [ spanish ] = "Registrarse" ;
         Text [ french ] = "Login" ;
         Text [ dutch ] = "Aanmelden" ;
         Text [ portuguese ] = "Login" ;
         Text[ chinese_simplified ] = "µÇÂ¼";
         Text[ russian ] = "Âõîä â ñèñòåìó";
-        Text[ polish ] = "Login";
+        Text[ polish ] = "Wejœcie do systemu";
         Text[ japanese ] = "Û¸Þ²Ý";
         Text[ chinese_traditional ] = "µn¤J";
         Text[ greek ] = "ÄÞëùóç";
@@ -406,4 +406,5 @@ ModalDialog DLG_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseña";
     Text[ finnish ] = "Käyttäjätunnus ja salasana pakolliset";
 };
+
 
