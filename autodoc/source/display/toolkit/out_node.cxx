@@ -2,9 +2,9 @@
  *
  *  $RCSfile: out_node.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,16 +229,13 @@ Node::find_Child( const String & i_name )
 Node &
 Node::add_Child( const String & i_name )
 {
-    Dyn<Node> pNew( new Node(i_name,*this) );
-    Node * pSearch = pNew.Ptr();    // Necessary, because Release() invalidates pNew.
-
-    List::iterator
-        itNew = aChildren.insert( std::upper_bound( aChildren.begin(),
-                                                    aChildren.end(),
-                                                    pSearch,
-                                                    C_Less_NodePtr ),
-                                  pSearch );
-    return *pNew.Release(); // Release, because it is hold by aChildren now.
+    DYN Node * pNew = new Node(i_name,*this);
+    aChildren.insert( std::upper_bound( aChildren.begin(),
+                                        aChildren.end(),
+                                        pNew,
+                                        C_Less_NodePtr ),
+                      pNew );
+    return *pNew;
 }
 
 Node &
@@ -258,8 +255,6 @@ Node::Null_()
 {
     return C_aNullNode;
 }
-
-
 
 
 }   // namespace output

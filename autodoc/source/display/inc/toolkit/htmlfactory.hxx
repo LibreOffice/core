@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ class HtmlFactory
                             ENV &               io_rEnv,
                             Xml::Element *      o_pOut = 0 )
                             :   pEnv(&io_rEnv)  { if (o_pOut != 0) aDestination.Enter(*o_pOut); }
+                        ~HtmlFactory() {}
   private:
     // DATA
     ENV *               pEnv;
