@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-04 12:52:27 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 07:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,11 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
     return aRet;
 }
 
-BOOL SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms )
+#define MAKEFRMS 0
+#define IGNOREANCHOR 1
+#define DONTMAKEFRMS 2
+
+sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms )
 {
     //Ankerwechsel sind fast immer in alle 'Richtungen' erlaubt.
     //Ausnahme: Absatz- bzw. Zeichengebundene Rahmen duerfen wenn sie in
@@ -337,14 +341,14 @@ BOOL SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms )
     SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
 
-    if( nOld == nNew )
-        return FALSE;
-
     // ist der neue ein gueltiger Anker?
     if( !aNewAnch.GetCntntAnchor() && (FLY_AT_FLY == nNew ||
         FLY_AT_CNTNT == nNew || FLY_IN_CNTNT == nNew ||
         FLY_AUTO_CNTNT == nNew ))
-        return FALSE;
+        return IGNOREANCHOR;
+
+    if( nOld == nNew )
+        return DONTMAKEFRMS;
 
 #ifndef PRODUCT
     if( nNew == FLY_PAGE &&
@@ -480,7 +484,7 @@ BOOL SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms )
     if( bNewFrms )
         rFmt.MakeFrms();
 
-    return TRUE;
+    return MAKEFRMS;
 }
 
 BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
@@ -498,8 +502,8 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
     //desselben einer Spezialmethode. Sie Returnt TRUE wenn der Fly neu
     //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
-    BOOL bMakeFrms = SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE ) &&
-                    SetFlyFrmAnchor( rFlyFmt, rSet, FALSE );
+    sal_Int8 nMakeFrms = SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE )
+                         && SetFlyFrmAnchor( rFlyFmt, rSet, FALSE );
 
     const SfxPoolItem* pItem;
     SfxItemIter aIter( rSet );
@@ -519,7 +523,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
             rSet.ClearItem( nWhich );
             break;
         case RES_ANCHOR:
-            if( bMakeFrms )
+            if( DONTMAKEFRMS != nMakeFrms )
                 break;
 
         default:
@@ -538,7 +542,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( aTmpSet.Count() )
         rFlyFmt.SetAttr( aTmpSet );
 
-    if( bMakeFrms )
+    if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
 
     if( pSaveUndo )
@@ -550,7 +554,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     SetModified();
 
-    return aTmpSet.Count() || bMakeFrms;
+    return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
 
@@ -605,7 +609,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                 DoUndo( FALSE );
 
             if( pSet )
-                bChgAnchor = SetFlyFrmAnchor( rFmt, *pSet, FALSE );
+                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, *pSet, FALSE );
             else
             {
                 //JP 23.04.98: muss den FlyFmt-Range haben, denn im SetFlyFrmAnchor
@@ -613,7 +617,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                 SfxItemSet aFlySet( *rNewFmt.GetAttrSet().GetPool(),
                                     rNewFmt.GetAttrSet().GetRanges() );
                 aFlySet.Put( *pItem );
-                bChgAnchor = SetFlyFrmAnchor( rFmt, aFlySet, FALSE );
+                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, aFlySet, FALSE);
             }
 
             if( pUndo )
