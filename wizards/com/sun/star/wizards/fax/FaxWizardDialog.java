@@ -130,10 +130,11 @@ FaxWizardDialogResources resources;
       new String[] {"Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
       new Object[] { new Integer(39),resources.reslblIntroduction_value,Boolean.TRUE,new Integer(104),new Integer(145),INTEGERS[1],new Short((short)55),new Integer(199)}
     );
-    ImageControl3 = insertImage("ImageControl3",
-      new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
-      new Object[] { new Short((short)0),INTEGERS[10],"private:resource/dbu/image/19205",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)56),INTEGERS[10]}
-    );
+    ImageControl3 = insertInfoImage(92, 145, 1);
+//  ImageControl3 = insertImage("ImageControl3",
+//      new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
+//      new Object[] { new Short((short)0),INTEGERS[10],"private:resource/dbu/image/19205",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)56),INTEGERS[10]}
+//    );
   }
 
   public void buildStep2() {
