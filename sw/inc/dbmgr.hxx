@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 08:25:32 $
+ *  last change: $Author: jp $ $Date: 2001-02-15 16:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ class SfxProgress;
 class ListBox;
 class Button;
 class SvNumberFormatter;
+class SwMailMergeDlg;
 
 // -----------------------------------------------------------------------
 
@@ -202,6 +203,7 @@ class SwNewDBMgr
     SwDSParamArr        aDataSourceParams;
 
     SwDSParam*          pMergeData;
+    SwMailMergeDlg*     pMergeDialog;
 
     BOOL                OpenMergeSource(const String& rDataSource,
                             const String& rDataTableOrQuery,
