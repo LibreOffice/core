@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-30 17:53:48 $
+ *  last change: $Author: aw $ $Date: 2000-12-01 13:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,8 +504,8 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
         drawing::Direction3D aDirection;
         if( aValue >>= aDirection )
         {
-            Vector3D aPos(aDirection.DirectionX, aDirection.DirectionY, aDirection.DirectionZ);
-            ((E3dCubeObj*)pObj)->SetCubePos(aPos);
+            Vector3D aSize(aDirection.DirectionX, aDirection.DirectionY, aDirection.DirectionZ);
+            ((E3dCubeObj*)pObj)->SetCubeSize(aSize);
         }
     }
     else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
