@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapesContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,15 +107,15 @@ SvXMLImportContext *ScXMLTableShapesContext::CreateChildContext( USHORT nPrefix,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    SvXMLImportContext *pContext = 0;
+    SvXMLImportContext *pContext(0);
 
     if (!pContext)
     {
-        ScXMLImport& rXMLImport = GetScImport();
+        ScXMLImport& rXMLImport(GetScImport());
         uno::Reference<drawing::XShapes> xShapes (rXMLImport.GetTables().GetCurrentXShapes());
         if (xShapes.is())
         {
-            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get();
+            XMLTableShapeImportHelper* pTableShapeImport((XMLTableShapeImportHelper*)rXMLImport.GetShapeImport().get());
             pTableShapeImport->SetOnTable(sal_True);
             pContext = rXMLImport.GetShapeImport()->CreateGroupChildContext(
                 rXMLImport, nPrefix, rLName, xAttrList, xShapes);
