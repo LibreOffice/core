@@ -20358,3 +20358,14 @@ _real@8@3fff8666666666666800
 ?disposeOutliner@SdrOutlinerCache@@QAEXPAVSdrOutliner@@@Z
 ?createOutliner@SdrModel@@QAEPAVSdrOutliner@@G@Z
 ?disposeOutliner@SdrModel@@QAEXPAVSdrOutliner@@@Z
+??0SvxCharBasePage@@IAE@PAVWindow@@ABVResId@@ABVSfxItemSet@@GG@Z
+??1SvxCharBasePage@@MAE@XZ
+?ActivatePage@SvxCharBasePage@@MAEXABVSfxItemSet@@@Z
+?SetPrevFont@SvxCharBasePage@@IAEXABVSfxItemSet@@GAAVSvxFont@@@Z
+?SetPrevFontEscapement@SvxCharBasePage@@IAEXEEF@Z
+?SetPrevFontSize@SvxCharBasePage@@IAEXABVSfxItemSet@@GAAVSvxFont@@@Z
+?SetPrevFontStyle@SvxCharBasePage@@IAEXABVSfxItemSet@@GGAAVSvxFont@@@Z
+?SetPrevFontWidthScale@SvxCharBasePage@@IAEXABVSfxItemSet@@@Z
+?Execute@SvxOpenGraphicDialog@@QAEKXZ
+?GetGraphic@SvxOpenGraphicDialog@@QBEKAAVGraphic@@@Z
+?flushCache@SvxOutlinerForwarder@@QAEXXZ
