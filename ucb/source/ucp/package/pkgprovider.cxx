@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,9 +153,9 @@ public:
 struct equalString
 {
     bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
-      {
-          return !!( rKey1 == rKey2 );
-      }
+    {
+        return !!( rKey1 == rKey2 );
+    }
 };
 
 struct hashString
@@ -223,9 +223,9 @@ XINTERFACE_IMPL_3( ContentProvider,
 
 // @@@ Add own interfaces.
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContentProvider );
+                      XTypeProvider,
+                      XServiceInfo,
+                      XContentProvider );
 
 //=========================================================================
 //
@@ -235,9 +235,9 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1( ContentProvider,
                      OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.PackageContentProvider" ),
+                        "com.sun.star.comp.ucb.PackageContentProvider" ),
                      OUString::createFromAscii(
-                         PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -263,7 +263,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     // Check URL scheme...
 
     OUString aScheme( OUString::createFromAscii( PACKAGE_URL_SCHEME ) );
-    if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
+    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
         throw IllegalIdentifierException();
 
     // Normalize URL...

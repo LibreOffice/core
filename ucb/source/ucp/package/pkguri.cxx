@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-30 11:25:15 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ static void normalize( OUString& rURL )
             if ( nPos < ( rURL.getLength() - 2 ) )
             {
                 OUString aTmp = rURL.copy( nPos + 1, 2 );
-                rURL = rURL.replaceAt( nPos + 1, 2, aTmp.toUpperCase() );
+                rURL = rURL.replaceAt( nPos + 1, 2, aTmp.toAsciiUpperCase() );
                 nPos++;
             }
         }

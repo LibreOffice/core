@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:40:17 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,9 +126,9 @@ XINTERFACE_IMPL_3( ContentProvider,
 
 // @@@ Add own interfaces.
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContentProvider );
+                      XTypeProvider,
+                      XServiceInfo,
+                      XContentProvider );
 
 //=========================================================================
 //
@@ -138,9 +138,9 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 XSERVICEINFO_IMPL_1( ContentProvider,
                      OUString::createFromAscii(
-                         "com.sun.star.comp.WebDAVContentProvider" ),
+                        "com.sun.star.comp.WebDAVContentProvider" ),
                      OUString::createFromAscii(
-                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
+                        WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -168,18 +168,18 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
 #ifdef HTTP_SUPPORTED
 
     const OUString aScheme = Identifier->getContentProviderScheme();
-    if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                        WEBDAV_URL_SCHEME ) ) &&
-         !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                        HTTP_URL_SCHEME ) ) &&
-         !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                        HTTPS_URL_SCHEME ) ) )
+    if ( !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                         WEBDAV_URL_SCHEME ) ) &&
+         !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                         HTTP_URL_SCHEME ) ) &&
+         !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                         HTTPS_URL_SCHEME ) ) )
         throw IllegalIdentifierException();
 
 #else
 
     OUString aScheme( OUString::createFromAscii( WEBDAV_URL_SCHEME ) );
-    if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
+    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
         throw IllegalIdentifierException();
 
 #endif
@@ -227,7 +227,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     try
     {
       xContent = new ::webdav_ucp::Content(
-                          m_xSMgr, this, xCanonicId, &m_aDAVSessionFactory );
+                        m_xSMgr, this, xCanonicId, &m_aDAVSessionFactory );
     }
     catch (ContentCreationException e)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:40:17 $
+ *  last change: $Author: th $ $Date: 2001-05-11 09:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,26 +175,26 @@ class AuthListener : public DAVAuthListener
 //=========================================================================
 // virtual
 int AuthListener::authenticate( const ::rtl::OUString & inRealm,
-                                   const ::rtl::OUString & inHostName,
-                                   ::rtl::OUStringBuffer & inUserName,
-                                   ::rtl::OUStringBuffer & inPassWord,
-                                   const com::sun::star::uno::Reference<
-                                       com::sun::star::ucb::XCommandEnvironment >&
+                                const ::rtl::OUString & inHostName,
+                                ::rtl::OUStringBuffer & inUserName,
+                                ::rtl::OUStringBuffer & inPassWord,
+                                const com::sun::star::uno::Reference<
+                                    com::sun::star::ucb::XCommandEnvironment >&
                                         Environment )
 {
     if ( Environment.is() )
     {
         Reference< com::sun::star::task::XInteractionHandler > xIH
-              = Environment->getInteractionHandler();
+            = Environment->getInteractionHandler();
         if ( xIH.is() )
         {
             vos::ORef< InteractionRequest_Impl > xRequest
-                  = new InteractionRequest_Impl( inHostName,
+                = new InteractionRequest_Impl( inHostName,
                                                inRealm,
                                                inUserName,
                                                inPassWord );
 
-              xIH->handle( xRequest.getBodyPtr() );
+            xIH->handle( xRequest.getBodyPtr() );
 
             vos::ORef< InteractionContinuation_Impl > xSelection
                 = xRequest->getSelection();
@@ -301,8 +301,8 @@ void ContentProperties::setValues(DAVResource& resource)
 //=========================================================================
 // ctr for content on an existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                    ::ucb::ContentProviderImplHelper* pProvider,
-                    const Reference< XContentIdentifier >& Identifier,
+                  ::ucb::ContentProviderImplHelper* pProvider,
+                  const Reference< XContentIdentifier >& Identifier,
                   DAVSessionFactory* pSessionFactory )
   throw ( ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier ),
@@ -314,34 +314,34 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
   _davResource( sal_True )
 #endif
 {
-      if ( !initpath() )
+    if ( !initpath() )
     {
         VOS_ENSURE( sal_False, "invalid URL" );
-          throw ContentCreationException();
-      }
+        throw ContentCreationException();
+    }
 
     try
-      {
+    {
         // set the webdav session
-          _pWebdavSession = pSessionFactory->createDAVSession(
+        _pWebdavSession = pSessionFactory->createDAVSession(
                                 Identifier->getContentIdentifier(), rxSMgr );
-          _pWebdavSession->setServerAuthListener( &webdavAuthListener );
+        _pWebdavSession->setServerAuthListener( &webdavAuthListener );
     }
     catch ( DAVException & )
     {
         VOS_ENSURE( sal_False, "createDAVSession : DAVException" );
-          throw ContentCreationException();
-      }
+        throw ContentCreationException();
+    }
 }
 
 
 //=========================================================================
 // ctr for content on an non-existing webdav resource
 Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
-                    ::ucb::ContentProviderImplHelper* pProvider,
-                    const Reference< XContentIdentifier >& Identifier,
-                    ::vos::ORef< DAVSession > pSession,
-                    sal_Bool isCollection )
+                  ::ucb::ContentProviderImplHelper* pProvider,
+                  const Reference< XContentIdentifier >& Identifier,
+                  ::vos::ORef< DAVSession > pSession,
+                  sal_Bool isCollection )
   throw ( ContentCreationException )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
   _transient( sal_True ),
@@ -353,11 +353,11 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
 #endif
   _pWebdavSession( pSession )
 {
-      if ( !initpath() )
+    if ( !initpath() )
     {
         VOS_ENSURE( sal_False, "invalid URL" );
-          throw ContentCreationException();
-      }
+        throw ContentCreationException();
+    }
 
     // this is not an existing Content, let's set some props anyway ...
 
@@ -365,12 +365,12 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
     {
         m_aProps.bIsDocument = sal_False;
         m_aProps.bIsFolder   = sal_True;
-      }
-      else
+    }
+    else
     {
         m_aProps.bIsDocument = sal_True;
         m_aProps.bIsFolder   = sal_False;
-      }
+    }
 }
 
 //=========================================================================
@@ -407,12 +407,12 @@ Any SAL_CALL Content::queryInterface( const Type & rType )
 {
     // Note: isFolder ma yrequire network activities! So call it only
     //       if it is really necessary!!!
-      Any aRet = cppu::queryInterface( rType,
-                                      static_cast< XContentCreator * >( this ) );
+    Any aRet = cppu::queryInterface( rType,
+                                     static_cast< XContentCreator * >( this ) );
     if ( aRet.hasValue() )
         return isFolder( Reference< XCommandEnvironment >() ) ? aRet : Any();
 
-      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
+    return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
 
@@ -527,77 +527,77 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                    XCommandEnvironment >& Environment )
     throw( Exception, CommandAbortedException, RuntimeException )
 {
-      Any aRet;
+    Any aRet;
 
     if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
     {
-          //////////////////////////////////////////////////////////////////
-          // getPropertyValues
-          //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        // getPropertyValues
+        //////////////////////////////////////////////////////////////////
 
-          Sequence< Property > Properties;
-          if ( !( aCommand.Argument >>= Properties ) )
+        Sequence< Property > Properties;
+        if ( !( aCommand.Argument >>= Properties ) )
         {
-              VOS_ENSURE( sal_False, "Wrong argument type!" );
-              return Any();
+            VOS_ENSURE( sal_False, "Wrong argument type!" );
+            return Any();
         }
 
-          aRet <<= getPropertyValues( Properties, Environment );
+        aRet <<= getPropertyValues( Properties, Environment );
     }
-      else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
+    else if ( aCommand.Name.compareToAscii( "setPropertyValues" ) == 0 )
     {
-          //////////////////////////////////////////////////////////////////
-          // setPropertyValues
-          //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        // setPropertyValues
+        //////////////////////////////////////////////////////////////////
 
-          Sequence< PropertyValue > aProperties;
-          if ( !( aCommand.Argument >>= aProperties ) )
+        Sequence< PropertyValue > aProperties;
+        if ( !( aCommand.Argument >>= aProperties ) )
         {
-              VOS_ENSURE( sal_False, "Wrong argument type!" );
-              return Any();
+            VOS_ENSURE( sal_False, "Wrong argument type!" );
+            return Any();
         }
 
-          if ( !aProperties.getLength() )
+        if ( !aProperties.getLength() )
         {
-              VOS_ENSURE( sal_False, "No properties!" );
-              return Any();
+            VOS_ENSURE( sal_False, "No properties!" );
+            return Any();
         }
 
-          setPropertyValues( aProperties, Environment );
+        setPropertyValues( aProperties, Environment );
     }
-      else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
-       {
-          //////////////////////////////////////////////////////////////////
-          // getPropertySetInfo
-          //////////////////////////////////////////////////////////////////
+    else if ( aCommand.Name.compareToAscii( "getPropertySetInfo" ) == 0 )
+    {
+        //////////////////////////////////////////////////////////////////
+        // getPropertySetInfo
+        //////////////////////////////////////////////////////////////////
 
-          // Note: Implemented by base class.
-          aRet <<= getPropertySetInfo( Environment, sal_False );
-       }
-      else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
-       {
-          //////////////////////////////////////////////////////////////////
-          // getCommandInfo
-          //////////////////////////////////////////////////////////////////
+        // Note: Implemented by base class.
+        aRet <<= getPropertySetInfo( Environment, sal_False );
+    }
+    else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
+    {
+        //////////////////////////////////////////////////////////////////
+        // getCommandInfo
+        //////////////////////////////////////////////////////////////////
 
-          // Note: Implemented by base class.
-          aRet <<= getCommandInfo( Environment, sal_False );
-       }
+        // Note: Implemented by base class.
+        aRet <<= getCommandInfo( Environment, sal_False );
+    }
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
     {
         //////////////////////////////////////////////////////////////////
-          // open command
-          //////////////////////////////////////////////////////////////////
+        // open command
+        //////////////////////////////////////////////////////////////////
 
-          OpenCommandArgument2 aOpenCommand;
-          if ( aCommand.Argument >>= aOpenCommand )
+        OpenCommandArgument2 aOpenCommand;
+        if ( aCommand.Argument >>= aOpenCommand )
         {
             sal_Bool bOpenFolder =
                         ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
-                            ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
-                            ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
+                          ( aOpenCommand.Mode == OpenMode::FOLDERS ) ||
+                          ( aOpenCommand.Mode == OpenMode::DOCUMENTS ) );
 
-              if ( bOpenFolder && isFolder( Environment ) )
+            if ( bOpenFolder && isFolder( Environment ) )
             {
                 // Open collection.
 
@@ -607,7 +607,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                                                         aOpenCommand,
                                                         Environment );
                 aRet <<= xSet;
-              }
+            }
 
             if ( aOpenCommand.Sink.is() )
             {
@@ -616,62 +616,62 @@ Any SAL_CALL Content::execute( const Command& aCommand,
                 if ( ( aOpenCommand.Mode
                             == OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
                      ( aOpenCommand.Mode
-                             == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
+                            == OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
                 {
                     // Currently(?) unsupported.
-                      throw CommandAbortedException();
+                    throw CommandAbortedException();
                 }
 
                 OUString aURL = m_xIdentifier->getContentIdentifier();
                 Reference< XOutputStream > xOut
-                      = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
+                    = Reference< XOutputStream >(aOpenCommand.Sink, UNO_QUERY );
                 if ( xOut.is() )
-                  {
+                {
                     // PUSH: write data
                     try
                     {
-                          _pWebdavSession->GET( _path, xOut, Environment );
+                        _pWebdavSession->GET( _path, xOut, Environment );
                     }
                     catch ( DAVException & )
                     {
-                          VOS_ENSURE( sal_False, "GET : DAVException" );
-                          throw CommandAbortedException();
+                        VOS_ENSURE( sal_False, "GET : DAVException" );
+                        throw CommandAbortedException();
                     }
-                  }
+                }
                 else
-                  {
+                {
                     Reference< XActiveDataSink > xDataSink
-                          = Reference< XActiveDataSink >(
+                        = Reference< XActiveDataSink >(
                                                 aOpenCommand.Sink, UNO_QUERY );
-                      if ( xDataSink.is() )
+                    if ( xDataSink.is() )
                     {
-                          // PULL: wait for client read
-                          try
+                        // PULL: wait for client read
+                        try
                         {
                             Reference< XInputStream > xIn
                                 = _pWebdavSession->GET( _path, Environment );
                             xDataSink->setInputStream( xIn );
-                          }
+                        }
                         catch ( DAVException &)
                         {
                             VOS_ENSURE( sal_False, "GET : DAVException" );
                             throw CommandAbortedException();
-                          }
+                        }
                     }
-                      else
+                    else
                     {
                         // Note: aOpenCommand.Sink may contain an XStream
                         //       implementation. Support for this type of
                         //       sink is optional...
-                          throw CommandAbortedException();
+                        throw CommandAbortedException();
                     }
-                  }
-              }
+                }
+            }
         }
-          else
+        else
         {
-              VOS_ENSURE( sal_False, "Content::execute - invalid parameter!" );
-              throw CommandAbortedException();
+            VOS_ENSURE( sal_False, "Content::execute - invalid parameter!" );
+            throw CommandAbortedException();
         }
     }
   else if ( aCommand.Name.compareToAscii( "insert" ) == 0 )
@@ -713,7 +713,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
       removeAdditionalPropertySet( sal_True );
     }
   else if (aCommand.Name.compareToAscii( "transfer" ) == 0)
-      {
+    {
         // This command transfers (copies/moves) an object from one location
         // to another. It must be executed at the folder content representing
         // the destination of the transfer operation.
@@ -788,19 +788,19 @@ Any SAL_CALL Content::execute( const Command& aCommand,
             // Check scheme
             //
             const OUString aScheme = sourceURI.GetScheme();
-            if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                                WEBDAV_URL_SCHEME ) ) &&
-                  !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                                HTTP_URL_SCHEME ) ) &&
-                  !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                                HTTPS_URL_SCHEME ) ) )
+            if ( !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                                 WEBDAV_URL_SCHEME ) ) &&
+                 !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                                 HTTP_URL_SCHEME ) ) &&
+                 !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                                 HTTPS_URL_SCHEME ) ) )
                 throw InteractiveBadTransferURLException();
 #else
             // Check scheme
             //
             const OUString aScheme = sourceURI.GetScheme();
-            if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
-                                                WEBDAV_URL_SCHEME ) ) )
+            if ( !aScheme.equalsIgnoreAsciiCase( OUString::createFromAscii(
+                                                 WEBDAV_URL_SCHEME ) ) )
                 throw InteractiveBadTransferURLException();
 #endif
             sourceURI.SetScheme (OUString::createFromAscii ("http"));
@@ -1060,9 +1060,9 @@ Reference< XContent > SAL_CALL Content::createNewContent( const ContentInfo& Inf
       try {
         return new ::webdav_ucp::Content( m_xSMgr,
                                           m_xProvider.getBodyPtr(),
-                                            xId,
-                                            _pWebdavSession,
-                                            isCollection);
+                                          xId,
+                                          _pWebdavSession,
+                                          isCollection);
       }
       catch (ContentCreationException e ) {
         return Reference< XContent >();
@@ -1135,11 +1135,11 @@ Reference< XRow > Content::getPropertyValues(
       if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
        {
             if ( rData.bIsFolder )
-                  xRow->appendString( rProp, OUString::createFromAscii(
-                                                      WEBDAV_COLLECTION_TYPE ) );
+                xRow->appendString( rProp, OUString::createFromAscii(
+                                                    WEBDAV_COLLECTION_TYPE ) );
             else
-                  xRow->appendString( rProp, OUString::createFromAscii(
-                                                      WEBDAV_CONTENT_TYPE ) );
+                xRow->appendString( rProp, OUString::createFromAscii(
+                                                    WEBDAV_CONTENT_TYPE ) );
         }
       else if ( rProp.Name.compareToAscii( "Title" ) == 0 )
         {
@@ -1154,15 +1154,15 @@ Reference< XRow > Content::getPropertyValues(
           xRow->appendBoolean( rProp, rData.bIsFolder );
         }
       else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
-          {
+        {
           xRow->appendLong( rProp, rData.size );
         }
       else if ( rProp.Name.compareToAscii( "DateCreated" ) == 0 )
-          {
+        {
           xRow->appendTimestamp( rProp, rData.dateCreated );
         }
       else if ( rProp.Name.compareToAscii( "DateModified" ) == 0 )
-          {
+        {
           xRow->appendTimestamp( rProp, rData.dateModified );
         }
       else if ( rProp.Name.compareToAscii( "MediaType" ) == 0 ) {
@@ -1251,7 +1251,7 @@ Reference< XRow > Content::getPropertyValues(
               rData.bIsFolder ? OUString::createFromAscii(
                                                 WEBDAV_COLLECTION_TYPE )
                               : OUString::createFromAscii(
-                                                  WEBDAV_CONTENT_TYPE ) );
+                                                WEBDAV_CONTENT_TYPE ) );
       xRow->appendString (
               Property( OUString::createFromAscii( "Title" ),
                     -1,
@@ -1393,16 +1393,16 @@ Reference< XRow > Content::getPropertyValues(
 
     if ( update( rProperties, xEnv ) )
         return getPropertyValues( m_xSMgr,
-                                      rProperties,
-                                      m_aProps,
-                                      m_xProvider,
-                                      m_xIdentifier->getContentIdentifier() );
+                                  rProperties,
+                                  m_aProps,
+                                  m_xProvider,
+                                  m_xIdentifier->getContentIdentifier() );
     return Reference< XRow >();
 }
 
 //=========================================================================
 void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
-                                    const Reference< XCommandEnvironment >& xEnv )
+                                 const Reference< XCommandEnvironment >& xEnv )
 {
   osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1445,12 +1445,12 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
     {
         OUString aNewValue;
         if ( rValue.Value >>= aNewValue )
-          {
+        {
             // No empty titles!
             if ( aNewValue.getLength() > 0 )
             {
                 if ( aNewValue != m_aProps.aTitle )
-                  {
+                {
                     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
                     // modified title -> modified URL -> exchange !
@@ -1467,7 +1467,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
                     m_aProps.aEscapedTitle
                         = NeonUri::escapeSegment( aNewValue );
                     nChanged++;
-                  }
+                }
             }
         }
     }
@@ -1526,15 +1526,15 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
   {
     // Assemble new content identifier...
 
-      OUString aNewURL = getParentURL();
-      if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
+    OUString aNewURL = getParentURL();
+    if ( aNewURL.lastIndexOf( '/' ) != ( aNewURL.getLength() - 1 ) )
         aNewURL += OUString::createFromAscii( "/" );
 
-      aNewURL += m_aProps.aEscapedTitle;
+    aNewURL += m_aProps.aEscapedTitle;
 
     Reference< XContentIdentifier > xNewId
                         = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
-      Reference< XContentIdentifier > xOldId = m_xIdentifier;
+    Reference< XContentIdentifier > xOldId = m_xIdentifier;
 
     try
     {
@@ -1558,8 +1558,8 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues,
         {
             // Adapt Additional Core Properties.
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
-                                         xNewId->getContentIdentifier(),
-                                         sal_True );
+                                        xNewId->getContentIdentifier(),
+                                        sal_True );
             initpath();
         }
     }
@@ -1640,50 +1640,50 @@ void Content::insert(Reference<XInputStream> xInputStream,
     // IsFolder
 
     if ( m_aProps.aTitle.getLength() == 0 )
-       {
+    {
         VOS_ENSURE( sal_False, "Content::insert - property value missing!" );
-          throw CommandAbortedException();
-       }
+        throw CommandAbortedException();
+    }
 
-      // Assemble new content identifier...
+    // Assemble new content identifier...
 
-      OUString aURL = getParentURL();
-      if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
+    OUString aURL = getParentURL();
+    if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
         aURL += OUString::createFromAscii( "/" );
 
-      aURL += m_aProps.aEscapedTitle;
-      m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+    aURL += m_aProps.aEscapedTitle;
+    m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
 
     if ( !initpath() )
-          throw CommandAbortedException();
+        throw CommandAbortedException();
 
-      try
+    try
     {
         if ( isFolder( Environment ) )
-          {
+        {
             _pWebdavSession->MKCOL(_path, Environment);
-          }
+        }
         else
-          {
-              _pWebdavSession->PUT(_path, xInputStream, Environment);
-          }
+        {
+            _pWebdavSession->PUT(_path, xInputStream, Environment);
+        }
 
-      }
+    }
     catch ( DAVException& )
     {
         if ( isFolder( Environment ) )
-              VOS_ENSURE( sal_False, "MKCOL : DAVException\n" );
+            VOS_ENSURE( sal_False, "MKCOL : DAVException\n" );
         else
-              VOS_ENSURE( sal_False, "PUT : DAVException\n" );
+            VOS_ENSURE( sal_False, "PUT : DAVException\n" );
         throw CommandAbortedException();
-      }
+    }
 
 //  if ( ! update(Environment) )
 //    throw CommandAbortedException();
 
     aGuard.clear();
-      inserted();
-      _transient = sal_False;
+    inserted();
+    _transient = sal_False;
 }
 
 //=========================================================================
@@ -1787,53 +1787,53 @@ sal_Bool Content::initpath()
 {
     const OUString aURL = m_xIdentifier->getContentIdentifier();
 
-      // scheme://user@host:port/path
-      sal_Int32 nPos = aURL.indexOf( '/' );
-      if ( nPos == -1 )
-      {
+    // scheme://user@host:port/path
+    sal_Int32 nPos = aURL.indexOf( '/' );
+    if ( nPos == -1 )
+    {
         VOS_ENSURE( sal_False, "No '/' in URL " );
         return sal_False;
-      }
+    }
 
-      nPos = aURL.indexOf( '/', nPos + 1 );
-      if ( nPos == -1 )
-      {
+    nPos = aURL.indexOf( '/', nPos + 1 );
+    if ( nPos == -1 )
+    {
         VOS_ENSURE( sal_False, "No second '/' in URL " );
         return sal_False;
-      }
+    }
 
-      nPos = aURL.indexOf( '/', nPos + 1 );
-      if ( nPos == -1 )
+    nPos = aURL.indexOf( '/', nPos + 1 );
+    if ( nPos == -1 )
         _path = OUString::createFromAscii( "/" );
     else
         _path = aURL.copy( nPos );
 
     nPos = aURL.lastIndexOf( '/' );
-      sal_Int32 nEnd = aURL.getLength();
+    sal_Int32 nEnd = aURL.getLength();
 
-      if ( nPos == nEnd - 1 )
+    if ( nPos == nEnd - 1 )
     {
         // Trailing slash found. Skip.
         nPos = aURL.lastIndexOf( '/', nPos );
         nEnd--;
-      }
+    }
 
-      if ( nPos == -1 )
+    if ( nPos == -1 )
     {
         VOS_ENSURE( sal_False, "Invalid URL " );
         return sal_False;
     }
 
     NeonUri aURI( aURL );
-       m_aProps.aTitle = aURI.GetPathBaseNameUnescaped();
-       m_aProps.aEscapedTitle = aURI.GetPathBaseName();
+    m_aProps.aTitle = aURI.GetPathBaseNameUnescaped();
+    m_aProps.aEscapedTitle = aURI.GetPathBaseName();
 
     return sal_True;
 }
 
 //=========================================================================
 sal_Bool Content::update( const Sequence< Property >& rProperties,
-                           const Reference< XCommandEnvironment >& Environment )
+                          const Reference< XCommandEnvironment >& Environment )
 {
     if ( !_upToDate && !_transient )
     {
@@ -1856,13 +1856,13 @@ sal_Bool Content::update( const Sequence< Property >& rProperties,
                  ( rPropName == DAVProperties::RESOURCETYPE ) ||
                  ( rPropName == DAVProperties::SOURCE ) ||
 //               ( rPropName == DAVProperties::SUPPORTEDLOCK ) ||
-                   ( rPropName.compareToAscii( "ContentType" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "IsDocument" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "IsFolder" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "Size" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "DateCreated" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "DateModified" ) == 0 ) ||
-                   ( rPropName.compareToAscii( "MediaType" ) == 0 ) )
+                 ( rPropName.compareToAscii( "ContentType" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "IsDocument" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "IsFolder" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "Size" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "DateCreated" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "DateModified" ) == 0 ) ||
+                 ( rPropName.compareToAscii( "MediaType" ) == 0 ) )
             {
                 bDoIt = sal_True;
                 break;
@@ -1874,52 +1874,52 @@ sal_Bool Content::update( const Sequence< Property >& rProperties,
             try
             {
                 DAVCapabilities caps;
-                   _pWebdavSession->OPTIONS( _path, caps, Environment );
+                _pWebdavSession->OPTIONS( _path, caps, Environment );
                 _davResource = caps.class1;
             }
             catch ( DAVException & )
             {
 //              VOS_ENSURE( sal_False, "OPTIONS : DAVException" );
                 _davResource = sal_False;
-              }
+            }
 
             if ( _davResource )
             {
                 std::vector< DAVResource > resources;
                 try
                 {
-                       // properties initialization
-                       std::vector< OUString > propertyNames;
-                       propertyNames.push_back( DAVProperties::CREATIONDATE );
-                       propertyNames.push_back( DAVProperties::DISPLAYNAME );
-                       propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
-                       propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
-                       propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
-                       propertyNames.push_back( DAVProperties::GETETAG );
-                       propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
-                       propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
-                       propertyNames.push_back( DAVProperties::RESOURCETYPE );
-                       propertyNames.push_back( DAVProperties::SOURCE );
-                       //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
+                    // properties initialization
+                    std::vector< OUString > propertyNames;
+                    propertyNames.push_back( DAVProperties::CREATIONDATE );
+                    propertyNames.push_back( DAVProperties::DISPLAYNAME );
+                    propertyNames.push_back( DAVProperties::GETCONTENTLANGUAGE );
+                    propertyNames.push_back( DAVProperties::GETCONTENTLENGTH );
+                    propertyNames.push_back( DAVProperties::GETCONTENTTYPE );
+                    propertyNames.push_back( DAVProperties::GETETAG );
+                    propertyNames.push_back( DAVProperties::GETLASTMODIFIED );
+                    propertyNames.push_back( DAVProperties::LOCKDISCOVERY );
+                    propertyNames.push_back( DAVProperties::RESOURCETYPE );
+                    propertyNames.push_back( DAVProperties::SOURCE );
+                    //   propertyNames.push_back( DAVProperties::SUPPORTEDLOCK );
 
-                       _pWebdavSession->PROPFIND(
+                    _pWebdavSession->PROPFIND(
                             _path, ZERO, propertyNames, resources, Environment );
                 }
                 catch ( DAVException & )
                 {
     //              VOS_ENSURE( sal_False, "PROPFIND : DAVException" );
-                       return sal_False;
+                    return sal_False;
                 }
 
                 if ( resources.size() != 1 )
-                       return sal_False;
+                    return sal_False;
 
                 m_aProps.setValues( resources[ 0 ] );
             }
             _upToDate = sal_True;
         }
     }
-      return sal_True;
+    return sal_True;
 }
 
 //=========================================================================
