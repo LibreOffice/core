@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 16:28:47 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3815,10 +3815,18 @@ String RID_STR_TITLE
     Text = "Titel" ;
     Text [ ENGLISH ] = "Title" ;
 };
+String RID_STR_STEP
+{
+    Text = "Step" ;
+    Text [ ENGLISH ] = "Step" ;
+};
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/02 16:28:47  tbe
+ *  added title property
+ *
  *  Revision 1.4  2001/02/22 09:32:15  tbe
  *  added properties for dialog controls
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-06 16:01:24 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 14:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_READONLY,            PROPERTY_ID_READONLY,           sal_True,  String(ModuleRes(RID_STR_READONLY)),         nPos++, HID_PROP_READONLY) ,
                 OPropertyInfoImpl(PROPERTY_PRINTABLE,           PROPERTY_ID_PRINTABLE,          sal_True,  String(ModuleRes(RID_STR_PRINTABLE)),        nPos++, HID_PROP_PRINTABLE) ,
                 OPropertyInfoImpl(PROPERTY_CONTROLSOURCE,       PROPERTY_ID_CONTROLSOURCE,      sal_True,  String(ModuleRes(RID_STR_CONTROLSOURCE)),    nPos++, HID_PROP_CONTROLSOURCE),
+                OPropertyInfoImpl(PROPERTY_STEP,                PROPERTY_ID_STEP,               sal_True,  String(ModuleRes(RID_STR_STEP)),             nPos++, 0),
                 OPropertyInfoImpl(PROPERTY_TABSTOP,             PROPERTY_ID_TABSTOP,            sal_True,  String(ModuleRes(RID_STR_TABSTOP)),          nPos++, HID_PROP_TABSTOP),
                 OPropertyInfoImpl(PROPERTY_TABINDEX,            PROPERTY_ID_TABINDEX,           sal_True,  String(ModuleRes(RID_STR_TABINDEX)),         nPos++, HID_PROP_TABINDEX) ,
                 OPropertyInfoImpl(PROPERTY_DATASOURCE,          PROPERTY_ID_DATASOURCE,         sal_True,  String(ModuleRes(RID_STR_DATASOURCE)),       nPos++, HID_PROP_DATASOURCE) ,
@@ -474,6 +475,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/06 16:01:24  fs
+ *  changed relative position of Command and CommandType
+ *
  *  Revision 1.6  2001/03/02 16:28:04  tbe
  *  added title property
  *

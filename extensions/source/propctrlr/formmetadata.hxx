@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-02 16:28:16 $
+ *  last change: $Author: tbe $ $Date: 2001-03-07 14:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,7 @@ namespace pcr
     #define PROPERTY_ID_POSITIONX            99
     #define PROPERTY_ID_POSITIONY            100
     #define PROPERTY_ID_TITLE                101
+    #define PROPERTY_ID_STEP                 102
 
 //............................................................................
 } // namespace pcr
@@ -242,6 +243,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/02 16:28:16  tbe
+ *  added title property
+ *
  *  Revision 1.4  2001/02/22 09:31:55  tbe
  *  added properties for dialog controls
  *
