@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistrytdprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:34:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
 #include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
+#include "com/sun/star/reflection/XPublished.hpp"
 #include "com/sun/star/reflection/XServiceTypeDescription2.hpp"
 #include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
 #include "com/sun/star/reflection/XStructTypeDescription.hpp"
@@ -267,10 +268,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider.Struct3")),
         structure->getName());
-    assertEqual(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider.Struct2")),
-        structure->getBaseType()->getName());
+    assertFalse(structure->getBaseType().is());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
     assertEqual(
         css::uno::TypeClass_UNKNOWN,
@@ -302,7 +300,10 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider.Struct4")),
         structure->getName());
-    assertFalse(structure->getBaseType().is());
+    assertEqual(
+        rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider.Struct2")),
+        structure->getBaseType()->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberTypes().getLength());
     assertEqual(
         rtl::OUString(
@@ -313,7 +314,7 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
         structure->getMemberTypes()[0]->getName());
     assertEqual< sal_Int32 >(1, structure->getMemberNames().getLength());
     assertEqual(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("s1")),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("s2")),
         structure->getMemberNames()[0]);
     assertEqual< sal_Int32 >(0, structure->getTypeParameters().getLength());
     assertEqual< sal_Int32 >(0, structure->getTypeArguments().getLength());
@@ -689,6 +690,209 @@ sal_Int32 Service::run(css::uno::Sequence< rtl::OUString > const & arguments)
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider.Typedef2")),
         singleton->getInterface()->getName());
+
+    css::uno::Reference< css::reflection::XPublished > published;
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Enum1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Enum2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Struct1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Struct2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Struct3"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XStructTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Struct3"))),
+            css::uno::UNO_QUERY_THROW)->getMemberTypes()[0],
+        css::uno::UNO_QUERY);
+    assertFalse(published.is());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Struct3a"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Exception1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Exception2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.XTest1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.XTest2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Typedef1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Typedef2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    //TODO: check constants test.registrytdprovider.Const1 (published),
+    // test.registrytdprovider.Const2 (unpublished), and
+    // test.registrytdprovider.Consts1.C (no XPublished), which are not
+    // accessible via provider->getByHierarchicalName (see #i31428)
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Consts1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Consts2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("test.registrytdprovider"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertFalse(published.is());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Service1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Service2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Singleton2"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertTrue(published->isPublished());
+    published = css::uno::Reference< css::reflection::XPublished >(
+        css::uno::Reference< css::reflection::XTypeDescription >(
+            provider->getByHierarchicalName(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "test.registrytdprovider.Singleton1"))),
+            css::uno::UNO_QUERY_THROW),
+        css::uno::UNO_QUERY);
+    assertTrue(published.is());
+    assertFalse(published->isPublished());
 
     return 0;
 }
