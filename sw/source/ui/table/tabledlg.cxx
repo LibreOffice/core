@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 10:32:55 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,13 +1493,11 @@ void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));//CHINA001
     if( TP_BACKGROUND == nId )
     {
-        //ShowTblControl() zuerst rufen, wegen HTMLMode
-        //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowTblControl();
-        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_TBLCTL));
+        sal_Int32 nFlagType = SVX_SHOW_TBLCTL;
         if(!( nHtmlMode & HTMLMODE_ON ) ||
             nHtmlMode & HTMLMODE_SOME_STYLES)
-            aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, SVX_SHOW_SELECTOR));
-            //CHINA001 ((SvxBackgroundTabPage&)rPage).ShowSelector();
+            nFlagType |= SVX_SHOW_SELECTOR;
+        aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, nFlagType));
         rPage.PageCreated(aSet);
     }
     else if(TP_BORDER == nId)
