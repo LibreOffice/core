@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-26 15:13:19 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,10 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if ( !pArgs )
-            pArgs = new CommandLineArgs( ::vos::OExtCommandLine() );
+    {
+            ::vos::OExtCommandLine aArgs;
+            pArgs = new CommandLineArgs( aArgs );
+    }
     }
 
     return pArgs;
