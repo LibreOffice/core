@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 16:08:47 $
+ *  last change: $Author: mba $ $Date: 2000-12-21 16:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1298,42 +1298,13 @@ BOOL SfxStatusBarConfigPage::FillItemSet( SfxItemSet& )
     {
         Apply();
         aEntriesBox.bModified = FALSE;
+        pMgr->StoreConfig();
         return TRUE;
     }
     return FALSE;
 }
 
 void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
-{
-}
-
-BOOL SfxMenuConfigPage::FillItemSet( SfxItemSet& )
-{
-    if ( bModified )
-    {
-        Apply();
-        bModified = FALSE;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-void SfxMenuConfigPage::Reset( const SfxItemSet& )
-{
-}
-
-BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
-{
-    if ( bModified )
-    {
-        Apply();
-        bModified = FALSE;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
 {
 }
 

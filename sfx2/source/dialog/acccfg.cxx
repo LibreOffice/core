@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: mba $ $Date: 2000-12-21 16:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,6 +851,22 @@ String SfxAcceleratorConfigPage::GetFunctionName( KeyFuncType eType ) const
 void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 {
     aGroupBox.SelectMacro( pItem );
+}
+
+BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
+{
+    if ( bModified )
+    {
+        Apply();
+        bModified = FALSE;
+        pMgr->StoreConfig();
+        return TRUE;
+    }
+    return FALSE;
+}
+
+void SfxAcceleratorConfigPage::Reset( const SfxItemSet& )
+{
 }
 
 
