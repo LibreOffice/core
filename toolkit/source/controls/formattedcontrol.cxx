@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:06:25 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 11:57:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_HELPURL );
         ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
         ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+        ImplRegisterProperty( BASEPROPERTY_REPEAT );
+        ImplRegisterProperty( BASEPROPERTY_REPEAT_DELAY );
         ImplRegisterProperty( BASEPROPERTY_READONLY );
         ImplRegisterProperty( BASEPROPERTY_SPIN );
         ImplRegisterProperty( BASEPROPERTY_STRICTFORMAT );
