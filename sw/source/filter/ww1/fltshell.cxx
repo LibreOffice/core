@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:53:12 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,9 +890,10 @@ SfxPoolItem* __EXPORT SwFltSection::Clone(SfxItemPool*) const
 //
 
 //////////////////////////////////////////////////////////// SwFltShell
-SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, BOOL bNew, ULONG nFieldFl)
+SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const String& rBaseURL, BOOL bNew, ULONG nFieldFl)
     : pCurrentPageDesc(0), pSavedPos(0), eSubMode(None), nAktStyle(0),
     aStack(pDoc, nFieldFl), aEndStack(pDoc, nFieldFl),
+    sBaseURL(rBaseURL),
     pPaM(new SwPaM(*(rPaM.GetPoint()))),
     nPageDescOffset(GetDoc().GetPageDescCnt()),
     eSrcCharSet(RTL_TEXTENCODING_MS_1252), bNewDoc(bNew), bStdPD(FALSE),
@@ -1065,7 +1066,10 @@ SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
     // one of: GFF_NOT GFF_BMP GFF_GIF GFF_JPG GFF_PCD GFF_PCX GFF_PNG
     // GFF_TIF GFF_XBM GFF_DXF GFF_MET GFF_PCT GFF_SGF GFF_SVM GFF_WMF
     // GFF_SGV GFF_XXX
-    INetURLObject aDir( URIHelper::SmartRelToAbs(rPicName) );
+    INetURLObject aDir(
+        URIHelper::SmartRel2Abs(
+            INetURLObject(GetBaseURL()), rPicName,
+            URIHelper::GetMaybeFileHdl()) );
     switch (pFilter->ImportGraphic(aGraphic, aDir))
     {
         case GRFILTER_OK:
