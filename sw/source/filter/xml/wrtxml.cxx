@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:06:38 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ sal_uInt32 SwXMLWriter::_Write()
         {
             xStrm->SetSize( 0 );
             String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("appication/binary") );
+            OUString aMime( RTL_CONSTASCII_USTRINGPARAM("application/binary") );
             uno::Any aAny;
             aAny <<= aMime;
             xStrm->SetProperty( aPropName, aAny );
