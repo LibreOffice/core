@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:35:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@
 #endif
 
 #include <tools/urlobj.hxx>
+#include <comphelper/mediadescriptor.hxx>
 
 #include <vector>
 
@@ -205,14 +206,19 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
         // create parameter array
         sal_Int32 nCount = 4;
+        if ( aDispatchRequest.aPreselectedFactory.getLength() )
+            nCount++;
 
         // we need more properties for a print/print to request
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO  )
-            nCount = 5;
+            nCount++;
 
         Sequence < PropertyValue > aArgs( nCount );
+
+        // mark request as user interaction from outside
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
+        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
 
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO )
@@ -240,8 +246,11 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             aArgs[3].Value <<= nUpdateDoc;
         }
 
-        // mark request as user interaction from outside
-        aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:OpenEvent");
+        if ( aDispatchRequest.aPreselectedFactory.getLength() )
+        {
+            aArgs[nCount-1].Name = ::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE();
+            aArgs[nCount-1].Value <<= aDispatchRequest.aPreselectedFactory;
+        }
 
         String aName( GetURL_Impl( aDispatchRequest.aURL ) );
         ::rtl::OUString aTarget( RTL_CONSTASCII_USTRINGPARAM("_default") );
