@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsecctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 08:47:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,16 @@
 
 #include <sfx2/stbitem.hxx>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 class  SvxSizeItem;
 
 // class SvxPosSizeToolBoxControl ----------------------------------------
 
-class XmlSecStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC XmlSecStatusBarControl : public SfxStatusBarControl
 {
 private:
     struct XmlSecStatusBarControl_Impl;
