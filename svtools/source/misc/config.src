@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:40:15 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,10 @@ String STR_WARNING_ITEM
     TEXT[ czech ] = "Neplatná verze!";
     TEXT[ hebrew ] = "‮גרסה לא נכונה!‬";
     TEXT[ hindi ] = "Incorrect Version!";
+    TEXT[ slovak ] = "Neplatná verzia";
 };
+
+
 
 
 
