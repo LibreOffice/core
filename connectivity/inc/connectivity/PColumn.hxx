@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 06:58:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 12:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,40 @@ namespace connectivity
             ::rtl::OUString getTableName() const { return  m_aTableName; }
             sal_Bool        getFunction() const { return  m_bFunction; }
             sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
+        };
+
+        class OOrderColumn;
+
+        typedef sdbcx::OColumn OOrderColumn_BASE;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OOrderColumn> OOrderColumn_PROP;
+
+        class OOrderColumn :    public OOrderColumn_BASE,
+                                public OOrderColumn_PROP
+        {
+            sal_Bool        m_bAscending;
+            sal_Bool        m_bOrder;
+        protected:
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( sal_Int32 _nId) const;
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+            virtual ~OOrderColumn();
+        public:
+            OOrderColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase,sal_Bool _bAscending);
+            OOrderColumn(const ::rtl::OUString& _Name,
+                    const ::rtl::OUString& _TypeName,
+                    const ::rtl::OUString& _DefaultValue,
+                    sal_Int32       _IsNullable,
+                    sal_Int32       _Precision,
+                    sal_Int32       _Scale,
+                    sal_Int32       _Type,
+                    sal_Bool        _IsAutoIncrement,
+                    sal_Bool        _IsCurrency,
+                    sal_Bool        _bCase
+                    ,sal_Bool _bAscending);
+
+            virtual void construct();
+
+            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
         };
     }
 }
