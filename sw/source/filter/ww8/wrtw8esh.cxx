@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:25:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -86,12 +90,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-#ifndef _IPOBJ_HXX
-#include <so3/ipobj.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
 #endif
@@ -150,6 +149,9 @@
 #include <svx/flditem.hxx>
 #endif
 
+#include <comphelper/seqstream.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <svtools/filter.hxx>
 
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
@@ -525,7 +527,7 @@ void SwWW8Writer::DoCheckBox(uno::Reference<beans::XPropertySet> xPropSet)
 
 namespace wwUtility
 {
-    Graphic MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj);
+    Graphic MakeSafeGDIMetaFile(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
 };
 
 
@@ -1698,7 +1700,7 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
     {
         SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
         SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-        const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
+        com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj(rOLENd.GetOLEObj().GetOleRef());
 
         /*
         #i5970#
@@ -1706,14 +1708,15 @@ INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
         instead ==> allows unicode text to be preserved
         */
 #ifdef OLE_PREVIEW_AS_EMF
-        Graphic aGraphic = wwUtility::MakeSafeGDIMetaFile(xObj);
+        //Graphic aGraphic = wwUtility::MakeSafeGDIMetaFile(xObj);
+        Graphic* pGraphic = rOLENd.GetGraphic();
 #endif
         OpenContainer(ESCHER_SpContainer);
 
         EscherPropertyContainer aPropOpt;
         const SwMirrorGrf &rMirror = rOLENd.GetSwAttrSet().GetMirrorGrf();
         WriteOLEPicture(aPropOpt, AddMirrorFlags(0xa00 | SHAPEFLAG_OLESHAPE,
-            rMirror), aGraphic, *pSdrObj, nShapeId);
+            rMirror), pGraphic ? *pGraphic : Graphic(), *pSdrObj, nShapeId);
 
         nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
         WriteGrfAttr(rOLENd, aPropOpt);
@@ -2524,15 +2527,33 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
  But currently just use wmf as we have always done :-(
 */
-Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
+Graphic wwUtility::MakeSafeGDIMetaFile( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
 {
 #if 1
-    if (xObj.Is())
+    if (xObj.is())
     {
-        GDIMetaFile aMtf;
-        xObj->GetGDIMetaFile(aMtf);
-        return Graphic(aMtf);
+        // TODO/LATER: not used currently, it's completely unclear if this is a problem
+        //xObj->GetGDIMetaFile(aMtf);
+        //return Graphic(aMtf);
+
+        // It would be better to retrieve the last representation from the storage (it could still be the original one!)
+        /*
+        embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( embed::Aspects::MSOLE_CONTENT );
+        uno::Sequence < sal_Int8 > aSeq;
+        aRep.Data >>= aSeq;
+        uno::Reference < io::XInputStream > xStream = new ::comphelper::SequenceInputStream( aSeq );
+        SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xStream );
+        if ( pGraphicStream && !pGraphicStream->GetError() )
+        {
+            GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+            Graphic aGraphic;
+            String aEmptyStr;
+            pGF->ImportGraphic( aGraphic, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
+            delete pGraphicStream;
+            return aGraphic;
+        }*/
     }
+
     return Graphic();
 #else
     Graphic aGraphic;
@@ -2642,14 +2663,14 @@ bool SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
     aSize.Height = TWIPS_TO_MM(aRect.Bottom());
 
     //Open the ObjectPool
-    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(
+    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenSotStorage(
         CREATE_CONST_ASC(SL::aObjectPool), STREAM_READWRITE |
         STREAM_SHARE_DENYALL);
 
     //Create a destination storage for the microsoft control
     String sStorageName('_');
     sStorageName += String::CreateFromInt32((UINT32)pObj);
-    SvStorageRef xOleStg = xObjPool->OpenStorage(sStorageName,
+    SvStorageRef xOleStg = xObjPool->OpenSotStorage(sStorageName,
                  STREAM_READWRITE|STREAM_SHARE_DENYALL);
 
     if (!xOleStg.Is())
