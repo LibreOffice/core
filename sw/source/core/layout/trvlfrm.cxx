@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:08:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1549,11 +1549,10 @@ Point SwRootFrm::GetPagePos( USHORT nPageNum ) const
 */
 SwPageFrm* SwRootFrm::GetPageByPageNum( sal_uInt16 _nPageNum ) const
 {
-    for ( const SwPageFrm* pPageFrm = static_cast<const SwPageFrm*>( Lower() );
-          pPageFrm && pPageFrm->GetPhyPageNum() < _nPageNum;
-          pPageFrm = static_cast<const SwPageFrm*>( pPageFrm->GetNext() ) )
+    const SwPageFrm* pPageFrm = static_cast<const SwPageFrm*>( Lower() );
+    while ( pPageFrm && pPageFrm->GetPhyPageNum() < _nPageNum )
     {
-        // empty body of for-loop
+          pPageFrm = static_cast<const SwPageFrm*>( pPageFrm->GetNext() );
     }
 
     if ( pPageFrm && pPageFrm->GetPhyPageNum() == _nPageNum )
