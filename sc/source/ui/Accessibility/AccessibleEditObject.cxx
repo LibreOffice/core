@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:11:35 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,10 @@ Rectangle ScAccessibleEditObject::GetBoundingBoxOnScreen(void) const
     Rectangle aCellRect(GetBoundingBox());
     if (mpWindow)
     {
-        Point aLoc;
-        aCellRect.getLocation(aLoc);
+        Point aLoc = aCellRect.TopLeft();
         Rectangle aRect = mpWindow->GetWindowExtentsRelative(NULL);
-        Point aLoc2;
-        aRect.getLocation(aLoc2);
-        aCellRect.setLocation(Point(aLoc.getX() + aLoc2.getX(), aLoc.getY() + aLoc2.getY()));
+        Point aLoc2 = aRect.TopLeft();
+        aCellRect.SetPos(Point(aLoc.getX() + aLoc2.getX(), aLoc.getY() + aLoc2.getY()));
         //aCellRect.setX(aCellRect.getX() + aRect.getX());
         //aCellRect.setY(aCellRect.getY() + aRect.getY());
     }
