@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-04 08:32:23 $
+#   last change: $Author: kz $ $Date: 2004-05-19 13:54:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/tabletree.obj			\
         $(SLO)$/TableGrantCtrl.obj		\
         $(SLO)$/sqledit.obj			\
+        $(SLO)$/ColumnControlWindow.obj	\
         $(SLO)$/FieldDescControl.obj
 
 # ... object files ............................
