@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:40:07 $
+ *  last change: $Author: kz $ $Date: 2005-03-03 17:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-#ifdef SOLARIS
+#if defined(SOLARIS) && !defined(__GNUC__)
 #include <varargs.h>
 #else
 #include <stdarg.h>
