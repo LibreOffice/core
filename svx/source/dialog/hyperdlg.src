@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 11:26:30 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 11:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,7 @@
 #include "helpid.hrc"
 #include "hyperdlg.hrc"
 
-#define STD_MAGENTA_MASKCOLOR Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; }
-
-#ifndef STD_MASKCOLOR
-#define STD_MASKCOLOR   STD_MAGENTA_MASKCOLOR
-#endif
+#define MASKCOLOR   MaskColor = Color { Red=0xFFFF; Green=0x0000; Blue=0xFFFF; };
 
 /*************************************************************************
 |
@@ -358,7 +354,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "browse.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Browse";
         QuickHelpText[ russian ] = "WWW-Ïðîñìîòð";
@@ -386,7 +382,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Image IMG_BROWSE_HC
     {
         ImageBitmap = Bitmap { File = "browse_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     ImageButton BTN_TARGET
     {
@@ -402,7 +398,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "target.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Destino no documento";
         QuickHelpText[ russian ] = "Öåëü â äîêóìåíòå";
@@ -431,7 +427,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Image IMG_TARGET_HC
     {
         ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     FixedLine GRP_MORE
     {
@@ -738,7 +734,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "script.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Eventos";
         QuickHelpText[ russian ] = "Ñîáûòèÿ";
@@ -768,7 +764,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     Image IMG_SCRIPT_HC
     {
         ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
 };
@@ -966,7 +962,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "adrbook.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
 
         Text = "Datenquellen..." ;
@@ -1000,7 +996,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Image IMG_ADRESSBOOK_HC
     {
         ImageBitmap = Bitmap { File = "adrbook_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -1307,7 +1303,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "script.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Eventos";
         QuickHelpText[ russian ] = "Ñîáûòèÿ";
@@ -1337,7 +1333,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     Image IMG_SCRIPT_HC
     {
         ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
 };
@@ -1448,7 +1444,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "fileopen.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Fileopen";
         QuickHelpText[ russian ] = "Îòêðûòü ôàéë";
@@ -1478,7 +1474,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Image IMG_FILEOPEN_HC
     {
         ImageBitmap = Bitmap { File = "fileopen_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
 
     FixedLine GRP_TARGET
@@ -1613,7 +1609,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "target.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Destino no documento";
         QuickHelpText[ russian ] = "Öåëü â äîêóìåíòå";
@@ -1642,7 +1638,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Image IMG_BROWSE_HC
     {
         ImageBitmap = Bitmap { File = "target_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -1949,7 +1945,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "script.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Eventos";
         QuickHelpText[ russian ] = "Ñîáûòèÿ";
@@ -1979,7 +1975,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     Image IMG_SCRIPT_HC
     {
         ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
 };
@@ -2190,7 +2186,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "newdoc.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Create";
         QuickHelpText[ russian ] = "Âûáðàòü ïóòü";
@@ -2219,7 +2215,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Image IMG_CREATE_HC
     {
         ImageBitmap = Bitmap { File = "newdoc_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
 
     FixedLine GRP_MORE
@@ -2526,7 +2522,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "script.bmp" ; };
-            MaskColor = STD_MASKCOLOR ;
+            MASKCOLOR
         };
         QuickHelpText[ portuguese ] = "Eventos";
         QuickHelpText[ russian ] = "Ñîáûòèÿ";
@@ -2556,7 +2552,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     Image IMG_SCRIPT_HC
     {
         ImageBitmap = Bitmap { File = "script_hc.bmp" ; };
-        MaskColor = STD_MAGENTA_MASKCOLOR ;
+        MASKCOLOR
     };
     Text[ thai ] = "à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸«à¸¥à¸²à¸¢à¸¡à¸´à¸•à¸´";
 };
@@ -3092,22 +3088,6 @@ Image RID_SVXBMP_HLDOCTP_H
 Image RID_SVXBMP_HLDOCNTP_H
 {
     ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0x0000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
