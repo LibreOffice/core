@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:28:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@
 #include <RefreshListenerContainer.hxx>
 #endif
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP Mac OS X internal compiler error; revisit with gcc3
 #define __IFC27 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
 Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27
@@ -245,7 +245,7 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4);
  *
  ******************************************************************************/
 
-#ifdef MACOSX
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 // [ed] Explicit template instantiation to workaround compiler ICE
 
 namespace cppu
@@ -396,7 +396,7 @@ public ::com::sun::star::util::XLinkUpdate, public ::com::sun::star::lang::XUnoT
             { return getClassData( s_aCD ).getImplementationId(); }
     };
 
-#ifndef MACOSX
+#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
     ClassData12 ImplHelper12< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12 >::s_aCD = ClassData12( 0 );
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12 >
