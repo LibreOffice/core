@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:48:56 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ class SwCntntNode;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
 class SwAttrSetChg;
+class SwTxtFrm;
 
 //Implementiert in cntfrm.cxx, wird von cntfrm.cxx und crsrsh.cxx angezogen
 extern BOOL GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
@@ -86,6 +87,8 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL& );
+
+    const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
 
@@ -112,6 +115,7 @@ public:
 
     inline const SwCntntFrm *GetFollow() const;
     inline       SwCntntFrm *GetFollow();
+    SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
     virtual BOOL    LeftMargin( SwPaM * ) const;
@@ -133,7 +137,26 @@ public:
     virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
     BOOL MoveFtnCntFwd( BOOL, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
+
+    inline  SwCntntFrm* GetNextCntntFrm() const;
+    inline  SwCntntFrm* GetPrevCntntFrm() const;
 };
+
+inline SwCntntFrm* SwCntntFrm::GetNextCntntFrm() const
+{
+    if ( GetNext() && GetNext()->IsCntntFrm() )
+        return (SwCntntFrm*)GetNext();
+    else
+        return (SwCntntFrm*)ImplGetNextCntntFrm( true );
+}
+
+inline SwCntntFrm* SwCntntFrm::GetPrevCntntFrm() const
+{
+    if ( GetPrev() && GetPrev()->IsCntntFrm() )
+        return (SwCntntFrm*)GetPrev();
+    else
+        return (SwCntntFrm*)ImplGetNextCntntFrm( false );
+}
 
 inline SwCntntNode *SwCntntFrm::GetNode()
 {
