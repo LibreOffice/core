@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:36:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ extern RTLFUNC(Sqr);
 extern RTLFUNC(Str);
 extern RTLFUNC(StrComp);
 extern RTLFUNC(String);
+extern RTLFUNC(StrReverse);
 extern RTLFUNC(Tan);
 extern RTLFUNC(UCase);
 extern RTLFUNC(Val);
@@ -236,14 +237,17 @@ extern RTLFUNC(Day);
 extern RTLFUNC(Hour);
 extern RTLFUNC(Minute);
 extern RTLFUNC(Month);
+extern RTLFUNC(MonthName);
 extern RTLFUNC(Now);
 extern RTLFUNC(Second);
 extern RTLFUNC(Time);
 extern RTLFUNC(Timer);
 extern RTLFUNC(Weekday);
+extern RTLFUNC(WeekdayName);
 extern RTLFUNC(Year);
 extern RTLFUNC(Date);
 extern RTLFUNC(InputBox);
+extern RTLFUNC(Me);
 extern RTLFUNC(MsgBox);
 extern RTLFUNC(IsArray);
 extern RTLFUNC(IsDate);
@@ -258,6 +262,7 @@ extern RTLFUNC(FileDateTime);
 extern RTLFUNC(Format);
 extern RTLFUNC(GetAttr);
 extern RTLFUNC(Randomize); // JSM
+extern RTLFUNC(Round);
 extern RTLFUNC(Rnd);
 extern RTLFUNC(Shell);
 extern RTLFUNC(VarType);
