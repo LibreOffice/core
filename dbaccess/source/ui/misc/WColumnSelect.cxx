@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:03:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,8 +237,10 @@ sal_Bool OWizColumnSelect::LeavePage()
 // -----------------------------------------------------------------------
 IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
 {
-    MultiListBox *pLeft,*pRight;
+    MultiListBox *pLeft = NULL;
+    MultiListBox *pRight = NULL;
     sal_Bool bAll = sal_False;
+
     if(pButton == &m_ibColumn_RH)
     {
         pLeft  = &m_lbOrgColumnNames;
@@ -261,6 +263,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         pRight = &m_lbOrgColumnNames;
         bAll   = sal_True;
     }
+    // else ????
 
     Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
