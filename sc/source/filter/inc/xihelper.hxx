@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:46:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 #include "scmatrix.hxx"
 #endif
 
-#ifndef SC_XISTREAM_HXX
-#include "xistream.hxx"
-#endif
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
+#endif
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
 #endif
 
 class ScMatrix;
