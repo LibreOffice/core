@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_constant.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ Constant::Constant( const String &      i_sName,
                     Type_id             i_nType,
                     const String &      i_sInitValue )
     :   sName(i_sName),
-        nOwner(i_nOwner),
         nNameRoom(i_nNameRoom),
+        nOwner(i_nOwner),
         nType(i_nType),
         sInitValue(i_sInitValue)
 {
@@ -89,36 +89,6 @@ Constant::Constant( const String &      i_sName,
 Constant::~Constant()
 {
 }
-
-#if ENABLE_UDM
-
-namespace
-{
-enum E_Data_Constant
-{
-    mid_Base = 0,
-    mid_Name,
-    mid_Owner,
-    mid_NameRoom,
-    mid_Type,
-    mid_InitValue,
-    mid_MAX
-};
-}
-
-void
-Constant::SetupUdmTraits_( udm::struct_traits<Constant> & o_rTraits )
-{
-    o_rTraits.reserve( mid_MAX );
-    udm::add_traits_base( o_rTraits, csv::Type2Type<CodeEntity>(), mid_Base );
-    udm::add_traits_member( o_rTraits, &Constant::sName, mid_Name );
-    udm::add_traits_member( o_rTraits, &Constant::nOwner, mid_Owner );
-    udm::add_traits_member( o_rTraits, &Constant::nNameRoom, mid_NameRoom );
-    udm::add_traits_member( o_rTraits, &Constant::nType, mid_Type );
-    udm::add_traits_member( o_rTraits, &Constant::sInitValue, mid_InitValue );
-}
-#endif // ENABLE_UDM
-
 
 void
 Constant::do_Visit_CeHost( CeHost & o_rHost ) const
