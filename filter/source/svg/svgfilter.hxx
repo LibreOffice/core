@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:25:52 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,13 +160,10 @@
 #include <svx/svdxcgv.hxx>
 #include <svx/svdobj.hxx>
 #include <xmloff/xmlexp.hxx>
-#ifdef SOLAR_JAVA
-#include <sj2/jnihelp.hxx>
-#endif
+
 #include "svgfilter.hxx"
 #include "svgscript.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -313,8 +310,8 @@ private:
     sal_Bool                            implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
-    OUString                            implGetDescriptionFromShape( const Reference< XShape >& rxShape );
-    OUString                            implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+    ::rtl::OUString                         implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString                         implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
 
 protected:
 
@@ -334,9 +331,9 @@ protected:
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(RuntimeException);
+    virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException);
 
 public:
 
