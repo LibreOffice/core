@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:46:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ ModelessDialog DLG_JOIN_TABADD
     Text [ DANISH ] = "Tilføj tabeller" ;
     Text [ ENGLISH_US ] = "Add Tables" ;
     Text [ SPANISH ] = "Añadir tablas" ;
-    Text [ FINNISH ] = "Tabellen hinzufügen" ;
+    Text [ FINNISH ] = "Lisää taulukoita" ;
     Text [ FRENCH ] = "Ajouter des tables" ;
     Text [ ITALIAN ] = "Aggiungi tabelle" ;
     Text [ DUTCH ] = "Tabellen toevoegen" ;
@@ -102,7 +102,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "Tabelnavn" ;
         Text [ ENGLISH_US ] = "~Table name" ;
         Text [ SPANISH ] = "~Nombre de la tabla" ;
-        Text [ FINNISH ] = "~Tabellenname" ;
+        Text [ FINNISH ] = "~Taulukon nimi" ;
         Text [ FRENCH ] = "~Nom de la table" ;
         Text [ ITALIAN ] = "Nome ~tabella" ;
         Text [ DUTCH ] = "~Tabelnaam" ;
@@ -141,7 +141,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "Tilføj" ;
         Text [ ENGLISH_US ] = "~Add" ;
         Text [ SPANISH ] = "~Añadir" ;
-        Text [ FINNISH ] = "Hinzu~fügen" ;
+        Text [ FINNISH ] = "~Lisää" ;
         Text [ FRENCH ] = "~Ajouter" ;
         Text [ ITALIAN ] = "~Aggiungi" ;
         Text [ DUTCH ] = "Toe~voegen" ;
@@ -176,7 +176,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ italian ] = "~Chiudi" ;
         Text [ portuguese_brazilian ] = "Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
-        Text [ finnish ] = "S~chließen" ;
+        Text [ finnish ] = "~Sulje" ;
         Text [ danish ] = "Luk" ;
         Text [ french ] = "F~ermer" ;
         Text [ swedish ] = "Stä~ng" ;
@@ -214,7 +214,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "Tabel" ;
         Text [ ENGLISH_US ] = "Table" ;
         Text [ SPANISH ] = "Tabla" ;
-        Text [ FINNISH ] = "Tabelle" ;
+        Text [ FINNISH ] = "Lomake" ;
         Text [ FRENCH ] = "Table" ;
         Text [ ITALIAN ] = "Tabella" ;
         Text [ DUTCH ] = "Tabel" ;
@@ -243,7 +243,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ DANISH ] = "<standard>" ;
         Text [ ENGLISH_US ] = "<default>" ;
         Text [ SPANISH ] = "<predeterminado>" ;
-        Text [ FINNISH ] = "<Standard>" ;
+        Text [ FINNISH ] = "<oletusarvo>" ;
         Text [ FRENCH ] = "<Par défaut>" ;
         Text [ ITALIAN ] = "<standard>" ;
         Text [ DUTCH ] = "<Standaard>" ;
