@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-02 12:57:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,6 @@ public:
           const String& rSet, BOOL bIsPredefined = FALSE);
 
     SmSym&      operator = (const SmSym& rSymbol);
-
-    void            SetSymbolName(const String& rName);
 
     const Font&     GetFace() const { return Face; }
     sal_Unicode     GetCharacter() const { return Character; }
