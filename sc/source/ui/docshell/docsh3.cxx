@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:15:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
     }
 
 
-    if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien berücksichtigen
+    if (nExtFlags & SC_PF_LINES)            // Platz fuer Linien beruecksichtigen
     {
                                             //! Abfrage auf versteckte Spalten/Zeilen!
         if (nStartCol>0) --nStartCol;
