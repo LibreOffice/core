@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desk.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:00:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,28 +38,10 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// structs, const ...
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.frame.DispatchResultEvent;
-import com.sun.star.frame.DispatchResultState;
-
-// interfaces
-import com.sun.star.frame.XDispatchResultListener;
-import com.sun.star.frame.XFrame;
-import com.sun.star.lang.XComponent;
-
-// helper
 import com.sun.star.uno.UnoRuntime;
 
-// Exceptions
-import java.lang.IllegalMonitorStateException;
-import java.lang.InterruptedException;
-
-// base classes
 import java.lang.String;
 
 // __________ Implementation __________
@@ -79,13 +61,9 @@ public class Desk
      * Establish connection to a remote office and starts the demo application.
      * User can overwrite some of neccessary start options by using command line parameters.
      *
-     * syntax: Desk [host=<hostname>] [port=<portnumber>] [mode={inplace|outplace}] [file=<filename>]
+     * syntax: Desk [mode={inplace|outplace}] [file=<filename>]
      *
      * @param  args  command line arguments
-     *                  host        describe host on which remote office runs
-     *                              default=localhost
-     *                  port        describe port which is used by remote office
-     *                              default=2083
      *                  mode        describe using mode of document view {inplace/outplace}
      *                              default=inplace
      *                  file        name of first file which should be open
@@ -94,20 +72,12 @@ public class Desk
     public static void main(String[] lArguments)
     {
         // Analyze command line parameters.
-        String  sHost  = new String("localhost");
-        String  sPort  = new String("2083");
         String  sMode  = new String("inplace");
         String  sFile  = new String("private:factory/swriter");
 
         for(int i=0; i<lArguments.length; ++i)
         {
             lArguments[i] = lArguments[i].toLowerCase();
-            if(lArguments[i].startsWith("host=")==true)
-                sHost = lArguments[i].substring(5);
-            else
-            if(lArguments[i].startsWith("port=")==true)
-                sPort = lArguments[i].substring(5);
-            else
             if(lArguments[i].startsWith("mode=")==true)
                 sMode = lArguments[i].substring(5);
             else
@@ -118,7 +88,7 @@ public class Desk
         ViewContainer.mbInplace = (sMode.compareTo("inplace")==0);
 
         // Connect to remote office.
-        OfficeConnect.createConnection(sHost,sPort);
+        OfficeConnect.createConnection();
 
         // Create first document view.
         // This one will register himself at the global
