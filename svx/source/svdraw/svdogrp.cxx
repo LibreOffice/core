@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 15:11:24 $
+ *  last change: $Author: aw $ $Date: 2000-11-25 16:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,6 +1658,10 @@ void SdrObjGroup::AfterRead()
 {
     SdrObject::AfterRead();
     pSub->AfterRead();
+
+    // #80049# as fix for errors after #69055#
+    if(aAnchor.X() || aAnchor.Y())
+        NbcSetAnchorPos(aAnchor);
 }
 
 // ItemPool fuer dieses Objekt wechseln
