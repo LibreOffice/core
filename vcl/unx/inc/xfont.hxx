@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:32:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,9 @@ class ExtendedFontStruct : public SvRefBase
 {
     private:
         Display*            mpDisplay;
-        unsigned short      mnPixelSize;
+        Size                maPixelSize;
+        float               mfXScale;
+        float               mfYScale;
         sal_Size            mnDefaultWidth;
         sal_Bool            mbVertical;
         rtl_TextEncoding    mnCachedEncoding;
@@ -166,18 +168,18 @@ class ExtendedFontStruct : public SvRefBase
                                     long *pWidthArray, ExtendedFontStruct *pFallback );
     public:
                             ExtendedFontStruct( Display* pDisplay,
-                                    unsigned short nPixelSize, sal_Bool bVertical,
+                                    const Size& rPixelSize, sal_Bool bVertical,
                                     ExtendedXlfd* pXlfd );
                             ~ExtendedFontStruct();
         Bool                Match( const ExtendedXlfd *pXlfd,
-                                    int nPixelSize, sal_Bool bVertical ) const;
+                                    const Size& rPixelSize, sal_Bool bVertical ) const;
         XFontStruct*        GetFontStruct( rtl_TextEncoding nEncoding );
         XFontStruct*        GetFontStruct( sal_Unicode nChar,
                                     rtl_TextEncoding *pEncoding );
         Bool                ToImplFontMetricData( ImplFontMetricData *pMetric );
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
-        sal_Size            GetCharWidth( sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray, ExtendedFontStruct *pFallback );
+        sal_Size            GetCharWidth( sal_Unicode,
+                                    long *pPhysWidth, long* pLogWidth );
         int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
         bool                HasUnicodeChar( sal_Unicode ) const;
 };
