@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:18 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:26:31 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -65,7 +65,7 @@ CXXFILES = FlatXml.cxx
 
 SLOFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
-TYPES = $(shell xml2cmp -types stdout $(COMPONENT_XML))
+TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 
 # Targets
@@ -78,7 +78,7 @@ include $(SETTINGS)/stdtarget.mk
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(DKREGISTRYNAME)
 	echo flagged > $@
 
 $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
@@ -105,17 +105,17 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(OUT_BIN)/%.zip : $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) TypeDetection.xcu
+$(COMPONENT_PACKAGE) : $(SHAREDLIB_OUT)/$(COMPONENT_IMPL_NAME) TypeDetection.xcu
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_GEN)/$(PACKAGE_LIB_DIR))
 	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_COMP_GEN)) 
-	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && jar cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
+	cd $(subst /,$(PS),$(OUT_COMP_GEN)) && $(SDK_JAR) cvfM ../../bin/$(@F) TypeDetection.xcu $(PACKAGE_LIB_DIR)/$(<F)
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -137,7 +137,7 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))

@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:38:27 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:26:44 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -50,7 +50,6 @@ include $(SETTINGS)/dk.mk
 # Define non-platform/compiler specific settings
 COMPONENT_NAME=FlatXmlFilter_java
 OUT_COMP_CLASS = $(OUT_CLASS)/$(COMPONENT_NAME)
-OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
 COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
@@ -69,14 +68,9 @@ CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
 $(COMPONENT_NAME)_CLASSFILES = *.class 
 
-
-
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+
 
 # Targets
 .PHONY: ALL
@@ -91,22 +85,22 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES)
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(OUT_BIN)/%.zip : TypeDetection.xcu $(OUT_CLASS)/%.jar
+$(COMPONENT_PACKAGE) : TypeDetection.xcu $(COMPONENT_JAR)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $< $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(^F)
-	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$<)
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
+	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$<))
 
 $(REGISTERFLAG) : $(COMPONENT_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -124,15 +118,14 @@ FlatXmlFilterJavaExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 %.local: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@) local
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@) local
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_JAR))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
