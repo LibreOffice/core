@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-24 07:54:45 $
+#   last change: $Author: obo $ $Date: 2004-11-15 15:18:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,8 +85,6 @@ PATCH_FILE_NAME=$(TARFILE_NAME).patch
 ADDITIONAL_FILES= \
     makefile.mk \
     xml2.map
-
-# This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 CONFIGURE_DIR=win32
