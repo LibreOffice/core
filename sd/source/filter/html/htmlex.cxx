@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-12 15:04:26 $
+ *  last change: $Author: cl $ $Date: 2002-11-25 18:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,21 @@
  *
  *
  ************************************************************************/
+
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
+#include <com/sun/star/document/XFilter.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
@@ -211,6 +226,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::document;
 
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
@@ -1031,106 +1048,65 @@ BOOL HtmlExport::SavePresentation()
     return false;
 }
 
-Graphic HtmlExport::CreateImage( USHORT nPageNumber )
-{
-    Graphic         aRet;
-    USHORT          nPgNum = 0;
-
-    while( nPgNum < m_nSdPageCount )
-    {
-        pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
-        nPgNum++;
-    }
-
-    HideSpecialObjects( pDoc->GetSdPage( nPageNumber, PK_STANDARD ) );
-
-    GDIMetaFile*    pMetaFile = pDoc->GetDocSh()->GetPreviewMetaFile( );
-    Size            aSize( m_nWidthPixel, m_nHeightPixel );
-
-    if( pMetaFile )
-    {
-        VirtualDevice   aVDev;
-        const MapMode   aPrefMap( pMetaFile->GetPrefMapMode() );
-        const Point     aOutPos( aVDev.PixelToLogic( Point(), aPrefMap ) );
-        const Size      aOutSize( aVDev.PixelToLogic( aSize, aPrefMap ) );
-
-        aVDev.SetMapMode( aPrefMap );
-
-        if( aVDev.SetOutputSize( aOutSize ) )
-        {
-            Graphic( *pMetaFile ).Draw( &aVDev, aOutPos, aOutSize );
-            aRet = aVDev.GetBitmap( aOutPos, aOutSize );
-        }
-
-        delete pMetaFile;
-    }
-
-    if( aRet.GetType() == GRAPHIC_NONE )
-    {
-        Bitmap aBmp( aSize, 4 );
-
-        aBmp.Erase( Color( COL_LIGHTGRAY ) );
-        aRet = aBmp;
-    }
-
-    ShowSpecialObjects();
-
-    return aRet;
-}
-
 // =====================================================================
 // Image-Dateien anlegen
 // =====================================================================
 BOOL HtmlExport::CreateImagesForPresPages()
 {
-    ULONG nError = 0;
-
-    // #100563# GraphicFilter now needs its configuration via property values
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aFilterData;
-    if(m_eFormat == FORMAT_JPG && m_nCompression != -1)
+    try
     {
-        aFilterData.realloc(1);
-        aFilterData[0].Name  = String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) );
-        aFilterData[0].Value <<= m_nCompression;
-        aFilterData[0].State = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
-    }
+        Reference < XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        if( !xMSF.is() )
+            return false;
 
-    for (USHORT nSdPage = 0; nSdPage < m_nSdPageCount && nError == 0; nSdPage++)
-    {
-        Graphic aGraphic( CreateImage( nSdPage ) );
-        ByteString aFull(m_aExportPath);
-        aFull += *m_pImageFiles[nSdPage];
+        Reference< XExporter > xGraphicExporter( xMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ), UNO_QUERY );
+        Reference< XFilter > xFilter( xGraphicExporter, UNO_QUERY );
 
-        m_eEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, *m_pImageFiles[nSdPage] );
+        DBG_ASSERT( xFilter.is(), "no com.sun.star.drawing.GraphicExportFilter?" );
+        if( !xFilter.is() )
+            return false;
 
-        EasyFile aFile;
-        SvStream* pStrm;
-        nError = aFile.createStream(aFull,pStrm);
-        if(nError == 0)
+        Sequence< PropertyValue > aFilterData(((m_eFormat==FORMAT_JPG)&&(m_nCompression != -1))? 3 : 2);
+        aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelWidth") );
+        aFilterData[0].Value <<= (sal_Int32)m_nWidthPixel;
+        aFilterData[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PixelHeight") );
+        aFilterData[1].Value <<= (sal_Int32)m_nHeightPixel;
+        if((m_eFormat==FORMAT_JPG)&&(m_nCompression != -1))
         {
-            // #100563# Use GraphicFilter and set config items by hand
-            GraphicFilter* pGrfFilter = GetGrfFilter();
-
-            pGrfFilter->ExportGraphic( aGraphic,
-                                       String(),
-                                       *pStrm,
-                                       m_eFormat==FORMAT_GIF ?
-                                       pGrfFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( GIF_SHORTNAME ) ) ) :
-                                       pGrfFilter->GetExportFormatNumberForShortName( String( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ),
-                                       sal_False,
-                                       &aFilterData );
-
-            if(nError == 0)
-                nError = aFile.close();
+            aFilterData[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality") );
+            aFilterData[2].Value <<= (sal_Int32)m_nCompression;
         }
 
-        if (mpProgress)
-            mpProgress->SetState(++m_nPagesWritten);
+        Sequence< PropertyValue > aDescriptor( 3 );
+        aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
+        aDescriptor[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        aDescriptor[1].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(m_eFormat==FORMAT_GIF ? "GIF" : "JPG") );
+        aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
+        aDescriptor[2].Value <<= aFilterData;
+
+        for (USHORT nSdPage = 0; nSdPage < m_nSdPageCount; nSdPage++)
+        {
+            SdPage* pPage = pDoc->GetSdPage( nSdPage, PK_STANDARD );
+
+            ByteString aFull(m_aExportPath);
+            aFull += *m_pImageFiles[nSdPage];
+
+            aDescriptor[0].Value <<= OUString::createFromAscii( aFull.GetBuffer() );
+
+            Reference< XComponent > xPage( pPage->getUnoPage(), UNO_QUERY );
+            xGraphicExporter->setSourceDocument( xPage );
+            xFilter->filter( aDescriptor );
+
+            if (mpProgress)
+                mpProgress->SetState(++m_nPagesWritten);
+        }
+    }
+    catch( Exception& )
+    {
+        return false;
     }
 
-    if( nError != 0 )
-        ErrorHandler::HandleError(nError);
-    return nError == 0;
+    return true;
 }
 
 // =====================================================================

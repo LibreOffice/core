@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
+ *  last change: $Author: cl $ $Date: 2002-11-25 18:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,6 @@ class HtmlExport
     BOOL    CreateImageFileList();
     BOOL    CreateImageNumberFile();
 
-    Graphic CreateImage( USHORT nPageNumber );
     ULONG   CreateBitmap( ULONG nThemeId, INT16 nImage, const ByteString& aName ) const;
     void    SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const;
     ByteString getDocumentTitle();
