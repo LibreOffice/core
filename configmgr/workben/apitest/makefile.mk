@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dg $ $Date: 2000-11-15 18:30:58 $
+#   last change: $Author: dg $ $Date: 2000-11-17 08:30:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ APP1STDLIBS+=$(LIBCIMT)
 APP1TARGET= $(TARGET)
 APP1OBJS=	\
     $(SLO)$/cfgapi.obj	\
+    $(SLO)$/strimpl.obj \
     $(SLO)$/typeconverter.obj
 
 # ... cfgreg ..............................
@@ -142,6 +143,7 @@ APP4STDLIBS+=$(LIBCIMT)
 APP4TARGET= $(TARGET4)
 APP4OBJS=	\
     $(SLO)$/cfgadmin.obj	\
+    $(SLO)$/strimpl.obj \
     $(SLO)$/typeconverter.obj
 
 
@@ -157,6 +159,7 @@ APP5STDLIBS+=$(LIBCIMT)
 APP5TARGET= $(TARGET5)
 APP5OBJS=	\
     $(SLO)$/cfgupdate.obj	\
+    $(SLO)$/strimpl.obj \
     $(SLO)$/typeconverter.obj
 
 

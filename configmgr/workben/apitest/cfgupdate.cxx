@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgupdate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-15 18:30:39 $
+ *  last change: $Author: dg $ $Date: 2000-11-17 08:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@ using namespace std;
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -76,6 +77,9 @@ using namespace std;
 #include <com/sun/star/beans/XExactName.hpp>
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XHIERARCHICALPROPERTYSET_HPP_
+#include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
 #endif
 
 
@@ -159,16 +163,6 @@ struct prompt_and_wait
     }
 };
 static prompt_and_wait exit_prompt("Quitting\nQ");
-
-
-Reference< XChangesBatch > xChangesBatch = NULL;
-void commit()
-{
-    if (xChangesBatch.is())
-    {
-        xChangesBatch->commitChanges();
-    }
-}
 
 
 // -----------------------------------------------------------------------------
@@ -270,7 +264,103 @@ rtl::OUString enterValue(const char* _aStr, const char* _aDefault, bool _bIsAPas
     return sValue;
 }
 
+// -----------------------------------------------------------------------------
+Reference< XNameAccess > beginChanges(Reference< XMultiServiceFactory > xFactory, OUString sPath)
+{
+    Sequence< Any > aArgs(1);
+    aArgs[0] <<= configmgr::createPropertyValue(ASCII("nodepath"),sPath);
 
+    cout << "starting update for node:" << sPath << endl;
+
+    Reference< XNameAccess > xTree(xFactory->createInstanceWithArguments(OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
+            aArgs), UNO_QUERY);
+
+    return xTree;
+}
+
+template <class Type>
+// -----------------------------------------------------------------------------
+void update(Reference< XInterface > xIFace, OUString sRelPath, Type sValue)
+{
+    Reference< XHierarchicalPropertySet > xTree(xIFace, UNO_QUERY);
+    Any aValue;
+    aValue <<= sValue;
+
+    cout << "updating node:" << sRelPath << endl;
+    xTree->setHierarchicalPropertyValue(sRelPath, aValue);
+}
+
+// -----------------------------------------------------------------------------
+Reference< XHierarchicalPropertySet > insertTree(Reference< XInterface > xIFace, OUString aName)
+{
+    if (!aName.getLength())
+        aName =   enterValue("/nEnter a Tree to insert: ", "", false);
+
+    Reference< XSingleServiceFactory > xFactory(xIFace, UNO_QUERY);
+    Reference< XHierarchicalPropertySet > xNewElement(xFactory->createInstance(), UNO_QUERY);
+
+    cout << "inserting new tree element:" << aName << endl;
+
+    Any aTree;
+    aTree <<= xNewElement;
+    Reference< XNameContainer >(xFactory, UNO_QUERY)->insertByName(aName, aTree);
+
+    return xNewElement;
+}
+
+// -----------------------------------------------------------------------------
+void removeTree(Reference< XInterface > xIFace, OUString aName)
+{
+    if (!aName.getLength())
+        aName =   enterValue("/nEnter a Tree to remove: ", "", false);
+
+    cout << "removing new tree element:" << aName << endl;
+
+    Reference< XNameContainer >(xIFace, UNO_QUERY)->removeByName(aName);
+}
+
+// -----------------------------------------------------------------------------
+void commitChanges(Reference< XInterface > xIFace)
+{
+    cout << "committing changes:" << endl;
+
+    Reference< XChangesBatch > xChangesBatch(xIFace, UNO_QUERY);
+    xChangesBatch->commitChanges();
+}
+
+// -----------------------------------------------------------------------------
+void displayTree(Reference< XNameAccess > xIFace, sal_Int32 nLevel)
+{
+    const char* pTab = "  ";
+    Sequence<OUString> aNames( xIFace->getElementNames() );
+    for (int i = 0; i < aNames.getLength(); ++i)
+    {
+        Any aElement = xIFace->getByName(aNames[i]);
+        Reference< XNameAccess > xAccess;
+        Reference< XSingleServiceFactory > xFactory;
+        aElement >>= xFactory;
+        aElement >>= xAccess;
+
+        cout << endl;
+        for (int j = 0; j < nLevel; j++)
+            cout << "  ";
+
+        if (xAccess.is())
+        {
+            OUString sType;
+            if (xFactory.is())
+                sType = OUString::createFromAscii(" type = 'set' " );
+
+            cout << "<" << aNames[i] << sType << ">";
+            displayTree(xAccess, nLevel + 1);
+            cout << endl << "</" << aNames[i] << ">";
+        }
+        else
+            cout << "<" << aNames[i] << "/>";
+
+    }
+    flush(cout);
+}
 
 // -----------------------------------------------------------------------------
 // ---------------------------------- M A I N ----------------------------------
@@ -313,47 +403,21 @@ int _cdecl main( int argc, char * argv[] )
 
         Sequence< Any > aCPArgs;
 
-        OUString sServerType = enterValue("Enter Servertype: ", "local", false);
-        cout << endl;
+        /*OUString sServerType = enterValue("Enter Servertype: ", "remote", false);
+        cout << endl;*/
 
 
         rtl::OUString sFilePath;
+        rtl::OUString sPort;
         rtl::OUString sUser;
 
-        if (!sServerType.equalsIgnoreCase(ASCII("local")))
-        {
-            sFilePath = enterValue("Enter Server: ", "lautrec-3108:18205",false);
-            cout << endl;
+        sUser =   enterValue("Enter User: ", "user1", false);
+        cout << endl;
 
-            sUser =   enterValue("Enter User: ", "nobody", false);
-            cout << endl;
+        OUString sPasswd;// = enterValue("Enter Password: ", "", true);
+        cout << endl;
 
-            OUString sPasswd;// = enterValue("Enter Password: ", "", true);
-            cout << endl;
-
-            aCPArgs = createSequence(sUser, sPasswd);
-
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("server"), sFilePath);
-
-            OUString sTimeout = ASCII("10000");
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("timeout"), sTimeout);
-
-        }
-        else
-        {
-            sFilePath = enterValue("Enter Filepath: ", "f:/local/611/SRC611/configmgr/workben/local_io",false);
-            // sFilePath = enterValue("Enter Filepath: ", "d:/local/609/SRC609/configmgr/workben/local_io",false);
-            // sFilePath = enterValue("Enter Filepath: ", "f:/office60/user/config/registry", false);
-            cout << endl;
-
-            aCPArgs.realloc(aCPArgs.getLength() + 1);
-            aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("rootpath"), sFilePath);
-        }
-
-        aCPArgs.realloc(aCPArgs.getLength() + 1);
-        aCPArgs[aCPArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("servertype"), sServerType);
+        aCPArgs = createSequence(sUser, sPasswd);
 
         Reference< XMultiServiceFactory > xCfgProvider(
             xORB->createInstanceWithArguments(
@@ -367,61 +431,31 @@ int _cdecl main( int argc, char * argv[] )
             return 3;
         }
 
-/*      Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
-            aArgs);
+        Reference< XNameAccess > xUpdateAccess;
 
-        Sequence< Any > aArgs;
-        OUString sPath("org.openoffice.Inet/Proxy
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
+// now do updates for the user
+        xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Security"));
+        displayTree(xUpdateAccess, 0);
 
+        update(xUpdateAccess, OUString::createFromAscii("_3D_Engine/Dithering"), sal_Bool(sal_False));
 
+/*      xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Inet"));
 
+        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Port"), sal_Int32(11));
+        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Name"), OUString::createFromAscii("Test3"));
+        update(xUpdateAccess, OUString::createFromAscii("DNS/IP_Address"), OUString::createFromAscii("Test4"));
+*/
+        commitChanges(xUpdateAccess);
 
+// now do updates with inserting and removing of nodes
 
+        xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Security/MountPoints"));
+        displayTree(xUpdateAccess, 0);
 
-
-//      char aPath[300] =           "Root/ApplProfile/StarPortal/";
-//      int const nStart = sizeof(  "Root/ApplProfile/StarPortal/"  ) - 1;
-        char aPath[300] =           "/";
-        int nStart = sizeof(    "/" ) - 1;
-
-        cout << "Configuration Provider created !\n---------------------------------------------------------------" << endl;
-
-        OUString sPath =   enterValue("Enter RootPath: ", "org.openoffice.test", false);
-        cout << endl;
-        OUString sLocale =   enterValue("Enter Locale: ", "de-DE", false);
-        cout << endl;
-
-        Sequence< Any > aArgs;
-        aArgs = createSequence(sUser, ASCII(""));
-
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
-        aArgs.realloc(aArgs.getLength() + 1);
-        aArgs[aArgs.getLength() - 1] <<= configmgr::createPropertyValue(ASCII("locale"), sLocale);
-/*
-#else
-        OUString aStr = ASCII("String");
-        sal_Int32 nDepth = 10;
-        Sequence< Any > aArgs(2);
-
-        aArgs[0] <<= aStr;
-        aArgs[1] <<= nDepth;
-#endif
-
-        Reference< XInterface > xIFace = xCfgProvider->createInstanceWithArguments(
-            OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
-            aArgs);
-        cout << "Configuration Read/Write Access created !\n---------------------------------------------------------------" << endl;
-
-        xChangesBatch = Reference< XChangesBatch >(xIFace, UNO_QUERY);
-
-        Sequence<OUString> aSeq = xCfgProvider->getAvailableServiceNames();
-        showSequence(aSeq);
-
-        test_read_access(xIFace, xCfgProvider);*/
+        Reference< XHierarchicalPropertySet > xTree = insertTree(xUpdateAccess, OUString());
+        update(xUpdateAccess, OUString::createFromAscii("InstallationDirectory/Directory"), OUString::createFromAscii("Test1"));
+        removeTree(xUpdateAccess, OUString());
+        commitChanges(xUpdateAccess);
     }
     catch (Exception& e)
     {
@@ -438,344 +472,3 @@ int _cdecl main( int argc, char * argv[] )
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-void test(Reference< XHierarchicalName >& xAccessName)
-{
-        if (xAccessName.is())
-            cout << "Accessing Node: " << xAccessName->getHierarchicalName();
-        else
-            cout << "BUG: XHierarchicalName not available";
-        cout << endl;
-}
-void test(Reference< XNamed >& xAccess)
-{
-        if (xAccess.is())
-            cout << "Node is named: " << xAccess->getName();
-        else
-            cout << "BUG: XNamed not available";
-        cout << endl;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////
-void write(Reference<XNameAccess  >& xAccess)
-{
-        if (xAccess.is())
-        {
-            Sequence<OUString> aNames( xAccess->getElementNames() );
-
-            cout << "Element Names: (" << aNames.getLength() << ")";
-            for (int i = 0; i < aNames.getLength(); ++i)
-                cout << "\n[" << i << "] -\t" << aNames[i];
-            cout << endl;
-        }
-        else
-            cout << "BUG: XNameAccess not available";
-        cout << endl;
-}
-void write(Reference< XChild >& xChild)
-{
-        if (xChild.is())
-            cout << "\n[ P ] -\tParent";
-        else
-            cout << "BUG: Parent not available (no XChild)";
-        cout << endl;
-}
-///////////////////////////////////////////////////////////////////////////////////////////
-
-bool ask(Reference< XInterface >& xIface, Reference<XMultiServiceFactory> &);
-
-void test_read_access(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
-{
-    using com::sun::star::uno::UNO_QUERY;
-    do
-    {
-        cout << "\n\n---------------------------------------------------------------" << endl;
-        Reference< XNameAccess > xAccess(xIface, UNO_QUERY);
-        Reference< XChild > xChild(xIface, UNO_QUERY);
-        Reference< XHierarchicalName > xAccessPath(xIface,UNO_QUERY);
-        Reference< XNamed > xAccessName(xIface,UNO_QUERY);
-//      Reference< XHierarchicalNameAccess >& xAccess(xIface, UNO_QUERY);
-
-        test(xAccessPath);
-        test(xAccessName);
-        write(xAccess);
-        write(xChild);
-    }
-    while (ask(xIface, xMSF));
-}
-
-bool ask(Reference< XInterface >& xIface, Reference< XMultiServiceFactory > &xMSF)
-{
-    cout << "\n[ Q ] -> <Quit>";
-    cout << "\n[ S ] -> <SetValue> ";
-    cout << endl;
-
-    cout << "\n:> " << flush;
-    char buf[200] = {0};
-    try
-    {
-        bool bHandled = false;
-        bool bInserted = false;
-
-        if (cin.getline(buf,sizeof buf))
-        {
-            Reference< XInterface > xNext;
-            if ((buf[0] == 'q' || buf[0] == 'Q') && (0 == buf[1]))
-            {
-                return false;
-            }
-            else if (buf[0] == 0)
-            {
-                return true;
-            }
-            else if((buf[0] == 0 || buf[0] == 'o' || buf[0] == 'O') && (0 == buf[1]))
-            {
-/*
-                cout << "work Offline" << endl;
-                Reference<com::sun::star::configuration::XConfigurationSync> xSync(xMSF, UNO_QUERY);
-
-                Sequence< Any > aArgs2(5);
-                sal_Int32 n=0;
-                aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Setup"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Common"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Java"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.Writer"));
-                // aArgs2[n++] <<= configmgr::createPropertyValue(ASCII("path"), ASCII("org.openoffice.Office.ucb.Hierarchy"));
-                xSync->offline(aArgs2);
-                bHandled = true;
-*/
-            }
-            else if((buf[0] == 0 || buf[0] == 's' || buf[0] == 'S') && (0 == buf[1]))
-            {
-                // Replace a Value
-                Reference< XNameAccess > xAccess(xIface, UNO_QUERY);
-
-                cout << "SetMode, insert a Number" << endl;
-                cin.getline(buf,sizeof buf);
-                bInserted = true;
-            }
-
-            else if ((buf[0] == 'p' || buf[0] == 'P') && (0 == buf[1]))
-            {
-                Reference< XChild > xChild(xIface, UNO_QUERY);
-                if (xChild.is())
-                    xNext = xChild->getParent();
-                bHandled = true;
-            }
-
-            if (bHandled == false)
-            {
-                Reference< XNameAccess > xAccess(xIface, UNO_QUERY);
-                Reference< XHierarchicalNameAccess > xDeepAccess(xIface, UNO_QUERY);
-                Reference< XExactName > xExactName(xIface, UNO_QUERY);
-
-                if (xAccess.is() || xDeepAccess.is())
-                {
-                    OUString aName;
-                    OUString aInput = OUString::createFromAscii(buf);
-
-                    if (xExactName.is())
-                    {
-                        ::rtl::OUString sTemp = xExactName->getExactName(aInput);
-                        if (sTemp.getLength())
-                            aInput = sTemp;
-                    }
-
-                    if (xAccess.is() && xAccess->hasByName(aInput))
-                    {
-                        aName = aInput;
-                    }
-                    else if (xDeepAccess.is() && xDeepAccess->hasByHierarchicalName(aInput))
-                    {
-                        aName = aInput;
-                    }
-                    else if ('0' <= buf[0] && buf[0] <= '9' && xAccess.is())
-                    {
-                        unsigned int n = unsigned(atoi(buf));
-                        Sequence<OUString> aNames = xAccess->getElementNames();
-                        if (n < aNames.getLength())
-                            aName = aNames[n];
-                    }
-
-                    if (aName.getLength())
-                    {
-                        bool bNest = aInput.indexOf(sal_Unicode('/')) >= 0;
-
-                        Any aElement = bNest    ? ( xDeepAccess.is() ? xDeepAccess->getByHierarchicalName(aName) : Any())
-                                                : ( xAccess.    is() ? xAccess->    getByName(aName)             : Any() );
-
-                        while (aElement.getValueTypeClass() == TypeClass_ANY)
-                        {
-                            Any aWrap(aElement);
-                            aWrap >>= aElement;
-                        }
-                        sal_Bool bValue = true;
-                        sal_Bool bValueOk = false;
-
-                        switch (aElement.getValueTypeClass() )
-                        {
-                        case TypeClass_INTERFACE: bValue = false; break;
-                        case TypeClass_BOOLEAN:
-                            {
-                                sal_Bool* pVal = (sal_Bool*)aElement.getValue();
-                                bValueOk = (pVal != 0);
-
-                                cout << "VALUE '" << aName << "' is a BOOLEAN = ";
-                                if (!bValueOk)
-                                    cout << "NULL (error!!)";
-                                else if (*pVal)
-                                    cout << "'TRUE'";
-                                else
-                                    cout << "'FALSE'";
-
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_SHORT:
-                            {
-                                sal_Int16 aValue;
-                                cout << "VALUE '" << aName << "' is a SHORT (16 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
-                                    cout << aValue;
-                                else
-                                    cout << "ERROR RETRIEVING VALUE";
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_LONG:
-                            {
-
-                                sal_Int32 aValue;
-                                cout << "VALUE '" << aName << "' is a INT (32 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
-                                    cout << aValue;
-                                else
-                                    cout << "ERROR RETRIEVING VALUE";
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_HYPER:
-                            {
-                                sal_Int64 aValue;
-                                cout << "VALUE '" << aName << "' is a LONG (64 bit) = ";
-                                if (bValueOk = (aElement >>= aValue))
-                                    cout << double(aValue);
-                                else
-                                    cout << "ERROR RETRIEVING VALUE";
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_DOUBLE:
-                            {
-                                double aValue;
-                                cout << "VALUE '" << aName << "' is a DOUBLE = ";
-                                if (bValueOk = (aElement >>= aValue))
-                                    cout << aValue;
-                                else
-                                    cout << "ERROR RETRIEVING VALUE";
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_STRING:
-                            {
-                                OUString aValue;
-                                cout << "VALUE '" << aName << "' is a STRING = ";
-                                if (bValueOk = (aElement >>= aValue))
-                                    cout << "\"" << aValue << "\"";
-                                else
-                                    cout << "ERROR RETRIEVING VALUE";
-                                cout << endl;
-                            }
-                            break;
-                        case TypeClass_SEQUENCE:
-                            {
-                                cout << "VALUE '" << aName << "' is a SEQUENCE or BINARY" << endl;
-
-                                Type aTypeS = configmgr::getSequenceElementType(aElement.getValueType());
-                                OUString sType = configmgr::toTypeName(aTypeS.getTypeClass());
-                                cout << "Real type is Sequence<" << sType << ">" << endl;
-                                bValueOk = true;
-                            }
-                            break;
-                        case TypeClass_VOID:
-                            cout << "ELEMENT '" << aName << "' is NULL and VOID " << endl;
-                            bValueOk = true;
-                            break;
-                        default:
-                                cout << "Error: ELEMENT '" << aName << "' is of unknown or unrecognized type" << endl;
-                            break;
-                        }
-                        if (bValue)
-                        {
-                            if (bInserted)
-                            {
-                                if (aElement.getValueTypeClass() == TypeClass_BOOLEAN ||
-                                    aElement.getValueTypeClass() == TypeClass_VOID)
-                                {
-                                    cout << "Set Value (Type=BOOL) to :";
-                                    cout.flush();
-                                    cin.getline(buf,sizeof buf);
-                                    OUString aInput = OUString::createFromAscii(buf);
-                                    sal_Bool bValue = false;
-                                    if (aInput.equalsIgnoreCase(ASCII("true")))
-                                        bValue = true;
-
-                                    OUString aStr = ASCII("false");
-                                    Any aValueAny;
-                                    aValueAny <<= bValue;
-
-                                    Reference< XNameReplace > xNameReplace(xAccess, UNO_QUERY);
-                                    if (xNameReplace.is())
-                                    {
-                                        xNameReplace->replaceByName(aName, aValueAny);
-                                        commit();
-                                    }
-                                    bInserted = false;
-                                }
-                                else
-                                {
-                                    cout << "Sorry, only BOOLEAN Values can changed today." << endl;
-                                }
-                            }
-                            prompt_and_wait();
-                            return bValueOk ? true : false;
-                        }
-
-                        if (aElement >>= xNext)
-                            cout << "Got an Interface for '" << aName << "'" << endl;
-                        else
-                            cout << "Error: Cannot get an Interface for '" << aName << "'" << endl;
-                    }
-                    else
-                    {
-                        cout << "Error: No element \"" << aInput << "\" found." <<endl;
-                    }
-                }
-
-            }
-            if (xNext.is())
-            {
-                xIface = xNext;
-                return true;
-            }
-            cout << "Error: could not obtain the requested Object " << endl;
-        }
-        else
-        {
-            cout << "Input Error " << endl;
-            return true;
-        }
-    }
-    catch (Exception& e)
-    {
-        cout << "An Exception occurred: " << e.Message << endl;
-
-    }
-    catch (...)
-    {
-        cout << "An UNKNOWN Exception occurred !" << endl;
-    }
-
-    prompt_and_wait();
-    return true;
-}

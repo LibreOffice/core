@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgadmin.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-15 18:30:28 $
+ *  last change: $Author: dg $ $Date: 2000-11-17 08:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,12 @@ void write(Reference< XChild >& xChild)
         cout << endl;
 }
 
+// -----------------------------------------------------------------------------
+void displayTree(Reference< XNameAccess > xIFace){
+
+    write(Reference< XNameAccess >(xIFace));
+}
+
 
 // -----------------------------------------------------------------------------
 void displayGroups(Reference< XNameAccess > xGroupAccess)
@@ -369,14 +375,16 @@ void deleteUser(Reference< XNameAccess > xUserAccess, OUString sUser)
 }
 
 // -----------------------------------------------------------------------------
-Reference< XNameAccess > beginChanges(Reference< XMultiServiceFactory > xFactory, OUString sPath, OUString sUser)
+Reference< XNameAccess > beginChanges(Reference< XMultiServiceFactory > xFactory, OUString sPath, OUString& sUser)
 {
     if (!sUser.getLength())
         sUser =   enterValue("    Enter a User: ", "", true);
 
-    Sequence< Any > aArgs(3);
+    Sequence< Any > aArgs(2);
     aArgs[0] <<= configmgr::createPropertyValue(ASCII("user"), sUser);
     aArgs[1] <<= configmgr::createPropertyValue(ASCII("nodepath"),sPath);
+
+    cout << "starting update for node:" << sPath << endl;
 
     Reference< XNameAccess > xTree(xFactory->createInstanceWithArguments(OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"),
             aArgs), UNO_QUERY);
@@ -391,19 +399,45 @@ void update(Reference< XInterface > xIFace, OUString sRelPath, Type sValue)
     Reference< XHierarchicalPropertySet > xTree(xIFace, UNO_QUERY);
     Any aValue;
     aValue <<= sValue;
+
+    cout << "updating node:" << sRelPath << endl;
     xTree->setHierarchicalPropertyValue(sRelPath, aValue);
+}
+
+// -----------------------------------------------------------------------------
+Reference< XHierarchicalPropertySet > insertTree(Reference< XInterface > xIFace, OUString aName)
+{
+    if (!aName.getLength())
+        aName =   enterValue("/nEnter a Tree to insert: ", "", false);
+
+    Reference< XSingleServiceFactory > xFactory(xIFace, UNO_QUERY);
+    Reference< XHierarchicalPropertySet > xNewElement(xFactory->createInstance(), UNO_QUERY);
+
+    cout << "inserting new tree element:" << aName << endl;
+
+    Any aTree;
+    aTree <<= xNewElement;
+    Reference< XNameContainer >(xFactory, UNO_QUERY)->insertByName(aName, aTree);
+
+    return xNewElement;
+}
+
+// -----------------------------------------------------------------------------
+void removeTree(Reference< XInterface > xIFace, OUString aName)
+{
+    if (!aName.getLength())
+        aName =   enterValue("/nEnter a Tree to remove: ", "", false);
+
+    cout << "removing new tree element:" << aName << endl;
+
+    Reference< XNameContainer >(xIFace, UNO_QUERY)->removeByName(aName);
 }
 
 // -----------------------------------------------------------------------------
 void commitChanges(Reference< XInterface > xIFace)
 {
-    Reference< XChangesBatch > xChangesBatch(xIFace, UNO_QUERY);
-    xChangesBatch->commitChanges();
-}
+    cout << "committing changes:" << endl;
 
-// -----------------------------------------------------------------------------
-void insertTree(Reference< XInterface > xIFace)
-{
     Reference< XChangesBatch > xChangesBatch(xIFace, UNO_QUERY);
     xChangesBatch->commitChanges();
 }
@@ -464,6 +498,7 @@ int _cdecl main( int argc, char * argv[] )
 
         cout << "Configuration Provider created !\n---------------------------------------------------------------" << endl;
 
+        Reference< XNameAccess > xUpdateAccess;
         Reference< XNameAccess > xGroupAccess(xCfgProvider->createInstance(OUString::createFromAscii("com.sun.star.configuration.GroupAccess")),UNO_QUERY);
         Reference< XNameAccess > xUserAccess(xCfgProvider->createInstance(OUString::createFromAscii("com.sun.star.configuration.UserAccess")),UNO_QUERY);
 
@@ -473,18 +508,33 @@ int _cdecl main( int argc, char * argv[] )
 // create a group
         OUString sGroupName = insertGroup(xGroupAccess);
 // create a user
-        OUString sUserName = insertUser(xUserAccess, sGroupName);
+        OUString sUserName;
+        sUserName = insertUser(xUserAccess, sGroupName);
 
 // now do updates for the user
-        Reference< XNameAccess > xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Inet"), sUserName);
+        xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Inet"), sUserName);
 
-        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Name"), OUString::createFromAscii("Test"));
-        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Port"), sal_Int32(10));
+        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Port"), sal_Int32(12));
+        update(xUpdateAccess, OUString::createFromAscii("Proxy/FTP/Name"), OUString::createFromAscii("demo"));
+        update(xUpdateAccess, OUString::createFromAscii("DNS/IP_Address"), OUString::createFromAscii("demo1"));
 
+        xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Office.Common"), sUserName);
+        update(xUpdateAccess, OUString::createFromAscii("_3D_Engine/Dithering"), sal_Bool(sal_False));
         commitChanges(xUpdateAccess);
 
-        deleteUser(xUserAccess, sUserName);
-        deleteGroup(xGroupAccess, sGroupName);
+// now do updates with inserting and removing of nodes
+
+        xUpdateAccess = beginChanges(xCfgProvider, OUString::createFromAscii("org.openoffice.Security/MountPoints"), sUserName);
+        displayTree(xUpdateAccess);
+
+        Reference< XHierarchicalPropertySet > xTree = insertTree(xUpdateAccess, OUString());
+        update(xUpdateAccess, OUString::createFromAscii("InstallationDirectory/Directory"), OUString::createFromAscii("Test1"));
+        removeTree(xUpdateAccess, OUString());
+        commitChanges(xUpdateAccess);
+
+
+/*      deleteUser(xUserAccess, sUserName);
+        deleteGroup(xGroupAccess, sGroupName);      */
 
         displayGroups(xGroupAccess);
         displayUsers(xUserAccess);
