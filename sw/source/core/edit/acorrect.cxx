@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2000-10-18 11:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,19 +326,6 @@ BOOL SwAutoCorrDoc::SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String&
         nUndoId = USHRT_MAX;
     return TRUE;
 }
-
-    // sind in dem Bereich Symbolzeichen?
-BOOL SwAutoCorrDoc::HasSymbolChars( xub_StrLen nStt, xub_StrLen nEnd )
-{
-    BOOL bRet = FALSE;
-    SwTxtNode* pNd = rCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
-    if( pNd )
-        for( ; nStt < nEnd; ++nStt )
-            if( 0 != ( bRet = pNd->IsSymbol( nStt ) ) )
-                break;
-    return bRet;
-}
-
 
     // returne den Text eines vorherigen Absatzes.
     // Dieser darf nicht leer sein!

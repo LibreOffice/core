@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: jp $ $Date: 2000-10-18 11:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,6 @@ public:
                             SfxPoolItem& );
 
     virtual BOOL SetINetAttr( xub_StrLen nStt, xub_StrLen nEnd, const String& rURL );
-
-    // sind in dem Bereich Symbolzeichen?
-    virtual BOOL HasSymbolChars( xub_StrLen nStt, xub_StrLen nEnd );
 
     // returne den Text eines vorherigen Absatzes.
     // Dieser darf nicht leer sein!
