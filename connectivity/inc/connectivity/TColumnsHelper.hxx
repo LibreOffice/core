@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TColumnsHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:51:20 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,12 @@
 namespace connectivity
 {
     class OTableHelper;
+    class OColumnsHelperImpl;
     /** contains generell column handling to creat default columns and default sql statements.
     */
     class OColumnsHelper : public sdbcx::OCollection
     {
+        OColumnsHelperImpl* m_pImpl;
     protected:
         OTableHelper*   m_pTable;
 
@@ -95,6 +97,7 @@ namespace connectivity
                     ::osl::Mutex& _rMutex,
                     const TStringVector &_rVector
                     );
+        virtual ~OColumnsHelper();
 
         /** set the parent of the columns. Can also be <NULL/>.
             @param  _pTable
