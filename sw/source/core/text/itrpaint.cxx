@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-12 11:08:29 $
+ *  last change: $Author: fme $ $Date: 2002-05-30 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 #ifdef VERTICAL_LAYOUT
     GETGRID( GetTxtFrm()->FindPageFrm() )
     const sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() ||
+                                     GetTxtFrm()->IsVertical() ||
                                      ( 0 != pGrid );
     if ( ! bAdjustBaseLine )
 #else
