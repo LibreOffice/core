@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-15 12:31:37 $
+ *  last change: $Author: mt $ $Date: 2001-05-15 12:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,6 +717,14 @@ void UnoControl::setContext( const ::com::sun::star::uno::Reference< ::com::sun:
 void UnoControl::createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& rxToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
+
+    if ( !mxModel.is() )
+    {
+        ::com::sun::star::uno::RuntimeException aException;
+        aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
+        aException.Context = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
+        throw( aException );
+    }
 
     if( !mxPeer.is() )
     {
