@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-25 11:12:14 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
+#endif
+#ifndef _SCERRORS_HXX
+#include "scerrors.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -940,7 +943,12 @@ void ScXMLTableRowCellContext::EndElement()
                             else
                             {
                                 if (!bWasEmpty || (pMyAnnotation))
-                                    rXMLImport.SetHasRangeOverflow();
+                                {
+                                    if (aCurrentPos.Row > MAXROW)
+                                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
+                                    else
+                                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
+                                }
                             }
                         }
                     }
@@ -1037,7 +1045,10 @@ void ScXMLTableRowCellContext::EndElement()
                 }
                 else
                 {
-                    rXMLImport.SetHasRangeOverflow();
+                    if (aCellPos.Row > MAXROW)
+                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
+                    else
+                        rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
                 }
 
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 17:29:20 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 12:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         ScXMLImport* pImport = static_cast<ScXMLImport*>(SvXMLImport::getImplementation(xDocHandler));
 
         if (pImport && pImport->HasRangeOverflow() && !nReturn)
-            nReturn = SCWARN_IMPORT_RANGE_OVERFLOW;
+            nReturn = pImport->GetRangeOverflowType();
     }
 
     // free the component
@@ -558,7 +558,10 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             if (nDocRetval)
             {
                 pStorage->SetError(nDocRetval);
-                if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW)
+                if (nDocRetval == SCWARN_IMPORT_RANGE_OVERFLOW ||
+                    nDocRetval == SCWARN_IMPORT_ROW_OVERFLOW ||
+                    nDocRetval == SCWARN_IMPORT_COLUMN_OVERFLOW ||
+                    nDocRetval == SCWARN_IMPORT_SHEET_OVERFLOW)
                     bRet = sal_True;
             }
             else if (nStylesRetval)

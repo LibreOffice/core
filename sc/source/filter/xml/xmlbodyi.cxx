@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 16:05:36 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 12:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef SC_XMLEMPTYCONTEXT_HXX
 #include "XMLEmptyContext.hxx"
+#endif
+#ifndef _SCERRORS_HXX
+#include "scerrors.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -202,7 +205,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
         {
             if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
             {
-                GetScImport().SetHasRangeOverflow();
+                GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
                 pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLocalName);
             }
             else
