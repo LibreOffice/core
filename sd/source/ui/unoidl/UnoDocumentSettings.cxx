@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-12 09:49:04 $
+ *  last change: $Author: cl $ $Date: 2002-12-06 10:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,11 +1180,11 @@ Sequence< OUString > SAL_CALL DocumentSettings::getSupportedServiceNames(  )
     aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.Settings") );
     if( mpModel->IsImpressDocument() )
     {
-        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Impress.Settings") );
+        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.DocumentSettings") );
     }
     else
     {
-        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.Settings") );
+        aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DocumentSettings") );
     }
 
     return aSeq;
