@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 12:44:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 06:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,12 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
 #endif
@@ -251,6 +257,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP_
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
 #endif
@@ -321,6 +330,7 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::container;
+    using namespace ::dbtools;
 
     //========================================================================
     //= helper
@@ -847,7 +857,7 @@ namespace pcr
                 Reference< XPropertySet >  xField;
                 try
                 {
-                    Reference< XConnection >   xConnection = ::dbtools::calcConnection(Reference< XRowSet > (xFormSet, UNO_QUERY),m_xORB);
+                    Reference< XConnection >   xConnection = ::dbtools::getConnection(Reference< XRowSet > (xFormSet, UNO_QUERY));
                     if (!xConnection.is())
                         return;
 
@@ -928,7 +938,7 @@ namespace pcr
             Reference< XTablesSupplier >  xTables;
             try
             {
-                xTables = Reference< XTablesSupplier > (::dbtools::calcConnection(xRowSet,m_xORB),UNO_QUERY);
+                xTables = Reference< XTablesSupplier > (::dbtools::getConnection(xRowSet),UNO_QUERY);
             }
             catch (Exception&)
             {
@@ -982,7 +992,7 @@ namespace pcr
             Reference< XQueriesSupplier >  xSupplyQueries;
             try
             {
-                xSupplyQueries = Reference< XQueriesSupplier > (::dbtools::calcConnection(xRowSet,m_xORB),UNO_QUERY);
+                xSupplyQueries = Reference< XQueriesSupplier > (::dbtools::getConnection(xRowSet),UNO_QUERY);
             }
             catch (Exception&)
             {
@@ -1007,6 +1017,31 @@ namespace pcr
         {
             DBG_ERROR("OPropertyBrowserController::SetQueries : caught an exception !")
         }
+    }
+
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::recalcConnection()
+    {
+        SQLExceptionInfo aErrorInfo;
+        try
+        {
+            Reference< XRowSet > xRowSet(m_xPropValueAccess, UNO_QUERY);
+            if (xRowSet.is())
+            if (m_pView)
+            {
+                WaitObject aWaitCursor(m_pView);
+                ::dbtools::calcConnection(xRowSet,m_xORB);
+            }
+            else
+                ::dbtools::calcConnection(xRowSet,m_xORB);
+        }
+        catch (SQLContext& e) { aErrorInfo = e; }
+        catch (SQLWarning& e) { aErrorInfo = e; }
+        catch (SQLException& e) { aErrorInfo = e; }
+        catch (Exception&) { }
+
+        if (aErrorInfo.isValid() && haveView())
+            showError(aErrorInfo, VCLUnoHelper::GetInterface(m_pView), m_xORB);
     }
 
     //------------------------------------------------------------------------
@@ -1046,6 +1081,9 @@ namespace pcr
                 aProperty.sValue = sCommand;
             else
                 aProperty.sValue = String();
+
+            if (bInit)
+                recalcConnection();
 
             ////////////////////////////////////////////////////////////
             // Enums setzen
@@ -2695,7 +2733,11 @@ namespace pcr
                     m_xPropStateAccess->setPropertyToDefault(rName);
                 }
 
-                SetCursorSource();
+                // try to open a connection for the new data source. Needed for filling the table list etc., but the methods doing this
+                // don't display errors, and we want to have an error message.
+                recalcConnection();
+
+                SetCursorSource(sal_False);
                 SetListSource();
             }
         }
@@ -2724,6 +2766,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/04/03 12:44:06  fs
+ *  corrected SetQueries for list-/combo boxes
+ *
  *  Revision 1.13  2001/03/21 15:42:13  fs
  *  #82696# use the new font dialog for changing the control font
  *
