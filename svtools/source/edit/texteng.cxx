@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 12:11:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1635,12 +1635,12 @@ void TextEngine::FormatDoc()
                 maInvalidRec.Bottom() = nY + CalcParaHeight( nPara );
             }
 
-            if ( ( mnCurTextWidth != 0xFFFFFFFF ) && ( nOldParaWidth == nOldCurTextWidth ) )
+            if ( mnCurTextWidth != 0xFFFFFFFF )
             {
                 ULONG nNewParaWidth = CalcTextWidth( nPara );
                 if ( nNewParaWidth >= mnCurTextWidth )
                     mnCurTextWidth = nNewParaWidth;
-                else
+                else if ( ( nOldParaWidth != 0xFFFFFFFF ) && ( nOldParaWidth >= mnCurTextWidth ) )
                     mnCurTextWidth = 0xFFFFFFFF;
             }
         }
