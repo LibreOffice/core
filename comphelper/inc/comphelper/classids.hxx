@@ -2,9 +2,9 @@
  *
  *  $RCSfile: classids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:21:32 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,10 @@
 #define BF_SO3_OUT_CLASSID \
     0x970b1e83, 0xcf2d, 0x11cf, 0x89, 0xca, 0x00, \
     0x80, 0x29, 0xe4, 0xb0, 0xb1
+
+#define SO3_DUMMY_CLASSID \
+    0x970b1fff, 0xcf2d, 0x11cf, \
+    0x89,0xca,0x00,0x80,0x29,0xe4,0xb0,0xb1
 
 #define SO3_APPLET_CLASSID \
     0x970b1e81, 0xcf2d, 0x11cf, \
