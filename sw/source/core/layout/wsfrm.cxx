@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-12 08:57:11 $
+ *  last change: $Author: ama $ $Date: 2002-09-12 09:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1981,8 +1981,21 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
     //Upper nur growen wenn notwendig.
     if ( nReal < nDist )
-        nReal = GetUpper() ? GetUpper()->Grow( nDist - (nReal > 0 ? nReal : 0),
-                                               bTst, bInfo ) : 0;
+    {
+        if( GetUpper() )
+        {
+            if( bTst || !GetUpper()->IsFooterFrm() )
+                nReal = GetUpper()->Grow( nDist - (nReal > 0 ? nReal : 0),
+                                          bTst, bInfo );
+            else
+            {
+                nReal = 0;
+                GetUpper()->InvalidateSize();
+            }
+        }
+        else
+            nReal = 0;
+    }
     else
         nReal = nDist;
 
@@ -2113,8 +2126,19 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         }
     }
 
-    const SwTwips nReal = GetUpper() && nDist > 0 ?
-            GetUpper()->Shrink( nDist, bTst, bInfo ) : 0;
+    SwTwips nReal;
+    if( GetUpper() && nDist > 0 )
+    {
+        if( bTst || !GetUpper()->IsFooterFrm() )
+            nReal = GetUpper()->Shrink( nDist, bTst, bInfo );
+        else
+        {
+            nReal = 0;
+            GetUpper()->InvalidateSize();
+        }
+    }
+    else
+        nReal = 0;
 
     if ( !bTst )
     {
