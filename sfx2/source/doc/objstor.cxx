@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-22 09:28:10 $
+ *  last change: $Author: dv $ $Date: 2001-02-23 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -771,11 +771,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             aInfo.aCreateStamp.SetName( aAuthor );
 
-            // Version in die Liste aufnehmen; diese mu\s vorher schon vom
-            // "alten" Medium "ubertragen worden sein
             sal_Bool bUseXML = SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion();
-            rMedium.AddVersion_Impl( aInfo );
-            rMedium.SaveVersionList_Impl( bUseXML );
 
             // Den Storage f"ur die Versionen "offnen
             SvStorageRef xVersion = bUseXML ?
@@ -797,6 +793,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     pInfo = pList->GetObject(n++);
                 }
             }
+
+            // Version in die Liste aufnehmen; diese mu\s vorher schon vom
+            // "alten" Medium "ubertragen worden sein
+            rMedium.AddVersion_Impl( aInfo );
+            rMedium.SaveVersionList_Impl( bUseXML );
 
             // Einen Stream aufmachen, auf den dann der Storage gesetzt wird,
             // in den gespeichert wird
