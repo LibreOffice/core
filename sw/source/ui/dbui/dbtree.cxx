@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-06-06 13:12:30 $
+ *  last change: $Author: os $ $Date: 2002-12-06 09:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,119 +414,130 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
 {
     if (!pParent->HasChilds())
     {
-
         if (GetParent(pParent)) // column names
         {
-
-            String sSourceName = GetEntryText(GetParent(pParent));
-            String sTableName = GetEntryText(pParent);
-
-            if(!pImpl->GetContext()->hasByName(sSourceName))
-                return;
-            Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
-            BOOL bTable = pParent->GetUserData() == 0;
-            Reference<XColumnsSupplier> xColsSupplier;
-            if(bTable)
+            try
             {
-                Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
-                if(xTSupplier.is())
+
+                String sSourceName = GetEntryText(GetParent(pParent));
+                String sTableName = GetEntryText(pParent);
+
+                if(!pImpl->GetContext()->hasByName(sSourceName))
+                    return;
+                Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
+                BOOL bTable = pParent->GetUserData() == 0;
+                Reference<XColumnsSupplier> xColsSupplier;
+                if(bTable)
                 {
-                    Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                    DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?")
-                    try
+                    Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+                    if(xTSupplier.is())
                     {
-                        Any aTable = xTbls->getByName(sTableName);
-                        Reference<XPropertySet> xPropSet;
-                        aTable >>= xPropSet;
-                        xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                        Reference<XNameAccess> xTbls = xTSupplier->getTables();
+                        DBG_ASSERT(xTbls->hasByName(sTableName), "table not available anymore?")
+                        try
+                        {
+                            Any aTable = xTbls->getByName(sTableName);
+                            Reference<XPropertySet> xPropSet;
+                            aTable >>= xPropSet;
+                            xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                        }
+                        catch(Exception&)
+                        {}
                     }
-                    catch(Exception&)
-                    {}
+                }
+                else
+                {
+                    Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+                    if(xQSupplier.is())
+                    {
+                        Reference<XNameAccess> xQueries = xQSupplier->getQueries();
+                        DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?")
+                        try
+                        {
+                            Any aQuery = xQueries->getByName(sTableName);
+                            Reference<XPropertySet> xPropSet;
+                            aQuery >>= xPropSet;
+                            xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
+                        }
+                        catch(Exception&)
+                        {}
+                    }
+                }
+
+                if(xColsSupplier.is())
+                {
+                    Reference <XNameAccess> xCols = xColsSupplier->getColumns();
+                    Sequence<OUString> aColNames = xCols->getElementNames();
+                    const OUString* pColNames = aColNames.getConstArray();
+                    long nCount = aColNames.getLength();
+                    for (long i = 0; i < nCount; i++)
+                    {
+                        String sName = pColNames[i];
+                        if(bTable)
+                            InsertEntry(sName, pParent);
+                        else
+                            InsertEntry(sName, pParent);
+                    }
                 }
             }
-            else
+            catch(const Exception& rEx)
             {
-                Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
-                if(xQSupplier.is())
-                {
-                    Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                    DBG_ASSERT(xQueries->hasByName(sTableName), "table not available anymore?")
-                    try
-                    {
-                        Any aQuery = xQueries->getByName(sTableName);
-                        Reference<XPropertySet> xPropSet;
-                        aQuery >>= xPropSet;
-                        xColsSupplier = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
-                    }
-                    catch(Exception&)
-                    {}
-                }
-            }
-
-            if(xColsSupplier.is())
-            {
-                Reference <XNameAccess> xCols = xColsSupplier->getColumns();
-                Sequence<OUString> aColNames = xCols->getElementNames();
-                const OUString* pColNames = aColNames.getConstArray();
-                long nCount = aColNames.getLength();
-                for (long i = 0; i < nCount; i++)
-                {
-                    String sName = pColNames[i];
-                    if(bTable)
-                        InsertEntry(sName, pParent);
-                    else
-                        InsertEntry(sName, pParent);
-                }
             }
         }
         else    // Tabellennamen
         {
-            String sSourceName = GetEntryText(pParent);
-            if(!pImpl->GetContext()->hasByName(sSourceName))
-                return;
-            Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
-            if (xConnection.is())
+            try
             {
-                Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
-                if(xTSupplier.is())
+                String sSourceName = GetEntryText(pParent);
+                if(!pImpl->GetContext()->hasByName(sSourceName))
+                    return;
+                Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
+                if (xConnection.is())
                 {
-                    Reference<XNameAccess> xTbls = xTSupplier->getTables();
-                    Sequence<OUString> aTblNames = xTbls->getElementNames();
-                    String sTableName;
-                    long nCount = aTblNames.getLength();
-                    const OUString* pTblNames = aTblNames.getConstArray();
-                    Image& rImg = aImageList.GetImage(IMG_DBTABLE);
-                    Image& rHCImg = aImageListHC.GetImage(IMG_DBTABLE);
-                    for (long i = 0; i < nCount; i++)
+                    Reference<XTablesSupplier> xTSupplier = Reference<XTablesSupplier>(xConnection, UNO_QUERY);
+                    if(xTSupplier.is())
                     {
-                        sTableName = pTblNames[i];
-                        SvLBoxEntry* pTableEntry = InsertEntry(sTableName, rImg, rImg, pParent, bShowColumns);
-                        //to discriminate between queries and tables the user data of table entries is set
-                        pTableEntry->SetUserData((void*)0);
-                        SetExpandedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
-                        SetCollapsedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        Reference<XNameAccess> xTbls = xTSupplier->getTables();
+                        Sequence<OUString> aTblNames = xTbls->getElementNames();
+                        String sTableName;
+                        long nCount = aTblNames.getLength();
+                        const OUString* pTblNames = aTblNames.getConstArray();
+                        Image& rImg = aImageList.GetImage(IMG_DBTABLE);
+                        Image& rHCImg = aImageListHC.GetImage(IMG_DBTABLE);
+                        for (long i = 0; i < nCount; i++)
+                        {
+                            sTableName = pTblNames[i];
+                            SvLBoxEntry* pTableEntry = InsertEntry(sTableName, rImg, rImg, pParent, bShowColumns);
+                            //to discriminate between queries and tables the user data of table entries is set
+                            pTableEntry->SetUserData((void*)0);
+                            SetExpandedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                            SetCollapsedEntryBmp(pTableEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        }
                     }
-                }
 
-                Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
-                if(xQSupplier.is())
-                {
-                    Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-                    Sequence<OUString> aQueryNames = xQueries->getElementNames();
-                    String sQueryName;
-                    long nCount = aQueryNames.getLength();
-                    const OUString* pQueryNames = aQueryNames.getConstArray();
-                    Image& rImg = aImageList.GetImage(IMG_DBQUERY);
-                    Image& rHCImg = aImageListHC.GetImage(IMG_DBQUERY);
-                    for (long i = 0; i < nCount; i++)
+                    Reference<XQueriesSupplier> xQSupplier = Reference<XQueriesSupplier>(xConnection, UNO_QUERY);
+                    if(xQSupplier.is())
                     {
-                        sQueryName = pQueryNames[i];
-                        SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, rImg, rImg, pParent, bShowColumns);
-                        pQueryEntry->SetUserData((void*)1);
-                        SetExpandedEntryBmp(pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
-                        SetCollapsedEntryBmp( pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        Reference<XNameAccess> xQueries = xQSupplier->getQueries();
+                        Sequence<OUString> aQueryNames = xQueries->getElementNames();
+                        String sQueryName;
+                        long nCount = aQueryNames.getLength();
+                        const OUString* pQueryNames = aQueryNames.getConstArray();
+                        Image& rImg = aImageList.GetImage(IMG_DBQUERY);
+                        Image& rHCImg = aImageListHC.GetImage(IMG_DBQUERY);
+                        for (long i = 0; i < nCount; i++)
+                        {
+                            sQueryName = pQueryNames[i];
+                            SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, rImg, rImg, pParent, bShowColumns);
+                            pQueryEntry->SetUserData((void*)1);
+                            SetExpandedEntryBmp(pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                            SetCollapsedEntryBmp( pQueryEntry, rHCImg, BMP_COLOR_HIGHCONTRAST);
+                        }
                     }
                 }
+            }
+            catch(const Exception& rEx)
+            {
             }
         }
     }
