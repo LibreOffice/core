@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-25 17:02:00 $
+ *  last change: $Author: fme $ $Date: 2002-10-11 09:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,37 @@ IMPL_LINK( SwBlink, Blinker, Timer *, pTimer )
                 ((SwRootFrm*)pTmp->GetRootFrm())->GetCurrShell() )
             {
                 ++nPos;
-                Rectangle aRefresh( Point( pTmp->GetPos().X(), pTmp->GetPos().Y()
-                                          - pTmp->GetPortion()->GetAscent() ),
-                                    pTmp->GetPortion()->SvLSize() );
+
+                Point aPos = pTmp->GetPos();
+                long nWidth, nHeight;
+                switch ( pTmp->GetDirection() )
+                {
+                    case 900:
+                        aPos.X() -= pTmp->GetPortion()->GetAscent();
+                        aPos.Y() -= pTmp->GetPortion()->Width();
+                        nWidth = pTmp->GetPortion()->SvLSize().Height();
+                        nHeight = pTmp->GetPortion()->SvLSize().Width();
+                        break;
+                    case 1800:
+                        aPos.Y() -= pTmp->GetPortion()->Height() -
+                                    pTmp->GetPortion()->GetAscent();
+                        aPos.X() -= pTmp->GetPortion()->Width();
+                        nWidth = pTmp->GetPortion()->SvLSize().Width();
+                        nHeight = pTmp->GetPortion()->SvLSize().Height();
+                        break;
+                    case 2700:
+                        aPos.X() -= pTmp->GetPortion()->Height() -
+                                    pTmp->GetPortion()->GetAscent();
+                        nWidth = pTmp->GetPortion()->SvLSize().Height();
+                        nHeight = pTmp->GetPortion()->SvLSize().Width();
+                        break;
+                    default:
+                        aPos.Y() -= pTmp->GetPortion()->GetAscent();
+                        nWidth = pTmp->GetPortion()->SvLSize().Width();
+                        nHeight = pTmp->GetPortion()->SvLSize().Height();
+                }
+
+                Rectangle aRefresh( aPos, Size( nWidth, nHeight ) );
                 aRefresh.Right() += ( aRefresh.Bottom()- aRefresh.Top() ) / 8;
                 ((SwRootFrm*)pTmp->GetRootFrm())
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
@@ -146,10 +174,11 @@ IMPL_LINK( SwBlink, Blinker, Timer *, pTimer )
     return sal_True;
 }
 
-void SwBlink::Insert( const SwLinePortion* pPor, const Point& rPoint,
-                      const SwTxtFrm *pTxtFrm )
+void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
+                      const SwTxtFrm *pTxtFrm, USHORT nDir )
 {
-    SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor );
+    SwBlinkPortion *pBlinkPor = new SwBlinkPortion( pPor, nDir );
+
     MSHORT nPos;
     if( aList.Seek_Entry( pBlinkPor, &nPos ) )
     {
@@ -172,7 +201,9 @@ void SwBlink::Insert( const SwLinePortion* pPor, const Point& rPoint,
 
 void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
 {
-    SwBlinkPortion aBlink( pOld );
+    // setting direction to 0 because direction does not matter
+    // for this operation
+    SwBlinkPortion aBlink( pOld, 0 );
     MSHORT nPos;
     if( aList.Seek_Entry( &aBlink, &nPos ) )
     {
@@ -184,7 +215,9 @@ void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
 
 void SwBlink::Delete( const SwLinePortion* pPor )
 {
-    SwBlinkPortion aBlink( pPor );
+    // setting direction to 0 because direction does not matter
+    // for this operation
+    SwBlinkPortion aBlink( pPor, 0 );
     MSHORT nPos;
     if( aList.Seek_Entry( &aBlink, &nPos ) )
         aList.Remove( nPos );

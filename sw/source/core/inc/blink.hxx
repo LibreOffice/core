@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blink.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:20 $
+ *  last change: $Author: fme $ $Date: 2002-10-11 09:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,18 +78,21 @@ class SwTxtFrm;
 
 class SwBlinkPortion
 {
+    Point               aPos;
     const SwLinePortion *pPor;
     const SwRootFrm     *pFrm;
-    Point           aPos;
+    USHORT              nDir;
 public:
-    SwBlinkPortion( const SwLinePortion* pPortion ){ pPor = pPortion; }
+    SwBlinkPortion( const SwLinePortion* pPortion, USHORT nDirection )
+            { pPor = pPortion; nDir = nDirection; }
     SwBlinkPortion( const SwBlinkPortion* pBlink, const SwLinePortion* pPort )
-    {   pPor = pPort; pFrm = pBlink->pFrm; aPos = pBlink->aPos; }
+    {   pPor = pPort; pFrm = pBlink->pFrm; aPos = pBlink->aPos; nDir = pBlink->nDir; }
     void SetPos( const Point& aNew ){ aPos = aNew; }
     const Point& GetPos() const{ return aPos; }
     void SetRootFrm( const SwRootFrm* pNew ){ pFrm = pNew; }
     const SwRootFrm* GetRootFrm() const{ return pFrm; }
     const SwLinePortion *GetPortion() const{ return pPor; }
+    USHORT GetDirection() const { return nDir; }
     BOOL operator<( const SwBlinkPortion& rBlinkPortion ) const
     { return (long)pPor < (long)rBlinkPortion.pPor; }
     BOOL operator==( const SwBlinkPortion& rBlinkPortion ) const
@@ -110,8 +113,8 @@ public:
 
     DECL_LINK( Blinker, Timer * );
 
-    void Insert( const SwLinePortion* pPor, const Point& rPoint,
-                 const SwTxtFrm *pTxtFrm );
+    void Insert( const Point& rPoint, const SwLinePortion* pPor,
+                 const SwTxtFrm *pTxtFrm, USHORT nDir );
     void Replace( const SwLinePortion* pOld, const SwLinePortion* pNew );
     void Delete( const SwLinePortion* pPor );
     void FrmDelete( const SwRootFrm* pRoot );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-20 08:24:41 $
+ *  last change: $Author: fme $ $Date: 2002-10-11 09:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,22 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         {
             if( !pBlink )
                 pBlink = new SwBlink();
-            pBlink->Insert( &rPor, aPos, GetTxtFrm() );
+
+            Point aPoint( aPos );
+
+#ifdef BIDI
+            if ( GetTxtFrm()->IsRightToLeft() )
+                GetTxtFrm()->SwitchLTRtoRTL( aPoint );
+
+            if ( TEXT_LAYOUT_BIDI_STRONG != GetOut()->GetLayoutMode() )
+                aPoint.X() -= rPor.Width();
+#endif
+
+            if ( GetTxtFrm()->IsVertical() )
+                GetTxtFrm()->SwitchHorizontalToVertical( aPoint );
+
+            pBlink->Insert( aPoint, &rPor, GetTxtFrm(), pFnt->GetOrientation() );
+
             if( !pBlink->IsVisible() )
                 return;
         }
