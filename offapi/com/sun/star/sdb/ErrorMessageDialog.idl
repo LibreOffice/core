@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorMessageDialog.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 14:32:46 $
+ *  last change: $Author: fs $ $Date: 2001-03-12 16:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ service ErrorMessageDialog
         of any classe derived from this exception.</p>
         <p>This property can't be set while the dialog is beeing displayed.</p>
     */
-    [property] any bla;
+    [property] any SQLException;
 
     /** allows access to the properties of the object
     */
@@ -158,5 +158,8 @@ service ErrorMessageDialog
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/20 14:32:46  fs
+ *  initial checkin - service description for the ErrorMessageDialog
+ *
  ************************************************************************/
 
