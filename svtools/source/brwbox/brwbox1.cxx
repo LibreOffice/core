@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:20:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,9 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
             Rectangle aScrollArea;
             if ( nOldPos > nPos )
             {
+                long nFrozenWidth = GetFrozenWidth();
+                if ( aToRect.Left() < nFrozenWidth )
+                    aToRect.Left() = nFrozenWidth;
                 aScrollArea = Rectangle(Point(aToRect.Left(),0),
                                         Point(aNextRect.Right(),aDataWinSize.Height()));
                 nScroll *= -1; // reverse direction
