@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 
 #ifndef SC_FILTER_HXX
 #include "filter.hxx"
+#endif
+
+#ifndef SC_XLTOOLS_HXX
+#include "xltools.hxx"
 #endif
 
 #include "scerrors.hxx"
@@ -335,12 +339,12 @@ FltError ScExportExcel5( SfxMedium &rOutMedium, ScDocument *pDocument,
 
             if ( bBiff8 )
             {
-                ExportBiff8     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
+                ExportBiff8     aFilter( *pStorage, *xStStream, xlBiff8, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
             else
             {
-                ExportBiff5     aFilter( *pStorage, *xStStream, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
+                ExportBiff5     aFilter( *pStorage, *xStStream, xlBiff5, pDocument, lcl_GetBasePath( rOutMedium ), eNach, bRelUrl );
                 eRet = aFilter.Write();
             }
 
