@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-26 17:59:26 $
+ *  last change: $Author: ama $ $Date: 2002-07-03 10:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1127,7 +1127,7 @@
 					<prop oor:name="Load" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
-						<!-- Responsible: JP -->
+                                                <!-- Responsible: OS -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
 						<value>true</value>
 						<info>
@@ -1138,7 +1138,7 @@
 					<prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
-						<!-- Responsible: JP -->
+                                                <!-- Responsible: OS -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
 						<value>true</value>
 						<info>
