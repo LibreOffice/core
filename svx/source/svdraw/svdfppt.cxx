@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-19 17:20:24 $
+ *  last change: $Author: sj $ $Date: 2000-10-20 09:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5086,7 +5086,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                         pCharPropsATable[ nCurrentPara ]++;
                         PPTCharPropSet* pCPropSet = new PPTCharPropSet( aCharPropSet );
                         pCPropSet->SetFont( rMan.pFonts->Count() - 1 );
-                        pCPropSet->maString = (char)( nCurrentSpecMarker >> 24 );   //aString[ (UINT16)nCharAnzRead ];
+                        pCPropSet->maString = (sal_uInt8)( nCurrentSpecMarker >> 24 );
                         aCharPropList.Insert( pCPropSet, LIST_APPEND );
                         nCharCount--;
                         nCharAnzRead++;
