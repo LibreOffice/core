@@ -1,4 +1,4 @@
-    <node oor:name="MathML XML (Math)" oor:op="replace">
+    <node oor:name="MathML XML (Math)" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>math_MathML_XML_Math</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
