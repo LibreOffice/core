@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTimeHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-16 15:29:59 $
+ *  last change: $Author: kso $ $Date: 2001-06-21 10:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include <stdio.h>
 
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -79,53 +83,126 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
 {
     OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
-    int year;
-    int month;
-    int day;
-    int hours;
-    int minutes;
-    int seconds;
+    int year, month, day, hours, minutes, off_hours, off_minutes, fix;
+    double seconds;
 
-    int i = sscanf( aDT.getStr(), "%4d-%2d-%2dT%2d:%2d:%2d",
+    // 2001-01-01T12:30:00Z
+    int n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lfZ",
                     &year, &month, &day, &hours, &minutes, &seconds );
-    if (i != 6)
-        return false;
+    if ( n == 6 )
+    {
+        fix = 0;
+    }
+    else
+    {
+        // 2001-01-01T12:30:00+03:30
+        n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lf+%02d:%02d",
+                    &year, &month, &day, &hours, &minutes, &seconds,
+                    &off_hours, &off_minutes );
+        if ( n == 8 )
+        {
+            fix = - off_hours * 3600 - off_minutes * 60;
+        }
+        else
+        {
+            // 2001-01-01T12:30:00-03:30
+            n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lf-%02d:%02d",
+                        &year, &month, &day, &hours, &minutes, &seconds,
+                        &off_hours, &off_minutes );
+            if ( n = 8 )
+            {
+                fix = off_hours * 3600 + off_minutes * 60;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
-    dateTime.Year    = year;
-    dateTime.Month   = month;
-    dateTime.Day     = day;
-    dateTime.Hours   = hours;
-    dateTime.Minutes = minutes;
-    dateTime.Seconds = seconds;
+    // Convert to local time...
 
-    return true;
+    oslDateTime aDateTime;
+    aDateTime.NanoSeconds = 0;
+    aDateTime.Seconds     = static_cast< int >( seconds );    // 0-59
+    aDateTime.Minutes     = minutes;    // 0-59
+    aDateTime.Hours       = hours;      // 0-23
+    aDateTime.Day         = day;        // 1-31
+    aDateTime.DayOfWeek   = 0;          // 0-6, 0 = Sunday
+    aDateTime.Month       = month;      // 1-12
+    aDateTime.Year        = year;
+
+    TimeValue aTimeValue;
+    if ( osl_getTimeValueFromDateTime( &aDateTime, &aTimeValue ) )
+    {
+        aTimeValue.Seconds += fix;
+
+        if ( osl_getLocalTimeFromSystemTime( &aTimeValue, &aTimeValue ) )
+        {
+            if ( osl_getDateTimeFromTimeValue( &aTimeValue, &aDateTime ) )
+            {
+                dateTime.Year    = aDateTime.Year;
+                dateTime.Month   = aDateTime.Month;
+                dateTime.Day     = aDateTime.Day;
+                dateTime.Hours   = aDateTime.Hours;
+                dateTime.Minutes = aDateTime.Minutes;
+                dateTime.Seconds = aDateTime.Seconds;
+
+                return true;
+             }
+        }
+    }
+
+    return false;
 }
 
-sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& day)
+/*
+sal_Int32 DateTimeHelper::convertDayToInt (const OUString& day)
 {
-    if (day.compareToAscii ("Jan") == 0)
+    if (day.compareToAscii ("Sun") == 0)
+        return 0;
+    else if (day.compareToAscii ("Mon") == 0)
         return 1;
-    else if (day.compareToAscii ("Feb") == 0)
+    else if (day.compareToAscii ("Tue") == 0)
         return 2;
-    else if (day.compareToAscii ("Mar") == 0)
+    else if (day.compareToAscii ("Wed") == 0)
         return 3;
-    else if (day.compareToAscii ("Apr") == 0)
+    else if (day.compareToAscii ("Thu") == 0)
         return 4;
-    else if (day.compareToAscii ("May") == 0)
+    else if (day.compareToAscii ("Fri") == 0)
         return 5;
-    else if (day.compareToAscii ("Jun") == 0)
+    else if (day.compareToAscii ("Sat") == 0)
         return 6;
-    else if (day.compareToAscii ("Jul") == 0)
+    else
+        return -1;
+}
+*/
+
+sal_Int32 DateTimeHelper::convertMonthToInt (const OUString& month)
+{
+    if (month.compareToAscii ("Jan") == 0)
+        return 1;
+    else if (month.compareToAscii ("Feb") == 0)
+        return 2;
+    else if (month.compareToAscii ("Mar") == 0)
+        return 3;
+    else if (month.compareToAscii ("Apr") == 0)
+        return 4;
+    else if (month.compareToAscii ("May") == 0)
+        return 5;
+    else if (month.compareToAscii ("Jun") == 0)
+        return 6;
+    else if (month.compareToAscii ("Jul") == 0)
         return 7;
-    else if (day.compareToAscii ("Aug") == 0)
+    else if (month.compareToAscii ("Aug") == 0)
         return 8;
-    else if (day.compareToAscii ("Sep") == 0)
+    else if (month.compareToAscii ("Sep") == 0)
         return 9;
-    else if (day.compareToAscii ("Oct") == 0)
+    else if (month.compareToAscii ("Oct") == 0)
         return 10;
-    else if (day.compareToAscii ("Nov") == 0)
+    else if (month.compareToAscii ("Nov") == 0)
         return 11;
-    else if (day.compareToAscii ("Dec") == 0)
+    else if (month.compareToAscii ("Dec") == 0)
         return 12;
     else
         return 0;
@@ -135,35 +212,31 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     DateTime& dateTime)
 {
     int year;
-    int month;
     int day;
     int hours;
     int minutes;
     int seconds;
     sal_Char string_month[3 + 1];
+    sal_Char string_day[3 + 1];
 
     sal_Int32 found = s.indexOf (',');
     if (found != -1)
     {
-        OUString _s = s.copy (found);
-        OString aDT (_s.getStr(), _s.getLength(), RTL_TEXTENCODING_ASCII_US);
-        const sal_Char* __s = aDT.getStr();
+        OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
         // RFC 1123
-        found = sscanf (__s, ", %2d %3s %4d %2d:%2d:%2d GMT",
-                        &day, string_month, &year, &hours, &minutes, &seconds);
-        if (found != 6)
+        found = sscanf (aDT.getStr(), "%3s, %2d %3s %4d %2d:%2d:%2d GMT",
+                        string_day, &day, string_month, &year, &hours, &minutes, &seconds);
+        if (found != 7)
         {
             // RFC 1036
-            found = sscanf (__s, ", %2d-%3s-%2d %2d:%2d:%2d GMT",
-                            &day, &string_month, &year, &hours, &minutes, &seconds);
+            found = sscanf (aDT.getStr(), "%3s, %2d-%3s-%2d %2d:%2d:%2d GMT",
+                            string_day, &day, &string_month, &year, &hours, &minutes, &seconds);
         }
-        found = (found == 6) ? 1 : 0;
+        found = (found == 7) ? 1 : 0;
     }
     else
     {
-        char string_day[3 + 1];
-
         OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
         // ANSI C's asctime () format
@@ -175,18 +248,46 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
 
     if (found)
     {
-        month = DateTimeHelper::convertMonthToInt (OUString::createFromAscii (string_month));
+        found = 0;
+
+        int month = DateTimeHelper::convertMonthToInt (
+                            OUString::createFromAscii (string_month));
         if (month)
         {
-            dateTime.Year    = year;
-            dateTime.Month   = month;
-            dateTime.Day     = day;
-            dateTime.Hours   = hours;
-            dateTime.Minutes = minutes;
-            dateTime.Seconds = seconds;
+            // Convert to local time...
+
+            oslDateTime aDateTime;
+            aDateTime.NanoSeconds = 0;
+            aDateTime.Seconds     = seconds;    // 0-59
+            aDateTime.Minutes     = minutes;    // 0-59
+            aDateTime.Hours       = hours;      // 0-23
+            aDateTime.Day         = day;        // 1-31
+            aDateTime.DayOfWeek   = 0; //dayofweek;  // 0-6, 0 = Sunday
+            aDateTime.Month       = month;      // 1-12
+            aDateTime.Year        = year;
+
+            TimeValue aTimeValue;
+            if ( osl_getTimeValueFromDateTime( &aDateTime,
+                                                &aTimeValue ) )
+            {
+                if ( osl_getLocalTimeFromSystemTime( &aTimeValue,
+                                                        &aTimeValue ) )
+                {
+                    if ( osl_getDateTimeFromTimeValue( &aTimeValue,
+                                                        &aDateTime ) )
+                    {
+                        dateTime.Year    = aDateTime.Year;
+                        dateTime.Month   = aDateTime.Month;
+                        dateTime.Day     = aDateTime.Day;
+                        dateTime.Hours   = aDateTime.Hours;
+                        dateTime.Minutes = aDateTime.Minutes;
+                        dateTime.Seconds = aDateTime.Seconds;
+
+                        found = 1;
+                    }
+                }
+            }
         }
-        else
-            found = 0;
     }
 
     return (found) ? true : false;
