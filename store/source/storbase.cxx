@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:13:32 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORBASE_CXX_ "$Revision: 1.6 $"
+#define _STORE_STORBASE_CXX_ "$Revision: 1.7 $"
 
 #ifndef __ALGORITHM__
 #include <algorithm>
@@ -1124,10 +1124,12 @@ storeError OStorePageBIOS::initialize (
             if (eErrCode != store_E_None)
                 return eErrCode;
 
+#ifdef STORE_FEATURE_COMMIT
             // Commit.
             eErrCode = m_xLockBytes->flush();
             if (eErrCode != store_E_None)
                 return eErrCode;
+#endif /* STORE_FEATURE_COMMIT */
 
             // Mark not existent.
             eErrCode = store_E_NotExists;
@@ -1196,16 +1198,16 @@ storeError OStorePageBIOS::create (sal_uInt16 nPageSize)
         return eErrCode;
     }
 
+#ifdef STORE_FEATURE_COMMIT
     // Commit.
     eErrCode = m_xLockBytes->flush();
     OSL_POSTCOND(
         eErrCode == store_E_None,
         "OStorePageBIOS::create(): flush failed");
-    if (eErrCode == store_E_None)
-    {
-        // Mark not modified.
-        m_bModified = sal_False;
-    }
+#endif /* STORE_FEATURE_COMMIT */
+
+    // Adjust modified state.
+    m_bModified = (eErrCode != store_E_None);
 
     // Release Lock and finish.
     return releaseLock (0, SuperPage::size());
@@ -1798,21 +1800,33 @@ storeError OStorePageBIOS::close (void)
     }
 
     // Check SuperBlock page.
+    storeError eErrCode = store_E_None;
     if (m_pSuper)
     {
         // Release SuperBlock page.
-        m_pSuper->close (*this);
+        eErrCode = m_pSuper->close (*this);
         __STORE_DELETEZ (m_pSuper);
     }
 
     // Check LockBytes.
     if (m_xLockBytes.is())
     {
+#ifdef STORE_FEATURE_COMMIT
+        // Commit.
+        storeError result = m_xLockBytes->flush();
+        if (eErrCode == store_E_None)
+        {
+            // Previous result(s) okay. Propagate next result.
+            eErrCode = result;
+        }
+#endif /* STORE_FEATURE_COMMIT */
+
         // Release LockBytes.
-        m_xLockBytes->flush();
         m_xLockBytes.clear();
     }
-    return store_E_None;
+
+    // Done.
+    return eErrCode;
 }
 
 /*
@@ -1829,25 +1843,25 @@ storeError OStorePageBIOS::flush (void)
         return store_E_InvalidAccess;
 
     // Check mode and state.
+    storeError eErrCode = store_E_None;
     if (!(m_bWriteable && m_bModified))
-        return store_E_None;
+        return eErrCode;
 
     // Flush SuperBlock page.
-    storeError eErrCode = m_pSuper->flush (*this);
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageBIOS::flush(): SuperBlock flush failed");
+    eErrCode = m_pSuper->flush (*this);
 
     // Flush LockBytes.
-    eErrCode = m_xLockBytes->flush();
-    OSL_POSTCOND(
-        eErrCode == store_E_None,
-        "OStorePageBIOS::flush(): LockBytes flush failed");
+    storeError result = m_xLockBytes->flush();
     if (eErrCode == store_E_None)
     {
-        // Mark not modified.
-        m_bModified = sal_False;
+        // Previous result(s) okay. Propagate next result.
+        eErrCode = result;
     }
+
+    // Adjust modified state.
+    m_bModified = (eErrCode != store_E_None);
+
+    // Done.
     return eErrCode;
 }
 
