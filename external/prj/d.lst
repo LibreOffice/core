@@ -1,0 +1,98 @@
+mkdir: %_DEST%\inc%_EXT%\external
+mkdir: %_DEST%\inc%_EXT%\external\ado
+mkdir: %_DEST%\inc%_EXT%\external\atl
+mkdir: %_DEST%\inc%_EXT%\external\dt
+mkdir: %_DEST%\inc%_EXT%\external\expat
+mkdir: %_DEST%\inc%_EXT%\external\glibc
+mkdir: %_DEST%\inc%_EXT%\external\jpeg
+mkdir: %_DEST%\inc%_EXT%\external\neon
+mkdir: %_DEST%\inc%_EXT%\external\npsdk
+mkdir: %_DEST%\inc%_EXT%\external\odbc
+mkdir: %_DEST%\inc%_EXT%\external\pgp
+mkdir: %_DEST%\inc%_EXT%\external\pgp\win32_55
+mkdir: %_DEST%\inc%_EXT%\external\pgp\win32_60
+mkdir: %_DEST%\inc%_EXT%\external\pgp\win32_65
+mkdir: %_DEST%\inc%_EXT%\external\sane
+mkdir: %_DEST%\inc%_EXT%\external\twain
+mkdir: %_DEST%\inc%_EXT%\external\zlib
+mkdir: %_DEST%\inc%_EXT%\stl
+mkdir: %_DEST%\inc%_EXT%\stl\BC50
+mkdir: %_DEST%\inc%_EXT%\stl\BCB
+mkdir: %_DEST%\inc%_EXT%\stl\SC5
+mkdir: %_DEST%\inc%_EXT%\stl\config
+mkdir: %_DEST%\inc%_EXT%\audio
+
+..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
+..\audio\rtufiles\usr.include\audio\* %_DEST%\inc%_EXT%\audio\*
+..\ado\*.h %_DEST%\inc%_EXT%\external\ado\*.h
+..\atl\rtufiles\*.h %_DEST%\inc%_EXT%\external\atl\*.h
+..\atl\rtufiles\*.idl %_DEST%\inc%_EXT%\external\atl\*.idl
+..\atl\rtufiles\*.cpp %_DEST%\inc%_EXT%\external\atl\*.cpp
+..\dt\*.h %_DEST%\inc%_EXT%\external\dt\*.h
+..\expat\rtufiles\xmlparse\xmlparse.h %_DEST%\inc%_EXT%\external\expat\xmlparse.h
+..\glibc\rtufiles\posix\config.h %_DEST%\inc%_EXT%\external\glibc\config.h
+..\glibc\rtufiles\posix\getopt.h %_DEST%\inc%_EXT%\external\glibc\getopt.h
+..\npsdk\rtufiles\*.h %_DEST%\inc%_EXT%\external\npsdk\*.h
+..\odbc\rtufiles\*.h %_DEST%\inc%_EXT%\external\odbc\*.h
+..\sane\*.h %_DEST%\inc%_EXT%\external\sane\*.h
+..\twain\*.h %_DEST%\inc%_EXT%\external\twain\*.h
+..\zlib\rtufiles\zlib.h %_DEST%\inc%_EXT%\external\zlib\zlib.h
+..\zlib\rtufiles\zconf.h %_DEST%\inc%_EXT%\external\zconf.h
+
+..\%__SRC%\slo\np* %_DEST%\lib%_EXT%\*
+..\%__SRC%\slo\badapter.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\slo\PluginNew.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\slb\expat_xmltok.lib %_DEST%\lib%_EXT%\expat_xmltok.lib
+..\%__SRC%\slb\expat_xmlparse.lib %_DEST%\lib%_EXT%\expat_xmlparse.lib
+..\%__SRC%\slb\ascii_expat_xmlparse.lib %_DEST%\lib%_EXT%\ascii_expat_xmlparse.lib
+..\%__SRC%\lib\libexpat_xmltok.a %_DEST%\lib%_EXT%\libexpat_xmltok.a
+..\%__SRC%\lib\libexpat_xmlparse.a %_DEST%\lib%_EXT%\libexpat_xmlparse.a
+..\%__SRC%\lib\libascii_expat_xmlparse.a %_DEST%\lib%_EXT%\libascii_expat_xmlparse.a
+..\%__SRC%\slb\gnu_getopt.lib %_DEST%\lib%_EXT%\gnu_getopt.lib
+..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
+..\%__SRC%\slb\zlib.lib %_DEST%\lib%_EXT%\zlib.lib
+..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a
+
+..\jpeg\rtufiles\jpeg.h %_DEST%\inc%_EXT%\external\jpeg\jpeg.h
+..\jpeg\rtufiles\jpeglib.h %_DEST%\inc%_EXT%\external\jpeg\jpeglib.h
+..\%__SRC%\slb\jpeglib.lib %_DEST%\lib%_EXT%\jpeglib.lib
+..\%__SRC%\lib\libjpeglib.a %_DEST%\lib%_EXT%\libjpeglib.a
+
+..\pgp\pgp553\win32_55\inc\*.h %_DEST%\inc%_EXT%\external\pgp\win32_55\*.h
+..\pgp\pgp602\win32_60\inc\*.h %_DEST%\inc%_EXT%\external\pgp\win32_60\*.h
+..\pgp\pgp651\win32_65\inc\*.h %_DEST%\inc%_EXT%\external\pgp\win32_65\*.h
+..\pgp\pgp553\win32_55\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\pgp\pgp602\win32_60\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\pgp\pgp651\win32_65\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+
+..\neon\dates.h %_DEST%\inc%_EXT%\external\neon\dates.h
+..\neon\dav_207.h %_DEST%\inc%_EXT%\external\neon\dav_207.h
+..\neon\dav_basic.h %_DEST%\inc%_EXT%\external\neon\dav_basic.h
+..\neon\dav_locks.h %_DEST%\inc%_EXT%\external\neon\dav_locks.h
+..\neon\dav_props.h %_DEST%\inc%_EXT%\external\neon\dav_props.h
+..\neon\hip_xml.h %_DEST%\inc%_EXT%\external\neon\hip_xml.h
+..\neon\http_basic.h %_DEST%\inc%_EXT%\external\neon\http_basic.h
+..\neon\http_cookies.h %_DEST%\inc%_EXT%\external\neon\http_cookies.h
+..\neon\http_request.h %_DEST%\inc%_EXT%\external\neon\http_request.h
+..\neon\http_utils.h %_DEST%\inc%_EXT%\external\neon\http_utils.h
+..\neon\neon_config.h %_DEST%\inc%_EXT%\external\neon\neon_config.h
+..\neon\neon_defs.h %_DEST%\inc%_EXT%\external\neon\neon_defs.h
+..\neon\socket.h %_DEST%\inc%_EXT%\external\neon\socket.h
+..\neon\string_utils.h %_DEST%\inc%_EXT%\external\neon\string_utils.h
+..\neon\uri.h %_DEST%\inc%_EXT%\external\neon\uri.h
+..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
+..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
+
+..\std2\stl\* %_DEST%\inc%_EXT%\stl\*
+..\std2\stl\*.* %_DEST%\inc%_EXT%\stl\*.*
+..\std2\stl\BC50\* %_DEST%\inc%_EXT%\stl\BC50\*
+..\std2\stl\BC50\*.* %_DEST%\inc%_EXT%\stl\BC50\*.*
+..\std2\stl\BCB\* %_DEST%\inc%_EXT%\stl\BCB\*
+..\std2\stl\BCB\* %_DEST%\inc%_EXT%\stl\BCB\*
+..\std2\stl\SC5\* %_DEST%\inc%_EXT%\stl\SC5\*
+..\std2\stl\SC5\*.* %_DEST%\inc%_EXT%\stl\SC5\*.*
+..\std2\stl\config\*.* %_DEST%\inc%_EXT%\stl\config\*.*
+..\std2\stl\config\*.* %_DEST%\inc%_EXT%\stl\config\*.*
+dos: sh %__PRJROOT%\prj\linkheader
+dos: sh %__PRJROOT%\prj\rmheader
+
