@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2002-05-21 09:00:22 $
+ *  last change: $Author: mi $ $Date: 2002-06-19 07:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,14 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
+#define _COM_SUN_STAR_XML_IMPORTFILTER_IDL__
 
-#include "XImportFilter.idl"
+#ifndef _COM_SUN_STAR_XML_XIMPORTFILTER_IDL__
+#include <com/sun/star/xml/XImportFilter.idl>
+#endif
+
+//#include "XImportFilter.idl"
 #include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module xml {
@@ -69,7 +75,8 @@ module com { module sun { module star { module xml {
 */
 service ImportFilter
 {
-    interface com::sun::star::xml::ImportFilter;
+    interface com::sun::star::xml::XImportFilter;
 };
 
 }; }; }; };
+#endif
