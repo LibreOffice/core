@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+ *  last change: $Author: ssa $ $Date: 2002-07-02 14:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ RscTop * RscTypCont::InitClassSystemWindow( RscTop * pSuper )
     InsWinBit( pClassSystemWindow, "Maxable", nMaximizeId );
     INS_WINBIT(pClassSystemWindow,Closeable)
     INS_WINBIT(pClassSystemWindow,App)
+    INS_WINBIT(pClassSystemWindow,SysWin)
 
     return pClassSystemWindow ;
 }
