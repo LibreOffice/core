@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:13:47 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,11 @@
 #include <vcl/image.hxx>
 #endif
 
-class SvImageManager
+class SvFileInformationManager
 {
 public:
     static Image GetImage( const INetURLObject& rURL, BOOL bBig = FALSE );
+    static String GetDescription( const INetURLObject& rObject );
 };
 
 #endif

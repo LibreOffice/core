@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 08:27:55 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #endif
 
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -111,6 +114,8 @@
 
 // globals *******************************************************************
 
+#define NO_INDEX    ((USHORT)0xFFFF)
+
 static ImageList* _pSmallImageList = NULL;
 static ImageList* _pBigImageList = NULL;
 
@@ -122,54 +127,8 @@ struct SvtExtensionResIdMapping_Impl
     USHORT  _nImgId;
 };
 
-#define RID_DESCRIPTION_START               256
-
-#define STR_DESCRIPTION_WORKPLACE                   (RID_DESCRIPTION_START +  0)
-#define STR_DESCRIPTION_FOLDER                      (RID_DESCRIPTION_START +  1)
-#define STR_DESCRIPTION_FILE                        (RID_DESCRIPTION_START +  2)
-#define STR_DESCRIPTION_DESKTOP                     (RID_DESCRIPTION_START +  3)
-#define STR_DESCRIPTION_MAILSRV_INBOX               (RID_DESCRIPTION_START +  4)
-#define STR_DESCRIPTION_TEXTFILE                    (RID_DESCRIPTION_START +  5)
-#define STR_DESCRIPTION_BOOKMARKFILE                (RID_DESCRIPTION_START +  6)
-#define STR_DESCRIPTION_HTMLFILE                    (RID_DESCRIPTION_START +  7)
-#define STR_DESCRIPTION_CFGFILE                     (RID_DESCRIPTION_START +  8)
-#define STR_DESCRIPTION_SYSFILE                     (RID_DESCRIPTION_START +  9)
-#define STR_DESCRIPTION_ARCHIVFILE                  (RID_DESCRIPTION_START + 10)
-#define STR_DESCRIPTION_APPLICATION                 (RID_DESCRIPTION_START + 11)
-#define STR_DESCRIPTION_LINK                        (RID_DESCRIPTION_START + 12)
-#define STR_DESCRIPTION_SWRITER_DOC                 (RID_DESCRIPTION_START + 13)
-#define STR_DESCRIPTION_SCALC_DOC                   (RID_DESCRIPTION_START + 14)
-#define STR_DESCRIPTION_SIMPRESS_DOC                (RID_DESCRIPTION_START + 15)
-#define STR_DESCRIPTION_SDRAW_DOC                   (RID_DESCRIPTION_START + 16)
-#define STR_DESCRIPTION_SCHART_DOC                  (RID_DESCRIPTION_START + 17)
-#define STR_DESCRIPTION_SMATH_DOC                   (RID_DESCRIPTION_START + 18)
-#define STR_DESCRIPTION_SIMAGE_DOC                  (RID_DESCRIPTION_START + 19)
-#define STR_DESCRIPTION_GLOBALDOC                   (RID_DESCRIPTION_START + 20)
-#define STR_DESCRIPTION_GRAPHIC_DOC                 (RID_DESCRIPTION_START + 21)
-#define STR_DESCRIPTION_WORD_DOC                    (RID_DESCRIPTION_START + 22)
-#define STR_DESCRIPTION_EXCEL_DOC                   (RID_DESCRIPTION_START + 23)
-#define STR_DESCRIPTION_EXCEL_TEMPLATE_DOC          (RID_DESCRIPTION_START + 24)
-#define STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC        (RID_DESCRIPTION_START + 25)
-#define STR_DESCRIPTION_SOFFICE_FRAMESET_DOC        (RID_DESCRIPTION_START + 26)
-#define STR_DESCRIPTION_HELP_DOC                    (RID_DESCRIPTION_START + 27)
-#define STR_DESCRIPTION_DATABASE_TABLE              (RID_DESCRIPTION_START + 28)
-#define STR_DESCRIPTION_LOGFILE                     (RID_DESCRIPTION_START + 29)
-#define STR_DESCRIPTION_SOURCEFILE                  (RID_DESCRIPTION_START + 30)
-#define STR_DESCRIPTION_BATCHFILE                   (RID_DESCRIPTION_START + 31)
-#define STR_DESCRIPTION_ALREADYEXISTOVERWRITE       (RID_DESCRIPTION_START + 32)
-#define STR_DESCRIPTION_IODLG_FAVORITES_ADD         (RID_DESCRIPTION_START + 33)
-#define STR_DESCRIPTION_IODLG_FAVORITES_REMOVE      (RID_DESCRIPTION_START + 34)
-#define STR_DESCRIPTION_IODLG_FAVORITES_TITLE       (RID_DESCRIPTION_START + 35)
-#define STR_DESCRIPTION_IODLG_FAVORITES_PATH        (RID_DESCRIPTION_START + 36)
-#define STR_DESCRIPTION_IODLG_COLUMN_TITLE          (RID_DESCRIPTION_START + 37)
-#define STR_DESCRIPTION_IODLG_COLUMN_SIZE           (RID_DESCRIPTION_START + 38)
-#define STR_DESCRIPTION_IODLG_COLUMN_DATE           (RID_DESCRIPTION_START + 39)
-#define STR_DESCRIPTION_IODLG_ERROR_MAKEFOLDER      (RID_DESCRIPTION_START + 40)
-
-
 static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 {
-    // "fld",       0,                             IMG_FOLDER,
     "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
 #ifndef WNT
@@ -207,7 +166,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "jpg",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG,
     "lha",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
 #ifdef WNT
-    "lnk",   FALSE, 0,                              0,
+    "lnk",   FALSE, 0,                                     0,
 #endif
     "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
     "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
@@ -221,16 +180,16 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "pl",    TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG,
     "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
-    "sbl",   FALSE, 0,                             IMG_MACROLIB,
+    "sbl",   FALSE, 0,                                     IMG_MACROLIB,
     "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0,
     "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
-    "sdb",   FALSE, 0,                             IMG_DATABASE,
+    "sdb",   FALSE, 0,                                     IMG_DATABASE,
     "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
     "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
     "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED,
     "sds",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
     "sdw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
-    "sga",   FALSE, 0,                             IMG_GALLERY,
+    "sga",   FALSE, 0,                                     IMG_GALLERY,
     "sgf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF,
     "sgl",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
     "sgv",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV,
@@ -358,24 +317,40 @@ String GetImageExtensionByFactory_Impl( const String& rURL )
     return aExtension;
 }
 
+USHORT GetIndexOfExtension_Impl( const String& rExtension )
+{
+    USHORT nRet = NO_INDEX;
+    if ( rExtension.Len() )
+    {
+        USHORT nIndex = 0;
+        String aExt = rExtension;
+        aExt.ToLowerAscii();
+        while ( ExtensionMap_Impl[ nIndex ]._pExt )
+        {
+            if ( aExt.EqualsAscii( ExtensionMap_Impl[ nIndex ]._pExt ) )
+            {
+                nRet = nIndex;
+                break;
+            }
+            ++nIndex;
+        }
+    }
+
+    return nRet;
+}
+
 USHORT GetImageId_Impl( const String& rExtension )
 {
     USHORT nImage = IMG_FILE;
-    if ( !rExtension.Len() )
-        return nImage;
-    USHORT nIndex = 0;
-    String aExt = rExtension;
-    aExt.ToLowerAscii();
-    while ( ExtensionMap_Impl[ nIndex ]._pExt )
+    if ( rExtension.Len()  != NO_INDEX )
     {
-        if ( aExt.EqualsAscii(ExtensionMap_Impl[ nIndex ]._pExt) )
+        USHORT nIndex = GetIndexOfExtension_Impl( rExtension );
+        if ( nIndex != NO_INDEX )
         {
-            nImage = ExtensionMap_Impl[ nIndex]._nImgId;
+            nImage = ExtensionMap_Impl[ nIndex ]._nImgId;
             if ( !nImage )
                 nImage = IMG_FILE;
-            break;
         }
-        ++nIndex;
     }
 
     return nImage;
@@ -441,10 +416,51 @@ USHORT GetImageId_Impl( const INetURLObject& rObject )
     return nImage;
 }
 
+USHORT GetDescriptionId_Impl( const String& rExtension, sal_Bool& rbShowExt )
+{
+    USHORT nId = 0;
+
+    if ( rExtension.Len()  != NO_INDEX )
+    {
+        USHORT nIndex = GetIndexOfExtension_Impl( rExtension );
+        if ( nIndex != NO_INDEX )
+        {
+            nId = ExtensionMap_Impl[ nIndex ]._nStrId;
+            rbShowExt = ExtensionMap_Impl[ nIndex ]._bExt;
+        }
+    }
+
+    return nId;
+}
+
+String GetDescriptionByFactory_Impl( const String& rFactory )
+{
+    USHORT nResId = 0;
+    if ( rFactory.EqualsIgnoreCaseAscii( "swriter" ) )
+        nResId = STR_DESCRIPTION_FACTORY_WRITER;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "scalc" ) )
+        nResId = STR_DESCRIPTION_FACTORY_CALC;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "simpress" ) )
+        nResId = STR_DESCRIPTION_FACTORY_IMPRESS;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "sdraw" ) )
+        nResId = STR_DESCRIPTION_FACTORY_DRAW;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/web" ) )
+        nResId = STR_DESCRIPTION_FACTORY_WRITERWEB;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "swriter/globaldocument" ) )
+        nResId = STR_DESCRIPTION_FACTORY_GLOBALDOC;
+    else if ( rFactory.EqualsIgnoreCaseAscii( "smath" ) )
+        nResId = STR_DESCRIPTION_FACTORY_MATH;
+
+    String aRet;
+    if ( nResId )
+        aRet = String( SvtResId( nResId ) );
+    return aRet;
+}
+
 //****************************************************************************
 
 
-Image SvImageManager::GetImage( const INetURLObject& rObject, BOOL bBig )
+Image SvFileInformationManager::GetImage( const INetURLObject& rObject, BOOL bBig )
 {
     USHORT nImage = GetImageId_Impl( rObject );
     DBG_ASSERT( nImage, "invalid ImageId" );
@@ -464,5 +480,70 @@ Image SvImageManager::GetImage( const INetURLObject& rObject, BOOL bBig )
     }
 
     return pList->GetImage( nImage );
+}
+
+String SvFileInformationManager::GetDescription( const INetURLObject& rObject )
+{
+    String aDescription( SvtResId( STR_DESCRIPTION_FOLDER ) );
+    sal_Bool bShowExt = sal_False;
+    sal_Bool bDetected = sal_False;
+    sal_Bool bFolder = ::utl::UCBContentHelper::IsFolder( rObject.GetMainURL() );
+    if ( !bFolder )
+    {
+#if defined( OS2 ) || defined( MAC )
+        // FileType via EAs
+        SvEaMgr aMgr( rObject.GetMainURL() );
+        String aType;
+        if ( aMgr.GetFileType( aType ) )
+        {
+            for( USHORT nIndex = 0; !bDetected && Mappings[ nIndex ]._pExt; nIndex++ )
+                if ( Mappings[ nIndex ]._pExt == aType )
+                {
+                    aDescription = SfxResId( Mappings[ nIndex ]._nStrId );
+                    bDetected = sal_True;
+                }
+        }
+#endif
+        if ( !bDetected )
+        {
+            if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
+            {
+                String aURLPath = rObject.GetMainURL().Erase( 0, URL_PREFIX_PRIV_SOFFICE_LEN );
+                String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
+                if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+                {
+                    aDescription = GetDescriptionByFactory_Impl( aURLPath.Copy( aURLPath.Search( INET_PATH_TOKEN ) + 1 ) );
+                    bDetected = sal_True;
+                }
+            }
+
+            if ( !bDetected )
+            {
+                // Bestimmung der Dateiendung
+                String aExtension( rObject.getExtension() );
+                aExtension.ToLowerAscii();
+
+                // Iteration ueber alle Zuordnungen
+                USHORT nResId = 0;
+                if ( aExtension.Len() )
+                    nResId = GetDescriptionId_Impl( aExtension, bShowExt );
+                if ( !nResId )
+                    nResId = STR_DESCRIPTION_FILE;
+
+                aDescription = String( SvtResId( nResId ) );
+            }
+
+            DBG_ASSERT( aDescription.Len() > 0, "file without description" );
+        }
+    }
+
+    if ( bShowExt )
+    {
+        aDescription += String( RTL_CONSTASCII_STRINGPARAM(" (") );
+        aDescription += rObject.getExtension().ToLowerAscii();
+        aDescription += ')';
+    }
+
+    return aDescription;
 }
 
