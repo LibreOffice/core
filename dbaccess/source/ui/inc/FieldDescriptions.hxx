@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:54:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ namespace dbaui
         void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue);
         void SetType(TOTypeInfoSP _pType);
         void SetTypeValue(sal_Int32 _nType);
+        void SetTypeName(const ::rtl::OUString& _sTypeName);
         void SetPrecision(const sal_Int32& _rPrecision);
         void SetScale(const sal_Int32& _rScale);
         void SetIsNullable(const sal_Int32& _rIsNullable);
