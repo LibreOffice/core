@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:10:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,7 @@ using namespace ::cppu;
 #define DISPATCH_CLOSEDOC   2
 #define DISPATCH_CLOSEWIN   3
 #define DISPATCH_CLOSEFRAME 4
-#define DISPATCH_EDITDOC    5
-#define DISPATCH_RELOAD     6
+#define DISPATCH_RELOAD     5
 // the OSL_ENSURE in CTOR has to be changed too, when adding new defines
 
 void OInterceptor::DisconnectContentHolder()
@@ -164,14 +163,13 @@ OInterceptor::OInterceptor( ODocumentDefinition* _pContentHolder,sal_Bool _bAllo
       ,m_aInterceptedURL(7)
       ,m_bAllowEditDoc(_bAllowEditDoc)
 {
-    OSL_ENSURE(DISPATCH_EDITDOC < m_aInterceptedURL.getLength(),"Illegal size.");
+    OSL_ENSURE(DISPATCH_RELOAD < m_aInterceptedURL.getLength(),"Illegal size.");
 
     m_aInterceptedURL[DISPATCH_SAVEAS]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
     m_aInterceptedURL[DISPATCH_SAVE]        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Save"));
     m_aInterceptedURL[DISPATCH_CLOSEDOC]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
     m_aInterceptedURL[DISPATCH_CLOSEWIN]    = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     m_aInterceptedURL[DISPATCH_CLOSEFRAME]  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
-    m_aInterceptedURL[DISPATCH_EDITDOC]     = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:EditDoc"));
     m_aInterceptedURL[DISPATCH_RELOAD]      = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Reload"));
 }
 
@@ -248,13 +246,6 @@ OInterceptor::dispatch(
             if ( xDispatch.is() )
                 xDispatch->dispatch( _URL, Arguments );
         }
-        else if ( _URL.Complete == m_aInterceptedURL[DISPATCH_EDITDOC] )
-        {
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
-            if ( xDispatch.is() )
-                xDispatch->dispatch( _URL, Arguments );
-        }
 }
 
 void SAL_CALL
@@ -306,23 +297,6 @@ OInterceptor::addStatusListener(
         Reference< ::com::sun::star::document::XEventBroadcaster> xEvtB(m_pContentHolder->getComponent(),UNO_QUERY);
         if ( xEvtB.is() )
             xEvtB->addEventListener(this);
-    }
-    else if ( m_pContentHolder && _URL.Complete == m_aInterceptedURL[DISPATCH_EDITDOC] )
-    {   // EditDoc
-        FeatureStateEvent aStateEvent;
-        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_EDITDOC];
-        aStateEvent.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Update"));
-        aStateEvent.IsEnabled = m_bAllowEditDoc;
-        aStateEvent.Requery = sal_False;
-
-        Control->statusChanged(aStateEvent);
-        {
-            osl::MutexGuard aGuard(m_aMutex);
-            if(!m_pStatCL)
-                m_pStatCL = new PropertyChangeListenerContainer(m_aMutex);
-        }
-
-        m_pStatCL->addInterface(_URL.Complete,Control);
     }
     else
     {
