@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:46:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 21:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ TabDialog DLG_MULTI_TOX
         Text[ portuguese_brazilian ] = "User-define index";
         Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìõˆø";
         Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »öÀÎ";
-        Text[ chinese_simplified ] = "ÓÃ»§¶¨ÒåµÄÄ¿Â¼";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÕß¶¨ÒåµÄÄ¿Â¼";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q¥Ø¿ı";
         Text[ arabic ] = "İåÑÓ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı tanımlı dizin";
@@ -706,7 +706,7 @@ TabPage TP_TOX_SELECT
         < "Ë÷Òı" ;  TO_INDEX        ;> ;
         < "²åÍ¼Ä¿Â¼" ; TO_ILLUSTRATION ;> ;
         < "±í¸ñÄ¿Â¼" ;  TO_TABLE        ;> ;
-        < "ÓÃ»§×Ô¶¨µÄ" ;    TO_USER         ;> ;
+        < "Ê¹ÓÃÕß×Ô¶¨µÄ" ;  TO_USER         ;> ;
         < "¶ÔÏóÄ¿Â¼" ;  TO_OBJECT       ;> ;
         < "ÎÄÏ×Ä¿Â¼" ;  TO_AUTHORITIES  ;> ;
     };
@@ -4804,6 +4804,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
