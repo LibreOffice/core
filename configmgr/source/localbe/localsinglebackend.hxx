@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:30:34 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ class LocalSingleBackend : public SingleBackendBase {
         /**
           Locates the main layer data and localized data directories in a layer directory hierarchy
           */
-        static void getLayerSubDirectories( rtl::OUString const & aLayerBaseUrl,
+        static bool getLayerSubDirectories( rtl::OUString const & aLayerBaseUrl,
                                              rtl::OUString& aMainLayerUrl,
                                              rtl::OUString& aSubLayerUrl);
         /**
@@ -303,7 +303,7 @@ class LocalSingleBackend : public SingleBackendBase {
           @param aLayerUrl      layer base URL, filled on return
           @param aSubLayerUrl   sublayer base URL, filled on return
           */
-        void getLayerDirectories(sal_Int32 aLayerIndex,
+        bool getLayerDirectories(sal_Int32 aLayerIndex,
                                  rtl::OUString& aLayerUrl,
                                  rtl::OUString& aSubLayerUrl) ;
         /**
