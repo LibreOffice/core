@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:05:46 $
+ *  last change: $Author: nn $ $Date: 2001-02-13 11:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/fmglob.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdxcgv.hxx>
@@ -280,6 +281,13 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
     {
         if ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
         {
+            if ( bOleObj )              // single OLE object
+            {
+                SvInPlaceObjectRef xIPObj = GetSingleObject();
+                if ( xIPObj.Is() )
+                    xIPObj->FillTransferableObjectDescriptor( aObjDesc );
+            }
+
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
         }
         else if ( nFormat == SOT_FORMATSTR_ID_DRAWING )
@@ -318,8 +326,12 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             if ( bOleObj )              // single OLE object
             {
-                //! initialize aOleData
-                bOK = SetAny( aOleData.GetAny( rFlavor ), rFlavor );
+                SvInPlaceObjectRef xIPObj = GetSingleObject();
+                if ( xIPObj.Is() )
+                {
+                    SvEmbeddedObject* pEmbObj = xIPObj;
+                    bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
+                }
             }
             else                        // create object from contents
             {
@@ -397,6 +409,25 @@ void ScDrawTransferObj::ObjectReleased()
         ScGlobal::ReleaseClip();                // (still owner of pModel - deleted in dtor)
 
     TransferableHelper::ObjectReleased();
+}
+
+SvInPlaceObjectRef ScDrawTransferObj::GetSingleObject()
+{
+    //  if single OLE object was copied, get its object
+
+    SdrPage* pPage = pModel->GetPage(0);
+    if (pPage)
+    {
+        SdrObjListIter aIter( *pPage, IM_FLAT );
+        SdrObject* pObject = aIter.Next();
+        if (pObject && pObject->GetObjIdentifier() == OBJ_OLE2)
+        {
+            SdrOle2Obj* pOleObj = (SdrOle2Obj*) pObject;
+            return pOleObj->GetObjRef();
+        }
+    }
+
+    return SvInPlaceObjectRef();
 }
 
 //
