@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:48:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,9 +511,8 @@ public:
     // Hoch-/Runtermoven sowohl innerhalb als auch ausserhalb von Numerierungen
     BOOL MoveParagraph( long nOffset = 1);
     BOOL MoveNumParas( BOOL bUpperLower, BOOL bUpperLeft );
-    // No-/Numerierung ueber Delete/Backspace ein/abschalten
-    BOOL NumOrNoNum( BOOL bDelete = FALSE, BOOL bChkStart = TRUE,
-                        BOOL bOutline = FALSE );
+    // No-/Numerierung ueber Delete/Backspace ein/abschalten #115901#
+    BOOL NumOrNoNum( BOOL bDelete = FALSE, BOOL bChkStart = TRUE);
     BOOL IsNoNum( BOOL bChkStart = TRUE, BOOL bOutline = FALSE ) const;
     // returne den Num-Level des Nodes, in dem sich der Point vom
     // Cursor befindet. Return kann sein :
