@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:48:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,15 +63,10 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJJECT_HXX_
 #include "java/lang/Class.hxx"
 #endif
+#include "connectivity/CommonTools.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_JAVA_XJAVAVM_HPP_
-#include <com/sun/star/java/XJavaVM.hpp>
 #endif
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
@@ -86,17 +81,11 @@
 #include <vos/mutex.hxx>
 #endif
 
-#ifndef _RTL_PROCESS_H_
-#include <rtl/process.h>
-#endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
 using namespace connectivity;
-
-namespace starjava  = com::sun::star::java;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 //  using namespace ::com::sun::star::sdbcx;
@@ -104,54 +93,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-::rtl::Reference< jvmaccess::VirtualMachine > InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
-{
-    ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
-    OSL_ENSURE(_rxFactory.is(),"No XMultiServiceFactory a.v.!");
-    if(!_rxFactory.is())
-        return aRet;
 
-    try
-    {
-        Reference< ::starjava::XJavaVM > xVM(_rxFactory->createInstance(
-            rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
-
-        OSL_ENSURE(_rxFactory.is(),"InitJava: I have no factory!");
-        if (!xVM.is() || !_rxFactory.is())
-            throw Exception(); // -2;
-
-        Sequence<sal_Int8> processID(16);
-        rtl_getGlobalProcessId( (sal_uInt8*) processID.getArray() );
-        processID.realloc(17);
-        processID[16] = 0;
-
-        Any uaJVM = xVM->getJavaVM( processID );
-
-        if (!uaJVM.hasValue())
-            throw Exception(); // -5
-        else
-        {
-            sal_Int32 nValue;
-            jvmaccess::VirtualMachine* pJVM = NULL;
-            if ( uaJVM >>= nValue )
-                pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nValue);
-            else
-            {
-                sal_Int64 nTemp;
-                uaJVM >>= nTemp;
-                pJVM = reinterpret_cast< jvmaccess::VirtualMachine* > (nTemp);
-            }
-            aRet = pJVM;
-        }
-    }
-    catch (Exception& e)
-    {
-    }
-
-    return aRet;
-}
 // -----------------------------------------------------------------------------
-::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
+::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM2(const ::rtl::Reference< jvmaccess::VirtualMachine >& _rVM = ::rtl::Reference< jvmaccess::VirtualMachine >(),
                                                         sal_Bool _bSet = sal_False)
 {
     static ::rtl::Reference< jvmaccess::VirtualMachine > s_VM;
@@ -162,9 +106,9 @@ using namespace ::com::sun::star::lang;
 // -----------------------------------------------------------------------------
 ::rtl::Reference< jvmaccess::VirtualMachine > java_lang_Object::getVM(const Reference<XMultiServiceFactory >& _rxFactory)
 {
-    ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM();
+    ::rtl::Reference< jvmaccess::VirtualMachine > xVM = getJavaVM2();
     if ( !xVM.is() && _rxFactory.is() )
-        xVM = getJavaVM(InitJava(_rxFactory));
+        xVM = getJavaVM2(::connectivity::getJavaVM(_rxFactory));
 
     return xVM;
 }
@@ -196,7 +140,7 @@ void SDBThreadAttach::releaseRef()
 {
     getJavaVMRefCount()--;
     if ( getJavaVMRefCount() == 0 )
-        getJavaVM(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
+        getJavaVM2(::rtl::Reference< jvmaccess::VirtualMachine >(),sal_True);
 }
 // -----------------------------------------------------------------------------
 // statische Variablen der Klasse:
