@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-18 13:11:16 $
+ *  last change: $Author: oj $ $Date: 2002-04-19 08:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,11 +272,13 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
         Reference<XRow> xRow(xSet,UNO_QUERY);
         while(xSet->next())
         {
-            if(xRow->getInt(2) == DataType::VARCHAR)
+            ::rtl::OUString sTypeName = xRow->getString (1);
+            sal_Int32 nType = xRow->getInt(2);
+            if( nType == DataType::VARCHAR)
             {
                 m_pTypeInfo                 = new OTypeInfo();
-                m_pTypeInfo->aTypeName      = xRow->getString (1);
-                m_pTypeInfo->nType          = xRow->getShort (2);
+                m_pTypeInfo->aTypeName      = sTypeName;
+                m_pTypeInfo->nType          = nType;
                 m_pTypeInfo->nPrecision     = xRow->getInt (3);
                 m_pTypeInfo->aLiteralPrefix = xRow->getString (4);
                 m_pTypeInfo->aLiteralSuffix = xRow->getString (5);
