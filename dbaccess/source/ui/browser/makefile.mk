@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:02:45 $
+#   last change: $Author: kz $ $Date: 2004-05-19 04:35:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,12 +65,10 @@ PRJINC=$(PRJ)$/source
 PRJNAME=dbaccess
 TARGET=browser
 
-BMP_IN=$(PRJ)$/res
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
