@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:17:51 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,7 +561,9 @@ sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
                         aFontSize = pOut->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pOut->GetMapMode() );
                         pPDFControl->TextFont.SetSize( aFontSize );
 
+                        pPDFExport->BeginStructureElement( vcl::PDFWriter::Form );
                         pPDFExport->CreateControl( *pPDFControl.get() );
+                        pPDFExport->EndStructureElement();
                         bDefaultDraw = false;
                     }
                 }
