@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-29 11:21:37 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 11:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,10 +563,8 @@ OSQLMessageBox::~OSQLMessageBox()
 //--------------------------------------------------------------------------
 IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 {
-    OExceptionChainDialog aDlg(GetParent(), m_aNextChainElement);
-    Hide();
+    OExceptionChainDialog aDlg( this, m_aNextChainElement );
     aDlg.Execute();
-    Show();
     return 0;
 }
 
@@ -577,6 +575,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/11/29 11:21:37  pb
+ *  fix: #93646# message FixedText is not a label
+ *
  *  Revision 1.9  2001/05/17 13:28:14  sj
  *  #86988# dialog redesign
  *
