@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:54:59 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 06:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,7 +1344,7 @@ String STR_ERR_DUPL_TABLENAME
 
 ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
 {
-    Message = "Bitte ändern Sie den den Tabellenname. Er ist zu lang";
+    Message = "Bitte ändern Sie den Tabellenname. Er ist zu lang";
     Message [ ENGLISH ] = "Please change the table name. It is too long.";
     Buttons = WB_OK;
 };
