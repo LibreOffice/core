@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:44:50 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ namespace rtl {
 #define BASEPROPERTY_DEFAULTBUTTON          57  // sal_Bool
 #define BASEPROPERTY_HELPURL                58  // ::rtl::OUString
 #define BASEPROPERTY_AUTOTOGGLE             59  // sal_Bool
-#define BASEPROPERTY_FOCUSSELECTIONHIDE     60  // sal_Bool
+//#define BASEPROPERTY_FOCUSSELECTIONHIDE       60  // sal_Bool
 #define BASEPROPERTY_FORMATKEY              61  // sal_Bool
 #define BASEPROPERTY_FORMATSSUPPLIER        62  // ::com::sun::star::util::XNumberFormatsSupplier
 #define BASEPROPERTY_EFFECTIVE_VALUE        63  // Any (double or string)
@@ -186,7 +186,12 @@ namespace rtl {
 #define BASEPROPERTY_ACTIVATED            105  // sal Bool
 #define BASEPROPERTY_COMPLETE             106  // sal_Bool
 #define BASEPROPERTY_CURRENTITEMID            107  // sal_Int16
-
+#define BASEPROPERTY_TOGGLE                108  // sal_Bool
+#define BASEPROPERTY_FOCUSONCLICK          109  // sal_Bool
+#define BASEPROPERTY_HIDEINACTIVESELECTION 110  // sal_Bool
+#define BASEPROPERTY_VISUALEFFECT          111  // sal_Int16
+#define BASEPROPERTY_BORDERCOLOR           112  // sal_Int32
+#define BASEPROPERTY_IMAGEPOSITION         113  // sal_Int16
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
