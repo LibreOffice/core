@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: lla $ $Date: 2000-11-03 08:51:04 $
+#   last change: $Author: fs $ $Date: 2000-12-01 14:06:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,20 +74,22 @@ TARGET=misc
 # --- Files -------------------------------------
 
 EXCEPTIONSFILES = \
+        $(SLO)$/configmodule.obj	\
+        $(SLO)$/providerfactory.obj	\
         $(SLO)$/saxtools.obj	\
         $(SLO)$/oslstream.obj	\
         $(SLO)$/attributes.obj	\
         $(SLO)$/confname.obj	\
-        $(SLO)$/configmodule.obj	\
         $(SLO)$/configunoreg.obj	\
 
 SLOFILES=	\
+        $(SLO)$/configmodule.obj	\
+        $(SLO)$/providerfactory.obj	\
         $(SLO)$/tracer.obj	\
         $(SLO)$/saxtools.obj	\
         $(SLO)$/oslstream.obj	\
         $(SLO)$/attributes.obj	\
         $(SLO)$/confname.obj	\
-        $(SLO)$/configmodule.obj	\
         $(SLO)$/configunoreg.obj	\
         $(SLO)$/synchronize.obj	\
         $(SLO)$/filehelper.obj	\
