@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-17 20:24:51 $
+ *  last change: $Author: rt $ $Date: 2001-07-20 20:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2509,7 +2509,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ polish ] = "Opcje wydruku";
         Text[ portuguese_brazilian ] = "Op??s";
         Text[ japanese ] = "σόµΜίΌ®έ";
-        Text[ chinese_simplified ] = "΄ςΣ΅µΔΡ΅Οξ";
+        Text[ chinese_simplified ] = "΄ςΣ΅Ρ΅Οξ";
         Text[ chinese_traditional ] = "¦C¦LΏο¶µ";
         Text[ arabic ] = "ΞνΗΡΗΚ ΗαΨΘΗΪΙ";
         Text[ greek ] = "Επιλογές εκτύπωσης";
@@ -7485,13 +7485,13 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ portuguese ] = "Acento para a direita";
                 Text[ russian ] = "Σδΰπενθε βοπΰβξ";
                 Text[ greek ] = "Τόνος προς τα δεξιά";
-                Text[ dutch ] = "Accent naar rechts";
+                Text[ dutch ] = "Accent naar rechtsboven";
                 Text[ french ] = "Accent aigu";
-                Text[ spanish ] = "Acento hacia la derecha";
+                Text[ spanish ] = "Acento hacia arriba a la derecha";
                 Text[ finnish ] = "Aksenttimerkki oikealla";
                 Text[ italian ] = "Accento verso destra";
                 Text[ danish ] = "accent aigu";
-                Text[ swedish ] = "Accent till hφger";
+                Text[ swedish ] = "Accent εt hφger";
                 Text[ polish ] = "Akcent w prawo";
                 Text[ portuguese_brazilian ] = "Accent nach rechts";
                 Text[ japanese ] = "±·­°Δ";
@@ -7512,13 +7512,13 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ portuguese ] = "Acento grave";
                 Text[ russian ] = "Σδΰπενθε βλεβξ";
                 Text[ greek ] = "Τόνος προς τα αριστερά";
-                Text[ dutch ] = "Accent naar links";
+                Text[ dutch ] = "Accent naar linksonder";
                 Text[ french ] = "Accent grave";
-                Text[ spanish ] = "Acento hacia la izquierda";
+                Text[ spanish ] = "Acento hacia la izquierda abajo";
                 Text[ finnish ] = "Aksenttimerkki vasemmalla";
                 Text[ italian ] = "Accento verso sinistra";
                 Text[ danish ] = "accent grave";
-                Text[ swedish ] = "Accent till vδnster";
+                Text[ swedish ] = "Accent εt vδnster";
                 Text[ polish ] = "Akcent w lewo";
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "ΈήΪ°Μή";
@@ -11202,6 +11202,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Pδδtyφkalurivi";
 };
+
 
 
 
