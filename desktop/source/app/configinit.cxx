@@ -168,16 +168,11 @@ namespace
     class SimpleCurrentContext : public cppu::WeakImplHelper1< uno::XCurrentContext >
     {
         CurrentContext m_xChainedContext;
-        typedef std::map< OUString, uno::Any > Settings;
-        Settings m_settings;
     public:
         explicit
         SimpleCurrentContext(const CurrentContext & xChainedContext)
         : m_xChainedContext(xChainedContext)
         {}
-
-        void addSetting(const OUString & aName, const uno::Any & aValue)
-        { m_settings[aName] = aValue; }
 
         void install()      { uno::setCurrentContext(this); }
         void deinstall()    { uno::setCurrentContext(m_xChainedContext); }
@@ -190,7 +185,7 @@ namespace
         }
 
         // XCurrentContext
-        uno::Any SAL_CALL
+        virtual uno::Any SAL_CALL
             getValueByName( OUString const & aName)
                 throw (uno::RuntimeException);
     };
@@ -199,11 +194,7 @@ namespace
         SimpleCurrentContext::getValueByName( OUString const & aName)
             throw (uno::RuntimeException)
     {
-        Settings::iterator it = m_settings.find(aName);
-        if (it != m_settings.end())
-            return it->second;
-        else
-            return getChainedValueByName(aName);
+        return getChainedValueByName(aName);
     }
 
 }
@@ -216,14 +207,33 @@ public:
     Context(InteractionHandler const & xHandler)
     : SimpleCurrentContext( uno::getCurrentContext() )
     {
-        addSetting( OUSTRING(CONFIG_ERROR_HANDLER), uno::makeAny(xHandler) );
     }
 
     ~Context()
     {
     }
 
+    // XCurrentContext
+    virtual uno::Any SAL_CALL
+        getValueByName( OUString const & aName)
+            throw (uno::RuntimeException);
+
+private:
+    InteractionHandler  m_xHandler;
 };
+
+//------------------------------------------------------------------------------
+uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
+        throw (uno::RuntimeException)
+{
+    if ( aName.equalsAscii( CONFIG_ERROR_HANDLER ) )
+    {
+        if ( !m_xHandler.is() )
+            m_xHandler = ConfigurationErrorHandler::getDefaultInteractionHandler();
+        return uno::Any( m_xHandler );
+    }
+    return SimpleCurrentContext::getValueByName( aName );
+}
 
 //------------------------------------------------------------------------------
 ConfigurationErrorHandler::~ConfigurationErrorHandler()
@@ -272,5 +282,6 @@ ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefa
     return xHandler;
 }
 //------------------------------------------------------------------------------
+
 
 
