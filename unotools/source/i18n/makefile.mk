@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+#   last change: $Author: er $ $Date: 2000-10-13 19:54:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,12 +88,17 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Types -------------------------------------
 
 #UNOTYPES+=	\
-#	com.sun.star.lang.XCharacterClassification
+#	com.sun.star.lang.XCharacterClassification \
+#	com.sun.star.lang.XLocaleData \
+#	com.sun.star.lang.XNumberFormatCode
 
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/charclass.obj
+SLOFILES=	\
+    $(SLO)$/charclass.obj	\
+    $(SLO)$/localedatawrapper.obj	\
+    $(SLO)$/numberformatcodewrapper.obj
 
 
 # --- Targets ----------------------------------
