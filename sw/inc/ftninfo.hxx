@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftninfo.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,17 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+#ifndef _NUMRULE_HXX
 #include "numrule.hxx"
+#endif
 
 class SwTxtFmtColl;
 class SwPageDesc;
 
-class SwEndNoteInfo : public SwClient
+class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
 {
     SwDepend    aPageDescDep;
     SwDepend    aCharFmtDep, aAnchorCharFmtDep;
@@ -126,7 +131,7 @@ enum SwFtnNum
     FTNNUM_PAGE, FTNNUM_CHAPTER, FTNNUM_DOC
 };
 
-class SwFtnInfo: public SwEndNoteInfo
+class SW_DLLPUBLIC SwFtnInfo: public SwEndNoteInfo
 {
 public:
     String    aQuoVadis;
