@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labimg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:25:46 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _RESID_HXX //autogen
-#include <vcl/resid.hxx>
+#include <tools/resid.hxx>
 #endif
 
 #ifndef _SVX_ADRITEM_HXX
