@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-17 18:27:02 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,14 @@
 #include "dpsave.hxx"
 #include "miscuno.hxx"
 #include "scerrors.hxx"
+#include "global.hxx"
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
@@ -93,6 +95,7 @@ using namespace com::sun::star;
 // -----------------------------------------------------------------------
 
 //! move to a header file
+//! use names from unonames.hxx?
 #define DP_PROP_COLUMNGRAND         "ColumnGrand"
 #define DP_PROP_FUNCTION            "Function"
 #define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
@@ -105,6 +108,7 @@ using namespace com::sun::star;
 #define DP_PROP_SHOWEMPTY           "ShowEmpty"
 #define DP_PROP_SUBTOTALS           "SubTotals"
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
+#define DP_PROP_FILTER              "Filter"
 
 // -----------------------------------------------------------------------
 
@@ -178,9 +182,19 @@ BOOL ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
     return TRUE;
 }
 
+BOOL ScDPSaveMember::HasIsVisible()
+{
+    return nVisibleMode != SC_DPSAVEMODE_DONTKNOW;
+}
+
 void ScDPSaveMember::SetIsVisible(BOOL bSet)
 {
     nVisibleMode = bSet;
+}
+
+BOOL ScDPSaveMember::HasShowDetails()
+{
+    return nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW;
 }
 
 void ScDPSaveMember::SetShowDetails(BOOL bSet)
@@ -223,7 +237,8 @@ ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     nFunction( sheet::GeneralFunction_AUTO ),
     nUsedHierarchy( -1 ),
-    pLayoutName( NULL )
+    pLayoutName( NULL ),
+    pSelectedPage( NULL )
 {
 }
 
@@ -256,6 +271,10 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         pLayoutName = new String( *(r.pLayoutName) );
     else
         pLayoutName = NULL;
+    if (r.pSelectedPage)
+        pSelectedPage = new String( *(r.pSelectedPage) );
+    else
+        pSelectedPage = NULL;
 }
 
 ScDPSaveDimension::ScDPSaveDimension(SvStream& rStream)
@@ -294,6 +313,7 @@ ScDPSaveDimension::ScDPSaveDimension(SvStream& rStream)
         aMemberList.Insert( pNew, LIST_APPEND );
     }
     pLayoutName = NULL;
+    pSelectedPage = NULL;
 }
 
 void ScDPSaveDimension::Store( SvStream& rStream ) const
@@ -335,8 +355,8 @@ ScDPSaveDimension::~ScDPSaveDimension()
     for (long i=0; i<nCount; i++)
         delete (ScDPSaveMember*)aMemberList.GetObject(i);
     aMemberList.Clear();
-    if (pLayoutName)
-        delete pLayoutName;
+    delete pLayoutName;
+    delete pSelectedPage;
 }
 
 BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
@@ -434,12 +454,11 @@ void ScDPSaveDimension::ResetLayoutName()
 
 void ScDPSaveDimension::SetLayoutName(const String* pName)
 {
+    delete pLayoutName;
     if (pName)
-    {
-        if (pLayoutName)
-            delete pLayoutName;
         pLayoutName = new String( *pName );
-    }
+    else
+        pLayoutName = NULL;
 }
 
 const String& ScDPSaveDimension::GetLayoutName() const
@@ -449,7 +468,28 @@ const String& ScDPSaveDimension::GetLayoutName() const
     return aName;
 }
 
-ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
+void ScDPSaveDimension::SetCurrentPage( const String* pPage )
+{
+    delete pSelectedPage;
+    if (pPage)
+        pSelectedPage = new String( *pPage );
+    else
+        pSelectedPage = NULL;
+}
+
+BOOL ScDPSaveDimension::HasCurrentPage() const
+{
+    return ( pSelectedPage != NULL );
+}
+
+const String& ScDPSaveDimension::GetCurrentPage() const
+{
+    if (pSelectedPage)
+        return *pSelectedPage;
+    return EMPTY_STRING;
+}
+
+ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const String& rName)
 {
     long nCount = aMemberList.Count();
     for (long i=0; i<nCount; i++)
@@ -458,6 +498,17 @@ ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
         if ( pMember->GetName() == rName )
             return pMember;
     }
+    return NULL;
+}
+
+
+ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
+{
+    long nCount = aMemberList.Count();
+    ScDPSaveMember* pMember = GetExistingMemberByName(rName);
+    if (pMember)
+        return pMember;
+
     ScDPSaveMember* pNew = new ScDPSaveMember( rName );
     aMemberList.Insert( pNew, LIST_APPEND );
     return pNew;
@@ -484,6 +535,26 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         {
             aAny <<= (INT32)nUsedHierarchy;
             xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY), aAny );
+        }
+
+        uno::Sequence<sheet::TableFilterField> aFilter;
+        // set the selected page field only if the dimension is used as page dimension
+        if ( pSelectedPage && nOrientation == sheet::DataPilotFieldOrientation_PAGE )
+        {
+            // single filter field: first field equal to selected string
+            sheet::TableFilterField aField( sheet::FilterConnection_AND, 0,
+                    sheet::FilterOperator_EQUAL, sal_False, 0.0, *pSelectedPage );
+            aFilter = uno::Sequence<sheet::TableFilterField>( &aField, 1 );
+        }
+        // else keep empty sequence
+        try
+        {
+            aAny <<= aFilter;
+            xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_FILTER), aAny );
+        }
+        catch ( beans::UnknownPropertyException& )
+        {
+            // recent addition - allow source to not handle it (no error)
         }
     }
 
