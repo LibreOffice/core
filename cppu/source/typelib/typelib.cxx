@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:26:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
