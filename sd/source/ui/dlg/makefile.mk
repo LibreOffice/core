@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-14 07:29:04 $
+#   last change: $Author: kz $ $Date: 2004-05-19 00:45:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,11 +72,6 @@ LIBTARGET=NO
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Imagelisten --------------------------------------------------
-
-IMGLST_SRS=$(SRS)$/dlg.srs
-BMP_IN=$(PRJ)$/res/imagelst
 
 # --- Files --------------------------------------------------------
 
