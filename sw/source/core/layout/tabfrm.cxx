@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:22:37 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,7 @@ void SwTabFrm::MakeAll()
 
     if ( bDontSplit )
     {
-        while ( GetFollow() )
+        while ( GetFollow() && !GetFollow()->IsJoinLocked() )
         {
             if ( HasFollowFlowLine() )
                 lcl_RemoveFollowFlowLine( *this );
@@ -2432,22 +2432,23 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     {
         SwRect aOldFrm( Frm() );
 
-        if ( IsRestrictTableGrowth() )
+        //Der Upper wird nur soweit wie notwendig gegrowed. In nReal wird erstmal
+        //die bereits zur Verfuegung stehende Strecke bereitgestellt.
+        SwTwips nReal = (GetUpper()->Prt().*fnRect->fnGetHeight)();
+        SwFrm *pFrm = GetUpper()->Lower();
+        while ( pFrm && GetFollow() != pFrm )
         {
-            //Der Upper wird nur soweit wie notwendig gegrowed. In nReal wird erstmal
-            //die bereits zur Verfuegung stehende Strecke bereitgestellt.
-            SwTwips nReal = (GetUpper()->Prt().*fnRect->fnGetHeight)();
-            SwFrm *pFrm = GetUpper()->Lower();
-            while ( pFrm && GetFollow() != pFrm )
-            {
-                nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
-                pFrm = pFrm->GetNext();
-            }
+            nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+            pFrm = pFrm->GetNext();
+        }
 
-            long nTmp = 0;
-            if ( nReal < nDist )
+        long nTmp = 0;
+        if ( nReal < nDist )
+        {
+            nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
+
+            if ( IsRestrictTableGrowth() )
             {
-                nTmp = GetUpper()->Grow( nDist - ( nReal > 0 ? nReal : 0), bTst, bInfo );
                 nTmp = Min( nDist, nReal + nTmp );
                 nDist = nTmp < 0 ? 0 : nTmp;
             }
