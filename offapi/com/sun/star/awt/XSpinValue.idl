@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSpinValue.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:36:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_XSpinValue_idl__
+#define __com_sun_star_awt_XSpinValue_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XAdjustmentListener_idl__
+#include <com/sun/star/awt/XAdjustmentListener.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** gives access to the value and settings of a control which is associated with
+    a spinnable value.
+ */
+interface XSpinValue : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** registers an adjustment event listener.
+     */
+    [oneway] void addAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+
+    //-------------------------------------------------------------------------
+
+    /** unregisters an adjustment event listener.
+     */
+    [oneway] void removeAdjustmentListener( [in] com::sun::star::awt::XAdjustmentListener listener );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the current value of the control
+     */
+    [oneway] void setValue( [in] long value );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the value and value range of the control
+
+        @see setValue
+        @see setMinimum
+        @see setMaximum
+     */
+    [oneway] void setValues( [in] long minValue, [in] long maxValue, [in] long currentValue );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the current value of the control.
+     */
+    long getValue();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the  minimum value which can be set on the control
+     */
+    [oneway] void setMinimum( [in] long minValue );
+
+    //-------------------------------------------------------------------------
+
+    /** sets the  maximum value which can be set on the control
+     */
+    [oneway] void setMaximum( [in] long maxValue );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set minimum value of the control
+     */
+    long getMinimum();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the currently set maximum value of the control
+     */
+    long getMaximum();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the value by which the current value of the control
+        should be incremented or decremented upon spinning.
+     */
+    [oneway] void setSpinIncrement( [in] long spinIncrement );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the value by which the current value of the control
+        should be incremented or decremented upon spinning.
+     */
+    long getSpinIncrement();
+
+    //-------------------------------------------------------------------------
+
+    /** controls the orientation of the control
+        @param orientation
+            one of the <type>ScrollBarOrientation</type> values specifying the orientation
+        @throws com::sun::star::lang::NoSupportException
+            in case the given orientation is not supported
+     */
+    void setOrientation( [in] long orientation )
+            raises( com::sun::star::lang::NoSupportException );
+
+    //-------------------------------------------------------------------------
+
+    /** returns the current orientation of the control
+     */
+    long getOrientation();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
