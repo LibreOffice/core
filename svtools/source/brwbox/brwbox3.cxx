@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-15 09:46:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-03 10:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,9 +388,7 @@ void BrowseBox::FillAccessibleStateSet(
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-            rStateSet.AddState( AccessibleStateType::VISIBLE );
-            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
-            rStateSet.AddState( AccessibleStateType::TRANSIENT );
+            OSL_ENSURE(0,"Illegal call here!");
             break;
     }
 }

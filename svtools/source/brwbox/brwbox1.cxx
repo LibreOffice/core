@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-22 12:44:33 $
+ *  last change: $Author: oj $ $Date: 2002-12-03 10:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1898,9 +1898,19 @@ void BrowseBox::SelectAll()
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
     if ( m_pImpl->m_pAccessible )
+    {
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
+        m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_SELECTION_EVENT,
+                                                     com::sun::star::uno::Any(),
+                                                     com::sun::star::uno::Any(),
+                                                     sal_True); // column header event
+        m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_SELECTION_EVENT,
+                                                     com::sun::star::uno::Any(),
+                                                     com::sun::star::uno::Any(),
+                                                     sal_False); // row header event
+    }
 }
 
 //-------------------------------------------------------------------
@@ -1961,9 +1971,15 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
     if ( m_pImpl->m_pAccessible )
+    {
         m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                             com::sun::star::uno::Any(),
                                             com::sun::star::uno::Any());
+        m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_SELECTION_EVENT,
+                                                     com::sun::star::uno::Any(),
+                                                     com::sun::star::uno::Any(),
+                                                     sal_False); // row header event
+    }
 }
 
 //-------------------------------------------------------------------
@@ -2025,10 +2041,16 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
         else
             bSelect = TRUE;
 
-        if ( m_pImpl->m_pAccessible )
+         if ( m_pImpl->m_pAccessible )
+        {
             m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
                                                 com::sun::star::uno::Any(),
                                                 com::sun::star::uno::Any());
+            m_pImpl->m_pAccessible->commitHeaderBarEvent(ACCESSIBLE_SELECTION_EVENT,
+                                                     com::sun::star::uno::Any(),
+                                                     com::sun::star::uno::Any(),
+                                                     sal_True); // column header event
+        }
     }
 
     // restore screen
