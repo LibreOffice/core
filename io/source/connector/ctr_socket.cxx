@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,26 +131,20 @@ namespace stoc_connector {
 
     void SocketConnection::completeConnectionString()
     {
-        OUString sHost;
         sal_Int32 nPort;
 
         nPort = m_socket.getPeerPort();
-        m_socket.getPeerHost( sHost );
 
         OUStringBuffer buf( 256 );
         buf.appendAscii( ",peerPort=" );
         buf.append( (sal_Int32) nPort );
         buf.appendAscii( ",peerHost=" );
-        buf.append( sHost );
-
-
-        nPort = m_socket.getLocalPort();
-        m_socket.getLocalHost( sHost );
+        buf.append( m_socket.getPeerHost() );
 
         buf.appendAscii( ",localPort=" );
         buf.append( (sal_Int32) nPort );
         buf.appendAscii( ",localHost=" );
-        buf.append( sHost );
+        buf.append( m_socket.getLocalHost( ) );
 
         m_sDescription += buf.makeStringAndClear();
     }
@@ -171,11 +165,8 @@ namespace stoc_connector {
 
             if(i != nBytesToRead)
             {
-                OUString errMessage;
-                m_socket.getError(errMessage);
-
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::read: error - "));
-                message += errMessage;
+                message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
@@ -212,11 +203,8 @@ namespace stoc_connector {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString errMessage;
-                m_socket.getError(errMessage);
-
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("ctr_socket.cxx:SocketConnection::write: error - "));
-                message += errMessage;
+                message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 

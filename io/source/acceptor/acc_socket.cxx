@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,8 @@ namespace io_acceptor {
     public:
         void completeConnectionString();
 
-        ::vos::OStreamSocket m_socket;
-        ::vos::OInetSocketAddr m_addr;
+        ::osl::StreamSocket m_socket;
+        ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
 
@@ -205,31 +205,21 @@ namespace io_acceptor {
     {
         // make it unique
         m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
-        m_sDescription += OUString::valueOf( (sal_Int64) (::vos::OObject * ) &m_socket , 10 );
+        m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
     }
 
     void SocketConnection::completeConnectionString()
     {
-        OUString sHost;
-        sal_Int32 nPort;
-
-        nPort = m_socket.getPeerPort();
-        m_socket.getPeerHost( sHost );
-
         OUStringBuffer buf( 256 );
         buf.appendAscii( ",peerPort=" );
-        buf.append( (sal_Int32) nPort );
+        buf.append( (sal_Int32) m_socket.getPeerPort() );
         buf.appendAscii( ",peerHost=" );
-        buf.append( sHost );
-
-
-        nPort = m_socket.getLocalPort();
-        m_socket.getLocalHost( sHost );
+        buf.append( m_socket.getPeerHost( ) );
 
         buf.appendAscii( ",localPort=" );
-        buf.append( (sal_Int32) nPort );
+        buf.append( (sal_Int32) m_socket.getLocalPort() );
         buf.appendAscii( ",localHost=" );
-        buf.append( sHost );
+        buf.append( m_socket.getLocalHost() );
 
         m_sDescription += buf.makeStringAndClear();
     }
@@ -252,11 +242,8 @@ namespace io_acceptor {
 
             if(i != nBytesToRead)
             {
-                OUString errMessage;
-                m_socket.getError(errMessage);
-
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::read: error - "));
-                message += errMessage;
+                message +=  m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
@@ -293,11 +280,8 @@ namespace io_acceptor {
         {
             if( m_socket.write( seq.getConstArray() , seq.getLength() ) != seq.getLength() )
             {
-                OUString errMessage;
-                m_socket.getError(errMessage);
-
                 OUString message(RTL_CONSTASCII_USTRINGPARAM("acc_socket.cxx:SocketConnection::write: error - "));
-                message += errMessage;
+                message += m_socket.getErrorAsString();
 
                 IOException ioException(message, Reference<XInterface>(static_cast<XConnection *>(this)));
 
@@ -379,8 +363,8 @@ namespace io_acceptor {
     void SocketAcceptor::init()
     {
         m_addr.setPort( m_nPort );
-        m_addr.setAddr( m_sSocketName.pData );
-        m_socket.setReuseAddr(1);
+        m_addr.setHostname( m_sSocketName.pData );
+        m_socket.setOption( osl_Socket_OptionReuseAddr, 1);
 
         if(! m_socket.bind(m_addr) )
         {
@@ -401,7 +385,7 @@ namespace io_acceptor {
     {
         SocketConnection *pConn = new SocketConnection( m_sSocketName , m_nPort, m_sConnectionDescription );
 
-        if( m_socket.acceptConnection( pConn->m_socket, pConn->m_addr )!= osl_Socket_Ok )
+        if( m_socket.acceptConnection( pConn->m_socket )!= osl_Socket_Ok )
         {
             // stopAccepting was called
             delete pConn;
@@ -414,7 +398,7 @@ namespace io_acceptor {
         }
 
         pConn->completeConnectionString();
-        pConn->m_socket.setTcpNoDelay( 1 );
+        pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay,  1 );
 
         return Reference < XConnection > ( (XConnection * ) pConn );
     }

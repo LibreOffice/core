@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-using namespace ::vos;
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -98,7 +98,7 @@ namespace io_acceptor
         virtual ::rtl::OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
     public:
-        ::vos::OStreamPipe m_pipe;
+        ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
         OUString m_sDescription;
     };
@@ -184,19 +184,14 @@ namespace io_acceptor
 
     void PipeAcceptor::init()
     {
-#ifdef ENABLEUNICODE
-        m_pipe.create( m_sPipeName.pData , ::vos::OPipe::TOption_Create );
-#else
-        OString o = OUStringToOString( m_sPipeName , RTL_TEXTENCODING_ASCII_US );
-        m_pipe.create( o.pData->buffer , ::vos::OPipe::TOption_Create );
-#endif
+        m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE );
     }
 
     Reference< XConnection > PipeAcceptor::accept( )
     {
         PipeConnection *pConn = new PipeConnection( m_sPipeName , m_sConnectionDescription );
 
-        OPipe::TPipeError status = m_pipe.accept( pConn->m_pipe );
+        oslPipeError status = m_pipe.accept( pConn->m_pipe );
 
         if( m_bClosed )
         {
@@ -204,13 +199,15 @@ namespace io_acceptor
             delete pConn;
             return Reference < XConnection >();
         }
-        else if( OPipe::E_None == status )
+        else if( osl_Pipe_E_None == status )
         {
             return Reference < XConnection > ( (XConnection * ) pConn );
         }
         else
         {
-            throw ConnectionSetupException();
+            OUString error = OUString::createFromAscii( "io.acceptor: Couldn't setup pipe " );
+            error += m_sPipeName;
+            throw ConnectionSetupException( error, Reference< XInterface > ());
         }
     }
 

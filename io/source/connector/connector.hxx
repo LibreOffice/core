@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@
 
 #include <hash_set>
 
-#ifndef _VOS_SOCKET_HXX_
-#       include <vos/socket.hxx>
+#ifndef _OSL_SOCKET_HXX_
+#       include <osl/socket.hxx>
 #endif
-#ifndef _VOS_PIPE_HXX_
-#       include <vos/pipe.hxx>
+#ifndef _OSL_PIPE_HXX_
+#       include <osl/pipe.hxx>
 #endif
 
 namespace stoc_connector
@@ -123,7 +123,7 @@ namespace stoc_connector
         virtual ::rtl::OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
     public:
-        ::vos::OStreamPipe m_pipe;
+        ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
     };
@@ -161,8 +161,8 @@ namespace stoc_connector
     public:
         void completeConnectionString();
 
-        ::vos::OConnectorSocket m_socket;
-        ::vos::OInetSocketAddr m_addr;
+        ::osl::ConnectorSocket m_socket;
+        ::osl::SocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
 

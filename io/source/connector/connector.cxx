@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:51:12 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 using namespace ::osl;
 using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -214,7 +213,8 @@ namespace stoc_connector
 
             PipeConnection *pConn = new PipeConnection(sName , sConnectionDescription );
 
-            if( pConn->m_pipe.create( sName.pData, ::vos::OPipe::TOption_Open ) )
+            ;
+            if( pConn->m_pipe.create( sName.pData, osl_Pipe_OPEN ) )
             {
                 r = Reference < XConnection > ( (XConnection * ) pConn );
             }
@@ -259,23 +259,13 @@ namespace stoc_connector
             SocketConnection *pConn = new SocketConnection( sHost ,
                                                             nPort ,
                                                             sConnectionDescription);
-            if( ! pConn->m_socket.bind( pConn->m_addr ) )
-            {
-                OUString sMessage = OUString::createFromAscii( "Connector : couldn't bind socket (" );
-                OUString sError;
-                pConn->m_socket.getError( sError );
-                sMessage += sError;
-                sMessage += OUString::createFromAscii( ")" );
-                delete pConn;
-                throw ConnectionSetupException( sMessage, Reference < XInterface >() );
-            }
-            pConn->m_socket.setTcpNoDelay( 1 );
-            OInetSocketAddr AddrTarget( sHost.pData, nPort );
+
+            pConn->m_socket.setOption( osl_Socket_OptionTcpNoDelay , sal_True );
+            SocketAddr AddrTarget( sHost.pData, nPort );
             if(pConn->m_socket.connect(AddrTarget) != osl_Socket_Ok)
             {
                 OUString sMessage = OUString::createFromAscii( "Connector : couldn't connect to socket (" );
-                OUString sError;
-                pConn->m_socket.getError( sError );
+                OUString sError = pConn->m_socket.getErrorAsString();
                 sMessage += sError;
                 sMessage += OUString::createFromAscii( ")" );
                 delete pConn;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 11:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,13 @@
  *
  ************************************************************************/
 
-#include <vos/pipe.hxx>
-#include <vos/socket.hxx>
+#ifndef _OSL_PIPE_HXX_
+#include <osl/pipe.hxx>
+#endif
+
+#ifndef _OSL_SOCKET_HXX_
+#include <osl/socket.hxx>
+#endif
 
 #include <com/sun/star/connection/XConnection.hpp>
 
@@ -72,12 +77,11 @@ namespace io_acceptor {
         PipeAcceptor( const ::rtl::OUString &sPipeName , const ::rtl::OUString &sConnectionDescription );
 
         void init();
-        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >
-               accept(  );
+        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >  accept(  );
 
         void stopAccepting();
 
-        ::vos::OPipe m_pipe;
+        ::osl::Pipe m_pipe;
         ::rtl::OUString m_sPipeName;
         ::rtl::OUString m_sConnectionDescription;
         sal_Bool m_bClosed;
@@ -91,13 +95,12 @@ namespace io_acceptor {
                         const ::rtl::OUString &sConnectionDescription );
 
         void init();
-        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >
-                accept();
+        ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection > accept();
 
         void stopAccepting();
 
-        ::vos::OInetSocketAddr m_addr;
-        ::vos::OAcceptorSocket m_socket;
+        ::osl::SocketAddr m_addr;
+        ::osl::AcceptorSocket m_socket;
         ::rtl::OUString m_sSocketName;
         ::rtl::OUString m_sConnectionDescription;
         sal_uInt16 m_nPort;
