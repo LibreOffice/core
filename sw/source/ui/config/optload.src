@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:01:39 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,20 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_traditional ] = "文件使用印表機的字型尺度(~E)";
         Text[ slovak ] = "Použiť mi~erky tlačiarne pri formátovaní textu";
         Text[ portuguese_brazilian ] = "Usar as m�tricas da impressora para formatar o documento.";
+        Text[ greek ] = "Us~e printer metrics for document formatting";
+        Text[ dutch ] = "Us~e printer metrics for document formatting";
+        Text[ finnish ] = "Us~e printer metrics for document formatting";
+        Text[ czech ] = "Pro formátování dokumentu použít metriky tiskárny";
+        Text[ danish ] = "Us~e printer metrics for document formatting";
+        Text[ arabic ] = "Us~e printer metrics for document formatting";
+        Text[ hebrew ] = "Us~e printer metrics for document formatting";
+        Text[ catalan ] = "Us~e printer metrics for document formatting";
+        Text[ hindi ] = "Us~e printer metrics for document formatting";
+        Text[ portuguese ] = "Us~e printer metrics for document formatting";
+        Text[ russian ] = "Us~e printer metrics for document formatting";
+        Text[ polish ] = "Us~e printer metrics for document formatting";
+        Text[ turkish ] = "Us~e printer metrics for document formatting";
+        Text[ thai ] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -648,10 +662,10 @@ TabPage TP_OPTLOAD_PAGE
         Text[ finnish ] = "Lis�� v�lit k�yt�ss� olevan asiakirjan kappaleiden ja taulukoiden v�liin";
         Text[ catalan ] = "Suma ~espais de par�grafs i taules en el document actual";
         Text[ thai ] = "เพิ่มระยะห่างระหว่างย่อหน้ากับตารางในเอกสารปัจจุบัน";
-        Text[ czech ] = "Vložit mezeru mezi odstavce a tabulky v aktuálním dokumentu";
+        Text[ czech ] = "Vložit mezeru mezi odstavce a tabulky (v aktuálním dokumentu)";
         Text[ hebrew ] = "Im aktuellen ~Dokument alle Absatz- und Tabellenabstände addieren";
         Text[ hindi ] = "वर्तमान लेखपत्र में परिच्छेद और सारणीयों के बीच में अंतर जोड़ो";
-        Text[ slovak ] = "Vložiť medzeru medzi odstavce a tabuľky v aktuálnom dokumente";
+        Text[ slovak ] = "Pridať od~sadenie medzi odstavcami a tabuľkami (v aktuálnom dokumente)";
     };
     CheckBox CB_MERGE_PARA_DIST_PAGESTART
     {
@@ -681,10 +695,10 @@ TabPage TP_OPTLOAD_PAGE
         Text[ finnish ] = "Lis�� kappaleiden ja taulukoiden v�lit sivujen alkuun";
         Text[ catalan ] = "Su~ma espais de taules i par�grafs a l'inici de p�gines";
         Text[ thai ] = "เพิ่มระยะห่างย่อหน้าและตารางที่ส่วนบนของหน้า";
-        Text[ czech ] = "Přidat odsazení odstavce a tabulky na vrcholu stránky";
+        Text[ czech ] = "Přidat odsazení odstavce a tabulky na vrcholu stránek (v aktuálním dokumentu)";
         Text[ hebrew ] = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
         Text[ hindi ] = "पृष्ठों के ऊपरी भाग में परिच्छेद और सारणी के बीच में अंतर जोड़ो";
-        Text[ slovak ] = "Pridať odsadenie odstavca a tabuľky na vrchu stránky";
+        Text[ slovak ] = "~Pridať odsadenie odstavcov a tabuliek na vrchu stránok (v aktuálnom dokumente)";
     };
     CheckBox CB_TAB_ALIGNMENT
     {
@@ -709,14 +723,14 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_simplified ] = "调整制表键位置(在当前的文档内)(~B)";
         Text[ chinese_traditional ] = "調整定位鍵位置 (在目前的文件)(~B)";
         Text[ turkish ] = "Sekme noktas�n� hizala";
-        Text[ arabic ] = "Align tab stop position";
+        Text[ arabic ] = "Align ta~b stop position (in current document)";
         Text[ catalan ] = "Alinia la posici� d'aturada dels tabuladors";
         Text[ finnish ] = "Tasaa sarkainkohdan sijainti";
         Text[ thai ] = "จัดตำแหน่งหยุดระยะกั้น";
-        Text[ czech ] = "Zarovnání kroku tabulátoru";
+        Text[ czech ] = "Zarovnání kroku tabulátoru (v aktuálním dokumentu)";
         Text[ hebrew ] = "~Tabulatorposition ausrichten";
         Text[ hindi ] = "टॉब रुकावट स्थान का पंक्तिकरण";
-        Text[ slovak ] = "Zarovnanie kroku tabulátora";
+        Text[ slovak ] = "Zarovnanie kroku ta~bulátora (v aktuálnom dokumente)";
     };
 };
 /**************************************************************************/
@@ -1778,6 +1792,12 @@ ItemList [ catalan ] =
         < "Bod" ; FUNIT_POINT ; > ;
     };
     };
+
+
+
+
+
+
 
 
 
