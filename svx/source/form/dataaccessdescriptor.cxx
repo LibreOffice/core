@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-20 16:14:36 $
+ *  last change: $Author: fs $ $Date: 2001-05-10 14:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ namespace svx
             { CONST_CHAR("ColumnName"),         daColumnName,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("Command"),            daCommand,          &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("CommandType"),        daCommandType,      &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),         PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("DataSourceName"),     daDataSource,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing, &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("Selection"),          daSelection,        &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
@@ -567,6 +567,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/04/20 16:14:36  fs
+ *  exclude some stuff when compiling for SVX_LIGHT
+ *
  *  Revision 1.2  2001/04/18 10:42:37  fs
  *  added operator=
  *
