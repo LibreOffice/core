@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-25 09:53:53 $
+ *  last change: $Author: fs $ $Date: 2002-08-12 14:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ Menu RID_MAIN_MENU
                 Command = ".uno:Bib/sdbsource" ;
                 Identifier = RID_MAIN_ME_DBSOURCE;
                 Checkable=TRUE;
-                Text = "~Datenquelle austauschen..." ;
+                Text = "~Datenquelle auswählen..." ;
                 Text[ english_us ] = "~Choose Data Source...";
                };
             MenuItem
