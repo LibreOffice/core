@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-16 08:07:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ Input stream class for Excel import
 // ============================================================================
 
 class XclImpDecrypter;
-typedef ::boost::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
+typedef ScfRef< XclImpDecrypter > XclImpDecrypterRef;
 
 /** Base class for BIFF stream decryption. */
 class XclImpDecrypter : ScfNoCopy
