@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:22:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,12 +216,14 @@
 #define HID_PROP_SHOW_NAVIGATION                (HID_FORMS_START +  161)
 #define HID_PROP_SHOW_RECORDACTIONS             (HID_FORMS_START +  162)
 #define HID_PROP_SHOW_FILTERSORT                (HID_FORMS_START +  163)
+#define HID_PROP_AUTOLINEBREAK                  (HID_FORMS_START +  164)
+#define HID_PROP_TEXTTYPE                       (HID_FORMS_START +  165)
 
 // ----------------------------------------------------------------------------
 #define UID_PROP_DLG_FONT_TYPE                  (HID_FORMS_START +  180)
 #define UID_PROP_DLG_IMAGE_URL                  (HID_FORMS_START +  181)
 #define UID_PROP_DLG_BACKGROUNDCOLOR            (HID_FORMS_START +  182)
-#define UID_PROP_DLG_SYMBOLCOLOR            (HID_FORMS_START +  183)
+#define UID_PROP_DLG_SYMBOLCOLOR                (HID_FORMS_START +  183)
 #define UID_PROP_DLG_ATTR_DATASOURCE            (HID_FORMS_START +  184)
 #define UID_PROP_DLG_ATTR_TARGET_URL            (HID_FORMS_START +  185)
 #define UID_PROP_DLG_NUMBER_FORMAT              (HID_FORMS_START +  186)
