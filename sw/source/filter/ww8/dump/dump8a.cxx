@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dump8a.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,7 @@
 
 //#include "defs.hxx"
 #include <tools/solar.h>
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #include "ww8struc.hxx"
 #include "ww8scan.hxx"
 #include "ww8darr.hxx"
