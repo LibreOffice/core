@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlithlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:43 $
+ *  last change: $Author: dvo $ $Date: 2001-07-12 14:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,18 @@
 #include <xmloff/xmlement.hxx>
 #endif
 
+#ifndef _HINTIDS_HXX
+#include "hintids.hxx"  // for following include
+#endif
+
+#ifndef _SVX_BRSHITEM_HXX
+#include <svx/brshitem.hxx> // for SvxGraphicsPosition
+#endif
+
 class SvxBorderLine;
 struct SvXMLEnumMapEntry;
 class SvXMLUnitConverter;
 class Color;
-enum SvxGraphicPosition;
 namespace rtl { class OUString; }
 
 
