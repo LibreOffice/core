@@ -334,8 +334,9 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
         try
         {
-            int nColor = 0xffe1ff; // thistle1
+            int nColor = 0xf5fffa; // mint cream
             xArea.setPropertyValue( "FillColor", new Integer( nColor ) );
+            xArea.setPropertyValue( "FillStyle", FillStyle.SOLID );
 
             int nNewColor = AnyConverter.toInt( xArea.getPropertyValue( "FillColor" ) );
             assure( "Changing FillColor of Area failed", nNewColor == nColor );
