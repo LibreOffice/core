@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connpooloptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:19:05 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <svtools/solar.hrc>
 #define SID_SB_POOLING_ENABLED          (RID_OFA_START + 247)
 #define SID_SB_DRIVER_TIMEOUTS          (RID_OFA_START + 248)
+#define SID_SB_DB_REGISTER              (RID_OFA_START + 249)
 
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
