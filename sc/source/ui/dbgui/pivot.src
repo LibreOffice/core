@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:36:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,11 +453,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "Total - ~colonnes" ;
         Text [ dutch ] = "Saldo ~kolommen" ;
         Text [ portuguese_brazilian ] = "Gesamtergebnis-~Spalten" ;
-        Text[ chinese_simplified ] = "×Ü¼ÆÁĞ(~C)";
+        Text[ chinese_simplified ] = "×Ü¼ÆµÄÁĞ(~C)";
         Text[ russian ] = "Âñåãî ñòîëáöîâ";
         Text[ polish ] = "~Podsumowanie kolumn";
         Text[ japanese ] = "—ñ‚Ì‘Œv(~C)";
-        Text[ chinese_traditional ] = "Á`­pÄæ(~C)";
+        Text[ chinese_traditional ] = "Á`­pªºÄæ(~C)";
         Text[ arabic ] = "ÃÚãÏÉ ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá óôçëşí";
         Text[ korean ] = "ÀüÃ¼ ¿­)(~C)";
@@ -483,11 +483,11 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ french ] = "Total - ~lignes" ;
         Text [ dutch ] = "~Saldo rijen" ;
         Text [ portuguese_brazilian ] = "~Gesamtergebnis-Zeilen" ;
-        Text[ chinese_simplified ] = "×Ü¼Æ - ĞĞ(~T)";
+        Text[ chinese_simplified ] = "×Ü¼ÆµÄĞĞ(~T)";
         Text[ russian ] = "Âñåãî ñòğîê";
         Text[ polish ] = "Podsumowanie liczby linijek";
         Text[ japanese ] = "s‚Ì‘Œv(~T)";
-        Text[ chinese_traditional ] = "Á`­p¦C(~T)";
+        Text[ chinese_traditional ] = "Á`­pªº¦C(~T)";
         Text[ arabic ] = "Õİæİ ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá ãñáììşí";
         Text[ korean ] = "ÀüÃ¼ Çà(~T)";
@@ -817,6 +817,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ catalan ] = "Piloto de datos";
     Text[ finnish ] = "Tietojen ohjaus";
 };
+
 
 
 
