@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:27:05 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 #pragma hdrstop
 #include "sb.hxx"
-#include <vcl/rcid.h>
+#include <tools/rcid.h>
 #include <tools/config.hxx>
 
 #ifndef _STREAM_HXX //autogen
@@ -883,13 +883,6 @@ BOOL StarBASIC::CError
             return FALSE;
 
         Stop();
-    }
-
-    // #45741# Falls der Wait-Cursor gesetzt ist, jetzt zuruecksetzen
-    if( GetSbData()->bCompWait )
-    {
-        Application::LeaveWait();
-        GetSbData()->bCompWait = FALSE;
     }
 
     // Flag setzen, damit GlobalRunInit den Fehler mitbekommt
