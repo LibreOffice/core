@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-13 16:04:22 $
+ *  last change: $Author: obo $ $Date: 2000-10-18 08:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1463,7 +1463,9 @@ void OTableSubscriptionPage::ActivatePage(const SfxItemSet& _rSet)
         if (aErrorInfo.isValid())
         {
             // establishing the connection failed. Show an error window and exit.
-            OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
+            OSQLMessageBox aMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error);
+            aMessageBox.Execute();
+//          OSQLMessageBox(GetParent(), aErrorInfo, WB_OK | WB_DEF_OK, OSQLMessageBox::Error).Execute();
             m_aTablesList.Enable(sal_False);
             m_aTablesListLabel.Enable(sal_False);
             m_aTablesList.Clear();
@@ -1605,6 +1607,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/13 16:04:22  fs
+ *  Separator changed to string / getDetailIds
+ *
  *  Revision 1.4  2000/10/12 16:20:42  fs
  *  new implementations ... still under construction
  *
