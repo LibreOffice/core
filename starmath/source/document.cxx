@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 17:14:39 $
+ *  last change: $Author: jp $ $Date: 2001-03-13 15:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ BOOL SmDocShell::SetData( SvData *pData )
             return TRUE;
         }
     }
-    return SfxInPlaceObject::SetData( pData );
+    return SvObject::SetData( pData );
 }
 
 BOOL SmDocShell::SetData( const String& rData )
