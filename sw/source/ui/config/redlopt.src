@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:18:05 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,8 +390,8 @@ TabPage TP_REDLINE_OPT
             < "[無]" ; > ;
         < "粗體" ; > ;
         < "斜體" ; > ;
-        < "下劃線" ; > ;
-        < "雙下劃線" ; > ;
+        < "底線" ; > ;
+        < "雙底線" ; > ;
         < "大寫字母" ; > ;
         < "小寫字母" ; > ;
         < "小型大寫字母" ; > ;
@@ -931,8 +931,8 @@ TabPage TP_REDLINE_OPT
             < "[無]" ; > ;
         < "粗體" ; > ;
         < "斜體" ; > ;
-        < "下劃線" ; > ;
-        < "雙下劃線" ; > ;
+        < "底線" ; > ;
+        < "雙底線" ; > ;
         < "大寫字母" ; > ;
         < "小寫字母" ; > ;
         < "小型大寫字母" ; > ;
