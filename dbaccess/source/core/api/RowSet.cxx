@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:05:08 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 06:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1246,8 +1246,8 @@ void SAL_CALL ORowSet::addRowSetListener( const Reference< XRowSetListener >& li
         throw DisposedException();
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-
-    m_aListeners.addInterface(listener);
+    if(listener.is())
+        m_aListeners.addInterface(listener);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
@@ -1256,8 +1256,8 @@ void SAL_CALL ORowSet::removeRowSetListener( const Reference< XRowSetListener >&
         throw DisposedException();
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-
-    m_aListeners.removeInterface(listener);
+    if(listener.is())
+        m_aListeners.removeInterface(listener);
 }
 // -------------------------------------------------------------------------
 void ORowSet::notifyAllListeners()
@@ -1968,15 +1968,22 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     else
                     {
                         // create the rowset columns
-                        Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
-                        const ::rtl::OUString* pBegin   = aSeq.getConstArray();
-                        const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
-                        for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
+//                      Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
+//                      const ::rtl::OUString* pBegin   = aSeq.getConstArray();
+//                      const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
+                        Reference<XResultSetMetaData> xMeta = getMetaData();
+                        sal_Int32 nCount = xMeta->getColumnCount();
+                        for(sal_Int32 i=1; i<=nCount ;++i)
                         {
+                            ::rtl::OUString sName = xMeta->getColumnName(i);
                             Reference<XPropertySet> xColumn;
-                            ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
-                            Reference<XPropertySetInfo> xInfo = xColumn->getPropertySetInfo();
-                            if(xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
+                            if(m_xColumns->hasByName(sName))
+                                m_xColumns->getByName(sName) >>= xColumn;
+                            if(!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
+                                m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+
+                            Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
+                            if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
                             ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
@@ -1987,28 +1994,28 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                                 m_aCurrentRow,
                                                                                 m_pCache->getEnd());
                             aColumns.push_back(pColumn);
-                            pColumn->setName(*pBegin);
-                            aNames.push_back(*pBegin);
+                            pColumn->setName(sName);
+                            aNames.push_back(sName);
 
                             try
                             {
-                                if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_ALIGN))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
 
                                 nFormatKey = 0;
-                                if(xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_NUMBERFORMAT))
                                     nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));
                                 if(!nFormatKey)
                                     nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
 
                                 pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                                if(xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
-                                if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_WIDTH))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
-                                if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_HIDDEN))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));
-                                if(xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
+                                if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_CONTROLMODEL))
                                     pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLMODEL,xColumn->getPropertyValue(PROPERTY_CONTROLMODEL));
                             }
                             catch(Exception&)
