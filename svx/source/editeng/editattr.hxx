@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-07 15:09:02 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ class SvxContourItem;
 class SvxCrossedOutItem;
 class SvxUnderlineItem;
 class SvxFontHeightItem;
-class SvxFontWidthItem;
+class SvxCharScaleWidthItem;
 class SvxColorItem;
 class SvxAutoKernItem;
 class SvxKerningItem;
@@ -318,7 +318,7 @@ public:
 class EditCharAttribFontWidth : public EditCharAttrib
 {
 public:
-    EditCharAttribFontWidth( const SvxFontWidthItem& rAttr, USHORT nStart, USHORT nEnd );
+    EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, USHORT nStart, USHORT nEnd );
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev );
 };

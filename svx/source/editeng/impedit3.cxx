@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-01 09:13:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@
 #include <cscoitem.hxx>
 #include <colritem.hxx>
 #include <fhgtitem.hxx>
-#include <fwdtitem.hxx>
 #include <kernitem.hxx>
 #include <lrspitem.hxx>
 #include <ulspitem.hxx>
@@ -90,6 +89,7 @@
 #include <postitem.hxx>
 #include <langitem.hxx>
 #include <scriptspaceitem.hxx>
+#include <charscaleitem.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 
@@ -2066,9 +2066,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         rFont.SetLanguage( ((const SvxLanguageItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ))).GetLanguage() );
     }
 
-    const SvxFontWidthItem& rWidthItem =
-        (const SvxFontWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH);
-    sal_uInt16 nRelWidth = rWidthItem.GetProp();
+    sal_uInt16 nRelWidth = ((const SvxCharScaleWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
 
     if ( pOut )
         pOut->SetTextLineColor();
@@ -2098,7 +2096,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
                     pAttrib->SetFont( rFont );
                 #endif
                 if ( pAttrib->Which() == EE_CHAR_FONTWIDTH )
-                    nRelWidth = ((const SvxFontWidthItem*)pAttrib->GetItem())->GetProp();
+                    nRelWidth = ((const SvxCharScaleWidthItem*)pAttrib->GetItem())->GetValue();
             }
             pAttrib = GetAttrib( rAttribs, ++nAttr );
         }
@@ -3426,13 +3424,11 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
         if ( nX != 100 )
         {
             // Fontbreite
-            const SvxFontWidthItem& rWidthItem =
-                (const SvxFontWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH );
-            SvxFontWidthItem* pNewWidth = (SvxFontWidthItem*)rWidthItem.Clone();
-            sal_uInt32 nProp = pNewWidth->GetProp();    // sal_uInt32, kann temporaer gross werden
+            SvxCharScaleWidthItem* pNewWidth = (SvxCharScaleWidthItem*) pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH ).Clone();
+            sal_uInt32 nProp = pNewWidth->GetValue();   // sal_uInt32, kann temporaer gross werden
             nProp *= nX;
             nProp /= 100;
-            pNewWidth->SetProp( (sal_uInt16)nProp );
+            pNewWidth->SetValue( (sal_uInt16)nProp );
             aTmpSet.Put( *pNewWidth );
             delete pNewWidth;
 
@@ -3515,11 +3511,11 @@ void ImpEditEngine::DoStretchChars( sal_uInt16 nX, sal_uInt16 nY )
                 }
                 else if ( nWhich == EE_CHAR_FONTWIDTH )
                 {
-                    SvxFontWidthItem* pNewWidth = (SvxFontWidthItem*)pAttr->GetItem()->Clone();
-                    sal_uInt32 nProp = pNewWidth->GetProp();
+                    SvxCharScaleWidthItem* pNewWidth = (SvxCharScaleWidthItem*)pAttr->GetItem()->Clone();
+                    sal_uInt32 nProp = pNewWidth->GetValue();
                     nProp *= nX;
                     nProp /= 100;
-                    pNewWidth->SetProp( (sal_uInt16)nProp );
+                    pNewWidth->SetValue( (sal_uInt16)nProp );
                     pNew = pNewWidth;
                 }
                 else if ( nWhich == EE_CHAR_KERNING )

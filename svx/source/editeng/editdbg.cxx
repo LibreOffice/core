@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-04 13:05:30 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <fhgtitem.hxx>
 #include <fontitem.hxx>
 #include <adjitem.hxx>
-#include <fwdtitem.hxx>
 #include <wghtitem.hxx>
 #include <postitem.hxx>
 #include <udlnitem.hxx>
@@ -87,6 +86,7 @@
 #include <akrnitem.hxx>
 #include <langitem.hxx>
 #include <emphitem.hxx>
+#include <charscaleitem.hxx>
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -199,14 +199,8 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_FONTWIDTH:
         {
             aDebStr += "Breite=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxFontWidthItem&)rItem).GetWidth() );
-            Size aSz( 0, ((SvxFontWidthItem&)rItem).GetWidth() );
-            SfxMapUnit eUnit = rPool.GetMetric( rItem.Which() );
-            MapMode aItemMapMode( (MapUnit) eUnit );
-            MapMode aPntMap( MAP_POINT );
-            aSz = OutputDevice::LogicToLogic( aSz, aItemMapMode, aPntMap );
-            aDebStr += " Points=";
-            aDebStr += ByteString::CreateFromInt32( aSz.Width() );
+            aDebStr += ByteString::CreateFromInt32( ((SvxCharScaleWidthItem&)rItem).GetValue() );
+            aDebStr += "%";
         }
         break;
         case EE_CHAR_WEIGHT:

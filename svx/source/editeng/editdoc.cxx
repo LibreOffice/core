@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:25 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <fontitem.hxx>
 #include <crsditem.hxx>
 #include <fhgtitem.hxx>
-#include <fwdtitem.hxx>
 #include <postitem.hxx>
 #include <kernitem.hxx>
 #include <wrlmitem.hxx>
@@ -81,6 +80,7 @@
 #include <cscoitem.hxx>
 #include <langitem.hxx>
 #include <emphitem.hxx>
+#include <charscaleitem.hxx>
 
 #include <editdoc.hxx>
 #include <editdbg.hxx>
@@ -326,7 +326,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
         break;
         case EE_CHAR_FONTWIDTH:
         {
-            pNew = new EditCharAttribFontWidth( (const SvxFontWidthItem&)rNew, nS, nE );
+            pNew = new EditCharAttribFontWidth( (const SvxCharScaleWidthItem&)rNew, nS, nE );
         }
         break;
         case EE_CHAR_WEIGHT:
@@ -1205,7 +1205,6 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
         rFont.SetFamily( rFontItem.GetFamily() );
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
-        rFont.SetSize( Size( ((const SvxFontWidthItem&)rSet.Get( EE_CHAR_FONTWIDTH )).GetWidth(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
         rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetUnderline() );
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
@@ -1234,8 +1233,6 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, BOOL bSearchInParent )
         }
         if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) == SFX_ITEM_ON )
             rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( EE_CHAR_FONTHEIGHT ) ).GetHeight() ) );
-        if ( rSet.GetItemState( EE_CHAR_FONTWIDTH ) == SFX_ITEM_ON )
-            rFont.SetSize( Size( ((const SvxFontWidthItem&)rSet.Get( EE_CHAR_FONTWIDTH )).GetWidth(), rFont.GetSize().Height() ) );
         if ( rSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON )
             rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( EE_CHAR_WEIGHT )).GetWeight() );
         if ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON )

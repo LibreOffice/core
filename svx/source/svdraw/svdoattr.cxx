@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 14:28:29 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,7 @@
 #include "fhgtitem.hxx"
 #endif
 
-#ifndef _SVX_FWDTITEM_HXX //autogen
-#include "fwdtitem.hxx"
-#endif
+#include <charscaleitem.hxx>
 
 #ifndef _SVX_XLNSTCIT_HXX //autogen
 #include <xlnstcit.hxx>

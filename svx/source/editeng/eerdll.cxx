@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 #include <escpitem.hxx>
 #include <fhgtitem.hxx>
 #include <fontitem.hxx>
-#include <fwdtitem.hxx>
 #include <kernitem.hxx>
 #include <lrspitem.hxx>
 #include <postitem.hxx>
@@ -105,6 +104,7 @@
 #include <wrlmitem.hxx>
 #include <numitem.hxx>
 #include <langitem.hxx>
+#include <charscaleitem.hxx>
 
 
 GlobalEditData::GlobalEditData()
@@ -150,7 +150,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[14]  = new SvxColorItem( Color( COL_BLACK ), EE_CHAR_COLOR );
         ppDefItems[15]  = new SvxFontItem( EE_CHAR_FONTINFO );
         ppDefItems[16] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT );
-        ppDefItems[17] = new SvxFontWidthItem( 0, 100, EE_CHAR_FONTWIDTH );
+        ppDefItems[17] = new SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH );
         ppDefItems[18] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT );
         ppDefItems[19] = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
         ppDefItems[20] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-07 15:09:02 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include <postitem.hxx>
 #include <wghtitem.hxx>
 #include <udlnitem.hxx>
-#include <fwdtitem.hxx>
 #include <cntritem.hxx>
 #include <shdditem.hxx>
 #include <escpitem.hxx>
@@ -82,13 +81,14 @@
 #include <akrnitem.hxx>
 #include <langitem.hxx>
 #include <emphitem.hxx>
+#include <charscaleitem.hxx>
 
 
 #include <editattr.hxx>
 
 DBG_NAME( EE_EditAttrib );
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditAttrib
 // -------------------------------------------------------------------------
 EditAttrib::EditAttrib( const SfxPoolItem& rAttr )
@@ -102,7 +102,7 @@ EditAttrib::~EditAttrib()
     DBG_DTOR( EE_EditAttrib, 0 );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttrib
 // -------------------------------------------------------------------------
 EditCharAttrib::EditCharAttrib( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
@@ -119,7 +119,7 @@ void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 }
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFont
 // -------------------------------------------------------------------------
 EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -138,7 +138,7 @@ void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetCharSet( rAttr.GetCharSet() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribItalic
 // -------------------------------------------------------------------------
 EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -152,7 +152,7 @@ void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetItalic( ((const SvxPostureItem*)GetItem())->GetPosture() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribWeight
 // -------------------------------------------------------------------------
 EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -166,7 +166,7 @@ void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetWeight( (FontWeight)((const SvxWeightItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribUnderline
 // -------------------------------------------------------------------------
 EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -182,7 +182,7 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
         pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFontHeight
 // -------------------------------------------------------------------------
 EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -197,10 +197,10 @@ void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem*)GetItem())->GetHeight() ) );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribFontWidth
 // -------------------------------------------------------------------------
-EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxFontWidthItem& rAttr, USHORT nStart, USHORT nEnd )
+EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, USHORT nStart, USHORT nEnd )
     : EditCharAttrib( rAttr, nStart, nEnd )
 {
     DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTWIDTH, "Kein Widthattribut!" );
@@ -208,12 +208,10 @@ EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxFontWidthItem& rAttr,
 
 void EditCharAttribFontWidth::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    // Prop wird nicht verwendet, weil bei def-Breite von 0 unmoeglich.
-    // => f( Device, andere Fonteinstellungen )!
-    rFont.SetSize( Size( ((const SvxFontWidthItem*)GetItem())->GetWidth(), rFont.GetSize().Height() ) );
+    // must be calculated outside, because f(device)...
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribStrikeout
 // -------------------------------------------------------------------------
 EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -227,7 +225,7 @@ void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetStrikeout( (FontStrikeout)((const SvxCrossedOutItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribColor
 // -------------------------------------------------------------------------
 EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -241,7 +239,7 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetColor( ((const SvxColorItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribLanguage
 // -------------------------------------------------------------------------
 EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -255,7 +253,7 @@ void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetLanguage( ((const SvxLanguageItem*)GetItem())->GetLanguage() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribShadow
 // -------------------------------------------------------------------------
 EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -269,7 +267,7 @@ void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetShadow( (BOOL)((const SvxShadowedItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribEscapement
 // -------------------------------------------------------------------------
 EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -300,7 +298,7 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 #endif
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribOutline
 // -------------------------------------------------------------------------
 EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -314,7 +312,7 @@ void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetOutline( (BOOL)((const SvxContourItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribTab
 // -------------------------------------------------------------------------
 EditCharAttribTab::EditCharAttribTab( const SfxVoidItem& rAttr, USHORT nPos )
@@ -327,7 +325,7 @@ void EditCharAttribTab::SetFont( SvxFont&, OutputDevice* )
 {
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribLineBreak
 // -------------------------------------------------------------------------
 EditCharAttribLineBreak::EditCharAttribLineBreak( const SfxVoidItem& rAttr, USHORT nPos )
@@ -340,7 +338,7 @@ void EditCharAttribLineBreak::SetFont( SvxFont&, OutputDevice* )
 {
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribField
 // -------------------------------------------------------------------------
 EditCharAttribField::EditCharAttribField( const SvxFieldItem& rAttr, USHORT nPos )
@@ -395,7 +393,7 @@ BOOL EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
     return TRUE;
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribPairKerning
 // -------------------------------------------------------------------------
 EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -409,7 +407,7 @@ void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetKerning( ((const SvxAutoKernItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribKerning
 // -------------------------------------------------------------------------
 EditCharAttribKerning::EditCharAttribKerning( const SvxKerningItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -423,7 +421,7 @@ void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetFixKerning( ((const SvxKerningItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribWordLineMode
 // -------------------------------------------------------------------------
 EditCharAttribWordLineMode::EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, USHORT nStart, USHORT nEnd )
@@ -437,7 +435,7 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
     rFont.SetWordLineMode( ((const SvxWordLineModeItem*)GetItem())->GetValue() );
 }
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditCharAttribEmphasisMark
 // -------------------------------------------------------------------------
 EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, USHORT nStart, USHORT nEnd )

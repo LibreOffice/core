@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-20 17:14:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include "escpitem.hxx"
 #include "fhgtitem.hxx"
 #include "fontitem.hxx"
-#include "fwdtitem.hxx"
 #include "kernitem.hxx"
 #include "lrspitem.hxx"
 #include "postitem.hxx"
@@ -93,6 +92,7 @@
 #include "ulspitem.hxx"
 #include "wghtitem.hxx"
 #include "wrlmitem.hxx"
+#include <charscaleitem.hxx>
 
 #include <vcl/svapp.hxx>    // Fuer AppWindow...
 
@@ -663,13 +663,6 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Ungueltiges Item!" );
             SvxFontHeightItem& rItem = (SvxFontHeightItem&)rPoolItem;
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
-        }
-        break;
-        case EE_CHAR_FONTWIDTH:
-        {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontWidthItem ) ), "ConvertItem: Ungueltiges Item!" );
-            SvxFontWidthItem& rItem = (SvxFontWidthItem&)rPoolItem;
-            rItem.SetWidth( OutputDevice::LogicToLogic( rItem.GetWidth(), eSourceUnit, eDestUnit ) );
         }
         break;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,7 @@
 #include "fhgtitem.hxx"
 #endif
 
-#ifndef _SVX_FWDTITEM_HXX //autogen
-#include "fwdtitem.hxx"
-#endif
+#include <charscaleitem.hxx>
 
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
@@ -1078,7 +1076,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                         else if (HAS_BASE(SvxColorItem    ,&rItem)) aEntry.eItemType=ITEM_COLOR;
                         else if (HAS_BASE(SvxFontItem     ,&rItem)) aEntry.eItemType=ITEM_FONT;
                         else if (HAS_BASE(SvxFontHeightItem,&rItem))aEntry.eItemType=ITEM_FONTHEIGHT;
-                        else if (HAS_BASE(SvxFontWidthItem,&rItem)) aEntry.eItemType=ITEM_FONTWIDTH;
+                        else if (HAS_BASE(SvxCharScaleWidthItem,&rItem)) aEntry.eItemType=ITEM_FONTWIDTH;
                         else if (HAS_BASE(SvxFieldItem    ,&rItem)) aEntry.eItemType=ITEM_FIELD;
                         switch (aEntry.eItemType) {
                             case ITEM_BYTE      : aEntry.bIsNum=TRUE;  aEntry.nVal=((SfxByteItem  &)rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=255;   break;
@@ -1090,7 +1088,7 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
                             case ITEM_BOOL      : aEntry.bCanNum=TRUE; aEntry.nVal=((SfxBoolItem  &)rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=1;          break;
                             case ITEM_FLAG      : aEntry.bCanNum=TRUE; aEntry.nVal=((SfxFlagItem  &)rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=0xFFFF;     break;
                             case ITEM_FONTHEIGHT: aEntry.bCanNum=TRUE; aEntry.nVal=((SvxFontHeightItem&)rItem).GetHeight(); aEntry.nMin=0;                    break;
-                            case ITEM_FONTWIDTH : aEntry.bCanNum=TRUE; aEntry.nVal=((SvxFontWidthItem&)rItem).GetProp();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
+                            case ITEM_FONTWIDTH : aEntry.bCanNum=TRUE; aEntry.nVal=((SvxCharScaleWidthItem&)rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum=TRUE;
                         FASTBOOL bGetPres=TRUE;
@@ -1330,14 +1328,11 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                     ((SvxFontHeightItem*)pNewItem)->SetHeight(nHgt,nProp);
                 } break;
                 case ITEM_FONTWIDTH: {
-                    USHORT nWdt=0;
                     USHORT nProp=100;
                     if (aNewText.Search(sal_Unicode('%'))!=STRING_NOTFOUND) {
                         nProp=(USHORT)nLongVal;
-                    } else {
-                        nWdt=(USHORT)nLongVal;
                     }
-                    ((SvxFontWidthItem*)pNewItem)->SetWidth(nWdt,nProp);
+                    ((SvxCharScaleWidthItem*)pNewItem)->SetValue(nProp);
                 } break;
                 case ITEM_FIELD: break;
             } // switch

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svditext.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #define ITEMID_COLOR        EE_CHAR_COLOR
 #define ITEMID_FONT         EE_CHAR_FONTINFO
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-#define ITEMID_FONTWIDTH    EE_CHAR_FONTWIDTH
+#define ITEMID_CHARSCALE_W  EE_CHAR_FONTWIDTH
 #define ITEMID_WEIGHT       EE_CHAR_WEIGHT
 #define ITEMID_UNDERLINE    EE_CHAR_UNDERLINE
 #define ITEMID_CROSSEDOUT   EE_CHAR_STRIKEOUT

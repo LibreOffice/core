@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 16:37:36 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 #include "escpitem.hxx"
 #include "fhgtitem.hxx"
 #include "fontitem.hxx"
-#include "fwdtitem.hxx"
 #include "kernitem.hxx"
 #include "lrspitem.hxx"
 #include "postitem.hxx"
@@ -100,6 +99,7 @@
 #include "brshitem.hxx"
 #include "cscoitem.hxx"
 #include "langitem.hxx"
+#include <charscaleitem.hxx>
 
 
 #ifndef _SV_SYSTEM_HXX
@@ -2191,7 +2191,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxLanguageItem( rFont.GetLanguage(), EE_CHAR_LANGUAGE ) );
     rSet.Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(), XubString(), rFont.GetPitch(), rFont.GetCharSet(), EE_CHAR_FONTINFO ) );
     rSet.Put( SvxFontHeightItem( rFont.GetSize().Height(), 100, EE_CHAR_FONTHEIGHT )  );
-    rSet.Put( SvxFontWidthItem( (sal_uInt16)rFont.GetSize().Width(), 100, EE_CHAR_FONTWIDTH )  );
+    rSet.Put( SvxCharScaleWidthItem( 100, EE_CHAR_FONTWIDTH ) );
     rSet.Put( SvxShadowedItem( rFont.IsShadow(), EE_CHAR_SHADOW )  );
     rSet.Put( SvxEscapementItem( rFont.GetEscapement(), rFont.GetPropr(), EE_CHAR_ESCAPEMENT )  );
     rSet.Put( SvxWeightItem( rFont.GetWeight(), EE_CHAR_WEIGHT )  );

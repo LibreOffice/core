@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,6 @@
 #include <xflgrit.hxx>
 #endif
 
-#ifndef _SVX_FWDTITEM_HXX //autogen
-#include <fwdtitem.hxx>
-#endif
-
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
@@ -143,6 +139,8 @@
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
+
+#include <charscaleitem.hxx>
 
 #include "xflhtit.hxx"
 #include "svdattr.hxx"
@@ -391,7 +389,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, FASTBOOL bForceText
         pTextAttr->Put(SvxPostureItem(aFnt.GetItalic()));
         pTextAttr->Put(SvxWeightItem(aFnt.GetWeight()));
         pTextAttr->Put(SvxFontHeightItem((ULONG)aFnt.GetSize().Height()));
-        pTextAttr->Put(SvxFontWidthItem((USHORT)aFnt.GetSize().Width()));
+        pTextAttr->Put(SvxCharScaleWidthItem(100));
         pTextAttr->Put(SvxUnderlineItem(aFnt.GetUnderline()));
         pTextAttr->Put(SvxCrossedOutItem(aFnt.GetStrikeout()));
         pTextAttr->Put(SvxShadowedItem(aFnt.IsShadow()));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-20 15:11:49 $
+ *  last change: $Author: mt $ $Date: 2001-03-02 16:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,7 @@
 #include "fhgtitem.hxx"
 #endif
 
-#ifndef _SVX_FWDTITEM_HXX //autogen
-#include "fwdtitem.hxx"
-#endif
+#include <charscaleitem.hxx>
 
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -595,12 +593,11 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
         {
             // Rahmenattribute
             const SfxItemSet& rSet = GetItemSet();
-            const SvxFontWidthItem& rOldWdt=(SvxFontWidthItem&)rSet.Get(EE_CHAR_FONTWIDTH);
+            const SvxCharScaleWidthItem& rOldWdt=(SvxCharScaleWidthItem&)rSet.Get(EE_CHAR_FONTWIDTH);
             const SvxFontHeightItem& rOldHgt=(SvxFontHeightItem&)rSet.Get(EE_CHAR_FONTHEIGHT);
 
             // erstmal die alten Werte holen
-            long nAbsWdt=rOldWdt.GetWidth();
-            long nRelWdt=rOldWdt.GetProp();
+            long nRelWdt=rOldWdt.GetValue();
             long nAbsHgt=rOldHgt.GetHeight();
             long nRelHgt=rOldHgt.GetProp();
 
@@ -619,7 +616,7 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
 
             // und nun attributieren
-            SetItem(SvxFontWidthItem((USHORT)nAbsWdt,(USHORT)nRelWdt));
+            SetItem(SvxCharScaleWidthItem(nRelWdt));
             SetItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt));
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
