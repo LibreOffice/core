@@ -139,7 +139,7 @@ public class HelpIndexer {
             builder.setPrefixTranslator( translator );
 
             builder.clearIndex();               // Build index from scratch
-            builder.setTransformLocation( installDirectory );
+            builder.setTransformLocation( installDirectory + "..\\StyleSheets\\Indexing\\" );
             builder.init( "index" );
 
 
@@ -178,7 +178,7 @@ public class HelpIndexer {
                           info.append( keyStr,tagStr );
                     else
                      {
-                        String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language + "&System=" + _system;
+                        String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language;
                         info.setURL( url );
                         info.setId( keyStr );
                       }
@@ -199,7 +199,7 @@ public class HelpIndexer {
             System.out.println( "Indexing..." );
               Enumeration enum = _hashDocInfo.elements();
             int cut = 0;
-             while( enum.hasMoreElements() && cut < 100 )
+             while( enum.hasMoreElements() && cut < 10000000 )
              {
                   try
                 {
@@ -216,7 +216,7 @@ public class HelpIndexer {
 
                        _urlHandler.setMode( null );
                       byte[] embResolved = getSourceDocument( url );
-//                  System.out.println( new String( embResolved ) );
+                    //System.out.println( new String( embResolved ) );
                      InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
                       in.setEncoding( "UTF8" );
                     Document docResolved = null;
@@ -273,72 +273,6 @@ public class HelpIndexer {
             {
                 System.err.println( e.getMessage() );
             }
-/*
-            // Now the database may be indexed, the keywords and helptexts are extracted
-              System.out.println( "Indexing..." );
-              int cut = 0;
-            while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) && cut++ < 200000 )
-            {
-                try
-                {
-                       String keyStr = key.getString();
-                    System.out.println( "   Id = " + keyStr + " is file = " + data.getFile() );
-
-                      // Resolve the embedding
-                    _urlHandler.setMode( null );
-                       String url = "vnd.sun.star.help://" + _module + "/" + keyStr + "?Language=" + _language + "&System=" + _system;
-                    byte[] embResolved = getSourceDocument( url );
-                      InputSource in = new InputSource( new ByteArrayInputStream( embResolved ) );
-                    in.setEncoding( "UTF8" );
-                    Document docResolved = XmlDocument.createXmlDocument( in,false );
-
-                    addKeywords( docResolved,keyStr );
-
-                      _urlHandler.setMode( embResolved );    // Fake the embedding
-                      builder.indexDocument( new URL( url ),"" );
-
-
-                     String hash = "";
-                    int idx = data.getFile().indexOf( '#' );
-                       if( idx == -1 )
-                      {
-                        hash = data.getFile().substring(1+idx).trim();
-                    }
-
-                    if( data.getFile().indexOf('#') != -1 ) // && data.getDatabase().equals( _module + ".jar" ) )
-                       {    // Something to schnitzel
-
-
-
-                           hash = data.getFile().substring( 1+idx ).trim();
-                        System.out.println( hash );
-                          Node node = extractHelptext( docResolved,hash );
-                           if( node != null )
-                           {
-                            String text = dump(node);
-                               System.out.println( text );
-                               // transfomHelpText( text );
-                           }
-                       }
-                }
-                  catch( Exception e )
-                {
-                     // System.out.println( "Ignoring exception " + e.getMessage() );
-                }
-
-                   if( first )
-                  {
-                    key.set_flags( Db.DB_DBT_REALLOC );
-                     data.set_flags( Db.DB_DBT_REALLOC );
-                     first = false;
-                }
-            }
-
-            cursor.close();
-            table.close( 0 );
-              builder.close();
-              _keywords.dump();
-            */
         }
          catch( DbRunRecoveryException e )
         {
@@ -753,14 +687,12 @@ public class HelpIndexer {
           // Initialize
           if( _stuff == null )
         {
-              String styleSheet = HelpDatabases.getInstallDirectory() + "ResEmb.xsl";
+              String styleSheet = HelpDatabases.getInstallDirectory() + "..\\StyleSheets\\Indexing\\ResEmb.xsl";
             _stuff = new ParseStuff( styleSheet );
 
              // Setting the parameters
              _stuff.setParameter( "Language", _language );
-              _stuff.setParameter( "System", _system );
-               HelpDatabases.StaticModuleInformation _static = HelpDatabases.getStaticInformationForModule( _module,_language );
-               _stuff.setParameter( "Program", _static.get_program() );
+             _stuff.setParameter( "Database", _module );
         }
 
         // and parse
