@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-25 13:52:42 $
+ *  last change: $Author: sj $ $Date: 2001-06-27 06:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,8 +1200,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
             if ( bVerticalText )
             {
-                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_BLOCK;
-                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+                if ( nTextFlags & PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_BLOCK )
+                    nTextFlags |= PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER;
+
+                nTextFlags &= ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER
+                              | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT );
+
+                eTVA = SDRTEXTVERTADJUST_TOP;
+                eTHA = SDRTEXTHORZADJUST_CENTER;
 
                 sal_Int32 nMod = ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone ) ? 1 : 0;
                 nMod += ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) ? 2 : 0;
@@ -1235,7 +1241,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                     case mso_anchorMiddle :
                     case mso_anchorMiddleCentered:
-                        eTHA = SDRTEXTHORZADJUST_BLOCK;
+                        eTHA = SDRTEXTHORZADJUST_CENTER;
                     break;
 
                     case mso_anchorBottom:
@@ -1243,20 +1249,14 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                         eTHA = SDRTEXTHORZADJUST_LEFT;
                     break;
                 }
-
-                switch ( eTextAnchor )
-                {
-                    case mso_anchorTopCentered :
-                    case mso_anchorMiddleCentered :
-                    case mso_anchorBottomCentered :
-                    {
-                        // check if it is sensible to use the centered alignment
-                        sal_uInt32 nMask = PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT;
-                        if ( ( nTextFlags & nMask ) != nMask )  // if the textobject has left and also right aligned pararagraphs
-                            eTVA = SDRTEXTVERTADJUST_CENTER;    // the text has to be displayed using the full width;
-                    }
-                    break;
-                }
+                // if there is a 100% use of following attributes, the textbox can been aligned also in vertical direction
+                if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT )
+                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                else if ( nTextFlags == PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_CENTER )
+                    eTVA = SDRTEXTVERTADJUST_CENTER;
+                else if ( ( nTextFlags & ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT ) )
+                            == ( PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_LEFT | PPT_TEXTOBJ_FLAGS_PARA_ALIGNMENT_USED_RIGHT ) )
+                    eTVA = SDRTEXTVERTADJUST_CENTER;
                 nMinFrameWidth = rTextRect.GetWidth() - ( nTextLeft + nTextRight );
             }
             else
