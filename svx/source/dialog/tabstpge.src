@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 12:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SVXPAGE_TABULATOR
     Text [ English ] = "Tabs" ;
     Text [ norwegian ] = "Tabulatorer" ;
     Text [ italian ] = "Tabulazioni" ;
-    Text [ portuguese_brazilian ] = "Tabulações" ;
+    Text [ portuguese_brazilian ] = "Tabula??s" ;
     Text [ portuguese ] = "Tabulações" ;
     Text [ finnish ] = "Sarkaimet" ;
     Text [ danish ] = "Tabulatorer" ;
@@ -214,7 +214,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "C~entered" ;
         Text[ chinese_simplified ] = "¾ÓÖĞ(~E)";
         Text[ russian ] = "Ïî öåíòğó";
-        Text[ polish ] = "Wyœrodk.";
+        Text[ polish ] = "Wy?rodk.";
         Text[ japanese ] = "’†‰›‘µ‚¦(~E)";
         Text[ chinese_traditional ] = "¸m¤¤(~E)";
         Text[ arabic ] = "ÊæÓíØ";
@@ -494,7 +494,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ english_us ] = "Delete ~All" ;
         Text[ chinese_simplified ] = "È«²¿É¾³ı(~A)";
         Text[ russian ] = "Óäàëèòü âñå";
-        Text[ polish ] = "Wyczyœæ w~szyst.";
+        Text[ polish ] = "Wyczy?æ w~szyst.";
         Text[ japanese ] = "‚·‚×‚Äíœ(~A)";
         Text[ chinese_traditional ] = "¥ş³¡§R°£(~A)";
         Text[ arabic ] = "ÍĞİ Çáßá";
