@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:46:16 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1978,6 +1978,11 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
     {
         // the easy case, clear the background obj
         GetPage()->SetBackgroundObj( NULL );
+
+        // #110094#-15
+        // tell the page that it's visualization has changed
+        GetPage()->ActionChanged();
+
         return;
     }
 
@@ -1987,6 +1992,10 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
     {
         pObj = new SdrRectObj();
         GetPage()->SetBackgroundObj( pObj );
+
+        // #110094#-15
+        // tell the page that it's visualization has changed
+        GetPage()->ActionChanged();
     }
 
     const sal_Int32 nLeft = GetPage()->GetLftBorder();
@@ -2042,10 +2051,12 @@ void SdDrawPage::setBackground( const uno::Any& rValue )
     }
     else
     {
-        pObj->SetItemSet(aSet);
+        pObj->SetMergedItemSet(aSet);
     }
 
-    pPage->SendRepaintBroadcast();
+    // repaint only
+    pPage->ActionChanged();
+    // pPage->SendRepaintBroadcast();
 }
 
 void SdDrawPage::getBackground( uno::Any& rValue ) throw()
@@ -2353,7 +2364,11 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
             {
                 SfxItemSet& rStyleSet = pStyleSheet->GetItemSet();
                 rStyleSet.Put( aSet );
-                pPage->SendRepaintBroadcast();
+
+                // repaint only
+                pPage->ActionChanged();
+                // pPage->SendRepaintBroadcast();
+
                 return;
             }
         }
@@ -2364,9 +2379,11 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
         if( pObj == NULL )
             return;
 
-        pObj->SetItemSet(aSet);
+        pObj->SetMergedItemSet(aSet);
 
-        pPage->SendRepaintBroadcast();
+        // repaint only
+        pPage->ActionChanged();
+        // pPage->SendRepaintBroadcast();
     }
 }
 
