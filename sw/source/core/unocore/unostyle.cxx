@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:03:25 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 08:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1706,13 +1706,11 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
             // Sonderbehandlung RES_PAGEDESC
             if(rValue.getValueType() != ::getCppuType((const OUString*)0))
                 throw lang::IllegalArgumentException();
-            const SfxItemSet& rStyleSet = rBase.GetItemSet();
-            SfxItemSet aSet(*rStyleSet.GetPool(), RES_PAGEDESC, RES_PAGEDESC);
-            aSet.Put(rStyleSet);
+            SfxItemSet& rStyleSet = rBase.GetItemSet();
 
             SwFmtPageDesc* pNewDesc = 0;
             const SfxPoolItem* pItem;
-            if(SFX_ITEM_SET == aSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
+            if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
             {
                 pNewDesc = new SwFmtPageDesc(*((SwFmtPageDesc*)pItem));
             }
@@ -1740,13 +1738,12 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 }
                 if(!bPut)
                 {
-                    aSet.ClearItem(RES_BREAK);
-                    aSet.Put(SwFmtPageDesc());
+                    rStyleSet.ClearItem(RES_BREAK);
+                    rStyleSet.Put(SwFmtPageDesc());
                 }
                 else
-                    aSet.Put(*pNewDesc);
+                    rStyleSet.Put(*pNewDesc);
             }
-            rBase.pNewBase->SetItemSet(aSet);
             delete pNewDesc;
         }
         break;
@@ -1795,21 +1792,15 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
         break;
         case SID_SWREGISTER_COLLECTION:
         {
-            SfxItemSet& rStyleSet = rBase.GetItemSet();
-            SfxItemSet aSet(*rStyleSet.GetPool(),
-                            SID_SWREGISTER_MODE,
-                            SID_SWREGISTER_COLLECTION);
-            aSet.Put(rStyleSet);
             OUString sName;
             rValue >>= sName;
             SwRegisterItem aReg( sName.getLength() != 0);
             aReg.SetWhich(SID_SWREGISTER_MODE);
-            aSet.Put(aReg);
+            rBase.GetItemSet().Put(aReg);
 
-            aSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
+            rBase.GetItemSet().Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             SwXStyleFamilies::GetUIName(sName,
                                             SFX_STYLE_FAMILY_PARA) ));
-            rBase.pNewBase->SetItemSet(aSet);
         }
         break;
         case RES_TXTATR_CJK_RUBY:
@@ -1819,11 +1810,9 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                 if(rValue >>= sTmp)
                 {
                     SfxItemSet& rStyleSet = rBase.GetItemSet();
-                    SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
-                    aSet.Put(rStyleSet);
                     SwFmtRuby* pRuby = 0;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == aSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
+                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
                         pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
                     if(!pRuby)
                         pRuby = new SwFmtRuby(aEmptyStr);
@@ -1835,8 +1824,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                         sal_uInt16 nId = SwDoc::GetPoolId( sTmp, GET_POOLID_CHRFMT );
                         pRuby->SetCharFmtId(nId);
                     }
-                    aSet.Put(*pRuby);
-                    rBase.pNewBase->SetItemSet(aSet);
+                    rStyleSet.Put(*pRuby);
                     delete pRuby;
                 }
                 else
@@ -1850,13 +1838,11 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
             {
                 if(rValue.getValueType() == ::getCppuType((const OUString*)0))
                 {
-                    const SfxItemSet& rStyleSet = rBase.GetItemSet();
-                    SfxItemSet aSet(*rStyleSet.GetPool(), RES_PARATR_DROP, RES_PARATR_DROP);
-                    aSet.Put(rStyleSet);
+                    SfxItemSet& rStyleSet = rBase.GetItemSet();
 
                     SwFmtDrop* pDrop = 0;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == aSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
+                    if(SFX_ITEM_SET == rStyleSet.GetItemState( RES_PARATR_DROP, sal_True, &pItem ) )
                         pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                     if(!pDrop)
                         pDrop = new SwFmtDrop();
@@ -1869,8 +1855,7 @@ void lcl_SetStyleProperty(const SfxItemPropertyMap* pMap,
                         pDrop->SetCharFmt(pStyle->GetCharFmt());
                     else
                         throw lang::IllegalArgumentException();
-                    aSet.Put(*pDrop);
-                    rBase.pNewBase->SetItemSet(aSet);
+                    rStyleSet.Put(*pDrop);
                     delete pDrop;
                 }
                 else
@@ -1884,7 +1869,7 @@ put_itemset:
         {
             SfxItemSet& rStyleSet = rBase.GetItemSet();
             SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
-            aSet.Put(rStyleSet);
+            aSet.SetParent(&rStyleSet);
             rPropSet.setPropertyValue(*pMap, rValue, aSet);
             rStyleSet.Put(aSet);
         }
