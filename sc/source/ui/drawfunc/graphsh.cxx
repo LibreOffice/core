@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-20 18:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,42 +67,28 @@
 
 //------------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
-#include <svx/fontwork.hxx>
-#include <svx/labdlg.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/tabarea.hxx>
-#include <svx/tabline.hxx>
-#include <svx/textanim.hxx>
-#include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
-#include <vcl/msgbox.hxx>
-#include <segmentc.hxx>
+#include <svx/svdograf.hxx>
 
 #include "graphsh.hxx"
-#include "drwlayer.hxx"
 #include "sc.hrc"
 #include "viewdata.hxx"
-#include "document.hxx"
-#include "docpool.hxx"
 #include "drawview.hxx"
 #include "scresid.hxx"
 
-#ifndef _SVDOBJ_HXX //autogen
-#include <svx/svdobj.hxx>
-#endif
-
 #define ScGraphicShell
 #include "scslots.hxx"
+
+#define ITEMVALUE(ItemSet,Id,Cast) ((const Cast&)(ItemSet).Get(Id)).GetValue()
 
 
 SFX_IMPL_INTERFACE(ScGraphicShell, ScDrawShell, ScResId(SCSTR_GRAPHICSHELL) )
 {
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
-                                ScResId(RID_DRAW_OBJECTBAR) );
+                                ScResId(RID_GRAPHIC_OBJECTBAR) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_GRAPHIC) );
     SFX_OBJECTMENU_REGISTRATION( SID_OBJECTMENU0, ScResId(RID_OBJECTMENU_DRAW) );
 }
@@ -119,6 +105,199 @@ ScGraphicShell::ScGraphicShell(ScViewData* pData) :
 ScGraphicShell::~ScGraphicShell()
 {
 }
+
+void ScGraphicShell::GetAttrState( SfxItemSet& rSet )
+{
+    SfxItemSet      aAttrSet( GetPool() );
+    SfxWhichIter    aIter( rSet );
+    USHORT          nWhich = aIter.FirstWhich();
+
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    pView->GetAttributes( aAttrSet );
+
+    while( nWhich )
+    {
+        USHORT nSlotId = SfxItemPool::IsWhich( nWhich )
+                            ? GetPool().GetSlotId( nWhich )
+                            : nWhich;
+
+        switch( nSlotId )
+        {
+            case( SID_ATTR_GRAF_MODE ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
+                {
+                    rSet.Put( SfxUInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFMODE, SdrGrafModeItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_RED ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFRED ) )
+                {
+                    rSet.Put( SfxInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFRED, SdrGrafRedItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_GREEN ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFGREEN ) )
+                {
+                    rSet.Put( SfxInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFGREEN, SdrGrafGreenItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_BLUE ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFBLUE ) )
+                {
+                    rSet.Put( SfxInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFBLUE, SdrGrafBlueItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_LUMINANCE ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
+                {
+                    rSet.Put( SfxInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFLUMINANCE, SdrGrafLuminanceItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_CONTRAST ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
+                {
+                    rSet.Put( SfxInt16Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFCONTRAST, SdrGrafContrastItem ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_GAMMA ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFGAMMA ) )
+                {
+                    rSet.Put( SfxUInt32Item( nSlotId,
+                        ITEMVALUE( aAttrSet, SDRATTR_GRAFGAMMA, SdrGrafGamma100Item ) ) );
+                }
+            }
+            break;
+
+            case( SID_ATTR_GRAF_TRANSPARENCE ):
+            {
+                if( SFX_ITEM_AVAILABLE <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
+                {
+                    const SdrMarkList&  rMarkList = pView->GetMarkList();
+                    BOOL                bEnable = TRUE;
+
+                    for( USHORT i = 0, nCount = rMarkList.GetMarkCount();
+                            ( i < nCount ) && bEnable; i++ )
+                    {
+                        SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+
+                        if( !pObj || !pObj->ISA( SdrGrafObj ) ||
+                            ( (SdrGrafObj*) pObj )->HasGDIMetaFile() ||
+                            ( (SdrGrafObj*) pObj )->IsAnimated() )
+                        {
+                            bEnable = FALSE;
+                        }
+                    }
+
+                    if( bEnable )
+                        rSet.Put( SfxUInt16Item( nSlotId,
+                            ITEMVALUE( aAttrSet, SDRATTR_GRAFTRANSPARENCE, SdrGrafTransparenceItem ) ) );
+                    else
+                        rSet.DisableItem( SID_ATTR_GRAF_TRANSPARENCE );
+                }
+            }
+            break;
+
+            default:
+            break;
+        }
+
+        nWhich = aIter.NextWhich();
+    }
+}
+
+void ScGraphicShell::Execute( SfxRequest& rReq )
+{
+    SfxItemSet aSet( GetPool(), SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST-1 );
+
+    const SfxItemSet*   pArgs = rReq.GetArgs();
+    const SfxPoolItem*  pItem;
+    USHORT              nSlot = rReq.GetSlot();
+    BOOL                bGeometryChanged = FALSE;
+
+    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, FALSE, &pItem ))
+        pItem = 0;
+
+    switch( nSlot )
+    {
+        case SID_ATTR_GRAF_RED:
+            if( pItem )
+                aSet.Put( SdrGrafRedItem( ((SfxInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_GREEN:
+            if( pItem )
+                aSet.Put( SdrGrafGreenItem( ((SfxInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_BLUE:
+            if( pItem )
+                aSet.Put( SdrGrafBlueItem( ((SfxInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_LUMINANCE:
+            if( pItem )
+                aSet.Put( SdrGrafLuminanceItem( ((SfxInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_CONTRAST:
+            if( pItem )
+                aSet.Put( SdrGrafContrastItem( ((SfxInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_GAMMA:
+            if( pItem )
+                aSet.Put( SdrGrafGamma100Item( ((SfxUInt32Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_TRANSPARENCE:
+            if( pItem )
+                aSet.Put( SdrGrafTransparenceItem( ((SfxUInt16Item*)pItem)->GetValue() ));
+        break;
+
+        case SID_ATTR_GRAF_MODE:
+            if( pItem )
+                aSet.Put( SdrGrafModeItem( (GraphicDrawMode)
+                                        ((SfxUInt16Item*)pItem)->GetValue() ));
+        break;
+
+        default:
+            break;
+    }
+
+    if( aSet.Count() )
+    {
+        ScDrawView* pView = GetViewData()->GetScDrawView();
+        pView->SetAttributes( aSet );
+    }
+
+    Invalidate();
+}
+
 
 
 
