@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.10 $
+  *  $Revision: 1.11 $
   *
-  *  last change: $Author: pl $ $Date: 2001-07-27 07:58:33 $
+  *  last change: $Author: cp $ $Date: 2001-10-08 15:04:06 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -177,10 +177,12 @@ PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
 
         WritePS (mpPageHeader, pFontResource);
 
-        aFontFile.open (OpenFlag_Read);
-        convertPfbToPfa (aFontFile, *mpPageHeader);
-        aFontFile.close ();
-
+        osl::File::RC nError = aFontFile.open (OpenFlag_Read);
+        if (nError == osl::File::E_None)
+        {
+            convertPfbToPfa (aFontFile, *mpPageHeader);
+            aFontFile.close ();
+        }
         WritePS (mpPageHeader, "%%EndResource\n");
 
         // add the fontid to the list

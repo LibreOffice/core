@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 16:14:22 $
+ *  last change: $Author: cp $ $Date: 2001-10-08 15:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,17 +138,26 @@ AppendPS (FILE* pDst, osl::File* pSrc, sal_uChar* pBuffer,
 osl::File*
 PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rExtension)
 {
+    osl::File::RC nError = osl::File::E_None;
+    osl::File*    pFile  = NULL;
 
-    rtl::OUString aFileName = maSpoolDirName + rtl::OUString::createFromAscii ("/")
-        + rName + rExtension;
-    rtl::OUString aNormFileName;
-    osl::File::getFileURLFromSystemPath( aFileName, aNormFileName );
+    rtl::OUString aFile = rName + rExtension;
+    rtl::OUString aFileURL;
+    nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
+    if (nError != osl::File::E_None)
+        return NULL;
+    aFileURL = maSpoolDirName + rtl::OUString::createFromAscii ("/") + aFileURL;
 
-    osl::File* pFile = new osl::File (aNormFileName);
-    pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
-    pFile->setAttributes (aNormFileName,
-                          osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead );
+    pFile = new osl::File (aFileURL);
+    nError = pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
+    if (nError != osl::File::E_None)
+    {
+        delete pFile;
+        return NULL;
+    }
 
+    pFile->setAttributes (aFileURL,
+                          osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead);
     return pFile;
 }
 
@@ -300,7 +309,7 @@ void
 removeSpoolDir (const rtl::OUString& rSpoolDir)
 {
     rtl::OUString aSysPath;
-    if( osl_File_E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
+    if( osl::File::E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
     {
         // Conversion did not work, as this is quite a dangerous action,
         // we should abort here ....
@@ -536,13 +545,18 @@ PrinterJob::EndJob ()
          pPageBody != maPageList.end() && pPageHead != maHeaderList.end();
          pPageBody++, pPageHead++)
     {
-        (*pPageHead)->open(OpenFlag_Read);
-        AppendPS (pDestFILE, *pPageHead, pBuffer);
-        (*pPageHead)->close();
-
-        (*pPageBody)->open(OpenFlag_Read);
-        AppendPS (pDestFILE, *pPageBody, pBuffer);
-        (*pPageBody)->close();
+        osl::File::RC nError = (*pPageHead)->open(OpenFlag_Read);
+        if (nError == osl::File::E_None)
+        {
+            AppendPS (pDestFILE, *pPageHead, pBuffer);
+            (*pPageHead)->close();
+        }
+        nError = (*pPageBody)->open(OpenFlag_Read);
+        if (nError == osl::File::E_None)
+        {
+            AppendPS (pDestFILE, *pPageBody, pBuffer);
+            (*pPageBody)->close();
+        }
     }
 
     AppendPS (pDestFILE, mpJobTrailer, pBuffer);
