@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:21:15 $
+ *  last change: $Author: sab $ $Date: 2002-06-13 13:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if (pSdrHint)
         {
             SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN) && (pObj->GetPage() == GetDrawPage()))
+            if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()))
             {
                 switch (pSdrHint->GetKind())
                 {
@@ -436,7 +436,7 @@ sal_Int32 ScChildrenShapes::GetCount() const
         for (sal_uInt32 i = 0; i < mnSdrObjCount; ++i)
         {
             SdrObject* pObj = pDrawPage->GetObj(i);
-            if (pObj && (pObj->GetLayer() != SC_LAYER_INTERN))
+            if (pObj/* && (pObj->GetLayer() != SC_LAYER_INTERN)*/)
             {
                 uno::Reference< drawing::XShape > xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                 AddShape(xShape, sal_False);
@@ -486,8 +486,8 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
             Point aPnt( rPoint.X, rPoint.Y );
             aPnt = pWindow->PixelToLogic( aPnt );
             SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
-            if (pObj->GetLayer() != SC_LAYER_INTERN)
-            {
+//            if (pObj->GetLayer() != SC_LAYER_INTERN)
+//            {
                 uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                 SortedShapesList::iterator aItr;;
                 if (FindShape(xShape, aItr))
@@ -499,7 +499,7 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                 }
                 else
                     DBG_ERRORFILE("a shape is not in the list");
-            }
+//            }
         }
     }
     return xAccessible;
