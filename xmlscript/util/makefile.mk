@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-04 09:14:58 $
+#   last change: $Author: hjs $ $Date: 2002-04-04 14:28:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,18 +106,4 @@ DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 .INCLUDE :	target.mk
 
 $(MISC)$/$(SHL1TARGET).flt : makefile.mk
-.IF "$(COM)"=="MSC"
-    @echo ??_7>>$@
-    @echo ??_8>>$@
-    @echo ??_C>>$@
-    @echo ??_E>>$@
-    @echo ??_F>>$@
-    @echo ??_G>>$@
-    @echo ??_H>>$@
-    @echo ??_I>>$@
-    @echo 0Imp>>$@
-    @echo Impl@@>>$@
-    @echo Imp@@>>$@
-    @echo __CT>>$@
-    @echo _STL>>$@
-.ENDIF
+    +$(TYPE) xcr.flt > $@
