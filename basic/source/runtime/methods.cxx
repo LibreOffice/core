@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:42:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1386,9 +1386,12 @@ RTLFUNC(String)
     {
         String aStr;
         sal_Unicode aFiller;
-        USHORT nCount = (USHORT)(rPar.Get(1)->GetLong());
+        INT32 lCount = rPar.Get(1)->GetLong();
+        if( lCount < 0 || lCount > 0xffff )
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        USHORT nCount = (USHORT)lCount;
         if( rPar.Get(2)->GetType() == SbxINTEGER )
-            aFiller = (char)rPar.Get(2)->GetInteger();
+            aFiller = (sal_Unicode)rPar.Get(2)->GetInteger();
         else
         {
             const String& rStr = rPar.Get(2)->GetString();
