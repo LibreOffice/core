@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:33:51 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #else
 #include <malloc.h>
 #endif
-#ifdef SOLARIS
+#if defined(SOLARIS) || defined(IRIX)
 #include <alloca.h>
 #endif
 #include <new>
