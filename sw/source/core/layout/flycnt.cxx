@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:45:34 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -288,9 +287,6 @@ public:
     ~SwOszControl();
     bool ChkOsz();
     static FASTBOOL IsInProgress( const SwFlyFrm *pFly );
-    // --> OD 2004-11-01 #i36347#
-    static bool IsLowerInProgress( const SwFlyFrm* _pFlyFrm );
-    // <--
 };
 const SwFlyFrm *SwOszControl::pStk1 = 0;
 const SwFlyFrm *SwOszControl::pStk2 = 0;
@@ -353,24 +349,6 @@ FASTBOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
         return TRUE;
     return FALSE;
 }
-
-// --> OD 2004-11-01 #i36347#
-bool SwOszControl::IsLowerInProgress( const SwFlyFrm* _pFlyFrm )
-{
-    if ( SwOszControl::pStk1 && SwOszControl::pStk1->IsLowerOf( _pFlyFrm ) )
-        return true;
-    if ( SwOszControl::pStk2 && SwOszControl::pStk2->IsLowerOf( _pFlyFrm ) )
-        return true;
-    if ( SwOszControl::pStk3 && SwOszControl::pStk3->IsLowerOf( _pFlyFrm ) )
-        return true;
-    if ( SwOszControl::pStk4 && SwOszControl::pStk4->IsLowerOf( _pFlyFrm ) )
-        return true;
-    if ( SwOszControl::pStk5 && SwOszControl::pStk5->IsLowerOf( _pFlyFrm ) )
-        return true;
-
-    return false;
-}
-// <--
 
 bool SwOszControl::ChkOsz()
 {
@@ -601,12 +579,6 @@ bool SwFlyAtCntFrm::IsFormatPossible() const
            !SwOszControl::IsInProgress( this );
 }
 
-// --> OD 2004-11-01 #i36347#
-bool SwFlyAtCntFrm::IsLowerInProgress() const
-{
-    return SwOszControl::IsLowerInProgress( this );
-}
-// <--
 /*************************************************************************
 |*
 |*  FindAnchor() und Hilfsfunktionen.
