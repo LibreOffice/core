@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:44:22 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 16:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,8 +442,8 @@ void OGridControlModel::fillProperties(
         DECL_PROP1(FONT_STYLENAME,      ::rtl::OUString,    MAYBEDEFAULT);
         DECL_PROP1(FONT_FAMILY,         sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_CHARSET,        sal_Int16,          MAYBEDEFAULT);
-        DECL_PROP1(FONT_HEIGHT,         Float,              MAYBEDEFAULT);
-        DECL_PROP1(FONT_WEIGHT,         Float,              MAYBEDEFAULT);
+        DECL_PROP1(FONT_HEIGHT,         float,              MAYBEDEFAULT);
+        DECL_PROP1(FONT_WEIGHT,         float,              MAYBEDEFAULT);
         DECL_PROP1(FONT_SLANT,          sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_UNDERLINE,      sal_Int16,          MAYBEDEFAULT);
         DECL_PROP1(FONT_STRIKEOUT,      sal_Int16,          MAYBEDEFAULT);
