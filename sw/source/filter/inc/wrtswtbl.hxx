@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 10:16:29 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 15:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,14 +124,11 @@ class SwWriteTableCell
 
 public:
 
-    SwWriteTableCell( const SwTableBox *pB, USHORT nR, USHORT nC,
-                        USHORT nRSpan, USHORT nCSpan, long nHght,
-                        const SvxBrushItem *pBGround ) :
-        pBox( pB ),
-        nRow( nR ), nCol( nC ),
-        nRowSpan( nRSpan ), nColSpan( nCSpan ),
-        nHeight( nHght ), pBackground( pBGround ),
-        nWidthOpt( 0 ), bPrcWidthOpt( FALSE )
+    SwWriteTableCell(const SwTableBox *pB, USHORT nR, USHORT nC, USHORT nRSpan,
+        USHORT nCSpan, long nHght, const SvxBrushItem *pBGround)
+    : pBox( pB ), pBackground( pBGround ), nHeight( nHght ), nWidthOpt( 0 ),
+    nRow( nR ), nCol( nC ), nRowSpan( nRSpan ), nColSpan( nCSpan ),
+    bPrcWidthOpt( FALSE )
     {}
 
     const SwTableBox *GetBox() const { return pBox; }
