@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:28:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,11 @@
 #define _INITUI_HXX
 
 #ifndef _SOLAR_H
-#include <tools/solar.h>
+#include "tools/solar.h"
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 /*
@@ -87,12 +91,13 @@ extern  String*         pOldFrmCat;
 extern  String*         pCurrGlosGroup;
 
 //CHINA001  add for swui to access global variables in sw. Begin
-String* GetOldGrfCat();
-String* GetOldTabCat();
-String* GetOldFrmCat();
-String* GetOldDrwCat();
-String* GetCurrGlosGroup();
-void SetCurrGlosGroup(String* pStr);
+SW_DLLPUBLIC String* GetOldGrfCat();
+SW_DLLPUBLIC String* GetOldTabCat();
+SW_DLLPUBLIC String* GetOldFrmCat();
+SW_DLLPUBLIC String* GetOldDrwCat();
+
+SW_DLLPUBLIC String* GetCurrGlosGroup();
+SW_DLLPUBLIC void SetCurrGlosGroup(String* pStr);
 //CHINA001 End for add
 
 extern SvStringsDtor*   pDBNameList;
@@ -102,7 +107,7 @@ extern SvStringsDtor*   pAuthFieldTypeList;
 
 // stellt die Textbausteinverwaltung zur Verfuegung
 class SwGlossaries;
-SwGlossaries* GetGlossaries();
+SW_DLLPUBLIC SwGlossaries* GetGlossaries();
 
 class SwGlossaryList;
 
