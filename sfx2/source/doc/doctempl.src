@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:13:44 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,16 +364,16 @@ String RID_CNT_STR_WAITING
     Text [ ENGLISH ] = "Initializing the templates for the first usage." ;
     Text [ english_us ] = "The templates are being initialized for first-time usage." ;
     Text[ language_user1 ] = " ";
-    Text[ portuguese ] = "Os componentes do %PRODUCTNAME acabados de instalar estão agora a ser inicializados.";
+    Text[ portuguese ] = "A inicializar modelos para a primeira utilização...";
     Text[ russian ] = "Ïåğåä ïåğâûì èñïîëüçîâàíèåì âûïîëíÿåòñÿ èíèöèàëèçàöèÿ øàáëîíîâ.";
     Text[ greek ] = "Áñ÷éêïğïßçóç ôùí óôïé÷åßùí ôïõ %PRODUCTNAME ãéá ğñşôç öïñÜ ìåôÜ ôçí åãêáôÜóôáóç.";
     Text[ dutch ] = "De sjablonen worden nu geïnitialiseerd voor het eerste gebruik.";
     Text[ french ] = "Initialisation des modèles pour une première utilisation ...";
     Text[ spanish ] = "Las plantillas se inicializarán ahora para el primer uso.";
-    Text[ italian ] = "Adesso le componenti di %PRODUCTNAME vengono inizializzate.";
+    Text[ italian ] = "Inizializzazione dei modelli per il primo utilizzo del programma.";
     Text[ danish ] = "%PRODUCTNAME-komponenterne initialiseres.";
     Text[ swedish ] = "Mallarna initieras nu för den första användningen.";
-    Text[ polish ] = "Po zakoñczeniu instalacji rozpocznie siê inicjalizacja komponentów %PRODUCTNAME.";
+    Text[ polish ] = "Rozpocznie siê teraz inicjalizacja u¿ytych pierwszy raz szablonów";
     Text[ portuguese_brazilian ] = "Die %PRODUCTNAME Komponenten werden initialisiert";
     Text[ japanese ] = "ÃİÌßÚ°Ä‚Í¡‰ñ‰‚ß‚Äg—p‚·‚é‚É‚ ‚½‚Á‚ÄA‚Ü‚¸‰Šú‰»‚³‚ê‚Ü‚·B";
     Text[ korean ] = "%PRODUCTNAME ±¸¼º¿ä¼Ò´Â ¼³Ä¡ÇÑ ÈÄ ÀÌÁ¦ ÇÑ¹ø ÃÊ±âÈ­µË´Ï´Ù.";
