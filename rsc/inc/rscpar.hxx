@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscpar.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,20 +77,20 @@ class RscExpression;
 class RscFileInst
 {
     ERRTYPE             aFirstError;// Erster Fehler
-    USHORT              nErrorLine; // Zeile des ersten Fehlers
-    USHORT              nErrorPos;  // Position des ersten Fehlers
+    sal_uInt32              nErrorLine; // Zeile des ersten Fehlers
+    sal_uInt32              nErrorPos;  // Position des ersten Fehlers
     BOOL                bIncLine;   // Muss Zeilennummer incrementiert werden
-    USHORT              nLineNo;    // Zeile in der Eingabedatei
+    sal_uInt32              nLineNo;    // Zeile in der Eingabedatei
     ULONG               lFileIndex; // Index auf Eingabedatei
     ULONG               lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
-    USHORT              nInputBufLen; // Laenge des Lesepuffers
-    USHORT              nInputPos;  // Position im Lesepuffer
-    USHORT              nInputEndPos;// Ende im Lesepuffer
+    sal_uInt32              nInputBufLen; // Laenge des Lesepuffers
+    sal_uInt32              nInputPos;  // Position im Lesepuffer
+    sal_uInt32              nInputEndPos;// Ende im Lesepuffer
     char *              pLine;      // Zeile
-    USHORT              nLineBufLen;//Lange des Zeilenpuffres
-    USHORT              nScanPos;   // Position in der Zeile
+    sal_uInt32              nLineBufLen;//Lange des Zeilenpuffres
+    sal_uInt32              nScanPos;   // Position in der Zeile
     int                 cLastChar;
     BOOL                bEof;
 
@@ -106,9 +106,9 @@ public:
     void    SetFileIndex( ULONG lFIndex ) { lFileIndex = lFIndex;  }
     ULONG   GetFileIndex()                { return( lFileIndex );  }
     ULONG   GetSrcIndex()                 { return( lSrcIndex );   }
-    void    SetLineNo( USHORT nLine )     { nLineNo = nLine;       }
-    USHORT  GetLineNo()                   { return( nLineNo );     }
-    USHORT  GetScanPos()                  { return( nScanPos );    }
+    void    SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
+    sal_uInt32  GetLineNo()                   { return( nLineNo );     }
+    sal_uInt32  GetScanPos()                  { return( nScanPos );    }
     char *  GetLine()                     { return( pLine );       }
     int     GetChar();
     int     GetFastChar() { return pLine[ nScanPos ] ?
@@ -118,8 +118,8 @@ public:
             // Fehlerbehandlung
     void    SetError( ERRTYPE aError );
     ERRTYPE GetError()                    { return aFirstError;    }
-    USHORT  GetErrorLine()                { return nErrorLine;     }
-    USHORT  GetErrorPos()                 { return nErrorPos;      }
+    sal_uInt32  GetErrorLine()                { return nErrorLine;     }
+    sal_uInt32  GetErrorPos()                 { return nErrorPos;      }
 };
 
 /******************* F u n c t i o n *************************************/
