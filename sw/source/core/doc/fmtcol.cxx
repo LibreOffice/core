@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-09 14:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     int bNewParent = FALSE;
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
-    SvxFontHeightItem *pNewFSize = 0, *pOldFSize = 0;
+    SvxFontHeightItem *pNewFSize = 0, *pNewCJKFSize = 0, *pNewCTLFSize = 0;
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
     switch( pOld ? pOld->Which() : pNew ? pNew->Which() : 0 )
@@ -137,6 +137,10 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             RES_UL_SPACE, FALSE, (const SfxPoolItem**)&pNewULSpace );
         pNewChgSet->GetChgSet()->GetItemState(
             RES_CHRATR_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewFSize );
+        pNewChgSet->GetChgSet()->GetItemState(
+            RES_CHRATR_CJK_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewCJKFSize );
+        pNewChgSet->GetChgSet()->GetItemState(
+            RES_CHRATR_CTL_FONTSIZE, FALSE, (const SfxPoolItem**)&pNewCTLFSize );
         break;
 
     case RES_FMT_CHG:
@@ -146,7 +150,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             pNewLRSpace = (SvxLRSpaceItem*)&pParent->Get( RES_LR_SPACE );
             pNewULSpace = (SvxULSpaceItem*)&pParent->Get( RES_UL_SPACE );
             pNewFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
-            bNewParent = TRUE;
+            pNewCJKFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
+            pNewCTLFSize = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
         }
         break;
 
@@ -158,6 +163,12 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     case RES_CHRATR_FONTSIZE:
         pNewFSize = (SvxFontHeightItem*)pNew;
+        break;
+    case RES_CHRATR_CJK_FONTSIZE:
+        pNewCJKFSize = (SvxFontHeightItem*)pNew;
+        break;
+    case RES_CHRATR_CTL_FONTSIZE:
+        pNewCTLFSize = (SvxFontHeightItem*)pNew;
         break;
     }
 
@@ -248,34 +259,46 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
     }
 
-    if( pNewFSize && SFX_ITEM_SET == GetItemState(
-        RES_CHRATR_FONTSIZE, FALSE, (const SfxPoolItem**)&pOldFSize ) &&
-        pOldFSize != pNewFSize )    // verhinder Rekursion (SetAttr!!)
+    static SvxFontHeightItem** aFontSizeArr[]  = {
+        &pNewFSize,
+        &pNewCJKFSize,
+        &pNewCTLFSize,
+        0
+    };
+
+    for( int nC = 0; aFontSizeArr[ nC ]; ++nC )
     {
-        if( 100 == pOldFSize->GetProp() &&
-            SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
+        SvxFontHeightItem *pFSize = *aFontSizeArr[ nC ], *pOldFSize;
+        if( pFSize && SFX_ITEM_SET == GetItemState(
+            pFSize->Which(), FALSE, (const SfxPoolItem**)&pOldFSize ) &&
+            // verhinder Rekursion (SetAttr!!)
+            pFSize != pOldFSize )
         {
-            // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-            // denn es wird bei uns gesetzt!
-            if( pNewChgSet )
-                bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
-        }
-        else
-        {
-            // wir hatten eine relative Angabe -> neu berechnen
-            UINT32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
-            SvxFontHeightItem aNew;
-            aNew.SetHeight( pNewFSize->GetHeight(), pOldFSize->GetProp(),
-                            pOldFSize->GetPropUnit() );
-            if( nTmp != aNew.GetHeight() )
+            if( 100 == pOldFSize->GetProp() &&
+                SFX_MAPUNIT_RELATIVE == pOldFSize->GetPropUnit() )
             {
-                SetAttr( aNew );
-                bWeiter = 0 != pOldChgSet || bNewParent;
+                // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
+                // denn es wird bei uns gesetzt!
+                if( pNewChgSet )
+                    bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
             }
-            // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
-            // denn es wird bei uns gesetzt!
-            else if( pNewChgSet )
-                bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+            else
+            {
+                // wir hatten eine relative Angabe -> neu berechnen
+                UINT32 nTmp = pOldFSize->GetHeight();       // alten zum Vergleichen
+                SvxFontHeightItem aNew( pFSize->Which() );
+                aNew.SetHeight( pFSize->GetHeight(), pOldFSize->GetProp(),
+                                pOldFSize->GetPropUnit() );
+                if( nTmp != aNew.GetHeight() )
+                {
+                    SetAttr( aNew );
+                    bWeiter = 0 != pOldChgSet || bNewParent;
+                }
+                // bei uns absolut gesetzt -> nicht weiter propagieren, es sei
+                // denn es wird bei uns gesetzt!
+                else if( pNewChgSet )
+                    bWeiter = pNewChgSet->GetTheChgdSet() == &GetAttrSet();
+            }
         }
     }
 
