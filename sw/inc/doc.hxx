@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:53:28 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _DOC_HXX
 #define _DOC_HXX
-
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
@@ -1039,6 +1038,9 @@ public:
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( const SwPaM& rPaM, utl::TransliterationWrapper& );
+
+    // count words in pam
+    void CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const;
 
         //Einfuegen einer Grafik, Formel. Die XXXX werden kopiert.
     SwFlyFrmFmt* Insert(const SwPaM &rRg,
