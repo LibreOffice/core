@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-28 13:29:25 $
+ *  last change: $Author: tl $ $Date: 2001-03-01 13:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,8 +1168,146 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 {
-    // nur Initialisierung
-    UpdateBox_Impl();
+    // if not HideGroups was called with GROUP_MODULES...
+    if (aLinguModulesCLB.IsVisible())
+    {
+        if (!pLinguData)
+            pLinguData = new SvxLinguData_Impl;
+        const ServiceInfoArr&   rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
+
+        for(sal_uInt16 i = 0; i < rAllDispSrvcArr.Count(); i++)
+        {
+            ServiceInfo_Impl* pInfo = rAllDispSrvcArr[i];
+            aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
+            SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
+            pEntry->SetUserData( new SvxModulesData_Impl(
+                                 pInfo->sDisplayName, pInfo->bConfigured ) );
+            aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
+        }
+        aLinguModulesEditPB.Enable( rAllDispSrvcArr.Count() > 0 );
+    }
+
+
+    //
+    //  get data from configuration
+    //
+
+    SvtLinguConfig aLngCfg;
+
+    aLinguOptionsCLB.SetUpdateMode(FALSE);
+    aLinguOptionsCLB.Clear();
+
+    SvLBoxTreeList *pModel = aLinguOptionsCLB.GetModel();
+    SvLBoxEntry* pEntry = NULL;
+
+    INT16 nVal = 0;
+    BOOL  bVal  = FALSE;
+    ULONG nUserData = 0;
+
+    pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
+    nUserData = OptionsUserData( EID_CAPITAL_WORDS, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_WITH_DIGITS) ) >>= bVal;
+    nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sCapitalization,  CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_CAPITALIZATION) ) >>= bVal;
+    nUserData = OptionsUserData( EID_CAPITALIZATION, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_SPECIAL) ) >>= bVal;
+    nUserData = OptionsUserData( EID_SPELL_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sAllLanguages,    CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ) >>= bVal;
+    nUserData = OptionsUserData( EID_ALL_LANGUAGES, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
+    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
+    if (pItem)
+        bVal = ((SfxBoolItem *) pItem)->GetValue();
+    nUserData = OptionsUserData( EID_SPELL_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sHideMarkings,    CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_HIDE) ) >>= bVal;
+    pItem = GetItem( rSet, SID_AUTOSPELL_MARKOFF );
+    if (pItem)
+        bVal = ((SfxBoolItem *) pItem)->GetValue();
+    nUserData = OptionsUserData( EID_HIDE_MARKINGS, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sOldGerman,       CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_GERMAN_PRE_REFORM) ) >>= bVal;
+    nUserData = OptionsUserData( EID_OLD_GERMAN, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
+    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_WORD_LENGTH) ) >>= nVal;
+    nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+
+    const SfxHyphenRegionItem *pHyp = NULL;
+    USHORT nWhich = GetWhich( SID_ATTR_HYPHENREGION );
+    if ( rSet.GetItemState( nWhich, FALSE ) >= SFX_ITEM_AVAILABLE )
+        pHyp = &( (const SfxHyphenRegionItem &) rSet.Get( nWhich ) );
+
+    pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
+    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_LEADING) ) >>= nVal;
+    if (pHyp)
+        nVal = (INT16) pHyp->GetMinLead();
+    nUserData = OptionsUserData( EID_NUM_PRE_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+
+    pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
+    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
+    if (pHyp)
+        nVal = (INT16) pHyp->GetMinTrail();
+    nUserData = OptionsUserData( EID_NUM_POST_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+
+    pEntry = CreateEntry( sHyphAuto,        CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_AUTO) ) >>= bVal;
+    nUserData = OptionsUserData( EID_HYPH_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    pEntry = CreateEntry( sHyphSpecial,     CBCOL_FIRST );
+    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_SPECIAL) ) >>= bVal;
+    nUserData = OptionsUserData( EID_HYPH_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
+    pEntry->SetUserData( (void *)nUserData );
+    pModel->Insert( pEntry );
+    lcl_SetCheckButton( pEntry, bVal );
+
+    aLinguOptionsCLB.SetUpdateMode(TRUE);
 }
 
 // -----------------------------------------------------------------------
@@ -1286,134 +1424,11 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry(String& rTxt, USHORT nCol)
 
 // ----------------------------------------------------------------------
 
+#if SUPD <= 623
 void SvxLinguTabPage::UpdateBox_Impl()
 {
-    // if not HideGroups was called with GROUP_MODULES...
-    if (aLinguModulesCLB.IsVisible())
-    {
-        if (!pLinguData)
-            pLinguData = new SvxLinguData_Impl;
-        const ServiceInfoArr&   rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
-
-        for(sal_uInt16 i = 0; i < rAllDispSrvcArr.Count(); i++)
-        {
-            ServiceInfo_Impl* pInfo = rAllDispSrvcArr[i];
-            aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
-            SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
-            pEntry->SetUserData( new SvxModulesData_Impl(
-                                 pInfo->sDisplayName, pInfo->bConfigured ) );
-            aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
-        }
-        aLinguModulesEditPB.Enable( rAllDispSrvcArr.Count() > 0 );
-    }
-
-
-    //
-    //  get data from configuration
-    //
-
-    SvtLinguConfig aLngCfg;
-
-    aLinguOptionsCLB.SetUpdateMode(FALSE);
-    aLinguOptionsCLB.Clear();
-
-    SvLBoxTreeList *pModel = aLinguOptionsCLB.GetModel();
-    SvLBoxEntry* pEntry = NULL;
-
-    INT16 nVal = 0;
-    BOOL  bVal  = FALSE;
-    ULONG nUserData = 0;
-
-    pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
-    nUserData = OptionsUserData( EID_CAPITAL_WORDS, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_WITH_DIGITS) ) >>= bVal;
-    nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sCapitalization,  CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_CAPITALIZATION) ) >>= bVal;
-    nUserData = OptionsUserData( EID_CAPITALIZATION, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_SPECIAL) ) >>= bVal;
-    nUserData = OptionsUserData( EID_SPELL_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sAllLanguages,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_IN_ALL_LANGUAGES) ) >>= bVal;
-    nUserData = OptionsUserData( EID_ALL_LANGUAGES, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
-    nUserData = OptionsUserData( EID_SPELL_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sHideMarkings,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_HIDE) ) >>= bVal;
-    nUserData = OptionsUserData( EID_HIDE_MARKINGS, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sOldGerman,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_GERMAN_PRE_REFORM) ) >>= bVal;
-    nUserData = OptionsUserData( EID_OLD_GERMAN, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_WORD_LENGTH) ) >>= nVal;
-    nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-
-    pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_LEADING) ) >>= nVal;
-    nUserData = OptionsUserData( EID_NUM_PRE_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-
-    pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
-    nUserData = OptionsUserData( EID_NUM_POST_BREAK, TRUE, (USHORT)nVal, FALSE, FALSE).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-
-    pEntry = CreateEntry( sHyphAuto,        CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_AUTO) ) >>= bVal;
-    nUserData = OptionsUserData( EID_HYPH_AUTO, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    pEntry = CreateEntry( sHyphSpecial,     CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_SPECIAL) ) >>= bVal;
-    nUserData = OptionsUserData( EID_HYPH_SPECIAL, FALSE, 0, TRUE, bVal).GetUserData();
-    pEntry->SetUserData( (void *)nUserData );
-    pModel->Insert( pEntry );
-    lcl_SetCheckButton( pEntry, bVal );
-
-    aLinguOptionsCLB.SetUpdateMode(TRUE);
 }
+#endif
 
 // -----------------------------------------------------------------------
 
