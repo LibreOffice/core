@@ -1,5 +1,5 @@
 import com.sun.star.uno.UnoRuntime;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.Type;
