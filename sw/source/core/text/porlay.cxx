@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,8 +559,13 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
  *
  * searches for script changes in rTxt and stores them
  *************************************************************************/
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
-                                   const OutputDevice& rOut )
+
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
+{
+    InitScriptInfo( rNode, nDefaultDir == UBIDI_RTL );
+}
+
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 {
     if( !pBreakIt->xBreak.is() )
         return;
@@ -571,9 +576,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
     nInvalidityPos = STRING_LEN;
 
     // this is the default direction
-    nDefaultDir = TEXT_LAYOUT_BIDI_STRONG != rOut.GetLayoutMode() ?
-                  UBIDI_RTL :
-                  UBIDI_LTR;
+    nDefaultDir = bRTL ? UBIDI_RTL : UBIDI_LTR;
 
     // counter for script info arrays
     USHORT nCnt = 0;
@@ -713,7 +716,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 
     //
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
-    // SCRIPT FOR WAEK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
+    // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
     //
 
     if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
@@ -733,6 +736,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         ASSERT( i18n::ScriptType::LATIN == nScript ||
                 i18n::ScriptType::ASIAN == nScript ||
                 i18n::ScriptType::COMPLEX == nScript, "Wrong default language" );
+
+/*
+ * This code has been disabled since the glyph fallback should work now
+ *
 
         // map scripts to font indices, CTL font is always the last one
         const BYTE nScripts[3] = {
@@ -798,6 +805,15 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
         }
 
         delete pIter;
+
+        // Get next script type or set to weak in order to exit
+        nScript = ( nEnd < rTxt.Len() ) ?
+                  (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
+                  (BYTE)WEAK;
+ */
+        nChg = nEnd;
+        aScriptChg.Insert( nEnd, nCnt );
+        aScriptType.Insert( nScript, nCnt++ );
 
         // Get next script type or set to weak in order to exit
         nScript = ( nEnd < rTxt.Len() ) ?
@@ -1039,48 +1055,42 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
 #endif
 
     // remove invalid entries from direction information arrays
-    if ( ! bBidiInfoValid )
+    const USHORT nDirRemove = aDirChg.Count();
+    aDirChg.Remove( 0, nDirRemove );
+    aDirType.Remove( 0, nDirRemove );
+
+    // Perform Unicode Bidi Algorithm for text direction information
+    nCnt = 0;
+    sal_Bool bLatin = sal_False;
+    sal_Bool bAsian = sal_False;
+    sal_Bool bComplex = sal_False;
+
+    while( nCnt < CountScriptChg() )
     {
-        const USHORT nDirRemove = aDirChg.Count();
-        aDirChg.Remove( 0, nDirRemove );
-        aDirType.Remove( 0, nDirRemove );
-
-        // Perform Unicode Bidi Algorithm for text direction information
-        nCnt = 0;
-        sal_Bool bLatin = sal_False;
-        sal_Bool bAsian = sal_False;
-        sal_Bool bComplex = sal_False;
-
-        while( nCnt < CountScriptChg() )
+        nScript = GetScriptType( nCnt++ );
+        switch ( nScript )
         {
-            nScript = GetScriptType( nCnt++ );
-            switch ( nScript )
-            {
-            case i18n::ScriptType::LATIN:
-                bLatin = sal_True;
-                break;
-            case i18n::ScriptType::ASIAN:
-                bAsian = sal_True;
-                break;
-            case i18n::ScriptType::COMPLEX:
-                bComplex = sal_True;
-                break;
-            default:
-                ASSERT( ! rTxt.Len(), "Wrong script found" )
-            }
+        case i18n::ScriptType::LATIN:
+            bLatin = sal_True;
+            break;
+        case i18n::ScriptType::ASIAN:
+            bAsian = sal_True;
+            break;
+        case i18n::ScriptType::COMPLEX:
+            bComplex = sal_True;
+            break;
+        default:
+            ASSERT( ! rTxt.Len(), "Wrong script found" )
         }
-
-        // do not call the unicode bidi algorithm if not required
-        if ( UBIDI_LTR != nDefaultDir || bComplex )
-            UpdateBidiInfo( rTxt );
     }
+
+    // do not call the unicode bidi algorithm if not required
+    if ( UBIDI_LTR != nDefaultDir || bComplex )
+        UpdateBidiInfo( rTxt );
 }
 
 void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 {
-    if ( bBidiInfoValid )
-        return;
-
     // remove invalid entries from direction information arrays
     const USHORT nDirRemove = aDirChg.Count();
     aDirChg.Remove( 0, nDirRemove );
@@ -1112,7 +1122,6 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     }
 
     ubidi_close( pBidi );
-    bBidiInfoValid = sal_True;
 }
 
 
