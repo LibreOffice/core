@@ -2,9 +2,9 @@
  *
  *  $RCSfile: retstrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:05:14 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <svtools/sbxvar.hxx>
 #endif
 #ifndef _SMARTID_HXX_
-#include "smartid.hxx"
+#include <vcl/smartid.hxx>
 #endif
 #include "cmdbasestream.hxx"
 
