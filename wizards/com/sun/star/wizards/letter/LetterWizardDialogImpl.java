@@ -1,0 +1,937 @@
+package com.sun.star.wizards.letter;
+
+import java.util.Vector;
+
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.NoValidPathException;
+import com.sun.star.awt.XWindow;
+import com.sun.star.awt.XWindowPeer;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.document.XDocumentInfo;
+import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.text.*;
+import com.sun.star.wizards.common.*;
+import com.sun.star.text.XTextFrame;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.CloseVetoException;
+import com.sun.star.util.XCloseable;
+import com.sun.star.wizards.document.*;
+import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.event.*;
+import com.sun.star.wizards.common.Helper;
+
+
+
+public class LetterWizardDialogImpl extends LetterWizardDialog {
+
+    static LetterDocument myLetterDoc;
+    static boolean running;
+
+    XTextDocument xTextDocument;
+    PathSelection myPathSelection;
+
+    CGLetterWizard myConfig;
+    Vector mainDA = new Vector();
+    Vector letterDA = new Vector();
+    Vector businessDA = new Vector();
+
+    String[][] BusinessFiles;
+    String[][] OfficialFiles;
+    String[][] PrivateFiles;
+    String[] Norms;
+    String[] NormNames;
+
+    String sTemplatePath;
+    String sUserTemplatePath;
+    String sBitmapPath;
+    String sLetterPath;
+    String sWorkPath;
+    String sCurrentNorm;
+    String sPath;
+    boolean bEditTemplate;
+    boolean bSaveSuccess = false;
+
+    LetterDocument.BusinessPaperObject BusCompanyLogo = null;
+    LetterDocument.BusinessPaperObject BusCompanyAddress = null;
+    LetterDocument.BusinessPaperObject BusCompanyAddressReceiver = null;
+    LetterDocument.BusinessPaperObject BusFooter = null;
+
+    final static int RM_TYPESTYLE = 1;
+    final static int RM_BUSINESSPAPER = 2;
+    final static int RM_ELEMENTS = 3;
+    final static int RM_SENDERRECEIVER = 4;
+    final static int RM_FOOTER = 5;
+    final static int RM_FINALSETTINGS = 6;
+
+    public LetterWizardDialogImpl(XMultiServiceFactory xmsf) {
+        super(xmsf);
+    }
+
+    public static void main(String args[]) {
+        //only being called when starting wizard remotely
+        try {
+            String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+            XMultiServiceFactory xLocMSF = Desktop.connect(ConnectStr);
+            LetterWizardDialogImpl lw = new LetterWizardDialogImpl(xLocMSF);
+            lw.startWizard(xLocMSF, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startWizard(XMultiServiceFactory xMSF, Object[] CurPropertyValue) {
+
+        running = true;
+        try {
+            //Number of steps on WizardDialog:
+            setMaxStep(6);
+
+            //instatiate The Document Frame for the Preview
+            myLetterDoc = new LetterDocument(xMSF);
+
+            //create the dialog:
+            drawNaviBar();
+            buildStep1();
+            buildStep2();
+            buildStep3();
+            buildStep4();
+            buildStep5();
+            buildStep6();
+
+            initializeNorms();
+            initializeSalutation();
+            initializeGreeting();
+            initializePaths();
+
+            //special Control for setting the save Path:
+            insertPathSelectionControl();
+
+            //load the last used settings from the registry and apply listeners to the controls:
+            initConfiguration();
+
+            initializeTemplates(xMSF);
+
+            //update the dialog UI according to the loaded Configuration
+            updateUI();
+
+            if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
+
+            XWindow xContainerWindow = myLetterDoc.xFrame.getContainerWindow();
+            XWindowPeer xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
+            createWindowPeer(xWindowPeer);
+
+            //add the Roadmap to the dialog:
+            insertRoadmap();
+
+            //load the last used document and apply last used settings:
+            setConfiguration();
+
+            //disable funtionality that is not supported by the template:
+            initializeElements();
+
+            //disable the document, so that the user cannot change anything:
+            myLetterDoc.xFrame.getComponentWindow().setEnable(false);
+
+            //show the Wizard dialog:
+            xWindow.setVisible(true);
+
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+        }
+    }
+
+
+    public void cancelWizard() {
+        xWindow.setVisible(false);
+        closeDocument();
+        running = false;
+    }
+
+    public void finishWizard() {
+        try {
+            myLetterDoc.xTextDocument.lockControllers();
+            FileAccess fileAccess = new FileAccess(xMSF);
+            sPath = myPathSelection.getSelectedPath();
+            sPath = fileAccess.getURL(sPath);
+            myLetterDoc.killEmptyUserFields();
+
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer_StarOffice_XML_Writer_Template", false, "Template could not be saved!");
+            if (bSaveSuccess) {
+                saveConfiguration();
+                xWindow.setVisible(false);
+                closeDocument();
+                myLetterDoc.xTextDocument.unlockControllers();
+                PropertyValue loadValues[] = new PropertyValue[1];
+                loadValues[0] = new PropertyValue();
+                loadValues[0].Name = "AsTemplate";
+                if (bEditTemplate) {
+                    loadValues[0].Value = Boolean.FALSE;
+                } else {
+                    loadValues[0].Value = Boolean.TRUE;
+                }
+                Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_blank", new PropertyValue[0]);
+                XTextDocument xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
+                XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+                ViewHandler myViewHandler = new ViewHandler(xDocMSF, xTextDocument);
+                myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.OPTIMAL));
+            } else {
+                //TODO: Error Handling
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            running = false;
+        }
+
+    }
+
+    public void closeDocument() {
+        try {
+            xComponent.dispose();
+            XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myLetterDoc.xFrame);
+            xCloseable.close(false);
+        } catch (CloseVetoException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void optBusinessLetterItemChanged() {
+        DataAware.setDataObject(letterDA,myConfig.cp_BusinessLetter,true);
+        setControlProperty("lblBusinessStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lstBusinessStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("chkBusinessPaper", "Enabled", Boolean.TRUE);
+        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstPrivateStyle", "Enabled", Boolean.FALSE);
+        lstBusinessStyleItemChanged();
+        enableSenderReceiver();
+        setPossibleFooter(true);
+    }
+
+    public void optPrivOfficialLetterItemChanged() {
+        DataAware.setDataObject(letterDA,myConfig.cp_PrivateOfficialLetter,true);
+        setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("chkBusinessPaper", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstPrivateStyle", "Enabled", Boolean.FALSE);
+        lstPrivOfficialStyleItemChanged();
+        disableBusinessPaper();
+        enableSenderReceiver();
+        setPossibleFooter(true);
+    }
+
+    public void optPrivateLetterItemChanged() {
+        DataAware.setDataObject(letterDA,myConfig.cp_PrivateLetter,true);
+        setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("chkBusinessPaper", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPrivateStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lstPrivateStyle", "Enabled", Boolean.TRUE);
+        lstPrivateStyleItemChanged();
+        disableBusinessPaper();
+        disableSenderReceiver();
+        setPossibleFooter(false);
+    }
+
+    public void optSenderPlaceholderItemChanged() {
+        setControlProperty("lblSenderName", "Enabled", Boolean.FALSE);
+        setControlProperty("lblSenderStreet", "Enabled", Boolean.FALSE);
+        setControlProperty("lblPostCodeCity", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderName", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderStreet", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderPostCode", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderState", "Enabled", Boolean.FALSE);
+        setControlProperty("txtSenderCity", "Enabled", Boolean.FALSE);
+        myLetterDoc.fillSenderWithUserData();
+    }
+
+    public void optSenderDefineItemChanged() {
+        setControlProperty("lblSenderName", "Enabled", Boolean.TRUE);
+        setControlProperty("lblSenderStreet", "Enabled", Boolean.TRUE);
+        setControlProperty("lblPostCodeCity", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderName", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderStreet", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderPostCode", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderState", "Enabled", Boolean.TRUE);
+        setControlProperty("txtSenderCity", "Enabled", Boolean.TRUE);
+        txtSenderNameTextChanged();
+        txtSenderStreetTextChanged();
+        txtSenderPostCodeTextChanged();
+        txtSenderStateTextChanged();
+        txtSenderCityTextChanged();
+    }
+
+    public void optCreateLetterItemChanged() {
+        bEditTemplate = false;
+    }
+
+    public void optMakeChangesItemChanged() {
+        bEditTemplate = true;
+    }
+
+    public void optReceiverPlaceholderItemChanged() {
+        OfficeDocument.attachEventCall(xTextDocument, "OnNew", "StarBasic", "macro:///Template.Correspondence.Placeholder()");
+    }
+
+    public void optReceiverDatabaseItemChanged() {
+        OfficeDocument.attachEventCall(xTextDocument, "OnNew", "StarBasic", "macro:///Template.Correspondence.Database()");
+    }
+
+    public void lstBusinessStyleItemChanged() {
+        xTextDocument = myLetterDoc.loadTemplate(BusinessFiles[1][lstBusinessStyle.getSelectedItemPos()]);
+        myLetterDoc.xTextDocument.lockControllers();
+        initializeElements();
+        chkBusinessPaperItemChanged();
+        setElements();
+        myLetterDoc.xTextDocument.unlockControllers();
+    }
+
+    public void lstPrivOfficialStyleItemChanged() {
+        xTextDocument = myLetterDoc.loadTemplate(OfficialFiles[1][lstPrivOfficialStyle.getSelectedItemPos()]);
+        initializeElements();
+        setElements();
+    }
+
+    public void lstPrivateStyleItemChanged() {
+        xTextDocument = myLetterDoc.loadTemplate(PrivateFiles[1][lstPrivateStyle.getSelectedItemPos()]);
+        initializeElements();
+        setElements();
+    }
+
+    public void numLogoHeightTextChanged() {
+        BusCompanyLogo.iHeight = (int) (numLogoHeight.getValue() * 1000);
+        BusCompanyLogo.setFramePosition();
+    }
+
+    public void numLogoWidthTextChanged() {
+        BusCompanyLogo.iWidth = (int) (numLogoWidth.getValue() * 1000);
+        BusCompanyLogo.setFramePosition();
+    }
+
+    public void numLogoXTextChanged() {
+        BusCompanyLogo.iXPos = (int) (numLogoX.getValue() * 1000);
+        BusCompanyLogo.setFramePosition();
+    }
+
+    public void numLogoYTextChanged() {
+        BusCompanyLogo.iYPos = (int) (numLogoY.getValue() * 1000);
+        BusCompanyLogo.setFramePosition();
+    }
+
+    public void numAddressWidthTextChanged() {
+        BusCompanyAddress.iWidth = (int) (numAddressWidth.getValue() * 1000);
+        BusCompanyAddress.setFramePosition();
+    }
+
+    public void numAddressXTextChanged() {
+        BusCompanyAddress.iXPos = (int) (numAddressX.getValue() * 1000);
+        BusCompanyAddress.setFramePosition();
+    }
+
+    public void numAddressYTextChanged() {
+        BusCompanyAddress.iYPos = (int) (numAddressY.getValue() * 1000);
+        BusCompanyAddress.setFramePosition();
+    }
+
+    public void numAddressHeightTextChanged() {
+        BusCompanyAddress.iHeight = (int) (numAddressHeight.getValue() * 1000);
+        BusCompanyAddress.setFramePosition();
+    }
+
+    public void numFooterHeightTextChanged() {
+        BusFooter.iHeight = (int) (numFooterHeight.getValue() * 1000);
+        BusFooter.iYPos = myLetterDoc.DocSize.Height - BusFooter.iHeight;
+        BusFooter.setFramePosition();
+    }
+
+    public void chkPaperCompanyLogoItemChanged() {
+        if (chkPaperCompanyLogo.getState() != 0) {
+            //minimal value is required, otherwise the frame creation fails
+            if (numLogoWidth.getValue() == 0) {
+                numLogoWidth.setValue(0.1);
+            }
+            if (numLogoHeight.getValue() == 0) {
+                numLogoHeight.setValue(0.1);
+            }
+            BusCompanyLogo = myLetterDoc.new BusinessPaperObject("Company Logo", (int) (numLogoWidth.getValue() * 1000), (int) (numLogoHeight.getValue() * 1000), (int) (numLogoX.getValue() * 1000), (int) (numLogoY.getValue() * 1000));
+            setControlProperty("numLogoHeight", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyLogoHeight", "Enabled", Boolean.TRUE);
+            setControlProperty("numLogoWidth", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyLogoWidth", "Enabled", Boolean.TRUE);
+            setControlProperty("numLogoX", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyLogoX", "Enabled", Boolean.TRUE);
+            setControlProperty("numLogoY", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyLogoY", "Enabled", Boolean.TRUE);
+            setPossibleLogo(false);
+        } else {
+            if (BusCompanyLogo != null) {
+                BusCompanyLogo.removeFrame();
+            }
+            setControlProperty("numLogoHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyLogoHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("numLogoWidth", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyLogoWidth", "Enabled", Boolean.FALSE);
+            setControlProperty("numLogoX", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyLogoX", "Enabled", Boolean.FALSE);
+            setControlProperty("numLogoY", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyLogoY", "Enabled", Boolean.FALSE);
+            setPossibleLogo(true);
+        }
+    }
+
+    public void chkPaperCompanyAddressItemChanged() {
+        if (chkPaperCompanyAddress.getState() != 0) {
+//          minimal value is required, otherwise the frame creation fails
+            if (numAddressWidth.getValue() == 0) {
+                numAddressWidth.setValue(0.1);
+            }
+            if (numAddressHeight.getValue() == 0) {
+                numAddressHeight.setValue(0.1);
+            }
+            BusCompanyAddress = myLetterDoc.new BusinessPaperObject("Company Address", (int) (numAddressWidth.getValue() * 1000), (int) (numAddressHeight.getValue() * 1000), (int) (numAddressX.getValue() * 1000), (int) (numAddressY.getValue() * 1000));
+            setControlProperty("numAddressHeight", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyAddressHeight", "Enabled", Boolean.TRUE);
+            setControlProperty("numAddressWidth", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyAddressWidth", "Enabled", Boolean.TRUE);
+            setControlProperty("numAddressX", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyAddressX", "Enabled", Boolean.TRUE);
+            setControlProperty("numAddressY", "Enabled", Boolean.TRUE);
+            setControlProperty("lblCompanyAddressY", "Enabled", Boolean.TRUE);
+            if (myLetterDoc.hasElement("Sender Address")) {
+                myLetterDoc.switchElement("Sender Address", (false));
+            }
+            if (chkCompanyReceiver.getState() != 0) {
+                setPossibleSenderData(false);
+            }
+        } else {
+            if (BusCompanyAddress != null) {
+                BusCompanyAddress.removeFrame();
+            }
+            setControlProperty("numAddressHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyAddressHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("numAddressWidth", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyAddressWidth", "Enabled", Boolean.FALSE);
+            setControlProperty("numAddressX", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyAddressX", "Enabled", Boolean.FALSE);
+            setControlProperty("numAddressY", "Enabled", Boolean.FALSE);
+            setControlProperty("lblCompanyAddressY", "Enabled", Boolean.FALSE);
+            if (myLetterDoc.hasElement("Sender Address")) {
+                myLetterDoc.switchElement("Sender Address", (true));
+            }
+            setPossibleSenderData(true);
+            if (optSenderDefine.getState()) {optSenderDefineItemChanged();}
+            if (optSenderPlaceholder.getState()) {optSenderPlaceholderItemChanged();}
+        }
+    }
+
+    public void chkCompanyReceiverItemChanged() {
+        XTextFrame xReceiverFrame = null;
+
+        if (chkCompanyReceiver.getState() != 0) {
+            try {
+                xReceiverFrame = TextFrameHandler.getFrameByName("Receiver Address", xTextDocument);
+                Integer FrameWidth = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, "Width");
+                int iFrameWidth = FrameWidth.intValue();
+                Integer FrameX = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, "HoriOrientPosition");
+                int iFrameX = FrameX.intValue();
+                Integer FrameY = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, "VertOrientPosition");
+                int iFrameY = FrameY.intValue();
+
+                //Height of the Company Address in the Receiver Field
+                int iReceiverHeight = (int) (0.5 * 1000);
+                BusCompanyAddressReceiver = myLetterDoc.new BusinessPaperObject(" ", iFrameWidth, iReceiverHeight, iFrameX, (iFrameY - iReceiverHeight));
+
+                setPossibleAddressReceiver(false);
+            } catch (NoSuchElementException e) {
+                // TODO Error Message: Template modified!
+                e.printStackTrace();
+            } catch (WrappedTargetException e) {
+                e.printStackTrace();
+            }
+            if (chkPaperCompanyAddress.getState() != 0) {
+                setPossibleSenderData(false);
+            }
+        } else {
+            if (BusCompanyAddressReceiver != null) {
+                BusCompanyAddressReceiver.removeFrame();
+            }
+            setPossibleAddressReceiver(true);
+            setPossibleSenderData(true);
+            if (optSenderDefine.getState()) {optSenderDefineItemChanged();}
+            if (optSenderPlaceholder.getState()) {optSenderPlaceholderItemChanged();}
+        }
+    }
+
+    public void chkPaperFooterItemChanged() {
+
+        if (chkPaperFooter.getState() != 0) {
+            //minimal value is required, otherwise the frame creation fails
+            if (numFooterHeight.getValue() == 0) {
+                numFooterHeight.setValue(0.1);
+            }
+            BusFooter = myLetterDoc.new BusinessPaperObject("Footer", (int) myLetterDoc.DocSize.Width, (int) (numFooterHeight.getValue() * 1000), (int) 0, (int) (myLetterDoc.DocSize.Height - (numFooterHeight.getValue() * 1000)));
+            this.setControlProperty("numFooterHeight", "Enabled", Boolean.TRUE);
+            this.setControlProperty("lblFooterHeight", "Enabled", Boolean.TRUE);
+            setPossibleFooter(false);
+        } else {
+            if (BusFooter != null) {
+                BusFooter.removeFrame();
+            }
+            setControlProperty("numFooterHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("lblFooterHeight", "Enabled", Boolean.FALSE);
+            setPossibleFooter(true);
+        }
+    }
+
+    //switch Elements on/off -------------------------------------------------------
+    public void chkUseLogoItemChanged() {
+        if (myLetterDoc.hasElement("Company Logo")) {
+            myLetterDoc.switchElement("Company Logo", (chkUseLogo.getState() != 0));
+        }
+    }
+
+    public void chkUseAddressReceiverItemChanged() {
+        if (myLetterDoc.hasElement("Sender Address Repeated")) {
+            myLetterDoc.switchElement("Sender Address Repeated", (chkUseAddressReceiver.getState() != 0));
+        }
+    }
+
+    public void chkUseSignsItemChanged() {
+        if (myLetterDoc.hasElement("Letter Signs")) {
+            myLetterDoc.switchElement("Letter Signs", (chkUseSigns.getState() != 0));
+        }
+    }
+
+    public void chkUseSubjectItemChanged() {
+            if (myLetterDoc.hasElement("Subject Line")) {
+            myLetterDoc.switchElement("Subject Line", (chkUseSubject.getState() != 0));
+        }
+    }
+
+    public void chkUseBendMarksItemChanged() {
+        if (myLetterDoc.hasElement("Bend Marks")) {
+            myLetterDoc.switchElement("Bend Marks", (chkUseBendMarks.getState() != 0));
+        }
+    }
+
+    public void chkUseFooterItemChanged() {
+        try {
+            boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", "Enabled"));
+
+            if (chkFooterNextPages.getState() != 0) {
+                myLetterDoc.switchFooter("First Page", false, (chkFooterPageNumbers.getState() != 0),txtFooter.getText());
+                myLetterDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+            } else {
+                myLetterDoc.switchFooter("First Page", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+                myLetterDoc.switchFooter("Default", bFooterPossible, (chkFooterPageNumbers.getState() != 0), txtFooter.getText());
+            }
+
+            //enable/disable roadmap item for footer page
+            XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
+            Helper.setUnoPropertyValue(BPaperItem, "Enabled", new Boolean(bFooterPossible));
+
+        } catch (Exception exception) {
+            exception.printStackTrace(System.out);
+        }
+    }
+
+
+
+    public void chkFooterNextPagesItemChanged() {
+        chkUseFooterItemChanged();
+    }
+
+    public void chkFooterPageNumbersItemChanged() {
+        chkUseFooterItemChanged();
+    }
+
+    private void setPossibleFooter(boolean bState) {
+        setControlProperty("chkUseFooter", "Enabled", new Boolean(bState));
+        if (!bState) {
+            chkUseFooter.setState((short) 0);
+        }
+        chkUseFooterItemChanged();
+    }
+
+    private void setPossibleAddressReceiver(boolean bState) {
+        if (myLetterDoc.hasElement("Sender Address Repeated")) {
+            setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(bState));
+            if (!bState) {
+                chkUseAddressReceiver.setState((short) 0);
+            }
+            chkUseAddressReceiverItemChanged();
+        }
+    }
+
+    private void setPossibleLogo(boolean bState) {
+        if (myLetterDoc.hasElement("Company Logo")) {
+            setControlProperty("chkUseLogo", "Enabled", new Boolean(bState));
+            if (!bState) {
+                chkUseLogo.setState((short) 0);
+            }
+            chkUseLogoItemChanged();
+        }
+    }
+
+    public void txtFooterTextChanged() {
+        chkUseFooterItemChanged();
+    }
+
+    public void txtSenderNameTextChanged() {
+        TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
+        myFieldHandler.changeUserFieldContent("Company", txtSenderName.getText());
+    }
+
+    public void txtSenderStreetTextChanged() {
+        TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
+        myFieldHandler.changeUserFieldContent("Street", txtSenderStreet.getText());
+    }
+
+    public void txtSenderCityTextChanged() {
+        TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
+        myFieldHandler.changeUserFieldContent("City", txtSenderCity.getText());
+    }
+
+    public void txtSenderPostCodeTextChanged() {
+        TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
+        myFieldHandler.changeUserFieldContent("PostCode", txtSenderPostCode.getText());
+    }
+
+    public void txtSenderStateTextChanged() {
+        TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
+        myFieldHandler.changeUserFieldContent("State", txtSenderState.getText());
+    }
+
+    public void txtTemplateNameTextChanged() {
+        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
+        XDocumentInfo xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        String TitleName = txtTemplateName.getText();
+        Helper.setUnoPropertyValue(xDocInfo, "Title", TitleName);
+    }
+
+    public void chkUseSalutationItemChanged() {
+        myLetterDoc.switchUserField("Salutation", lstSalutation.getSelectedItem(), (chkUseSalutation.getState() != 0));
+        setControlProperty("lstSalutation", "Enabled", new Boolean(chkUseSalutation.getState() != 0));
+    }
+
+    public void lstSalutationItemChanged() {
+        myLetterDoc.switchUserField("Salutation", lstSalutation.getSelectedItem(), (chkUseSalutation.getState() != 0));
+    }
+
+    public void chkUseGreetingItemChanged() {
+        myLetterDoc.switchUserField("Greeting", lstGreeting.getSelectedItem(), (chkUseGreeting.getState() != 0));
+        setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
+    }
+
+    public void lstGreetingItemChanged() {
+        myLetterDoc.switchUserField("Greeting", lstGreeting.getSelectedItem(), (chkUseGreeting.getState() != 0));
+    }
+
+    //  ----------------------------------------------------------------------------
+
+    public void chkBusinessPaperItemChanged() {
+        //enable/disable Roadmap Entry Business Paper
+        if (chkBusinessPaper.getState() != 0) {
+            enableBusinessPaper();
+        } else {
+            disableBusinessPaper();
+        }
+    }
+
+    private void setPossibleSenderData(boolean bState) {
+        setControlProperty("optSenderDefine", "Enabled", new Boolean(bState));
+        setControlProperty("optSenderPlaceholder", "Enabled", new Boolean(bState));
+        setControlProperty("lblSenderAddress", "Enabled", new Boolean(bState));
+        if ( !bState) {
+            setControlProperty("txtSenderCity", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderName", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderPostCode", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderStreet", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderCity", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderState", "Enabled", new Boolean(bState));
+            setControlProperty("lblSenderName", "Enabled", new Boolean(bState));
+            setControlProperty("lblSenderStreet", "Enabled", new Boolean(bState));
+            setControlProperty("lblPostCodeCity", "Enabled", new Boolean(bState));
+        }
+    }
+
+    private void enableSenderReceiver() {
+        XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
+    }
+
+    private void disableSenderReceiver() {
+        XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
+    }
+
+    private void enableBusinessPaper() {
+        XInterface BPaperItem = getRoadmapItemByID(RM_BUSINESSPAPER);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
+        chkPaperCompanyLogoItemChanged();
+        chkPaperCompanyAddressItemChanged();
+        chkPaperFooterItemChanged();
+        chkCompanyReceiverItemChanged();
+    }
+
+    private void disableBusinessPaper() {
+        XInterface BPaperItem = getRoadmapItemByID(RM_BUSINESSPAPER);
+        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
+        if (BusCompanyLogo != null) {
+            BusCompanyLogo.removeFrame();
+        }
+        if (BusCompanyAddress != null) {
+            BusCompanyAddress.removeFrame();
+        }
+        if (BusFooter != null) {
+            BusFooter.removeFrame();
+        }
+        if (BusCompanyAddressReceiver != null) {
+            BusCompanyAddressReceiver.removeFrame();
+        }
+        setPossibleAddressReceiver(true);
+        setPossibleFooter(true);
+        setPossibleLogo(true);
+        if (myLetterDoc.hasElement("Sender Address")) {
+            myLetterDoc.switchElement("Sender Address", (true));
+        }
+
+    }
+
+    public void lstLetterNormItemChanged() {
+        //when the norm changes, the correct template needs to be reloaded
+        sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
+        initializeTemplates(xMSF);
+        if (optBusinessLetter.getState()) {
+            lstBusinessStyleItemChanged();
+        }
+        if (optPrivOfficialLetter.getState()) {
+            lstPrivOfficialStyleItemChanged();
+        }
+        if (optPrivateLetter.getState()) {
+            lstPrivateStyleItemChanged();
+        }
+    }
+
+    public void initializeSalutation() {
+        setControlProperty("lstSalutation", "StringItemList", resources.SalutationLabels);
+    }
+
+    public void initializeGreeting() {
+        setControlProperty("lstGreeting", "StringItemList", resources.GreetingLabels);
+    }
+
+    public void initializeNorms() {
+        //To add new Languages please modify this method and LetterWizardDialogResources.java
+        Norms = new String[2];
+
+        Norms[0] = "english_us";
+        Norms[1] = "german";
+
+        setControlProperty("lstLetterNorm", "StringItemList", resources.LanguageLabels);
+
+    }
+
+    private CGLetter getCurrentLetter() {
+        switch (myConfig.cp_LetterType) {
+            case 0 : return myConfig.cp_BusinessLetter;
+            case 1 : return myConfig.cp_PrivateOfficialLetter;
+            case 2 : return myConfig.cp_PrivateLetter;
+            default : return null;
+        }
+    }
+
+    private void initializePaths() {
+        try {
+            sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+        } catch (NoValidPathException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean initializeTemplates(XMultiServiceFactory xMSF) {
+        try {
+            sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
+            String sLetterSubPath = "/wizard/letter/" + sCurrentNorm;
+            sLetterPath = FileAccess.combinePaths(xMSF, sTemplatePath, sLetterSubPath);
+            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "");
+
+            BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sLetterPath);
+            OfficialFiles = FileAccess.getFolderTitles(xMSF, "off", sLetterPath);
+            PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sLetterPath);
+
+            setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
+            setControlProperty("lstPrivOfficialStyle", "StringItemList", OfficialFiles[0]);
+            setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+
+            setControlProperty("lstBusinessStyle", "SelectedItems", new short[]{0});
+            setControlProperty("lstPrivOfficialStyle", "SelectedItems", new short[]{0});
+            setControlProperty("lstPrivateStyle", "SelectedItems", new short[]{0});
+
+            return true;
+        } catch (NoValidPathException nopathexception) {
+            nopathexception.printStackTrace();
+            return false;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
+    public void initializeElements() {
+        setControlProperty("chkUseLogo", "Enabled", new Boolean(myLetterDoc.hasElement("Company Logo")));
+        setControlProperty("chkUseBendMarks", "Enabled", new Boolean(myLetterDoc.hasElement("Bend Marks")));
+        setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(myLetterDoc.hasElement("Sender Address Repeated")));
+        setControlProperty("chkUseSubject", "Enabled", new Boolean(myLetterDoc.hasElement("Subject Line")));
+        setControlProperty("chkUseSigns", "Enabled", new Boolean(myLetterDoc.hasElement("Letter Signs")));
+    }
+
+    public void setConfiguration() {
+        //set correct Configuration tree:
+
+        if (optBusinessLetter.getState())  {
+            optBusinessLetterItemChanged();
+        }
+        if (optPrivOfficialLetter.getState())  {
+            optPrivOfficialLetterItemChanged();
+        }
+        if (optPrivateLetter.getState())  {
+            optPrivateLetterItemChanged();
+        }
+    }
+
+    public void setElements() {
+        //UI relevant:
+        if (optSenderDefine.getState())  {optSenderDefineItemChanged();}
+        if (optSenderPlaceholder.getState())  {optSenderPlaceholderItemChanged();}
+        chkUseSignsItemChanged();
+        chkUseSubjectItemChanged();
+        chkUseSalutationItemChanged();
+        chkUseGreetingItemChanged();
+        chkUseBendMarksItemChanged();
+        txtTemplateNameTextChanged();
+
+        //not UI relevant:
+        if (optReceiverDatabase.getState())  {optReceiverDatabaseItemChanged();}
+        if (optReceiverPlaceholder.getState())  {optReceiverPlaceholderItemChanged();}
+        if (optCreateLetter.getState())  {optCreateLetterItemChanged();}
+        if (optMakeChanges.getState())  {optMakeChangesItemChanged();}
+    }
+
+    public void insertRoadmap() {
+        addRoadmap();
+        int i = 0;
+        i = insertRoadmapItem(0, true, resources.RoadmapLabels[RM_TYPESTYLE], RM_TYPESTYLE);
+        i = insertRoadmapItem(i, false, resources.RoadmapLabels[RM_BUSINESSPAPER], RM_BUSINESSPAPER);
+        i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_ELEMENTS], RM_ELEMENTS);
+        i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_SENDERRECEIVER], RM_SENDERRECEIVER);
+        i = insertRoadmapItem(i, false, resources.RoadmapLabels[RM_FOOTER], RM_FOOTER);
+        i = insertRoadmapItem(i, true, resources.RoadmapLabels[RM_FINALSETTINGS], RM_FINALSETTINGS);
+        setRoadmapInteractive(false);
+        setRoadmapComplete(true);
+        setCurrentRoadmapItemID((short) 1);
+    }
+
+    public void insertPathSelectionControl() {
+        myPathSelection = new PathSelection(xMSF, this, PathSelection.TransferMode.SAVE, PathSelection.DialogTypes.FILE);
+        myPathSelection.insert(6, 97, 70, 205, (short) 45, "Path", true, "HID:" + ( HID + 47 ), "HID:" + ( HID + 48 ));
+        myPathSelection.sDefaultDirectory = sUserTemplatePath;
+        myPathSelection.sDefaultName = "myLetterTemplate.stw";
+        myPathSelection.sDefaultFilter = "writer_StarOffice_XML_Writer_Template";
+    }
+
+
+    public void initConfiguration() {
+        try {
+            myConfig = new CGLetterWizard();
+            Object root = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.Office.Writer/Wizards/Letter", false);
+            myConfig.readConfiguration(root, "cp_");
+            mainDA.add(RadioDataAware.attachRadioButtons(myConfig, "cp_LetterType", new Object[] { optBusinessLetter, optPrivOfficialLetter, optPrivateLetter }, null, true));
+            mainDA.add(UnoDataAware.attachListBox(myConfig.cp_BusinessLetter, "cp_Style", lstBusinessStyle, null, true));
+            mainDA.add(UnoDataAware.attachListBox(myConfig.cp_PrivateOfficialLetter, "cp_Style", lstPrivOfficialStyle, null, true));
+            mainDA.add(UnoDataAware.attachListBox(myConfig.cp_PrivateLetter, "cp_Style", lstPrivateStyle, null, true));
+            mainDA.add(UnoDataAware.attachCheckBox(myConfig.cp_BusinessLetter, "cp_BusinessPaper", chkBusinessPaper, null, true));
+
+            CGLetter cgl = myConfig.cp_BusinessLetter;
+
+            CGPaperElementLocation cgpl = myConfig.cp_BusinessLetter.cp_CompanyLogo;
+            CGPaperElementLocation cgpa = myConfig.cp_BusinessLetter.cp_CompanyAddress;
+
+            businessDA.add(UnoDataAware.attachCheckBox(cgpl, "cp_Display", chkPaperCompanyLogo, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpl, "cp_Width", numLogoWidth, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpl, "cp_Height", numLogoHeight, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpl, "cp_X", numLogoX, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpl, "cp_Y", numLogoY, null, true));
+            businessDA.add(UnoDataAware.attachCheckBox(cgpa, "cp_Display", chkPaperCompanyAddress, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpa, "cp_Width", numAddressWidth, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpa, "cp_Height", numAddressHeight, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpa, "cp_X", numAddressX, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgpa, "cp_Y", numAddressY, null, true));
+
+            businessDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PaperCompanyAddressReceiverField", chkCompanyReceiver, null, true));
+            businessDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PaperFooter", chkPaperFooter, null, true));
+            businessDA.add(UnoDataAware.attachNumericControl(cgl, "cp_PaperFooterHeight", numFooterHeight, null, true));
+
+            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Norm", lstLetterNorm, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintCompanyLogo", chkUseLogo, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintCompanyAddressReceiverField", chkUseAddressReceiver, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintLetterSigns", chkUseSigns, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintSubjectLine", chkUseSubject, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintSalutation", chkUseSalutation, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintBendMarks", chkUseBendMarks, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintGreeting", chkUseGreeting, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_PrintFooter", chkUseFooter, null, true));
+            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Salutation", lstSalutation, null, true));
+            letterDA.add(UnoDataAware.attachListBox(cgl, "cp_Greeting", lstGreeting, null, true));
+            letterDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_SenderAddressType", new Object[] { optSenderDefine, optSenderPlaceholder }, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderCompanyName", txtSenderName, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderStreet", txtSenderStreet, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderPostCode", txtSenderPostCode, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderState", txtSenderState, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_SenderCity", txtSenderCity, null, true));
+            letterDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_ReceiverAddressType", new Object[] { optReceiverDatabase, optReceiverPlaceholder }, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_Footer", txtFooter, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_FooterOnlySecondPage", chkFooterNextPages, null, true));
+            letterDA.add(UnoDataAware.attachCheckBox(cgl, "cp_FooterPageNumbers", chkFooterPageNumbers, null, true));
+            letterDA.add(RadioDataAware.attachRadioButtons(cgl, "cp_CreationType", new Object[] { optCreateLetter, optMakeChanges }, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_TemplateName", txtTemplateName, null, true));
+            letterDA.add(UnoDataAware.attachEditControl(cgl, "cp_TemplatePath", myPathSelection.xSaveTextBox, null, true));
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    private void updateUI() {
+        UnoDataAware.updateUI(mainDA);
+        UnoDataAware.updateUI(letterDA);
+        UnoDataAware.updateUI(businessDA);
+    }
+
+    public void saveConfiguration() {
+        try {
+            Object root = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.Office.Writer/Wizards/Letter", true);
+            myConfig.writeConfiguration(root, "cp_");
+            Configuration.commit(root);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}
