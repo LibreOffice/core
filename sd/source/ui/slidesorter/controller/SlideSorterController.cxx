@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:56:35 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,18 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#endif
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 using namespace ::sd::slidesorter::controller;
@@ -148,7 +158,10 @@ SlideSorterController::SlideSorterController (
           rViewShell.GetScrollBarFiller())),
       mpListener(),
       mnModelChangeLockCount (0),
-      mbPostModelChangePending (false)
+      mbPostModelChangePending (false),
+      maSelectionBeforeSwitch(),
+      mnCurrentPageBeforeSwitch(0),
+      mpEditModeChangeMasterPage(NULL)
 {
     OSL_ASSERT(pFrame!=NULL);
     OSL_ASSERT(pParentWindow!=NULL);
@@ -363,14 +376,36 @@ bool SlideSorterController::Command (
             if (aSelectedPages.HasMoreElements())
                 pPage = aSelectedPages.GetNextElement().GetPage();
 
-            // When there is no selection, then we show the insertion
-            // indicator so that the user knows where a page insertion would
-            // take place.
-            if (pPage != NULL)
-                nPopupId = RID_SLIDETABLE_POPUP;
-            else
+            // Choose the popup menu depending on a) the type of the main
+            // view shell, b) the edit mode, and c) on whether the selection
+            // is empty or not.
+            switch (GetViewShell().GetViewShellBase().GetMainViewShell()->GetShellType())
             {
-                nPopupId = RID_SLIDE_NOSEL_POPUP;
+                case ViewShell::ST_DRAW:
+                    if (pPage != NULL)
+                        nPopupId = RID_SLIDE_SORTER_DRAW_SEL_POPUP;
+                    else
+                        nPopupId = RID_SLIDE_SORTER_DRAW_NOSEL_POPUP;
+                    break;
+
+                default:
+                    if (mrModel.GetEditMode() == EM_PAGE)
+                        if (pPage != NULL)
+                            nPopupId = RID_SLIDE_SORTER_IMPRESS_SEL_POPUP;
+                        else
+                            nPopupId = RID_SLIDE_SORTER_IMPRESS_NOSEL_POPUP;
+                    else
+                        if (pPage != NULL)
+                            nPopupId = RID_SLIDE_SORTER_MASTER_SEL_POPUP;
+                        else
+                            nPopupId = RID_SLIDE_SORTER_MASTER_NOSEL_POPUP;
+            }
+
+            if (pPage == NULL)
+            {
+                // When there is no selection, then we show the insertion
+                // indicator so that the user knows where a page insertion
+                // would take place.
                 GetView().GetOverlay().GetInsertionIndicatorOverlay()
                     .SetPosition(
                         pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
@@ -542,24 +577,71 @@ void SlideSorterController::DeleteSelectedPages (void)
     while (aPageEnumeration.HasMoreElements())
         aSelectedPages.push_back (aPageEnumeration.GetNextElement().GetPage());
 
+    // Prepare the deletion via the UNO API.
+    Reference<drawing::XDrawPages> xPages;
+    if (GetModel().GetEditMode() == EM_PAGE)
+    {
+        Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier (
+            GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
+        if (xDrawPagesSupplier.is())
+            xPages = xDrawPagesSupplier->getDrawPages();
+    }
+    else
+    {
+        Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
+            GetModel().GetDocument()->getUnoModel(), UNO_QUERY);
+        if (xMasterPagesSupplier.is())
+            xPages = xMasterPagesSupplier->getMasterPages();
+    }
+
     // Iterate over all pages that where seleted when this method was called
     // and 1) delete the draw page, and 2) delete the notes page.
     ::std::vector<SdPage*>::iterator aI;
     for (aI=aSelectedPages.begin(); aI!=aSelectedPages.end(); aI++)
     {
-        SdPage* pPage = *aI;
-        USHORT nPage = (pPage->GetPageNum()-1) / 2;
+        USHORT nPage = ((*aI)->GetPageNum()-1) / 2;
 
-        // 1) Delete draw page.  To be robust in the case that pPage points
-        // to a notes page, re-fetch the page via its index.
-        pPage = pDocument->GetSdPage (nPage, PK_STANDARD);
-        GetView().AddUndo (new SdrUndoDelPage (*pPage));
-        pDocument->RemovePage (pPage->GetPageNum());
+        // Get pointers to the page and its notes page.
+        SdPage* pPage;
+        SdPage* pNotesPage;
+        if (mrModel.GetEditMode() == EM_PAGE)
+        {
+            pPage = pDocument->GetSdPage (nPage, PK_STANDARD);
+            pNotesPage = pDocument->GetSdPage (nPage, PK_NOTES);
+        }
+        else
+        {
+            pPage = pDocument->GetMasterSdPage (nPage, PK_STANDARD);
+            pNotesPage = pDocument->GetMasterSdPage (nPage, PK_NOTES);
+        }
 
-        // 2) Delete notes page.
-        pPage = pDocument->GetSdPage (nPage, PK_NOTES);
+        DBG_ASSERT(pPage!=NULL, "page does not exist");
+        DBG_ASSERT(pNotesPage!=NULL, "notes does not exist");
+
+        // Add undo actions and delete the pages.
         GetView().AddUndo (new SdrUndoDelPage (*pPage));
-        pDocument->RemovePage (pPage->GetPageNum());
+        GetView().AddUndo (new SdrUndoDelPage (*pNotesPage));
+        if (GetModel().GetEditMode() == EM_PAGE)
+        {
+            // Remove regular slides with the API.
+            if (xPages.is())
+            {
+                xPages->remove (Reference<drawing::XDrawPage>(
+                    pPage->getUnoPage(), UNO_QUERY));
+                xPages->remove (Reference<drawing::XDrawPage>(
+                    pNotesPage->getUnoPage(), UNO_QUERY));
+            }
+        }
+        else
+        {
+            // Remove master slides with the core since the API does not
+            // only remove but also delete the page.
+            if (pDocument->GetMasterPageUserCount(pPage) == 0)
+            {
+                pDocument->RemoveMasterPage (pPage->GetPageNum());
+                pDocument->RemoveMasterPage (pNotesPage->GetPageNum());
+            }
+        }
     }
 
     GetView().EndUndo ();
@@ -572,19 +654,30 @@ void SlideSorterController::DeleteSelectedPages (void)
     if (bIsFocusShowing)
         GetFocusManager().ToggleFocus ();
     GetFocusManager().MoveFocus (FocusManager::FMD_NONE);
+
+    // Finally, we have to make sure that the current page is set to one of
+    // the remaining pages.
+
 }
 
 
 
 
-void SlideSorterController::MoveSelectedPages (USHORT nTargetPageIndex)
+bool SlideSorterController::MoveSelectedPages (USHORT nTargetPageIndex)
 {
+    bool bMoved (false);
+
+    ModelChangeLock aLock (*this);
     mrView.LockRedraw (TRUE);
     mrModel.SynchronizeDocumentSelection ();
-    LockModelChange();
-    BOOL bMoved = mrModel.GetDocument()->MovePages (nTargetPageIndex);
-    UnlockModelChange();
+
+    // At the moment we can not move master pages.
+    if (mrModel.GetEditMode() == EM_PAGE)
+        bMoved = (mrModel.GetDocument()->MovePages (nTargetPageIndex)==TRUE);
+
     mrView.LockRedraw (FALSE);
+
+    return bMoved;
 }
 
 
@@ -963,6 +1056,121 @@ void SlideSorterController::SetZoom (long int nZoom)
 FuPoor* SlideSorterController::CreateSelectionFunction (SfxRequest& rRequest)
 {
     return new SelectionFunction (*this, rRequest);
+}
+
+
+
+
+void SlideSorterController::PrepareEditModeChange (void)
+{
+    //  Before we throw away the page descriptors we prepare for selecting
+    //  descriptors in the other mode and for restoring the current
+    //  selection when switching back to the current mode.
+    if (mrModel.GetEditMode() == EM_PAGE)
+    {
+        maSelectionBeforeSwitch.clear();
+
+        // Search for the first selected page and determine the master page
+        // used by its page object.  It will be selected after the switch.
+        // In the same loop the current selection is stored.
+        PageEnumeration aSelectedPages (mrModel.GetSelectedPagesEnumeration());
+        while (aSelectedPages.HasMoreElements())
+        {
+            PageDescriptor& rDescriptor (aSelectedPages.GetNextElement());
+            SdPage* pPage = rDescriptor.GetPage();
+            // Remember the master page of the first selected descriptor.
+            if (pPage!=NULL && mpEditModeChangeMasterPage==NULL)
+                mpEditModeChangeMasterPage = &static_cast<SdPage&>(
+                    pPage->TRG_GetMasterPage());
+
+            maSelectionBeforeSwitch.push_back(pPage);
+        }
+
+        // Remember the current page.
+        mnCurrentPageBeforeSwitch = (GetViewShell().GetViewShellBase()
+            .GetMainViewShell()->GetActualPage()->GetPageNum()-1)/2;
+    }
+}
+
+
+
+
+bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
+{
+    ModelChangeLock aLock (*this);
+
+    // Do the actual edit mode switching.
+    PreModelChange();
+    bool bResult (mrModel.SetEditMode (eEditMode));
+    if (bResult)
+        HandleModelChange();
+
+    return bResult;
+}
+
+
+
+
+void SlideSorterController::FinishEditModeChange (void)
+{
+    if (mrModel.GetEditMode() == EM_MASTERPAGE)
+    {
+        // Search for the master page that was determined in
+        // PrepareEditModeChange() and make it the current page.
+        PageEnumeration aAllPages (mrModel.GetAllPagesEnumeration ());
+        while (aAllPages.HasMoreElements())
+        {
+            PageDescriptor& rDescriptor (aAllPages.GetNextElement());
+            if (rDescriptor.GetPage() == mpEditModeChangeMasterPage)
+            {
+                mpPageSelector->SetCurrentPage (rDescriptor);
+                break;
+            }
+        }
+    }
+    else
+    {
+        mpPageSelector->SetCurrentPage (mnCurrentPageBeforeSwitch);
+
+        // Restore the selection.
+        ::std::vector<SdPage*>::iterator iPage;
+        for (iPage=maSelectionBeforeSwitch.begin();
+             iPage!=maSelectionBeforeSwitch.end();
+             ++iPage)
+        {
+            mpPageSelector->SelectPage(*iPage);
+        }
+        maSelectionBeforeSwitch.clear( );
+    }
+    mpEditModeChangeMasterPage = NULL;
+}
+
+
+
+
+//===== SlideSorterController::ModelChangeLock ================================
+
+SlideSorterController::ModelChangeLock::ModelChangeLock (
+    SlideSorterController& rController)
+    : mrController (rController)
+{
+    mrController.LockModelChange();
+}
+
+
+
+
+SlideSorterController::ModelChangeLock::~ModelChangeLock (void)
+{
+    mrController.UnlockModelChange();
+}
+
+
+
+
+void SlideSorterController::ModelChangeLock::ModelHasChanged (void)
+{
+    mrController.HandleModelChange ();
 }
 
 
