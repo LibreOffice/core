@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:27:25 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:12:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,11 +113,6 @@ SLOFILES= 	\
 NOOPTFILES= \
         $(SLO)$/urp_reader.obj
 .ENDIF			# "$(COM)"=="GCC"
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbremoteurp.obj
-.ENDIF
 
 SHL1TARGET= $(TARGET)
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-17 09:23:01 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:17:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,11 +148,6 @@ APP4STDLIBS= \
 APP4STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-APP4OBJS+=$(OBJ)$/staticmbtest.obj 
-.ENDIF
-
 # --- Application 5 - testinvocation main ------------------------------------
 APP5TARGET= 	$(TARGET5)
 APP5OBJS  = 	$(OBJ)$/testiadapter.obj 
@@ -163,11 +158,6 @@ APP5STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 APP5STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-APP5OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
 # --- Application 6 - testitrosp main ------------------------------------
@@ -181,11 +171,6 @@ APP6STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 APP6STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-APP6OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
 # --- Application 7 - testconv main ------------------------------------
@@ -210,11 +195,6 @@ APP8STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 APP8STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-APP8OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
 ALLIDLFILES:=	testcorefl.idl language_binding.idl testintrosp.idl

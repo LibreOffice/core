@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-17 09:23:00 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,11 +88,6 @@ OBJFILES=	\
         $(OBJ)$/testproptyphlp.obj	\
         $(OBJ)$/testimplhelper.obj \
         $(OBJ)$/testcontainer.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-OBJFILES+=$(OBJ)$/staticmbtest.obj
-.ENDIF
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJFILES) 

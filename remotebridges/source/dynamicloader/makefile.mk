@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile  $
 #*
 #*	  Ersterstellung	JSC 24.06.99
-#*	  Letzte Aenderung	$Author: pluby $ $Date: 2001-02-12 01:33:28 $
-#*	  $Revision: 1.4 $
+#*	  Letzte Aenderung	$Author: pluby $ $Date: 2001-03-02 07:16:26 $
+#*	  $Revision: 1.5 $
 #*
 #*	  $Logfile:$
 #*
@@ -40,11 +40,6 @@ INCPRE+=$(UNOUCROUT)
 
 SLOFILES= \
     $(SLO)$/dynamicloader.obj 
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbdynamic.obj
-.ENDIF
 
 SHL1TARGET= $(TARGET)
 

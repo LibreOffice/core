@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 19:38:15 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:15:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,11 +104,6 @@ UNOTYPES= \
 
 SLOFILES= \
         $(SLO)$/javaunohelper.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmb.obj
-.ENDIF
 
 SHL1TARGET=	$(TARGET)
 

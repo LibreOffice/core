@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-17 09:23:00 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,11 +92,6 @@ APP1OBJS=	\
         $(OBJ)$/testcppu.obj	\
         $(OBJ)$/test_di.obj	
 #		$(OBJ)$/test_sec.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-APP1OBJS+=$(OBJ)$/staticmbtest.obj
-.ENDIF
 
 APP1STDLIBS+=	\
         $(CPPULIB)		\

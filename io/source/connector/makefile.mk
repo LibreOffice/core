@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 17:12:03 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:15:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,11 +85,6 @@ SLOFILES= \
     $(SLO)$/connector.obj\
     $(SLO)$/ctr_pipe.obj\
     $(SLO)$/ctr_socket.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
-SLOFILES+=$(SLO)$/staticmbconnector.obj
-.ENDIF
 
 SHL1TARGET= $(TARGET)
 

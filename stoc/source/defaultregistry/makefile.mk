@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:32 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:18:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,6 @@ COMP1TYPELIST=$(TARGET)
 
 SLOFILES= \
         $(SLO)$/defaultregistry.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbdefaultregistry.obj
-.ENDIF
 
 SHL1TARGET=	$(TARGET)
 
