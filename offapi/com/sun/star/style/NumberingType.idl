@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NumberingType.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:24:24 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,21 +236,21 @@ published constants NumberingType
     //-------------------------------------------------------------------------
     /** Numbering in Arabic alphabet letters
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     const short CHARS_ARABIC = 31;
 
     //-------------------------------------------------------------------------
     /** Numbering in Thai alphabet letters
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     const short CHARS_THAI = 32;
 
     //-------------------------------------------------------------------------
     /** Numbering in Hebrew alphabet letters
 
-        @since #i17516#
+        @since OOo 2.0.0
      */
     const short CHARS_HEBREW = 33;
 };
