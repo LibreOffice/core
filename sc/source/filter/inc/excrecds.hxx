@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:56:36 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1007,12 +1007,14 @@ private:
 
     void                    SetRange( UINT16 nFCol, UINT16 nLCol );
     void                    SetHeight( UINT16 nNewHeight, BOOL bUser );
+    BOOL                    ForceUserHeightFlag(const XclExpRoot& rRoot,ScDocument& rDoc,
+                                sal_uInt16 nRow, sal_uInt16 nTab);
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
-                            ExcRow( UINT16 nNum, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
+                            ExcRow( const XclExpRoot& rRoot, UINT16 nNum, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
                                 sal_uInt32 nXFId, ScDocument& rDoc, ExcEOutline& rOutline, ExcTable& rExcTab );
 
     inline BOOL             IsDefault();
