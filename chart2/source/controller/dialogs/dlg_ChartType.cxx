@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:11:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ SvxChartStyle lcl_GetChartStyleForTemplateServiceName( const ::rtl::OUString & r
     tTemplateServiceMap::const_iterator aIt(
         ::std::find_if( rMap.begin(), rMap.end(),
                         ::std::compose1( ::std::bind2nd(
-                                             ::std::equal_to< tTemplateServiceMap::data_type >(),
+                                             ::std::equal_to< tTemplateServiceMap::mapped_type >(),
                                              static_cast< sal_Int32 >( eStyle ) ),
                                          ::std::select2nd< tTemplateServiceMap::value_type >())));
     if( aIt != rMap.end())
