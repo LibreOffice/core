@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 06:45:52 $
+ *  last change: $Author: hr $ $Date: 2002-04-16 17:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,19 +1177,19 @@ namespace dbaui
         return 0;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry) const
     {
         // at the momoent this isn't allowed
         return sal_False;
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry) const
     {
         EntryType eType = getEntryType(_pEntry);
         return  (eType == etTable || eType == etQuery || eType == etView);
     }
     // -----------------------------------------------------------------------------
-    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry)
+    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry) const
     {
         sal_Bool bAllowed = sal_False;
         EntryType eType = getEntryType(_pEntry);
@@ -1290,6 +1290,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2002/04/02 06:45:52  oj
+ *  #98146# mapping of columns corrected
+ *
  *  Revision 1.34  2001/12/07 13:13:04  oj
  *  #95728# insert try catch
  *
