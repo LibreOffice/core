@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:18:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2029,17 +2029,14 @@ void SvxLineTabPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
     if (pDlgTypeItem)
         SetDlgType(pDlgTypeItem->GetValue());
     Construct();
-    if (pSymbolAttrItem)
+
+    if(pSdrObjListItem) //symbols
     {
         ShowSymbolControls(TRUE);
-        if (pSdrObjListItem)
-            SetSymbolList(static_cast<SdrObjList*>(pSdrObjListItem->GetValue()));
+        pSymbolList = static_cast<SdrObjList*>(pSdrObjListItem->GetValue());
         if (pSymbolAttrItem)
-            SetSymbolAttr(&pSymbolAttrItem->GetItemSet());
-        if(pGraphicItem) {
-            Graphic aTmp(pGraphicItem->GetGraphic());
-            SetAutoSymbolGraphic(&aTmp);
-        }
+            pSymbolAttr = new SfxItemSet(pSymbolAttrItem->GetItemSet());
+        if(pGraphicItem)
+            aAutoSymbolGraphic = pGraphicItem->GetGraphic();
     }
-
 }
