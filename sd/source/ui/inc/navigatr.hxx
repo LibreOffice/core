@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:46:58 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef SD_NAVIGATOR_HXX
+#define SD_NAVIGATOR_HXX
 
-#ifndef _SD_NAVIGATR_HXX
-#define _SD_NAVIGATR_HXX
-
-
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -105,22 +106,17 @@
 #define NAVBTN_NEXT_DISABLED    0x00080000
 
 // forward
-class SdView;
-class SdDrawDocShell;
+namespace sd {
+class DrawDocShell;
+class NavigatorChildWindow;
+class View;
+}
 class Menu;
 
 //------------------------------------------------------------------------
 
 class NavDocInfo
 {
- friend class SdNavigatorWin;
-
-private:
-    BOOL            bName   : 1;
-    BOOL            bActive : 1;
-    SdDrawDocShell* pDocShell;
-
-
 public:
             NavDocInfo() { pDocShell = NULL; }
 
@@ -129,23 +125,52 @@ public:
 
     void    SetName( BOOL bOn = TRUE ) { bName = bOn; }
     void    SetActive( BOOL bOn = TRUE ) { bActive = bOn; }
+
+private:
+    friend class SdNavigatorWin;
+    BOOL            bName   : 1;
+    BOOL            bActive : 1;
+    ::sd::DrawDocShell* pDocShell;
 };
 
 //------------------------------------------------------------------------
 
-class SdNavigatorWin : public Window
+class SdNavigatorWin
+    : public Window
 {
- friend class SdNavigatorChildWindow;
- friend class SdNavigatorControllerItem;
- friend class SdPageNameControllerItem;
+public:
+    SdNavigatorWin(
+        ::Window* pParent,
+        ::sd::NavigatorChildWindow* pChildWinContext,
+        const SdResId& rSdResId,
+        SfxBindings* pBindings );
+    virtual ~SdNavigatorWin();
+
+    virtual void                KeyInput( const KeyEvent& rKEvt );
+
+    void                        InitTreeLB( const SdDrawDocument* pDoc );
+    void                        RefreshDocumentLB( const String* pDocName = NULL );
+
+    BOOL                        InsertFile(const String& rFileName);
+
+    NavigatorDragType           GetNavigatorDragType();
+    void                        SetNavigatorDragType(NavigatorDragType eType) { eDragType = eType; }
+
+protected:
+    virtual void                Resize();
+    virtual long                ParentNotify(NotifyEvent& rNEvt);
+
 
 private:
+    friend class ::sd::NavigatorChildWindow;
+    friend class SdNavigatorControllerItem;
+    friend class SdPageNameControllerItem;
 
     ToolBox                     aToolbox;
     SdPageObjsTLB               aTlbObjects;
     ListBox                     aLbDocs;
 
-    SdNavigatorChildWindow*     pChildWinContext;
+    ::sd::NavigatorChildWindow*     pChildWinContext;
     Size                        aSize;
     Size                        aMinSize;
     Size                        aFltWinSize;
@@ -174,29 +199,10 @@ private:
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
     void                        SetDragImage();
     void                        ApplyImageList();
-
-protected:
-
-    virtual void                Resize();
-    virtual long                Notify(NotifyEvent& rNEvt);
-
-public:
-                                SdNavigatorWin( Window* pParent,
-                                    SdNavigatorChildWindow* pChildWinContext,
-                                    const SdResId& rSdResId,
-                                    SfxBindings* pBindings );
-                                ~SdNavigatorWin();
-
-    virtual void                KeyInput( const KeyEvent& rKEvt );
-
-    void                        InitTreeLB( const SdDrawDocument* pDoc );
-    void                        RefreshDocumentLB( const String* pDocName = NULL );
-
-    BOOL                        InsertFile(const String& rFileName);
-
-    NavigatorDragType           GetNavigatorDragType();
-    void                        SetNavigatorDragType(NavigatorDragType eType) { eDragType = eType; }
 };
+
+
+
 
 /*************************************************************************
 |*
@@ -206,15 +212,18 @@ public:
 
 class SdNavigatorControllerItem : public SfxControllerItem
 {
-    SdNavigatorWin* pNavigatorWin;
+public:
+    SdNavigatorControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
 
- protected:
+protected:
     virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
- public:
-    SdNavigatorControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
+private:
+    SdNavigatorWin* pNavigatorWin;
 };
+
+
 
 /*************************************************************************
 |*
@@ -224,15 +233,15 @@ class SdNavigatorControllerItem : public SfxControllerItem
 
 class SdPageNameControllerItem : public SfxControllerItem
 {
-    SdNavigatorWin* pNavigatorWin;
+public:
+    SdPageNameControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
 
- protected:
+protected:
     virtual void StateChanged( USHORT nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
- public:
-    SdPageNameControllerItem( USHORT, SdNavigatorWin*, SfxBindings* );
+private:
+    SdNavigatorWin* pNavigatorWin;
 };
 
-#endif      // _SD_NAVIGATR_HXX
-
+#endif
