@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 18:51:29 $
+ *  last change: $Author: obo $ $Date: 2001-12-19 18:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ TabPage TP_ENV_ENV
         Text[ chinese_simplified ] = "ζ•°ζ®εΊ“ε­—ζ®µ(~D)";
         Text[ russian ] = "Οξλε αΰηϋ δΰννϋυ";
         Text[ polish ] = "Pole bazy danych";
-        Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ή γƒ•γ‚£γƒΌγƒ«γƒ‰(~D)";
+        Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγƒ•γ‚£γƒΌγƒ«γƒ‰(~D)";
         Text[ chinese_traditional ] = "θ³‡ζ–™εΊ«ζ¬„δ½(~D)";
         Text[ arabic ] = "Νήα ήΗΪΟΙ ΗαΘνΗδΗΚ";
         Text[ greek ] = "Πεδίο βάσης δεδομένων";
@@ -485,6 +485,7 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
 };
+
 
 
 
