@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 12:21:22 $
+ *  last change: $Author: nn $ $Date: 2000-12-14 17:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,10 +794,19 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
 BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
-    BOOL bEqual = ( pObj1 == pObj2 );       // beide leer oder selbes Objekt
+    if ( pObj1 == pObj2 )               // both empty or the same object
+        return TRUE;
 
-    if ( !bEqual && pObj1 && pObj2 )
+    if ( pObj1 && pObj2 )
     {
+        //  first test for equal text content
+        USHORT nParCount = pObj1->GetParagraphCount();
+        if ( nParCount != pObj2->GetParagraphCount() )
+            return FALSE;
+        for (USHORT nPar=0; nPar<nParCount; nPar++)
+            if ( pObj1->GetText(nPar) != pObj2->GetText(nPar) )
+                return FALSE;
+
         SvMemoryStream  aStream1;
         SvMemoryStream  aStream2;
         pObj1->Store( aStream1 );
@@ -805,10 +814,10 @@ BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
         ULONG nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
             if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (USHORT) nSize ) )
-                bEqual = TRUE;
+                return TRUE;
     }
 
-    return bEqual;
+    return FALSE;
 }
 
 void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
