@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormatField.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:53:43 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ published service TableAutoFormatField
 
     /** property containing a description of the cell border.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional, property] com::sun::star::table::TableBorder TableBorder;
 };
