@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.47 $
-# Date:        $Date: 2005-02-24 14:07:05 $
+# Version:     $Revision: 1.48 $
+# Date:        $Date: 2005-02-24 14:44:57 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -354,6 +354,20 @@ elsif ( $platform eq "$FreeBSD" )
 } 
 elsif ( $platform eq "$Linux" ) 
 {
+# General Linux settings:
+      $CVER           = "C300";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GLIBC          = "2REDHAT60";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $OS             = "LINUX";
+      $PATH_SEPERATOR = $ps;
+      $XPVERSION      = "3"; 
+
 #Set machine_type specific values: 
    if (($machine_type eq "i686") or ($machine_type eq "i586"))
    {  print "Setting Linux Intel specific values... ";
@@ -364,6 +378,13 @@ elsif ( $platform eq "$Linux" )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+      if( @GCCVER@ >= 30401 ) {
+         $OUTPATH     = "unxlngi6";
+      	 $CVER        = "C341";
+      }
+      else {
+         $OUTPATH     = "unxlngi4";
+      }
    }
    elsif ($machine_type eq "x86_64")
    {  print "Setting Linux x86-64 specific values... ";
@@ -433,27 +454,9 @@ elsif ( $platform eq "$Linux" )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
    }
-   #Conditional setting depending on gcc3 (on x86):
-   $CVER           = "C300";
-   if (($machine_type eq "i686") or ($machine_type eq "i586"))
-   {
-        $OUTPATH      = "unxlngi4"
-   }
-   # General Linux settings:
 
-      $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
-      $COMPATH        = '@COMPATH@'; 
-      $GLIBC          = "2REDHAT60";
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $GUIENV         = "sal";
-      $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
-      $OS             = "LINUX";
-      $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3"; 
+   $INPATH         = $OUTPATH.$PROEXT;
+   $GVERDIR        = $INPATH;
 }
 elsif ( $platform eq "$Tru64" ) 
 {     print "Setting Tru64 specific values... ";
