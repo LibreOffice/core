@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:30:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ namespace sdr
     {
         ViewContact::ViewContact()
         :   mpAnimationInfo(0L),
+            mpViewObjectContactRedirector(0L),
             mbPaintRectangleValid(sal_False)
         {
         }
@@ -474,6 +475,20 @@ namespace sdr
         sal_Bool ViewContact::HasAnimationInfo() const
         {
             return (0L != mpAnimationInfo);
+        }
+
+        // access to ViewObjectContactRedirector
+        ViewObjectContactRedirector* ViewContact::GetViewObjectContactRedirector() const
+        {
+            return mpViewObjectContactRedirector;
+        }
+
+        void ViewContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew)
+        {
+            if(mpViewObjectContactRedirector != pNew)
+            {
+                mpViewObjectContactRedirector = pNew;
+            }
         }
 
         // access to SdrObject and/or SdrPage. May return 0L like the default
