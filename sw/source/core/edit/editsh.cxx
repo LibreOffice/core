@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 14:25:06 $
+ *  last change: $Author: jp $ $Date: 2001-12-10 22:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
 void SwEditShell::ClearAutomaticContour()
 {
     SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
+    ASSERT( pNd, "is no NoTxtNode!" );
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
