@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-10 15:57:21 $
+ *  last change: $Author: mib $ $Date: 2001-10-10 17:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,13 +519,15 @@ void XMLTextFrameContext::Create( sal_Bool bHRefOrBase64 )
         }
     }
 
+    // anchor type (must be set before any other properties, because
+    // otherwise some orientations cannot be set or will be changed
+    // afterwards)
+    aAny <<= eAnchorType;
+    xPropSet->setPropertyValue( sAnchorType, aAny );
+
     // hard properties
     if( pStyle )
         pStyle->FillPropertySet( xPropSet );
-
-    // anchor type
-    aAny <<= eAnchorType;
-    xPropSet->setPropertyValue( sAnchorType, aAny );
 
 
     // x and y
