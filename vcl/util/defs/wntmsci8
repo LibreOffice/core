@@ -7949,3 +7949,5 @@ threadFunc
 ?resize@?$hashtable@U?$pair@$$CBHH@_STL@@HU?$hash@H@2@U?$_Select1st@U?$pair@$$CBHH@_STL@@@2@U?$equal_to@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@QAEXI@Z
 ?size@?$hash_map@HHU?$hash@H@_STL@@U?$equal_to@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@QBEIXZ
 ?size@?$hashtable@U?$pair@$$CBHH@_STL@@HU?$hash@H@2@U?$_Select1st@U?$pair@$$CBHH@_STL@@@2@U?$equal_to@H@2@V?$allocator@U?$pair@$$CBHH@_STL@@@2@@_STL@@QBEIXZ
+?GetTextOutline@OutputDevice@@QBEEAAVPolyPolygon@@ABVString@@GGGEKPBJ@Z
+?GetTextOutlines@OutputDevice@@QBEEAAV?$vector@VPolyPolygon@@V?$allocator@VPolyPolygon@@@_STL@@@_STL@@ABVString@@GGGEKPBJ@Z
