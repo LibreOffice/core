@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2001-10-23 11:07:23 $
+#   last change: $Author: hr $ $Date: 2001-10-23 11:09:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,14 +96,14 @@ CFLAGS=
 .ENDIF
 CFLAGS+=-fmessage-length=0 -c $(INCLUDE)
 # flags for the C++ Compiler
-CFLAGSCC= -pipe -mcpu=pentiumpro -fno-rtti
+CFLAGSCC= -pipe -mcpu=pentiumpro
 # Flags for enabling exception handling
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
-CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive
+CFLAGSCXX= -pipe -mcpu=pentiumpro -fno-for-scope -fpermissive -fno-rtti
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
