@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 14:45:09 $
+ *  last change: $Author: iha $ $Date: 2002-12-02 18:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ void    PrtPrvWindow::Paint(const Rectangle&)
         }
 
         if(bAccessibleColors)
-            SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
+            SetFillColor( GetSettings().GetStyleSettings().GetWindowColor() );
         else
             SetFillColor( Color( COL_GRAY ) );
 
