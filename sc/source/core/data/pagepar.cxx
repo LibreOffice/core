@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagepar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 10:55:03 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,42 +83,26 @@ ScPageTableParam::ScPageTableParam()
 
 //------------------------------------------------------------------------
 
-ScPageTableParam::ScPageTableParam( const ScPageTableParam& r )
-{
-    *this = r;
-}
-
-//------------------------------------------------------------------------
-
-__EXPORT ScPageTableParam::~ScPageTableParam()
+ScPageTableParam::~ScPageTableParam()
 {
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPageTableParam::Reset()
+void ScPageTableParam::Reset()
 {
     bNotes=bGrid=bHeaders=bDrawings=
-    bLeftRight=bScaleAll=bScalePageNum=
+    bLeftRight=bScaleAll=bScaleTo=bScalePageNum=
     bFormulas=bNullVals=bSkipEmpty          = FALSE;
     bTopDown=bScaleNone=bCharts=bObjects    = TRUE;
-    nScaleAll       = 100;
-    nScalePageNum   = 0;
-    nFirstPageNo    = 1;
+    nScaleAll = 100;
+    nScalePageNum = nScaleWidth = nScaleHeight = 0;
+    nFirstPageNo = 1;
 }
 
 //------------------------------------------------------------------------
 
-ScPageTableParam& __EXPORT ScPageTableParam::operator=( const ScPageTableParam& r )
-{
-    memcpy( this, &r, sizeof(ScPageTableParam) );
-
-    return *this;
-}
-
-//------------------------------------------------------------------------
-
-BOOL __EXPORT ScPageTableParam::operator==( const ScPageTableParam& r ) const
+BOOL ScPageTableParam::operator==( const ScPageTableParam& r ) const
 {
     return ( memcmp( this, &r, sizeof(ScPageTableParam) ) == 0 );
 }
@@ -133,20 +117,13 @@ ScPageAreaParam::ScPageAreaParam()
 
 //------------------------------------------------------------------------
 
-ScPageAreaParam::ScPageAreaParam( const ScPageAreaParam& r )
-{
-    *this = r;
-}
-
-//------------------------------------------------------------------------
-
-__EXPORT ScPageAreaParam::~ScPageAreaParam()
+ScPageAreaParam::~ScPageAreaParam()
 {
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPageAreaParam::Reset()
+void ScPageAreaParam::Reset()
 {
     bPrintArea = bRepeatRow = bRepeatCol = FALSE;
 
@@ -157,22 +134,7 @@ void __EXPORT ScPageAreaParam::Reset()
 
 //------------------------------------------------------------------------
 
-ScPageAreaParam& __EXPORT ScPageAreaParam::operator=( const ScPageAreaParam& r )
-{
-    bPrintArea = r.bPrintArea;
-    bRepeatRow = r.bRepeatRow;
-    bRepeatCol = r.bRepeatCol;
-
-    memcpy( &aPrintArea, &r.aPrintArea, sizeof(ScRange) );
-    memcpy( &aRepeatRow, &r.aRepeatRow, sizeof(ScRange) );
-    memcpy( &aRepeatCol, &r.aRepeatCol, sizeof(ScRange) );
-
-    return *this;
-}
-
-//------------------------------------------------------------------------
-
-BOOL __EXPORT ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
+BOOL ScPageAreaParam::operator==( const ScPageAreaParam& r ) const
 {
     BOOL bEqual =
             bPrintArea  == r.bPrintArea
