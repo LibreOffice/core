@@ -5,6 +5,7 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\login %_DEST%\bin%_EXT%\login.bin
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%
 
 ..\dtd\menubar.dtd %_DEST%\bin%_EXT%\menubar.dtd
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
