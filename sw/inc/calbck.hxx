@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calbck.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <tools/rtti.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwModify;
 class SwClientIter;
 class SfxPoolItem;
@@ -98,7 +102,7 @@ class SvStream;
 // SwClient
 // ----------
 
-class SwClient
+class SW_DLLPUBLIC SwClient
 {
     friend class SwModify;
     friend class SwClientIter;
@@ -115,11 +119,14 @@ class SwClient
 
 protected:
     SwModify *pRegisteredIn;
-    SwClient(SwModify *pToRegisterIn);
+
+    // single argument ctors shall be explicit.
+    explicit SwClient(SwModify *pToRegisterIn);
 
 public:
     inline SwClient();
     virtual ~SwClient();
+
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
 
@@ -156,18 +163,22 @@ inline SwClient::SwClient() :
 
 // Klasse hat eine doppelt Verkette Liste fuer die Abhaengigen.
 
-class SwModify: public SwClient
+class SW_DLLPUBLIC SwModify: public SwClient
 {
     friend SvStream& operator<<( SvStream& aS, SwModify & );
 
     friend class SwClientIter;
     SwClient* pRoot;
 
-    SwClient *_Remove(SwClient *pDepend);
+    SW_DLLPRIVATE SwClient *_Remove(SwClient *pDepend);
 
 public:
-    SwModify(SwModify *pToRegisterIn );
+    SwModify() : pRoot(0) {}
+
+    // single argument ctors shall be explicit.
+    explicit SwModify(SwModify *pToRegisterIn );
     virtual ~SwModify();
+
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
     void Add(SwClient *pDepend);
     SwClient *Remove(SwClient *pDepend)
@@ -184,6 +195,16 @@ public:
 
     BOOL IsLastDepend() const
         { return pRoot && !pRoot->pLeft && !pRoot->pRight; }
+
+private:
+    // forbidden and not implemented (see @ SwClient).
+    SwModify & operator= (const SwModify &);
+
+protected:
+    // forbidden and not implemented (see @ SwClient),
+    //   but GCC >= 3.4 needs an accessible "T (const T&)"
+    //   to pass a "T" as a "const T&" argument
+    SwModify (const SwModify &);
 };
 
 // ----------
@@ -197,19 +218,26 @@ public:
  */
 class SwDepend: public SwClient
 {
-private:
     SwClient *pToTell;
+
 public:
+    SwDepend() : pToTell(0) {}
+    SwDepend(SwClient *pTellHim, SwModify *pDepend);
+
     SwClient* GetToTell() { return pToTell; }
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
-    SwDepend(SwClient *pTellHim, SwModify *pDepend);
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem & ) const;
+
+private:
+    // forbidden and not implemented (see @ SwClient).
+    SwDepend (const SwDepend &);
+    SwDepend & operator= (const SwDepend &);
 };
 
 
-class SwClientIter
+class SW_DLLPUBLIC SwClientIter
 {
     friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
     friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
