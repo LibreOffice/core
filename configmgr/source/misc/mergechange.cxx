@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-04 09:50:14 $
+ *  last change: $Author: jb $ $Date: 2001-05-28 15:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,12 @@ namespace configmgr
                         OSL_ENSURE(pNewValueNode->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
 
                         std::auto_ptr<INode> pNewNode(pNewValueNode.release());
-                        std::auto_ptr<Change> pNewChange( new AddNode(pNewNode,m_aValueChange.getNodeName()) );
 
+                        std::auto_ptr<AddNode> pNewAdd( new AddNode(pNewNode,m_aValueChange.getNodeName()) );
+                        if (_rAddNode.isReplacing())
+                            pNewAdd->setReplacing();
+
+                        std::auto_ptr<Change> pNewChange( pNewAdd.release() );
                         replaceExistingEntry(pNewChange);
                     }
                     else
@@ -261,7 +265,7 @@ namespace configmgr
             if ( isLocalizedValueSet(_rSubtree) )
             {
                 std::auto_ptr<ValueChange> pNewValueChange( new ValueChange(m_aValueChange) );
-                OSL_ENSURE(pNewValueChange->isLocalized(), "OMergeValueChange:handle(AddNode): have a non-localized ValueChange a for a localized node!");
+                OSL_ENSURE(pNewValueChange->isLocalized(), "OMergeValueChange:handle(SubtreeChange): have a non-localized ValueChange a for a localized node!");
 
                 std::auto_ptr<Change> pNewChange( pNewValueChange.release() );
 
@@ -331,7 +335,7 @@ namespace configmgr
     private:
         virtual void handle(ValueChange& aValueChange)
             {
-                OSL_ENSURE(false, "OMergeRemoveNode::handle(ValueChange): remove a value node?");
+                m_eAction = FlagDeleted;
             }
 
         virtual void handle(RemoveNode& _rRemoveNode)
@@ -343,8 +347,10 @@ namespace configmgr
 
         virtual void handle(AddNode& _rAddNode)
             {
-                // though this is suspicious, as currently no AddNode changes are created ...
-                m_eAction = RemoveCompletely;
+                if (_rAddNode.isReplacing())
+                    m_eAction = FlagDeleted;
+                else
+                    m_eAction = RemoveCompletely;
             }
 
         virtual void handle(SubtreeChange& _rSubtree)
@@ -358,45 +364,6 @@ namespace configmgr
 
 
     // -----------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------
-    class OMergeSubtreeChange : private ChangeTreeModification,public ONameCreator
-    {
-        const SubtreeChange& m_aSubtreeChange;
-    public:
-        OMergeSubtreeChange(const SubtreeChange& _aSubtreeChange)
-                :m_aSubtreeChange(_aSubtreeChange)
-            {
-
-            }
-        void handleChange(Change& _pChange)
-            {
-                applyToChange(_pChange);
-            }
-
-    private:
-        virtual void handle(ValueChange& aValueChange)
-            {
-                OSL_ENSURE(false, "OMergeSubtreeChange::handle(ValueChange): remove a value node?");
-            }
-
-        virtual void handle(RemoveNode& _rRemoveNode)
-            {
-                OSL_ENSURE(false, "OMergeSubtreeChange::handle(RemoveNode): should never happen!");
-            }
-
-        virtual void handle(AddNode& _rAddNode)
-            {
-            }
-
-        virtual void handle(SubtreeChange& _rSubtree)
-            {
-                // we will run through the exist tree and insert the new one.
-                pushName(_rSubtree.getNodeName());
-                _rSubtree.forEachChange(*this);
-                popName();
-            }
-    };
-
     // -----------------------------------------------------------------------------
     // Main class for merging treechangelists
 
@@ -495,18 +462,28 @@ namespace configmgr
     {
         // Handle an AddNode
         rtl::OUString aSearchName = createName(_rAddNode.getNodeName());
+
         OMergeSearchChange a(aSearchName);
         Change *pChange = a.searchForChange(m_aTreeChangeList.root);
 
+        bool bReplacing = _rAddNode.isReplacing();
         if (pChange)
         {
-            OSL_ENSURE(pChange->ISA(RemoveNode) || _rAddNode.isReplacing(), "OMergeTreeChangeList::handle(AddNode): the changes tree given already contains a change for this!");
+            OSL_ENSURE(pChange->ISA(RemoveNode) || bReplacing, "OMergeTreeChangeList::handle(AddNode): the changes tree given already contains a change for this!");
 
             m_pCurrentParent->removeChange(pChange->getNodeName());
+
+            bReplacing = true;
         }
+
         // insert manually
         auto_ptr<INode> pNode = auto_ptr<INode>(_rAddNode.getAddedNode()->clone());
-        auto_ptr<Change> pNewChange(new AddNode(pNode, _rAddNode.getNodeName()));
+
+        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName()));
+        if (bReplacing)
+            pNewAdd->setReplacing();
+
+        auto_ptr<Change> pNewChange( pNewAdd.release() );
         m_pCurrentParent->addChange(pNewChange);
     }
 
@@ -722,15 +699,22 @@ namespace configmgr
         OMergeSearchChange a(aSearchName);
         Change *pChange = a.searchForChange(m_aSubtreeChange);
 
+        bool bReplacing = _rAddNode.isReplacing();
         if (pChange)
         {
-            OSL_ENSURE(pChange->ISA(RemoveNode) || _rAddNode.isReplacing(), "OMergeTreeChangeList::handle(AddNode): the changes tree given already contains a change for this!");
+            OSL_ENSURE(pChange->ISA(RemoveNode) || bReplacing, "OMergeTreeChangeList::handle(AddNode): the changes tree given already contains a change for this!");
 
             m_pCurrentParent->removeChange(pChange->getNodeName());
+            bReplacing = true;
         }
         // insert manually
         auto_ptr<INode> pNode = auto_ptr<INode>(_rAddNode.getAddedNode()->clone());
-        auto_ptr<Change> pNewChange(new AddNode(pNode, _rAddNode.getNodeName()));
+
+        auto_ptr<AddNode> pNewAdd(new AddNode(pNode, _rAddNode.getNodeName()));
+        if (bReplacing)
+            pNewAdd->setReplacing();
+
+        auto_ptr<Change> pNewChange( pNewAdd.release() );
         m_pCurrentParent->addChange(pNewChange);
     }
 
