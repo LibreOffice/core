@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:24 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 12:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -162,20 +165,7 @@ SwBlockName::SwBlockName( const String& rShort, const String& rLong, long n )
 
 short SwImpBlocks::GetFileType( const String& rFile )
 {
-    BOOL bExist = FALSE;
-    try
-    {
-        ::ucb::Content aTestContent(
-            rFile,
-            uno::Reference< XCommandEnvironment >());
-        bExist = aTestContent.isDocument();
-    }
-    catch(...)
-    {
-        bExist = FALSE;
-    }
-
-    if( !bExist )
+    if( !FStatHelper::IsDocument( rFile ) )
         return SWBLK_NO_FILE;
     if( SvStorage::IsStorageFile( rFile ) )
         return SWBLK_SW3;
@@ -190,25 +180,12 @@ SwImpBlocks::SwImpBlocks( const String& rFile, BOOL bMake )
     : aFile( rFile ), bReadOnly( TRUE ), bInPutMuchBlocks( FALSE ),
     nCur( (USHORT)-1 ), pDoc( 0 )
 {
-    try
-    {
-        ::ucb::Content aTestContent(
-        rFile,
-        uno::Reference< XCommandEnvironment >());
-        uno::Any aAny = aTestContent.getPropertyValue( C2U("DateModified") );
-        if(aAny.hasValue())
-        {
-            const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-            aDateModified = Date(pDT->Day, pDT->Month, pDT->Year);
-            aTimeModified = Time(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds);
-        }
-    }
-    catch(...)
-    {
-        DBG_ERROR("exception caught")
-    }
+    FStatHelper::GetModifiedDateTimeOfFile( rFile,
+                                            &aDateModified, &aTimeModified );
     INetURLObject aObj(rFile);
+    aObj.setExtension( aEmptyStr );
     aName = aObj.GetBase();
+
     aName.Erase(aName.Len() - 4, 4); //remove extension
 //  aDEntry.SetExtension( aEmptyStr );
 //  aName = aDEntry.GetName();
@@ -312,47 +289,17 @@ BOOL SwImpBlocks::IsFileChanged() const
 {
     Date aTempDateModified( aDateModified );
     Time aTempTimeModified( aTimeModified );
-    try
-    {
-        ::ucb::Content aTestContent(
-        aFile,
-        uno::Reference< XCommandEnvironment >());
-        uno::Any aAny = aTestContent.getPropertyValue( C2U("DateModified") );
-        if(aAny.hasValue())
-        {
-            const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-            aTempDateModified = Date(pDT->Day, pDT->Month, pDT->Year);
-            aTempTimeModified = Time(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds);
-        }
-    }
-    catch(...)
-    {
-        DBG_ERROR("exception caught")
-    }
-    return aDateModified != aTempDateModified ||
-            aTimeModified != aTempTimeModified;
+    return FStatHelper::GetModifiedDateTimeOfFile( aFile,
+                            &aTempDateModified, &aTempTimeModified ) &&
+          ( aDateModified != aTempDateModified ||
+            aTimeModified != aTempTimeModified );
 }
 
 
 void SwImpBlocks::Touch()
 {
-    try
-    {
-        ::ucb::Content aTestContent(
-        aFile,
-        uno::Reference< XCommandEnvironment >());
-        uno::Any aAny = aTestContent.getPropertyValue( C2U("DateModified") );
-        if(aAny.hasValue())
-        {
-            const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-            aDateModified = Date(pDT->Day, pDT->Month, pDT->Year);
-            aTimeModified = Time(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds);
-        }
-    }
-    catch(...)
-    {
-        DBG_ERROR("exception caught")
-    }
+    FStatHelper::GetModifiedDateTimeOfFile( aFile,
+                                            &aDateModified, &aTimeModified );
 }
 
 BOOL SwImpBlocks::IsOnlyTextBlock( const String& ) const
@@ -556,15 +503,11 @@ ULONG SwTextBlocks::ConvertToNew()
             ::ucb::Content aContent(
                 aNewFull.GetMainURL(), Reference< XCommandEnvironment > ());
             aContent.executeCommand( C2U( "delete" ), makeAny( sal_Bool( sal_True ) ) );
-            uno::Any aAny = aContent.getPropertyValue( C2U("DateModified") );
-            if(aAny.hasValue())
-            {
-                const util::DateTime* pDT = (util::DateTime*)aAny.getValue();
-                pImp->aDateModified = Date(pDT->Day, pDT->Month, pDT->Year);
-                pImp->aTimeModified = Time(pDT->Hours, pDT->Minutes, pDT->Seconds, pDT->HundredthSeconds);
-            }
         }
         catch(...){}
+
+        FStatHelper::GetModifiedDateTimeOfFile( aNewFull.GetMainURL(),
+                                &pImp->aDateModified, &pImp->aTimeModified );
     }
     return nErr;
 }
