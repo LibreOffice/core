@@ -120,7 +120,7 @@ public class FunctionLookup implements SymbolLookup {
                 // Text
                 addEntry("RIGHT", TokenConstants.TRIGHT, -1);
                 addEntry("SUBSTITUTE", TokenConstants.TSUBSTITUTE, -1);
-                addEntry("FIND", TokenConstants.TFIND, -1);
+                addEntry("SEARCH", TokenConstants.TFIND, -1);
                 addEntry("LEFT", TokenConstants.TLEFT, -1);
                 // Logical
                 addEntry("AND", TokenConstants.TAND, -1 );
