@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:26 $
+ *  last change: $Author: dbo $ $Date: 2001-05-09 13:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,6 @@
  *
  *
  ************************************************************************/
-
-/*
- * This bootstraps an initial service factory up to the point
- * that a dll component loader, simple and default registry and an implementation registration
- * service is registered and available.
- * All other services have to be registered somewhere else.
- */
-
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #define _CPPUHELPER_SERVICEFACTORY_HXX_
 
@@ -73,10 +65,16 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
+
+/*
+ * This bootstraps an initial service factory up to the point
+ * that a dll component loader, simple and default registry and an implementation registration
+ * service is registered and available.
+ * All other services have to be registered somewhere else.
+ */
 
 namespace cppu
 {
@@ -124,7 +122,8 @@ createRegistryServiceFactory(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {
-    return ::cppu::createRegistryServiceFactory( rRegistryFile, ::rtl::OUString(), bReadOnly, rBootstrapPath );
+    return ::cppu::createRegistryServiceFactory(
+        rRegistryFile, ::rtl::OUString(), bReadOnly, rBootstrapPath );
 }
 
 
@@ -136,7 +135,8 @@ createServiceFactory(
     const ::rtl::OUString & rBootstrapPath = ::rtl::OUString() )
     SAL_THROW( (::com::sun::star::uno::Exception) )
 {
-    return ::cppu::createRegistryServiceFactory( ::rtl::OUString(), ::rtl::OUString(), sal_False, rBootstrapPath );
+    return ::cppu::createRegistryServiceFactory(
+        ::rtl::OUString(), ::rtl::OUString(), sal_False, rBootstrapPath );
 }
 
 } // end namespace cppu

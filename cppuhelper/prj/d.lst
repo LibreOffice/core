@@ -29,7 +29,7 @@ mkdir: %_DEST%\inc%_EXT%\cppuhelper
 ..\inc\cppuhelper\compbase12.hxx %_DEST%\inc%_EXT%\cppuhelper\compbase12.hxx
 
 ..\inc\cppuhelper\shlib.hxx %_DEST%\inc%_EXT%\cppuhelper\shlib.hxx
-..\inc\cppuhelper\tdmgr.hxx %_DEST%\inc%_EXT%\cppuhelper\tdmgr.hxx
+..\inc\cppuhelper\bootstrap.hxx %_DEST%\inc%_EXT%\cppuhelper\bootstrap.hxx
 ..\inc\cppuhelper\extract.hxx %_DEST%\inc%_EXT%\cppuhelper\extract.hxx
 ..\inc\cppuhelper\exc_hlp.hxx %_DEST%\inc%_EXT%\cppuhelper\exc_hlp.hxx
 ..\inc\cppuhelper\typeprovider.hxx %_DEST%\inc%_EXT%\cppuhelper\typeprovider.hxx
