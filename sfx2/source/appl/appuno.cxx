@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-10 14:22:10 $
+ *  last change: $Author: mba $ $Date: 2000-12-11 10:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,11 +1045,11 @@ void SAL_CALL SfxMacroLoader::load (   const ::com::sun::star::uno::Reference< :
             pApp->EnterBasicCall();
 
     // macro:-::com::sun::star::util::URL analysiern
-    // 'macro://#lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-    // 'macro:#lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
-    // 'macro:obj.method(args)' => Object via App-BASIC-Mgr
+    // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
+    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
+    // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
     String aMacro( rURL );
-    sal_uInt16 nHashPos = aMacro.Search( '#' );
+    sal_uInt16 nHashPos = aMacro.Search( '/', 8 );
     sal_uInt16 nArgsPos = aMacro.Search( '(' );
     BasicManager *pBasMgr = 0;
     ErrCode nErr = ERRCODE_NONE;
@@ -1058,10 +1058,10 @@ void SAL_CALL SfxMacroLoader::load (   const ::com::sun::star::uno::Reference< :
     if ( STRING_NOTFOUND != nHashPos && nHashPos < nArgsPos )
     {
         // BasManager ermitteln
-        String aBasMgrName( INetURLObject::decode(aMacro.Copy( 6, nHashPos-6 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
-        if ( aBasMgrName.EqualsAscii("//") )
+        String aBasMgrName( INetURLObject::decode(aMacro.Copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET) );
+        if ( !aBasMgrName.Len() )
             pBasMgr = pApp->GetBasicManager();
-        else if ( !aBasMgrName.Len() )
+        else if ( aBasMgrName.EqualsAscii(".") )
             pBasMgr = SfxObjectShell::Current()->GetBasicManager();
         else
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
@@ -1137,9 +1137,11 @@ void SAL_CALL SfxMacroLoader::load (   const ::com::sun::star::uno::Reference< :
     SbxBase::ResetError();
     if ( rListener.is() )
     {
+/*
         if( nErr == ERRCODE_NONE )
             rListener->loadFinished (this) ;
         else
+*/
             rListener->loadCancelled( this ) ;
     }
 }
