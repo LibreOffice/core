@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 11:42:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _HTMLOUT_HXX //autogen
 #include <svtools/htmlout.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
 #endif
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
@@ -298,7 +301,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             {
                 aBulletSrc = pOption->GetString();
                 if( !InternalImgToPrivateURL(aBulletSrc) )
-                    aBulletSrc = INetURLObject::RelToAbs( aBulletSrc );
+                    aBulletSrc = URIHelper::SmartRel2Abs( INetURLObject( sBaseURL ), aBulletSrc );
             }
             break;
         case HTML_O_WIDTH:
