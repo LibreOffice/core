@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:03:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese_brazilian ] = "~Tabula��o" ;
         TEXT [ portuguese ] = "~Tabula��o" ;
         TEXT [ finnish ] = "~Sarkaimet" ;
-        TEXT [ danish ] = "Tabulator" ;
+        TEXT [ danish ] = "Tabu~lator" ;
         TEXT [ french ] = "Tabulation" ;
         TEXT [ swedish ] = "~Tabulator" ;
         TEXT [ dutch ] = "~Tab" ;
@@ -119,6 +119,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ hebrew ] = "~Tabulator";
         TEXT[ hindi ] = "~टेब्स";
         TEXT[ slovak ] = "~Tabulátory";
+        TEXT[ hungarian ] = "~Tabulátorok";
+        TEXT[ slovenian ] = "~Tabulatorji";
     };
     RadioButton CB_SEMI
     {
@@ -131,7 +133,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese_brazilian ] = "~Ponto-e-v�rgulas" ;
         TEXT [ portuguese ] = "Ponto e v�r~gula" ;
         TEXT [ finnish ] = "~Puolipisteet" ;
-        TEXT [ danish ] = "Semikolon" ;
+        TEXT [ danish ] = "~Semikoloner" ;
         TEXT [ french ] = "Point-virgule" ;
         TEXT [ swedish ] = "~Semikolon" ;
         TEXT [ dutch ] = "~Puntkomma" ;
@@ -154,6 +156,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ hebrew ] = "~Semikolon";
         TEXT[ hindi ] = "~अर्ध विराम का चिह्न";
         TEXT[ slovak ] = "~Bodkočiarky";
+        TEXT[ hungarian ] = "~Pontosvesszők";
+        TEXT[ slovenian ] = "~Podpičja";
     };
     RadioButton CB_PARA
     {
@@ -166,7 +170,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT [ portuguese_brazilian ] = "~Par�grafo" ;
         TEXT [ portuguese ] = "~Par�grafo" ;
         TEXT [ finnish ] = "~Kappale" ;
-        TEXT [ danish ] = "Afsnit" ;
+        TEXT [ danish ] = "~Afsnit" ;
         TEXT [ french ] = "Paragraphe" ;
         TEXT [ swedish ] = "Styc~ke" ;
         TEXT [ dutch ] = "~Alinea" ;
@@ -189,6 +193,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ hebrew ] = "‮פסקאות‬";
         TEXT[ hindi ] = "~परिच्छेद";
         TEXT[ slovak ] = "O~dstavec";
+        TEXT[ hungarian ] = "~Bekezdés";
+        TEXT[ slovenian ] = "~Odstavek";
     };
     RadioButton RB_OTHER
     {
@@ -200,7 +206,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ english_us ] = "~Other: " ;
         Text [ portuguese_brazilian ] = "~Outros: " ;
         Text [ swedish ] = "An~dra:  " ;
-        Text [ danish ] = "Andre: " ;
+        Text [ danish ] = "~Andre: " ;
         Text [ italian ] = "~Altri: " ;
         Text [ spanish ] = "~Otros:  " ;
         Text [ french ] = "~Autres : " ;
@@ -222,6 +228,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "An~dere:";
         Text[ hindi ] = "~अन्य: ";
         Text[ slovak ] = "~Iné: ";
+        Text[ hungarian ] = "~Egyebek:";
+        Text[ slovenian ] = "~Drugo:";
     };
     Edit ED_OTHER
     {
@@ -243,7 +251,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ english_us ] = "Equal width for all columns" ;
         Text [ portuguese_brazilian ] = "Mesma largura para todas as colunas" ;
         Text [ swedish ] = "Samma bredd p� alla kolumner" ;
-        Text [ danish ] = "Alle kolonner samme bredde" ;
+        Text [ danish ] = "Samme bredde for alle kolonner" ;
         Text [ italian ] = "~Larghezza uguale per tutte le colonne" ;
         Text [ spanish ] = "Mismo an~cho para todas las columnas" ;
         Text [ french ] = "~Largeur identique pour toutes les colonnes" ;
@@ -266,6 +274,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "Gleiche ~Breite aller Spalten";
         Text[ hindi ] = "सब स्तंभों केलिए समान चौड़ाई";
         Text[ slovak ] = "Rovnaká šírka všetkých stĺpcov";
+        Text[ hungarian ] = "Összes oszlop azonos méretű";
+        Text[ slovenian ] = "Enake širine stolpcev";
     };
     FixedLine FL_DELIM
     {
@@ -301,6 +311,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ hebrew ] = "Trennzeichen im Text";
         TEXT[ hindi ] = "में अलग टेक्स्ट्";
         TEXT[ slovak ] = "Oddeliť text";
+        TEXT[ hungarian ] = "Szöveg elválasztása a következőnél";
+        TEXT[ slovenian ] = "Loči besedilo pri";
     };
     CheckBox CB_HEADER
     {
@@ -312,7 +324,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ italian ] = "Intestazione";
         Text[ portuguese_brazilian ] = "Cabe�alho";
         Text[ portuguese ] = "~T�tulo";
-        Text[ danish ] = "Overskrift";
+        Text[ danish ] = "Tabeloverskrift";
         Text[ french ] = "Titre";
         Text[ swedish ] = "�ve~rskrift";
         Text[ dutch ] = "~Kop";
@@ -335,6 +347,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "‮כותרת עליונה‬";
         Text[ hindi ] = "शीर्षक";
         Text[ slovak ] = "Záhlavie";
+        Text[ hungarian ] = "Élőfej";
+        Text[ slovenian ] = "Glava";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -346,7 +360,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ italian ] = "Ripeti su ogni pagina";
         Text[ portuguese_brazilian ] = "~Repetir cabe�alho";
         Text[ portuguese ] = "~Repetir em todas as p�ginas";
-        Text[ danish ] = "Gentag p� hver side";
+        Text[ danish ] = "~Gentag sidehoved";
         Text[ french ] = "R�p�ter sur chaque page";
         Text[ swedish ] = "~Upprepa p� varje sida";
         Text[ dutch ] = "Op iedere pagina ~herhalen";
@@ -369,6 +383,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "Auf jeder Seite ~wiederholen";
         Text[ hindi ] = "शीर्षक ~दुहराना";
         Text[ slovak ] = "O~pakovať záhlavie";
+        Text[ hungarian ] = "Fejléc ~ismétlése";
+        Text[ slovenian ] = "Po~novi glavo";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -380,7 +396,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ italian ] = "Non separare la tabella";
         Text[ portuguese_brazilian ] = "N�o dividir a tabela";
         Text[ portuguese ] = "N�o ~dividir tabela";
-        Text[ danish ] = "Opdel tabel ikke";
+        Text[ danish ] = "Opdel ikke tabel";
         Text[ french ] = "Ne pas ~scinder le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
@@ -403,6 +419,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "Tabelle ~nicht trennen";
         Text[ hindi ] = "सारणी को मत अलगाना";
         Text[ slovak ] = "Nerozdeľovať tabuľku";
+        Text[ hungarian ] = "Ne ossza fel a táblázatot";
+        Text[ slovenian ] = "Ne razdeli tabele";
     };
     CheckBox CB_BORDER
     {
@@ -414,7 +432,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ italian ] = "Bordo";
         Text[ portuguese_brazilian ] = "Borda";
         Text[ portuguese ] = "~Contornos";
-        Text[ danish ] = "Ramme";
+        Text[ danish ] = "Kant";
         Text[ french ] = "~Bordure";
         Text[ swedish ] = "Inra~mning";
         Text[ dutch ] = "~Omranding";
@@ -437,6 +455,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "~Umrandung";
         Text[ hindi ] = "किनारा";
         Text[ slovak ] = "Okraj";
+        Text[ hungarian ] = "Szegély";
+        Text[ slovenian ] = "Obroba";
     };
     FixedLine FL_OPTIONS
     {
@@ -470,6 +490,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     String STR_CONVERT_TEXT_TABLE
     {
@@ -502,6 +524,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ hebrew ] = "Text in Tabelle umwandeln";
         TEXT[ hindi ] = "टेक्स्ट् को सारणी में बदलो";
         TEXT[ slovak ] = "Previesť text na tabuľku";
+        TEXT[ hungarian ] = "Szöveg átalakítása táblázattá";
+        TEXT[ slovenian ] = "Pretvori besedilo v tabelo";
     };
     OkButton BT_OK
     {
@@ -535,7 +559,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text [ portuguese_brazilian ] = "Auto~Formata��o..." ;
         Text [ portuguese ] = "Auto~Formato..." ;
         Text [ finnish ] = "~Automaattinen muotoilu..." ;
-        Text [ danish ] = "AutoFormat..." ;
+        Text [ danish ] = "Auto~Format..." ;
         Text [ french ] = "AutoFormat..." ;
         Text [ swedish ] = "AutoFormat..." ;
         Text [ dutch ] = "Auto~Opmaak..." ;
@@ -557,6 +581,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ hebrew ] = "‮עיצוב אוטומטי...‬";
         Text[ hindi ] = "स्वचालित ~रचना...";
         Text[ slovak ] = "Automatický ~formát...";
+        Text[ hungarian ] = "Automatikus ~formázás...";
+        Text[ slovenian ] = "Sam~ooblikovanje...";
     };
     TEXT[ chinese_simplified ] = "转换表格成文字";
     TEXT[ russian ] = "������������� ������� � �����";
@@ -574,7 +600,10 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ hebrew ] = "Tabelle in Text umwandeln";
     TEXT[ hindi ] = "सारणी को टेक्स्ट् में बदलो";
     TEXT[ slovak ] = "Previesť tabuľku na text";
+    TEXT[ hungarian ] = "Táblázat átalakítása szöveggé";
+    TEXT[ slovenian ] = "Pretvori tabelo v besedilo";
 };
+
 
 
 
