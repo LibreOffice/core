@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-30 15:59:40 $
+ *  last change: $Author: mtg $ $Date: 2001-09-13 11:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,14 +114,12 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     SwView* pView;
 
     // XEventListener
-    virtual void SAL_CALL disposing(
-        const STAR_NMSPC::lang::EventObject& rEventObject )
-;//                         throw( UNO_NMSPC::RuntimeException );
+    virtual void SAL_CALL disposing( const STAR_NMSPC::lang::EventObject& rEventObject )
+        throw ( com::sun::star::uno::RuntimeException );
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents(
-            const CLIP_NMSPC::ClipboardEvent& rEventObject )
-;//                                     throw( UNO_NMSPC::RuntimeException );
+    virtual void SAL_CALL changedContents( const CLIP_NMSPC::ClipboardEvent& rEventObject )
+        throw ( com::sun::star::uno::RuntimeException );
 
 public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}
