@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:50:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
 
 #ifndef _SWMODULE_HXX //autogen
 #include <swmodule.hxx>
