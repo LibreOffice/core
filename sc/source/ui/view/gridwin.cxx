@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:08 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2062,7 +2062,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         SCsROW nPosY;
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
         ScDPObject* pDPObj  = pDoc->GetDPAtCursor( nPosX, nPosY, pViewData->GetTabNo() );
-        if (pDPObj)
+        if ( pDPObj && pDPObj->GetSaveData()->GetDrillDown() )
         {
             ScAddress aPos( nPosX, nPosY, pViewData->GetTabNo() );
             ScDPPositionData aData;
@@ -2071,11 +2071,22 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             if ( ( aData.nFlags & sheet::MemberResultFlags::HASMEMBER ) &&
                  ! ( aData.nFlags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
-                ScDPObject aNewObj( *pDPObj );
-                pDPObj->ToggleDetails( aData, &aNewObj );
-                ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                aFunc.DataPilotUpdate( pDPObj, &aNewObj, TRUE, FALSE );
-                pViewData->GetView()->CursorPosChanged();       // shells may be switched
+                ScDBFunc* pView = pViewData->GetView();
+                USHORT nDummy;
+                if ( pView->HasSelectionForDrillDown( nDummy ) )
+                {
+                    // execute slot to show dialog
+                    pViewData->GetDispatcher().Execute( SID_OUTLINE_SHOW, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD );
+                }
+                else
+                {
+                    // toggle single entry
+                    ScDPObject aNewObj( *pDPObj );
+                    pDPObj->ToggleDetails( aData, &aNewObj );
+                    ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+                    aFunc.DataPilotUpdate( pDPObj, &aNewObj, TRUE, FALSE );
+                    pViewData->GetView()->CursorPosChanged();       // shells may be switched
+                }
             }
             else
                 Sound::Beep();      // nothing to expand/collapse
