@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:10:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,30 +367,25 @@ namespace xmloff
 
         /**
             @return
-                string which can be used in the <code>form:property</code> element's <code>type</code> attribute
+                token which can be used in the <code>form:property</code> element's <code>type</code> attribute
                 to describe the type of a value.<br/>
                 Possible types returned are
                 <ul>
                     <li><b>boolean</b>: <arg>_rValue</arg> was interpreted as boolean value before converting
                         it into a string</li>
-                    <li><b>short</b>: <arg>_rValue</arg> was interpreted as 16 bit integer value before
-                        converting it into a string</li>
-                    <li><b>int</b>: <arg>_rValue</arg> was interpreted as 32 bit integer value before
-                        converting it into a string</li>
-                    <li><b>long</b>: <arg>_rValue</arg> was interpreted as 64 bit integer value before
-                        converting it into a string</li>
-                    <li><b>double</b>: <arg>_rValue</arg> was interpreted as 64 bit floating point value before
+                    <li><b>float</b>: <arg>_rValue</arg> was interpreted as 64 bit floating point 16bit integer, 32bit integer or 64 bit integer value before
                         converting it into a string</li>
                     <li><b>string</b>: <arg>_rValue</arg> did not need any conversion as it already was a string</li>
                 </ul>
-                If the type is not convertable, an empty string is returned
+                If the type is not convertable, float is returned
         */
-        ::rtl::OUString implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
+        ::xmloff::token::XMLTokenEnum implGetPropertyXMLType(const ::com::sun::star::uno::Type& _rType);
 
 #ifdef DBG_UTIL
-                void AddAttribute( sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue );
-                void AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue );
+                void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue);
                 void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName, const sal_Char *pValue );
+                void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue);
+                void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
         inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
@@ -399,6 +394,10 @@ namespace xmloff
             { m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue ); }
         inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
             { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
+        inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, const ::rtl::OUString& _rValue)
+            { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _rValue); }
+        inline void AddAttribute(sal_uInt16 _nPrefix, ::xmloff::token::XMLTokenEnum _eName, ::xmloff::token::XMLTokenEnum _eValue )
+            { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _eName, _eValue); }
 #endif
 
 #ifdef DBG_UTIL
