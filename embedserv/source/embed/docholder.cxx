@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:00:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
-#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#ifndef _COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <com/sun/star/ui/XUIElement.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -518,7 +518,7 @@ HRESULT DocumentHolder::InPlaceActivate(
 
         // determine the menuhandle to get menutitems.
         if(m_xLayoutManager.is()) {
-            uno::Reference<drafts::com::sun::star::ui::XUIElement> xUIEl(
+            uno::Reference<::com::sun::star::ui::XUIElement> xUIEl(
                 m_xLayoutManager->getElement(
                     rtl::OUString::createFromAscii(
                         "private:resource/menubar/menubar")));
