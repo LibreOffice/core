@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:31:46 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 10:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,29 @@ SvXMLExport::~SvXMLExport()
     delete pNamespaceMap;
     delete pUnitConv;
     if (pProgressBarHelper)
+    {
+        if (xExportInfo.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+            if (xPropertySetInfo.is())
+            {
+                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressCurrent))
+                {
+                    sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
+                    sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
+                    uno::Any aAny;
+                    aAny <<= nProgressMax;
+                    xExportInfo->setPropertyValue(sProgressMax, aAny);
+                    aAny <<= nProgressCurrent;
+                    xExportInfo->setPropertyValue(sProgressCurrent, aAny);
+                }
+            }
+        }
         delete pProgressBarHelper;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1052,6 +1074,44 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
     }
 
     return sRet;
+}
+
+ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()
+{
+    if (!pProgressBarHelper)
+    {
+        pProgressBarHelper = new ProgressBarHelper(xStatusIndicator, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XML Export" )));
+
+        if (pProgressBarHelper && xExportInfo.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+            if (xPropertySetInfo.is())
+            {
+                OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
+                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressRange))
+                {
+                    uno::Any aAny;
+                    sal_Int32 nProgressMax(0);
+                    sal_Int32 nProgressCurrent(0);
+                    sal_Int32 nProgressRange(0);
+                    aAny = xExportInfo->getPropertyValue(sProgressRange);
+                    if (aAny >>= nProgressRange)
+                        pProgressBarHelper->SetRange(nProgressRange);
+                    aAny = xExportInfo->getPropertyValue(sProgressMax);
+                    if (aAny >>= nProgressMax)
+                        pProgressBarHelper->SetReference(nProgressMax);
+                    aAny = xExportInfo->getPropertyValue(sProgressCurrent);
+                    if (aAny >>= nProgressCurrent)
+                        pProgressBarHelper->SetValue(nProgressCurrent);
+                }
+            }
+        }
+    }
+    return pProgressBarHelper;
 }
 
 XMLEventExport& SvXMLExport::GetEventExport()

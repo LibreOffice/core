@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-22 11:06:52 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 10:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,31 +74,34 @@
 
 using namespace ::com::sun::star;
 
-const sal_Int32 nProgressBarRange = 1000000;
+const sal_Int32 nDefaultProgressBarRange = 1000000;
 const sal_Int16 nProgressStep = 2;
 
 ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator>& xTempStatusIndicator,
                                     const ::rtl::OUString& rText)
     : nOldPercent(0),
+    nRange(nDefaultProgressBarRange),
     xStatusIndicator(xTempStatusIndicator)
 {
     if (xStatusIndicator.is())
-        xStatusIndicator->start(rText, nProgressBarRange);
+        xStatusIndicator->setText(rText);
+//      xStatusIndicator->start(rText, nProgressBarRange);
 }
 
 ProgressBarHelper::~ProgressBarHelper()
 {
-    if (xStatusIndicator.is())
-        xStatusIndicator->end();
+//  if (xStatusIndicator.is())
+//      xStatusIndicator->end();
 }
 
-void ProgressBarHelper::SetValue(sal_Int32 nValue)
+void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
+    nValue = nTempValue;
     if (xStatusIndicator.is())
     {
         double fValue(nValue);
-        double fNewValue ((fValue * nProgressBarRange) / nReference);
-        double fPercent ((fNewValue * 100) / nProgressBarRange);
+        double fNewValue ((fValue * nRange) / nReference);
+        double fPercent ((fNewValue * 100) / nRange);
         if ((sal_Int16)fPercent >= (nOldPercent + nProgressStep))
         {
             xStatusIndicator->setValue((sal_Int32)fNewValue);

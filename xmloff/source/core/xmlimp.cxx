@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-28 10:47:41 $
+ *  last change: $Author: sab $ $Date: 2001-03-30 10:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,29 @@ SvXMLImport::~SvXMLImport() throw ()
     if (pNumImport)
         delete pNumImport;
     if (pProgressBarHelper)
+    {
+        if (xImportInfo.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+            if (xPropertySetInfo.is())
+            {
+                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressCurrent))
+                {
+                    sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
+                    sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
+                    uno::Any aAny;
+                    aAny <<= nProgressMax;
+                    xImportInfo->setPropertyValue(sProgressMax, aAny);
+                    aAny <<= nProgressCurrent;
+                    xImportInfo->setPropertyValue(sProgressCurrent, aAny);
+                }
+            }
+        }
         delete pProgressBarHelper;
+    }
 
     if( xFontDecls.Is() )
         ((SvXMLStylesContext *)&xFontDecls)->Clear();
@@ -798,6 +820,44 @@ void SvXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::
 
 void SvXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps)
 {
+}
+
+ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
+{
+    if (!pProgressBarHelper)
+    {
+        pProgressBarHelper = new ProgressBarHelper(mxStatusIndicator, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "XML Export" )));
+
+        if (pProgressBarHelper && xImportInfo.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+            if (xPropertySetInfo.is())
+            {
+                OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSRANGE));
+                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressCurrent) &&
+                    xPropertySetInfo->hasPropertyByName(sProgressRange))
+                {
+                    uno::Any aAny;
+                    sal_Int32 nProgressMax(0);
+                    sal_Int32 nProgressCurrent(0);
+                    sal_Int32 nProgressRange(0);
+                    aAny = xImportInfo->getPropertyValue(sProgressRange);
+                    if (aAny >>= nProgressRange)
+                        pProgressBarHelper->SetRange(nProgressRange);
+                    aAny = xImportInfo->getPropertyValue(sProgressMax);
+                    if (aAny >>= nProgressMax)
+                        pProgressBarHelper->SetReference(nProgressMax);
+                    aAny = xImportInfo->getPropertyValue(sProgressCurrent);
+                    if (aAny >>= nProgressCurrent)
+                        pProgressBarHelper->SetValue(nProgressCurrent);
+                }
+            }
+        }
+    }
+    return pProgressBarHelper;
 }
 
 XMLEventImportHelper& SvXMLImport::GetEventImport()
