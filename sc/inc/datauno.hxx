@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 08:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,14 +420,18 @@ public:
 class ScFilterDescriptorBase : public cppu::WeakImplHelper3<
                                     com::sun::star::sheet::XSheetFilterDescriptor,
                                     com::sun::star::beans::XPropertySet,
-                                    com::sun::star::lang::XServiceInfo >
+                                    com::sun::star::lang::XServiceInfo >,
+                               public SfxListener
 {
 private:
     SfxItemPropertySet      aPropSet;
+    ScDocShell*             pDocSh;
 
 public:
-                            ScFilterDescriptorBase();
+                            ScFilterDescriptorBase(ScDocShell* pDocShell);
     virtual                 ~ScFilterDescriptorBase();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // in den Ableitungen:
                             // (nField[] hier innerhalb des Bereichs)
@@ -500,7 +504,7 @@ private:
     ScQueryParam            aStoredParam;       // nField[] hier innerhalb des Bereichs
 
 public:
-                            ScFilterDescriptor();
+                            ScFilterDescriptor(ScDocShell* pDocSh);
     virtual                 ~ScFilterDescriptor();
 
                             // von ScFilterDescriptorBase:
@@ -521,7 +525,7 @@ private:
     ScDatabaseRangeObj*     pParent;
 
 public:
-                            ScRangeFilterDescriptor(ScDatabaseRangeObj* pPar);
+                            ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar);
     virtual                 ~ScRangeFilterDescriptor();
 
                             // von ScFilterDescriptorBase:
@@ -538,7 +542,7 @@ private:
     ScDataPilotDescriptorBase*  pParent;
 
 public:
-                            ScDataPilotFilterDescriptor(ScDataPilotDescriptorBase* pPar);
+                            ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar);
     virtual                 ~ScDataPilotFilterDescriptor();
 
                             // von ScFilterDescriptorBase:
