@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:49:38 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text [ french ] = "Actif" ;
         Text [ dutch ] = "Actief" ;
         Text [ swedish ] = "Aktiv" ;
-        Text [ danish ] = "Aktiv" ;
+        Text [ danish ] = "I/O aktiv" ;
         Text [ portuguese_brazilian ] = "Aktiv" ;
         Text [ portuguese ] = "Activo" ;
         Text[ chinese_simplified ] = "¼¤»î";
