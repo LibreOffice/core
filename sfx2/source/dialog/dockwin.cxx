@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:52:57 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 11:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,12 @@ void SfxDockingWindow::Resize()
             if( !GetFloatingWindow()->IsRollUp() )
                 SetFloatingSize( GetOutputSizePixel() );
             pImp->aWinState = GetFloatingWindow()->GetWindowState();
+            SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+            SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+            if ( pImp->bSplitable )
+                eIdent = SFX_CHILDWIN_SPLITWINDOW;
+            pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
         }
-
-        SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-        SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
-        if ( pImp->bSplitable )
-            eIdent = SFX_CHILDWIN_SPLITWINDOW;
-        pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
 }
 
@@ -785,8 +784,11 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
 void SfxDockingWindow::Initialize_Impl()
 {
     if ( !pMgr )
+    {
         // Bugfix #39771
+        pImp->bConstructed = TRUE;
         return;
+    }
 
     Point aPos = GetFloatingPos();
     if ( aPos == Point() )
@@ -1459,6 +1461,11 @@ USHORT SfxDockingWindow::GetWinBits_Impl() const
 void SfxDockingWindow::SetItemSize_Impl( const Size& rSize )
 {
     pImp->aSplitSize = rSize;
+    SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+    SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+    if ( pImp->bSplitable )
+        eIdent = SFX_CHILDWIN_SPLITWINDOW;
+    pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
 }
 
 void SfxDockingWindow::Disappear_Impl()
