@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 18:47:17 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,11 +548,11 @@ public:
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
     // mit KillPaMs, ClearMark
-    BOOL Undo(USHORT nUndoId = 0);
+    BOOL Undo(USHORT nUndoId = 0, USHORT nCnt = 1 );
     // wiederholt
     USHORT Repeat( USHORT nCount );
     // wiederholt
-    USHORT Redo();
+    USHORT Redo( USHORT nCnt = 1 );
 #ifdef USED
     // Aktionen klammern
     void StartAction();
