@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:34 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,11 +1200,7 @@ sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     if  (   (rEvt.GetColumnId() >= 0)
         &&  (rEvt.GetRow() >= -1)
-#if SUPD>627 || FS_PRIV_DEBUG
         &&  OJoinExchObj::isFormatAvailable(GetDataFlavors())
-#else
-        &&  sal_False
-#endif
         )
         return DND_ACTION_LINK;
 
@@ -1354,7 +1350,7 @@ void OSelectionBrowseBox::InsertColumn(OTableFieldDescRef pEntry, long& nColId)
             nColId = getFields().size();
         }
         else
-            nColId++; // innerhalb der vorgegebenen Liste
+            ++nColId; // innerhalb der vorgegebenen Liste
     }
 
     // in Liste der Spaltenbeschreibungen neues Element
@@ -1459,7 +1455,7 @@ sal_uInt16 OSelectionBrowseBox::FieldsCount()
     while (aIter != getFields().end())
     {
         if ((*aIter).isValid() && !(*aIter)->IsEmpty())
-            nCount++;
+            ++nCount;
         ++aIter;
     }
 
@@ -2267,4 +2263,10 @@ OTableFieldDescRef OSelectionBrowseBox::getEntry(OTableFields::size_type _nPos)
     return pEntry;
 }
 // -----------------------------------------------------------------------------
-
+void OSelectionBrowseBox::GetFocus()
+{
+    if(!IsEditing())
+        ActivateCell();
+    EditBrowseBox::GetFocus();
+}
+// -----------------------------------------------------------------------------

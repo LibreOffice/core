@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:26:30 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 09:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,8 @@ namespace dbaui
         virtual void Construct();
         virtual void initialize();
         // window overloads
-        virtual long        PreNotify( NotifyEvent& rNEvt );
+        virtual long PreNotify( NotifyEvent& rNEvt );
+        virtual void GetFocus();
 
         BOOL IsAddAllowed();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);

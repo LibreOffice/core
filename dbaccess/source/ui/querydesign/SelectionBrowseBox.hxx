@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ namespace dbaui
         void                        cut();
         void                        paste();
         void                        copy();
+
+        virtual void                GetFocus();
 
     protected:
         virtual sal_Bool            SeekRow( long nRow );

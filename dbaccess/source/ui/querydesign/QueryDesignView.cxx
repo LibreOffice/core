@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 09:34:22 $
+ *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,27 +488,6 @@ long OQueryDesignView::PreNotify(NotifyEvent& rNEvt)
                     bHandled = TRUE;
                 }
             }
-        }
-        break;
-        case EVENT_GETFOCUS:
-        {
-            // set focus if no one has the focus
-            if (m_pTableView && !m_pTableView->HasChildPathFocus() &&
-                m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus())
-            {
-                m_pTableView->GrabTabWinFocus();
-                bHandled = TRUE;
-            }
-
-            if( m_pTableView && m_pTableView->HasChildPathFocus() )
-            {
-                if(m_pSelectionBox->IsVisible())
-                    m_pSelectionBox->DeactivateCell();
-                m_eChildFocus = TABLEVIEW;
-            }
-            else
-                m_eChildFocus = SELECTION;
-
         }
         break;
     }
@@ -2664,7 +2643,28 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
     return pParseNode;
 }
 // -----------------------------------------------------------------------------
+void OQueryDesignView::GetFocus()
+{
+    // set focus if no one has the focus
+    if (m_pTableView && !m_pTableView->HasChildPathFocus() &&
+        m_pSelectionBox && !m_pSelectionBox->HasChildPathFocus())
+    {
+        m_pTableView->GrabTabWinFocus();
+    }
 
+    if( m_pTableView && m_pTableView->HasChildPathFocus() )
+    {
+        if(m_pSelectionBox->IsVisible())
+            m_pSelectionBox->DeactivateCell();
+        m_eChildFocus = TABLEVIEW;
+    }
+    else if( m_pSelectionBox && m_pSelectionBox->HasChildPathFocus() )
+    {
+        m_pSelectionBox->ActivateCell(m_pSelectionBox->GetCurRow(), m_pSelectionBox->GetCurColumnId());
+        m_eChildFocus = SELECTION;
+    }
+}
+// -----------------------------------------------------------------------------
 
 
 
