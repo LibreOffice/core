@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-08 13:19:39 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellAlternatives >  &xAlt );
 
-    sal_uInt16  Execute( Window* pWin, const Point& rPopupPos );
+    sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
 };
 
 
