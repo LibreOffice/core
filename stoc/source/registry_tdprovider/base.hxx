@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:31:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
 #include <cppuhelper/implementationentry.hxx>
 #endif
@@ -99,6 +102,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
 #include <com/sun/star/reflection/XModuleTypeDescription.hpp>
+#include <com/sun/star/reflection/XPublished.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
@@ -118,8 +122,8 @@ using namespace com::sun::star::reflection;
 namespace stoc_rdbtdp
 {
 
-Reference< XTypeDescription > resolveTypedefs(
-    Reference< XTypeDescription > const & type);
+com::sun::star::uno::Reference< XTypeDescription > resolveTypedefs(
+    com::sun::star::uno::Reference< XTypeDescription > const & type);
 
 
 ::osl::Mutex & getMutex();
@@ -237,29 +241,38 @@ public:
 };
 
 //==================================================================================================
-class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescription2 >
+class InterfaceTypeDescriptionImpl:
+    public WeakImplHelper2< XInterfaceTypeDescription2, XPublished >
 {
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
     OUString                              _aName;
 
     Sequence< OUString >                  _aBaseTypes;
-    Sequence< Reference< XTypeDescription > > _xBaseTDs;
+    Sequence< com::sun::star::uno::Reference< XTypeDescription > > _xBaseTDs;
     Sequence< OUString >                  _aOptionalBaseTypes;
-    Sequence< Reference< XTypeDescription > > _xOptionalBaseTDs;
+    Sequence< com::sun::star::uno::Reference< XTypeDescription > >
+    _xOptionalBaseTDs;
 
     sal_Int32                             _nBaseOffset;
-    Sequence< Reference< XInterfaceMemberTypeDescription > > _members;
+    Sequence<
+        com::sun::star::uno::Reference< XInterfaceMemberTypeDescription > >
+    _members;
     bool _membersInit;
 
-    void checkInterfaceType(Reference< XTypeDescription > const & type);
+    bool _published;
+
+    void checkInterfaceType(
+        com::sun::star::uno::Reference< XTypeDescription > const & type);
 
 public:
-    InterfaceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                  const OUString & rName, const Sequence< OUString > & rBaseTypes,
-                                  const Sequence< OUString > & rOptionalBaseTypes,
-                                  const Sequence< sal_Int8 > & rBytes );
+    InterfaceTypeDescriptionImpl(
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        const OUString & rName, const Sequence< OUString > & rBaseTypes,
+        const Sequence< OUString > & rOptionalBaseTypes,
+        const Sequence< sal_Int8 > & rBytes, bool published );
     virtual ~InterfaceTypeDescriptionImpl();
 
     // XTypeDescription
@@ -268,35 +281,49 @@ public:
 
     // XInterfaceTypeDescription2
     virtual Uik SAL_CALL getUik() throw(::com::sun::star::uno::RuntimeException);
-    virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< Reference< XInterfaceMemberTypeDescription > > SAL_CALL getMembers() throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Reference< XTypeDescription > SAL_CALL
+    getBaseType() throw(::com::sun::star::uno::RuntimeException);
+    virtual
+    Sequence<
+        com::sun::star::uno::Reference< XInterfaceMemberTypeDescription > >
+    SAL_CALL getMembers() throw(::com::sun::star::uno::RuntimeException);
 
-    virtual Sequence< Reference< XTypeDescription > > SAL_CALL getBaseTypes()
-        throw (RuntimeException);
+    virtual Sequence< com::sun::star::uno::Reference< XTypeDescription > >
+    SAL_CALL getBaseTypes() throw (RuntimeException);
 
-    virtual Sequence< Reference< XTypeDescription > > SAL_CALL
-    getOptionalBaseTypes() throw (RuntimeException);
+    virtual Sequence< com::sun::star::uno::Reference< XTypeDescription > >
+    SAL_CALL getOptionalBaseTypes() throw (RuntimeException);
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 //==================================================================================================
-class CompoundTypeDescriptionImpl : public WeakImplHelper1< XCompoundTypeDescription >
+class CompoundTypeDescriptionImpl:
+    public WeakImplHelper2< XCompoundTypeDescription, XPublished >
 {
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
     TypeClass                             _eTypeClass;
     Sequence< sal_Int8 >                  _aBytes;
     OUString                              _aName;
 
     OUString                              _aBaseType;
-    Reference< XTypeDescription >         _xBaseTD;
+    com::sun::star::uno::Reference< XTypeDescription >        _xBaseTD;
 
-    Sequence< Reference< XTypeDescription > > * _pMembers;
+    Sequence< com::sun::star::uno::Reference< XTypeDescription > > * _pMembers;
     Sequence< OUString > *                _pMemberNames;
 
+    bool _published;
+
 public:
-    CompoundTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                 TypeClass eTypeClass,
-                                 const OUString & rName, const OUString & rBaseName,
-                                 const Sequence< sal_Int8 > & rBytes )
+    CompoundTypeDescriptionImpl(
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        TypeClass eTypeClass,
+        const OUString & rName, const OUString & rBaseName,
+        const Sequence< sal_Int8 > & rBytes,
+        bool published )
         : _xTDMgr( xTDMgr )
         , _eTypeClass( eTypeClass )
         , _aBytes( rBytes )
@@ -304,6 +331,7 @@ public:
         , _aBaseType( rBaseName )
         , _pMembers( 0 )
         , _pMemberNames( 0 )
+        , _published( published )
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
@@ -314,15 +342,22 @@ public:
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
     // XCompoundTypeDescription
-    virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< Reference< XTypeDescription > > SAL_CALL getMemberTypes() throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Reference< XTypeDescription > SAL_CALL
+    getBaseType() throw(::com::sun::star::uno::RuntimeException);
+    virtual Sequence< com::sun::star::uno::Reference< XTypeDescription > >
+    SAL_CALL getMemberTypes() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getMemberNames() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 //==================================================================================================
-class EnumTypeDescriptionImpl : public WeakImplHelper1< XEnumTypeDescription >
+class EnumTypeDescriptionImpl:
+    public WeakImplHelper2< XEnumTypeDescription, XPublished >
 {
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess >  _xTDMgr;
     Sequence< sal_Int8 >                  _aBytes;
 
     OUString                              _aName;
@@ -331,16 +366,21 @@ class EnumTypeDescriptionImpl : public WeakImplHelper1< XEnumTypeDescription >
     Sequence< OUString > *                _pEnumNames;
     Sequence< sal_Int32 > *               _pEnumValues;
 
+    bool _published;
+
 public:
-    EnumTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                             const OUString & rName, sal_Int32 nDefaultValue,
-                             const Sequence< sal_Int8 > & rBytes )
+    EnumTypeDescriptionImpl(
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        const OUString & rName, sal_Int32 nDefaultValue,
+        const Sequence< sal_Int8 > & rBytes, bool published )
         : _xTDMgr( xTDMgr )
         , _aName( rName )
         , _nDefaultValue( nDefaultValue )
         , _aBytes( rBytes )
         , _pEnumNames( 0 )
         , _pEnumValues( 0 )
+        , _published( published )
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
@@ -354,23 +394,33 @@ public:
     virtual sal_Int32 SAL_CALL getDefaultEnumValue() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getEnumNames() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< sal_Int32 > SAL_CALL getEnumValues() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 //==================================================================================================
-class TypedefTypeDescriptionImpl : public WeakImplHelper1< XIndirectTypeDescription >
+class TypedefTypeDescriptionImpl:
+    public WeakImplHelper2< XIndirectTypeDescription, XPublished >
 {
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess > _xTDMgr;
     OUString                              _aName;
 
     OUString                              _aRefName;
-    Reference< XTypeDescription >         _xRefTD;
+    com::sun::star::uno::Reference< XTypeDescription > _xRefTD;
+
+    bool _published;
 
 public:
-    TypedefTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                const OUString & rName, const OUString & rRefName )
+    TypedefTypeDescriptionImpl(
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        const OUString & rName, const OUString & rRefName, bool published )
         : _xTDMgr( xTDMgr )
         , _aName( rName )
         , _aRefName( rRefName )
+        , _published( published )
         {
             g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
         }
@@ -381,32 +431,50 @@ public:
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 
     // XIndirectTypeDescription
-    virtual Reference< XTypeDescription > SAL_CALL getReferencedType() throw(::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Reference< XTypeDescription > SAL_CALL
+    getReferencedType() throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 //==================================================================================================
-class ServiceTypeDescriptionImpl : public WeakImplHelper1< XServiceTypeDescription2 >
+class ServiceTypeDescriptionImpl:
+    public WeakImplHelper2< XServiceTypeDescription2, XPublished >
 {
     OUString                              _aName;
     Sequence< sal_Int8 >                  _aBytes;
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess > _xTDMgr;
     bool _bInitReferences;
 
-    Reference< XTypeDescription > _xInterfaceTD;
-    std::auto_ptr< Sequence< Reference< XServiceConstructorDescription > > >
+    com::sun::star::uno::Reference< XTypeDescription > _xInterfaceTD;
+    std::auto_ptr<
+        Sequence<
+            com::sun::star::uno::Reference< XServiceConstructorDescription > > >
     _pCtors;
-    Sequence< Reference< XServiceTypeDescription > >   _aMandatoryServices;
-    Sequence< Reference< XServiceTypeDescription > >   _aOptionalServices;
-    Sequence< Reference< XInterfaceTypeDescription > > _aMandatoryInterfaces;
-    Sequence< Reference< XInterfaceTypeDescription > > _aOptionalInterfaces;
-    std::auto_ptr< Sequence< Reference< XPropertyTypeDescription > > > _pProps;
+    Sequence< com::sun::star::uno::Reference< XServiceTypeDescription > >
+    _aMandatoryServices;
+    Sequence< com::sun::star::uno::Reference< XServiceTypeDescription > >
+    _aOptionalServices;
+    Sequence< com::sun::star::uno::Reference< XInterfaceTypeDescription > >
+    _aMandatoryInterfaces;
+    Sequence< com::sun::star::uno::Reference< XInterfaceTypeDescription > >
+    _aOptionalInterfaces;
+    std::auto_ptr<
+        Sequence< com::sun::star::uno::Reference< XPropertyTypeDescription > > >
+    _pProps;
+
+    bool _published;
 
 public:
-    ServiceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                const OUString & rName,
-                                const Sequence< sal_Int8 > & rBytes)
+    ServiceTypeDescriptionImpl(
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        const OUString & rName, const Sequence< sal_Int8 > & rBytes,
+        bool published)
     : _aName( rName ), _aBytes( rBytes ), _xTDMgr( xTDMgr ),
-      _bInitReferences( false )
+      _bInitReferences( false ), _published( published )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     }
@@ -458,6 +526,10 @@ public:
     SAL_CALL getConstructors()
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
+
 private:
     void getReferences()
         throw (::com::sun::star::uno::RuntimeException);
@@ -467,13 +539,14 @@ private:
 class ModuleTypeDescriptionImpl : public WeakImplHelper1< XModuleTypeDescription >
 {
     OUString                                        _aName;
-    Reference< XTypeDescriptionEnumerationAccess >  _xTDMgr;
+    com::sun::star::uno::Reference< XTypeDescriptionEnumerationAccess > _xTDMgr;
 
-    Sequence< Reference< XTypeDescription > > *     _pMembers;
+    Sequence< com::sun::star::uno::Reference< XTypeDescription > > * _pMembers;
 
 public:
     ModuleTypeDescriptionImpl(
-        const Reference< XTypeDescriptionEnumerationAccess > & xTDMgr,
+        const com::sun::star::uno::Reference<
+        XTypeDescriptionEnumerationAccess > & xTDMgr,
         const OUString & rName )
     : _aName( rName ), _xTDMgr( xTDMgr ), _pMembers( 0 )
     {
@@ -527,16 +600,21 @@ public:
 };
 
 //==================================================================================================
-class ConstantsTypeDescriptionImpl : public WeakImplHelper1< XConstantsTypeDescription >
+class ConstantsTypeDescriptionImpl:
+    public WeakImplHelper2< XConstantsTypeDescription, XPublished >
 {
     OUString             _aName;
     Sequence< sal_Int8 > _aBytes;
-    Sequence< Reference< XConstantTypeDescription > > * _pMembers;
+    Sequence< com::sun::star::uno::Reference< XConstantTypeDescription > > *
+    _pMembers;
+
+    bool _published;
 
 public:
     ConstantsTypeDescriptionImpl( const OUString & rName,
-                                  const Sequence< sal_Int8 > & rBytes )
-    : _aName( rName ), _aBytes( rBytes), _pMembers( 0 )
+                                  const Sequence< sal_Int8 > & rBytes,
+                                  bool published )
+    : _aName( rName ), _aBytes( rBytes), _pMembers( 0 ), _published( published )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     }
@@ -551,28 +629,36 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XConstantsTypeDescription
-    virtual Sequence< Reference< XConstantTypeDescription > > SAL_CALL
-    getConstants()
-        throw ( RuntimeException );
+    virtual
+    Sequence< com::sun::star::uno::Reference< XConstantTypeDescription > >
+    SAL_CALL getConstants() throw ( RuntimeException );
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 //==================================================================================================
-class SingletonTypeDescriptionImpl : public WeakImplHelper1< XSingletonTypeDescription2 >
+class SingletonTypeDescriptionImpl:
+    public WeakImplHelper2< XSingletonTypeDescription2, XPublished >
 {
     OUString _aName;
     OUString _aBaseName;
-    Reference< XHierarchicalNameAccess >   _xTDMgr;
-    Reference< XTypeDescription > _xInterfaceTD;
-    Reference< XServiceTypeDescription > _xServiceTD;
+    com::sun::star::uno::Reference< XHierarchicalNameAccess > _xTDMgr;
+    com::sun::star::uno::Reference< XTypeDescription > _xInterfaceTD;
+    com::sun::star::uno::Reference< XServiceTypeDescription > _xServiceTD;
+
+    bool _published;
 
     void init();
 
 public:
     SingletonTypeDescriptionImpl(
-            const Reference< XHierarchicalNameAccess > & xTDMgr,
-            const OUString & rName,
-            const OUString & rBaseName )
-    : _aName( rName ), _aBaseName( rBaseName), _xTDMgr( xTDMgr )
+        const com::sun::star::uno::Reference< XHierarchicalNameAccess > &
+        xTDMgr,
+        const OUString & rName, const OUString & rBaseName, bool published )
+    : _aName( rName ), _aBaseName( rBaseName), _xTDMgr( xTDMgr ),
+      _published( published )
     {
         g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     }
@@ -587,15 +673,18 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     // XSingletonTypeDescription
-    virtual Reference< XServiceTypeDescription > SAL_CALL
-    getService()
-        throw ( ::com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Reference< XServiceTypeDescription > SAL_CALL
+    getService() throw ( ::com::sun::star::uno::RuntimeException );
 
     // XSingletonTypeDescription2
     virtual sal_Bool SAL_CALL isInterfaceBased()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual Reference< XTypeDescription > SAL_CALL getInterface()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual com::sun::star::uno::Reference< XTypeDescription > SAL_CALL
+    getInterface() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL isPublished()
+        throw (::com::sun::star::uno::RuntimeException)
+    { return _published; }
 };
 
 }
