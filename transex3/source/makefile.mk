@@ -2,9 +2,8 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
-#
-#   last change: $Author: rt $ $Date: 2004-07-13 13:53:08 $
+#   $Revision: 1.31 $
+#   last change: $Author: kz $ $Date: 2004-08-30 17:31:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,11 +64,11 @@ PRJ=..
 PRJNAME=transex
 TARGET=transex3
 TARGETTYPE=CUI
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
+.INCLUDE :  libs.mk
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
 
 # --- Files --------------------------------------------------------
@@ -83,130 +82,100 @@ OBJFILES=   			\
     $(OBJ)$/wtranode.obj    \
     $(OBJ)$/srciter.obj		\
     $(OBJ)$/utf8conv.obj	\
-    $(OBJ)$/hw2fw.obj      
-#        $(OBJ)$/sdfupdate.obj
+    $(OBJ)$/xmlparse.obj    \
+    $(OBJ)$/helpmerge.obj   \
+    $(OBJ)$/helpex.obj      \
+    $(OBJ)$/hw2fw.obj
 
 LIB1TARGET= $(LB)$/transex.lib
 LIB1ARCHIV= $(LB)$/libtransex.a
-LIB1FILES=  $(LB)$/transex3.lib
+#LIB1FILES=  $(LB)$/transex3.lib
+LIB1OBJFILES=        $(OBJ)$/export.obj      \
+        $(OBJ)$/export2.obj     \
+        $(OBJ)$/merge.obj   \
+        $(OBJ)$/wrdtrans.obj    \
+        $(OBJ)$/wtratree.obj    \
+        $(OBJ)$/wtranode.obj    \
+        $(OBJ)$/srciter.obj             \
+        $(OBJ)$/utf8conv.obj    \
+        $(OBJ)$/hw2fw.obj
 
 APP1VERSIONMAP=exports.map
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=     $(TARGET)
 APP1OBJS=   $(OBJ)$/src_yy.obj
-
-.IF "$(OS)"!="MACOSX"
-APP1STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP1STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP1STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
-APP1LIBS+=	$(LB)$/$(TARGET).lib
-APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
+APP1LIBS+=	$(LB)$/$(PRJNAME).lib
+APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(PRJNAME).lib
 
 #APP2TARGET= termilo
 #APP2STACK=  16000
 #APP2OBJS=   $(OBJ)$/termino.obj
 #APP2STDLIBS=$(TOOLSLIBST) $(L)$/bootstrp.lib
 
+APP2TARGET= helpex
+APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj $(OBJ)$/hw2fw.obj
+APP2STDLIBS=$(BTSTRPLIB) $(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB) $(VOSLIB) 
+
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
-
-.IF "$(OS)"!="MACOSX"
-APP3STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP3STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP1STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
-
-.IF "$(OS)"!="MACOSX"
-APP4STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP4STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP4STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 
 # tag checker for *.gsi
 APP5TARGET= gsicheck
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
-
-.IF "$(OS)"!="MACOSX"
-APP5STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP5STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP5STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 
 # extractor and merger for *.cfg
-APP6TARGET= cfgex
-APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+#APP6TARGET= cfgex
+#APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
-.IF "$(OS)"!="MACOSX"
-APP6STDLIBS+= $(BTSTRPLIB)
-.ENDIF
+#.IF "$(OS)"!="MACOSX"
+#APP6STDLIBS+= $(BTSTRPLIB)
+#.ENDIF
 
 APP6STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP6STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 
 # extractor and merger for *.xrm
-APP7TARGET= xrmex
-APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+#APP7TARGET= xrmex
+#APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 
-.IF "$(OS)"!="MACOSX"
-APP7STDLIBS+= $(BTSTRPLIB)
-.ENDIF
+#.IF "$(OS)"!="MACOSX"
+#APP7STDLIBS+= $(BTSTRPLIB)
+#.ENDIF
 
-APP7STDLIBS+= \
+#APP7STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
-            $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP7STDLIBS+= $(BTSTRPLIB)
-.ENDIF
+#            $(SALLIB)
 
 #APP8TARGET=  sdfupdate
 #APP8OBJS= $(OBJ)$/sdfupdate.obj
@@ -231,20 +200,11 @@ APP9TARGET= localize_sl
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
-
-.IF "$(OS)"!="MACOSX"
-APP9STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP9STDLIBS+= \
+            $(BTSTRPLIB) \
             $(TOOLSLIB) \
             $(VOSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-APP9STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
