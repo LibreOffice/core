@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: as $ $Date: 2001-11-08 11:54:27 $
+#   last change: $Author: dbo $ $Date: 2001-11-27 12:28:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,6 @@ IDLFILES=\
     NoSupportException.idl\
     NullPointerException.idl\
     RegistryServiceManager.idl\
-    SecurityException.idl\
     ServiceManager.idl\
     ServiceNotRegisteredException.idl\
     SystemDependent.idl\
