@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-11-19 16:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,14 @@
 #include "xmlnmspe.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
+#endif
 
 using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
 
 XMLEventImportHelper::XMLEventImportHelper() :
     aFactoryMap(),
@@ -194,6 +198,15 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     if( NULL == pContext )
     {
         pContext = new SvXMLImportContext(rImport, nPrefix, rLocalName);
+
+        Sequence<OUString> aMsgParams(2);
+
+        aMsgParams[0] = rXmlEventName;
+        aMsgParams[1] = rLanguage;
+
+        rImport.SetError(XMLERROR_FLAG_ERROR | XMLERROR_ILLEGAL_EVENT,
+                         aMsgParams);
+
     }
 
     return pContext;
