@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-22 11:23:06 $
+ *  last change: $Author: aw $ $Date: 2001-11-08 12:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ void SdModule::Execute(SfxRequest& rReq)
 {
     const SfxItemSet* pSet = rReq.GetArgs();
     ULONG nSlotId = rReq.GetSlot();
+
+    // #94442# keep track of created frames
+    SfxFrame* pFrame = NULL;
 
     switch ( nSlotId )
     {
@@ -288,7 +291,7 @@ void SdModule::Execute(SfxRequest& rReq)
                         SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
                         if ( pFrmItem )
                         {
-                            SfxFrame* pFrame = pFrmItem->GetFrame();
+                            pFrame = pFrmItem->GetFrame();
                             pFrame->InsertDocument( pNewDocSh );
                         }
                         else
@@ -340,7 +343,7 @@ void SdModule::Execute(SfxRequest& rReq)
                             SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
                             if ( pFrmItem && pFrmItem->GetFrame())
                             {
-                                SfxFrame* pFrame = pFrmItem->GetFrame();
+                                pFrame = pFrmItem->GetFrame();
 
                                 SfxAllItemSet aSet( *pSet->GetPool() );
                                 aSet.Put( aFile );
@@ -351,13 +354,13 @@ void SdModule::Execute(SfxRequest& rReq)
                             }
                             else
                             {
-                                SfxViewFrame* pFrame = SfxViewFrame::Current();
-                                DBG_ASSERT( pFrame, "The autopilot needs a frame to load a document!" );
-                                if( pFrame )
+                                SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+                                DBG_ASSERT( pViewFrame, "The autopilot needs a frame to load a document!" );
+                                if( pViewFrame )
                                 {
                                     SdDrawDocShell*             pDocShell = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
                                     SdViewShell*                pViewShell = pDocShell ? pDocShell->GetViewShell() : NULL;
-                                    const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)pFrame->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
+                                    const SfxObjectShellItem*   pRet = (SfxObjectShellItem*)pViewFrame->GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, &aFile, &aReferer, &aPassword, 0L );
                                 }
                             }
                         }
@@ -386,7 +389,7 @@ void SdModule::Execute(SfxRequest& rReq)
                     SFX_REQUEST_ARG( rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
                     if ( pFrmItem && pShell )
                     {
-                        SfxFrame* pFrame = pFrmItem->GetFrame();
+                        pFrame = pFrmItem->GetFrame();
                         pFrame->InsertDocument( pShell );
                         pViewFrame = pFrame->GetCurrentViewFrame();
                     }
@@ -752,6 +755,12 @@ void SdModule::Execute(SfxRequest& rReq)
 
         default:
         break;
+    }
+
+    // #94442# if a frame was created, set it as return value
+    if(pFrame)
+    {
+        rReq.SetReturnValue(SfxFrameItem(0, pFrame));
     }
 }
 
