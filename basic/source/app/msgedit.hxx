@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 17:17:33 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@ protected:
     USHORT nVersion;        // Speichert die Dateiversion
     AppError* pAppError;
     String aLogFileName;    // Name der Logdatei
+
+    static USHORT nMaxLogLen;
+    static BOOL bLimitLogLen;
 public:
     MsgEdit( AppError*, BasicFrame *pBF, const WinBits& );
     ~MsgEdit();
@@ -133,6 +136,8 @@ public:
     void AddAssertion( String aMsg, TTDebugData aDebugData );
     void AddAssertionStack( String aMsg, TTDebugData aDebugData );
     void AddQAError( String aMsg, TTDebugData aDebugData );
+
+    static void SetMaxLogLen( USHORT nLen ) { nMaxLogLen = nLen; bLimitLogLen = TRUE; }
 DATA_FUNC_DEF( aEditTree, TTTreeListBox )
 };
 
