@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 10:22:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,28 +691,14 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     // we are a DispatchInterceptor, so we want to be inserted into the frame's dispatch chain, thus having
     // a chance for frame-spanning communication (via UNO, not slots)
     SfxFrame* pFrame = _pViewFrame ? _pViewFrame->GetFrame() : NULL;
-    Reference< ::com::sun::star::frame::XFrame> xUnoFrame;
     if ( pFrame )
-        xUnoFrame = pFrame->GetFrameInterface();
+        m_xAttachedFrame = pFrame->GetFrameInterface();
 
     // to prevent deletion of this we acquire our refcounter once
     ::comphelper::increment(FmXFormShell_BASE::m_refCount);
 
-    // dispatch interception for the frame
-    Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xUnoFrame, UNO_QUERY);
-
-    m_xAttachedFrame = xUnoFrame;
-
     // correct the refcounter
     ::comphelper::decrement(FmXFormShell_BASE::m_refCount);
-
-    // determine the type of document we live in
-    Reference< XController > xController;
-    if ( xUnoFrame.is() )
-        xController = xUnoFrame->getController();
-    OSL_ENSURE( xController.is() && xController->getModel().is(), "FmXFormShell::FmXFormShell: can't determine the document type!" );
-    if ( xController.is() )
-        m_eDocumentType = DocumentClassification::classifyDocument( xController->getModel() );
 
     // cache the current configuration settings we're interested in
     implAdjustConfigCache();
@@ -727,6 +713,31 @@ FmXFormShell::~FmXFormShell()
 {
     delete m_pTextShell;
     DBG_DTOR(FmXFormShell,NULL);
+}
+
+//------------------------------------------------------------------
+::svxform::DocumentType FmXFormShell::getDocumentType()
+{
+    if ( m_eDocumentType != eUnknownDocumentType )
+        return m_eDocumentType;
+
+    // determine the type of document we live in
+    Reference< XController > xController;
+    if ( m_xAttachedFrame.is() )
+        xController = m_xAttachedFrame->getController();
+    Reference< XModel > xModel;
+    if ( xController.is() )
+        xModel = xController->getModel();
+    if ( xModel.is() )
+        m_eDocumentType = DocumentClassification::classifyDocument( xModel );
+    else
+    {
+        OSL_ENSURE( sal_False, "FmXFormShell::getDocumentType: can't determine the document type!" );
+        m_eDocumentType = eTextDocument;
+            // fallback, just to have a defined state
+    }
+
+    return m_eDocumentType;
 }
 
 //------------------------------------------------------------------
