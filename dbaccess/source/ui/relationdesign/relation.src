@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-21 13:51:10 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,23 +98,23 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text = "Bearbeiten" ;
             Text [ ENGLISH ] = "Edit" ;
             Text[ english_us ] = "Edit";
-            Text[ portuguese ] = "Edit";
-            Text[ russian ] = "Edit";
-            Text[ greek ] = "Edit";
-            Text[ dutch ] = "Edit";
-            Text[ french ] = "Edit";
+            Text[ portuguese ] = "Editar";
+            Text[ russian ] = "Ïğàâêà";
+            Text[ greek ] = "Åğåîåñãáóßá";
+            Text[ dutch ] = "Bewerken";
+            Text[ french ] = "Éditer";
             Text[ spanish ] = "Editar";
-            Text[ italian ] = "Edit";
+            Text[ italian ] = "Modifica";
             Text[ danish ] = "Edit";
             Text[ swedish ] = "Redigera";
             Text[ polish ] = "Edytuj";
             Text[ portuguese_brazilian ] = "Edit";
-            Text[ japanese ] = "Edit";
+            Text[ japanese ] = "•ÒW";
             Text[ korean ] = "Edit";
-            Text[ chinese_simplified ] = "Edit";
-            Text[ chinese_traditional ] = "Edit";
+            Text[ chinese_simplified ] = "±à¼­";
+            Text[ chinese_traditional ] = "½s¿è";
             Text[ turkish ] = "Edit";
-            Text[ arabic ] = "Edit";
+            Text[ arabic ] = "ÊÍÑíÑ";
         };
         ToolBoxItem
         {
@@ -128,22 +128,22 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text [ ENGLISH ] = "Save" ;
             Text[ english_us ] = "Save";
             Text[ portuguese ] = "Save";
-            Text[ russian ] = "Save";
-            Text[ greek ] = "Save";
-            Text[ dutch ] = "Save";
-            Text[ french ] = "Save";
+            Text[ russian ] = "Ñîõğàíèòü";
+            Text[ greek ] = "ÁğïèŞêåõóç";
+            Text[ dutch ] = "Opslaan";
+            Text[ french ] = "Enregistrer";
             Text[ spanish ] = "Guardar";
-            Text[ italian ] = "Save";
+            Text[ italian ] = "Salva";
             Text[ danish ] = "Save";
             Text[ swedish ] = "Spara";
             Text[ polish ] = "Zapisz";
             Text[ portuguese_brazilian ] = "Save";
-            Text[ japanese ] = "Save";
+            Text[ japanese ] = "•Û‘¶";
             Text[ korean ] = "Save";
-            Text[ chinese_simplified ] = "Save";
-            Text[ chinese_traditional ] = "Save";
+            Text[ chinese_simplified ] = "´æÅÌ";
+            Text[ chinese_traditional ] = "Àx¦s";
             Text[ turkish ] = "Save";
-            Text[ arabic ] = "Save";
+            Text[ arabic ] = "ÍİÙ";
         };
         ToolBoxItem
         {
@@ -153,23 +153,23 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text = "Drucken" ;
             Text [ ENGLISH ] = "Print" ;
             Text[ english_us ] = "Print";
-            Text[ portuguese ] = "Print";
-            Text[ russian ] = "Print";
-            Text[ greek ] = "Print";
-            Text[ dutch ] = "Print";
-            Text[ french ] = "Print";
+            Text[ portuguese ] = "Imprimir";
+            Text[ russian ] = "Ïå÷àòü";
+            Text[ greek ] = "Åêôığùóç";
+            Text[ dutch ] = "Afdrukken";
+            Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
-            Text[ italian ] = "Print";
+            Text[ italian ] = "Stampa";
             Text[ danish ] = "Print";
             Text[ swedish ] = "Skriv ut";
             Text[ polish ] = "Drukuj";
             Text[ portuguese_brazilian ] = "Print";
-            Text[ japanese ] = "Print";
+            Text[ japanese ] = "ˆóü";
             Text[ korean ] = "Print";
-            Text[ chinese_simplified ] = "Print";
-            Text[ chinese_traditional ] = "Print";
+            Text[ chinese_simplified ] = "´òÓ¡";
+            Text[ chinese_traditional ] = "¦C¦L";
             Text[ turkish ] = "Print";
-            Text[ arabic ] = "Print";
+            Text[ arabic ] = "ØÈÇÚÉ";
         };
         ToolBoxItem
         {
@@ -182,23 +182,23 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text = "Rückgängig" ;
             Text [ ENGLISH ] = "Undo" ;
             Text[ english_us ] = "Undo";
-            Text[ portuguese ] = "Undo";
-            Text[ russian ] = "Undo";
-            Text[ greek ] = "Undo";
-            Text[ dutch ] = "Undo";
-            Text[ french ] = "Undo";
+            Text[ portuguese ] = "Anular";
+            Text[ russian ] = "Îòìåíèòü";
+            Text[ greek ] = "Áíáßñåóç";
+            Text[ dutch ] = "Ongedaan";
+            Text[ french ] = "Annuler";
             Text[ spanish ] = "Deshacer";
-            Text[ italian ] = "Undo";
+            Text[ italian ] = "Annulla";
             Text[ danish ] = "Undo";
             Text[ swedish ] = "Ångra";
             Text[ polish ] = "Cofnij";
             Text[ portuguese_brazilian ] = "Undo";
-            Text[ japanese ] = "Undo";
+            Text[ japanese ] = "Œ³‚É–ß‚·";
             Text[ korean ] = "Undo";
-            Text[ chinese_simplified ] = "Undo";
-            Text[ chinese_traditional ] = "Undo";
+            Text[ chinese_simplified ] = "³·ÏûÃüÁî";
+            Text[ chinese_traditional ] = "´_­ì";
             Text[ turkish ] = "Undo";
-            Text[ arabic ] = "Undo";
+            Text[ arabic ] = "ÊÑÇÌÚ";
         };
         ToolBoxItem
         {
@@ -208,23 +208,23 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text [ ENGLISH ] = "Redo" ;
 
             Text[ english_us ] = "Redo";
-            Text[ portuguese ] = "Redo";
-            Text[ russian ] = "Redo";
-            Text[ greek ] = "Redo";
-            Text[ dutch ] = "Redo";
-            Text[ french ] = "Redo";
+            Text[ portuguese ] = "Restaurar";
+            Text[ russian ] = "Âîññòàíîâèòü";
+            Text[ greek ] = "ÅğáíáöïñÜ";
+            Text[ dutch ] = "Herstellen";
+            Text[ french ] = "Restaurer";
             Text[ spanish ] = "Restaurar";
-            Text[ italian ] = "Redo";
+            Text[ italian ] = "Ripristina";
             Text[ danish ] = "Redo";
             Text[ swedish ] = "Återställ";
-            Text[ polish ] = "Odtwórz";
+            Text[ polish ] = "Przywróæ";
             Text[ portuguese_brazilian ] = "Redo";
-            Text[ japanese ] = "Redo";
+            Text[ japanese ] = "‚â‚è’¼‚µ";
             Text[ korean ] = "Redo";
-            Text[ chinese_simplified ] = "Redo";
-            Text[ chinese_traditional ] = "Redo";
+            Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
+            Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O";
             Text[ turkish ] = "Redo";
-            Text[ arabic ] = "Redo";
+            Text[ arabic ] = "ÅÚÇÏÉ";
         };
         ToolBoxItem
         {
@@ -236,24 +236,24 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             HelpId = SID_FM_ADDTABLE ;
             Text = "Tabellen hinzufügen ..." ;
             Text [ ENGLISH ] = "Add tables ..." ;
-            Text[ english_us ] = "Add tables ...";
-            Text[ portuguese ] = "Add tables ...";
-            Text[ russian ] = "Add tables ...";
-            Text[ greek ] = "Add tables ...";
-            Text[ dutch ] = "Add tables ...";
-            Text[ french ] = "Add tables ...";
+            Text[ english_us ] = "Add Tables...";
+            Text[ portuguese ] = "Adicionar tabelas...";
+            Text[ russian ] = "Äîáàâèòü òàáëèöû...";
+            Text[ greek ] = "ĞñïóèŞêç ğéíÜêùí...";
+            Text[ dutch ] = "Tabellen toevoegen...";
+            Text[ french ] = "Ajouter des tables ...";
             Text[ spanish ] = "Añadir tablas ...";
-            Text[ italian ] = "Add tables ...";
+            Text[ italian ] = "Inserisci tabelle";
             Text[ danish ] = "Add tables ...";
             Text[ swedish ] = "Lägg till tabeller ...";
             Text[ polish ] = "Dodaj tabele ...";
             Text[ portuguese_brazilian ] = "Add tables ...";
-            Text[ japanese ] = "Add tables ...";
+            Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
             Text[ korean ] = "Add tables ...";
-            Text[ chinese_simplified ] = "Add tables ...";
-            Text[ chinese_traditional ] = "Add tables ...";
+            Text[ chinese_simplified ] = "Ôö¼Ó±í¸ñ...";
+            Text[ chinese_traditional ] = "¼W¥[ªí®æ...";
             Text[ turkish ] = "Add tables ...";
-            Text[ arabic ] = "Add tables ...";
+            Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá...";
         };
         ToolboxItem
         {
@@ -265,24 +265,24 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             HelpId = SID_SBA_ADD_RELATION ;
             Text = "neue Relation ..." ;
             Text [ ENGLISH ] = "new relation ..." ;
-            Text[ english_us ] = "new relation ...";
-            Text[ portuguese ] = "new relation ...";
-            Text[ russian ] = "new relation ...";
-            Text[ greek ] = "new relation ...";
-            Text[ dutch ] = "new relation ...";
-            Text[ french ] = "new relation ...";
+            Text[ english_us ] = "New Relation...";
+            Text[ portuguese ] = "nova relação...";
+            Text[ russian ] = "Ñîçäàòü ñâÿçü...";
+            Text[ greek ] = "Äçìéïõñãßá ó÷İóçò ...";
+            Text[ dutch ] = "nieuwe relatie...";
+            Text[ french ] = "Nouvelle relation ...";
             Text[ spanish ] = "nueva relación ...";
-            Text[ italian ] = "new relation ...";
+            Text[ italian ] = "Nuova relazione...";
             Text[ danish ] = "new relation ...";
             Text[ swedish ] = "ny relation ...";
             Text[ polish ] = "nowa relacja ...";
             Text[ portuguese_brazilian ] = "new relation ...";
-            Text[ japanese ] = "new relation ...";
+            Text[ japanese ] = "V‚µ‚¢ØÚ°¼®İ...";
             Text[ korean ] = "new relation ...";
-            Text[ chinese_simplified ] = "new relation ...";
-            Text[ chinese_traditional ] = "new relation ...";
+            Text[ chinese_simplified ] = "ĞÂµÄ¹ØÏµ...";
+            Text[ chinese_traditional ] = "·sÃö«Y...";
             Text[ turkish ] = "new relation ...";
-            Text[ arabic ] = "new relation ...";
+            Text[ arabic ] = "ÚáÇŞÉ ÌÏíÏÉ...";
         };
 /*      ToolBoxItem
         {
@@ -304,19 +304,19 @@ String STR_QUERY_REL_EDIT_RELATION
     Text [ ENGLISH ] = "This relation already exsits. Do you want to edit it?" ;
     Text [ english_us ] = "This relation already exsits. Do you want to edit it?" ;
     Text[ portuguese ] = "Esta relação já existe. Editar?";
-    Text[ russian ] = "İòî îòíîøåíèå óæå ñóùåñòâóåò. Âû õîòèòå åãî èçìåíèòü?";
+    Text[ russian ] = "İòà ñâÿçü óæå ñóùåñòâóåò. Âû õîòèòå åå èçìåíèòü?";
     Text[ greek ] = "Ç ó÷İóç áõôŞ õğÜñ÷åé Şäç. Èİëåôå íá ôçí åğåîåñãáóôåßôå;";
-    Text[ dutch ] = "Deze relatie bestaat reeds. Wilt u deze bewerken.";
-    Text[ french ] = "Cette relation existe déjà. Souhaitez-vous l'éditer ?";
+    Text[ dutch ] = "Deze relatie bestaat reeds. Wilt u deze bewerken?";
+    Text[ french ] = "Cette relation existe déjà. Voulez-vous l'éditer ?";
     Text[ spanish ] = "Ya existe esta relación. ¿Desea editarla?";
     Text[ italian ] = "Questa relazione esiste già. Volete modificarla?";
     Text[ danish ] = "Denne ralation eksisterer allerede. Vil du redigere den?";
     Text[ swedish ] = "Den här relationen finns redan. Vill du redigera den?";
     Text[ polish ] = "Relacja ju¿ istnieje. Czy chcesz j¹ edytowaæ?";
     Text[ portuguese_brazilian ] = "This relation already exsits. Do you want to edit it?";
-    Text[ japanese ] = "‚±‚ÌØÚ°¼®İ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B‚±‚ê‚ğ•ÒW‚µ‚Ü‚·‚©?";
+    Text[ japanese ] = "‚±‚ÌØÚ°¼®İ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B‚±‚ê‚ğ•ÒW‚µ‚Ü‚·‚©B";
     Text[ korean ] = "ÀÌ °ü°è´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù. ÀÌ°ÍÀ» ÆíÁıÇÏ½Ã°Ú½À´Ï±î ?";
-    Text[ chinese_simplified ] = "Õâ¸ö¹ØÏµÒÑ¾­´æÔÚ¡£ÄúÏë±à¼­ËüÂğ£¿";
+    Text[ chinese_simplified ] = "Õâ¸ö¹ØÏµÒÑ¾­´æÔÚ¡£ÄúÏë±à¼­Ëü£¿";
     Text[ chinese_traditional ] = "³o­ÓÃö«Y¤w¸g¦s¦b¡C­n½s¿è¥¦¡H";
     Text[ arabic ] = "åĞå ÇáÚáÇŞÉ ãæÌæÏÉ ÈÇáİÚá. åá ÊÑíÏ ÊÍÑíÑåÇ¿";
     Text[ turkish ] = "Bu ilişki mevcut durumda. Düzenlemek istiyor musunuz?";
@@ -326,21 +326,21 @@ String STR_RELATIONDESIGN
     Text = "Relationenentwurf" ;
     Text [ English ] = "Relation design" ;
     Text [ english_us ] = "Relation design" ;
-    Text[ portuguese ] = "Relation design";
-    Text[ russian ] = "Relation design";
-    Text[ greek ] = "Relation design";
-    Text[ dutch ] = "Relation design";
-    Text[ french ] = "Relation design";
+    Text[ portuguese ] = "Esboçar relação";
+    Text[ russian ] = "Ïğîåêò ñâÿçåé";
+    Text[ greek ] = "Ó÷åäéáóìüò ó÷İóçò";
+    Text[ dutch ] = "Relatie-ontwerp";
+    Text[ french ] = "Ébauche de relation";
     Text[ spanish ] = "Diseño de relaciones";
-    Text[ italian ] = "Relation design";
+    Text[ italian ] = "Struttura relazione";
     Text[ danish ] = "Relation design";
     Text[ swedish ] = "Relationsutkast";
     Text[ polish ] = "Projekt relacji";
     Text[ portuguese_brazilian ] = "Relation design";
-    Text[ japanese ] = "Relation design";
+    Text[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ";
     Text[ korean ] = "Relation design";
-    Text[ chinese_simplified ] = "Relation design";
-    Text[ chinese_traditional ] = "Relation design";
+    Text[ chinese_simplified ] = "¹ØÏµÉè¼Æ";
+    Text[ chinese_traditional ] = "Ãö«Y³]­p";
     Text[ turkish ] = "Relation design";
     Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
 };
@@ -348,10 +348,24 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
 {
     Text = "Die Datenbank unterstützt keine Relationen!" ;
     Text [ English ] = "The database doesn't support any relations!" ;
-    Text [ english_us ] = "The database doesn't support any relations!" ;
-    Text[ portuguese ] = "The database doesn't support any relations!";
-    Text[ russian ] = "The database doesn't support any relations!";
-    Text[ greek ] = "The database doesn't support any relations!";
+    Text [ english_us ] = "The database does not support relations." ;
+    Text[ portuguese ] = "A base de dados não tem suporte para relações. O esboço de relações será fechado.";
+    Text[ russian ] = "İòà áàçà äàííûõ íå ïîääåğæèâàåò ñâÿçåé. Ïğîåêò ñâÿçåé çàêğîåòñÿ.";
+    Text[ greek ] = "Ç âÜóç äåäïìİíùí äåí õğïóôçñßæåé ó÷İóåéò. Ï ó÷åäéáóìüò ôùí ó÷İóåùí èá ôåñìáôéóôåß.";
+    Text[ dutch ] = "De database ondersteunt geen relaties. Het relatie-ontwerp wordt weer gesloten!";
+    Text[ french ] = "La base de données ne supporte pas les relations. Fermeture de l'ébauche de relation !";
+    Text[ spanish ] = "La base de datos no apoya ninguna relación. ¡El diseño de relación se cerrará!";
+    Text[ italian ] = "Il database non supporta alcuna relazione.";
+    Text[ danish ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ swedish ] = "Databasen understöder inte några relationer.";
+    Text[ polish ] = "Baza danych nie obs³uguje relacji. Projekt relacji zostanie zamkniêty!";
+    Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÍØÚ°¼®İ‚ğx‰‡‚µ‚Ü‚¹‚ñB";
+    Text[ korean ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ chinese_simplified ] = "Õâ¸öÊı¾İ¿â²»Ö§³ÖÈÎºÎµÄ¹ØÏµ¡£ÏÖÔÚ¹Ø±Õ¹ØÏµÉè¼Æ¡£";
+    Text[ chinese_traditional ] = "³o­Ó¸ê®Æ®w¤£¤ä´©Ãö«Y¥\\¯à¡I";
+    Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
+    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ áÇ ÊÏÚã ÃíÉ ÚáÇŞÇÊ. Óæİ íÊã ÅÛáÇŞ ÊÕãíã ÇáÚáÇŞÇÊ.";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -360,6 +374,23 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message = "Der Relationeneentwurf wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The relation design has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The relation design has been changed.\nDo you want to save the changes?" ;
+    Message[ portuguese ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ russian ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ greek ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ dutch ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ french ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ spanish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ italian ] = "La struttura relazione è stata cambiata.\nVolete salvare le modifiche?";
+    Message[ danish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ swedish ] = "Relationsutkastet har ändrats.\nSka ändringarna sparas?";
+    Message[ polish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
+    Message[ korean ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ chinese_simplified ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ chinese_traditional ] = "³o­ÓÃö«Y³]­p¤w¸gÅÜ§ó¡C\n­nÀx¦sÅÜ§ó¤º®e¡H";
+    Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ arabic ] = "The relation design has been changed.\nDo you want to save the changes?";
 };
 
 
