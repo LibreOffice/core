@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:43:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,19 @@ class XclExpNumFmtBuffer;
 class XclExpXFBuffer;
 class XclExpTabInfo;
 class XclExpLinkManager;
+class XclExpPivotTableManager;
 
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
 {
-    typedef ::std::auto_ptr< XclExpSst >            XclExpSstPtr;
-    typedef ::std::auto_ptr< XclExpPalette >        XclExpPalettePtr;
-    typedef ::std::auto_ptr< XclExpFontBuffer >     XclExpFontBufferPtr;
-    typedef ::std::auto_ptr< XclExpNumFmtBuffer >   XclExpNumFmtBufferPtr;
-    typedef ::std::auto_ptr< XclExpXFBuffer >       XclExpXFBufferPtr;
-    typedef ::std::auto_ptr< XclExpTabInfo >        XclExpTabInfoPtr;
-    typedef ::std::auto_ptr< XclExpLinkManager >    XclExpLinkManagerPtr;
+    typedef ::std::auto_ptr< XclExpSst >                XclExpSstPtr;
+    typedef ::std::auto_ptr< XclExpPalette >            XclExpPalettePtr;
+    typedef ::std::auto_ptr< XclExpFontBuffer >         XclExpFontBufferPtr;
+    typedef ::std::auto_ptr< XclExpNumFmtBuffer >       XclExpNumFmtBufferPtr;
+    typedef ::std::auto_ptr< XclExpXFBuffer >           XclExpXFBufferPtr;
+    typedef ::std::auto_ptr< XclExpTabInfo >            XclExpTabInfoPtr;
+    typedef ::std::auto_ptr< XclExpLinkManager >        XclExpLinkManagerPtr;
+    typedef ::std::auto_ptr< XclExpPivotTableManager >  XclExpPivotTableManagerPtr;
 
     XclExpSstPtr                mpSst;              /// The shared string table.
 
@@ -99,6 +101,7 @@ struct XclExpRootData : public XclRootData
 
     XclExpTabInfoPtr            mpTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
+    XclExpPivotTableManagerPtr  mpPTManager;        /// All pivot tables and pivot caches.
 
     bool                        mbRelUrl;           /// true = Store URLs relative.
 
@@ -141,6 +144,8 @@ public:
     XclExpTabInfo&              GetTabInfo() const;
     /** Returns the link manager. */
     XclExpLinkManager&          GetLinkManager() const;
+    /** Returns the pivot table manager. */
+    XclExpPivotTableManager&    GetPivotTableManager() const;
 
     /** Returns the Excel add-in function name for a Calc function name. */
     String                      GetXclAddInName( const String& rScName ) const;
