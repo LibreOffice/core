@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2001-04-23 12:02:45 $
+ *  last change: $Author: pb $ $Date: 2001-06-05 10:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,7 @@ class IndexTabPage_Impl : public TabPage
 {
 private:
     FixedText           aExpressionFT;
-    Edit                aExpressionED;
-    ListBox             aResultsLB;
+    ComboBox            aIndexCB;
     PushButton          aOpenBtn;
     Timer               aFactoryTimer;
 
@@ -146,7 +145,6 @@ private:
     void                ClearIndex();
 
     DECL_LINK(          OpenHdl, PushButton* );
-    DECL_LINK(          ModifyHdl, Edit* );
     DECL_LINK(          FactoryHdl, Timer* );
 
 public:
@@ -158,6 +156,7 @@ public:
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory );
     String              GetFactory() const { return aFactory; }
+    String              GetSelectEntry() const;
 };
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -204,6 +203,7 @@ public:
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory ) { aFactory = rFactory; }
+    String              GetSelectEntry() const;
 };
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
@@ -239,6 +239,7 @@ public:
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory, sal_Bool bActive );
     String              GetFactory() const { return pIPage->GetFactory(); }
+    String              GetSelectEntry() const;
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -300,7 +301,7 @@ private:
     void                SaveConfig();
 
     DECL_LINK(          SelectHdl, ToolBox* );
-    DECL_LINK(          OpenHdl, ListBox* );
+    DECL_LINK(          OpenHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
     DECL_LINK(          OpenDoneHdl, OpenStatusListener_Impl* );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-05 08:16:32 $
+ *  last change: $Author: pb $ $Date: 2001-06-05 10:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,15 +232,15 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
     TabPage( pParent, SfxResId( TP_HELP_INDEX ) ),
 
     aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
-    aExpressionED   ( this, ResId( ED_EXPRESSION ) ),
-    aResultsLB      ( this, ResId( LB_RESULTS ) ),
+    aIndexCB        ( this, ResId( CB_INDEX ) ),
     aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) )
 
 {
     FreeResource();
 
+    aIndexCB.EnableAutocomplete( TRUE );
+
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
-    aExpressionED.SetModifyHdl( LINK( this, IndexTabPage_Impl, ModifyHdl ) );
     aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
     aFactoryTimer.SetTimeout( 200 );
 
@@ -297,9 +297,9 @@ void IndexTabPage_Impl::InitializeIndex()
                     {
                         for ( j = 0; j < nRefCount; ++j )
                         {
-                            nPos = aResultsLB.InsertEntry( aKeywordPair );
+                            nPos = aIndexCB.InsertEntry( aKeywordPair );
                             String* pData = new String( pRef[j] );
-                            aResultsLB.SetEntryData( nPos, (void*)(ULONG)pData );
+                            aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
                         }
                     }
                     else if ( 2 == nTokenCount )
@@ -309,15 +309,15 @@ void IndexTabPage_Impl::InitializeIndex()
                         if ( aIndex != aToken )
                         {
                             aIndex = aToken;
-                            aResultsLB.InsertEntry( aIndex );
+                            aIndexCB.InsertEntry( aIndex );
                         }
                         String aSubIndex( DEFINE_CONST_UNICODE("  ") );
                         aSubIndex += aKeywordPair.GetToken( 0, ';', nIdx );
                         for ( j = 0; j < nRefCount; ++j )
                         {
-                            nPos = aResultsLB.InsertEntry( aSubIndex );
+                            nPos = aIndexCB.InsertEntry( aSubIndex );
                             String* pData = new String( pRef[j] );
-                            aResultsLB.SetEntryData( nPos, (void*)(ULONG)pData );
+                            aIndexCB.SetEntryData( nPos, (void*)(ULONG)pData );
                         }
                     }
                     else
@@ -352,26 +352,18 @@ void IndexTabPage_Impl::InitializeIndex()
 
 void IndexTabPage_Impl::ClearIndex()
 {
-    USHORT nCount = aResultsLB.GetEntryCount();
+    USHORT nCount = aIndexCB.GetEntryCount();
     for ( USHORT i = 0; i < nCount; ++i )
-        delete (String*)(ULONG)aResultsLB.GetEntryData(i);
-    aResultsLB.Clear();
-    aResultsLB.Update();
+        delete (String*)(ULONG)aIndexCB.GetEntryData(i);
+    aIndexCB.Clear();
+    aIndexCB.Update();
 }
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 {
-    aResultsLB.GetDoubleClickHdl().Call( &aResultsLB );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( IndexTabPage_Impl, ModifyHdl, Edit*, pEdit )
-{
-    aResultsLB.SelectEntry( pEdit->GetText() );
+    aIndexCB.GetDoubleClickHdl().Call( &aIndexCB );
     return 0;
 }
 
@@ -397,20 +389,15 @@ void IndexTabPage_Impl::Resize()
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aExpressionFT.SetSizePixel( aNewSize );
 
-        aPnt = aExpressionED.GetPosPixel();
-        aNewSize = aExpressionED.GetSizePixel();
-        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
-        aExpressionED.SetSizePixel( aNewSize );
-
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         Size aBtnSize = aOpenBtn.GetSizePixel();
 
-        aPnt = aResultsLB.GetPosPixel();
-        aNewSize = aResultsLB.GetSizePixel();
+        aPnt = aIndexCB.GetPosPixel();
+        aNewSize = aIndexCB.GetSizePixel();
         aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
         aNewSize.Height() = aSize.Height() - aPnt.Y();
         aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
-        aResultsLB.SetSizePixel( aNewSize );
+        aIndexCB.SetSizePixel( aNewSize );
 
         aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
         aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
@@ -422,7 +409,7 @@ void IndexTabPage_Impl::Resize()
 
 void IndexTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 {
-    aResultsLB.SetDoubleClickHdl( rLink );
+    aIndexCB.SetDoubleClickHdl( rLink );
 }
 
 // -----------------------------------------------------------------------
@@ -435,6 +422,17 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
         ClearIndex();
         aFactoryTimer.Start();
     }
+}
+
+// -----------------------------------------------------------------------
+
+String IndexTabPage_Impl::GetSelectEntry() const
+{
+    String aRet;
+    String* pData = (String*)(ULONG)aIndexCB.GetEntryData( aIndexCB.GetEntryPos( aIndexCB.GetText() ) );
+    if ( pData )
+        aRet = String( *pData );
+    return aRet;
 }
 
 // class SearchBox_Impl --------------------------------------------------
@@ -648,6 +646,17 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
     aResultsLB.SetDoubleClickHdl( rLink );
 }
 
+// -----------------------------------------------------------------------
+
+String SearchTabPage_Impl::GetSelectEntry() const
+{
+    String aRet;
+    String* pData = (String*)(ULONG)aResultsLB.GetEntryData( aResultsLB.GetSelectEntryPos() );
+    if ( pData )
+        aRet = String( *pData );
+    return aRet;
+}
+
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
@@ -858,6 +867,27 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
 
     if ( bActive )
         SetActiveFactory();
+}
+
+String SfxHelpIndexWindow_Impl::GetSelectEntry() const
+{
+    String aRet;
+
+    switch ( aTabCtrl.GetCurPageId() )
+    {
+        case HELP_INDEX_PAGE_CONTENTS:
+            break;
+
+        case HELP_INDEX_PAGE_INDEX:
+            aRet = pIPage->GetSelectEntry();
+            break;
+
+        case HELP_INDEX_PAGE_SEARCH:
+            aRet = pSPage->GetSelectEntry();
+            break;
+    }
+
+    return aRet;
 }
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -1102,19 +1132,19 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
+IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 {
-    String* pData = (String*)(ULONG)pBox->GetEntryData( pBox->GetSelectEntryPos() );
-    if ( pData )
+    String aEntry = pIndexWin->GetSelectEntry();
+    if ( aEntry.Len() > 0 )
     {
-        String aEntry( *pData );
         INetURLObject aObj( aEntry );
         if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
         {
+            String aTemp = aEntry;
             aEntry = HELP_URL;
             aEntry += pIndexWin->GetFactory();
             aEntry += '/';
-            aEntry += *pData;
+            aEntry += aTemp;
             AppendConfigToken_Impl( aEntry, sal_True );
         }
         URL aURL;
