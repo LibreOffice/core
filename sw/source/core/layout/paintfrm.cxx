@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-20 10:17:21 $
+ *  last change: $Author: ama $ $Date: 2001-11-20 15:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2592,6 +2592,31 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
         pPage = FindPageFrm();
     const SwPageFtnInfo &rInf = pPage->GetPageDesc()->GetFtnInfo();
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    SwTwips nPrtWidth = (Prt().*fnRect->fnGetWidth)();
+    Fraction aFract( nPrtWidth, 1 );
+    const SwTwips nWidth = (long)(aFract *= rInf.GetWidth());
+
+    SwTwips nX = (this->*fnRect->fnGetPrtLeft)();
+    switch ( rInf.GetAdj() )
+    {
+        case FTNADJ_CENTER:
+            nX += nPrtWidth/2 - nWidth/2; break;
+        case FTNADJ_RIGHT:
+            nX += nPrtWidth - nWidth; break;
+        case FTNADJ_LEFT:
+            /* do nothing */; break;
+        default:
+            ASSERT( !this, "Neues Adjustment fuer Fussnotenlinie?" );
+    }
+    SwTwips nLineWidth = rInf.GetLineWidth();
+    const SwRect aLineRect = bVert ?
+        SwRect( Point(Frm().Left()+Frm().Width()-rInf.GetTopDist()-nLineWidth,
+                      nX), Size( nLineWidth, nWidth ) )
+            : SwRect( Point( nX, Frm().Pos().Y() + rInf.GetTopDist() ),
+                            Size( nWidth, rInf.GetLineWidth()));
+#else
     Fraction aFract( Prt().Width(), 1 );
     const SwTwips nWidth = (long)(aFract *= rInf.GetWidth());
 
@@ -2609,7 +2634,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
     }
     const SwRect aLineRect( Point( nX, Frm().Pos().Y() + rInf.GetTopDist() ),
                             Size( nWidth, rInf.GetLineWidth()));
-
+#endif
     if ( aLineRect.HasArea() )
         PaintBorderLine( rRect, aLineRect , pPage, &rInf.GetLineColor() );
 }
