@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 14:21:27 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 07:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -75,6 +81,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 
 // -----------------------
@@ -204,35 +211,27 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 {
     Dialog* pRet = NULL;
 
-    if( mpResMgr )
+    if( mpResMgr && mxSrcDoc.is() )
     {
-        Reference< XRenderable >    xRenderable( mxSrcDoc, UNO_QUERY );
-        sal_Bool                    bSelection = sal_False;
+        Any aSelection;
 
-        if( xRenderable.is() )
+        try
         {
-            try
-            {
-              /*
-                for( sal_Int32 i = 0, nPageCount = xRenderable->getRendererCount(); ( i < nPageCount ) && !bSelection; ++i )
-                {
-                    Sequence< PropertyValue > aRenderer( xRenderable->getRenderer( i ) );
+            Reference< XController > xController( Reference< XModel >( mxSrcDoc, UNO_QUERY )->getCurrentController() );
 
-                    for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); ( nProperty < nPropertyCount ) && !bSelection; ++nProperty )
-                    {
-                        if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) ) )
-                            aRenderer[ nProperty].Value >>= bSelection;
-                    }
-                }
-              */
-            }
-            catch( RuntimeException )
+            if( xController.is() )
             {
+                Reference< XSelectionSupplier > xView( xController, UNO_QUERY );
+
+                if( xView.is() )
+                    xView->getSelection() >>= aSelection;
             }
         }
+        catch( RuntimeException )
+        {
+        }
 
-        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData );
-        pDlg->Init( bSelection );
+        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData, aSelection );
         pRet = pDlg;
     }
 

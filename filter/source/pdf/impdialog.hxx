@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 13:57:32 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 07:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,16 +93,16 @@ private:
     RadioButton                         maRbPress;
 
     FilterConfigItem                    maConfigItem;
-    OUString                            maPageSelectionRange;
+    Any                                 maSelection;
 
                                         DECL_LINK( TogglePagesHdl, void* );
 
 public:
 
-                                        ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData );
+                                        ImpPDFDialog( Window* pParent, ResMgr& rResMgr,
+                                                      Sequence< PropertyValue >& rFilterData,
+                                                      const Any& rSelection );
                                         ~ImpPDFDialog();
-
-    void                                Init( sal_Bool bEnableSelection );
 
     Sequence< PropertyValue >           GetFilterData();
 };

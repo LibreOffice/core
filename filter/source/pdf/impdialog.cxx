@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 11:43:30 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 07:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 // - ImpPDFDialog -
 // ----------------
 
-ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData ) :
+ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData, const Any& rSelection ) :
     ModalDialog( pParent, ResId( DLG_PDFEXPORT, &rResMgr ) ),
     maBtnOK( this, ResId( BT_OK ) ),
     maBtnCancel( this, ResId( BT_CANCEL ) ),
@@ -80,27 +80,17 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maRbScreen( this, ResId( RB_SCREEN ) ),
     maRbPrint( this, ResId( RB_PRINT ) ),
     maRbPress( this, ResId( RB_PRESS ) ),
-    maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData )
-{
-    FreeResource();
-    maRbPages.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
-}
-
-// -----------------------------------------------------------------------------
-
-ImpPDFDialog::~ImpPDFDialog()
-{
-}
-
-// -----------------------------------------------------------------------------
-
-void ImpPDFDialog::Init( sal_Bool bEnableSelection )
+    maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
+    maSelection( rSelection )
 {
     const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 );
 
+    FreeResource();
+    maRbPages.SetToggleHdl( LINK( this, ImpPDFDialog, TogglePagesHdl ) );
+
     maRbAll.Check();
     TogglePagesHdl( NULL );
-    maRbSelection.Enable( bEnableSelection );
+    maRbSelection.Enable( maSelection.hasValue() );
 
     switch( nCompressMode )
     {
@@ -111,6 +101,12 @@ void ImpPDFDialog::Init( sal_Bool bEnableSelection )
             maRbScreen.Check();
         break;
     }
+}
+
+// -----------------------------------------------------------------------------
+
+ImpPDFDialog::~ImpPDFDialog()
+{
 }
 
 // -----------------------------------------------------------------------------
@@ -127,16 +123,20 @@ Sequence< PropertyValue > ImpPDFDialog::GetFilterData()
         nCompressMode = 0;
 
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
-
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
     aRet.realloc( aRet.getLength() + 1 );
-    aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) );
 
     if( maRbPages.IsChecked() )
+    {
+        aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
         aRet[ aRet.getLength() - 1 ].Value <<= OUString( maEdPages.GetText() );
+    }
     else if( maRbSelection.IsChecked() )
-        aRet[ aRet.getLength() - 1 ].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+    {
+        aRet[ aRet.getLength() - 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+        aRet[ aRet.getLength() - 1 ].Value <<= maSelection;
+    }
 
     return aRet;
 }

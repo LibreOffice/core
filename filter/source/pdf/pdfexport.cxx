@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-22 14:21:27 $
+ *  last change: $Author: ka $ $Date: 2002-08-23 07:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,53 +137,59 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
         if( xRenderable.is() )
         {
             PDFWriter*  pPDFWriter = NULL;
-            sal_Int32   nPageCount = 0;//xRenderable->getRendererCount();
+            OUString    aPageRange;
+            Any         aSelection;
+            sal_Int32   nCompressMode = 0;
+
+            for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
+            {
+                if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ) )
+                    rFilterData[ nData ].Value >>= nCompressMode;
+                else if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) )
+                    rFilterData[ nData ].Value >>= aPageRange;
+                else if( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selection" ) ) )
+                    rFilterData[ nData ].Value >>= aSelection;
+            }
+
+            if( aPageRange.getLength() || !aSelection.hasValue() )
+            {
+                aSelection = Any();
+                aSelection <<= mxSrcDoc;
+            }
+
+            const sal_Int32 nPageCount = xRenderable->getRendererCount( aSelection );
 
             if( nPageCount )
             {
-                const Range         aRange( 1, nPageCount );
-                MultiSelection      aSel;
-                FilterConfigItem    aFilterOptions( const_cast< Sequence< PropertyValue >* >( &rFilterData ) );
-                OUString            aPages( aFilterOptions.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSelectionRange" ) ), OUString() ) );
-                sal_Int32           nCompressMode( aFilterOptions.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 0 ) );
-                sal_Bool            bSelectionOnly = sal_False;
+                const Range     aRange( 1, nPageCount );
+                MultiSelection  aSel;
 
                 try
                 {
-                    if( !aPages.getLength() )
+                    if( !aPageRange.getLength() )
                     {
                         aSel.SetTotalRange( aRange );
                         aSel.Select( aRange );
-                    }
-                    else if( aPages.equalsAscii( "Selection"  ) )
-                    {
-                        aSel.SetTotalRange( aRange );
-                        aSel.Select( aRange );
-                        bSelectionOnly = sal_True;
                     }
                     else
                     {
-                        aSel = MultiSelection( aPages );
+                        aSel = MultiSelection( aPageRange );
                         aSel.SetTotalRange( aRange );
                     }
 
                     for( sal_Int32 nSel = aSel.FirstSelected(); nSel != SFX_ENDOFSELECTION; nSel = aSel.NextSelected() )
                     {
-                      Sequence< PropertyValue >   aRenderer( /*xRenderable->getRenderer( nSel - 1 )*/ );
+                        Sequence< PropertyValue >   aRenderer( xRenderable->getRenderer( nSel - 1, aSelection ) );
                         awt::Size                   aPageSize;
                         sal_Bool                    bProcess = sal_True;
 
-                        /*
                         for( sal_Int32 nProperty = 0, nPropertyCount = aRenderer.getLength(); nProperty < nPropertyCount; ++nProperty )
                         {
                             if( aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) )
                                 aRenderer[ nProperty].Value >>= aPageSize;
-                            else if( bSelectionOnly && aRenderer[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Selected" ) ) )
-                                aRenderer[ nProperty].Value >>= bProcess;
                         }
-                        */
 
-                        if( bProcess && ( aPageSize.Width > 0 ) && ( aPageSize.Height > 0 ) )
+                        if( ( aPageSize.Width > 0 ) && ( aPageSize.Height > 0 ) )
                         {
                             GDIMetaFile                 aMtf;
                             OutputDevice*               pOut = NULL;
@@ -199,6 +205,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                             if( pOut )
                             {
+                                pOut->Push();
                                 pOut->EnableOutput( FALSE );
                                 pOut->SetMapMode( aMapMode );
                                 pXDevice->SetOutputDevice( pOut );
@@ -210,13 +217,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
 
-                                // xRenderable->render( nSel - 1, aRenderOptions );
+                                xRenderable->render( nSel - 1, aSelection, aRenderOptions );
 
                                 aMtf.Stop();
                                 aMtf.WindStart();
 
                                 if( aMtf.GetActionCount() )
                                     bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
+
+                                pOut->Pop();
                             }
                         }
                     }
