@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #endif
 
 #include "rsclex.hxx"
-#include <rscyacc.yxx.h>
+#include <yyrscyacc.hxx>
 
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscyacc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,5 +311,5 @@ RSCINST GetFirstTupelEle( const RSCINST & rTop )
 #endif
 #endif
 
-#include "rscyacc.yxx"
+#include "yyrscyacc.cxx"
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@
 #endif
 
 #include "rsclex.hxx"
-#include <rscyacc.yxx.h>
+#include <yyrscyacc.hxx>
 
 /****************** M a c r o s ******************************************/
 #define INS_WINBIT( pClass, WinBit )        \

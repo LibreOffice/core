@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-07-13 12:22:18 $
+ *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 
 
 #include "rsclex.hxx"
-#include <rscyacc.yxx.h>
+#include <yyrscyacc.hxx>
 
 /****************** M A C R O S ******************************************/
 void RscTypCont::SETCONST( RscConst * pClass, char * szString, UINT32 nVal )

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+#   last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,20 +69,12 @@ TARGET=rscpar
 
 # --- Settings -----------------------------------------------------
 
-.IF "$(COM)"=="ICC"
-CFLAGS+= /O-
-.ENDIF
-
 #prjpch=T
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-YACCOUT=$(INCCOM)
-
-YACCTARGET= $(YACCOUT)$/rscyacc.yxx
+YACCTARGET= $(INCCOM)$/yyrscyacc.cxx
 YACCFILES=  rscyacc.y
 
 CXXFILES=   rscpar.cxx          \
