@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:14:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,11 @@ String STR_ADDRESSBOOK_MOZILLA
 {
     Text [ de ] ="Mozilla Adressbuch";
     Text[ en-US ] = "Mozilla address book";
+};
+String STR_ADDRESSBOOK_THUNDERBIRD
+{
+    Text [ de ] ="Thunderbird Adressbuch";
+    Text[ en-US ] = "Thunderbird address book";
 };
 String STR_ADDRESSBOOK_EVOLUTION
 {
