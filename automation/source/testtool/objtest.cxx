@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:30:10 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3731,9 +3731,13 @@ static ControlDefLoad __READONLY_DATA arRes_Type [] =
 #include "res_type.hxx"
 
     static CNames *pRTypes = NULL;
-    xub_StrLen nStart,nGleich,nEnd,nStartPos = 0;
+    xub_StrLen nStart;
+    xub_StrLen nGleich;
+    xub_StrLen nEnd;
+    xub_StrLen nStartPos = 0;
     ULONG nNumber;
-    String aType,aResult;
+    String aType;
+    String aResult;
     BOOL bFound;
 
     while ( (nStart = aText.Search(StartKenn,nStartPos)) != STRING_NOTFOUND &&
