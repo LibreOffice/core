@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hro $ $Date: 2003-06-06 11:21:58 $
+#   last change: $Author: hro $ $Date: 2003-06-11 12:16:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,12 @@ LIBSALCPPRT=$(0)
 .INCLUDE :  settings.mk
 # ------------------------------------------------------------------
 
+.IF "$(ENABLE_STATIC_GTK)" == "FALSE"
+GTKLINKFLAGS=
+.ELSE
+GTKLINKFLAGS=-Bstatic
+.ENDIF
+
 CFLAGS+=`pkg-config --cflags gtk+-2.0`
 
 OBJFILES=\
@@ -86,9 +92,9 @@ APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 .IF "$(COM)" == "GCC"
-APP1STDLIBS=-Wl,-Bstatic `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Wl,-Bdynamic -lXext -lX11 -ldl -lnsl
+APP1STDLIBS=-Wl,$(GTKLINKFLAGS) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Wl,-Bdynamic -lXext -lX11 -ldl -lnsl
 .ELSE
-APP1STDLIBS=-Bstatic `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Bdynamic -lXext -lX11 -ldl -lsocket -lnsl
+APP1STDLIBS=$(GTKLINKFLAGS) `pkg-config --only-mod-libs --libs gtk+-2.0` -lpng -lzlib -ljpeg -ltiff -Bdynamic -lXext -lX11 -ldl -lsocket -lnsl
 .ENDIF
 
 ALL: ALLTAR $(BIN)$/crash_dump.res.01
