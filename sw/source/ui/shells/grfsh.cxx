@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:30:07 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _SVX_GRFFLT_HXX //autogen
 #include <svx/grfflt.hxx>
+#endif
+#ifndef _SVX_TBXCOLOR_HXX
+#include <svx/tbxcolor.hxx>
 #endif
 
 #ifndef _FMTURL_HXX //autogen
@@ -298,7 +301,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( SvxBrushItem( rSh.GetGraphicObj(), GPOS_LT,
                                         SID_ATTR_GRAF_GRAPHIC ));
             }
-            aSet.Put(SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() ));
+            aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, sGrfNm.Len() > 0 ) );
 
             // get Mirror and Crop
             {
@@ -344,8 +347,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                             SID_ATTR_GRAF_FRMSIZE_PERCENT, FALSE, &pItem ))
                     {
                         const Size& rSz = ((SvxSizeItem*)pItem)->GetSize();
-                        aSize.SetWidthPercent( rSz.Width() );
-                        aSize.SetHeightPercent( rSz.Height() );
+                        aSize.SetWidthPercent( static_cast< BYTE >( rSz.Width() ) );
+                        aSize.SetHeightPercent( static_cast< BYTE >( rSz.Height() ) );
                     }
                     pSet->Put( aSize );
                 }
@@ -533,7 +536,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( pItem )
                 aGrfSet.Put( SwTransparencyGrf(
-                            ((SfxUInt16Item*)pItem)->GetValue() ));
+                    static_cast< sal_Int8 >( ( (SfxUInt16Item*)pItem )->GetValue() ) ) );
             break;
         case SID_ATTR_GRAF_INVERT:
             if( pItem )
@@ -546,6 +549,13 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                 aGrfSet.Put( SwDrawModeGrf(
                             ((SfxUInt16Item*)pItem)->GetValue() ));
             break;
+
+        case SID_COLOR_SETTINGS:
+        {
+            svx::ColorToolboxAccess aToolboxAccess;
+            aToolboxAccess.toggleToolbox();
+            break;
+        }
 
         case SID_GRFFILTER:
         case SID_GRFFILTER_INVERT:
@@ -602,6 +612,18 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case FN_FORMAT_GRAFIC_DLG:
             break;
 
+        case SID_COLOR_SETTINGS:
+        {
+            if ( bParentCntProt || !bIsGrfCntnt )
+                bDisable = TRUE;
+            else
+            {
+                svx::ColorToolboxAccess aToolboxAccess;
+                rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible() ) );
+            }
+            break;
+        }
+
         case FN_FLIP_VERT_GRAFIC:
             if( !bParentCntProt )
             {
@@ -653,8 +675,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 
         case SID_ATTR_GRAF_GAMMA:
             if( !bParentCntProt )
-                rSet.Put( SfxUInt32Item( nWhich, ((SwGammaGrf&)
-                        aCoreSet.Get(RES_GRFATR_GAMMA)).GetValue() * 100 ));
+                rSet.Put( SfxUInt32Item( nWhich, static_cast< UINT32 >(
+                    ( (SwGammaGrf&)aCoreSet.Get( RES_GRFATR_GAMMA ) ).GetValue() * 100 ) ) );
             break;
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
