@@ -21,7 +21,7 @@ all: $(DOCU_INDEX_FILE)
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
     
-$(DOCU_INDEX_FILE) : $(IDLFILES) $(DIRLIST)
+$(DOCU_INDEX_FILE) : idl_chapter_refs.txt $(IDLFILES) $(DIRLIST)
 .IF "$(BUILD_SOSL)"==""
     +autodoc -html $(DESTDIRGENDOCU) -dvgroot ..$/..$/DevelopersGuide -name "StarOffice6.0 API" -lg \
     idl -dvgfile idl_chapter_refs.txt -t $(DESTDIRIDL)
