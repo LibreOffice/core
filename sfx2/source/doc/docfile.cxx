@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-16 15:55:40 $
+ *  last change: $Author: mba $ $Date: 2000-11-17 19:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1406,6 +1406,7 @@ void SfxMedium::GetMedium_Impl()
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
                 xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream );
+            Done_Impl( xLockBytes.Is() ? xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
         }
         else
         {
@@ -1415,21 +1416,24 @@ void SfxMedium::GetMedium_Impl()
 
             // no callbacks for opening read/write because we might try readonly later
             xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, bIsWritable ? NULL : pHandler );
-            if ( ( !xLockBytes.Is() || xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS )
-                    && bIsWritable && bAllowReadOnlyMode )
+            if ( ( !xLockBytes.Is() || xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS )  )
             {
-                // later error code will be corrected to ERRCODE_ACCESS_DENIED !
-                QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
-                BOOL bSilent = TRUE;    // don't ask at the moment
-                if ( bSilent || RET_YES == aBox.Execute() )
+                if ( bIsWritable && bAllowReadOnlyMode )
                 {
-                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
-                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
-                    ResetError();
-                    xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                    // later error code will be corrected to ERRCODE_ACCESS_DENIED !
+                    QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
+                    BOOL bSilent = TRUE;    // don't ask at the moment
+                    if ( bSilent || RET_YES == aBox.Execute() )
+                    {
+                        GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                        SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                        ResetError();
+                        xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                    }
                 }
             }
-            else
+            else if ( bIsWritable && !pImp->bDownloadDone )
+                // opening readwrite is always done synchronously
                 Done_Impl( xLockBytes.Is() ? xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
         }
 
