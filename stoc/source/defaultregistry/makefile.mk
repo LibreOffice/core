@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 14:20:37 $
+#   last change: $Author: rt $ $Date: 2000-11-24 10:50:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
+#COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 .INCLUDE :  ..$/cppumaker.mk
 
