@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:31:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,10 @@ class SwRTFParser : public SvxRTFParser
     bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
     bool bFirstContinue;    // 1.Call ins Continue
     bool bContainsPara;     // If there is no paragraph in the section
+    bool bContainsTablePara;     // If there is an table in this section
+    bool bForceNewTable;     // Forces a beginning of a new table
     bool bNestedField;
+    bool bTrowdRead;         // True, iff an \trowd definition was read after the last \row
 
     /*
      #i9243#
