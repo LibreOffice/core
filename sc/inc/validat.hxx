@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:17:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public:
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
             ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,
                                 ScDocument* pDocument );
-            ~ScValidationData();
+    virtual ~ScValidationData();
 
     void            Store(SvStream& rStream, ScMultipleWriteHeader& rHdr) const;
 
