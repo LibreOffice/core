@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:43:25 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,6 +1291,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "⁄Ê«„·  ‘€Ì· √Õ«œÌ…/À‰«∆Ì…";
             Text[ turkish ] = "Birli/ikili i˛leÁler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Operadores ~unarios/binarios";
         };
         MenuItem
         {
@@ -1459,6 +1460,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "⁄·«ﬁ« ";
             Text[ turkish ] = "›li˛kiler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Relaciones";
         };
         MenuItem
         {
@@ -1633,6 +1635,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "„Ã„Ê⁄… ⁄„·Ì« ";
             Text[ turkish ] = "K¸me i˛lemleri";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Operaciones de conjuntos";
         };
         MenuItem
         {
@@ -1844,6 +1847,7 @@ Menu RID_COMMANDMENU
                         TEXT[ korean ] = "±‚≈∏";
                         TEXT[ arabic ] = "€Ì— –·ﬂ";
                         TEXT[ turkish ] = "Dier";
+                        TEXT[ catalan ] = "otros";
                     };
                 };
             };
@@ -1859,6 +1863,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "œ«·« ";
             Text[ turkish ] = "Fonksiyon";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Funciones";
         };
         MenuItem
         {
@@ -1975,6 +1980,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "⁄Ê«„· «· ‘€Ì·";
             Text[ turkish ] = "›˛leÁler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Operadores";
         };
         MenuItem
         {
@@ -2155,6 +2161,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "”„« ";
             Text[ turkish ] = "÷znitelikler";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Atributos";
         };
         MenuItem
         {
@@ -2339,6 +2346,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "√ﬁÊ«”";
             Text[ turkish ] = "AyraÁlar";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~ParÈntesis";
         };
         MenuItem
         {
@@ -2426,6 +2434,7 @@ Menu RID_COMMANDMENU
                         Text[ arabic ] = "Œÿ ÃœÌœ";
                         Text[ turkish ] = "Yeni sat˝r";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "nueva lÌnea";
                     };
                     MenuItem
                     {
@@ -2454,6 +2463,7 @@ Menu RID_COMMANDMENU
                         Text[ arabic ] = " »«⁄œ ’€Ì—";
                         Text[ turkish ] = "K¸Á¸k aral˝k";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "espacio pequeÒo";
                     };
                     MenuItem
                     {
@@ -2482,6 +2492,7 @@ Menu RID_COMMANDMENU
                         Text[ arabic ] = " »«⁄œ";
                         Text[ turkish ] = "Aral˝k";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "espacio";
                     };
                     MenuItem
                     {
@@ -2537,6 +2548,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = " ‰”Ìﬁ";
             Text[ turkish ] = "Format";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Formatos";
         };
         MenuItem
         {
@@ -2693,6 +2705,7 @@ Menu RID_COMMANDMENU
             Text[ arabic ] = "„« ⁄œÏ –·ﬂ";
             Text[ turkish ] = "Dier";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Otros";
         };
     };
 };
