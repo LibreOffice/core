@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
+#   last change: $Author: rt $ $Date: 2003-09-16 14:35:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,89 +71,10 @@ AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
 
-#.INCLUDE :  sdpre.mk
 .INCLUDE :  settings.mk
-#.INCLUDE :  sd.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = $(PRJ)$/util$/sd.cxx \
-        undolayer.cxx	\
-        fupoor.cxx		\
-        fudraw.cxx		\
-        fusel.cxx		\
-        fuconstr.cxx	\
-        fuconrec.cxx	\
-        fuconuno.cxx	\
-        fuconbez.cxx	\
-        fuediglu.cxx	\
-        fuzoom.cxx		\
-        fuslid.cxx		\
-        fuslsel.cxx 	\
-        fuslshow.cxx	\
-        fuslshw2.cxx	\
-        fuslshw3.cxx	\
-        fuslshw4.cxx	\
-        fuslshw5.cxx	\
-        fuslshw6.cxx	\
-        fusldlg.cxx		\
-        fader.cxx		\
-        fader2.cxx		\
-        mover.cxx		\
-        fuslprms.cxx	\
-        fuscale.cxx 	\
-        fuslhide.cxx	\
-        futransf.cxx	\
-        futext.cxx		\
-        futext2.cxx		\
-        fuline.cxx		\
-        sdundo.cxx		\
-        sdundogr.cxx	\
-        unslprms.cxx	\
-        fuoaprms.cxx	\
-        unoaprms.cxx	\
-        fuarea.cxx		\
-        fuchar.cxx		\
-        fuconarc.cxx	\
-        fuparagr.cxx	\
-        fubullet.cxx	\
-        futempl.cxx 	\
-        fuoutl.cxx		\
-        fuoltext.cxx	\
-        fuinsert.cxx	\
-        fupage.cxx		\
-        undopage.cxx	\
-        fuprlout.cxx	\
-        fuprobjs.cxx	\
-        fulinend.cxx	\
-        fusnapln.cxx	\
-        fuolbull.cxx	\
-        fucopy.cxx		\
-        fulink.cxx		\
-        fuspell.cxx 	\
-        futhes.cxx		\
-        fusearch.cxx	\
-        fuinsfil.cxx	\
-        futxtatt.cxx	\
-        fumeasur.cxx	\
-        fuconnct.cxx	\
-        unprlout.cxx	\
-        fudspord.cxx	\
-        unmovss.cxx 	\
-        fucon3d.cxx 	\
-        fumorph.cxx		\
-        fuexpand.cxx	\
-        fusumry.cxx     \
-        sdmtf.cxx		\
-        sprite.cxx		\
-        outlinfo.cxx	\
-        fucushow.cxx	\
-        speedctl.cxx	\
-        fuvect.cxx      \
-        bulmaper.cxx    \
-        undoback.cxx    
 
 EXCEPTIONSFILES= \
         $(SLO)$/futext2.obj		\
