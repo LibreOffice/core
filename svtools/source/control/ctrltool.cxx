@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-12 15:53:30 $
+ *  last change: $Author: th $ $Date: 2001-03-28 08:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,12 @@ static long aStdSizeAry[] =
      80,
      90,
     100,
+    105,
     110,
     120,
+    130,
     140,
+    150,
     160,
     180,
     200,
@@ -1004,10 +1007,13 @@ String FontSizeNames::Size2Name( long nValue ) const
     {
         long mid = (upper + lower) >> 1;
         if ( nValue == mpArray[mid].mnSize )
-            return String( mpArray[mid].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+        {
+            aStr = String( mpArray[mid].mszUtf8Name, RTL_TEXTENCODING_UTF8 );
+            break;
+        }
         else if ( nValue < mpArray[mid].mnSize )
             upper = mid - 1;
-        else if ( nValue > mpArray[mid].mnSize )
+        else /* ( nValue > mpArray[mid].mnSize ) */
             lower = mid + 1;
     }
 
