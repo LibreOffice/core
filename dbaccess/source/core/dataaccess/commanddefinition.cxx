@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:05:15 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 07:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 #include "commanddefinition.hxx"
 #endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
-#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -89,7 +86,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -307,7 +303,7 @@ void OCommandDefinition::initializeFromConfiguration()
         return;
     }
 
-    OCommandBase::initializeFrom(m_aConfigurationNode);
+    OCommandBase::loadFrom( m_aConfigurationNode );
 }
 
 //........................................................................
