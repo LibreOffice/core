@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_imexp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:18:56 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ struct ModuleDescriptor
     ::rtl::OUString aCode;
 };
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportScriptModule(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
     const ModuleDescriptor& rMod )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
-SAL_DLLEXPORT ::com::sun::star::uno::Reference<
+::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
     SAL_THROW( (::com::sun::star::uno::Exception) );
