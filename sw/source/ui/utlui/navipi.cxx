@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:37:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,7 +1418,9 @@ String SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
         sFileName = aBkmk.GetURL();
     }
     if( sFileName.Len() )
-        sFileName = URIHelper::SmartRelToAbs( sFileName );
+    {
+        sFileName = INetURLObject( sFileName ).GetMainURL( INetURLObject::NO_DECODE );
+    }
     return sFileName;
 }
 
