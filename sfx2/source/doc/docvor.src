@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-13 09:45:11 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ ModalDialog DLG_ORGANIZE
         Text[ spanish ] = "~Libreta de direcciones...";
         Text[ italian ] = "~Rubrica...";
         Text[ danish ] = "~Address Book...";
-        Text[ swedish ] = "~Addressbok...";
+        Text[ swedish ] = "~Adressbok...";
         Text[ polish ] = "~Ksi¹¿ka adresowa...";
         Text[ portuguese_brazilian ] = "~Address Book...";
         Text[ japanese ] = "±ÄÞÚ½’ (~A)...";
@@ -653,7 +653,7 @@ ModalDialog DLG_ORGANIZE
                     Text[ russian ] = "Ýêñïîðò øàáëîíà...";
                     Text[ polish ] = "Eksportuj szablon...";
                     Text[ japanese ] = "ÃÝÌßÚ°Ä‚Ì´¸½Îß°Ä...";
-                    Text[ chinese_traditional ] = "¿é¥X¼Ë¦¡(~X)...";
+                    Text[ chinese_traditional ] = "¶×¥X¼Ë¦¡(~X)...";
                     Text[ arabic ] = "ÊÕÏíÑ ÞÇáÈ...";
                     Text[ greek ] = "~ÅîáãùãÞ ðñïôýðùí...";
                     Text[ korean ] = "¼­½Ä ÆÄÀÏ ³»º¸³»±â...";
@@ -708,7 +708,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ dutch ] = "Printerinstellin~gen..." ;
                     Text [ spanish ] = "~Configuración de la impresora..." ;
                     Text [ danish ] = "Udskriftsindstillin~ger..." ;
-                    Text [ swedish ] = "~Skrivarinställningar..." ;
+                    Text [ swedish ] = "Skrivarinställnin~gar..." ;
                     Text [ finnish ] = "Tulostimen asetukset" ;
                     Text [ english_us ] = "Printer Settings..." ;
                     Text[ chinese_simplified ] = "Éè¶¨´òÓ¡»ú...";
@@ -766,6 +766,25 @@ ModalDialog DLG_ORGANIZE
                     HelpId = HID_ORGANIZE_STDTEMPLATE_ADD ;
                     Text = "Als S~tandardvorlage setzen" ;
                     Text [ english_us ] = "Set As Default Template" ;
+                    Text[ portuguese ] = "Set As Default Template";
+                    Text[ russian ] = "Set As Default Template";
+                    Text[ greek ] = "Set As Default Template";
+                    Text[ dutch ] = "Als s~tandaardsjabloon";
+                    Text[ french ] = "Set As Default Template";
+                    Text[ spanish ] = "Definir como plantilla predeterminada";
+                    Text[ finnish ] = "Set As Default Template";
+                    Text[ italian ] = "Set As Default Template";
+                    Text[ danish ] = "Set As Default Template";
+                    Text[ swedish ] = "Definiera som s~tandardmall";
+                    Text[ polish ] = "Set As Default Template";
+                    Text[ portuguese_brazilian ] = "Set As Default Template";
+                    Text[ japanese ] = "Set As Default Template";
+                    Text[ korean ] = "Set As Default Template";
+                    Text[ chinese_simplified ] = "Set As Default Template";
+                    Text[ chinese_traditional ] = "Set As Default Template";
+                    Text[ turkish ] = "Set As Default Template";
+                    Text[ arabic ] = "Set As Default Template";
+                    Text[ catalan ] = "Set As Default Template";
                 };
                 MenuItem
                 {
@@ -773,6 +792,25 @@ ModalDialog DLG_ORGANIZE
                     HelpId = HID_ORGANIZE_STDTEMPLATE_DEL ;
                     Text = "~Standardvorlage zurücksetzen" ;
                     Text [ english_us ] = "Reset Default Template" ;
+                    Text[ portuguese ] = "Reset Default Template";
+                    Text[ russian ] = "Reset Default Template";
+                    Text[ greek ] = "Reset Default Template";
+                    Text[ dutch ] = "~Standaardsjabloon";
+                    Text[ french ] = "Reset Default Template";
+                    Text[ spanish ] = "Restaurar plantilla predeterminada";
+                    Text[ finnish ] = "Reset Default Template";
+                    Text[ italian ] = "Reset Default Template";
+                    Text[ danish ] = "Reset Default Template";
+                    Text[ swedish ] = "Återställ ~standardmall";
+                    Text[ polish ] = "Reset Default Template";
+                    Text[ portuguese_brazilian ] = "Reset Default Template";
+                    Text[ japanese ] = "Reset Default Template";
+                    Text[ korean ] = "Reset Default Template";
+                    Text[ chinese_simplified ] = "Reset Default Template";
+                    Text[ chinese_traditional ] = "Reset Default Template";
+                    Text[ turkish ] = "Reset Default Template";
+                    Text[ arabic ] = "Reset Default Template";
+                    Text[ catalan ] = "Reset Default Template";
                 };
             };
         };
@@ -840,6 +878,7 @@ ModalDialog DLG_ORGANIZE
     Text[ catalan ] = "Administrar plantillas";
 };
  // ********************************************************************** EOF
+
 
 
 
