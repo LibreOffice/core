@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-09 10:09:00 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:05:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.68 $$"
+LIBSMKREV!:="$$Revision: 1.69 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -172,7 +172,11 @@ LINGULIB=$(HM2LIBST)
 LNGLIB=-llng$(OFFICEUPD)$(DLLPOSTFIX)
 EXPAT3RDLIB=-lexpat_xmlparse -lexpat_xmltok
 EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
+.IF "$(SYSTEM_ZLIB)"=="YES"
+ZLIB3RDLIB=-lz
+.ELSE
 ZLIB3RDLIB=-lzlib
+.ENDIF
 JPEG3RDLIB=-ljpeglib
 NEON3RDLIB=-lneon
 BERKELEYLIB=-ldb-3.2
