@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-07 15:03:12 $
+ *  last change: $Author: aw $ $Date: 2002-08-02 10:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,14 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                 BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
 
-                pAktCreate->SetItemSet(aDefaultAttr);
+                // #101618# SW uses a naked SdrObject for frame construction. Normally, such an
+                // object should not be created. Since it is possible to use it as a helper
+                // object (e.g. in letting the user define an area with the interactive
+                // construction) at least no items should be set at that object.
+                if(nInvent != SdrInventor || nIdent != OBJ_NONE)
+                {
+                    pAktCreate->SetItemSet(aDefaultAttr);
+                }
 
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
                 {
