@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-15 17:45:03 $
+ *  last change: $Author: jp $ $Date: 2002-01-17 16:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3195,43 +3195,28 @@ BOOL SwWW8ImplReader::ConvertSubToGraphicPlacement()
     if (pCtrlStck->GetFmtStackAttr(RES_CHRATR_ESCAPEMENT, &nPos))
     {
         SwFltStackEntry* pEntry = (*pCtrlStck)[nPos];
-        SwNodeIndex aBegin( pEntry->nMkNode, 1 );
-        SwNodeIndex aEnd(pPaM->GetPoint()->nNode );
-        xub_StrLen nBegin = pEntry->nMkCntnt;
-        xub_StrLen nEnd = pPaM->GetPoint()->nContent.GetIndex();
-
-        if ( (aBegin == aEnd) && (nBegin == nEnd-1) )
+        const SwNodeIndex* pNodeIndex = &pEntry->nMkNode;
+        if( pNodeIndex )
         {
-            const SwpHints *pAttrs = ((SwTxtNode *)pPaM->GetNode())->
-                GetpSwpHints();
-            if( pAttrs )
+            SwNodeIndex aBegin( *pNodeIndex, 1 );
+            xub_StrLen nBegin = pEntry->nMkCntnt;
+            const SwTxtNode* pTNd;
+            const SwTxtAttr* pTFlyAttr;
+            if( aBegin == pPaM->GetPoint()->nNode &&
+                nBegin == pPaM->GetPoint()->nContent.GetIndex() - 1 &&
+                0 != ( pTNd = aBegin.GetNode().GetTxtNode() ) &&
+                0 != ( pTFlyAttr =
+                            pTNd->GetTxtAttr( nBegin, RES_TXTATR_FLYCNT )) )
             {
-                register xub_StrLen i;
-                for( i = 0; i < pAttrs->Count(); i++ )
+                const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
+                SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
+                if( pFlyFmt &&
+                    FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() )
                 {
-                    const SwTxtAttr* pHt = (*pAttrs)[i];
-                    const xub_StrLen* pEnd = pHt->GetEnd();
-
-                    if( pEnd ? ( nBegin >= *pHt->GetStart() &&
-                        nBegin < *pEnd ) : nBegin == *pHt->GetStart() )
-                    {
-                        if (pHt->GetAttr().Which() == RES_TXTATR_FLYCNT)
-                        {
-                            const SwFmtFlyCnt& rFly = (const SwFmtFlyCnt &)
-                                pHt->GetAttr();
-                            SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
-                            SwFmtAnchor aAnchor = pFlyFmt->GetAnchor();
-                            if (FLY_IN_CNTNT == aAnchor.GetAnchorId())
-                            {
-                                pCtrlStck->DeleteAndDestroy( nPos );
-                                bIsGraphicPlacementHack=TRUE;
-                                pFlyFmt->SetAttr(SwFmtVertOrient(0,
-                                    VERT_CHAR_CENTER,REL_CHAR));
-                            }
-                        }
-                    }
-                    else if( nBegin < *pHt->GetStart() )
-                        break;
+                    pCtrlStck->DeleteAndDestroy( nPos );
+                    bIsGraphicPlacementHack=TRUE;
+                    pFlyFmt->SetAttr( SwFmtVertOrient( 0,
+                                                VERT_CHAR_CENTER,REL_CHAR));
                 }
             }
         }
