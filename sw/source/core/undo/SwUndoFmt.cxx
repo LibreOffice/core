@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoFmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:14:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,10 @@
 SwUndoFmtCreate::SwUndoFmtCreate
 (USHORT nUndoId, SwFmt * _pNew, SwFmt * _pDerivedFrom, SwDoc * _pDoc)
     : SwUndo(nUndoId), pNew(_pNew),
-      sDerivedFrom(_pDerivedFrom->GetName()),
       pDoc(_pDoc), pNewSet(NULL), nId(0), bAuto(FALSE)
 {
+    if (_pDerivedFrom)
+        sDerivedFrom = _pDerivedFrom->GetName();
 }
 
 SwUndoFmtCreate::~SwUndoFmtCreate()
@@ -370,13 +371,14 @@ SwFmt * SwUndoRenameCharFmt::Find(const String & rName) const
 SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNew,
                                        SwFrmFmt * pDerivedFrom,
                                        SwDoc * pDoc)
-    : SwUndoFmtCreate(UNDO_FRMFMT_CREATE, pNew, pDerivedFrom, pDoc)
+    : SwUndoFmtCreate(UNDO_FRMFMT_CREATE, pNew, pDerivedFrom, pDoc),
+      bAuto(pNew->IsAuto())
 {
 }
 
 SwFmt * SwUndoFrmFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, TRUE);
+    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, TRUE, bAuto);
 }
 
 void SwUndoFrmFmtCreate::Delete()
