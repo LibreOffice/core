@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-05 10:48:50 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2006,6 +2006,17 @@ void ScDocument::SetDirty( const ScRange& rRange )
     USHORT nTab2 = rRange.aEnd.Tab();
     for (USHORT i=rRange.aStart.Tab(); i<=nTab2; i++)
         if (pTab[i]) pTab[i]->SetDirty( rRange );
+    SetAutoCalc( bOldAutoCalc );
+}
+
+
+void ScDocument::SetTableOpDirty( const ScRange& rRange )
+{
+    BOOL bOldAutoCalc = GetAutoCalc();
+    bAutoCalc = FALSE;      // no multiple recalculation
+    USHORT nTab2 = rRange.aEnd.Tab();
+    for (USHORT i=rRange.aStart.Tab(); i<=nTab2; i++)
+        if (pTab[i]) pTab[i]->SetTableOpDirty( rRange );
     SetAutoCalc( bOldAutoCalc );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-05 18:24:23 $
+ *  last change: $Author: er $ $Date: 2001-02-13 19:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,23 @@
 
 #include <math.h>
 
+#ifndef _TOOLS_SOLMATH_HXX
 #include <tools/solmath.hxx>    // SOMA_FPSIGNAL_JUMP
+#endif
 
+#ifndef SC_COMPILER_HXX
 #include "compiler.hxx"
+#endif
+#ifndef SC_CELL_HXX
 #include "cell.hxx"
+#endif
+#ifndef SC_SCDLL_HXX
 #include "scdll.hxx"
+#endif
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
+
 #if SC_SPEW_ENABLED
 #include "scspew.hxx"
 #endif
@@ -235,12 +247,15 @@ void SetNV();
 //-------------------------------------------------------------------------
 // Funktionen für den Zugriff auf das Document
 //-------------------------------------------------------------------------
-void ReplaceCell( ScAddress& ); // fuer MehrfachOp.
+void ReplaceCell( ScAddress& );     // for TableOp
+void ReplaceCell( USHORT& rCol, USHORT& rRow, USHORT& rTab );   // for TableOp
+BOOL IsTableOpInRange( const ScRange& );
 ULONG GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
 double GetValueCellValue( const ScAddress&, const ScValueCell* );
-ScBaseCell* GetCell( const ScAddress& );
+ScBaseCell* GetCell( const ScAddress& rPos )
+    { return pDok->GetCell( rPos ); }
 void GetCellString( String& rStr, const ScBaseCell* pCell );
 USHORT GetCellErrCode( const ScBaseCell* pCell );
 inline CellType GetCellType( const ScBaseCell* pCell )
@@ -268,9 +283,10 @@ double PopDouble();
 const sal_Unicode* PopString();
 void PopSingleRef( ScAddress& );
 void PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab);
-void PopDoubleRef( ScRange& );
+void PopDoubleRef( ScRange&, BOOL bDontCheckForTableOp = FALSE );
 void PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-                          USHORT& rCol2, USHORT &rRow2, USHORT& rTab2);
+                          USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+                          BOOL bDontCheckForTableOp = FALSE );
 BOOL PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
 inline void MatrixDoubleRefToMatrix();      // wenn MatrixFormula: PopDoubleRefPushMatrix

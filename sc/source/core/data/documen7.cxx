@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void ScDocument::Broadcast( ULONG nHint, const ScAddress& rAddr,
             }
         }
         if ( pBASM->AreaBroadcast( rAddr, aHint ) || bIsBroadcasted )
-            TrackFormulas();
+            TrackFormulas( nHint );
     }
 
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
@@ -422,7 +422,7 @@ BOOL ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
     Der nachfolgende broadcastet wieder usw.
     View stoesst Interpret an.
  */
-void ScDocument::TrackFormulas()
+void ScDocument::TrackFormulas( ULONG nHintId )
 {
 
     if ( pFormulaTrack )
@@ -438,7 +438,7 @@ void ScDocument::TrackFormulas()
         pTrack = pFormulaTrack;
         do
         {
-            ScHint aHint( SC_HINT_DATACHANGED, pTrack->aPos, pTrack );
+            ScHint aHint( nHintId, pTrack->aPos, pTrack );
             if ( pBC = pTrack->GetBroadcaster() )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( pTrack->aPos, aHint );
@@ -461,7 +461,7 @@ void ScDocument::TrackFormulas()
         if ( bHaveForced )
         {
             SetForcedFormulas( TRUE );
-            if ( bAutoCalc && !IsAutoCalcShellDisabled() )
+            if ( bAutoCalc && !IsAutoCalcShellDisabled() && !IsInInterpreter() )
                 CalcFormulaTree( TRUE );
             else
                 SetForcedFormulaPending( TRUE );
@@ -500,7 +500,7 @@ void ScDocument::SetAutoCalc( BOOL bNewAutoCalc )
     {
         if ( IsAutoCalcShellDisabled() )
             SetForcedFormulaPending( TRUE );
-        else
+        else if ( !IsInInterpreter() )
             CalcFormulaTree( TRUE );
     }
 }

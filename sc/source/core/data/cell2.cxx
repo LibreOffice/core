@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 11:44:50 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,14 +326,14 @@ void ScFormulaCell::GetEnglishFormula( String& rFormula, BOOL bCompileXML ) cons
 
 BOOL ScFormulaCell::IsValue()
 {
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
     return bIsValue;
 }
 
 double ScFormulaCell::GetValue()
 {
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
     if ( !pCode->GetError() || pCode->GetError() == errDoubleRef)
         return nErgValue;
@@ -344,14 +344,14 @@ double ScFormulaCell::GetValueAlways()
 {
     // for goal seek: return result value even if error code is set
 
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
     return nErgValue;
 }
 
 void ScFormulaCell::GetString( String& rString )
 {
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
     if ( !pCode->GetError() || pCode->GetError() == errDoubleRef)
         rString = aErgString;
@@ -367,7 +367,7 @@ void ScFormulaCell::GetMatrix(ScMatrix** ppMat)
         // => wir brauchen pMatrix
         if ( !pMatrix && cMatrixFlag == MM_FORMULA )
             bDirty = TRUE;
-        if ( bDirty )
+        if ( IsDirtyOrInTableOpDirty() )
             Interpret();
     }
     if (!pCode->GetError())
@@ -543,7 +543,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
 
 USHORT ScFormulaCell::GetErrCode()
 {
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
     return pCode->GetError();
 }

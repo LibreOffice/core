@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,7 @@ ScFormulaCell::ScFormulaCell() :
     pMatrix     ( NULL ),
     bIsIterCell (FALSE),
     bInChangeTrack( FALSE ),
+    bTableOpDirty( FALSE ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -590,6 +591,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pMatrix( NULL ),
     bIsIterCell (FALSE),
     bInChangeTrack( FALSE ),
+    bTableOpDirty( FALSE ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -621,6 +623,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pMatrix ( NULL ),
     bIsIterCell (FALSE),
     bInChangeTrack( FALSE ),
+    bTableOpDirty( FALSE ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -661,6 +664,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
     cMatrixFlag ( rScFormulaCell.cMatrixFlag ),
     bIsIterCell (FALSE),
     bInChangeTrack( FALSE ),
+    bTableOpDirty( FALSE ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -747,6 +751,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pMatrix ( NULL ),
     bIsIterCell (FALSE),
     bInChangeTrack( FALSE ),
+    bTableOpDirty( FALSE ),
     pPrevious(0),
     pNext(0),
     pPreviousTrack(0),
@@ -973,7 +978,7 @@ void ScFormulaCell::GetFormula( String& rFormula ) const
 
 void ScFormulaCell::GetResultDimensions( USHORT& rCols, USHORT& rRows )
 {
-    if (bDirty && pDocument->GetAutoCalc())
+    if (IsDirtyOrInTableOpDirty() && pDocument->GetAutoCalc())
         Interpret();
 
     if ( !pCode->GetError() && pMatrix )
@@ -1176,7 +1181,7 @@ void ScFormulaCell::Interpret()
 {
     static USHORT nRecCount = 0;
     static ScFormulaCell* pLastIterInterpreted = NULL;
-    if ( !bDirty )
+    if ( !IsDirtyOrInTableOpDirty() )
         return;         // fuer IterCircRef, nix doppelt
 
     //! HACK:
@@ -1221,6 +1226,7 @@ void ScFormulaCell::Interpret()
             // Vorgaenger bereits berechnet worden bzw. von der View wird
             // via ScCellFormat::GetString CalcFormulaTree angeworfen
             bDirty = FALSE;
+            bTableOpDirty = FALSE;
             nErgValue = 0.0;
             bIsValue = TRUE;
             nIterMode = 0;
@@ -1269,6 +1275,7 @@ void ScFormulaCell::Interpret()
              && pCode->GetError() != errCircularReference )
             {
                 bDirty = FALSE;
+                bTableOpDirty = FALSE;
                 nIterMode = 0;
                 bIsIterCell = FALSE;
                 pLastIterInterpreted = NULL;
@@ -1289,6 +1296,7 @@ void ScFormulaCell::Interpret()
                     nIterMode = 0;
                     bIsIterCell = FALSE;
                     bDirty = FALSE;
+                    bTableOpDirty = FALSE;
                     bRepeat = FALSE;
                 }
                 // Zu oft rumgelaufen?
@@ -1297,6 +1305,7 @@ void ScFormulaCell::Interpret()
                     nIterMode = 0;
                     bIsIterCell = FALSE;
                     bDirty = FALSE;
+                    bTableOpDirty = FALSE;
                     bRepeat = FALSE;
                     pCode->SetError( errNoConvergence );
                 }
@@ -1362,7 +1371,10 @@ void ScFormulaCell::Interpret()
             nErgValue = pDocument->RoundValueAsShown( nErgValue, nFormat );
         }
         if ( nIterMode == 0 )
+        {
             bDirty = FALSE;
+            bTableOpDirty = FALSE;
+        }
         else
             pLastIterInterpreted = this;
         pMatrix = p->GetMatrixResult();
@@ -1427,6 +1439,7 @@ void ScFormulaCell::Interpret()
         //  Zelle bei Compiler-Fehlern nicht ewig auf dirty stehenlassen
         DBG_ASSERT( pCode->GetError(), "kein UPN-Code und kein Fehler ?!?!" );
         bDirty = FALSE;
+        bTableOpDirty = FALSE;
     }
 }
 
@@ -1447,9 +1460,13 @@ void __EXPORT ScFormulaCell::SFX_NOTIFY( SfxBroadcaster& rBC,
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
         const ScHint* p = PTR_CAST( ScHint, &rHint );
-        if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
+        if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING |
+                SC_HINT_TABLEOPDIRTY)) )
         {
-            bDirty = TRUE;
+            if ( p->GetId() & SC_HINT_TABLEOPDIRTY )
+                bTableOpDirty = TRUE;
+            else
+                bDirty = TRUE;
             // #35962# nicht ewig aus FormulaTree rausholen um in FormulaTrack
             // zu stellen und wieder in FormulaTree reinzupacken..
             // kann ausser bei RECALCMODE_ALWAYS jemals eine Zelle im
@@ -1484,6 +1501,31 @@ void ScFormulaCell::SetDirty()
         }
     }
 }
+
+void ScFormulaCell::SetTableOpDirty()
+{
+    if ( !IsInChangeTrack() )
+    {
+        if ( pDocument->GetHardRecalcState() )
+            bTableOpDirty = TRUE;
+        else
+        {
+            if ( !bTableOpDirty || !pDocument->IsInFormulaTree( this ) )
+            {
+                bTableOpDirty = TRUE;
+                pDocument->AppendToFormulaTrack( this );
+                pDocument->TrackFormulas( SC_HINT_TABLEOPDIRTY );
+            }
+        }
+    }
+}
+
+
+BOOL ScFormulaCell::IsDirtyOrInTableOpDirty()
+{
+    return bDirty || (bTableOpDirty && pDocument->IsInInterpreterTableOp());
+}
+
 
 void ScFormulaCell::SetErrCode( USHORT n )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-09 17:46:12 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1894,6 +1894,32 @@ void ScColumn::SetDirty( const ScRange& rRange )
         {
             aPos.SetRow( nRow );
             pDocument->Broadcast( SC_HINT_DATACHANGED, aPos, pCell );
+        }
+        nIndex++;
+    }
+    pDocument->SetAutoCalc( bOldAutoCalc );
+}
+
+
+void ScColumn::SetTableOpDirty( const ScRange& rRange )
+{
+    if ( !pItems || !nCount )
+        return ;
+    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( FALSE );    // no multiple recalculation
+    USHORT nRow2 = rRange.aEnd.Row();
+    ScAddress aPos( nCol, 0, nTab );
+    USHORT nRow, nIndex;
+    Search( rRange.aStart.Row(), nIndex );
+    while ( nIndex < nCount && (nRow = pItems[nIndex].nRow) <= nRow2 )
+    {
+        ScBaseCell* pCell = pItems[nIndex].pCell;
+        if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+            ((ScFormulaCell*)pCell)->SetTableOpDirty();
+        else
+        {
+            aPos.SetRow( nRow );
+            pDocument->Broadcast( SC_HINT_TABLEOPDIRTY, aPos, pCell );
         }
         nIndex++;
     }

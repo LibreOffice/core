@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-08 08:27:33 $
+ *  last change: $Author: er $ $Date: 2001-02-13 19:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,52 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 }
 
 
+void ScInterpreter::ReplaceCell( USHORT& rCol, USHORT& rRow, USHORT& rTab )
+{
+    USHORT* pTOp = aTableOpList.First();
+    while (pTOp)
+    {
+        if (rCol == pTOp[0] && rRow == pTOp[1] && rTab == pTOp[2])
+        {
+            rCol = pTOp[3];
+            rRow = pTOp[4];
+            rTab = pTOp[5];
+            return ;
+        }
+        else if (rCol == pTOp[6] && rRow == pTOp[7] && rTab == pTOp[8])
+        {
+            rCol = pTOp[9];
+            rRow = pTOp[10];
+            rTab = pTOp[11];
+            return ;
+        }
+        else
+            pTOp = aTableOpList.Next();
+    }
+}
+
+
+BOOL ScInterpreter::IsTableOpInRange( const ScRange& rRange )
+{
+    if ( rRange.aStart == rRange.aEnd )
+        return FALSE;   // not considered to be a range in TableOp sense
+
+    // we can't replace a single cell in a range
+    USHORT* pTOp = aTableOpList.First();
+    while (pTOp)
+    {
+        ScAddress aAdr( pTOp[0], pTOp[1], pTOp[2] );
+        if ( rRange.In( aAdr ) )
+            return TRUE;
+        aAdr.Set( pTOp[6], pTOp[7], pTOp[8] );
+        if ( rRange.In( aAdr ) )
+            return TRUE;
+        pTOp = aTableOpList.Next();
+    }
+    return FALSE;
+}
+
+
 ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCell* pCell)
 {
     ULONG nFormat;
@@ -286,14 +332,7 @@ ULONG ScInterpreter::GetCellNumberFormat( const ScAddress& rPos, const ScBaseCel
             nErr = ((ScFormulaCell*)pCell)->GetErrCode();
         else
             nErr = 0;
-        if ( aTableOpList.Count() > 0 )
-        {
-            ScAddress aAdr( rPos );
-            ReplaceCell( aAdr );
-            nFormat = pDok->GetNumberFormat( aAdr );
-        }
-        else
-            nFormat = pDok->GetNumberFormat( rPos );
+        nFormat = pDok->GetNumberFormat( rPos );
         if ( pCell->GetCellType() == CELLTYPE_FORMULA
           && ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0) )
             nFormat = ((ScFormulaCell*)pCell)->GetStandardFormat( *pFormatter,
@@ -350,16 +389,8 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     if (pFCell->IsValue())
                     {
                         fValue = pFCell->GetValue();
-                        if ( aTableOpList.Count() > 0 )
-                        {
-                            ScAddress aAdr( rPos );
-                            ReplaceCell( aAdr );
-                            pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                                aAdr, *pFCell );
-                        }
-                        else
-                            pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
-                                rPos, *pFCell );
+                        pDok->GetNumberFormatInfo( nCurFmtType, nCurFmtIndex,
+                            rPos, *pFCell );
                     }
                     else
                     {
@@ -377,14 +408,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             case CELLTYPE_VALUE:
             {
                 fValue = ((ScValueCell*)pCell)->GetValue();
-                if ( aTableOpList.Count() > 0 )
-                {
-                    ScAddress aAdr( rPos );
-                    ReplaceCell( aAdr );
-                    nCurFmtIndex = pDok->GetNumberFormat( aAdr );
-                }
-                else
-                    nCurFmtIndex = pDok->GetNumberFormat( rPos );
+                nCurFmtIndex = pDok->GetNumberFormat( rPos );
                 nCurFmtType = pFormatter->GetType( nCurFmtIndex );
                 if ( bCalcAsShown && fValue != 0.0 )
                     fValue = pDok->RoundValueAsShown( fValue, nCurFmtIndex );
@@ -418,18 +442,6 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
     else
         fValue = 0.0;
     return fValue;
-}
-
-
-ScBaseCell* ScInterpreter::GetCell( const ScAddress& rPos )
-{
-    if (aTableOpList.Count() > 0)
-    {
-        ScAddress aTmp( rPos );
-        ReplaceCell( aTmp );
-        return pDok->GetCell( aTmp );
-    }
-    return pDok->GetCell( rPos );
 }
 
 
@@ -959,6 +971,8 @@ void ScInterpreter::PopSingleRef(USHORT& rCol, USHORT &rRow, USHORT& rTab)
                 SetError( errNoRef ), rRow = 0;
             if( rTab < 0 || rTab >= pDok->GetTableCount() || aRef.IsTabDeleted() )
                 SetError( errNoRef ), rTab = 0;
+            if ( aTableOpList.Count() > 0 )
+                ReplaceCell( rCol, rRow, rTab );
             return;
         }
         else if( p->GetType() == svMissing )
@@ -999,6 +1013,8 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
             if( nTab < 0 || nTab >= pDok->GetTableCount() || aRef.IsTabDeleted() )
                 SetError( errNoRef ), nTab = 0;
             rAdr.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
+            if ( aTableOpList.Count() > 0 )
+                ReplaceCell( rAdr );
             return;
         }
         else if( p->GetType() == svMissing )
@@ -1009,7 +1025,8 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
 
 
 void ScInterpreter::PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
-                                 USHORT& rCol2, USHORT &rRow2, USHORT& rTab2)
+                                 USHORT& rCol2, USHORT &rRow2, USHORT& rTab2,
+                                 BOOL bDontCheckForTableOp )
 {
     if( sp )
     {
@@ -1062,6 +1079,12 @@ void ScInterpreter::PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
                 if( rTab2 < 0 || rTab2 >= nMaxTab || aRef.IsTabDeleted() )
                     SetError( errNoRef ), rTab2 = 0;
             }
+            if ( aTableOpList.Count() > 0 && !bDontCheckForTableOp )
+            {
+                ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
+                if ( IsTableOpInRange( aRange ) )
+                    SetError( errIllegalParameter );
+            }
             return;
         }
         else if( p->GetType() == svMissing )
@@ -1071,7 +1094,7 @@ void ScInterpreter::PopDoubleRef(USHORT& rCol1, USHORT &rRow1, USHORT& rTab1,
 }
 
 
-void ScInterpreter::PopDoubleRef( ScRange& rRange )
+void ScInterpreter::PopDoubleRef( ScRange& rRange, BOOL bDontCheckForTableOp )
 {
     if( sp )
     {
@@ -1127,6 +1150,11 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange )
                     SetError( errNoRef ), nTab = 0;
                 rRange.aEnd.Set( (USHORT)nCol, (USHORT)nRow, (USHORT)nTab );
             }
+            if ( aTableOpList.Count() > 0 && !bDontCheckForTableOp )
+            {
+                if ( IsTableOpInRange( rRange ) )
+                    SetError( errIllegalParameter );
+            }
             return;
         }
         else if( p->GetType() == svMissing )
@@ -1143,7 +1171,7 @@ BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
         case svDoubleRef :
         {
             ScRange aRange;
-            PopDoubleRef( aRange );
+            PopDoubleRef( aRange, TRUE );
             return DoubleRefToPosSingleRef( aRange, rAdr );
         }
         break;
@@ -2032,8 +2060,6 @@ void ScInterpreter::ScExternal()
                             {
                                 ScAddress aAdr;
                                 PopSingleRef( aAdr );
-                                if (aTableOpList.Count() > 0)
-                                    ReplaceCell( aAdr );
                                 ScRange aRange( aAdr );
                                 uno::Reference<table::XCellRange> xObj =
                                         ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
@@ -2213,8 +2239,6 @@ void ScInterpreter::ScMacro()
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
-                if (aTableOpList.Count() > 0)
-                    ReplaceCell( aAdr );
                 bOk = SetSbxVariable( pPar, aAdr );
             }
             break;
@@ -2434,15 +2458,19 @@ void ScInterpreter::ScTableOp()
     ScAddress aFAdr;
     USHORT nOCol1, nORow1, nOTab1, nNCol1, nNRow1, nNTab1;
     USHORT nOCol2, nORow2, nOTab2, nNCol2, nNRow2, nNTab2;
+    ScRange aRange2;
     if (nParamCount == 5)
     {
         PopSingleRef(nNCol2, nNRow2, nNTab2);
         PopSingleRef(nOCol2, nORow2, nOTab2);
+        aRange2.aStart.Set( nOCol2, nORow2, nOTab2 );
+        aRange2.aEnd = aRange2.aStart;
     }
     else
         nOCol2 = MAXCOL+1;
     PopSingleRef(nNCol1, nNRow1, nNTab1);
     PopSingleRef(nOCol1, nORow1, nOTab1);
+    ScRange aRange1( nOCol1, nORow1, nOTab1 );
     PopSingleRef( aFAdr );
     pTableOp = new USHORT[12];
     pTableOp[0]  = nOCol1;
@@ -2459,6 +2487,11 @@ void ScInterpreter::ScTableOp()
     pTableOp[11] = nNTab2;
     aTableOpList.Insert(pTableOp);
 
+    pDok->IncInterpreterTableOpLevel();
+
+    pDok->SetTableOpDirty( aRange1 );
+    if ( nOCol2 != MAXCOL+1 )
+        pDok->SetTableOpDirty( aRange2 );
     ScBaseCell* pFCell = pDok->GetCell( aFAdr );
     if (pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA)
         ((ScFormulaCell*)pFCell)->SetDirtyVar();
@@ -2476,8 +2509,16 @@ void ScInterpreter::ScTableOp()
         delete [] pTableOp;
         pTableOp = NULL;
     }
+    pDok->SetTableOpDirty( aRange1 );
+    if ( nOCol2 != MAXCOL+1 )
+        pDok->SetTableOpDirty( aRange2 );
     if (pFCell && pFCell->GetCellType() == CELLTYPE_FORMULA)
+    {
         ((ScFormulaCell*)pFCell)->SetDirtyVar();
+        ((ScFormulaCell*)pFCell)->GetErrCode();     // recalculate original
+    }
+
+    pDok->DecInterpreterTableOpLevel();
 }
 
 /*

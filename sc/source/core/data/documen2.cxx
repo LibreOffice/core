@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,6 +350,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         nFormulaCodeInTree(0),
         nInterpretLevel(0),
         nMacroInterpretLevel(0),
+        nInterpreterTableOpLevel(0),
         bLostData(FALSE),
         pDetOpList(NULL),
         bInDtorClear( FALSE ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-07 11:33:16 $
+ *  last change: $Author: er $ $Date: 2001-02-13 18:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1252,6 +1252,17 @@ void ScTable::SetDirty( const ScRange& rRange )
     USHORT nCol2 = rRange.aEnd.Col();
     for (USHORT i=rRange.aStart.Col(); i<=nCol2; i++)
         aCol[i].SetDirty( rRange );
+    pDocument->SetAutoCalc( bOldAutoCalc );
+}
+
+
+void ScTable::SetTableOpDirty( const ScRange& rRange )
+{
+    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( FALSE );    // no multiple recalculation
+    USHORT nCol2 = rRange.aEnd.Col();
+    for (USHORT i=rRange.aStart.Col(); i<=nCol2; i++)
+        aCol[i].SetTableOpDirty( rRange );
     pDocument->SetAutoCalc( bOldAutoCalc );
 }
 
