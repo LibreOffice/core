@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 13:01:28 $
+#   last change: $Author: kz $ $Date: 2004-06-10 16:26:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,8 +98,7 @@ OBJFILES = \
         $(OBJ)$/langselect.obj			    \
         $(OBJ)$/cmdlinehelp.obj             \
         $(OBJ)$/userinstall.obj             \
-        $(OBJ)$/desktopcontext.obj          \
-        $(OBJ)$/license.obj
+        $(OBJ)$/desktopcontext.obj
 
 
 .IF "$(GUI)" == "UNX"
