@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msStarBasic( RTL_CONSTASCII_USTRINGPARAM("StarBasic") )
 {
     // construct PropertyHandlerFactory
-    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
+    xSdPropHdlFactory = new XMLSdPropHdlFactory( rExport.GetModel(), &rExp );
 
     // construct PropertySetMapper
     xPropertySetMapper = CreateShapePropMapper( rExport );
@@ -663,6 +663,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         case XmlShapeTypePresOutlinerShape:
         case XmlShapeTypePresSubtitleShape:
         case XmlShapeTypePresNotesShape:
+        case XmlShapeTypePresHeaderShape:
+        case XmlShapeTypePresFooterShape:
+        case XmlShapeTypePresSlideNumberShape:
+        case XmlShapeTypePresDateTimeShape:
         {
             ImpExportTextBoxShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
@@ -923,7 +927,7 @@ sal_Int32 XMLShapeExport::getShapeId( const uno::Reference < drawing::XShape >& 
 SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     SvXMLExport& rExport )
 {
-    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel() );
+    UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), &rExport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory );
     SvXMLExportPropertyMapper* pResult =
         new XMLShapeExportPropertyMapper( xMapper,
@@ -1039,6 +1043,10 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
                 else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
+                else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
+                else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
+                else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
+                else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
             }
         }
     }
