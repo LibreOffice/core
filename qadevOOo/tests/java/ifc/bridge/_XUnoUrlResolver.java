@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUnoUrlResolver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:25:00 $
+ *  last change:$Date: 2003-09-08 10:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 package ifc.bridge;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+import util.utils;
+
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
@@ -72,9 +76,6 @@ import com.sun.star.connection.XConnection;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.StatusException;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.bridge.XUnoUrlResolver</code>
@@ -232,10 +233,6 @@ public class _XUnoUrlResolver extends MultiMethodTest {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
         } catch (IllegalArgumentException e) {
-            log.println("Unexpected exception thrown " + e.getMessage());
-            e.printStackTrace(log);
-            throw new StatusException("Unexpected exception", e);
-        } catch (com.sun.star.uno.Exception e) {
             log.println("Unexpected exception thrown " + e.getMessage());
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);

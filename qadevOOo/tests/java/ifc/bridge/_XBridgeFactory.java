@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBridgeFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:24:49 $
+ *  last change:$Date: 2003-09-08 10:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,17 @@
 
 package ifc.bridge;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XBridgeFactory;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
 * Tests <code>com.sun.star.bridge.XBridgeFactory</code>
