@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:04:54 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,11 @@
 #include <hintids.hxx>
 #endif
 
+// --> OD 2005-02-21 #i42921#
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
+// <--
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
 #endif
@@ -1914,6 +1919,41 @@ void SwCntntNode::ChkCondColl()
         }
     }
 }
+
+// --> OD 2005-02-21 #i42921#
+short SwCntntNode::GetTextDirection( const SwPosition& rPos,
+                                     const Point* pPt ) const
+{
+    short nRet = -1;
+
+    Point aPt;
+    if( pPt )
+        aPt = *pPt;
+
+    SwFrm* pFrm = GetFrm( &aPt, &rPos );
+
+    if ( pFrm )
+    {
+        if ( pFrm->IsVertical() )
+        {
+            if ( pFrm->IsRightToLeft() )
+                nRet = FRMDIR_VERT_TOP_LEFT;
+            else
+                nRet = FRMDIR_VERT_TOP_RIGHT;
+        }
+        else
+        {
+            if ( pFrm->IsRightToLeft() )
+                nRet = FRMDIR_HORI_RIGHT_TOP;
+            else
+                nRet = FRMDIR_HORI_LEFT_TOP;
+        }
+    }
+
+
+    return nRet;
+}
+// <--
 
 //FEATURE::CONDCOLL
 // Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
