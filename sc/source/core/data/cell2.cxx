@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-15 10:04:26 $
+ *  last change: $Author: er $ $Date: 2002-09-12 16:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -891,13 +891,8 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             pUndoDoc->PutCell( aUndoPos, pFCell );
         }
         bValChanged = FALSE;
-        if (pRangeData)                     // Shared Formula gegen echte Formel
-        {                                   // austauschen
-
-// hier wird noch zu oft ausgetauscht. Es muesste noch ein Test implementiert werden,
-// ob diese Zelle mit ihrer Formel wirklich von der Referenzaenderung betroffen ist.
-// (analog in TabInsert und TabDelete).
-
+        if ( pRangeData )
+        {   // Replace shared formula with own formula
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
