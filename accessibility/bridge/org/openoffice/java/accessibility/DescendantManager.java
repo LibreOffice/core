@@ -192,7 +192,7 @@ public abstract class DescendantManager extends Component {
         /** Causes every child of the object to be selected if the object supports multiple selection */
         public void selectAllAccessibleSelection() {
             try {
-                unoAccessibleSelection.selectAllAccessible();
+                unoAccessibleSelection.selectAllAccessibleChildren();
             } catch (com.sun.star.uno.RuntimeException e) {
             }
         }
