@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 09:48:55 $
+ *  last change: $Author: obr $ $Date: 2001-06-27 13:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include <osl/nlsupport.h>
+#include <osl/diagnose.h>
 
 #if defined(LINUX) || defined(SOLARIS)
 #include <pthread.h>
@@ -152,11 +153,12 @@ const _pair _nl_language_list[] = {
     { "ANSI-1251",      RTL_TEXTENCODING_MS_1251        }, /* ru_RU.ANSI1251 */
     { "BIG5",           RTL_TEXTENCODING_BIG5           },
     { "CNS11643",       RTL_TEXTENCODING_EUC_TW         }, /* zh_TW.EUC */
-    { "EUCJP",          RTL_TEXTENCODING_EUC_JP         },
-    { "GB2312",         RTL_TEXTENCODING_EUC_CN         }, /* zh_CN.EUC */
+    { "EUCJP",          RTL_TEXTENCODING_EUC_JP         }, /* ja_JP.eucjp */
+    { "GB2312",         RTL_TEXTENCODING_GB_2312        }, /* zh_CN */
     { "GBK",            RTL_TEXTENCODING_GBK            }, /* zh_CN.GBK */
     { "ISO8859-1",      RTL_TEXTENCODING_ISO_8859_1     },
-    { "ISO8859-13",     RTL_TEXTENCODING_DONTKNOW       }, /* lt_LT lv_LV */
+    { "ISO8859-10",     RTL_TEXTENCODING_ISO_8859_10    },
+    { "ISO8859-13",     RTL_TEXTENCODING_ISO_8859_13    }, /* lt_LT lv_LV */
     { "ISO8859-14",     RTL_TEXTENCODING_ISO_8859_14    },
     { "ISO8859-15",     RTL_TEXTENCODING_ISO_8859_15    },
     { "ISO8859-2",      RTL_TEXTENCODING_ISO_8859_2     },
@@ -184,6 +186,8 @@ const _pair _nl_language_list[] = {
     { "ANSI_X3.4-1968",             RTL_TEXTENCODING_ISO_8859_1 },  /* fake: ASCII_US */
     { "ASMO_449",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO_9036 ARABIC7 */
     { "BALTIC",                     RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 */
+    { "BIG5",                       RTL_TEXTENCODING_BIG5 },        /* locale: zh_TW */
+    { "BIG5HKSCS",                  RTL_TEXTENCODING_BIG5 },        /* locale: zh_HK */
     { "BS_4730",                    RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-4 ISO646-GB */
     { "BS_VIEWDATA",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-47 */
     { "CP1250",                     RTL_TEXTENCODING_MS_1250 },     /* MS-EE */
@@ -221,6 +225,12 @@ const _pair _nl_language_list[] = {
     { "ECMA-CYRILLIC",              RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-111 */
     { "ES",                         RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-17 */
     { "ES2",                        RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-85 */
+    { "EUC-JP",                     RTL_TEXTENCODING_EUC_JP },      /* locale: ja_JP.eucjp */
+    { "EUC-KR",                     RTL_TEXTENCODING_EUC_KR },      /* locale: ko_KR.euckr */
+    { "EUC-TW",                     RTL_TEXTENCODING_EUC_TW },      /* locale: zh_TW.euctw */
+    { "GB18030",                    RTL_TEXTENCODING_GB_18030 },    /* locale: zh_CN.gb18030 */
+    { "GB2312",                     RTL_TEXTENCODING_GB_2312 },     /* locale: zh_CN */
+    { "GBK",                        RTL_TEXTENCODING_GBK },         /* locale: zh_CN.GBK */
     { "GB_1988-80",                 RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-57 */
     { "GOST_19768-74",              RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-153 */
     { "GREEK-CCITT",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-150 */
@@ -278,8 +288,8 @@ const _pair _nl_language_list[] = {
     { "INIS-CYRILLIC",              RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-51 */
     { "INVARIANT",                  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-170 */
     { "ISO-8859-1",                 RTL_TEXTENCODING_ISO_8859_1 },  /* ISO-IR-100 CP819 */
-    { "ISO-8859-10",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-157 LATIN6 */
-    { "ISO-8859-13",                RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-179 LATIN7 */
+    { "ISO-8859-10",                RTL_TEXTENCODING_ISO_8859_10 }, /* ISO-IR-157 LATIN6 */
+    { "ISO-8859-13",                RTL_TEXTENCODING_ISO_8859_13 }, /* ISO-IR-179 LATIN7 */
     { "ISO-8859-14",                RTL_TEXTENCODING_ISO_8859_14 }, /* LATIN8 L8 */
     { "ISO-8859-15",                RTL_TEXTENCODING_ISO_8859_15 },
     { "ISO-8859-2",                 RTL_TEXTENCODING_ISO_8859_2 },  /* LATIN2 L2 */
@@ -344,6 +354,7 @@ const _pair _nl_language_list[] = {
     { "T.101-G2",                   RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-128 */
     { "T.61-7BIT",                  RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-102 */
     { "T.61-8BIT",                  RTL_TEXTENCODING_DONTKNOW },    /* T.61 ISO-IR-103 */
+    { "TIS620",                     RTL_TEXTENCODING_MS_874 },      /* locale: th_TH */
     { "UTF-8",                      RTL_TEXTENCODING_UTF8 },        /* ISO-10646/UTF-8 */
     { "VIDEOTEX-SUPPL",             RTL_TEXTENCODING_DONTKNOW },    /* ISO-IR-70 */
     { "WIN-SAMI-2",                 RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
@@ -445,6 +456,8 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         language = _pair_search (codeset, _nl_language_list, members);
     }
 
+    OSL_ASSERT( language && ( RTL_TEXTENCODING_DONTKNOW != language->value ) );
+
     /* a matching item in our list provides a mapping from codeset to
      * rtl-codeset */
     if ( language != NULL )
@@ -476,6 +489,9 @@ const _pair _locale_extension_list[] = {
     { "big5",         RTL_TEXTENCODING_BIG5        },
     { "euc",          RTL_TEXTENCODING_EUC_JP      },
     { "iso8859-1",    RTL_TEXTENCODING_ISO_8859_1  },
+    { "iso8859-10",   RTL_TEXTENCODING_ISO_8859_10 },
+    { "iso8859-13",   RTL_TEXTENCODING_ISO_8859_13 },
+    { "iso8859-14",   RTL_TEXTENCODING_ISO_8859_14 },
     { "iso8859-15",   RTL_TEXTENCODING_ISO_8859_15 },
     { "iso8859-2",    RTL_TEXTENCODING_ISO_8859_2  },
     { "iso8859-3",    RTL_TEXTENCODING_ISO_8859_3  },
@@ -515,7 +531,6 @@ const _pair _iso_language_list[] = {
     { "fi",  RTL_TEXTENCODING_ISO_8859_1 },
     { "fo",  RTL_TEXTENCODING_ISO_8859_1 },
     { "fr",  RTL_TEXTENCODING_ISO_8859_1 },
-    { "hi",  RTL_TEXTENCODING_DONTKNOW },
     { "hi",  RTL_TEXTENCODING_DONTKNOW },
     { "hr",  RTL_TEXTENCODING_ISO_8859_2 },
     { "hu",  RTL_TEXTENCODING_ISO_8859_2 },
