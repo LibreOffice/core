@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:09:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,14 +1102,14 @@ String STR_CHANGESECTPASSWD
     Text [ danish ] = "Modificer adgangskodebeskyttelse" ;
     Text [ portuguese ] = "Alterar protecção da senha" ;
     Text [ portuguese_brazilian ] = "Paßwortschutz ändern" ;
-    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤¿ÚÁî";
+    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
     Text[ russian ] = "Èçìåíèòü çàùèòó ïàğîëåì";
     Text[ polish ] = "Zmieñ ochronê has³a";
     Text[ japanese ] = "Êß½Ü°ÄŞ•ÛŒì‚Ì•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§ó«OÅ@±K½X";
     Text[ arabic ] = "ÊÛííÑ ÍãÇíÉ ßáãÉ ÇáÓÑ";
     Text[ dutch ] = "Wachtwoordbeveiliging wijzigen";
-    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤¿ÚÁî";
+    Text[ chinese_simplified ] = "¸ü¸Ä±£»¤ÃÜÂë";
     Text[ greek ] = "ÁëëáãŞ ğñïóôáóßáò êùäéêïı ğñüóâáóçò";
     Text[ korean ] = "ÆĞ½º¿öµå º¸È£ º¯°æ";
     Text[ turkish ] = "Şifre korumasını değiştir";
