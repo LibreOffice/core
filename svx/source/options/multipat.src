@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:25:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text = "Pfade auswählen" ;
     Text [ English ] = "Select paths" ;
     Text [ english_us ] = "Select Paths" ;
-    Text [ portuguese_brazilian ] = "Pfade auswählen" ;
+    Text [ portuguese_brazilian ] = "Pfade ausw?hlen" ;
     Text [ swedish ] = "Välj sökvägar" ;
     Text [ danish ] = "Vælg stier" ;
     Text [ italian ] = "Seleziona percorsi" ;
@@ -102,7 +102,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
         Text [ english_us ] = "~Add..." ;
-        Text [ portuguese_brazilian ] = "Hi~nzufügen" ;
+        Text [ portuguese_brazilian ] = "Hi~nzuf?en" ;
         Text [ swedish ] = "Lägg t~ill..." ;
         Text [ danish ] = "Tilføj..." ;
         Text [ italian ] = "~Aggiungi..." ;
@@ -134,7 +134,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ English ] = "~Delete" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -173,7 +173,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text [ portuguese ] = "Atalhos" ;
         Text[ chinese_simplified ] = "Â·¾¶";
         Text[ russian ] = "Ïóòè";
-        Text[ polish ] = "Œcie¿ki";
+        Text[ polish ] = "?cie¿ki";
         Text[ japanese ] = "Êß½";
         Text[ chinese_traditional ] = "¸ô®|";
         Text[ arabic ] = "ÇáãÓÇÑÇÊ";
@@ -203,7 +203,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
     };
     Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
     Text[ russian ] = "Âûáğàòü ïóòè";
-    Text[ polish ] = "Wybierz œcie¿ki";
+    Text[ polish ] = "Wybierz ?cie¿ki";
     Text[ japanese ] = "Êß½‚Ì‘I‘ğ";
     Text[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
     Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
@@ -231,7 +231,7 @@ String RID_MULTIPATH_DBL_ERR
     Text [ portuguese ] = "O atalho %1 já existe." ;
     Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
     Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
-    Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
+    Text[ polish ] = "?cie¿ka %1 ju¿ istnieje.";
     Text[ japanese ] = "%1‚ÌÊß½‚ÍŠù‚É‚ ‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó¸ô®| %1 ¤w¸g¦s¦b¡C";
     Text[ arabic ] = "ÇáãÓÇÑ %1 ãæÌæÏ ãÓÈŞÇğ.";
@@ -278,7 +278,7 @@ String RID_SVXSTR_FILE_TITLE
     Text [ English ] = "Select files" ;
     Text [ english_us ] = "Select files" ;
     Text [ portuguese ] = "Seleccionar ficheiros" ;
-    Text [ portuguese_brazilian ] = "Dateien auswählen" ;
+    Text [ portuguese_brazilian ] = "Dateien ausw?hlen" ;
     Text [ swedish ] = "Välj ut filer" ;
     Text [ danish ] = "Vælg filer" ;
     Text [ italian ] = "Seleziona file" ;
