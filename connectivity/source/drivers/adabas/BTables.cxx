@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 08:12:54 $
+ *  last change: $Author: oj $ $Date: 2001-03-28 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,11 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_H_
+#include <cppuhelper/interfacecontainer.h>
+#endif
 
+using namespace cppu;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -122,8 +126,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
     //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
 
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-    aSchema,aName,aTypes);
+    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
     Reference< XNamed > xRet = NULL;
     if(xResult.is())
@@ -168,6 +171,113 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
     if(!aName.getLength())
         ::dbtools::FunctionSequenceException(*this);
 
+    if(descriptor->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND)) // here we have a view
+        createView(descriptor);
+    else
+        createTable(descriptor);
+
+    OCollection_TYPE::appendByDescriptor(descriptor);
+}
+// -------------------------------------------------------------------------
+void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
+{
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+
+    OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
+        Reference< XStatement > xStmt = pConnection->createStatement(  );
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ")
+            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
+            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
+            + ::rtl::OUString::createFromAscii(" '")
+            + getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION))
+            + ::rtl::OUString::createFromAscii("'");
+    xStmt->execute(aSql);
+
+    // columns
+    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
+    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
+    Reference< XPropertySet > xColProp;
+
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ")
+            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
+            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote  + aDot
+            + aQuote;
+
+    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    {
+        ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
+        if(xColProp.is())
+        {
+            ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(PROPERTY_DESCRIPTION));
+            if(aDescription.getLength())
+            {
+                ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
+                                            + ::rtl::OUString::createFromAscii(" '")
+                                            + aDescription
+                                            + ::rtl::OUString::createFromAscii("'");
+                xStmt->execute(aSql);
+            }
+        }
+    }
+}
+// -------------------------------------------------------------------------
+// XDrop
+void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+
+    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
+    if( aIter == m_aNameMap.end())
+        throw NoSuchElementException(elementName,*this);
+
+    if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
+        aIter->second = createObject(elementName);
+    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
+    sal_Bool bIsNew = sal_False;
+    if(xTunnel.is())
+    {
+        connectivity::sdbcx::ODescriptor* pTable = (connectivity::sdbcx::ODescriptor*)xTunnel->getSomething(connectivity::sdbcx::ODescriptor::getUnoTunnelImplementationId());
+        if(pTable)
+            bIsNew = pTable->isNew();
+    }
+    if (!bIsNew)
+    {
+        OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
+        Reference< XStatement > xStmt = pConnection->createStatement(  );
+
+        ::rtl::OUString aName,aSchema;
+        sal_Int32 nLen = elementName.indexOf('.');
+        aSchema = elementName.copy(0,nLen);
+        aName   = elementName.copy(nLen+1);
+        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
+        Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
+        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND)) // here we have a view
+            aSql += ::rtl::OUString::createFromAscii("VIEW ");
+        else
+            aSql += ::rtl::OUString::createFromAscii("TABLE ");
+
+        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
+        aSql = aSql + ::rtl::OUString::createFromAscii(".");
+        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
+        xStmt->execute(aSql);
+    }
+
+    OCollection_TYPE::dropByName(elementName);
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    if (index < 0 || index >= getCount())
+        throw IndexOutOfBoundsException();
+
+    dropByName((*m_aElements[index]).first);
+}
+// -------------------------------------------------------------------------
+void OTables::createTable( const Reference< XPropertySet >& descriptor )
+{
     ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema;
@@ -353,98 +463,49 @@ void SAL_CALL OTables::appendByDescriptor( const Reference< XPropertySet >& desc
 
     if(getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION)).getLength())
         setComments(descriptor);
-
-
-    OCollection_TYPE::appendByDescriptor(descriptor);
 }
-// -------------------------------------------------------------------------
-void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
+// -----------------------------------------------------------------------------
+void OTables::createView( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
-    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
+    ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii("."),sSchema,sCommand;
+
+    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sSchema;
+    if(sSchema.getLength())
+        aSql += ::dbtools::quoteName(aQuote, sSchema) + aDot;
+    else
+        descriptor->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
+
+    aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(PROPERTY_NAME)))
+                + ::rtl::OUString::createFromAscii(" AS ");
+    descriptor->getPropertyValue(PROPERTY_SCHEMANAME) >>= sCommand;
+    aSql += sCommand;
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
-    aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ")
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
-            + ::rtl::OUString::createFromAscii(" '")
-            + getString(descriptor->getPropertyValue(PROPERTY_DESCRIPTION))
-            + ::rtl::OUString::createFromAscii("'");
     xStmt->execute(aSql);
 
-    // columns
-    Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
-    Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-    Reference< XPropertySet > xColProp;
-
-    aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ")
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_SCHEMANAME)) + aQuote + aDot
-            + aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote  + aDot
-            + aQuote;
-
-    for(sal_Int32 i=0;i<xColumns->getCount();++i)
+    // insert the new view also in the tables collection
+    OTables* pTables = static_cast<OTables*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateTables());
+    if(pTables)
     {
-        ::cppu::extractInterface(xColProp,xColumns->getByIndex(i));
-        if(xColProp.is())
-        {
-            ::rtl::OUString aDescription = getString(xColProp->getPropertyValue(PROPERTY_DESCRIPTION));
-            if(aDescription.getLength())
-            {
-                ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
-                                            + ::rtl::OUString::createFromAscii(" '")
-                                            + aDescription
-                                            + ::rtl::OUString::createFromAscii("'");
-                xStmt->execute(aSql);
-            }
-        }
+        ::rtl::OUString sName = sSchema;
+        sName += aDot;
+        sName += getString(descriptor->getPropertyValue(PROPERTY_NAME));
+        pTables->appendNew(sName);
     }
 }
-// -------------------------------------------------------------------------
-// XDrop
-void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
+// -----------------------------------------------------------------------------
+void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
 {
-    ::osl::MutexGuard aGuard(m_rMutex);
-
-    ObjectMap::iterator aIter = m_aNameMap.find(elementName);
-    if( aIter == m_aNameMap.end())
-        throw NoSuchElementException(elementName,*this);
-
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(aIter->second.get(),UNO_QUERY);
-    sal_Bool bIsNew = sal_False;
-    if(xTunnel.is())
-    {
-        OAdabasTable* pTable = (OAdabasTable*)xTunnel->getSomething(OAdabasTable:: getUnoTunnelImplementationId());
-        bIsNew = pTable->isNew();
-    }
-    if (!bIsNew)
-    {
-        OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
-        Reference< XStatement > xStmt = pConnection->createStatement(  );
-
-        ::rtl::OUString aName,aSchema;
-        sal_Int32 nLen = elementName.indexOf('.');
-        aSchema = elementName.copy(0,nLen);
-        aName   = elementName.copy(nLen+1);
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP TABLE ");
-        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
-        aSql = aSql + ::rtl::OUString::createFromAscii(".");
-        aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
-        xStmt->execute(aSql);
-    }
-
-    OCollection_TYPE::dropByName(elementName);
+    m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(_rsNewTable,WeakReference< XNamed >())));
+        // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
-// -------------------------------------------------------------------------
-void SAL_CALL OTables::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_rMutex);
-    if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
-
-    dropByName((*m_aElements[index]).first);
-}
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 
