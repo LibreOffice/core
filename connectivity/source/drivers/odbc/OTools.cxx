@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:06:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,6 @@ void OTools::bindData(  SQLSMALLINT _nOdbcType,
             break;
         case SQL_LONGVARCHAR:
         {
-            _pData  = 0;//(void*)&rCol;
             sal_Int32 nLen = 0;
             if(_bUseWChar)
                 nLen = sizeof(sal_Unicode) * ((::rtl::OUString*)_pValue)->getLength();
@@ -405,6 +404,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     }   break;
                 case SQL_LONGVARBINARY:
                 {
+                    _pData = (void*)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
                     *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
@@ -412,6 +412,7 @@ void OTools::bindValue( OConnection* _pConnection,
                     break;
                 case SQL_LONGVARCHAR:
                 {
+                    _pData = (void*)(columnIndex);
                     sal_Int32 nLen = 0;
                     nLen = ((::rtl::OUString*)_pValue)->getLength();
                     *pLen = (SDWORD)SQL_LEN_DATA_AT_EXEC(nLen);
