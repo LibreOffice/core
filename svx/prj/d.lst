@@ -524,7 +524,6 @@ hedabu: ..\inc\fmdmod.hxx %_DEST%\inc%_EXT%\svx\fmdmod.hxx
 hedabu: ..\inc\fmgridcl.hxx %_DEST%\inc%_EXT%\svx\fmgridcl.hxx
 hedabu: ..\inc\fmgridif.hxx %_DEST%\inc%_EXT%\svx\fmgridif.hxx
 hedabu: ..\inc\gridctrl.hxx %_DEST%\inc%_EXT%\svx\gridctrl.hxx
-hedabu: ..\inc\qryparam.hxx %_DEST%\inc%_EXT%\svx\qryparam.hxx
 hedabu: ..\inc\pfiledlg.hxx %_DEST%\inc%_EXT%\svx\pfiledlg.hxx
 hedabu: ..\inc\hyperdlg.hxx %_DEST%\inc%_EXT%\svx\hyperdlg.hxx
 hedabu: ..\inc\hlnkitem.hxx %_DEST%\inc%_EXT%\svx\hlnkitem.hxx
