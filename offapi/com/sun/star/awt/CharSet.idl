@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharSet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:32:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
     @deprecated
  */
-constants CharSet
+published constants CharSet
 {
     //-------------------------------------------------------------------------
 
