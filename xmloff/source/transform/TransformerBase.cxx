@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 13:21:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,6 +911,26 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                         }
 
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                    }
+                    break;
+                case XML_ATACTION_DECODE_ID:
+                    {
+                        OUString aAttrValue;
+
+                        const sal_Int32 nLen = rAttrValue.getLength();
+                        OUStringBuffer aBuffer;
+
+                        sal_Int32 pos;
+                        for( pos = 0; pos < nLen; pos++ )
+                        {
+                            sal_Unicode c = rAttrValue[pos];
+                            if( (c >= '0') && (c <= '9') )
+                                aBuffer.append( c );
+                            else
+                                aBuffer.append( (sal_Int32)c );
+                        }
+
+                        pMutableAttrList->SetValueByIndex( i, aBuffer.makeStringAndClear() );
                     }
                     break;
                 default:
