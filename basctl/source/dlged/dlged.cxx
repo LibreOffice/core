@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-12 11:52:23 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 12:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,11 +129,6 @@
 
 #include "vcsbxdef.hxx"
 
-// only for progressbar test
-//#define _PROGRESSBAR_TEST_
-#ifdef _PROGRESSBAR_TEST_
-#include <com/sun/star/lang/XTypeProvider.hpp>
-#endif
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -429,47 +424,6 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdForm->SetRectFromProps();
     pDlgEdForm->SortByTabIndex();       // for backward compatibility
     pDlgEdForm->StartListening();
-
-
-    // test progressbar
-
-#ifdef _PROGRESSBAR_TEST_
-
-    uno::Reference< lang::XMultiServiceFactory >  xModFact( xDlgMod, uno::UNO_QUERY );
-    //DlgEdObj* pBar = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.XProgressBar"), xModFact);
-    DlgEdObj* pBar = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlButtonModel"));
-    pBar->SetSnapRect( Rectangle( Point(1000,1000) , Size(1000,1000) ) );
-    pBar->SetChanged();
-    pSdrModel->GetPage(0)->InsertObject( pBar );
-    pBar->SendRepaintBroadcast();
-
-    uno::Reference< awt::XControlModel > xCtrl1( xModFact->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.XProgressBar" ) ) ), uno::UNO_QUERY );
-
-    Reference< lang::XTypeProvider > xTypeProvider( pBar->GetUnoControlModel() , UNO_QUERY );
-    if( xTypeProvider.is() )
-    {
-        Sequence< Type > aTypeSeq = xTypeProvider->getTypes();
-        const Type* pTypeArray = aTypeSeq.getConstArray();
-        UINT32 nIfaceCount = aTypeSeq.getLength();
-        for( UINT32 j = 0 ; j < nIfaceCount ; j++ )
-        {
-            const Type& rType = pTypeArray[j];
-            //aRet += Impl_GetInterfaceInfo( x, TypeToIdlClass( rType ), 1 );
-        }
-    }
-
-    uno::Reference< beans::XPropertySet > xPSet( xCtrl1, uno::UNO_QUERY );
-    uno::Any aValue;
-    aValue <<= (sal_Int32) 10;
-    //xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Range" ) ), aValue );
-    uno::Any aAny;
-    aAny <<= xCtrl1;
-    uno::Reference< container::XNameContainer > xC( xDlgMod , uno::UNO_QUERY );
-    //xC->insertByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ProgressBar1" ) ), aAny );
-
-#endif
-
-    // end of progressbar test
 
     // create controls
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
