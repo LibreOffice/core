@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:07:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,11 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+// --> OD 2004-08-06 #i28749#
+#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
+#include <com/sun/star/text/PositionLayoutDir.hpp>
+#endif
+// <--
 // OD 2004-05-24 #i28701#
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
@@ -2802,6 +2807,28 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
     return sal_False;
 }
 
+// --> OD 2004-07-27 #i31698#
+SwFrmFmt::tLayoutDir SwFrmFmt::GetLayoutDir() const
+{
+    return SwFrmFmt::HORI_L2R;
+}
+
+void SwFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir _nLayoutDir )
+{
+    // empty body, because default implementation does nothing
+}
+// <--
+
+// --> OD 2004-08-06 #i28749#
+sal_Int16 SwFrmFmt::GetPositionLayoutDir() const
+{
+    return text::PositionLayoutDir::PositionInLayoutDirOfAnchor;
+}
+void SwFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
+{
+    // empty body, because default implementation does nothing
+}
+// <--
 //  class SwFlyFrmFmt
 //  Implementierung teilweise inline im hxx
 
@@ -3092,6 +3119,41 @@ void SwDrawFrmFmt::DelFrms()
         pContact->DisconnectFromLayout();
 }
 
+// --> OD 2004-07-27 #i31698#
+SwFrmFmt::tLayoutDir SwDrawFrmFmt::GetLayoutDir() const
+{
+    return meLayoutDir;
+}
+
+void SwDrawFrmFmt::SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir )
+{
+    meLayoutDir = _eLayoutDir;
+}
+// <--
+
+// --> OD 2004-08-06 #i28749#
+sal_Int16 SwDrawFrmFmt::GetPositionLayoutDir() const
+{
+    return mnPositionLayoutDir;
+}
+void SwDrawFrmFmt::SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir )
+{
+    switch ( _nPositionLayoutDir )
+    {
+        case text::PositionLayoutDir::PositionInHoriL2R:
+        case text::PositionLayoutDir::PositionInLayoutDirOfAnchor:
+        {
+            mnPositionLayoutDir = _nPositionLayoutDir;
+        }
+        break;
+        default:
+        {
+            ASSERT( false,
+                    "<SwDrawFrmFmt::SetPositionLayoutDir(..)> - invalid attribute value." );
+        }
+    }
+}
+// <--
 
 IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
                                         const SwFlyFrm *pFly ) const
