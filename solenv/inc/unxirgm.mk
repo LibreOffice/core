@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:02:03 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:16:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,7 @@ CXX= g++
 CFLAGS= -w -c $(INCLUDE)
 CDEFS+= -D_PTHREADS -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC= 
-CFLAGSCXX= 	-fno-for-scope -fpermissive 
+CFLAGSCXX=
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
 CFLAGSOBJGUIST=
