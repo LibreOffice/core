@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 08:52:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 //------------------------------------------------------------------
 
+#include <cmath>
+
 #ifndef SC_RANGELST_HXX
 #include <rangelst.hxx>
 #endif
@@ -109,11 +111,13 @@
 #define SCNAV_MINTOL        5
 
 //  maximum values for UI
-#define SCNAV_MAXCOL        (MAXCOL+1)
-#define SCNAV_COLDIGITS     3           // 1...256
-#define SCNAV_COLLETTERS    2           // A...IV
+#define SCNAV_MAXCOL        (MAXCOLCOUNT)
+// macro is sufficient since only used in ctor
+#define SCNAV_COLDIGITS     (static_cast<xub_StrLen>( floor( log10( static_cast<double>(SCNAV_MAXCOL)))) + 1)   // 1...256...18278
+// precomputed constant because it is used in every change of spin button field
+static const xub_StrLen SCNAV_COLLETTERS = ::ColToAlpha(SCNAV_MAXCOL).Len();    // A...IV...ZZZ
 
-#define SCNAV_MAXROW        (MAXROW+1)
+#define SCNAV_MAXROW        (MAXROWCOUNT)
 
 //------------------------------------------------------------------------
 
@@ -137,10 +141,10 @@ void ScNavigatorDlg::ReleaseFocus()
 ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   SpinField   ( pParent, rResId ),
         rDlg        ( *pParent ),
-        nKeyGroup   ( KEYGROUP_ALPHA ),
-        nCol        ( 0 )
+        nCol        ( 0 ),
+        nKeyGroup   ( KEYGROUP_ALPHA )
 {
-    SetMaxTextLen( SCNAV_COLDIGITS );   // 1...255 or A...IV
+    SetMaxTextLen( SCNAV_COLDIGITS );   // 1...256...18278 or A...IV...ZZZ
 }
 
 //------------------------------------------------------------------------
@@ -262,7 +266,7 @@ void ColumnEdit::EvalText()
 
 void ColumnEdit::ExecuteCol()
 {
-    USHORT nRow = rDlg.aEdRow.GetRow();
+    SCROW nRow = rDlg.aEdRow.GetRow();
 
     EvalText(); // setzt nCol
 
@@ -272,7 +276,7 @@ void ColumnEdit::ExecuteCol()
 
 //------------------------------------------------------------------------
 
-void ColumnEdit::SetCol( USHORT nColNo )
+void ColumnEdit::SetCol( SCCOL nColNo )
 {
     String aStr;
 
@@ -291,23 +295,18 @@ void ColumnEdit::SetCol( USHORT nColNo )
 
 //------------------------------------------------------------------------
 
-USHORT ColumnEdit::AlphaToNum( String& rStr )
+SCCOL ColumnEdit::AlphaToNum( String& rStr )
 {
-    USHORT  nColumn = 0;
+    SCCOL  nColumn = 0;
 
-    ByteString aByteStr( rStr, RTL_TEXTENCODING_ASCII_US );
-    if ( aByteStr.IsAlphaAscii() )
+    if ( CharClass::isAsciiAlpha( rStr) )
     {
         rStr.ToUpperAscii();
-        aByteStr.ToUpperAscii();
 
-        if ( aByteStr.Len() <= SCNAV_COLLETTERS )
-        {
-            for ( USHORT nIndex = 0; nIndex < aByteStr.Len(); ++nIndex )
-                (nColumn *= 26) += (aByteStr.GetChar( nIndex ) - 'A' + 1);
-        }
+        if (::AlphaToCol( nColumn, rStr))
+            ++nColumn;
 
-        if ( (aByteStr.Len() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
+        if ( (rStr.Len() > SCNAV_COLLETTERS) || (nColumn > SCNAV_MAXCOL) )
         {
             nColumn = SCNAV_MAXCOL;
             NumToAlpha( nColumn, rStr );
@@ -321,12 +320,12 @@ USHORT ColumnEdit::AlphaToNum( String& rStr )
 
 //------------------------------------------------------------------------
 
-USHORT ColumnEdit::NumStrToAlpha( String& rStr )
+SCCOL ColumnEdit::NumStrToAlpha( String& rStr )
 {
-    USHORT  nColumn = 0;
+    SCCOL  nColumn = 0;
 
     if ( CharClass::isAsciiNumeric(rStr) )
-        nColumn = NumToAlpha( (USHORT)rStr.ToInt32(), rStr );
+        nColumn = NumToAlpha( (SCCOL)rStr.ToInt32(), rStr );
     else
         rStr.Erase();
 
@@ -335,15 +334,14 @@ USHORT ColumnEdit::NumStrToAlpha( String& rStr )
 
 //------------------------------------------------------------------------
 
-USHORT ColumnEdit::NumToAlpha( USHORT nColNo, String& rStr )
+SCCOL ColumnEdit::NumToAlpha( SCCOL nColNo, String& rStr )
 {
     if ( nColNo > SCNAV_MAXCOL )
         nColNo = SCNAV_MAXCOL;
     else if ( nColNo < 1 )
         nColNo = 1;
 
-    ScAddress aAddr( nColNo - 1, 0, 0 );
-    aAddr.Format( rStr, SCA_VALID_COL, NULL );
+    ::ColToAlpha( rStr, nColNo - 1);
 
     return nColNo;
 }
@@ -356,6 +354,8 @@ RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
     :   NumericField( pParent, rResId ),
         rDlg        ( *pParent )
 {
+    SetMax( SCNAV_MAXROW);
+    SetLast( SCNAV_MAXROW);
 }
 
 //------------------------------------------------------------------------
@@ -395,8 +395,8 @@ void __EXPORT RowEdit::LoseFocus()
 
 void RowEdit::ExecuteRow()
 {
-    USHORT nCol = rDlg.aEdCol.GetCol();
-    USHORT nRow = (USHORT)GetValue();
+    SCCOL nCol = rDlg.aEdCol.GetCol();
+    SCROW nRow = (SCROW)GetValue();
 
     if ( (nCol > 0) && (nRow > 0) )
         rDlg.SetCurrentCell( nCol-1, nRow-1 );
@@ -656,13 +656,14 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
 
     pNavigator->SetListMode( eNavMode, FALSE );     // FALSE: Groesse des Float nicht setzen
 
-    USHORT nCmdId = 0;
+    USHORT nCmdId;
     switch (eNavMode)
     {
         case NAV_LMODE_DOCS:        nCmdId = IID_DOCS;      break;
         case NAV_LMODE_AREAS:       nCmdId = IID_AREAS;     break;
         case NAV_LMODE_DBAREAS:     nCmdId = IID_DBAREAS;   break;
         case NAV_LMODE_SCENARIOS:   nCmdId = IID_SCENARIOS; break;
+        default:                    nCmdId = 0;
     }
     if (nCmdId)
     {
@@ -712,12 +713,12 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         aStrDisplay  ( ScResId( STR_DISPLAY ) ),
         aStrActiveWin( ScResId( STR_ACTIVEWIN ) ),
         pContextWin ( pCW ),
-        eListMode   ( NAV_LMODE_NONE ),
-        nDropMode   ( SC_DROPMODE_URL ),
+        pMarkArea   ( NULL ),
+        pViewData   ( NULL ),
         nListModeHeight( 0 ),
         nInitListHeight( 0 ),
-        pViewData   ( NULL ),
-        pMarkArea   ( NULL ),
+        eListMode   ( NAV_LMODE_NONE ),
+        nDropMode   ( SC_DROPMODE_URL ),
         nCurCol     ( 0 ),
         nCurRow     ( 0 ),
         nCurTab     ( 0 ),
@@ -740,8 +741,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aStrHidden += ')';                                      // " (versteckt)"
 
     aTitleBase = GetText();
-
-    Size aSize( GetOutputSizePixel() );
 
     nBorderOffset = aLbEntries.GetPosPixel().X();
 
@@ -1050,8 +1049,8 @@ BOOL ScNavigatorDlg::GetDBAtCursor( String& rStrName )
 
     if ( GetViewData() )
     {
-        USHORT nCol = aEdCol.GetCol();
-        USHORT nRow = aEdRow.GetRow();
+        SCCOL nCol = aEdCol.GetCol();
+        SCROW nRow = aEdRow.GetRow();
 
         if ( nCol > 0 && nRow > 0 )
         {
@@ -1075,8 +1074,8 @@ BOOL ScNavigatorDlg::GetAreaAtCursor( String& rStrName )
 
     if ( GetViewData() )
     {
-        USHORT nCol = aEdCol.GetCol();
-        USHORT nRow = aEdRow.GetRow();
+        SCCOL nCol = aEdCol.GetCol();
+        SCROW nRow = aEdRow.GetRow();
 
         if ( nCol > 0 && nRow > 0 )
         {
@@ -1094,7 +1093,7 @@ BOOL ScNavigatorDlg::GetAreaAtCursor( String& rStrName )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetCurrentCell( USHORT nColNo, USHORT nRowNo )
+void ScNavigatorDlg::SetCurrentCell( SCCOL nColNo, SCROW nRowNo )
 {
     if ( (nColNo+1 != nCurCol) || (nRowNo+1 != nCurRow) )
     {
@@ -1131,12 +1130,12 @@ void ScNavigatorDlg::SetCurrentCellStr( const String rName )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::SetCurrentTable( USHORT nTabNo )
+void ScNavigatorDlg::SetCurrentTable( SCTAB nTabNo )
 {
     if ( nTabNo != nCurTab )
     {
         //  Tabelle fuer Basic ist 1-basiert
-        SfxUInt16Item aTabItem( SID_CURRENTTAB, nTabNo + 1 );
+        SfxUInt16Item aTabItem( SID_CURRENTTAB, static_cast<sal_uInt16>(nTabNo) + 1 );
         rBindings.GetDispatcher()->Execute( SID_CURRENTTAB,
                                   SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                                   &aTabItem, 0L );
@@ -1148,10 +1147,10 @@ void ScNavigatorDlg::SetCurrentTableStr( const String rName )
     if (!GetViewData()) return;
 
     ScDocument* pDoc = pViewData->GetDocument();
-    USHORT nCount    = pDoc->GetTableCount();
+    SCTAB nCount     = pDoc->GetTableCount();
     String aTabName;
 
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( SCTAB i=0; i<nCount; i++ )
     {
         pDoc->GetName( i, aTabName );
         if ( aTabName == rName )
@@ -1216,7 +1215,7 @@ BOOL ScNavigatorDlg::GetViewData()
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::UpdateColumn( const USHORT* pCol )
+void ScNavigatorDlg::UpdateColumn( const SCCOL* pCol )
 {
     if ( pCol )
         nCurCol = *pCol;
@@ -1229,7 +1228,7 @@ void ScNavigatorDlg::UpdateColumn( const USHORT* pCol )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::UpdateRow( const USHORT* pRow )
+void ScNavigatorDlg::UpdateRow( const SCROW* pRow )
 {
     if ( pRow )
         nCurRow = *pRow;
@@ -1242,7 +1241,7 @@ void ScNavigatorDlg::UpdateRow( const USHORT* pRow )
 
 //------------------------------------------------------------------------
 
-void ScNavigatorDlg::UpdateTable( const USHORT* pTab )
+void ScNavigatorDlg::UpdateTable( const SCTAB* pTab )
 {
     if ( pTab )
         nCurTab = *pTab;
@@ -1473,8 +1472,6 @@ void ScNavigatorDlg::MarkDataArea()
 
     if ( pViewSh )
     {
-        ScDocument* pDoc = (pViewData = pViewSh->GetViewData())->GetDocument();
-
         if ( !pMarkArea )
             pMarkArea = new ScArea;
 
@@ -1532,8 +1529,8 @@ void ScNavigatorDlg::StartOfDataArea()
         ScRange aMarkRange;
         rMark.GetMarkArea( aMarkRange );
 
-        USHORT nCol = aMarkRange.aStart.Col();
-        USHORT nRow = aMarkRange.aStart.Row();
+        SCCOL nCol = aMarkRange.aStart.Col();
+        SCROW nRow = aMarkRange.aStart.Row();
 
         if ( (nCol+1 != aEdCol.GetCol()) || (nRow+1 != aEdRow.GetRow()) )
             SetCurrentCell( nCol, nRow );
@@ -1552,8 +1549,8 @@ void ScNavigatorDlg::EndOfDataArea()
         ScRange aMarkRange;
         rMark.GetMarkArea( aMarkRange );
 
-        USHORT nCol = aMarkRange.aEnd.Col();
-        USHORT nRow = aMarkRange.aEnd.Row();
+        SCCOL nCol = aMarkRange.aEnd.Col();
+        SCROW nRow = aMarkRange.aEnd.Row();
 
         if ( (nCol+1 != aEdCol.GetCol()) || (nRow+1 != aEdRow.GetRow()) )
             SetCurrentCell( nCol, nRow );
