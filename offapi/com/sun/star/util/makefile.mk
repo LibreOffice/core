@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 17:46:23 $
+#   last change: $Author: vg $ $Date: 2005-02-21 16:48:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,7 +170,8 @@ IDLFILES=\
     PathSubstitution.idl\
     XTimeStamped.idl\
     OfficeInstallationDirectories.idl\
-    XOfficeInstallationDirectories.idl
+    XOfficeInstallationDirectories.idl\
+    RevisionTag.idl\
 
 # ------------------------------------------------------------------
 
