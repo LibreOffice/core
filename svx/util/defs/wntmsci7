@@ -18598,3 +18598,14 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?select@FmXGridControl@@UAAEABVAny@uno@star@sun@com@@@Z
 ?select@FmXGridPeer@@UAAEABVAny@uno@star@sun@com@@@Z
 ?selectionChanged@FmXGridPeer@@IAEXXZ
+?HasValidData@EditEngine@@SAEAAV?$Reference@VXTransferable@datatransfer@star@sun@com@@@uno@star@sun@com@@@Z
+?DrawBackgrBitmap@SvxCtrDialBmp@@QAEXABV1@@Z
+?DrawBackgrBitmap@SvxCtrDialBmp@@QAEXABVSize@@ABVColor@@E@Z
+?DrawBackground@SvxCtrDialBmp@@AAEXE@Z
+?DrawCalibration@SvxCtrDialBmp@@AAEXE@Z
+?DrawElements@SvxCtrDialBmp@@QAEXABVString@@FE@Z
+?DrawShadow@SvxCtrDialBmp@@AAEXE@Z
+?Init@SvxCtrDial@@AAEXXZ
+?InitBitmap@SvxCtrDialBmp@@AAEXABVSize@@ABVColor@@@Z
+?InitBitmap@SvxCtrDialBmp@@QAEXABVSize@@ABVColor@@ABVFont@@@Z
+?Invalidate@SvxCtrDial@@UAEXXZ
