@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.4 $
+#*  $Revision: 1.5 $
 #*
-#*  last change: $Author: jp $ $Date: 2000-10-26 11:36:30 $
+#*  last change: $Author: sb $ $Date: 2000-11-03 17:52:16 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -109,7 +109,6 @@ LIB7FILES=	\
         $(SLB)$/misc2.lib		\
         $(SLB)$/items2.lib		\
         $(SLB)$/browse.lib		\
-        $(SLB)$/config.lib		\
         $(SLB)$/ctrl.lib		\
         $(SLB)$/dialogs.lib 	\
         $(SLB)$/edit.lib		\
@@ -145,6 +144,7 @@ LIB8TARGET= $(SLB)$/svl.lib
 #LIB8ARCHIV= $(LB)$/libsvl$(UPD)$(DLLPOSTFIX).a
 LIB8OBJFILES= $(OBJ)$/svtdata.obj
 LIB8FILES=	\
+        $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
         $(SLB)$/items1.lib	\
         $(SLB)$/libcall.lib \
