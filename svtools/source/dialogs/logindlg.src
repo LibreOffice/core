@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 15:55:51 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_LOGIN
         Text[ japanese ] = "‚±‚±‚Ι %1 ‚ΜΥ°»ή°–Ό‚ΖΚί½ά°Δή‚π“ό—Ν‚µ‚Δ‚­‚Ύ‚³‚ΆB";
         Text[ chinese_traditional ] = "½Π¬° %1 Ώι¤J¨Ο¥Ξ¦W©M±K½X΅C";
         Text[ greek ] = "Παρακαλώ εισάγετε εδώ το όνομα του χρήστη και τον κωδικό πρόσβασης για το %1.";
-        Text[ korean ] = "Ώ©±βΏ΅ »ηΏλΐΪ ΐΜΈ§°ϊ %1ΐΗ ΖΠ½ΊΏφµεΈ¦ ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
+        Text[ korean ] = "Ώ©±βΏ΅Ό­ %1ΐΗ ΖΠ½ΊΏφµεΏΝ »ηΏλΐΪ ΐΜΈ§ΐ» ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
         Text[ arabic ] = "ΗαΡΜΗΑ ΕΟΞΗα ΗΣγ ΗαγΣΚΞΟγ ζίαγΙ ΗαΣΡ αά %1.";
         Text[ turkish ] = "%1 iηin buraya kullanύcύ adύ ve ώifre girin.";
     };
