@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-11 09:45:18 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 09:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,29 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     else
                         nStyle &= ~WB_WORDBREAK;
                     pWindow->SetStyle( nStyle );
+                }
+            }
+            break;
+            case BASEPROPERTY_ORIENTATION:
+            {
+                switch ( eWinType )
+                {
+                    case WINDOW_FIXEDLINE:
+                    {
+                        sal_Int32 nOrientation;
+                        if ( Value >>= nOrientation )
+                        {
+                            WinBits nStyle = pWindow->GetStyle();
+                            nStyle &= ~(WB_HORZ|WB_VERT);
+                            if ( nOrientation == 0 )
+                                nStyle |= WB_HORZ;
+                            else
+                                nStyle |= WB_VERT;
+
+                            pWindow->SetStyle( nStyle );
+                        }
+                    }
+                    break;
                 }
             }
             break;

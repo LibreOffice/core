@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 15:21:44 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 09:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,8 @@ uno::Reference< uno::XInterface >UnoControlDialogModel::createInstance( const ::
         pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
 
     uno::Reference< uno::XInterface > xNewModel = (::cppu::OWeakObject*)pNewModel;
     return xNewModel;
@@ -306,7 +308,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
     static uno::Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 18 );
+        pNamesSeq = new uno::Sequence< ::rtl::OUString >( 19 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -326,6 +328,7 @@ uno::Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames
         pNames[15] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlPatternFieldModel );
         pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
         pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
+        pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
     }
     return *pNamesSeq;
 }
@@ -4319,4 +4322,74 @@ sal_Int32 UnoScrollBarControl::getOrientation() throw(::com::sun::star::uno::Run
         n = xScrollBar->getOrientation();
     }
     return n;
+}
+
+
+//  ----------------------------------------------------
+//  class UnoControlFixedLineModel
+//  ----------------------------------------------------
+UnoControlFixedLineModel::UnoControlFixedLineModel()
+{
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_LABEL );
+    ImplRegisterProperty( BASEPROPERTY_ORIENTATION );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
+}
+
+::rtl::OUString UnoControlFixedLineModel::getServiceName() const
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLineModel );
+}
+
+uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedLine );
+        return aAny;
+    }
+    return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoControlFixedLineModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+//  ----------------------------------------------------
+//  class UnoFixedLineControl
+//  ----------------------------------------------------
+UnoFixedLineControl::UnoFixedLineControl()
+{
+    maComponentInfos.nWidth = 100;      // ??
+    maComponentInfos.nHeight = 100;     // ??
+}
+
+::rtl::OUString UnoFixedLineControl::GetComponentServiceName()
+{
+    return ::rtl::OUString::createFromAscii( "FixedLine" );
+}
+
+sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
+{
+    return sal_True;
 }

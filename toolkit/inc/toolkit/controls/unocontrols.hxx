@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:27:22 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 09:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1574,6 +1574,49 @@ public:
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoScrollBarControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBar ) )
+};
+
+
+//  ----------------------------------------------------
+//  class UnoControlFixedLineModel
+//  ----------------------------------------------------
+class UnoControlFixedLineModel : public UnoControlModel
+{
+protected:
+    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+
+public:
+                        UnoControlFixedLineModel();
+                        UnoControlFixedLineModel( const UnoControlFixedLineModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoControlFixedLineModel( *this ); }
+
+    ::rtl::OUString     getServiceName() const;
+
+
+    // ::com::sun::star::beans::XMultiPropertySet
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO( UnoControlFixedLineModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel ) )
+
+};
+
+//  ----------------------------------------------------
+//  class UnoFixedLineControl
+//  ----------------------------------------------------
+class UnoFixedLineControl : public UnoControlBase
+{
+public:
+                        UnoFixedLineControl();
+    ::rtl::OUString     GetComponentServiceName();
+
+    sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO( UnoFixedLineControl, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLine ) )
+
 };
 
 

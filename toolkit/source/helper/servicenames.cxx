@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:31:11 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 09:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,3 +120,5 @@ const sal_Char __FAR_DATA szServiceName_UnoControlProgressBar[] = "stardiv.vcl.c
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBarModel[] = "stardiv.vcl.controlmodel.ProgressBar", szServiceName2_UnoControlProgressBarModel[] = "com.sun.star.awt.UnoControlProgressBarModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlScrollBar[] = "stardiv.vcl.control.ScrollBar", szServiceName2_UnoControlScrollBar[] = "com.sun.star.awt.UnoControlScrollBar";
 const sal_Char __FAR_DATA szServiceName_UnoControlScrollBarModel[] = "stardiv.vcl.controlmodel.ScrollBar", szServiceName2_UnoControlScrollBarModel[] = "com.sun.star.awt.UnoControlScrollBarModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlFixedLine[] = "stardiv.vcl.control.FixedLine", szServiceName2_UnoControlFixedLine[] = "com.sun.star.awt.UnoControlFixedLine";
+const sal_Char __FAR_DATA szServiceName_UnoControlFixedLineModel[] = "stardiv.vcl.controlmodel.FixedLine", szServiceName2_UnoControlFixedLineModel[] = "com.sun.star.awt.UnoControlFixedLineModel";

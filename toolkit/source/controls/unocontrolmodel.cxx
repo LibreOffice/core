@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-02 12:24:34 $
+ *  last change: $Author: tbe $ $Date: 2001-05-04 09:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
-#include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
@@ -329,7 +326,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             case BASEPROPERTY_SCROLLVALUE_MAX:      aDefault <<= (sal_Int32) 100;   break;
             case BASEPROPERTY_LINEINCREMENT:        aDefault <<= (sal_Int32)   1;   break;
             case BASEPROPERTY_BLOCKINCREMENT:       aDefault <<= (sal_Int32)  10;   break;
-            case BASEPROPERTY_ORIENTATION:          aDefault <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::VERTICAL; break;
+            case BASEPROPERTY_ORIENTATION:          aDefault <<= (sal_Int32)   0;   break;
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
             case BASEPROPERTY_MOVEABLE:
