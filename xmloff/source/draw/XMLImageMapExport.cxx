@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-30 13:53:39 $
+ *  last change: $Author: dvo $ $Date: 2001-05-03 13:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,13 +439,18 @@ void XMLImageMapExport::ExportPolygon(
     sal_Int32 nWidth = 0;
     sal_Int32 nHeight = 0;
     sal_Int32 nLength = aPoly.getLength();
-    for (sal_Int32 i = 0; i < nLength; i++)
+    const struct awt::Point* pPointPtr = aPoly.getConstArray();
+    for ( sal_Int32 i = 0; i < nLength; i++ )
     {
-        sal_Int32 nPolyX = aPoly[i].X;
-        sal_Int32 nPolyY = aPoly[i].Y;
+        sal_Int32 nPolyX = pPointPtr->X;
+        sal_Int32 nPolyY = pPointPtr->Y;
 
-        nWidth = (nPolyX > nWidth ) ? nPolyX : nWidth;
-        nHeight = (nPolyY > nHeight ) ? nPolyY : nHeight;
+        if ( nPolyX > nWidth )
+            nWidth = nPolyX;
+        if ( nPolyY > nHeight )
+            nHeight = nPolyY;
+
+        pPointPtr++;
     }
     DBG_ASSERT(nWidth > 0, "impossible Polygon found");
     DBG_ASSERT(nHeight > 0, "impossible Polygon found");
