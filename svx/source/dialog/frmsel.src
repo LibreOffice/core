@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 20:37:08 $
+ *  last change: $Author: kz $ $Date: 2002-05-21 09:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ english_us ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ portuguese ] =
     {
@@ -342,13 +342,13 @@ Resource RID_SVXSTR_BORDER_CONTROL
     };
     ItemList [ english_us ] =
     {
-         < "Umrandungseinstellung" ; 0; > ;
-        < "Linke Umrandungslinie" ; 1; > ;
-        < "Rechte Umrandungslinie" ; 2; > ;
-        < "Obere Umrandungslinie" ; 3; > ;
-        < "Untere Umrandungslinie" ; 4; > ;
-        < "Horizontale Umrandungslinie" ; 5; > ;
-        < "Vertikale Umrandungslinie" ; 6; > ;
+         < "Border setting" ; 0; > ;
+        < "Left border line" ; 1; > ;
+        < "Right border line" ; 2; > ;
+        < "Top border line" ; 3; > ;
+        < "Bottom border line" ; 4; > ;
+        < "Horizontal border line" ; 5; > ;
+        < "Vertical border line" ; 6; > ;
     };
     ItemList [ portuguese ] =
     {
