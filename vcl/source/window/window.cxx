@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:29:31 $
+ *  last change: $Author: ssa $ $Date: 2002-07-12 15:50:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@
 #ifndef _SV_MENU_HXX
 #include <menu.hxx>
 #endif
+#ifndef _SV_WRKWIN_HXX
+#include <wrkwin.hxx>
+#endif
 #ifndef _SV_WALL_HXX
 #include <wall.hxx>
 #endif
@@ -197,6 +200,9 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#include "com/sun/star/portal/client/XRmFrameWindow.hpp"
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #endif
 
 #include <unowrap.hxx>
@@ -204,9 +210,6 @@
 #include <dndevdis.hxx>
 #include <frameacc.hxx>
 
-#include "com/sun/star/portal/client/XRmFrameWindow.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
 
 #pragma hdrstop
 
@@ -7526,6 +7529,10 @@ Reference< XClipboard > Window::GetSelection()
     return static_cast < XClipboard * > (0);
 }
 
+// -----------------------------------------------------------------------
+// Accessibility
+// -----------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Window::GetAccessible( BOOL bCreate )
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
@@ -7633,7 +7640,15 @@ Window* Window::GetAccessibleParentWindow() const
 Window* Window::GetAccessibleParentWindow() const
 {
     Window* pParent = mpParent;
-    if( pParent && !pParent->ImplIsAccessibleCandidate() )
+    if( GetType() == WINDOW_MENUBARWINDOW )
+    {
+        // report the menubar as a child of THE workwindow
+        Window *pWorkWin = GetParent()->mpFirstChild;
+        while( pWorkWin && (pWorkWin == this) )
+            pWorkWin = pWorkWin->mpNext;
+        pParent = pWorkWin;
+    }
+    else if( pParent && !pParent->ImplIsAccessibleCandidate() )
     {
         pParent = pParent->mpParent;
     }
@@ -7666,6 +7681,18 @@ USHORT Window::GetAccessibleChildWindowCount()
         pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
     }
 
+    // report the menubarwindow as a child of THE workwindow
+    if( GetType() == WINDOW_BORDERWINDOW )
+    {
+        if( ((ImplBorderWindow *) this)->mpMenuBarWindow )
+            --nChildren;
+    }
+    else if( GetType() == WINDOW_WORKWINDOW )
+    {
+        if( ((WorkWindow *) this)->GetMenuBar() )
+            ++nChildren;
+    }
+
     return nChildren;
 }
 
@@ -7686,7 +7713,25 @@ Window* Window::GetAccessibleChildWindow( USHORT n )
 
 Window* Window::GetAccessibleChildWindow( USHORT n )
 {
+    // report the menubarwindow as a the first child of THE workwindow
+    if( GetType() == WINDOW_WORKWINDOW && ((WorkWindow *) this)->GetMenuBar() )
+    {
+        if( n == 0)
+        {
+            MenuBar *pMenuBar = ((WorkWindow *) this)->GetMenuBar();
+            return pMenuBar->GetWindow();
+        }
+        else
+            --n;
+    }
+
     Window* pChild = GetChild( n );
+    // report the menubarwindow as a child of THE workwindow
+    if( GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_MENUBARWINDOW )
+    {
+        pChild = pChild->mpNext;
+        DBG_ASSERT( pChild, "GetAccessibleChildWindow(): wrong index in border window");
+    }
     if ( !pChild && ( n >= GetChildCount() ) )
     {
         USHORT n2 = n - GetChildCount();
@@ -7809,7 +7854,7 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_SYSWINDOW:
             case WINDOW_FLOATINGWINDOW: nRole = accessibility::AccessibleRole::LAYEREDPANE; break;
 
-            case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::FRAME; break;
+            case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::ROOTPANE; break;
 
 
             case WINDOW_SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
@@ -7818,7 +7863,13 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:
             case WINDOW_SYSTEMCHILDWINDOW:
-            default: nRole = accessibility::AccessibleRole::WINDOW;
+            default:
+                if (ImplIsAccessibleNativeFrame() )
+                    nRole = accessibility::AccessibleRole::FRAME;
+                else if( IsScrollable() )
+                    nRole = accessibility::AccessibleRole::SCROLLPANE;
+                else
+                    nRole = accessibility::AccessibleRole::WINDOW;
         }
     }
     return nRole;
@@ -7930,6 +7981,10 @@ BOOL Window::IsAccessibilityEventsSuppressed( BOOL bTraverseParentPath )
         return FALSE;
     }
 }
+
+// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
+
 
 // returns background color used in this control
 // false: could not determine color
@@ -8058,3 +8113,17 @@ Window* Window::GetPreferredKeyInputWindow()
     return this;
 }
 
+
+BOOL Window::IsScrollable() const
+{
+    // check for scrollbars
+    Window *pChild = mpFirstChild;
+    while( pChild )
+    {
+        if( pChild->GetType() == WINDOW_SCROLLBAR )
+            return true;
+        else
+            pChild = pChild->mpNext;
+    }
+    return false;
+}
