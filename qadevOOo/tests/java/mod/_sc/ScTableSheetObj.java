@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetObj.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-03-19 16:28:42 $
+ *  last change:$Date: 2004-07-23 10:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,9 +320,9 @@ public class ScTableSheetObj extends TestCase {
                                 oSheet.getCellByPosition(15, 15));
             tEnv.addObjRelation("RANGEINDICES", new int[] { 0, 0 });
             tEnv.addObjRelation("EXPECTEDDEPENDENTVALUES",
-                                new int[] { 0, 255, 0, 31999 });
+                                new int[] { 0, 255, 0, 65535 });
             tEnv.addObjRelation("EXPECTEDPRECEDENTVALUES",
-                                new int[] { 0, 255, 0, 31999 });
+                                new int[] { 0, 255, 0, 65535 });
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
             log.println(
                     "Cannot add the necessary object relation for XFormulaQuery test.");
