@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleeventbuffer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-22 06:58:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,26 +65,25 @@
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
-#include "drafts/com/sun/star/accessibility/AccessibleEventObject.hpp"
-#include "drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp"
+#include "com/sun/star/accessibility/AccessibleEventObject.hpp"
+#include "com/sun/star/accessibility/XAccessibleEventListener.hpp"
 #include "osl/diagnose.h"
 #include "rtl/textenc.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 namespace css = ::com::sun::star;
-namespace dcss = ::drafts::com::sun::star;
 
 using comphelper::AccessibleEventBuffer;
 
 struct AccessibleEventBuffer::Entry
 {
-    inline Entry(::dcss::accessibility::AccessibleEventObject const & rEvent,
+    inline Entry(::css::accessibility::AccessibleEventObject const & rEvent,
                  ::css::uno::Sequence< ::css::uno::Reference<
                  ::css::uno::XInterface > > const & rListeners):
         m_aEvent(rEvent), m_aListeners(rListeners) {}
 
-    ::dcss::accessibility::AccessibleEventObject m_aEvent;
+    ::css::accessibility::AccessibleEventObject m_aEvent;
 
     ::css::uno::Sequence<
         ::css::uno::Reference< ::css::uno::XInterface > > m_aListeners;
@@ -109,7 +108,7 @@ AccessibleEventBuffer::operator =(AccessibleEventBuffer const & rOther)
 }
 
 void AccessibleEventBuffer::addEvent(
-    ::dcss::accessibility::AccessibleEventObject const & rEvent,
+    ::css::accessibility::AccessibleEventObject const & rEvent,
     ::css::uno::Sequence< ::css::uno::Reference< ::css::uno::XInterface > >
     const & rListeners)
 {
@@ -123,7 +122,7 @@ void AccessibleEventBuffer::sendEvents() const
         for (::sal_Int32 i = 0; i < aIt->m_aListeners.getLength(); ++i)
         {
             ::css::uno::Reference<
-                  ::dcss::accessibility::XAccessibleEventListener > xListener(
+                  ::css::accessibility::XAccessibleEventListener > xListener(
                       aIt->m_aListeners[i], ::css::uno::UNO_QUERY);
             if (xListener.is())
                 try
