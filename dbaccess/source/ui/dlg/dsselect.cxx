@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:44:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ typedef void*               HDC;
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
@@ -247,7 +250,7 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
                     {
                         String sDatabaseName;
                         sDatabaseName = String(::comphelper::getString(xProp->getPropertyValue(PROPERTY_DATABASENAME)));
-                        m_aDatasource.SelectEntry(m_aDatasource.InsertEntry( sDatabaseName ));
+                        m_aDatasource.SelectEntryPos(m_aDatasource.InsertEntry( sDatabaseName ));
 
                     }
                     if ( xPropInfo->hasPropertyByName(PROPERTY_CONTROLUSER) )
@@ -257,7 +260,10 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, pButton )
                     if ( xPropInfo->hasPropertyByName(PROPERTY_USER) )
                         m_pOutputSet->Put(SfxStringItem(DSID_USER, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_USER))));
                     if ( xPropInfo->hasPropertyByName(PROPERTY_PASSWORD) )
+                    {
                         m_pOutputSet->Put(SfxStringItem(DSID_PASSWORD, ::comphelper::getString(xProp->getPropertyValue(PROPERTY_PASSWORD))));
+                        m_pOutputSet->Put(SfxBoolItem(DSID_PASSWORDREQUIRED, TRUE));
+                    }
                     if ( xPropInfo->hasPropertyByName(PROPERTY_CACHESIZE) )
                         m_pOutputSet->Put(SfxInt32Item(DSID_CONN_CACHESIZE, ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_CACHESIZE))));
                 }
