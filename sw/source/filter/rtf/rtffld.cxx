@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:18:58 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #include <svx/fhgtitem.hxx>
 #endif
 
+#ifndef _REFFLD_HXX //autogen wg. SwGetRefField
+#include <reffld.hxx>
+#endif
 #ifndef _FMTFLD_HXX //autogen
 #include <fmtfld.hxx>
 #endif
@@ -168,6 +171,7 @@ enum RTF_FLD_TYPES {
     RTFFLD_DATA,
     RTFFLD_MERGEFLD,
     RTFFLD_HYPERLINK,
+    RTFFLD_REF,
     RTFFLD_EQ
 };
 
@@ -187,7 +191,9 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
     sal_Char __READONLY_DATA sMERGEFLD[]=   "\x0A""mergefield";
     sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
     sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
+    sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
     sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
+
 
     struct _Dummy_RTF_FLD_TYPES
     {
@@ -207,7 +213,9 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             {RTFFLD_MERGEFLD,    sMERGEFLD},
             {RTFFLD_IMPORT,      sIMPORT2},
             {RTFFLD_HYPERLINK,   sHYPERLINK},
+            {RTFFLD_REF,         sREF},
             {RTFFLD_EQ,          sEQ}
+
     };
 
 
@@ -906,6 +914,63 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         }
         break;
 
+    case RTFFLD_REF:
+        {
+            String sOrigBkmName;
+            bool bChapterNr = false;
+            bool bAboveBelow = false;
+
+            RtfFieldSwitch aRFS( aSaveStr );
+            while( !aRFS.IsAtEnd() )
+            {
+                String sParam;
+                sal_Unicode cKey = aRFS.GetSwitch( sParam );
+                switch( cKey )
+                {
+                    case 0:
+                        if( !sOrigBkmName.Len() ) // get name of bookmark
+                            sOrigBkmName = sParam;
+                        break;
+
+                    case 'n':
+                    case 'r':
+                    case 'w':
+                        bChapterNr = true; // activate flag 'Chapter Number'
+                        break;
+
+                    case 'p':
+                        bAboveBelow = true;
+                        break;
+                }
+            }
+            if (!bAboveBelow || bChapterNr)
+            {
+                if (bChapterNr)
+                {
+                    SwGetRefField aFld(
+                        (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
+                        sOrigBkmName,REF_BOOKMARK,0,REF_CHAPTER);
+                    pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                }
+                else
+                {
+                    SwGetRefField aFld(
+                        (SwGetRefFieldType*)pDoc->GetSysFldType( RES_GETREFFLD ),
+                        sOrigBkmName,REF_BOOKMARK,0,REF_CONTENT);
+                    pDoc->Insert( *pPam, SwFmtFld( aFld ) );
+                }
+            }
+
+            if( bAboveBelow )
+            {
+                SwGetRefField aFld( (SwGetRefFieldType*)
+                    pDoc->GetSysFldType( RES_GETREFFLD ), sOrigBkmName, REF_BOOKMARK, 0,
+                    REF_UPDOWN );
+                pDoc->Insert(*pPam, SwFmtFld(aFld));
+            }
+        }
+        break;
+
     case RTFFLD_TOC:
     case RTFFLD_INDEX:
         break;
@@ -1086,8 +1151,6 @@ INSINGLECHAR:
             }
             break;
 
-        case RTF_BKMKSTART:
-        case RTF_BKMKEND:
         case RTF_BKMK_KEY:
         case RTF_XE:
         case RTF_TC:
