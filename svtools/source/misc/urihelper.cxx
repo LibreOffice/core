@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-10 13:10:24 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 15:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     // 6th Production (file):
     //    \W "//" (domain / IPv6reference) ["/" *wchar] ["#" 1*wchar] \W
     //
-    // 7th Production (Unix file; FSYS_UNX only):
+    // 7th Production (Unix file; FSYS_UNX only): @@@ DISABLED @@@
     //    \W "/" 1*wchar \W
     //
     // 8th Production (UNC file; FSYS_DOS only):
@@ -547,13 +547,13 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                             }
                         }
                     }
-                    else if (eStyle & INetURLObject::FSYS_UNX) // 7th
-                    {
-                        ++i;
-                        while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i,
-                                             &nURIEnd));
-                    }
+//                  else if (eStyle & INetURLObject::FSYS_UNX) // 7th
+//                  {
+//                      ++i;
+//                      while (i != rEnd
+//                             && checkWChar(rCharClass, rText, &i,
+//                                           &nURIEnd));
+//                  }
             }
             else if (eStyle & INetURLObject::FSYS_DOS && c == '\\') // 8th
             {
