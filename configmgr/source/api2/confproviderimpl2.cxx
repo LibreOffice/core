@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-10 22:43:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 11:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace configmgr
     }
     //--------------------------------------------------------------------------
     uno::Reference<uno::XInterface>  OConfigurationProviderImpl::createReadAccess( uno::Sequence<uno::Any> const& aArgs)
+        throw (uno::Exception, uno::RuntimeException)
     {
         CFG_TRACE_INFO("config provider: going to create a read access instance");
 

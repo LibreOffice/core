@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 #include "setnodeimpl.hxx"
 #include "nodefactory.hxx"
 

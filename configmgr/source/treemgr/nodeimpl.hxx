@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,15 @@
 #ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #define CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 
+#ifndef __SGI_STL_MEMORY
+#include <stl/memory>
+#endif
+
 #include "apitypes.hxx"
 #include "template.hxx"
 
 #include <vos/refernce.hxx>
 #include <vos/ref.hxx>
-
 #include <osl/diagnose.h>
 
 namespace configmgr

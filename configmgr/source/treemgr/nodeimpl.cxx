@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:17:22 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 #include "nodeimpl.hxx"
 
 #include "treeimpl.hxx"

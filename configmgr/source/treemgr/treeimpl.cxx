@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 19:16:53 $
+ *  last change: $Author: dg $ $Date: 2000-11-13 11:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,7 @@
  *
  *
  ************************************************************************/
-
+#include <stdio.h>
 #include "treeimpl.hxx"
 #include "roottreeimpl.hxx"
 
