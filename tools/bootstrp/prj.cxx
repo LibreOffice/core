@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-02-14 16:55:59 $
+ *  last change: $Author: nf $ $Date: 2001-02-15 15:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "stream.hxx"
 #include "geninfo.hxx"
 #include "prj.hxx"
+#include "inimgr.hxx"
 
 #pragma hdrstop
 
@@ -512,10 +513,15 @@ Star::Star( SolarFileList *pSolarFiles )
 }
 
 /*****************************************************************************/
-Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
+Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
+    BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
+    String sSrcRoot;
+    if ( pSourceRoot )
+        sSrcRoot = String::CreateFromAscii( pSourceRoot );
+
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
 #else
@@ -524,7 +530,12 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
     GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
 
     if( pInfo && pInfo->GetValue().Len()) {
-        String sFileName( pInfo->GetValue(), RTL_TEXTENCODING_ASCII_US );
+        ByteString sFile( pInfo->GetValue());
+        if ( bLocal ) {
+            IniManager aIniManager;
+            aIniManager.ToLocal( sFile );
+        }
+        String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
         Read( sFileName );
     }
@@ -542,36 +553,44 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-#ifdef UNX
-                    sPath = "UnixVolume";
-                    GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
-                    if ( pUnixVolume ) {
-                        String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
-                        aEntry = DirEntry( sRoot );
+                    if ( sSrcRoot.Len()) {
+                        aEntry = DirEntry( sSrcRoot );
                         bOk = TRUE;
-                     }
+                    }
+                    else {
+#ifdef UNX
+                        sPath = "UnixVolume";
+                        GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
+                        if ( pUnixVolume ) {
+                            String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
+                            aEntry = DirEntry( sRoot );
+                            bOk = TRUE;
+                         }
 #else
-                    bOk = TRUE;
-                    String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
-                    sRoot += String::CreateFromAscii( "\\" );
-                    aEntry = DirEntry( sRoot );
+                        bOk = TRUE;
+                        String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
+                        sRoot += String::CreateFromAscii( "\\" );
+                        aEntry = DirEntry( sRoot );
 #endif
+                    }
                     if ( bOk ) {
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            sPath = rVersion;
-                            sPath += "/settings/PATH";
-                            GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
-                            if( pPath ) {
-                                ByteString sAddPath( pPath->GetValue());
+                            if ( !sSrcRoot.Len()) {
+                                sPath = rVersion;
+                                sPath += "/settings/PATH";
+                                GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                                if( pPath ) {
+                                    ByteString sAddPath( pPath->GetValue());
 #ifdef UNX
-                                sAddPath.SearchAndReplaceAll( "\\", "/" );
+                                    sAddPath.SearchAndReplaceAll( "\\", "/" );
 #else
-                                sAddPath.SearchAndReplaceAll( "/", "\\" );
+                                    sAddPath.SearchAndReplaceAll( "/", "\\" );
 #endif
-                                String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
-                                aEntry += DirEntry( ssAddPath );
+                                    String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
+                                    aEntry += DirEntry( ssAddPath );
+                                }
                             }
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -581,7 +600,9 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                                 for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
                                     ByteString sProject( *pProjects->GetObject( i ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
+
                                     DirEntry aPrjEntry( aEntry );
+
                                     aPrjEntry += DirEntry( ssProject );
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
@@ -589,7 +610,6 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion )
                                     pFileList->Insert( new String( aPrjEntry.GetFull()), LIST_APPEND );
 
                                     ByteString sFile( aPrjEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
-                                    fprintf( stdout, "%s\n", sFile.GetBuffer());
                                 }
                             }
                         }
@@ -1019,10 +1039,15 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion )
+StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
+    BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
+    String sSrcRoot;
+    if ( pSourceRoot )
+        sSrcRoot = String::CreateFromAscii( pSourceRoot );
+
 #ifdef UNX
     sPath += "/settings/UNXSOLARLIST";
 #else
@@ -1031,7 +1056,12 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion 
     GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
 
     if( pInfo && pInfo->GetValue().Len()) {
-        String sFileName( pInfo->GetValue(), RTL_TEXTENCODING_ASCII_US );
+        ByteString sFile( pInfo->GetValue());
+        if ( bLocal ) {
+            IniManager aIniManager;
+            aIniManager.ToLocal( sFile );
+        }
+        String sFileName( sFile, RTL_TEXTENCODING_ASCII_US );
         nStarMode = STAR_MODE_SINGLE_PARSE;
         Read( sFileName );
     }
@@ -1049,36 +1079,44 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion 
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
-#ifdef UNX
-                    sPath = "UnixVolume";
-                    GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
-                    if ( pUnixVolume ) {
-                        String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
-                        aEntry = DirEntry( sRoot );
+                    if ( sSrcRoot.Len()) {
+                        aEntry = DirEntry( sSrcRoot );
                         bOk = TRUE;
-                     }
+                    }
+                    else {
+#ifdef UNX
+                        sPath = "UnixVolume";
+                        GenericInformation *pUnixVolume = pDrive->GetSubInfo( sPath );
+                        if ( pUnixVolume ) {
+                            String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
+                            aEntry = DirEntry( sRoot );
+                            bOk = TRUE;
+                         }
 #else
-                    bOk = TRUE;
-                    String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
-                    sRoot += String::CreateFromAscii( "\\" );
-                    aEntry = DirEntry( sRoot );
+                        bOk = TRUE;
+                        String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
+                        sRoot += String::CreateFromAscii( "\\" );
+                        aEntry = DirEntry( sRoot );
 #endif
+                    }
                     if ( bOk ) {
                         sPath = "projects";
                         GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
                         if ( pProjectsKey ) {
-                            sPath = rVersion;
-                            sPath += "/settings/PATH";
-                            GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
-                            if( pPath ) {
-                                ByteString sAddPath( pPath->GetValue());
+                            if ( !sSrcRoot.Len()) {
+                                sPath = rVersion;
+                                sPath += "/settings/PATH";
+                                GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                                if( pPath ) {
+                                    ByteString sAddPath( pPath->GetValue());
 #ifdef UNX
-                                sAddPath.SearchAndReplaceAll( "\\", "/" );
+                                    sAddPath.SearchAndReplaceAll( "\\", "/" );
 #else
-                                sAddPath.SearchAndReplaceAll( "/", "\\" );
+                                    sAddPath.SearchAndReplaceAll( "/", "\\" );
 #endif
-                                String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
-                                aEntry += DirEntry( ssAddPath );
+                                    String ssAddPath( sAddPath, RTL_TEXTENCODING_ASCII_US );
+                                    aEntry += DirEntry( ssAddPath );
+                                }
                             }
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -1088,7 +1126,9 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion 
                                 for ( ULONG i = 0; i < pProjects->Count(); i++ ) {
                                     ByteString sProject( *pProjects->GetObject( i ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
+
                                     DirEntry aPrjEntry( aEntry );
+
                                     aPrjEntry += DirEntry( ssProject );
                                     aPrjEntry += DirEntry( sPrjDir );
                                     aPrjEntry += DirEntry( sSolarFile );
