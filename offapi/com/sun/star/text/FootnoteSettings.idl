@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FootnoteSettings.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** provides access to the settings of footnotes or endnotes in a
     (text) document.
  */
-service FootnoteSettings
+published service FootnoteSettings
 {
     //-------------------------------------------------------------------------
 
