@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:04:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,14 +111,14 @@ Menu MN_CLIPBOARDFUNCS
             Text [ dutch ] = "Kn~ippen" ;
             Text [ spanish ] = "C~ortar" ;
             Text [ english_us ] = "Cu~t" ;
-            Text[ chinese_simplified ] = "¼ô³ı";
+            Text[ chinese_simplified ] = "¼ô³ı(~T)";
             Text[ russian ] = "Âûğåçàòü";
             Text[ polish ] = "~Wytnij";
             Text[ japanese ] = "Ø‚èæ‚è(~T)";
             Text[ chinese_traditional ] = "°Å¤U(~T)";
             Text[ arabic ] = "ŞÕ";
             Text[ dutch ] = "Kn~ippen";
-            Text[ chinese_simplified ] = "¼ô³ı";
+            Text[ chinese_simplified ] = "¼ô³ı(~T)";
             Text[ greek ] = "~ÁğïêïğŞ";
             Text[ korean ] = "Àß¶ó ³»±â(~T)";
             Text[ turkish ] = "Kes";
@@ -140,14 +140,14 @@ Menu MN_CLIPBOARDFUNCS
             Text [ dutch ] = "~Kopiëren" ;
             Text [ spanish ] = "~Copiar" ;
             Text [ english_us ] = "~Copy" ;
-            Text[ chinese_simplified ] = "¸´ÖÆ";
+            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
             Text[ russian ] = "Êîïèğîâàòü";
             Text[ polish ] = "~Kopiuj";
             Text[ japanese ] = "ºËß°(~C)";
             Text[ chinese_traditional ] = "½Æ»s(~C)";
             Text[ arabic ] = "äÓÎ";
             Text[ dutch ] = "~Kopiëren";
-            Text[ chinese_simplified ] = "¸´ÖÆ";
+            Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
             Text[ greek ] = "Áíôé~ãñáöŞ";
             Text[ korean ] = "º¹»ç(~C)";
             Text[ turkish ] = "Kopyala";
