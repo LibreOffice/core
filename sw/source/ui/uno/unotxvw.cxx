@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:31:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1142,18 +1141,20 @@ SwXTextViewCursor::~SwXTextViewCursor()
 // - XTextRange
 // - XLineCursor
 
-sal_Bool SwXTextViewCursor::IsTextSelection( void ) const {
+sal_Bool SwXTextViewCursor::IsTextSelection( sal_Bool bAllowTables ) const
+{
 
     sal_Bool bRes = sal_False;
-        DBG_ASSERT(pView, "pView is NULL ???");
-    if(pView) {
-            //! pView->GetShellMode() will only work after the shell
-            //! has already changed and thus can not be used here!
-      SwWrtShell::SelectionType eSelType = static_cast<SwWrtShell::SelectionType>(
+    DBG_ASSERT(pView, "pView is NULL ???");
+    if(pView)
+    {
+        //! pView->GetShellMode() will only work after the shell
+        //! has already changed and thus can not be used here!
+        SwWrtShell::SelectionType eSelType = static_cast<SwWrtShell::SelectionType>(
                 pView->GetWrtShell().GetSelectionType());
-            bRes = ((SwWrtShell::SEL_TXT        & eSelType) ||
-                (SwWrtShell::SEL_NUM        & eSelType)) &&
-               !(SwWrtShell::SEL_TBL_CELLS  & eSelType);
+        bRes =  ( (SwWrtShell::SEL_TXT & eSelType) ||
+                  (SwWrtShell::SEL_NUM & eSelType) )  &&
+                (!(SwWrtShell::SEL_TBL_CELLS & eSelType) || bAllowTables);
     }
     return bRes;
 }
@@ -1653,7 +1654,7 @@ Reference< text::XText >  SwXTextViewCursor::getText(void) throw( uno::RuntimeEx
     Reference< text::XText >  xRet;
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         SwWrtShell& rSh = pView->GetWrtShell();
@@ -1720,7 +1721,7 @@ OUString SwXTextViewCursor::getString(void) throw( uno::RuntimeException )
     OUString uRet;
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         ShellModes  eSelMode = pView->GetShellMode();
@@ -1751,7 +1752,7 @@ void SwXTextViewCursor::setString(const OUString& aString) throw( uno::RuntimeEx
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         ShellModes  eSelMode = pView->GetShellMode();
@@ -1961,7 +1962,7 @@ sal_Bool SwXTextViewCursor::isAtStartOfLine(void) throw( uno::RuntimeException )
     sal_Bool bRet = sal_False;
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         bRet = pView->GetWrtShell().IsAtLeftMargin();
@@ -1979,7 +1980,7 @@ sal_Bool SwXTextViewCursor::isAtEndOfLine(void) throw( uno::RuntimeException )
     sal_Bool bRet = sal_False;
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         bRet = pView->GetWrtShell().IsAtRightMargin(sal_True);
@@ -1996,7 +1997,7 @@ void SwXTextViewCursor::gotoEndOfLine(sal_Bool bExpand) throw( uno::RuntimeExcep
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         pView->GetWrtShell().RightMargin(bExpand, sal_True);
@@ -2012,7 +2013,7 @@ void SwXTextViewCursor::gotoStartOfLine(sal_Bool bExpand) throw( uno::RuntimeExc
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView)
     {
-        if (!IsTextSelection())
+        if (!IsTextSelection( sal_False ))
             throw  uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "no text selection" ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
         pView->GetWrtShell().LeftMargin(bExpand, sal_True);
