@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include "xmlsceni.hxx"
 #include "document.hxx"
 #include "xmlmapch.hxx"
+#include "docuno.hxx"
+#include "olinetab.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -153,26 +155,41 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
-    sal_Bool bHeader = sal_False;
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
+    case XML_TOK_TABLE_COL_GROUP:
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_False, sal_True );
+        break;
     case XML_TOK_TABLE_HEADER_COLS:
-        bHeader = sal_True;
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_True, sal_False );
+        break;
     case XML_TOK_TABLE_COLS:
         pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   bHeader );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList );
         break;
+    case XML_TOK_TABLE_ROW_GROUP:
+        pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_False, sal_True );
+        break;
     case XML_TOK_TABLE_HEADER_ROWS:
-        bHeader = sal_True;
+        pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_True, sal_False );
+        break;
     case XML_TOK_TABLE_ROWS:
         pContext = new ScXMLTableRowsContext( GetScImport(), nPrefix,
                                                    rLName, xAttrList,
-                                                   bHeader );
+                                                   sal_False, sal_False );
         break;
     case XML_TOK_TABLE_ROW:
             pContext = new ScXMLTableRowContext( GetScImport(), nPrefix,
@@ -220,6 +237,50 @@ void ScXMLTableContext::EndElement()
                             aRangeList[ aRangeList.getLength() - 1 ] = aCellRange;
                         }
                         xPrintAreas->setPrintAreas( aRangeList );
+                    }
+                }
+            }
+        }
+    }
+    ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
+    if( pDocObj )
+    {
+        ScDocument* pDoc = pDocObj->GetDocument();
+        if( pDoc )
+        {
+            ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(GetScImport().GetTables().GetCurrentSheet(), sal_False);
+            if (pOutlineTable)
+            {
+                ScOutlineArray* pColArray = pOutlineTable->GetColArray();
+                sal_Int32 nDepth = pColArray->GetDepth();
+                for (sal_Int32 i = 0; i < nDepth; i++)
+                {
+                    sal_Int32 nCount = pColArray->GetCount(i);
+                    sal_Bool bChanged(sal_False);
+                    for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+                    {
+                        ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
+                        if (pEntry->IsHidden())
+                        {
+                            pColArray->SetVisibleBelow(i, j, sal_False);
+                            bChanged = sal_True;
+                        }
+                    }
+                }
+                ScOutlineArray* pRowArray = pOutlineTable->GetRowArray();
+                nDepth = pRowArray->GetDepth();
+                for (i = 0; i < nDepth; i++)
+                {
+                    sal_Int32 nCount = pRowArray->GetCount(i);
+                    sal_Bool bChanged(sal_False);
+                    for (sal_Int32 j = 0; j < nCount && !bChanged; j++)
+                    {
+                        ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
+                        if (pEntry->IsHidden())
+                        {
+                            pRowArray->SetVisibleBelow(i, j, sal_False);
+                            bChanged = sal_True;
+                        }
                     }
                 }
             }

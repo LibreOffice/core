@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:02:23 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,13 @@ public:
 
 class ScXMLTableRowsContext : public SvXMLImportContext
 {
-    sal_Int32 nStartRow;
-    sal_Int32 nEndRow;
+    sal_Int32 nHeaderStartRow;
+    sal_Int32 nHeaderEndRow;
+    sal_Int32 nGroupStartRow;
+    sal_Int32 nGroupEndRow;
     sal_Bool bHeader;
+    sal_Bool bGroup;
+    sal_Bool bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -112,7 +116,7 @@ public:
                        const NAMESPACE_RTL(OUString)& rLName,
                        const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        const sal_Bool bHeader);
+                        const sal_Bool bHeader, const sal_Bool bGroup);
 
     virtual ~ScXMLTableRowsContext();
 

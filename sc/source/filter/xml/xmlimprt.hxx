@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,11 @@ enum ScXMLLabelRangeAttrTokens
 
 enum ScXMLTableTokens
 {
+    XML_TOK_TABLE_COL_GROUP,
     XML_TOK_TABLE_HEADER_COLS,
     XML_TOK_TABLE_COLS,
     XML_TOK_TABLE_COL,
+    XML_TOK_TABLE_ROW_GROUP,
     XML_TOK_TABLE_HEADER_ROWS,
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
@@ -215,11 +217,17 @@ enum ScXMLTableTokens
 
 enum ScXMLTableRowsTokens
 {
+    XML_TOK_TABLE_ROWS_ROW_GROUP,
+    XML_TOK_TABLE_ROWS_HEADER_ROWS,
+    XML_TOK_TABLE_ROWS_ROWS,
     XML_TOK_TABLE_ROWS_ROW
 };
 
 enum ScXMLTableColsTokens
 {
+    XML_TOK_TABLE_COLS_COL_GROUP,
+    XML_TOK_TABLE_COLS_HEADER_COLS,
+    XML_TOK_TABLE_COLS_COLS,
     XML_TOK_TABLE_COLS_COL
 };
 

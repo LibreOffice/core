@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 16:01:39 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,13 @@
 #include "xmlimprt.hxx"
 #include "global.hxx"
 #include "xmlstyli.hxx"
+#include "document.hxx"
+#include "docuno.hxx"
+#include "olinetab.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
@@ -246,16 +250,37 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                       const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      const sal_Bool bTempHeader) :
+                                      const sal_Bool bTempHeader, const sal_Bool bTempGroup) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    nStartCol(0),
-    nEndCol(0),
-    bHeader(bTempHeader)
+    nHeaderStartCol(0),
+    nHeaderEndCol(0),
+    nGroupStartCol(0),
+    nGroupEndCol(0),
+    bHeader(bTempHeader),
+    bGroup(bTempGroup),
+    bGroupDisplay(sal_True)
 {
     // don't have any attributes
     if (bHeader)
+        nHeaderStartCol = rImport.GetTables().GetCurrentColumn();
+    else if (bGroup)
     {
-        nStartCol = rImport.GetTables().GetCurrentColumn();
+        nGroupStartCol = rImport.GetTables().GetCurrentColumn();
+        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        {
+            rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+            rtl::OUString aLocalName;
+            sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                                sAttrName, &aLocalName );
+            rtl::OUString sValue = xAttrList->getValueByIndex( i );
+
+            if (nPrfx == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_display) == 0)
+            {
+                if (sValue.compareToAscii(sXML_false) == 0)
+                    bGroupDisplay = sal_False;
+            }
+        }
     }
 }
 
@@ -274,6 +299,21 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
     sal_Bool bHeader = sal_False;
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
+    case XML_TOK_TABLE_COLS_COL_GROUP:
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_False, sal_True );
+        break;
+    case XML_TOK_TABLE_COLS_HEADER_COLS:
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_True, sal_False );
+        break;
+    case XML_TOK_TABLE_COLS_COLS:
+        pContext = new ScXMLTableColsContext( GetScImport(), nPrefix,
+                                                   rLName, xAttrList,
+                                                   sal_False, sal_False );
+        break;
     case XML_TOK_TABLE_COLS_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList//,
@@ -291,34 +331,66 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableColsContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
-    nEndCol = rXMLImport.GetTables().GetCurrentColumn();
-    nEndCol--;
-    if (bHeader && nStartCol <= nEndCol)
+    sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
+    if (bHeader)
     {
-        sal_Int16 nSheet = rXMLImport.GetTables().GetCurrentSheet();
-        uno::Reference <sheet::XSpreadsheetDocument> xSheetsDocument (rXMLImport.GetModel(), uno::UNO_QUERY);
-        if(xSheetsDocument.is())
+        nHeaderEndCol = rXMLImport.GetTables().GetCurrentColumn();
+        nHeaderEndCol--;
+        if (nHeaderStartCol <= nHeaderEndCol)
         {
-            uno::Reference<sheet::XSpreadsheets> xSheets = xSheetsDocument->getSheets();
-            if (xSheets.is())
+            uno::Reference <sheet::XSpreadsheetDocument> xSheetsDocument (rXMLImport.GetModel(), uno::UNO_QUERY);
+            if(xSheetsDocument.is())
             {
-                uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
-                if (xIndex.is())
+                uno::Reference<sheet::XSpreadsheets> xSheets = xSheetsDocument->getSheets();
+                if (xSheets.is())
                 {
-                    uno::Any aSheet = xIndex->getByIndex(nSheet);
-                    uno::Reference<sheet::XSpreadsheet> xSheet;
-                    if(aSheet >>= xSheet)
+                    uno::Reference<container::XIndexAccess> xIndex(xSheets, uno::UNO_QUERY);
+                    if (xIndex.is())
                     {
-                        uno::Reference <sheet::XPrintAreas> xPrintAreas (xSheet, uno::UNO_QUERY);
-                        if (xPrintAreas.is())
+                        uno::Any aSheet = xIndex->getByIndex(nSheet);
+                        uno::Reference<sheet::XSpreadsheet> xSheet;
+                        if(aSheet >>= xSheet)
                         {
-                            xPrintAreas->setPrintTitleColumns(sal_True);
-                            table::CellRangeAddress aColumnHeaderRange;
-                            aColumnHeaderRange.StartColumn = nStartCol;
-                            aColumnHeaderRange.EndColumn = nEndCol;
-                            xPrintAreas->setTitleColumns(aColumnHeaderRange);
+                            uno::Reference <sheet::XPrintAreas> xPrintAreas (xSheet, uno::UNO_QUERY);
+                            if (xPrintAreas.is())
+                            {
+                                if (!xPrintAreas->getPrintTitleColumns())
+                                {
+                                    xPrintAreas->setPrintTitleColumns(sal_True);
+                                    table::CellRangeAddress aColumnHeaderRange;
+                                    aColumnHeaderRange.StartColumn = nHeaderStartCol;
+                                    aColumnHeaderRange.EndColumn = nHeaderEndCol;
+                                    xPrintAreas->setTitleColumns(aColumnHeaderRange);
+                                }
+                                else
+                                {
+                                    table::CellRangeAddress aColumnHeaderRange = xPrintAreas->getTitleColumns();
+                                    aColumnHeaderRange.EndColumn = nHeaderEndCol;
+                                    xPrintAreas->setTitleColumns(aColumnHeaderRange);
+                                }
+                            }
                         }
                     }
+                }
+            }
+        }
+    }
+    else if (bGroup)
+    {
+        nGroupEndCol = rXMLImport.GetTables().GetCurrentColumn();
+        nGroupEndCol--;
+        if (nGroupStartCol <= nGroupEndCol)
+        {
+            ScModelObj* pDocObj = ScModelObj::getImplementation( rXMLImport.GetModel() );
+            if( pDocObj )
+            {
+                ScDocument* pDoc = pDocObj->GetDocument();
+                if( pDoc )
+                {
+                    ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, sal_True);
+                    ScOutlineArray* pColArray = pOutlineTable->GetColArray();
+                    sal_Bool bResized;
+                    pColArray->Insert(nGroupStartCol, nGroupEndCol, bResized, !bGroupDisplay, sal_True);
                 }
             }
         }

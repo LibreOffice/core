@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-27 13:59:38 $
+ *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,7 +593,7 @@ void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int3
 
 rtl::OUString* ScColumnRowStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
 {
-    return aStyleNames[aTables[nTable].at(nField)];
+    return aStyleNames[GetStyleNameIndex(nTable, nField)];
 }
 
 rtl::OUString* ScColumnRowStyles::GetStyleNameByIndex(const sal_Int32 nIndex)
@@ -1411,6 +1411,15 @@ sal_Bool LessGroup(const ScMyColumnRowGroup& aGroup1, const ScMyColumnRowGroup& 
             return sal_False;
 }
 
+sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
+{
+    sal_Int32 max(-1);
+    for (sal_Int32 i = 0; i < aTableEnd.size(); i++)
+        if (aTableEnd[i] > max)
+            max = aTableEnd[i];
+    return max;
+}
+
 void ScMyOpenCloseColumnRowGroup::Sort()
 {
     std::sort(aTableStart.begin(), aTableStart.end(), LessGroup);
@@ -2061,6 +2070,7 @@ sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>&
 
 void ScXMLExport::WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible)
 {
+    CheckAttrList();
     AddAttribute(XML_NAMESPACE_TABLE, sXML_style_name, *aColumnStyles.GetStyleNameByIndex(nStyleIndex));
     if (!bIsVisible)
         AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_visibility, sXML_collapse);
@@ -2072,9 +2082,24 @@ void ScXMLExport::WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nS
     SvXMLElementExport aElemR(*this, XML_NAMESPACE_TABLE, sXML_table_column, sal_True, sal_True);
 }
 
+void ScXMLExport::OpenHeaderColumn()
+{
+    rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
+    GetDocHandler()->ignorableWhitespace(sWS);
+    GetDocHandler()->startElement( sName, GetXAttrList());
+    ClearAttrList();
+}
+
+void ScXMLExport::CloseHeaderColumn()
+{
+    rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
+    GetDocHandler()->ignorableWhitespace(sWS);
+    GetDocHandler()->endElement(sName);
+}
+
 void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAddress& aColumnHeaderRange, const sal_Bool bHasColumnHeader)
 {
-    sal_Int32 nColsRepeated (0);
+    sal_Int32 nColsRepeated (1);
     rtl::OUString sParent;
     sal_Int32 nIndex;
     sal_Bool bPrevIsVisible (sal_True);
@@ -2111,42 +2136,54 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                 if (nColumn > 0)
                                 {
                                     WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                    if (aGroupColumns.IsGroupEnd(nColumn - 1))
+                                        aGroupColumns.CloseGroups(nColumn - 1);
                                     bPrevIsVisible = bIsVisible;
                                     nPrevIndex = nIndex;
-                                    nColsRepeated = 0;
+                                    nColsRepeated = 1;
                                 }
-                                rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->startElement( sName, GetXAttrList());
-                                ClearAttrList();
+                                if(aGroupColumns.IsGroupStart(nColumn))
+                                    aGroupColumns.OpenGroups(nColumn);
+                                OpenHeaderColumn();
                                 bWasHeader = sal_True;
                                 bIsClosed = sal_False;
                             }
                             else
                             {
                                 WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                                CloseHeaderColumn();
+                                if (aGroupColumns.IsGroupEnd(nColumn - 1))
+                                    aGroupColumns.CloseGroups(nColumn - 1);
                                 bPrevIsVisible = bIsVisible;
                                 nPrevIndex = nIndex;
                                 nColsRepeated = 1;
-                                rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
-                                GetDocHandler()->ignorableWhitespace(sWS);
-                                GetDocHandler()->endElement(sName);
                                 bWasHeader = sal_False;
                                 bIsClosed = sal_True;
                             }
                         }
-                        if (nColumn == 0)
+                        else if (nColumn == 0)
                         {
+                            if (aGroupColumns.IsGroupStart(nColumn))
+                                aGroupColumns.OpenGroups(nColumn);
                             bPrevIsVisible = bIsVisible;
                             nPrevIndex = nIndex;
                         }
-                        if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex))
-                        {
+                        else if ((bIsVisible == bPrevIsVisible) && (nIndex == nPrevIndex) &&
+                            !aGroupColumns.IsGroupStart(nColumn) && !aGroupColumns.IsGroupEnd(nColumn - 1))
                             nColsRepeated++;
-                        }
                         else
                         {
                             WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+                            if (aGroupColumns.IsGroupEnd(nColumn - 1))
+                                aGroupColumns.CloseGroups(nColumn - 1);
+                            if (aGroupColumns.IsGroupStart(nColumn))
+                            {
+                                if (bIsHeader)
+                                    CloseHeaderColumn();
+                                aGroupColumns.OpenGroups(nColumn);
+                                if (bIsHeader)
+                                    OpenHeaderColumn();
+                            }
                             bPrevIsVisible = bIsVisible;
                             nPrevIndex = nIndex;
                             nColsRepeated = 1;
@@ -2154,14 +2191,12 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                     }
                 }
             }
-            CheckAttrList();
-            WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
+            if (nColsRepeated > 1)
+                WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
             if (!bIsClosed)
-            {
-                rtl::OUString sName (GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_columns))));
-                GetDocHandler()->ignorableWhitespace(sWS);
-                GetDocHandler()->endElement(sName);
-            }
+                CloseHeaderColumn();
+            if (aGroupColumns.IsGroupEnd(nColumn - 1))
+                aGroupColumns.CloseGroups(nColumn - 1);
         }
     }
 }
@@ -2262,19 +2297,22 @@ void ScXMLExport::OpenHeaderRows()
     bRowHeaderOpen = sal_True;
 }
 
+void ScXMLExport::CloseHeaderRows()
+{
+    rtl::OUString sName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_rows)));
+    GetDocHandler()->ignorableWhitespace(sWS);
+    GetDocHandler()->endElement(sName);
+}
+
 void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
 {
     nOpenRow = nStartRow;
+    if (aGroupRows.IsGroupStart(nStartRow))
+        aGroupRows.OpenGroups(nStartRow);
     if (bHasRowHeader && !bRowHeaderOpen && nStartRow >= aRowHeaderRange.StartRow && nStartRow <= aRowHeaderRange.EndRow)
     {
         if (nStartRow == aRowHeaderRange.StartRow)
             OpenHeaderRows();
-        else
-        {
-            WriteRowStartTag(nIndex, nFlag, aRowHeaderRange.StartRow - nStartRow);
-            CloseRow(aRowHeaderRange.StartRow - 1);
-            OpenHeaderRows();
-        }
         sal_Int32 nEquals;
         if (aRowHeaderRange.EndRow < nStartRow + nEqualRows - 1)
             nEquals = aRowHeaderRange.EndRow - nStartRow + 1;
@@ -2320,7 +2358,9 @@ void ScXMLExport::OpenRow(const sal_Int16 nTable, const sal_Int32 nStartRow, con
                 nIndex = aRowStyles.GetStyleNameIndex(nTable, nRow);
                 nFlag = (pDoc->GetRowFlags(nRow, nTable)) & (CR_HIDDEN | CR_FILTERED);
                 if (nIndex == nPrevIndex && nFlag == nPrevFlag &&
-                    !(bHasRowHeader && nRow == aRowHeaderRange.StartRow))
+                    !(bHasRowHeader && nRow == aRowHeaderRange.StartRow) &&
+                    !(aGroupRows.IsGroupStart(nRow)) &&
+                    !(aGroupRows.IsGroupEnd(nRow - 1)))
                     nEqualRows++;
                 else
                 {
@@ -2351,10 +2391,16 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
         GetDocHandler()->endElement(sName);
         if (bHasRowHeader && nRow == aRowHeaderRange.EndRow)
         {
-            sName = GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_table_header_rows)));
-            GetDocHandler()->ignorableWhitespace(sWS);
-            GetDocHandler()->endElement(sName);
+            CloseHeaderRows();
             bRowHeaderOpen = sal_False;
+        }
+        if (aGroupRows.IsGroupEnd(nRow))
+        {
+            if (bHasRowHeader && bRowHeaderOpen)
+                CloseHeaderRows();
+            aGroupRows.CloseGroups(nRow);
+            if (bHasRowHeader && bRowHeaderOpen)
+                OpenHeaderRows();
         }
     }
     nOpenRow = -1;
@@ -2463,8 +2509,24 @@ sal_Bool ScXMLExport::GetRowHeader(com::sun::star::table::CellRangeAddress& aRow
     return bResult;
 }
 
-void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& aGroup)
+void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup& rGroups)
 {
+    sal_Int32 nDepth = pFields->GetDepth();
+    for(sal_Int32 i = 0; i < nDepth; i++)
+    {
+        sal_Int32 nFields = pFields->GetCount(i);
+        for (sal_Int32 j = 0; j < nFields; j++)
+        {
+            ScMyColumnRowGroup aGroup;
+            ScOutlineEntry* pEntry = pFields->GetEntry(i, j);
+            aGroup.nField = pEntry->GetStart();
+            aGroup.nLevel = i;
+            aGroup.bDisplay = !(pEntry->IsHidden());
+            rGroups.AddGroup(aGroup, pEntry->GetEnd());
+        }
+    }
+    if (nDepth)
+        rGroups.Sort();
 }
 
 void ScXMLExport::FillColumnRowGroups()
@@ -2478,6 +2540,8 @@ void ScXMLExport::FillColumnRowGroups()
             FillFieldGroup(pCols, aGroupColumns);
         if (pRows)
             FillFieldGroup(pRows, aGroupRows);
+        SetLastColumn(nCurrentTable, aGroupColumns.GetLast());
+        SetLastRow(nCurrentTable, aGroupRows.GetLast());
     }
 }
 
@@ -2849,6 +2913,8 @@ void ScXMLExport::_ExportAutoStyles()
                                     nColumns++;
                                     aColumnStyles.AddNewTable(nTable, aCellAddress.EndColumn);
                                 }
+                                else if (nColumns < MAXCOL)
+                                    aColumnStyles.AddNewTable(nTable, ++nColumns);
                                 else
                                     aColumnStyles.AddNewTable(nTable, nColumns);
                                 for (sal_Int32 nColumn = 0; nColumn <= nColumns; nColumn++)
@@ -2897,6 +2963,8 @@ void ScXMLExport::_ExportAutoStyles()
                                     nRows++;
                                     aRowStyles.AddNewTable(nTable, aCellAddress.EndRow);
                                 }
+                                else if (nRows < MAXROW)
+                                    aRowStyles.AddNewTable(nTable, ++nRows);
                                 else
                                     aRowStyles.AddNewTable(nTable, nRows);
                                 for (sal_Int32 nRow = 0; nRow <= nRows; nRow++)
