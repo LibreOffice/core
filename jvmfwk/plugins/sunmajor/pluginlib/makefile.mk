@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2004-04-20 08:04:27 $
+#   last change: $Author: jl $ $Date: 2004-05-07 14:58:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,11 @@ DLLPRE =
 
 #.INCLUDE :  ..$/cppumaker.mk
 .IF "$(SOLAR_JAVA)"!=""
+
+UNOTYPES = \
+    com.sun.star.uno.TypeClass \
+    com.sun.star.uno.XInterface 
+
 SLOFILES= \
     $(SLO)$/sunjavaplugin.obj \
     $(SLO)$/javainfo.obj \
