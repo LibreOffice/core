@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:27:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,8 +801,8 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 /*  */
 
 
-void CalculateFlySize( SfxItemSet& rFlySet, SwNodeIndex& rAnchor,
-                          SwTwips nPageWidth )
+void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
+    SwTwips nPageWidth)
 {
     const SfxPoolItem* pItem = 0;
     if( SFX_ITEM_SET != rFlySet.GetItemState( RES_FRM_SIZE, TRUE, &pItem ) ||
