@@ -22,6 +22,8 @@ original target interfaces on queryInterface() calls.
         <type>  com.sun.star.lang.XMultiServiceFactory              </type>
         <type>  com.sun.star.registry.XSimpleRegistry               </type>
         <type>  com.sun.star.registry.XRegistryKey                  </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory </type>
+        <type>  com.sun.star.uno.XComponentContext        </type>
         <type>  com.sun.star.uno.XAggregation                       </type>
         <type>  com.sun.star.uno.XWeak                              </type>
         <type>  com.sun.star.reflection.XProxyFactory   </type>
