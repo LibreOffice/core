@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,11 @@ service ChartAxis
      */
     service com::sun::star::style::CharacterProperties;
 
-    /** If a <type>ChartAxis</type> may be stored as XML element, this
-        service should be supported in order to preserve unparsed XML
-        attributes.
+        /** If a <type>ChartAxis</type> may be stored as XML element, this
+            service should be supported in order to preserve unparsed XML
+            attributes.
+
+        @since #107627#
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
