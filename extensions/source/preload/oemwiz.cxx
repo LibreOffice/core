@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:10:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,6 @@
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
-#ifndef _SVX_OPTGENRL_HXX
-#include <svx/optgenrl.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -109,6 +106,7 @@
 #endif
 
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/tabdlg.hxx>
 #include <svx/dialogs.hrc>
 
 //.........................................................................
