@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
 class EncryptionData;
 class ZipOutputStream
 {
-private:
+protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     ::std::vector < ::com::sun::star::packages::ZipEntry *>         aZipList;
     com::sun::star::uno::Sequence < sal_Int8 > aBuffer;
@@ -101,13 +101,12 @@ private:
     sal_Int16           nLevel;
     sal_Bool            bFinished;
     sal_Bool            bEncryptCurrentEntry;
+    sal_Int32           nCurrentDataBegin;
 
 public:
     ZipOutputStream( com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > &xOStream, sal_Int32 nNewBufferSize);
     ~ZipOutputStream(void);
 
-    void SAL_CALL setEncryptionKey ( com::sun::star::uno::Sequence < sal_Int8 > &rKey, com::sun::star::packages::ZipEntry & rEntry );
-    static com::sun::star::uno::Sequence < sal_Int8 > getInitialisationVector();
     // rawWrite to support a direct write to the output stream
     void SAL_CALL rawWrite( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer)
         throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
