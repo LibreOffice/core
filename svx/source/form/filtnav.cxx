@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 12:13:58 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 13:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ TYPEINIT1(FmFilterItems, FmParentData);
 FmFilterItem* FmFilterItems::Find(const Reference< ::com::sun::star::awt::XTextComponent > & _xText) const
 {
     for (vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
-         i != m_aChilds.end(); i++)
+         i != m_aChilds.end(); ++i)
     {
         FmFilterItem* pCond = PTR_CAST(FmFilterItem, *i);
         DBG_ASSERT(pCond, "Wrong element in container");
@@ -1582,7 +1582,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
 // -----------------------------------------------------------------------------
 namespace
 {
-    FmFilterItems*  getTargetItems(SvLBoxEntry* _pTarget)
+    FmFilterItems* getTargetItems(SvLBoxEntry* _pTarget)
     {
         FmFilterData*   pData = (FmFilterData*)_pTarget->GetUserData();
         FmFilterItems*  pTargetItems = pData->ISA(FmFilterItems) ? (FmFilterItems*)pData
@@ -1939,7 +1939,31 @@ void FmFilterNavigator::Command( const CommandEvent& rEvt )
     if (!bHandled)
         SvTreeListBox::Command( rEvt );
 }
-
+// -----------------------------------------------------------------------------
+SvLBoxEntry* FmFilterNavigator::getNextEntry(SvLBoxEntry* _pStartWith)
+{
+    SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : LastSelected();
+    pEntry = Next(pEntry);
+    // we need the next filter entry
+    while( pEntry && GetChildCount( pEntry ) == 0 && pEntry != Last() )
+        pEntry = Next(pEntry);
+    return pEntry;
+}
+// -----------------------------------------------------------------------------
+SvLBoxEntry* FmFilterNavigator::getPrevEntry(SvLBoxEntry* _pStartWith)
+{
+    SvLBoxEntry* pEntry = _pStartWith ? _pStartWith : FirstSelected();
+    pEntry = Prev(pEntry);
+    // check if the previous entry is a filter, if so get the next prev
+    if ( pEntry && GetChildCount( pEntry ) != 0 )
+    {
+        pEntry = Prev(pEntry);
+        // if the entry is still no leaf return
+        if ( pEntry && GetChildCount( pEntry ) != 0 )
+            pEntry = NULL;
+    }
+    return pEntry;
+}
 //------------------------------------------------------------------------
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
@@ -1953,32 +1977,41 @@ void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
         ::std::vector<FmFilterItem*> aItemList;
         if ( FmFormItem* pFirstItem = getSelectedFilterItems(aItemList) )
         {
-            SvLBoxEntry* pTarget = NULL;
+            ::std::mem_fun1_t<SvLBoxEntry*,FmFilterNavigator,SvLBoxEntry*> aGetEntry = ::std::mem_fun1(&FmFilterNavigator::getNextEntry);
             if ( rKeyCode.GetCode() == KEY_UP )
-            {
-                SvLBoxEntry* pEntry = FirstSelected();
-                pTarget = Prev(pEntry);
-                // check if the previous entry is a filter, if so get the next prev
-                if ( pTarget && GetChildCount( pTarget ) != 0 )
-                {
-                    pTarget = Prev(pTarget);
-                    // if the entry is still no leaf return
-                    if ( pTarget && GetChildCount( pTarget ) != 0 )
-                        return ;
-                }
-            }
-            else
-            {
-                SvLBoxEntry* pEntry = LastSelected();
-                pTarget = Next(pEntry);
-                // we need the next filter entry
-                while( pTarget && GetChildCount( pTarget ) == 0 && pTarget != Last() )
-                    pTarget = Next(pTarget);
-            }
+                aGetEntry = ::std::mem_fun1(&FmFilterNavigator::getPrevEntry);
+
+            SvLBoxEntry* pTarget = aGetEntry(this,NULL);
 
             if ( pTarget )
             {
-                insertFilterItem(aItemList,getTargetItems(pTarget));
+                FmFilterItems* pTargetItems = getTargetItems(pTarget);
+                ::std::vector<FmFilterItem*>::const_iterator aEnd = aItemList.end();
+                sal_Bool bNextTargetItem = sal_True;
+                while ( bNextTargetItem )
+                {
+                    ::std::vector<FmFilterItem*>::const_iterator i = aItemList.begin();
+                    for (; i != aEnd; ++i)
+                    {
+                        if ((*i)->GetParent() == pTargetItems)
+                            continue;
+                        else
+                        {
+                            FmFilterItem* pFilterItem = pTargetItems->Find((*i)->GetTextComponent());
+                            // we found the text component so jump above
+                            if ( pFilterItem )
+                            {
+                                pTarget = aGetEntry(this,pTarget);
+                                if ( !pTarget )
+                                    return;
+                                pTargetItems = getTargetItems(pTarget);
+                                break;
+                            }
+                        }
+                    }
+                    bNextTargetItem = i != aEnd;
+                }
+                insertFilterItem(aItemList,pTargetItems);
                 return;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-01 12:14:33 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 13:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,8 @@ private:
             If <TRUE/> the items will not be removed from the model, otherwise they will.
     */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
+    SvLBoxEntry* getPrevEntry(SvLBoxEntry* _pStartWith = NULL);
+    SvLBoxEntry* getNextEntry(SvLBoxEntry* _pStartWith = NULL);
 };
 
 //========================================================================
