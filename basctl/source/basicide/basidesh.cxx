@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-28 15:26:41 $
+ *  last change: $Author: tbe $ $Date: 2001-07-17 14:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame, SfxViewShell* /* pOldShell *
 
 void BasicIDEShell::Init()
 {
-    //TbxControls::RegisterControl( SID_CHOOSE_CONTROLS );
+    TbxControls::RegisterControl( SID_CHOOSE_CONTROLS );
     SvxPosSizeStatusBarControl::RegisterControl();
     SvxInsertStatusBarControl::RegisterControl();
 
