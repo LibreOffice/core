@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:28:15 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog RID_FONTDIALOG
         Text[ french ] = "Police";
         Text[ spanish ] = "~Fuente";
         Text[ finnish ] = "~Fontti";
-        Text[ italian ] = "~Tipo di carattere:";
+        Text[ italian ] = "Tipo di carattere";
         Text[ danish ] = "Skrifttype:";
         Text[ swedish ] = "Tecken~snitt:";
         Text[ polish ] = "Czcionka";
@@ -284,9 +284,9 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ greek ] = "¬·ÛÈÍ¸ Ï›„ÂËÔÚ:";
         Text[ dutch ] = "~Basisgrootte";
         Text[ french ] = "Taille de base";
-        Text[ spanish ] = "~TamaÒo de base";
+        Text[ spanish ] = "TamaÒo de base";
         Text[ finnish ] = "~Peruskoko";
-        Text[ italian ] = "Dim. di ~base:";
+        Text[ italian ] = "Dim. di base:";
         Text[ danish ] = "Basisst¯rrelse:";
         Text[ swedish ] = "~Basstorlek:";
         Text[ polish ] = "Domyúlnie";
@@ -495,7 +495,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ french ] = "Limites";
         Text[ spanish ] = "~LÌmites";
         Text[ finnish ] = "~Rajat";
-        Text[ italian ] = "~Bordi";
+        Text[ italian ] = "Bordi";
         Text[ danish ] = "~GrÊnser:";
         Text[ swedish ] = "~Gr‰nser";
         Text[ polish ] = "Granica";
@@ -574,8 +574,8 @@ ModalDialog RID_FONTSIZEDIALOG
         Text [ ENGLISH ] = "~Standard" ;
         Text [ english_us ] = "~Default" ;
         Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "~Par dÈfaut" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ french ] = "Par dÈfaut" ;
         Text [ dutch ] = "Standaar~d" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -780,7 +780,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ finnish ] = "~Numerot";
         Text[ italian ] = "~Numeri";
         Text[ danish ] = "Tal:";
-        Text[ swedish ] = "T~al:";
+        Text[ swedish ] = "Ta~l";
         Text[ polish ] = "Liczby";
         Text[ portuguese_brazilian ] = "~N?eros:";
         Text[ japanese ] = "Êï∞ÂÄ§(~N)";
@@ -850,9 +850,9 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ french ] = "~Serif";
         Text[ spanish ] = "~Serif";
         Text[ finnish ] = "~Serif";
-        Text[ italian ] = "~Serif";
+        Text[ italian ] = "Serif";
         Text[ danish ] = "~Serif";
-        Text[ swedish ] = "~Serif";
+        Text[ swedish ] = "S~erif";
         Text[ polish ] = "~Serif";
         Text[ portuguese_brazilian ] = "~Serif";
         Text[ japanese ] = "~Serif";
@@ -1002,8 +1002,8 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ arabic ] = "«› —«÷Ì";
         Text [ english_us ] = "~Default" ;
         Text [ italian ] = "~Standard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "~Par dÈfaut" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ french ] = "Par dÈfaut" ;
         Text [ dutch ] = "Standaar~d" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -1237,7 +1237,7 @@ ModalDialog RID_DISTANCEDIALOG
         Text [ english_us ] = "~Default" ;
         Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "Par ~dÈfaut" ;
+        Text [ french ] = "Par dÈfaut" ;
         Text [ dutch ] = "Standaar~d" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
@@ -1364,7 +1364,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "…cart";
             Text[ spanish ] = "~Espacio";
             Text[ finnish ] = "~Objektiv‰lit";
-            Text[ italian ] = "~Distanza";
+            Text[ italian ] = "Distanza";
             Text[ danish ] = "Afstand:";
             Text[ swedish ] = "~AvstÂnd";
             Text[ polish ] = "OdstÍp";
@@ -1838,7 +1838,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ finnish ] = "~Liiallinen koko (vasen/oikea)";
             Text[ italian ] = "Sovradim. (sin./des.)";
             Text[ danish ] = "Venstre/h¯jre overst¯rrelse:";
-            Text[ swedish ] = "~V‰nster/hˆger ˆverstorlek";
+            Text[ swedish ] = "~V‰nster/hˆger ˆverstorl.";
             Text[ polish ] = "wysuniÍcie (z lew./z praw.)";
             Text[ portuguese_brazilian ] = "~Tamanho excedente:";
             Text[ japanese ] = "‰∏ä‰∏ã„ÅØ„ÇäÂá∫„Åó(~E)";
@@ -1865,7 +1865,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "…cart";
             Text[ spanish ] = "~Espacio";
             Text[ finnish ] = "~Objektiv‰lit";
-            Text[ italian ] = "~Distanza";
+            Text[ italian ] = "Distanza";
             Text[ danish ] = "Afstand:";
             Text[ swedish ] = "~AvstÂnd";
             Text[ polish ] = "OdstÍp";
@@ -2160,7 +2160,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "…cart";
             Text[ spanish ] = "~Espacio";
             Text[ finnish ] = "~Objektiv‰lit";
-            Text[ italian ] = "~Distanza";
+            Text[ italian ] = "Distanza";
             Text[ danish ] = "~Afstand:";
             Text[ swedish ] = "~AvstÂnd";
             Text[ polish ] = "OdstÍp";
@@ -2218,7 +2218,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ french ] = "¿ gauche";
             Text[ spanish ] = "~Izquierda";
             Text[ finnish ] = "~Vasen:";
-            Text[ italian ] = "~Sinistra";
+            Text[ italian ] = "Sinistra";
             Text[ danish ] = "~Venstre:";
             Text[ swedish ] = "~V‰nster";
             Text[ polish ] = "Z lewej";
@@ -2365,12 +2365,12 @@ ModalDialog RID_ALIGNDIALOG
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ norwegian ] = "~Left" ;
-        Text [ italian ] = "~Sinistra" ;
+        Text [ italian ] = "Sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
         Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "~Venstre" ;
-        Text [ french ] = "¿ ~gauche" ;
+        Text [ french ] = "¿ gauche" ;
         Text [ swedish ] = "~V‰nster" ;
         Text [ dutch ] = "~Links" ;
         Text [ spanish ] = "~Izquierda" ;
@@ -2425,12 +2425,12 @@ ModalDialog RID_ALIGNDIALOG
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ norwegian ] = "~Right" ;
-        Text [ italian ] = "~Destra" ;
+        Text [ italian ] = "Destra" ;
         Text [ portuguese_brazilian ] = "~Direita" ;
         Text [ portuguese ] = "~Direita" ;
         Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "H¯j~re" ;
-        Text [ french ] = "¿ ~droite" ;
+        Text [ french ] = "¿ droite" ;
         Text [ swedish ] = "~Hˆger" ;
         Text [ dutch ] = "~Rechts" ;
         Text [ spanish ] = "~Derecha" ;
@@ -2499,7 +2499,7 @@ ModalDialog RID_ALIGNDIALOG
         Text [ dutch ] = "Standaar~d" ;
         Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "~Par dÈfaut" ;
+        Text [ french ] = "Par dÈfaut" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese ] = "~Padr„o" ;
@@ -2593,7 +2593,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ english_us ] = "~Title row" ;
         Text [ swedish ] = "R~ubrikrad" ;
         Text [ danish ] = "Titellinje" ;
-        Text [ italian ] = "Riga del ~titolo" ;
+        Text [ italian ] = "Riga del titolo" ;
         Text [ spanish ] = "~Fila del tÌtulo" ;
         Text [ french ] = "~Ligne du titre" ;
         Text [ portuguese ] = "Linha do ~tÌtulo" ;
@@ -2622,7 +2622,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ english_us ] = "~Formula text" ;
         Text [ swedish ] = "~Formeltext" ;
         Text [ danish ] = "~Formeltekst" ;
-        Text [ italian ] = "~Testo formula" ;
+        Text [ italian ] = "Testo formula" ;
         Text [ spanish ] = "~Texto de la fÛrmula" ;
         Text [ french ] = "~Texte de la formule" ;
         Text [ portuguese ] = "Te~xto da fÛrmula" ;
@@ -2976,7 +2976,7 @@ ModalDialog RID_SYMBOLDIALOG
         Text [ english_us ] = "~Insert" ;
         Text [ italian ] = "Applica" ;
         Text [ spanish ] = "~Aplicar" ;
-        Text [ french ] = "~Appliquer" ;
+        Text [ french ] = "Appliquer" ;
         Text [ dutch ] = "~Overnemen" ;
         Text [ swedish ] = "~÷verta" ;
         Text [ danish ] = "Accepter" ;
@@ -3155,7 +3155,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ finnish ] = "Va~nha symbolijoukko";
         Text[ italian ] = "Set simboli preced.:";
         Text[ danish ] = "Oprindeligt symbolsÊt:";
-        Text[ swedish ] = "Gammalt s~ymbolset";
+        Text[ swedish ] = "Gammalt sy~mbolset";
         Text[ polish ] = "Stary zbiÛr symboli";
         Text[ portuguese_brazilian ] = "S~ymbolset:";
         Text[ japanese ] = "Êó¢Â≠ò„ÅÆË®òÂè∑„Çª„ÉÉ„Éà(~L)";
@@ -3269,7 +3269,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ french ] = "Police";
         Text[ spanish ] = "~Fuente";
         Text[ finnish ] = "~Fontti";
-        Text[ italian ] = "~Tipo di carattere";
+        Text[ italian ] = "Tipo di carattere";
         Text[ danish ] = "Skrifttype:";
         Text[ swedish ] = "Te~ckensnitt";
         Text[ polish ] = "Czcionka";
@@ -3303,9 +3303,9 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ russian ] = " ‡ÚÂ„ÓËˇ";
         Text[ greek ] = "–ÂÒÈÔ˜ﬁ";
         Text[ dutch ] = "~Bereik";
-        Text[ french ] = "~Plage";
+        Text[ french ] = "Plage";
         Text[ spanish ] = "~¡rea";
-        Text[ italian ] = "~Area";
+        Text[ italian ] = "Area";
         Text[ danish ] = "~Subset";
         Text[ swedish ] = "~OmrÂde";
         Text[ polish ] = "~Obszar";
@@ -3343,7 +3343,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ french ] = "Style";
         Text[ spanish ] = "~Estilo";
         Text[ finnish ] = "~Kirjasinlaji";
-        Text[ italian ] = "S~tile";
+        Text[ italian ] = "Stile";
         Text[ danish ] = "Typografi:";
         Text[ swedish ] = "Teckens~til:";
         Text[ polish ] = "Styl";
@@ -3431,7 +3431,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ portuguese ] = "Adicionar" ;
         Text [ finnish ] = "~Lis‰‰" ;
         Text [ danish ] = "Tilf¯j" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "L‰gg t~ill" ;
         Text [ dutch ] = "~Toevoegen" ;
         Text [ spanish ] = "~AÒadir" ;
