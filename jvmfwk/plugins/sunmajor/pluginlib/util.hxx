@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:45:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define INCLUDED_JFW_PLUGIN_UTIL_HXX
 
 #include "rtl/ustring.hxx"
+#include "rtl/bootstrap.hxx"
 #include <vector>
 #include "vendorbase.hxx"
 
@@ -157,6 +158,7 @@ void  createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInf
 
 void bubbleSortVersion(std::vector<rtl::Reference<VendorBase> >& vec);
 
+rtl::Bootstrap* getBootstrap();
 }
 
 #endif
