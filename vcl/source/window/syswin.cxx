@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-11-24 18:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,15 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef REMOTE_APPSERVER
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
+#endif
+
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
@@ -83,6 +92,9 @@
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
+#ifndef _SV_BRDWIN_HXX
+#include <brdwin.hxx>
+#endif
 #ifndef _SV_SYSWIN_HXX
 #include <syswin.hxx>
 #endif
@@ -91,6 +103,10 @@
 #endif
 
 #include <unowrap.hxx>
+
+#ifdef REMOTE_APPSERVER
+#include "rmwindow.hxx"
+#endif
 
 #pragma hdrstop
 
@@ -336,7 +352,25 @@ void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
 {
     maMinOutSize = rSize;
     if ( mpBorderWindow )
+    {
         ((ImplBorderWindow*)mpBorderWindow)->SetMinOutputSize( rSize.Width(), rSize.Height() );
+        if ( mpBorderWindow->mbFrame )
+            mpBorderWindow->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
+    }
+    else if ( mbFrame )
+        mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
+}
+
+// -----------------------------------------------------------------------
+
+Size SystemWindow::GetResizeOutputSizePixel() const
+{
+    Size aSize = GetOutputSizePixel();
+    if ( aSize.Width() < maMinOutSize.Width() )
+        aSize.Width() = maMinOutSize.Width();
+    if ( aSize.Height() < maMinOutSize.Height() )
+        aSize.Height() = maMinOutSize.Height();
+    return aSize;
 }
 
 // -----------------------------------------------------------------------
