@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotread.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:45:10 $
+ *  last change: $Author: vg $ $Date: 2001-05-18 12:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,6 @@ FltError ImportLotus::Read( SvStream& rIn )
 
             DBG_ASSERT( nNextRec >= pIn->Tell(),
                 "*ImportLotus::Read(): Etwas zu gierig..." );
-
             pIn->Seek( nNextRec );
             aPrgrsBar.Progress();
         }
