@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-11 09:19:47 $
+ *  last change: $Author: sab $ $Date: 2002-11-21 17:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,7 +1031,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
     if( !xRet.is() )
     {
         ScUnoGuard aGuard;
-        if (pDocShell)
+        if (pDocShell && pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
         {
             xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
 
@@ -1040,18 +1040,12 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
             if( xCont.is() )
             {
                 uno::Sequence< beans::PropertyValue > aSeq;
-                ScViewData* pViewData = pDocShell->GetViewData();
-                if (pViewData)
-                    pViewData->WriteUserDataSequence( aSeq );
-                else
-                {
-                    aSeq.realloc(1);
-                    String sName;
-                    pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
-                    rtl::OUString sOUName(sName);
-                    aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
-                    aSeq[0].Value <<= sOUName;
-                }
+                aSeq.realloc(1);
+                String sName;
+                pDocShell->GetDocument()->GetName( pDocShell->GetDocument()->GetVisibleTab(), sName );
+                rtl::OUString sOUName(sName);
+                aSeq[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVETABLE));
+                aSeq[0].Value <<= sOUName;
                 xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
             }
         }
