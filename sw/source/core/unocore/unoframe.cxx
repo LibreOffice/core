@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,10 @@
 // DVO, OD 01.10.2003 #i18732#
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
+#endif
+// OD 2004-05-05 #i28701#
+#ifndef _FMTWRAPINFLUENCEONOBJPOS_HXX
+#include <fmtwrapinfluenceonobjpos.hxx>
 #endif
 
 #include <so3/outplace.hxx>
@@ -695,6 +699,16 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rToSet, const 
         SwFmtFollowTextFlow aFmtFollowTextFlow;
         aFmtFollowTextFlow.PutValue(*pFollowTextFlow, 0);
         rToSet.Put(aFmtFollowTextFlow);
+    }
+
+    // OD 2004-05-04 #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    uno::Any* pWrapInfluenceOnObjPos = 0;
+    GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE, pWrapInfluenceOnObjPos);
+    if ( pWrapInfluenceOnObjPos )
+    {
+        SwFmtWrapInfluenceOnObjPos aFmtWrapInfluenceOnObjPos;
+        aFmtWrapInfluenceOnObjPos.PutValue( *pWrapInfluenceOnObjPos, MID_WRAP_INFLUENCE );
+        rToSet.Put(aFmtWrapInfluenceOnObjPos);
     }
 
     return bRet;
