@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 05:59:58 $
+ *  last change: $Author: os $ $Date: 2002-04-04 16:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public:
 
 TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) :
 
-    SfxPopupWindow( nId, (WinBits)0, rBind ),
+    SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
     rTbx(rParentTbx)
 
 {
@@ -406,7 +406,7 @@ public:
 ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
                             ToolBox& rParentTbx ) :
 
-    SfxPopupWindow( nId, (WinBits)0, rBind ),
+    SfxPopupWindow( nId, WB_SYSTEMWINDOW, rBind ),
     rTbx(rParentTbx)
 
 {
