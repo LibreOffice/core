@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-23 09:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 11:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
         sRealName+= ::rtl::OUString('.');
     sRealName += sTable;
 
-    AddTabWin(strDatabase, sRealName, ConvertAlias(sTable), bNewTable);
+    AddTabWin(strDatabase, sRealName, ConvertAlias(strTableName), bNewTable);
 }
 // -----------------------------------------------------------------------------
 // find the table which has a foreign key with this referencedTable name
@@ -539,17 +539,17 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
 
     // neue Datenstruktur erzeugen
     // first check if this already hav it's data
-    sal_Bool bAppend = sal_True;
+    sal_Bool bAppend = bNewTable;
     OQueryTableWindowData* pNewTabWinData = NULL;
-//  ::std::vector< OTableWindowData*>* pWindowData = getDesignView()->getController()->getTableWindowData();
-//  ::std::vector< OTableWindowData*>::iterator aWinIter = pWindowData->begin();
-//  for(;aWinIter != pWindowData->end();++aWinIter)
-//  {
-//      pNewTabWinData = PTR_CAST(OQueryTableWindowData, *aWinIter);
-//      if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == strTableName)
-//          break;
-//  }
-//  if(bAppend = (aWinIter == pWindowData->end()))
+    ::std::vector< OTableWindowData*>* pWindowData = getDesignView()->getController()->getTableWindowData();
+    ::std::vector< OTableWindowData*>::iterator aWinIter = pWindowData->begin();
+    for(;aWinIter != pWindowData->end();++aWinIter)
+    {
+        pNewTabWinData = PTR_CAST(OQueryTableWindowData, *aWinIter);
+        if (pNewTabWinData && pNewTabWinData->GetWinName() == strAlias && pNewTabWinData->GetComposedName() == _rComposedName && pNewTabWinData->GetTableName() == strTableName)
+            break;
+    }
+    if(bAppend || (bAppend = (aWinIter == pWindowData->end())))
         pNewTabWinData = new OQueryTableWindowData(_rComposedName, strTableName, strAlias);
         // die TabWinData brauche ich nicht in die entsprechende Liste der DocShell eintragen, das macht ShowTabWin
 

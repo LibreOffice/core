@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-10 11:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1872,7 +1872,7 @@ void OQueryDesignView::InitFromParseNode()
                     OQueryTableWindow* pExistentWin = static_cast<OQueryTableView*>(m_pTableView)->FindTable(aIter->first);
                     if (!pExistentWin)
                     {
-                        m_pTableView->AddTabWin(aComposedName, aIter->first,sal_True);
+                        m_pTableView->AddTabWin(aComposedName, aIter->first,sal_False);// don't create data here
                     }
                     else
                     {
