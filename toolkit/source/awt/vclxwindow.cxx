@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:16:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,6 +1013,25 @@ void VCLXWindow::getStyles( sal_Int16 nType, ::com::sun::star::awt::FontDescript
     }
 }
 
+namespace toolkit
+{
+    static void setColorSettings( Window* _pWindow, const ::com::sun::star::uno::Any& _rValue,
+        void (StyleSettings::*pSetter)( const Color& ), const Color& (StyleSettings::*pGetter)( ) const )
+    {
+        sal_Int32 nColor = 0;
+        if ( !( _rValue >>= nColor ) )
+            nColor = (Application::GetSettings().GetStyleSettings().*pGetter)().GetColor();
+
+        AllSettings aSettings = _pWindow->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+
+        (aStyleSettings.*pSetter)( Color( nColor ) );
+
+        aSettings.SetStyleSettings( aStyleSettings );
+        _pWindow->SetSettings( aSettings, TRUE );
+    }
+}
+
 void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -1231,14 +1250,25 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_ALIGN:
             {
+                sal_Int16 nAlign = PROPERTY_ALIGN_LEFT;
                 switch ( eWinType )
                 {
+                    case WINDOW_COMBOBOX:
+                    case WINDOW_BUTTON:
+                    case WINDOW_PUSHBUTTON:
+                    case WINDOW_OKBUTTON:
+                    case WINDOW_CANCELBUTTON:
+                    case WINDOW_HELPBUTTON:
+                        nAlign = PROPERTY_ALIGN_CENTER;
+                        // no break here!
                     case WINDOW_FIXEDTEXT:
                     case WINDOW_EDIT:
+                    case WINDOW_CHECKBOX:
+                    case WINDOW_RADIOBUTTON:
+                    case WINDOW_LISTBOX:
                     {
                         WinBits nStyle = pWindow->GetStyle();
                         nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
-                        sal_uInt16 nAlign = 0;
                         if ( !bVoid )
                             Value >>= nAlign;
                         if ( nAlign == PROPERTY_ALIGN_LEFT )
@@ -1255,7 +1285,15 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_MULTILINE:
             {
-                if ( eWinType == WINDOW_FIXEDTEXT )
+                if  (  ( eWinType == WINDOW_FIXEDTEXT )
+                    || ( eWinType == WINDOW_CHECKBOX )
+                    || ( eWinType == WINDOW_RADIOBUTTON )
+                    || ( eWinType == WINDOW_BUTTON )
+                    || ( eWinType == WINDOW_PUSHBUTTON )
+                    || ( eWinType == WINDOW_OKBUTTON )
+                    || ( eWinType == WINDOW_CANCELBUTTON )
+                    || ( eWinType == WINDOW_HELPBUTTON )
+                    )
                 {
                     WinBits nStyle = pWindow->GetStyle();
                     sal_Bool bMulti;
@@ -1344,20 +1382,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
 
             case BASEPROPERTY_SYMBOL_COLOR:
-            {
-                sal_Int32 nButtonTextColor = 0;
-                if ( !( Value >>= nButtonTextColor ) )
-                    nButtonTextColor = Application::GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+                ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetButtonTextColor, &StyleSettings::GetButtonTextColor );
+                break;
 
-                AllSettings aSettings = pWindow->GetSettings();
-                StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-
-                aStyleSettings.SetButtonTextColor( Color( nButtonTextColor ) );
-
-                aSettings.SetStyleSettings( aStyleSettings );
-                pWindow->SetSettings( aSettings, TRUE );
-            }
-            break;
+            case BASEPROPERTY_BORDERCOLOR:
+                ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetMonoColor, &StyleSettings::GetMonoColor);
+                break;
         }
     }
 }
@@ -1429,7 +1459,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_BORDER:
             {
-                sal_uInt16 nBorder = 0;
+                sal_Int16 nBorder = 0;
                 if ( GetWindow()->GetStyle() & WB_BORDER )
                     nBorder = GetWindow()->GetBorderStyle();
                 aProp <<= nBorder;
@@ -1444,6 +1474,15 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 {
                     case WINDOW_FIXEDTEXT:
                     case WINDOW_EDIT:
+                    case WINDOW_CHECKBOX:
+                    case WINDOW_RADIOBUTTON:
+                    case WINDOW_LISTBOX:
+                    case WINDOW_COMBOBOX:
+                    case WINDOW_BUTTON:
+                    case WINDOW_PUSHBUTTON:
+                    case WINDOW_OKBUTTON:
+                    case WINDOW_CANCELBUTTON:
+                    case WINDOW_HELPBUTTON:
                     {
                         WinBits nStyle = GetWindow()->GetStyle();
                         if ( nStyle & WB_LEFT )
@@ -1458,7 +1497,15 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             }
             case BASEPROPERTY_MULTILINE:
             {
-                if ( eWinType == WINDOW_FIXEDTEXT )
+                if  (  ( eWinType == WINDOW_FIXEDTEXT )
+                    || ( eWinType == WINDOW_CHECKBOX )
+                    || ( eWinType == WINDOW_RADIOBUTTON )
+                    || ( eWinType == WINDOW_BUTTON )
+                    || ( eWinType == WINDOW_PUSHBUTTON )
+                    || ( eWinType == WINDOW_OKBUTTON )
+                    || ( eWinType == WINDOW_CANCELBUTTON )
+                    || ( eWinType == WINDOW_HELPBUTTON )
+                    )
                     aProp <<= (sal_Bool) ( GetWindow()->GetStyle() & WB_WORDBREAK ) ? sal_True : sal_False;
             }
             break;
@@ -1487,11 +1534,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
 
             case BASEPROPERTY_SYMBOL_COLOR:
-            {
-                sal_Int32 nButtonTextColor = GetWindow()->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
-                aProp <<= nButtonTextColor;
-            }
-            break;
+                aProp <<= (sal_Int32)GetWindow()->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+                break;
+
+            case BASEPROPERTY_BORDERCOLOR:
+                aProp <<= (sal_Int32)GetWindow()->GetSettings().GetStyleSettings().GetMonoColor().GetColor();
+                break;
         }
     }
     return aProp;
