@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-06 14:37:42 $
+ *  last change: $Author: sb $ $Date: 2002-10-04 14:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,6 +1185,26 @@ main()
                                     RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
         }
+    }
+
+    if (true)
+    {
+        INetURLObject aUrl;
+        rtl::OUString aUser;
+        aUrl = INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "ftp://test")));
+        aUser = aUrl.GetUser();
+        if (aUser.getLength() != 0)
+            printf(
+                "BAD <ftp://test> user: \"%s\" != \"\"",
+                rtl::OUStringToOString(aUser, RTL_TEXTENCODING_UTF8).getStr());
+        aUrl = INetURLObject(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "ftp://user@test")));
+        aUser = aUrl.GetUser();
+        if (!aUser.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("user")))
+            printf(
+                "BAD <ftp://user@test> user: \"%s\" != \"user\"",
+                rtl::OUStringToOString(aUser, RTL_TEXTENCODING_UTF8).getStr());
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
