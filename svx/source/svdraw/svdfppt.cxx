@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:01:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,12 +1208,18 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 nMinFrameHeight = rTextRect.GetHeight() - ( nTextTop + nTextBottom );
             }
 
-            SdrObjKind eTextKind = OBJ_TEXT;
+            SdrObjKind eTextKind = OBJ_RECT;
             if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESSLIDEIMAGE )
                 || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESSLIDEIMAGE ) )
             {
                 aTextObj.SetInstance( 2 );
                 eTextKind = OBJ_TITLETEXT;
+            }
+            else if ( ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_MASTERNOTESBODYIMAGE )
+                || ( aPlaceholderAtom.nPlaceholderId == PPT_PLACEHOLDER_NOTESBODY ) )
+            {
+                aTextObj.SetInstance( 2 );
+                eTextKind = OBJ_TEXT;
             }
 
             sal_uInt32 nInstanceInSheet = aTextObj.GetInstance();
@@ -1259,9 +1265,9 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             SdrObject* pTObj = NULL;
             sal_Bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
             sal_Bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
-            if ( bWordWrap || ( eTextKind != OBJ_TEXT ) )
+            if ( bWordWrap || ( eTextKind != OBJ_RECT ) )
             {
-                pTObj = new SdrRectObj( eTextKind );
+                pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
                 if ( bVerticalText )
                 {
                     bAutoGrowWidth = bFitShapeToText;   // bFitShapeToText; can't be used, because we cut the text if it is too height,
@@ -1494,8 +1500,6 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
     nDocStreamPos       ( 0 ),
     nPageColorsNum      ( 0xFFFF ),
     ePageColorsKind     ( PPT_MASTERPAGE ),
-    nNotesMasterNum     ( 0 ),
-    nHandoutMasterNum   ( 0 ),
     eAktPageKind        ( PPT_MASTERPAGE )
 {
     DffRecordHeader* pHd;
@@ -1637,6 +1641,15 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
             pMasterPages=new PptSlidePersistList;
             pSlidePages =new PptSlidePersistList;
             pNotePages  =new PptSlidePersistList;
+
+            // now always creating the handout page, it will be the first in our masterpage list
+            PptSlidePersistEntry* pE = new PptSlidePersistEntry;
+            pE->aPersistAtom.nPsrReference = aDocAtom.nHandoutMasterPersist;
+            pE->bHandoutMaster = sal_True;
+            if ( !aDocAtom.nHandoutMasterPersist )
+                pE->bStarDrawFiller = sal_True;     // this is a dummy master page
+            pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, 0 );
+
             USHORT nPageListNum = 0;
             DffRecordHeader* pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText );
             PptSlidePersistEntry* pPreviousPersist = NULL;
@@ -1661,24 +1674,31 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                 pSlideListWithTextHd = aDocRecManager.GetRecordHeader( PPT_PST_SlideListWithText, SEEK_FROM_CURRENT );
                 nPageListNum++;
             }
-            if ( aDocAtom.nNotesMasterPersist != 0 )
+
+            // we will ensure that there is at least one master page
+            if ( pMasterPages->Count() == 1 )   // -> there is only a handout page available
             {
                 PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-                pE->bNotesMaster = TRUE;
-                pE->aPersistAtom.nPsrReference = aDocAtom.nNotesMasterPersist;
-                nNotesMasterNum = pMasterPages->Count() == 0 ? 0 : 1;
-                pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, nNotesMasterNum );
+                pE->bStarDrawFiller = sal_True;         // this is a dummy master page
+                pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, 1 );
             }
-            if ( aDocAtom.nHandoutMasterPersist != 0 )
+
+            // now we will insert at least one notes master for each master page
+            sal_uInt16 nMasterPage;
+            sal_uInt16 nMasterPages = pMasterPages->Count() - 1;
+            for ( nMasterPage = 0; nMasterPage < nMasterPages; nMasterPage++ )
             {
                 PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-                pE->bHandoutMaster = TRUE;
-                pE->aPersistAtom.nPsrReference = aDocAtom.nHandoutMasterPersist;
-                nHandoutMasterNum = 0;
-                pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, nHandoutMasterNum );
-                if ( aDocAtom.nNotesMasterPersist )
-                    nNotesMasterNum++;
+                pE->bNotesMaster = sal_True;
+                pE->bStarDrawFiller = sal_True;         // this is a dummy master page
+                if ( !nMasterPage && aDocAtom.nNotesMasterPersist )
+                {   // special treatment for the first notes master
+                    pE->aPersistAtom.nPsrReference = aDocAtom.nNotesMasterPersist;
+                    pE->bStarDrawFiller = sal_False;    // this is a dummy master page
+                }
+                pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, ( nMasterPage + 1 ) << 1 );
             }
+
             // Zu jeder Page noch das SlideAtom bzw. NotesAtom lesen, soweit vorhanden
             nPageListNum = 0;
             for ( nPageListNum = 0; nPageListNum < 3; nPageListNum++ )
@@ -1688,7 +1708,7 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                 {
                     PptSlidePersistEntry* pE = (*pPageList)[ nPageNum ];
                     ULONG nPersist = pE->aPersistAtom.nPsrReference;
-                    if ( nPersist > 0 && nPersist < nPersistPtrAnz )
+                    if ( ( nPersist > 0 ) && ( nPersist < nPersistPtrAnz ) )
                     {
                         ULONG nFPos = pPersistPtr[ nPersist ];
                         if ( nFPos < nStreamLen )
@@ -1743,10 +1763,6 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
                         {
                             DBG_ERROR("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
                         }
-                    }
-                    else
-                    {
-                        DBG_ERROR("SdrPowerPointImport::Ctor(): SlidePersist fehlerhaft! (SJ)");
                     }
                 }
             }
@@ -2201,54 +2217,6 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
         }
         rStCtrl.Seek( nOldPos );
     }
-}
-
-void SdrPowerPointImport::SetStarDraw()
-{
-    // StarDraw's Masterpagestruktur erzwingen:
-    // HandoutMaster,
-    // SlideMaster,NotesMaster,
-    // SlideMaster,NotesMaster,...
-    // Also auch immer eine ungerade Anzahl von Masterpages
-    if ( !HasHandoutMasterPage() )
-    {
-        PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-        pE->bStarDrawFiller = TRUE;
-        pE->bHandoutMaster = TRUE;
-        pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, 0 );
-    }
-    USHORT nAnz = pMasterPages->Count();
-    if ( HasNotesMasterPage() )
-        nAnz--;
-    if ( nAnz == 1 )
-    {   // fuer den unwarscheinichen Fall, das das Ppt-Dok keine MasterPage besitzt
-        PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-        pE->bStarDrawFiller = TRUE;
-        pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, 1 );
-    }
-    if ( !HasNotesMasterPage() )
-    {
-        PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-        pE->bStarDrawFiller = TRUE;
-        pE->bNotesMaster = TRUE;
-        pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, 2 );
-    }
-    nAnz = pMasterPages->Count();
-    if ( nAnz > 3 )
-    {   // Weitere Masterpages (z.B. TitleMaster) vorhanden?
-        USHORT nPos = 4;
-        while ( nPos <= nAnz )
-        {
-            PptSlidePersistEntry* pE = new PptSlidePersistEntry;
-            pE->bStarDrawFiller = TRUE;
-            pE->bNotesMaster = TRUE;
-            pMasterPages->C40_INSERT( PptSlidePersistEntry, pE, nPos );
-            nAnz++;
-            nPos += 2;
-        }
-    }
-    nHandoutMasterNum = 0;
-    nNotesMasterNum = 2;
 }
 
 sal_Bool SdrPowerPointImport::ReadFontCollection()
@@ -3100,9 +3068,9 @@ UINT32 SdrPowerPointImport::GetMasterPageId( USHORT nPageNum, PptPageKind ePageK
    return 0;
 }
 
-UINT32 SdrPowerPointImport::GetNotesPageId( USHORT nPageNum, PptPageKind ePageKind ) const
+UINT32 SdrPowerPointImport::GetNotesPageId( USHORT nPageNum ) const
 {
-    PptSlidePersistList* pPageList=GetPageList( ePageKind );
+    PptSlidePersistList* pPageList=GetPageList( PPT_SLIDEPAGE );
     if ( pPageList && nPageNum < pPageList->Count() )
         return (*pPageList)[ nPageNum ]->aSlideAtom.nNotesId;
    return 0;
@@ -3110,9 +3078,9 @@ UINT32 SdrPowerPointImport::GetNotesPageId( USHORT nPageNum, PptPageKind ePageKi
 
 sal_Bool SdrPowerPointImport::HasMasterPage( USHORT nPageNum, PptPageKind ePageKind ) const
 {
-    if ( ePageKind == PPT_NOTEPAGE)
-        return HasNotesMasterPage();
-    if ( ePageKind == PPT_MASTERPAGE)
+    if ( ePageKind == PPT_NOTEPAGE )
+        return aDocAtom.nNotesMasterPersist != 0;
+    if ( ePageKind == PPT_MASTERPAGE )
         return FALSE;
     return GetMasterPageId( nPageNum, ePageKind ) != 0;
 }
@@ -3121,38 +3089,13 @@ USHORT SdrPowerPointImport::GetMasterPageIndex( USHORT nPageNum, PptPageKind ePa
 {
     USHORT nIdx = 0;
     if ( ePageKind == PPT_NOTEPAGE )
-        return GetNotesMasterPageIndex();
-    if ( ePageKind == PPT_MASTERPAGE )
-        return nIdx;
+        return 2;
     UINT32 nId = GetMasterPageId( nPageNum, ePageKind );
     if ( nId && pMasterPages )
     {
         nIdx = pMasterPages->FindPage( nId );
         if ( nIdx == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
             nIdx = 0;
-    }
-    return nIdx;
-}
-
-sal_Bool SdrPowerPointImport::HasNotesPage( USHORT nPageNum, PptPageKind ePageKind ) const
-{
-    if ( ePageKind == PPT_SLIDEPAGE)
-        return GetNotesPageId( nPageNum, ePageKind ) != 0;
-    return FALSE;
-}
-
-USHORT SdrPowerPointImport::GetNotesPageIndex( USHORT nPageNum, PptPageKind ePageKind ) const
-{
-    USHORT nIdx = 0;
-    if ( ePageKind == PPT_SLIDEPAGE )
-    {
-        UINT32 nId = GetNotesPageId( nPageNum, ePageKind );
-        if ( nId && pNotePages )
-        {
-            nIdx = pNotePages->FindPage( nId );
-            if ( nIdx == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                nIdx = 0;
-        }
     }
     return nIdx;
 }
