@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMeaning.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 17:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ interface XMeaning : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
          @returns
-             a sequence of string where each entry is a synonym of the
+             a sequence of strings where each entry is a synonym of the
              current objects meaning.
      */
     sequence<string> querySynonyms();
