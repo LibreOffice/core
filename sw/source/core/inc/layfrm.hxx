@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: od $ $Date: 2002-11-11 09:33:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ class SwLayoutFrm: public SwFrm
 
         //Hebt die Lower waehrend eines Spaltenumbaus auf.
     friend SwFrm* SaveCntnt( SwLayoutFrm *, SwFrm * );
-    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling );
+    friend void   RestoreCntnt( SwFrm *, SwLayoutFrm *, SwFrm *pSibling, bool bGrow );
 
     //entfernt leere SwSectionFrms aus einer Kette
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
