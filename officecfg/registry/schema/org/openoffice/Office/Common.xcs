@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 08:39:30 $
+ *  last change: $Author: dv $ $Date: 2002-06-13 11:24:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4120,7 +4120,7 @@
         </info>
       </prop>
       <prop oor:name="UseSystemFileDialog" oor:type="xs:boolean">
-        <!-- Responsible: DV -->
+        <!-- Responsible: FS -->
         <value>true</value>
         <info>
           <desc xml:lang="en-US"/>
