@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:00:14 $
+#   last change: $Author: kz $ $Date: 2005-01-13 18:59:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,7 @@ TARGET=intro
 
 .INCLUDE :  settings.mk
 
+
 RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 
 # setting the compiled by $user$ using $license$ string in the about box
@@ -79,6 +80,8 @@ RSCDEFS+=-DBUILD_SPECIAL=True
 .ENDIF
 
 # --- Allgemein -----------------------------------------------------------
+
+LOCALIZE_ME=intro_tmpl.hrc
 
 SRS1NAME= iso
 SRC1FILES=	\
@@ -101,3 +104,4 @@ RESLIB4SRSFILES= \
 
 .INCLUDE :  target.mk
 
+$(SRS)$/iso.srs: $(INCCOM)$/intro.hrc
