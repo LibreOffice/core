@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:43:24 $
+ *  last change: $Author: jp $ $Date: 2001-11-08 16:51:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,6 +1329,13 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
                 aSize.Width() = nBoxWidth;
         }
     }
+
+    //JP 8.11.2001: bug 94450 - if no size exist, then the size is set by
+    //              the swapin of the graphic.
+    SwGrfNode* pGrfNd;
+    if( !aSize.Width() && !aSize.Height() &&
+        0 != (pGrfNd = (SwGrfNode*)rNd.GetGrfNode() ) && pGrfNd->IsGrfLink() )
+        pGrfNd->SetChgTwipSize( TRUE );
 
         // min. Werte einhalten !!
     if( aSize.Width() < /*2268*/MINFLY )
