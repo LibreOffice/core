@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-07 15:28:46 $
+ *  last change: $Author: mav $ $Date: 2002-08-22 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include <unotools/streamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/streamwrap.hxx>
@@ -3152,6 +3153,23 @@ BOOL UCBStorage::Equals( const BaseStorage& rStorage ) const
 {
     // ???
     return ((BaseStorage*)this) == &rStorage;
+}
+
+BOOL UCBStorage::IsStorageFile( const String& rFileName )
+{
+    String aFileURL = rFileName;
+    INetURLObject aObj( aFileURL );
+    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURL );
+        aObj.SetURL( aFileURL );
+        aFileURL = aObj.GetMainURL();
+    }
+
+    SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_STD_READ );
+    BOOL bRet = UCBStorage::IsStorageFile( pStm );
+    delete pStm;
+    return bRet;
 }
 
 BOOL UCBStorage::IsStorageFile( SvStream* pFile )
