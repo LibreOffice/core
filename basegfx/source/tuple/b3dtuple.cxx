@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtuple.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,18 @@
 #ifndef _BGFX_TUPLE_B3DTUPLE_HXX
 #include <basegfx/tuple/b3dtuple.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
+namespace { struct EmptyTuple : public rtl::Static<basegfx::B3DTuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
-    // initialize static member
-    ::basegfx::B3DTuple B3DTuple::maEmptyTuple(0.0, 0.0, 0.0);
+    static const B3DTuple& getEmptyTuple()
+    {
+        return EmptyTuple::get();
+    }
 } // end of namespace basegfx
 
 // eof
