@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-10 14:59:07 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 15:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,22 +687,31 @@ void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, c
 void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 {
     USHORT nSize,i;
-    nSize=rPoly.GetSize();
 
+    Polygon aSimplePoly;
+    if ( rPoly.HasFlags() )
+        rPoly.GetSimple( aSimplePoly );
+    else
+        aSimplePoly = rPoly;
+    nSize = aSimplePoly.GetSize();
     WriteRecordHeader(((ULONG)nSize)*2+4,W_META_POLYGON);
     *pWMF << nSize;
-    for (i=0; i<nSize; i++) WritePointXY(rPoly.GetPoint(i));
+    for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
 
 
 void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 {
     USHORT nSize,i;
-    nSize=rPoly.GetSize();
-
+    Polygon aSimplePoly;
+    if ( rPoly.HasFlags() )
+        rPoly.GetSimple( aSimplePoly );
+    else
+        aSimplePoly = rPoly;
+    nSize=aSimplePoly.GetSize();
     WriteRecordHeader(((ULONG)nSize)*2+4,W_META_POLYLINE);
     *pWMF << nSize;
-    for (i=0; i<nSize; i++) WritePointXY(rPoly.GetPoint(i));
+    for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
 }
 
 
@@ -711,12 +720,22 @@ void WMFWriter::WMFRecord_PolyPolygon(const PolyPolygon & rPolyPoly)
     const Polygon * pPoly;
     USHORT nCount,nSize,i,j;
 
-    WriteRecordHeader(0,W_META_POLYPOLYGON);
     nCount=rPolyPoly.Count();
+    PolyPolygon aSimplePolyPoly( rPolyPoly );
+    for ( i = 0; i < nCount; i++ )
+    {
+        if ( aSimplePolyPoly[ i ].HasFlags() )
+        {
+            Polygon aSimplePoly;
+            aSimplePolyPoly[ i ].GetSimple( aSimplePoly );
+            aSimplePolyPoly[ i ] = aSimplePoly;
+        }
+    }
+    WriteRecordHeader(0,W_META_POLYPOLYGON);
     *pWMF << nCount;
-    for (i=0; i<nCount; i++) *pWMF << ((USHORT)(rPolyPoly.GetObject(i).GetSize()));
+    for (i=0; i<nCount; i++) *pWMF << ((USHORT)(aSimplePolyPoly.GetObject(i).GetSize()));
     for (i=0; i<nCount; i++) {
-        pPoly=&(rPolyPoly.GetObject(i));
+        pPoly=&(aSimplePolyPoly.GetObject(i));
         nSize=pPoly->GetSize();
         for (j=0; j<nSize; j++) WritePointXY(pPoly->GetPoint(j));
     }
