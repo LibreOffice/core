@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:00:23 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ russian ] = "Ñîçäàòü Àâòîğåôåğàò";
     Text[ polish ] = "Utwórz AutoAbstract ";
     Text[ japanese ] = "©“®’Šo‚Ìì¬";
-    Text[ chinese_traditional ] = "¥Í¦¨¦Û°ÊºK­n";
+    Text[ chinese_traditional ] = "²£¥Í¦Û°ÊºK­n";
     Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ ÊáŞÇÆí";
     Text[ dutch ] = "AutoExtract maken";
     Text[ chinese_simplified ] = "Éú³É×Ô¶¯ÕªÒª";
