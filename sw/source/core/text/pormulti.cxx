@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 10:26:15 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 08:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,17 +1101,17 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
             {
                 if( bTwo == bOn )
                 {
-                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
-                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
-                    else if( aEnd.Count() > 1 )
-                        aEnd.Remove( aEnd.Count()-1, 1 );
-                    else
+                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
                         aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
                 }
                 else
                 {
                     bOn = bTwo;
-                    if( aEnd[ aEnd.Count()-1 ] < *pTmp->GetEnd() )
+                    if( aEnd[ aEnd.Count()-1 ] > *pTmp->GetEnd() )
+                        aEnd.Insert( *pTmp->GetEnd(), aEnd.Count() );
+                    else if( aEnd.Count() > 1 )
+                        aEnd.Remove( aEnd.Count()-1, 1 );
+                    else
                         aEnd[ aEnd.Count()-1 ] = *pTmp->GetEnd();
                 }
             }
@@ -1307,7 +1307,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwFontSave *pFontSave;
     SwFont* pTmpFnt;
 
-    if( rMulti.IsDouble() || rMulti.HasRotation() )
+    if( rMulti.IsDouble() )
     {
         pTmpFnt = new SwFont( *GetInfo().GetFont() );
         if( rMulti.IsDouble() )
@@ -1315,7 +1315,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             SetPropFont( 50 );
             pTmpFnt->SetProportion( GetPropFont() );
         }
-        pTmpFnt->SetVertical( rMulti.GetFontRotation() );
         pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
     }
     else
@@ -1501,14 +1500,9 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     SeekAndChg( rInf );
     SwFontSave *pFontSave;
-    if( rMulti.IsDouble() || rMulti.HasRotation() )
+    if( rMulti.IsDouble() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        if( rMulti.HasRotation() )
-        {
-            pTmpFnt->SetVertical( rMulti.GetFontRotation() );
-            nMaxWidth = USHRT_MAX;
-        }
         if( rMulti.IsDouble() )
         {
             SetPropFont( 50 );
@@ -1518,6 +1512,8 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
     else
         pFontSave = NULL;
+    if( rMulti.HasRotation() )
+        nMaxWidth = USHRT_MAX;
 
     SwTwips nTmpX = rInf.X();
 
