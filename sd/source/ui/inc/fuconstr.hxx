@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconstr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,18 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCONSTR_HXX
-#define _SD_FUCONSTR_HXX
+#ifndef SD_FU_CONSTRUCT_HXX
+#define SD_FU_CONSTRUCT_HXX
 
-#ifndef _SFXITEMSET_HXX //autogen
-#include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SD_FUDRAW_HXX
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
 #endif
 
+class KeyEvent;
 class SdrObject;
+class SfxItemSet;
 
-/************************************************************************/
-
-#define MIN_FREEHAND_DISTANCE   10
-
+namespace sd {
 
 /*************************************************************************
 |*
@@ -83,19 +78,22 @@ class SdrObject;
 |*
 \************************************************************************/
 
-class FuConstruct : public FuDraw
+class FuConstruct
+    : public FuDraw
 {
- protected:
-    BOOL    bSelectionChanged;
+public:
+    static const int MIN_FREEHAND_DISTANCE = 10;
 
- public:
     TYPEINFO();
 
-    FuConstruct(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
+    FuConstruct (ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuConstruct (void);
 
-    virtual ~FuConstruct();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -107,8 +105,11 @@ class FuConstruct : public FuDraw
     virtual void SelectionHasChanged() { bSelectionChanged = TRUE; }
 
     void SetStyleSheet(SfxItemSet& rAttr, SdrObject* pObj);
+
+protected:
+    bool bSelectionChanged;
 };
 
-
+} // end of namespace sd
 
 #endif      // _SD_FUCONSTR_HXX
