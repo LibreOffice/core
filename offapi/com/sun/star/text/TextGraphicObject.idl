@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextGraphicObject.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-01-22 13:26:33 $
+ *  last change: $Author: os $ $Date: 2001-01-24 15:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,31 +154,31 @@ service TextGraphicObject
     /** changes the display of the luminance.
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicLuminance;
+    [property] short AdjustLuminance;
     //-------------------------------------------------------------------------
     /** changes the display of contrast.
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicContrast;
+    [property] short AdjustContrast;
     //-------------------------------------------------------------------------
     /** changes the display of the red color channel.
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicRed;
+    [property] short AdjustRed;
     //-------------------------------------------------------------------------
     /** changes the display of the green color channel.
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicGreen;
+    [property] short AdjustGreen;
     //-------------------------------------------------------------------------
     /** changes the display of the blue color channel.
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicBlue;
+    [property] short AdjustBlue;
     //-------------------------------------------------------------------------
     /** determins the gamma value of the graphic.
      */
-    [property] double GraphicGamma;
+    [property] double Gamma;
     //-------------------------------------------------------------------------
     /** determins if the graphic is display in inverted colors.
          It contains percentage values between -100 and +100.
@@ -188,7 +188,7 @@ service TextGraphicObject
     /** .
          It contains percentage values between -100 and +100.
      */
-    [property] short GraphicTransparency;
+    [property] short Transparency;
     //-------------------------------------------------------------------------
     /** contains the ColorMode as <type scope="com::sun::star::drawing">ColorMode</type>.
      */
