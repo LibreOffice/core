@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:16:24 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:31:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef SC_FIELDWND_HXX
 #define SC_FIELDWND_HXX
 
+#include <vector>
 
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
@@ -78,6 +79,7 @@
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
 #define LINE_SIZE   8       // count of fields per column for scrollbar
 #define MAX_FIELDS  8       // maximum count of fields for row/col/data area
+#define MAX_PAGEFIELDS 10   // maximum count of fields for page area
 
 #define OWIDTH  PivotGlobal::nObjWidth
 #define OHEIGHT PivotGlobal::nObjHeight
@@ -91,6 +93,7 @@ class ScAccessibleDataPilotControl;
 /** Type of content area. */
 enum ScDPFieldType
 {
+    TYPE_PAGE,              /// Area for all page fields.
     TYPE_ROW,               /// Area for all row fields.
     TYPE_COL,               /// Area for all column fields.
     TYPE_DATA,              /// Area for all data fields.
@@ -108,15 +111,14 @@ private:
     Rectangle               aWndRect;       /// Area rectangle in pixels.
     FixedText*              pFtCaption;     /// FixedText containing the name of the control.
     Point                   aTextPos;       /// Position of the caption text.
-    String**                aFieldArr;      /// Pointer to string array of the field names.
+    std::vector< String >   aFieldArr;      /// Pointer to string array of the field names.
     ScDPFieldType           eType;          /// Type of this area.
     Color                   aFaceColor;     /// Color for dialog background.
     Color                   aWinColor;      /// Color for window background.
     Color                   aTextColor;     /// Color for text in buttons.
     Color                   aWinTextColor;  /// Color for text in field windows.
-    long                    nFieldSize;     /// Maximum count of fields.
-    long                    nFieldCount;    /// Count of existing fields.
-    long                    nFieldSelected; /// Currently selected field.
+    size_t                  nFieldSize;     /// Maximum count of fields.
+    size_t                  nFieldSelected; /// Currently selected field.
 
     com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xAccessible;
     ScAccessibleDataPilotControl* pAccessible;
@@ -134,17 +136,17 @@ private:
                                 OutputDevice& rDev,
                                 const Rectangle& rRect,
                                 const String& rText,
-                                BOOL bSelected );
+                                bool bFocus );
 
     /** @return  TRUE, if the field index is inside of the control area. */
-    BOOL                    IsValidIndex( long nIndex ) const;
+    bool                    IsValidIndex( size_t nIndex ) const;
     /** @return  TRUE, if the field with the given index exists. */
-    BOOL                    IsExistingIndex( long nIndex ) const;
+    bool                    IsExistingIndex( size_t nIndex ) const;
     /** @return  The new selection index after moving to the given direction. */
-    long                    CalcNewFieldIndex( short nDX, short nDY ) const;
+    size_t                  CalcNewFieldIndex( short nDX, short nDY ) const;
 
     /** Sets selection to the field with index nIndex. */
-    void                    SetSelection( long nIndex );
+    void                    SetSelection( size_t nIndex );
     /** Sets selection to first field. */
     void                    SetSelectionHome();
     /** Sets selection to last field. */
@@ -153,7 +155,7 @@ private:
     void                    MoveSelection( USHORT nKeyCode, short nDX, short nDY );
 
     /** Moves the selected field to nDestIndex. */
-    void                    MoveField( long nDestIndex );
+    void                    MoveField( size_t nDestIndex );
     /** Moves the selected field to the given direction. */
     void                    MoveFieldRel( short nDX, short nDY );
 
@@ -185,44 +187,44 @@ public:
     void                    Redraw();
 
     /** @return  The pixel position of a field (without bound check). */
-    Point                   GetFieldPosition( long nIndex ) const;
+    Point                   GetFieldPosition( size_t nIndex ) const;
     /** @return  The pixel size of a field. */
     Size                    GetFieldSize() const;
 
     /** @return  The index of the selected field. */
-    inline BOOL             IsEmpty() const             { return nFieldCount == 0; }
+    inline bool             IsEmpty() const { return aFieldArr.empty(); }
     /** @return  The index of the selected field. */
-    inline long             GetSelectedField() const    { return nFieldSelected; }
+    inline size_t           GetSelectedField() const { return nFieldSelected; }
     /** @return  The pixel position of the last possible field. */
     Point                   GetLastPosition() const;
 
     /** @return  The count of existing fields. */
-    long                    GetFieldCount() const       { return nFieldCount; }
+    inline size_t           GetFieldCount() const { return aFieldArr.size(); }
     /** Inserts a field to the specified index. */
-    void                    AddField( const String& rText, long nNewIndex );
+    void                    AddField( const String& rText, size_t nNewIndex );
     /** Removes a field from the specified index. */
-    void                    DelField( long nDelIndex );
+    void                    DelField( size_t nDelIndex );
     /** Removes all fields. */
     void                    ClearFields();
     /** Changes the text on an existing field. */
-    void                    SetFieldText( const String& rText, long nIndex );
+    void                    SetFieldText( const String& rText, size_t nIndex );
     /** Returns the text of an existing field. */
-    const String&           GetFieldText(long nIndex) const;
+    const String&           GetFieldText( size_t nIndex ) const;
 
     /** Inserts a field using the specified pixel position.
         @param rPos  The coordinates to insert the field.
         @param rnIndex  The new index of the field is returned here.
         @return  TRUE, if the field has been created. */
-    BOOL                    AddField( const String& rText, const Point& rPos, long& rnIndex );
+    bool                    AddField( const String& rText, const Point& rPos, size_t& rnIndex );
     /** Calculates the field index at a specific pixel position.
         @param rnIndex  The index of the field is returned here.
         @return  TRUE, if the index value is valid. */
-    BOOL                    GetFieldIndex( const Point& rPos, long& rnIndex ) const;
+    bool                    GetFieldIndex( const Point& rPos, size_t& rnIndex ) const;
     /** Calculates a field index at a specific pixel position. Returns in every
         case the index of an existing field.
         @param rnIndex  The index of the field is returned here.
         @return  TRUE, if the index value is valid. */
-    void                    GetExistingIndex( const Point& rPos, long& rnIndex );
+    void                    GetExistingIndex( const Point& rPos, size_t& rnIndex );
 
     /** Notifies this control that the offset of the first field has been changed.
         The control has to adjust the selection to keep the same field selected
@@ -232,16 +234,16 @@ public:
     void                    SelectNext();
 
     /** @return The name of the control without shortcut. */
-    String                  GetName()const              { return aName; }
+    inline String           GetName() const { return aName; }
 
     /** @return The description of the control which is used for the accessibility objects. */
-    String                  GetDescription()const;
+    String                  GetDescription() const;
 
     /** Grabs focus and sets new selection. */
-    void                    GrabFocusWithSel( long nIndex );
+    void                    GrabFocusWithSel( size_t nIndex );
 
     /** @return The type of the FieldWindow. */
-    ScDPFieldType           GetType() const { return eType; }
+    inline ScDPFieldType    GetType() const { return eType; }
 };
 
 //===================================================================
