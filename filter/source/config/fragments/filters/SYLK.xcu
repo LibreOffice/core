@@ -1,13 +1,13 @@
     <node oor:name="SYLK" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">SYLK</value>
+        </prop>
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>calc_SYLK</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"/>
-        <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value>SYLK</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
     </node>
