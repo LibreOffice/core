@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-11 12:56:58 $
+ *  last change: $Author: dvo $ $Date: 2001-05-14 16:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ void SwXDocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries
                     SfxItemSet *pItemSet = new SfxItemSet( pDoc->GetAttrPool(), nRange );
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
-                    pDoc->_SetPrt( pPrinter );
+                    pDoc->SetPrt( pPrinter );
 
                     if ( !pPrinter->IsOriginal() )
                     {
