@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:00 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "~Type" ;
         Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ swedish ] = "~Typ" ;
-        Text [ danish ] = "Type" ;
+        Text [ danish ] = "~Type" ;
         Text [ italian ] = "~Tipo" ;
         Text [ spanish ] = "~Tipo" ;
         Text [ french ] = "Type" ;
@@ -115,6 +115,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "~Typ";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_TYPE
     {
@@ -133,11 +135,11 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "Line skew" ;
         Text [ portuguese_brazilian ] = "Inclina��o da linha" ;
         Text [ swedish ] = "Linjef�rskjutning" ;
-        Text [ danish ] = "Linjeforskydning" ;
+        Text [ danish ] = "Linjesk�vhed" ;
         Text [ italian ] = "Spostamento linea" ;
         Text [ spanish ] = "Desplazamiento de l�neas" ;
         Text [ french ] = "D�calage de ligne" ;
-        Text [ dutch ] = "Lijnopvulling" ;
+        Text [ dutch ] = "Lijnverloop" ;
         Text [ portuguese ] = "Transposi��o de linhas" ;
         Text[ chinese_simplified ] = "线偏离";
         Text[ russian ] = "������ �����";
@@ -156,6 +158,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮הטית קו‬";
         Text[ hindi ] = "रेखा तिरछा";
         Text[ slovak ] = "Skosenie čiary";
+        Text[ hungarian ] = "Vonaltörés";
+        Text[ slovenian ] = "Nagib črte";
     };
     FixedText FT_LINE_1
     {
@@ -166,7 +170,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "Line ~1" ;
         Text [ portuguese_brazilian ] = "Linha ~1" ;
         Text [ swedish ] = "Linje ~1" ;
-        Text [ danish ] = "Linje 1" ;
+        Text [ danish ] = "Linje ~1" ;
         Text [ italian ] = "Linea ~1" ;
         Text [ spanish ] = "L�nea ~1" ;
         Text [ french ] = "Ligne ~1" ;
@@ -189,6 +193,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮קו 1‬";
         Text[ hindi ] = "रेखा ~1";
         Text[ slovak ] = "Čiara ~1";
+        Text[ hungarian ] = "~1. sor";
+        Text[ slovenian ] = "Črta ~1";
     };
     MetricField MTR_FLD_LINE_1
     {
@@ -215,7 +221,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "Line ~2" ;
         Text [ portuguese_brazilian ] = "Linha ~2" ;
         Text [ swedish ] = "Linje ~2" ;
-        Text [ danish ] = "Linje 2" ;
+        Text [ danish ] = "Linje ~2" ;
         Text [ italian ] = "Linea ~2" ;
         Text [ spanish ] = "L�nea ~2" ;
         Text [ french ] = "Ligne ~2" ;
@@ -238,6 +244,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮קו 2‬";
         Text[ hindi ] = "रेखा ~2";
         Text[ slovak ] = "Čiara ~2";
+        Text[ hungarian ] = "~2. sor";
+        Text[ slovenian ] = "Črta ~2";
     };
     MetricField MTR_FLD_LINE_2
     {
@@ -264,7 +272,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "Line ~3" ;
         Text [ portuguese_brazilian ] = "Linha ~3" ;
         Text [ swedish ] = "Linje ~3" ;
-        Text [ danish ] = "Linje 3" ;
+        Text [ danish ] = "Linje ~3" ;
         Text [ italian ] = "Linea ~3" ;
         Text [ spanish ] = "L�nea~3" ;
         Text [ french ] = "Ligne ~3" ;
@@ -287,6 +295,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮קו 3‬";
         Text[ hindi ] = "रेखा ~3";
         Text[ slovak ] = "Čiara ~3";
+        Text[ hungarian ] = "~3. sor";
+        Text[ slovenian ] = "Črta ~3";
     };
     MetricField MTR_FLD_LINE_3
     {
@@ -336,6 +346,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮ריווח שורה‬";
         Text[ hindi ] = "रेखा के बीच अंतर देना";
         Text[ slovak ] = "Riadkovanie";
+        Text[ hungarian ] = "Sorköz";
+        Text[ slovenian ] = "Razmik med črtami";
     };
     FixedText FT_HORZ_1
     {
@@ -346,7 +358,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "~Begin horizontal" ;
         Text [ portuguese_brazilian ] = "In�cio h~orizontal" ;
         Text [ swedish ] = "Start h~orisontellt" ;
-        Text [ danish ] = "Start vandret" ;
+        Text [ danish ] = "~Start vandret" ;
         Text [ italian ] = "Inizio ~orizzontale" ;
         Text [ spanish ] = "Comienzo h~orizontal" ;
         Text [ french ] = "D�but h~orizontal" ;
@@ -369,6 +381,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮החל אופקי‬";
         Text[ hindi ] = "~समतल प्रारंभ";
         Text[ slovak ] = "V~odorovný začiatok";
+        Text[ hungarian ] = "~Vízszintes kezdet";
+        Text[ slovenian ] = "~Začetek vodoravno";
     };
     MetricField MTR_FLD_HORZ_1
     {
@@ -418,6 +432,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮קצה אופקי‬";
         Text[ hindi ] = "स~मतल अंत";
         Text[ slovak ] = "Vodorovný ~koniec";
+        Text[ hungarian ] = "Ví~zszintes vég";
+        Text[ slovenian ] = "Konec ~vodoravno";
     };
     MetricField MTR_FLD_HORZ_2
     {
@@ -467,6 +483,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮החל אנכי‬";
         Text[ hindi ] = "~लम्ब प्रारंभ";
         Text[ slovak ] = "Zvislý ~začiatok";
+        Text[ hungarian ] = "~Függőleges kezdet";
+        Text[ slovenian ] = "Začetek ~navpično";
     };
     MetricField MTR_FLD_VERT_1
     {
@@ -493,7 +511,7 @@ TabPage RID_SVXPAGE_CONNECTION
         Text [ english_us ] = "~End vertical" ;
         Text [ portuguese_brazilian ] = "Fim ~vertical" ;
         Text [ swedish ] = "Slut v~ertikalt" ;
-        Text [ danish ] = "Slut lodret" ;
+        Text [ danish ] = "~Slut lodret" ;
         Text [ italian ] = "~Fine verticale" ;
         Text [ spanish ] = "Final v~ertical" ;
         Text [ french ] = "Fin v~erticale" ;
@@ -516,6 +534,8 @@ TabPage RID_SVXPAGE_CONNECTION
         Text[ hebrew ] = "‮קצה אנכי‬";
         Text[ hindi ] = "लम्ब ~अंत";
         Text[ slovak ] = "Z~vislý koniec";
+        Text[ hungarian ] = "Fü~ggőleges vég";
+        Text[ slovenian ] = "~Konec navpično";
     };
     MetricField MTR_FLD_VERT_2
     {
@@ -550,7 +570,7 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ spanish ] = "Previsualizaci�n";
         QuickHelpText[ finnish ] = "Esikatselu";
         QuickHelpText[ italian ] = "Anteprima";
-        QuickHelpText[ danish ] = "Preview";
+        QuickHelpText[ danish ] = "Eksempel";
         QuickHelpText[ swedish ] = "F�rhandsvisning";
         QuickHelpText[ polish ] = "Podgl�d";
         QuickHelpText[ portuguese_brazilian ] = "Visualizar";
@@ -566,6 +586,8 @@ TabPage RID_SVXPAGE_CONNECTION
         QuickHelpText[ hebrew ] = "Vorschau";
         QuickHelpText[ hindi ] = "पूर्वदृश्य";
         QuickHelpText[ slovak ] = "Náhľad";
+        QuickHelpText[ hungarian ] = "Előnézet";
+        QuickHelpText[ slovenian ] = "Predogled";
     };
     Text[ chinese_simplified ] = "连接符";
     Text[ russian ] = "�������������� �����";
@@ -584,8 +606,11 @@ TabPage RID_SVXPAGE_CONNECTION
     Text[ hebrew ] = "‮מחבר‬";
     Text[ hindi ] = "कनेक्टर";
     Text[ slovak ] = "Spojnica";
+    Text[ hungarian ] = "Összekötő";
+    Text[ slovenian ] = "Konektor";
 };
  // ******************************************************************* EOF
+
 
 
 
