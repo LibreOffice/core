@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintpost.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:16:57 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "arrdecl.hxx"
 #include "hintpost.hxx"
