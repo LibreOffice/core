@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.29 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-15 01:15:43 $
+ *  $Revision: 1.30 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-18 21:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,41 @@ static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 
 // =======================================================================
 
+static void GetGDeviceResolution ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    GDPtr  pGDevice = NULL;                   pGDevice = *GetGDevice ( );
+    if ( pGDevice != NULL )
+    {
+        long       nGDeviceTop    = pGDevice->gdRect.top;
+        long       nGDeviceLeft   = pGDevice->gdRect.left;
+        long       nGDeviceBottom = pGDevice->gdRect.bottom;
+        long       nGDeviceRight  = pGDevice->gdRect.right;
+        PixMapPtr  pPixMap        = NULL;
+
+        pPixMap = *pGDevice->gdPMap;
+
+        if ( pPixMap != NULL )
+        {
+            // From the PixMap data get the current bits-per-pixel
+            // as associated with the current GDevice
+
+            rSalGraphicsData->mnBitDepth = pPixMap->pixelSize;
+        } // if
+
+        // From the current GDevice get its horizontal resolution
+
+        rSalGraphicsData->mnHorizontalRes = AbsoluteValue( nGDeviceRight - nGDeviceLeft );
+
+        // From the current GDevice get its vertical resolution
+
+        rSalGraphicsData->mnVerticalRes = AbsoluteValue( nGDeviceBottom - nGDeviceTop );
+    } // if
+} // GetGDeviceResolution
+
+// =======================================================================
+
+// =======================================================================
+
 static OSErr BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
 {
     if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
@@ -268,10 +303,6 @@ static OSErr BeginClip ( SalGraphicsDataPtr rSalGraphicsData )
         // Get the port bounds from our current region handle
 
         GetRegionBounds( rSalGraphicsData->mhClipRgn, &aClipRect );
-
-        // Erase the clip rectangle that we got from our current region
-
-        EraseRect( &aClipRect );
 
         // Clip to a rectangle that we got from our current region
 
@@ -420,9 +451,7 @@ static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitGDeviceAttr ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mnBitDepth      = 0;
-    rSalGraphicsData->mnHorizontalRes = 0;
-    rSalGraphicsData->mnVerticalRes   = 0;
+    GetGDeviceResolution ( rSalGraphicsData );
 } // InitQD
 
 // -----------------------------------------------------------------------
@@ -530,18 +559,9 @@ SalGraphics::~SalGraphics()
 
 void SalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
-    if ( maGraphicsData.mhWnd )
-    {
-        VCLGraphics_GetScreenResolution( maGraphicsData.mhWnd,
-            &rDPIX, &rDPIY );
-    }
-    else
-    {
-        // Stub code: we only support screen resolution right now
-        rDPIX = 0;
-        rDPIY = 0;
-    }
-}
+    rDPIX = maGraphicsData.mnHorizontalRes;
+    rDPIY = maGraphicsData.mnVerticalRes;
+} // SalGraphics::GetResolution
 
 // -----------------------------------------------------------------------
 

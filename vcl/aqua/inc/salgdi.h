@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-14 19:32:43 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-18 21:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ struct SalGraphicsData
 
     // Current GDevice resolution, and bit-depth
 
-    long                   mnBitDepth;            // Current GDevice bit-depth
-    long                   mnHorizontalRes;        // Current GDevice horizontal resolution
-    long                   mnVerticalRes;          // Current GDevice vertical resolution
+    unsigned long            mnBitDepth;             // Current GDevice bit-depth
+    unsigned long            mnHorizontalRes;        // Current GDevice horizontal resolution
+    unsigned long            mnVerticalRes;          // Current GDevice vertical resolution
 
     // Regions within a current port
 
