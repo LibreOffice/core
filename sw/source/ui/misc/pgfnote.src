@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 07:06:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Area note a piè pagina" ;
         Text [ portuguese_brazilian ] = "Faixa de nota de pé de página" ;
         Text [ portuguese ] = "Área da nota de rodapé" ;
-        Text [ finnish ] = "Fußnotenbereich" ;
+        Text [ finnish ] = "Alaviitealue" ;
         Text [ danish ] = "Fodnoteområde" ;
         Text [ french ] = "Plage note de bas de page" ;
         Text [ swedish ] = "Fotnotsområde" ;
@@ -546,7 +546,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ italian ] = "Linea di separazione" ;
         Text [ portuguese_brazilian ] = "Linha" ;
         Text [ portuguese ] = "Linha de separação" ;
-        Text [ finnish ] = "Trennlinie" ;
+        Text [ finnish ] = "Erotin" ;
         Text [ danish ] = "Skillelinje" ;
         Text [ french ] = "Trait de séparation" ;
         Text [ swedish ] = "Skiljelinje" ;
