@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:19:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,10 @@ struct mso_CustomShape
 const sal_Bool          SortFilledObjectsToBackByDefault( MSO_SPT eSpType );
 const sal_Bool          IsCustomShapeFilledByDefault( MSO_SPT eSpType );
 const sal_Int16         GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType );
+
+// #i28269#
+const sal_Bool          IsCustomShapeStrokedByDefault( MSO_SPT eSpType );
+
 const mso_CustomShape*  GetCustomShapeContent( MSO_SPT eSpType );
 
 #endif
