@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:21:50 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,22 @@
 
 //_______________________________________________
 // includes of an other project
+
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+
+#ifndef _SV_WRKWIN_HXX
+#include <vcl/wrkwin.hxx>
+#endif
+
+#ifndef _SV_SYSWIN_HXX
+#include <vcl/syswin.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -815,7 +831,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     {
         pIt = stlMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INPUTSTREAM());
         css::uno::Reference< css::io::XInputStream > xStream;
-        if (pIt == stlMediaDescriptor.end())
+        if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xStream;
         if (xStream.is())
             return E_CAN_BE_LOADED;
@@ -1084,11 +1100,12 @@ sal_Bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
     // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
-    sal_Bool                                           bHidden   = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
-    sal_Bool                                           bPreview  = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
-    css::uno::Reference< css::task::XStatusIndicator > xProgress = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
+    sal_Bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
+    sal_Bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
+    sal_Bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
+    css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
-    if (!bHidden && !bPreview && !xProgress.is())
+    if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
     {
         // Note: its an optional interface!
         css::uno::Reference< css::task::XStatusIndicatorFactory > xProgressFactory(xTargetFrame, css::uno::UNO_QUERY);
@@ -1463,9 +1480,19 @@ void LoadEnv::impl_reactForLoadingState()
         // Bring the new loaded document to front (if allowed!).
         // Note: We show new created frames here only.
         // We dont hide already visible frames here ...
-        css::uno::Reference< css::awt::XWindow > xWindow = m_xTargetFrame->getContainerWindow();
-        sal_Bool                                 bHidden = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
+        css::uno::Reference< css::awt::XWindow > xWindow    = m_xTargetFrame->getContainerWindow();
+        sal_Bool                                 bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()   , sal_False);
+        sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED(), sal_False);
 
+        if (bMinimized)
+        {
+            ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+            Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+            // check for system window is neccessary to guarantee correct pointer cast!
+            if (pWindow && pWindow->IsSystemWindow())
+                ((WorkWindow*)pWindow)->Minimize();
+        }
+        else
         if (!bHidden)
         {
             xWindow->setVisible(sal_True);
@@ -1506,6 +1533,7 @@ void LoadEnv::impl_reactForLoadingState()
         }
     }
     else
+    if (m_bCloseFrameOnError)
     {
         // close empty frames
         css::uno::Reference< css::util::XCloseable > xCloseable (m_xTargetFrame, css::uno::UNO_QUERY);
