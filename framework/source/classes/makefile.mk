@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: as $ $Date: 2001-11-08 12:00:18 $
+#   last change: $Author: cd $ $Date: 2001-11-09 08:02:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,8 +93,9 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/statusbardocumenthandler.obj			\
                     $(SLO)$/eventsconfiguration.obj					\
                     $(SLO)$/eventsdocumenthandler.obj				\
-                    $(SLO)$/converter.obj						\
-                    $(SLO)$/imagesconfiguration.obj
+                    $(SLO)$/converter.obj							\
+                    $(SLO)$/imagesconfiguration.obj					\
+                    $(SLO)$/imagesdocumenthandler.obj
 
 # --- Targets ------------------------------------------------------
 

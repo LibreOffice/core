@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: as $ $Date: 2001-11-08 12:01:15 $
+#   last change: $Author: cd $ $Date: 2001-11-09 08:05:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ LIB1OBJFILES=	$(SLO)$/attributelist.obj					\
                 $(SLO)$/toolboxdocumenthandler.obj			\
                 $(SLO)$/toolboxlayoutdocumenthandler.obj	\
                 $(SLO)$/imagesconfiguration.obj				\
-                $(SLO)$/xmlnamespaces.obj
+                $(SLO)$/imagesdocumenthandler.obj			\
+                $(SLO)$/xmlnamespaces.obj					
 
 # --- internal import -------------------------------------------------
 
