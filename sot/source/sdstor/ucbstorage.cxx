@@ -291,6 +291,8 @@ struct UCBStorageElement_Impl
     String                      GetContentType();
     void                        SetContentType( const String& );
     String                      GetOriginalContentType();
+    BOOL                        IsLoaded()
+                                { return m_xStream.Is() || m_xStorage.Is(); }
 };
 
 ::ucb::Content* UCBStorageElement_Impl::GetContent()
@@ -1483,7 +1485,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("Title"), aAny );
                     }
 
-                    if ( pElement->GetContentType() != pElement->GetOriginalContentType() )
+                    if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
                     {
                         // errors will be caught in the "catch" statement outside the loop
                         nRet = COMMIT_RESULT_SUCCESS;
