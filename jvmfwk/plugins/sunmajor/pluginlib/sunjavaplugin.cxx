@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 15:56:10 $
+ *  last change: $Author: jl $ $Date: 2004-05-19 08:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT);
 #if defined(LINUX)
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
-                                   SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)) == 0)
+                                   SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)) == 0 )
 #else
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
@@ -368,7 +368,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
              sRuntimeLib, osl_getThreadTextEncoding());
          fprintf(stderr,"Could not load java runtime library : %s",
                  msg.getStr());
-         return JFW_PLUGIN_E_ERROR;
+         return JFW_PLUGIN_E_VM_CREATION_FAILED;
      }
 
 #ifdef UNX
