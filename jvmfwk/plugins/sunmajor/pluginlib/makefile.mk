@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:19:14 $
+#   last change: $Author: rt $ $Date: 2005-01-31 09:49:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,15 +80,15 @@ DLLPRE =
 # ------------------------------------------------------------------
 
 #.INCLUDE :  ..$/cppumaker.mk
-.IF "$(SOLAR_JAVA)"!="" && "$(OS)"!="MACOSX"
+.IF "$(SOLAR_JAVA)"!=""
 
 UNOTYPES = \
     com.sun.star.uno.TypeClass \
     com.sun.star.uno.XInterface 
 
 SLOFILES= \
-    $(SLO)$/sunjavaplugin.obj \
     $(SLO)$/sunversion.obj \
+    $(SLO)$/sunjavaplugin.obj \
     $(SLO)$/vendorbase.obj \
     $(SLO)$/util.obj \
     $(SLO)$/sunjre.obj \
@@ -132,9 +132,26 @@ JAVACLASSFILES= \
     $(CLASSDIR)$/JREProperties.class					
 
 JAVAFILES = $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
-.ENDIF
+
+.ENDIF # SOLAR_JAVA
+
+
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
+.IF "$(GUI)"=="WNT"
+BOOTSTRAPFILE=$(BIN)$/sunjavaplugin.ini
+.ELSE
+BOOTSTRAPFILE=$(BIN)$/sunjavapluginrc
+.ENDIF
+
+
+$(BOOTSTRAPFILE): sunjavapluginrc
+    +-$(COPY) $< $@
+
+
+ALLTAR: \
+    $(BOOTSTRAPFILE)
 
