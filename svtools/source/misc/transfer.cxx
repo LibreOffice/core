@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 16:24:45 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
 #endif
 #ifndef DEBUG_HXX
 #include <tools/debug.hxx>
@@ -1008,6 +1011,37 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 
     return  Reference< XClipboard > ();
 }
+
+
+const Sequence< sal_Int8 > & TransferableHelper::getUnoTunnelId()
+{
+    static Sequence< sal_Int8 > aSeq;
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex aCreateMutex;
+        osl::Guard<osl::Mutex> aGuard( aCreateMutex );
+        aSeq.realloc( 16 );
+        rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+    }
+    return aSeq;
+}
+/* -----------------------------10.03.00 18:04--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Int64 SAL_CALL TransferableHelper::getSomething(
+                                            const Sequence< sal_Int8 >& rId )
+                                                    throw(RuntimeException)
+{
+    if( rId.getLength() == 16
+        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                        rId.getConstArray(), 16 ) )
+    {
+            return (sal_Int64)this;
+    }
+    return 0;
+}
+
+
 
 // ---------------------------------
 // - TransferableClipboardNotifier -
@@ -2024,6 +2058,16 @@ void TransferDataContainer::CopyString( const String& rStr )
         pImpl->aFmtList.push_back( aEntry );
          AddFormat( aEntry.nId );
     }
+}
+
+void TransferDataContainer::CopyAny( USHORT nFmt,
+                                    const ::com::sun::star::uno::Any& rAny )
+{
+    TDataCntnrEntry_Impl aEntry;
+    aEntry.nId = nFmt;
+    aEntry.aAny = rAny;
+    pImpl->aFmtList.push_back( aEntry );
+    AddFormat( aEntry.nId );
 }
 
 sal_Bool TransferDataContainer::HasAnyData() const
