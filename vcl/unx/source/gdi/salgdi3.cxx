@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:00:33 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,27 +593,6 @@ X11SalGraphics::SelectFont()
 
 //--------------------------------------------------------------------------
 
-// Select the max size of a font, which is token for real
-// This routine is (and should be) called only once, the result should be
-// stored in some static variable
-
-static int
-GetMaxFontHeight()
-{
-    #define DEFAULT_MAXFONTHEIGHT 250
-
-    int  nMaxFontHeight = 0;
-
-    char *FontHeight = getenv ("SAL_MAXFONTHEIGHT");
-    if (FontHeight)
-        nMaxFontHeight = atoi (FontHeight);
-
-    if (nMaxFontHeight <= 0)
-        nMaxFontHeight = DEFAULT_MAXFONTHEIGHT;
-
-    return nMaxFontHeight;
-}
-
 bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLevel )
 {
     bFontVertical_      = pEntry->mbVertical;
@@ -661,16 +640,6 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     if( !pSysFont )
         return false;
      Size aReqSize( pEntry->mnWidth, pEntry->mnHeight );
-     if( bWindow_ )
-     {
-         // see BugId #44528# FontWork (-> #45038#) and as well Bug #47127#
-         static int nMaxFontHeight = GetMaxFontHeight();
-         if( aReqSize.Height() > nMaxFontHeight )
-             aReqSize.Height() = nMaxFontHeight;
-         else if( aReqSize.Height() < 2 )
-             aReqSize.Height() = 2;
-     }
-
      mXFont[ nFallbackLevel ] = GetDisplay()->GetFont( pSysFont, aReqSize, bFontVertical_ );
 
     return true;
