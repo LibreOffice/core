@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-11 16:22:30 $
+ *  last change: $Author: sj $ $Date: 2002-05-07 08:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        const ULONG nAryLen = mnLen - 1;
+        const ULONG nAryLen = mnLen;
 
         mpDXAry = new long[ nAryLen ];
         memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( long ) );
