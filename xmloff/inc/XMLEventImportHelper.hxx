@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 18:56:47 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 13:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #endif
 
 #include <map>
+#include <list>
 
 
 namespace com { namespace sun { namespace star {
@@ -83,23 +84,52 @@ struct XMLEventNameTranslation;
 
 typedef ::std::map< ::rtl::OUString, XMLEventContextFactory* > FactoryMap;
 typedef ::std::map< ::rtl::OUString, ::rtl::OUString > NameMap;
+typedef ::std::list< NameMap* > NameMapList;
 
 
+/**
+ * Helps the XMLEventsImportContext.
+ *
+ * This class stores
+ * a) the translation from XML event names to API event names, and
+ * b) a mapping from script language names to XMLEventContextFactory objects
+ *    (that handle particular languages).
+ *
+ * Event name translation tables may be added, i.e. they will be joined
+ * together. If different translations are needed (i.e., if the same XML name
+ * needs to be translated to different API names in different contexts), then
+ * translation tables may be saved on a translation table stack.
+ */
 class XMLEventImportHelper
 {
+    /// map of XMLEventContextFactory objects
     FactoryMap aFactoryMap;
-    NameMap aEventNameMap;
+
+    /// map from XML to API names
+    NameMap* pEventNameMap;
+
+    /// stack of previous aEventNameMap
+    NameMapList aEventNameMapList;
 
 public:
     XMLEventImportHelper();
 
     ~XMLEventImportHelper();
 
+    /// register a handler for a particular language type
     void RegisterFactory( const ::rtl::OUString& rLanguage,
                           XMLEventContextFactory* aFactory );
 
+    /// add event name translation to the internal table
     void AddTranslationTable( const XMLEventNameTranslation* pTransTable );
 
+    /// save the old translation table on a stack and install an empty table
+    void PushTranslationTable();
+
+    /// recover the top-most previously saved translation table
+    void PopTranslationTable();
+
+    /// create an appropriate import context for a particular event
     SvXMLImportContext* CreateContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix,

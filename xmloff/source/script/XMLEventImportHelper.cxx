@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventImportHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-22 19:50:20 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 13:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,13 @@ using ::rtl::OUString;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::uno::Reference;
 
-XMLEventImportHelper::XMLEventImportHelper()
+XMLEventImportHelper::XMLEventImportHelper() :
+    aFactoryMap(),
+    pEventNameMap(new NameMap()),
+    aEventNameMapList()
 {
 }
+
 
 XMLEventImportHelper::~XMLEventImportHelper()
 {
@@ -103,6 +107,9 @@ XMLEventImportHelper::~XMLEventImportHelper()
         delete aIter->second;
     }
     aFactoryMap.clear();
+
+    // delete name map
+    delete pEventNameMap;
 }
 
 void XMLEventImportHelper::RegisterFactory(
@@ -129,15 +136,37 @@ void XMLEventImportHelper::AddTranslationTable(
             OUString rName(OUString::createFromAscii(pTrans->sXMLName));
 
             // check for conflicting entries
-            DBG_ASSERT(aEventNameMap.find(rName) == aEventNameMap.end(),
+            DBG_ASSERT(pEventNameMap->find(rName) == pEventNameMap->end(),
                        "conflicting event translations");
 
             // assign new translation
-            aEventNameMap[rName] = OUString::createFromAscii(pTrans->sAPIName);
+            (*pEventNameMap)[rName] =
+                OUString::createFromAscii(pTrans->sAPIName);
         }
     }
     // else? ignore!
 }
+
+void XMLEventImportHelper::PushTranslationTable()
+{
+    // save old map and install new one
+    aEventNameMapList.push_back(pEventNameMap);
+    pEventNameMap = new NameMap();
+}
+
+void XMLEventImportHelper::PopTranslationTable()
+{
+    DBG_ASSERT(aEventNameMapList.size() > 0,
+               "no translation tables left to pop");
+    if (aEventNameMapList.size() > 0)
+    {
+        // delete current and install old map
+        delete pEventNameMap;
+        pEventNameMap = aEventNameMapList.back();
+        aEventNameMapList.pop_back();
+    }
+}
+
 
 SvXMLImportContext* XMLEventImportHelper::CreateContext(
     SvXMLImport& rImport,
@@ -151,17 +180,17 @@ SvXMLImportContext* XMLEventImportHelper::CreateContext(
     SvXMLImportContext* pContext = NULL;
 
     // translate event name form xml to api
-    if (aEventNameMap.count(rXmlEventName))
+    NameMap::iterator aNameIter = pEventNameMap->find(rXmlEventName);
+    if (aNameIter != pEventNameMap->end())
     {
-        OUString& rApiEventName = aEventNameMap[rXmlEventName];
-
         // check for factory
-        if (aFactoryMap.count(rLanguage))
+        FactoryMap::iterator aFactoryIterator = aFactoryMap.find(rLanguage);
+        if (aFactoryIterator != aFactoryMap.end())
         {
             // delegate to factory
-            pContext = aFactoryMap[rLanguage]->CreateContext(
+            pContext = aFactoryIterator->second->CreateContext(
                 rImport, nPrefix, rLocalName, xAttrList,
-                rEvents, rApiEventName, rLanguage);
+                rEvents, aNameIter->second, rLanguage);
         }
     }
 
