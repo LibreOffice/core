@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:12:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		smgr
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = servicemgr.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = smgr
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ SLOFILES= \
         $(SLO)$/servicemanager.obj
 
 SHL1TARGET=	$(TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = smgr.map
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
