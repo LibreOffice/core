@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-15 13:53:48 $
+ *  last change: $Author: mt $ $Date: 2001-02-14 18:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <vos/mutex.hxx>
 #endif
 
+#include <osl/file.hxx>
+
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -100,6 +102,15 @@
 #ifndef _VCL_UNOWRAP_HXX
 #include <unowrap.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include <com/sun/star/lang/XComponent.hpp>
+
+
+
 
 #pragma hdrstop
 
@@ -156,6 +167,20 @@ void ImplDeInitSVData()
     {
         pSVData->mpUnoWrapper->Destroy();
         pSVData->mpUnoWrapper = NULL;
+    }
+
+    if ( pSVData->maAppData.mpMSFTempFileName )
+    {
+        if ( pSVData->maAppData.mxMSF.is() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pSVData->maAppData.mxMSF, ::com::sun::star::uno::UNO_QUERY );
+            xComp->dispose();
+            pSVData->maAppData.mxMSF = NULL;
+        }
+
+        osl::File::remove( *pSVData->maAppData.mpMSFTempFileName );
+        delete pSVData->maAppData.mpMSFTempFileName;
+        pSVData->maAppData.mpMSFTempFileName = NULL;
     }
 }
 
