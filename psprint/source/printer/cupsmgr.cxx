@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:37:51 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ typedef void cups_option_t;
 #include <rtl/ustrbuf.hxx>
 #include <cupsmgr.hxx>
 
-#include <unistd.h>
+#include <algorithm>
 
 namespace psp
 {
@@ -391,6 +391,9 @@ void CUPSManager::runDests()
     int nDests = 0;
     cups_dest_t* pDests = NULL;
     nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "came out of cupsGetDests\n" );
+#endif
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
     m_nDests = nDests;
@@ -563,68 +566,75 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
         aPrinter = rPrinter;
 
 #ifdef ENABLE_CUPS
-    if( m_aCUPSMutex.tryToAcquire() && m_nDests && m_pDests )
+    if( m_aCUPSMutex.tryToAcquire() )
     {
-        std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
-            m_aCUPSDestMap.find( aPrinter );
-        if( dest_it != m_aCUPSDestMap.end() )
+        if( m_nDests && m_pDests )
         {
-            cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
-            const char* pPPDFile = m_pCUPSWrapper->cupsGetPPD( pDest->name );
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), pPPDFile );
-#endif
-            if( pPPDFile )
+            std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
+            m_aCUPSDestMap.find( aPrinter );
+            if( dest_it != m_aCUPSDestMap.end() )
             {
-                rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-                OUString aFileName( OStringToOUString( pPPDFile, aEncoding ) );
-                // update the printer info with context information
-                ppd_file_t* pPPD = m_pCUPSWrapper->ppdOpenFile( pPPDFile );
-                if( pPPD )
+                cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
+                const char* pPPDFile = m_pCUPSWrapper->cupsGetPPD( pDest->name );
+                #if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "PPD for %s is %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr(), pPPDFile );
+                #endif
+                if( pPPDFile )
                 {
-                    // create the new parser
-                    PPDParser* pCUPSParser =  new PPDParser( aFileName );
-                    pCUPSParser->m_aFile = rPrinter;
-                    pNewParser = pCUPSParser;
+                    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+                    OUString aFileName( OStringToOUString( pPPDFile, aEncoding ) );
+                    // update the printer info with context information
+                    ppd_file_t* pPPD = m_pCUPSWrapper->ppdOpenFile( pPPDFile );
+                    if( pPPD )
+                    {
+                        // create the new parser
+                        PPDParser* pCUPSParser =  new PPDParser( aFileName );
+                        pCUPSParser->m_aFile = rPrinter;
+                        pNewParser = pCUPSParser;
 
-                    /*int nConflicts =*/ m_pCUPSWrapper->cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
-#if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "processing the following options for printer %s (instance %s):\n",
-                    pDest->name, pDest->instance );
-                    for( int k = 0; k < pDest->num_options; k++ )
-                        fprintf( stderr, "   \"%s\" = \"%s\"\n",
-                    pDest->options[k].name,
-                    pDest->options[k].value );
-#endif
-                    PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
+                        /*int nConflicts =*/ m_pCUPSWrapper->cupsMarkOptions( pPPD, pDest->num_options, pDest->options );
+                        #if OSL_DEBUG_LEVEL > 1
+                        fprintf( stderr, "processing the following options for printer %s (instance %s):\n",
+                        pDest->name, pDest->instance );
+                        for( int k = 0; k < pDest->num_options; k++ )
+                            fprintf( stderr, "   \"%s\" = \"%s\"\n",
+                        pDest->options[k].name,
+                        pDest->options[k].value );
+                        #endif
+                        PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
-                    // remember the default context for later use
-                    PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
-                    rContext.setParser( pNewParser );
-                    for( int i = 0; i < pPPD->num_groups; i++ )
-                        updatePrinterContextInfo( pPPD->groups + i, rContext );
+                        // remember the default context for later use
+                        PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
+                        rContext.setParser( pNewParser );
+                        for( int i = 0; i < pPPD->num_groups; i++ )
+                            updatePrinterContextInfo( pPPD->groups + i, rContext );
 
-                    rInfo.m_pParser = pNewParser;
-                    rInfo.m_aContext = rContext;
+                        rInfo.m_pParser = pNewParser;
+                        rInfo.m_aContext = rContext;
 
-                    // clean up the mess
-                    m_pCUPSWrapper->ppdClose( pPPD );
+                        // clean up the mess
+                        m_pCUPSWrapper->ppdClose( pPPD );
+                    }
+                    #if OSL_DEBUG_LEVEL > 1
+                    else
+                        fprintf( stderr, "ppdOpenFile failed, fallinmg back to generic driver\n" );
+                    #endif
+
+                    // remove temporary PPD file
+                    unlink( pPPDFile );
                 }
-#if OSL_DEBUG_LEVEL > 1
+                #if OSL_DEBUG_LEVEL > 1
                 else
-                    fprintf( stderr, "ppdOpenFile failed, fallinmg back to generic driver\n" );
-#endif
-
-                // remove temporary PPD file
-                unlink( pPPDFile );
+                    fprintf( stderr, "no dest found for printer %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr() );
+                #endif
             }
-#if OSL_DEBUG_LEVEL > 1
-            else
-                fprintf( stderr, "no dest found for printer %s\n", OUStringToOString( aPrinter, osl_getThreadTextEncoding() ).getStr() );
-#endif
         }
         m_aCUPSMutex.release();
     }
+#if OSL_DEBUG_LEVEL >1
+    else
+        fprintf( stderr, "could not acquire CUPS mutex !!!\n" );
+#endif
 #endif // ENABLE_CUPS
 
     if( ! pNewParser )
@@ -702,7 +712,45 @@ FILE* CUPSManager::startSpool( const OUString& rPrintername )
 #endif
 }
 
-int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile )
+struct less_ppd_key : public ::std::binary_function<double, double, bool>
+{
+    bool operator()(const PPDKey* left, const PPDKey* right)
+    { return left->getOrderDependency() < right->getOrderDependency(); }
+};
+
+void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOptions, void** rOptions ) const
+{
+    rNumOptions = 0;
+    *rOptions = NULL;
+    int i;
+
+    // emit features ordered to OrderDependency
+    // ignore features that are set to default
+
+    // sanity check
+    if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
+    {
+        int nKeys = rJob.m_aContext.countValuesModified();
+        ::std::vector< const PPDKey* > aKeys( nKeys );
+        for(  i = 0; i < nKeys; i++ )
+            aKeys[i] = rJob.m_aContext.getModifiedKey( i );
+        ::std::sort( aKeys.begin(), aKeys.end(), less_ppd_key() );
+
+        for( i = 0; i < nKeys; i++ )
+        {
+            const PPDKey* pKey = aKeys[i];
+            const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
+            if(pValue && pValue->m_eType == eInvocation && pValue->m_aValue.Len() )
+            {
+                OString aKey = OUStringToOString( pKey->getKey(), RTL_TEXTENCODING_ASCII_US );
+                OString aValue = OUStringToOString( pValue->m_aOption, RTL_TEXTENCODING_ASCII_US );
+                rNumOptions = m_pCUPSWrapper->cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, (cups_option_t**)rOptions );
+            }
+        }
+    }
+}
+
+int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
 {
     int nJobID = 0;
 
@@ -711,7 +759,7 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
     std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
-        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile );
+        return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
 
     #ifdef ENABLE_CUPS
     std::hash_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
@@ -720,17 +768,27 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
         fclose( pFile );
         rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
 
+        // setup cups options
+        int nNumOptions = 0;
+        cups_option_t* pOptions = NULL;
+        getOptionsFromDocumentSetup( rDocumentJobData, nNumOptions, (void**)&pOptions );
+
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
         nJobID = m_pCUPSWrapper->cupsPrintFile( pDest->name,
         it->second.getStr(),
         OUStringToOString( rJobTitle, aEnc ).getStr(),
-        0, NULL );
+        nNumOptions, pOptions );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "cupsPrintFile( %s, %s, %s, 0, 0 ) returns %d\n",
-        pDest->name,
-        it->second.getStr(),
-        OUStringToOString( rJobTitle, aEnc ).getStr(),
-        nJobID );
+        fprintf( stderr, "cupsPrintFile( %s, %s, %s, %d, %p ) returns %d\n",
+                    pDest->name,
+                    it->second.getStr(),
+                    OUStringToOString( rJobTitle, aEnc ).getStr(),
+                    nNumOptions,
+                    pOptions,
+                    nJobID
+                    );
+        for( int n = 0; n < nNumOptions; n++ )
+            fprintf( stderr, "    option %s=%s\n", pOptions[n].name, pOptions[n].value );
         OString aCmd( "cp " );
         aCmd = aCmd + it->second;
         aCmd = aCmd + OString( " $HOME/cupsprint.ps" );
@@ -739,6 +797,8 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
 
         unlink( it->second.getStr() );
         m_aSpoolFiles.erase( pFile );
+        if( pOptions )
+            m_pCUPSWrapper->cupsFreeOptions( nNumOptions, pOptions );
     }
 #endif // ENABLE_CUPS
 
