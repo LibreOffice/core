@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:11:23 $
+ *  last change:$Date: 2003-09-08 13:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,20 @@
 
 package mod._xmloff.Chart;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.chart.XChartDocument;
-import com.sun.star.document.XImporter;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.chart.XChartDocument;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -166,9 +167,6 @@ public class XMLImporter extends TestCase {
         final XPropertySet xTitleProp ;
         try {
             oInt = xMSF.createInstance("com.sun.star.comp.Chart.XMLImporter") ;
-            XImporter imp = (XImporter)
-                UnoRuntime.queryInterface(XImporter.class, oInt) ;
-            //imp.setTargetDocument(xChartDoc) ;
 
             Object oTitle = xChartDoc.getTitle() ;
             xTitleProp = (XPropertySet) UnoRuntime.queryInterface
