@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-12 19:00:03 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 19:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@
 #include "markdata.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
+#include "drwlayer.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -1466,47 +1467,13 @@ void ScDocument::KeyInput( const KeyEvent& rKEvt )
 }
 
 //  ----------------------------------------------------------------------------
-//
-//  Makro-Warnung:
-//  Nur beim Laden von Dokumenten wird der Modus vorher auf ASK gesetzt, wenn
-//  es in der EventConfig so eingestellt ist. Beim Ausfuehren waehrend des Ladens
-//  wird dann nachgefragt. Nach dem Laden wird nachgeschaut, ob Makro-Aufrufe enthalten
-//  sind (Formeln oder Gueltigkeit), und ggf. nachgefragt, sonst auf ALLOWED gesetzt.
-//
 
 BOOL ScDocument::CheckMacroWarn()
 {
-    if ( nMacroCallMode == SC_MACROCALL_ASK )
-    {
-/*
-        //  Wenn wegen !IsSecure nichts ausgefuehrt wird, braucht auch nicht gefragt zu werden
-        if ( !pShell || !pShell->IsSecure() )
-            return FALSE;                           // nicht ausfuehren, aber nicht umstellen
+    //  The check for macro configuration, macro warning and disabling is now handled
+    //  in SfxObjectShell::AdjustMacroMode, called by SfxObjectShell::CallBasic.
 
-        QueryBox aBox( NULL, WinBits(WB_YES_NO | WB_DEF_YES),
-                        ScGlobal::GetRscString(STR_MACRO_WARNING) );
-        USHORT nRet = aBox.Execute();
-*/
-        if ( !pShell )
-            return FALSE;
-
-        SvtSecurityOptions aOpt;
-        sal_Bool bConfirm = aOpt.IsConfirmationEnabled();
-        sal_Bool bWarn = aOpt.IsWarningEnabled();
-        sal_Bool bSecure = pShell->IsSecure();
-        int nRet = bSecure ? RET_YES : RET_NO;
-        if ( bSecure && bWarn )
-            nRet = QueryBox( NULL, WinBits(WB_YES_NO | WB_DEF_YES), ScGlobal::GetRscString(STR_MACRO_WARNING) ).Execute();
-        else if ( !bSecure && bConfirm )
-            nRet = QueryBox( NULL, WinBits(WB_YES_NO | WB_DEF_NO), ScGlobal::GetRscString(STR_MACRO_WARNING) ).Execute();
-
-        if ( nRet == RET_YES )
-            nMacroCallMode = SC_MACROCALL_ALLOWED;
-        else
-            nMacroCallMode = SC_MACROCALL_NOTALLOWED;
-    }
-
-    return ( nMacroCallMode == SC_MACROCALL_ALLOWED );
+    return TRUE;
 }
 
 BOOL ScDocument::HasMacroCallsAfterLoad()   // wird direkt nach dem Laden abgefragt
@@ -1535,6 +1502,11 @@ BOOL ScDocument::HasMacroCallsAfterLoad()   // wird direkt nach dem Laden abgefr
             }
         }
     }
+
+    //  3. macros in form controls
+
+    if ( pDrawLayer && pDrawLayer->containsActiveCode( String::CreateFromAscii("StarBasic") ) )
+        return TRUE;
 
     return FALSE;       // nichts gefunden
 }
