@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:58:15 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
+#endif
+#ifndef SC_XLPIVOT_HXX
+#include "xlpivot.hxx"
 #endif
 #ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
@@ -333,7 +336,7 @@ inline static void __Add16p16( ByteString& r, UINT32 n )
 
 static void lcl_AddRef( ByteString& rStr, sal_uInt16 nCol, sal_uInt16 nRow )
 {
-    ScAddress aRef( nCol, nRow, 0 );
+    ScAddress aRef( static_cast< SCCOL >( nCol ), static_cast< SCROW >( nRow ), 0 );
     rStr.Append( GETSTR( aRef.GetColRowString() ) );
 }
 
@@ -728,30 +731,31 @@ UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
     ::extract_value( nTmp, nAlign, 0, 3 );
     ADDTEXT( "hor-align=" );        __AddDec( t, nTmp );
     ADDTEXT( " (" );
-    switch( static_cast< XclHorAlign >( nTmp ) )
+    switch( nTmp )
     {
-        case xlHAlignGeneral:       ADDTEXT( "general" );   break;
-        case xlHAlignLeft:          ADDTEXT( "left" );      break;
-        case xlHAlignCenter:        ADDTEXT( "center" );    break;
-        case xlHAlignRight:         ADDTEXT( "right" );     break;
-        case xlHAlignFill:          ADDTEXT( "fill" );      break;
-        case xlHAlignJustify:       ADDTEXT( "justify" );   break;
-        case xlHAlignCenterAcrSel:  ADDTEXT( "center-as" ); break;
-        case xlHAlignDistrib:       ADDTEXT( "distrib" );   break;
+        case EXC_XF_HOR_GENERAL:    ADDTEXT( "general" );   break;
+        case EXC_XF_HOR_LEFT:       ADDTEXT( "left" );      break;
+        case EXC_XF_HOR_CENTER:     ADDTEXT( "center" );    break;
+        case EXC_XF_HOR_RIGHT:      ADDTEXT( "right" );     break;
+        case EXC_XF_HOR_FILL:       ADDTEXT( "fill" );      break;
+        case EXC_XF_HOR_JUSTIFY:    ADDTEXT( "justify" );   break;
+        case EXC_XF_HOR_CENTER_AS:  ADDTEXT( "center-as" ); break;
+        case EXC_XF_HOR_DISTRIB:    ADDTEXT( "distrib" );   break;
+        default:                    ADDTEXT( "!unknown!" );
     };
     ::extract_value( nTmp, nAlign, 4, 3 );
     ADDTEXT( ")   ver-align=" );    __AddDec( t, nTmp );
     ADDTEXT( " (" );
-    switch( static_cast< XclVerAlign >( nTmp ) )
+    switch( nTmp )
     {
-        case xlVAlignTop:           ADDTEXT( "top" );       break;
-        case xlVAlignCenter:        ADDTEXT( "center" );    break;
-        case xlVAlignBottom:        ADDTEXT( "bottom" );    break;
-        case xlVAlignJustify:       ADDTEXT( "justify" );   break;
-        case xlVAlignDistrib:       ADDTEXT( "distrib" );   break;
+        case EXC_XF_VER_TOP:        ADDTEXT( "top" );       break;
+        case EXC_XF_VER_CENTER:     ADDTEXT( "center" );    break;
+        case EXC_XF_VER_BOTTOM:     ADDTEXT( "bottom" );    break;
+        case EXC_XF_VER_JUSTIFY:    ADDTEXT( "justify" );   break;
+        case EXC_XF_VER_DISTRIB:    ADDTEXT( "distrib" );   break;
         default:                    ADDTEXT( "!unknown!" );
     };
-    ADDTEXT( ")   text-wrap=" );    lcl_AddOnOff( t, ::get_flag( nAlign, EXC_XF_WRAPPED ) );
+    ADDTEXT( ")   text-wrap=" );    lcl_AddOnOff( t, ::get_flag( nAlign, EXC_XF_LINEBREAK ) );
     PRINT();
 
     LINESTART();
@@ -772,12 +776,12 @@ UINT16 Biff8RecDumper::DumpXF( XclImpStream& rStrm, const sal_Char* pPre )
     ::extract_value( nTmp, nMiscAttrib, 6, 2 );
     ADDTEXT( "   text-dir=" );      __AddDec( t, nTmp );
     ADDTEXT( " (" );
-    switch( static_cast< XclTextDirection >( nTmp ) )
+    switch( nTmp )
     {
-        case xlTextDirContext:      ADDTEXT( "context" );   break;
-        case xlTextDirLTR:          ADDTEXT( "ltr" );       break;
-        case xlTextDirRTL:          ADDTEXT( "rtl" );       break;
-        default:                    ADDTEXT( "!unknown!" );
+        case EXC_XF_TEXTDIR_CONTEXT:    ADDTEXT( "context" );   break;
+        case EXC_XF_TEXTDIR_LTR:        ADDTEXT( "ltr" );       break;
+        case EXC_XF_TEXTDIR_RTL:        ADDTEXT( "rtl" );       break;
+        default:                        ADDTEXT( "!unknown!" );
     };
     ADDTEXT( ")" );
     PRINT();
@@ -948,15 +952,6 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
     UINT16              __nFlags;
     const UINT16        nR = pIn->GetRecId();
     const ByteString*   pName = GetName( nR );
-
-    // detect BIFF version
-    switch( nR )
-    {
-        case 0x0009:    SetBiff( xlBiff2 );                     break;
-        case 0x0209:    SetBiff( xlBiff3 );                     break;
-        case 0x0409:    SetBiff( xlBiff4 );                     break;
-        case 0x0809:    SetBiff( bBIFF8 ? xlBiff8 : xlBiff5 );  break;
-    }
 
     // set CONTINUE handling mode
     switch( nR )
@@ -3863,6 +3858,24 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             {
                 LINESTART();
                 ADDCELLHEAD();
+                PRINT();
+            }
+            break;
+            case 0x0203:
+            {
+                LINESTART();
+                ADDCELLHEAD();
+                ADDTEXT( "   val = " );
+                ADDDOUBLE();
+                PRINT();
+            }
+            break;
+            case 0x0205:
+            {
+                LINESTART();
+                ADDCELLHEAD();
+                ADDTEXT( "   val = " );     ADDHEX( 1 );
+                ADDTEXT( "   type = " );    ADDDEC( 1 );
                 PRINT();
             }
             break;
@@ -6864,7 +6877,7 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 /** Import from bytestream. */
 SvStream& operator>>( SvStream& rStrm, XclGuid& rGuid )
 {
-    rStrm.Read( rGuid.mpData, 16 );
+    rStrm.Read( rGuid.mpnData, 16 );
     return rStrm;
 }
 
@@ -6872,21 +6885,21 @@ SvStream& operator>>( SvStream& rStrm, XclGuid& rGuid )
 SvStream& operator<<( SvStream& rStrm, const XclGuid& rGuid )
 {
     ByteString aOut;
-    __AddPureHex( aOut, SVBT32ToLong( rGuid.mpData ) );
+    __AddPureHex( aOut, SVBT32ToLong( rGuid.mpnData ) );
     aOut.Append( '-' );
-    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpData + 4 ) );
+    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpnData + 4 ) );
     aOut.Append( '-' );
-    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpData + 6 ) );
+    __AddPureHex( aOut, SVBT16ToShort( rGuid.mpnData + 6 ) );
     aOut.Append( '-' );
-    __AddPureHex( aOut, rGuid.mpData[ 8 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 9 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 8 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 9 ] );
     aOut.Append( '-' );
-    __AddPureHex( aOut, rGuid.mpData[ 10 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 11 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 12 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 13 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 14 ] );
-    __AddPureHex( aOut, rGuid.mpData[ 15 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 10 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 11 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 12 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 13 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 14 ] );
+    __AddPureHex( aOut, rGuid.mpnData[ 15 ] );
     return rStrm << aOut.GetBuffer();
 }
 
