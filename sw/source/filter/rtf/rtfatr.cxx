@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-03 08:47:36 $
+ *  last change: $Author: jp $ $Date: 2001-05-03 11:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,15 @@
 #endif
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
 #include <svx/paravertalignitem.hxx>
+#endif
+#ifndef _SVX_HNGPNCTITEM_HXX
+#include <svx/hngpnctitem.hxx>
+#endif
+#ifndef _SVX_SRIPTSPACEITEM_HXX
+#include <svx/scriptspaceitem.hxx>
+#endif
+#ifndef _SVX_FORBIDDENRULEITEM_HXX
+#include <svx/forbiddenruleitem.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -3521,6 +3530,34 @@ static Writer& OutRTF_SwNumRule( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutRTF_SwScriptSpace( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    if( ((const SvxScriptSpaceItem&)rHt).GetValue() )
+    {
+        rWrt.Strm() << sRTF_ASPALPHA;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    return rWrt;
+}
+static Writer& OutRTF_SwHangPunctuation( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    if( !((const SvxHangingPunctuationItem&)rHt).GetValue() )
+    {
+        rWrt.Strm() << sRTF_NOOVERFLOW;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    return rWrt;
+}
+static Writer& OutRTF_SwForbiddenRule( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    if( !((const SvxForbiddenRuleItem&)rHt).GetValue() )
+    {
+        rWrt.Strm() << sRTF_NOCWRAP;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = TRUE;
+    }
+    return rWrt;
+}
+
 static Writer& OutRTF_SwFontAlign( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
@@ -3616,10 +3653,10 @@ SwAttrFnTab aRTFAttrFnTab = {
 /* RES_PARATR_DROP */               0,
 /* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
 /* RES_PARATR_NUMRULE */            OutRTF_SwNumRule,
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_FORBIDDEN_RULE*/      0, // Dummy:
-/* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign, // Dummy:
+/* RES_PARATR_SCRIPTSPACE */        OutRTF_SwScriptSpace,
+/* RES_PARATR_HANGINGPUNCTUATION */ OutRTF_SwHangPunctuation,
+/* RES_PARATR_FORBIDDEN_RULE*/      OutRTF_SwForbiddenRule,
+/* RES_PARATR_VERTALIGN */          OutRTF_SwFontAlign,
 /* RES_PARATR_DUMMY3 */             0, // Dummy:
 /* RES_PARATR_DUMMY4 */             0, // Dummy:
 /* RES_PARATR_DUMMY5 */             0, // Dummy:
@@ -3698,11 +3735,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.17 2001-05-03 08:47:36 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.18 2001-05-03 11:46:10 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.17  2001/05/03 08:47:36  jp
+      new: export ParaVertAlignItem
+
       Revision 1.16  2001/03/27 21:34:45  jp
       export character background
 
