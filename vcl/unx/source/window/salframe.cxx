@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-09 09:34:42 $
+ *  last change: $Author: pl $ $Date: 2002-11-06 18:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2400,7 +2400,11 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
            nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen, &nStatus );
      }
 
+    SalKeyEvent aKeyEvt;
+    USHORT      nKeyCode;
     USHORT nModCode = 0;
+    char        aDummy;
+
     if( pEvent->state & ShiftMask )
         nModCode |= KEY_SHIFT;
     if( pEvent->state & ControlMask )
@@ -2430,7 +2434,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
             if ( (nKeySym == XK_Shift_L)   || (nKeySym == XK_Shift_R) )
                 nModCode &= ~KEY_SHIFT;
             if ( (nKeySym == XK_Alt_L)     || (nKeySym == XK_Alt_R) )
-                nModCode &= ~KEY_MOD2;
+                nModCode &= ~(KEY_MOD2|KEY_CONTROLMOD);
         }
         else
         {
@@ -2445,12 +2449,20 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
 
-        return Call( SALEVENT_KEYMODCHANGE, &aModEvt );
-    }
+        int nRet = Call( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-    SalKeyEvent aKeyEvt;
-    USHORT      nKeyCode;
-    char        aDummy;
+        if ( ( (nKeySym == XK_Alt_L) || (nKeySym == XK_Alt_R) ) &&
+             ( (nModCode & ~(KEY_CONTROLMOD|KEY_MOD2)) == 0 ) )
+        {
+            // simulate KEY_MENU
+            aKeyEvt.mnCode     = KEY_MENU | nModCode;
+            aKeyEvt.mnRepeat   = 0;
+            aKeyEvt.mnTime     = pEvent->time;
+            aKeyEvt.mnCharCode = 0;
+            nRet = Call( pEvent->type == KeyRelease ? SALEVENT_KEYUP : SALEVENT_KEYINPUT, &aKeyEvt );
+        }
+        return nRet;
+    }
 
     // try to figure out the vcl code for the keysym
     nKeyCode = pDisplay_->GetKeyCode( nKeySym, &aDummy );
