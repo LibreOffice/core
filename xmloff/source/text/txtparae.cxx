@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,10 +1055,10 @@ void XMLTextParagraphExport::exportTextMark(
 void XMLTextParagraphExport::addTextFrameAttributes(
     const Reference < XPropertySet >& rPropSet )
 {
-    // text:name
+    // draw:name
     Reference < XNamed > xNamed( rPropSet, UNO_QUERY );
     if( xNamed.is() )
-        GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_name,
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_name,
                                   xNamed->getName() );
 
     Any aAny;
@@ -1205,18 +1205,18 @@ void XMLTextParagraphExport::_exportTextFrame(
                                   sAutoStyle );
     addTextFrameAttributes( rPropSet );
 
-    // text:chain-next-name
+    // draw:chain-next-name
     if( rPropSetInfo->hasPropertyByName( sChainNextName ) )
     {
         OUString sNext;
         aAny = rPropSet->getPropertyValue( sChainNextName );
         if( (aAny >>= sNext) && sNext.getLength() > 0 )
-            GetExport().AddAttribute( XML_NAMESPACE_TEXT,
+            GetExport().AddAttribute( XML_NAMESPACE_DRAW,
                                       sXML_chain_next_name,
                                       sNext );
     }
 
-    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_text_box, sal_False, sal_True );
     exportText( xTxt, sal_False );
 }
@@ -1287,12 +1287,12 @@ void XMLTextParagraphExport::_exportTextGraphic(
     GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_actuate,
                                    sXML_onRequest );
 
-    // office:filter-name
+    // draw:filter-name
     OUString sGrfFilter;
     aAny = rPropSet->getPropertyValue( sGraphicFilter );
     aAny >>= sGrfFilter;
     if( sGrfFilter.getLength() )
-        GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_filter_name,
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW, sXML_filter_name,
                                   sGrfFilter );
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
@@ -1304,7 +1304,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
     aAny >>= sAltText;
     if( sAltText.getLength() )
     {
-        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_OFFICE,
+        SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_SVG,
                                   sXML_desc, sal_True, sal_False );
         GetExport().GetDocHandler()->characters( sAltText );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:45 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_h,               XML_TOK_TEXT_H              },
     { XML_NAMESPACE_TEXT, sXML_ordered_list,    XML_TOK_TEXT_ORDERED_LIST   },
     { XML_NAMESPACE_TEXT, sXML_unordered_list,  XML_TOK_TEXT_UNORDERED_LIST },
-    { XML_NAMESPACE_TEXT, sXML_text_box,        XML_TOK_TEXT_TEXTBOX_PAGE },
-    { XML_NAMESPACE_OFFICE, sXML_image,         XML_TOK_TEXT_IMAGE_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_text_box,        XML_TOK_TEXT_TEXTBOX_PAGE },
+    { XML_NAMESPACE_DRAW, sXML_image,       XML_TOK_TEXT_IMAGE_PAGE },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,sXML_table,           XML_TOK_TABLE_TABLE         },
 //  { XML_NAMESPACE_TABLE,sXML_sub_table,       XML_TOK_TABLE_SUBTABLE      },
@@ -208,8 +208,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_reference_mark_end,
       XML_TOK_TEXT_REFERENCE_END },
 
-    { XML_NAMESPACE_TEXT, sXML_text_box, XML_TOK_TEXT_TEXTBOX },
-    { XML_NAMESPACE_OFFICE, sXML_image, XML_TOK_TEXT_IMAGE },
+    { XML_NAMESPACE_DRAW, sXML_text_box, XML_TOK_TEXT_TEXTBOX },
+    { XML_NAMESPACE_DRAW, sXML_image, XML_TOK_TEXT_IMAGE },
     { XML_NAMESPACE_DRAW, sXML_a,               XML_TOK_DRAW_A },
 
     // sender fields
@@ -355,7 +355,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextListBlockElemTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, sXML_style_name, XML_TOK_TEXT_FRAME_STYLE_NAME },
-    { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_TEXT_FRAME_NAME },
+    { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_TEXT_FRAME_NAME },
     { XML_NAMESPACE_TEXT, sXML_anchor_type, XML_TOK_TEXT_FRAME_ANCHOR_TYPE },
     { XML_NAMESPACE_TEXT, sXML_anchor_page_number, XML_TOK_TEXT_FRAME_ANCHOR_PAGE_NUMBER },
     { XML_NAMESPACE_SVG, sXML_x, XML_TOK_TEXT_FRAME_X },
@@ -364,9 +364,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
 //  { XML_NAMESPACE_FO, sXML_min_width, XML_TOK_TEXT_FRAME_MIN_WIDTH },
     { XML_NAMESPACE_SVG, sXML_height, XML_TOK_TEXT_FRAME_HEIGHT },
     { XML_NAMESPACE_FO, sXML_min_height, XML_TOK_TEXT_FRAME_MIN_HEIGHT },
-    { XML_NAMESPACE_TEXT, sXML_chain_next_name, XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME },
+    { XML_NAMESPACE_DRAW, sXML_chain_next_name, XML_TOK_TEXT_FRAME_NEXT_CHAIN_NAME },
     { XML_NAMESPACE_XLINK, sXML_href, XML_TOK_TEXT_FRAME_HREF },
-    { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_TEXT_FRAME_FILTER_NAME },
+    { XML_NAMESPACE_DRAW, sXML_name, XML_TOK_TEXT_FRAME_FILTER_NAME },
     XML_TOKEN_MAP_END
 };
 

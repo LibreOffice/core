@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:09:42 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,13 +165,13 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_TEXT == nPrefix &&
+    if( XML_NAMESPACE_DRAW == nPrefix &&
         rLocalName.equalsAsciiL( sXML_text_box, sizeof(sXML_text_box)-1 ) )
         pContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,
                                             eAnchorType,
                                             XML_TEXT_FRAME_TEXTBOX);
-    else if( XML_NAMESPACE_OFFICE == nPrefix &&
+    else if( XML_NAMESPACE_DRAW == nPrefix &&
         rLocalName.equalsAsciiL( sXML_image, sizeof(sXML_image)-1 ) )
         pContext = new XMLTextFrameContext( GetImport(), nPrefix,
                                             rLocalName, xAttrList,

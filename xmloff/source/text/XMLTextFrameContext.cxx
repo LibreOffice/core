@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-26 08:10:55 $
+ *  last change: $Author: mib $ $Date: 2000-09-29 13:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
+    if( XML_NAMESPACE_SVG == nPrefix &&
         rLocalName.equalsAsciiL( sXML_desc, sizeof(sXML_desc)-1 ) )
         pContext = new XMLTextFrameDescContext_Impl( GetImport(),
                                               nPrefix, rLocalName,
