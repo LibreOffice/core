@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 15:04:56 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,13 @@ void XMLSectionExport::ExportBaseIndexStart(
     const OUString sElementName,
     const Reference<XPropertySet> & rPropertySet)
 {
-    // rPropertySet not used any more; should be removed
+    // protect + protection key
+    Any aAny = rPropertySet->getPropertyValue(sIsProtected);
+    if (*(sal_Bool*)aAny.getValue())
+    {
+        GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_protected,
+                                      sXML_true);
+    }
 
     // index  Element start
     GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );

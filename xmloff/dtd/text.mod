@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.31 2001-05-07 12:06:55 dvo Exp $
+	$Id: text.mod,v 1.32 2001-05-29 12:32:57 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -747,6 +747,7 @@
 <!ELEMENT text:table-of-content (text:table-of-content-source, 
 								 text:index-body)   >
 <!ATTLIST text:table-of-content text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:table-of-content text:protected %boolean; "false">
 
 <!ELEMENT text:table-of-content-source (text:index-title-template? , 
 										text:table-of-content-entry-template*,
@@ -775,6 +776,7 @@
 <!ELEMENT text:illustration-index 
 			(text:illustration-index-source, text:index-body)>
 <!ATTLIST text:illustration-index text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:illustration-index text:protected %boolean; "false">
 
 <!ELEMENT text:illustration-index-source (text:index-title-template?,
 									text:illustration-index-entry-template?) >
@@ -798,6 +800,7 @@
 
 <!ELEMENT text:table-index (text:table-index-source, text:index-body)>
 <!ATTLIST text:table-index text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:table-index text:protected %boolean; "false">
 
 <!ELEMENT text:table-index-source (text:index-title-template?, 
 									text:table-index-entry-template?) >
@@ -820,6 +823,7 @@
 
 <!ELEMENT text:object-index ( text:object-index-source, text:index-body ) >
 <!ATTLIST text:object-index text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:object-index text:protected %boolean; "false">
 
 <!ELEMENT text:object-index-source ( text:index-title-template?,
 									 text:object-index-entry-template? ) >
@@ -843,6 +847,7 @@
 
 <!ELEMENT text:user-index (text:user-index-source, text:index-body) >
 <!ATTLIST text:user-index text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:user-index text:protected %boolean; "false">
 
 <!ELEMENT text:user-index-source ( text:index-title-template?,
 								   text:user-index-entry-template*,
@@ -871,6 +876,7 @@
 <!ELEMENT text:alphabetical-index (text:alphabetical-index-source, 
 									text:index-body)>
 <!ATTLIST text:alphabetical-index text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:alphabetical-index text:protected %boolean; "false">
 
 <!ELEMENT text:alphabetical-index-source ( text:index-title-template?, 
 							text:alphabetical-index-entry-template* ) >
@@ -912,6 +918,7 @@
 
 <!ELEMENT text:bibliography (text:bibliography-source, text:index-body) >
 <!ATTLIST text:bibliography text:style-name %styleName; #IMPLIED>
+<!ATTLIST text:bibliography text:protected %boolean; "false">
 
 <!ELEMENT text:bibliography-source ( text:index-title-template?,
 									 text:bibliography-entry-template* ) >

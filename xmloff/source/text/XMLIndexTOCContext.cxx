@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,8 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         pSourceElementName(NULL),
         bValid(sal_False),
-        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
+        sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
+        sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
     {
@@ -376,26 +377,43 @@ void XMLIndexTOCContext::StartElement(
         }
 
         // find text:style-name attribute and set section style
+        // find text:protected and set value
         sal_Int16 nCount = xAttrList->getLength();
+        sal_Bool bProtected = sal_False;
         for(sal_Int16 nAttr = 0; nAttr < nCount; nAttr++)
         {
             OUString sLocalName;
             sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
                 GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
                                   &sLocalName );
-            if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-                 (sLocalName.equalsAsciiL(sXML_style_name,
-                                          sizeof(sXML_style_name)-1)) )
+            if ( XML_NAMESPACE_TEXT == nPrefix)
             {
-                XMLPropStyleContext* pStyle =
-                    GetImport().GetTextImport()->FindSectionStyle(
-                        xAttrList->getValueByIndex(nAttr));
-                if (pStyle != NULL)
+                if ( sLocalName.equalsAsciiL(sXML_style_name,
+                                            sizeof(sXML_style_name)-1) )
                 {
-                    pStyle->FillPropertySet( xTOCPropertySet );
+                    XMLPropStyleContext* pStyle =
+                        GetImport().GetTextImport()->FindSectionStyle(
+                            xAttrList->getValueByIndex(nAttr));
+                    if (pStyle != NULL)
+                    {
+                        pStyle->FillPropertySet( xTOCPropertySet );
+                    }
+                }
+                else if ( sLocalName.equalsAsciiL(sXML_protected,
+                                                  sizeof(sXML_protected)-1) )
+                {
+                    sal_Bool bTmp;
+                    if ( SvXMLUnitConverter::convertBool(
+                         bTmp, xAttrList->getValueByIndex(nAttr) ) )
+                    {
+                        bProtected = bTmp;
+                    }
                 }
             }
         }
+        Any aAny;
+        aAny.setValue( &bProtected, ::getBooleanCppuType() );
+        xTOCPropertySet->setPropertyValue( sIsProtected, aAny );
     }
 }
 

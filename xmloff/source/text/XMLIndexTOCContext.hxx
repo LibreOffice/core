@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-30 16:46:20 $
+ *  last change: $Author: dvo $ $Date: 2001-05-29 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ enum IndexTypeEnum
 class XMLIndexTOCContext : public SvXMLImportContext
 {
     const ::rtl::OUString sTitle;
+    const ::rtl::OUString sIsProtected;
 
     /** XPropertySet of the index */
     ::com::sun::star::uno::Reference<
