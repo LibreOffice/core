@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-29 05:17:15 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -866,7 +866,7 @@ void SvXMLUnitConverter::convertTime( ::rtl::OUStringBuffer& rBuffer,
 sal_Bool SvXMLUnitConverter::convertTime( double& fTime,
                             const ::rtl::OUString& rString)
 {
-    rtl::OUString aTrimmed = rString.trim().toUpperCase();
+    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     // negative time duration?
@@ -1180,35 +1180,52 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
     sal_Int32 nMin   = 0;
     sal_Int32 nSec   = 0;
 
-    sal_Int32 nDateTokens = aDateStr.getTokenCount('-');
-    if ( nDateTokens > 3 || aDateStr.len() == 0 )
+    const sal_Uniocde* pStr;
+    pStr = aDateStr.getStr();
+    sal_Int32 nDateTokens = 1;
+    while ( *pStr )
+    {
+        if ( *pStr == '-' )
+            nDateTokens++;
+        pStr++;
+    }
+    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
         bSuccess = sal_False;
     else
     {
-        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-' ), 0, 9999 ) )
+        sal_int32 n = 0;
+        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
             bSuccess = sal_False;
         if ( nDateTokens >= 2 )
-            if ( !convertNumber( nMonth, aDateStr.getToken( 1, '-' ), 0, 12 ) )
+            if ( !convertNumber( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
                 bSuccess = sal_False;
         if ( nDateTokens >= 3 )
-            if ( !convertNumber( nDay, aDateStr.getToken( 2, '-' ), 0, 31 ) )
+            if ( !convertNumber( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
                 bSuccess = sal_False;
     }
 
-    if ( aTimeStr.len() > 0 )           // time is optional
+    if ( aTimeStr.getLength() > 0 )           // time is optional
     {
-        sal_Int32 nTimeTokens = aTimeStr.getTokenCount(':');
+        pStr = aDateStr.getStr();
+        sal_Int32 nTimeTokens = 1;
+        while ( *pStr )
+        {
+            if ( *pStr == ':' )
+                nTimeTokens++;
+            pStr++;
+        }
         if ( nTimeTokens > 3 )
             bSuccess = sal_False;
         else
         {
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':' ), 0, 23 ) )
+            sal_int32 n = 0;
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':'. n ), 0, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )
-                if ( !convertNumber( nMin, aTimeStr.getToken( 1, ':' ), 0, 59 ) )
+                if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
                     bSuccess = sal_False;
             if ( nTimeTokens >= 3 )
-                if ( !convertNumber( nSec, aTimeStr.getToken( 2, ':' ), 0, 59 ) )
+                if ( !convertNumber( nSec, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
                     bSuccess = sal_False;
         }
     }
@@ -1304,35 +1321,52 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
     sal_Int32 nMin   = 0;
     sal_Int32 nSec   = 0;
 
-    sal_Int32 nDateTokens = aDateStr.getTokenCount('-');
-    if ( nDateTokens > 3 || aDateStr.len() == 0 )
+    const sal_Uniocde* pStr;
+    pStr = aDateStr.getStr();
+    sal_Int32 nDateTokens = 1;
+    while ( *pStr )
+    {
+        if ( *pStr == '-' )
+            nDateTokens++;
+        pStr++;
+    }
+    if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
         bSuccess = sal_False;
     else
     {
-        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-' ), 0, 9999 ) )
+        sal_int32 n = 0;
+        if ( !convertNumber( nYear, aDateStr.getToken( 0, '-', n ), 0, 9999 ) )
             bSuccess = sal_False;
         if ( nDateTokens >= 2 )
-            if ( !convertNumber( nMonth, aDateStr.getToken( 1, '-' ), 0, 12 ) )
+            if ( !convertNumber( nMonth, aDateStr.getToken( 0, '-', n ), 0, 12 ) )
                 bSuccess = sal_False;
         if ( nDateTokens >= 3 )
-            if ( !convertNumber( nDay, aDateStr.getToken( 2, '-' ), 0, 31 ) )
+            if ( !convertNumber( nDay, aDateStr.getToken( 0, '-', n ), 0, 31 ) )
                 bSuccess = sal_False;
     }
 
-    if ( aTimeStr.len() > 0 )           // time is optional
+    if ( aTimeStr.getLength() > 0 )           // time is optional
     {
-        sal_Int32 nTimeTokens = aTimeStr.getTokenCount(':');
+        pStr = aDateStr.getStr();
+        sal_Int32 nTimeTokens = 1;
+        while ( *pStr )
+        {
+            if ( *pStr == ':' )
+                nTimeTokens++;
+            pStr++;
+        }
         if ( nTimeTokens > 3 )
             bSuccess = sal_False;
         else
         {
-            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':' ), 0, 23 ) )
+            sal_int32 n = 0;
+            if ( !convertNumber( nHour, aTimeStr.getToken( 0, ':'. n ), 0, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )
-                if ( !convertNumber( nMin, aTimeStr.getToken( 1, ':' ), 0, 59 ) )
+                if ( !convertNumber( nMin, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
                     bSuccess = sal_False;
             if ( nTimeTokens >= 3 )
-                if ( !convertNumber( nSec, aTimeStr.getToken( 2, ':' ), 0, 59 ) )
+                if ( !convertNumber( nSec, aTimeStr.getToken( 0, ':', n ), 0, 59 ) )
                     bSuccess = sal_False;
         }
     }
@@ -1755,7 +1789,7 @@ void SvXMLUnitConverter::convertNumFormat( OUStringBuffer& rBuffer,
 }
 
 void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
-                                  sal_Int16 nType ) const
+                               sal_Int16 nType ) const
 {
     const sal_Char *pSync = 0;
     switch( nType )
