@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:19:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:29:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "ÅíçìÝñùóç";
         Text[ dutch ] = "Updating";
         Text[ french ] = "Actualisation";
-        Text[ spanish ] = "Updating";
+        Text[ spanish ] = "Actualización";
         Text[ italian ] = "Updating";
         Text[ danish ] = "Updating";
         Text[ swedish ] = "Uppdatering";
@@ -112,7 +112,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "ÅíçìÝñùóç óõíäÝóåùí êáôÜ ôç öüñôùóç";
         Text[ dutch ] = "Update links when loading";
         Text[ french ] = "Actualiser les liens lors du chargement";
-        Text[ spanish ] = "Update links when loading";
+        Text[ spanish ] = "Actualizar vínculos al cargar";
         Text[ italian ] = "Update links when loading";
         Text[ danish ] = "Update links when loading";
         Text[ swedish ] = "Uppdatera länkar vid laddning";
@@ -382,7 +382,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ greek ] = "Ñõèìßóåéò";
         Text[ dutch ] = "Settings";
         Text[ french ] = "Paramètres";
-        Text[ spanish ] = "Settings";
+        Text[ spanish ] = "Configuración";
         Text[ italian ] = "Settings";
         Text[ danish ] = "Settings";
         Text[ swedish ] = "Inställningar";
@@ -643,7 +643,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ french ] = "Image %PRODUCTNAME Writer";
         Text[ swedish ] = "Grafik %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer afbeelding";
-        Text[ spanish ] = "%PRODUCTNAME Writer Imagen ";
+        Text[ spanish ] = "%PRODUCTNAME Writer Imagen";
         Text[ english_us ] = "%PRODUCTNAME Writer Graphics";
         Text[ chinese_simplified ] = "%PRODUCTNAME Writer Í¼ÐÎ";
         Text[ russian ] = "%PRODUCTNAME Writer - Ðèñóíîê";
@@ -1299,7 +1299,7 @@ StringArray STR_ARR_METRIC
         < "Ó¢´ç" ; FUNIT_INCH ; > ;
         < "Ó¢³ß" ; FUNIT_FOOT ; > ;
         < "Ó¢Àï" ; FUNIT_MILE ; > ;
-        < "Æ¤¿ÉÐÍ×Ö·û" ; FUNIT_PICA ; > ;
+        < "Æ¤¿É" ; FUNIT_PICA ; > ;
         < "µã" ; FUNIT_POINT ; > ;
     };
     ItemList [ russian ] =
@@ -1347,7 +1347,7 @@ StringArray STR_ARR_METRIC
         < "­^¤o" ; FUNIT_INCH ; > ;
         < "­^¤Ø" ; FUNIT_FOOT ; > ;
         < "­^¨½" ; FUNIT_MILE ; > ;
-        < "¥Ö¥i«¬¦r¤¸" ; FUNIT_PICA ; > ;
+        < "¥Ö¥i" ; FUNIT_PICA ; > ;
         < "ÂI" ; FUNIT_POINT ; > ;
     };
     ItemList [ arabic ] =
