@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:38:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ arabic ] = "ΣΨΡ γΟΡΜ";
         Text[ dutch ] = "Rij ingevoegd";
         Text[ chinese_simplified ] = "θ΅θΆ«ζ’ε…¥";
-        Text[ greek ] = "Η στήλη εισάχθηκε";
+        Text[ greek ] = "Έγινε εισαγωγή της στήλης";
         Text[ korean ] = "ν–‰μ΄ μ‚½μ…λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Satύr eklendi";
         Text[ language_user1 ] = " ";
@@ -270,7 +270,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ arabic ] = "ΜΟζα γΟΡΜ";
         Text[ dutch ] = "Tabel ingevoegd";
         Text[ chinese_simplified ] = "ε ε…¥ε·¥δ½θ΅¨";
-        Text[ greek ] = "Ο πίνακας εισάχθηκε";
+        Text[ greek ] = "Έγινε εισαγωγή του φύλλου";
         Text[ korean ] = "μ‹νΈκ°€ μ‚½μ…λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Tablo eklendi";
         Text[ language_user1 ] = " ";
@@ -369,7 +369,7 @@ ModelessDialog RID_SCDLG_CHANGES
         Text[ arabic ] = "ΜΟζα γΝΠζέ";
         Text[ dutch ] = "Tabel gewist";
         Text[ chinese_simplified ] = "ε ι™¤η„ε·¥δ½θ΅¨";
-        Text[ greek ] = "Διαγραμμένοι πίνακες";
+        Text[ greek ] = "Διαγραμμένα φύλλα";
         Text[ korean ] = "μ‹νΈκ°€ μ‚­μ λμ—μµλ‹λ‹¤.";
         Text[ turkish ] = "Tablo silindi";
         Text[ language_user1 ] = " ";
@@ -1019,6 +1019,8 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
+
 
 
 
