@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:22:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,18 +593,6 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
         // release UI lock
         pWindow->DecrementLockCount();
     }
-
-#ifdef REMOTE_APPSERVER
-
-     if( ! pWindow->ImplGetFrameData()->mbInternalDragGestureRecognizer )
-     {
-        if( xSource.is() )
-        {
-            xSource->startDrag( DragGestureEvent(), 0, 0, 0, Reference< XTransferable >(), Reference< XDragSourceListener > () );
-        }
-     }
-
-#endif
 
     return n;
 }
