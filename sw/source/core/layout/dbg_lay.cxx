@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbg_lay.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:04:56 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@
 #include "dflyobj.hxx"
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 ULONG SwProtocol::nRecord = 0;
@@ -802,12 +806,12 @@ void SwImplProtocol::SnapShot( const SwFrm* pFrm, ULONG nFlags )
         if( pFrm->GetDrawObjs() && nFlags & SNAP_FLYFRAMES )
         {
             aLayer += "[ ";
-            const SwDrawObjs &rObjs = *pFrm->GetDrawObjs();
+            const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
-                SdrObject *pO = rObjs[i];
-                if ( pO->ISA(SwVirtFlyDrawObj) )
-                    SnapShot( ((SwVirtFlyDrawObj*)pO)->GetFlyFrm(), nFlags );
+                SwAnchoredObject* pObj = rObjs[i];
+                if ( pObj->ISA(SwFlyFrm) )
+                    SnapShot( static_cast<SwFlyFrm*>(pObj), nFlags );
             }
             if( aLayer.Len() > 1 )
                 aLayer.Erase( aLayer.Len() - 2 );
