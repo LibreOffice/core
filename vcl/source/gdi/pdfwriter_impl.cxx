@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:22:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,18 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
                                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
     rBuffer.append( pHexDigits[ (nInt >> 4) & 15 ] );
     rBuffer.append( pHexDigits[ nInt & 15 ] );
+}
+
+static void appendUnicodeTextString( const String& rString, OStringBuffer& rBuffer )
+{
+    rBuffer.append( "<FEFF" );
+    for( int i = 0; i < rString.Len(); i++ )
+    {
+        sal_Unicode aChar = rString.GetChar(i);
+        appendHex( (sal_Int8)(aChar >> 8), rBuffer );
+        appendHex( (sal_Int8)(aChar & 255 ), rBuffer );
+    }
+    rBuffer.append( ">" );
 }
 
 // appends a double. PDF does not accept exponential format, only fixed point
@@ -467,6 +479,8 @@ void PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         appendMappedLength( rInfo.GetWidth(), rBuffer );
         rBuffer.append( " w\r\n" );
     }
+    else if( rInfo.GetWidth() == 0 )
+        rBuffer.append( "0 w\r\n" );
 }
 
 void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal_Int32 nDelta, OStringBuffer& rBuffer )
@@ -572,6 +586,16 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
 PDFWriterImpl::~PDFWriterImpl()
 {
     delete static_cast<VirtualDevice*>(m_pReferenceDevice);
+}
+
+void PDFWriterImpl::setDocInfo( const PDFDocInfo& rInfo )
+{
+    m_aDocInfo.Title                = rInfo.Title;
+    m_aDocInfo.Author               = rInfo.Author;
+    m_aDocInfo.Subject              = rInfo.Subject;
+    m_aDocInfo.Keywords             = rInfo.Keywords;
+    m_aDocInfo.Creator              = rInfo.Creator;
+    m_aDocInfo.Producer             = rInfo.Producer;
 }
 
 void PDFWriterImpl::emitComment( const OString& rComment )
@@ -800,12 +824,9 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
     SetUnitsPerPixel( 1000 );
 
     Point aNewPos( 0, 0 );
-    for(;;)
+    bool bRightToLeft;
+    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
-        int nCharPos;
-        bool bRightToLeft;
-        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
-            break;
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( cChar & 0xff00 )
         {
@@ -830,6 +851,7 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
             nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
+        // TODO: get kerning from builtin fonts
         GlyphItem aGI( nCharPos, cChar, aNewPos, nGlyphFlags, nGlyphWidth );
         AppendGlyph( aGI );
 
@@ -2358,8 +2380,110 @@ bool PDFWriterImpl::emitCatalog()
     return true;
 }
 
+sal_Int32 PDFWriterImpl::emitInfoDict()
+{
+    sal_Int32 nObject = createObject();
+
+    if( updateObject( nObject ) )
+    {
+        OStringBuffer aLine( 1024 );
+        aLine.append( nObject );
+        aLine.append( " 0 obj\r\n"
+                      "<< " );
+        if( m_aDocInfo.Title.Len() )
+        {
+            aLine.append( "/Title " );
+            appendUnicodeTextString( m_aDocInfo.Title, aLine );
+            aLine.append( "\r\n" );
+        }
+        if( m_aDocInfo.Author.Len() )
+        {
+            aLine.append( "/Author " );
+            appendUnicodeTextString( m_aDocInfo.Author, aLine );
+            aLine.append( "\r\n" );
+        }
+        if( m_aDocInfo.Subject.Len() )
+        {
+            aLine.append( "/Subject " );
+            appendUnicodeTextString( m_aDocInfo.Subject, aLine );
+            aLine.append( "\r\n" );
+        }
+        if( m_aDocInfo.Keywords.Len() )
+        {
+            aLine.append( "/Keywords " );
+            appendUnicodeTextString( m_aDocInfo.Keywords, aLine );
+            aLine.append( "\r\n" );
+        }
+        if( m_aDocInfo.Creator.Len() )
+        {
+            aLine.append( "/Creator " );
+            appendUnicodeTextString( m_aDocInfo.Creator, aLine );
+            aLine.append( "\r\n" );
+        }
+        if( m_aDocInfo.Producer.Len() )
+        {
+            aLine.append( "/Producer " );
+            appendUnicodeTextString( m_aDocInfo.Producer, aLine );
+            aLine.append( "\r\n" );
+        }
+        TimeValue aTVal, aGMT;
+        oslDateTime aDT;
+        osl_getSystemTime( &aGMT );
+        osl_getLocalTimeFromSystemTime( &aGMT, &aTVal );
+        osl_getDateTimeFromTimeValue( &aTVal, &aDT );
+        aLine.append( "/CreationDate (D:" );
+        aLine.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Year/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Year)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Month/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Month)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Day/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Day)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Hours/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Hours)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Minutes/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Minutes)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Seconds/10)%10)) );
+        aLine.append( (sal_Char)('0' + ((aDT.Seconds)%10)) );
+        sal_uInt32 nDelta = 0;
+        if( aGMT.Seconds > aTVal.Seconds )
+        {
+            aLine.append( "-" );
+            nDelta = aGMT.Seconds-aTVal.Seconds;
+        }
+        else if( aGMT.Seconds < aTVal.Seconds )
+        {
+            aLine.append( "+" );
+            nDelta = aTVal.Seconds-aGMT.Seconds;
+        }
+        else
+            aLine.append( "Z" );
+        if( nDelta )
+        {
+            aLine.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
+            aLine.append( (sal_Char)('0' + ((nDelta/3600)%10)) );
+            aLine.append( "'" );
+            aLine.append( (sal_Char)('0' + ((nDelta/600)%6)) );
+            aLine.append( (sal_Char)('0' + ((nDelta/60)%10)) );
+        }
+        aLine.append( "')\r\n" );
+
+        aLine.append( ">>\r\nendobj\r\n\r\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            nObject = 0;
+    }
+    else
+        nObject = 0;
+
+    return nObject;
+}
+
 bool PDFWriterImpl::emitTrailer()
 {
+    // emit doc info
+    sal_Int32 nDocInfoObject = emitInfoDict();
+
     // emit xref table
 
     // remember start
@@ -2395,8 +2519,14 @@ bool PDFWriterImpl::emitTrailer()
     aLine.append( "\r\n"
                   "   /Root " );
     aLine.append( m_nCatalogObject );
-    aLine.append( " 0 R\r\n"
-                  ">>\r\n"
+    aLine.append( " 0 R\r\n" );
+    if( nDocInfoObject )
+    {
+        aLine.append( "   /Info " );
+        aLine.append( nDocInfoObject );
+        aLine.append( " 0 R\r\n" );
+    }
+    aLine.append( ">>\r\n"
                   "startxref\r\n" );
     aLine.append( (sal_Int64)nXRefOffset );
     aLine.append( "\r\n"
@@ -3273,10 +3403,11 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
         return;
 
     OStringBuffer aLine;
+    aLine.append( "q 0 w " );
     m_aPages.back().appendPoint( rStart, aLine );
     aLine.append( " m " );
     m_aPages.back().appendPoint( rStop, aLine );
-    aLine.append( " l S\r\n" );
+    aLine.append( " l S Q\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -4136,8 +4267,9 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
         return;
 
     OStringBuffer aLine( 20 * nPoints );
+    aLine.append( "q 0 w " );
     m_aPages.back().appendPolygon( rPoly, aLine, rPoly[0] == rPoly[nPoints-1] );
-    aLine.append( "S\r\n" );
+    aLine.append( "S Q\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
