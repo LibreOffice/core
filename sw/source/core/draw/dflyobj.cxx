@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:02:04 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,32 +252,6 @@ sal_Bool SwVirtFlyDrawObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintIn
     if(!SwFlyFrm::IsPaint((SdrObject*)this, pFlyFrm->GetShell()))
     {
         bDrawObject = sal_False;
-    }
-
-    // do this things only for objects on the highest level
-    // what means directly insetrted at the page
-    if(GetPage() && GetPage() == GetObjList())
-    {
-        const BYTE nHellId = pFlyFrm->GetShell()->GetDoc()->GetHellId();
-
-        if(nHellId == GetLayer())
-        {
-            //Fuer Rahmen in der Hoelle gelten andere Regeln:
-            //1. Rahmen mit einem Parent werden nie direkt, sondern von ihren
-            //   Parents gepaintet.
-            //1a.Es sei denn, der Parent steht nicht in der Hoelle.
-            //2. Rahmen mit Childs painten zuerst die Childs in
-            //   umgekehrter Z-Order.
-            SwFlyFrm *pFly = (SwFlyFrm*)GetFlyFrm();
-            const sal_Bool bInFly = pFly->GetAnchor()->IsInFly();
-
-            if(!bInFly || (bInFly && pFly->GetAnchor()->FindFlyFrm()->GetVirtDrawObj()->GetLayer() != nHellId))
-            {
-                SwDrawView* pDrawView = pFlyFrm->GetShell()->Imp()->GetDrawView();
-                pDrawView->Imp().PaintFlyChilds( pFly, rOut, rInfoRec );
-                bDrawObject = sal_False;
-            }
-        }
     }
 
     if(bDrawObject)
