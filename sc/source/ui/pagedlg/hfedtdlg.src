@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:04 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@
     Text[ chinese_simplified ] = "Ò³Ã¼(ÓÒ)";    \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñïğàâà)";    \
     Text[ polish ] = "Wiersz nag³ówka (z prawej)";  \
-    Text[ japanese ] = "Í¯ÀŞi‰Ej";    \
+    Text[ japanese ] = "Í¯ÀŞ(‰E)";  \
     Text[ chinese_traditional ] = "­¶­º(¥k)";   \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íãíä)";   \
     Text[ dutch ] = "Koptekst (rechts)";    \
@@ -188,7 +188,7 @@
     Text[ chinese_simplified ] = "Ò³Ã¼(×ó)";    \
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë (ñëåâà)"; \
     Text[ polish ] = "Wiersz nag³ówka (z lewej)";   \
-    Text[ japanese ] = "Í¯ÀŞi¶j";    \
+    Text[ japanese ] = "Í¯ÀŞ(¶)";  \
     Text[ chinese_traditional ] = "­¶­º(¥ª)";   \
     Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ (íÓÇÑ)";   \
     Text[ dutch ] = "Koptekst (links)"; \
@@ -216,7 +216,7 @@
     Text[ chinese_simplified ] = "Ò³½Å(ÓÒ)";    \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñïğàâà)"; \
     Text[ polish ] = "Wiersz stopki (z prawej)";    \
-    Text[ japanese ] = "Ì¯Ài‰Ej"; \
+    Text[ japanese ] = "Ì¯À(‰E)";   \
     Text[ chinese_traditional ] = "­¶§À(¥k)";   \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íãíä)"; \
     Text[ dutch ] = "Voettekst (rechts)";   \
@@ -244,7 +244,7 @@
     Text[ chinese_simplified ] = "Ò³½Å(×ó)";    \
     Text[ russian ] = "Íèæíèé êîëîíòèòóë (ñëåâà)";  \
     Text[ polish ] = "Wiersz stopki (z lewej)"; \
-    Text[ japanese ] = "Ì¯À (¶j"; \
+    Text[ japanese ] = "Ì¯À(¶)";   \
     Text[ chinese_traditional ] = "­¶§À(¥ª)";   \
     Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ (íÓÇÑ)"; \
     Text[ dutch ] = "Voettekst (links)";    \
@@ -269,7 +269,7 @@ TabDialog RID_SCDLG_HFED_HEADER
     Text [ portuguese_brazilian ] = "Cabeçalho" ;
     Text [ portuguese ] = "Cabeçalhos" ;
     Text [ finnish ] = "Yläteksti" ;
-    Text [ danish ] = "Sidehoved" ;
+    Text [ danish ] = "Sidehoveder" ;
     Text [ french ] = "En-têtes" ;
     Text [ swedish ] = "Sidhuvuden" ;
     Text [ dutch ] = "Kopteksten" ;
@@ -325,7 +325,7 @@ TabDialog RID_SCDLG_HFED_FOOTER
     Text [ portuguese_brazilian ] = "Rodapé" ;
     Text [ portuguese ] = "Rodapé" ;
     Text [ finnish ] = "Alateksti" ;
-    Text [ danish ] = "Sidefod" ;
+    Text [ danish ] = "Sidefødder" ;
     Text [ french ] = "Pieds de pages" ;
     Text [ swedish ] = "Sidfötter" ;
     Text [ dutch ] = "Voetteksten" ;
@@ -862,7 +862,7 @@ TabPage RID_HFBASE
         QuickHelpText [ swedish ] = "Filnamn" ;
         QuickHelpText [ dutch ] = "Bestandsnaam" ;
         QuickHelpText [ spanish ] = "Nombre de archivo" ;
-        QuickHelpText [ english_us ] = "File name" ;
+        QuickHelpText [ english_us ] = "File Name" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "file.bmp" ; };
@@ -1002,7 +1002,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen des aktuellen Tabellennamens : Einf³gen des aktuellen Tabellennamens */
     QuickHelpText[ russian ] = "Èìÿ ëèñòà";
         QuickHelpText[ polish ] = "Nazwa tabeli";
-        QuickHelpText[ japanese ] = "•\\‚Ì–¼‘O";
+        QuickHelpText[ japanese ] = "•\\–¼";
         QuickHelpText[ chinese_simplified ] = "±í¸ñÃû³Æ";
         QuickHelpText[ chinese_traditional ] = "¤u§@ªí¦WºÙ";
         QuickHelpText[ arabic ] = "ÇÓã ÇáÌÏæá";
@@ -1232,7 +1232,7 @@ TabPage RID_HFBASE
         Text [ portuguese ] = "Use os botões para mudar o tipo de letra ou inserir campos como data, hora, etc." ;
         Text [ finnish ] = "Kuvapainikkeilla voit vaihtaa tekstin fontin tai lisätä erikoiskomennon, kuten päiväyksen tai ajan." ;
         Text [ danish ] = "Brug knapperne til at forandre skrifttypen eller til at indsætte felter som dato, klokkeslæt etc." ;
-        Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insérer des instructions de champ telles que la date, l'heure, etc." ;
+        Text [ french ] = "Utilisez les boutons pour modifier la police ou pour insérer des champs tels que la date, l'heure, etc." ;
         Text [ swedish ] = "Använd kommandoknapparna för att ändra teckensnitt eller infoga fältkommandon som datum, klockslag etc." ;
         Text [ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen." ;
         Text [ spanish ] = "Utilice los botones para modificar la fuente o para insertar comandos como fecha, hora, etc." ;
@@ -1240,7 +1240,7 @@ TabPage RID_HFBASE
         Text[ chinese_simplified ] = "ÇëÄú°´»÷°´Å¥£¬¸ü¸Ä×ÖÌå»ò²åÈëÈÕÆÚ£¬Ê±¼äµÈÇøÓòÖ¸Áî¡£";
         Text[ russian ] = "Äëÿ èçìåíåíèÿ øğèôòà èëè äëÿ âñòàâêè òàêèõ êîìàíä ïîëÿ êàê äàòà, âğåìÿ è ò.ä. èñïîëüçóéòå êíîïêè.";
         Text[ polish ] = "U¿yj przycisków, aby zmieniæ czcionkê oraz wpisaæ datê i godzinê.";
-        Text[ japanese ] = "•ÏXÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ä¤Ì«İÄ‚Ì•ÏX‚ ‚é‚¢‚Í“ú•t¤“™‚ÌÌ¨°ÙÄŞºÏİÄŞ‚Ì‘}“ü‚ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ japanese ] = "Ì«İÄ‚Ì•ÏX‚Ü‚½‚Í“ú•tÌ¨°ÙÄŞ‚âÌ¨°ÙÄŞ‚È‚Ç‚ğ‘}“ü‚·‚é‚Æ‚«‚ÍA•ÏXÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = "½Ğ±z«ö¤@¤U«ö¶s¡MÅÜ§ó¦r«¬©Î´¡¤J¤é´Á¡M®É¶¡µ¥°Ï°ì«ü¥O¡C";
         Text[ arabic ] = "ÇÓÊÎÏã ÇáãİÇÊíÍ áÊÛííÑ äæÚ ÇáÎØ Ãæ áÅÖÇİÉ ÃæÇãÑ ÍŞæá¡ ãËá ÇáÊÇÑíÎ¡ Ãæ ÇáæŞÊ ...ÅáÎ.";
         Text[ dutch ] = "Gebruik de knoppen om de tekstattributen te wijzigen of om veldopdrachten zoals datum, tijd, enz. in te voegen.";
