@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:04:59 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,22 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             {
                 rBlocks.ClearDoc();
                 const String &rLNm = rStrings[nGlosEntry];
-                if( rBlocks.BeginPutDoc( rBlocks.GetValidShortCut(rLNm,true),
-                    rLNm ))
+
+                String sShortcut = rLNm;
+
+                // Need to check make sure the shortcut is not already being used
+                xub_StrLen nStart = 0;
+                USHORT nCurPos = rBlocks.GetIndex( sShortcut );
+                xub_StrLen nLen = sShortcut.Len();
+                while( (USHORT)-1 != nCurPos )
+                {
+                    sShortcut.Erase( nLen ) +=
+                        String::CreateFromInt32( ++nStart );    // add an Number to it
+                    nCurPos = rBlocks.GetIndex( sShortcut );
+                }
+
+                if( rBlocks.BeginPutDoc( sShortcut, sShortcut ))    // Make the shortcut and the name the same
+
                 {
                     SwDoc* pGlDoc = rBlocks.GetDoc();
                     SwNodeIndex aIdx( pGlDoc->GetNodes().GetEndOfContent(),
