@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 12:21:18 $
+ *  last change: $Author: od $ $Date: 2002-08-28 12:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 {
     ((OutputDevice&)rOut).SetLayoutMode( bChgToRTL ?
                                          TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL :
-                                         TEXT_LAYOUT_COMPLEX_DISABLED );
+                                         TEXT_LAYOUT_BIDI_STRONG );
 }
 
 #endif
@@ -1257,12 +1257,16 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
         return;
     pPara->SetPrepWidows( sal_True );
 
+    // These two lines of code have been deleted for #102340#.
+    // Obviously the widow control does not work if we have a
+    // pMaster->pFollow->pFollow situation:
+
     // returnen oder nicht ist hier die Frage.
     // Ohne IsLocked() ist 5156 gefaehrlich,
     // ohne IsFollow() werden die Orphans unterdrueckt: 6968.
     // Abfrage auf IsLocked erst hier, weil das Flag gesetzt werden soll.
-    if( IsLocked() && IsFollow() )
-        return;
+//  if( IsLocked() && IsFollow() )
+//      return;
 
     MSHORT nHave = nNeed;
 
