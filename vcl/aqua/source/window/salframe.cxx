@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ganaya $ $Date: 2000-11-13 21:12:25 $
+ *  last change: $Author: pluby $ $Date: 2000-11-14 00:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,11 @@ BOOL SalFrame::PostEvent( void* pData )
 
 void SalFrame::SetTitle( const XubString& rTitle )
 {
-  ByteString aByteTitle( rTitle, gsl_getSystemTextEncoding() );
-  char *pTitle = (char*)aByteTitle.GetBuffer();
-  VCLWindow_SetTitle(maFrameData.mhWnd, pTitle);
+
+    ByteString aByteTitle( rTitle, gsl_getSystemTextEncoding() );
+    char *pTitle = (char *)aByteTitle.GetBuffer();
+    VCLWindow_setTitle(maFrameData.mhWnd, pTitle);
+
 }
 
 // -----------------------------------------------------------------------
