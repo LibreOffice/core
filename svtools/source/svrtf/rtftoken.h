@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:43 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,7 +873,8 @@ enum RTF_TOKEN_IDS {
     RTF_DFRMTXTX,
     RTF_DFRMTXTY,
     RTF_DROPCAPLI,
-    RTF_DROPCAPLT,
+    RTF_DROPCAPT,
+    RTF_ABSNOOVRLP,
     RTF_PHMRG,
     RTF_PHPG,
     RTF_PHCOL,
