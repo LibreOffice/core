@@ -41,7 +41,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 
-..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\applicat.rdb
+..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
 
 ..\com\sun\star\awt\*.idl %_DEST%\idl%_EXT%\com\sun\star\awt\*.idl
