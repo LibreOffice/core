@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:54:56 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:45:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,10 +92,6 @@ SRC1FILES =\
         error.src
 
 
-OBJFILES = \
-        $(OBJ)$/swlib.obj   \
-        $(OBJ)$/swcomlib.obj
-
 SLOFILES = \
         $(SLO)$/appenv.obj   \
         $(SLO)$/apphdl.obj   \
@@ -141,18 +137,6 @@ LIB1OBJFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(SLO)$/swdll.obj : $(INCCOM)$/swdll0.hxx
-$(SLO)$/swmodule.obj : $(INCCOM)$/swdll0.hxx
-
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-$(INCCOM)$/swdll0.hxx: makefile.mk
-    echo \#define DLL_NAME \"$(DLLPRE)sw$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-$(INCCOM)$/swdll0.hxx: makefile.mk
-    echo #define DLL_NAME "sw$(UPD)$(DLLPOSTFIX).DLL" >$@
-.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 
