@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 16:03:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #include "imgmgr.hxx"
 #include "app.hxx"
@@ -123,7 +126,12 @@ static ModuleIdToImagegMgr                                    m_aModuleIdToImage
 
 Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
+<<<<<<< imagemgr.cxx
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
+=======
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (cd100003) ::GetImage" );
+
+>>>>>>> 1.8.232.1
     if ( !rFrame.is() )
         return Image();
 
@@ -289,6 +297,7 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
 
     return Image();
 }
+<<<<<<< imagemgr.cxx
 /*
     Reference< XController > xController = rFrame->getController();
     if ( xController.is() )
@@ -376,3 +385,5 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
     return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
 }
 */
+=======
+>>>>>>> 1.8.232.1
