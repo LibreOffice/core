@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-14 13:04:49 $
+ *  last change: $Author: sj $ $Date: 2002-03-25 14:43:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1666,8 +1666,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
                 // #90790#
                 pObj->SetItem( SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP) );
                 pObj->SetItem( SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT) );
-
-                pObj->SetLogicRect( aRect1 );
+//              pObj->SetLogicRect( aRect1 );   // sj: #98326#
             }
             aSize.Height() = aRect0.GetSize().Height();
             Point aPos( aTitleRect.TopLeft() );
