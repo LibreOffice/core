@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:07:08 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,7 +1652,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "¨Ï¥Î­¶­±¼Ë¦¡(~W)";
         Text[ arabic ] = "ÈäãØ ÕİÍÉ";
         Text[ greek ] = "Ìå ğñüôõğï óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú ÇÔ²²(~Y)";
+        Text[ korean ] = "ÆäÀÌÁö À¯Çü°ú ÇÔ²²";
         Text[ turkish ] = "Sayfa biçiml~i";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
