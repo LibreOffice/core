@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:50:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,27 +133,27 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERSUPPLIER_HPP_
+#include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNodeFactory.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORY_HPP_
+#include <com/sun/star/script/browse/XBrowseNodeFactory.hpp>
 #endif
-#ifndef  _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
-#include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
+#ifndef  _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODEFACTORYVIEWTYPE_HPP_
+#include <com/sun/star/script/browse/BrowseNodeFactoryViewTypes.hpp>
 #endif
 #include <drafts/com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -167,7 +167,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 namespace css = ::com::sun::star;
 
 #define _SVSTDARR_STRINGSDTOR
@@ -932,9 +932,9 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
-            rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR ) );
-            //rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
+                ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+            rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
+            //rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
         }
         catch( Exception& e )
         {
