@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-01 16:52:33 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SPRITE_HXX
-#define _SPRITE_HXX
+#ifndef SD_SPRITE_HXX
+#define SD_SPRITE_HXX
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -82,13 +82,29 @@
 // - Sprite -
 // ----------
 
-class SdMetaFile;
+
+namespace sd {
+
 class Marker;
+class MetaFile;
 
 class Sprite
 {
-protected:
+public:
+    Sprite( List* pListOfBmpEx );
+    ~Sprite();
 
+    BOOL            StartMoving( OutputDevice* pOut,
+                                 OutputDevice* pBottomLayer = NULL,
+                                 BitmapEx* pTopLayer = NULL,
+                                 MetaFile** ppTopMtf = NULL,
+                                 Marker* pObjStartMarker = NULL,
+                                 Marker* pObjEndMarker = NULL );
+    void            MoveTo( OutputDevice* pOut, const Point& rPt, const Size* pSz = NULL );
+    void            MoveTo( OutputDevice* pOut, const Point& rPt, const double& rScaleX, const double& rScaleY );
+    void            EndMoving( OutputDevice* pOut );
+
+protected:
     MapMode         aOldMap;
     Region          aOldClip;
     Rectangle       aPaintRect;
@@ -99,7 +115,7 @@ protected:
     VirtualDevice*  pBottomLayer;
     BitmapEx*       pActBmpEx;
     BitmapEx*       pTopLayer;
-    SdMetaFile**    ppTopMtf;
+    MetaFile**  ppTopMtf;
     Marker*         pObjStartMarker;
     Marker*         pObjEndMarker;
     List*           pListOfBmpEx;
@@ -109,20 +125,8 @@ protected:
     BOOL            ImplPrepareMoveTo();
     void            ImplDrawSprite( OutputDevice* pOut, const Point& rPt, const Size& rSz );
 
-public:
-
-                    Sprite( List* pListOfBmpEx );
-                    ~Sprite();
-
-    BOOL            StartMoving( OutputDevice* pOut,
-                                 OutputDevice* pBottomLayer = NULL,
-                                 BitmapEx* pTopLayer = NULL,
-                                 SdMetaFile** ppTopMtf = NULL,
-                                 Marker* pObjStartMarker = NULL,
-                                 Marker* pObjEndMarker = NULL );
-    void            MoveTo( OutputDevice* pOut, const Point& rPt, const Size* pSz = NULL );
-    void            MoveTo( OutputDevice* pOut, const Point& rPt, const double& rScaleX, const double& rScaleY );
-    void            EndMoving( OutputDevice* pOut );
 };
 
-#endif // _SPRITE_HXX
+}
+
+#endif
