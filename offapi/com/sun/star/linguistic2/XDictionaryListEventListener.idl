@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryListEventListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 16:22:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@ module com { module sun { module star { module linguistic2 {
     dictionary-list events.
 
     <P>This interface is the base class for all dictionary-list event
-    listeners. It's single function will be called by the broadcasting
-    dictionary-list in order to notify it's registered listeners.</P>
+    listeners. Its single function will be called by the broadcasting
+    dictionary-list in order to notify its registered listeners.</P>
 
     @see    com::sun::star::linguistic2::DictionaryListEvent
     @see    com::sun::star::linguistic2::XDictionaryList
