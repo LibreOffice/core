@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:28:45 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,21 @@ using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::sax;
 using namespace ::rtl;
+using namespace ::xmloff::token;
 using namespace cppu;
+
+sal_Char __READONLY_DATA sXML_np__office_ooo[] = "___office";
+sal_Char __READONLY_DATA sXML_np__style_ooo[] = "___style";
+sal_Char __READONLY_DATA sXML_np__text_ooo[] = "___text";
+sal_Char __READONLY_DATA sXML_np__table_ooo[] = "___table";
+sal_Char __READONLY_DATA sXML_np__draw_ooo[] = "___draw";
+sal_Char __READONLY_DATA sXML_np__dr3d_ooo[] = "___dr3d";
+sal_Char __READONLY_DATA sXML_np__meta_ooo[] = "___meta";
+sal_Char __READONLY_DATA sXML_np__number_ooo[] = "___number";
+sal_Char __READONLY_DATA sXML_np__chart_ooo[] = "___chart";
+sal_Char __READONLY_DATA sXML_np__script_ooo[] = "___script";
+sal_Char __READONLY_DATA sXML_np__config_ooo[] = "___config";
+sal_Char __READONLY_DATA sXML_np__form_ooo[] = "___form";
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -266,7 +280,7 @@ SvXMLImportContext *SvxXMLTableImportContext::CreateChildContext( USHORT nPrefix
                 }
             }
         }
-        catch( uno::Exception& e )
+        catch( uno::Exception& )
         {
         }
     }
@@ -337,10 +351,18 @@ SvxXMLXTableImport::SvxXMLXTableImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XNameContainer > & rTable,
     Reference< XGraphicObjectResolver >& xGrfResolver )
-:   SvXMLImport(xServiceFactory),
+:   SvXMLImport(xServiceFactory, 0),
     mrTable( rTable )
 {
     SetGraphicResolver( xGrfResolver );
+
+    // OOo namespaces
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__office_ooo ) ),
+                        GetXMLToken(XML_N_OFFICE_OOO),
+                        XML_NAMESPACE_OFFICE );
+    GetNamespaceMap().Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw_ooo ) ),
+                        GetXMLToken(XML_N_DRAW_OOO),
+                        XML_NAMESPACE_DRAW );
 }
 
 SvxXMLXTableImport::~SvxXMLXTableImport() throw ()
