@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:20 $
+ *  last change: $Author: cmc $ $Date: 2002-11-14 12:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,8 +496,6 @@ public:
         public:
             WW8_FC mnFC;
 
-            //mpData is a pointer to the maRawData pool, so bitwise copying is
-            //exactly what we want
             sal_uInt8* mpData;
             sal_uInt16 mnLen;
             sal_uInt16 mnIStd; // only for Fkp.Papx (actualy Style-Nr)
@@ -505,8 +503,10 @@ public:
 
             explicit Entry(WW8_FC nFC) : mnFC(nFC), mpData(0), mnLen(0),
                 mnIStd(0), mbMustDelete(false) {}
+            Entry(const Entry &rEntry);
             ~Entry();
-            bool operator<(const Entry& rSecond) const;
+            bool operator<(const Entry& rEntry) const;
+            Entry& operator=(const Entry& rEntry);
         };
 
         sal_uInt8 maRawData[512];

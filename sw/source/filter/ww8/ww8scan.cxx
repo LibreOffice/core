@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:11 $
+ *  last change: $Author: cmc $ $Date: 2002-11-14 12:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2493,6 +2493,40 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(BYTE nFibVer, SvStream* pSt, SvStream* pDataSt,
         SeekPos(nStartFc);
 
     pSt->Seek(nOldPos);
+}
+
+WW8PLCFx_Fc_FKP::WW8Fkp::Entry::Entry(const Entry &rEntry)
+    : mnFC(rEntry.mnFC), mnLen(rEntry.mnLen), mnIStd(rEntry.mnIStd),
+    mbMustDelete(rEntry.mbMustDelete)
+{
+    if (mbMustDelete)
+    {
+        mpData = new sal_uInt8[mnLen];
+        memcpy(mpData, rEntry.mpData, mnLen);
+    }
+    else
+        mpData = rEntry.mpData;
+}
+
+WW8PLCFx_Fc_FKP::WW8Fkp::Entry&
+    WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator=(const Entry &rEntry)
+{
+    if (mbMustDelete)
+        delete[] mpData;
+
+    mnFC = rEntry.mnFC;
+    mnLen = rEntry.mnLen;
+    mnIStd = rEntry.mnIStd;
+    mbMustDelete = rEntry.mbMustDelete;
+
+    if (mbMustDelete)
+    {
+        mpData = new sal_uInt8[mnLen];
+        memcpy(mpData, rEntry.mpData, mnLen);
+    }
+    else
+        mpData = rEntry.mpData;
+    return *this;
 }
 
 WW8PLCFx_Fc_FKP::WW8Fkp::Entry::~Entry()
