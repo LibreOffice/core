@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:11:52 $
+ *  last change: $Author: rt $ $Date: 2003-07-01 07:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 #include <interface.hxx>
 #include <cstdio>
 #include <sys/utsname.h>
-#include <vcl/_version.h>
+#include <_version.h>
 #include <errno.h>
 #include <string>
 #include <string.h>
