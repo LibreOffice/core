@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 12:59:27 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 12:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,18 +403,18 @@ BOOL SdView::InsertData( const Reference< XTransferable >& rxTransferable,
         }
         else
         {
-            if( !pPage )
-                pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
-
             // internal paste
             SdrModel*   pWorkModel = (SdrModel*) pOwnData->GetWorkDocument();
-            SdrPage*    pWorkPage = pWorkModel->GetPage( 0 ); pPage->SetRectsDirty();
+            SdrPage*    pWorkPage = pWorkModel->GetPage( 0 ); pWorkPage->SetRectsDirty();
             Size        aSize( pWorkPage->GetAllObjBoundRect().GetSize() );
 
             aDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
             aDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
 
             bReturn = Paste( *pWorkModel, aDropPos, pPage, nPasteOptions );
+
+            if( !pPage )
+                pPage = (SdPage*) GetPageViewPvNum( 0 )->GetPage();
 
             String aLayout( pPage->GetLayoutName() );
             aLayout.Erase( aLayout.SearchAscii( SD_LT_SEPARATOR ) );
