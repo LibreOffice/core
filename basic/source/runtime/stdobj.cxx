@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-12 09:00:48 $
+ *  last change: $Author: ab $ $Date: 2002-10-02 15:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,6 +353,9 @@ static Methods aMethods[] = {
   { "Variant",      SbxVARIANT },
 { "IsUnoStruct",    SbxBOOL,      1 | _FUNCTION, RTLNAME(IsUnoStruct)       },
   { "Variant",      SbxVARIANT },
+{ "Join",           SbxSTRING,      2 | _FUNCTION, RTLNAME(Join)            },
+  { "list",         SbxOBJECT },
+  { "delimiter",    SbxSTRING },
 { "Kill",           SbxNULL,      1 | _FUNCTION, RTLNAME(Kill)              },
   { "filespec",     SbxSTRING },
 { "LBound",         SbxINTEGER,      1 | _FUNCTION, RTLNAME(LBound)         },
@@ -473,6 +476,10 @@ static Methods aMethods[] = {
   { "string",       SbxLONG },
 { "Spc",            SbxSTRING,      1 | _FUNCTION, RTLNAME(Spc)             },
   { "Count",        SbxLONG },
+{ "Split",          SbxOBJECT,      3 | _FUNCTION, RTLNAME(Split)           },
+  { "expression",   SbxSTRING },
+  { "delimiter",    SbxSTRING },
+  { "count",        SbxLONG },
 { "Sqr",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Sqr)               },
   { "number",       SbxDOUBLE },
 { "Str",            SbxSTRING,    1 | _FUNCTION, RTLNAME(Str)               },
