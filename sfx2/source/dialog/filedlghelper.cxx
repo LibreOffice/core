@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-29 09:14:59 $
+ *  last change: $Author: dv $ $Date: 2001-07-03 15:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #endif
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/ucbhelper.hxx>
 #include <vcl/cvtgrf.hxx>
 
 #ifndef _SV_MSGBOX_HXX
@@ -399,7 +400,8 @@ void FileDialogHelper_Impl::updateVersions()
     {
         INetURLObject aObj( aPathSeq[0] );
 
-        if ( aObj.GetProtocol() == INET_PROT_FILE )
+        if ( ( aObj.GetProtocol() == INET_PROT_FILE ) &&
+            ( utl::UCBContentHelper::IsDocument( aObj.GetMainURL( INetURLObject::NO_DECODE ) ) ) )
         {
             SfxMedium aMed( aObj.GetMainURL( INetURLObject::NO_DECODE ),
                             SFX_STREAM_READONLY_MAKECOPY, TRUE );
@@ -471,9 +473,11 @@ IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
 
     if ( mbShowPreview && ( aPathSeq.getLength() == 1 ) )
     {
-
         OUString    aURL = aPathSeq[0];
-        SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
+        SvStream*   pIStm = NULL;
+
+        if ( utl::UCBContentHelper::IsDocument( aURL ) )
+            pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
 
         if( pIStm )
         {
@@ -1090,7 +1094,10 @@ void FileDialogHelper_Impl::saveConfig()
             aValue >>= bValue;
             aUserData.SetToken( 1, ' ', String::CreateFromInt32( (sal_Int32) bValue ) );
 
-            aUserData.SetToken( 2, ' ', getPath() );
+            INetURLObject aObj( getPath() );
+
+            if ( aObj.GetProtocol() == INET_PROT_FILE )
+                aUserData.SetToken( 2, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
             String aFilter = getFilter();
             aFilter = EncodeSpaces_Impl( aFilter );
@@ -1123,7 +1130,10 @@ void FileDialogHelper_Impl::saveConfig()
             catch( IllegalArgumentException ){}
         }
 
-        aUserData.SetToken( 1, ' ', getPath() );
+        INetURLObject aObj( getPath() );
+
+        if ( aObj.GetProtocol() == INET_PROT_FILE )
+            aUserData.SetToken( 1, ' ', aObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
         String aFilter = getFilter();
         aFilter = EncodeSpaces_Impl( aFilter );
@@ -1254,6 +1264,9 @@ void FileDialogHelper_Impl::setExtension( OUString& rFileName ) const
     if ( ! mbHasAutoExt )
         return;
 
+    if ( utl::UCBContentHelper::IsFolder( rFileName ) )
+        return;
+
     Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
     if ( ! xCtrlAccess.is() )
@@ -1284,26 +1297,6 @@ void FileDialogHelper_Impl::setExtension( OUString& rFileName ) const
         rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 }
-
-#if 0
-            // beim Speichern
-                // und automatischer Dateinamenserweiterung...
-                if ( pThis->_pImp->_pCbAutoExtension &&
-                     pThis->_pImp->_pCbAutoExtension->IsChecked())
-                {
-                    // Dateiextension beim Filterwechsel anpassen
-                    String aNewFile = pThis->_pImp->_pEdFileName->GetText();
-                    String aExt = GetFsysExtension_Impl( aNewFile );
-
-                    // aber nur wenn bereits eine Endung vorhanden ist
-                    if ( aExt.Len() )
-                    {
-                        SetFsysExtension_Impl( aNewFile, pThis->_aDefExt );
-                        pThis->_pImp->_pEdFileName->SetText( aNewFile );
-                    }
-                }
-#endif
-
 
 // ------------------------------------------------------------------------
 // -----------          FileDialogHelper        ---------------------------
