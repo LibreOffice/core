@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:10:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,10 +263,6 @@
 // Gemeinsame Core-Strings
 #define RC_COMCORE_BEGIN            (RC_COMMON_CORE)
 #define RC_COMCORE_END              (RC_COMMON_CORE + 49)
-
-// Wizzards
-#define RC_WIZARD_BEGIN             RC_WIZARD
-#define RC_WIZARD_END               (RC_WIZARD + 99)
 
 // Shell-Verzeichnis
 #define RC_SHELLS_BEGIN             RC_SHELLS
