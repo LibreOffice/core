@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 13:49:50 $
+#   last change: $Author: vg $ $Date: 2005-03-08 15:32:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,6 @@ JAVAFILES=							\
     common$/Properties.java                 		\
     common$/Resource.java                   		\
     common$/SystemDialog.java				\
-    common$/TaskList.java					\
     common$/Configuration.java				\
     common$/ConfigNode.java					\
     common$/ConfigGroup.java				\
