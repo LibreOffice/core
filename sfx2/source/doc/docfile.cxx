@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-14 16:50:05 $
+ *  last change: $Author: mav $ $Date: 2002-02-19 17:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSIMPLEFILEACCESS_HPP_
+#include <com/sun/star/ucb/XSimpleFileAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -116,6 +119,18 @@
 #endif
 #ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
+#include <com/sun/star/ucb/OpenMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
+#include <com/sun/star/io/XActiveDataStreamer.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -209,6 +224,21 @@ using namespace ::com::sun::star::io;
 #include "xmlversion.hxx"
 
 #define MAX_REDIRECT 5
+
+//===========================================================================
+
+class ActiveDataStreamer : public ::cppu::WeakImplHelper1< XActiveDataStreamer >
+{
+    Reference< XStream > mStream;
+public:
+
+    virtual Reference< XStream > SAL_CALL getStream() { return mStream; }
+
+    virtual void SAL_CALL setStream( const Reference< XStream >& stream ) { mStream = stream; }
+};
+
+//===========================================================================
+
 
 class SfxLockBytesHandler_Impl : public ::utl::UcbLockBytesHandler
 {
@@ -1385,16 +1415,78 @@ void SfxMedium::Transfer_Impl()
 
         sal_Bool bSuccess = sal_False;
         INetURLObject aDest( GetURLObject() );
+        Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
+
+        // source is the temp file written so far
+        INetURLObject aSource( pImp->pTempFile->GetURL() );
+
+    Reference< XOutputStream > aDestStream;
+    Reference< XSimpleFileAccess > aSimpleAccess;
+
+    ::ucb::Content aOriginalContent;
+        if ( ::ucb::Content::create( aDest.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aOriginalContent ) )
+    {
+        Close();
+        ::ucb::Content aTempCont;
+        if( ::ucb::Content::create( aSource.GetMainURL( INetURLObject::NO_DECODE ), xEnv, aTempCont ) )
+        {
+            try
+            {
+                Reference< XInputStream > aTempInput = aTempCont.openStream();
+                Reference < XOutputStream > xOrigOut;
+                Reference< XActiveDataStreamer > xSink = new ActiveDataStreamer;
+
+                OpenCommandArgument2 aArg;
+                aArg.Mode       = OpenMode::DOCUMENT;
+                aArg.Priority   = 0; // unused
+                aArg.Sink       = xSink;
+                aArg.Properties = Sequence< Property >( 0 ); // unused
+
+                aOriginalContent.executeCommand( DEFINE_CONST_UNICODE( "open" ), makeAny( aArg ) );
+                xOrigOut = xSink->getStream()->getOutputStream();
+
+                sal_Int32 nRead;
+                const sal_Int32 nBufSize = 32765;
+                Sequence < sal_Int8 > aSequence ( nBufSize );
+
+                do
+                {
+                    nRead = aTempInput->readBytes ( aSequence, nBufSize );
+                    if ( nRead < nBufSize )
+                    {
+                        Sequence < sal_Int8 > aTempBuf ( aSequence.getConstArray(), nRead );
+                        xOrigOut->writeBytes ( aTempBuf );
+                    }
+                    else
+                        xOrigOut->writeBytes ( aSequence );
+                } while ( nRead == nBufSize );
+
+                xOrigOut->closeOutput();
+                bSuccess = sal_True;
+            }
+            catch( Exception& )
+            {}
+
+                if ( bSuccess )
+                {
+                        pImp->pTempFile->EnableKillingFile( sal_True );
+                        delete pImp->pTempFile;
+                        pImp->pTempFile = NULL;
+
+                        // without a TempFile the physical and logical name should be the same
+                        ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
+                        return;
+                }
+        }
+    }
+
         if ( aDest.removeSegment() )
         {
             // create content for the parent folder and call transfer on that content with the source content
             // and the destination file name as parameters
-            Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
             ::ucb::Content aSourceContent;
             ::ucb::Content aTransferContent;
 
-            // source is the temp file written so far
-            INetURLObject aSource( pImp->pTempFile->GetURL() );
             String aFileName = GetLongName();
             if ( !aFileName.Len() )
                 aFileName = GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -1403,7 +1495,6 @@ void SfxMedium::Transfer_Impl()
             {
                 // free resources, otherwise the transfer may fail
                 Close();
-
                 // don't create content before Close(), because if the storage was opened in direct mode, it will be flushed
                 // in Close() and this leads to a transfer command executed in the package, which currently is implemented as
                 // remove+move in the file FCP. The "remove" is notified to the ::ucb::Content, that clears its URL and its
@@ -1424,7 +1515,6 @@ void SfxMedium::Transfer_Impl()
                     // default is overwrite existing files
                     nNameClash = NameClash::OVERWRITE;
 
-                BOOL bSuccess = FALSE;
                 try
                 {
                     bSuccess = aTransferContent.transferContent( aSourceContent, ::ucb::InsertOperation_MOVE, aFileName, nNameClash );
@@ -1453,8 +1543,8 @@ void SfxMedium::Transfer_Impl()
                     eError = ERRCODE_IO_GENERAL;
                 }
 
-                if ( bSuccess && !::utl::UCBContentHelper::IsDocument( pImp->pTempFile->GetURL() ) )
-                {
+            if ( bSuccess && !::utl::UCBContentHelper::IsDocument( pImp->pTempFile->GetURL() ) )
+            {
                     // if the transfer was done by a direct move, the source file is gone
                     // so we have to destroy the TempFile object that points to it
                     pImp->pTempFile->EnableKillingFile( sal_False );
@@ -1464,9 +1554,11 @@ void SfxMedium::Transfer_Impl()
                     // without a TempFile the physical and logical name should be the same
                     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aLogicName, aName );
                     return;
-                }
             }
+
         }
+    }
+
     }
 }
 
