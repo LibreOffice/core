@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-10 20:09:23 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "Größe" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
