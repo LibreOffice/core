@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:45:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,11 +1313,17 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     :SfxTabPage         ( pParent, SVX_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
     ,maSecOptionsFL     ( this, ResId( FL_SEC_SECOPTIONS ) )
     ,maSecOptionsFI     ( this, ResId( FI_SEC_SECOPTIONS ) )
+    ,maSaveOrSendDocsFI ( this, ResId( FI_SEC_SAVEORSENDDOCS ) )
     ,maSaveOrSendDocsCB ( this, ResId( CB_SEC_SAVEORSENDDOCS ) )
+    ,maSignDocsFI       ( this, ResId( FI_SEC_SIGNDOCS ) )
     ,maSignDocsCB       ( this, ResId( CB_SEC_SIGNDOCS ) )
+    ,maPrintDocsFI      ( this, ResId( FI_SEC_PRINTDOCS ) )
     ,maPrintDocsCB      ( this, ResId( CB_SEC_PRINTDOCS ) )
+    ,maCreatePdfFI      ( this, ResId( FI_SEC_CREATEPDF ) )
     ,maCreatePdfCB      ( this, ResId( CB_SEC_CREATEPDF ) )
+    ,maRemovePersInfoFI ( this, ResId( FI_SEC_REMOVEPERSINFO ) )
     ,maRemovePersInfoCB ( this, ResId( CB_SEC_REMOVEPERSINFO ) )
+    ,maRecommPasswdFI   ( this, ResId( FI_SEC_RECOMMPASSWD ) )
     ,maRecommPasswdCB   ( this, ResId( CB_SEC_RECOMMPASSWD ) )
     ,maMacroSecFL       ( this, ResId( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, ResId( FI_SEC_MACROSEC ) )
@@ -1546,16 +1552,21 @@ int SvxSecurityTabPage::DeactivatePage( SfxItemSet* pSet )
 
 namespace
 {
-    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl )
+/*    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl, FixedImage& _rImg )
     {
         bool    b = _rOpt.IsOptionEnabled( _eOpt );
         _rCtrl.Enable( b );
+        _Img.Show( !b );
         return b;
     }
-
-    bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, CheckBox& _rCtrl )
+*/
+    bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt,
+                                                        CheckBox& _rCtrl, FixedImage& _rImg )
     {
-        bool    b = Enable( _rOpt, _eOpt, _rCtrl );
+//        bool    b = Enable( _rOpt, _eOpt, _rCtrl, _rImg );
+        bool    b = _rOpt.IsOptionEnabled( _eOpt );
+        _rCtrl.Enable( b );
+        _rImg.Show( !b );
         if( b )
             _rCtrl.Check( _rOpt.IsOptionSet( _eOpt ) );
         return b;
@@ -1606,12 +1617,12 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& _rSet )
 
 void SvxSecurityTabPage::Reset( const SfxItemSet& _rSet )
 {
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB, maSaveOrSendDocsFI );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB, maSignDocsFI );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB, maPrintDocsFI );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB, maCreatePdfFI );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB, maRemovePersInfoFI );
+    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB, maRecommPasswdFI );
 
     String sNewText = msProtectRecordsStr;
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
