@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:21:33 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2083,7 +2083,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 void SwFrm::AppendDrawObj( SwDrawContact *pNew )
 {
     if ( pNew->GetAnchor() && pNew->GetAnchor() != this )
-        pNew->DisconnectFromLayout( FALSE );
+        pNew->DisconnectFromLayout( false );
 
     SdrObject* pObj = pNew->GetMaster();
     if ( pNew->GetAnchor() != this )
