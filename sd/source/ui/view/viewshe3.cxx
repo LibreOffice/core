@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-29 12:35:42 $
+ *  last change: $Author: ka $ $Date: 2001-06-21 11:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1053,17 +1053,19 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
     } */
     // Es wird jetzt (vorlaeufig ?) der Druckerschacht vom Drucker genommen
 
-    MapMode aMap = rPrinter.GetMapMode();
-    Point aPageOfs = rPrinter.GetPageOffset();
+    const MapMode       aOldMap( rPrinter.GetMapMode() );
+    MapMode             aMap( aOldMap );
+    const Orientation   eOldOrient = rPrinter.GetOrientation();
+    Point               aPageOfs( rPrinter.GetPageOffset() );
+    Fraction            aScale(1, 2);
+    BOOL                bPrintExcluded = TRUE;
+
     aMap.SetOrigin(Point() - aPageOfs);
-    Fraction aScale(1, 2);
     aMap.SetScaleX(aScale);
     aMap.SetScaleY(aScale);
     rPrinter.SetMapMode(aMap);
-    Orientation eOrient = rPrinter.GetOrientation();
     rPrinter.SetOrientation(ORIENTATION_PORTRAIT);
 
-    BOOL bPrintExcluded = TRUE;
     if ( pPrintOpts )
         bPrintExcluded = pPrintOpts->IsHiddenPages();
 
@@ -1200,7 +1202,9 @@ void SdViewShell::PrintOutline(SfxPrinter& rPrinter,
     pOutliner->SetUpdateMode(bOldUpdateMode);
     pOutliner->SetPaperSize(aPaperSize);
     pOutliner->Init( nOutlMode );
-    rPrinter.SetOrientation(eOrient);
+
+    rPrinter.SetOrientation(eOldOrient);
+    rPrinter.SetMapMode( aOldMap );
 }
 
 /*************************************************************************
@@ -1244,13 +1248,14 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
 
     if ( nDlgResult == RET_OK )
     {
-        MapMode aMap = rPrinter.GetMapMode();
-        MapMode aOldMap = aMap;
-        Point aPageOfs = rPrinter.GetPageOffset();
+        const MapMode   aOldMap( rPrinter.GetMapMode() );
+        MapMode         aMap( aOldMap );
+        Point           aPageOfs( rPrinter.GetPageOffset() );
+        SdDrawView*     pPrintView;
+        BOOL            bPrintExcluded = TRUE;
+
         aMap.SetOrigin(Point() - aPageOfs);
         rPrinter.SetMapMode(aMap);
-
-        SdDrawView* pPrintView;
 
         if( this->ISA( SdDrawViewShell ) )
             pPrintView = new SdDrawView( pDocSh, &rPrinter, (SdDrawViewShell*)this );
@@ -1258,14 +1263,12 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
             pPrintView = new SdDrawView( pDocSh, &rPrinter, NULL );
 
         List*   pList = pMaster->GetPresObjList();
-
-        USHORT nPageCount = nProgressOffset;
+        USHORT  nPageCount = nProgressOffset;
 
         WriteFrameViewData();
 
         nPrintedHandoutPageNum = 0;
 
-        BOOL bPrintExcluded = TRUE;
         if ( pPrintOpts )
             bPrintExcluded = pPrintOpts->IsHiddenPages();
 
@@ -1351,7 +1354,6 @@ void SdViewShell::PrintHandout(SfxPrinter& rPrinter,
 
         nPrintedHandoutPageNum = 1;
         delete pPrintView;
-
         rPrinter.SetMapMode(aOldMap);
     }
 }
@@ -1428,14 +1430,15 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
 
     if ( nDlgResult == RET_OK )
     {
-        MapMode aMap = rPrinter.GetMapMode();
-        MapMode aOldMap = aMap;
-        Point aPageOfs = rPrinter.GetPageOffset();
+        const MapMode   aOldMap( rPrinter.GetMapMode() );
+        MapMode         aMap( aOldMap );
+        Point           aPageOfs( rPrinter.GetPageOffset() );
+        SdDrawView*     pPrintView;
+
         aMap.SetOrigin(Point() - aPageOfs);
         rPrinter.SetMapMode(aMap);
-        Size aPrintSize = rPrinter.GetOutputSize();
+        Size aPrintSize( rPrinter.GetOutputSize() );
 
-        SdDrawView* pPrintView;
         if( this->ISA( SdDrawViewShell ) )
             pPrintView = new SdDrawView( pDocSh, &rPrinter, (SdDrawViewShell*)this );
         else
@@ -1737,9 +1740,9 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                 nPage++;
             }
         }
-        delete pPrintView;
 
-        rPrinter.SetMapMode(aOldMap);
+        delete pPrintView;
+        rPrinter.SetMapMode( aOldMap );
     }
 }
 
