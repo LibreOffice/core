@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:11:06 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 {
     Window::ImplLoadRes( rResId );
 
-    USHORT  nMask = ReadShortRes();
+    ULONG  nMask = ReadLongRes();
 
     if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
           RSC_DOCKINGWINDOW_Y) & nMask )
@@ -451,7 +451,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
         MapUnit ePosMap = MAP_PIXEL;
 
         if ( RSC_DOCKINGWINDOW_XYMAPMODE & nMask )
-            ePosMap = (MapUnit)ReadShortRes();
+            ePosMap = (MapUnit)ReadLongRes();
 
         if ( RSC_DOCKINGWINDOW_X & nMask )
         {
