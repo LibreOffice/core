@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:42:30 $
+ *  last change: $Author: cd $ $Date: 2002-10-11 15:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ private:
     ResMgr*         pResMgr;
     PopupMenu*      pWindowMenu;
     PopupMenu*      pPickMenu;
+    PopupMenu*      pAddonsMenu;
     Timer*          pAutoDeactivate; // Hack fuer QAP-Bug
     USHORT          nVisibleItems;
     USHORT          nId;
@@ -124,6 +125,10 @@ protected:
     DECL_LINK( Activate, Menu * );
     DECL_LINK( Deactivate, Menu * );
     DECL_LINK( SettingsChanged, void* );
+
+    // Used for runtime popup menus
+    void            UpdateImages( Menu* pMenu );
+    void            RemoveMenuImages( Menu* pMenu );
 
 public:
                     ~SfxVirtualMenu();
