@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-12 13:41:11 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
             INetURLObject aURL;
             aURL.SetSmartURL (sURL);
             aURL.SetPass (sPassword);
-            m_aOpenFilesList.push_back (new String (aURL.GetMainURL()));
+            m_aOpenFilesList.push_back (new String (aURL.GetMainURL( INetURLObject::NO_DECODE )));
             m_pPage1OpenLB->InsertEntry (sTitle);
         }
     }

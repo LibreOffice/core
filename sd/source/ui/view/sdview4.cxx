@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:41:16 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,7 @@ IMPL_LINK_INLINE_START( SdView, DropInsertFileHdl, Timer*, pTimer )
     }
 
     // get adjusted DropFile name
-    aDropFile = aURL.GetMainURL();
+    aDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     BOOL        bOK = FALSE;
     const       SfxFilter* pFilter = NULL;

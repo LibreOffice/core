@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-12 12:43:29 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                     String         aFileName;
 
                    if( ( INET_PROT_FILE == aURL.GetProtocol() ) &&
-                       ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL(), aFileName ) )
+                       ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL( INetURLObject::NO_DECODE ), aFileName ) )
                    {
                        ::vos::OProcess                 aApp( aFileName );
                        ::vos::OArgumentList            aParameters;

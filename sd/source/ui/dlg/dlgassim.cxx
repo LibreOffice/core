@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:05:50 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ void TemplateCache::Load()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "template.sod" ) ) );
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ | STREAM_NOCREATE, TRUE ); // Download
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ | STREAM_NOCREATE, TRUE ); // Download
     SvStream* pStream = aMedium.GetInStream();
 
     if( !pStream )
@@ -388,7 +388,7 @@ void TemplateCache::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "template.sod" ) ) );
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC, FALSE ); // Download
+    SfxMedium aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC, FALSE ); // Download
     SvStream* pStream = aMedium.GetInStream();
 
     if( !pStream )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 07:50:11 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,7 +1486,7 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
     }
 
     // get adjusted file name
-    aStr = aURL.GetMainURL();
+    aStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
     if( bFullDocDestination &&
         eCA == presentation::ClickAction_DOCUMENT &&

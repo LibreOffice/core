@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 08:32:56 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
     }
 
     // get adjusted FileName
-    String aFileName( aURL.GetMainURL() );
+    String aFileName( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     if (!aFileName.Len())
     {

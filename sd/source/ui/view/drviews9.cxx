@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-08 15:31:18 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                 // Soll nur ein Link benutzt werden?
                 if( pGrafObj && pGal->IsLinkage() )
                 {
-                    pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL(), pGal->GetFilterName() );
+                    pGrafObj->SetGraphicLink( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), pGal->GetFilterName() );
                 }
             }
             // Sound als OLE-Objekt einfuegen
@@ -304,7 +304,7 @@ void SdDrawViewShell::ExecGallery(SfxRequest& rReq)
                 SvStorageRef        aStor = new SvStorage( String(), STREAM_STD_READWRITE );
                 String              aName;
 
-                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( pGal->GetURL().GetMainURL(), aStor );
+                aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ), aStor );
                 if (aIPObj.Is())
                 {
                     Size        aSize(aIPObj->GetVisArea(ASPECT_CONTENT).GetSize());

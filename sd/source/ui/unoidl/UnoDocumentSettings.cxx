@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-28 12:45:23 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 15:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XColorTable* pColTab = new XColorTable( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pColTab->SetName( aURL.getName() );
                         if( pColTab->Load() )
                         {
@@ -371,7 +371,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XDashList* pDashTab = new XDashList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pDashTab->SetName( aURL.getName() );
                         if( pDashTab->Load() )
                         {
@@ -393,7 +393,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XLineEndList* pTab = new XLineEndList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -415,7 +415,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XHatchList* pTab = new XHatchList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -437,7 +437,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XGradientList* pTab = new XGradientList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -459,7 +459,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         aPathURL.removeSegment();
                         aPathURL.removeFinalSlash();
 
-                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL(), (XOutdevItemPool*)&pDoc->GetPool() );
+                        XBitmapList* pTab = new XBitmapList( aPathURL.GetMainURL( INetURLObject::NO_DECODE ), (XOutdevItemPool*)&pDoc->GetPool() );
                         pTab->SetName( aURL.getName() );
                         if( pTab->Load() )
                         {
@@ -834,7 +834,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetColorTable()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soc") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
@@ -844,7 +844,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetDashList()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sod") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
@@ -854,7 +854,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetLineEndList()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soe") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
@@ -864,7 +864,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetHatchList()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("soh") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
@@ -874,7 +874,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetGradientList()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sog") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
@@ -884,7 +884,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                     aPathURL.insertName( pDoc->GetBitmapList()->GetName() );
                     String aExt( RTL_CONSTASCII_USTRINGPARAM("sob") );
                     aPathURL.setExtension( aExt );
-                    OUString aPath( aPathURL.GetMainURL() );
+                    OUString aPath( aPathURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     *pValue <<= aPath;
                 }
                 break;
