@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 09:09:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 11:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,15 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
             default:
                 VCLXSpinField::setProperty( PropertyName, Value );
         }
+
+        if (BASEPROPERTY_TEXTCOLOR == nPropType)
+        {   // after setting a new text color, think again about the AutoColor flag of the control
+            // 17.05.2001 - 86859 - frank.schoenheit@germany.sun.com
+            pField->SetAutoColor(!Value.hasValue());
+        }
     }
+    else
+        VCLXSpinField::setProperty( PropertyName, Value );
 }
 
 // --------------------------------------------------------------------------------------
