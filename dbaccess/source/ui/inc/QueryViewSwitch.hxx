@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:37 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@ namespace dbaui
         virtual ~OQueryViewSwitch();
 
         virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();

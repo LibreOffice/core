@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:01:14 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace dbaui
         String  m_strOrigText;      // wird beim Undo wiederhergestellt
         OQueryTextView* m_pView;
         BOOL    m_bAccelAction;     // Wird bei Cut, Copy, Paste gesetzt
+        BOOL    m_bStopTimer;
 
         DECL_LINK(OnUndoActionTimer, void*);
         DECL_LINK(OnInvalidateTimer, void*);
@@ -101,6 +102,9 @@ namespace dbaui
             // bitte nicht SetModifyHdl benutzen, den brauche ich selber, der hier wird von dem damit gesetzten Handler
             // gerufen
             // der Link bekommt einen Pointer-to-string, der nach dem Link nicht mehr gueltig ist
+
+        void stopTimer();
+        void startTimer();
     };
 }
 

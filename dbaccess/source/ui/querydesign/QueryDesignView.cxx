@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,26 @@ sal_Bool OQueryDesignView::isCutAllowed()
     {
     }
     return bCutAllowed;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryDesignView::isPasteAllowed()
+{
+    return m_pSelectionBox->HasChildPathFocus();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryDesignView::isCopyAllowed()
+{
+    return m_pSelectionBox->HasChildPathFocus();
+}
+// -----------------------------------------------------------------------------
+void OQueryDesignView::stopTimer()
+{
+    m_pSelectionBox->stopTimer();
+}
+// -----------------------------------------------------------------------------
+void OQueryDesignView::startTimer()
+{
+    m_pSelectionBox->startTimer();
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::cut()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 10:50:54 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,17 @@ void OQueryContainerWindow::hideBeamer()
     Resize();
 }
 // -----------------------------------------------------------------------------
+long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pView)
+    {
+        m_pView->getRealView()->getController()->InvalidateFeature(SID_CUT);
+        m_pView->getRealView()->getController()->InvalidateFeature(SID_COPY);
+        m_pView->getRealView()->getController()->InvalidateFeature(SID_PASTE);
+    }
+    return Window::PreNotify(rNEvt);
+}
+// -----------------------------------------------------------------------------
 void OQueryContainerWindow::showBeamer(const Reference<XFrame>& _xFrame)
 {
     if(!m_pBeamer)
@@ -305,6 +316,16 @@ void OQueryTextView::copy()
 sal_Bool OQueryTextView::isCutAllowed()
 {
     return m_pEdit->GetSelected().Len() != 0;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryTextView::isPasteAllowed()
+{
+    return sal_True;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryTextView::isCopyAllowed()
+{
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::cut()

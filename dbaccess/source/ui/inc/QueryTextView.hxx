@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@ namespace dbaui
         ~OQueryContainerWindow();
 
         virtual void        Resize();
+        virtual long        PreNotify( NotifyEvent& rNEvt );
+
         void showBeamer(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
         void hideBeamer();
         void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
@@ -117,6 +119,8 @@ namespace dbaui
         virtual ~OQueryTextView();
 
         virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();
@@ -129,6 +133,8 @@ namespace dbaui
         virtual ::rtl::OUString getStatement();
         /// late construction
         virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        // allow access to our edit
+        OSqlEdit* getSqlEdit() const { return m_pEdit; }
     protected:
         virtual void Resize();
     };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqledit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:01:54 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ DBG_NAME(OSqlEdit);
 OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     MultiLineEdit( pParent, nWinStyle )
     ,m_bAccelAction( sal_False )
+    ,m_bStopTimer(sal_False )
     ,m_pView(pParent)
 {
     DBG_CTOR(OSqlEdit,NULL);
@@ -173,7 +174,8 @@ IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
 {
     static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_CUT);
     static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->InvalidateFeature(SID_COPY);
-    m_timerInvalidate.Start();
+    if(!m_bStopTimer)
+        m_timerInvalidate.Start();
     return 0L;
 }
 //------------------------------------------------------------------------------
@@ -207,6 +209,20 @@ void OSqlEdit::OverloadedSetText(const String& rNewText)
     MultiLineEdit::SetText(rNewText);
     m_strOrigText = rNewText;
     static_cast<OQueryContainerWindow*>(m_pView->GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
+}
+// -----------------------------------------------------------------------------
+void OSqlEdit::stopTimer()
+{
+    m_bStopTimer = sal_True;
+    if (m_timerInvalidate.IsActive())
+        m_timerInvalidate.Stop();
+}
+// -----------------------------------------------------------------------------
+void OSqlEdit::startTimer()
+{
+    m_bStopTimer = sal_False;
+    if (!m_timerInvalidate.IsActive())
+        m_timerInvalidate.Start();
 }
 
 //==============================================================================

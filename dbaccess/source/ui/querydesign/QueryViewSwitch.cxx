@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
+#endif
+#ifndef DBAUI_SQLEDIT_HXX
+#include "sqledit.hxx"
 #endif
 
 
@@ -206,6 +209,20 @@ sal_Bool OQueryViewSwitch::isCutAllowed()
     return m_pDesignView->isCutAllowed();
 }
 // -----------------------------------------------------------------------------
+sal_Bool OQueryViewSwitch::isCopyAllowed()
+{
+    if(m_pTextView->IsVisible())
+        return m_pTextView->isCopyAllowed();
+    return m_pDesignView->isCopyAllowed();
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryViewSwitch::isPasteAllowed()
+{
+    if(m_pTextView->IsVisible())
+        return m_pTextView->isPasteAllowed();
+    return m_pDesignView->isPasteAllowed();
+}
+// -----------------------------------------------------------------------------
 void OQueryViewSwitch::cut()
 {
     if(m_pTextView->IsVisible())
@@ -229,6 +246,8 @@ void OQueryViewSwitch::switchView()
     ToolBox* pToolBox = m_pDesignView->getToolBox();
     if(pToolBox && m_pTextView->IsVisible())
     {
+        m_pDesignView->stopTimer();
+        m_pTextView->getSqlEdit()->startTimer();
         pToolBox->SetParent(m_pTextView); // change owner ship
         m_pDesignView->Show(FALSE);
         pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
@@ -246,7 +265,10 @@ void OQueryViewSwitch::switchView()
     }
     else if(pToolBox)
     {
+        // we have to stop the sqledit from our textview
+
         pToolBox->SetParent(m_pDesignView); // change owner ship
+        m_pTextView->getSqlEdit()->stopTimer();
         //  pToolBox->ShowItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_ADDTABLE)-1)); // hide the separator
         pToolBox->HideItem(ID_BROWSER_ESACPEPROCESSING);
         pToolBox->ShowItem(ID_BROWSER_ADDTABLE);
@@ -262,8 +284,13 @@ void OQueryViewSwitch::switchView()
         m_pDesignView->InitFromParseNode();
         // only show the view when the data is inserted
         m_pDesignView->Show(static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode());
+        m_pDesignView->startTimer();
     }
     m_pDesignView->Resize();
+
+    m_pDesignView->getController()->getUndoMgr()->Clear();
+    m_pDesignView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
+    m_pDesignView->getController()->InvalidateFeature(ID_BROWSER_REDO);
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::clearDesignView()

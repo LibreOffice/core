@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:46:40 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,9 +318,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && m_pWindow->getView()->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
+            aReturn.bEnabled = m_pWindow->getView()->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable;
+            aReturn.bEnabled = m_bEditable && m_pWindow->getView()->isPasteAllowed();
             break;
         case ID_BROWSER_SQL:
             aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ namespace dbaui
     {
         friend class OQueryDesignView;
         ::std::vector<FASTBOOL>             m_bVisibleRow;  // an Pos steht die RowId
+        Timer                               m_timerInvalidate;
 
         long                                m_nSeekRow;
         BrowserMode                         m_nMode;                        // Merken des BrowseModes
@@ -130,7 +131,9 @@ namespace dbaui
         sal_uInt16                          m_nVisibleCount;                // Anzahl der max sichtbaren Zeilen
         sal_Bool                            m_bOrderByUnRelated;
         sal_Bool                            m_bGroupByUnRelated;
+        sal_Bool                            m_bStopTimer;
 
+        DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( Window* pParent );
                                     ~OSelectionBrowseBox();
 
@@ -205,6 +208,9 @@ namespace dbaui
         virtual sal_uInt16          GetDefaultColumnWidth(const String& rName) const;
 
         void                        Fill();
+
+        void                        stopTimer();
+        void                        startTimer();
 
     private:
         OTableFieldDesc*            FindFirstFreeCol(long & rCol);

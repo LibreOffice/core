@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:02 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@ namespace dbaui
         OQueryView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
         virtual ~OQueryView();
 
-        virtual sal_Bool isCutAllowed() = 0;
+        virtual sal_Bool isCutAllowed()     = 0;
+        virtual sal_Bool isPasteAllowed()   = 0;
+        virtual sal_Bool isCopyAllowed()    = 0;
         virtual void copy()     = 0;
         virtual void cut()      = 0;
         virtual void paste()    = 0;

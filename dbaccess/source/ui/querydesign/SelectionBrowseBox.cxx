@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 11:44:59 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
                    ,m_bOrderByUnRelated(sal_True)
                    ,m_bGroupByUnRelated(sal_True)
+                   ,m_bStopTimer(sal_False)
 {
     DBG_CTOR(OSelectionBrowseBox,NULL);
     SetHelpId(HID_CTL_QRYDGNCRIT);
@@ -202,6 +203,10 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
         m_bVisibleRow.push_back(sal_True);
 
     m_bVisibleRow[BROW_FUNCTION_ROW] = sal_False;   // zuerst ausblenden
+
+    m_timerInvalidate.SetTimeout(200);
+    m_timerInvalidate.SetTimeoutHdl(LINK(this, OSelectionBrowseBox, OnInvalidateTimer));
+    m_timerInvalidate.Start();
 }
 
 //------------------------------------------------------------------------------
@@ -2252,4 +2257,29 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
     }
 }
 // -----------------------------------------------------------------------------
+IMPL_LINK(OSelectionBrowseBox, OnInvalidateTimer, void*, EMPTYARG)
+{
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature(SID_CUT);
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature(SID_COPY);
+    static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature(SID_PASTE);
+    if(!m_bStopTimer)
+        m_timerInvalidate.Start();
+    return 0L;
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::stopTimer()
+{
+    m_bStopTimer = sal_True;
+    if (m_timerInvalidate.IsActive())
+        m_timerInvalidate.Stop();
+}
+// -----------------------------------------------------------------------------
+void OSelectionBrowseBox::startTimer()
+{
+    m_bStopTimer = sal_False;
+    if (!m_timerInvalidate.IsActive())
+        m_timerInvalidate.Start();
+}
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace dbaui
         ::com::sun::star::lang::Locale      m_aLocale;
         ::rtl::OUString                     m_sDecimalSep;
 
-        OSelectionBrowseBox*    m_pSelectionBox;    // presents the lower window
+        OSelectionBrowseBox*                m_pSelectionBox;    // presents the lower window
 
         ::rtl::OUString QuoteField( const ::rtl::OUString& rValue, sal_Int32 aType );
         void            InitFromParseNode();
@@ -168,6 +168,8 @@ namespace dbaui
         virtual ~OQueryDesignView();
 
         virtual sal_Bool isCutAllowed();
+        virtual sal_Bool isPasteAllowed();
+        virtual sal_Bool isCopyAllowed();
         virtual void copy();
         virtual void cut();
         virtual void paste();
@@ -206,6 +208,8 @@ namespace dbaui
         void zoomTableView(const Fraction& _rFraction);
 
         void SaveUIConfig();
+        void stopTimer();
+        void startTimer();
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeControl(Rectangle& rRect);
