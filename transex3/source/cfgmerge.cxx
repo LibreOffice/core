@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-22 12:57:00 $
+ *  last change: $Author: nf $ $Date: 2000-11-22 13:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,10 +185,9 @@ int InitCfgExport( char *pOutput )
 
     pParser = new CfgParser();
 
-/*  if ( bMergeMode )
+    if ( bMergeMode )
         pParser = new CfgMerge( sMergeSrc, sOutputFile, bErrorLog );
-      else  */
-    if ( sOutputFile.Len()) {
+      else if ( sOutputFile.Len()) {
         pParser = new CfgExport( sOutputFile, sPrj, sActFileName );
     }
     else
@@ -332,14 +331,28 @@ BOOL CfgParser::IsTokenClosed( const ByteString &rToken )
 
 /*****************************************************************************/
 void CfgParser::WorkOnText(
-    const ByteString &rText,
-    const ByteString &rIsoLang
+    ByteString &rText,
+    USHORT nLangIndex,
+    const ByteString &rResTyp
+)
+/*****************************************************************************/
+{
+}
+
+/*****************************************************************************/
+void CfgParser::AddText(
+    ByteString &rText,
+    const ByteString &rIsoLang,
+    const ByteString &rResTyp
 )
 /*****************************************************************************/
 {
     USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
     if ( nLang ) {
-         pStackData->sText[ Export::GetLangIndex( nLang )] = rText;
+        USHORT nLangIndex = Export::GetLangIndex( nLang );
+        pStackData->sResTyp = rResTyp;
+        WorkOnText( rText, nLangIndex, rResTyp );
+         pStackData->sText[ nLangIndex ] = rText;
     }
     else {
         ByteString sError( "Unknown language code: " );
@@ -349,7 +362,7 @@ void CfgParser::WorkOnText(
 }
 
 /*****************************************************************************/
-void CfgParser::WorkOnRessourceEnd( const ByteString &rResTyp )
+void CfgParser::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
 }
@@ -362,6 +375,8 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
     ByteString sTokenName;
     ByteString sTokenId;
+
+    BOOL bOutput = TRUE;
 
     switch ( nToken ) {
         case CFG_TOKEN_PACKAGE:
@@ -412,7 +427,7 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case CFG_CLOSETAG:
             sTokenName = sToken.GetToken( 1, '/' ).GetToken( 0, '>' ).GetToken( 0, ' ' );
                if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName )) {
-                WorkOnRessourceEnd( sCurrentResTyp );
+                WorkOnRessourceEnd();
                 aStack.Pop();
                 pStackData = aStack.GetStackData();
             }
@@ -425,16 +440,27 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
 
         case CFG_TEXTCHAR:
             sCurrentText += sToken;
+            bOutput = FALSE;
         break;
     }
 
     if ( sCurrentText.Len() && nToken != CFG_TEXTCHAR ) {
-        WorkOnText( sCurrentText, sCurrentIsoLang );
+        AddText( sCurrentText, sCurrentIsoLang, sCurrentResTyp );
+        Output( sCurrentText );
         sCurrentText = "";
         pStackData->sEndTextTag = sToken;
     }
 
+    if ( bOutput )
+        Output( sToken );
+
     return 1;
+}
+
+/*****************************************************************************/
+void CfgParser::Output( const ByteString& rOutput )
+/*****************************************************************************/
+{
 }
 
 /*****************************************************************************/
@@ -524,7 +550,7 @@ CfgExport::~CfgExport()
 }
 
 /*****************************************************************************/
-void CfgExport::WorkOnRessourceEnd( const ByteString &rResTyp )
+void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream ) {
@@ -564,18 +590,13 @@ void CfgExport::WorkOnRessourceEnd( const ByteString &rResTyp )
                     if ( !sText.Len())
                         sText = sFallback;
 
-                    Export::UnquotHTML( sText );
-                    USHORT nLangId = Export::LangId[ i ];
-                    sText = UTF8Converter::ConvertFromUTF8(
-                        sText, Export::GetCharSet( nLangId ));
-
                     ByteString sOutput( sPrj ); sOutput += "\t";
                     sOutput += sPath;
                     sOutput += "\t0\t";
-                    sOutput += rResTyp; sOutput += "\t";
+                    sOutput += pStackData->sResTyp; sOutput += "\t";
                     sOutput += sGroupId; sOutput += "\t";
                     sOutput += sLocalId; sOutput += "\t\t\t0\t";
-                    sOutput += ByteString::CreateFromInt64( nLangId );
+                    sOutput += ByteString::CreateFromInt64( Export::LangId[ i ]);
                     sOutput += "\t";
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
@@ -585,4 +606,134 @@ void CfgExport::WorkOnRessourceEnd( const ByteString &rResTyp )
             }
         }
     }
+}
+
+/*****************************************************************************/
+void CfgExport::WorkOnText(
+    ByteString &rText,
+    USHORT nLangIndex,
+    const ByteString &rResTyp
+)
+/*****************************************************************************/
+{
+    Export::UnquotHTML( rText );
+    USHORT nLangId = Export::LangId[ nLangIndex ];
+    rText = UTF8Converter::ConvertFromUTF8(
+        rText, Export::GetCharSet( nLangId ));
+}
+
+
+//
+// class CfgMerge
+//
+
+/*****************************************************************************/
+CfgMerge::CfgMerge(
+    const ByteString &rMergeSource, const ByteString &rOutputFile,
+    BOOL bErrorLog )
+/*****************************************************************************/
+                : CfgOutputParser( rOutputFile ),
+                pMergeDataFile( NULL ),
+                pResData( NULL )
+{
+    if ( rMergeSource.Len())
+        pMergeDataFile = new MergeDataFile(
+            rMergeSource, bErrorLog, RTL_TEXTENCODING_MS_1252 );
+}
+
+/*****************************************************************************/
+CfgMerge::~CfgMerge()
+/*****************************************************************************/
+{
+    delete pMergeDataFile;
+    delete pResData;
+}
+
+/*****************************************************************************/
+void CfgMerge::WorkOnText(
+    ByteString &rText,
+    USHORT nLangIndex,
+    const ByteString &rResTyp
+)
+/*****************************************************************************/
+{
+    if ( pMergeDataFile ) {
+        if ( !pResData ) {
+            ByteString sLocalId = pStackData->sIdentifier;
+            ByteString sGroupId;
+            if ( aStack.Count() == 1 ) {
+                sGroupId = sLocalId;
+                sLocalId = "";
+            }
+            else {
+                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+            }
+
+            ByteString sPlatform( "" );
+
+            pResData = new ResData( sPlatform, sGroupId );
+            pResData->sId = sLocalId;
+            pResData->sResTyp = pStackData->sResTyp;
+        }
+
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        if ( pEntrys ) {
+            ByteString sContent;
+            if (( nLangIndex != GERMAN_INDEX ) &&
+                ( nLangIndex != ENGLISH_INDEX ) &&
+                ( pEntrys->GetText(
+                    sContent, STRING_TYP_TEXT, nLangIndex )))
+            {
+                rText = UTF8Converter::ConvertToUTF8(
+                    sContent, Export::GetCharSet( Export::LangId[ nLangIndex ]));
+                Export::QuotHTML( rText );
+            }
+        }
+    }
+}
+
+/*****************************************************************************/
+void CfgMerge::Output( const ByteString& rOutput )
+/*****************************************************************************/
+{
+    if ( pOutputStream )
+        pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
+}
+
+/*****************************************************************************/
+void CfgMerge::WorkOnRessourceEnd()
+/*****************************************************************************/
+{
+    if ( pMergeDataFile && pResData ) {
+        PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+        if ( pEntrys ) {
+            for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
+                ByteString sContent;
+                if (( nIndex != GERMAN_INDEX ) &&
+                    ( nIndex != ENGLISH_INDEX ) &&
+                    ( LANGUAGE_ALLOWED( nIndex )) &&
+                    ( pEntrys->GetText(
+                        sContent, STRING_TYP_TEXT, nIndex, TRUE )) &&
+                    ( sContent != "-" ) && ( sContent.Len()))
+                {
+                    ByteString sText = UTF8Converter::ConvertToUTF8(
+                        sContent, Export::GetCharSet( Export::LangId[ nIndex ]));
+
+                    Export::QuotHTML( sText );
+
+                    ByteString sAdditionalLine;
+                    for ( ULONG i = 0; i < aStack.Count() - 1; i++ )
+                        sAdditionalLine += "\t";
+
+                    sAdditionalLine += pStackData->sTextTag;
+                    sAdditionalLine += sText;
+                    sAdditionalLine += pStackData->sEndTextTag;
+
+                    Output( sAdditionalLine );
+                }
+            }
+        }
+    }
+    delete pResData;
+    pResData = NULL;
 }
