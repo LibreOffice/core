@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_tag.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:29:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,9 +164,7 @@ HF_IdlTag::Display_SinceAtTag( const csi::dsapi::DT_SinceAtTag & i_rTag )
 {
     csv_assert(pTitleOut != 0);
 
-    if ( i_rTag.Text().IsEmpty()
-         OR
-         NOT autodoc::CommandLine::Get_().Display_SinceTag() )
+    if ( i_rTag.Text().IsEmpty() )
     {
          return;
     }
@@ -264,7 +262,7 @@ HF_IdlDocuTextDisplay::Display_TextToken( const csi::dsapi::DT_TextToken & i_rTo
         }
     }   // endif (bGatherLink)
 
-    CurOut() << " " << new Xml::XmlCode( i_rToken.GetText() );
+    CurOut() << new Xml::XmlCode( i_rToken.GetText() ) << " ";
 }
 
 void
@@ -278,9 +276,9 @@ HF_IdlDocuTextDisplay::Display_MupType( const csi::dsapi::DT_MupType & i_rToken 
     {
         if (bGatherLink)
         {
+            CreateTypeLink();
             CurOut()
                 << " ";
-            CreateTypeLink();
             StopLinkGathering();
         }
     }
@@ -297,9 +295,9 @@ HF_IdlDocuTextDisplay::Display_MupMember( const csi::dsapi::DT_MupMember & i_rTo
     {
         if (bGatherLink)
         {
+            CreateMemberLink();
             CurOut()
                 << " ";
-            CreateMemberLink();
             StopLinkGathering();
         }
     }
@@ -309,9 +307,10 @@ void
 HF_IdlDocuTextDisplay::Display_MupConst( const csi::dsapi::DT_MupConst & i_rToken )
 {
     CurOut()
-        << " "
         >> *new Html::Bold
            << i_rToken.GetText();
+    CurOut()
+        << " ";
 }
 
 void
