@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:41:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5011,6 +5011,28 @@ sal_Bool SdrObject::IsMasterPageBackgroundObject() const
 //   @@@@  @@@@@   @@@@   @@    @@  @@  @@@@    @@    @@@@  @@  @@   @@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel)
+{
+    nInventor=nInvent;
+    nIdentifier=nIdent;
+    pNewObj=NULL;
+    pPage=pNewPage;
+    pModel=pNewModel;
+    pObj=NULL;
+    pNewData=NULL;
+}
+
+SdrObjFactory::SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj1)
+{
+    nInventor=nInvent;
+    nIdentifier=nIdent;
+    pNewObj=NULL;
+    pPage=NULL;
+    pModel=NULL;
+    pObj=pObj1;
+    pNewData=NULL;
+}
 
 SdrObject* SdrObjFactory::MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* pPage, SdrModel* pModel)
 {
