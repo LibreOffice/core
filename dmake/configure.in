@@ -31,7 +31,7 @@ dnl Initialize libtool
 dnl Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
-AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h)
+AC_CHECK_HEADERS(fcntl.h limits.h strings.h sys/types.h sys/stat.h unistd.h errno.h utime.h spawn.h)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -55,6 +55,9 @@ if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
    _os="WINNT"
 fi
 
+
+## The following allows like systems to share settings this is not meant to
+## Imply that these OS are the same thing.
 case "$_os" in
 	"SunOS")
 	  OS_VERSION=solaris  
@@ -83,6 +86,9 @@ case "$_os" in
 	"IRIX64")
 	  OS_VERSION=sysvr4
 	  ;;
+	"GNU")
+	  OS_VERSION=linux
+	  ;;
    *)
       AC_MSG_ERROR([$_os operating system is not suitable to build dmake!])
       ;;
@@ -98,8 +104,7 @@ AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
 		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
 		startup/unix/macosx/Makefile startup/unix/sysvr4/Makefile \
-		dmakeroot.h )
-###		startup/unix/cygwin/Makefile )
+		startup/unix/cygwin/Makefile dmakeroot.h )
 
 dnl ******************************
 dnl *** output the whole stuff ***
