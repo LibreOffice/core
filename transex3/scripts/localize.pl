@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-13 19:16:18 $
+#   last change: $Author: obo $ $Date: 2005-01-27 15:58:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,7 @@ use IO::Handle;
 use File::Find;
 use File::Temp;
 use File::Copy;
+use Cwd;
 
 # ver 1.1
 #
@@ -90,6 +91,7 @@ use lib (@lib_dirs);
 
 #### globals ####
 my $sdffile = '';
+my $no_sort = '';
 my $outputfile = '';
 my $mode = '';
 my $bVerbose="0";
@@ -101,7 +103,8 @@ my $languages;
          #           prj      file     dummy     type      gid        lid        helpid   pform     width     lang      text     helptext  qhelptext  title    timestamp
 my $sdf_regex  = "((([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t])*\t([^\t]*)\t([^\t]*))\t([^\t]*)\t(([^\t]*)\t([^\t]*)\t([^\t]*)\t([^\t]*)\t)([^\t]*))";
 my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
-
+# Always use this date to prevent cvs conflicts
+my $default_date = "2002-02-02 02:02:02";
 
 #### main ####
 parse_options();
@@ -176,6 +179,11 @@ sub splitfile{
                 else       { $cur_sdffile =~ s/\/[^\/]*\.$file_types[\s]*$/\/localize.sdf/; }
             #}
 
+            # Set default date
+            if( $line =~ /(.*)\t[^\t\$]*$/ ){
+                $line = $1."\t".$default_date;
+            }
+
             if( $start ){
                 $start='';
                 $lastFile = $currentFile; # ?
@@ -235,7 +243,8 @@ sub writesdf{
             my $helpid         = defined $9 ? $9 : '';
 
             chomp( $line );
-                 $index{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+            $index{ $prj.$lang.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+
          } #else { print STDOUT "writesdf REGEX kaputt $_\n";}
 
         }
@@ -287,7 +296,9 @@ sub writesdf{
             }
         }
     }
-    sort_outfile( $localizeFile );
+    if( $no_sort eq '' ){
+        sort_outfile( $localizeFile );
+    }
 }
 
 sub get_license_header{
@@ -395,6 +406,8 @@ sub collectfiles{
 
     ### Search sdf particles
     print STDOUT "### Searching sdf particles\n";
+    my $working_path = getcwd();
+    chdir $srcpath;
     find sub {
         my $file = $File::Find::name;
         if( -f && $file =~ /.*localize.sdf$/ ) {
@@ -403,7 +416,9 @@ sub collectfiles{
             else { print ".";  }
 
          }
-    }, $srcpath;
+    } , getcwd() ;#"."; #$srcpath;
+    chdir $working_path;
+
     my $nFound  = $#sdfparticles +1;
     print "\n    $nFound files found !\n";
 
@@ -484,7 +499,8 @@ sub collectfiles{
     or die "Can't open $particleSDF_merged";
 
     ## Fill fackback hash
-    my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF , $langhash_ref );
+    my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF ,  $langhash_ref );
+#    my( $fallbackhashhash_ref ) = fetch_fallback( \@sdfparticles , $localizeSDF , $langhash_ref );
     my %block;
     my $cur_fallback;
     if( !$bAll) {
@@ -715,7 +731,6 @@ sub sort_outfile{
 
         #if ( open ( SORTEDFILE , "< $outputfile" ) ){
         if ( open ( SORTEDFILE , "< $outfile" ) ){
-
             my $line;
             while ( <SORTEDFILE> ){
                 $line = $_;
@@ -764,12 +779,8 @@ sub sort_outfile{
                 else {
                     return $xa_left_part cmp $xb_left_part;        # Left part compare
                 }
-                #$xa_left_part cmp $xb_left_part ||
-                #$xa_lang cmp $xb_lang           ||
-                #$xa_right_part cmp $xb_right_part
-
             } @lines;
-#            if ( open ( SORTEDFILE , "> $outputfile" ) ){
+
             if ( open ( SORTEDFILE , "> $outfile" ) ){
                 print SORTEDFILE get_license_header();
                 foreach my $newline ( @sorted_lines ) {
@@ -818,7 +829,7 @@ sub remove_duplicates{
 
 ##############################################################
 sub fetch_fallback{
-    my $sdfparticleshash_ref   = shift;
+    my $sdfparticleslist_ref   = shift;
     my $localizeSDF            = shift;
     my $langhash_ref           = shift;
     my %fallbackhashhash;
@@ -834,21 +845,22 @@ sub fetch_fallback{
     remove_duplicates( \@langlist );
     foreach  $cur_lang ( @langlist ){
         if( $cur_lang eq "de" || $cur_lang eq "en-US" ){
-            read_file_fallback( $localizeSDF , $cur_lang , \%fallbackhashhash );
+            read_fallbacks_from_source( $localizeSDF , $cur_lang , \%fallbackhashhash );
         }
     }
 
     # remove de / en-US
     my @tmplist;
     foreach $cur_lang( @langlist ){
-        if( $cur_lang ne "de" && $cur_lang ne "en-US" ){
-            push @tmplist , $cur_lang;
+        if(  $cur_lang ne "en-US" ){
+           push @tmplist , $cur_lang;
+
         }
     }
     @langlist = @tmplist;
     if ( $#langlist +1 ){
-        #print STDOUT "DBG: Loading @langlist into Fallbackhash\n";
-        read_file_fallbacks( $localizeSDF , \@langlist , \%fallbackhashhash );
+        read_fallbacks_from_particles( $sdfparticleslist_ref , \@langlist , \%fallbackhashhash );
+
     }
     return (\%fallbackhashhash);
 }
@@ -899,39 +911,41 @@ sub read_file{
 }
 
 #########################################################
-sub read_file_fallbacks{
+sub read_fallbacks_from_particles{
 
-    my $sdffile                 = shift;
+    my $sdfparticleslist_ref    = shift;
     my $isolanglist_ref         = shift;
     my $fallbackhashhash_ref    = shift;
     my $block_ref;
-    # read fallback for all files
-    open MYFILE , "< $sdffile"
-        or die "Can't open '$sdffile'\n";
+    foreach my $currentfile ( @{ $sdfparticleslist_ref } ){
+        if ( open MYFILE , "< $currentfile" ) {
+            while(<MYFILE>){
+                if( /$sdf_regex/ ){
+                    my $line           = defined $_ ? $_ : '';
+                    my $prj            = defined $3 ? $3 : '';
+                    my $file           = defined $4 ? $4 : '';
+                    my $type           = defined $6 ? $6 : '';
+                    my $gid            = defined $7 ? $7 : '';
+                    my $lid            = defined $8 ? $8 : '';
+                    my $lang           = defined $12 ? $12 : '';
+                    my $plattform      = defined $10 ? $10 : '';
+                    my $helpid         = defined $9 ? $9 : '';
 
-    while( <MYFILE>){
-          if( /$sdf_regex/ ){
-            my $line           = defined $_ ? $_ : '';
-            my $prj            = defined $3 ? $3 : '';
-            my $file           = defined $4 ? $4 : '';
-            my $type           = defined $6 ? $6 : '';
-            my $gid            = defined $7 ? $7 : '';
-            my $lid            = defined $8 ? $8 : '';
-            my $lang           = defined $12 ? $12 : '';
-            my $plattform      = defined $10 ? $10 : '';
-            my $helpid         = defined $9 ? $9 : '';
+                    chomp( $line );
 
-            chomp( $line );
-            foreach my $isolang ( @{$isolanglist_ref}  ){
-                if( $isolang=~ /$lang/i ) { $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+                    foreach my $isolang ( @{$isolanglist_ref}  ){
+                        if( $isolang=~ /$lang/i ) {
+                            $fallbackhashhash_ref->{ $isolang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
+                        }
+                    }
                 }
             }
-        }
+       }else { print STDERR "WARNING: Can't open file $currentfile"; }
     }
 }
 
 #########################################################
-sub read_file_fallback{
+sub read_fallbacks_from_source{
 
     my $sdffile                 = shift;
     my $isolang                 = shift;
@@ -1029,7 +1043,7 @@ sub parse_options{
     my $help;
     my $merge;
     my $extract;
-    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose , 'm' => \$merge , 'e' => \$extract );
+    my $success = GetOptions('f=s' => \$sdffile , 'l=s' => \$languages , 's=s' => \$srcpath ,  'h' => \$help , 'v' => \$bVerbose , 'm' => \$merge , 'e' => \$extract , 'x' => \$no_sort );
     $outputfile = $sdffile;
 
     #print STDOUT "DBG: lang = $languages\n";
