@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-05 11:55:56 $
+ *  last change: $Author: avy $ $Date: 2001-08-07 15:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,12 @@
 #       define  CPPU_CLBN_TMP   UNO_LB_MSCI
 #       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "MSC"
+#   elif(_MSC_VER < 1400)  // MSVC 7.0
+#       define  CPPU_CLBN_TMP   UNO_LB_MSCI
+#       define  CPPU_CLBN_NS_TMP UNO_LB_MSCI_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "MSC"
 #   else
-#     error "msc version must be between 4.2 and 6.x"
+#     error "msc version must be between 4.2 and 7.x"
 #   endif
 
 // AIX xlC 3.1 , 3.0.1 ==0x301
