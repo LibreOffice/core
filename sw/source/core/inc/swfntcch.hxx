@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfntcch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-12 09:52:23 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <tools/mempool.hxx>
 #endif
 
-#define NUM_DEFAULT_VALUES 33
+#define NUM_DEFAULT_VALUES 34
 
 #include "swcache.hxx"
 #include "swfont.hxx"
