@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-10-01 12:01:13 $
+ *  last change: $Author: gt $ $Date: 2002-10-15 11:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
+#include "filedlghelper.hxx"
+
 class SfxFilterMatcher;
 class GraphicFilter;
 class FileDialogHelper;
@@ -110,38 +112,41 @@ namespace sfx2
 
         std::vector< FilterPair >   maFilters;
 
-        SfxFilterMatcher*       mpMatcher;
-        GraphicFilter*          mpGraphicFilter;
-        FileDialogHelper*       mpParent;
+        SfxFilterMatcher*           mpMatcher;
+        GraphicFilter*              mpGraphicFilter;
+        FileDialogHelper*           mpParent;
 
-        ::rtl::OUString         maPath;
-        ::rtl::OUString         maCurFilter;
-        ::rtl::OUString         maSelectFilter;
+        ::rtl::OUString             maPath;
+        ::rtl::OUString             maCurFilter;
+        ::rtl::OUString             maSelectFilter;
 
-        Timer                   maPreViewTimer;
-        Graphic                 maGraphic;
+        Timer                       maPreViewTimer;
+        Graphic                     maGraphic;
 
-        const short             m_nDialogType;
+        const short                 m_nDialogType;
 
-        SfxFilterFlags          m_nMustFlags;
-        SfxFilterFlags          m_nDontFlags;
+        SfxFilterFlags              m_nMustFlags;
+        SfxFilterFlags              m_nDontFlags;
 
-        ErrCode                 mnError;
-        sal_Bool                mbHasPassword           : 1;
-        sal_Bool                mbIsPwdEnabled          : 1;
-        sal_Bool                m_bHaveFilterOptions    : 1;
-        sal_Bool                mbHasVersions           : 1;
-        sal_Bool                mbHasAutoExt            : 1;
-        sal_Bool                mbHasLink               : 1;
-        sal_Bool                mbHasPreview            : 1;
-        sal_Bool                mbShowPreview           : 1;
-        sal_Bool                mbIsSaveDlg             : 1;
-        sal_Bool                mbExport                : 1;
+        ErrCode                     mnError;
 
-        sal_Bool                mbDeleteMatcher         : 1;
-        sal_Bool                mbInsert                : 1;
-        sal_Bool                mbSystemPicker          : 1;
-        sal_Bool                mbPwdCheckBoxState      : 1;
+        FileDialogHelper::Context   meContext;
+
+        sal_Bool                    mbHasPassword           : 1;
+        sal_Bool                    mbIsPwdEnabled          : 1;
+        sal_Bool                    m_bHaveFilterOptions    : 1;
+        sal_Bool                    mbHasVersions           : 1;
+        sal_Bool                    mbHasAutoExt            : 1;
+        sal_Bool                    mbHasLink               : 1;
+        sal_Bool                    mbHasPreview            : 1;
+        sal_Bool                    mbShowPreview           : 1;
+        sal_Bool                    mbIsSaveDlg             : 1;
+        sal_Bool                    mbExport                : 1;
+
+        sal_Bool                    mbDeleteMatcher         : 1;
+        sal_Bool                    mbInsert                : 1;
+        sal_Bool                    mbSystemPicker          : 1;
+        sal_Bool                    mbPwdCheckBoxState      : 1;
 
     private:
         void                    addFilters( sal_uInt32 nFlags,
@@ -207,7 +212,7 @@ namespace sfx2
                                 FileDialogHelper_Impl( FileDialogHelper* pParent,
                                                        const short nDialogType,
                                                        sal_uInt32 nFlags );
-                               ~FileDialogHelper_Impl();
+        virtual                 ~FileDialogHelper_Impl();
 
         ErrCode                 execute( SvStringsDtor*& rpURLList,
                                          SfxItemSet *&   rpSet,
@@ -229,6 +234,8 @@ namespace sfx2
                                                const ::rtl::OUString& rFilterWithExtension );
         ::rtl::OUString         getFilterName( const ::rtl::OUString& rFilterWithExtension ) const;
         ::rtl::OUString         getFilterWithExtension( const ::rtl::OUString& rFilter ) const;
+
+        void                    SetContext( FileDialogHelper::Context _eNewContext );
     };
 
 }   // end of namespace sfx2
