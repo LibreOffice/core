@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HoriOrientationFormat.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
     to odd and even pages. If "PositionToggle" is set, then the
     horizontal position is mirrored.</p>
  */
-struct HoriOrientationFormat
+published struct HoriOrientationFormat
 {
     // DocMerge from xml: field com::sun::star::text::HoriOrientationFormat::XPos
     /** contains the distance from the left border. Only valid if
