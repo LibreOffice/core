@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-06 18:17:27 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,16 +358,16 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name
 
-    DBG_ASSERT( ScCompiler::pSymbolTableEnglish, "no symbol table" );
-    if (!ScCompiler::pSymbolTableEnglish)
+    DBG_ASSERT( ScCompiler::pSymbolHashMapEnglish, "no symbol hash map" );
+    if (!ScCompiler::pSymbolHashMapEnglish)
         return FALSE;
 
-    for ( USHORT nPos=0; nPos<ScCompiler::nAnzStrings; nPos++ )
-        if ( ScCompiler::pSymbolTableEnglish[nPos] == aUpper )
-        {
-            rArray.AddOpCode( (OpCode) nPos );
-            return TRUE;
-        }
+    ScOpCodeHashMap::const_iterator iLook( ScCompiler::pSymbolHashMapEnglish->find( aUpper ) );
+    if ( iLook != ScCompiler::pSymbolHashMapEnglish->end() )
+    {
+        rArray.AddOpCode( iLook->second );
+        return TRUE;
+    }
 
     // 2. old add in functions
 

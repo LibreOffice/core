@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: er $ $Date: 2002-11-01 18:25:38 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,12 @@
 #include "docoptio.hxx"
 
 
-String* ScCompiler::pSymbolTableNative = NULL;          // Liste der Symbole
-String* ScCompiler::pSymbolTableEnglish = NULL;         // Liste der Symbole English
-USHORT  ScCompiler::nAnzStrings = 0;                    // Anzahl der Symbole
+String* ScCompiler::pSymbolTableNative = NULL;
+String* ScCompiler::pSymbolTableEnglish = NULL;
+USHORT  ScCompiler::nAnzStrings = 0;
 USHORT* ScCompiler::pCharTable = 0;
+ScOpCodeHashMap* ScCompiler::pSymbolHashMapNative = NULL;
+ScOpCodeHashMap* ScCompiler::pSymbolHashMapEnglish = NULL;
 
 enum ScanState
 {
@@ -204,10 +206,10 @@ short lcl_GetRetFormat( OpCode eOpCode )
 class ScOpCodeList : public Resource        // temp object fuer Resource
 {
 public:
-    ScOpCodeList( USHORT, String[] );
+    ScOpCodeList( USHORT, String[], ScOpCodeHashMap& );
 };
 
-ScOpCodeList::ScOpCodeList( USHORT nRID, String pSymbolTable[] )
+ScOpCodeList::ScOpCodeList( USHORT nRID, String pSymbolTable[], ScOpCodeHashMap& rHashMap )
         :
         Resource( ScResId( nRID ) )
 {
@@ -216,7 +218,10 @@ ScOpCodeList::ScOpCodeList( USHORT nRID, String pSymbolTable[] )
         ScResId aRes(i);
         aRes.SetRT(RSC_STRING);
         if (IsAvailableRes(aRes))
+        {
             pSymbolTable[i] = aRes;
+            rHashMap.insert( ScOpCodeHashMap::value_type( pSymbolTable[i], i ) );
+        }
     }
     FreeResource();
 }
@@ -236,7 +241,9 @@ public:
 void ScCompiler::Init()
 {
     pSymbolTableNative = new String[SC_OPCODE_LAST_OPCODE_ID+1];
-    ScOpCodeList aOpCodeListNative( RID_SC_FUNCTION_NAMES, pSymbolTableNative );
+    pSymbolHashMapNative = new ScOpCodeHashMap( SC_OPCODE_LAST_OPCODE_ID+1 );
+    ScOpCodeList aOpCodeListNative( RID_SC_FUNCTION_NAMES, pSymbolTableNative,
+            *pSymbolHashMapNative );
     nAnzStrings = SC_OPCODE_LAST_OPCODE_ID+1;
 
     pCharTable = new USHORT [128];
@@ -298,6 +305,18 @@ void ScCompiler::DeInit()
         delete [] pSymbolTableEnglish;
         pSymbolTableEnglish = NULL;
     }
+    if ( pSymbolHashMapNative )
+    {
+        pSymbolHashMapNative->clear();
+        delete pSymbolHashMapNative;
+        pSymbolHashMapNative = NULL;
+    }
+    if ( pSymbolHashMapEnglish )
+    {
+        pSymbolHashMapEnglish->clear();
+        delete pSymbolHashMapEnglish;
+        pSymbolHashMapEnglish = NULL;
+    }
     delete [] pCharTable;
     pCharTable = NULL;
 }
@@ -309,13 +328,18 @@ void ScCompiler::SetCompileEnglish( BOOL bCompileEnglish )
         if ( !pSymbolTableEnglish )
         {
             pSymbolTableEnglish = new String[SC_OPCODE_LAST_OPCODE_ID+1];
+            pSymbolHashMapEnglish = new ScOpCodeHashMap( SC_OPCODE_LAST_OPCODE_ID+1 );
             ScOpCodeList aOpCodeListEnglish( RID_SC_FUNCTION_NAMES_ENGLISH,
-                pSymbolTableEnglish );
+                pSymbolTableEnglish, *pSymbolHashMapEnglish );
         }
         pSymbolTable = pSymbolTableEnglish;
+        pSymbolHashMap = pSymbolHashMapEnglish;
     }
     else
+    {
         pSymbolTable = pSymbolTableNative;
+        pSymbolHashMap = pSymbolHashMapNative;
+    }
 }
 
 //-----------------------Funktionen der Klasse ScCompiler----------------------
@@ -325,6 +349,7 @@ ScCompiler::ScCompiler( ScDocument* pDocument, const ScAddress& rPos,
         :
         aPos( rPos ),
         pSymbolTable( pSymbolTableNative ),
+        pSymbolHashMap( pSymbolHashMapNative ),
         nRecursion(0),
         bAutoCorrect( FALSE ),
         bCorrected( FALSE ),
@@ -346,6 +371,7 @@ ScCompiler::ScCompiler(ScDocument* pDocument, const ScAddress& rPos )
         :
         aPos( rPos ),
         pSymbolTable( pSymbolTableNative ),
+        pSymbolHashMap( pSymbolHashMapNative ),
         nRecursion(0),
         bAutoCorrect( FALSE ),
         bCorrected( FALSE ),
@@ -785,15 +811,12 @@ xub_StrLen ScCompiler::NextSymbol()
 
 BOOL ScCompiler::IsOpCode( const String& rName )
 {
-    BOOL bFound = FALSE;
-
-    for( USHORT i = 0; i < nAnzStrings && !bFound; i++ )
-        bFound = (pSymbolTable[i] == rName);
-
+    ScOpCodeHashMap::const_iterator iLook( pSymbolHashMap->find( rName ) );
+    BOOL bFound = (iLook != pSymbolHashMap->end());
     if (bFound)
     {
         ScRawToken aToken;
-        aToken.SetOpCode( (OpCode) --i );
+        aToken.SetOpCode( iLook->second );
         pRawToken = aToken.Clone();
     }
     else

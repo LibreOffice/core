@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-08 14:00:52 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ private:
     long                nCallerPos;
     USHORT              nCategory;
     USHORT              nHelpId;
-    uno::Sequence<sheet::LocalizedName> aCompNames;
-    BOOL                bCompInitialized;
+    mutable uno::Sequence<sheet::LocalizedName> aCompNames;
+    mutable BOOL        bCompInitialized;
 
 public:
                 ScUnoAddInFuncData( const String& rNam, const String& rLoc,
@@ -176,7 +176,7 @@ public:
     USHORT                  GetCategory() const         { return nCategory; }
     USHORT                  GetHelpId() const           { return nHelpId; }
 
-    const uno::Sequence<sheet::LocalizedName>& GetCompNames();
+    const uno::Sequence<sheet::LocalizedName>& GetCompNames() const;
 };
 
 //------------------------------------------------------------------------
@@ -219,7 +219,7 @@ ScUnoAddInFuncData::~ScUnoAddInFuncData()
     delete[] pArgDescs;
 }
 
-const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames()
+const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames() const
 {
     if ( !bCompInitialized )
     {
@@ -290,12 +290,18 @@ BOOL lcl_ConvertToDouble( const uno::Any& rAny, double& rOut )
 ScUnoAddInCollection::ScUnoAddInCollection() :
     nFuncCount( 0 ),
     ppFuncData( NULL ),
+    pExactHashMap( NULL ),
+    pNameHashMap( NULL ),
+    pLocalHashMap( NULL ),
     bInitialized( FALSE )
 {
 }
 
 ScUnoAddInCollection::~ScUnoAddInCollection()
 {
+    delete pExactHashMap;
+    delete pNameHashMap;
+    delete pLocalHashMap;
     if ( ppFuncData )
     {
         for ( long i=0; i<nFuncCount; i++ )
@@ -345,7 +351,7 @@ void ScUnoAddInCollection::Initialize()
 BOOL ScUnoAddInCollection::GetExcelName( const String& rCalcName,
                                         LanguageType eDestLang, String& rRetExcelName )
 {
-    ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
+    const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
     if ( pFuncData )
     {
         const uno::Sequence<sheet::LocalizedName>& rSequence = pFuncData->GetCompNames();
@@ -586,6 +592,14 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         else
                             ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
 
+                        //! TODO: adjust bucket count?
+                        if ( !pExactHashMap )
+                            pExactHashMap = new ScAddInHashMap;
+                        if ( !pNameHashMap )
+                            pNameHashMap = new ScAddInHashMap;
+                        if ( !pLocalHashMap )
+                            pLocalHashMap = new ScAddInHashMap;
+
                         const uno::Reference<reflection::XIdlMethod>* pArray = aMethods.getConstArray();
                         for (long nFuncPos=0; nFuncPos<nNewCount; nFuncPos++)
                         {
@@ -741,6 +755,21 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             xFunc, aObject,
                                             nVisibleCount, pVisibleArgs, nCallerPos );
 
+                                        const ScUnoAddInFuncData* pData =
+                                            ppFuncData[nFuncPos+nOld];
+                                        pExactHashMap->insert(
+                                                ScAddInHashMap::value_type(
+                                                    pData->GetOriginalName(),
+                                                    pData ) );
+                                        pNameHashMap->insert(
+                                                ScAddInHashMap::value_type(
+                                                    pData->GetUpperName(),
+                                                    pData ) );
+                                        pLocalHashMap->insert(
+                                                ScAddInHashMap::value_type(
+                                                    pData->GetUpperLocal(),
+                                                    pData ) );
+
                                         delete[] pVisibleArgs;
                                     }
                                 }
@@ -761,24 +790,22 @@ String ScUnoAddInCollection::FindFunction( const String& rName, BOOL bLocalFirst
     if (nFuncCount == 0)
         return EMPTY_STRING;
 
-    String aUpperCmp = rName;
-    ScGlobal::pCharClass->toUpper(aUpperCmp);
-    long i;
+    String aUpperCmp( ScGlobal::pCharClass->upper( rName ) );
 
     if ( bLocalFirst )
     {
         //  first scan all local names (used for entering formulas)
 
-        for (i=0; i<nFuncCount; i++)
-            if ( ppFuncData[i] && ppFuncData[i]->GetUpperLocal() == aUpperCmp )
-                return ppFuncData[i]->GetOriginalName();
+        ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( aUpperCmp ) );
+        if ( iLook != pLocalHashMap->end() )
+            return iLook->second->GetOriginalName();
 
 #if 0
         //  after that, scan international names (really?)
 
-        for (i=0; i<nFuncCount; i++)
-            if ( ppFuncData[i] && ppFuncData[i]->GetUpperName() == aUpperCmp )
-                return ppFuncData[i]->GetOriginalName();
+        iLook = pNameHashMap->find( aUpperCmp );
+        if ( iLook != pNameHashMap->end() )
+            return iLook->second->GetOriginalName();
 #endif
     }
     else
@@ -786,30 +813,30 @@ String ScUnoAddInCollection::FindFunction( const String& rName, BOOL bLocalFirst
         //  first scan international names (used when calling a function)
         //! before that, check for exact match???
 
-        for (i=0; i<nFuncCount; i++)
-            if ( ppFuncData[i] && ppFuncData[i]->GetUpperName() == aUpperCmp )
-                return ppFuncData[i]->GetOriginalName();
+        ScAddInHashMap::const_iterator iLook( pNameHashMap->find( aUpperCmp ) );
+        if ( iLook != pNameHashMap->end() )
+            return iLook->second->GetOriginalName();
 
         //  after that, scan all local names (to allow replacing old AddIns with Uno)
 
-        for (i=0; i<nFuncCount; i++)
-            if ( ppFuncData[i] && ppFuncData[i]->GetUpperLocal() == aUpperCmp )
-                return ppFuncData[i]->GetOriginalName();
+        iLook = pLocalHashMap->find( aUpperCmp );
+        if ( iLook != pLocalHashMap->end() )
+            return iLook->second->GetOriginalName();
     }
 
     return EMPTY_STRING;
 }
 
-ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const String& rName )
+const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const String& rName )
 {
     if (!bInitialized)
         Initialize();
 
     //  rName must be the exact internal name
 
-    for (long i=0; i<nFuncCount; i++)
-        if ( ppFuncData[i] && ppFuncData[i]->GetOriginalName() == rName )
-            return ppFuncData[i];
+    ScAddInHashMap::const_iterator iLook( pExactHashMap->find( rName ) );
+    if ( iLook != pExactHashMap->end() )
+        return iLook->second;
 
     return NULL;
 }
@@ -821,12 +848,9 @@ void ScUnoAddInCollection::LocalizeString( String& rName )
 
     //  modify rName - input: exact name
 
-    for (long i=0; i<nFuncCount; i++)
-        if ( ppFuncData[i] && ppFuncData[i]->GetOriginalName() == rName )
-        {
-            rName = ppFuncData[i]->GetUpperLocal();         //! upper?
-            return;
-        }
+    ScAddInHashMap::const_iterator iLook( pExactHashMap->find( rName ) );
+    if ( iLook != pExactHashMap->end() )
+        rName = iLook->second->GetUpperLocal();         //! upper?
 }
 
 

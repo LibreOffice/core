@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-13 14:37:23 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,28 @@
 #include <tools/lang.hxx>
 #endif
 
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
+
+#include <hash_map>
+
+
 class String;
 class SfxObjectShell;
 class ScUnoAddInFuncData;
 class ScMatrix;
 class ScFuncDesc;
+
+
+struct ScAddInStringHashCode
+{
+    size_t operator()( const String& rStr ) const
+    {
+        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+    }
+};
+typedef ::std::hash_map< String, const ScUnoAddInFuncData*, ScAddInStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
 
 
 enum ScAddInArgumentType
@@ -116,6 +133,9 @@ class ScUnoAddInCollection
 private:
     long                    nFuncCount;
     ScUnoAddInFuncData**    ppFuncData;
+    ScAddInHashMap*         pExactHashMap;      // exact internal name
+    ScAddInHashMap*         pNameHashMap;       // internal name upper
+    ScAddInHashMap*         pLocalHashMap;      // localized name upper
     BOOL                    bInitialized;
 
     void        Initialize();
@@ -127,7 +147,7 @@ public:
                 ~ScUnoAddInCollection();
 
     String              FindFunction( const String& rName, BOOL bLocalFirst );  // user entered name
-    ScUnoAddInFuncData* GetFuncData( const String& rName );                     // exact name
+    const ScUnoAddInFuncData*   GetFuncData( const String& rName );             // exact name
 
     void                LocalizeString( String& rName );    // modify rName - input: exact name
 

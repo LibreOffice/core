@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2002-09-16 12:42:35 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#include <hash_map>
 
 //-----------------------------------------------
 
@@ -480,12 +481,23 @@ public:
 
 struct ScArrayStack;
 
+struct ScStringHashCode
+{
+    size_t operator()( const String& rStr ) const
+    {
+        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+    }
+};
+typedef ::std::hash_map< String, OpCode, ScStringHashCode, ::std::equal_to< String > > ScOpCodeHashMap;
+
 class ScCompiler
 {
 public:
-    static String*  pSymbolTableNative;             // Liste der Symbole: String[]
-    static String*  pSymbolTableEnglish;            // Liste der Symbole English
-    static USHORT   nAnzStrings;                    // Anzahl der Symbole
+    static String*  pSymbolTableNative;             // array of native symbols, offset==OpCode
+    static String*  pSymbolTableEnglish;            // array of English symbols, offset==OpCode
+    static USHORT   nAnzStrings;                    // count of symbols
+    static ScOpCodeHashMap* pSymbolHashMapNative;   // hash map of native symbols
+    static ScOpCodeHashMap* pSymbolHashMapEnglish;  // hash map of English symbols
 private:
     static USHORT*  pCharTable;                     // char[];
     ScDocument* pDoc;
@@ -502,7 +514,8 @@ private:
     OpCode      eLastOp;
     ScToken**   pCode;
     ScArrayStack* pStack;
-    String*     pSymbolTable;               // welche SymbolTable benutzt wird
+    String*     pSymbolTable;               // which symbol table is used
+    ScOpCodeHashMap*    pSymbolHashMap;     // which symbol hash map is used
     USHORT      pc;
     short       nNumFmt;                    // bei CompileTokenArray() gesetzt
     short       nMaxTab;                    // letzte Tabelle im Doc
