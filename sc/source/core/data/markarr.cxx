@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: er $ $Date: 2001-11-05 19:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 ScMarkArray::ScMarkArray()
 {
-    nCount = 1;
+    nCount = nLimit = 1;
     pData = new ScMarkEntry[1];
     if (pData)
     {
@@ -103,7 +103,7 @@ void ScMarkArray::Reset( BOOL bMarked )
     {
         delete[] pData;
 
-        nCount = 1;
+        nCount = nLimit = 1;
         pData = new ScMarkEntry[1];
         if (pData)
         {
@@ -179,67 +179,107 @@ void ScMarkArray::SetMarkArea( USHORT nStartRow, USHORT nEndRow, BOOL bMarked )
         }
         else
         {
-            USHORT nNewCount = 0;
-            ScMarkEntry* pNewData = new ScMarkEntry[nCount + 2];
-            if (pNewData)
+            USHORT nNeeded = nCount + 2;
+            if ( nLimit < nNeeded )
             {
-                USHORT ni = 0;
-                if (nStartRow > 0)
-                {
-                    // Anfangsbereich kopieren
-                    while (pData[ni].nRow < nStartRow)
-                    {
-                        pNewData[ni].nRow = pData[ni].nRow;
-                        pNewData[ni].bMarked = pData[ni].bMarked;
-                        nNewCount++;
-                        ni++;
-                    }
-                    if ((pData[ni].bMarked != bMarked) &&
-                        ((ni==0) ? TRUE : (pData[ni - 1].nRow < nStartRow - 1)))
-                    {
-                        // Eintrag splitten
-                        pNewData[nNewCount].nRow = nStartRow - 1;
-                        pNewData[nNewCount].bMarked = pData[ni].bMarked;
-                        nNewCount++;
-                        ni++;
-                    }
-                    if (ni > 0)
-                        if (pData[ni-1].bMarked == bMarked)         // zusammenfassen
-                        {
-                            ni--;
-                            nNewCount--;
-                        }
-                } // if StartRow > 0
-
-                // Bereich setzen
-                pNewData[nNewCount].nRow = nEndRow;
-                pNewData[nNewCount].bMarked = bMarked;
-                nNewCount++;
-
-                USHORT nj = 0;
-                if (nEndRow < MAXROW)
-                {
-                    // mittleren Bereich ueberspringen
-                    while (pData[nj].nRow <= nEndRow) nj++;
-                    if (pData[nj].bMarked == bMarked)
-                    {
-                        // Eintrag zusammenfassen
-                        pNewData[nNewCount - 1].nRow = pData[nj].nRow;
-                        nj++;
-                    }
-                    // Den Endbereich kopieren
-                    while (nj < nCount)
-                    {
-                        pNewData[nNewCount].nRow = pData[nj].nRow;
-                        pNewData[nNewCount].bMarked = pData[nj].bMarked;
-                        nNewCount++;
-                        nj++;
-                    }
-                } // if EndRow < MaxRow
-                // Zeiger umsetzen
+                nLimit += SC_MARKARRAY_DELTA;
+                if ( nLimit < nNeeded )
+                    nLimit = nNeeded;
+                ScMarkEntry* pNewData = new ScMarkEntry[nLimit];
+                memcpy( pNewData, pData, nCount*sizeof(ScMarkEntry) );
                 delete[] pData;
-                nCount = nNewCount;
                 pData = pNewData;
+            }
+
+            USHORT ni;          // number of entries in beginning
+            USHORT nInsert;     // insert position (MAXROW+1 := no insert)
+            BOOL bCombined = FALSE;
+            BOOL bSplit = FALSE;
+            if ( nStartRow > 0 )
+            {
+                // skip beginning
+                short nIndex;
+                Search( nStartRow, nIndex );
+                ni = nIndex;
+
+                nInsert = MAXROW+1;
+                if ( pData[ni].bMarked != bMarked )
+                {
+                    if ( ni == 0 || (pData[ni-1].nRow < nStartRow - 1) )
+                    {   // may be a split or a simple insert or just a shrink,
+                        // row adjustment is done further down
+                        if ( pData[ni].nRow > nEndRow )
+                            bSplit = TRUE;
+                        ni++;
+                        nInsert = ni;
+                    }
+                    else if ( ni > 0 && pData[ni-1].nRow == nStartRow - 1 )
+                        nInsert = ni;
+                }
+                if ( ni > 0 && pData[ni-1].bMarked == bMarked )
+                {   // combine
+                    pData[ni-1].nRow = nEndRow;
+                    nInsert = MAXROW+1;
+                    bCombined = TRUE;
+                }
+            }
+            else
+                nInsert = ni = 0;
+
+            USHORT nj = ni;     // stop position of range to replace
+            while ( nj < nCount && pData[nj].nRow <= nEndRow )
+                nj++;
+            if ( !bSplit && nj < nCount && pData[nj].bMarked == bMarked )
+            {   // combine
+                if ( ni > 0 )
+                {
+                    if ( pData[ni-1].bMarked == bMarked )
+                    {   // adjacent entries
+                        pData[ni-1].nRow = pData[nj].nRow;
+                        nj++;
+                    }
+                    else if ( nj == nInsert && nj == ni )
+                        pData[ni-1].nRow = nStartRow - 1;   // shrink
+                }
+                nInsert = MAXROW+1;
+                bCombined = TRUE;
+            }
+            if ( ni < nj )
+            {   // remove middle entries
+                if ( !bCombined )
+                {   // replace one entry
+                    pData[ni].nRow = nEndRow;
+                    pData[ni].bMarked = bMarked;
+                    ni++;
+                    nInsert = MAXROW+1;
+                }
+                if ( ni < nj )
+                {   // remove entries
+                    memmove( pData + ni, pData + nj, (nCount - nj) * sizeof(ScMarkEntry) );
+                    nCount -= nj - ni;
+                }
+            }
+
+            if ( nInsert <= MAXROW )
+            {   // insert or append new entry
+                if ( nInsert <= nCount )
+                {
+                    if ( !bSplit )
+                        memmove( pData + nInsert + 1, pData + nInsert,
+                            (nCount - nInsert) * sizeof(ScMarkEntry) );
+                    else
+                    {
+                        memmove( pData + nInsert + 2, pData + nInsert,
+                            (nCount - nInsert) * sizeof(ScMarkEntry) );
+                        pData[nInsert+1] = pData[nInsert-1];
+                        nCount++;
+                    }
+                }
+                if ( nInsert )
+                    pData[nInsert-1].nRow = nStartRow - 1;
+                pData[nInsert].nRow = nEndRow;
+                pData[nInsert].bMarked = bMarked;
+                nCount++;
             }
         }
     }
@@ -314,6 +354,10 @@ void ScMarkArray::SwapCol(ScMarkArray& rMarkArray)
     rMarkArray.nCount = nCount;
     nCount = nTemp;
 
+    nTemp = rMarkArray.nLimit;
+    rMarkArray.nLimit = nLimit;
+    nLimit = nTemp;
+
     ScMarkEntry* pTemp = rMarkArray.pData;
     rMarkArray.pData = pData;
     pData = pTemp;
@@ -346,7 +390,7 @@ void ScMarkArray::CopyMarksTo( ScMarkArray& rDestMarkArray ) const
     else
         rDestMarkArray.pData = NULL;
 
-    rDestMarkArray.nCount = nCount;
+    rDestMarkArray.nCount = rDestMarkArray.nLimit = nCount;
 }
 
 short ScMarkArray::GetNextMarked( short nRow, BOOL bUp ) const
