@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:31:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,8 +693,7 @@ public:
                                                             BOOL bRelax,
                                                             USHORT nOther,
                                                             USHORT nShorter,
-                                                            USHORT nLonger,
-                                                            const ResId& rResId); //add for SvxSearchSimilarityDialog
+                                                            USHORT nLonger); //add for SvxSearchSimilarityDialog
     virtual AbstractSvxJSearchOptionsDialog * CreateSvxJSearchOptionsDialog( Window* pParent,
                                                             const SfxItemSet& rOptionsSet, USHORT nUniqueId,
                                                             INT32 nInitialFlags,
