@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eq.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:28 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:29:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,63 +79,6 @@ namespace cppu
 //##################################################################################################
 
 //--------------------------------------------------------------------------------------------------
-inline sal_Bool _unoEqualObject( void * pUnoI1, void * pUnoI2 )
-    SAL_THROW( () )
-{
-    if (pUnoI1 == pUnoI2)
-        return sal_True;
-    if (!pUnoI2 || !pUnoI2)
-        return sal_False;
-
-    sal_Bool bRet = sal_False;
-
-    void * pArgs[1];
-
-    const com::sun::star::uno::Type & rXIType =
-        ::getCppuType( (const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > *)0 );
-    pArgs[0] = const_cast< com::sun::star::uno::Type * >( &rXIType );
-    uno_Any aRet1, aRet2, aExc;
-    uno_Any * pExc = &aExc;
-
-    typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
-    (*((uno_Interface *)pUnoI1)->pDispatcher)(
-        (uno_Interface *)pUnoI1, pMTqueryInterface, &aRet1, pArgs, &pExc );
-
-    OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
-    if (pExc)
-    {
-        _destructAny( pExc, 0 );
-    }
-    else
-    {
-        if (typelib_TypeClass_INTERFACE == aRet1.pType->eTypeClass)
-        {
-            pExc = &aExc;
-            (*((uno_Interface *)pUnoI2)->pDispatcher)(
-                (uno_Interface *)pUnoI2, pMTqueryInterface, &aRet2, pArgs, &pExc );
-
-            OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
-            if (pExc)
-            {
-                _destructAny( pExc, 0 );
-            }
-            else
-            {
-                if (typelib_TypeClass_INTERFACE == aRet2.pType->eTypeClass)
-                {
-                    bRet = (*(void **)aRet1.pData == *(void **)aRet2.pData);
-                }
-                _destructAny( &aRet2, 0 );
-            }
-        }
-        _destructAny( &aRet1, 0 );
-    }
-
-    typelib_typedescription_release( pMTqueryInterface );
-
-    return bRet;
-}
-//--------------------------------------------------------------------------------------------------
 inline sal_Bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
@@ -143,23 +86,26 @@ inline sal_Bool _equalObject(
 {
     if (pI1 == pI2)
         return sal_True;
-    if (queryInterface)
+    if ((0 == pI1) || (0 == pI2))
+        return sal_False;
+    sal_Bool bRet = sal_False;
+
+    typelib_TypeDescriptionReference * type_XInterface =
+        * typelib_static_type_getByTypeClass( typelib_TypeClass_INTERFACE );
+    if (0 == queryInterface)
+        queryInterface = binuno_queryInterface;
+    pI1 = (*queryInterface)( pI1, type_XInterface );
+    if (0 != pI1)
     {
-        sal_Bool bRet = sal_False;
-        const com::sun::star::uno::Type & rType =
-            ::getCppuType( (const com::sun::star::uno::Reference< com::sun::star::uno::XInterface > *)0 );
-        if (pI1 = (*queryInterface)( pI1, rType.getTypeLibType() ))
+        pI2 = (*queryInterface)( pI2, type_XInterface );
+        if (0 != pI2)
         {
-            if (pI2 = (*queryInterface)( pI2, rType.getTypeLibType() ))
-            {
-                bRet = (pI1 == pI2);
-                (*release)( pI2 );
-            }
-            (*release)( pI1 );
+            bRet = (pI1 == pI2);
+            _release( pI2, release );
         }
-        return bRet;
+        _release( pI1, release );
     }
-    return _unoEqualObject( pI1, pI2 );
+    return bRet;
 }
 
 //==================================================================================================
@@ -674,11 +620,9 @@ inline sal_Bool _equalData(
     case typelib_TypeClass_ENUM:
         return (_type_equals( pDestType, pSourceType ) &&
                 *(sal_Int32 *)pDest == *(sal_Int32 *)pSource);
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (! _type_equals( pDestType, pSourceType ))
