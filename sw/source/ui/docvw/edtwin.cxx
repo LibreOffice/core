@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:49:10 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4173,107 +4173,126 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             break;
 
     case COMMAND_STARTEXTTEXTINPUT:
-        if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
+    {
+        SwWrtShell &rSh = rView.GetWrtShell();
+        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+                              rSh.IsCrsrReadonly();
+        if(!bIsDocReadOnly)
         {
-            bCallBase = FALSE;
-            rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
-        }
-        else
-        {
-            if( rSh.HasSelection() )
-                rSh.DelRight();
+            if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
+            {
+                bCallBase = FALSE;
+                rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
+            }
+            else
+            {
+                if( rSh.HasSelection() )
+                    rSh.DelRight();
 
-            bCallBase = FALSE;
-            rSh.CreateExtTextInput();
+                bCallBase = FALSE;
+                rSh.CreateExtTextInput();
+            }
         }
         break;
-
+    }
     case COMMAND_ENDEXTTEXTINPUT:
-        if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
+    {
+        SwWrtShell &rSh = rView.GetWrtShell();
+        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+                              rSh.IsCrsrReadonly();
+        if(!bIsDocReadOnly)
         {
-            bCallBase = FALSE;
-            rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
-        }
-        else
-        {
-            bCallBase = FALSE;
-            String sRecord = rSh.DeleteExtTextInput();
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
-                    rView.GetViewFrame()->GetBindings().GetRecorder();
-
-            if ( sRecord.Len() )
+            if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
-                // #102812# convert quotes in IME text
-                // works on the last input character, this is escpecially in Korean text often done
-                // quotes that are inside of the string are not replaced!
-                const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
-                OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
-                SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-                if(pACorr &&
-                    ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
-                    ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
-                {
-                    rSh.DelLeft();
-                    rSh.AutoCorrect( *pACorr, aCh );
-                }
+                bCallBase = FALSE;
+                rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
+            }
+            else
+            {
+                bCallBase = FALSE;
+                String sRecord = rSh.DeleteExtTextInput();
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                        rView.GetViewFrame()->GetBindings().GetRecorder();
 
-                if ( xRecorder.is() )
+                if ( sRecord.Len() )
                 {
-                    //Shell ermitteln
-                    SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
-                    // Request generieren und recorden
-                    if (pSfxShell)
+                    // #102812# convert quotes in IME text
+                    // works on the last input character, this is escpecially in Korean text often done
+                    // quotes that are inside of the string are not replaced!
+                    const sal_Unicode aCh = sRecord.GetChar(sRecord.Len() - 1);
+                    OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+                    SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+                    if(pACorr &&
+                        ( pACorr->IsAutoCorrFlag( ChgQuotes ) && ('\"' == aCh ))||
+                        ( pACorr->IsAutoCorrFlag( ChgSglQuotes ) && ( '\'' == aCh)))
                     {
-                        SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
-                        aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
-                        aReq.Done();
+                        rSh.DelLeft();
+                        rSh.AutoCorrect( *pACorr, aCh );
+                    }
+
+                    if ( xRecorder.is() )
+                    {
+                        //Shell ermitteln
+                        SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
+                        // Request generieren und recorden
+                        if (pSfxShell)
+                        {
+                            SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
+                            aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
+                            aReq.Done();
+                        }
                     }
                 }
             }
         }
-        break;
-
+    }
+    break;
     case COMMAND_EXTTEXTINPUT:
     {
-        QuickHelpData aTmpQHD;
-        if( pQuickHlpData->bClear )
+        SwWrtShell &rSh = rView.GetWrtShell();
+        BOOL bIsDocReadOnly = rView.GetDocShell()->IsReadOnly() &&
+                              rSh.IsCrsrReadonly();
+        if(!bIsDocReadOnly)
         {
-            aTmpQHD.Move( *pQuickHlpData );
-            pQuickHlpData->Stop( rSh );
-        }
-        String sWord;
-        if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
-        {
-            bCallBase = FALSE;
-            rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
-        }
-        else
-        {
-            const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
-            if( pData )
+            QuickHelpData aTmpQHD;
+            if( pQuickHlpData->bClear )
             {
-                sWord = pData->GetText();
-                bCallBase = FALSE;
-                rSh.SetExtTextInputData( *pData );
+                aTmpQHD.Move( *pQuickHlpData );
+                pQuickHlpData->Stop( rSh );
             }
-        }
-            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
-                    rView.GetViewFrame()->GetBindings().GetRecorder();
-            if(!xRecorder.is())
+            String sWord;
+            if( rSh.HasDrawView() && rSh.GetDrawView()->IsTextEdit() )
             {
-                OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
-                SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
-                if( pACfg && pACorr &&
-                    ( pACfg->IsAutoTextTip() ||
-                      pACorr->GetSwFlags().bAutoCompleteWords ) &&
-                    rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+                bCallBase = FALSE;
+                rSh.GetDrawView()->GetTextEditOutlinerView()->Command( rCEvt );
+            }
+            else
+            {
+                const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
+                if( pData )
                 {
-                    ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+                    sWord = pData->GetText();
+                    bCallBase = FALSE;
+                    rSh.SetExtTextInputData( *pData );
                 }
             }
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                        rView.GetViewFrame()->GetBindings().GetRecorder();
+                if(!xRecorder.is())
+                {
+                    OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
+                    SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
+                    if( pACfg && pACorr &&
+                        ( pACfg->IsAutoTextTip() ||
+                          pACorr->GetSwFlags().bAutoCompleteWords ) &&
+                        rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
+                    {
+                        ShowAutoTextCorrectQuickHelp(sWord, pACfg, pACorr);
+                    }
+                }
         }
-        break;
-
+    }
+    break;
     case COMMAND_CURSORPOS:
         // will be handled by the base class
         break;
