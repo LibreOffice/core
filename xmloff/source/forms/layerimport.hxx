@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:40:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11.24.2  2003/11/24 15:19:46  obo
+ *  undo last change
+ *
+ *  Revision 1.11  2003/10/21 08:40:18  obo
+ *  INTEGRATION: CWS formcelllinkage (1.10.160); FILE MERGED
+ *  2003/10/01 09:55:23 fs 1.10.160.1: #i18994# merging the changes from the CWS fs002
+ *
  *  Revision 1.10.160.1  2003/10/01 09:55:23  fs
  *  #i18994# merging the changes from the CWS fs002
  *
