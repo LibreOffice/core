@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2001-08-28 10:40:44 $
+ *  last change: $Author: dl $ $Date: 2001-09-10 11:36:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,9 @@ SO2_DECL_REF(SvInPlaceObject)
 class SdrOle2ObjImpl
 {
 public:
-    GDIMetaFile*    pMetaFile;             // Metafile fuer GetMtf kopieren und merken
+    GDIMetaFile*    pMetaFile;          // Metafile fuer GetMtf kopieren und merken
     GraphicObject*  pGraphicObject;
+    String          aPersistName;       // name of object in persist
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,7 +206,7 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
 #endif
 
-    aName=rNewObjName;
+    mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
@@ -229,7 +230,7 @@ SdrOle2Obj::SdrOle2Obj(const SvInPlaceObjectRef& rNewObjRef, const XubString& rN
     ppObjRef=new SvInPlaceObjectRef(rNewObjRef);
 #endif
 
-    aName=rNewObjName;
+    mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     SvInPlaceObjectRef& rIPRef = *ppObjRef;
@@ -323,25 +324,25 @@ FASTBOOL SdrOle2Obj::IsEmpty() const
 void SdrOle2Obj::Connect()
 {
 #ifndef SVX_LIGHT
-    if(pModel && aName.Len())
+    if(pModel && mpImpl->aPersistName.Len())
     {
         SvPersist* pPers=pModel->GetPersist();
         if (pPers!=NULL)
         {
             SvInfoObjectRef xIObj;
-            SvInfoObject* pInfo = pPers->Find(aName);
+            SvInfoObject* pInfo = pPers->Find(mpImpl->aPersistName);
 
             if (!pInfo)
             {
                 if ( !ppObjRef->Is() )
                     GetObjRef();    // try to load inplace object
 
-                xIObj = pInfo = new SvEmbeddedInfoObject(*ppObjRef,aName);
+                xIObj = pInfo = new SvEmbeddedInfoObject(*ppObjRef,mpImpl->aPersistName);
             }
 
-            if ( !pPers->HasObject(aName) )
+            if ( !pPers->HasObject(mpImpl->aPersistName) )
             {
-                pPers->Move(pInfo, aName);
+                pPers->Move(pInfo, mpImpl->aPersistName);
             }
             else
             {
@@ -389,7 +390,7 @@ void SdrOle2Obj::Connect()
 void SdrOle2Obj::Disconnect()
 {
 #ifndef SVX_LIGHT
-    if( !IsEmpty() && aName.Len() )
+    if( !IsEmpty() && mpImpl->aPersistName.Len() )
     {
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
         if( xBC.is() && pModifyListener )
@@ -399,7 +400,7 @@ void SdrOle2Obj::Disconnect()
         }
     }
 
-    if (pModel && aName.Len() )
+    if (pModel && mpImpl->aPersistName.Len() )
     {
         if ( ppObjRef->Is() )
             (*ppObjRef)->DoClose();
@@ -408,7 +409,7 @@ void SdrOle2Obj::Disconnect()
 
         if (pPers)
         {
-            SvInfoObject* pInfo = pPers->Find(aName);
+            SvInfoObject* pInfo = pPers->Find(mpImpl->aPersistName);
 
             if (pInfo)
                 pInfo->SetDeleted(TRUE);
@@ -439,37 +440,32 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
                 // Persists unterschiedlich (unterschiedliche Dokumente)
                 // oder gleiches Dokument
 
-                SvInfoObject* pInfo = pSrcPers->Find(aName);
+                SvInfoObject* pInfo = pSrcPers->Find(mpImpl->aPersistName);
 
                 if (pInfo)
                 {
                     USHORT i = 1;
-
                     // loop because of storage bug 46033
                     for( USHORT n = 0; n < 100; n++ )
                     {
-//                      aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-//                      aName += sal_Unicode(' ');
-
-                        aName = OUString::createFromAscii( "Object " );
-
-                        String aStr(aName);
+                        mpImpl->aPersistName = OUString::createFromAscii( "Object " );
+                        String aStr( mpImpl->aPersistName );
                         aStr+=String::CreateFromInt32( i );
                         while( pDestPers->Find( aStr ) )
                         {
                             i++;
-                            aStr = aName;
+                            aStr = mpImpl->aPersistName;
                             aStr += String::CreateFromInt32(i);
                         }
-                        aName = aStr;
-                        const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( aName );
-                        if( pDestPers->Copy(aName, aName, pInfo, pSrcPers) )
+                        mpImpl->aPersistName = aStr;
+                        const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( mpImpl->aPersistName );
+                        if( pDestPers->Copy(mpImpl->aPersistName, mpImpl->aPersistName, pInfo, pSrcPers) )
                             break;
 
                         i++;
                     }
 
-                    (*ppObjRef)=&(pDestPers->GetObject(aName));
+                    (*ppObjRef)=&(pDestPers->GetObject(mpImpl->aPersistName));
                 }
             }
         }
@@ -477,6 +473,23 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 #endif
 
     SdrRectObj::SetModel(pNewModel);
+
+    if( pModel && bChg && aName.Len() == 0 )
+    {
+        String aStr( mpImpl->aPersistName );
+        USHORT i = 1;
+        while( pModel->GetPersist() && pModel->GetPersist()->Find( aStr ) )
+        {
+            i++;
+            aStr = mpImpl->aPersistName;
+            aStr += String::CreateFromInt32(i);
+        }
+
+        aName = ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
+        aName += sal_Unicode(' ');
+        aName += String::CreateFromInt32( i );
+    }
+
     if (bChg) Connect();
 }
 
@@ -519,16 +532,7 @@ FASTBOOL SdrOle2Obj::HasSetName() const
 
 void SdrOle2Obj::SetName(const XubString& rStr)
 {
-    sal_Bool bInitialName = 0 == aName.Len();
-
-    if( !bInitialName )
-        Disconnect();
-
-    aName=rStr;
-
-    if( !bInitialName )
-        Connect();
-
+    aName = rStr;
     SetChanged();
 }
 
@@ -663,10 +667,9 @@ SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
 void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 {
-//  rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
-    rName = OUString::createFromAscii( "Object " );
+    rName = ImpGetResStr(bFrame ? STR_ObjNameSingulFrame : STR_ObjNameSingulOLE2);
 
-    if(aName.Len())
+    if( aName.Len() )
     {
         rName.AppendAscii(" '");
         rName += aName;
@@ -676,8 +679,7 @@ void SdrOle2Obj::TakeObjNameSingul(XubString& rName) const
 
 void SdrOle2Obj::TakeObjNamePlural(XubString& rName) const
 {
-//  rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
-    rName = OUString::createFromAscii( "Object " );
+    rName=ImpGetResStr(bFrame ? STR_ObjNamePluralFrame : STR_ObjNamePluralOLE2);
 }
 
 void SdrOle2Obj::operator=(const SdrObject& rObj)
@@ -685,8 +687,9 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
     FASTBOOL bModelOk=pModel!=NULL;
     if (bModelOk) Disconnect();
     SdrRectObj::operator=(rObj);
-    aName    =((SdrOle2Obj&)rObj).aName;
+    mpImpl->aPersistName    =((SdrOle2Obj&)rObj).mpImpl->aPersistName;
     aProgName=((SdrOle2Obj&)rObj).aProgName;
+    aName = ((SdrOle2Obj&)rObj).aName;
     bFrame   =((SdrOle2Obj&)rObj).bFrame;
 
     if(((SdrOle2Obj&)rObj).pGraphic)
@@ -708,35 +711,38 @@ void SdrOle2Obj::operator=(const SdrObject& rObj)
         if (pDestPers!=NULL && pSrcPers!=NULL && pModel==pSrcModel) {
             // Kopie innerhalb eines Models
             // Eindeutigen Namen finden
-            SvInfoObject* pInfo=pSrcPers->Find(aName);
+            SvInfoObject* pInfo=pSrcPers->Find(mpImpl->aPersistName);
             if (pInfo!=NULL)
             {
-                USHORT i=1;
-
+                USHORT i = 1;
                 // loop because of storage bug 46033
                 for( USHORT n = 0; n < 100; n++ )
                 {
-//                  aName=ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
-//                  aName += sal_Unicode(' ');
-
-                    aName = OUString::createFromAscii( "Object " );
-
-                    String aStr(aName);
+                    // new name in persist
+                    mpImpl->aPersistName = OUString::createFromAscii( "Object " );
+                    String aStr( mpImpl->aPersistName );
                     aStr+=String::CreateFromInt32( i );
-                    while(pDestPers->Find(aStr)) {
+                    while( pDestPers->Find( aStr ) )
+                    {
                         i++;
-                        aStr=aName;
+                        aStr = mpImpl->aPersistName;
                         aStr += String::CreateFromInt32(i);
                     }
-                    aName=aStr;
-                    const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( aName );
-                    if( pDestPers->Copy(aName,aName,pInfo,pSrcPers) )
+                    mpImpl->aPersistName = aStr;
+
+                    // new UI name
+//                  aName = ImpGetResStr(bFrame ? STR_ObjFrameNamePrefix : STR_ObjOLE2NamePrefix);
+//                  aName += String::CreateFromInt32( i );
+                    aName = String();
+
+                    const SvInPlaceObjectRef& aXRef = &pSrcPers->GetObject( mpImpl->aPersistName );
+                    if( pDestPers->Copy(mpImpl->aPersistName,mpImpl->aPersistName,pInfo,pSrcPers) )
                         break;
 
                     i++;
                 }
 
-                (*ppObjRef)=&(pDestPers->GetObject(aName));
+                (*ppObjRef)=&(pDestPers->GetObject(mpImpl->aPersistName));
             }
         }
 #endif
@@ -897,8 +903,8 @@ void SdrOle2Obj::WriteData(SvStream& rOut) const
     aCompat.SetID("SdrOle2Obj");
 #endif
 
-    // UNICODE: rOut<<aName;
-    rOut.WriteByteString(aName);
+    // UNICODE: rOut<<mpImpl->aPersistName;
+    rOut.WriteByteString(mpImpl->aPersistName);
 
     // UNICODE: rOut<<aProgName;
     rOut.WriteByteString(aProgName);
@@ -947,8 +953,8 @@ void SdrOle2Obj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     aCompat.SetID("SdrOle2Obj");
 #endif
 
-    // UNICODE: rIn >> aName;
-    rIn.ReadByteString(aName);
+    // UNICODE: rIn >> mpImpl->aPersistName;
+    rIn.ReadByteString(mpImpl->aPersistName);
 
     // UNICODE: rIn >> aProgName;
     rIn.ReadByteString(aProgName);
@@ -1037,13 +1043,29 @@ BOOL SdrOle2Obj::Unload()
     return bUnloaded;
 }
 
+void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
+{
+    mpImpl->aPersistName = OUString::createFromAscii( "Object " );
+    String aStr( mpImpl->aPersistName );
+    USHORT i = 1;
+    aStr+=String::CreateFromInt32( i );
+    while( pPers->Find( aStr ) )
+    {
+        i++;
+        aStr = mpImpl->aPersistName;
+        aStr += String::CreateFromInt32(i);
+    }
+    mpImpl->aPersistName = aStr;
+}
+
+
 const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
 {
 #ifndef SVX_LIGHT
     if ( !ppObjRef->Is() && pModel && pModel->GetPersist() && !pModel->GetPersist()->IsHandsOff() )
     {
         // Objekt laden
-        (*ppObjRef) = &( pModel->GetPersist()->GetObject( aName ) );
+        (*ppObjRef) = &( pModel->GetPersist()->GetObject( mpImpl->aPersistName ) );
 
         if ( ppObjRef->Is() )
         {
@@ -1115,7 +1137,7 @@ const SvInPlaceObjectRef& SdrOle2Obj::GetObjRef() const
         SotStorageRef xSt;
         if( pStor)
         {
-            xSt = pStor->OpenSotStorage( aName );
+            xSt = pStor->OpenSotStorage( mpImpl->aPersistName );
 
             if( xSt.Is() )
             {
