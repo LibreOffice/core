@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:31:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,18 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
 
+/******************************************************************************
+ *
+ * ATTENTION:
+ * All col/row/tab members here are dedicated UINT16/INT16 types for alien
+ * binary file import/export. May have to be casted/converted when used in Calc
+ * context.
+ *
+ *****************************************************************************/
 
 class ColRowSettings;
 
@@ -168,11 +179,11 @@ public:
 
     ScExtDocOptions&        operator =( const ScExtDocOptions& rCpy );
 
-    void                    SetExtTabOptions( UINT16 nTabNum, ScExtTabOptions* pTabOpt );
+    void                    SetExtTabOptions( SCTAB nTabNum, ScExtTabOptions* pTabOpt );
 
     void                    SetGridCol( const Color& rColor );
     void                    SetActTab( UINT16 nTab );
-    void                    SetOleSize( USHORT nFirstCol, USHORT nFirstRow, USHORT nLastCol, USHORT nLastRow );
+    void                    SetOleSize( SCCOL nFirstCol, SCROW nFirstRow, SCCOL nLastCol, SCROW nLastRow );
     void                    SetCursor( UINT16 nCol, UINT16 nRow );
     void                    SetZoom( UINT16 nZaehler, UINT16 nNenner );
     inline void             SetChanged( BOOL bChg )     { bChanged = bChg; }
@@ -180,8 +191,8 @@ public:
 
     void                    Add( const ColRowSettings& rCRS );
 
-    inline const ScExtTabOptions*   GetExtTabOptions( const UINT16 nTabNum ) const;
-    inline ScExtTabOptions* GetExtTabOptions( const UINT16 nTabNum );
+    inline const ScExtTabOptions*   GetExtTabOptions( const SCTAB nTabNum ) const;
+    inline ScExtTabOptions* GetExtTabOptions( const SCTAB nTabNum );
     inline const ScRange*   GetOleSize() const  { return pOleSize; }
 
     inline const String*    GetCodename( void ) const;      // for Workbook globals
@@ -227,15 +238,15 @@ inline const String* CodenameList::Act( void ) const
 
 
 
-inline const ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const UINT16 nTab ) const
+inline const ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const SCTAB nTab ) const
 {
-    return (nTab <= MAXTAB) ? ppExtTabOpts[ nTab ] : NULL;
+    return ValidTab(nTab) ? ppExtTabOpts[ nTab ] : NULL;
 }
 
 
-inline ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const UINT16 nTab )
+inline ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const SCTAB nTab )
 {
-    return (nTab <= MAXTAB) ? ppExtTabOpts[ nTab ] : NULL;
+    return ValidTab(nTab) ? ppExtTabOpts[ nTab ] : NULL;
 }
 
 
