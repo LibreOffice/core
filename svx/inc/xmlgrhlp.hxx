@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
  *  last change: $Author: ka $
  *
@@ -152,7 +152,7 @@ protected:
 
                                 SvXMLGraphicHelper();
                                 ~SvXMLGraphicHelper();
-    void                        Init( SotStorage& rXMLStorage,
+    void                        Init( SotStorage* pXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       BOOL bDirect );
 
@@ -161,6 +161,8 @@ public:
     static SvXMLGraphicHelper*  Create( SotStorage& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         BOOL bDirect = TRUE );
+    static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
+
     static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );
 
     void                        Flush();

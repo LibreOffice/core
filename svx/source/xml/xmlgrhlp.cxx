@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ sal_Bool SvXMLGraphicHelper::ImplGetStreamNames( const ::rtl::OUString& rURLStr,
 
 SotStorageRef SvXMLGraphicHelper::ImplGetGraphicStorage( const ::rtl::OUString& rStorageName )
 {
-    if( !mxGraphicStorage.Is() || ( rStorageName != maCurStorageName ) )
+    if( mpRootStorage && ( !mxGraphicStorage.Is() || ( rStorageName != maCurStorageName ) ) )
     {
         if( mxGraphicStorage.Is() && GRAPHICHELPER_MODE_WRITE == meCreateMode )
             mxGraphicStorage->Commit();
@@ -649,11 +649,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
 
 // -----------------------------------------------------------------------------
 
-void SvXMLGraphicHelper::Init( SotStorage& rXMLStorage,
+void SvXMLGraphicHelper::Init( SotStorage* pXMLStorage,
                                SvXMLGraphicHelperMode eCreateMode,
                                BOOL bDirect )
 {
-    mpRootStorage = &rXMLStorage;
+    mpRootStorage = pXMLStorage;
     meCreateMode = eCreateMode;
     mbDirect = bDirect;
 }
@@ -667,7 +667,19 @@ SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SotStorage& rXMLStorage,
     SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
 
     pThis->acquire();
-    pThis->Init( rXMLStorage, eCreateMode, bDirect );
+    pThis->Init( &rXMLStorage, eCreateMode, bDirect );
+
+    return pThis;
+}
+
+// -----------------------------------------------------------------------------
+
+SvXMLGraphicHelper* SvXMLGraphicHelper::Create( SvXMLGraphicHelperMode eCreateMode )
+{
+    SvXMLGraphicHelper* pThis = new SvXMLGraphicHelper;
+
+    pThis->acquire();
+    pThis->Init( NULL, eCreateMode, sal_False );
 
     return pThis;
 }
