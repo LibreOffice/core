@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:02:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #endif
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
