@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: container_XNameReplace.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:46:14 $ 
+'*  last change:$Date: 2003-10-06 13:22:20 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,16 +74,11 @@ option explicit
 ' This Interface/Service test depends on the following GLOBAL variables,
 ' which must be specified in the object creation:
 
-'      Global cNameToReplace As String name of instance to be replased
-'      Global oReplaceInstance As Object instance, that will be inserted
+'      Global cNameToReplace As String 'name of instance to be replased
+'      Global oReplaceInstance As Variant 'instance, that will be inserted
 '      instead old one
 
 '*************************************************************************
-
-
-
-
-
 
 Sub RunTest()
 
@@ -104,9 +99,8 @@ On Error Goto ErrHndl
     Test.StartMethod("replaceByName()")
     bOK = true
 
-    oOldObject = oObj.getByName(cNameToReplace)
-
     if (cObjectName = "sc.ScCellRangesObj") then
+        oOldObject = oObj.getByName(cNameToReplace)
         InstAddress = oReplaceInstance.getRangeAddress
 
         oObj.replaceByName(cNameToReplace, oReplaceInstance)
@@ -119,7 +113,16 @@ On Error Goto ErrHndl
         bOK = bOK AND NewAddress.EndColumn = InstAddress.EndColumn
         bOK = bOK AND NewAddress.StartRow = InstAddress.StartRow
         bOK = bOK AND NewAddress.EndRow = InstAddress.EndRow
+        
+    elseif typename(oReplaceInstance) = "String" then
+        Dim oNewObj as Variant
+        Dim oOldObj as Variant
+        oOldObj = oObj.getByName(cNameToReplace)
+        oObj.replaceByName(cNameToReplace, oReplaceInstance)
+        oNewObj = oObj.getByName(cNameToReplace)
+        bOK = bOK and not PropertyTester.equals(oOldObj, oNewObj)
     else
+        oOldObject = oObj.getByName(cNameToReplace)
         cReplInstName = oReplaceInstance.Name
         Out.Log("ReplaceInstance.name = '" &amp; cReplInstName &amp; "'")
         cOldObjName = oOldObject.Name
