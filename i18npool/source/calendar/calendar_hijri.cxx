@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-09-16 19:57:02 $
+ *  last change: $Author: rt $ $Date: 2002-09-18 13:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
 }
 
 /* this algorithm is taken from "Numerical Recipes in C", 2nd ed, pp 14-15. */
-/* this algorithm only valid for non-negative gregorian year
+/* this algorithm only valid for non-negative gregorian year                */
 void
 Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear)
 {
