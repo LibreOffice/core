@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:52:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,14 +128,6 @@ const ULONG ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
 
 
 
-// Natural Language Formulas Flag (8+)  0 := nein, 1:= ja
-const BYTE ExcDummy8_UsesElfs::pMyData[] = {
-    0x60, 0x01, 0x02, 0x00, 0x01, 0x00
-};
-const ULONG ExcDummy8_UsesElfs::nMyLen = sizeof(ExcDummy8_UsesElfs::pMyData);
-
-
-
 const BYTE ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
     };
@@ -194,19 +186,6 @@ ULONG ExcDummy8_041::GetLen() const
 
 
 const BYTE* ExcDummy8_041::GetData() const
-{
-    return pMyData;
-}
-
-
-
-ULONG ExcDummy8_UsesElfs::GetLen() const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy8_UsesElfs::GetData() const
 {
     return pMyData;
 }
