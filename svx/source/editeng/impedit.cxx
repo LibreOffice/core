@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 12:33:49 $
+ *  last change: $Author: mt $ $Date: 2001-10-24 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1535,7 +1535,7 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    if ( !bReadOnly && rDSDE.DropSuccess && !pDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    if ( !bReadOnly && rDSDE.DropSuccess && !pDragAndDropInfo->bOutlinerMode && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
         if ( pDragAndDropInfo->bStarterOfDD && pDragAndDropInfo->bDroppedInMe )
         {
@@ -1705,7 +1705,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
 
     sal_Bool bAccept = sal_False;
 
-    if ( GetOutputArea().IsInside( aMousePos ) )
+    if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
     {
         sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
         if ( pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
