@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:20:31 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@
 #include "docinf.hxx"
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include <misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #include <macrconf.hxx>
 #include "appimp.hxx"
 #include "helper.hxx"   // SfxContentHelper::...
