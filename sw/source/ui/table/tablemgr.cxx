@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:38:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,7 @@
 
 #pragma hdrstop
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SCH_DLL_HXX
 #include <sch/schdll.hxx>
 #endif
@@ -262,19 +257,23 @@ void SwTableFUNC::InsertChart( SchMemChart& rData, const SfxItemSet *pSet )
 
     //Jetzt das CharObject einfuegen.
     //Wer das nicht versteht ist selber schuld ;-)
-    SvInPlaceObjectRef aIPObj = SvInPlaceObject::CreateObject( SvGlobalName( SO3_SCH_CLASSID ) );
-    if ( aIPObj.Is() )
+    ::rtl::OUString aObjName;
+    comphelper::EmbeddedObjectContainer aCnt;
+    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > xObj =
+            aCnt.CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aObjName );
+    if ( xObj.is() )
     {
-        pSh->InsertOle( aIPObj );
+        pSh->InsertOleObject( xObj );
 
         //Den Namen der Table am OleNode setzen
         pSh->SetChartName( aName );
 
         //Und die Daten in's Objekt uebertragen.
+        // TODO/LATER: Looks like there is no need here to update the replacement. But it should be checked.
         if( pSet )
-            SchDLL::Update( aIPObj, &rData, *pSet );
+            SchDLL::Update( xObj, &rData, *pSet );
         else
-            SchDLL::Update( aIPObj, &rData );
+            SchDLL::Update( xObj, &rData );
     }
     pSh->EndUndo( UIUNDO_INSERT_CHART );
     pSh->EndAllAction();
