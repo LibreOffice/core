@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:15:05 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 14:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,17 @@
  *
  ************************************************************************/
 
+/*TODO
+    - change "singleton" behaviour by using new helper ::comhelper::SingletonRef
+    - rename method exist() to existHandlerForURL() or similar one
+    - may its a good idea to replace struct ProtocolHandler by css::beans::NamedValue type?!
+*/
+
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
 #include <classes/protocolhandlercache.hxx>
-#include <classes/wildcard.hxx>
 #include <classes/converter.hxx>
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -77,6 +82,10 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _WLDCRD_HXX
+#include <tools/wldcrd.hxx>
+#endif
 
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
@@ -117,7 +126,8 @@ PatternHash::iterator PatternHash::findPatternKey( const ::rtl::OUString& sURL )
     PatternHash::iterator pItem = this->begin();
     while( pItem!=this->end() )
     {
-        if (Wildcard::match(sURL,pItem->first))
+        WildCard aPattern(pItem->first);
+        if (aPattern.Matches(sURL))
             break;
         ++pItem;
     }
@@ -233,6 +243,19 @@ sal_Bool HandlerCache::search( const ::rtl::OUString& sURL, ProtocolHandler* pRe
 sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pReturn ) const
 {
     return search( aURL.Complete, pReturn );
+}
+
+//_________________________________________________________________________________________________________________
+
+sal_Bool HandlerCache::exists( const ::rtl::OUString& sURL ) const
+{
+    sal_Bool bFound = sal_False;
+    /* SAFE */{
+        ReadGuard aReadLock( LockHelper::getGlobalLock() );
+        PatternHash::const_iterator pItem = m_pPattern->findPatternKey(sURL);
+        bFound = pItem!=m_pPattern->end();
+    /* SAFE */}
+    return bFound;
 }
 
 //_________________________________________________________________________________________________________________
