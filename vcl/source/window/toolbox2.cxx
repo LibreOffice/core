@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-30 16:38:24 $
+ *  last change: $Author: pb $ $Date: 2002-11-21 08:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,8 +777,6 @@ void ToolBox::CopyItem( const ToolBox& rToolBox, USHORT nItemId,
 
 void ToolBox::CopyItems( const ToolBox& rToolBox )
 {
-    ImplToolItem* pItem;
-
     mpData->ImplClearLayoutData();
     mpData->m_aItems = rToolBox.mpData->m_aItems;
     // Absichern gegen das Loeschen im Select-Handler
@@ -1446,6 +1444,8 @@ void ToolBox::SetItemState( USHORT nItemId, TriState eState )
 
             pItem->meState = eState;
             ImplUpdateItem( nPos );
+            // Notify
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK, (void*) nPos );
         }
     }
 }
@@ -1718,7 +1718,7 @@ Rectangle ToolBox::GetCharacterBounds( USHORT nItemID, long nIndex ) const
         ImplFillLayoutData();
     if( mpData->m_pLayoutData )
     {
-        for( int i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
+        for( ULONG i = 0; i < mpData->m_pLayoutData->m_aLineItemIds.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineItemIds[i] == nItemID )
             {
@@ -1741,7 +1741,7 @@ long ToolBox::GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const
     if( mpData->m_pLayoutData )
     {
         nIndex = mpData->m_pLayoutData->GetIndexForPoint( rPoint );
-        for( int i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
+        for( ULONG i = 0; i < mpData->m_pLayoutData->m_aLineIndices.size(); i++ )
         {
             if( mpData->m_pLayoutData->m_aLineIndices[i] <= nIndex &&
                 (i == mpData->m_pLayoutData->m_aLineIndices.size()-1 || mpData->m_pLayoutData->m_aLineIndices[i+1] > nIndex) )
@@ -1779,7 +1779,7 @@ USHORT ToolBox::GetDisplayItemId( long nText ) const
     USHORT nItemId = 0;
     if( ! mpData->m_pLayoutData )
         ImplFillLayoutData();
-    if( mpData->m_pLayoutData && nText >= 0 && nText < mpData->m_pLayoutData->m_aLineItemIds.size() )
+    if( mpData->m_pLayoutData && nText >= 0 && (ULONG)nText < mpData->m_pLayoutData->m_aLineItemIds.size() )
         nItemId = mpData->m_pLayoutData->m_aLineItemIds[nText];
     return nItemId;
 }
