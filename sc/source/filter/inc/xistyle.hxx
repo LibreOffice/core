@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:38:59 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _SVMEMPOOL_HXX
 #include <tools/mempool.hxx>
+#endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
 #ifndef SC_RANGELST_HXX
@@ -172,8 +175,6 @@ public:
     void                        ReadFont( XclImpStream& rStrm );
 
     /** Fills all font properties to the item set.
-        @descr  If the pointer to an item pool is passed, it will be used to
-        compare all items with the pool defaults and to not put items equal to the default.
         @param rItemSet  The destination item set.
         @param eMode  The type of Which-IDs.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
@@ -224,8 +225,6 @@ public:
     void                        ReadFont( XclImpStream& rStrm );
 
     /** Fills all font properties from a FONT record to the item set.
-        @descr  If the pointer to an item pool is passed, it will be used to
-        compare all items with the pool defaults and to not put items equal to the default.
         @param rItemSet  The destination item set.
         @param eMode  The type of Which-IDs.
         @param nFontIndex  The Excel index of the font.
@@ -250,11 +249,28 @@ private:
 public:
     explicit                    XclImpNumFmtBuffer( const XclImpRoot& rRoot );
 
-    /** Returns the format key with the Excel index nIndex or standard key, if invalid index. */
-    sal_uInt32                  GetFormat( sal_uInt32 nIndex );
+    /** Returns the format key with the Excel index nNumFmt or standard key, if invalid index. */
+    sal_uInt32                  GetFormat( sal_uInt16 nNumFmt ) const;
+    /** Returns the core index of the current standard number format. */
+    inline sal_uInt32           GetStandardFormat() const { return mnStdFmt; }
 
     /** Reads a FORMAT record. */
     void                        ReadFormat( XclImpStream& rStrm );
+
+    /** Fills an Excel number format to the passed item set.
+        @param rItemSet  The destination item set.
+        @param nNumFmt  The Excel number format index.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillToItemSet(
+                                    SfxItemSet& rItemSet, sal_uInt16 nNumFmt,
+                                    bool bSkipPoolDefs = false ) const;
+    /** Fills a Calc number format to the passed item set.
+        @param rItemSet  The destination item set.
+        @param nScNumFmt  The Calc number formatter index of the format.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
+    void                        FillScFmtToItemSet(
+                                    SfxItemSet& rItemSet, sal_uInt32 nScNumFmt,
+                                    bool bSkipPoolDefs = false ) const;
 
 private:
     /** Inserts the built-in number formats that Excel omits in BIFF5+. */
@@ -401,11 +417,14 @@ public:
     inline XclVerAlign          GetVerAlign() const     { return maAlignment.meVerAlign; }
     inline sal_uInt16           GetFont() const         { return mnFont; }
 
-    /** Inserts all formatting attributes to the specified area in the Calc document. */
+    /** Inserts all formatting attributes to the specified area in the Calc document.
+        @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
+        the number format of the XF. */
     void                        ApplyPattern(
                                     sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
                                     sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-                                    sal_uInt16 nTab );
+                                    sal_uInt16 nTab,
+                                    sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
 
 private:
     void                        ReadXF2( XclImpStream& rStrm );
@@ -457,17 +476,20 @@ public:
     /** Returns true, if either superscript or subscript is used in the font. */
     bool                        HasEscapement( sal_uInt32 nXFIndex ) const;
 
-    /** Inserts formatting attributes from an XF to the specified area in the Calc document. */
+    /** Inserts formatting attributes from an XF to the specified area in the Calc document.
+        @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
+        the number format of the XF. */
     void                        ApplyPattern(
                                     sal_uInt16 nFirstCol, sal_uInt16 nFirstRow,
                                     sal_uInt16 nLastCol, sal_uInt16 nLastRow,
-                                    sal_uInt16 nTab, sal_uInt16 nXFIndex );
+                                    sal_uInt16 nTab, sal_uInt16 nXFIndex,
+                                    sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND );
 };
 
 
 // Buffer for XF indexes in cells =============================================
 
-/** Contains an XF index for a range of rows in a single column. */
+/** Contains an (encoded) XF index for a range of rows in a single column. */
 class XclImpXFIndex
 {
     DECL_FIXEDMEMPOOL_NEWDEL( XclImpXFIndex )
@@ -475,31 +497,31 @@ class XclImpXFIndex
 public:
     sal_uInt16                  mnFirstRow;     /// The first row of an equal-formatted range.
     sal_uInt16                  mnLastRow;      /// The last row of an equal-formatted range.
-    sal_uInt16                  mnXF;           /// Index to the XF record.
+    sal_uInt32                  mnEncXF;        /// Encoded XF index (contains additional information).
 
-    inline explicit             XclImpXFIndex( sal_uInt16 nRow, sal_uInt16 nXFIndex );
-    inline explicit             XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt16 nXFIndex );
+    inline explicit             XclImpXFIndex( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
+    inline explicit             XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt32 nEncXFIndex );
 
     /** Returns true, if nRow is contained in own row range. */
     inline bool                 Contains( sal_uInt16 nRow ) const;
 
     /** Returns true, if the range has been expanded. */
-    bool                        Expand( sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    bool                        Expand( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
     /** Returns true, if the range has been expanded. */
     bool                        Expand( const XclImpXFIndex& rNextStyle );
 };
 
-inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nRow, sal_uInt16 nXFIndex ) :
+inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nRow, sal_uInt32 nEncXFIndex ) :
     mnFirstRow( nRow ),
     mnLastRow( nRow ),
-    mnXF( nXFIndex )
+    mnEncXF( nEncXFIndex )
 {
 }
 
-inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt16 nXFIndex ) :
+inline XclImpXFIndex::XclImpXFIndex( sal_uInt16 nFRow, sal_uInt16 nLRow, sal_uInt32 nEncXFIndex ) :
     mnFirstRow( nFRow ),
     mnLastRow( nLRow ),
-    mnXF( nXFIndex )
+    mnEncXF( nEncXFIndex )
 {
 }
 
@@ -525,8 +547,8 @@ public:
     /** Returns the next formatted cell range in this column. */
     inline XclImpXFIndex*       Next()      { return maIndexList.Next(); }
 
-    /** Inserts a new XF index (first try to expand the last range). */
-    void                        SetXF( sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    /** Inserts a new (encoded) XF index (first try to expand the last range). */
+    void                        SetXF( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
 
 private:
     /** Finds the previous and next row range from row position nRow.
@@ -554,6 +576,7 @@ private:
     enum XclImpXFInsertMode
     {
         xlXFModeCell,               /// Filled cell.
+        xlXFModeBoolCell,           /// Cell with a single Boolean value.
         xlXFModeBlank,              /// Blank cell.
         xlXFModeRow                 /// Row default XF.
     };
@@ -573,6 +596,8 @@ public:
     void                        SetXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for blank cells. */
     void                        SetBlankXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    /** Inserts a new XF index for boolean cells. */
+    void                        SetBoolXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a row. */
     void                        SetRowDefXF( sal_uInt16 nRow, sal_uInt16 nXFIndex );
 
@@ -589,6 +614,11 @@ public:
 private:
     /** Clears all buffered data, used to set up for a new sheet. */
     void                        Clear();
+
+    /** Encoded an XF index with additional information. */
+    sal_uInt32                  EncodeXFIndex( sal_uInt16 nXFIndex, XclImpXFInsertMode eMode ) const;
+    /** Encoded an XF index with additional information. */
+    void                        DecodeXFIndex( sal_uInt16& rnXFIndex, sal_uInt32& rnForcedNumFmt, sal_uInt32 nEncXFIndex ) const;
 
     /** Inserts a new XF index for the specified cell type. */
     void                        SetXF(
