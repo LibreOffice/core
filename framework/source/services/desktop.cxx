@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:29:56 $
+ *  last change: $Author: as $ $Date: 2001-07-05 05:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,18 +1201,7 @@ void SAL_CALL Desktop::dispose() throw( css::uno::RuntimeException )
     // We must send the dispose message to all listener.
     // Otherwise our child tasks are disposed and try to remove it by himself at our container ...
     css::lang::EventObject aDisposeEvent( xThis         );
-    try
-    {
-        m_aListenerContainer.disposeAndClear( aDisposeEvent );
-    }
-    catch( css::uno::Exception& e1 )
-    {
-        LOG_ERROR( "Desktop::dispose()", "uno::Exception exception detected!" )
-    }
-    catch( exception& e2 )
-    {
-        LOG_ERROR( "Desktop::dispose()", "Standard exception detected!" )
-    }
+    m_aListenerContainer.disposeAndClear( aDisposeEvent );
 
     // Clear our child task container and forget all task references.
     m_aChildTaskContainer.clear();
