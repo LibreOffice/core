@@ -1,12 +1,19 @@
-sh	shell	: offuh rdbmaker tools sal expat NULL
-sh  shell\source\win32					nmake	-	w sh_win32 NULL
-sh	shell\source\win32\simplemail		nmake	-	w sh_win32_simplemail NULL
-sh  shell\source\unix\exec				nmake	-	u sh_win32 NULL
-sh	shell\source\proxysettings			nmake	-	all sh_proxysettings NULL
-sh	shell\source\cmdmail      			nmake	-	all sh_cmdmail NULL
-sh shell\source\all                     nmake   -   all sh_all NULL
-#sh shell\source\backends\gconfbe        nmake   -   all sh_backends_gconfbe NULL
-sh shell\source\unix\sysshell              nmake   -   u  sh_unix_sysshell sh_all NULL
-sh shell\source\win32\sysshell             nmake   -   w sh_win32_sysshell NULL
-shell shell\source\tools\lngconvex      nmake - w sh_win32_lngconv NULL
-sh shell\source\win32\shlxthandler nmake - w sh_win32_shlxthandler sh_win32_lngconv.w NULL
+sh    shell	: offuh rdbmaker tools sal expat NULL
+sh    shell\source\win32                           nmake   -   w   sh_win32 NULL
+sh    shell\source\win32\simplemail                nmake   -   w   sh_win32_simplemail NULL
+sh    shell\source\unix\exec                       nmake   -   u   sh_win32 NULL
+sh    shell\source\proxysettings                   nmake   -   all sh_proxysettings NULL
+sh    shell\source\cmdmail                         nmake   -   all sh_cmdmail NULL
+sh    shell\source\all                             nmake   -   all sh_all NULL
+sh    shell\source\unix\sysshell                   nmake   -   u   sh_unix_sysshell sh_all NULL
+sh    shell\source\win32\sysshell                  nmake   -   w   sh_win32_sysshell NULL
+sh    shell\source\tools\lngconvex                 nmake   -   w   sh_win32_lngconv NULL
+sh    shell\source\tools\regsvrex                  nmake   -   w   sh_win32_regsvrex  NULL
+sh    shell\source\all\zipfile                     nmake   -   w   sh_all_zipfile  NULL
+sh    shell\source\all\metainfo                    nmake   -   w   sh_all_metainfo sh_all_zipfile.w  NULL
+sh    shell\source\win32\shlxthandler\res          nmake   -   w   sh_win32_shlxthandler_res sh_win32_lngconv.w NULL
+sh    shell\source\win32\shlxthandler\util         nmake   -   w   sh_win32_shlxthandler_util  NULL
+sh    shell\source\win32\shlxthandler\propsheets   nmake   -   w   sh_win32_shlxthandler_propsheets  NULL
+sh    shell\source\win32\shlxthandler\infotips     nmake   -   w   sh_win32_shlxthandler_infotips  NULL
+sh    shell\source\win32\shlxthandler\columninfo   nmake   -   w   sh_win32_shlxthandler_columninfo  NULL
+sh    shell\source\win32\shlxthandler              nmake   -   w   sh_win32_shlxthandler sh_win32_lngconv.w sh_win32_shlxthandler_res.w sh_win32_shlxthandler_util.w sh_all_zipfile.w sh_all_metainfo.w sh_win32_shlxthandler_propsheets.w sh_win32_shlxthandler_infotips.w sh_win32_shlxthandler_columninfo.w NULL
