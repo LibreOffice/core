@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,10 @@ class XMLRedlineImportHelper
 
     RedlineMapType aRedlineMap;
 
+    /// redline mode before the import (to be restored after import)
+    sal_uInt16 eSavedRedlineMode;
+    sal_Bool bSavedRedlineMode;     /// validity-flag for eSavedRedlineMode
+
     /// if sal_True, no redlines should be inserted into document
     /// (This typically happen when a document is loaded in 'insert'-mode.)
     sal_Bool bIgnoreRedlines;
@@ -115,7 +119,11 @@ class XMLRedlineImportHelper
 public:
 
     XMLRedlineImportHelper(
-        sal_Bool bIgnoreRedlines);      /// ignore redlines mode
+        sal_Bool bIgnoreRedlines,       /// ignore redlines mode
+        /// model (for saving the redline mode)
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XModel> & rModel,
+        sal_Bool bPreserveRedlineMode);
     virtual ~XMLRedlineImportHelper();
 
     /// create a redline object
@@ -171,6 +179,15 @@ private:
     SwRedlineData* ConvertRedline(
         RedlineInfo* pRedline,  /// RedlineInfo to be converted
         SwDoc* pDoc);           /// document needed for Author-ID conversion
+
+    /** save the redline mode (if rPropertySet is non-null) */
+    void SaveRedlineMode(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & rPropertySet);
+
+    /** don't restore the saved redline mode */
+     void DontRestoreRedlineMode();
+
 };
 
 #endif

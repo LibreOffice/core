@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-23 15:42:10 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,7 @@ SwXMLImport::SwXMLImport(sal_uInt16 nImportFlags) :
     pSttNdIdx( 0 ),
     bProgressValid( sal_False ),
     bShowProgress( sal_True ),
+    bPreserveRedlineMode( sal_True ),
     nProgress( 0 )
 {
     _InitItemImport();
@@ -360,6 +361,7 @@ SwXMLImport::SwXMLImport(
     pSttNdIdx( 0 ),
     bProgressValid( sal_False ),
     bShowProgress( sal_True ),
+    bPreserveRedlineMode( sal_True ),
     nProgress( 0 ),
     xPackage( pPkg )
 {
@@ -832,6 +834,32 @@ void SwXMLImport::ShowProgress( sal_Int32 nPercent )
         ProgressBarHelper *pProgress = GetProgressBarHelper();
         if( pProgress )
             pProgress->SetValue( nProgress );
+    }
+}
+
+void SwXMLImport::initialize(
+    const Sequence<Any>& aArguments )
+    throw( uno::Exception, uno::RuntimeException)
+{
+    // delegate to super class
+    SvXMLImport::initialize(aArguments);
+
+    // we are only looking for a PropertyValue "PreserveRedlineMode"
+    sal_Int32 nLength = aArguments.getLength();
+    for(sal_Int32 i = 0; i < nLength; i++)
+    {
+        if (aArguments[i].getValueType() ==
+            ::getCppuType((const beans::PropertyValue*)0) )
+        {
+            beans::PropertyValue aValue;
+            aArguments[i] >>= aValue;
+
+            if (aValue.Name.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("PreserveRedlineMode")))
+            {
+                bPreserveRedlineMode = *(sal_Bool*)aValue.Value.getValue();
+            }
+        }
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-21 16:20:47 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@ class SwXMLExport : public SvXMLExport
     sal_Bool                    bBlock : 1;         // export text block?
     sal_Bool                    bExportFirstTableOnly : 1;
     sal_Bool                    bShowProgress : 1;
+
+    sal_Bool                    bRedlineModeSaved;  /// saved old redline mode?
+    sal_Bool                    bRedlineModeValue;  /// value of redline mode
 
     void _InitItemExport();
     void _FinitItemExport();

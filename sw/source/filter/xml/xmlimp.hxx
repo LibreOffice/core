@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 12:36:48 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ class SwXMLImport: public SvXMLImport
     sal_Bool                bProgressValid : 1;
     sal_Bool                bShowProgress : 1;
     sal_Bool                bOrganizerMode : 1;
+    sal_Bool                bPreserveRedlineMode;
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
@@ -167,6 +168,9 @@ public:
     // XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     void                    InsertStyles( sal_Bool bAuto );
     void                    FinishStyles();

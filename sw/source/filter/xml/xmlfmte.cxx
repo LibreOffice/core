@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:42:26 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,16 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
 
 using namespace ::rtl;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
@@ -290,7 +294,40 @@ XMLPageExport* SwXMLExport::CreatePageExport()
 
 void SwXMLExport::_ExportMasterStyles()
 {
+    // switch redline mode (and preserve old mode) before exporting content
+    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
+    if (xPropSet.is() && ! bRedlineModeSaved)
+    {
+        if (xPropSet.is())
+        {
+            // record old mode
+            Any aAny = xPropSet->getPropertyValue(sShowChanges);
+            bRedlineModeValue = *(sal_Bool*)aAny.getValue();
+            bRedlineModeSaved = sal_True;
+
+            // set mode to false
+            sal_Bool bTmp = sal_False;
+            aAny.setValue(&bTmp, ::getBooleanCppuType());
+            xPropSet->setPropertyValue(sShowChanges, aAny);
+        }
+    }
+
+    // export master styles
     GetPageExport()->exportMasterStyles( sal_False );
+
+    // restore redline mode (but only if we aren't going to do so
+    // anyway in exportContent)
+    if (bRedlineModeSaved && xPropSet.is() &&
+        ((getExportFlags() & EXPORT_CONTENT) == 0) )
+    {
+        // set mode to previous value
+        Any aAny;
+        aAny.setValue(&bRedlineModeValue, ::getBooleanCppuType());
+        xPropSet->setPropertyValue(sShowChanges, aAny);
+
+        bRedlineModeSaved = sal_False;
+    }
 }
 
 // ---------------------------------------------------------------------

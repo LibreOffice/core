@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:38:46 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ public:
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::frame::XModel>& rModel,
             sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
-            sal_Bool bBlockM, sal_Bool bOrganizerM );
+            sal_Bool bBlockM, sal_Bool bOrganizerM,
+            sal_Bool bPreserveRedlineMode );
     ~SwXMLTextImportHelper();
 
     virtual ::com::sun::star::uno::Reference<

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-09 14:42:26 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
-#include <com/sun/star/text/XTextDocument.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 
@@ -124,9 +124,9 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::text::XTextCursor;
 using ::com::sun::star::text::XTextRange;
 using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextDocument;
 using ::com::sun::star::text::XWordCursor;
 using ::com::sun::star::lang::XUnoTunnel;
+using ::com::sun::star::beans::XPropertySet;
 // collision with tools/DateTime: use UNO DateTime as util::DateTime
 // using ::com::sun::star::util::DateTime;
 
@@ -323,15 +323,24 @@ RedlineInfo::~RedlineInfo()
 //
 
 XMLRedlineImportHelper::XMLRedlineImportHelper(
-    sal_Bool bNoRedlinesPlease) :
+    sal_Bool bNoRedlinesPlease,
+    const Reference<XModel> & rModel,
+    sal_Bool bPreserveRedlineMode) :
         sEmpty(),
         sInsertion(RTL_CONSTASCII_USTRINGPARAM(sXML_insertion)),
         sDeletion(RTL_CONSTASCII_USTRINGPARAM(sXML_deletion)),
         sFormatChange(RTL_CONSTASCII_USTRINGPARAM(sXML_format_change)),
         aRedlineMap(),
         bIgnoreRedlines(bNoRedlinesPlease),
+        bSavedRedlineMode(sal_False),
+        eSavedRedlineMode(REDLINE_NONE),
         pSaveDoc(NULL)
 {
+    if (bPreserveRedlineMode)
+    {
+        Reference<XPropertySet> xPropertySet(rModel, UNO_QUERY);
+        SaveRedlineMode(xPropertySet);
+    }
 }
 
 XMLRedlineImportHelper::~XMLRedlineImportHelper()
@@ -350,11 +359,10 @@ XMLRedlineImportHelper::~XMLRedlineImportHelper()
     // set redline mode; first set bogus redline mode with
     // SetRedlineMode_intern(), so that the subsequent
     // SetRedlineMode() is forced to update the data structures
-    if (NULL != pSaveDoc)
+    if ( (NULL != pSaveDoc) && bSavedRedlineMode )
     {
-        // TODO: get "real" Redline mode from the saved document
-        // sal_uInt16 nRedlineMode = REDLINE_ON | REDLINE_SHOW_MASK;
-        sal_uInt16 nRedlineMode = REDLINE_NONE | REDLINE_SHOW_MASK;
+        // set previous redline mode
+        sal_uInt16 nRedlineMode = eSavedRedlineMode;
         pSaveDoc->SetRedlineMode_intern(~nRedlineMode);
         pSaveDoc->SetRedlineMode(nRedlineMode);
     }
@@ -683,4 +691,42 @@ SwRedlineData* XMLRedlineImportHelper::ConvertRedline(
                                              NULL); // no extra data
 
     return pData;
+}
+
+
+void XMLRedlineImportHelper::SaveRedlineMode(
+    const Reference<XPropertySet> & rPropertySet)
+{
+    DBG_ASSERT(rPropertySet.is(), "Expected property set");
+    if (rPropertySet.is())
+    {
+        OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+        OUString sRecordChanges(RTL_CONSTASCII_USTRINGPARAM("RecordChanges"));
+
+        // save show redline mode
+        Any aAny = rPropertySet->getPropertyValue(sShowChanges);
+        eSavedRedlineMode &= ~ (REDLINE_SHOW_INSERT|REDLINE_SHOW_DELETE);
+        eSavedRedlineMode |= REDLINE_SHOW_INSERT;
+        if (*(sal_Bool*)aAny.getValue())
+            eSavedRedlineMode |= REDLINE_SHOW_DELETE;
+
+        // save record redlines
+        aAny = rPropertySet->getPropertyValue(sRecordChanges);
+        eSavedRedlineMode &= ~ REDLINE_ON;
+        if (*(sal_Bool*)aAny.getValue())
+            eSavedRedlineMode |= REDLINE_ON;
+
+        bSavedRedlineMode = sal_True;
+
+        // and finally, disable record redlines property
+        sal_Bool bTmp = sal_False;
+        aAny.setValue( &bTmp, ::getBooleanCppuType() );
+        rPropertySet->setPropertyValue(sRecordChanges, aAny);
+    }
+}
+
+void XMLRedlineImportHelper::DontRestoreRedlineMode()
+{
+    // just pretend we didn't save any info in the first place.
+    bSavedRedlineMode = sal_False;
 }

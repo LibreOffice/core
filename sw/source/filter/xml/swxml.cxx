@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-23 16:36:21 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
@@ -386,12 +389,22 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
 
+    // filter argument to prevent multiple switching of redline mode
+    OUString sPreserveRedlineMode(
+        RTL_CONSTASCII_USTRINGPARAM("PreserveRedlineMode"));
+    beans::PropertyValue aValue;
+    aValue.Name = sPreserveRedlineMode;
+    sal_Bool bTmp = sal_False;
+    aValue.Value.setValue( &bTmp, ::getBooleanCppuType() );
+
     // prepare filter arguments
-    Sequence<Any> aFilterArgs( 2 );
+    Sequence<Any> aFilterArgs( 3 );
     Any *pArgs = aFilterArgs.getArray();
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
-    Sequence<Any> aEmptyArgs( 0 );
+    *pArgs++ <<= aValue;            // redline mode, as prepared above
+    Sequence<Any> aEmptyArgs( 1 );
+    aEmptyArgs[0] <<= aValue;           // redline mode, as prepared above
 
     // prepare for special modes
     sal_uInt16 nStyleFamilyMask = 0U;
@@ -434,6 +447,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
             aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
             IsOrganizerMode() );
 
+        // save redline mode (*after* it was set in the settings)
+        // (Also pass info to components to not bother with save/restore of
+        //  redline mode.)
+        sal_uInt16 nRedlineMode = rDoc.GetRedlineMode();
+        rDoc.SetRedlineMode_intern(REDLINE_NONE);
+
         ReadThroughComponent(
             pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             "com.sun.star.comp.Writer.XMLStylesImporter",
@@ -448,6 +467,12 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
                aFilterArgs, rName, IsBlockMode(), xInsertTextRange,
                aOpt.IsFmtsOnly(), nStyleFamilyMask, !aOpt.IsMerge(),
                sal_False );
+
+        // and restore redline mode
+        // (First set bogus mode to make sure the mode in SetRedlineMode()
+        //  is different from it's previous mode.)
+        rDoc.SetRedlineMode_intern( ~nRedlineMode );
+        rDoc.SetRedlineMode( nRedlineMode );
 
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-21 13:38:46 $
+ *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,10 +161,13 @@ static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet, sal_Int32 nHeight, sal
 SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
-        sal_Bool bBlockM, sal_Bool bOrganizerM ) :
+        sal_Bool bBlockM, sal_Bool bOrganizerM,
+        sal_Bool bPreserveRedlineMode ) :
     XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM,
                          bOrganizerM ),
-    pRedlineHelper(NULL)
+    pRedlineHelper(new XMLRedlineImportHelper(bInsertM || bBlockM, rModel,
+                                              bPreserveRedlineMode))
+//  pRedlineHelper(NULL)
 {
 }
 
@@ -527,7 +530,8 @@ XMLTextImportHelper* SwXMLImport::CreateTextImport()
 {
     return new SwXMLTextImportHelper( GetModel(), IsInsertMode(),
                                       IsStylesOnlyMode(), bShowProgress,
-                                      IsBlockMode(), IsOrganizerMode() );
+                                      IsBlockMode(), IsOrganizerMode(),
+                                      bPreserveRedlineMode );
 }
 
 
@@ -542,11 +546,9 @@ void SwXMLTextImportHelper::RedlineAdd(
     const util::DateTime& rDateTime)
 {
     // create redline helper on demand
-    if (NULL == pRedlineHelper)
-        pRedlineHelper = new XMLRedlineImportHelper(IsInsertMode() ||
-                                                    IsBlockMode() );
-
-    pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
+    DBG_ASSERT(NULL != pRedlineHelper, "helper should have been created in constructor");
+    if (NULL != pRedlineHelper)
+        pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime);
 }
 
 Reference<XTextCursor> SwXMLTextImportHelper::RedlineCreateText(
