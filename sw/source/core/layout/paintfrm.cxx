@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: od $ $Date: 2002-10-17 14:10:00 $
+ *  last change: $Author: od $ $Date: 2002-10-18 13:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,6 +1433,8 @@ void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
     Method introduced for bug fix #103876# in order to optimize drawing tiled
     background graphics. Previously, this code was integrated in method
     <lcl_DrawGraphic>.
+    Method implemented as a inline, checking the conditions and calling method
+    method <lcl_implDrawGraphicBackgrd(..)> for the intrinsic drawing.
 
     @author OD
 
@@ -1456,12 +1458,61 @@ void lcl_PaintShadow( const SwRect& aFrm, ViewShell* pSh )
     @param _bBackgrdAlreadyDrawn
     boolean (optional; default: false) indicating, if the background is already drawn.
 */
-void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
-                             OutputDevice* _pOut,
-                             const SwRect& _rAlignedPaintRect,
-                             const GraphicObject& _rGraphicObj,
-                             bool _bNumberingGraphic,
-                             bool _bBackgrdAlreadyDrawn = false )
+void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+                                 OutputDevice* _pOut,
+                                 const SwRect& _rAlignedPaintRect,
+                                 const GraphicObject& _rGraphicObj )
+{
+    /// determine color of background
+    ///     If color of background brush is not "no fill"/"auto fill" or
+    ///     <bFlyMetafile> is set, use color of background brush, otherwise
+    ///     use global retouche color.
+    const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || bFlyMetafile )
+                        ? _rBackgrdBrush.GetColor()
+                        : aGlobalRetoucheColor );
+
+    /// determine, if background color have to be drawn transparent
+    /// and calculate transparency percent value
+    sal_Int8 nTransparencyPercent = 0;
+    bool bDrawTransparent = false;
+    if ( aColor.GetTransparency() != 0 )
+    ///     background color is transparent --> draw transparent.
+    {
+        bDrawTransparent = true;
+        nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
+    }
+    else if ( (_rGraphicObj.GetAttr().GetTransparency() != 0) &&
+                (_rBackgrdBrush.GetColor() == COL_TRANSPARENT) )
+    ///     graphic is drawn transparent and background color is
+    ///     "no fill"/"auto fill" --> draw transparent
+    {
+        bDrawTransparent = true;
+        nTransparencyPercent = (_rGraphicObj.GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
+    }
+
+    if ( bDrawTransparent )
+    {
+        /// draw background transparent
+        if( _pOut->GetFillColor() != aColor.GetRGBColor() )
+            _pOut->SetFillColor( aColor.GetRGBColor() );
+        PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
+        _pOut->DrawTransparent( aPoly, nTransparencyPercent );
+    }
+    else
+    {
+        /// draw background opaque
+        if ( _pOut->GetFillColor() != aColor )
+            _pOut->SetFillColor( aColor );
+        _pOut->DrawRect( _rAlignedPaintRect.SVRect() );
+    }
+}
+
+inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+                                    OutputDevice* _pOut,
+                                    const SwRect& _rAlignedPaintRect,
+                                    const GraphicObject& _rGraphicObj,
+                                    bool _bNumberingGraphic,
+                                    bool _bBackgrdAlreadyDrawn = false )
 {
     /// draw background with background color, if
     ///     (1) graphic is not used as a numbering AND
@@ -1472,49 +1523,8 @@ void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
          ( _rGraphicObj.IsTransparent() || _rGraphicObj.GetType() == GRAPHIC_NONE  )
        )
     {
-        /// determine color of background
-        ///     If color of background brush is not "no fill"/"auto fill" or
-        ///     <bFlyMetafile> is set, use color of background brush, otherwise
-        ///     use global retouche color.
-        const Color aColor( ( (_rBackgrdBrush.GetColor() != COL_TRANSPARENT) || bFlyMetafile )
-                            ? _rBackgrdBrush.GetColor()
-                            : aGlobalRetoucheColor );
-
-        /// determine, if background color have to be drawn transparent
-        /// and calculate transparency percent value
-        sal_Int8 nTransparencyPercent = 0;
-        bool bDrawTransparent = false;
-        if ( aColor.GetTransparency() != 0 )
-        ///     background color is transparent --> draw transparent.
-        {
-            bDrawTransparent = true;
-            nTransparencyPercent = (aColor.GetTransparency()*100 + 0x7F)/0xFF;
-        }
-        else if ( (_rGraphicObj.GetAttr().GetTransparency() != 0) &&
-                    (_rBackgrdBrush.GetColor() == COL_TRANSPARENT) )
-        ///     graphic is drawn transparent and background color is
-        ///     "no fill"/"auto fill" --> draw transparent
-        {
-            bDrawTransparent = true;
-            nTransparencyPercent = (_rGraphicObj.GetAttr().GetTransparency()*100 + 0x7F)/0xFF;
-        }
-
-        if ( bDrawTransparent )
-        {
-            /// draw background transparent
-            if( _pOut->GetFillColor() != aColor.GetRGBColor() )
-                _pOut->SetFillColor( aColor.GetRGBColor() );
-            PolyPolygon aPoly( _rAlignedPaintRect.SVRect() );
-            _pOut->DrawTransparent( aPoly, nTransparencyPercent );
-        }
-        else
-        {
-            /// draw background opaque
-            if ( _pOut->GetFillColor() != aColor )
-                _pOut->SetFillColor( aColor );
-            _pOut->DrawRect( _rAlignedPaintRect.SVRect() );
-        }
-    } /// end of if [draw background ?]
+        lcl_implDrawGraphicBackgrd( _rBackgrdBrush, _pOut, _rAlignedPaintRect, _rGraphicObj );
+    }
 }
 
 /// OD 06.08.2002 #99657# - Note: the transparency of the background graphic
@@ -1554,7 +1564,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                                                     GETOBJSHELL() );
 
     /// OD 17.10.2002 #103876# - outsourcing drawing of background with a background color.
-    //::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
+    ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
 
     /// OD 25.09.2002 #99739# -
     /// Because for drawing a graphic left-top-corner and size coordinations are
