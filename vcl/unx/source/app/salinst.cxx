@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:57:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _SV_SALOGL_H
 #include <salogl.h>
 #endif
+#ifndef _SV_SALSOUND_H
+#include <salsound.h>
+#endif
 
 // -------------------------------------------------------------------------
 //
@@ -165,6 +168,9 @@ extern "C"
 
 X11SalInstance::~X11SalInstance()
 {
+    // deinitialize global sound resources
+    X11SalSound::Release();
+
     // eventually free OpenGL lib
     X11SalOpenGL::Release();
 
@@ -331,5 +337,10 @@ void X11SalInstance::DestroyFrame( SalFrame* pFrame )
 SalOpenGL* X11SalInstance::CreateSalOpenGL( SalGraphics* pGraphics )
 {
     return new X11SalOpenGL( pGraphics );
+}
+
+SalSound* X11SalInstance::CreateSalSound()
+{
+    return new X11SalSound();
 }
 
