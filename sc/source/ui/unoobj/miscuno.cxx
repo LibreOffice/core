@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 09:07:59 $
+ *  last change: $Author: sab $ $Date: 2002-09-26 09:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,16 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
                                         lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return xIndex->getByIndex(nPos++);
+    uno::Any aReturn;
+    try
+    {
+        aReturn = xIndex->getByIndex(nPos++);
+    }
+    catch (lang::IndexOutOfBoundsException&)
+    {
+        throw container::NoSuchElementException();
+    }
+    return aReturn;
 }
 
 ::rtl::OUString SAL_CALL ScIndexEnumeration::getImplementationName()
