@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:37:10 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,7 +1426,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ danish ] = "PHI";
         Text[ swedish ] = "FI";
         Text[ polish ] = "PHI";
-        Text[ portuguese_brazilian ] = "PHI";
+        Text[ portuguese_brazilian ] = "fi";
         Text[ japanese ] = "PHI";
         Text[ korean ] = "PHI";
         Text[ chinese_simplified ] = "PHI";
@@ -2164,13 +2164,13 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ danish ] = "S";
         Text[ swedish ] = "T";
         Text[ polish ] = "S";
-        Text[ portuguese_brazilian ] = "T";
+        Text[ portuguese_brazilian ] = "S";
         Text[ japanese ] = "T";
         Text[ korean ] = "T";
         Text[ chinese_simplified ] = "T";
         Text[ chinese_traditional ] = "T";
         Text[ turkish ] = "T";
-        Text[ arabic ] = "T";
+        Text[ arabic ] = "Ý";
         Text[ catalan ] = "S";
         Text[ thai ] = "T";
     };
