@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:45:44 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -656,18 +653,6 @@ FASTBOOL SwCrsrShell::IsInHeaderFooter( FASTBOOL* pbInHeader ) const
     return 0 != pFrm;
 }
 
-// #i23726#
-SwPosition SwCrsrShell::GetDocPos(const Point &rPt)
-{
-    SwPosition aPos(*pCurCrsr->GetPoint());
-    Point aPt(rPt);
-
-    SwCrsrMoveState aTmpState( MV_NONE );
-    GetLayout()->GetCrsrOfst(&aPos, aPt, &aTmpState);
-
-    return aPos;
-}
-
 int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
 {
     SET_CURR_SHELL( this );
@@ -1175,26 +1160,9 @@ void SwCrsrShell::UpdateCrsrPos()
         SizeChgNotify( GetLayout()->Frm().SSize() );
 }
 
-
-BOOL lcl_IsInValueBox( const SwPaM& rCrsr, SwCrsrShell& rShell )
-{
-    BOOL bRet = FALSE;
-    const SwStartNode* pSttNd = rCrsr.GetNode()->FindSttNodeByType( SwTableBoxStartNode );
-    if( pSttNd )
-    {
-        const SwFrmFmt* pFmt = pSttNd->FindTableNode()->GetTable().
-                    GetTblBox( pSttNd->GetIndex() )->GetFrmFmt();
-        bRet = SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE ) ||
-                SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA );
-        // der WrtShell bescheid sagen!!!
-        rShell.NewCoreSelection();
-    }
-    return bRet;
-}
-
 // JP 30.04.99: Bug 65475 - falls Point/Mark in versteckten Bereichen
 //              stehen, so mussen diese daraus verschoben werden
-void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
+static void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
 {
     const SwSectionNode* pSectNd = rIdx.GetNode().FindSectionNode();
     if( pSectNd && pSectNd->GetSection().IsHiddenFlag() )
@@ -1208,7 +1176,7 @@ void lcl_CheckHiddenSection( SwNodeIndex& rIdx )
 }
 
 // Try to set the cursor to the next visible content node.
-void lcl_CheckHiddenPara( SwPosition& rPos )
+static void lcl_CheckHiddenPara( SwPosition& rPos )
 {
     SwNodeIndex aTmp( rPos.nNode );
     SwTxtNode* pTxtNd = aTmp.GetNode().GetTxtNode();
@@ -1264,7 +1232,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
           ( pTblCrsr ||
             pTstCrsr->GetNode( TRUE )->FindStartNode() !=
             pTstCrsr->GetNode( FALSE )->FindStartNode() ))
-        /*|| ( !pTblCrsr && lcl_IsInValueBox( *pTstCrsr, *this ) )*/ )
+        )
     {
         SwShellCrsr* pITmpCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
         Point aTmpPt( pITmpCrsr->GetPtPos() );
@@ -1273,14 +1241,14 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
         // JP 30.04.99: Bug 65475 - falls Point/Mark in versteckten Bereichen
         //              stehen, so mussen diese daraus verschoben werden
-        ::lcl_CheckHiddenSection( pPos->nNode );
-        ::lcl_CheckHiddenSection( pITmpCrsr->GetMark()->nNode );
+        lcl_CheckHiddenSection( pPos->nNode );
+        lcl_CheckHiddenSection( pITmpCrsr->GetMark()->nNode );
 
         // Move cursor out of hidden paragraphs
         if ( !GetViewOptions()->IsShowHiddenChar() )
         {
-            ::lcl_CheckHiddenPara( *pPos );
-            ::lcl_CheckHiddenPara( *pITmpCrsr->GetMark() );
+            lcl_CheckHiddenPara( *pPos );
+            lcl_CheckHiddenPara( *pITmpCrsr->GetMark() );
         }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
@@ -2016,107 +1984,6 @@ String SwCrsrShell::GetText() const
     return aTxt;
 }
 
-// retrurne die Anzahl der selektierten Zeichen.
-// Falls keine Selektion vorliegt entscheided nType was selektiert wird
-// bIntrnlChar besagt ob interne Zeichen erhalten bleiben (TRUE) oder
-// ob sie expandiert werden (z.B Felder/...)
-ULONG SwCrsrShell::GetCharCount( USHORT nType, BOOL bIntrnlChrs ) const
-{
-    if( IsTableMode() )
-        GetCrsr();
-
-    BOOL bPop = FALSE;
-    if( !pCurCrsr->HasMark() && pCurCrsr->GetNext() == pCurCrsr )
-    {
-        // dann den Type auswerten, ansonsten ist ein Bereich vorhanden
-        bPop = TRUE;
-        SwCrsrShell* pThis = (SwCrsrShell*)this;
-        pThis->Push();
-        switch( nType )
-        {
-        case GETCHARCOUNT_PARA:     // Absatz selektieren
-            {
-                SwCntntNode* pCNd = pCurCrsr->GetCntntNode();
-                if( pCNd )
-                {
-                    pCurCrsr->SetMark();
-                    pCurCrsr->GetMark()->nContent.Assign( pCNd, 0 );
-                    pCurCrsr->GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
-                }
-            }
-            break;
-
-        case GETCHARCOUNT_SECTION:      // "Section" selektieren
-            {
-                pCurCrsr->SetMark();
-                GoStartSection( pCurCrsr->GetMark() );
-                GoEndSection( pCurCrsr->GetPoint() );
-            }
-            break;
-        }
-    }
-
-    USHORT nCrsrCnt = 0;
-    ULONG nCount = 0;
-    USHORT nLineOffset = /* Basic zaehlt CRLF als ein Zeichen
-                        LINEEND_CRLF == GetSystemLineEnd() ? 2 : 1*/ 1;
-
-    const SwPaM* pTmp = pCurCrsr;
-    do {
-        ++nCrsrCnt;
-        const SwPosition *pStt = pTmp->Start(), *pEnd = pTmp->End();
-        if( *pStt < *pEnd )
-        {
-            ULONG nSttNd = pStt->nNode.GetIndex(),
-                  nEndNd = pEnd->nNode.GetIndex();
-            xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
-                          nEndCnt = pEnd->nContent.GetIndex();
-
-            if( nSttNd != nEndNd )
-            {
-                for( ; nSttNd < nEndNd; ++nSttNd, nSttCnt = 0 )
-                {
-                    const SwCntntNode* pCNd = pDoc->GetNodes()[
-                                            nSttNd ]->GetCntntNode();
-                    if( pCNd )
-                    {
-                        if( pCNd->IsTxtNode() && !bIntrnlChrs )
-                            nCount += ((SwTxtNode*)pCNd)->GetExpandTxt(
-                                                            nSttCnt ).Len();
-                        else
-                            nCount += pCNd->Len();
-
-                        nCount += nLineOffset;
-                    }
-                }
-            }
-
-            if( bIntrnlChrs )
-                nCount += nEndCnt - nSttCnt;
-            else
-            {
-                const SwTxtNode* pNd = pDoc->GetNodes()[ nEndNd ]->GetTxtNode();
-                if( pNd )
-                    nCount += pNd->GetExpandTxt( nSttCnt,
-                                nEndCnt - nSttCnt ).Len();
-            }
-        }
-    } while( pCurCrsr != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
-
-    // bei TabellenSelektion werden alle Boxen mit CR/LF abgeschlossen
-    if( IsTableMode() && 1 < nCrsrCnt )
-        nCount += nCrsrCnt * nLineOffset;
-
-    if( bPop )
-    {
-        SwCrsrShell* pThis = (SwCrsrShell*)this;
-        pThis->Pop( FALSE );
-    }
-
-    return nCount;
-}
-
-
 // hole vom Start/Ende der akt. SSelection das nte Zeichen
 sal_Unicode SwCrsrShell::GetChar( BOOL bEnd, long nOffset )
 {
@@ -2593,21 +2460,6 @@ USHORT SwCrsrShell::UpdateTblSelBoxes()
          GetLayout()->MakeTblCrsrs( *pTblCrsr );
     return pTblCrsr ? pTblCrsr->GetBoxesCount() : 0;
 }
-
-
-// steht der Curor auf einem "Symbol"-Zeichen
-FASTBOOL SwCrsrShell::IsInSymbolFont() const
-{
-    if( IsTableMode() )
-        return FALSE;
-
-    SwPosition* pPos = GetCrsr()->GetPoint();
-    SwTxtNode* pTNd = pPos->nNode.GetNode().GetTxtNode();
-    if( pTNd )
-        return pTNd->IsInSymbolFont( pPos->nContent.GetIndex() );
-    return FALSE;
-}
-
 
 // zeige das akt. selektierte "Object" an
 void SwCrsrShell::MakeSelVisible()
