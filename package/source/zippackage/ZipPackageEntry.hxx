@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:08:31 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 15:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(::com::sun::star::uno::RuntimeException) = 0;
-    com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId( void );
+    com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId( void )
+        throw (::com::sun::star::uno::RuntimeException);
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
         throw(::com::sun::star::uno::RuntimeException);
