@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:12:00 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 11:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,7 +1571,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucb::Content& aOriginalContent,
     aTransactTemp.EnableKillingFile( sal_False );
 
     INetURLObject aBackObj( aTransactTemp.GetURL() );
-    ::rtl::OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
+    ::rtl::OUString aBackupName = aBackObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
     Reference < ::com::sun::star::ucb::XCommandEnvironment > xDummyEnv;
     ::ucb::Content aBackupCont;
