@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 18:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,11 +436,51 @@ Reference< XSingleServiceFactory > SAL_CALL loadSharedLibComponentFactory(
         if (pCurrentEnv)
             (*pCurrentEnv->release)( pCurrentEnv );
     }
+
+    // ========================= DEPRECATED =========================
     else
     {
-        aExcMsg = aModulePath;
-        aExcMsg += OUString( RTL_CONSTASCII_USTRINGPARAM(": cannot get symbol: ") );
-        aExcMsg += aGetEnvName;
+        OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(CREATE_COMPONENT_FACTORY_FUNCTION) );
+        if (pSym = ::osl_getSymbol( lib, aGetFactoryName.pData ))
+        {
+            OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+            OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+            Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
+            Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
+            OSL_ENSHURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
+
+            if (aUno2Cpp.is() && aCpp2Uno.is())
+            {
+                uno_Interface * pUComponentFactory = 0;
+
+                uno_Interface * pUSFactory = (uno_Interface *)aCpp2Uno.mapInterface(
+                    xMgr.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
+                uno_Interface * pUKey = (uno_Interface *)aCpp2Uno.mapInterface(
+                    xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
+
+                pUComponentFactory = (*((CreateComponentFactoryFunc)pSym))(
+                    rImplName.getStr(), pUSFactory, pUKey );
+
+                if (pUKey)
+                    (*pUKey->release)( pUKey );
+                if (pUSFactory)
+                    (*pUSFactory->release)( pUSFactory );
+
+                if (pUComponentFactory)
+                {
+                    aUno2Cpp.mapInterface(
+                        reinterpret_cast< void ** >( &xRet ),
+                        pUComponentFactory, ::getCppuType( &xRet ) );
+                    (*pUComponentFactory->release)( pUComponentFactory );
+                }
+            }
+        }
+        else
+        {
+            aExcMsg = aModulePath;
+            aExcMsg += OUString( RTL_CONSTASCII_USTRINGPARAM(": cannot get symbol: ") );
+            aExcMsg += aGetEnvName;
+        }
     }
 
     if (! xRet.is())
@@ -590,11 +630,34 @@ void SAL_CALL writeSharedLibComponentInfo(
         if (pCurrentEnv)
             (*pCurrentEnv->release)( pCurrentEnv );
     }
+
+    // ========================= DEPRECATED =========================
     else
     {
-        aExcMsg = aModulePath;
-        aExcMsg += OUString( RTL_CONSTASCII_USTRINGPARAM(": cannot get symbol: ") );
-        aExcMsg += aGetEnvName;
+        OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(WRITE_COMPONENT_INFO_FUNCTION) );
+        if (pSym = ::osl_getSymbol( lib, aWriteInfoName.pData ))
+        {
+            OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+            OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
+            Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
+
+            if (aCpp2Uno.is())
+            {
+                uno_Interface * pUKey = (uno_Interface *)aCpp2Uno.mapInterface(
+                    xKey.get(), ::getCppuType( &xKey ) );
+
+                bRet = (*((WriteComponentInfoFunc)pSym))( pUKey );
+
+                if (pUKey)
+                    (*pUKey->release)( pUKey );
+            }
+        }
+        else
+        {
+            aExcMsg = aModulePath;
+            aExcMsg += OUString( RTL_CONSTASCII_USTRINGPARAM(": cannot get symbol: ") );
+            aExcMsg += aGetEnvName;
+        }
     }
 
     if (! bRet)
