@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:46:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFilterOptionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     ScUnoGuard aGuard;
-    SC_DLL()->Load();       // load module
-
+    ScDLL::Init();
     return (::cppu::OWeakObject*) new ScFilterOptionsObj;
 }
 
