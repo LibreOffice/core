@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:04:11 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,23 @@
     Text = "Indexentwurf" ; \
     Text [ english ] = "Index Desgin" ; \
     Text [ english_us ] = "Index Desgin";   \
+    Text[ portuguese ] = "Index Desgin";
+    Text[ russian ] = "Ïğîåêò èíäåêñà";
+    Text[ greek ] = "Index Desgin";
+    Text[ dutch ] = "Ontwerp-index";
+    Text[ french ] = "Index Desgin";
+    Text[ spanish ] = "Index Desgin";
+    Text[ italian ] = "Index Desgin";
+    Text[ danish ] = "Index Desgin";
+    Text[ swedish ] = "Indexutkast";
+    Text[ polish ] = "Projekt indeksu";
+    Text[ portuguese_brazilian ] = "Index Desgin";
+    Text[ japanese ] = "Index Desgin";
+    Text[ korean ] = "Index Desgin";
+    Text[ chinese_simplified ] = "Index Desgin";
+    Text[ chinese_traditional ] = "Index Desgin";
+    Text[ turkish ] = "Index Desgin";
+    Text[ arabic ] = "Index Desgin";
 
 
 String STR_TABLEDESIGN_DBFIELDTYPES
@@ -93,22 +110,22 @@ String STR_TABLEDESIGN_DBFIELDTYPES
 
     Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
     Text [ ENGLISH ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF;OTHER" ;
-    Text[ english_us ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ portuguese ] = "Desconhecido;Texto;Número;Data/Hora;Data;Hora;Sim/Não;Moeda;Memorando;Countador;Imagem;Texto (fixo);Decimal;CampoBinário (fixo);CampoBinário;InteiroGrande;Duplo;Float;Real;Inteiro;InteiroPequeno;InteiroEstreito;SQL Zero;Objecto;Distinto;Estrutura;Campo;BLOB;CLOB;REF";
+    Text[ english_us ] = "Unknown;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER";
+    Text[ portuguese ] = "Desconhecido;Texto;Número;Data/Hora;Data;Hora;Sim/Não;Moeda;Memorando;Contador;Imagem;Texto (fixo);Decimal;CampoBinário (fixo);CampoBinário;InteiroGrande;Duplo;Float;Real;Inteiro;InteiroPequeno;InteiroEstreito;SQL Zero;Objecto;Distinto;Estrutura;Campo;BLOB;CLOB;REF;OUTROS";
     Text[ russian ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ greek ] = "¢ãíùóôï;Êåßìåíï;Áñéèìüò;Çìåñïìçíßá/¿ñá;Çìåñïìçíßá;¿ñá;Íáé/¼÷é;Íüìéóìá;Óçìåßùìá;ÌåôñçôŞò;Åéêüíá;Êåßìåíï (óôáèåñü);Äåêáäéêü;Äõáäéêü (óôáèåñü);Äõáäéêü;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Áíôéêåßìåíï;Distinct;ÄïìŞ;Ğåäßï;BLOB;CLOB;REF";
-    Text[ dutch ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ french ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
+    Text[ greek ] = "¢ãíùóôï;Êåßìåíï;Áñéèìüò;Çìåñïìçíßá/¿ñá;Çìåñïìçíßá;¿ñá;Íáé/¼÷é;Íüìéóìá;Óçìåßùìá;ÌåôñçôŞò;Åéêüíá;Êåßìåíï (óôáèåñü);Äåêáäéêü;Äõáäéêü ğåäßï (óôáèåñü);Äõáäéêü ğåäßï;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Áíôéêåßìåíï;Distinct;ÄïìŞ;Ğåäßï;BLOB;CLOB;REF;OTHER";
+    Text[ dutch ] = "Onbekend;Tekst;Nummer;Datum/Tijd;Datum;Tijd;Ja/Nee;Valuta;Memo;Teller;Afbeelding;Tekst (vast);Decimaal;Binair (vast);Binair;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structuur;Veld;BLOB;CLOB;REF;OTHER";
+    Text[ french ] = "Inconnu;Texte;Nombre;Date/Heure;Date;Heure;Oui/Non;Monnaie;Mémo;Compteur;Image;Texte (fixe);Décimal;Champ binaire (fixe);Champ binaire;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Champ;BLOB;CLOB;REF";
     Text[ spanish ] = "Desconocido;Texto;Número;Fecha/Hora;Fecha;Hora;Sí/No;Moneda;Nota;Contador;Imagen;Texto(fijo);Decimal;Campo binario(fijo);Campo binario;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objeto;Distinct;Estructura;Campo;BLOB;CLOB;REF;OTHER";
-    Text[ italian ] = "Sconosciuto;Testo;Numero;Data/Ora;Data;Ora;Boolean;Valuta;Memo;Contatore;Immagine;Testo(fisso);Decimale;Binario (fisso);Binario;BigInt;Doppio;Fluttuante;Reale;Integrale;Piccolo integrale;Tiny Integer;SQL nullo;Oggetto;Distinto;Struttura;Campo;BLOB;CLOB;REF";
+    Text[ italian ] = "Sconosciuto;Testo;Numero;Data/Ora;Data;Ora;Sì/No;Valuta;Memo;Contatore;Immagine;Testo(fisso);Decimale;Campo binario (fisso);Campo binario;BigInt;Doppio;Fluttuante;Reale;Integrale;Piccolo integrale;Tiny Integrale;SQL nullo;Oggetto;Distinto;Struttura;Campo;BLOB;CLOB;REF;OTHER";
     Text[ danish ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ swedish ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
+    Text[ swedish ] = "Okänd;Text;Tal;Datum/Tid;Datum;Tid;Ja/Nej;Valuta;Memo;Räknare;Bild;Text (fast);Decimal;Binärfält (fast);Binärfält;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Fält;BLOB;CLOB;REF;OTHER";
     Text[ polish ] = "Nieznany;Tekst;Liczba;Data/Godzina;Data;Godzina;Tak/Nie;Waluta;Memorandum;Licznik;Obraz;Tekst (sta³y);Dziesiêtny;Pole binarne (sta³e);BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Zero;Obiekt;Distinct;Struktura;Pole;BLOB;CLOB;REF";
     Text[ portuguese_brazilian ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ japanese ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
+    Text[ japanese ] = "•s–¾;Ã·½Ä;”Œ;“ú•t/;“ú•t;;‚Í‚¢/‚¢‚¢‚¦;’Ê‰İ’PˆÊ;ÒÓ;¶³İÀ;²Ò°¼Ş;Ã·½Ä(ŒÅ’è);\\i–@;“ñi–@(ŒÅ’è);“ñi–@;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL ¾ŞÛ;µÌŞ¼Şª¸Ä;Distinct;\\‘¢;Ì¨°ÙÄŞ;BLOB;CLOB;REF";
     Text[ korean ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
     Text[ chinese_simplified ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
-    Text[ chinese_traditional ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
+    Text[ chinese_traditional ] = "Unknown;Text;Number;Date/Time;Date;Time;Yes/No;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Structure;Field;BLOB;CLOB;REF;OTHER";
     Text[ turkish ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
     Text[ arabic ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF";
 };
@@ -125,14 +142,14 @@ String STR_TABLEDESIGN_UNDO_PRIMKEY
     Text [ french ] = "Insérer/supprimer une clé primaire" ;
     Text [ dutch ] = "Primaire sleutel invoegen/verwijderen" ;
     Text [ portuguese ] = "Inserir/remover chave primária" ;
-    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ chinese_simplified ] = "ĞÂÔö»òÉ¾³ıÖ÷¹Ø¼ü×Ö";
     Text[ russian ] = "Âñòàâèòü/óáğàòü ïåğâè÷íûé êëş÷";
     Text[ polish ] = "Wstaw /Usuñ g³ówny klucz";
     Text[ japanese ] = "Ìß×²ÏØ·°‚Ì‘}“ü‚Æíœ";
     Text[ chinese_traditional ] = "´¡¤J©Î§R°£¥DÃöÁä¦r";
     Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÇáãİÊÇÍ ÇáÃÓÇÓí";
     Text[ dutch ] = "Primaire sleutel invoegen/verwijderen";
-    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ chinese_simplified ] = "ĞÂÔö»òÉ¾³ıÖ÷¹Ø¼ü×Ö";
     Text[ greek ] = "ÅéóáãùãŞ/ÄéáãñáöŞ ğñùôåıïí êëåéäß";
     Text[ korean ] = "±âº»Å° »ğÀÔ/»èÁ¦";
     Text[ turkish ] = "Birinci anahtar ekle/kaldır";
@@ -275,7 +292,7 @@ String STR_TAB_FIELD_NAME
 {
     Text = "Feldname" ;
     Text [ ENGLISH ] = "Field name" ;
-    Text [ english_us ] = "Field name" ;
+    Text [ english_us ] = "Field Name" ;
     Text [ italian ] = "Nome di campo" ;
     Text [ spanish ] = "Nombre del campo" ;
     Text [ french ] = "Nom de champ" ;
@@ -301,7 +318,7 @@ String STR_TAB_FIELD_DATATYPE
 {
     Text = "Feldtyp" ;
     Text [ ENGLISH ] = "Field type" ;
-    Text [ english_us ] = "Field type" ;
+    Text [ english_us ] = "Field Type" ;
     Text [ italian ] = "Tipo di campo" ;
     Text [ spanish ] = "Tipo de campo" ;
     Text [ french ] = "Type de champ" ;
@@ -360,7 +377,7 @@ String STR_TAB_FIELD_DESCR
     Text [ italian ] = "Descrizione" ;
     Text [ spanish ] = "Descripción" ;
     Text [ french ] = "Description" ;
-    Text [ dutch ] = "Beschrijving" ;
+    Text [ dutch ] = "Omschrijving" ;
     Text [ portuguese ] = "Descrição" ;
     Text[ chinese_simplified ] = "ËµÃ÷";
     Text[ russian ] = "Îïèñàíèå";
@@ -368,7 +385,7 @@ String STR_TAB_FIELD_DESCR
     Text[ japanese ] = "ŠT—v";
     Text[ chinese_traditional ] = "´y­z";
     Text[ arabic ] = "æÕİ";
-    Text[ dutch ] = "Beschrijving";
+    Text[ dutch ] = "Omschrijving";
     Text[ chinese_simplified ] = "ËµÃ÷";
     Text[ greek ] = "ĞåñéãñáöŞ";
     Text[ korean ] = "¼³¸í";
@@ -379,7 +396,7 @@ String STR_TAB_FIELD_NULLABLE
 {
     Text = "Eingabe erforderlich" ;
     Text [ ENGLISH ] = "Input required" ;
-    Text [ dutch ] = "Invoer vereist" ;
+    Text [ dutch ] = "Invoer verlangd" ;
     Text [ english_us ] = "Input required" ;
     Text [ italian ] = "Digitazione necessaria" ;
     Text [ spanish ] = "Se requiere entrada" ;
@@ -394,7 +411,7 @@ String STR_TAB_FIELD_NULLABLE
     Text[ japanese ] = "“ü—Í‚ª•K—v";
     Text[ chinese_traditional ] = "­n¨D¿é¤J¸ê®Æ";
     Text[ arabic ] = "ãØáæÈ ÅÏÎÇá";
-    Text[ dutch ] = "Invoer vereist";
+    Text[ dutch ] = "Invoer verlangd";
     Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
     Text[ greek ] = "Áğáéôåßôáé åéóáãùãŞ";
     Text[ korean ] = "ÀÔ·ÂÀÌ ¿ä±¸µÊ";
@@ -413,7 +430,7 @@ String STR_FIELD_AUTOINCREMENT
     Text[ swedish ] = "~AutoVärde";
     Text[ dutch ] = "~AutoWaarde";
     Text[ spanish ] = "~Valor automático";
-    Text[ english_us ] = "AutoValue";
+    Text[ english_us ] = "~AutoValue";
     Text[ chinese_simplified ] = "×Ô¶¯ÊıÖµ";
     Text[ russian ] = "~Àâòîçíà÷åíèå";
     Text[ polish ] = "Wartoœæ automatyczna";
@@ -431,7 +448,7 @@ String STR_TAB_PROPERTIES
 {
     Text = "Feldeigenschaften" ;
     Text [ ENGLISH ] = "Field properties" ;
-    Text [ english_us ] = "Field properties" ;
+    Text [ english_us ] = "Field Properties" ;
     Text [ portuguese_brazilian ] = "Feldeigenschaften" ;
     Text [ swedish ] = "Fältegenskaper" ;
     Text [ danish ] = "Feltegenskaber" ;
@@ -483,7 +500,7 @@ String STR_TAB_TABLE_DESCRIPTION
 {
     Text = "Beschreibung :" ;
     Text [ ENGLISH ] = "Description :" ;
-    Text[ english_us ] = "Description :";
+    Text[ english_us ] = "Description:";
     Text[ portuguese ] = "Descrição:";
     Text[ greek ] = "ĞåñéãñáöŞ :";
     Text[ dutch ] = "Omschrijving :";
@@ -542,7 +559,7 @@ ErrorBox ERR_INVALID_LISTBOX_ENTRY
 {
     Message = "Der eingegebenen Text ist kein Element der Liste." ;
     Message [ English ] = "The text entry does not belong to the list" ;
-    Message [ english_us ] = "The text entry is not an element of the list." ;
+    Message [ english_us ] = "The text you entered is not a list element. " ;
     Message [ italian ] = "Il testo digitato non è un elemento della lista." ;
     Message [ spanish ] = "Este texto introducido no pertenece a la lista." ;
     Message [ french ] = "Le texte saisi n'est pas un élément de la liste." ;
@@ -551,14 +568,14 @@ ErrorBox ERR_INVALID_LISTBOX_ENTRY
     Message [ danish ] = "Den indtastede tekst er ikke et element i listen." ;
     Message [ portuguese_brazilian ] = "Der eingegebenen Text ist kein Element der Liste." ;
     Message [ portuguese ] = "O texto digitado não faz parte da lista." ;
-    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥Ôª¡£";
+    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥µ¥Ôª¡£";
     Message[ russian ] = "Ââåäåííûé òåêñò íå ÿâëÿåòñÿ ıëåìåíòîì ñïèñêà.";
     Message[ polish ] = "Wprowadzony tekst nie jest elementem listy.";
     Message[ japanese ] = "“ü—Í‚µ‚½Ã·½Ä‚ÍØ½Ä‚Ì—v‘f‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¿é¤Jªº¤å¦r¤£¬O²M³æ³æ¤¸¡C";
     Message[ arabic ] = "ÇáäÕ ÇáãõÏÎá áíÓ ãä Öãä ÚäÇÕÑ ÇáŞÇÆãÉ.";
     Message[ dutch ] = "De tekstinvoer is geen element van de lijst.";
-    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥Ôª¡£";
+    Message[ chinese_simplified ] = "ÊäÈëµÄÎÄ×Ö²»ÊÇÁĞµ¥µ¥Ôª¡£";
     Message[ greek ] = "Ôï êåßìåíï ğïõ åéóÜãáôå äåí åßíáé óôïé÷åßï ôçò ëßóôáò.";
     Message[ korean ] = "ÀÔ·ÂµÈ ÅØ½ºÆ®´Â ¸ñ·ÏÀÇ Ç×¸ñÀÌ ¾Æ´Õ´Ï´Ù.";
     Message[ turkish ] = "Girilen metin, liste öğesi değil.";
@@ -759,7 +776,7 @@ String STR_TABED_UNDO_NEWROWINSERTED
     Text [ italian ] = "Inserisci riga nuova" ;
     Text [ spanish ] = "Insertar nueva fila" ;
     Text [ french ] = "Insérer une nouvelle ligne" ;
-    Text [ dutch ] = "Nieuwe cel invoegen" ;
+    Text [ dutch ] = "Nieuwe rij invoegen" ;
     Text [ portuguese ] = "Inserir nova linha" ;
     Text[ chinese_simplified ] = "ĞÂÔöĞĞ";
     Text[ russian ] = "Âñòàâèòü íîâóş ñòğîêó";
@@ -767,7 +784,7 @@ String STR_TABED_UNDO_NEWROWINSERTED
     Text[ japanese ] = "V‚µ‚¢s‚Ì‘}“ü";
     Text[ chinese_traditional ] = "´¡¤J¦C";
     Text[ arabic ] = "ÅÏÑÇÌ ÓØÑ ÌÏíÏ";
-    Text[ dutch ] = "Nieuwe cel invoegen";
+    Text[ dutch ] = "Nieuwe rij invoegen";
     Text[ chinese_simplified ] = "ĞÂÔöĞĞ";
     Text[ greek ] = "ÅéóáãùãŞ íİáò ãñáììŞò";
     Text[ korean ] = "»õ ÇàÀ» »ğÀÔ";
@@ -786,14 +803,14 @@ String STR_TABED_UNDO_PRIMKEY
     Text [ french ] = "Insérer/supprimer une clé primaire" ;
     Text [ dutch ] = "Primaire sleutel invoegen/verwijderen" ;
     Text [ portuguese ] = "Inserir/remover chave primária" ;
-    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ chinese_simplified ] = "ĞÂÔö»òÉ¾³ıÖ÷¹Ø¼ü×Ö";
     Text[ russian ] = "Âñòàâèòü/óáğàòü ïåğâè÷íûé êëş÷";
     Text[ polish ] = "Wstaw /Usuñ g³ówny klucz";
     Text[ japanese ] = "Ìß×²ÏØ·°‚Ì‘}“ü‚Æíœ";
     Text[ chinese_traditional ] = "´¡¤J©Î§R°£¥DÃöÁä¦r";
     Text[ arabic ] = "ÅÏÑÇÌ/ÍĞİ ÇáãİÊÇÍ ÇáÃÓÇÓí";
     Text[ dutch ] = "Primaire sleutel invoegen/verwijderen";
-    Text[ chinese_simplified ] = "²åÈë/É¾³ıÖ÷¹Ø¼ü×Ö";
+    Text[ chinese_simplified ] = "ĞÂÔö»òÉ¾³ıÖ÷¹Ø¼ü×Ö";
     Text[ greek ] = "ÅéóáãùãŞ/ÄéáãñáöŞ ğñùôåıïí êëåéäß";
     Text[ korean ] = "±âº»Å° »ğÀÔ/»èÁ¦";
     Text[ turkish ] = "Birinci anahtar ekle/kaldır";
@@ -819,12 +836,12 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             HelpId = SID_EDITDOC ;
             Text = "Bearbeiten" ;
             Text [ ENGLISH ] = "Bearbeiten" ;
-            Text[ english_us ] = "Bearbeiten";
-            Text[ portuguese ] = "Bearbeiten";
+            Text[ english_us ] = "Edit";
+            Text[ portuguese ] = "Editar";
             Text[ russian ] = "Ïğàâêà";
             Text[ greek ] = "Åğåîåñãáóßá";
-            Text[ dutch ] = "Bearbeiten";
-            Text[ french ] = "Bearbeiten";
+            Text[ dutch ] = "Bewerken";
+            Text[ french ] = "Éditer";
             Text[ spanish ] = "Editar";
             Text[ italian ] = "Modifica";
             Text[ danish ] = "Bearbeiten";
@@ -833,7 +850,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ portuguese_brazilian ] = "Bearbeiten";
             Text[ japanese ] = "•ÒW";
             Text[ korean ] = "Bearbeiten";
-            Text[ chinese_simplified ] = "Bearbeiten";
+            Text[ chinese_simplified ] = "±à¼­";
             Text[ chinese_traditional ] = "½s¿è";
             Text[ turkish ] = "Bearbeiten";
             Text[ arabic ] = "ÊÍÑíÑ";
@@ -849,11 +866,11 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text = "Speichern" ;
             Text [ ENGLISH ] = "Save" ;
             Text[ english_us ] = "Save";
-            Text[ portuguese ] = "Save";
+            Text[ portuguese ] = "Guardar";
             Text[ russian ] = "Ñîõğàíèòü";
             Text[ greek ] = "ÁğïèŞêåõóç";
-            Text[ dutch ] = "Save";
-            Text[ french ] = "Save";
+            Text[ dutch ] = "Opslaan";
+            Text[ french ] = "Enregistrer";
             Text[ spanish ] = "Guardar";
             Text[ italian ] = "Salva";
             Text[ danish ] = "Save";
@@ -862,7 +879,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ portuguese_brazilian ] = "Save";
             Text[ japanese ] = "•Û‘¶";
             Text[ korean ] = "Save";
-            Text[ chinese_simplified ] = "Save";
+            Text[ chinese_simplified ] = "´æÅÌ";
             Text[ chinese_traditional ] = "Àx¦s";
             Text[ turkish ] = "Save";
             Text[ arabic ] = "ÍİÙ";
@@ -911,11 +928,11 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text = "Rückgängig" ;
             Text [ ENGLISH ] = "Undo" ;
             Text[ english_us ] = "Undo";
-            Text[ portuguese ] = "Undo";
+            Text[ portuguese ] = "Anular";
             Text[ russian ] = "Îòìåíèòü";
             Text[ greek ] = "Áíáßñåóç";
-            Text[ dutch ] = "Undo";
-            Text[ french ] = "Undo";
+            Text[ dutch ] = "Ongedaan";
+            Text[ french ] = "Annuler";
             Text[ spanish ] = "Deshacer";
             Text[ italian ] = "Annulla";
             Text[ danish ] = "Undo";
@@ -924,7 +941,7 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ portuguese_brazilian ] = "Undo";
             Text[ japanese ] = "Œ³‚É–ß‚·";
             Text[ korean ] = "Undo";
-            Text[ chinese_simplified ] = "Undo";
+            Text[ chinese_simplified ] = "³·ÏûÃüÁî";
             Text[ chinese_traditional ] = "´_­ì";
             Text[ turkish ] = "Undo";
             Text[ arabic ] = "ÊÑÇÌÚ";
@@ -940,17 +957,17 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
             Text[ portuguese ] = "Restaurar";
             Text[ russian ] = "Âîññòàíîâèòü";
             Text[ greek ] = "ÅğáíáöïñÜ";
-            Text[ dutch ] = "Redo";
-            Text[ french ] = "Redo";
+            Text[ dutch ] = "Herstellen";
+            Text[ french ] = "Restaurer";
             Text[ spanish ] = "Restaurar";
-            Text[ italian ] = "Redo";
+            Text[ italian ] = "Ripristina";
             Text[ danish ] = "Redo";
             Text[ swedish ] = "Återställ";
             Text[ polish ] = "Przywróæ";
             Text[ portuguese_brazilian ] = "Redo";
             Text[ japanese ] = "‚â‚è’¼‚µ";
             Text[ korean ] = "Redo";
-            Text[ chinese_simplified ] = "Redo";
+            Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
             Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O";
             Text[ turkish ] = "Redo";
             Text[ arabic ] = "ÅÚÇÏÉ";
@@ -964,6 +981,24 @@ ToolBox RID_BRW_TABLEDESIGN_TOOLBOX
 
             Text = "Keine Verbindung" ;
             Text [ ENGLISH ] = "No connection" ;
+            Text[ english_us ] = "No connection";
+            Text[ portuguese ] = "Sem ligação";
+            Text[ russian ] = "Íåò ñîåäèíåíèÿ";
+            Text[ greek ] = "No connection";
+            Text[ dutch ] = "Geen verbinding";
+            Text[ french ] = "No connection";
+            Text[ spanish ] = "No connection";
+            Text[ italian ] = "No connection";
+            Text[ danish ] = "No connection";
+            Text[ swedish ] = "Ingen förbindelse";
+            Text[ polish ] = "Brak po³¹czenia";
+            Text[ portuguese_brazilian ] = "No connection";
+            Text[ japanese ] = "No connection";
+            Text[ korean ] = "No connection";
+            Text[ chinese_simplified ] = "No connection";
+            Text[ chinese_traditional ] = "No connection";
+            Text[ turkish ] = "No connection";
+            Text[ arabic ] = "No connection";
         };
     };
 };
@@ -971,13 +1006,13 @@ String STR_DEFAULT_VALUE
 {
     Text = "~Defaultwert" ;
     Text [ ENGLISH ] = "Default" ;
-    Text [ english_us ] = "Default" ;
+    Text [ english_us ] = "~Default value" ;
     Text [ portuguese_brazilian ] = "Defaultwert" ;
     Text [ swedish ] = "Stan~dardvärde" ;
     Text [ danish ] = "Standardværdi" ;
     Text [ italian ] = "~Valore predefinito" ;
     Text [ spanish ] = "Valor pre~determinado" ;
-    Text [ french ] = "Valeur par défaut" ;
+    Text [ french ] = "Valeur par ~défaut" ;
     Text [ dutch ] = "~Standaardwaarde" ;
     Text [ portuguese ] = "~Valor padrão" ;
     Text[ chinese_simplified ] = "Ä¬ÈÏÖµ";
@@ -997,13 +1032,13 @@ String STR_FIELD_REQUIRED
 {
     Text = "~Eingabe erforderlich" ;
     Text [ ENGLISH ] = "Field required." ;
-    Text [ english_us ] = "Entry required" ;
+    Text [ english_us ] = "~Entry required" ;
     Text [ portuguese_brazilian ] = "Eingabe erforderlich" ;
     Text [ swedish ] = "In~matning krävs" ;
     Text [ danish ] = "Input kræves" ;
     Text [ italian ] = "Di~gitazione necessaria" ;
     Text [ spanish ] = "~Entrada requerida" ;
-    Text [ french ] = "Saisie requise" ;
+    Text [ french ] = "~Saisie requise" ;
     Text [ dutch ] = "~Invoer verlangd" ;
     Text [ portuguese ] = "~Entrada necessária" ;
     Text[ chinese_simplified ] = "ÒªÇóÊäÈë";
@@ -1023,13 +1058,13 @@ String STR_TEXT_LENGTH
 {
     Text = "~Länge" ;
     Text [ ENGLISH ] = "Length" ;
-    Text [ english_us ] = "Length" ;
+    Text [ english_us ] = "~Length" ;
     Text [ portuguese_brazilian ] = "Länge" ;
     Text [ swedish ] = "~Längd" ;
     Text [ danish ] = "Længde" ;
     Text [ italian ] = "~Lunghezza" ;
     Text [ spanish ] = "~Longitud" ;
-    Text [ french ] = "Longueur" ;
+    Text [ french ] = "~Longueur" ;
     Text [ dutch ] = "~Lengte" ;
     Text [ portuguese ] = "~Comprimento" ;
     Text[ chinese_simplified ] = "³¤¶È";
@@ -1049,13 +1084,13 @@ String STR_NUMERIC_TYPE
 {
     Text = "~Typ" ;
     Text [ ENGLISH ] = "Type" ;
-    Text [ english_us ] = "Type" ;
+    Text [ english_us ] = "~Type" ;
     Text [ portuguese_brazilian ] = "Typ" ;
     Text [ swedish ] = "~Typ" ;
     Text [ danish ] = "Type" ;
     Text [ italian ] = "~Tipo" ;
     Text [ spanish ] = "Tip~o" ;
-    Text [ french ] = "Type" ;
+    Text [ french ] = "~Type" ;
     Text [ dutch ] = "~Type" ;
     Text [ portuguese ] = "~Tipo" ;
     Text[ chinese_simplified ] = "ÀàĞÍ";
@@ -1075,13 +1110,13 @@ String STR_LENGTH
 {
     Text = "~Länge" ;
     Text [ ENGLISH ] = "Length" ;
-    Text [ english_us ] = "Length" ;
+    Text [ english_us ] = "~Length" ;
     Text [ portuguese_brazilian ] = "Tamanho" ;
     Text [ swedish ] = "~Längd" ;
     Text [ danish ] = "Længde" ;
     Text [ italian ] = "Lun~ghezza" ;
     Text [ spanish ] = "Ta~maño" ;
-    Text [ french ] = "Longueur" ;
+    Text [ french ] = "~Longueur" ;
     Text [ dutch ] = "~Lengte" ;
     Text [ portuguese ] = "~Comprimento" ;
     Text[ chinese_simplified ] = "³¤¶È";
@@ -1101,13 +1136,13 @@ String STR_SCALE
 {
     Text = "~Nachkommastellen" ;
     Text [ ENGLISH ] = "Scale" ;
-    Text [ english_us ] = "Decimal places" ;
+    Text [ english_us ] = "Decimal ~places" ;
     Text [ portuguese_brazilian ] = "Nachkommastellen" ;
     Text [ swedish ] = "Decimalpositio~ner" ;
     Text [ danish ] = "Antal decimaler" ;
     Text [ italian ] = "Posizio~ni decimali" ;
     Text [ spanish ] = "~Decimales" ;
-    Text [ french ] = "Décimales" ;
+    Text [ french ] = "~Décimales" ;
     Text [ dutch ] = "~Cijfers achter de komma" ;
     Text [ portuguese ] = "Casas ~decimais" ;
     Text[ chinese_simplified ] = "Ğ¡ÊıµãÎ»Êı";
@@ -1135,8 +1170,8 @@ String STR_FORMAT
     Text[ swedish ] = "Formatexempel";
     Text[ dutch ] = "Opmaakvoorbeeld";
     Text[ spanish ] = "Ejemplo de formato";
-    Text[ english_us ] = "Format Example";
-    Text[ chinese_simplified ] = "¸ñÊ½-Ê¾·¶";
+    Text[ english_us ] = "Format example";
+    Text[ chinese_simplified ] = "¸ñÊ½Ê¾·¶";
     Text[ language_user1 ] = " ";
     Text[ russian ] = "Ïğèìåğ ôîğìàòà";
     Text[ polish ] = "Przyk³ad formatu";
@@ -1144,7 +1179,7 @@ String STR_FORMAT
     Text[ chinese_traditional ] = "®æ¦¡¥Ü½d";
     Text[ arabic ] = "ãËÇá ááÊäÓíŞ";
     Text[ dutch ] = "Opmaakvoorbeeld";
-    Text[ chinese_simplified ] = "¸ñÊ½-Ê¾·¶";
+    Text[ chinese_simplified ] = "¸ñÊ½Ê¾·¶";
     Text[ greek ] = "ĞáñÜäåéãìá ìïñöïğïßçóçò";
     Text[ korean ] = "¼­½Ä ¿¹";
     Text[ turkish ] = "Format örneği";
@@ -1157,19 +1192,19 @@ String STR_HELP_BOOL_DEFAULT
     Text[ portuguese_brazilian ] = "Wählen Sie einen Wert, der in jedem neu eingefügten Datensatz als Standard erscheinen soll.\nWählen Sie den leeren String, wenn das Feld keinen solchen Standardwert haben soll.";
     Text[ portuguese ] = "Seleccione o valor a aparecer como padrão em cada novo registo de dados introduzido.\nSeleccione a sequência vazia, se o campo não tiver que apresentar nenhum valor padrão.";
     Text[ danish ] = "Vælg en værdi, som skal vises som standard i hver ny datapost.\nVælg den tomme streng, hvis feltet ikke skal have en standardværdi.";
-    Text[ french ] = "Définissez la valeur à saisir comme valeur par défaut dans tout nouvel enregistrement.\\Si un champ ne doit pas adopter cette valeur par défaut, vous y saisirez la chaîne (String) vide.";
+    Text[ french ] = "Définissez la valeur à faire figurer comme valeur par défaut dans tous les nouveaux enregistrements.\\Si le champ ne doit pas adopter de valeur par défaut, choisissez la chaîne vide.";
     Text[ swedish ] = "Välj ett värde som skall visas som standard i varje ny infogad datapost.\nVälj den tomma strängen om fältet inte skall ha något standardvärde.";
     Text[ dutch ] = "Kies een waarde die in iedere nieuw ingevoegd record als standaard moet verschijnen.\nKies een lege string als u niet wilt dat het veld de standaardwaarde krijgt toegewezen.";
     Text[ spanish ] = "Elija el valor que deba aparecer como estándar en cada registro de datos que se\ninserte de nuevo. Elija la secuencia vacía si el campo no ha de contener tal valor estándar.";
-    Text[ english_us ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value leave it empty.";
-    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬ÄÇÃ´Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
+    Text[ english_us ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value, select the empty string.";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
     Text[ russian ] = "Âûáåğèòå çíà÷åíèå, êîòîğîå äîëæíî ïîÿâëÿòüñÿ â êàæäîé âíîâü ââåäåííîé çàïèñè.\nÂûáåğåèòå ïóñòóş ñòğîêó, åñëè ïîëå íå äîëæíî èìåòü òàêîãî ñòàíäàğòíîãî çíà÷åíèÿ.";
     Text[ polish ] = "Wybierz wartoœæ, która w ka¿dym nowo wstawionym rekordzie bêdzie wartoœci¹ domyœln¹.\nWybierz pusty ci¹g znaków, jeœli pole nie ma mieæ domyœlnej wartoœci.";
     Text[ japanese ] = "V‚µ‚­Úº°ÄŞ‚ğ‘}“ü‚·‚é‚Æ‚«‚É•\\¦‚³‚ê‚é•W€’l‚ğ‘I‘ğ‚µ‚Ü‚·B\n‚Ü‚½Ì¨°ÙÄŞ‚É•W€’lİ’è‚ğ‚µ‚È‚¢‚Æ‚«‚ÍA‹ó”’‚Ì‚Ü‚Ü‚É‚µ‚Ä‚¨‚«‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ¿ï¾Ü¤@­Ó¥Î©ó¨C¤@­Ó·s¼W¸ê®Æ¶µ¥Øªº¼Ğ·Ç¼Æ­È¡C\n­YÄæ¦ì¤£À³¸Ó§t¦³³o­Ó¼Ğ·Ç¼Æ­È¡A´N¿ï¾Ü¤@­ÓªÅ¦r¦ê¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáŞíãÉ ÇáÊí íÌÈ Ãä ÊÙåÑ ßŞíãÉ ÇİÊÑÇÖíÉ İí ßá ÓÌá ÌÏíÏ íÊã ÅÏÑÇÌå.\nÅĞÇ ßäÊ ÊÑíÏ ãäÚ ÙåæÑ ãËá åĞå ÇáŞíãÉ ÇáÇİÊÑÇÖíÉ¡ ÇáÑÌÇÁ ÇÎÊíÇÑ ÓáÓáÉ İÇÑÛÉ.";
     Text[ dutch ] = "Kies een waarde die in iedere nieuw ingevoegd record als standaard moet verschijnen.\nKies een lege string als u niet wilt dat het veld de standaardwaarde krijgt toegewezen.";
-    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬ÄÇÃ´Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
     Text[ greek ] = "Åğéëİîôå ìéá ôéìŞ, ç ïğïßá èá åìöáíßæåôáé ùò ğñïåğéëïãŞ óå êÜèå íİá åããñáöŞ ğïõ èá ğñïóèİóåôå.\nÁí äåí åğéèõìåßôå íá ïñßóåôå êÜğïéá ôéìŞ, áöŞóôå ôï ğåäßï êåíü.";
     Text[ korean ] = "¸ğµç »õ ·¹ÄÚµå¸¦ À§ÇÑ ÃÊ±â°ªÀ» Á¤ÇÏ½Ê½Ã¿À.\nÇÊµå°¡ ±×·¯ÇÑ ÃÊ±â°ªÀ» °®Áö ¸»¾Æ¾ß ÇÒ °æ¿ì¿¡´Â ºó ¹®ÀÚ¿­À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Yeni eklenen her kayıtta standart olarak bulunacak bir değer seçin.\nAlan için bu tür bir standart değer belirlenmeyecekse boş dizilim seçin.";
@@ -1179,23 +1214,23 @@ String STR_HELP_DEFAULT_VALUE
 {
     Text = "Geben Sie hier einen Standardwert für das Feld an.\n\nWenn Sie später Daten in die Tabelle eingeben, wird in jedem neuen Datensatz diese Zeichenkette für das aktuelle Feld verwendet. Sie sollte deshalb der weiter unten einzugebenden Zellenformatierung genügen." ;
     Text [ english ] = "Enter a default value for this field.\n\nThis string, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
-    Text [ english_us ] = "Enter a default value for this field.\n\nThis character chain, for the field currently selected is entered into each new record when data is entered into the table. It should, therefore, correspond to the cell format that needs to be entered below." ;
+    Text [ english_us ] = "Enter a default value for this field.\n\nWhen you later enter data in the table, this string will be used in each new record for the field selected. It should, therefore, correspond to the cell format that needs to be entered below." ;
     Text [ portuguese_brazilian ] = "Geben Sie hier einen Standardwert fuer das Feld an." ;
     Text [ swedish ] = "Ange ett standardvärde för fältet här.\n\nNär du matar in data i tabellen senare används den här teckensträngen för det aktuella fältet i varje ny datapost. Den bör därför motsvara cellformateringen som skall matas in nedan." ;
     Text [ danish ] = "Angiv her en standardværdi for dette felt.\n\nNår du senere indtaster data i denne tabel, bliver denne streng brugt i det aktuelle felt i hver ny datapost. Du bør derfor tage hensyn til den celleformatering der indtastes nedenfor." ;
     Text [ italian ] = "Specificate qui un valore standard per il campo.\n\nDigitando in seguito dei dati nella tabella, in ogni record di dati nuovo verrà utilizzata questa stringa per il campo attuale. Per questo motivo è necessario che corrisponda al formato della cella da specificare qui di seguito." ;
     Text [ spanish ] = "Especifique aquí un valor predeterminado para el campo.\n\nSi posteriormente introduce datos en la tabla, en cada registro nuevo se usará esta cadena de carecteres para el campo actual. Por esta razón debe corresponder al formato de celda a introducir más abajo." ;
-    Text [ french ] = "Saisissez une valeur par défaut pour le champ.\n\nIl s'agit de la chaîne de caractères qui sera utilisée dans chaque nouvel enregistrement pour le champ actif lorsque vous saisirez des données dans la table. Elle doit donc correspondre au format de cellule que vous devrez saisir plus bas." ;
+    Text [ french ] = "Saisissez une valeur par défaut pour le champ.\n\nIl s'agit de la chaîne de caractères qui sera utilisée dans chaque nouvel enregistrement pour le champ actif lorsque vous saisirez des données dans la table. Elle doit donc correspondre au format de cellule à saisir plus bas." ;
     Text [ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiëren celopmaak." ;
-    Text [ portuguese ] = "Indique um valor padrão para este campo.\n\nEsta cadeia de caracteres será utilizada para todos os novos registos de dados que introduzir no campo activo da tabela." ;
-    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÍù±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£Òò´ËÊı¾İ±ØĞë¾ß±¸ÏÂÃæµÄµ¥Ôª¸ñ¸ñÊ½¡£";
+    Text [ portuguese ] = "Indique um valor padrão para este campo.\n\nEsta cadeia de caracteres será utilizada para todos os novos registos de dados que introduzir no campo activo da tabela. Por esta razão, ela deve corresponder ao formato de célula a indicar mais abaixo." ;
+    Text[ chinese_simplified ] = "ÇëÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÔÚ±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£ÕâÑùµÄÉè¶¨¿ÉÒÔÂú×ãÒÔÏÂµÄµ¥Ôª¸ñ¸ñÊ½µÄÒªÇó¡£";
     Text[ russian ] = "Çàäàéòå çíà÷åíèå ïî óìîë÷àíèş äëÿ ıòîãî ïîëÿ.\n\nÅñëè Âû ïîçæå ââåäåòå äàííûå â òàáëèöó, òî äëÿ òåêóùåãî ïîëÿ â êàæäîé íîâîé çàïèñè äàííûõ áóäåò èñïîëüçîâàòüñÿ ıòà ñòğîêà ñèìâîëîâ. Ïîıòîìó îíà äîëæíà ñîîòâåòñòâîâàòü çàäàâàåìîìó íèæå ôîğìàòó ÿ÷ååê.";
     Text[ polish ] = "Nale¿y podaæ wartoœæ domyœln¹ pola.\n\nW trakcie póŸniejszego wpisywania danych do tabeli, dany ci¹g znaków u¿yty zostanie w ka¿dym nowym rekordzie odnoœnie aktualnego pola. Format ci¹gu znaków powinien zgadzaæ siê z podanym poni¿ej formatem komórek.";
     Text[ japanese ] = "‚±‚±‚ÉÌ¨°ÙÄŞ‚Ì•W€’l‚ğ“ü—Í‚µ‚Ü‚·B\n\n‚ ‚Æ‚©‚çÃŞ°À‚ğÃ°ÌŞÙ‚É“ü—Í‚·‚é‚ÆAŒ»İ‚ÌÌ¨°ÙÄŞ‚Ì•¶š—ñ‚ªV‚µ‚¢Úº°ÄŞ‚Ég‚í‚ê‚Ü‚·B‰º•û‚Å“ü—Í‚·‚é¾Ù‚Ì‘®‚Æ‡‚í‚¹‚Ä‚¨‚«‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ±z¬°³o­ÓÄæ¦ì¿é¤J¤@­ÓÀq»{­È¡C\n\n¦b³o­ÓÄæ¦ì¤§¤U¿é¤J¨ä¥L¸ê®Æ®É´N·|¦Û°Ê±Ä¥Î³o­ÓÀx¦s®æªº®æ¦¡¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ŞíãÉ ÇİÊÑÇÖíÉ áåĞÇ ÇáÍŞá.\n\nÚäÏãÇ ÊŞæã ÈÅÏÎÇá ÈíÇäÇÊ İí ÇáÌÏæá İí æŞÊ áÇÍŞ¡ Óæİ íÊã ÇÓÊÎÏÇã ÓáÓáÉ ÇáÃÍÑİ åĞå İí ßá ÓÌá ÌÏíÏ.áåĞÇ íÌÈ Ãä Êßæä åĞå ÇáÓáÓáÉ ãæÇİíÉ áÊäÓíŞ ÇáÎáÇíÇ ÇáĞí íÌÈ ÅÏÎÇáå ÃÏäÇå.";
     Text[ dutch ] = "Geef hier een standaardwaarde voor het veld aan.\n\nAls u dan later gegevens invoert in de tabel dan wordt deze tekenreeks in iedere nieuwe record gebruikt voor het actuele veld en moet corresponderen met de hierna te definiëren celopmaak.";
-    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÍù±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£Òò´ËÊı¾İ±ØĞë¾ß±¸ÏÂÃæµÄµ¥Ôª¸ñ¸ñÊ½¡£";
+    Text[ chinese_simplified ] = "ÇëÔÚ´ËÎªÕâ¸ö×Ö¶ÎÊäÈëÒ»¸öÄ¬ÈÏÖµ¡£\n\nÈç¹ûÄúÒÔºóÔÚ±í¸ñÖĞÊäÈëÊı¾İ£¬Ã¿¸öĞÂµÄÊı¾İÌõÄ¿»á²ÉÓÃÕâ¸öÊı¾İ¸ñÊ½¡£ÕâÑùµÄÉè¶¨¿ÉÒÔÂú×ãÒÔÏÂµÄµ¥Ôª¸ñ¸ñÊ½µÄÒªÇó¡£";
     Text[ greek ] = "ÅéóÜãåôå ìéá ôéìŞ ğñïåğéëïãŞò ãéá ôï ğåäßï.\n\nÁí èåëŞóåôå áñãüôåñá íá åéóÜãåôå äåäïìİíá óôïí ğßíáêá èá ÷ñçóéìïğïéçèåß áõôŞ ç ôéìŞ ãéá êÜèå íİá åããñáöŞ. Ãéá ôï ëüãï áõôü èá ğñİğåé íá óõìöùíåß ìå ôç ìïñöŞ ôïõ êåëéïı ôçò åğüìåíçò åããñáöŞò.";
     Text[ korean ] = "ÀÌ ÇÊµå¸¦ À§ÇÑ Ç¥ÁØ°ªÀ» ÀÔ·ÂÇÏ½Ê½Ã¿À. \n\n³ªÁß¿¡ Å×ÀÌºí¿¡ µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇÒ ¶§ »õ ·¹ÄÚµå¿¡´Â ¸ğµÎ ÀÌ ¹®ÀÚ¿­ÀÌ »ç¿ëµÉ °ÍÀÔ´Ï´Ù. ±×·¯¹Ç·Î ¹®ÀÚ¿­Àº ¾Æ·¡ ÀÔ·Â°¡´ÉÇÑ ¼¿ Æ÷¸Ë¿¡ ÀûÇÕÇØ¾ß ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Alan için bir standart değer girin.\n\nDaha sonra tabloya veri girişi yaptığınızda, her yeni veri kümesinde, yürürlükteki alan için bu dize kullanılır. Dize bu nedenle aşağıda girilmesi gereken hücre formatına uygun olmalıdır.";
@@ -1205,7 +1240,7 @@ String STR_HELP_FIELD_REQUIRED
 {
     Text = "Aktivieren Sie diese Option, wenn in diesem Feld keine NULL-Werte erlaubt sind, der Benutzer also immer Daten eingeben muss." ;
     Text [ ENGLISH ] = "Must this field not contain any entries that are empty?" ;
-    Text [ english_us ] = "Activate this option if this field cannot contain NULL values, i.e. the user must always key in data." ;
+    Text [ english_us ] = "Activate this option if this field cannot contain NULL values, i.e. the user must always enter data." ;
     Text [ portuguese_brazilian ] = "Geben Sie an, ob der Benutzer fuer dieses Feld immer Daten eingeben muß." ;
     Text [ swedish ] = "Aktivera det här alternativet om inga NULL-värden är tillåtna i det här fältet och användaren alltså alltid måste mata in data." ;
     Text [ danish ] = "Aktiver denne indstilling når NULL-værdier ikke er tilladt i dette felt, dvs. brugeren altid skal indtaste data." ;
@@ -1213,15 +1248,15 @@ String STR_HELP_FIELD_REQUIRED
     Text [ spanish ] = "Active esta opción si no están permitidos valores null en este campo, es decir, si el usuario debe introducir los datos siempre." ;
     Text [ french ] = "Activez cette option si ce champ n'accepte aucune valeur NULL et si l'utilisateur doit donc toujours y saisir des données." ;
     Text [ dutch ] = "Activeer deze optie als in dit veld geen NUL-waarde is toegestaan, d.w.z. dat de gebruiker hier altijd iets moet invullen." ;
-    Text [ portuguese ] = "Active esta opção se não forem permitidos valores ZERO neste campo, tendo o utilizador que introduzir sempre dados." ;
-    Text[ chinese_simplified ] = "Èç¹ûÓÃ»§ÔÚÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÊäÈëÊı¾İ£¬ÇëÄú¼¤»îÕâ¸öÑ¡Ïî¡£";
+    Text [ portuguese ] = "Active esta opção se não forem permitidos valores NULL neste campo, tendo o utilizador que introduzir sempre os dados." ;
+    Text[ chinese_simplified ] = "Èç¹ûÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÒªÇóÊäÈëÊı¾İ£¬¾ÍÑ¡ÔñÊ¹ÓÃÕâ¸öÑ¡Ïî¡£";
     Text[ russian ] = "Àêòèâèğóéòå ıòó îïöèş, åñëè â ıòîì ïîëå íå äîïóñêàşòñÿ çíà÷åíèÿ ÍÓËß, ò.å. ïîëüçîâàòåëü äîëæåí ïîñòîÿííî ââîäèòü â íåãî äàííûå.";
     Text[ polish ] = "Uaktywnij tê opcjê, jeœli niedozwolone s¹ w tym polu wartoœci ZEROWE, w wiêc jeœli u¿ytkownik musi zawsze wpisywaæ dane.";
     Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚É¾ŞÛ’l‚Íg‚í‚¸Aí‚ÉÕ°»Ş°‚ªÃŞ°À‚ğ“ü—Í‚·‚é‚æ‚¤‚Èê‡‚ÍA‚±‚ÌµÌß¼®İ‚ğ±¸Ã¨ÌŞ‚É‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "¦pªG­n³]©w³o­ÓÄæ¦ì¤º¤£¥i¥H¿é¤J¹s­È¦Ó¥²¶·¿é¤J¦³®Ä¼Æ­È®É¡A±z´N¥²¶·±Ä¥Î³o­Ó¿ï¶µ¡C";
     Text[ arabic ] = "Şã ÈÊäÔíØ åĞÇ ÇáÎíÇÑ¡ ÅĞÇ ßÇäÊ ÇáŞíã ÇáÎÇáíÉ ããäæÚÉ İí åĞÇ ÇáÍŞá¡ Ãí ÅĞÇ ßÇä Úáì ÇáãÓÊÎÏã ÅÏÎÇá ÈíÇäÇÊ ÏÇÆãÇğ.";
     Text[ dutch ] = "Activeer deze optie als in dit veld geen NUL-waarde is toegestaan, d.w.z. dat de gebruiker hier altijd iets moet invullen.";
-    Text[ chinese_simplified ] = "Èç¹ûÓÃ»§ÔÚÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÊäÈëÊı¾İ£¬ÇëÄú¼¤»îÕâ¸öÑ¡Ïî¡£";
+    Text[ chinese_simplified ] = "Èç¹ûÕâ¸ö×Ö¶ÎÄÚ²»ÔÊĞíÊ¹ÓÃÁãÖµ¶ø±ØĞëÒªÇóÊäÈëÊı¾İ£¬¾ÍÑ¡ÔñÊ¹ÓÃÕâ¸öÑ¡Ïî¡£";
     Text[ greek ] = "ÅíåñãïğïéŞóôå áõôŞ ôçí åğéëïãŞ üôáí äåí åğéôñİğïíôáé ÌÇÄÅÍÉÊÅÓ ôéìİò óå áõôü ôï ğåäßï, äçë. üôáí ï ÷ñŞóôçò ğñİğåé õğï÷ñåùôéêÜ íá åéóÜãåé êÜğïéá äåäïìİíá.";
     Text[ korean ] = "ÀÌ ÇÊµå¿¡ ³Î°ªÀÌ Çã¿ëµÇ¾î ÀÖÁö ¾Ê¾Æ »ç¿ëÀÚ°¡ Ç×»ó µ¥ÀÌÅÍ¸¦ ÀÔ·ÂÇØ¾ß ÇÒ °æ¿ì, ÀÌ ¿É¼ÇÀ» ½ÇÇàÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bu seçeneği, bu alana BOŞ değer girilememesi, yani kullanıcının daima vergi girmek zorunda olması halinde etkinleştiriniz.";
@@ -1239,7 +1274,7 @@ String STR_HELP_TEXT_LENGTH
     Text [ spanish ] = "Especifique la longitud máxima permitida de texto." ;
     Text [ french ] = "Indiquez la longueur maximum autorisée pour le texte." ;
     Text [ dutch ] = "Geef de maximaal toelaatbare tekstlengte aan." ;
-    Text [ portuguese ] = "Defina o comprimento máximo permitido para o texto." ;
+    Text [ portuguese ] = "Indique o comprimento máximo permitido para o texto." ;
     Text[ chinese_simplified ] = "ÇëÉè¶¨ÊäÈëÎÄµÄ×î³¤¶È¡£";
     Text[ russian ] = "Çàäàéòå ìàêñèìàëüíî äîïóñòèìóş äëèíó òåêñòà.";
     Text[ polish ] = "Podaj maksymalnie dopuszczaln¹ d³ugoœæ tekstu.";
@@ -1282,23 +1317,23 @@ String STR_HELP_NUMERIC_TYPE
 String STR_HELP_LENGTH
 {
     Text = "Geben Sie die Länge für Daten in diesem Feld an.\n\nFür Dezimal-Felder ist das die maximale Länge der eingegebenen Zahl, für Binärfelder die Länge des Datenblockes.\nWenn der Wert größer ist als der maximal für diese Datenbank zulässige, wird er entsprechend korrigiert." ;
-    Text [ english_us ] = "Determine the length data can have in this field.\n\nIf decimal fields then the maximum length of the number to be entered, if binary then the length of the data block.\nThe value will be corrected accordingly if it exceeds the maximum for this database." ;
+    Text [ english_us ] = "Determine the length data can have in this field.\n\nIf decimal fields, then the maximum length of the number to be entered, if binary fields, then the length of the data block.\nThe value will be corrected accordingly when it exceeds the maximum for this database." ;
     Text [ portuguese_brazilian ] = "Geben Sie die Länge dieses Feldtyps an." ;
     Text [ swedish ] = "Ange längden för data i det här fältet.\n\nFör decimalfält är det den maximala längden på det inmatade talet, för binärfält längden på datablocket.\nOm värdet är större än vad som maximalt är tillåtet för den här databasen, korrigeras det." ;
     Text [ danish ] = "Angiv længden for data i dette felt.\n\nFor decimalfelter er det tallets maksimale længde, for binærfelter er det datablokkens længde.\nHvis værdien er større en den maksimal tilladte for denne database, bliver den rettet tilsvarende." ;
     Text [ italian ] = "Digitate la lunghezza di questo tipo di campo.\n\nPer i campi decimali la lunghezza massima ammessa è il numero dato, per i campi binari è la lunghezza del blocco dati.\nSe il valore è maggiore di quello ammesso dal database attuale verrà corretto automaticamente." ;
     Text [ spanish ] = "Especifique la longitud de los datos en este tipo de campo.\n\nPara campos decimales será la longitud máxima del número introducido; para campos binarios, la longitud del bloque de datos.\nSi el valor fuera mayor que el máximo permitido para esta base de datos, se corregirá correspondientemente." ;
-    Text [ french ] = "Indiquez la longueur pour les données de ce champ.\n\nÀ savoir : pour les champs de type Décimal, la longueur maximale du nombre à saisir et pour les champs de type Binaire la longueur du bloc de données.\nLa valeur sera corrigée automatiquement si elle devait être supérieure au maximum autorisé pour cette base de données." ;
-    Text [ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer idan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd." ;
-    Text [ portuguese ] = "Defina o comprimento para os dados deste campo.\n\nPara campos decimais este é o comprimento máximo do número indicado; para campos binários é o comprimento do bloco de dados.\nEste valor será devidamente corrigido se for superior ao máximo permitido para esta base de dados," ;
-    Text[ chinese_simplified ] = "ÇëÄú¸ø¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İµÄ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İ¿éµÄ³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬ÄÇÃ´Õâ¸öÊıÖµ»á±»ÏàÓ¦µØ¸üÕı¡£";
+    Text [ french ] = "Indiquez la longueur pour les données de ce champ.\n\nÀ savoir : pour les champs de type Décimal, la longueur maximale du nombre à saisir et pour les champs de type Binaire la longueur du bloc de données.\nLa valeur sera corrigée automatiquement si elle devait dépasser le maximum autorisé pour cette base de données." ;
+    Text [ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer is dan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd." ;
+    Text [ portuguese ] = "Defina o comprimento para os dados deste campo.\n\nPara campos decimais este é o comprimento máximo do número indicado; para campos binários é o comprimento do bloco de dados.\nEste valor será devidamente corrigido se for superior ao máximo permitido para esta base de dados." ;
+    Text[ chinese_simplified ] = "ÇëÄúÉè¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞÉè¶¨µÄÊÇÊı¾İ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞÉè¶¨µÄÊÇÊı¾İ¿é³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬Êı¾İ¿â¾Í»áÏàÓ¦µØ¸üÕıÕâ¸öÊıÖµ¡£";
     Text[ russian ] = "Çàäàéòå äëèíó äàííûõ äëÿ ıòîãî ïîëÿ.\n\nÄëÿ äåñÿòè÷íûõ ïîëåé - ıòî ìàêñèìàëüíàÿ äëèíà ââåäåííîãî ÷èñëà, äëÿ áèíàğíûõ ïîëåé - ıòî äëèíà áëîêà äàííûõ.\nÅñëè çàäàííîå çíà÷åíèå áóäåò äëèíåå ìàêñèìàëüíî äîïóñòèìîãî äëÿ ıòîé áàçû äàííûõ, òî îíî áóäåò ñîîòâåòñòâåííî èñïğàâëåíî.";
     Text[ polish ] = "Podaj ¿¹dan¹ d³ugoœæ danych w tym polu.\n\nW przypadku pól dziesiêtnych okreœla ona maksymaln¹ d³ugoœæ wpisanych liczb, w przypadku pól birarnych okreœla ona d³ugoœæ bloku danych.\nJe¿eli wartoœæ bêdzie przekraczaæ dopuszczaln¹ dla tego pola wartoœæ maksymaln¹, zostanie ona odpowiednio skorygowana.";
     Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚É“ü—Í‚·‚éÃŞ°À‚Ì’·‚³‚ğw’è‚µ‚Ü‚·B\n\n\\i–@Ì¨°ÙÄŞ‚É‚Í“ü—Í’l‚ÌÅ‘åŒ…”A“ñi–@Ì¨°ÙÄŞ‚É‚ÍÃŞ°ÀÌŞÛ¯¸‚Ì’·‚³‚ğw’è‚µ‚Ü‚·B\n“ü—Í’l‚ª‚±‚ÌÃŞ°ÀÍŞ°½‚ÌÅ‘åŒÀ‚ğ’´‚¦‚½ê‡‚ÍAC³‚³‚ê‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ³]©w³o­ÓÄæ¦ìÃş«¬ªºªø«×¡C\n\n¤Q¶i¦ìÄæ¦ì«ü©w«ü¬O¿é¤J¼Æ¦rªº³Ìªø¼Æ¥Ø¡A¤G¶i¨îÄæ¦ì¬O«ü¸ê®Æ°Ï°ìªºªø«×¡C\n¦pªG¿é¤J¼Æ¾Ú¶W¹L³]©w­S³ò¡Aµ{¦¡´N·|¦Û°Ê­×¥¿¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá Øæá ÇáÈíÇäÇÊ İí åĞÇ ÇáÍŞá.\n\nÈÇáäÓÈÉ ááÍŞæá ÇáÚÔÑíÉ íßæä åæ ÇáØæá ÇáÃŞÕì ááÑŞã ÇáãõÏÎá¡ ÃãÇ ÈÇáäÓÈÉ ááÍŞæá ÇáËäÇÆíÉ İåæ Øæá ŞÇáÈ ÇáÈíÇäÇÊ.\nÅĞÇ ßÇäÊ ÇáŞíãÉ ÃßÈÑ ãä ÇáÍÏ ÇáÃŞÕì ÇáãÓãæÍ Èå İí ŞÇÚÏÉ ÇáÈíÇäÇÊ åĞå¡ İÓæİ íÊã ÊÕÍíÍåÇ ÈÇáÔßá ÇáãäÇÓÈ.";
-    Text[ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer idan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd.";
-    Text[ chinese_simplified ] = "ÇëÄú¸ø¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İµÄ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞ¸ø¶¨µÄÊÇÊı¾İ¿éµÄ³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬ÄÇÃ´Õâ¸öÊıÖµ»á±»ÏàÓ¦µØ¸üÕı¡£";
+    Text[ dutch ] = "Geef de lengte van dit veldtype aan.\n\nVoor decimale velden is dit de maximale lengte van het in te vullen getal, voor binaire velden de lengte van het gegevensblok.\nAls het veld langer is dan voor deze database maximaal is toegestaan dan wordt de lengte gecorrigeerd.";
+    Text[ chinese_simplified ] = "ÇëÄúÉè¶¨Õâ¸ö×Ö¶ÎÖĞµÄÊı¾İ³¤¶È¡£\n\nÔÚÊ®½øÖÆ×Ö¶ÎÖĞÉè¶¨µÄÊÇÊı¾İ×î´ó³¤¶È£¬ÔÚ¶ş½øÖÆ×Ö¶ÎÖĞÉè¶¨µÄÊÇÊı¾İ¿é³¤¶È¡£\nÈç¹ûÕâ¸öÊıÖµ´óÓÚÊı¾İ¿âÔÊĞíµÄ×î´óÖµ£¬Êı¾İ¿â¾Í»áÏàÓ¦µØ¸üÕıÕâ¸öÊıÖµ¡£";
     Text[ greek ] = "ÅéóÜãåôå ôï ìŞêïò ôùí äåäïìİíùí ãéá áõôü ôï ğåäßï.\n\nÔï ìŞêïò áõôü åßíáé ãéá ôá ğåäßá äåêáäéêşí ôï ìİãéóôï ìŞêïò ôïõ åéóçãìİíïõ áñéèìïı, åíş ãéá ôá ğåäßá äõáäéêşí ôï ìŞêïò åíüò ìğëïê åéóáãùãŞò.\nÁí áõôŞ ç ôéìŞ åßíáé ìåãáëıôåñç áğü ôçí ìİãéóôç åğéôñåğüìåíç ôéìŞ ôçò âÜóçò äåäïìİíùí, áõôŞ èá äéïñèùèåß áíáëüãá.";
     Text[ korean ] = "ÀÌ ÇÊµåÀÇ µ¥ÀÌÅÍ ±æÀÌ¸¦ ÁöÁ¤ÇÏ½Ê½Ã¿À.\n\n10Áø ÇÊµåÀÇ °æ¿ì¿¡´Â ÀÔ·ÂµÈ ¼öÀÇ ÃÖ´ë ±æÀÌ, ¹ÙÀÌ³Ê¸® ÇÊµåÀÇ °æ¿ì¿¡´Â µ¥ÀÌÅÍ ºí·ÏÀÇ ±æÀÌ¸¦ ÀÔ·ÂÇÕ´Ï´Ù. \n°ªÀÌ ÀÌ µ¥ÀÌÅÍº£ÀÌ½º¿¡ ÃÖ´ëÇÑÀ¸·Î Çã¿ëµÈ °ªº¸´Ù Å©¸é ÀûÀıÈ÷ ¼öÁ¤µË´Ï´Ù.";
     Text[ turkish ] = "Bu alandaki veri uzunluğunu giriniz.\n\nBu uzunluk, ondalık alanlar için girilen sayının azami uzunluğu, ikili alanlar için ise veri bloğu uzunluğudur.\nSöz konusu değer, bu veritabanı için azami olarak izin verilenden daha büyük olması halinde uygun bir şekilde düzeltilecektir.";
@@ -1314,7 +1349,7 @@ String STR_HELP_SCALE
     Text [ danish ] = "Angiv her, hvormange decimaler dette felt skal indeholde." ;
     Text [ italian ] = "Digitate il numero di cifre dopo la virgola." ;
     Text [ spanish ] = "Especifique el número de decimales que deban contener los números en este campo." ;
-    Text [ french ] = "Veuillez indiquer le nombre de décimales souhaité pour les nombres de ce champ." ;
+    Text [ french ] = "Spécifiez le nombre de décimales pour les nombres de ce champ." ;
     Text [ dutch ] = "Geef het aantal plaatsen achter de komma aan." ;
     Text [ portuguese ] = "Defina o número de casas decimais para este campo." ;
     Text[ chinese_simplified ] = "ÇëÎªÕâ¸ö×Ö¶ÎÄÚµÄÊı×ÖÉè¶¨Ğ¡ÊıµãÎ»Êı¡£";
@@ -1336,21 +1371,21 @@ String STR_HELP_FORMAT_CODE
     Text[ ENGLISH ] = "Hier sehen Sie, wie die Daten der aktuellen Spalte mit dem aktuell eingestellten Format - das Sie mittels des nebenstehenden Buttons ändern können - formatiert werden würden.";
     Text[ italian ] = "Qui vedete come è possibile formattare i dati dell'attuale colonna con il formato corrente che potete cambiare con il bottone che si trova qui a fianco.";
     Text[ portuguese_brazilian ] = "Der Format-Code der aktuellen Spalte. Diese Einstellung k÷nnen Sie nicht direkt, sondern nur mittels des nebenstehenden Buttons õndern.";
-    Text[ portuguese ] = "Aqui pode ver como os dados da coluna actual seriam formatados se utilizasse o formato definido. Para modificar este parâmetro, clique no botão ao lado.";
+    Text[ portuguese ] = "Aqui pode ver como os dados da coluna actual seriam formatados se utilizasse o formato definido. Para o modificar, clique no botão ao lado.";
     Text[ danish ] = "Her vises, hvorledes den aktuelle kolonnes data vil komme til at se ud med det aktuelt indstillede format (brug knapperne til at ændre formatet).";
-    Text[ french ] = "Vous montre comment les données de la colonne concernée seront formatées si vous utilisez le format sélectionné. Pour modifier ce paramètre, cliquez sur le bouton Modifier situé à côté.";
+    Text[ french ] = "Voici comment les données de la colonne concernée seront formatées si vous utilisez le format actuellement paramétré. Pour modifier ce format, cliquez sur le bouton approprié situé à côté.";
     Text[ swedish ] = "Här ser du hur data i den aktuella kolumnen skulle formateras med det nu inställda formatet, som du kan ändra med hjälp av knapparna som finns bredvid.";
     Text[ dutch ] = "Hier ziet u hoe de gegevens in de actuele kolom eruit zouden zien met de actueel ingestelde opmaak. Deze instelling kunt u veranderen met de nevenstaande buttons.";
     Text[ spanish ] = "Aquí puede ver cómo serían formateados los datos de la columna actual con el formato definido actualmente, que puede modificar con el botón que se encuentra al lado.";
-    Text[ english_us ] = "Here you can see how the data will be displayed with the current format settings (use the buttons nearby to modify the format).";
-    Text[ chinese_simplified ] = "Äú¿´µ½ÄúÄÜ¹»½èÖúÅÔ±ßµÄ°´Å¥À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İµÄ¸ñÊ½¡£";
+    Text[ english_us ] = "This is where you see how the data would be displayed in the current format (use the button on the right to modify the format).";
+    Text[ chinese_simplified ] = "Äú¿´µ½ÄÜ¹»Í¨¹ıµã»÷ÅÔ±ßµÄ°´Å¥£¬À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İ¸ñÊ½¡£";
     Text[ russian ] = "Çäåñü Âû ìîæåòå óâèäåòü, êàê ìîæíî îòôîğìàòèğîâàòü äàííûå òåêóùåé êîëîíêè â àêòóàëüíî óñòàíîâëåííîì ôîğìàòå, êîòîğûé Âû ìîæåòå èçìåíÿòü ïğè ïîìîùè íàõîäÿùåéñÿ ğÿäîì êíîïêè.";
     Text[ polish ] = "Tutaj wyœwietlony zostanie podgl¹d sformatowanych danych aktualnej kolumny. Format mo¿na zmieniæ klikniêciem przycisku znajduj¹cego siê obok.";
     Text[ japanese ] = "—ñ‚ÌÃŞ°À‚ªAŒ»İİ’è‚³‚ê‚½‘®‚Å‚Ç‚¤•Ï‚í‚Á‚½‚©A‚±‚±‚ÅŒ©‚ê‚Ü‚·B‰¡‚É‚ ‚éÎŞÀİ‚ğg‚¤‚ÆA‘®‚Ì•ÏX‚ª‚Å‚«‚Ü‚·B";
     Text[ chinese_traditional ] = "¦b³oùØ±z¯à°÷¬İ¨ì³z¹L«ö¤@¤U®ÇÃäªº«ö¶s¨ÓÅÜ§ó·í«eªºÄæ¤º¸ê®Æ®æ¦¡¡C";
     Text[ arabic ] = "íãßäß åäÇ ÑÄíÉ ÇáÊäÓíŞ ÇáĞí Óæİ ÊÙåÑ Èå ÇáÈíÇäÇÊ ÚäÏ ÇÓÊÎÏÇã ÅÚÏÇÏÇÊ ÇáÊäÓíŞ ÇáÍÇáí (íãßäß ÊÛííÑ åĞÇ ÇáÊäÓíŞ ÈæÇÓØÉ ÇáãİÊÇÍ ÇáãÌÇæÑ).";
     Text[ dutch ] = "Hier ziet u hoe de gegevens in de actuele kolom eruit zouden zien met de actueel ingestelde opmaak. Deze instelling kunt u veranderen met de nevenstaande buttons.";
-    Text[ chinese_simplified ] = "Äú¿´µ½ÄúÄÜ¹»½èÖúÅÔ±ßµÄ°´Å¥À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İµÄ¸ñÊ½¡£";
+    Text[ chinese_simplified ] = "Äú¿´µ½ÄÜ¹»Í¨¹ıµã»÷ÅÔ±ßµÄ°´Å¥£¬À´¸ü¸Äµ±Ç°ÁĞµÄÊı¾İ¸ñÊ½¡£";
     Text[ greek ] = "Åäş âëİğåôå ôçí üøç ôùí äåäïìİíùí ôçò ôñİ÷ïõóáò óôŞëçò áí åöáñìïæüôáí ç ôñİ÷ïõóá ìïñöŞ (×ñçóéìïğïéŞóôå ôá äéğëáíÜ ğåäßá ãéá ôçí åğéëïãŞ Üëëïõ óôõë).";
     Text[ korean ] = "¿©±â¿¡¼­ ÇöÀç ¿­ÀÇ µ¥ÀÌÅÍ°¡ ÁöÁ¤µÈ ¼­½Ä(¿·¿¡ ÀÖ´Â ´ÜÃß¸¦ ÀÌ¿ëÇÏ¿© ¼­½ÄÀ» ¹Ù²Ü ¼ö ÀÖÀ½)¿¡ µû¶ó Æ÷¸ËµÇ´Â ¸ğ½ÀÀ» º¼ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Burada, seçili sütundaki verilerin - yandaki düğme ile değiştirebileceğiniz - yürürlükteki ayarlar ile nasıl formatlanacağını görebilirsiniz.";
@@ -1364,19 +1399,19 @@ String STR_HELP_FORMAT_BUTTON
     Text[ portuguese_brazilian ] = "Hiermit können Sie festlegen, wie die Daten der Tabelle bei der Ausgabe formatiert werden sollen.";
     Text[ portuguese ] = "Permite-lhe definir o formato para a impressão dos dados da tabela.";
     Text[ danish ] = "Her kan du definere et outputformat for tabellens data.";
-    Text[ french ] = "Permet de déterminer le format de sortie des données de la table.";
+    Text[ french ] = "Permet de définir le format de sortie des données de la table.";
     Text[ swedish ] = "Här kan du bestämma hur tabellernas data skall formateras vid utmatning.";
-    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens wilt opmaken.";
+    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens in de tabel wilt opmaken.";
     Text[ spanish ] = "Aquí puede determinar el tipo de formateado para la salida de los datos de la tabla.";
-    Text[ english_us ] = "Here you can determine the output format of the data.";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚ´ËÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
+    Text[ english_us ] = "This is where you determine the output format of the data.";
+    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚÕâÀïÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
     Text[ russian ] = "Çäåñü Âû ìîæåòå îïğåäåëèòü ôîğìàò âûâîäà äàííûõ òàáëèöû.";
     Text[ polish ] = "Tutaj mo¿na ustawiæ wyjœciowy format tabeli.";
     Text[ japanese ] = "‚±‚±‚ÅAÃ°ÌŞÙ‚ÌÃŞ°À‚ğo—Í‚·‚é‚Æ‚«‚Ì‘®‚ğw’è‚Å‚«‚Ü‚·B";
     Text[ chinese_traditional ] = "±z¯à°÷¦b³oùØ³]©wªí®æ¼Æ¾Úªº¦C¦L®æ¦¡¡C";
     Text[ arabic ] = "íãßäß åäÇ ÊÍÏíÏ ÊäÓíŞ ÅÎÑÇÌ ÈíÇäÇÊ ÇáÌÏæá.";
-    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens wilt opmaken.";
-    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚ´ËÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
+    Text[ dutch ] = "Hiermee kunt u instellen hoe u de gegevens in de tabel wilt opmaken.";
+    Text[ chinese_simplified ] = "ÄúÄÜ¹»ÔÚÕâÀïÉè¶¨±í¸ñµÄ´òÓ¡¸ñÊ½¡£";
     Text[ greek ] = "Åäş İ÷åôå ôç äõíáôüôçôá íá ïñßóåôå ôç ìïñöŞ ğïõ èá åöáñìïóôåß óôá äåäïìİíá ôïõ ğßíáêá êáôÜ ôçí åîáãùãŞ ôïõò.";
     Text[ korean ] = "ÀÌ·Î½á Ãâ·Â½Ã Å×ÀÌºíÀÇ Å×ÀÌÅÍ°¡ ¾î¶»°Ô Æ÷¸ËµÇ¾î¾ß ÇÒÁö ¼³Á¤ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Burada tablo verilerinin çıktı formatını belirleyebilirsiniz.";
@@ -1388,20 +1423,20 @@ String STR_HELP_AUTOINCREMENT
     Text [ english_us ] = "Choose if this field should contain AutoIncrement values.\n\nYou can not enter data in fields of this type. An intrinsic value will be assigned to each new record automatically (resulting from the increment of the previous record)." ;
     Text[ italian ] = "Scegliete se questo campo deve contenere valori automatici d'incremento.\n\nIn questo campo non sarà possibile digitare alcun dato direttamente. Ogni nuovo record di dati riceve automaticamente un valore proprio (che risulta dall'incremento del precedente).";
     Text[ portuguese_brazilian ] = "Wählen Sie, ob dieses Feld ein Auto-Inkrement-Wert sein soll.\n\nSie können in diese Spalte dann keine Daten direkt eingeben, sondern jeder neue Datensatz bekommt automatisch einen eigenen Wert (der sich aus dem Inkrementieren des vorigen ergibt) zugewiesen.";
-    Text[ portuguese ] = "Indique se este campo deverá conter valores de incremento automático ou não.\n\nNão poderá então introduzir dados directamente nesse campo. Cada novo registo de dados obterá automaticamente um valor próprio (valor este que resulta por incremento do valor anterior).";
+    Text[ portuguese ] = "Indique se este campo deve conter valores de incremento automático ou não.\n\nNão será então possível introduzir dados directamente nesse campo. Cada novo registo de dados obterá automaticamente um valor próprio (valor este que resulta por incremento do valor do registo de dados anterior).";
     Text[ danish ] = "Vælg her, om dette felt skal indeholde AutoInkrement-værdier.\n\nDet er da ikke muligt at indtaste data direkte. Hver ny datapost får automatisk tildelt en egen værdi, som genereres ved inkrementering af den forrige datapost.";
-    Text[ french ] = "Décidez si le champ devra recevoir une valeur d'AutoIncrément (ou non).\n\nSi oui, vous ne pourrez pas saisir directement des données dans cette colonne : la valeur de tout nouvel enregistrement lui sera attribuée automatiquement (à savoir la valeur incrémentée à partir du champ de l'enregistrement précédent).";
+    Text[ french ] = "Choisissez si le champ doit contenir des valeurs d'incrément automatique.\n\nDans ce cas, vous ne pourrez pas saisir directement des données : tous les nouveaux enregistrements obtiendront automatiquement leur propre valeur (à savoir la valeur incrémentée à partir de l'enregistrement précédent).";
     Text[ swedish ] = "Välj om det här fältet skall innehålla Auto-Inkrementvärden.\n\nDu kan i så fall inte mata in några data direkt i fältet, utan varje ny datapost tilldelas automatiskt ett eget värde (vilket bestäms av inkrementering från den förra dataposten).";
     Text[ dutch ] = "U kunt dit veld een auto increment-waarde toewijzen.\n\nIn dat geval kunt u hierin geen gegevens typen, maar iedere nieuwe record krijgt automatisch een eigen waarde toegewezen, die het resultaat is van het incrementeren van de vorige.";
     Text[ spanish ] = "Defina si este campo debe contener valores de incremento automático.\n\nEn este caso no podrá escribir datos directamente, sino que a cada nuevo registro de datos se le asignará automáticamente un valor propio (que resulta del incremento proveniente del registro anterior).";
-    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯Ôö¼ÓµÄÊıÖµ¡£\n\nÄú²»ÄÜÖ±½ÓÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıÔöÖµµÃ³ö)¡£";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯µİÔöµÄÊıÖµ¡£\n\nÄú²»ÄÜÊÖ¶¯ÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıµİÔö·½Ê½µÃµ½)¡£";
     Text[ russian ] = "Ğåøèòå, äîëæíî ëè ıòî ïîëå ñîäåğæàòü àâòîìàòè÷åñêèå çíà÷åíèÿ èíêğåìåíòà.\n\nÒîãäà Âû íå ñìîæåòå íåïîñğåäñòâåííî ââîäèòü â íåãî äàííûå, ïîñêîëüêó êàæäîé íîâîé çàïèñè áóäåò àâòîìàòè÷åñêè ïğèñâîåíî ñîáòâåííîå çíà÷åíèå (êîòîğîå ïîëó÷èòñÿ áëàãîäàğÿ èíêğåìåíòèğîâàíèş èç ïğåäûäóùåé çàïèñè).";
     Text[ polish ] = "Nale¿y ustaliæ, czy pole to ma zawieraæ wartoœci autoinkrementu.\n\nDo tego pola nie mo¿na wprowadziæ danych bezpoœrednio. Ka¿demu rekordowi zostanie przypisana automatycznie w³asna wartoœæ (która wyniknie z inkrementacji poprzedniego rekordu).";
     Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚ğ©“®‘‰Á“ü—Í’l‚É‚·‚é‚©A‘I‘ğ‚µ‚Ü‚·B\n\n‘I‘ğ‚·‚é‚ÆA‚»‚±‚Ö’¼Ú‚ÉÃŞ°À‚ğ“ü—Í‚Å‚«‚È‚­‚È‚èA©“®“I‚ÉV‚µ‚¢Úº°ÄŞ‚É‚Í‘O‚ÌÚº°ÄŞ‚Ì”’l‚ğŠî‚É‘‰ÁZo‚³‚ê‚½Œ‹‰Ê’l‚ª“ü—Í‚³‚ê‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü³o­ÓÄæ¦ì¬O§_À³¸Ó§t¦³¦Û°Ê»¼¼Wªº¼Æ­È¡C\n\n±z¤£¯àª½±µ¿é¤J¸ê®Æ¡M¦]¬°¨C­Ó·s¸ê®Æ²Õ·|¦Û°Ê±o¨ì¤@­Ó¦Û¤vªº¼Æ­È(±q¥¦¤§«eªº¸ê®Æ²Õ¤¤³q¹L»¼¼W±o¥X)¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ãÇ ÅĞÇ ßäÊ ÊÑíÏ Ãä íÍÊæí åĞÇ ÇáÍŞá Úáì Şíã ĞÇÊ ÊÒÇíÏ ÊáŞÇÆí.\n\nİí åĞå ÇáÍÇáÉ áä íãßäß ÅÏÎÇá ÇáÈíÇäÇÊ İíå ÈÔßá ãÈÇÔÑ¡ Èá Óæİ íÍÕá ßá ÓÌá ÌÏíÏ ÊáŞÇÆíÇ Úáì ŞíãÉ ÎÇÕÉ Èåğ (ÊäÊÌ Úä ÒíÇÏÉ ŞíãÉ ÇáÓÌá ÇáÓÇÈŞ).";
     Text[ dutch ] = "U kunt dit veld een auto increment-waarde toewijzen.\n\nIn dat geval kunt u hierin geen gegevens typen, maar iedere nieuwe record krijgt automatisch een eigen waarde toegewezen, die het resultaat is van het incrementeren van de vorige.";
-    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯Ôö¼ÓµÄÊıÖµ¡£\n\nÄú²»ÄÜÖ±½ÓÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıÔöÖµµÃ³ö)¡£";
+    Text[ chinese_simplified ] = "ÇëÑ¡ÔñÕâ¸ö×Ö¶ÎÊÇ·ñÓ¦¸Ãº¬ÓĞ×Ô¶¯µİÔöµÄÊıÖµ¡£\n\nÄú²»ÄÜÊÖ¶¯ÊäÈëÊı¾İ£¬ÒòÎªÃ¿¸öĞÂÊı¾İ×é»á×Ô¶¯µÃµ½Ò»¸ö×Ô¼ºµÄÊıÖµ(´ÓËüÖ®Ç°µÄÊı¾İ×éÖĞÍ¨¹ıµİÔö·½Ê½µÃµ½)¡£";
     Text[ greek ] = "Êáèïñßóôå áí ôï ğåäßï èá ğåñéİ÷åé ôéìİò áõôüìáôçò ğñïóáıîçóçò.\n\nÓôç ğåñßğôùóç áõôŞ äåí èá ìğïñİóåôå íá åéóÜãåôå áğ´åõèåßáò äåäïìİíá óå áõôü ôï ğåäßï, áëëÜ êÜèå íİá åããñáöŞ èá ğáßñíåé áõôïìÜôùò êÜğïéá äéêŞò ôçò ôéìŞ (ç ïğïßá èá ğñïêığôåé áğü ôçí ğñïóáıîçóç ôçò ğñïçãïıìåíçò åããñáöŞò).";
     Text[ korean ] = "ÀÌ ÇÊµå°¡ ÀÚµ¿Áõ°¡°ªÀ» Æ÷ÇÔÇØ¾ßÇÒ Áö °áÁ¤ÇÏ½Ê½Ã¿À.\n\n±×·± ÇÊµå¿¡´Â µ¥ÀÌÅÍ¸¦ Á÷Á¢ ÀÔ·ÂÇÒ ¼ö ¾øÀ¸¸ç »õ ·¹ÄÚµå´Â ¸ğµÎ ÀÚµ¿ÀûÀ¸·Î °íÀ¯°ª(ÀÌÀüÀÇ ·¹ÄÚµå¸¦ Áõ°¡½ÃÅ´À¸·Î½á ³ª¿À´Â)À» ÁöÁ¤¹Ş°Ô µË´Ï´Ù.";
     Text[ turkish ] = "Bu alana, otomatik artış değerleri konulup konulmayacağını seçiniz.\n\nBu alana artık doğrudan veri girişi yapamazsınız. Bunun yerine her yeni kayıt için otomatik olarak (bir önceki kaydın artışından oluşan) özel bir değer atanır.";
@@ -1437,7 +1472,7 @@ PushButton PB_FORMAT
 String STR_TABLEDESIGN_DUPLICATE_NAME
 {
     Text = "Die Tabelle kann nicht gespeichert werden, da der Spaltenname \"$column$\" doppelt vergeben wurde.";
-    Text [ english_us ] = "The table can't be saved due to duplicate column name \"$column$\".";
+    Text [ english_us ] = "The table cannot be saved because column name \"$column$\" was assigned twice.";
     Text[ portuguese ] = "Impossível guardar a tabela. O nome da coluna \"$column$\" foi atribuído duas vezes.";
     Text[ russian ] = "Ñîõğàíèòü òàáëèöó íåâîçìîæíî, ò.ê. èìÿ êîëîíêè \"$column$\" ïğèñâîåíî äâàæäû.";
     Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ç áğïèŞêåõóç ôïõ ğßíáêá åğåéäŞ İãéíå äéğëŞ ÷ñŞóç ôïõ ïíüìáôïò óôŞëçò \"$column$\".";
@@ -1451,7 +1486,7 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
     Text[ portuguese_brazilian ] = "The table can't be saved as the column name \"$column$\" is used twice.";
     Text[ japanese ] = "\"$column$\" ‚Ì—ñ–¼‚ªd•¡‚µ‚Ä‚¢‚ÄAÃ°ÌŞÙ‚Ì•Û‘¶‚ª‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "¿­ÀÇ ÀÌ¸§\"$column$\"ÀÌ Áßº¹µÇ¾î ÁöÁ¤µÇ¾ú±â ¶§¹®¿¡ Å×ÀÌºíÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "ÒòÎªÖØ¸´Ê¹ÓÃÁËÁĞÃû³Æ\"$column$\"£¬ËùÒÔÎŞ·¨´æÅÌÕâ¸ö±í¸ñ¡£";
+    Text[ chinese_simplified ] = "ÒòÎªÖØ¸´Ê¹ÓÃÁĞÃû³Æ\"$column$\"£¬ËùÒÔÎŞ·¨´æÅÌÕâ¸ö±í¸ñ¡£";
     Text[ chinese_traditional ] = "µLªkÀx¦s³o­Óªí®æ¡A¦]¬°Äæ¦ì¦WºÙ \"$column$\" ¤w¸g¦s¦b¡C";
     Text[ arabic ] = "áÇ íãßä ÍİÙ ÇáÌÏæá¡ æĞáß áÇÓÊÎÏÇã ÇÓã ÇáÚãæÏ \"$column$\" ãÑÊíä.";
     Text[ turkish ] = "\"$column$\" sütun adı daha önce kullanıldığı için tablo kaydedilemiyor.";
@@ -1459,12 +1494,12 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
 String STR_TBL_COLUMN_IS_KEYCOLUMN
 {
     Text = "Die Spalten \"$column$\" gehört zum Primärschlüssel. Falls sie gelöscht wird, wird auch der Pirmärschlüssel gelöscht.Wollen Sie sie wirklich löschen?";
-    Text [ english_us ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
-    Text[ portuguese ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
+    Text [ english_us ] = "The column \"$column$\" belongs to the primary key. If the column is deleted, the primary key will also be deleted. Do you really want to delete the column?";
+    Text[ portuguese ] = "A coluna \"$column$\" pertence à chave primária. Se a eliminar, a chave primária também será eliminada. Mesmo assim, eliminar?";
     Text[ russian ] = "Êîëîíêà \"$column$\" îòíîñèòñÿ ê ïåğâè÷íîìó êëş÷ó. Óäàëèâ åå, Âû óäàëèòå ïåğâè÷íûé êëş÷. Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó êîëîíêó?";
     Text[ greek ] = "Ïé ãñáììİò \"$column$\" áíŞêïõí óôï ğñùôåıïí êëåéäß. Óôçí ğåñßğôùóç ğïõ äéáãñáöïıí áõôİò, èá äéáãñáöåß êáé ôï ğñùôåıïí êëåéäß. Èİëåôå íá äéáãñáöïıí ïé ãñáììİò;";
-    Text[ dutch ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
-    Text[ french ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
+    Text[ dutch ] = "De kolom \"$column$\" behoort tot de primaire sleutel. Wist u deze kolom dan wordt ook de primaire sleutel gewist. Wilt u de kolom werkelijk wissen?";
+    Text[ french ] = "La colonne \"$column$\" appartient à la clé primaire. La suppression de la colonne entraînera également la suppression de la clé primaire. Voulez-vous vraiment supprimer la colonne ?";
     Text[ spanish ] = "La columna \"$column$\" pertenece a la llave primaria. En caso de que la elimine, eliminará también la llave primaria. ¿Desea eliminarla realmente?";
     Text[ italian ] = "La colonna \"$column$\" appartiene alla chiave primaria. Se la colonna viene eliminata, si cancellerà anche la chiave primaria. Volete proseguire comunque?";
     Text[ danish ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
@@ -1473,7 +1508,7 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN
     Text[ portuguese_brazilian ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
     Text[ japanese ] = "—ñ \"$column$\" ‚ÍÌß×²ÏØ·°‚É‘®‚µ‚Ü‚·B‚±‚ê‚ğíœ‚·‚é‚ÆAÌß×²ÏØ·°‚àíœ‚³‚ê‚Ä‚µ‚Ü‚¢‚Ü‚·Bíœ‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
     Text[ korean ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
-    Text[ chinese_simplified ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î \"$column$\" Êôì¶Ö÷¹Ø¼ü×Ö¡£Èç¹ûÄúÉ¾³ıÕâ¸ö×Ö¶Î£¬Ò²¾Í»áÒ»ÆğÉ¾³ıÖ÷¹Ø¼ü×Ö¡£ÒªÉ¾³ıÕâ¸ö×Ö¶Î£¿";
     Text[ chinese_traditional ] = "³o­ÓÄæ¦ì \"$column$\" Äİ©ó¥DÃöÁä¦r¡C¦pªG±z§R°£³o­ÓÄæ¦ì¡A¤]´N·|¤@°_§R°£¥DÃöÁä¦r¡C­n§R°£³o­ÓÄæ¦ì¡H";
     Text[ turkish ] = "The column \"$column$\" belongs to the primary key. If the column will be deleted the primary key will be deleted as well. Do you really want to delete the column?";
     Text[ arabic ] = "íäÊãí ÇáÚãæÏ \"$column$\" Åáì ÇáãİÊÇÍ ÇáÃÓÇÓí. ÅĞÇ Êã ÍĞİå¡ İÓæİ íÊã ÍĞİ ÇáãİÊÇÍ ÇáÃÓÇÓí ÃíÖÇğ. åá ÊÑíÏ ÈÇáİÚá ÍĞİ åĞÇ ÇáÚãæÏ¿";
@@ -1482,11 +1517,11 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
 {
     Text = "Primärschlüssel betroffen";
     Text [ english_us ] = "primary key related";
-    Text[ portuguese ] = "primary key related";
+    Text[ portuguese ] = "Chave primária relacionada";
     Text[ russian ] = "Îòíîñèòñÿ ê ïåğâè÷íîìó êëş÷ó";
     Text[ greek ] = "Ğñùôåıïí êëåéäß betroffen";
-    Text[ dutch ] = "primary key related";
-    Text[ french ] = "primary key related";
+    Text[ dutch ] = "primaire sleutel betroffen";
+    Text[ french ] = "Clé primaire concernée";
     Text[ spanish ] = "Relativo a la llave primaria";
     Text[ italian ] = "Relativo alla chiave primaria";
     Text[ danish ] = "primary key related";
@@ -1495,8 +1530,8 @@ String STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE
     Text[ portuguese_brazilian ] = "primary key related";
     Text[ japanese ] = "Ìß×²ÏØ·°‚ÉŠÖ˜A‚ ‚è";
     Text[ korean ] = "primary key related";
-    Text[ chinese_simplified ] = "primary key related";
-    Text[ chinese_traditional ] = "©M¥DÃöÁä¦r¬ÛÃö";
+    Text[ chinese_simplified ] = "ºÍÖ÷¹Ø¼ü×Ö¹ØÁª";
+    Text[ chinese_traditional ] = "©M¥DÃöÁä¦rÃöÁp";
     Text[ turkish ] = "primary key related";
     Text[ arabic ] = "ÊÃËíÑ Úáì ÇáãİÊÇÍ ÇáÃÓÇÓí";
 };
@@ -1527,14 +1562,14 @@ String STR_QRY_CONTINUE
 {
     Text = "Wollen Sie trotzdem fortfahren?" ;
     Text [ ENGLISH ] = "Continue?" ;
-    Text [ english_us ] = "Continue?" ;
+    Text [ english_us ] = "Continue anyway?" ;
     Text [ portuguese ] = "Deseja continuar?" ;
     Text [ portuguese_brazilian ] = "Wollen Sie trotzdem fortfahren?" ;
     Text [ swedish ] = "Vill du ändå fortsätta?" ;
     Text [ danish ] = "Vil du fortsætte alligevel?" ;
     Text [ italian ] = "Volete continuare lo stesso?" ;
     Text [ spanish ] = "¿Desea continuar de todos modos?" ;
-    Text [ french ] = "Voulez-vous vraiment continuer ?" ;
+    Text [ french ] = "Voulez-vous vraiment poursuivre ?" ;
     Text [ dutch ] = "Wilt u toch doorgaan?" ;
     Text[ chinese_simplified ] = "Äú»¹ÊÇÒª¼ÌĞø£¿";
     Text[ russian ] = "Ïğîäîëæèòü?";
@@ -1553,7 +1588,7 @@ String STR_STAT_WARNING
     Text = "Warnung!" ;
     Text [ ENGLISH ] = "Warning!" ;
     Text [ english_us ] = "Warning!" ;
-    Text [ portuguese ] = "Aviso!" ;
+    Text [ portuguese ] = "Advertência!" ;
     Text [ portuguese_brazilian ] = "Warnung!" ;
     Text [ swedish ] = "Varning!" ;
     Text [ danish ] = "Advarsel!" ;
@@ -1580,23 +1615,23 @@ QueryBox TABLE_DESIGN_SAVEMODIFIED
     Message = "Die Tabelle wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The table has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The table has been changed.\nDo you want to save the changes?" ;
-    Message[ portuguese ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ russian ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ greek ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ dutch ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ french ] = "The table has been changed.\nDo you want to save the changes?";
+    Message[ portuguese ] = "A tabela foi modificada.\nGuardar modificações?";
+    Message[ russian ] = "Äàííàÿ òàáëèöà èçìåíåíà.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
+    Message[ greek ] = "Ï ğßíáêáò ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåõôïıí ïé áëëáãİò;";
+    Message[ dutch ] = "De tabel werd gewijzigd.\nWilt u de wijzigingen opslaan?";
+    Message[ french ] = "La table a été modifiée.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "Se ha modificado esta tabla.\n¿Desea guardar los cambios?";
-    Message[ italian ] = "The table has been changed.\nDo you want to save the changes?";
+    Message[ italian ] = "La tabella è cambiata.\nVolete salvare le modifiche?";
     Message[ danish ] = "The table has been changed.\nDo you want to save the changes?";
     Message[ swedish ] = "Tabellen har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Tabela zosta³a zmieniona.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ japanese ] = "The table has been changed.\nDo you want to save the changes?";
+    Message[ japanese ] = "Ã°ÌŞÙ‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ korean ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ chinese_simplified ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ chinese_traditional ] = "The table has been changed.\nDo you want to save the changes?";
+    Message[ chinese_simplified ] = "±í¸ñÒÑ¾­¸ü¸Ä¡£\nÒª´æÅÌ¸ü¸ÄµÄÄÚÈİ£¿";
+    Message[ chinese_traditional ] = "³o­Óªí®æ¤w¸gÅÜ§ó¡C\n±z­nÀx¦s³o­ÓÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "The table has been changed.\nDo you want to save the changes?";
-    Message[ arabic ] = "The table has been changed.\nDo you want to save the changes?";
+    Message[ arabic ] = "Êã ÊÛííÑ ÇáÌÏæá.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
 };
 QueryBox TABLE_QUERY_CONNECTION_LOST
 {
@@ -1604,12 +1639,46 @@ QueryBox TABLE_QUERY_CONNECTION_LOST
     Message = "Die Verbindung zur Datenbank wurde gelöscht! Ohne sie kann der Tabellenentwurf nur eingeschränkt benutzt werden.\nSoll die Verbindung zur Datenbank wieder aufgebaut werden?" ;
     Message [ English ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?" ;
     Message [ english_us ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?" ;
+    Message[ portuguese ] = "A ligação à base de dados foi cancelada! Sem esta, o esboço da tabela pode ser utilizado apenas de forma limitada.\nRetomar a ligação?";
+    Message[ russian ] = "Ñâÿçü ñ áàçîé äàííûõ óäàëåíà! Áåç íåå èñïîëüçîâàíèå ïğîåêòà òàáëèöû îãğàíè÷åíî.\nÂîññòàíîâèòü ñâÿçü ñ áàçîé äàííûõ?";
+    Message[ greek ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ dutch ] = "De verbinding met de database is verwijderd! Zonder deze verbinding kan de ontwerp-tabel slechts beperkt worden gebruikt.\nWilt u de verbinding met de database weer tot stand brengen?";
+    Message[ french ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ spanish ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ italian ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ danish ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ swedish ] = "Förbindelsen till databasen har raderats! Utan den kan bara tabellutkastet användas begränsat.\nSka förbindelsen till databasen upprättas igen?";
+    Message[ polish ] = "Przerwano po³¹czenie z baz¹ danych! Bez po³¹czenia z baz¹ danych mo¿liwoœæ korzystania z projektu tabeli bêdzie ograniczona.\nPo³¹czyæ ponownie z baz¹ danych?";
+    Message[ portuguese_brazilian ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ japanese ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ korean ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ chinese_simplified ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ chinese_traditional ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ turkish ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
+    Message[ arabic ] = "The connection to the database was lost! The tabledesign can only be used with limited functionality without a connection.\nReconnect?";
 };
 String STR_TABLEDESIGN_CONNECTION_MISSING
 {
     Text = "Die Tabelle konnte nicht gespeichert werden, da keine Verbindung zur Datenbank hergestellt werden konnte.";
     Text [ english_us ] = "The table couldn't be saved due to connection problems.";
     Text [ english ] = "The table couldn't be saved due to connection problems.";
+    Text[ portuguese ] = "Impossível guardar a tabela. Não foi possível estabelecer ligação à base de dados.";
+    Text[ russian ] = "Ñîõğàíèòü òàáëèöó íåâîçìîæíî, ïîñêîëüêó íå óäàëîñü ñîçäàòü ñâÿçü ñ áàçîé äàííûõ.";
+    Text[ greek ] = "The table couldn't be saved due to connection problems.";
+    Text[ dutch ] = "De tabel kon niet worden opgeslagen daar de koppeling met de database niet tot stand kon worden gebracht.";
+    Text[ french ] = "The table couldn't be saved due to connection problems.";
+    Text[ spanish ] = "The table couldn't be saved due to connection problems.";
+    Text[ italian ] = "The table couldn't be saved due to connection problems.";
+    Text[ danish ] = "The table couldn't be saved due to connection problems.";
+    Text[ swedish ] = "Tabellen kunde inte sparas eftersom det inte gick att upprätta en förbindelse till databasen.";
+    Text[ polish ] = "Zapisanie tabeli nie by³o mo¿liwe z powodu braku po³¹czenia z baz¹ danych.";
+    Text[ portuguese_brazilian ] = "The table couldn't be saved due to connection problems.";
+    Text[ japanese ] = "The table couldn't be saved due to connection problems.";
+    Text[ korean ] = "The table couldn't be saved due to connection problems.";
+    Text[ chinese_simplified ] = "The table couldn't be saved due to connection problems.";
+    Text[ chinese_traditional ] = "The table couldn't be saved due to connection problems.";
+    Text[ turkish ] = "The table couldn't be saved due to connection problems.";
+    Text[ arabic ] = "The table couldn't be saved due to connection problems.";
 };
 FixedText FIXED_NO_CONNECTION
 {
@@ -1618,17 +1687,50 @@ FixedText FIXED_NO_CONNECTION
     Text                = "Keine Verbindung" ;
     Text [ English ]    = "no connection" ;
     Text [ english_us ] = "no connection" ;
+    Text[ portuguese ] = "Sem ligação";
+    Text[ russian ] = "Íåò ñîåäèíåíèÿ";
+    Text[ greek ] = "no connection";
+    Text[ dutch ] = "geen verbinding";
+    Text[ french ] = "no connection";
+    Text[ spanish ] = "no connection";
+    Text[ italian ] = "no connection";
+    Text[ danish ] = "no connection";
+    Text[ swedish ] = "Ingen förbindelse";
+    Text[ polish ] = "Brak po³¹czenia";
+    Text[ portuguese_brazilian ] = "no connection";
+    Text[ japanese ] = "no connection";
+    Text[ korean ] = "no connection";
+    Text[ chinese_simplified ] = "no connection";
+    Text[ chinese_traditional ] = "no connection";
+    Text[ turkish ] = "no connection";
+    Text[ arabic ] = "no connection";
 };
 QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
 {
-    Message = "Bevor Sie die Indizies einer Tabelle ändern können, muß diese gespeichert werden.\n"
+    Message = "Bevor Sie die Indizies einer Tabelle ändern können, muss diese gespeichert werden.\n"
         "Wollen Sie Ihre Änderungen an der Tabellenstruktur jetzt speichern?";
     Message [ english ] = "Before you can edit the indexes of a table, it must be saved.\n"
         "Do you want to save your changes now?";
-    Message [ english_us ] = "Before you can edit the indexes of a table, it must be saved.\n"
-        "Do you want to save your changes now?";
+    Message [ english_us ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
 
     Buttons = WB_YES_NO ;
+    Message[ portuguese ] = "Antes de modificar os índices de uma tabela terá que a guardar.\nGuardar as modificações?";
+    Message[ russian ] = "Ïğåæäå ÷åì èçìåíèòü èíäåêñû òàáëèöû, ıòó òàáëèöó íåîáõîäèìî ñîõğàíèòü.\nÂû õîòèòå ñîõğàíèòü èçìåíåíèÿ â ñòğóêòóğå òàáëèöû?";
+    Message[ greek ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ dutch ] = "Voordat u de indices van een tabel kunt veranderen moeten deze worden opgeslagen.\nWilt u de wijzigingen aan de tabelstructuur nu opslaan?";
+    Message[ french ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ spanish ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ italian ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ danish ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ swedish ] = "Innan du kan ändra indexen till en tabell måste du spara den.\nVill du spara dina ändringar av tabellstrukturen nu?";
+    Message[ polish ] = "Przed zmodyfikowaniem indeksów tabeli nale¿y tabelê zapisaæ.\nZapisaæ teraz zmiany dokonane na strukturze tabeli?";
+    Message[ portuguese_brazilian ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ japanese ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ korean ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ chinese_simplified ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ chinese_traditional ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ turkish ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
+    Message[ arabic ] = "Before you can edit the indexes of a table, it must be saved.\nDo you want to save your changes now?";
 };
 
 
