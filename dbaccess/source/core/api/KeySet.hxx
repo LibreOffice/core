@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 14:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ namespace dbaccess
         OKeySetMatrix m_aKeyMap;
         OKeySetMatrix::iterator m_aKeyIter;
         ::std::vector< sal_Int32> m_aColumnPos;
+        ::std::vector< ::rtl::OUString> m_aColumnNames;
 
         connectivity::OSQLTable m_xTable; // reference to our table
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement> m_xStatement;
@@ -285,6 +286,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/24 09:50:49  oj
+    #82628# rowset modifications
+
     Revision 1.4  2001/01/22 07:38:23  oj
     #82632# change member
 

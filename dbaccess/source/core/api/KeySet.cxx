@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-24 09:50:49 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 14:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,14 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
 {
     try
     {
-        ::std::vector< ::rtl::OUString> aColumnNames = getColumnNames();
-        sal_Int32 nSize = aColumnNames.size();
+        m_aColumnNames = getColumnNames();
+        sal_Int32 nSize = m_aColumnNames.size();
 
         Reference<XColumnLocate> xColumnLocate(_xDriverSet,UNO_QUERY);
         if(xColumnLocate.is())
         {
             ::std::vector< ::rtl::OUString>::const_iterator aIter;
-            for(aIter = aColumnNames.begin();aIter != aColumnNames.end();++aIter)
+            for(aIter = m_aColumnNames.begin();aIter != m_aColumnNames.end();++aIter)
                 m_aColumnPos.push_back(xColumnLocate->findColumn(*aIter));
         }
         else
@@ -140,7 +140,7 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
             sal_Int32 nColumnCount = m_xSetMetaData->getColumnCount();
             for(sal_Int32 i=1;i<=nColumnCount;++i)
             {
-                for(aIter = aColumnNames.begin();aIter != aColumnNames.end();++aIter)
+                for(aIter = m_aColumnNames.begin();aIter != m_aColumnNames.end();++aIter)
                 {
                     if(bCase(m_xSetMetaData->getColumnName(i),*aIter) &&
                        bCase(m_xSetMetaData->getTableName(i),connectivity::getString(xTableProp->getPropertyValue(PROPERTY_NAME))))
@@ -163,13 +163,13 @@ OKeySet::OKeySet(const Reference< XResultSet>& _xDriverSet,
 
         ::rtl::OUString aFilter;
 
-        ::std::vector< ::rtl::OUString>::const_iterator aIter = aColumnNames.begin();
-        for(;aIter != aColumnNames.end();)
+        ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aColumnNames.begin();
+        for(;aIter != m_aColumnNames.end();)
         {
             ((aFilter += aQuote) += *aIter) += aQuote;
             aFilter += ::rtl::OUString::createFromAscii(" = ?");
             ++aIter;
-            if(aIter != aColumnNames.end())
+            if(aIter != m_aColumnNames.end())
                 aFilter += aAnd;
         }
         _xComposer->setFilter(aFilter);
@@ -634,48 +634,48 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
 
     connectivity::ORowVector< ORowSetValue >::iterator aIter = m_aKeyIter->second->begin();
-    ::std::vector< sal_Int32>::const_iterator aPosIter = m_aColumnPos.begin();
-    for(;aPosIter != m_aColumnPos.end();++aPosIter,++aIter)
+    ::std::vector< ::rtl::OUString>::const_iterator aPosIter = m_aColumnNames.begin();
+    for(sal_Int32 nPos=1;aPosIter != m_aColumnNames.end();++aPosIter,++aIter,++nPos)
     {
         switch(aIter->getTypeKind())
         {
         case DataType::CHAR:
         case DataType::VARCHAR:
-            xParameter->setString(*aPosIter,*aIter);
+            xParameter->setString(nPos,*aIter);
             break;
         case DataType::DOUBLE:
         case DataType::FLOAT:
         case DataType::REAL:
         case DataType::DECIMAL:
         case DataType::NUMERIC:
-            xParameter->setDouble(*aPosIter,*aIter);
+            xParameter->setDouble(nPos,*aIter);
             break;
         case DataType::DATE:
-            xParameter->setDate(*aPosIter,*aIter);
+            xParameter->setDate(nPos,*aIter);
             break;
         case DataType::TIME:
-            xParameter->setTime(*aPosIter,*aIter);
+            xParameter->setTime(nPos,*aIter);
             break;
         case DataType::TIMESTAMP:
-            xParameter->setTimestamp(*aPosIter,*aIter);
+            xParameter->setTimestamp(nPos,*aIter);
             break;
         case DataType::BINARY:
         case DataType::VARBINARY:
         case DataType::LONGVARBINARY:
         case DataType::LONGVARCHAR:
-            xParameter->setBytes(*aPosIter,*aIter);
+            xParameter->setBytes(nPos,*aIter);
             break;
         case DataType::BIT:
-            xParameter->setBoolean(*aPosIter,*aIter);
+            xParameter->setBoolean(nPos,*aIter);
             break;
         case DataType::TINYINT:
-            xParameter->setByte(*aPosIter,*aIter);
+            xParameter->setByte(nPos,*aIter);
             break;
         case DataType::SMALLINT:
-            xParameter->setShort(*aPosIter,*aIter);
+            xParameter->setShort(nPos,*aIter);
             break;
         case DataType::INTEGER:
-            xParameter->setInt(*aPosIter,*aIter);
+            xParameter->setInt(nPos,*aIter);
             break;
         }
     }
@@ -765,6 +765,9 @@ void OKeySet::fillAllRows()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/01/24 09:50:49  oj
+    #82628# rowset modifications
+
     Revision 1.7  2001/01/22 07:38:23  oj
     #82632# change member
 
