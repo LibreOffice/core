@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-14 14:09:58 $
+ *  last change: $Author: ssa $ $Date: 2002-11-21 10:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
 
 BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
+
     // F6 cycles through everything and works always
     // Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
     // only active if one of those items has the focus
@@ -203,13 +204,20 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
         while( p != mTaskPanes.end() )
         {
             Window *pWin = *p;
-            if( (*p)->HasChildPathFocus( TRUE ) )
+            if( pWin->HasChildPathFocus( TRUE ) )
             {
                 bFocusInList = TRUE;
 
                 // Ctrl-TAB does not work in Dialogs
-                if( !bF6 && (*p)->IsDialog() )
+                if( !bF6 && pWin->IsDialog() )
                     return FALSE;
+
+                // Ctrl-F6 goes directly to the document
+                if( !pWin->IsDialog() && bF6 && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
+                {
+                    pWin->GrabFocusToDocument();
+                    return TRUE;
+                }
 
                 // activate next task pane
                 Window *pNextWin = NULL;
@@ -231,16 +239,8 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                         return FALSE;
 
                     // we did not find another taskpane, so
-                    // put focus back into document: use frame win of topmost parent
-                    while( pWin )
-                    {
-                        if( !pWin->GetParent() )
-                        {
-                            pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
-                            break;
-                        }
-                        pWin = pWin->GetParent();
-                    }
+                    // put focus back into document
+                    pWin->GrabFocusToDocument();
                 }
 
                 return TRUE;

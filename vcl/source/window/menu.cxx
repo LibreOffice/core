@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-19 16:49:25 $
+ *  last change: $Author: ssa $ $Date: 2002-11-21 10:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4256,20 +4256,26 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
         ImplGetSVData()->maWinData.mbNoDeactivate = TRUE;
         if( !bStayActive )
         {
+            // #105406# avoid saving the focus when we already have the focus
+            BOOL bNoSaveFocus = (this == ImplGetSVData()->maWinData.mpFocusWin );
+
             if( nSaveFocusId )
             {
                 if( !ImplGetSVData()->maWinData.mbNoSaveFocus )
                 {
                     // we didn't clean up last time
                     Window::EndSaveFocus( nSaveFocusId, FALSE );    // clean up
-                    nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+                    nSaveFocusId = 0;
+                    if( !bNoSaveFocus )
+                        nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
                 }
                 else
                     ; // do nothing: we 're activated again from taskpanelist, focus was already saved
             }
             else
             {
-                nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
+                if( !bNoSaveFocus )
+                    nSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
             }
         }
         else
@@ -4290,6 +4296,9 @@ void MenuBarWindow::ChangeHighlightItem( USHORT n, BOOL bSelectEntry, BOOL bAllo
             ULONG nTempFocusId = nSaveFocusId;
             nSaveFocusId = 0;
             Window::EndSaveFocus( nTempFocusId, bAllowRestoreFocus );
+            // #105406# restore focus to document if we could not save focus before
+            if( !nTempFocusId && bAllowRestoreFocus )
+                GrabFocusToDocument();
         }
     }
 
@@ -4484,16 +4493,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
             if( nCode == KEY_F6 && rKEvent.GetKeyCode().IsMod1() )
             {
                 // put focus into document
-                Window *pWin = this;
-                while( pWin )
-                {
-                    if( !pWin->GetParent() )
-                    {
-                        pWin->ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
-                        break;
-                    }
-                    pWin = pWin->GetParent();
-                }
+                GrabFocusToDocument();
             }
 
             bDone = TRUE;
