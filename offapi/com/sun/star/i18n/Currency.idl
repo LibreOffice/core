@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-05-21 21:00:42 $
+ *  last change: $Author: er $ $Date: 2001-05-31 16:49:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,16 @@ struct Currency {
     string Name;
     /// if this currency is the default currency for a given locale.
     boolean Default;
+    /** if this currency is the one used in compatible number format codes with
+        <member>FormatElement::formatIndex</member> values in the range 12..17.
+        Those format codes are used to generate some old style currency format
+        codes for compatibility with StarOffice5 and StarOffice4.
+     */
+    boolean UsedInCompatibleFormatCodes;
+    /** the number of decimal places, for example, <bold>2</bold> for US Dollar
+        or <bold>0</bold> for Italian Lira.
+     */
+    short DecimalPlaces;
 };
 
 //=============================================================================
