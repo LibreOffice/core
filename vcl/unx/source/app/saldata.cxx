@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 10:11:55 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,7 @@ SalXLib::SalXLib()
 
     bWasXError_             = FALSE;
     bIgnoreXErrors_         = !!getenv( "SAL_IGNOREXERRORS" );
+    nIgnoreErrorLevel               = 0;
     nStateOfYield_          = 0;
 }
 
@@ -637,6 +638,9 @@ void EmitFontpathWarning( void )
 void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
     char msg[ 120 ] = "";
+
+    if( nIgnoreErrorLevel > 0 )
+        return;
 
     if( ! bIgnoreXErrors_ )
     {
