@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-31 14:44:28 $
+ *  last change: $Author: cl $ $Date: 2002-08-01 09:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
       bFirstPaint(TRUE),
       nPagesToProcess(0),
       nPagesProcessed(0),
+      mbHighContrastMode( false ),
+      maDocColor( COL_WHITE ),
       mpProgress(NULL)
 {
     BOOL bInitOutliner = FALSE;
@@ -248,21 +250,13 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
         pOutlinerView[nView] = NULL;
     }
 
-    svx::ColorConfig aColorConfig;
-    svx::ColorConfigValue aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ) );
-
-    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-        pOutliner->ForceAutoColor( true );
-
-
     pOutlinerView[0] = new OutlinerView(pOutliner, pWindow);
-    Color aWhiteColor( aDocColor.nColor );
-    pOutlinerView[0]->SetBackgroundColor( aWhiteColor );
     Rectangle aNullRect;
     pOutlinerView[0]->SetOutputArea(aNullRect);
     pOutliner->SetUpdateMode(FALSE);
     pOutliner->InsertView(pOutlinerView[0], LIST_APPEND);
-    pWindow->SetBackground( Wallpaper( aWhiteColor ) );
+
+    onUpdateStyleSettings( true );
 
     if (bInitOutliner)
     {
@@ -271,6 +265,8 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
     }
 
     pWindow->GrabFocus();
+
+    Application::AddEventListener( LINK( this, SdOutlineView, AppEventListenerHdl ) );
 }
 
 /*************************************************************************
@@ -281,6 +277,8 @@ SdOutlineView::SdOutlineView(SdDrawDocShell* pDocSh, Window* pWindow,
 
 SdOutlineView::~SdOutlineView()
 {
+    Application::RemoveEventListener( LINK( this, SdOutlineView, AppEventListenerHdl ) );
+
     if( mpProgress )
         delete mpProgress;
 
@@ -302,6 +300,8 @@ SdOutlineView::~SdOutlineView()
         ULONG nCntrl = pOutliner->GetControlWord();
         pOutliner->SetUpdateMode(FALSE); // sonst wird bei SetControlWord gezeichnet
         pOutliner->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
+        SvtAccessibilityOptions aOptions;
+        pOutliner->ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
         pOutliner->Clear();
     }
 
@@ -2087,6 +2087,47 @@ sal_uInt16 SdOutlineView::GetScriptType() const
     }
 
     return nScriptType;
+}
+
+void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
+{
+    const bool bHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode() != 0;
+    if( bForceUpdate || (mbHighContrastMode != bHighContrastMode) )
+    {
+        if( pOutliner )
+        {
+            pOutliner->ForceAutoColor( bHighContrastMode );
+        }
+        mbHighContrastMode = bHighContrastMode;
+
+    }
+
+    svx::ColorConfig aColorConfig;
+    const Color aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+    if( bForceUpdate || (maDocColor != aDocColor) )
+    {
+        sal_uInt16 nView;
+        for( nView = 0; nView < MAX_OUTLINERVIEWS; nView++ )
+        {
+            if (pOutlinerView[nView] != NULL)
+            {
+                pOutlinerView[nView]->SetBackgroundColor( aDocColor );
+
+                Window* pWindow = pOutlinerView[nView]->GetWindow();
+
+                if( pWindow )
+                    pWindow->SetBackground( Wallpaper( aDocColor ) );
+
+            }
+        }
+        maDocColor = aDocColor;
+    }
+}
+
+IMPL_LINK( SdOutlineView, AppEventListenerHdl, void *, EMPTYARG )
+{
+    onUpdateStyleSettings();
+    return 0;
 }
 
 // eof
