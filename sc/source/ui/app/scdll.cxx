@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:57:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ void ScDLL::Init()
     FmFormObjFactory();
 
     // factory for dummy import of old si-controls in 3.1 documents
-    SiImportFactory();
+//BFS02    SiImportFactory();
 
 
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, pMod->GetAppOptions().GetAppMetric() ) );
