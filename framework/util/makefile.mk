@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-07 13:43:33 $
+#   last change: $Author: kz $ $Date: 2004-08-02 13:17:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -274,7 +274,6 @@ SHL4OBJS=       \
                 $(SLO)$/popupmenucontrollerbase.obj \
                 $(SLO)$/fontmenucontroller.obj      \
                 $(SLO)$/fontsizemenucontroller.obj  \
-                $(SLO)$/formatmenucontroller.obj    \
                 $(SLO)$/objectmenucontroller.obj    \
                 $(SLO)$/headermenucontroller.obj    \
                 $(SLO)$/footermenucontroller.obj    \
@@ -307,7 +306,8 @@ SHL4OBJS=       \
                 $(SLO)$/toolbarcontrollerfactory.obj\
                 $(SLO)$/moduleimagemanager.obj      \
                 $(SLO)$/imagemanager.obj            \
-                $(SLO)$/graphicnameaccess.obj
+                $(SLO)$/graphicnameaccess.obj		\
+                $(SLO)$/recentfilesmenucontroller.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
