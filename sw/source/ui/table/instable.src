@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:12:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "´Ü";
+        Text[ korean ] = "´Ü(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -182,7 +182,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ chinese_simplified ] = "ĞĞ(~R)";
         Text[ russian ] = "Ñòğîêè";
         Text[ polish ] = "Wiersze";
-        Text[ japanese ] = "s(~Rj";
+        Text[ japanese ] = "s(~R)";
         Text[ chinese_traditional ] = "¦C(~R)";
         Text[ arabic ] = "Õİæİ";
         Text[ greek ] = "Ãñáììİò";
@@ -276,14 +276,14 @@ ModalDialog DLG_INSERT_TABLE
         Text[ dutch ] = "Op iedere pagina ~herhalen";
         Text[ spanish ] = "~Repetir en cada página";
         Text[ english_us ] = "Re~peat header";
-        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾";
+        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~P)";
         Text[ russian ] = "Ïîâòîğ íà êàæäîé ñòğàíèöå";
         Text[ polish ] = "Powtórz na ~ka¿dej stronie";
-        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ";
-        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü";
+        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~P)";
+        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~P)";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "ÅğáíÜëç~øç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹";
+        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹(~P)";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
     };
