@@ -1,31 +1,91 @@
-#ODKNAME=odk$(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO)
+#*************************************************************************
+#
+#   $RCSfile: makefile.pmk,v $
+#
+#   $Revision: 1.32 $
+#
+#   last change: $Author: hr $ $Date: 2003-03-26 13:40:54 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
 
-ODK_RELEASE=1.0.2
-
-OFFICEPRODUCTNAME="OpenOffice.org $(ODK_RELEASE)"
-TITLE="OpenOffice.org $(ODK_RELEASE) SDK"
-PRODUCT_NAME=OpenOffice.org$(ODK_RELEASE)SDK
+.IF "$(BUILD_SPECIAL)"==""
+PRODUCT_RELEASE=6.1
+PRODUCT_NAME=odk$(UPD)
+OFFICEPRODUCTNAME="StarOffice $(PRODUCT_RELEASE)"
+IDLDOCREFNAME="StarOffice6.1 API Beta"
+TITLE="StarOffice6.1 Beta SDK"
+IDL_CHAPTER_REFS=idl_chapter_refs.txt
+CONVMODE=2
+.ELSE
+PRODUCT_RELEASE=1.1
+PRODUCT_NAME=OpenOffice.org$(PRODUCT_RELEASE)_Beta_SDK
+OFFICEPRODUCTNAME="OpenOffice.org $(PRODUCT_RELEASE)"
+IDLDOCREFNAME="OpenOffice.org $(PRODUCT_RELEASE) API Beta"
+TITLE="OpenOffice.org$(PRODUCT_RELEASE) Beta SDK"
+IDL_CHAPTER_REFS=idl_chapter_refs_oo.txt
+CONVMODE=1
+.ENDIF
 
 PRODUCTZIPFILE=$(PRODUCT_NAME).zip
 PRODUCTTARGZFILE=$(PRODUCT_NAME).tar.gz
 
-
-ODKNAME=odk$(UPD)
-ODKDOCNAME=$(ODKNAME)_doc
-
-ODKZIPFILE=$(ODKNAME).zip
-ODKTARGZFILE=$(ODKNAME).tar.gz
-
-
-.IF "$(BUILD_SOSL)"==""
-# for Sun build use ODKNAME as directory name
-DESTDIR=$(OUT)$/bin$/$(ODKNAME)
-.ELSE
-# for OpenOffice build use PRODUCT_NAME as directory name
 DESTDIR=$(OUT)$/bin$/$(PRODUCT_NAME)
-.ENDIF
-
 DESTDIRIDL=$(DESTDIR)$/idl
+DESTDIRINC=$(DESTDIR)$/include
+DESTDIRJAR=$(DESTDIR)$/classes
+DESTDIRXML=$(DESTDIR)$/xml
 DESTDIRSETTINGS=$(DESTDIR)$/settings
 DESTDIREXAMPLES=$(DESTDIR)$/examples
 DESTDIRCPPEXAMPLES=$(DESTDIR)$/examples$/cpp
@@ -36,22 +96,32 @@ DESTDIRINC=$(DESTDIR)$/include
 DESTDIRCLASSES=$(DESTDIR)$/classes
 DESTDIRDOCU=$(DESTDIR)$/docs
 DESTDIRCOMMONDOCU=$(DESTDIRDOCU)$/common
-DESTDIRGENDOCU=$(DESTDIRCOMMONDOCU)$/ref
+DESTDIRGENIDLREF=$(DESTDIRCOMMONDOCU)$/ref
 DESTDIRDOCUIMAGES=$(DESTDIRDOCU)$/images
+DESTDIRCPPDOCU=$(DESTDIRDOCU)$/cpp
+DESTDIRGENCPPREF=$(DESTDIRDOCU)$/cpp$/ref
+DESTDIRJAVADOCU=$(DESTDIRDOCU)$/java
+DESTDIRGENJAVAREF=$(DESTDIRDOCU)$/java$/ref
 
-UDKZIPPATH=$(SOLARBINDIR)
-UDKNAME=udk$(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO)
-UDKZIPPREFIX=$(UDKNAME)_odk
 CHECKSCRIPT=$(SOLARENV)$/bin$/checkit.pl
  
 BINOUT=$(SOLARBINDIR)
+INCOUT=$(SOLARINCDIR)
 IDLOUT=$(SOLARIDLDIR)
+XMLOUT=$(SOLARXMLDIR)
+LIBOUT=$(SOLARLIBDIR)
 
 MY_COPY=$(GNUCOPY) -u
 MY_COPY_RECURSIVE=$(GNUCOPY) -urf
 
 CONVERTTAGSCRIPT=$(SOLARENV)$/bin$/converttags.pl
-CONVERTSCRIPT=$(SOLARENV)$/bin$/convertlinks.pl
+
+# used in pack/gendocu and unzip_udk
+DIR_CREATE_FLAG=$(MISC)$/docu_directories_created.txt
+
+# used in pack/copying and unzip_udk
+DEVGUIDE_DOCU_FLAG=$(MISC)$/devguide_docu_unzipped.txt
+DEVGUIDE_SAMPLES_FLAG=$(MISC)$/devguide_samples_unzipped.txt
 
 .IF "$(GUI)"=="WNT"
 #--------------------
@@ -64,6 +134,7 @@ MY_TEXTCOPY=cat
 MY_DLLPREFIX=
 MY_DLLPOSTFIX=.dll
 MY_DLLOUT=$(OUT)$/bin
+EXEPOSTFIX=.exe
 DLLOUT=$(SOLARBINDIR)
 
 DESTDIRBIN=$(DESTDIR)$/windows$/bin
@@ -77,7 +148,6 @@ DESTDIRDLL=$(DESTDIRBIN)
 MY_DELETE_RECURSIVE=rm -rf
 MY_DIRCMP=dircmp 
 MY_TEXTCOPY= tr -d "\015"
-#MY_COPY=cat
 
 MY_DLLPREFIX=lib
 MY_DLLPOSTFIX=.so
@@ -96,8 +166,8 @@ DESTDIRDLL=$(DESTDIRLIB)
 ##########
 # SOLARIS INTEL
 ##########
-DESTDIRBIN=$(DESTDIR)$/solia$/bin
-DESTDIRLIB=$(DESTDIR)$/solia$/lib
+DESTDIRBIN=$(DESTDIR)$/solintel$/bin
+DESTDIRLIB=$(DESTDIR)$/solintel$/lib
 DESTDIRDLL=$(DESTDIRLIB)
 
 .ELIF "$(OS)"=="LINUX"
@@ -137,3 +207,40 @@ DESTDIRDLL=$(DESTDIRLIB)
 
 MY_TEXTCOPY_SOURCEPRE=<
 MY_TEXTCOPY_TARGETPRE=>
+
+
+INCLUDETOPDIRLIST= \
+    $(INCOUT)$/sal \
+    $(INCOUT)$/salhelper \
+    $(INCOUT)$/rtl \
+    $(INCOUT)$/osl \
+    $(INCOUT)$/store \
+    $(INCOUT)$/typelib \
+    $(INCOUT)$/uno \
+    $(INCOUT)$/cppu \
+    $(INCOUT)$/cppuhelper \
+    $(INCOUT)$/bridges
+
+.IF "$(GUI)"=="WNT"
+INCLUDETOPDIRLIST += $(INCOUT)$/systools
+.ENDIF
+
+INCLUDEDIRLIST={$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type d -print))}
+
+INCLUDEFILELIST=\
+    $(INCOUT)$/udkversion.mk \
+    $(INCOUT)$/com$/sun$/star$/uno$/Any.h \
+    $(INCOUT)$/com$/sun$/star$/uno$/Any.hxx \
+    $(INCOUT)$/com$/sun$/star$/uno$/genfunc.h \
+    $(INCOUT)$/com$/sun$/star$/uno$/genfunc.hxx \
+    $(INCOUT)$/com$/sun$/star$/uno$/Reference.h \
+    $(INCOUT)$/com$/sun$/star$/uno$/Reference.hxx \
+    $(INCOUT)$/com$/sun$/star$/uno$/Sequence.h \
+    $(INCOUT)$/com$/sun$/star$/uno$/Sequence.hxx \
+    $(INCOUT)$/com$/sun$/star$/uno$/Type.h \
+    $(INCOUT)$/com$/sun$/star$/uno$/Type.hxx
+
+INCLUDELIST=\
+    {$(subst,/,$/ $(shell $(FIND) $(INCLUDETOPDIRLIST) -type f -print))} \
+    $(INCLUDEFILELIST)
+

@@ -98,7 +98,7 @@ endif
 JavaToDoExample : $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The ToDo Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Please load the "$(QM)ToDo.sxc$(QM)" document to see how this component works, see
+	@echo Please load the ToDo.sxc document to see how this component works, see
 	@echo the example description.
 	@echo --------------------------------------------------------------------------------
 

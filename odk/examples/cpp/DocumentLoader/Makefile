@@ -84,8 +84,8 @@ $(COMPOENNT_ENV_FLAG) :
 
 CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
 	@echo --------------------------------------------------------------------------------
-	@echo The example loads the "$(QM)test.sxw$(QM)" document in the DocumentLoader example directory.
-	@echo I you want to load your own document, please use: DocumentLoader "$(QM)filename$(QM)" [connection_url]
+	@echo The example loads the test.sxw document in the DocumentLoader example directory. If you
+	@echo want to load your own document, please use: DocumentLoader filename [connection_url]
 	@echo Use the following command to execute the example!
 	@echo -
 	@echo make DocumentLoader.run

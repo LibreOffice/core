@@ -37,7 +37,7 @@ $(OUT_COMP_CLASS) : $(OUT)
 
 $(OFFICE_CLASSES_DIR)/Notes.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo You need the "$(QM)'Notes.jar$(QM)" from Notes/Domino for this example.
+	@echo You need the 'Notes.jar' from Notes/Domino for this example.
 	@echo You can download it from http://www.servlets.com/cos/index.html
 	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------

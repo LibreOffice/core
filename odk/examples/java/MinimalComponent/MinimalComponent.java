@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MinimalComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2003-02-28 17:39:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 13:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ import com.sun.star.uno.Type;
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2003-02-28 17:39:28 $
+ * @version $Date: 2003-03-26 13:39:12 $
  * @author Bertram Nolte
  */
 public class MinimalComponent {

@@ -1,0 +1,21 @@
+#include <com/sun/star/uno/XInterface.idl>
+
+module foo
+{
+    /**
+     * Interface to count things.
+     */
+    interface XCountable : com::sun::star::uno::XInterface
+    {
+        long getCount();
+        void setCount( [in] long nCount );
+        long increment();
+        long decrement();
+    };
+
+    service Counter
+    {
+        // exported interfaces:
+        interface XCountable;
+    };
+};

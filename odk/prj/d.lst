@@ -7,5 +7,9 @@
 
 ..\%__SRC%\class\officebean.jar %_DEST%\bin%_EXT%\officebean.jar
 
+..\%__SRC%\bin\officebean.dll %_DEST%\bin%_EXT%\officebean.dll
+..\%__SRC%\lib\libofficebean.so %_DEST%\lib%_EXT%\libofficebean.so
+..\%__SRC%\lib\*officebean.dylib %_DEST%\lib%_EXT%\*officebean.dylib
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"

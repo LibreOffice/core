@@ -7,17 +7,9 @@ TARGET=odk
 .INCLUDE: makefile.pmk
 # ------------------------------------------------------------------
 
-.IF "$(BUILD_SOSL)"==""
-# for SUN build
-ZIPFILE=$(ODKZIPFILE)
-TARGZFILE=$(ODKTARGZFILE)
-ZIPDIR=$(ODKNAME)
-.ELSE
-# for OO build
 ZIPFILE=$(PRODUCTZIPFILE)
 TARGZFILE=$(PRODUCTTARGZFILE)
 ZIPDIR=$(PRODUCT_NAME)
-.ENDIF
 
 .IF "$(OS)"=="WNT"
 all:\

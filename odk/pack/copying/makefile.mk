@@ -1,3 +1,65 @@
+#*************************************************************************
+#
+#   $RCSfile: makefile.mk,v $
+#
+#   $Revision: 1.56 $
+#
+#   last change: $Author: hr $ $Date: 2003-03-26 13:39:48 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
 PRJ=..$/..
 PRJNAME=odk
 TARGET=copying
@@ -14,20 +76,62 @@ DESTIDLLIST={$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLLIST))}
 
 IDLDIRLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type d -print))}
 
+DESTINCLUDELIST={$(subst,$(SOLARINCDIR),$(DESTDIRINC) $(INCLUDELIST))}
+DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
+
+COMPONENTLIST = \
+    acceptor	\
+    brdgfctr	\
+    connectr	\
+    corefl		\
+    cpld		\
+    defreg		\
+    dynamicloader	\
+    impreg		\
+    insp		\
+    inv		\
+    invadp		\
+    jen		\
+    namingservice	\
+    proxyfac	\
+    rdbtdp		\
+    remotebridge	\
+    simreg		\
+    smgr		\
+    stm		\
+    tcv		\
+    tdmgr		\
+    uuresolver
+
+XMLLIST= \
+    $(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.xml) \
+    $(DESTDIRXML)$/module-description.dtd
+
 DIRLIST = \
+    $(DESTDIR) \
+    $(DESTDIRBIN) \
+    $(DESTDIRLIB) \
+    $(DESTDIRINC) \
+    $(DESTINCDIRLIST) \
+    $(DESTDIRINC)$/com$/sun$/star$/uno \
+    $(DESTDIRSETTINGS) \
+    $(DESTDIRJAR) \
+    $(DESTDIRXML) \
     $(DESTDIRDOCU) \
+    $(DESTDIRCOMMONDOCU) \
+    $(DESTDIRCOMMONDOCU)$/spec$/xml_format \
     $(DESTDIRDOCUIMAGES) \
-    $(DESTDIRDOCU)$/DevStudioWizards \
     $(DESTDIRDOCU)$/DevStudioWizards$/images \
     $(DESTDIREXAMPLES)		 	\
     $(DESTDIRCLASSES)		 	\
     $(DESTDIRCPPEXAMPLES)		 	\
+    $(DESTDIRCPPEXAMPLES)$/counter 	\
+    $(DESTDIRCPPEXAMPLES)$/remoteclient 	\
     $(DESTDIRCPPEXAMPLES)$/officeclient 	\
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader 	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter 	\
     $(DESTDIRJAVAEXAMPLES)		 	\
     $(DESTDIRJAVAEXAMPLES)$/draw		\
-    $(DESTDIRJAVAEXAMPLES)$/calc		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange		\
     $(DESTDIRJAVAEXAMPLES)$/writer		\
     $(DESTDIRJAVAEXAMPLES)$/Car		\
@@ -54,14 +158,66 @@ DIRLIST = \
     $(DESTDIRBASICEXAMPLES)$/text	 			\
     $(DESTDIRBASICEXAMPLES)$/text$/creating_an_index 	\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically 	\
-    $(DESTDIRBASICEXAMPLES)$/register_component	 			\
-    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp	\
     $(DESTDIROLEEXAMPLES)		 	\
     $(DESTDIROLEEXAMPLES)$/vbscript		 	\
-    $(DESTDIROLEEXAMPLES)$/delphi		 	\
     $(DESTDIROLEEXAMPLES)$/delphi$/InsertTables		 	\
     $(DESTDIROLEEXAMPLES)$/activex		 	\
     {$(subst,$(IDLOUT),$(DESTDIRIDL) $(IDLDIRLIST))}
+
+
+EXELIST = \
+    $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/regmerge$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/regview$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/rdbmaker$(EXEPOSTFIX)	\
+    $(DESTDIRBIN)$/idlcpp$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/idlc$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/javamaker$(EXEPOSTFIX) 	\
+    $(DESTDIRBIN)$/xml2cmp$(EXEPOSTFIX)	\
+    $(DESTDIRBIN)$/uno$(EXEPOSTFIX) \
+    $(DESTDIRBIN)$/autodoc$(EXEPOSTFIX)
+
+SDKDLLLIST = \
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)prot_uno_uno$(MY_DLLPOSTFIX)            		\
+    $(DESTDIRDLL)$/$(MY_DLLPREFIX)juh$(MY_DLLPOSTFIX)
+
+.IF "$(GUI)"=="WNT"
+LIBLIST = \
+    $(DESTDIRLIB)$/istore.lib 	\
+    $(DESTDIRLIB)$/ireg.lib 	\
+    $(DESTDIRLIB)$/isal.lib 	\
+    $(DESTDIRLIB)$/isalhelper.lib 	\
+    $(DESTDIRLIB)$/icppu.lib 	\
+    $(DESTDIRLIB)$/icppuhelper.lib 	\
+    $(DESTDIRLIB)$/irmcxt.lib
+
+.IF "$(COMEX)"=="8"
+    LIBLIST += $(DESTDIRLIB)$/stlport_vc7.lib
+.ELSE
+    LIBLIST += $(DESTDIRLIB)$/stlport_vc6.lib
+.ENDIF
+.ENDIF
+
+SETTINGSLIST= \
+    $(DESTDIRSETTINGS)$/settings.mk \
+    $(DESTDIRSETTINGS)$/std.mk \
+    $(DESTDIRSETTINGS)$/stdtarget.mk \
+    $(DESTDIRSETTINGS)$/dk.mk
+
+CPP_COUNTER= \
+    $(DESTDIRCPPEXAMPLES)$/counter$/counter.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/counter$/counter.xml 		\
+    $(DESTDIRCPPEXAMPLES)$/counter$/countermain.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/counter$/XCountable.idl	\
+    $(DESTDIRCPPEXAMPLES)$/counter$/Makefile         		\
+    $(DESTDIRCPPEXAMPLES)$/counter$/exports.dxp
+
+CPP_REMOTECLIENT= \
+    $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclient.cxx 		\
+    $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclientsample.xml	\
+    $(DESTDIRCPPEXAMPLES)$/remoteclient$/Makefile         		\
+    $(DESTDIRCPPEXAMPLES)$/remoteclient$/exports.dxp
 
 CPP_OFFICECLIENT= \
     $(DESTDIRCPPEXAMPLES)$/officeclient$/officeclient.cxx 		\
@@ -85,6 +241,7 @@ CPP_GENERICXMLFILTER= \
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/genericxmlfilter.xml	\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/README           		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/TypeDetection.xml 		\
+    $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/TypeDetection.xcu 		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/Makefile         		\
     $(DESTDIRCPPEXAMPLES)$/GenericXMLFilter$/exports.dxp
 
@@ -123,7 +280,7 @@ JAVA_CALCADDINS= \
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/CalcAddins.java		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/Makefile			\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins$/XCalcAddins.idl
-    
+
 JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/DemoComponent.sxw	\
@@ -213,12 +370,7 @@ BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/changing_appearance.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/inserting_bookmarks.sxw 		\
     $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/replacing_text.sxw 		\
-    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw \
-    $(DESTDIRBASICEXAMPLES)$/register_component$/readme.txt \
-    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/dialog.xlb \
-    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/script.xlb \
-    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/regcomp.xba \
-    $(DESTDIRBASICEXAMPLES)$/register_component$/regcomp$/regcompdlg.xdl
+    $(DESTDIRBASICEXAMPLES)$/text$/modifying_text_automatically$/using_regular_expressions.sxw
 
 OLE_EXAMPLES= \
     $(DESTDIROLEEXAMPLES)$/vbscript$/readme.txt \
@@ -254,6 +406,8 @@ OLE_EXAMPLES_ACTIVEX= \
     $(DESTDIROLEEXAMPLES)$/activex$/StdAfx2.h
 
 EXAMPLESLIST= \
+    $(CPP_COUNTER) \
+    $(CPP_REMOTECLIENT) \
     $(CPP_OFFICECLIENT) \
     $(CPP_DOCUMENTLOADER) \
     $(CPP_GENERICXMLFILTER) \
@@ -351,18 +505,16 @@ DOCUHTMLFILES+= \
     $(DESTDIRDOCU)$/DevelopersGuide_intro.html \
     $(DESTDIRDOCU)$/install.html \
     $(DESTDIRDOCU)$/sdk_styles.css \
-    $(DESTDIREXAMPLES)$/examples.html \
-    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
+    $(DESTDIREXAMPLES)$/examples.html
+
+#	$(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
 
 DOCUFILES+= \
     $(DOCUHTMLFILES) \
     $(DOCUSTUDIO4INTEGRATIONGRAPHICSFILES) \
     $(DESTDIRDOCUIMAGES)$/black_dot.gif \
     $(DESTDIRDOCUIMAGES)$/logo.gif \
-    $(DESTDIRDOCUIMAGES)$/sdk_logo.gif \
-    $(DESTDIRDOCUIMAGES)$/shadow_r.gif \
-    $(DESTDIRDOCUIMAGES)$/shadow_l.gif \
-    $(DESTDIRDOCUIMAGES)$/elements.jpg
+    $(DESTDIRDOCUIMAGES)$/sdk_logo.gif
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \
@@ -375,26 +527,31 @@ INSTALLSCRIPT= \
     $(DESTDIR)$/setsdkenv_windows.bat
 .ENDIF
 
-
-
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
-all : 	\
-    remove_dk \
+all : \
     $(DIRLIST) \
+    $(EXELIST) \
+    $(XMLLIST) \
+    $(SDKDLLLIST) \
+    $(LIBLIST) \
+    $(SETTINGSLIST) \
     $(EXAMPLESLIST) \
     $(DOCUFILES) \
     $(INSTALLSCRIPT) \
     $(DESTIDLLIST)  \
-    $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
-    $(DESTDIR)$/settings$/dk.mk \
-    $(DESTDIRCLASSES)$/officebean.jar \
+    $(DESTINCLUDELIST) \
     $(DESTDIRCLASSES)$/oosupport.nbm \
-    $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.htm \
+    $(DEVGUIDE_DOCU_FLAG) \
+    $(DEVGUIDE_SAMPLES_FLAG) \
     $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf \
-    $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html \
+    $(DESTDIRDOCU)$/common$/spec$/xml_format$/xml_specification.pdf \
     $(CONVERTTAGFLAG)
+
+# moved into the office installation for easier use
+#	$(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
+#	$(DESTDIRCLASSES)$/officebean.jar \
 
 $(DIRLIST) :
      -$(MKDIRHIER) 	$@
@@ -552,6 +709,10 @@ $(DESTDIREXAMPLES)$/%.xml : $(PRJ)$/examples$/%.xml $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
+$(DESTDIREXAMPLES)$/%.xcu : $(PRJ)$/examples$/%.xcu $(DIRLIST)
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
 $(DESTDIREXAMPLES)$/%.html : $(PRJ)$/examples$/%.html $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
@@ -607,9 +768,6 @@ $(DESTDIREXAMPLES)$/%.dfm : $(PRJ)$/examples$/%.dfm $(DIRLIST)
 $(DESTDIREXAMPLES)$/%.vbs : $(PRJ)$/examples$/%.vbs $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-        
-$(DESTDIRCLASSES)$/unoil.jar : $(BINOUT)$/unoil.jar 
-    $(GNUCOPY) -p $? $@
 
 $(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar 
     $(GNUCOPY) -p $? $@
@@ -617,63 +775,74 @@ $(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
     $(GNUCOPY) -p $? $@
 
-$(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
-    $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
-
 $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
 
-$(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
+$(DESTDIRSETTINGS)$/%.mk : $(PRJ)$/settings$/%.mk $(DIRLIST)
     +-rm -f $@ >& $(NULLDEV)
-.IF "$(BUILD_SOSL)"==""
-    echo #$(ODKNAME) dependent settings > $@
-    echo DKNAME=${ODKNAME} >> $@
-.ELSE
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRSETTINGS)$/dk.mk :
+    +-rm -f $@ >& $(NULLDEV)
     echo #$(PRODUCT_NAME) dependent settings > $@
     echo DKNAME=${PRODUCT_NAME} >> $@    
-.ENDIF
 .IF "$(GUI)"=="UNX"
     echo 'DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb")' >> $@
 .ELSE
     echo DKREGISTRYNAME=$$(subst \\,\,"$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb") >> $@
 .ENDIF
 
-.IF "$(BUILD_SOSL)"==""
-$(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-.ELSE
-$(DESTDIR)$/odk_overview.html : $(PRJ)$/util$/odk_overview2.html
-    +-rm -f $@ >& $(NULLDEV)
-    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
-.ENDIF
-
 $(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.pdf : DevelopersGuide.pdf
     $(GNUCOPY) -p DevelopersGuide.pdf $(DESTDIRDOCU)$/DevelopersGuide
     
-$(DESTDIRDOCU)$/DevelopersGuide$/DevelopersGuide.htm : DevelopersGuide.zip
+$(DEVGUIDE_DOCU_FLAG) : DevelopersGuide.zip
     $(GNUCOPY) -p DevelopersGuide.zip $(DESTDIRDOCU)
     unzip -quod $(DESTDIRDOCU) $(DESTDIRDOCU)$/DevelopersGuide.zip
-    +-$(MY_DELETE_RECURSIVE) $(DESTDIRDOCU)$/DevelopersGuide.zip >& $(NULLDEV)
+    +-rm -f $(DESTDIRDOCU)$/DevelopersGuide.zip >& $(NULLDEV)
+    +@echo "devguide docu unzipped" > $@       
 
-$(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html : DevelopersGuideSamples.zip
+$(DEVGUIDE_SAMPLES_FLAG) : DevelopersGuideSamples.zip
     $(GNUCOPY) -p DevelopersGuideSamples.zip $(DESTDIREXAMPLES)
     unzip -quod $(DESTDIREXAMPLES) $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip
-    +-$(MY_DELETE_RECURSIVE) $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip >& $(NULLDEV)
+    +-rm -f $(DESTDIREXAMPLES)$/DevelopersGuideSamples.zip >& $(NULLDEV)
+    +@echo "devguide samples unzipped" > $@       
 
-$(DESTDIRIDL)$/% : $(IDLOUT)$/%
+$(DESTDIRCOMMONDOCU)$/spec$/xml_format$/xml_specification.pdf : xml_specification.pdf
+    $(GNUCOPY) -p $? $@
+        
+$(DESTDIRXML)$/module-description.dtd : $(XMLOUT)$/module-description.dtd $(DIRLIST)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(XMLOUT)$/module-description.dtd $(MY_TEXTCOPY_TARGETPRE) $@  
+
+$(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX) $(DIRLIST)
+    $(GNUCOPY) -p $(BINOUT)$/$(@:f) $@
+
+$(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX) $(DIRLIST)
+    $(GNUCOPY) -p $(DLLOUT)$/$(@:f) $@
+    
+$(DESTDIRIDL)$/% : $(IDLOUT)$/% $(DIRLIST)
     +-rm -f $@
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-remove_dk : 
-    +-$(RM)  $(DESTDIRBIN)$/udkapi.rdb >& $(NULLDEV)
+$(DESTDIRINC)$/udkversion.mk :
+    +-rm -f $@ >& $(NULLDEV)
+    echo #UDK version number > $@
+    echo #major >> $@
+    echo UDK_MAJOR=$(UDK_MAJOR) >> $@
+    echo #minor >> $@
+    echo UDK_MINOR=$(UDK_MINOR) >> $@
+    echo #micro >> $@
+    echo UDK_MICRO=$(UDK_MICRO) >> $@
+    
+$(DESTDIRINC)$/% : $(INCOUT)$/% $(DIRLIST)
+    +-rm -f $@
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
-.IF "$(BUILD_SOSL)"!=""  
+$(DESTDIRLIB)$/%.lib : $(LIBOUT)$/%.lib $(DIRLIST)
+    $(GNUCOPY) -p $(LIBOUT)$/$(@:f) $@
+    
+$(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml $(DIRLIST)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+    
 $(CONVERTTAGFLAG) : $(MISC)$/deltree.txt $(DOCUHTMLFILES)
-    +$(PERL) $(CONVERTTAGSCRIPT) $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES)
+    +$(PERL) $(CONVERTTAGSCRIPT) $(CONVMODE) $(TITLE) $(OFFICEPRODUCTNAME) $(DOCUHTMLFILES) $(DESTDIREXAMPLES)$/DevelopersGuide$/examples.html
     +@echo "tags converted" > $@
-.ELSE
-$(CONVERTTAGFLAG) : $(MISC)$/deltree.txt
-    @echo no conversion necessary
-    +@echo "no conversion necessary" > $@
-.ENDIF

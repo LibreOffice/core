@@ -1,13 +1,10 @@
-od	odk	::	unoil offapi product apiwww netbeans_integration NULL
+od	odk	::	cppuhelper cpputools io jurt jut javaunohelper sandbox remotebridges stoc udkapi ridljar offapi unoil autodoc netbeans_integration NULL
 od	odk					usr1	-	all	od_mkout NULL
 od	odk\source\bean\com\sun\star\beans	nmake	-	all	od_beanjava NULL
-od	odk\source\bean\native\win32		nmake	-	n	od_beanwin32 NULL
+od	odk\source\bean\native\win32	nmake	-	n	od_beanwin32 NULL
 od	odk\source\bean\native\unix		nmake	-	u	od_beanunix NULL
 od	odk\source\OOSupport	nmake	-	all	od_oosupportjava NULL
 od	odk\pack\unzip_udk			nmake	-	all	od_unzip_udk NULL
 od	odk\pack\copying			nmake	-	all	od_copying od_unzip_udk od_beanjava od_beanwin32.n od_beanunix.u od_oosupportjava NULL
 od	odk\pack\gendocu			nmake	-	all	od_gendocu od_copying NULL
-od	odk\pack\checkinc			nmake	-	all	od_checkinc od_unzip_udk NULL
-od	odk\pack\checkinc2			nmake	-	all	od_checkinc2 od_unzip_udk NULL
-od	odk\pack\checkbin			nmake	-	all	od_checkbin od_unzip_udk NULL
-od	odk\util				nmake	-	all	od_util od_copying od_gendocu od_checkinc od_checkinc2 od_checkbin NULL
+od	odk\util				nmake	-	all	od_util od_copying od_gendocu NULL

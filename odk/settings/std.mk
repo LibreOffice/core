@@ -1,0 +1,16 @@
+OUT=$(PRJ)/$(OS)example.out
+OUT_BIN=$(OUT)/bin
+OUT_INC=$(OUT)/inc
+OUT_SLO=$(OUT)/slo
+OUT_LIB=$(OUT)/lib
+OUT_SLB=$(OUT)/slb
+OUT_MISC=$(OUT)/misc
+OUT_OBJ=$(OUT)/obj
+OUT_CLASS=$(OUT)/class
+IDL_DIR=$(PRJ)/idl
+BIN_DIR=$(PRJ)/$(PLATFORM)/bin
+CLASSES_DIR=$(PRJ)/classes
+OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
+DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)pkgchk"
+COMPONENT_PACKAGE_DIR=$(OO_SDK_HOME)$(PS)$(OS)example.out$(PS)bin
+SDK_JAVA=$(OO_SDK_JAVA_HOME)/bin/java

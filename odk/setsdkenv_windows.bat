@@ -18,7 +18,7 @@ REM Directory of the make command.
 REM Example: set OO_SDK_MAKE=D:\NextGenerationMake\make
 set OO_SDK_MAKE=
 
-REM Directory of the C++ tools.
+REM Directory of the C++ compiler.
 REM Example:set OO_SDK_CPP_HOME=C:\Programme\Microsoft Visual Studio\VC98\bin
 set OO_SDK_CPP_HOME=
 
@@ -26,8 +26,8 @@ REM STLPORT installation directory.
 REM Example: set OO_STLPORT_HOME=D:\stlport-4.5.3
 set OO_STLPORT_HOME=
 
-REM Java installation directory.
-REM Example: set OO_SDK_JAVA_HOME=C:\Programme\Java\J2SDK_Forte\jdk1.4.0
+REM Java SDK installation directory.
+REM Example: set OO_SDK_JAVA_HOME=C:\jdk1.4.0
 set OO_SDK_JAVA_HOME=
 
 REM Environment variable to enable auto deployment of example components
