@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:16:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 07:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String RID_SVXSTR_SOLID
     Text [ italian ] = "Piena" ;
     Text [ portuguese_brazilian ] = "Sólido" ;
     Text [ portuguese ] = "Contínuo" ;
-    Text [ finnish ] = "Tasainen" ;
+    Text [ finnish ] = "Jatkuva" ;
     Text [ danish ] = "Gennemgående" ;
     Text [ french ] = "Continu" ;
     Text [ swedish ] = "Genomgående" ;
@@ -100,7 +100,7 @@ String RID_SVXSTR_GRADIENT
     Text [ italian ] = "Sfumatura" ;
     Text [ portuguese_brazilian ] = "Dégradé" ;
     Text [ portuguese ] = "Gradação" ;
-    Text [ finnish ] = "Liukuväri" ;
+    Text [ finnish ] = "Sävytys" ;
     Text [ danish ] = "Farvegraduering" ;
     Text [ french ] = "Dégradé" ;
     Text [ swedish ] = "Färggradient" ;
@@ -134,7 +134,7 @@ String RID_SVXSTR_DESC_GRADIENT
     Text [ spanish ] = "Inserte aquí el nombre para el gradiente:" ;
     Text [ danish ] = "Indtast venligst et navn til farvegradueringen:" ;
     Text [ swedish ] = "Mata in ett namn för färggradienten här:" ;
-    Text [ finnish ] = "Please insert a Name for the Gradient:" ;
+    Text [ finnish ] = "Kirjoita sävytyksen nimi:" ;
     Text [ english_us ] = "Please enter a name for the gradient:" ;
     Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄ²ÊÉ«Í¼°¸ÊäÈëÒ»¸öÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîé ãğàäèåíòíîé:";
@@ -158,7 +158,7 @@ String RID_SVXSTR_DEL_GRADIENT
     Text [ italian ] = "Elimina sfumatura" ;
     Text [ portuguese_brazilian ] = "Apagar Dégradé" ;
     Text [ portuguese ] = "Eliminar gradação" ;
-    Text [ finnish ] = "Poista liukuväri" ;
+    Text [ finnish ] = "Poista sävytys" ;
     Text [ danish ] = "Slet farvegradueringen" ;
     Text [ french ] = "Supprimer le dégradé" ;
     Text [ swedish ] = "Radera färggradient" ;
@@ -187,7 +187,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text [ italian ] = "Eliminare la sfumatura?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o Dégradé?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a gradação?" ;
-    Text [ finnish ] = "Poistetaanko liukuväri?" ;
+    Text [ finnish ] = "Haluatko poistaa sävytyksen?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette farvegradueringen?" ;
     Text [ french ] = "Voulez-vous supprimer le dégradé ?" ;
     Text [ swedish ] = "Skall färggradienten verkligen raderas?" ;
@@ -216,7 +216,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text [ italian ] = "La sfumatura è stata modificata ma non cambiata \nPotete cambiare la sfumatura selezionata \no aggiungerne una nuova." ;
     Text [ portuguese_brazilian ] = "O Dégradé foi modificado sem Gravar? \nMude o Dégradé selecionado ou acrescente um novo Dégradé." ;
     Text [ portuguese ] = "A gradação da cor foi modificada e não guardada.\nPoderá modificar a gradação seleccionada\nou adicionar uma nova." ;
-    Text [ finnish ] = "Muutettua liukuväriä ei ole tallennettu. \nVoit muokata valittua liukuväriä tai lisätä uuden." ;
+    Text [ finnish ] = "Sävytystä ei tallennettu muokkauksen jälkeen. \nMuokkaa valittua sävytystä tai lisää uusi sävytys." ;
     Text [ danish ] = "Farvegradueringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farvegraduering \neller tilføje en ny." ;
     Text [ french ] = "Le dégradé a été modifié sans avoir été sauvegardé.\nVous pouvez modifier le dégradé sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Färggradienten ändrades utan att sparas.\nDu kan ändra den markerade färggradienten\neller lägga till en ny." ;
@@ -254,7 +254,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text [ spanish ] = "Inserte aquí el nombre para la bitmap:" ;
     Text [ danish ] = "Indtast venligst et navn til denne bitmap:" ;
     Text [ swedish ] = "Ange ett namn för bitmappen:" ;
-    Text [ finnish ] = "Please insert a Name for the Bitmap:" ;
+    Text [ finnish ] = "Kirjoita bittikartan nimi:" ;
     Text [ english_us ] = "Please enter a name for the bitmap:" ;
     Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÎ»Í¼ÊäÈëÒ»¸öÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîãî bitmap:";
@@ -307,7 +307,7 @@ String RID_SVXSTR_DEL_BITMAP
     Text [ italian ] = "Cancella Bitmap" ;
     Text [ portuguese_brazilian ] = "Apagar Bitmap:" ;
     Text [ portuguese ] = "Eliminar Bitmap:" ;
-    Text [ finnish ] = "Poista bittikartta:" ;
+    Text [ finnish ] = "Poista bittikartta" ;
     Text [ danish ] = "Slet bitmap" ;
     Text [ french ] = "Supprimer le bitmap" ;
     Text [ swedish ] = "Radera bitmap" ;
@@ -336,7 +336,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text [ italian ] = "Eliminare la bitmap?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o Bitmap?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o bitmap?" ;
-    Text [ finnish ] = "Poistetaanko bittikartta?" ;
+    Text [ finnish ] = "Haluatko varmasti poistaa bittikartan?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette denne bitmap?" ;
     Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
     Text [ swedish ] = "Skall bitmappen verkligen raderas?" ;
@@ -365,7 +365,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text [ italian ] = "La bitmap è stata modificata ma non salvata \nPotete cambiare la bitmap selezionata \no naggiungerne una nuova." ;
     Text [ portuguese_brazilian ] = "O Bitmap foi modificado sem Gravar? \nMude o Bitmap selecionado ou acrescente um novo Bitmap." ;
     Text [ portuguese ] = "O bitmap foi alterado e não guardado? \nPoderá modificar o bitmap seleccionado \nou adicionar um novo." ;
-    Text [ finnish ] = "Muutettua bittikarttaa ei ole tallennettu? \nVoit muokata valittua bittikarttaa tai lisätä uuden." ;
+    Text [ finnish ] = "Bittikarttaa on muokattu ilman tallennusta. \nMuokkaa valittua bittikarttaa tai lisää uusi bittikartta." ;
     Text [ danish ] = "Denne bitmap er blevet ændret, men ikke gemt. \nDu kan ændre den markerede bitmap\n eller tilføje en ny." ;
     Text [ french ] = "Le bitmap a été modifié sans avoir été sauvegardé.\nVous pouvez modifier le bitmap sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Bitmappen ändrades utan att sparas. \nDu kan ändra den markerade bitmappen\neller lägga till en ny." ;
@@ -392,7 +392,7 @@ String RID_SVXSTR_LINESTYLE
     Text [ italian ] = "Stile linea" ;
     Text [ portuguese_brazilian ] = "Estilo da Linha" ;
     Text [ portuguese ] = "Estilo de linha" ;
-    Text [ finnish ] = "Viivan tyyli" ;
+    Text [ finnish ] = "Viivatyyli" ;
     Text [ danish ] = "Stregtype" ;
     Text [ french ] = "Style de ligne" ;
     Text [ swedish ] = "Linjestil" ;
@@ -426,7 +426,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text [ spanish ] = "Inserte aquí el nombre para el estilo de línea:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye stregtype:" ;
     Text [ swedish ] = "Mata in namnet för linjestilen här:" ;
-    Text [ finnish ] = "Please insert a Name for the Linestyle:" ;
+    Text [ finnish ] = "Kirjoita viivatyylin nimi:" ;
     Text [ english_us ] = "Please enter a name for the line style:" ;
     Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÏßÌõÊ½ÑùÊäÈëÒ»¸öÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîãî ñòèëÿ ëèíèè:";
@@ -450,7 +450,7 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text [ italian ] = "Cancella stile linea" ;
     Text [ portuguese_brazilian ] = "Apagar Estilo de linha:" ;
     Text [ portuguese ] = "Eliminar estilo de linha" ;
-    Text [ finnish ] = "Poista viivatyyli" ;
+    Text [ finnish ] = "Poista viivan tyyli" ;
     Text [ danish ] = "Slet stregtype" ;
     Text [ french ] = "Supprimer le style de ligne" ;
     Text [ swedish ] = "Radera linjestil" ;
@@ -479,7 +479,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text [ italian ] = "Eliminare lo stile della linea?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o Estilo de linha?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
-    Text [ finnish ] = "Poistetaanko viivatyyli?" ;
+    Text [ finnish ] = "Haluatko poistaa viivatyylin?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette stregtypen?" ;
     Text [ french ] = "Voulez-vous supprimer le style de ligne ?" ;
     Text [ swedish ] = "Skall linjestilen verkligen raderas?" ;
@@ -508,7 +508,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text [ italian ] = "Lo stile è stato modificato ma non salvato.\nPotetecambiare lo stile selezionato\\o aggiungerne uno nuovo." ;
     Text [ portuguese_brazilian ] = "O Estilo de linha foi modificado sem Gravar? \nMude o Estilo de linha selecionado ou acrescente um novo Estilo de linha." ;
     Text [ portuguese ] = "O fim de linha foi modificado e não guardado.\nPoderá modificar o fim de linha seleccionado\nou adicionar um novo." ;
-    Text [ finnish ] = "Muutettua viivatyyliä ei ole tallennettu. \nVoit muokata valittua viivatyyliä tai lisätä uuden." ;
+    Text [ finnish ] = "Viivatyyliä on muokattu ilman tallennusta. \nMuokkaa valittua viivatyyliä tai lisää uusi viivatyyli." ;
     Text [ danish ] = "Stregtypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede stregtype \neller tilføje en ny." ;
     Text [ french ] = "Le style de ligne a été modifié sans avoir été sauvegardé. \nVous pouvez modifiez le style de ligne sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Linjestilen ändrades utan att sparas.\nDu kan ändra den markerade linjestilen eller\nlägga till en ny." ;
@@ -623,7 +623,7 @@ String RID_SVXSTR_DESC_HATCH
     Text [ spanish ] = "Inserte aquí el nombre para la trama:" ;
     Text [ danish ] = "Indtast venligst et navn til skraveringen:" ;
     Text [ swedish ] = "Mata in namnet för skrafferingen här:" ;
-    Text [ finnish ] = "Please insert a Name for the hatch:" ;
+    Text [ finnish ] = "Kirjoita viivoituksen nimi:" ;
     Text [ english_us ] = "Please enter a name for the hatching:" ;
     Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÒõÓ°ÊäÈëÒ»¸öÃû³Æ:";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîé øòğèõîâêè:";
@@ -676,7 +676,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text [ italian ] = "Eliminare il tratteggio?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o traço de sombreado?" ;
     Text [ portuguese ] = "Eliminar o tracejado?" ;
-    Text [ finnish ] = "Poistetaanko viivoitus?" ;
+    Text [ finnish ] = "Haluatko poistaa viivoituksen?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette skraveringen?" ;
     Text [ french ] = "Voulez-vous supprimer les hachures ?" ;
     Text [ swedish ] = "Vill Du verkligen radera skraffering?" ;
@@ -705,7 +705,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text [ italian ] = "Il tratteggio è stato modificato ma non salvato \nPotete cambiare il tratteggio selezionato \noppure aggiungerne uno nuovo." ;
     Text [ portuguese_brazilian ] = "The traço de sombreado foi modificado sem Gravar? \nMude o traço de sombreado selecionado ou acrescente um novo traço de sombreado." ;
     Text [ portuguese ] = "Tracejado foi alterado e não guardado.\nPoderá alterar o tracejado seleccionado\nou adicionar um novo." ;
-    Text [ finnish ] = "Muutettua viivoitusta ei ole tallennettu. \nVoit muokata valittua viivoitusta tai lisätä uuden." ;
+    Text [ finnish ] = "Viivoitustyyppiä on muokattu ilman tallennusta. \nMuokkaa valittua viivoitustyyppiä tai lisää uusi viivoitustyyppi." ;
     Text [ danish ] = "Skraveringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede skravering\n eller tilføje en ny." ;
     Text [ french ] = "Les hachures ont été modifiées sans avoir été sauvegardées. \nVous pouvez modifier les hachures sélectionnées ou en ajouter de nouvelles." ;
     Text [ swedish ] = "Skrafferingen ändrades utan att sparas.\nDu kan ändra den markerade skrafferingen eller\nlägga till en ny." ;
@@ -850,7 +850,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text [ italian ] = "Eliminare veramente il colore?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar a Cor?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a cor?" ;
-    Text [ finnish ] = "Poistetaanko väri?" ;
+    Text [ finnish ] = "Haluatko poistaa värin?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette farven?" ;
     Text [ french ] = "Voulez-vous supprimer la couleur ?" ;
     Text [ swedish ] = "Vill Du verkligen radera färgen?" ;
@@ -879,7 +879,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text [ italian ] = "Il colore è stato modificato ma non salvato.\nPotete cambiare il colore selezionato \no aggiungerne\n uno nuovo." ;
     Text [ portuguese_brazilian ] = "A Cor foi modificada sem Gravar? \nMude a Cor selecionada ou acrescente uma nova Cor." ;
     Text [ portuguese ] = "A cor foi modificada e não guardada? \nPoderá modificar a cor seleccionada\nou adicionar uma nova." ;
-    Text [ finnish ] = "Muutettua väriä ei ole tallennettu. \nVoit muokata valittua väriä tai lisätä uuden." ;
+    Text [ finnish ] = "Väriä on muokattu tallentamatta.\nMuokkaa valittua väriä tai lisää uusi väri." ;
     Text [ danish ] = "Farven er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farve\n eller tilføje en ny." ;
     Text [ french ] = "La couleur a été modifiée sans avoir été sauvegardée.\nVous pouvez modifier la couleur sélectionnée ou en ajouter une nouvelle." ;
     Text [ swedish ] = "Färgen ändrades utan att sparas.\nDu kan ändra den markerade färgen\neller lägga till en ny." ;
@@ -938,7 +938,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text [ spanish ] = "¡No se pudo guardar el archivo!" ;
     Text [ danish ] = "Det var ikke muligt at gemme filen!" ;
     Text [ swedish ] = "Det gick inte att spara filen!" ;
-    Text [ finnish ] = "The file couldn't be saved!" ;
+    Text [ finnish ] = "Tiedostoa ei voitu tallentaa." ;
     Text [ english_us ] = "The file could not be saved!" ;
     Text[ chinese_simplified ] = "ÎŞ·¨±£´æÕâ¸öÎÄ¼ş£¡";
     Text[ russian ] = "Ñîõğàíèòü ôàéë íå óäàåòñÿ!";
@@ -960,7 +960,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text [ italian ] = "Impossibile caricare il file!" ;
     Text [ portuguese_brazilian ] = "O arquivo não pode ser carregado!" ;
     Text [ portuguese ] = "Foi impossível carregar o ficheiro!" ;
-    Text [ finnish ] = "Tiedostoa ei voi lukea!" ;
+    Text [ finnish ] = "Tiedostoa ei löytynyt." ;
     Text [ danish ] = "Det var ikke muligt at indlæse filen!" ;
     Text [ french ] = "Impossible de charger le fichier !" ;
     Text [ swedish ] = "Det gick inte att ladda filen!" ;
@@ -989,7 +989,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text [ italian ] = "La tabella è stata modificata senza salvare. \nSalvare la tabella?" ;
     Text [ portuguese_brazilian ] = "A tabela foi modificada sem gravar. Gostaria de gravar a tabela?" ;
     Text [ portuguese ] = "A tabela foi modificada e não guardada.\nGuardar agora?" ;
-    Text [ finnish ] = "Muutettua taulukkoa ei ole tallennettu. Haluatko tallentaa sen?" ;
+    Text [ finnish ] = "Luetteloa on muokattu ilman tallennusta. Haluatko tallentaa luettelon nyt?" ;
     Text [ danish ] = "Tabellen er blevet ændret, men ikke gemt.\nVil du gemme tabellen nu?" ;
     Text [ french ] = "La table a été modifiée sans avoir été enregistrée. Voulez-vous enregistrer la table ?" ;
     Text [ swedish ] = "Tabellen ändrades utan att sparas. \nVill Du spara tabellen?" ;
@@ -1016,7 +1016,7 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text [ italian ] = "Il nome scelto è già esistente. \nScegliete un altro nome." ;
     Text [ portuguese_brazilian ] = "O nome escolhido já existe. \nEscolha outro nome." ;
     Text [ portuguese ] = "O nome indicado já existe. \nIndique um outro." ;
-    Text [ finnish ] = "Nimi on jo käytössä. \nKirjoita toinen nimi." ;
+    Text [ finnish ] = "Määritetty nimi on jo käytössä. \nValitse jokin muu nimi." ;
     Text [ danish ] = "Det navn, du har indtastet, eksisterer allerede.\nIndtast venligst et andet navn." ;
     Text [ french ] = "Le nom que vous avez saisi existe déjà. \nVeuillez en saisir un autre." ;
     Text [ swedish ] = "Namnet Du valde finns redan. \nVälj ett annat namn." ;
@@ -1043,7 +1043,7 @@ String RID_SVXSTR_LINEEND
     Text [ italian ] = "Estremità linea" ;
     Text [ portuguese_brazilian ] = "Fim de linha" ;
     Text [ portuguese ] = "Fim de linha" ;
-    Text [ finnish ] = "Viivanpää" ;
+    Text [ finnish ] = "Nuolenkärjet" ;
     Text [ danish ] = "Pile" ;
     Text [ french ] = "Extrémité de ligne" ;
     Text [ swedish ] = "Linjeslut" ;
@@ -1072,7 +1072,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text [ italian ] = "Digitare un nome per la nuova estremità di linea:" ;
     Text [ portuguese_brazilian ] = "Insira um nome para o novo fim de linha:" ;
     Text [ portuguese ] = "Por favor introduza um nome para o novo fim de linha:" ;
-    Text [ finnish ] = "Kirjoita uuden viivanpään nimi:" ;
+    Text [ finnish ] = "Kirjoita uuden nuolenkärjen nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye piltype:" ;
     Text [ french ] = "Saisissez un nom pour la nouvelle extrémité de ligne :" ;
     Text [ swedish ] = "Ange namn för nya linjeslutet:" ;
@@ -1101,7 +1101,7 @@ String RID_SVXSTR_DEL_LINEEND
     Text [ italian ] = "Cancella estremità linea" ;
     Text [ portuguese_brazilian ] = "Delete line end" ;
     Text [ portuguese ] = "Eliminar fim de linha" ;
-    Text [ finnish ] = "Delete line end" ;
+    Text [ finnish ] = "Poista viivanpäät" ;
     Text [ danish ] = "Slet pil" ;
     Text [ french ] = "Supprimer les extrémités" ;
     Text [ swedish ] = "Radera linjeslut" ;
@@ -1130,7 +1130,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text [ italian ] = "Cancellare l'estremità di linea?" ;
     Text [ portuguese_brazilian ] = "Do you want to delete the line end?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o fim de linha?" ;
-    Text [ finnish ] = "Do you want to delete the line end?" ;
+    Text [ finnish ] = "Haluatko poistaa nuolenkärjen?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette piltypen?" ;
     Text [ french ] = "Voulez-vous supprimer l'extrémité de la ligne ?" ;
     Text [ swedish ] = "Vill Du verkligen radera linjeslutet?" ;
@@ -1175,6 +1175,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ turkish ] = "Çizgi ucu değiştirildi ancak kaydedilmedi.\nÇizgi ucunu şimdi kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El final de línea ha sido modificado pero no guardado. \n¿Desea guardar ahora el final de línea?";
+    Text[ finnish ] = "Nuolenkärkeä on muokattu ilman tallennusta.\nHaluatko tallentaa nuolenkärjen nyt?";
 };
 String RID_SVXSTR_CLOSE
 {
@@ -1218,7 +1219,7 @@ String RID_SVXSTR_BLACK
     Text [ spanish ] = "Negro" ;
     Text [ danish ] = "Sort" ;
     Text [ swedish ] = "Svart" ;
-    Text [ finnish ] = "Black" ;
+    Text [ finnish ] = "Musta" ;
     Text [ english_us ] = "Black" ;
     Text[ chinese_simplified ] = "ºÚÉ«";
     Text[ russian ] = "×åğíûé";
@@ -1245,11 +1246,11 @@ String RID_SVXSTR_BLUE
     Text [ spanish ] = "Azul" ;
     Text [ danish ] = "Blå" ;
     Text [ swedish ] = "Blått" ;
-    Text [ finnish ] = "Blue" ;
+    Text [ finnish ] = "Sininen" ;
     Text [ english_us ] = "Blue" ;
     Text[ chinese_simplified ] = "À¶É«";
     Text[ russian ] = "Ñèíèé";
-    Text[ polish ] = "Nieb.";
+    Text[ polish ] = "Niebieski";
     Text[ japanese ] = "Â";
     Text[ chinese_traditional ] = "ÂÅ¦â";
     Text[ arabic ] = "ÃÒÑŞ";
@@ -1274,7 +1275,7 @@ String RID_SVXSTR_GREEN
     Text [ spanish ] = "Verde" ;
     Text [ danish ] = "Grøn" ;
     Text [ swedish ] = "Grönt" ;
-    Text [ finnish ] = "Green" ;
+    Text [ finnish ] = "Vihreä" ;
     Text [ english_us ] = "Green" ;
     Text[ chinese_simplified ] = "ÂÌÉ«";
     Text[ russian ] = "Çåëåíûé";
@@ -1303,7 +1304,7 @@ String RID_SVXSTR_CYAN
     Text [ spanish ] = "Turquesa" ;
     Text [ danish ] = "Turkis" ;
     Text [ swedish ] = "Turkost" ;
-    Text [ finnish ] = "Cyan" ;
+    Text [ finnish ] = "Turkoosi" ;
     Text [ english_us ] = "Turquoise" ;
     Text[ chinese_simplified ] = "À¶ÂÌÉ«";
     Text[ russian ] = "Áèğşçîâûé";
@@ -1330,11 +1331,11 @@ String RID_SVXSTR_RED
     Text [ spanish ] = "Rojo" ;
     Text [ danish ] = "Rød" ;
     Text [ swedish ] = "Rött" ;
-    Text [ finnish ] = "Red" ;
+    Text [ finnish ] = "Punainen" ;
     Text [ english_us ] = "Red" ;
     Text[ chinese_simplified ] = "ºìÉ«";
     Text[ russian ] = "Êğàñíûé";
-    Text[ polish ] = "Czerw.";
+    Text[ polish ] = "Czerwony";
     Text[ japanese ] = "Ô";
     Text[ chinese_traditional ] = "¬õ¦â";
     Text[ arabic ] = "ÃÍãÑ";
@@ -1358,7 +1359,7 @@ String RID_SVXSTR_MAGENTA
     Text [ spanish ] = "Magenta" ;
     Text [ danish ] = "Magenta" ;
     Text [ swedish ] = "Magenta" ;
-    Text [ finnish ] = "Magenta" ;
+    Text [ finnish ] = "Purppura" ;
     Text [ english_us ] = "Magenta" ;
     Text[ chinese_simplified ] = "×ÏºìÉ«";
     Text[ russian ] = "Ëèëîâûé";
@@ -1385,7 +1386,7 @@ String RID_SVXSTR_BROWN
     Text [ spanish ] = "Marrón" ;
     Text [ danish ] = "Brun" ;
     Text [ swedish ] = "Brunt" ;
-    Text [ finnish ] = "Brown" ;
+    Text [ finnish ] = "Ruskea" ;
     Text [ english_us ] = "Brown" ;
     Text[ chinese_simplified ] = "×ØÉ«";
     Text[ russian ] = "Êîğè÷íåâûé";
@@ -1412,7 +1413,7 @@ String RID_SVXSTR_GREY
     Text [ spanish ] = "Gris" ;
     Text [ danish ] = "Grå" ;
     Text [ swedish ] = "Grått" ;
-    Text [ finnish ] = "Grey" ;
+    Text [ finnish ] = "Harmaa" ;
     Text [ english_us ] = "Gray" ;
     Text[ chinese_simplified ] = "»ÒÉ«";
     Text[ russian ] = "Ñåğûé";
@@ -1439,7 +1440,7 @@ String RID_SVXSTR_LIGHTGREY
     Text [ spanish ] = "Gris claro" ;
     Text [ danish ] = "Lysegrå" ;
     Text [ swedish ] = "Ljusgrått" ;
-    Text [ finnish ] = "Lightgrey" ;
+    Text [ finnish ] = "Vaaleanharmaa" ;
     Text [ english_us ] = "Light gray" ;
     Text[ chinese_simplified ] = "Ç³»ÒÉ«";
     Text[ russian ] = "Ñâåòëî-ñåğûé";
@@ -1466,7 +1467,7 @@ String RID_SVXSTR_LIGHTBLUE
     Text [ spanish ] = "Azul claro" ;
     Text [ danish ] = "Lyseblå" ;
     Text [ swedish ] = "Ljusblått" ;
-    Text [ finnish ] = "Lightblue" ;
+    Text [ finnish ] = "Vaaleansininen" ;
     Text [ english_us ] = "Light blue" ;
     Text[ chinese_simplified ] = "Ç³À¶É«";
     Text[ russian ] = "Ñâåòëî-ñèíèé";
@@ -1495,7 +1496,7 @@ String RID_SVXSTR_LIGHTGREEN
     Text [ spanish ] = "Verde claro" ;
     Text [ danish ] = "Lysegrøn" ;
     Text [ swedish ] = "Ljusgrönt" ;
-    Text [ finnish ] = "Lightgreen" ;
+    Text [ finnish ] = "Vaaleanvihreä" ;
     Text [ english_us ] = "Light green" ;
     Text[ chinese_simplified ] = "Ç³ÂÌÉ«";
     Text[ russian ] = "Ñâåòëî-çåëåíûé";
@@ -1524,7 +1525,7 @@ String RID_SVXSTR_LIGHTCYAN
     Text [ spanish ] = "Turquesa claro" ;
     Text [ danish ] = "Lys turkis" ;
     Text [ swedish ] = "Ljusturkost" ;
-    Text [ finnish ] = "Lightcyan" ;
+    Text [ finnish ] = "Vaalea syaani" ;
     Text [ english_us ] = "Light cyan" ;
     Text[ chinese_simplified ] = "Ç³À¶ÂÌÉ«";
     Text[ russian ] = "Ñâåòëî-áèğşçîâûé";
@@ -1551,7 +1552,7 @@ String RID_SVXSTR_LIGHTRED
     Text [ spanish ] = "Rojo claro" ;
     Text [ danish ] = "Lys rød" ;
     Text [ swedish ] = "Ljusrött" ;
-    Text [ finnish ] = "Lightred" ;
+    Text [ finnish ] = "Vaalea punainen" ;
     Text [ english_us ] = "Light red" ;
     Text[ chinese_simplified ] = "Ç³ºìÉ«";
     Text[ russian ] = "Ñâåòëî-êğàñíûé";
@@ -1579,7 +1580,7 @@ String RID_SVXSTR_LIGHTMAGENTA
     Text [ spanish ] = "Magenta claro" ;
     Text [ danish ] = "Lys magenta" ;
     Text [ swedish ] = "Ljus magenta" ;
-    Text [ finnish ] = "Lightmagenta" ;
+    Text [ finnish ] = "Vaalea purppura" ;
     Text [ english_us ] = "Light magenta" ;
     Text[ chinese_simplified ] = "Ç³×ÏºìÉ«";
     Text[ russian ] = "Ñâåòëî-ëèëîâûé";
@@ -1606,7 +1607,7 @@ String RID_SVXSTR_YELLOW
     Text [ spanish ] = "Amarillo" ;
     Text [ danish ] = "Gul" ;
     Text [ swedish ] = "Gult" ;
-    Text [ finnish ] = "Yellow" ;
+    Text [ finnish ] = "Keltainen" ;
     Text [ english_us ] = "Yellow" ;
     Text[ chinese_simplified ] = "»ÆÉ«";
     Text[ russian ] = "Æåëòûé";
@@ -1635,7 +1636,7 @@ String RID_SVXSTR_WHITE
     Text [ spanish ] = "Blanco" ;
     Text [ danish ] = "Hvid" ;
     Text [ swedish ] = "Vitt" ;
-    Text [ finnish ] = "White" ;
+    Text [ finnish ] = "Valkoinen" ;
     Text [ english_us ] = "White" ;
     Text[ chinese_simplified ] = "°×É«";
     Text[ russian ] = "Áåëûé";
@@ -1662,11 +1663,11 @@ String RID_SVXSTR_BLUEGREY
     Text [ spanish ] = "Gris azulado" ;
     Text [ danish ] = "Blågrå" ;
     Text [ swedish ] = "Blågrått" ;
-    Text [ finnish ] = "Bluegrey" ;
+    Text [ finnish ] = "Siniharmaa" ;
     Text [ english_us ] = "Blue gray" ;
     Text[ chinese_simplified ] = "À¶»ÒÉ«";
     Text[ russian ] = "Ñèíå-ñåğûé";
-    Text[ polish ] = "Niebieskoszary";
+    Text[ polish ] = "B³êkitnoszary";
     Text[ japanese ] = "ÂŠDF";
     Text[ chinese_traditional ] = "ÂÅ¦Ç¦â";
     Text[ arabic ] = "ÑãÇÏí ãÒÑŞ";
@@ -1689,7 +1690,7 @@ String RID_SVXSTR_ORANGE
     Text [ spanish ] = "Naranja" ;
     Text [ danish ] = "Orange" ;
     Text [ swedish ] = "Orange" ;
-    Text [ finnish ] = "Orange" ;
+    Text [ finnish ] = "Oranssi" ;
     Text [ english_us ] = "Orange" ;
     Text[ chinese_simplified ] = "³ÈÉ«";
     Text[ russian ] = "Îğàíæåâûé";
@@ -1716,7 +1717,7 @@ String RID_SVXSTR_ARROW
     Text [ spanish ] = "Flecha" ;
     Text [ danish ] = "Pil" ;
     Text [ swedish ] = "Pil" ;
-    Text [ finnish ] = "Arrow" ;
+    Text [ finnish ] = "Nuoli" ;
     Text [ english_us ] = "Arrow" ;
     Text[ chinese_simplified ] = "¼ıÍ·";
     Text[ russian ] = "Ñòğåëêà";
@@ -1743,7 +1744,7 @@ String RID_SVXSTR_SQUARE
     Text [ spanish ] = "Cuadrado" ;
     Text [ danish ] = "Kvadrat" ;
     Text [ swedish ] = "Kvadrat" ;
-    Text [ finnish ] = "Square" ;
+    Text [ finnish ] = "Neliö" ;
     Text [ english_us ] = "Square" ;
     Text[ chinese_simplified ] = "Õı·½ĞÎ";
     Text[ russian ] = "Êâàäğàò";
@@ -1770,7 +1771,7 @@ String RID_SVXSTR_CIRCLE
     Text [ spanish ] = "Círculo" ;
     Text [ danish ] = "Cirkel" ;
     Text [ swedish ] = "Cirkel" ;
-    Text [ finnish ] = "Circle" ;
+    Text [ finnish ] = "Ympyrä" ;
     Text [ english_us ] = "Circle" ;
     Text[ chinese_simplified ] = "Ô²";
     Text[ russian ] = "Êğóã";
@@ -1808,6 +1809,7 @@ String RID_SVXSTR_NONE
     Text[ turkish ] = "- yok -";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "- sin -";
+    Text[ finnish ] = "- Ei mitään -";
 };
 String RID_SVXSTR_TRANSPARENCE
 {
@@ -1833,6 +1835,7 @@ String RID_SVXSTR_TRANSPARENCE
     Text[ turkish ] = "Saydamlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "Läpinäkyvyys";
 };
 String RID_SVXSTR_CENTERED
 {
@@ -1858,6 +1861,7 @@ String RID_SVXSTR_CENTERED
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Centrado";
+    Text[ finnish ] = "Keskitetty";
 };
 String RID_SVXSTR_NOTCENTERED
 {
@@ -1883,6 +1887,7 @@ String RID_SVXSTR_NOTCENTERED
     Text[ turkish ] = "Ortalanmamış";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin centrar";
+    Text[ finnish ] = "Ei keskitetty";
 };
 String RID_SVXSTR_GRAFMODE_STANDARD
 {
@@ -1899,7 +1904,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
     Text[ polish ] = "Domyœlnie";
-    Text[ portuguese_brazilian ] = "Standard";
+    Text[ portuguese_brazilian ] = "Padrão";
     Text[ japanese ] = "•W€";
     Text[ korean ] = "±âº»";
     Text[ chinese_simplified ] = "±ê×¼";
@@ -1907,6 +1912,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ arabic ] = "ŞíÇÓí";
     Text[ turkish ] = "Standart";
     Text[ catalan ] = "Predeterminado";
+    Text[ finnish ] = "Oletusarvo";
 };
 String RID_SVXSTR_GRAFMODE_GREYS
 {
@@ -1932,6 +1938,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ turkish ] = "Gri tonlama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala de grises";
+    Text[ finnish ] = "Harmaasävy";
 };
 String RID_SVXSTR_GRAFMODE_MONO
 {
@@ -1956,6 +1963,7 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ arabic ] = "ÃÓæÏ/ÃÈíÖ";
     Text[ turkish ] = "Siyah/Beyaz";
     Text[ catalan ] = "Blanco/Negro";
+    Text[ finnish ] = "Mustavalkoinen";
 };
 String RID_SVXSTR_GRAFMODE_WATERMARK
 {
@@ -1980,6 +1988,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
     Text[ turkish ] = "Filigran";
     Text[ catalan ] = "Marca de agua";
+    Text[ finnish ] = "Vesileima";
 };
 String STR_INSERT_VIDEO_EXTFILTER_IVF
 {
@@ -2004,6 +2013,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ arabic ] = "Intel Indeo Video (*.ivf)";
     Text[ turkish ] = "Intel Indeo Video (*.ivf)";
     Text[ catalan ] = "Intel Indeo Video (*.ivf)";
+    Text[ finnish ] = "Intel Indeo Video (*.ivf)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_AVI
@@ -2029,6 +2039,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ arabic ] = "İíÏíæ áÜ (*.avi) Windows";
     Text[ turkish ] = "Video for Windows (*.avi)";
     Text[ catalan ] = "Vídeo para Windows (*.avi)";
+    Text[ finnish ] = "Video for Windows (*.avi)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MOV
@@ -2054,6 +2065,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ arabic ] = "QuickTime Movie (*.mov)";
     Text[ turkish ] = "QuickTime Movie (*.mov)";
     Text[ catalan ] = "QuickTime Movie (*.mov)";
+    Text[ finnish ] = "QuickTime Movie (*.mov)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MPEG
@@ -2079,6 +2091,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ arabic ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ turkish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ catalan ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ finnish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
 };
 
 String STR_EXTFILTER_ALL
@@ -2104,6 +2117,7 @@ String STR_EXTFILTER_ALL
     Text[ arabic ] = "<Çáßá>";
     Text[ turkish ] = "<Tümü>";
     Text[ catalan ] = "<Todos>";
+    Text[ finnish ] = "<Kaikki>";
 };
 
 String STR_INSERT_SOUND_TITLE
@@ -2130,6 +2144,7 @@ String STR_INSERT_SOUND_TITLE
     Text[ turkish ] = "Ses ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar sonido";
+    Text[ finnish ] = "Lisää ääni";
 };
 
 String STR_INSERT_VIDEO_TITLE
@@ -2155,6 +2170,7 @@ String STR_INSERT_VIDEO_TITLE
     Text[ arabic ] = "ÅÏÑÇÌ İíÏíæ";
     Text[ turkish ] = "Film ekle";
     Text[ catalan ] = "Insertar vídeo";
+    Text[ finnish ] = "Lisää videokuva";
 };
 
 
@@ -2183,6 +2199,7 @@ String RID_SVXSTR_VIOLET
     Text[ arabic ] = "ÈäİÓÌí";
     Text[ turkish ] = "Menekşe";
     Text[ catalan ] = "Violeta";
+    Text[ finnish ] = "Violetti";
 };
 
 String RID_SVXSTR_BORDEAUX
@@ -2208,6 +2225,7 @@ String RID_SVXSTR_BORDEAUX
     Text[ arabic ] = "ÃÍãÑ ŞÇäò";
     Text[ turkish ] = "Bordo";
     Text[ catalan ] = "Burdeos";
+    Text[ finnish ] = "Bordeaux";
 };
 
 String RID_SVXSTR_PALE_YELLOW
@@ -2233,6 +2251,7 @@ String RID_SVXSTR_PALE_YELLOW
     Text[ arabic ] = "ÃÕİÑ ÔÇÍÈ";
     Text[ turkish ] = "Solgun sarı";
     Text[ catalan ] = "Amarillo pastel";
+    Text[ finnish ] = "Vaaleankeltainen";
 };
 
 String RID_SVXSTR_PALE_GREEN
@@ -2258,6 +2277,7 @@ String RID_SVXSTR_PALE_GREEN
     Text[ arabic ] = "ÃÎÖÑ ÔÇÍÈ";
     Text[ turkish ] = "Solgun yeşil";
     Text[ catalan ] = "Verde pastel";
+    Text[ finnish ] = "Vaaleanvihreä";
 };
 
 String RID_SVXSTR_DKVIOLET
@@ -2283,6 +2303,7 @@ String RID_SVXSTR_DKVIOLET
     Text[ arabic ] = "ÈäİÓÌí ÛÇãŞ";
     Text[ turkish ] = "Koyu lila";
     Text[ catalan ] = "Violeta oscuro";
+    Text[ finnish ] = "Tummanvioletti";
 };
 
 String RID_SVXSTR_SALMON
@@ -2308,6 +2329,7 @@ String RID_SVXSTR_SALMON
     Text[ arabic ] = "ŞÑäİáí";
     Text[ turkish ] = "Somon";
     Text[ catalan ] = "Salmón";
+    Text[ finnish ] = "Lohisuomu";
 };
 
 String RID_SVXSTR_SEABLUE
@@ -2333,6 +2355,7 @@ String RID_SVXSTR_SEABLUE
     Text[ arabic ] = "ÃÒÑŞ äíáí";
     Text[ turkish ] = "Deniz mavisi";
     Text[ catalan ] = "Azul marino";
+    Text[ finnish ] = "Merensininen";
 };
 
 String RID_SVXSTR_COLOR_SUN
@@ -2361,6 +2384,7 @@ String RID_SVXSTR_COLOR_SUN
     Text[ turkish ] = "Sun";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sun";
+    Text[ finnish ] = "Aurinko";
 };
 
 String RID_SVXSTR_TBLAFMT_3D
@@ -2387,6 +2411,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "3D";
+    Text[ finnish ] = "Kolmiulotteisuus";
 };
 String RID_SVXSTR_TBLAFMT_BLACK1
 {
@@ -2412,6 +2437,7 @@ String RID_SVXSTR_TBLAFMT_BLACK1
     Text[ turkish ] = "Siyah 1";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Negro 1";
+    Text[ finnish ] = "Musta 1";
 };
 String RID_SVXSTR_TBLAFMT_BLACK2
 {
@@ -2437,6 +2463,7 @@ String RID_SVXSTR_TBLAFMT_BLACK2
     Text[ turkish ] = "Siyah 2";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Negro 2";
+    Text[ finnish ] = "Musta 2";
 };
 String RID_SVXSTR_TBLAFMT_BLUE
 {
@@ -2461,6 +2488,7 @@ String RID_SVXSTR_TBLAFMT_BLUE
     Text[ arabic ] = "ÃÒÑŞ";
     Text[ turkish ] = "Mavi";
     Text[ catalan ] = "Azul";
+    Text[ finnish ] = "Sininen";
 };
 String RID_SVXSTR_TBLAFMT_BROWN
 {
@@ -2485,6 +2513,7 @@ String RID_SVXSTR_TBLAFMT_BROWN
     Text[ arabic ] = "Èäí";
     Text[ turkish ] = "Kahverengi";
     Text[ catalan ] = "Marrón";
+    Text[ finnish ] = "Ruskea";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY
 {
@@ -2509,6 +2538,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY
     Text[ arabic ] = "ÇáÚãáÉ";
     Text[ turkish ] = "Para birimi";
     Text[ catalan ] = "Moneda";
+    Text[ finnish ] = "Valuutta";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_3D
 {
@@ -2533,6 +2563,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ arabic ] = "ÚãáÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "Para birimi 3B";
     Text[ catalan ] = "Moneda 3D";
+    Text[ finnish ] = "Valuutta kolmiulotteisena";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
 {
@@ -2557,6 +2588,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
     Text[ arabic ] = "ÚãáÉ ÑãÇÏíÉ";
     Text[ turkish ] = "Para birimi gri";
     Text[ catalan ] = "Moneda gris";
+    Text[ finnish ] = "Valuutta harmaana";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
 {
@@ -2581,6 +2613,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
     Text[ arabic ] = "ÚãáÉ ÃÑÌæÇäíÉ İÇÊÍ";
     Text[ turkish ] = "Para birimi eflatun";
     Text[ catalan ] = "Moneda lavanda";
+    Text[ finnish ] = "Valuutta laventerina";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
 {
@@ -2605,6 +2638,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ arabic ] = "ÚãáÉ ÊÑßæÇÒ";
     Text[ turkish ] = "Para birimi turkuaz";
     Text[ catalan ] = "Moneda turquesa";
+    Text[ finnish ] = "Valuutta turkoosina";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
 {
@@ -2629,6 +2663,7 @@ String RID_SVXSTR_TBLAFMT_GRAY
     Text[ arabic ] = "ÑãÇÏí";
     Text[ turkish ] = "Gri";
     Text[ catalan ] = "Gris";
+    Text[ finnish ] = "Harmaa";
 };
 String RID_SVXSTR_TBLAFMT_GREEN
 {
@@ -2653,6 +2688,7 @@ String RID_SVXSTR_TBLAFMT_GREEN
     Text[ arabic ] = "ÃÎÖÑ";
     Text[ turkish ] = "Yeşil";
     Text[ catalan ] = "Verde";
+    Text[ finnish ] = "Vihreä";
 };
 String RID_SVXSTR_TBLAFMT_LAVENDER
 {
@@ -2677,6 +2713,7 @@ String RID_SVXSTR_TBLAFMT_LAVENDER
     Text[ arabic ] = "ÃÑÌæÇäí İÇÊÍ";
     Text[ turkish ] = "Eflatun";
     Text[ catalan ] = "Lavanda";
+    Text[ finnish ] = "Laventeri";
 };
 String RID_SVXSTR_TBLAFMT_RED
 {
@@ -2701,6 +2738,7 @@ String RID_SVXSTR_TBLAFMT_RED
     Text[ arabic ] = "ÃÍãÑ";
     Text[ turkish ] = "Kırmızı";
     Text[ catalan ] = "Rojo";
+    Text[ finnish ] = "Punainen";
 };
 String RID_SVXSTR_TBLAFMT_TURQUOISE
 {
@@ -2725,6 +2763,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ arabic ] = "ÊÑßæÇÒ";
     Text[ turkish ] = "Turkuaz";
     Text[ catalan ] = "Turquesa";
+    Text[ finnish ] = "Turkoosi";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
 {
@@ -2749,6 +2788,7 @@ String RID_SVXSTR_TBLAFMT_YELLOW
     Text[ arabic ] = "ÃÕİÑ";
     Text[ turkish ] = "Sarı";
     Text[ catalan ] = "Amarillo";
+    Text[ finnish ] = "Keltainen";
 };
 
 String RID_SVXSTR_LINEJOINT_MIDDLE
@@ -2774,6 +2814,7 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊæÓØÉ";
     Text[ turkish ] = "Ortalanmış çizgi geçişi";
     Text[ catalan ] = "Juntas de línea, media";
+    Text[ finnish ] = "Keskimääräinen viivaliitos";
 };
 String RID_SVXSTR_LINEJOINT_BEVEL
 {
@@ -2798,6 +2839,7 @@ String RID_SVXSTR_LINEJOINT_BEVEL
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊÕáÉ";
     Text[ turkish ] = "Birleştirilmiş çizgi geçişi";
     Text[ catalan ] = "Junta de líneas unida";
+    Text[ finnish ] = "Viisto viivaliitos";
 };
 String RID_SVXSTR_LINEJOINT_MITER
 {
@@ -2822,6 +2864,7 @@ String RID_SVXSTR_LINEJOINT_MITER
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊŞÇØÚÉ";
     Text[ turkish ] = "Çizgi kesişme noktası";
     Text[ catalan ] = "Junta de líneas cortada";
+    Text[ finnish ] = "Kanttiviivaliitos";
 };
 String RID_SVXSTR_LINEJOINT_ROUND
 {
@@ -2846,6 +2889,7 @@ String RID_SVXSTR_LINEJOINT_ROUND
     Text[ arabic ] = "æÕáÉ ÎØæØ¡ ÏÇÆÑíÉ";
     Text[ turkish ] = "Yuvarlak çizgi geçişi";
     Text[ catalan ] = "Junta de líneas redonda";
+    Text[ finnish ] = "Pyöreä viivaliitos";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3064,6 +3108,7 @@ String RID_SVXSTR_GRDT0
     Text[ arabic ] = "ÊÏÑÌ Çááæä";
     Text[ turkish ] = "Gradyan";
     Text[ catalan ] = "Gradiente";
+    Text[ finnish ] = "Gradientti";
 };
 String RID_SVXSTR_GRDT1
 {
@@ -3088,6 +3133,7 @@ String RID_SVXSTR_GRDT1
     Text[ arabic ] = "ÎØí ÃÒÑŞ/ÃÈíÖ";
     Text[ turkish ] = "Doğrusal mavi/beyaz";
     Text[ catalan ] = "Lineal azul/blanco";
+    Text[ finnish ] = "Lineaarinen sininen/valkoinen";
 };
 String RID_SVXSTR_GRDT2
 {
@@ -3112,6 +3158,7 @@ String RID_SVXSTR_GRDT2
     Text[ arabic ] = "ÎØí ÃÑÌæÇäí/ÃÎÖÑ";
     Text[ turkish ] = "Doğrusal menekşe/yeşil";
     Text[ catalan ] = "Lineal magenta/verde";
+    Text[ finnish ] = "Lineaarinen purppura/vihreä";
 };
 String RID_SVXSTR_GRDT3
 {
@@ -3136,6 +3183,7 @@ String RID_SVXSTR_GRDT3
     Text[ arabic ] = "ÎØí ÃÕİÑ/Èäí";
     Text[ turkish ] = "Doğrusal sarı/kahverengi";
     Text[ catalan ] = "Lineal amarillo/marrón";
+    Text[ finnish ] = "Lineaarinen keltainen/ruskea";
 };
 String RID_SVXSTR_GRDT4
 {
@@ -3160,6 +3208,7 @@ String RID_SVXSTR_GRDT4
     Text[ arabic ] = "ÔÚÇÚí ÃÎÖÑ/ÃÓæÏ";
     Text[ turkish ] = "Radyal yeşil/siyah";
     Text[ catalan ] = "Radial verde/negro";
+    Text[ finnish ] = "Säteittäinen vihreä/musta";
 };
 String RID_SVXSTR_GRDT5
 {
@@ -3184,6 +3233,7 @@ String RID_SVXSTR_GRDT5
     Text[ arabic ] = "ÔÚÇÚí ÃÍãÑ/ÃÕİÑ";
     Text[ turkish ] = "Radyal kırmızı/sarı";
     Text[ catalan ] = "Radial rojo/amarillo";
+    Text[ finnish ] = "Säteittäinen punainen/keltainen";
 };
 String RID_SVXSTR_GRDT6
 {
@@ -3208,6 +3258,7 @@ String RID_SVXSTR_GRDT6
     Text[ arabic ] = "ãÓÊØíá ÃÍãÑ/ÃÈíÖ";
     Text[ turkish ] = "Dikdörtgen kırmızı/beyaz";
     Text[ catalan ] = "Rectangular rojo/blanco";
+    Text[ finnish ] = "Suorakulmio punainen/valkoinen";
 };
 String RID_SVXSTR_GRDT7
 {
@@ -3232,6 +3283,7 @@ String RID_SVXSTR_GRDT7
     Text[ arabic ] = "ãÑÈÚ ÃÕİÑ/ÃÈíÖ";
     Text[ turkish ] = "Kare sarı/beyaz";
     Text[ catalan ] = "Cuadrado amarillo/blanco";
+    Text[ finnish ] = "Neliö keltainen/valkoinen";
 };
 String RID_SVXSTR_GRDT8
 {
@@ -3256,6 +3308,7 @@ String RID_SVXSTR_GRDT8
     Text[ arabic ] = "ÈíÖæí ÑãÇÏí ãÒÑŞ/ÃÒÑŞ İÇÊÍ";
     Text[ turkish ] = "Elipsoid mavi gri/açık mavi";
     Text[ catalan ] = "Elipsoide azul gris/azul claro";
+    Text[ finnish ] = "Ellipsoidi siniharmaa/vaaleansininen";
 };
 String RID_SVXSTR_GRDT9
 {
@@ -3280,6 +3333,7 @@ String RID_SVXSTR_GRDT9
     Text[ arabic ] = "ãÍæÑí ÃÍãÑ İÇÊÍ/ÃÈíÖ";
     Text[ turkish ] = "Eksen açık kırmızı/beyaz";
     Text[ catalan ] = "Axial rojo claro/blanco";
+    Text[ finnish ] = "Akselivalaistus punainen/valkoinen";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3366,6 +3420,7 @@ String RID_SVXSTR_HATCH0
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ æÇÓÚ";
     Text[ turkish ] = "Siyah 45 derece geniş";
     Text[ catalan ] = "Negro 45 grados ancho";
+    Text[ finnish ] = "Musta 45 astetta leveä";
 };
 String RID_SVXSTR_HATCH1
 {
@@ -3390,6 +3445,7 @@ String RID_SVXSTR_HATCH1
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 45 derece";
     Text[ catalan ] = "Negro 45 grados";
+    Text[ finnish ] = "Musta 45 astetta";
 };
 String RID_SVXSTR_HATCH2
 {
@@ -3414,6 +3470,7 @@ String RID_SVXSTR_HATCH2
     Text[ arabic ] = "ÃÓæÏ -45 ÏÑÌÉ";
     Text[ turkish ] = "Siyah -45 derece";
     Text[ catalan ] = "Negro -45 grados";
+    Text[ finnish ] = "Musta -45 astetta";
 };
 String RID_SVXSTR_HATCH3
 {
@@ -3438,6 +3495,7 @@ String RID_SVXSTR_HATCH3
     Text[ arabic ] = "ÃÓæÏ 90 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 90 derece";
     Text[ catalan ] = "Negro 90 grados";
+    Text[ finnish ] = "Musta 90 astetta";
 };
 String RID_SVXSTR_HATCH4
 {
@@ -3462,6 +3520,7 @@ String RID_SVXSTR_HATCH4
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 45 ÏÑÌÉ";
     Text[ turkish ] = "Kırmızı ızgaralı 45 derece";
     Text[ catalan ] = "Rojo red 45 grados";
+    Text[ finnish ] = "Punainen ristissä 45 astetta";
 };
 String RID_SVXSTR_HATCH5
 {
@@ -3486,6 +3545,7 @@ String RID_SVXSTR_HATCH5
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 0 ÏÑÌÉ";
     Text[ turkish ] = "Kırmızı ızgaralı 0 derece";
     Text[ catalan ] = "Rojo red 0 grados";
+    Text[ finnish ] = "Punainen ristissä 0 astetta";
 };
 String RID_SVXSTR_HATCH6
 {
@@ -3510,6 +3570,7 @@ String RID_SVXSTR_HATCH6
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 45 ÏÑÌÉ";
     Text[ turkish ] = "Mavi ızgaralı 45 derece";
     Text[ catalan ] = "Azul red 45 grados";
+    Text[ finnish ] = "Sininen ristissä 45 astetta";
 };
 String RID_SVXSTR_HATCH7
 {
@@ -3534,6 +3595,7 @@ String RID_SVXSTR_HATCH7
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 0 ÏÑÌÉ";
     Text[ turkish ] = "Mavi ızgaralı 0 derece";
     Text[ catalan ] = "Azul red 0 grados";
+    Text[ finnish ] = "Sininen ristissä 0 astetta";
 };
 String RID_SVXSTR_HATCH8
 {
@@ -3558,6 +3620,7 @@ String RID_SVXSTR_HATCH8
     Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ ËáÇËíÉ 90 ÏÑÌÉ";
     Text[ turkish ] = "Mavi 3'lü ızgaralı 90 derece";
     Text[ catalan ] = "Azul red triple 90 grados";
+    Text[ finnish ] = "Sininen kolminkertainen 90 astetta";
 };
 String RID_SVXSTR_HATCH9
 {
@@ -3582,6 +3645,7 @@ String RID_SVXSTR_HATCH9
     Text[ arabic ] = "ÃÓæÏ 0 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 0 derece";
     Text[ catalan ] = "Negro 0 grados";
+    Text[ finnish ] = "Musta 0 astetta";
 };
 String RID_SVXSTR_HATCH10
 {
@@ -3591,7 +3655,7 @@ String RID_SVXSTR_HATCH10
     Text [ italian ] = "Tratteggio" ;
     Text [ portuguese_brazilian ] = "Sombreado" ;
     Text [ portuguese ] = "Tracejado" ;
-    Text [ finnish ] = "Viivoitus" ;
+    Text [ finnish ] = "Schraffur" ;
     Text [ danish ] = "Skravering" ;
     Text [ french ] = "Hachure" ;
     Text [ swedish ] = "Skraffering" ;
@@ -3751,6 +3815,7 @@ String RID_SVXSTR_BMP0
     Text[ arabic ] = "İÇÑÛ";
     Text[ turkish ] = "Boş";
     Text[ catalan ] = "Vacío";
+    Text[ finnish ] = "Tyhjä";
 };
 String RID_SVXSTR_BMP1
 {
@@ -3775,6 +3840,7 @@ String RID_SVXSTR_BMP1
     Text[ arabic ] = "ÇáÓãÇÁ";
     Text[ turkish ] = "Gökyüzü";
     Text[ catalan ] = "Cielo";
+    Text[ finnish ] = "Taivas";
 };
 String RID_SVXSTR_BMP2
 {
@@ -3799,6 +3865,7 @@ String RID_SVXSTR_BMP2
     Text[ arabic ] = "ãíÇå";
     Text[ turkish ] = "Su";
     Text[ catalan ] = "Agua";
+    Text[ finnish ] = "Vesi";
 };
 String RID_SVXSTR_BMP3
 {
@@ -3823,6 +3890,7 @@ String RID_SVXSTR_BMP3
     Text[ arabic ] = "ÍõÈóíúÈöíø ÎÔä";
     Text[ turkish ] = "İri taneler";
     Text[ catalan ] = "Grano grueso";
+    Text[ finnish ] = "Karkea jyvitys";
 };
 String RID_SVXSTR_BMP4
 {
@@ -3847,6 +3915,7 @@ String RID_SVXSTR_BMP4
     Text[ arabic ] = "ÒÆÈŞ";
     Text[ turkish ] = "Çikolata";
     Text[ catalan ] = "Mercurio";
+    Text[ finnish ] = "Elohopea";
 };
 String RID_SVXSTR_BMP5
 {
@@ -3871,6 +3940,7 @@ String RID_SVXSTR_BMP5
     Text[ arabic ] = "ÇáİÖÇÁ";
     Text[ turkish ] = "Uzay";
     Text[ catalan ] = "Espacio";
+    Text[ finnish ] = "Avaruus";
 };
 String RID_SVXSTR_BMP6
 {
@@ -3895,6 +3965,7 @@ String RID_SVXSTR_BMP6
     Text[ arabic ] = "ãÚÏä";
     Text[ turkish ] = "Metal";
     Text[ catalan ] = "Metal";
+    Text[ finnish ] = "Metalli";
 };
 String RID_SVXSTR_BMP7
 {
@@ -3919,6 +3990,7 @@ String RID_SVXSTR_BMP7
     Text[ arabic ] = "ŞØÑÇÊ";
     Text[ turkish ] = "Damla";
     Text[ catalan ] = "Gota";
+    Text[ finnish ] = "Pisarat";
 };
 String RID_SVXSTR_BMP8
 {
@@ -3943,6 +4015,7 @@ String RID_SVXSTR_BMP8
     Text[ arabic ] = "ÑÎÇã";
     Text[ turkish ] = "Mermer";
     Text[ catalan ] = "Mármol";
+    Text[ finnish ] = "Marmori";
 };
 String RID_SVXSTR_BMP9
 {
@@ -3967,6 +4040,7 @@ String RID_SVXSTR_BMP9
     Text[ arabic ] = "ßÊøÇä";
     Text[ turkish ] = "Keten";
     Text[ catalan ] = "Lino";
+    Text[ finnish ] = "Pellava";
 };
 String RID_SVXSTR_BMP10
 {
@@ -3991,6 +4065,7 @@ String RID_SVXSTR_BMP10
     Text[ arabic ] = "ÍÌÑ";
     Text[ turkish ] = "Taş";
     Text[ catalan ] = "Piedra";
+    Text[ finnish ] = "Kivi";
 };
 String RID_SVXSTR_BMP11
 {
@@ -4015,6 +4090,7 @@ String RID_SVXSTR_BMP11
     Text[ arabic ] = "ÍÕì";
     Text[ turkish ] = "Çakıl";
     Text[ catalan ] = "Grava";
+    Text[ finnish ] = "Sora";
 };
 String RID_SVXSTR_BMP12
 {
@@ -4039,6 +4115,7 @@ String RID_SVXSTR_BMP12
     Text[ arabic ] = "ÓæÑ";
     Text[ turkish ] = "Duvar";
     Text[ catalan ] = "Muralla";
+    Text[ finnish ] = "Seinä";
 };
 String RID_SVXSTR_BMP13
 {
@@ -4063,6 +4140,7 @@ String RID_SVXSTR_BMP13
     Text[ arabic ] = "ŞæÇáÈ ØæÈ";
     Text[ turkish ] = "Tuğla";
     Text[ catalan ] = "Ladrillo";
+    Text[ finnish ] = "Tiilenruskea";
 };
 String RID_SVXSTR_BMP14
 {
@@ -4087,6 +4165,7 @@ String RID_SVXSTR_BMP14
     Text[ arabic ] = "ÔÈßÉ";
     Text[ turkish ] = "Hasır";
     Text[ catalan ] = "Malla";
+    Text[ finnish ] = "Verkko";
 };
 String RID_SVXSTR_BMP15
 {
@@ -4111,6 +4190,7 @@ String RID_SVXSTR_BMP15
     Text[ arabic ] = "æÑŞ ÃÔÌÇÑ";
     Text[ turkish ] = "Yapraklar";
     Text[ catalan ] = "Follaje";
+    Text[ finnish ] = "Lehdet";
 };
 String RID_SVXSTR_BMP16
 {
@@ -4135,6 +4215,7 @@ String RID_SVXSTR_BMP16
     Text[ arabic ] = "äÌíá ÕäÇÚí";
     Text[ turkish ] = "Yapay çim";
     Text[ catalan ] = "Césped sintético";
+    Text[ finnish ] = "Keinonurmi";
 };
 String RID_SVXSTR_BMP17
 {
@@ -4159,6 +4240,7 @@ String RID_SVXSTR_BMP17
     Text[ arabic ] = "ÒåÑÉ ÇáÑÈíÚ";
     Text[ turkish ] = "Papatya";
     Text[ catalan ] = "Margarita";
+    Text[ finnish ] = "Päivänkakkara";
 };
 String RID_SVXSTR_BMP18
 {
@@ -4183,6 +4265,7 @@ String RID_SVXSTR_BMP18
     Text[ arabic ] = "ÈÑÊŞÇáí";
     Text[ turkish ] = "Turuncu";
     Text[ catalan ] = "Naranja";
+    Text[ finnish ] = "Oranssi";
 };
 String RID_SVXSTR_BMP19
 {
@@ -4207,6 +4290,7 @@ String RID_SVXSTR_BMP19
     Text[ arabic ] = "äÇÑí";
     Text[ turkish ] = "Ateş";
     Text[ catalan ] = "Fogoso";
+    Text[ finnish ] = "Tulinen";
 };
 String RID_SVXSTR_BMP20
 {
@@ -4231,6 +4315,7 @@ String RID_SVXSTR_BMP20
     Text[ arabic ] = "æÑÏ";
     Text[ turkish ] = "Gül";
     Text[ catalan ] = "Rosas";
+    Text[ finnish ] = "Ruusut";
 };
 
 String RID_SVXSTR_BMP21
@@ -4253,9 +4338,10 @@ String RID_SVXSTR_BMP21
     Text[ korean ] = "Bitmap";
     Text[ chinese_simplified ] = "Î»Í¼";
     Text[ chinese_traditional ] = "ÂI°}¹Ï";
-    Text[ turkish ] = "Bitmap";
+    Text[ turkish ] = "Bit eşlem";
     Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
     Text[ catalan ] = "Bitmap";
+    Text[ finnish ] = "Bitmap";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -4346,6 +4432,7 @@ String RID_SVXSTR_DASH0
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ ÌÏÇğ";
     Text[ turkish ] = "Çok ince kesik çizgili";
     Text[ catalan ] = "Trazos ultrafinos";
+    Text[ finnish ] = "Hyvin ohut katkoviiva";
 };
 String RID_SVXSTR_DASH1
 {
@@ -4370,6 +4457,7 @@ String RID_SVXSTR_DASH1
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ";
     Text[ turkish ] = "İnce kesik çizgili";
     Text[ catalan ] = "Trazos finos";
+    Text[ finnish ] = "Ohut katkoviiva";
 };
 String RID_SVXSTR_DASH2
 {
@@ -4394,6 +4482,7 @@ String RID_SVXSTR_DASH2
     Text[ arabic ] = "2 äŞØÉ 3 ÔÑØ¡ ÑİíÚÉ ÌÏÇğ";
     Text[ turkish ] = "Çok ince 2 nokta 3 çizgi";
     Text[ catalan ] = "Ultrafino 2 puntos 2 trazos";
+    Text[ finnish ] = "Hyvin ohut, 2 pistettä, 3 katkoviivaa";
 };
 String RID_SVXSTR_DASH3
 {
@@ -4418,6 +4507,7 @@ String RID_SVXSTR_DASH3
     Text[ arabic ] = "äŞÇØ ÑİíÚÉ";
     Text[ turkish ] = "İnce noktalı";
     Text[ catalan ] = "Punteado fino";
+    Text[ finnish ] = "Pienet pisteet";
 };
 String RID_SVXSTR_DASH4
 {
@@ -4442,6 +4532,7 @@ String RID_SVXSTR_DASH4
     Text[ arabic ] = "ÎØ Ğæ äŞÇØ ÑİíÚÉ";
     Text[ turkish ] = "İnce noktalı çizgi";
     Text[ catalan ] = "Trazo con puntos finos";
+    Text[ finnish ] = "Viiva pienillä pisteillä";
 };
 String RID_SVXSTR_DASH5
 {
@@ -4466,6 +4557,7 @@ String RID_SVXSTR_DASH5
     Text[ arabic ] = "ÔõÑØ ÑİíÚÉ (ãÊÛíÑÉ)";
     Text[ turkish ] = "İnce kesik çizgili (değişken)";
     Text[ catalan ] = "Trazos finos (variable)";
+    Text[ finnish ] = "Pienet katkoviivat (muuttuja)";
 };
 String RID_SVXSTR_DASH6
 {
@@ -4490,6 +4582,7 @@ String RID_SVXSTR_DASH6
     Text[ arabic ] = "3 ÔõÑØ 3 äŞÇØ (ãÊÛíÑÉ)";
     Text[ turkish ] = "3 çizgi 3 nokta (değişken)";
     Text[ catalan ] = "3 trazos 3 puntos (variable)";
+    Text[ finnish ] = "3 katkoviivaa, 3 pistettä (muuttuja)";
 };
 String RID_SVXSTR_DASH7
 {
@@ -4514,6 +4607,7 @@ String RID_SVXSTR_DASH7
     Text[ arabic ] = "äŞÇØ ÑİíÚÉ ÌÏÇğ (ãÊÛíÑÉ)";
     Text[ turkish ] = "Çok ince noktalı (değişken)";
     Text[ catalan ] = "Punteado ultrafino (variable)";
+    Text[ finnish ] = "Hyvin ohuet pisteet (muuttuja)";
 };
 String RID_SVXSTR_DASH8
 {
@@ -4538,6 +4632,7 @@ String RID_SVXSTR_DASH8
     Text[ arabic ] = "äãØ ÇáÎØ 9";
     Text[ turkish ] = "Çizgi biçimi 9";
     Text[ catalan ] = "Estilo de línea 9";
+    Text[ finnish ] = "Viivatyyli 9";
 };
 String RID_SVXSTR_DASH9
 {
@@ -4562,6 +4657,7 @@ String RID_SVXSTR_DASH9
     Text[ arabic ] = "2 äŞØÉ 1 ÔÑØÉ";
     Text[ turkish ] = "2 nokta 1 çizgi";
     Text[ catalan ] = "2 puntos 1 trazo";
+    Text[ finnish ] = "2 pistettä, 1 katkoviiva";
 };
 String RID_SVXSTR_DASH10
 {
@@ -4586,6 +4682,7 @@ String RID_SVXSTR_DASH10
     Text[ arabic ] = "ÔõÑØ (ãÊÛíÑÉ)";
     Text[ turkish ] = "Kesik çizgili (değişken)";
     Text[ catalan ] = "Trazos (variable)";
+    Text[ finnish ] = "Katkoviiva (muuttuja)";
 };
 String RID_SVXSTR_DASH11
 {
@@ -4610,6 +4707,7 @@ String RID_SVXSTR_DASH11
     Text[ turkish ] = "Dashed";
     Text[ arabic ] = "ÔõÑØ";
     Text[ catalan ] = "Dashed";
+    Text[ finnish ] = "Gestrichelt";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4701,6 +4799,7 @@ String RID_SVXSTR_LEND0
     Text[ arabic ] = "Óåã ãŞÚÑ";
     Text[ turkish ] = "İçbükey ok";
     Text[ catalan ] = "Flecha cóncava";
+    Text[ finnish ] = "Kovera nuoli";
 };
 String RID_SVXSTR_LEND1
 {
@@ -4725,6 +4824,7 @@ String RID_SVXSTR_LEND1
     Text[ arabic ] = "ãÑÈÚ 45";
     Text[ turkish ] = "Kare 45";
     Text[ catalan ] = "Cuadrado 45";
+    Text[ finnish ] = "Neliö 45";
 };
 String RID_SVXSTR_LEND2
 {
@@ -4749,6 +4849,7 @@ String RID_SVXSTR_LEND2
     Text[ arabic ] = "Óåã ÑİíÚ";
     Text[ turkish ] = "İnce ok";
     Text[ catalan ] = "Flecha estrecha";
+    Text[ finnish ] = "Pieni nuoli";
 };
 String RID_SVXSTR_LEND3
 {
@@ -4773,6 +4874,7 @@ String RID_SVXSTR_LEND3
     Text[ arabic ] = "ÎØæØ ŞíÇÓ";
     Text[ turkish ] = "Boyutlandırma çizgileri";
     Text[ catalan ] = "Fines de dimensiones";
+    Text[ finnish ] = "Mittaviivat";
 };
 String RID_SVXSTR_LEND4
 {
@@ -4797,6 +4899,7 @@ String RID_SVXSTR_LEND4
     Text[ arabic ] = "Óåã ãÒÏæÌ";
     Text[ turkish ] = "İki uçlu ok";
     Text[ catalan ] = "Flecha doble";
+    Text[ finnish ] = "Tuplanuoli";
 };
 String RID_SVXSTR_LEND5
 {
@@ -4821,6 +4924,7 @@ String RID_SVXSTR_LEND5
     Text[ arabic ] = "Óåã ŞÕíÑ ãÓÊÏíÑ";
     Text[ turkish ] = "Yuvarlatılmış kısa ok";
     Text[ catalan ] = "Flecha corta redondeada";
+    Text[ finnish ] = "Pyöristetty lyhyt nuoli";
 };
 String RID_SVXSTR_LEND6
 {
@@ -4845,6 +4949,7 @@ String RID_SVXSTR_LEND6
     Text[ arabic ] = "Óåã ãÊäÇÓŞ";
     Text[ turkish ] = "Simetrik ok";
     Text[ catalan ] = "Flecha simétrica";
+    Text[ finnish ] = "Symmetrinen nuoli";
 };
 String RID_SVXSTR_LEND7
 {
@@ -4869,6 +4974,7 @@ String RID_SVXSTR_LEND7
     Text[ arabic ] = "Óåã ÎØí";
     Text[ turkish ] = "Çizgili ok";
     Text[ catalan ] = "Flecha línea";
+    Text[ finnish ] = "Viivanuoli";
 };
 String RID_SVXSTR_LEND8
 {
@@ -4893,6 +4999,7 @@ String RID_SVXSTR_LEND8
     Text[ arabic ] = "Óåã Øæíá ãÓÊÏíÑ";
     Text[ turkish ] = "Yuvarlatılmış uzun ok";
     Text[ catalan ] = "Flecha larga redondeada";
+    Text[ finnish ] = "Pyöristetty iso nuoli";
 };
 String RID_SVXSTR_LEND9
 {
@@ -4917,6 +5024,7 @@ String RID_SVXSTR_LEND9
     Text[ arabic ] = "ÏÇÆÑÉ";
     Text[ turkish ] = "Daire";
     Text[ catalan ] = "Círculo";
+    Text[ finnish ] = "Ympyrä";
 };
 String RID_SVXSTR_LEND10
 {
@@ -4941,6 +5049,7 @@ String RID_SVXSTR_LEND10
     Text[ arabic ] = "ãÑÈÚ";
     Text[ turkish ] = "Kare";
     Text[ catalan ] = "Cuadrado";
+    Text[ finnish ] = "Neliö";
 };
 String RID_SVXSTR_LEND11
 {
@@ -4965,6 +5074,7 @@ String RID_SVXSTR_LEND11
     Text[ arabic ] = "Óåã";
     Text[ turkish ] = "Ok";
     Text[ catalan ] = "Flecha";
+    Text[ finnish ] = "Nuoli";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -5003,6 +5113,7 @@ String RID_SVXSTR_TRASNGR0
     Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
     Text[ turkish ] = "Yüzey saydamlığı";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "Flächentransparenz";
 };
 
  // ********************************************************************** EOF
