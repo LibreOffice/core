@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.40 2002-01-09 16:50:04 dvo Exp $
+	$Id: text.mod,v 1.41 2002-01-11 16:45:00 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -283,7 +283,7 @@
 
 
 <!ELEMENT text:date (#PCDATA)>
-<!ATTLIST text:date text:date-value %date; #IMPLIED>
+<!ATTLIST text:date text:date-value %timeInstance; #IMPLIED>
 <!ATTLIST text:date text:date-adjust %dateDuration; #IMPLIED>
 <!ATTLIST text:date text:fixed %boolean; "false">
 <!ATTLIST text:date style:data-style-name %styleName; #IMPLIED>
