@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ TabDialog DLG_ENV
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sobre";
                 Text[ thai ] = "ซองจดหมาย";
+                Text[ czech ] = "Obálka";
+                Text[ hebrew ] = "‮מעטפה‬";
+                Text[ hindi ] = "लिफाफा";
             };
             PageItem
             {
@@ -134,16 +137,19 @@ TabDialog DLG_ENV
                 Text[ danish ] = "Format";
                 Text[ swedish ] = "Format";
                 Text[ polish ] = "Format";
-                Text[ portuguese_brazilian ] = "Format";
+                Text[ portuguese_brazilian ] = "Formato";
                 Text[ japanese ] = "書式";
                 Text[ korean ] = "서식";
                 Text[ chinese_simplified ] = "格式";
                 Text[ chinese_traditional ] = "格式";
-                Text[ turkish ] = "Renk format�";
+                Text[ turkish ] = "Bi�em";
                 Text[ arabic ] = "�������";
                 Text[ catalan ] = "Formata";
                 Text[ finnish ] = "Muotoilu";
                 Text[ thai ] = "รูปแบบ";
+                Text[ czech ] = "Formát";
+                Text[ hebrew ] = "‮עיצוב‬";
+                Text[ hindi ] = "रचना";
             };
             PageItem
             {
@@ -174,6 +180,9 @@ TabDialog DLG_ENV
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Impressora";
                 Text[ thai ] = "เครื่องพิมพ์";
+                Text[ czech ] = "Tiskárna";
+                Text[ hebrew ] = "‮מדפסת‬";
+                Text[ hindi ] = "मुद्रक";
             };
         };
     };
@@ -194,7 +203,7 @@ TabDialog DLG_ENV
         Text [ english_us ] = "~Insert" ;
         Text[ chinese_simplified ] = "插入(~I)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Wstaw";
+        Text[ polish ] = "W~staw";
         Text[ japanese ] = "挿入(~I)";
         Text[ chinese_traditional ] = "插入(~I)";
         Text[ arabic ] = "�����";
@@ -206,6 +215,9 @@ TabDialog DLG_ENV
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Insereix";
         Text[ thai ] = "แ~ทรก";
+        Text[ czech ] = "Vložit";
+        Text[ hebrew ] = "‮הוספה‬";
+        Text[ hindi ] = "~जोड़ो";
     };
     String ST_CHANGE
     {
@@ -213,7 +225,7 @@ TabDialog DLG_ENV
         Text [ English ] = "Change" ;
         Text [ norwegian ] = "Endre" ;
         Text [ italian ] = "C~ambia" ;
-        Text [ portuguese_brazilian ] = "Mudar" ;
+        Text [ portuguese_brazilian ] = "~Modificar" ;
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muuta" ;
         Text [ danish ] = "Modificer" ;
@@ -224,22 +236,25 @@ TabDialog DLG_ENV
         Text [ english_us ] = "~Modify" ;
         Text[ chinese_simplified ] = "更改(~M)";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Modyfikuj";
+        Text[ polish ] = "~Modyfikuj";
         Text[ japanese ] = "変更(~M)";
         Text[ chinese_traditional ] = "修改(~M)";
         Text[ arabic ] = "�����";
         Text[ dutch ] = "~Wijzigen";
         Text[ chinese_simplified ] = "更改(~M)";
         Text[ greek ] = "�����������";
-        Text[ korean ] = "변경(~M)";
+        Text[ korean ] = "수정(~M)";
         Text[ turkish ] = "D~e�i�tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modifica";
         Text[ thai ] = "~ดัดแปลงแก้ไข";
+        Text[ czech ] = "Upravit";
+        Text[ hebrew ] = "‮שינוי‬";
+        Text[ hindi ] = "~सुधारो";
     };
     Text[ chinese_simplified ] = "信封";
     Text[ russian ] = "�������";
-    Text[ polish ] = "Koperta listowa";
+    Text[ polish ] = "Koperta";
     Text[ japanese ] = "封筒";
     Text[ chinese_traditional ] = "信封";
     Text[ arabic ] = "���";
@@ -249,6 +264,9 @@ TabDialog DLG_ENV
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
     Text[ thai ] = "ซองจดหมาย";
+    Text[ czech ] = "Obálka";
+    Text[ hebrew ] = "‮מעטפה‬";
+    Text[ hindi ] = "लिफाफा";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -264,7 +282,7 @@ TabPage TP_ENV_ENV
         Text [ English ] = "Addressee" ;
         Text [ norwegian ] = "Addressee" ;
         Text [ italian ] = "Destinatario" ;
-        Text [ portuguese_brazilian ] = "Endere?o" ;
+        Text [ portuguese_brazilian ] = "~Destinat�rio" ;
         Text [ portuguese ] = "~Destinat�rio" ;
         Text [ finnish ] = "~Saaja" ;
         Text [ danish ] = "Modtager" ;
@@ -277,16 +295,19 @@ TabPage TP_ENV_ENV
         Left = TRUE ;
         Text[ chinese_simplified ] = "收件人(~E)";
         Text[ russian ] = "����������";
-        Text[ polish ] = "Odbiorca";
+        Text[ polish ] = "~Odbiorca";
         Text[ japanese ] = "宛先(~E)";
         Text[ chinese_traditional ] = "收件者(~E)";
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "수신인(~E)";
+        Text[ korean ] = "받는 사람(~E)";
         Text[ turkish ] = "Al�c�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Destinat~ari";
         Text[ thai ] = "ผู้รั~บจดหมาย";
+        Text[ czech ] = "Adresát";
+        Text[ hebrew ] = "~Empfänger";
+        Text[ hindi ] = "लेने~वाला";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -307,7 +328,7 @@ TabPage TP_ENV_ENV
         Text [ English ] = "Database" ;
         Text [ norwegian ] = "Database" ;
         Text [ italian ] = "Database" ;
-        Text [ portuguese_brazilian ] = "Base de Dados" ;
+        Text [ portuguese_brazilian ] = "Banco de dados" ;
         Text [ portuguese ] = "~Base de dados" ;
         Text [ finnish ] = "Tietokanta" ;
         Text [ danish ] = "Database" ;
@@ -328,6 +349,9 @@ TabPage TP_ENV_ENV
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Base de dades";
         Text[ thai ] = "ฐานข้อมูล";
+        Text[ czech ] = "Databáze";
+        Text[ hebrew ] = "~Datenbank";
+        Text[ hindi ] = "लेखासंचय";
     };
     ListBox LB_DATABASE
     {
@@ -350,7 +374,7 @@ TabPage TP_ENV_ENV
         Text [ dutch ] = "~Tabel" ;
         Text [ swedish ] = "~Tabell" ;
         Text [ danish ] = "Tabe~l" ;
-        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese_brazilian ] = "Tabela" ;
         Text [ portuguese ] = "~Tabela" ;
         Text[ chinese_simplified ] = "表格";
         Text[ russian ] = "�������";
@@ -365,6 +389,9 @@ TabPage TP_ENV_ENV
         Text[ catalan ] = "Taula";
         Text[ finnish ] = "Taulukko";
         Text[ thai ] = "ตาราง";
+        Text[ czech ] = "Tabulka";
+        Text[ hebrew ] = "‮טבלה‬";
+        Text[ hindi ] = "सारणी";
     };
     ListBox LB_TABLE
     {
@@ -389,7 +416,7 @@ TabPage TP_ENV_ENV
         Text [ English ] = "Database field" ;
         Text [ norwegian ] = "Database field" ;
         Text [ italian ] = "Campo database" ;
-        Text [ portuguese_brazilian ] = "Campo base de dados" ;
+        Text [ portuguese_brazilian ] = "~Campo do banco de dados" ;
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "~Tietokantakentt�" ;
         Text [ danish ] = "Databasefelt" ;
@@ -400,7 +427,7 @@ TabPage TP_ENV_ENV
         Text [ english_us ] = "~Database field" ;
         Text[ chinese_simplified ] = "数据库字段(~D)";
         Text[ russian ] = "���� ���� ������";
-        Text[ polish ] = "Pole bazy danych";
+        Text[ polish ] = "Pole bazy ~danych";
         Text[ japanese ] = "データベースフィールド(~D)";
         Text[ chinese_traditional ] = "資料庫欄位(~D)";
         Text[ arabic ] = "��� ����� ��������";
@@ -410,6 +437,9 @@ TabPage TP_ENV_ENV
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Camp de la ~base de dades";
         Text[ thai ] = "เขตข้อมูลของ~ฐานข้อมูล";
+        Text[ czech ] = "Pole databáze";
+        Text[ hebrew ] = "Datenbank~feld";
+        Text[ hindi ] = "~लेखासंचय क्षेत्र";
     };
     ListBox LB_DBFIELD
     {
@@ -427,7 +457,7 @@ TabPage TP_ENV_ENV
         Text [ English ] = "Sender" ;
         Text [ norwegian ] = "Sender" ;
         Text [ italian ] = "Mittente" ;
-        Text [ portuguese_brazilian ] = "Remetente" ;
+        Text [ portuguese_brazilian ] = "~Remetente" ;
         Text [ portuguese ] = "~Remetente" ;
         Text [ finnish ] = "~L�hett�j�" ;
         Text [ danish ] = "Afsender" ;
@@ -439,16 +469,19 @@ TabPage TP_ENV_ENV
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "发件人(~S)";
         Text[ russian ] = "�����������";
-        Text[ polish ] = "Nadawca";
+        Text[ polish ] = "N~adawca";
         Text[ japanese ] = "差出人(~S)";
         Text[ chinese_traditional ] = "寄件者(~S)";
         Text[ arabic ] = "������";
         Text[ greek ] = "����������";
-        Text[ korean ] = "발신인(~S)";
+        Text[ korean ] = "보낸 사람(~S)";
         Text[ turkish ] = "G�nderen";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Remitent";
         Text[ thai ] = "~ผู้ส่ง";
+        Text[ czech ] = "Odesilatel";
+        Text[ hebrew ] = "~Absender";
+        Text[ hindi ] = "~भेजनेवाला";
     };
     MultiLineEdit EDT_SEND
     {
@@ -486,7 +519,7 @@ String STR_DOC_TITLE
     Text [ english_us ] = "Envelope" ;
     Text[ chinese_simplified ] = "信封";
     Text[ russian ] = "�������";
-    Text[ polish ] = "Koperta listowa";
+    Text[ polish ] = "Koperta";
     Text[ japanese ] = "封筒";
     Text[ chinese_traditional ] = "信封";
     Text[ arabic ] = "���";
@@ -496,7 +529,19 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
     Text[ thai ] = "ซองจดหมาย";
+    Text[ czech ] = "Obálka";
+    Text[ hebrew ] = "‮מעטפה‬";
+    Text[ hindi ] = "लिफाफा";
 };
+
+
+
+
+
+
+
+
+
 
 
 
