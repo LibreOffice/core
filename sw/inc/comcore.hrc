@@ -2,9 +2,9 @@
  *
  *  $RCSfile: comcore.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-02 13:50:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,24 +67,25 @@
 // die Strings
 // ---------------
 
-#define STR_COMCORE_READERROR       (RC_COMCORE_BEGIN + 0)
-#define MSG_COMCORE_ASKSEARCH       (RC_COMCORE_BEGIN + 1)
-#define STR_TABLE_DEFNAME           (RC_COMCORE_BEGIN + 2)
-#define STR_GRAPHIC_DEFNAME         (RC_COMCORE_BEGIN + 3)
-#define STR_OBJECT_DEFNAME          (RC_COMCORE_BEGIN + 4)
-#define STR_FRAME_DEFNAME           (RC_COMCORE_BEGIN + 5)
-#define STR_REGION_DEFNAME          (RC_COMCORE_BEGIN + 6)
-#define STR_COMCORE_CANT_SHOW       (RC_COMCORE_BEGIN + 7)
-#define RID_GRAPHIC_REPLACEBMP      (RC_COMCORE_BEGIN + 8)
-#define RID_GRAPHIC_ERRORBMP        (RC_COMCORE_BEGIN + 9)
-#define STR_NUMRULE_DEFNAME         (RC_COMCORE_BEGIN + 10)
-#define STR_EMPTYPAGE               (RC_COMCORE_BEGIN + 11)
-#define RID_SHELLRES_AUTOFMTSTRS    (RC_COMCORE_BEGIN + 12)
-#define STR_MULT_INTERACT_HYPH_WARN (RC_COMCORE_BEGIN + 13)
-#define STR_MULT_INTERACT_SPELL_WARN    (RC_COMCORE_BEGIN + 14)
-#define STR_SPELL_TITLE             (RC_COMCORE_BEGIN + 15)
-#define STR_HYPH_TITLE              (RC_COMCORE_BEGIN + 16)
-#define MSG_DISABLE_UNDO_QUESTION   (RC_COMCORE_BEGIN + 17)
+#define STR_COMCORE_READERROR               (RC_COMCORE_BEGIN + 0)
+#define MSG_COMCORE_ASKSEARCH               (RC_COMCORE_BEGIN + 1)
+#define STR_TABLE_DEFNAME                   (RC_COMCORE_BEGIN + 2)
+#define STR_GRAPHIC_DEFNAME                 (RC_COMCORE_BEGIN + 3)
+#define STR_OBJECT_DEFNAME                  (RC_COMCORE_BEGIN + 4)
+#define STR_FRAME_DEFNAME                   (RC_COMCORE_BEGIN + 5)
+#define STR_REGION_DEFNAME                  (RC_COMCORE_BEGIN + 6)
+#define STR_COMCORE_CANT_SHOW               (RC_COMCORE_BEGIN + 7)
+#define RID_GRAPHIC_REPLACEBMP              (RC_COMCORE_BEGIN + 8)
+#define RID_GRAPHIC_ERRORBMP                (RC_COMCORE_BEGIN + 9)
+#define STR_NUMRULE_DEFNAME                 (RC_COMCORE_BEGIN + 10)
+#define STR_EMPTYPAGE                       (RC_COMCORE_BEGIN + 11)
+#define RID_SHELLRES_AUTOFMTSTRS            (RC_COMCORE_BEGIN + 12)
+#define STR_MULT_INTERACT_HYPH_WARN         (RC_COMCORE_BEGIN + 13)
+#define STR_MULT_INTERACT_SPELL_WARN        (RC_COMCORE_BEGIN + 14)
+#define STR_SPELL_TITLE                     (RC_COMCORE_BEGIN + 15)
+#define STR_HYPH_TITLE                      (RC_COMCORE_BEGIN + 16)
+#define MSG_DISABLE_UNDO_QUESTION           (RC_COMCORE_BEGIN + 17)
+#define MSG_DISABLE_READLINE_QUESTION       (RC_COMCORE_BEGIN + 18)
 
 // defines fuer die Autoformat Redline Kommentare
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
