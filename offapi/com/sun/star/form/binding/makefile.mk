@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 10:39:29 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:08:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,14 +83,17 @@ IDLFILES=\
     ListEntrySource.idl   \
     \
     BindableControlModel.idl   \
+    BindableIntegerValueRange.idl \
     BindableDataAwareControlModel.idl   \
     BindableDatabaseCheckBox.idl   \
     BindableDatabaseComboBox.idl   \
+    BindableDatabaseDateField.idl   \
     BindableDatabaseFormattedField.idl   \
     BindableDatabaseListBox.idl   \
     BindableDatabaseNumericField.idl   \
     BindableDatabaseRadioButton.idl   \
     BindableDatabaseTextField.idl   \
+    BindableDatabaseTimeField.idl   \
     \
     IncompatibleTypesException.idl   \
 
