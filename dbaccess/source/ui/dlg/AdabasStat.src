@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:23:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ italian ] = "Dimensioni database";
         Text[ danish ] = "Databasestørrelser";
         Text[ swedish ] = "Databasstorlekar";
-        Text[ polish ] = "Wielko?ci baz danych";
+        Text[ polish ] = "Wielkoœci baz danych";
         Text[ portuguese_brazilian ] = "database sizes";
         Text[ japanese ] = "ÃŞ°ÀÍŞ°½»²½Ş";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º Å©±â";
@@ -261,7 +261,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ italian ] = "Dimensione (MB):";
         Text[ danish ] = "Samlet størrelse (MB):";
         Text[ swedish ] = "T~otalstorlek (MB):";
-        Text[ polish ] = "£¹czna wielko?æ (MB):";
+        Text[ polish ] = "£¹czna wielkoœæ (MB):";
         Text[ portuguese_brazilian ] = "S~ize (MB):";
         Text[ japanese ] = "‘S‘Ì‚Ì»²½Ş(MB):";
         Text[ korean ] = "ÃÑ Å©±â(~I)";
@@ -338,7 +338,7 @@ ModalDialog DLG_ADABASSTAT
         Text[ polish ] = "~Wykorzystana pamiêæ (w %):";
         Text[ portuguese_brazilian ] = "~Memory using (in %):";
         Text[ japanese ] = "ÒÓØg—p—Ê(%):";
-        Text[ korean ] = "¸Ş¸ğ¸® ÀúÀå·®(~M)";
+        Text[ korean ] = "¸Ş¸ğ¸® »ç¿ë·® (%·Î)";
         Text[ chinese_simplified ] = "ÄÚ´æÊ¹ÓÃÂÊ(%)£º";
         Text[ chinese_traditional ] = "¥D°O¾ĞÅé¥e¥Î(%)¡G";
         Text[ arabic ] = "ÇáĞÇßÑÉ ÇáãÓÊÎÏãÉ (ÇáäÓÈÉ ÇáãÆæíÉ):";
@@ -405,7 +405,7 @@ String STR_ADABAS_HELP_SYSDEVSPACE
     Text[ polish ] = "Zawiera tabele systemu";
     Text[ portuguese_brazilian ] = "Contains the system tables";
     Text[ japanese ] = "¼½ÃÑÃ°ÌŞÙ‚ğŠÜ‚Ş";
-    Text[ korean ] = "½Ã½ºÅÛ ½ºÇÁ·¹µå½ÃÆ® Æ÷ÇÔ";
+    Text[ korean ] = "½Ã½ºÅÛ Å×ÀÌºí Æ÷ÇÔ";
     Text[ chinese_simplified ] = "º¬ÓĞÏµÍ³±í¸ñ";
     Text[ chinese_traditional ] = "§t¦³¨t²Îªí®æ";
     Text[ turkish ] = "Contains the system tables";
@@ -480,7 +480,7 @@ String STR_ADABAS_HELP_SIZE
     Text[ italian ] = "Dimensioni dei file del database";
     Text[ danish ] = "Overall Size of the database files";
     Text[ swedish ] = "Totalstorlek på databasfilerna";
-    Text[ polish ] = "£¹czna wielko?æ plików bazy danych";
+    Text[ polish ] = "£¹czna wielkoœæ plików bazy danych";
     Text[ portuguese_brazilian ] = "Overall Size of the database files";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½Ì§²Ù‘S‘Ì‚Ì»²½Ş";
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÆÄÀÏÀÇ ÀüÃ¼ Å©±â";
