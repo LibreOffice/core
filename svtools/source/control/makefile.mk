@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ka $ $Date: 2002-02-25 10:52:14 $
+#   last change: $Author: hr $ $Date: 2002-03-05 15:58:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,6 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/stdctrl.obj  \
             $(SLO)$/stdmenu.obj  \
             $(SLO)$/valueset.obj \
-            $(SLO)$/valueacc.obj \
             $(SLO)$/tabbar.obj	 \
             $(SLO)$/headbar.obj  \
             $(SLO)$/prgsbar.obj  \
