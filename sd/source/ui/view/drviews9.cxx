@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews9.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:19:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
                 Graphic aGraphic = pGal->GetGraphic();
 
                 // Ggf. Groesse reduzieren
-                Window aWindow (pWindow);
+                Window aWindow (GetActiveWindow());
                 aWindow.SetMapMode(aGraphic.GetPrefMapMode());
                 Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
                 aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
@@ -351,7 +351,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
     SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetPool() );
 
-    pView->GetAttributes( *pAttr );
+    GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
 
     switch (rReq.GetSlot ())
