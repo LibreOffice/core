@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:54:10 $
+ *  last change:$Date: 2003-09-08 12:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,17 @@
 package mod._sw;
 
 import java.io.PrintWriter;
-import com.sun.star.lang.XMultiServiceFactory;
 import java.util.Comparator;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
 
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.frame.XController;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
@@ -74,15 +80,9 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextFrame;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XSearchable;
 import com.sun.star.view.XSelectionSupplier;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 
 /**
  *
@@ -152,7 +152,6 @@ public class SwXTextView extends TestCase {
     public TestEnvironment createTestEnvironment( TestParameters tParam,
                               PrintWriter log )throws StatusException {
 
-        XInterface oObj = null;
 
         // creation of testobject here
         log.println( "creating a test environment" );
