@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 13:29:34 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 12:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ class ScXMLAutoStylePoolP : public SvXMLAutoStylePoolP
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
             sal_Int32 nFamily,
             const ::std::vector< XMLPropertyState >& rProperties,
+            const SvXMLExportPropertyMapper& rPropExp,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap) const;
 

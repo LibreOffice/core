@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-17 13:29:34 $
+ *  last change: $Author: dr $ $Date: 2000-10-18 12:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap) const
 {
+    SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         sal_Bool bNotFound = sal_True;
@@ -272,9 +273,11 @@ void ScXMLAutoStylePoolP::exportStyleContent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         sal_Int32 nFamily,
         const std::vector< XMLPropertyState >& rProperties,
+        const SvXMLExportPropertyMapper& rPropExp,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
+    SvXMLAutoStylePoolP::exportStyleContent( rHandler, nFamily, rProperties, rPropExp, rUnitConverter, rNamespaceMap );
     if (nFamily == XML_STYLE_FAMILY_TABLE_CELL)
     {
         sal_Bool bNotFound = sal_True;
