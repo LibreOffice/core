@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:44:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,10 @@
 
 
 SwCallLink::SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
-                        BYTE nAktNdTyp, long nLRPos )
+                        BYTE nAktNdTyp, long nLRPos, bool bAktSelection )
     : rShell( rSh ), nNode( nAktNode ), nCntnt( nAktCntnt ),
-    nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos )
+      nNdTyp( nAktNdTyp ), nLeftFrmPos( nLRPos ),
+      bHasSelection( bAktSelection )
 {
 }
 
@@ -124,6 +125,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     nNode = rNd.GetIndex();
     nCntnt = pCrsr->GetPoint()->nContent.GetIndex();
     nNdTyp = rNd.GetNodeType();
+    bHasSelection = ( *pCrsr->GetPoint() != *pCrsr->GetMark() );
 
     if( ND_TEXTNODE & nNdTyp )
         nLeftFrmPos = SwCallLink::GetFrm( (SwTxtNode&)rNd, nCntnt,
@@ -169,6 +171,11 @@ SwCallLink::~SwCallLink()
          * Es muesste also festgestellt werden, welche Attribute
          * jetzt gelten; das kann auch gleich der Handler machen
          */
+        rShell.CallChgLnk();
+    }
+    else if( bHasSelection != (*pCurCrsr->GetPoint() != *pCurCrsr->GetMark()) )
+    {
+        // always call change link when selection changes
         rShell.CallChgLnk();
     }
     else if( rShell.aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
