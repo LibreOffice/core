@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-26 12:06:54 $
+ *  last change: $Author: hdu $ $Date: 2001-11-27 15:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,7 +321,11 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
     {
         if( rServerFont.GetGlyphBitmap1( nGlyphIndex, maRawBitmap ) )
         {
-            rGlyphData.SetSize( Size( maRawBitmap.mnWidth, maRawBitmap.mnHeight ) );
+            // #94666# circumvent bug in some X11 systems, e.g. XF410.LynxEM.v163
+            ULONG nPixmapWidth = 8 * maRawBitmap.mnScanlineSize - 1;
+            nPixmapWidth = std::max( nPixmapWidth, maRawBitmap.mnWidth );
+
+            rGlyphData.SetSize( Size( nPixmapWidth, maRawBitmap.mnHeight ) );
             rGlyphData.SetOffset( +maRawBitmap.mnXOffset, +maRawBitmap.mnYOffset );
 
             const ULONG nBytes = maRawBitmap.mnHeight * maRawBitmap.mnScanlineSize;
@@ -370,7 +374,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
 
                 aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
                     DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                    maRawBitmap.mnWidth, maRawBitmap.mnHeight, 1, 0, 1 );
+                    nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
                 mnBytesUsed += nBytes;
             }
         }
