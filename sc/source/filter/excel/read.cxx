@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff2 )
                         {
                             eAkt = Z_Biff2;
-                            ResetBof();
                             NeueTabelle();
                         }
                         break;
@@ -186,7 +185,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff3 )
                         {
                             eAkt = Z_Biff3;
-                            ResetBof();
                             NeueTabelle();
                         }
                         break;
@@ -195,7 +193,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4;
-                            ResetBof();
                             NeueTabelle();
                         }
                         else if( pExcRoot->eDateiTyp == Biff4W )
@@ -327,6 +324,7 @@ FltError ImportExcel::Read( void )
                     case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                     case 0x0243: GetXFBuffer().ReadXF( maStrm );                break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                 }
             }
@@ -382,6 +380,7 @@ FltError ImportExcel::Read( void )
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
                     case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                 }
             }
                 break;
@@ -425,6 +424,7 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
                     case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                 }
 
             }
@@ -498,9 +498,10 @@ FltError ImportExcel::Read( void )
                     case 0x0406:                        // FORMULA      [   4 ]
                         Formula4();
                         eAkt = Z_Biff4T;
+                        break;
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
                     case 0x0443: GetXFBuffer().ReadXF( maStrm );                break;
-                        break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                 }
 
             }
@@ -545,7 +546,6 @@ FltError ImportExcel::Read( void )
                         if( pExcRoot->eDateiTyp == Biff4 )
                         {
                             eAkt = Z_Biff4I;
-                            ResetBof();
                         }
                         else
                         {
@@ -576,6 +576,8 @@ FltError ImportExcel::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
+                    // PALETTE follows XFs, but needed while reading the XFs
+                    case 0x92:  Palette(); break;       // PALETTE      [  345]
                         break;
                 }
             }
@@ -603,10 +605,10 @@ FltError ImportExcel::Read( void )
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
-                    case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
+                    case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
@@ -817,7 +819,6 @@ FltError ImportExcel::Read( void )
                         {
                             case Biff5:
                                 eAkt = Z_Biff5Pre;  // Shrfmla Prefetch, Row-Prefetch
-                                pColRowBuff->Reset();
                                 nBofLevel = 0;
 
                                 aIn.StoreGlobalPosition(); // und Position merken
@@ -857,7 +858,6 @@ FltError ImportExcel::Read( void )
                         case 0x0A:                          // EOF          [ 2345]
                             eAkt = Z_Biff5I;
                             aIn.SeekGlobalPosition(); // und zurueck an alte Position
-                            pColRowBuff->Apply( GetScTab() );
                             break;
                         case 0x12:  Protect(); break;       // SHEET PROTECTION
                         case 0x1A:  Verticalpagebreaks(); break;
@@ -1113,6 +1113,8 @@ FltError ImportExcel8::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345   ]
+                    // PALETTE follows XFs, but needed while reading the XFs
+                    case 0x92:  Palette(); break;       // PALETTE      [  345]
                         break;
                 }
             }
@@ -1133,7 +1135,6 @@ FltError ImportExcel8::Read( void )
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0x92:  Palette(); break;       // PALETTE      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0xD3:  bHasBasic = TRUE; break;
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
@@ -1362,9 +1363,7 @@ FltError ImportExcel8::Read( void )
                             case Biff8:
                             case Biff8M4:
                                 eAkt = Z_Biff8Pre;  // Shrfmla Prefetch, Row-Prefetch
-                                pColRowBuff->Reset();
                                 nBofLevel = 0;
-
                                 aIn.StoreGlobalPosition();
                                 break;
                             case Biff8C:
@@ -1404,7 +1403,6 @@ FltError ImportExcel8::Read( void )
                         case 0x0A:                          // EOF          [ 2345   ]
                             eAkt = Z_Biff8I;
                             aIn.SeekGlobalPosition();         // und zurueck an alte Position
-                            pColRowBuff->Apply( GetScTab() );
                             break;
                         case 0x12:  Protect(); break;
                         case 0x1A:  Verticalpagebreaks(); break;
