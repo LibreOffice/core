@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:12:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,8 @@ namespace pcr
                 the form to check. Must not be <NULL/>.
         */
         bool        hasValidDataSourceSignature(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+                        bool _bAllowEmptyDataSourceName
                     ) SAL_THROW(());
 
         sal_uInt32      GetPropertyPos(const ::rtl::OUString& _rPropName);
