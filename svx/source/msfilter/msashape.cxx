@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-27 08:55:08 $
+ *  last change: $Author: sj $ $Date: 2002-08-30 11:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4421,6 +4421,164 @@ static const mso_AutoShape msoFlowChartDisplay =
     0x80000000, 0x80000000
 };
 
+static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
+{
+    { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 8900, 21600 }, { 1300, 25930 }, { 3500, 21600 }, { 0, 21600 }
+};
+static const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
+{
+    2, 1350, 25920
+};
+static const SvxMSDffTextRectangles mso_sptWedgeRectCalloutTextRect[] =
+{
+    { { 0, 0 }, { 21600, 21600 } }
+};
+static const mso_AutoShape msoWedgeRectCallout =
+{
+    (SvxMSDffVertPair*)mso_sptWedgeRectCalloutVert, sizeof( mso_sptWedgeRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    NULL, 0,
+    NULL, 0,
+    (sal_Int32*)mso_sptWedgeRectCalloutDefault,
+    (SvxMSDffTextRectangles*)mso_sptWedgeRectCalloutTextRect, sizeof( mso_sptWedgeRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000
+};
+
+static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
+{
+    { 0, 3100 }, { 3100, 0 }, { 18500, 0 }, { 21600, 3100 }, { 21600, 18500 }, { 18500, 21600 },
+    { 9100, 21600 }, { 1300, 25930 }, { 3500, 21600 }, { 0, 18600 }
+};
+static const sal_uInt16 mso_sptWedgeRRectCalloutSegm[] =
+{
+    0x4000, 0xa801, 0x0001, 0xa701, 0x0001, 0xa801, 0x0003, 0xa701, 0x6001, 0x8000
+};
+static const sal_Int32 mso_sptWedgeRRectCalloutDefault[] =
+{
+    2, 1350, 25920
+};
+static const SvxMSDffTextRectangles mso_sptWedgeRRectCalloutTextRect[] =
+{
+    { { 800, 800 }, { 20800, 20800 } }
+};
+static const mso_AutoShape msoWedgeRRectCallout =
+{
+    (SvxMSDffVertPair*)mso_sptWedgeRRectCalloutVert, sizeof( mso_sptWedgeRRectCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptWedgeRRectCalloutSegm, sizeof( mso_sptWedgeRRectCalloutSegm ) >> 1,
+    NULL, 0,
+    (sal_Int32*)mso_sptWedgeRRectCalloutDefault,
+    (SvxMSDffTextRectangles*)mso_sptWedgeRRectCalloutTextRect, sizeof( mso_sptWedgeRRectCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000
+};
+
+static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
+{
+    { 0, 0 }, { 21600, 21600 }, { 3300, 18730 }, { 6900 , 20730 }, { 1300, 25930 }
+};
+static const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
+{
+    0xb504, 0x6001, 0x0001, 0x8000
+};
+static const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
+{
+    2, 1350, 25920
+};
+static const SvxMSDffTextRectangles mso_sptWedgeEllipseCalloutTextRect[] =
+{
+    { { 3200, 3200 }, { 18400, 18400 } }
+};
+static const mso_AutoShape msoWedgeEllipseCallout =
+{
+    (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutVert, sizeof( mso_sptWedgeEllipseCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptWedgeEllipseCalloutSegm, sizeof( mso_sptWedgeEllipseCalloutSegm ) >> 1,
+    NULL, 0,
+    (sal_Int32*)mso_sptWedgeEllipseCalloutDefault,
+    (SvxMSDffTextRectangles*)mso_sptWedgeEllipseCalloutTextRect, sizeof( mso_sptWedgeEllipseCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000
+};
+
+static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
+{
+    { 1930,7160 },                                      // p
+    { 1530,4490 }, { 3400,1970 }, { 5270,1970 },        // ccp
+    { 5860,1950 }, { 6470,2210 }, { 6970,2600 },        // ccp
+    { 7450,1390 }, { 8340,650 }, { 9340,650 },          // ccp
+    { 10004,690 }, { 10710,1050 }, { 11210,1700 },      // ccp
+    { 11570,630 }, { 12330,0 }, { 13150,0 },            // ccp
+    { 13840,0 }, { 14470,460 }, { 14870,1160 },         // ccp
+    { 15330,440 }, { 16020,0 }, { 16740,0 },            // ccp
+    { 17910,0 }, { 18900,1130 }, { 19110,2710 },        // ccp
+    { 20240,3150 }, { 21060,4580 }, { 21060,6220 },     // ccp
+    { 21060,6720 }, { 21000,7200 }, { 20830,7660 },     // ccp
+    { 21310,8460 }, { 21600,9450 }, { 21600,10460 },    // ccp
+    { 21600,12750 }, { 20310,14680 }, { 18650,15010 },  // ccp
+    { 18650,17200 }, { 17370,18920 }, { 15770,18920 },  // ccp
+    { 15220,18920 }, { 14700,18710 }, { 14240,18310 },  // ccp
+    { 13820,20240 }, { 12490,21600 }, { 11000,21600 },  // ccp
+    { 9890,21600 }, { 8840,20790 }, { 8210,19510 },     // ccp
+    { 7620,20000 }, { 7930,20290 }, { 6240,20290 },     // ccp
+    { 4850,20290 }, { 3570,19280 }, { 2900,17640 },     // ccp
+    { 1300,17600 }, { 480,16300 }, { 480,14660 },       // ccp
+    { 480,13900 }, { 690,13210 }, { 1070,12640 },       // ccp
+    { 380,12160 }, { 0,11210 }, { 0,10120 },            // ccp
+    { 0,8590 }, { 840,7330 }, { 1930,7160 },            // ccp
+
+    { 1930, 7160 }, { 1950, 7410 }, { 2040, 7690 }, { 2090, 7920 },         // pccp
+    { 6970, 2600 }, { 7200, 2790 }, { 7480, 3050 }, { 7670, 3310 },         // pccp
+    { 11210, 1700 }, { 11130, 1910 }, { 11080, 2160 }, { 11030, 2400 },     // pccp
+    { 14870, 1160 }, { 14720, 1400 }, { 14640, 1720 }, { 14540, 2010 },     // pccp
+    { 19110, 2710 }, { 19130, 2890 }, { 19230, 3290 }, { 19190, 3380 },     // pccp
+    { 20830, 7660 }, { 20660, 8170 }, { 20430, 8620 }, { 20110, 8990 },     // pccp
+    { 18660, 15010 }, { 18740, 14200 }, { 18280, 12200 }, { 17000, 11450 }, // pccp
+    { 14240, 18310 }, { 14320, 17980 }, { 14350, 17680 }, { 14370, 17360 }, // pccp
+    { 8220, 19510 }, { 8060, 19250 }, { 7960, 18950 }, { 7860, 18640 },     // pccp
+    { 2900, 17640 }, { 3090, 17600 }, { 3280, 17540 }, { 3460, 17450 },     // pccp
+    { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 },     // pccp
+
+    { 2220, 19800 }, { 5820, 23400 },                                       // circ1
+    { 1170, 23070 }, { 3570, 25470 },                                       // circ2
+    { 730, 25320 }, { 1930, 26520 }                                         // circ3
+
+};
+static const sal_uInt16 mso_sptCloudCalloutSegm[] =
+{
+    0x4000, 0x2016, 0x6001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0x4000, 0x2001, 0x8000,
+    0xb502, 0x6001, 0x8000,
+    0xb502, 0x6001, 0x8000,
+    0xb502, 0x6001, 0x8000
+};
+static const sal_Int32 mso_sptCloudCalloutDefault[] =
+{
+    2, 1350, 25920
+};
+static const SvxMSDffTextRectangles mso_sptCloudCalloutTextRect[] =
+{
+    { { 3000, 3320 }, { 17110, 17330 } }
+};
+static const mso_AutoShape msoCloudCallout =
+{
+    (SvxMSDffVertPair*)mso_sptCloudCalloutVert, sizeof( mso_sptCloudCalloutVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptCloudCalloutSegm, sizeof( mso_sptCloudCalloutSegm ) >> 1,
+    NULL, 0,
+    (sal_Int32*)mso_sptCloudCalloutDefault,
+    (SvxMSDffTextRectangles*)mso_sptCloudCalloutTextRect, sizeof( mso_sptCloudCalloutTextRect ) / sizeof( SvxMSDffTextRectangles ),
+    21600, 21600,
+    0x80000000, 0x80000000
+};
+
 class SvxMSDffAdjustmentHandle
 {
     sal_Int32   nAdjustValue;
@@ -4760,9 +4918,10 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         case mso_sptFlowChartMagneticDisk :     pDefAutoShape = &msoFlowChartMagneticDisk; break;
         case mso_sptFlowChartMagneticDrum :     pDefAutoShape = &msoFlowChartMagneticDrum; break;
         case mso_sptFlowChartDisplay :          pDefAutoShape = &msoFlowChartDisplay; break;
-//      case mso_sptWedgeRRectCallout :         pDefAutoShape = &msoWedgeRRectCallout; break;
-//      case mso_sptWedgeEllipseCallout :       pDefAutoShape = &msoWedgeEllipseCallout; break;
-//      case mso_sptCloudCallout :              pDefAutoShape = &msoCloudCallout; break;
+        case mso_sptWedgeRectCallout :          pDefAutoShape = &msoWedgeRectCallout; break;
+        case mso_sptWedgeRRectCallout :         pDefAutoShape = &msoWedgeRRectCallout; break;
+        case mso_sptWedgeEllipseCallout :       pDefAutoShape = &msoWedgeEllipseCallout; break;
+        case mso_sptCloudCallout :              pDefAutoShape = &msoCloudCallout; break;
 
 //      case mso_sptWave :                  pDefAutoShape = &msoWave; break;
         break;
@@ -5488,8 +5647,11 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             if ( !pSegData )
             {
                 FASTBOOL bClosed = aXP[ 0 ] == aXP[ (sal_uInt16)( aXP.GetPointCount() - 1 ) ];
+                Rectangle aUnion( aXP.GetBoundRect() );
                 pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
-                pRet->NbcSetSnapRect( aSnapRect );
+                pRet->NbcSetSnapRect( Rectangle( Point( aSnapRect.Left() + aUnion.Left(),
+                                                         aSnapRect.Top() + aUnion.Top() ),
+                                                            aUnion.GetSize() ) );
                 pRet->SetModel( pSdrModel );
                 pRet->SetItemSet(rSet);
             }
