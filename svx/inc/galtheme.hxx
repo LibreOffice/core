@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:43:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SVX_GALTHEME_HXX_
 #define _SVX_GALTHEME_HXX_
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
@@ -179,7 +183,7 @@ public:
     BOOL                        IsDragging() const { return bDragging; }
 
     void                        LockBroadcaster() { mnLockCount++; }
-    void                        UnlockBroadcaster( ULONG nUpdatePos = 0 );
+    SVX_DLLPUBLIC void                      UnlockBroadcaster( ULONG nUpdatePos = 0 );
     BOOL                        IsBroadcasterLocked() const { return mnLockCount > 0; }
 
     void                        SetDragPos( ULONG nPos ) { nDragPos = nPos; }
@@ -192,7 +196,7 @@ public:
     BOOL                        IsDefault() const { return pThm->IsDefault(); }
     BOOL                        IsModified() const { return pThm->IsModified(); }
 
-    void                        Actualize( const Link& rActualizeLink, GalleryProgress* pProgress = NULL );
+    SVX_DLLPUBLIC void                      Actualize( const Link& rActualizeLink, GalleryProgress* pProgress = NULL );
     void                        AbortActualize() { bAbortActualize = TRUE; }
 
     Gallery*                    GetParent() const { return pParent; }
@@ -225,7 +229,7 @@ public:
     BOOL                        InsertModelStream( const SotStorageStreamRef& rModelStream, ULONG nInsertPos = LIST_APPEND );
 
     BOOL                        GetURL( ULONG nPos, INetURLObject& rURL, BOOL bProgress = FALSE );
-    BOOL                        InsertURL( const INetURLObject& rURL, ULONG nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC BOOL                      InsertURL( const INetURLObject& rURL, ULONG nInsertPos = LIST_APPEND );
     BOOL                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG nInsertPos = LIST_APPEND );
 
     BOOL                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos );
