@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: abi $ $Date: 2001-02-19 10:17:05 $
+ *  last change: $Author: hro $ $Date: 2001-02-20 09:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2006,6 +2006,7 @@ shell::ls( sal_Int32 CommandId,
     if( ! p->CtorSuccess() )
     {
         delete p; p = 0;
+        throw CommandAbortedException();
     }
 
     return uno::Reference< XDynamicResultSet > ( p );
@@ -3453,22 +3454,58 @@ void SAL_CALL shell::notifyPropertyChanges( std::list< PropertyChangeNotifier* >
 extern "C" oslFileError osl_getRealPath(rtl_uString* strPath, rtl_uString** strRealPath);
 #endif
 
+//----------------------------------------------------------------------------
+//  makeAbsolute Path
+//----------------------------------------------------------------------------
+
+static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
+{
+    sal_Int32   nTokens = aRelPath.getTokenCount( '/' );
+    sal_Int32   iToken = 0;
+
+    for ( iToken = 1; iToken < nTokens; iToken++ )
+    {
+        rtl::OUString   aToken = aRelPath.getToken( iToken, '/' );
+
+        if ( aToken.compareTo( rtl::OUString::createFromAscii( ".." ) ) == 0 )
+        {
+            // ignore
+        }
+        else
+        {
+            aAbsPath += rtl::OUString::createFromAscii( "/" );
+            aAbsPath += aToken;
+        }
+    }
+
+    aAbsPath = aRelPath;
+
+    return sal_True;
+}
+
+//----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
                                           rtl::OUString&        aRedirectedPath )
 {
+    rtl::OUString   aAbsPath;
+
+    if ( !makeAbsolutePath( aUnqPath, aAbsPath ) )
+        return false;
+
     sal_Int32 numMp = m_vecMountPoint.size();
 
     if( ! numMp )
     {
         // No access restrictions
-        aRedirectedPath = aUnqPath;
+        aRedirectedPath = aAbsPath;
         return true;
     }
 
 
-    if( aUnqPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
+    if( aAbsPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
     {
-        aRedirectedPath = aUnqPath;
+        aRedirectedPath = aAbsPath;
         return true;
     }
 
@@ -3478,10 +3515,10 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
         rtl::OUString aDir   = m_vecMountPoint[j].m_aDirectory;
         sal_Int32 nL = aAlias.getLength();
 
-        if( aUnqPath.compareTo( aAlias,nL ) == 0 && ( aUnqPath.getLength() == nL || aUnqPath[nL] == '/' ) )
+        if( aAbsPath.compareTo( aAlias,nL ) == 0 && ( aAbsPath.getLength() == nL || aAbsPath[nL] == '/' ) )
         {
             aRedirectedPath = aDir;
-            aRedirectedPath += aUnqPath.copy( nL );
+            aRedirectedPath += aAbsPath.copy( nL );
             return true;
         }
     }
@@ -3490,23 +3527,29 @@ sal_Bool SAL_CALL shell::checkMountPoint( const rtl::OUString&  aUnqPath,
 }
 
 
-
 sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
                                             rtl::OUString&        aRedirectedPath )
 {
+    rtl::OUString   aAbsPath;
+
+
+    //
+    if ( !makeAbsolutePath( aUnqPath, aAbsPath ) )
+        return false;
+
     sal_Int32 numMp = m_vecMountPoint.size();
 
     if( ! numMp )
     {
         // No access restrictions
-        aRedirectedPath = aUnqPath;
+        aRedirectedPath = aAbsPath;
         return true;
     }
 
 
-    if( aUnqPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
+    if( aAbsPath.compareTo( rtl::OUString::createFromAscii( "//./" ) ) == 0 )
     {
-        aRedirectedPath = aUnqPath;
+        aRedirectedPath = aAbsPath;
         return true;
     }
 
@@ -3520,7 +3563,7 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
         oslFileError    error = osl_File_E_None;
 
         if ( !aRealUnqPath.pData->length )
-            error = osl_getRealPath( aUnqPath.pData, &aRealUnqPath.pData );
+            error = osl_getRealPath( aAbsPath.pData, &aRealUnqPath.pData );
 
         rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
 
@@ -3534,12 +3577,12 @@ sal_Bool SAL_CALL shell::uncheckMountPoint( const rtl::OUString&  aUnqPath,
 #else
         rtl::OUString dir = m_vecMountPoint[j].m_aDirectory;
 
-        if( aUnqPath.compareTo( dir,nL ) == 0  &&
-            ( aUnqPath.getLength() == nL || aUnqPath[nL] == '/' )
+        if( aAbsPath.compareTo( dir,nL ) == 0  &&
+            ( aAbsPath.getLength() == nL || aAbsPath[nL] == '/' )
         )
         {
             aRedirectedPath = m_vecMountPoint[j].m_aMountPoint;
-            aRedirectedPath += aUnqPath.copy( nL );
+            aRedirectedPath += aAbsPath.copy( nL );
             return true;
         }
 #endif
