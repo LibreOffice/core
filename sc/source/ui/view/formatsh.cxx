@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:14:34 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,39 @@
 #include <svx/svxslots.hxx>
 
 #include "scabstdlg.hxx" //CHINA001
+
+namespace {
+
+SvxCellHorJustify lclConvertSlotToHAlign( USHORT nSlot )
+{
+    SvxCellHorJustify eHJustify = SVX_HOR_JUSTIFY_STANDARD;
+    switch( nSlot )
+    {
+        case SID_ALIGN_ANY_HDEFAULT:    eHJustify = SVX_HOR_JUSTIFY_STANDARD;   break;
+        case SID_ALIGN_ANY_LEFT:        eHJustify = SVX_HOR_JUSTIFY_LEFT;       break;
+        case SID_ALIGN_ANY_HCENTER:     eHJustify = SVX_HOR_JUSTIFY_CENTER;     break;
+        case SID_ALIGN_ANY_RIGHT:       eHJustify = SVX_HOR_JUSTIFY_RIGHT;      break;
+        case SID_ALIGN_ANY_JUSTIFIED:   eHJustify = SVX_HOR_JUSTIFY_BLOCK;      break;
+        default:    DBG_ERRORFILE( "lclConvertSlotToHAlign - invalid slot" );
+    }
+    return eHJustify;
+}
+
+SvxCellVerJustify lclConvertSlotToVAlign( USHORT nSlot )
+{
+    SvxCellVerJustify eVJustify = SVX_VER_JUSTIFY_STANDARD;
+    switch( nSlot )
+    {
+        case SID_ALIGN_ANY_VDEFAULT:    eVJustify = SVX_VER_JUSTIFY_STANDARD;   break;
+        case SID_ALIGN_ANY_TOP:         eVJustify = SVX_VER_JUSTIFY_TOP;        break;
+        case SID_ALIGN_ANY_VCENTER:     eVJustify = SVX_VER_JUSTIFY_CENTER;     break;
+        case SID_ALIGN_ANY_BOTTOM:      eVJustify = SVX_VER_JUSTIFY_BOTTOM;     break;
+        default:    DBG_ERRORFILE( "lclConvertSlotToVAlign - invalid slot" );
+    }
+    return eVJustify;
+}
+
+} // namespace
 
 TYPEINIT1( ScFormatShell, SfxShell );
 
@@ -1008,55 +1041,80 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
 
     pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
 
-    if( pSet )
+    switch( nSlot )
     {
-        const SfxPoolItem* pItem = NULL;
-        if( pSet->GetItemState(GetPool().GetWhich(nSlot), TRUE, &pItem  ) == SFX_ITEM_SET )
-        {
+        // pseudo slots for Format menu
+        case SID_ALIGN_ANY_HDEFAULT:
+        case SID_ALIGN_ANY_LEFT:
+        case SID_ALIGN_ANY_HCENTER:
+        case SID_ALIGN_ANY_RIGHT:
+        case SID_ALIGN_ANY_JUSTIFIED:
+            pTabViewShell->ApplyAttr( SvxHorJustifyItem( lclConvertSlotToHAlign( nSlot ) ) );
+        break;
+        case SID_ALIGN_ANY_VDEFAULT:
+        case SID_ALIGN_ANY_TOP:
+        case SID_ALIGN_ANY_VCENTER:
+        case SID_ALIGN_ANY_BOTTOM:
+            pTabViewShell->ApplyAttr( SvxVerJustifyItem( lclConvertSlotToVAlign( nSlot ) ) );
+        break;
 
-            switch ( nSlot )
+        default:
+            if( pSet )
             {
-                case SID_ATTR_ALIGN_HOR_JUSTIFY:
-                case SID_ATTR_ALIGN_VER_JUSTIFY:
-                case SID_ATTR_ALIGN_INDENT:
-                case SID_ATTR_ALIGN_HYPHENATION:
-                case SID_ATTR_ALIGN_DEGREES:
-                case SID_ATTR_ALIGN_LOCKPOS:
-                case SID_ATTR_ALIGN_MARGIN:
-                case SID_ATTR_ALIGN_ORIENTATION:
-                    pTabViewShell->ApplyAttr( *pItem );
-                    break;
+                const SfxPoolItem* pItem = NULL;
+                if( pSet->GetItemState(GetPool().GetWhich(nSlot), TRUE, &pItem  ) == SFX_ITEM_SET )
+                {
 
-                case SID_H_ALIGNCELL:
-                {
-                    pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue() ) );
+                    switch ( nSlot )
+                    {
+                        case SID_ATTR_ALIGN_HOR_JUSTIFY:
+                        case SID_ATTR_ALIGN_VER_JUSTIFY:
+                        case SID_ATTR_ALIGN_INDENT:
+                        case SID_ATTR_ALIGN_HYPHENATION:
+                        case SID_ATTR_ALIGN_DEGREES:
+                        case SID_ATTR_ALIGN_LOCKPOS:
+                        case SID_ATTR_ALIGN_MARGIN:
+                        case SID_ATTR_ALIGN_ORIENTATION:
+                            pTabViewShell->ApplyAttr( *pItem );
+                        break;
+
+                        case SID_H_ALIGNCELL:
+                            pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue() ) );
+                        break;
+                        case SID_V_ALIGNCELL:
+                            pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue() ) );
+                        break;
+                        default:
+                            DBG_ERROR( "ExecuteAlignment: invalid slot" );
+                            return;
+                    }
                 }
-                break;
-                case SID_V_ALIGNCELL:
-                {
-                    pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue() ) );
-                }
-                break;
-                default:
-                DBG_ERROR( "ExecuteAlignment: invalid slot" );
-                return;
             }
-
-            rBindings.Invalidate( SID_ALIGNLEFT );
-            rBindings.Invalidate( SID_ALIGNRIGHT );
-            rBindings.Invalidate( SID_ALIGNCENTERHOR );
-            rBindings.Invalidate( SID_ALIGNBLOCK );
-            rBindings.Invalidate( SID_ALIGNTOP );
-            rBindings.Invalidate( SID_ALIGNBOTTOM );
-            rBindings.Invalidate( SID_ALIGNCENTERVER );
-            rBindings.Invalidate( SID_V_ALIGNCELL );
-            rBindings.Invalidate( SID_H_ALIGNCELL );
-            rBindings.Update();
-
-            if( ! rReq.IsAPI() )
-                rReq.Done();
-        }
     }
+
+    rBindings.Invalidate( SID_ALIGNLEFT );
+    rBindings.Invalidate( SID_ALIGNRIGHT );
+    rBindings.Invalidate( SID_ALIGNCENTERHOR );
+    rBindings.Invalidate( SID_ALIGNBLOCK );
+    rBindings.Invalidate( SID_ALIGNTOP );
+    rBindings.Invalidate( SID_ALIGNBOTTOM );
+    rBindings.Invalidate( SID_ALIGNCENTERVER );
+    rBindings.Invalidate( SID_V_ALIGNCELL );
+    rBindings.Invalidate( SID_H_ALIGNCELL );
+    // pseudo slots for Format menu
+    rBindings.Invalidate( SID_ALIGN_ANY_HDEFAULT );
+    rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
+    rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
+    rBindings.Invalidate( SID_ALIGN_ANY_VDEFAULT );
+    rBindings.Invalidate( SID_ALIGN_ANY_TOP );
+    rBindings.Invalidate( SID_ALIGN_ANY_VCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_BOTTOM );
+    rBindings.Update();
+
+    if( ! rReq.IsAPI() )
+        rReq.Done();
 }
 
 void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
@@ -1859,29 +1917,42 @@ void ScFormatShell::GetAlignState( SfxItemSet& rSet )
     SfxWhichIter    aIter(rSet);
     USHORT          nWhich = aIter.FirstWhich();
 
+    SvxCellHorJustify eHAlign = SVX_HOR_JUSTIFY_STANDARD;
+    bool bHasHAlign = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SFX_ITEM_DONTCARE;
+    if( bHasHAlign )
+        eHAlign = (SvxCellHorJustify)((const SvxHorJustifyItem&) rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
+
+    SvxCellVerJustify eVAlign = SVX_VER_JUSTIFY_STANDARD;
+    bool bHasVAlign = rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SFX_ITEM_DONTCARE;
+    if( bHasVAlign )
+        eVAlign = (SvxCellVerJustify)((const SvxVerJustifyItem&) rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();
+
     while ( nWhich )
     {
         switch ( nWhich )
         {
             case SID_H_ALIGNCELL:
-            {
-                if ( rAttrSet.GetItemState( ATTR_HOR_JUSTIFY ) != SFX_ITEM_DONTCARE )
-                {
-                    SvxCellHorJustify eHorJustify = (SvxCellHorJustify)((const SvxHorJustifyItem&)
-                                        rAttrSet.Get( ATTR_HOR_JUSTIFY )).GetValue();
-                    rSet.Put( SvxHorJustifyItem( eHorJustify, nWhich ));
-                }
-            }
+                if ( bHasHAlign )
+                    rSet.Put( SvxHorJustifyItem( eHAlign, nWhich ));
             break;
             case SID_V_ALIGNCELL:
-            {
-                if ( rAttrSet.GetItemState( ATTR_VER_JUSTIFY ) != SFX_ITEM_DONTCARE )
-                {
-                    SvxCellVerJustify eVerJustify = (SvxCellVerJustify)((const SvxVerJustifyItem&)
-                                        rAttrSet.Get( ATTR_VER_JUSTIFY )).GetValue();
-                    rSet.Put( SvxVerJustifyItem( eVerJustify, nWhich ));
-                }
-            }
+                if ( bHasVAlign )
+                    rSet.Put( SvxVerJustifyItem( eVAlign, nWhich ));
+            break;
+
+            // pseudo slots for Format menu
+            case SID_ALIGN_ANY_HDEFAULT:
+            case SID_ALIGN_ANY_LEFT:
+            case SID_ALIGN_ANY_HCENTER:
+            case SID_ALIGN_ANY_RIGHT:
+            case SID_ALIGN_ANY_JUSTIFIED:
+                rSet.Put( SfxBoolItem( nWhich, bHasHAlign && (eHAlign == lclConvertSlotToHAlign( nWhich )) ) );
+            break;
+            case SID_ALIGN_ANY_VDEFAULT:
+            case SID_ALIGN_ANY_TOP:
+            case SID_ALIGN_ANY_VCENTER:
+            case SID_ALIGN_ANY_BOTTOM:
+                rSet.Put( SfxBoolItem( nWhich, bHasVAlign && (eVAlign == lclConvertSlotToVAlign( nWhich )) ) );
             break;
         }
         nWhich = aIter.NextWhich();
