@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 11:03:52 $
+ *  last change: $Author: pb $ $Date: 2001-12-11 15:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,21 +115,34 @@
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
+#include <ucbhelper/commandenvironment.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 
 #include <tools/wldcrd.hxx>
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
-#include <ucbhelper/content.hxx>
-#include <comphelper/processfactory.hxx>
-#include <osl/file.hxx>
 
 using namespace ::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::task;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace rtl;
@@ -577,7 +590,10 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
     aURL.removeSegment();
     Content aCnt;
     Content aNew;
-    if ( Content::create( aURL.GetMainURL(), Reference< XCommandEnvironment >(), aCnt ) )
+    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+               xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+    if ( Content::create( aURL.GetMainURL(), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ), aCnt ) )
         return MakeFolder( aCnt, aTitle, aNew );
     else
         return sal_False;
