@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,8 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
     BOOL bTblIsValid;
     int nLoopMax = 100;     //JP 28.06.99: max 100 loops - Bug 67292
+    USHORT i;
+
     do {
         bTblIsValid = TRUE;
 
@@ -405,7 +407,7 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
         ::MakeSelUnions( aUnions, pStart, pEnd, eSearchType );
 
         //Jetzt zu jedem Eintrag die Boxen herausfischen und uebertragen.
-        for( USHORT i = 0; i < aUnions.Count() && bTblIsValid; ++i )
+        for( i = 0; i < aUnions.Count() && bTblIsValid; ++i )
         {
             SwSelUnion *pUnion = aUnions[i];
             const SwTabFrm *pTable = pUnion->GetTable();
@@ -536,6 +538,8 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
     BOOL bTblIsValid, bValidChartSel;
     int nLoopMax = 100;     //JP 28.06.99: max 100 loops - Bug 67292
+    USHORT i = 0;
+
     do {
         bTblIsValid = TRUE;
         bValidChartSel = TRUE;
@@ -547,7 +551,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
         ::MakeSelUnions( aUnions, pStart, pEnd, TBLSEARCH_NO_UNION_CORRECT );
 
         //Jetzt zu jedem Eintrag die Boxen herausfischen und uebertragen.
-        for( USHORT i = 0; i < aUnions.Count() && bTblIsValid &&
+        for( i = 0; i < aUnions.Count() && bTblIsValid &&
                                     bValidChartSel; ++i )
         {
             SwSelUnion *pUnion = aUnions[i];
