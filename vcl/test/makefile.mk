@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: obr $ $Date: 2001-02-21 15:02:01 $
+#   last change: $Author: obr $ $Date: 2001-12-03 10:21:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ OBJFILES=		$(OBJ)$/dndtest.obj
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=		$(OBJ)$/dnddem.obj \
+APP1OBJS=		$(OBJ)$/dndtest.obj \
                 $(OBJ)$/salmain.obj
 
 APP1STDLIBS=	$(CPPULIB)			\
