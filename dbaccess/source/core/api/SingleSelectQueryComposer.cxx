@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:31:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:51:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,6 +782,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                 for(sal_Int32 i=1;i<=nCount;++i)
                 {
                     ::rtl::OUString sName = xMeta->getColumnName(i);
+                    sal_Bool bFound = sal_False;
                     OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,bCase);
                     if(aFind != aCols->end())
                         //aNames.end() == ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName)))
@@ -794,17 +795,16 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                                 aFind = ::connectivity::findRealName(++aFind,aCols->end(),sName,bCase);
                             }
                             while(aColumnMap.find(aFind) != aColumnMap.end() && aFind != aCols->end());
-
-                            OSL_ENSURE(aFind != aCols->end(),"Invalid column!");
                         }
                         if(aFind != aCols->end())
                         {
                             (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
                             aColumnMap.insert(::std::map<OSQLColumns::const_iterator,int>::value_type(aFind,0));
                             aNames.push_back(sName);
+                            bFound = sal_True;
                         }
                     }
-                    else
+                    if ( !bFound )
                     { // we can now only look if we found it under the realname propertery
                         OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
 
@@ -817,15 +817,30 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
                                 if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
                                 {
                                     ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xMetaData->storesMixedCaseQuotedIdentifiers());
-                                    if(sName.getLength())
-                                        pColumn->setName(sName);
-                                    else
-                                        xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
-                                    pColumn->setRealName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_REALNAME)));
-                                    pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
                                     pColumn->setFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))));
                                     pColumn->setAggregateFunction(::comphelper::getBOOL(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction")))));
+
+                                    ::rtl::OUString sRealName;
+                                    xProp->getPropertyValue(PROPERTY_REALNAME) >>= sRealName;
+                                    ::std::vector< ::rtl::OUString>::iterator aFindName;
+                                    if ( !sName.getLength() )
+                                        xProp->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+
+                                    aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName));
+                                    sal_Int32 j = 0;
+                                    while ( aFindName != aNames.end() )
+                                    {
+                                        sName += ::rtl::OUString::valueOf(++j);
+                                        aFindName = ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName));
+                                    }
+
+                                    pColumn->setName(sName);
+                                    pColumn->setRealName(sRealName);
+                                    pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
+
                                     (*aCols)[i-1] = pColumn;
+                                    aColumnMap.insert(::std::map<OSQLColumns::const_iterator,int>::value_type((*aCols).begin() + i-1,0));
                                 }
                             }
                             aNames.push_back(sName);
