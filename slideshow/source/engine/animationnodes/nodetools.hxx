@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodetools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:06:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,31 +111,6 @@ namespace presentation
         AttributableShapeSharedPtr lookupAttributableShape( const LayerManagerSharedPtr&                rLayerManager,
                                                             const ::com::sun::star::uno::Reference<
                                                                 ::com::sun::star::drawing::XShape >&    xShape          );
-
-        /** generate vector of subsets, to show sequence of given
-            DocTreeNode::NodeType.
-
-            The output vector will receive all DocTreeNodes of the
-            given type, which are contained in the given shape. Note
-            that the output DocTreeNodes are flat, i.e. don't contain
-            any children.
-         */
-        void generateSubsets( DocTreeNode::VectorOfDocTreeNodes&    o_rOutput,
-                              const AttributableShapeSharedPtr&     pShape,
-                              DocTreeNode::NodeType                 eNodeType );
-
-        /** generate vector of subsets, to show sequence of given
-            DocTreeNode::NodeType.
-
-            This method starts subset generation below paragraph
-            nPara. This is for iterations with a ParagraphTarget
-            target attribute, where the iteration is to be applied
-            only to the selected paragraph number.
-        */
-        void generateSubsets( DocTreeNode::VectorOfDocTreeNodes&    o_rOutput,
-                              const AttributableShapeSharedPtr&     pShape,
-                              DocTreeNode::NodeType                 eNodeType,
-                              sal_Int32                             nPara );
 
         /** Predicate whether a Begin, Duration or End timing is
             indefinite, i.e. either contains no value, or the
