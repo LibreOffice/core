@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 14:14:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,7 +744,7 @@ String GID_MATH
     Text[ dutch ] = "Math";
     Text[ chinese_simplified ] = "ΚύΡ§";
     Text[ greek ] = "Math";
-    Text[ korean ] = "ΌφΗΠ";
+    Text[ korean ] = "Math";
     Text[ turkish ] = "Math";
     Text[ language_user1 ] = " ";
 };
@@ -1369,14 +1369,14 @@ TabDialog SID_OPTIONS
                 Text [ spanish ] = "Revisiσn ortogrαfica" ;
                 Text [ english_us ] = "Spellcheck" ;
                 PageResID = 259 ;
-                Text[ chinese_simplified ] = "ΥύΧΦ·¨Όμ²ι";
+                Text[ chinese_simplified ] = "Ζ΄Π΄Όμ²ι";
                 Text[ russian ] = "Οπξβεπκΰ ξπτξγπΰτθθ";
                 Text[ polish ] = "Sprawdzanie pisowni";
                 Text[ japanese ] = "•¶ΝZ³";
-                Text[ chinese_traditional ] = "«χ¦r";
+                Text[ chinese_traditional ] = "«χΌgΐΛ¬d";
                 Text[ arabic ] = "ΗαΚΟήνή ΗαΕγαΗΖν";
                 Text[ dutch ] = "Spellingcontrole";
-                Text[ chinese_simplified ] = "ΥύΧΦ·¨Όμ²ι";
+                Text[ chinese_simplified ] = "Ζ΄Π΄Όμ²ι";
                 Text[ greek ] = "Ορθογραφικός έλεγχος";
                 Text[ korean ] = "ΈΒΓγΉύ";
                 Text[ turkish ] = "Yazύm denetimi";
@@ -1475,7 +1475,7 @@ String STR_NODOUBLE
     Text[ russian ] = "Μνξγξκπΰςνϋι ηΰοσρκ %PRODUCTNAME νεβξημξζεν.";
     Text[ polish ] = "%PRODUCTNAME nie moΏna kilkakrotnie uruchomiζ.";
     Text[ japanese ] = "%PRODUCTNAME‚Ν ‰½‰ρ‚ΰ½ΐ°Δ‚Ε‚«‚ά‚Ή‚ρB";
-    Text[ chinese_traditional ] = "µLªk¦P®Ι¦h¦Έ±Ò°Κ%PRODUCTNAME΅C";
+    Text[ chinese_traditional ] = "µLªk¦P®Ι¦h¦Έ±Ò°Κ %PRODUCTNAME΅C";
     Text[ arabic ] = "αΗ νγίδ ΘΟΑ %PRODUCTNAME ΓίΛΡ γδ γΡΙ.";
     Text[ dutch ] = "%PRODUCTNAME kan maar ιιn keer tegelijk worden gestart.";
     Text[ chinese_simplified ] = "Ξή·¨Ν¬Κ±¶ΰ΄ΞΖτ¶― %PRODUCTNAME ΅£";
@@ -1507,7 +1507,7 @@ String STR_NOPRINTER
     Text[ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
     Text[ chinese_simplified ] = "ÒςΞªΓ»ΣΠ°²Χ°΄ςΣ΅»ϊΗύ¶―³ΜΠς£¬Ò»Π©%PRODUCTNAMEΉ¦ΔάΏΙΔά²»»αΥύ³£ΤΛΧª΅£\nΗλΔϊ°²Χ°Ò»Έφ΄ςΣ΅»ϊΗύ¶―³ΜΠς΅£";
     Text[ greek ] = "Μερικές από τις λειτουργίες του %PRODUCTNAME δεν θα λειτουργήσουν σωστά χωρίς το πρόγραμμα οδήγησης του εκτυπωτή.\nΠαρακαλώ να γίνει εγκατάσταση ενός προγράμματος οδήγησης εκτυπωτή.";
-    Text[ korean ] = "ΈξΈξΐΗ  %PRODUCTNAME ±β΄ΙΐΊ ΗΑΈ°ΕΝ µε¶σΐΜΉφ ΎψΐΜ΄Β ΐϋΐύΘχ ΐΫµΏµΗΑφ ΎΚ½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ µε¶σΐΜΉφΈ¦ Ό³Δ΅ ΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "ΐΟΊΞ  %PRODUCTNAME ±β΄ΙΐΊ ΗΑΈ°ΕΝ µε¶σΐΜΉφ ΎψΐΜ΄Β  Α¤Θ®ΗΟ°Τ ΐΫµΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΗΑΈ°ΕΝ µε¶σΐΜΉφΈ¦ Ό³Δ΅ΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Bazύ %PRODUCTNAME iώlevleri yazύcύ sόrόcόsό olmadan doπru ηalύώamaz.\nBir yazύcύ sόrόcόsό kurun.";
     Text[ language_user1 ] = " ";
 };
@@ -1561,7 +1561,7 @@ String STR_NOOFFICE
     Text[ dutch ] = "%PRODUCTNAME Desktop kan niet worden gestart\nals een %PRODUCTNAME Writer applicatiemodule als\napplicatie werd gestart.";
     Text[ chinese_simplified ] = "ΤΪ%PRODUCTNAME WriterΣ¦ΣΓ³ΜΠςΔ£Ώι±»µ±Χχ\nΣ¦ΣΓ³ΜΠςΖτ¶―ΤΛΠΠΚ±Ξή·¨Ζτ¶―%PRODUCTNAME Desktop ΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να εκκινήσει το %PRODUCTNAME Desktop\nαν εκκίνησε η λειτουργική μονάδα της εφαρμογής\n του %PRODUCTNAME Writer ως εφαρνογή.";
-    Text[ korean ] = "%PRODUCTNAME WriterΐΐΏλ ΗΑ·Ξ±Χ·¥ ΈπµβΐΜ\n ΐΐΏλΗΑ·Ξ±Χ·¥ΐΈ·ΞΌ­ ½ΓΐΫµΗΎϊ΄ΩΈι,\n %PRODUCTNAME µ¥½ΊΕ© ΕΎΐΊ ½ΓΐΫ µΙΌφ Ύψ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "StarWriter  ΐΐΏλΗΑ·Ξ±Χ·¥ ΈπµβΐΜ \nΐΐΏλΗΑ·Ξ±Χ·¥ΐΈ·Ξ ½ΓΐΫµΗΎϊΐΈΈι, StarDesktopΐΊ ½ΓΐΫµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "%PRODUCTNAME masaόstό, %PRODUCTNAME Writer uygulama modulό\nuygulama olarak ηalύώtύrύlmύώsa baώlatύlamaz.";
     Text[ language_user1 ] = " ";
 };
@@ -2156,7 +2156,7 @@ String STR_EVENT_NEWMESSAGE
     Text[ dutch ] = "Bericht ontvangen";
     Text[ chinese_simplified ] = "ΠΒµΔµηΧΣΣΚΌώ";
     Text[ greek ] = "Λήψη μηνύματος";
-    Text[ korean ] = "ΈήΌΌΑφ°΅ Όφ½ΕµΗΎϊ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "Έή½ΓΑφ°΅ Όφ½ΕµΗΎϊ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "έleti alύndύ";
     Text[ language_user1 ] = " ";
 };
@@ -2413,7 +2413,7 @@ String STR_EVENT_SAVEASDOC
     Text[ dutch ] = "Document opslaan als";
     Text[ chinese_simplified ] = "ΞΔµµΑν΄ζΞª";
     Text[ greek ] = "Αποθήκευση εγγράφου ως";
-    Text[ korean ] = "Ή®Ό­Έ¦ ΄ΩΈ¥ΐΜΈ§ΐΈ·Ξ ΐϊΐε";
+    Text[ korean ] = "Ή®Ό­Έ¦ ΄ΩΈ¥ ΐΜΈ§ΐΈ·Ξ ΐϊΐε";
     Text[ turkish ] = "Belgeyi farklύ kaydet";
     Text[ language_user1 ] = " ";
 };
@@ -2714,7 +2714,7 @@ String STR_MAIL
     Text[ dutch ] = "Post";
     Text[ chinese_simplified ] = "µηΧΣΣΚΌώ";
     Text[ greek ] = "Αλληλογραφία";
-    Text[ korean ] = "ΐόΐΪΏμΖν";
+    Text[ korean ] = "ΈήΐΟ";
     Text[ turkish ] = "Posta";
     Text[ language_user1 ] = " ";
 };
@@ -2822,7 +2822,7 @@ String RID_STR_NOWELCOMESCREEN
     Text[ dutch ] = "Tips niet meer weergeven";
     Text[ chinese_simplified ] = "²»ΤΩΟΤΚΎΜαΚΎ";
     Text[ greek ] = "Να μην εμφανιστούν άλλες συμβουλές";
-    Text[ korean ] = "ΖΑΐ» Η¥½ΓΗΟΑφ ΎΚΐ½";
+    Text[ korean ] = "Α¶Ύπΐ» Η¥½ΓΗΟΑφ ΎΚΐ½";
     Text[ turkish ] = "Φneri gφrόntόleme";
     Text[ language_user1 ] = " ";
 };
@@ -3833,7 +3833,7 @@ String STR_KEY_STORAGE_DIR
     Text[ dutch ] = "Geheugen voor berichten";
     Text[ chinese_simplified ] = "µηΧΣΣΚΌώ/ΠΒΞΕ΄Ά΄ζΜε";
     Text[ greek ] = "Στοιχείο αποθήκευσης μηνυμάτων";
-    Text[ korean ] = "ΈήΐΟ/΄Ί½Ί  ΐϊΐεΐεΌÒ";
+    Text[ korean ] = "Έή½ΓΑφ  ΐϊΐεΐεΌÒ";
     Text[ turkish ] = "έleti depolama alanύ";
     Text[ language_user1 ] = " ";
 };
