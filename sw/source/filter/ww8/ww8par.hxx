@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-11 13:31:03 $
+ *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifndef _WW8PAR_HXX
 #define _WW8PAR_HXX
@@ -1278,7 +1281,7 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
     short GetTimeDatePara(String& rStr, ULONG& rFormat, bool &rbForceJapanese);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
-    eF_ResT Read_F_FileName( WW8FieldDesc*, String& );
+    eF_ResT Read_F_FileName( WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_Anz( WW8FieldDesc* pF, String& );
     eF_ResT Read_F_CurPage( WW8FieldDesc*, String& );
     eF_ResT Read_F_Ref( WW8FieldDesc* pF, String& );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: aidan $ $Date: 2002-11-28 16:01:37 $
+ *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 /*
  * Dieses File enthaelt alle Ausgabe-Funktionen des WW8-Writers;
@@ -2058,7 +2061,10 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         break;
 
     case RES_FILENAMEFLD:
-        rWW8Wrt.OutField( pFld, 29, CREATE_CONST_ASC( "DATEINAME" ));
+        sStr.ASSIGN_CONST_ASC(" DATEINAME ");
+        if (pFld->GetFormat() == FF_PATHNAME)
+            sStr.APPEND_CONST_ASC("\\p ");
+        rWW8Wrt.OutField(pFld, 29, sStr);
         break;
 
     case RES_DBNAMEFLD:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-12 11:25:50 $
+ *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -1686,11 +1689,31 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
     return FLD_OK;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_FileName( WW8FieldDesc*, String& )
+eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
 {
-    SwFileNameField aFld( (SwFileNameFieldType*)
-                          rDoc.GetSysFldType( RES_FILENAMEFLD ) );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    SwFileNameFormat eType = FF_NAME;
+    long nRet;
+    _ReadFieldParams aReadParam(rStr);
+    while (-1 != (nRet = aReadParam.SkipToNextToken()))
+    {
+        switch (nRet)
+        {
+            case 'p':
+                eType = FF_PATHNAME;
+                break;
+            case '*':
+                //Skip over MERGEFORMAT
+                aReadParam.SkipToNextToken();
+                break;
+            default:
+                ASSERT(!this, "unknown option in FileName field");
+                break;
+        }
+    }
+
+    SwFileNameField aFld(
+        (SwFileNameFieldType*)rDoc.GetSysFldType(RES_FILENAMEFLD), eType);
+    rDoc.Insert(*pPaM, SwFmtFld(aFld));
     return FLD_OK;
 }
 
