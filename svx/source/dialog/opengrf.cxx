@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: svesik $ $Date: 2001-06-26 23:29:20 $
+ *  last change: $Author: thb $ $Date: 2001-06-27 17:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,16 @@ SvxOpenGrf_Impl::SvxOpenGrf_Impl() :
     // disable template dropdown
     if( xCtrlAcc.is() )
     {
-        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE, sal_False );
+        try
+        {
+            xCtrlAcc->enableControl( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE, sal_False );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot disable template dropdown" );
+#endif
+        }
     }
 }
 
@@ -319,7 +328,16 @@ void SvxOpenGraphicDialog::EnableLink( sal_Bool  state  )
 {
     if( mpImpl->xCtrlAcc.is() )
     {
-        mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+        try
+        {
+            mpImpl->xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, state );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot enable \"link\" checkbox" );
+#endif
+        }
     }
 }
 
@@ -328,19 +346,37 @@ void SvxOpenGraphicDialog::AsLink(sal_Bool  bState)
 {
     if( mpImpl->xCtrlAcc.is() )
     {
-        Any aAny; aAny <<= bState;
-        mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
+        try
+        {
+            Any aAny; aAny <<= bState;
+            mpImpl->xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aAny );
+        }
+        catch(IllegalArgumentException)
+        {
+#ifdef DBG_UTIL
+            DBG_ERROR( "Cannot check \"link\" checkbox" );
+#endif
+        }
     }
 }
 
 
 sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 {
-    if( mpImpl->xCtrlAcc.is() )
+    try
     {
-        Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
-        DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
-        return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
+        if( mpImpl->xCtrlAcc.is() )
+        {
+            Any aVal = mpImpl->xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 );
+            DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
+            return aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_False;
+        }
+    }
+    catch(IllegalArgumentException)
+    {
+#ifdef DBG_UTIL
+        DBG_ERROR( "Cannot access \"link\" checkbox" );
+#endif
     }
 
     return sal_False;
