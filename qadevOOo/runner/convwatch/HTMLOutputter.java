@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HTMLOutputter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:57:39 $
+ *  last change: $Date: 2005-02-24 17:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,35 +151,52 @@ public class HTMLOutputter
             StringBuffer a = new StringBuffer();
             if (! OSHelper.isWindows())
             {
-            a.append("<A HREF=\"");
-            a.append(_sHREF);
-            a.append("\">");
-            a.append(_sPathInfo);
-            a.append("</A>");
-            }
-            else
-            {
+                // System.out.println("Tu'nix system.");
                 a.append("<A HREF=\"");
                 a.append(_sHREF);
                 a.append("\">");
                 a.append(_sPathInfo);
                 a.append("</A>");
-                int index = _sHREF.indexOf("X:");
+            }
+            else
+            {
+                // System.out.println("Windows system.");
+                //! this should be replaced by a better method
+                //! name(WIN|UNIX)
+                a.append(_sPathInfo);
+                a.append("<A HREF=\"");
+                a.append(_sHREF);
+                a.append("\">");
+                a.append("(first)");
+                a.append("</A>");
+                // if (_sHREF.charAt(1) == ':' && (_sHREF.charAt(0) == 'x' || _sHREF.charAt(0) == 'X'))
+                int index = 0;
+                index = _sHREF.indexOf("X:");
+                if (index == -1)
+                {
+                    index = _sHREF.indexOf("x:");
+                }
                 if (index >= 0)
                 {
+                    // int index = 0;
                     // remove "X:" and insert "/tausch"
-                    StringBuffer sbUNIXPath = new StringBuffer(_sHREF.substring(0, index));
+                    StringBuffer sbUNIXPath = new StringBuffer( _sHREF.substring(0, index) );
                     sbUNIXPath.append("/tausch");
                     sbUNIXPath.append(_sHREF.substring(index + 2));
                     String sUNIXPath = sbUNIXPath.toString();
-                    sUNIXPath = utils.replaceAll13(sUNIXPath, "\\\\", "/");
+                    sUNIXPath = utils.replaceAll13(sUNIXPath, "\\", "/");
 
                     a.append("<A HREF=\"");
                     a.append(sUNIXPath);
                     a.append("\">");
-                    a.append("(UNIX)");
+                    a.append("(second)");
                     a.append("</A>");
                 }
+                // else
+                // {
+                //     System.out.println("Path is '" + _sHREF + "'");
+                // }
+
             }
             return a.toString();
         }
