@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:02:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,7 +474,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ japanese ] = "γƒ—γƒ¬γ‚Όγƒ³γƒ†γƒΌγ‚·γƒ§γƒ³γ®γƒγƒΌγ‚Έ";
         Text[ chinese_traditional ] = "η°΅ε ±ι ιΆ";
         Text[ arabic ] = "ΥέΝΗΚ ΗαΪΡΦ ΗαΚήΟνγν";
-        Text[ greek ] = "Σελίδες της παρουσίασης";
+        Text[ greek ] = "Διαφάνειες της παρουσίασης";
         Text[ korean ] = "ν„μ¬ μ¬λΌμ΄λ“";
         Text[ turkish ] = "Var olan slaytlar";
         Text[ language_user1 ] = " ";
@@ -507,7 +507,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ japanese ] = "η›®η„ε¥γ‚Ήγƒ©γ‚¤γƒ‰γ‚·γƒ§γƒΌ";
         Text[ chinese_traditional ] = "ε€‹δΊΊη°΅ε ±";
         Text[ arabic ] = "ΪΡΦ ΚήΟνγν γΞΥΥ";
-        Text[ greek ] = "Επιλεγμένες παρουσιάσεις";
+        Text[ greek ] = "Επιλεγμένες διαφάνειες";
         Text[ korean ] = "μ„ νƒν• μ¬λΌμ΄λ“";
         Text[ turkish ] = "Seηilmiώ slaytlar";
         Text[ language_user1 ] = " ";
@@ -546,6 +546,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text[ hindi ] = "ΰ¤•ΰ¤Έΰ¥ΰ¤ΰ¤® ΰ¤Έΰ¥ΰ¤²ΰ¤‡ΰ¤΅ ΰ¤¦ΰ¤Ώΰ¤–ΰ¤Ύΰ¤µ ΰ¤•ΰ¥‹ ΰ¤ªΰ¤°ΰ¤Ώΰ¤­ΰ¤Ύΰ¤·ΰ¤Ύ ΰ¤¦ΰ¥‹";
     Text[ slovak ] = "DefinovaΕ¥ vlastnΓΊ prezentΓ΅ciu";
 };
+
 
 
 
