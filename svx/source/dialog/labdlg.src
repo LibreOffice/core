@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:35:06 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Vzdálenost";
         Text[ hebrew ] = "‮ריווח‬";
         Text[ hindi ] = "~बीच में अंतर देना";
+        Text[ slovak ] = "~Rozostup";
     };
     MetricField MF_ABSTAND
     {
@@ -166,6 +167,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Úhel";
         Text[ hebrew ] = "~Winkel";
         Text[ hindi ] = "~कोण";
+        Text[ slovak ] = "~Uhol";
     };
     ListBox LB_WINKEL
     {
@@ -391,6 +393,14 @@ TabPage RID_SVXPAGE_CAPTION
         < "60 डिग्रियाँ" ; 6000 ; > ;
         < "90 डिग्रियाँ" ; 9000 ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Voľne" ; 1 ; > ;
+        < "30 stupňov" ; 3000 ; > ;
+        < "45 stupňov" ; 4500 ; > ;
+        < "60 stupňov" ; 6000 ; > ;
+        < "90 stupňov" ; 9000 ; > ;
+    };
     };
     FixedText FT_ANSATZ
     {
@@ -423,6 +433,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Rozšíření";
         Text[ hebrew ] = "A~nsatz";
         Text[ hindi ] = "~विस्तार";
+        Text[ slovak ] = "Rozšír~enie";
     };
     ListBox LB_ANSATZ
     {
@@ -648,6 +659,14 @@ TabPage RID_SVXPAGE_CAPTION
         < "समतल" ; 1 ; > ;
         < "लम्ब" ; 2 ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Optimálne" ; 4 ; > ;
+        < "Zhora" ; 3 ; > ;
+        < "Zľava" ; 3 ; > ;
+        < "Vodorovne" ; 1 ; > ;
+        < "Zvislé" ; 2 ; > ;
+    };
     };
     FixedText FT_UM
     {
@@ -680,6 +699,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "O";
         Text[ hebrew ] = "~Um";
         Text[ hindi ] = "~से";
+        Text[ slovak ] = "~O";
     };
     MetricField MF_ANSATZ
     {
@@ -726,6 +746,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
+        Text[ slovak ] = "~Umiestnenie";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -768,6 +789,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Délka";
         Text[ hebrew ] = "~Länge";
         Text[ hindi ] = "~लम्बाई";
+        Text[ slovak ] = "~Dĺžka";
     };
     MetricField MF_LAENGE
     {
@@ -815,6 +837,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Optimální";
         Text[ hebrew ] = "~Optimal";
         Text[ hindi ] = "~योग्य";
+        Text[ slovak ] = "~Optimálny";
     };
     String STR_CAPTTYPE_1
     {
@@ -845,6 +868,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Přímka";
         Text[ hebrew ] = "Gerade Linie";
         Text[ hindi ] = "सीधा रेखा";
+        Text[ slovak ] = "Priamka";
     };
     String STR_CAPTTYPE_2
     {
@@ -875,6 +899,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Křivka";
         Text[ hebrew ] = "Abgewinkelte Linie";
         Text[ hindi ] = "कोणयुक्त रेखा";
+        Text[ slovak ] = "Krivka";
     };
     String STR_CAPTTYPE_3
     {
@@ -905,6 +930,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Zakřivená spojnice";
         Text[ hebrew ] = "Abgewinkelte Linie einfach geknickt";
         Text[ hindi ] = "कोणयुक्त जोड़नेवाला रेखा";
+        Text[ slovak ] = "Ohnutá spojnica";
     };
     String STR_CAPTTYPE_4
     {
@@ -935,6 +961,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Dvakrát lomená křivka";
         Text[ hebrew ] = "Abgewinkelte Linie doppelt geknickt";
         Text[ hindi ] = "द्विगुणित-कोणयुक्त रेखा";
+        Text[ slovak ] = "Dvakrát lomená krivka";
     };
     String STR_HORZ_LIST
     {
@@ -965,6 +992,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Nahoře;Uprostřed;Dole";
         Text[ hebrew ] = "Oben;Mitte;Unten";
         Text[ hindi ] = "ऊपर;मध्य;नीचे";
+        Text[ slovak ] = "Nahor;Uprostred;Naspodok";
     };
     String STR_VERT_LIST
     {
@@ -995,6 +1023,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ czech ] = "Vlevo;Uprostřed;Vpravo";
         Text[ hebrew ] = "Links;Mitte;Rechts";
         Text[ hindi ] = "बायाँ;मध्य;दाहिना";
+        Text[ slovak ] = "Vľavo;Uprostred;Vpravo";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -1044,6 +1073,7 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ czech ] = "Bubliny";
     Text[ hebrew ] = "‮דיבורים‬";
     Text[ hindi ] = "कालौट्स्";
+    Text[ slovak ] = "Bubliny";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 TabDialog RID_SVXDLG_CAPTION
@@ -1102,6 +1132,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ czech ] = "Umístění a velikost";
                 Text[ hebrew ] = "Position und Größe";
                 Text[ hindi ] = "Position and Size";
+                Text[ slovak ] = "Umiestnenie a veľkosť";
             };
             PageItem
             {
@@ -1134,6 +1165,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ czech ] = "Bublina";
                 Text[ hebrew ] = "Legende";
                 Text[ hindi ] = "कालौट्";
+                Text[ slovak ] = "Bublina";
             };
         };
     };
@@ -1153,8 +1185,11 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ czech ] = "Bubliny";
     Text[ hebrew ] = "‮דיבורים‬";
     Text[ hindi ] = "कालौट्स्";
+    Text[ slovak ] = "Bubliny";
 };
  // ********************************************************************** EOF
+
+
 
 
 
