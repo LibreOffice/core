@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:30:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3565,7 +3565,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ spanish ] = "ComodÌn" ;
         Text [ english_us ] = "dummy" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "–È…Ë";
+        Text[ chinese_simplified ] = "—˘±æ";
         Text[ russian ] = "ÙËÍÚË‚Ì˚È";
         Text[ polish ] = "Zaúlepka";
         Text[ japanese ] = "¿ﬁ–∞";
@@ -3646,6 +3646,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
 };
+
 
 
 
