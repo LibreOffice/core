@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:55:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ public:
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
     void                    StoreCaptionAttribs();
     void                    StoreCaptionDimensions();
+    void                    CaptionTextDirection(USHORT nSlot);
 };
 
 
