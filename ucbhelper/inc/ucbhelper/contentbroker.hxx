@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-10 14:21:29 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandProcessor;
 } } } }
 
+#ifndef _UCBHELPER_CONFIGUREUCB_HXX_
+#include <ucbhelper/configureucb.hxx>
+#endif
+
 namespace ucb
 {
 
@@ -118,6 +122,16 @@ private:
                    const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
 
+    /** Constructor.
+      *
+      * @param rxSMgr is a Service Manager.
+      * @param rData are the data for the for the content providers for
+      *        the new UCB.
+      */
+    ContentBroker( const ::com::sun::star::uno::Reference<
+                     ::com::sun::star::lang::XMultiServiceFactory >&    rSMgr,
+                   const ContentProviderDataList & rData );
+
 protected:
     /**
       * Destructor.
@@ -146,6 +160,23 @@ public:
                     ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                 const ::com::sun::star::uno::Sequence<
                     ::com::sun::star::uno::Any >& rArguments );
+
+    /** Initialize "the one and only" Broker.  This method must be called
+      * exactly once, before the Broker is used in any way.
+      *
+      * @param rSMgr is a factory to create services needed in the Broker's
+      *        implementation.
+      *
+      * @param rData are the data for the for the content providers for
+      *        the UCB to initialize.
+      *
+      * @return True if creation and possible configuration of the Broker
+      *         was successful.
+      */
+    static sal_Bool
+    initialize( const::com::sun::star::uno::Reference<
+                    ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+                const ContentProviderDataList & rData );
 
     /** Deinitialize "the one and only" Broker.  Once this method has been
       * called, the Broker must not be used any longer.

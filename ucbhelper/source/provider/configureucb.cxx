@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configureucb.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-06 10:57:43 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,6 @@ using namespace unnamed_ucbhelper_configureucb;
 using namespace com::sun;
 using namespace com::sun::star;
 
-//============================================================================
-//
-//  configureUcb
-//
-//============================================================================
-
 namespace unnamed_ucbhelper_configureucb {
 
 bool fillPlaceholders(rtl::OUString const & rInput,
@@ -183,6 +177,45 @@ bool fillPlaceholders(rtl::OUString const & rInput,
 }
 
 namespace ucb {
+
+//============================================================================
+//
+//  configureUcb
+//
+//============================================================================
+
+bool
+configureUcb(
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
+    ContentProviderDataList const & rData,
+    ContentProviderRegistrationInfoList * pInfos)
+    throw (uno::RuntimeException)
+{
+    ContentProviderDataList::const_iterator aEnd(rData.end());
+    for (ContentProviderDataList::const_iterator aIt(rData.begin());
+         aIt != aEnd; ++aIt)
+    {
+        ContentProviderRegistrationInfo aInfo;
+        bool bSuccess = registerAtUcb(rManager,
+                                      rServiceFactory,
+                                      aIt->ServiceName,
+                                      aIt->Arguments,
+                                      aIt->URLTemplate,
+                                      &aInfo);
+
+        if (bSuccess && pInfos)
+            pInfos->push_back(aInfo);
+    }
+
+    return true;
+}
+
+//============================================================================
+//
+//  configureUcb
+//
+//============================================================================
 
 bool
 configureUcb(

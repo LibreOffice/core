@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-07 08:01:44 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,9 @@ class ContentBroker_Impl
     Reference< XContentProvider >           m_xProvider;
     Reference< XContentProviderManager >    m_xProviderMgr;
     Reference< XCommandProcessor >          m_xCommandProc;
-    Sequence< Any >                         m_aArguments;
     vos::OMutex                             m_aMutex;
+    Sequence< Any >                         m_aArguments;
+    ContentProviderDataList                 m_aProvData;
     sal_Bool                                m_bInitDone;
 
 private:
@@ -130,6 +131,11 @@ public:
     ContentBroker_Impl( const Reference< XMultiServiceFactory >& rSMgr,
                         const Sequence< Any >& rArguments )
     : m_xSMgr( rSMgr ), m_aArguments( rArguments ), m_bInitDone( sal_False )
+    {}
+
+    ContentBroker_Impl( const Reference< XMultiServiceFactory >& rSMgr,
+                        const ContentProviderDataList & rData )
+    : m_xSMgr( rSMgr ), m_aProvData( rData ), m_bInitDone( sal_False )
     {}
 
     ~ContentBroker_Impl();
@@ -166,6 +172,13 @@ ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
                               const Sequence< Any >& rArguments )
 {
     m_pImpl = new ContentBroker_Impl( rSMgr, rArguments );
+}
+
+//=========================================================================
+ContentBroker::ContentBroker( const Reference< XMultiServiceFactory >& rSMgr,
+                              const ContentProviderDataList & rData )
+{
+    m_pImpl = new ContentBroker_Impl( rSMgr, rData );
 }
 
 //=========================================================================
@@ -227,6 +240,23 @@ sal_Bool ContentBroker::initialize(
 
 //=========================================================================
 // static
+sal_Bool ContentBroker::initialize(
+                        const Reference< XMultiServiceFactory >& rSMgr,
+                        const ContentProviderDataList & rData )
+{
+    vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
+
+    VOS_ENSURE( !m_pTheBroker,
+                "ContentBroker::create - already created!" );
+
+    if ( !m_pTheBroker )
+        m_pTheBroker = new ContentBroker( rSMgr, rData );
+
+    return m_pTheBroker != 0;
+}
+
+//=========================================================================
+// static
 void ContentBroker::deinitialize()
 {
     vos::OGuard aGuard( vos::OMutex::getGlobalMutex() );
@@ -278,11 +308,38 @@ void ContentBroker_Impl::init()
     {
         m_bInitDone = sal_True;
 
-        Reference< XInterface > xIfc
-            = m_xSMgr->createInstanceWithArguments(
-                OUString::createFromAscii(
-                    "com.sun.star.ucb.UniversalContentBroker" ),
-                m_aArguments );
+        Reference< XInterface > xIfc;
+
+        if ( m_aProvData.size() > 0 )
+        {
+            xIfc
+                = m_xSMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.UniversalContentBroker" ) );
+
+            if ( xIfc.is() )
+            {
+                m_xProviderMgr
+                    = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
+
+                if ( m_xProviderMgr.is() )
+                {
+                    if ( !::ucb::configureUcb( m_xProviderMgr,
+                                               m_xSMgr,
+                                               m_aProvData,
+                                               0 ) )
+                        VOS_ENSURE( false, "Failed to configure UCB!" );
+                }
+            }
+        }
+        else
+        {
+            xIfc
+                = m_xSMgr->createInstanceWithArguments(
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.UniversalContentBroker" ),
+                    m_aArguments );
+        }
 
         VOS_ENSURE( xIfc.is(), "Error creating UCB service!" );
 
@@ -300,8 +357,9 @@ void ContentBroker_Impl::init()
             VOS_ENSURE( m_xProvider.is(),
                         "UCB without XContentProvider!" );
 
-            m_xProviderMgr
-                 = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
+            if ( !m_xProviderMgr.is() )
+                m_xProviderMgr
+                    = Reference< XContentProviderManager >( xIfc, UNO_QUERY );
 
             VOS_ENSURE( m_xProviderMgr.is(),
                         "UCB without XContentProviderManager!" );

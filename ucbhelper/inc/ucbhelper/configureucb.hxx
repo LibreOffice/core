@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configureucb.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-24 15:16:08 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,72 @@ struct ContentProviderRegistrationInfo
 };
     //@@@ if registerucb.hxx were exported, too, this might better reside in
     // there...
+
+typedef std::vector< ContentProviderRegistrationInfo >
+                                    ContentProviderRegistrationInfoList;
+
+//============================================================================
+/** Information about a content provider, passed to
+    <method>configureUcb</method>.
+ */
+struct ContentProviderData
+{
+    /** The UNO service name to use to instanciate the content provider.
+     */
+    rtl::OUString ServiceName;
+
+    /** The URL template to use to instanciate the content provider.
+     */
+    rtl::OUString URLTemplate;
+
+    /** The arguments to use to instanciate the content provider.
+     */
+    rtl::OUString Arguments;
+
+    ContentProviderData() {};
+    ContentProviderData( const rtl::OUString & rService,
+                         const rtl::OUString & rTemplate,
+                         const rtl::OUString & rArgs )
+    : ServiceName( rService ), URLTemplate( rTemplate ), Arguments( rArgs ) {}
+};
+
+typedef std::vector< ContentProviderData > ContentProviderDataList;
+
+//============================================================================
+/** Configure a (newly instantiated) Universal Content Broker.
+
+    @descr  This function tries to register at the given content provider
+    manager all the content provider services listed under a given key in the
+    configuration database.
+
+    @param rManager  A content provider manager (normally, this would be a
+    newly intantiated UCB).
+
+    @param rServiceFactory  A service factory through which to obtain the
+    various services required.
+
+    @param rData  A list containing the data for the content providers for
+    the UCB to configure.
+
+    @pInfos  If not null, an entry will be added to this vector for every
+    content provider that is registered (sucessfully or not).
+
+    @return  True if the UCB has successfuly been configured (though not all
+    content providers have necessarily been registered due to individual
+    problems).
+ */
+bool
+configureUcb(
+    com::sun::star::uno::Reference<
+            com::sun::star::ucb::XContentProviderManager > const &
+        rManager,
+    com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory > const &
+        rServiceFactory,
+    ContentProviderDataList const & rData,
+    ContentProviderRegistrationInfoList * pInfos)
+    throw (com::sun::star::uno::RuntimeException);
+
 
 //============================================================================
 /** Configure a (newly instantiated) Universal Content Broker.

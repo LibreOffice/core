@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provconf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
+ *  last change: $Author: kso $ $Date: 2002-03-12 09:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,15 @@
 #ifndef _UCBHELPER_PROVCONF_HXX_
 #define _UCBHELPER_PROFCONF_HXX_
 
-#ifndef __VECTOR__
-#include <vector>
-#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONFIGUREUCB_HXX_
+#include <ucbhelper/configureucb.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -79,21 +80,6 @@ namespace com { namespace sun { namespace star { namespace lang {
 //=========================================================================
 
 namespace ucb {
-
-struct ContentProviderData
-{
-    rtl::OUString ServiceName;
-    rtl::OUString URLTemplate;
-    rtl::OUString Arguments;
-
-    ContentProviderData() {};
-    ContentProviderData( const rtl::OUString & rService,
-                         const rtl::OUString & rTemplate,
-                         const rtl::OUString & rArgs )
-    : ServiceName( rService ), URLTemplate( rTemplate ), Arguments( rArgs ) {}
-};
-
-typedef std::vector< ContentProviderData > ContentProviderDataList;
 
 bool getContentProviderData( const com::sun::star::uno::Reference<
                                 com::sun::star::lang::XMultiServiceFactory >
