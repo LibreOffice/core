@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxDrawPage.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 10:50:52 $
+ *  last change:$Date: 2003-05-27 13:36:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import com.sun.star.drawing.XMasterPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -137,7 +138,7 @@ public class SvxDrawPage extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
         try {
             log.println( "creating a sheetdocument" );
@@ -197,7 +198,7 @@ public class SvxDrawPage extends TestCase {
             oObj = (XDrawPage) AnyConverter.toObject(
                         new Type(XDrawPage.class),oDP.getByIndex(0));
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
 
             oShape = SOF.createShape(xComp,5000,3500,7500,5000,"Rectangle");
             DrawTools.getShapes((XDrawPage) oObj).add(oShape);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxGraphicObject.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 08:59:22 $
+ *  last change:$Date: 2003-05-27 13:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ public class SvxGraphicObject extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a drawdoc" );
-        xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+        xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
@@ -200,7 +200,7 @@ public class SvxGraphicObject extends TestCase {
         log.println( "creating a test environment" );
 
         // create testobject here
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
         oShape = SOF.createShape(xDrawDoc,5000,5000,1500,1000,"GraphicObject");
         DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         oObj = oShape;
