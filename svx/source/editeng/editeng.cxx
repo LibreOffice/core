@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:47:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2104,6 +2104,53 @@ EESpellState EditEngine::HasSpellErrors()
         return EE_SPELL_NOSPELLER;
 
     return pImpEditEngine->HasSpellErrors();
+#endif
+}
+/*-- 13.10.2003 16:56:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void EditEngine::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
+{
+#ifdef SVX_LIGHT
+#else
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->StartSpelling(rEditView, bMultipleDoc);
+#endif
+}
+/*-- 13.10.2003 16:56:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void EditEngine::EndSpelling()
+{
+#ifdef SVX_LIGHT
+#else
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->EndSpelling();
+#endif
+}
+
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+bool EditEngine::SpellSentence(EditView& rView, ::svx::SpellPortions& rToFill)
+{
+#ifdef SVX_LIGHT
+    return false;
+#else
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->SpellSentence( rView, rToFill );
+#endif
+}
+/*-- 13.10.2003 16:43:27---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void EditEngine::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions)
+{
+#ifdef SVX_LIGHT
+    return;
+#else
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->ApplyChangedSentence( rEditView, rNewPortions );
 #endif
 }
 
