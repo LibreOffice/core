@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-09-17 11:15:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,10 +339,17 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
             Reference<XPropertySet> xProp;
             m_pColumns->getByName(colName) >>= xProp;
             // first check the types
-            sal_Int32 nOldType = 0,nNewType = 0;
-            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))     >>= nOldType;
-            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nNewType;
-            if(nOldType != nNewType)
+            sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
+
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
+            // and precsions and scale
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
+            xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
+            descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
+
+            if(nOldType != nNewType || nOldPrec != nNewPrec || nOldScale != nNewScale)
                 alterColumnType(nNewType,colName,descriptor);
 
             // second: check the "is nullable" value
