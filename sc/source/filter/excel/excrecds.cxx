@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:54:34 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #include "root.hxx"
 #include "excupn.hxx"
 
+#ifndef SC_XLFORMULA_HXX
+#include "xlformula.hxx"
+#endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
 #endif
@@ -3768,9 +3771,9 @@ XclExpTableOp* XclExpTableOpManager::InsertCell( const ScTokenArray* pTokenArray
     ScAddress       aColRel;
     ScAddress       aRowFirst;
     ScAddress       aRowRel;
-    BOOL            bMode2;
+    bool            bMode2;
 
-    if( pTokenArray && pTokenArray->GetTableOpRefs( aFmlaPos, aColFirst, aColRel, aRowFirst, aRowRel, bMode2 ) )
+    if( pTokenArray && XclTokenArrayHelper::GetMultipleOpRefs( aFmlaPos, aColFirst, aColRel, aRowFirst, aRowRel, bMode2, *pTokenArray ) )
     {
         const ScAddress& rPos = rFormula.GetPosition();
 
