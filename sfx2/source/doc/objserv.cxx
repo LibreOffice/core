@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:50:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #include <so3/svstor.hxx>
 
+#ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
@@ -82,6 +86,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -1068,8 +1076,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     switch(nId)
     {
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         case SID_SAVE_VERSION_ON_CLOSE:
         {
             BOOL bSet = GetDocInfo().IsSaveVersionOnClose();
