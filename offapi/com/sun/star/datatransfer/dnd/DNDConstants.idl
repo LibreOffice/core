@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DNDConstants.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:24:23 $
+ *  last change: $Author: obr $ $Date: 2001-07-02 07:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ constants DNDConstants
      const byte ACTION_COPY_OR_MOVE = 0x03;
     const byte ACTION_LINK = 0x04;
     const byte ACTION_REFERENCE = 0x04;
+    const byte ACTION_DEFAULT = 0x80;
 };
 
 //=============================================================================
