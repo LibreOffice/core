@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:18 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,7 +1076,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     SvtLanguageOptions aLangOptions;
     USHORT nLastLinePos = LASTLINEPOS_DEFAULT;
 
-    if ( aLangOptions.IsAsianTypographyEnabled() || aLangOptions.IsCTLFontEnabled() )
+    if ( aLangOptions.IsAsianTypographyEnabled() )
     {
         String sLeft(ResId(ST_LEFTALIGN_ASIAN));
         aLeft.SetText(sLeft);
