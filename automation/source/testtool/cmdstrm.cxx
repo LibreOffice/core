@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:03:48 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,11 +125,11 @@ String CmdStream::WandleKeyEventString( String aKeys )
             {
                 Token = Work.GetToken(0,' ');
                 Work.Erase(0,Token.Len()+1);
-                ControlDef WhatName(Token,0);
+                ControlDef WhatName(Token,SmartId());
                 USHORT nElement;
                 if (pKeyCodes->Seek_Entry(&WhatName,&nElement))
                 {
-                    USHORT nCode = (USHORT) pKeyCodes->GetObject(nElement)->pData->aUId.GetULONG();
+                    USHORT nCode = (USHORT) pKeyCodes->GetObject(nElement)->pData->aUId.GetNum();
                     if ( nCode >= KEY_SHIFT )
                         nModify ^= nCode;
                     else
