@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,8 +263,7 @@ SwXMLImport::SwXMLImport(
     pDocElemTokenMap( 0 ),
     pTableElemTokenMap( 0 ),
     pTableItemMapper( 0 ),
-    pSttNdIdx( 0 ),
-    bAutoStylesValid( sal_False )
+    pSttNdIdx( 0 )
 {
     _InitItemImport();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 10:42:49 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,7 @@ SvXMLItemMapEntry aXMLParaItemMap[] =
     M_E( FO,    margin_top,         RES_UL_SPACE,   MID_UP_MARGIN ),
     M_E( FO,    margin_bottom,      RES_UL_SPACE,   MID_LO_MARGIN ),
     // RES_PAGEDESC
-    // TODO
+    M_E( STYLE, page_number,        RES_PAGEDESC,   MID_PAGEDESC_PAGENUMOFFSET),
     // RES_BREAK
     M_E( FO,    break_before,       RES_BREAK,  MID_BREAK_BEFORE ),
     M_E( FO,    break_after,        RES_BREAK,  MID_BREAK_AFTER ),
@@ -294,7 +294,7 @@ SvXMLItemMapEntry aXMLTableItemMap[] =
     M_E( FO,    margin_top,         RES_UL_SPACE,   MID_UP_MARGIN ),
     M_E( FO,    margin_bottom,      RES_UL_SPACE,   MID_LO_MARGIN ),
     // RES_PAGEDESC
-    // TODO
+    M_E( STYLE, page_number,        RES_PAGEDESC,   MID_PAGEDESC_PAGENUMOFFSET),
     // RES_BREAK
     M_E( FO,    break_before,       RES_BREAK,  MID_BREAK_BEFORE ),
     M_E( FO,    break_after,        RES_BREAK,  MID_BREAK_AFTER ),
@@ -514,11 +514,14 @@ SvXMLItemMapEntry aXMLTableCellItemMap[] =
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlitemm.cxx,v 1.2 2000-10-12 10:42:49 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlitemm.cxx,v 1.3 2000-10-18 11:20:44 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/12 10:42:49  mib
+      #79090#: table:vertical-align -> fo:vertical-align
+
       Revision 1.1.1.1  2000/09/18 17:15:00  hr
       initial import
 

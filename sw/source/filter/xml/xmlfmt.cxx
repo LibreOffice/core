@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,12 @@
 #include "docary.hxx"
 #ifndef _UNOSTYLE_HXX
 #include "unostyle.hxx"
+#endif
+#ifndef _FMTPDSC_HXX
+#include "fmtpdsc.hxx"
+#endif
+#ifndef _PAGEDESC_HXX
+#include "pagedesc.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -398,8 +404,6 @@ SwXMLConditionContext_Impl::~SwXMLConditionContext_Impl()
 typedef SwXMLConditionContext_Impl *SwXMLConditionContextPtr;
 SV_DECL_PTRARR( SwXMLConditions_Impl, SwXMLConditionContextPtr, 5, 2 );
 
-#ifndef XML_CORE_API
-
 class SwXMLTextStyleContext_Impl : public XMLTextStyleContext
 {
     SwXMLConditions_Impl    *pConditions;
@@ -558,24 +562,16 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         }
     }
 }
-#endif
 
 // ---------------------------------------------------------------------
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
-#ifdef XML_CORE_API
-    OUString                sListStyleName;
-    SwFmt                   *pFmt;
-#endif
+    OUString                sMasterPageName;
     SfxItemSet              *pItemSet;
 
-#ifdef XML_CORE_API
-    SwXMLConditions_Impl    *pConditions;
-
-    sal_uInt16  nPoolId;                    // PoolId
-    sal_Bool    bAutoUpdate;
-#endif
+    sal_Bool                bHasMasterPageName : 1;
+    sal_Bool                bPageDescConnected : 1;
 
     SvXMLImportContext *CreateItemSetContext(
             sal_uInt16 nPrefix,
@@ -584,11 +580,9 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 
 protected:
 
-#ifdef XML_CORE_API
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,
                                const OUString& rValue );
-#endif
 
     const SwXMLImport& GetSwImport() const
             { return (const SwXMLImport&)GetImport(); }
@@ -601,11 +595,8 @@ public:
     SwXMLItemSetStyleContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList
-#ifndef XML_CORE_API
-            ,sal_uInt16 nFamily
-#endif
-                                 );
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
@@ -613,101 +604,32 @@ public:
             const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
 
-#ifdef XML_CORE_API
-    sal_uInt16 GetPoolId() const { return nPoolId; }
-    sal_Bool IsAutoUpdate() const { return bAutoUpdate; }
-#endif
-
     // The item set may be empty!
     SfxItemSet *GetItemSet() { return pItemSet; }
     const SfxItemSet *GetItemSet() const { return pItemSet; }
 
-#ifdef XML_CORE_API
-    SwFmt *GetFmt() { return pFmt; }
-    void SetFmt( SwFmt *p ) { pFmt = p; }
+    const OUString& GetMasterPageName() const { return sMasterPageName; }
+    sal_Bool HasMasterPageName() const { bHasMasterPageName; }
 
-    SwTxtFmtColl* GetColl();
-
-    sal_Bool HasConditions() const { return 0 != pConditions &&
-                                 pConditions->Count() > 0; }
-    const OUString& GetListStyle() const { return sListStyleName; }
-
-    void ConnectParent();
-    void ConnectFollow();
-    void ConnectConditions();
-    void ConnectListStyle();
-    void ConnectAutoListStyle();
-#endif
+    sal_Bool IsPageDescConnected() const { return bPageDescConnected; }
+    void ConnectPageDesc();
 };
 
-#ifdef XML_CORE_API
 void SwXMLItemSetStyleContext_Impl::SetAttribute( sal_uInt16 nPrefixKey,
                                            const OUString& rLocalName,
                                            const OUString& rValue )
 {
-    // TODO: use a map here
-    if( XML_NAMESPACE_STYLE == nPrefixKey )
+    if( XML_NAMESPACE_STYLE == nPrefixKey &&
+        rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
     {
-        if( rLocalName.compareToAscii( sXML_family ) == 0 )
-        {
-            SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
-            sal_uInt16 nSubFamily = 0U;
-            if( rValue.compareToAscii( sXML_paragraph ) == 0 )
-            {
-                eFamily = SFX_STYLE_FAMILY_PARA;
-            }
-            else if( rValue.compareToAscii( sXML_text ) == 0 )
-            {
-                eFamily = SFX_STYLE_FAMILY_CHAR;
-            }
-            else if( 0 == rValue.compareToAscii( sXML_table, 5L ) )
-            {
-                eFamily = SFX_STYLE_FAMILY_FRAME;
-                if( 5L == rValue.getLength() )
-                    nSubFamily = SW_STYLE_SUBFAMILY_TABLE;
-                else if( rValue.compareToAscii( sXML_table_column ) == 0 )
-                    nSubFamily = SW_STYLE_SUBFAMILY_TABLE_COL;
-                else if( rValue.compareToAscii( sXML_table_row ) == 0 )
-                    nSubFamily = SW_STYLE_SUBFAMILY_TABLE_LINE;
-                else if( rValue.compareToAscii( sXML_table_cell ) == 0 )
-                    nSubFamily = SW_STYLE_SUBFAMILY_TABLE_BOX;
-                else
-                    eFamily = SFX_STYLE_FAMILY_ALL;
-            }
-
-            if( SFX_STYLE_FAMILY_ALL != eFamily )
-            {
-                SetFamily( eFamily );
-                SetSubFamily( nSubFamily );
-            }
-        }
-        else if( rLocalName.compareToAscii( sXML_pool_id ) == 0 )
-        {
-            sal_Int32 nTmp = rValue.toInt32();
-            nPoolId =
-                (nTmp < 0L) ? 0U : ( (nTmp > USHRT_MAX) ? USHRT_MAX
-                                                        : (sal_uInt16)nTmp );
-        }
-        else if( rLocalName.compareToAscii( sXML_auto_update ) == 0 )
-        {
-            if( rValue.compareToAscii( sXML_true ) == 0 )
-                bAutoUpdate = sal_True;
-        }
-        else if( rLocalName.compareToAscii( sXML_list_style_name ) == 0 )
-        {
-            sListStyleName = rValue;
-        }
-        else
-        {
-            SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
-        }
+        sMasterPageName = rValue;
+        bHasMasterPageName = sal_True;
     }
     else
     {
         SvXMLStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
     }
 }
-#endif
 
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         sal_uInt16 nPrefix, const OUString& rLName,
@@ -718,55 +640,6 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
     SvXMLImportContext *pContext = 0;
 
-#ifdef XML_CORE_API
-    SfxItemPool& rItemPool = GetSwImport().GetDoc().GetAttrPool();
-    switch( GetFamily() )
-    {
-    case SFX_STYLE_FAMILY_PARA:
-        pItemSet = new SfxItemSet( rItemPool, aTxtFmtCollSetRange );
-        pContext = GetSwImport().CreateParaItemImportContext(
-                                nPrefix, rLName, xAttrList, *pItemSet );
-        break;
-
-    case SFX_STYLE_FAMILY_CHAR:
-        pItemSet = new SfxItemSet( rItemPool, aCharFmtSetRange );
-        pContext = GetSwImport().CreateParaItemImportContext(
-                                nPrefix, rLName, xAttrList, *pItemSet );
-        break;
-
-    case SFX_STYLE_FAMILY_FRAME:
-        {
-            switch( GetSubFamily() )
-            {
-            case SW_STYLE_SUBFAMILY_TABLE:
-                pItemSet = new SfxItemSet( rItemPool, aTableSetRange );
-                break;
-            case SW_STYLE_SUBFAMILY_TABLE_COL:
-                pItemSet = new SfxItemSet( rItemPool, RES_FRM_SIZE,
-                                           RES_FRM_SIZE, 0 );
-                break;
-            case SW_STYLE_SUBFAMILY_TABLE_LINE:
-                pItemSet = new SfxItemSet( rItemPool, aTableLineSetRange );
-                break;
-            case SW_STYLE_SUBFAMILY_TABLE_BOX:
-                pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
-                break;
-            }
-            if( pItemSet )
-                pContext = GetSwImport().CreateTableItemImportContext(
-                                    nPrefix, rLName, xAttrList, GetSubFamily(),
-                                    *pItemSet );
-            ASSERT( pItemSet,
-        "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: frames are unsopprted");
-        }
-        break;
-
-    default:
-        ASSERT( !this,
-        "SwXMLItemSetStyleContext_Impl::CreateItemSetContext: unknown family" );
-        break;
-    }
-#else
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
     ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
@@ -797,8 +670,6 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
         pContext = GetSwImport().CreateTableItemImportContext(
                                 nPrefix, rLName, xAttrList, GetFamily(),
                                 *pItemSet );
-#endif
-
     if( !pContext )
     {
         delete pItemSet;
@@ -812,40 +683,19 @@ TYPEINIT1( SwXMLItemSetStyleContext_Impl, SvXMLStyleContext );
 
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList
-#ifndef XML_CORE_API
-        ,sal_uInt16 nFamily
-#endif
-        ) :
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        sal_uInt16 nFamily ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
-#ifdef XML_CORE_API
-    nPoolId( USHRT_MAX ),
-    bAutoUpdate( sal_False ),
-    pFmt( 0 ),
-    pConditions( 0 ),
-#endif
-    pItemSet( 0 )
+    pItemSet( 0 ),
+    bHasMasterPageName( sal_False ),
+    bPageDescConnected( sal_False )
 {
-#ifndef XML_CORE_API
     SetFamily( nFamily );
-#endif
 }
 
 SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
 {
     delete pItemSet;
-#ifdef XML_CORE_API
-    if( pConditions )
-    {
-        while( pConditions->Count() )
-        {
-            SwXMLConditionContext_Impl *pCond = pConditions->GetObject(0);
-            pConditions->Remove( 0UL );
-            pCond->ReleaseRef();
-        }
-        delete pConditions;
-    }
-#endif
 }
 
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
@@ -861,22 +711,6 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
         {
             pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
         }
-#ifdef XML_CORE_API
-        else if( rLocalName.compareToAscii( sXML_map ) == 0 )
-        {
-            SwXMLConditionContext_Impl *pCond =
-                new SwXMLConditionContext_Impl( GetSwImport(), nPrefix,
-                                                   rLocalName, xAttrList );
-            if( pCond->IsValid() )
-            {
-                if( !pConditions )
-                   pConditions = new SwXMLConditions_Impl;
-                pConditions->Insert( pCond, pConditions->Count() );
-                pCond->AddRef();
-            }
-            pContext = pCond;
-        }
-#endif
     }
 
     if( !pContext )
@@ -886,180 +720,67 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
     return pContext;
 }
 
-#ifdef XML_CORE_API
-SwTxtFmtColl* SwXMLItemSetStyleContext_Impl::GetColl()
+void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
 {
-    return (GetFamily() & SFX_STYLE_FAMILY_PARA) != 0
-            ? (SwTxtFmtColl*) pFmt
-            : NULL;
-}
-
-void SwXMLItemSetStyleContext_Impl::ConnectParent()
-{
-    if( !pFmt )
+    if( bPageDescConnected || !HasMasterPageName() )
         return;
+    bPageDescConnected = sal_True;
 
-    SwDoc *pDoc = pFmt->GetDoc();
-    String aName( GetSwImport().GetI18NMap().Get( GetFamily(), GetParent() ) );
+    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
+                                       UNO_QUERY);
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    SwXTextCursor *pTxtCrsr = (SwXTextCursor*)xCrsrTunnel->getSomething(
+                                        SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    SwDoc *pDoc = pTxtCrsr->GetDoc();
 
-//  String aName( SwXStyleFamilies::GetUIName( GetParent(),
-//                                             (SfxStyleFamily)GetFamily() ) );
-    SwFmt* pParent;
-    switch( GetFamily() )
+    String sName( SwXStyleFamilies::GetUIName( GetMasterPageName(),
+                                               SFX_STYLE_FAMILY_PAGE ) );
+    SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
+    if( !pPageDesc )
     {
-    case SFX_STYLE_FAMILY_PARA:
-        if( aName.Len() )
-            pParent = pDoc->FindTxtFmtCollByName( aName );
-        else
-            pParent = (*pDoc->GetTxtFmtColls())[ 0 ];
-        break;
-
-    case SFX_STYLE_FAMILY_FRAME:
-        if( aName.Len() )
-            pParent = pDoc->FindFrmFmtByName( aName );
-        else
-            pParent = (*pDoc->GetFrmFmts())[ 0 ];
-        break;
-
-    case SFX_STYLE_FAMILY_CHAR:
-        if( aName.Len() )
-            pParent = pDoc->FindCharFmtByName( aName );
-        else
-            pParent = (*pDoc->GetCharFmts())[ 0 ];
-        break;
+        // If the page style is a pool style, then we maybe have to create it
+        // first if it hasn't been used by now.
+        sal_uInt16 nPoolId = pDoc->GetPoolId( sName, GET_POOLID_PAGEDESC );
+        if( USHRT_MAX != nPoolId )
+            pPageDesc = pDoc->GetPageDescFromPool( nPoolId );
     }
 
-    if( pParent )
-        pFmt->SetDerivedFrom( pParent );
-}
-
-void SwXMLItemSetStyleContext_Impl::ConnectFollow()
-{
-    if( !pFmt || GetFamily() != SFX_STYLE_FAMILY_PARA )
+    if( !pPageDesc )
         return;
 
-    SwDoc *pDoc = pFmt->GetDoc();
-    String aName( GetSwImport().GetI18NMap().Get( GetFamily(), GetFollow() ) );
-//  String aName( SwXStyleFamilies::GetUIName( GetFollow(), (SfxStyleFamily)GetFamily() ) );
+    if( !pItemSet )
+    {
+        SfxItemPool& rItemPool = pDoc->GetAttrPool();
+        pItemSet = new SfxItemSet( rItemPool, aTableSetRange );
+    }
 
-    SwTxtFmtColl* pFollow;
-    if( aName.Len() )
-        pFollow = pDoc->FindTxtFmtCollByName( aName );
+    const SfxPoolItem *pItem;
+    SwFmtPageDesc *pFmtPageDesc = 0;
+    if( SFX_ITEM_SET == pItemSet->GetItemState( RES_PAGEDESC, sal_False,
+                                                &pItem ) )
+    {
+         if( ((SwFmtPageDesc *)pItem)->GetPageDesc() != pPageDesc )
+            pFmtPageDesc = new SwFmtPageDesc( *(SwFmtPageDesc *)pItem );
+    }
     else
-        pFollow = GetColl();
-    if( pFollow )
-        GetColl()->SetNextTxtFmtColl( *pFollow );
-}
+        pFmtPageDesc = new SwFmtPageDesc();
 
-void SwXMLItemSetStyleContext_Impl::ConnectConditions()
-{
-    if( !pFmt || GetFamily() != SFX_STYLE_FAMILY_PARA || !pConditions ||
-         RES_CONDTXTFMTCOLL != pFmt->Which() )
-        return;
-
-    SwDoc *pDoc = pFmt->GetDoc();
-    SvI18NMap& rI18NMap = ((SwXMLImport&)GetImport()).GetI18NMap();
-
-    sal_uInt16 nCount = pConditions->Count();
-    for( sal_uInt16 i = 0; i < nCount; i++ )
+    if( pFmtPageDesc )
     {
-        const SwXMLConditionContext_Impl *pCond = (*pConditions)[i];
-        OUString sName( rI18NMap.Get( SFX_STYLE_FAMILY_PARA,
-                                         pCond->GetApplyStyle() ) );
-//      OUString sName( SwXStyleFamilies::GetUIName(
-//                  pCond->GetApplyStyle(), SFX_STYLE_FAMILY_PARA ) );
-        SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
-        ASSERT( pCondColl,
-            "SwXMLItemSetStyleContext_Impl::ConnectConditions: cond coll missing" );
-        if( pCondColl )
-        {
-            SwCollCondition aCond( pCondColl, pCond->GetCondition(),
-                                              pCond->GetSubCondition() );
-            ((SwConditionTxtFmtColl*)pFmt)->InsertCondition( aCond );
-        }
+        pPageDesc->Add( pFmtPageDesc );
+        pItemSet->Put( *pFmtPageDesc );
+        delete pFmtPageDesc;
     }
 }
-
-void SwXMLItemSetStyleContext_Impl::ConnectListStyle()
-{
-    if( !pFmt || GetFamily() != SFX_STYLE_FAMILY_PARA ||
-        !GetListStyle().getLength() )
-        return;
-
-    SwDoc *pDoc = pFmt->GetDoc();
-    String aName( GetSwImport().GetI18NMap().Get( SFX_STYLE_FAMILY_PSEUDO,
-                                                  GetListStyle() ) );
-//  String aName( SwXStyleFamilies::GetUIName(
-//                  GetListStyle(), SFX_STYLE_FAMILY_PSEUDO ) );
-    // Styles must not reference automatic num rules
-    SwNumRule *pNumRule = pDoc->FindNumRulePtr( aName );
-    if( pNumRule && !pNumRule->IsAutoRule() )
-        GetColl()->SetAttr( SwNumRuleItem(aName) );
-}
-
-void SwXMLItemSetStyleContext_Impl::ConnectAutoListStyle()
-{
-    if( GetFamily() != SFX_STYLE_FAMILY_PARA || !GetListStyle().getLength() )
-        return;
-
-    SwDoc& rDoc = GetSwImport().GetDoc();
-    String aName( GetSwImport().GetI18NMap().Get( SFX_STYLE_FAMILY_PSEUDO,
-                                                  GetListStyle() ) );
-//  String aName( SwXStyleFamilies::GetUIName(
-//                  GetListStyle(), SFX_STYLE_FAMILY_PSEUDO ) );
-    if( rDoc.FindNumRulePtr( aName ) )
-    {
-        if( !pItemSet )
-        {
-            SfxItemPool& rItemPool = rDoc.GetAttrPool();
-            pItemSet = new SfxItemSet( rItemPool, aTxtFmtCollSetRange );
-        }
-        pItemSet->Put( SwNumRuleItem(aName) );
-    }
-}
-#endif
-
-// ---------------------------------------------------------------------
-
-#ifdef XML_CORE_API
-enum SwXMLStyleStylesElemTokens
-{
-    SW_XML_TOK_STYLE_STYLE,
-    SW_XML_TOK_TEXT_LIST_STYLE,
-    SW_XML_TOK_TEXT_OUTLINE,
-    SW_XML_TOK_STYLE_STYLES_ELEM_END=XML_TOK_UNKNOWN
-};
-
-static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE,  sXML_style,         SW_XML_TOK_STYLE_STYLE },
-    { XML_NAMESPACE_TEXT,   sXML_list_style,    SW_XML_TOK_TEXT_LIST_STYLE},
-    { XML_NAMESPACE_TEXT,   sXML_outline_style, SW_XML_TOK_TEXT_OUTLINE },
-    XML_TOKEN_MAP_END
-};
-
-const SvXMLTokenMap& SwXMLImport::GetStyleStylesElemTokenMap()
-{
-    if( !pStyleStylesElemTokenMap )
-        pStyleStylesElemTokenMap =
-            new SvXMLTokenMap( aStyleStylesElemTokenMap );
-
-    return *pStyleStylesElemTokenMap;
-}
-#endif
 
 // ---------------------------------------------------------------------
 //
 class SwXMLStylesContext_Impl : public SvXMLStylesContext
 {
-    SwXMLItemSetStyleContext_Impl *GetSwStyle( sal_uInt16 i ) const;
-#ifdef XML_CORE_API
-    SwXMLListStyleContext *GetSwListStyle( sal_uInt16 i ) const;
+    sal_Bool bAutoStyles;
 
-    SwFmt *FindFmtByName( const String& rName,
-                          sal_uInt16 eFamily ) const;
-    SwXMLItemSetStyleContext_Impl *FindByPoolId( sal_uInt16 nPoolId ) const;
-#endif
+    SwXMLItemSetStyleContext_Impl *GetSwStyle( sal_uInt16 i ) const;
 
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
     const SwXMLImport& GetSwImport() const
@@ -1067,13 +788,6 @@ class SwXMLStylesContext_Impl : public SvXMLStylesContext
 
 protected:
 
-#ifdef XML_CORE_API
-    // Create a style context.
-    virtual SvXMLStyleContext *CreateStyleChildContext(
-            sal_uInt16 nPrefix,
-            const OUString& rLocalName,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
-#else
     virtual SvXMLStyleContext *CreateStyleStyleChildContext( sal_uInt16 nFamily,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList );
@@ -1086,7 +800,6 @@ protected:
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual ::rtl::OUString GetServiceName( sal_uInt16 nFamily ) const;
     // HACK
-#endif
 
 public:
 
@@ -1095,14 +808,13 @@ public:
     SwXMLStylesContext_Impl(
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName ,
-            const Reference< xml::sax::XAttributeList > & xAttrList );
+            const Reference< xml::sax::XAttributeList > & xAttrList,
+            sal_Bool bAuto );
     virtual ~SwXMLStylesContext_Impl();
 
     virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
-#ifdef XML_CORE_API
-    void CopyStylesToDoc();
-    void CopyAutoStylesToDoc();
-#endif
+
+    virtual void EndElement();
 };
 
 TYPEINIT1( SwXMLStylesContext_Impl, SvXMLStylesContext );
@@ -1113,115 +825,6 @@ inline SwXMLItemSetStyleContext_Impl *SwXMLStylesContext_Impl::GetSwStyle(
     return PTR_CAST( SwXMLItemSetStyleContext_Impl, GetStyle( i ) );
 }
 
-#ifdef XML_CORE_API
-inline SwXMLListStyleContext *SwXMLStylesContext_Impl::GetSwListStyle(
-        sal_uInt16 i ) const
-{
-    return PTR_CAST( SwXMLListStyleContext, GetStyle( i ) );
-}
-
-sal_Bool lcl_xmlfmt_isValidPoolId( sal_uInt16 nPoolId, sal_uInt16 eFamily )
-{
-    sal_Bool bValid = sal_False;
-
-    // check if pool id is valid
-    if( eFamily & SFX_STYLE_FAMILY_CHAR )
-    {
-        bValid = (RES_POOLCHR_NORMAL_BEGIN <= nPoolId &&
-                                        nPoolId < RES_POOLCHR_NORMAL_END) ||
-                 (RES_POOLCHR_HTML_BEGIN <= nPoolId &&
-                                        nPoolId < RES_POOLCHR_HTML_END);
-    }
-    else if( eFamily & SFX_STYLE_FAMILY_FRAME )
-    {
-        bValid = RES_POOLFRM_BEGIN <= nPoolId && nPoolId < RES_POOLFRM_END;
-    }
-    else if( eFamily & SFX_STYLE_FAMILY_PARA )
-    {
-        bValid = (RES_POOLCOLL_TEXT_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_TEXT_END) ||
-                 (RES_POOLCOLL_LISTS_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_LISTS_END) ||
-                 (RES_POOLCOLL_EXTRA_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_EXTRA_END) ||
-                 (RES_POOLCOLL_REGISTER_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_REGISTER_END) ||
-                 (RES_POOLCOLL_DOC_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_DOC_END) ||
-                 (RES_POOLCOLL_HTML_BEGIN <= nPoolId &&
-                                    nPoolId < RES_POOLCOLL_HTML_END);
-    }
-
-    return bValid;
-}
-
-SwFmt *SwXMLStylesContext_Impl::FindFmtByName( const String& rName,
-                                               sal_uInt16 eFamily ) const
-{
-    const SwDoc& rDoc = GetSwImport().GetDoc();
-    SwFmt *pFmt = 0;
-    switch( eFamily )
-    {
-    case SFX_STYLE_FAMILY_PARA:
-        pFmt = rDoc.FindTxtFmtCollByName( rName );
-        break;
-    case SFX_STYLE_FAMILY_FRAME:
-        pFmt = rDoc.FindFrmFmtByName( rName );
-        break;
-    case SFX_STYLE_FAMILY_CHAR:
-        pFmt = rDoc.FindCharFmtByName( rName );
-        break;
-    }
-
-    return pFmt;
-}
-
-SwXMLItemSetStyleContext_Impl *SwXMLStylesContext_Impl::FindByPoolId(
-        sal_uInt16 nPoolId ) const
-{
-    SwXMLItemSetStyleContext_Impl *pStyle = 0;
-    sal_uInt16 nCount = GetStyleCount();
-    for( sal_uInt16 i=0; i < nCount && !pStyle; i++ )
-    {
-        SwXMLItemSetStyleContext_Impl *pTmp = GetSwStyle( i );
-        if( pTmp && pTmp->GetPoolId() == nPoolId )
-            pStyle = pTmp;
-    }
-
-    return pStyle;
-}
-
-SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleChildContext(
-        sal_uInt16 nPrefix, const OUString& rLocalName,
-        const Reference< xml::sax::XAttributeList > & xAttrList )
-{
-    SvXMLStyleContext *pStyle = 0;
-
-    const SvXMLTokenMap& rTokenMap = GetSwImport().GetStyleStylesElemTokenMap();
-    switch( rTokenMap.Get( nPrefix, rLocalName ) )
-    {
-    case SW_XML_TOK_STYLE_STYLE:
-        pStyle = new SwXMLItemSetStyleContext_Impl( GetSwImport(), nPrefix, rLocalName,
-                                                xAttrList);
-        break;
-    case SW_XML_TOK_TEXT_LIST_STYLE:
-        pStyle = new SwXMLListStyleContext( GetSwImport(), nPrefix,
-                                            rLocalName, xAttrList );
-        break;
-    case SW_XML_TOK_TEXT_OUTLINE:
-        pStyle = new SwXMLListStyleContext( GetSwImport(), nPrefix,
-                                            rLocalName, xAttrList, sal_True );
-        break;
-    default:
-        pStyle = SvXMLStylesContext::CreateStyleChildContext( nPrefix,
-                                                              rLocalName,
-                                                              xAttrList );
-        break;
-    }
-
-    return pStyle;
-}
-#else
 SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -1256,12 +859,13 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
 
     return pStyle;
 }
-#endif
 
 SwXMLStylesContext_Impl::SwXMLStylesContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList ) :
-    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList )
+        const Reference< xml::sax::XAttributeList > & xAttrList,
+        sal_Bool bAuto ) :
+    SvXMLStylesContext( rImport, nPrfx, rLName, xAttrList ),
+    bAutoStyles( bAuto )
 {
 }
 
@@ -1269,7 +873,6 @@ SwXMLStylesContext_Impl::~SwXMLStylesContext_Impl()
 {
 }
 
-#ifndef XML_CORE_API
 sal_Bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 {
     const SwXMLImport& rSwImport = GetSwImport();
@@ -1336,277 +939,68 @@ OUString SwXMLStylesContext_Impl::GetServiceName( sal_uInt16 nFamily ) const
 
     return sServiceName;
 }
-#endif
 
-#ifdef XML_CORE_API
-void SwXMLStylesContext_Impl::CopyStylesToDoc()
+void SwXMLStylesContext_Impl::EndElement()
 {
-    SwXMLImport& rSwImport = GetSwImport();
-    SwDoc& rDoc = rSwImport.GetDoc();
-    SvI18NMap& rI18NMap = rSwImport.GetI18NMap();
-    sal_Bool bInsertMode = rSwImport.IsInsertMode();
+    GetSwImport().InsertStyles( bAutoStyles );
+}
+
+// ---------------------------------------------------------------------
+//
+class SwXMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
+{
+protected:
+    virtual sal_Bool InsertStyleFamily( sal_uInt16 nFamily ) const;
+
+    SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
+    const SwXMLImport& GetSwImport() const
+            { return (const SwXMLImport&)GetImport(); }
+
+public:
+
+    TYPEINFO();
+
+    SwXMLMasterStylesContext_Impl(
+            SwXMLImport& rImport, sal_uInt16 nPrfx,
+            const OUString& rLName ,
+            const Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~SwXMLMasterStylesContext_Impl();
+    virtual void EndElement();
+};
+
+TYPEINIT1( SwXMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
+
+SwXMLMasterStylesContext_Impl::SwXMLMasterStylesContext_Impl(
+        SwXMLImport& rImport, sal_uInt16 nPrfx,
+        const OUString& rLName ,
+        const Reference< xml::sax::XAttributeList > & xAttrList ) :
+    XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
+{
+}
+
+SwXMLMasterStylesContext_Impl::~SwXMLMasterStylesContext_Impl()
+{
+}
+
+sal_Bool SwXMLMasterStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
+{
+    sal_Bool bIns;
+
+    const SwXMLImport& rSwImport = GetSwImport();
     sal_uInt16 nStyleFamilyMask = rSwImport.GetStyleFamilyMask();
+    if( XML_STYLE_FAMILY_MASTER_PAGE == nFamily )
+        bIns = (nStyleFamilyMask & SFX_STYLE_FAMILY_PAGE) != 0;
+    else
+        bIns = XMLTextMasterStylesContext::InsertStyleFamily( nFamily );
 
-    // The following families are of interest for pass 1
-    sal_uInt16 nFamilies = nStyleFamilyMask &
-                       ( SFX_STYLE_FAMILY_FRAME|SFX_STYLE_FAMILY_PARA|
-                         SFX_STYLE_FAMILY_CHAR );
-
-    // pass 1: create text, paragraph and frame styles
-    sal_uInt16 nCount = GetStyleCount();
-    for( sal_uInt16 i=0; i<nCount; i++ )
-    {
-        SwXMLItemSetStyleContext_Impl *pStyle = GetSwStyle( i );
-        if( !pStyle )
-        {
-            continue;
-        }
-
-        sal_uInt16 eFamily = pStyle->GetFamily();
-        if( !(nFamilies & eFamily) )
-        {
-            pStyle->SetValid( sal_False );
-            continue;
-        }
-
-        const OUString& rName = pStyle->GetName();
-        if( 0 == rName.getLength() )
-        {
-            pStyle->SetValid( sal_False );
-            continue;
-        }
-        OUString sName =
-            SwXStyleFamilies::GetUIName( rName, (SfxStyleFamily)eFamily );
-
-//      sal_uInt16 nPoolId = pStyle->GetPoolId();
-
-        sal_Bool bNewFmt = sal_False;
-        SwFmt *pFmt = FindFmtByName( sName, eFamily );
-        if( !pFmt )
-        {
-            // it is a new format
-            SwGetPoolIdFromName eNameType;
-            if( eFamily & SFX_STYLE_FAMILY_CHAR )
-                eNameType = GET_POOLID_CHRFMT;
-            else if( eFamily & SFX_STYLE_FAMILY_FRAME )
-                eNameType = GET_POOLID_FRMFMT;
-            else
-                eNameType = GET_POOLID_TXTCOLL;
-
-            sal_uInt16 nPoolId = rDoc.GetPoolId( sName, eNameType );
-            bNewFmt = sal_True;
-//          sal_Bool bIsUserDefined = (nPoolId & USER_FMT) != 0;
-            sal_Bool bIsUserDefined = nPoolId == USHRT_MAX;
-#if 0
-            if( !bIsUserDefined )
-            {
-                bIsUserDefined = !lcl_xmlfmt_isValidPoolId( nPoolId, eFamily );
-                if( bIsUserDefined )
-                {
-                    // If the pool id is invalid create a user style
-                    nPoolId |= (USHRT_MAX &
-                                ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID));
-                }
-            }
-            else
-            {
-                // The style is not a pool style, but maybe there is
-                // a pool style with this name now?
-                SwGetPoolIdFromName eNameType;
-                if( eFamily & SFX_STYLE_FAMILY_CHAR )
-                    eNameType = GET_POOLID_CHRFMT;
-                else if( eFamily & SFX_STYLE_FAMILY_FRAME )
-                    eNameType = GET_POOLID_FRMFMT;
-                else
-                    eNameType = GET_POOLID_TXTCOLL;
-                sal_uInt16 nId = rDoc.GetPoolId( rName, eNameType );
-                if( nId != USHRT_MAX )
-                {
-                    if( FindByPoolId( nId ) )
-                    {
-                        // There is a style with the new pool id, too.
-                        // This means, that the user style will be ignored.
-                        continue;
-                    }
-                    else
-                    {
-                        bIsUserDefined = sal_False;
-                        nPoolId = nId;
-                    }
-                }
-            }
-#endif
-
-            if( bIsUserDefined )
-            {
-                if( eFamily & SFX_STYLE_FAMILY_CHAR )
-                {
-                    pFmt = rDoc.MakeCharFmt( rName, NULL );
-                    pFmt->SetAuto( sal_False );
-                }
-                else if( eFamily & SFX_STYLE_FAMILY_FRAME )
-                {
-                    pFmt = rDoc.MakeFrmFmt( rName, NULL );
-                    pFmt->SetAuto( sal_False );
-                }
-                else if( pStyle->HasConditions() )
-                {
-                    SwTxtFmtColl* pDer = (*rDoc.GetTxtFmtColls())[ 0 ];
-                    pFmt = rDoc.MakeCondTxtFmtColl( rName, pDer );
-                }
-                else
-                {
-                    SwTxtFmtColl* pDer = (*rDoc.GetTxtFmtColls())[ 0 ];
-                    pFmt = rDoc.MakeTxtFmtColl( rName, pDer );
-                }
-
-//              pFmt->SetPoolFmtId( nPoolId );
-//              if( pStyle->GetHelpFile().getLength() )
-//                  pFmt->SetPoolHlpFileId
-//                      ( (sal_Int8) rDoc.SetDocPattern(
-//                                          pStyle->GetHelpFile() ) );
-//              pFmt->SetPoolHelpId( (sal_uInt16)pStyle->GetHelpId() );
-            }
-            else
-            {
-                if( eFamily & SFX_STYLE_FAMILY_CHAR )
-                {
-                    sal_uInt16 nStyleCnt = rDoc.GetCharFmts()->Count();
-                    pFmt = rDoc.GetCharFmtFromPool( nPoolId );
-                    bNewFmt = nStyleCnt != rDoc.GetCharFmts()->Count();
-                }
-                else if( eFamily & SFX_STYLE_FAMILY_FRAME )
-                {
-                    sal_uInt16 nStyleCnt = rDoc.GetFrmFmts()->Count();
-                    pFmt = rDoc.GetFrmFmtFromPool( nPoolId );
-                    bNewFmt = nStyleCnt != rDoc.GetFrmFmts()->Count();
-                }
-                else
-                {
-                    sal_uInt16 nStyleCnt = rDoc.GetTxtFmtColls()->Count();
-                    pFmt = rDoc.GetTxtCollFromPool( nPoolId );
-                    bNewFmt = nStyleCnt != rDoc.GetTxtFmtColls()->Count();
-                }
-
-                // If the name of the pool style has been changed, add
-                // a i18n map entry.
-                if( String(rName) != pFmt->GetName() )
-                    rI18NMap.Add( eFamily, pStyle->GetName(), pFmt->GetName() );
-            }
-        }
-#if 0
-        else if( (nPoolId & USER_FMT) != 0 )
-        {
-            // If a pool style has been renamed it may have the same
-            // name a a user style. If this is the case, the user style
-            // will be ignored.
-            sal_uInt16 nId = pFmt->GetPoolFmtId();
-            SwXMLItemSetStyleContext_Impl *pTmp;
-            if( nId != nPoolId && (nId & USER_FMT) == 0 &&
-                (pTmp = FindByPoolId( nPoolId )) != 0 &&
-                pTmp->GetFmt() == pFmt )
-            {
-                pStyle->SetValid( sal_False );
-                continue;
-            }
-        }
-#endif
-
-        pStyle->SetFmt( pFmt );
-
-        if( !bInsertMode || bNewFmt )
-        {
-            if( pStyle->GetItemSet() )
-            {
-                pFmt->ResetAllAttr(); // delete default attributes
-
-                ((SwAttrSet&) pFmt->GetAttrSet()).Put( *pStyle->GetItemSet() );
-            }
-            SwTxtFmtColl* pColl = pStyle->GetColl();
-            if( pColl )
-            {
-                ((SwAttrSet&) pColl->GetAttrSet()).SetModifyAtAttr( pColl );
-            }
-            pFmt->SetAutoUpdateFmt( pStyle->IsAutoUpdate() );
-        }
-        else
-        {
-            pStyle->SetValid( sal_False );
-        }
-    }
-
-    // pass 2: connect parent/next styles and create list styles
-    for( i=0; i<nCount; i++ )
-    {
-        SwXMLItemSetStyleContext_Impl *pStyle = GetSwStyle( i );
-        if( !pStyle )
-        {
-            if( (nStyleFamilyMask & SFX_STYLE_FAMILY_PSEUDO) != 0 )
-            {
-                SwXMLListStyleContext *pListStyle = GetSwListStyle( i );
-                if( pListStyle )
-                    pListStyle->InsertNumRule( sal_False );
-            }
-            continue;
-        }
-        else if( !pStyle->IsValid() )
-            continue;
-
-        sal_uInt16 eFamily = pStyle->GetFamily();
-        if( (nFamilies & eFamily) != 0 )
-        {
-            pStyle->ConnectParent();
-            pStyle->ConnectFollow();
-
-            // The format has been changed
-            SwFmtChg aHint( pStyle->GetFmt() );
-            pStyle->GetFmt()->Modify( &aHint, &aHint );
-        }
-    }
-
-    // pass 3: connect conditions and list styles
-    for( i=0; i<nCount; i++ )
-    {
-        SwXMLItemSetStyleContext_Impl *pStyle = GetSwStyle( i );
-        if( pStyle && pStyle->IsValid() &&
-            (nFamilies & pStyle->GetFamily()) != 0 )
-        {
-            pStyle->ConnectListStyle();
-            if( pStyle->HasConditions() )
-                pStyle->ConnectConditions();
-        }
-    }
+    return bIns;
 }
 
-void SwXMLStylesContext_Impl::CopyAutoStylesToDoc()
+void SwXMLMasterStylesContext_Impl::EndElement()
 {
-    // pass 1: create list styles
-    sal_uInt16 nCount = GetStyleCount();
-    if( (GetSwImport().GetStyleFamilyMask() & SFX_STYLE_FAMILY_PSEUDO) != 0 )
-    {
-        for( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            SwXMLListStyleContext *pListStyle = GetSwListStyle( i );
-            if( pListStyle && !pListStyle->IsOutline() )
-                pListStyle->InsertNumRule( sal_True );
-        }
-    }
-
-    // pass 3: connect list styles
-    if( (GetSwImport().GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA) != 0 )
-    {
-        for( sal_uInt16 i=0; i<nCount; i++ )
-        {
-            SwXMLItemSetStyleContext_Impl *pStyle = GetSwStyle( i );
-            if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
-            {
-                pStyle->ConnectAutoListStyle();
-            }
-        }
-    }
+    FinishStyles( !GetSwImport().IsInsertMode() );
+    GetSwImport().FinishStyles();
 }
-#endif
-
 // ---------------------------------------------------------------------
 
 SvXMLImportContext *SwXMLImport::CreateStylesContext(
@@ -1616,7 +1010,7 @@ SvXMLImportContext *SwXMLImport::CreateStylesContext(
 {
     SvXMLImportContext *pContext =
         new SwXMLStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
-                                       xAttrList );
+                                       xAttrList, bAuto );
     if( bAuto )
         xAutoStyles = pContext;
     else
@@ -1630,64 +1024,53 @@ SvXMLImportContext *SwXMLImport::CreateMasterStylesContext(
         const Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLImportContext *pContext =
-        new XMLTextMasterStylesContext( *this, XML_NAMESPACE_OFFICE, rLocalName,
+        new SwXMLMasterStylesContext_Impl( *this, XML_NAMESPACE_OFFICE, rLocalName,
                                           xAttrList );
     return pContext;
 }
 
-void SwXMLImport::InsertStyles()
+void SwXMLImport::InsertStyles( sal_Bool bAuto )
 {
-    sal_Bool bStylesValid = xStyles.Is();
-    bAutoStylesValid  = xAutoStyles.Is();
-
-    if( bStylesValid )
-#ifdef XML_CORE_API
-        ((SwXMLStylesContext_Impl *)&xStyles)->CopyStylesToDoc();
-#else
+    if( !bAuto && xStyles.Is() )
         ((SwXMLStylesContext_Impl *)&xStyles)->CopyStylesToDoc(
-                                                !IsInsertMode() );
-#endif
-    xStyles = 0;
+                                                !IsInsertMode(),
+                                                sal_False );
 
-    if( bAutoStylesValid )
-#ifdef XML_CORE_API
-        ((SwXMLStylesContext_Impl *)&xAutoStyles)->CopyAutoStylesToDoc();
-#else
+    if( bAuto && xAutoStyles.Is() )
         GetTextImport()->SetAutoStyles( (SwXMLStylesContext_Impl *)&xAutoStyles );
-#endif
-    else
-        xAutoStyles = 0;
+}
+
+void SwXMLImport::FinishStyles()
+{
+    if( xStyles.Is() )
+        ((SwXMLStylesContext_Impl *)&xStyles)->FinishStyles(
+                                                !IsInsertMode() );
 }
 
 sal_Bool SwXMLImport::FindAutomaticStyle(
-#ifdef XML_CORE_API
-        SfxStyleFamily eFamily,
-        sal_uInt16 nSubFamily,
-#else
         sal_uInt16 nFamily,
-#endif
         const OUString& rName,
         const SfxItemSet **ppItemSet,
         OUString *pParent ) const
 {
-    const SwXMLItemSetStyleContext_Impl *pStyle = 0;
-    if( bAutoStylesValid && xAutoStyles.Is() )
+    SwXMLItemSetStyleContext_Impl *pStyle = 0;
+    if( xAutoStyles.Is() )
     {
-#ifdef XML_CORE_API
-        pStyle = PTR_CAST( SwXMLItemSetStyleContext_Impl,
-              ((SwXMLStylesContext_Impl *)&xAutoStyles)->
-                    FindStyleChildContext( eFamily, nSubFamily, rName,
-                                           sal_True ) );
-#else
         pStyle = PTR_CAST( SwXMLItemSetStyleContext_Impl,
               ((SwXMLStylesContext_Impl *)&xAutoStyles)->
                     FindStyleChildContext( nFamily, rName,
                                            sal_True ) );
-#endif
         if( pStyle )
         {
             if( ppItemSet )
+            {
+                if( XML_STYLE_FAMILY_TABLE_TABLE == pStyle->GetFamily() &&
+                    pStyle->HasMasterPageName() &&
+                    !pStyle->IsPageDescConnected() )
+                    pStyle->ConnectPageDesc();
                 (*ppItemSet) = pStyle->GetItemSet();
+            }
+
             if( pParent )
                 *pParent = pStyle->GetParent();
         }
@@ -1695,149 +1078,3 @@ sal_Bool SwXMLImport::FindAutomaticStyle(
 
     return pStyle != 0;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmt.cxx,v 1.3 2000-10-12 17:32:03 mib Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/09/28 12:45:50  mib
-      Splitting and joining nodes in insert mode fixed
-
-      Revision 1.1.1.1  2000/09/18 17:15:00  hr
-      initial import
-
-      Revision 1.42  2000/09/18 16:05:05  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.41  2000/09/18 11:58:02  mib
-      text frames/graphics import and export continued
-
-      Revision 1.40  2000/08/31 14:26:32  mib
-      conditional styles
-
-      Revision 1.39  2000/08/24 11:16:41  mib
-      text import continued
-
-      Revision 1.38  2000/08/10 10:22:15  mib
-      #74404#: Adeptions to new XSL/XLink working draft
-
-      Revision 1.37  2000/07/27 08:06:34  mib
-      text import continued
-
-      Revision 1.36  2000/07/21 12:55:15  mib
-      text import/export using StarOffice API
-
-      Revision 1.35  2000/07/07 13:58:36  mib
-      text styles using StarOffice API
-
-      Revision 1.34  2000/06/26 08:31:15  mib
-      removed SfxStyleFamily
-
-      Revision 1.33  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.32  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.31  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.30  2000/03/06 10:46:10  mib
-      #72585#: toInt32
-
-      Revision 1.29  2000/02/18 09:20:12  mib
-      #70271#: initialization of pContext was missing
-
-      Revision 1.28  2000/02/17 14:40:30  mib
-      #70271#: XML table import
-
-      Revision 1.26  2000/01/27 08:59:02  mib
-      #70271#: outline numbering
-
-      Revision 1.25  2000/01/20 10:03:15  mib
-      #70271#: Lists reworked
-
-      Revision 1.24  2000/01/06 15:08:27  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-      Revision 1.23  1999/12/13 08:28:25  mib
-      #70271#: Support for element items added
-
-      Revision 1.22  1999/12/06 11:41:33  mib
-      #70258#: Container item for unkown attributes
-
-      Revision 1.21  1999/11/26 11:13:57  mib
-      loading of styles only and insert mode
-
-      Revision 1.20  1999/11/22 15:52:34  os
-      headers added
-
-      Revision 1.19  1999/11/17 20:08:49  nn
-      document language
-
-      Revision 1.18  1999/11/12 14:50:28  mib
-      meta import and export reactivated
-
-      Revision 1.17  1999/11/12 11:43:03  mib
-      using item mapper, part iii
-
-      Revision 1.16  1999/11/10 15:08:09  mib
-      Import now uses XMLItemMapper
-
-      Revision 1.15  1999/11/09 15:40:08  mib
-      Using XMLItemMapper for export
-
-      Revision 1.14  1999/11/05 19:44:11  nn
-      handle office:meta
-
-      Revision 1.13  1999/11/01 11:38:50  mib
-      List style import
-
-      Revision 1.12  1999/10/25 10:41:48  mib
-      Using new OUString ASCII methods
-
-      Revision 1.11  1999/10/22 09:49:16  mib
-      List style export
-
-      Revision 1.10  1999/10/15 12:37:05  mib
-      integrated SvXMLStyle into SvXMLStyleContext
-
-      Revision 1.9  1999/10/08 11:47:45  mib
-      moved some file to SVTOOLS/SVX
-
-      Revision 1.8  1999/10/01 13:02:51  mib
-      no comparisons between OUString and char* any longer
-
-      Revision 1.7  1999/09/28 10:47:58  mib
-      char fmts again
-
-      Revision 1.6  1999/09/28 08:31:15  mib
-      char fmts, hints
-
-      Revision 1.5  1999/09/23 11:53:58  mib
-      i18n, token maps and hard paragraph attributes
-
-      Revision 1.4  1999/09/22 11:56:57  mib
-      string -> wstring
-
-      Revision 1.3  1999/08/19 12:57:42  MIB
-      attribute import added
-
-
-      Rev 1.2   19 Aug 1999 14:57:42   MIB
-   attribute import added
-
-      Rev 1.1   18 Aug 1999 17:03:36   MIB
-   Style import
-
-      Rev 1.0   13 Aug 1999 16:18:10   MIB
-   Initial revision.
-
-
-*************************************************************************/
-

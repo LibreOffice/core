@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:30:28 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,12 @@
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
 #endif
+#ifndef _FMTPDSC_HXX
+#include <fmtpdsc.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
+#endif
 
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
@@ -235,252 +241,65 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 
     // style:family="..."
     const sal_Char *pStr = pFamily;
-#ifdef XML_CORE_API
-    SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
-    switch( rFmt.Which() )
-    {
-    case RES_CHRFMT:
-        if( !pStr )
-            pStr = sXML_text;
-        eFamily = SFX_STYLE_FAMILY_CHAR;
-        break;
-    case RES_FRMFMT:
-        if( !pStr )
-            pStr = sXML_frame;
-        eFamily = SFX_STYLE_FAMILY_FRAME;
-        break;
-    case RES_TXTFMTCOLL:
-    case RES_CONDTXTFMTCOLL:
-        if( !pStr )
-            pStr = sXML_paragraph;
-        eFamily = SFX_STYLE_FAMILY_PARA;
-        break;
-    case RES_FLYFRMFMT:
-    case RES_GRFFMTCOLL:
-        DBG_ASSERT( pStr, "SwXMLExport::ExportFmt: which id unexpected" );
-        break;
-    default:
-        DBG_ASSERT( pStr, "SwXMLExport::ExportFmt: which id unknown" );
-        break;
-    }
-    // style:name="..."
-    AddAttribute( XML_NAMESPACE_STYLE, sXML_name,
-            SwXStyleFamilies::GetProgrammaticName( rFmt.GetName(), eFamily ) );
-#else
     DBG_ASSERT( RES_FRMFMT==rFmt.Which(), "frame format expected" );
     if( RES_FRMFMT != rFmt.Which() )
         return;
     DBG_ASSERT( pStr, "family must be specified" );
     // style:name="..."
     AddAttribute( XML_NAMESPACE_STYLE, sXML_name, rFmt.GetName() );
-#endif
 
     if( pStr )
         AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family, pStr );
 
-#ifdef XML_CORE_API
-    // register name to prevent it from beeing reused as an automtic
-    // style name
-    if( SFX_STYLE_FAMILY_ALL != eFamily )
-        pItemSetAutoStylePool->RegisterName( eFamily, rFmt.GetName() );
-#endif
-
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
     // Parent-Namen nur uebernehmen, wenn kein Default
-    if( pParent && !pParent->IsDefault() )
-    {
-#ifdef XML_CORE_API
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_parent_style_name,
-            SwXStyleFamilies::GetProgrammaticName( pParent->GetName(),
-                                                   eFamily ) );
-#else
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_parent_style_name,
-                      pParent->GetName() );
-#endif
-    }
+    ASSERT( !pParent || pParent->IsDefault(), "unexpected parent" );
 
-#ifdef XML_CORE_API
-    // style:next-style-name="..."
-    // (if its not the default and not the same style only)
-    if( RES_TXTFMTCOLL == rFmt.Which() || RES_CONDTXTFMTCOLL == rFmt.Which() )
-    {
-        const SwTxtFmtColl& rFollow =
-            ((const SwTxtFmtColl&)rFmt).GetNextTxtFmtColl();
-        if( !rFollow.IsDefault() && &rFollow != &rFmt )
-        {
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_next_style_name,
-                SwXStyleFamilies::GetProgrammaticName( rFollow.GetName(),
-                                                       eFamily ) );
-        }
-    }
-
-#if 0
-    // style:pool-id="..."
-    if( USHRT_MAX != rFmt.GetPoolFmtId() )
-    {
-        OUStringBuffer sTmp( 5L );
-        sTmp.append( (sal_Int32)rFmt.GetPoolFmtId() );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_pool_id,
-                      sTmp.makeStringAndClear() );
-    }
-
-    // style:help-file-name="..." and style:help-id="..."
-    if( UCHAR_MAX != rFmt.GetPoolHlpFileId() )
-    {
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_help_file_name,
-                      *pDoc->GetDocPattern( rFmt.GetPoolHlpFileId() ) );
-        OUStringBuffer sTmp( 5L );
-        sTmp.append( (sal_Int32)rFmt.GetPoolHelpId() );
-        AddAttribute( XML_NAMESPACE_STYLE, sXML_help_id,
-                      sTmp.makeStringAndClear() );
-    }
-#endif
-
-    // style:auto-update="..."
-    if( rFmt.IsAutoUpdateFmt() )
-    {
-        AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_auto_update, sXML_true );
-    }
-
-    // text:list-style-name
-    if( RES_TXTFMTCOLL == rFmt.Which() || RES_CONDTXTFMTCOLL == rFmt.Which() )
-    {
-        const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PARATR_NUMRULE,
-                                                            sal_False, &pItem ) )
-        {
-            AddAttribute( XML_NAMESPACE_STYLE, sXML_list_style_name,
-                SwXStyleFamilies::GetProgrammaticName(
-                    ((const SwNumRuleItem *)pItem)->GetValue(),
-                    SFX_STYLE_FAMILY_PSEUDO ) );
-        }
-    }
-#else
     ASSERT( USHRT_MAX == rFmt.GetPoolFmtId(), "pool ids arent'supported" );
     ASSERT( UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help ids aren't supported" );
-#endif
+
+    // style:master-page-name
+    if( RES_FRMFMT == rFmt.Which() && sXML_table == pStr )
+    {
+        const SfxPoolItem *pItem;
+        if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
+                                                            sal_False, &pItem ) )
+        {
+            String sName;
+            const SwPageDesc *pPageDesc =
+                ((const SwFmtPageDesc *)pItem)->GetPageDesc();
+            if( pPageDesc )
+                sName = SwXStyleFamilies::GetProgrammaticName(
+                                    pPageDesc->GetName(),
+                                    SFX_STYLE_FAMILY_PAGE );
+            AddAttribute( XML_NAMESPACE_STYLE, sXML_master_page_name, sName );
+        }
+    }
 
     {
         SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE, sXML_style,
                                   sal_True, sal_True );
 
-#ifdef XML_CORE_API
-        switch( rFmt.Which() )
+        SvXMLItemMapEntriesRef xItemMap;
+        if( sXML_table == pStr )
+            xItemMap = xTableItemMap;
+        else if( sXML_table_row == pStr )
+            xItemMap = xTableRowItemMap;
+        else if( sXML_table_cell == pStr )
+            xItemMap = xTableCellItemMap;
+
+        if( xItemMap.Is() )
         {
-        case RES_TXTFMTCOLL:
-        case RES_CONDTXTFMTCOLL:
-        case RES_CHRFMT:
-            GetParaItemMapper().exportXML( GetDocHandler(),
+            SvXMLExportItemMapper& rItemMapper = GetTableItemMapper();
+            rItemMapper.setMapEntries( xItemMap );
+
+            GetTableItemMapper().exportXML( GetDocHandler(),
                                            rFmt.GetAttrSet(),
                                            GetTwipUnitConverter(),
                                            GetNamespaceMap(),
                                            XML_EXPORT_FLAG_IGN_WS );
-            break;
-        case RES_FRMFMT:
-            {
-#endif
-                SvXMLItemMapEntriesRef xItemMap;
-                if( sXML_table == pStr )
-                    xItemMap = xTableItemMap;
-                else if( sXML_table_row == pStr )
-                    xItemMap = xTableRowItemMap;
-                else if( sXML_table_cell == pStr )
-                    xItemMap = xTableCellItemMap;
-
-                if( xItemMap.Is() )
-                {
-                    SvXMLExportItemMapper& rItemMapper = GetTableItemMapper();
-                    rItemMapper.setMapEntries( xItemMap );
-
-                    GetTableItemMapper().exportXML( GetDocHandler(),
-                                                   rFmt.GetAttrSet(),
-                                                   GetTwipUnitConverter(),
-                                                   GetNamespaceMap(),
-                                                   XML_EXPORT_FLAG_IGN_WS );
-                }
-#ifdef XML_CORE_API
-            }
-            break;
-        default:
-            DBG_ASSERT( !this,
-                        "SwXMLExport::ExportFmt: attribute export missing" );
-            break;
         }
-
-        if( RES_CONDTXTFMTCOLL == rFmt.Which() )
-        {
-            const SwFmtCollConditions& rConditions =
-                ((SwConditionTxtFmtColl&)rFmt). GetCondColls();
-            for( sal_uInt16 i=0; i < rConditions.Count(); i++ )
-            {
-                const SwCollCondition& rCond = *rConditions[i];
-
-                const sal_Char *pFunc = 0;
-                OUStringBuffer sBuffer( 20 );
-                switch( rCond.GetCondition() )
-                {
-                case PARA_IN_LIST:
-                    pFunc = sXML_list_level;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
-                    break;
-                case PARA_IN_OUTLINE:
-                    pFunc = sXML_outline_level;
-                    sBuffer.append( (sal_Int32)(rCond.GetSubCondition()+1) );
-                    break;
-                case PARA_IN_FRAME:
-                    pFunc = sXML_text_box;
-                    break;
-                case PARA_IN_TABLEHEAD:
-                    pFunc = sXML_table_header;
-                    break;
-                case PARA_IN_TABLEBODY:
-                    pFunc = sXML_table;
-                    break;
-                case PARA_IN_SECTION:
-                    pFunc = sXML_section;
-                    break;
-                case PARA_IN_FOOTENOTE:
-                    pFunc = sXML_footnote;
-                    break;
-                case PARA_IN_FOOTER:
-                    pFunc = sXML_footer;
-                    break;
-                case PARA_IN_HEADER:
-                    pFunc = sXML_header;
-                    break;
-                case PARA_IN_ENDNOTE:
-                    pFunc = sXML_endnote;
-                    break;
-                }
-                OUString sVal( sBuffer.makeStringAndClear() );
-
-                DBG_ASSERT( pFunc, "SwXMLExport::ExportFmt: unknon condition" );
-                if( pFunc )
-                {
-                    sBuffer.appendAscii( pFunc );
-                    sBuffer.append( (sal_Unicode)'(' );
-                    sBuffer.append( (sal_Unicode)')' );
-                    if( sVal.getLength() )
-                    {
-                        sBuffer.append( (sal_Unicode)'=' );
-                        sBuffer.append( sVal );
-                    }
-
-                    AddAttribute( XML_NAMESPACE_STYLE, sXML_condition,
-                                  sBuffer.makeStringAndClear() );
-                    const String& rName =
-                        SwXStyleFamilies::GetProgrammaticName(
-                                    rCond.GetTxtFmtColl()->GetName(),
-                                    SFX_STYLE_FAMILY_PARA );
-                    AddAttribute( XML_NAMESPACE_STYLE, sXML_apply_style_name,
-                                  rName );
-                    SvXMLElementExport aElem( *this, XML_NAMESPACE_STYLE,
-                                              sXML_map, sal_True, sal_True );
-                }
-            }
-        }
-#endif
     }
 }
 
@@ -928,6 +747,7 @@ class SwXMLAutoStylePoolP : public SvXMLAutoStylePoolP
 {
     SvXMLExport& rExport;
     const OUString sListStyleName;
+    const OUString sMasterPageName;
     const OUString sCDATA;
 
 protected:
@@ -978,6 +798,15 @@ void SwXMLAutoStylePoolP::exportStyleAttributes(
                     }
                 }
                 break;
+            case CTF_PAGEDESCNAME:
+                {
+                    OUString sStyleName;
+                    aProperty->maValue >>= sStyleName;
+                    OUString sName( rNamespaceMap.GetQNameByKey(
+                                XML_NAMESPACE_STYLE, sMasterPageName ) );
+                    rAttrList.AddAttribute( sName, sCDATA, sStyleName );
+                }
+                break;
             }
         }
     }
@@ -987,6 +816,7 @@ SwXMLAutoStylePoolP::SwXMLAutoStylePoolP(SvXMLExport& rExp ) :
     SvXMLAutoStylePoolP(),
     rExport( rExp ),
     sListStyleName( RTL_CONSTASCII_USTRINGPARAM( sXML_list_style_name) ),
+    sMasterPageName( RTL_CONSTASCII_USTRINGPARAM( sXML_master_page_name) ),
     sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA) )
 {
 }
@@ -1006,11 +836,14 @@ SvXMLAutoStylePoolP* SwXMLExport::CreateAutoStylePool()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.3 2000-10-12 17:30:28 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlfmte.cxx,v 1.4 2000-10-18 11:20:44 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/12 17:30:28  mib
+      export of master pages
+
       Revision 1.2  2000/09/29 10:54:05  mib
       export graphics styles again
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-27 06:15:11 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,9 +930,6 @@ const SvXMLTokenMap& SwXMLImport::GetBodyElemTokenMap()
 SvXMLImportContext *SwXMLImport::CreateBodyContext(
                                        const OUString& rLocalName )
 {
-    // styles nun einfuegen!
-    InsertStyles();
-
     SvXMLImportContext *pContext = 0;
 
     if( !IsStylesOnlyMode() )
@@ -1500,11 +1497,14 @@ void SwXMLExport::ExportSection( const SwSectionNode& rSectNd )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltext.cxx,v 1.2 2000-09-27 06:15:11 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmltext.cxx,v 1.3 2000-10-18 11:20:44 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/27 06:15:11  mib
+      Setting outline styles at end of body
+
       Revision 1.1.1.1  2000/09/18 17:15:00  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtpdsc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,10 @@ public:
     //
     // this item must be ignored while comparing item sets during XML export
     virtual BOOL        equalsXML( const SfxPoolItem& ) const;
+    virtual BOOL        importXML( const NAMESPACE_RTL(OUString)& rValue,USHORT,
+                                   const SvXMLUnitConverter& rUnitConv );
+    virtual BOOL        exportXML( NAMESPACE_RTL(OUString)& rValue, USHORT,
+                                   const SvXMLUnitConverter& rUnitConv ) const;
 };
 
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const

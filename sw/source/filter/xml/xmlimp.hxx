@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-12 17:32:03 $
+ *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,6 @@ class SwXMLImport: public SvXMLImport
 
     void                    _InitItemImport();
     void                    _FinitItemImport();
-    void                    InsertStyles();
 
 protected:
 
@@ -133,6 +132,8 @@ public:
 
     ~SwXMLImport();
 
+    void                    InsertStyles( sal_Bool bAuto );
+    void                    FinishStyles();
     // namespace office
     SvXMLImportContext *CreateMetaContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext *CreateStylesContext(
