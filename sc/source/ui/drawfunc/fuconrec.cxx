@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 12:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,13 +339,13 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         {
             //  set vertical flag for caption object
 
-            //! object is empty, OutlinerParaObject not there
-            //! how can vertical flag be set?
-
             const SdrMarkList& rMarkList = pView->GetMarkList();
             if (rMarkList.GetMark(0))
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                //  create OutlinerParaObject now so it can be set to vertical
+                if ( pObj->ISA(SdrTextObj) )
+                    ((SdrTextObj*)pObj)->ForceOutlinerParaObject();
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if( pOPO && !pOPO->IsVertical() )
                     pOPO->SetVertical( TRUE );
