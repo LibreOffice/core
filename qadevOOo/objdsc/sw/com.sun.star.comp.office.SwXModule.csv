@@ -1,0 +1,2 @@
+"SwXModule";"com::sun::star::view::XViewSettingsSupplier";"getViewSettings()"
+"SwXModule";"com::sun::star::view::XPrintSettingsSupplier";"getPrintSettings()"

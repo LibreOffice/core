@@ -1,0 +1,6 @@
+"XMLContentExporter";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"XMLContentExporter";"com::sun::star::document::XFilter";"filter()"
+"XMLContentExporter";"com::sun::star::document::XFilter";"cancel()"
+"XMLContentExporter";"com::sun::star::container::XNamed#optional";"getName()"
+"XMLContentExporter";"com::sun::star::container::XNamed#optional";"setName()"
+"XMLContentExporter";"com::sun::star::document::XExporter";"setSourceDocument()"

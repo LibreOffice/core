@@ -1,0 +1,5 @@
+"CoreReflection";"com::sun::star::reflection::XIdlReflection";"forName()"
+"CoreReflection";"com::sun::star::reflection::XIdlReflection";"getType()"
+"CoreReflection";"com::sun::star::lang::XComponent#optional";"dispose()"
+"CoreReflection";"com::sun::star::lang::XComponent#optional";"addEventListener()"
+"CoreReflection";"com::sun::star::lang::XComponent#optional";"removeEventListener()"

@@ -1,0 +1,6 @@
+"ScCellFieldsObj";"com::sun::star::util::XRefreshable";"refresh()"
+"ScCellFieldsObj";"com::sun::star::util::XRefreshable";"addRefreshListener()"
+"ScCellFieldsObj";"com::sun::star::util::XRefreshable";"removeRefreshListener()"
+"ScCellFieldsObj";"com::sun::star::container::XElementAccess";"getElementType()"
+"ScCellFieldsObj";"com::sun::star::container::XElementAccess";"hasElements()"
+"ScCellFieldsObj";"com::sun::star::container::XEnumerationAccess";"createEnumeration()"

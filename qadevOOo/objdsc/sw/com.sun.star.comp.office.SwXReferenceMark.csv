@@ -1,0 +1,7 @@
+"SwXReferenceMark";"com::sun::star::lang::XComponent";"dispose()"
+"SwXReferenceMark";"com::sun::star::lang::XComponent";"addEventListener()"
+"SwXReferenceMark";"com::sun::star::lang::XComponent";"removeEventListener()"
+"SwXReferenceMark";"com::sun::star::container::XNamed";"getName()"
+"SwXReferenceMark";"com::sun::star::container::XNamed";"setName()"
+"SwXReferenceMark";"com::sun::star::text::XTextContent";"attach()"
+"SwXReferenceMark";"com::sun::star::text::XTextContent";"getAnchor()"

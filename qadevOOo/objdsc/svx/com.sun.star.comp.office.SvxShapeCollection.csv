@@ -1,0 +1,6 @@
+"SvxShapeCollection";"com::sun::star::container::XIndexAccess";"getCount()"
+"SvxShapeCollection";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"SvxShapeCollection";"com::sun::star::container::XElementAccess";"getElementType()"
+"SvxShapeCollection";"com::sun::star::container::XElementAccess";"hasElements()"
+"SvxShapeCollection";"com::sun::star::drawing::XShapes";"add()"
+"SvxShapeCollection";"com::sun::star::drawing::XShapes";"remove()"

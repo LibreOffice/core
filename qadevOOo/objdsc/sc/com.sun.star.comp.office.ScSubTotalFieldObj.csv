@@ -1,0 +1,4 @@
+"ScSubTotalFieldObj";"com::sun::star::sheet::XSubTotalField";"getGroupColumn()"
+"ScSubTotalFieldObj";"com::sun::star::sheet::XSubTotalField";"setGroupColumn()"
+"ScSubTotalFieldObj";"com::sun::star::sheet::XSubTotalField";"getSubTotalColumns()"
+"ScSubTotalFieldObj";"com::sun::star::sheet::XSubTotalField";"setSubTotalColumns()"

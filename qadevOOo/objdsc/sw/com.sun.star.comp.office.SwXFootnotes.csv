@@ -1,0 +1,4 @@
+"SwXFootnotes";"com::sun::star::container::XIndexAccess";"getCount()"
+"SwXFootnotes";"com::sun::star::container::XIndexAccess";"getByIndex()"
+"SwXFootnotes";"com::sun::star::container::XElementAccess";"getElementType()"
+"SwXFootnotes";"com::sun::star::container::XElementAccess";"hasElements()"

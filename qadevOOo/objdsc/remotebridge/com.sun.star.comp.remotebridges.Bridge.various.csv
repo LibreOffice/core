@@ -1,0 +1,7 @@
+"various";"com::sun::star::lang::XComponent";"dispose()"
+"various";"com::sun::star::lang::XComponent";"addEventListener()"
+"various";"com::sun::star::lang::XComponent";"removeEventListener()"
+"various";"com::sun::star::lang::XInitialization";"initialize()"
+"various";"com::sun::star::bridge::XBridge";"getInstance()"
+"various";"com::sun::star::bridge::XBridge";"getName()"
+"various";"com::sun::star::bridge::XBridge";"getDescription()"
