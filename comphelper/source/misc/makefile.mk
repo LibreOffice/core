@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2004-04-23 12:04:05 $
+#   last change: $Author: rt $ $Date: 2004-05-07 16:28:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+            $(SLO)$/listenernotification.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/accessiblecomponenthelper.obj \
             $(SLO)$/accessiblecontexthelper.obj \
@@ -95,7 +96,6 @@ SLOFILES=	\
             $(SLO)$/proxyaggregation.obj    \
             $(SLO)$/anytostring.obj		\
             $(SLO)$/sequenceashashmap.obj \
-                        $(SLO)$/listenernotification.obj \
             $(SLO)$/mediadescriptor.obj
 
 
