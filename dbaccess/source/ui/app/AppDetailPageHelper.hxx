@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:39:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,17 +167,26 @@ namespace dbaui
         */
         void sort(int _nPos,SvSortMode _eSortMode );
 
+        /** retrieves the resource ids of the images representing elements of the given type
+        */
+        void getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId );
+
         /** fills the names in the listbox
             @param  _xContainer
                 This can either be the queries, forms or report names.
             @param  _rList
                 The tree list box to fill
+            @param _nImageId
+                the resource id of the image to use for non-container entries
+            @param _nHighContrastImageId
+                the resource id of the high contrast image to use for non-container entries
             @param  _pParent
                 The parent of the entries to be inserted.
         */
         void fillNames(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer
                         ,DBTreeListBox& _rList
                         ,USHORT _nImageId
+                        ,USHORT _nHighContrastImageId
                         ,SvLBoxEntry* _pParent = NULL);
         /** sets the detail page
             @param  _pWindow
@@ -410,6 +419,9 @@ namespace dbaui
                 if <TRUE/> then the controls will be disabled otherwise they will be enabled.
         */
         void disableControls(sal_Bool _bDisable);
+
+    protected:
+        void DataChanged( const DataChangedEvent& rDCEvt );
     };
 }
 #endif // DBAUI_APPDETAILPAGEHELPER_HXX
