@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-07 12:08:30 $
+ *  last change: $Author: rt $ $Date: 2003-10-10 09:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ namespace dbaui
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const xlistener_type & xControl = xlistener_type() );
 #else
         void NotifyStatusChanged(const ::com::sun::star::util::URL& aUrl, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > ());
-#endif # _MSC_VER>=1310
+#endif // # _MSC_VER>=1310
 
     private:
         // for asny execution of XDispatch::dispatch
