@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:10:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #define GLOBALOVERFLOW
+
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
 /************************************************************************/
 
@@ -1349,7 +1352,11 @@ SfxItemPresentation XLineWidthItem::GetPresentation
 
 sal_Bool XLineWidthItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
-    rVal <<= (sal_Int32)GetValue();
+    sal_Int32 nValue = GetValue();
+    if( 0 != (nMemberId&CONVERT_TWIPS) )
+        nValue = TWIP_TO_MM100(nValue);
+
+    rVal <<= nValue;
     return sal_True;
 }
 
@@ -1357,6 +1364,8 @@ sal_Bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE 
 {
     sal_Int32 nValue;
     rVal >>= nValue;
+    if( 0 != (nMemberId&CONVERT_TWIPS) )
+        nValue = MM100_TO_TWIP(nValue);
 
     SetValue( nValue );
     return sal_True;
