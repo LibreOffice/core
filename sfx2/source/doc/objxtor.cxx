@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-16 13:29:37 $
+ *  last change: $Author: ab $ $Date: 2001-11-20 18:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,10 +743,9 @@ void SfxObjectShell::InitBasicManager_Impl
     Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
     pImp->pDialogLibContainer = pDialogCont;
 
-    BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
-    pBasMgrImpl->xScriptCont = xBasicCont;
-    pBasMgrImpl->xDialogCont = xDialogCont;
-    pBasicManager->SetImpl( pBasMgrImpl );
+    LibraryContainerInfo* pInfo = new LibraryContainerInfo
+        ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
+    pBasicManager->SetLibraryContainerInfo( pInfo );
     pBasicCont->setBasicManager( pBasicManager );
 
     // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen

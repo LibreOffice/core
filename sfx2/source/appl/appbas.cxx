@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:06:54 $
+ *  last change: $Author: ab $ $Date: 2001-11-20 18:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,11 +714,9 @@ BasicManager* SfxApplication::GetBasicManager()
         Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
         pImp->pDialogLibContainer = pDialogCont;
 
-        BasicManagerImpl* pBasMgrImpl = new BasicManagerImpl();
-        pBasMgrImpl->xScriptCont = xBasicCont;
-        pBasMgrImpl->xDialogCont = xDialogCont;
-        pBasicManager->SetImpl( pBasMgrImpl );
-
+        LibraryContainerInfo* pInfo = new LibraryContainerInfo
+            ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
+        pBasicManager->SetLibraryContainerInfo( pInfo );
 
         Any aBasicCont;
         aBasicCont <<= xBasicCont;
