@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,7 @@ class WW8ListManager
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
     USHORT       nLSTInfos;// geht schneller als Abfrage von pLSTInfos->Count()
     USHORT       nLFOInfos;// dito
+    USHORT       nUniqueList; // current number for creating unique list names
     BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
     WW8LSTInfo* GetLSTByStreamPos( USHORT nStreamPos ) const;
     WW8LSTInfo* GetLSTByListId(    ULONG  nIdLst     ) const;
@@ -299,6 +300,7 @@ public:
     ~WW8ListManager();
     SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition) const;
     BOOL IsSimpleList(USHORT nLFOPosition) const;
+    SwNumRule* CreateNextRule();
 };
 
 
@@ -984,21 +986,15 @@ friend class WW8FormulaControl;
     void RegisterNumFmtOnTxtNode(   USHORT nActLFO,
                                     BYTE   nActLevel,
                                     BOOL   bSetAttr = TRUE );
-    void RegisterNumFmtOnStyle(     SwWW8StyInf& rStyleInfo,
+    void RegisterNumFmtOnStyle(     USHORT nStyle,
                                     USHORT nActLFO   = USHRT_MAX,
                                     BYTE   nActLevel = nWW8MaxListLevel );
     void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
 
-#if 0
-// Pictures mit Kode 100, die ueber MsoftbSpContainer abgespeichert sind.
-    int WW8QuickHackForMSDFF_DirectBLIPImport( SvStream&    rSt,
-                                                WW8PicDesc* pPic,
-                                                Graphic&    rData,
-                                                String&     rGraphName);
-#endif
+    SwNumRule* SyncStyleIndentWithList(SwWW8StyInf &rStyleInfo,
+        SwNumRule* pNumRule, BYTE nLevel);
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
-
 
     const String* GetAnnotationAuthor( short nId );
 

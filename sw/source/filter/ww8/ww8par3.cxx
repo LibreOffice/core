@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-14 17:27:58 $
+ *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,22 +1034,30 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
     return bRes;
 }
 
-
+SwNumRule* WW8ListManager::CreateNextRule()
+{
+    String aPrefix;     // wird erstmal zur Bildung des Style Namens genommen
+    aPrefix  = WW8_ASCII2STR( "WW8Num" );
+    aPrefix += String::CreateFromInt32( nUniqueList++ );
+    sal_uInt16 nRul =
+        rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &aPrefix ));
+    SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
+    pMyNumRule->SetAutoRule( sal_False );
+    return pMyNumRule;
+}
 
 // oeffentliche Methoden /////////////////////////////////////////////////////
 //
 WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
-: pLSTInfos( 0 ),
-    pLFOInfos( 0 ),
-    nLSTInfos( 0 ), nLFOInfos( 0 ), rSt( rSt_ ),
-    rReader( rReader_ ),
-    rDoc( rReader.GetDoc() ),
+    : pLSTInfos( 0 ), pLFOInfos( 0 ), nLSTInfos( 0 ), nUniqueList(1),
+    nLFOInfos( 0 ), rSt( rSt_ ), rReader( rReader_ ), rDoc( rReader.GetDoc() ),
     rFib( rReader.GetFib() )
 {
-    if(    ( 8 > rFib.nVersion )                    // LST und LFO gibts erst ab WW8
+    // LST und LFO gibts erst ab WW8
+    if(    ( 8 > rFib.nVersion )
             || ( rFib.fcPlcfLst == rFib.fcPlfLfo )
             || ( !rFib.lcbPlcfLst )
-            || ( !rFib.lcbPlfLfo ) ) return;    // offensichtlich keine Listen da
+            || ( !rFib.lcbPlfLfo ) ) return; // offensichtlich keine Listen da
 
     // Arrays anlegen
     pLSTInfos = new WW8LSTInfos;
@@ -1058,7 +1066,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     sal_uInt16 nLfo;
     sal_Bool   bLVLOk;
     sal_uInt8   aBits1;
-    String aPrefix;     // wird erstmal zur Bildung des Style Namens genommen
     String aPostfix;
 
     long nOriginalPos = rSt.Tell();
@@ -1100,13 +1107,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             //
             // 1.1.2 neue NumRule ins Doc einsetzen und WW8LSTInfo vermerken
             //
-            aPrefix  = WW8_ASCII2STR( "WW8Num" );
-            aPrefix += String::CreateFromInt32( nList+1 );
-            sal_uInt16 nRul =
-                rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &aPrefix ));
-            SwNumRule* pMyNumRule =
-                rDoc.GetNumRuleTbl()[nRul];
-            pMyNumRule->SetAutoRule( sal_False );
+            SwNumRule* pMyNumRule = CreateNextRule();
 
             WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST, nList);
             pLSTInfos->Insert( pLSTInfo );
@@ -1222,8 +1223,10 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         {
             bOk = sal_False;
             WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLfo );
-            if( !pLFOInfo ) break;
-            if( pLFOInfo->bOverride )   // stehen hierfuer ueberhaupt LFOLVL an ?
+            if( !pLFOInfo )
+                break;
+            // stehen hierfuer ueberhaupt LFOLVL an ?
+            if( pLFOInfo->bOverride )
             {
                 WW8LSTInfo* pParentListInfo = GetLSTByListId( pLFOInfo->nIdLst );
                 if( !pParentListInfo ) break;
@@ -1235,16 +1238,17 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
                 // und (falls vorhanden) fuer Style-Name (dann auf jeden Fall)
-                aPrefix.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "WW8NumSt" ));
+                String aPrefix(RTL_CONSTASCII_STRINGPARAM( "WW8NumSt" ));
                 aPrefix += String::CreateFromInt32( nLfo + 1 );
                 // jetzt dem pNumRule seinen RICHTIGEN Wert zuweisen !!!
                 // (bis dahin war hier die Parent NumRule vermerkt )
                 //
-                // Dazu erst mal nachsehen, ob ein Style diesen LFO referenziert:
+                // Dazu erst mal nachsehen, ob ein Style diesen LFO
+                // referenziert:
                 if( USHRT_MAX > rReader.StyleUsingLFO( nLfo ) )
                 {
-                    sal_uInt16 nRul =
-                        rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &aPrefix ), pParentNumRule);
+                    sal_uInt16 nRul = rDoc.MakeNumRule(
+                        rDoc.GetUniqueNumRuleName( &aPrefix ), pParentNumRule);
                     pLFOInfo->pNumRule = rDoc.GetNumRuleTbl()[ nRul ];
                     pLFOInfo->pNumRule->SetAutoRule( sal_False );
                 }
@@ -1498,21 +1502,81 @@ sal_Bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     return bRes;
 }
 
-void SwWW8ImplReader::RegisterNumFmtOnStyle(SwWW8StyInf& rStyleInfo,
-                                            sal_uInt16       nActLFO,
-                                            sal_uInt8         nActLevel)
+SwNumRule* SwWW8ImplReader::SyncStyleIndentWithList( SwWW8StyInf &rStyle,
+    SwNumRule* pNumRule, BYTE nLevel)
 {
-    if( rStyleInfo.bValid )
+    /*
+    #i1886#
+    When a style has a numbering rule attached to it in word, the numbering
+    rule contains indentation information for the style. The style itself also
+    has indentation info, generally setting one in word sets the indentation
+    in the list formatting for the level in the list to be the same, so the
+    two remain in sync. But it is possible for them to fall out of sync. In
+    which case the styles indentation is the real indentation for the level of
+    the list that is attached to it. The solution is to create a new list
+    based upon the one registered on the style and change the formatting of
+    the level that is effectively overridden by the styles formatting info.
+
+    Once the styles numbering is correctly setup then conceptionally setting a
+    numbering style on anything in word removes all its original indentation
+    information and the lists is used instead, so if we have a style which has
+    a outline list formatting and it happens to be based on a style that has
+    indentation, then that inherited indentation is stripped from the style.
+    */
+    const SfxPoolItem *pItem;
+    if (SFX_ITEM_SET == rStyle.pFmt->GetItemState(RES_LR_SPACE,FALSE,&pItem))
+    {
+        const SvxLRSpaceItem *pLR = (const SvxLRSpaceItem *)pItem;
+        const SwNumFmt& rRule = pNumRule->Get( nLevel );
+
+        BOOL bRequired = FALSE;
+        if ( rRule.GetAbsLSpace() != pLR->GetTxtLeft() )
+            bRequired = TRUE;
+        else if(pLR->GetTxtFirstLineOfst() && (pLR->GetTxtFirstLineOfst() != 0))
+        {
+            if (rRule.GetFirstLineOffset() != pLR->GetTxtFirstLineOfst())
+                bRequired = TRUE;
+        }
+
+        if (bRequired)
+        {
+            //new list required with these settings.
+            SwNumRule *pNewRule = pLstManager->CreateNextRule();
+
+            for (int i=0;i<MAXLEVEL;i++)
+            {
+                const SwNumFmt& rRule = pNumRule->Get(i);
+                pNewRule->Set( i, rRule );
+            }
+
+            SwNumFmt aRule = pNumRule->Get(nLevel);
+            aRule.SetAbsLSpace( pLR->GetTxtLeft() );
+            if (pLR->GetTxtFirstLineOfst() != 1)
+                aRule.SetFirstLineOffset( pLR->GetTxtFirstLineOfst() );
+            pNewRule->Set( nLevel, aRule );
+            pNumRule = pNewRule;
+        }
+    }
+    SvxLRSpaceItem aLR;
+    rStyle.pFmt->SetAttr( aLR );
+    return pNumRule;
+}
+
+void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
+    sal_uInt16 nActLFO, sal_uInt8 nActLevel)
+{
+    SwWW8StyInf &rStyleInf = pCollA[ nStyle ];
+    if( rStyleInf.bValid )
     {
         // Phase 1: Nummerierungsattribute beim Einlesen einer StyleDef
         if( pAktColl )
         {
-                // jetzt nur die Parameter vermerken: die tatsaechliche Liste wird
-                // spaeter drangehaengt, wenn die Listendefinitionen gelesen sind...
+            // jetzt nur die Parameter vermerken: die tatsaechliche Liste wird
+            // spaeter drangehaengt, wenn die Listendefinitionen gelesen sind...
             if( (USHRT_MAX > nActLFO) && (nWW8MaxListLevel > nActLevel))
             {
-                rStyleInfo.nLFOIndex  = nActLFO;
-                rStyleInfo.nListLevel = nActLevel;
+                rStyleInf.nLFOIndex  = nActLFO;
+                rStyleInf.nListLevel = nActLevel;
             }
         }
         else
@@ -1522,30 +1586,53 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(SwWW8StyInf& rStyleInfo,
             sal_uInt8   nLevel;
             if( (USHRT_MAX > nActLFO) && (nWW8MaxListLevel > nActLevel))
             {
-                // Plan A: die Werte fuer Listen- und Level-Nummer wurden uebergeben
+                // Plan A: die Werte fuer Listen- und Level-Nummer wurden
+                // uebergeben
                 nLFO   = nActLFO;
                 nLevel = nActLevel;
             }
             else
             {
-                // Plan B: die vorhin in Phase 1 gespeicherten Werte sind zu nehmen
-                nLFO   = rStyleInfo.nLFOIndex;
-                nLevel = rStyleInfo.nListLevel;
+                // Plan B: die vorhin in Phase 1 gespeicherten Werte sind zu
+                // nehmen
+                nLFO   = rStyleInf.nLFOIndex;
+                nLevel = rStyleInf.nListLevel;
             }
             if( (USHRT_MAX > nLFO) && (nWW8MaxListLevel > nLevel))
             {
-                SwNumRule* pNumRule = pLstManager->GetNumRuleForActivation( nLFO );
-                if( pNumRule )
+                SwNumRule* pNmRule = pLstManager->GetNumRuleForActivation(nLFO);
+                if( pNmRule )
                 {
-                    if( MAXLEVEL > rStyleInfo.nOutlineLevel )
-                    {
-                        rStyleInfo.pOutlineNumrule = pNumRule;
-                    }
+                    pNmRule = SyncStyleIndentWithList(rStyleInf,pNmRule,nLevel);
+                    if( MAXLEVEL > rStyleInf.nOutlineLevel )
+                        rStyleInf.pOutlineNumrule = pNmRule;
                     else
                     {
-                        rStyleInfo.pFmt->SetAttr( SwNumRuleItem( pNumRule->GetName() ) );
-                        rStyleInfo.bHasStyNumRule = sal_True;
+                        rStyleInf.pFmt->SetAttr(
+                            SwNumRuleItem( pNmRule->GetName() ) );
+                        rStyleInf.bHasStyNumRule = sal_True;
                     }
+                }
+            }
+            else
+            {
+                //inherit numbering from base if not explicitly set for this
+                //style
+                if (rStyleInf.nBase < nStyle)
+                {
+                    rStyleInf.pOutlineNumrule =
+                        pCollA[rStyleInf.nBase].pOutlineNumrule;
+                    const SfxPoolItem* pItem;
+                    if (SFX_ITEM_SET == pCollA[rStyleInf.nBase].pFmt->
+                        GetItemState(RES_PARATR_NUMRULE,FALSE,&pItem))
+                    {
+                        const SwNumRuleItem *pRule=(const SwNumRuleItem *)pItem;
+                        rStyleInf.pFmt->SetAttr(*pRule);
+                    }
+                    rStyleInf.bHasStyNumRule =
+                        pCollA[rStyleInf.nBase].bHasStyNumRule;
+                    rStyleInf.nLFOIndex = pCollA[rStyleInf.nBase].nLFOIndex;
+                    rStyleInf.nListLevel = pCollA[rStyleInf.nBase].nListLevel;
                 }
             }
         }
@@ -1592,7 +1679,7 @@ void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 {
     // sind wir erst beim Einlesen der StyleDef ?
     if( pAktColl )
-        RegisterNumFmtOnStyle(pCollA[ nAktColl ], nActLFO, nActLevel);
+        RegisterNumFmtOnStyle( nAktColl , nActLFO, nActLevel);
     else
         RegisterNumFmtOnTxtNode(nActLFO, nActLevel);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-12 17:33:40 $
+ *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,9 +336,7 @@ const BYTE* SwWW8ImplReader::TestApo( BOOL& rbStartApo, BOOL& rbStopApo,
 {
     const BYTE* pSprm37;
     const BYTE* pSprm29;
-    // Frame in Style Definition (word appears to ignore them if
-    // inside an text autoshape, e.g. #94418#)
-    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly && !bTxbxFlySection);
+    rbNowStyleApo = (0 != pCollA[nAktColl].pWWFly); // Apo in StyleDef
     rbStartApo = rbStopApo  = FALSE;
 
     /*
@@ -3237,11 +3235,25 @@ void WW8RStyle::Import1Style( USHORT nNr )
 
 void WW8RStyle::RegisterNumFmts()
 {
-    for(USHORT i=0; i < cstd; i++)
+    USHORT i;
+    for(i=0; i < cstd; i++)
+    {
+        SwWW8StyInf* pSI = &pIo->pCollA[ i ];
+        pSI->bImported=FALSE;
+    }
+
+    for(i=0; i < cstd; i++)
     {
         SwWW8StyInf* pSI = &pIo->pCollA[ i ];
         if( pSI )
-            pIo->RegisterNumFmtOnStyle( *pSI );
+        {
+            if( pSI->bImported || !pSI->bValid )
+                continue;
+            pSI->bImported = TRUE;
+            if( pSI->nBase < cstd && !pIo->pCollA[pSI->nBase].bImported )
+                pIo->RegisterNumFmtOnStyle( pSI->nBase );
+            pIo->RegisterNumFmtOnStyle( i );
+        }
     }
 }
 

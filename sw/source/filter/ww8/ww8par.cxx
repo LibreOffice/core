@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-19 15:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2488,17 +2488,32 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                                 ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( NO_NUMBERING );
                             }
                             else
-                            // die Default-Styles im ZWEITEN Durchgang auf jeden Fall
-                            // nehmen, die User-definierten nur, wenn auch verwendet.
+                            // die Default-Styles im ZWEITEN Durchgang auf
+                            // jeden Fall nehmen, die User-definierten nur,
+                            // wenn auch verwendet.
                             if( nJ || rSI.pFmt->GetDepends() )
                             {
                                 // Numformat aus der NumRule nehmen
                                 // und bei der OutlineRule setzen.
-                                aOutlineRule.Set(
-                                    rSI.nOutlineLevel,
-                                    rSI.pOutlineNumrule->Get( rSI.nOutlineLevel ) );
+
+                                /*
+                                #i1886#
+                                I believe that when a list is registered onto
+                                a winword style which is an outline numbering
+                                style (i.e. nOutlineLevel is set) that the
+                                style of numbering is for the level is indexed
+                                by the *list* level that was registered on
+                                that style, and not the outlinenumbering
+                                level, which is probably a logical sequencing,
+                                and not a physical mapping into the list style
+                                reged on that outline style.
+                                */
+                                BYTE nFromLevel=rSI.nListLevel;
+                                BYTE nToLevel=rSI.nOutlineLevel;
+                                const SwNumFmt& rRule = rSI.pOutlineNumrule->Get( nFromLevel );
+                                aOutlineRule.Set( nToLevel, rRule );
                                 // am Style die Outlinenummer eintragen
-                                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( rSI.nOutlineLevel );
+                                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
                                 // Flag verodern, um Doppeltvergabe zu vermeiden
                                 nFlagsStyleOutlLevel |= nAktFlags;
                             }
@@ -2510,12 +2525,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 if( nFlagsStyleOutlLevel )
                     rDoc.SetOutlineNumRule( aOutlineRule );
 
-                /*  // wird nun ueber D'tor erledigt!
-                for( nI = 0; nI < nColls; nI++ ){
-                    if( pCollA[nI].pWWFly )
-                        delete( pCollA[nI].pWWFly );
-                }
-                */
                 delete[] pCollA;
             }
 
