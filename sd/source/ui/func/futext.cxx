@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-20 15:08:44 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 17:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,16 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         * Objekt wurde erzeugt
         **********************************************************************/
         pTextObj = (SdrTextObj*) pView->GetCreateObj();
+
+        //AW outliner needs to be set to vertical when there is no
+        // outliner object up to now; also it needs to be set back to not
+        // vertical when there was a vertical one used last time.
+        OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+        SdrOutliner& rOutl = pTextObj->GetModel()->GetDrawOutliner(pTextObj);
+        BOOL bVertical((pOPO && pOPO->IsVertical())
+            || nSlotId == SID_ATTR_CHAR_VERTICAL
+            || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL);
+        rOutl.SetVertical(bVertical);
 
         if ( pTextObj && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
         {
