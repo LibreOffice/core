@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 11:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,15 +402,38 @@ Reference< XConnection > getConnection_allowException(
 }
 
 //------------------------------------------------------------------------------
+Reference< XConnection> getConnection_withFeedback(const ::rtl::OUString& _rDataSourceName,
+        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference< XMultiServiceFactory>& _rxFactory)
+    SAL_THROW ( (SQLException) )
+{
+    Reference< XConnection > xReturn;
+    try
+    {
+        xReturn = getConnection_allowException(_rDataSourceName, _rUser, _rPwd, _rxFactory);
+    }
+    catch(SQLException&)
+    {
+        // allowed to pass
+        throw;
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "::dbtools::getConnection_withFeedback: unexpected (non-SQL) exception caught!");
+    }
+    return xReturn;
+}
+
+//------------------------------------------------------------------------------
 Reference< XConnection> getConnection(
             const ::rtl::OUString& _rsTitleOrPath,
             const ::rtl::OUString& _rsUser,
             const ::rtl::OUString& _rsPwd,
             const Reference< XMultiServiceFactory>& _rxFactory)
 {
+    Reference< XConnection > xReturn;
     try
     {
-        return getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
+        xReturn = getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
     }
     catch(Exception&)
     {
@@ -419,7 +442,7 @@ Reference< XConnection> getConnection(
     // TODO: if there were not dozens of places which rely on getConnection not throwing an exception ....
     // I would change this ...
 
-    return Reference< XConnection>();
+    return xReturn;
 }
 
 //------------------------------------------------------------------------------
@@ -1242,6 +1265,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/05/30 11:48:15  fs
+ *  #86671# createUniqueName: check if the base name is allowed, too
+ *
  *  Revision 1.29  2001/05/25 13:09:29  oj
  *  #86839# flush scanner buffer
  *

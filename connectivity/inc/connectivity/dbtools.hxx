@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-19 09:35:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-05 16:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,13 @@ namespace dbtools
             const ::rtl::OUString& _rsUser,
             const ::rtl::OUString& _rsPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection_withFeedback(
+            const ::rtl::OUString& _rDataSourceName,
+            const ::rtl::OUString& _rUser,
+            const ::rtl::OUString& _rPwd,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
+        SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
     /** returns the columns of the named table of the given connection
     */
