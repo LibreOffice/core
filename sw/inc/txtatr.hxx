@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: ama $ $Date: 2000-09-25 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,19 +84,22 @@
 class SwTxtNode;    // fuer SwTxtFld
 class SvxFont;
 class SwCharSetCol;
+class SwImplPrev;
 
 // ATT_FONT ***********************************************************
 
 class SwTxtFont: public SwTxtAttrEnd
 {
     // Hier werden die alten Werte aus dem Font bei ChgFnt() gemerkt.
+    String aPrevName;
+    String aPrevStyleName;
     FontFamily ePrevFamily;
     FontPitch ePrevPitch;
     CharSet ePrevCharSet;
-    String aPrevName;
-    String aPrevStyleName;
+    BYTE nScript;
 public:
-    SwTxtFont( const SvxFontItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtFont( const SvxFontItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd,
+               const BYTE nScrpt );
     ~SwTxtFont( );
 
     virtual void ChgFnt(SwFont *);
@@ -110,8 +113,10 @@ public:
 class SwTxtPosture : public SwTxtAttrEnd
 {
     FontItalic ePrevPosture;
+    BYTE nScript;
 public:
-    SwTxtPosture( const SvxPostureItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtPosture( const SvxPostureItem& rAttr, xub_StrLen nStart,
+        xub_StrLen nEnd, const BYTE nScrpt );
 
     virtual void ChgFnt(SwFont *);
     virtual void RstFnt(SwFont *);
@@ -125,8 +130,10 @@ class SwTxtWeight : public SwTxtAttrEnd
 {
     // Hier merkt es sich das SV-Attribut Weight aus dem Font.
     FontWeight ePrevWeight;
+    BYTE nScript;
 public:
-    SwTxtWeight( const SvxWeightItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtWeight( const SvxWeightItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd,
+        const BYTE nScrpt );
 
     virtual void ChgFnt(SwFont *);
     virtual void RstFnt(SwFont *);
@@ -221,8 +228,10 @@ public:
 class SwTxtSize : public SwTxtAttrEnd
 {
     Size aPrevSize;
+    BYTE nScript;
 public:
-    SwTxtSize( const SvxFontHeightItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtSize( const SvxFontHeightItem& rAttr, xub_StrLen nStart,
+        xub_StrLen nEnd, const BYTE nScrpt );
 
     virtual void ChgFnt(SwFont *);
     virtual void RstFnt(SwFont *);
@@ -263,11 +272,8 @@ public:
 
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
-    SvxFont* pPrevFont;
-    const void* pFontNo;
+    SwImplPrev *pImpl;
     SwTxtNode* pMyTxtNd;
-    Color* pPrevColor;
-    USHORT nFntIndex;
     BOOL bPrevNoHyph    : 1;
     BOOL bPrevBlink     : 1;
     BOOL bPrevURL       : 1;
@@ -324,8 +330,10 @@ public:
 class SwTxtLanguage : public SwTxtAttrEnd
 {
     LanguageType ePrevLang;
+    BYTE nScript;
 public:
-    SwTxtLanguage( const SvxLanguageItem& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
+    SwTxtLanguage( const SvxLanguageItem& rAttr, xub_StrLen nStart,
+        xub_StrLen nEnd, const BYTE nScrpt );
 
     virtual void ChgFnt(SwFont *);
     virtual void RstFnt(SwFont *);
