@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1098,7 +1098,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 // diese Box ist selektiert
                                 pLastBox = pBox;
                                 rBoxes.Insert( pBox );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                                 Point aInsPoint( (pCell->Frm().*fnRect->fnGetPos)() );
 #endif
                                 aPosArr.Insert(
