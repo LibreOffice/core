@@ -9020,3 +9020,7 @@ lpfnGetWindowTextW
 ?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABN@Z
 ?UpdateDocumentTemplates_Impl@SvtDocumentTemplateDialog@@AAEXXZ
 ?UpdateHdl_Impl@SvtDocumentTemplateDialog@@AAEJPAVTimer@@@Z
+??1ReferenceObject@salhelper@@MAE@XZ
+??3ReferenceObject@salhelper@@SAXPAX@Z
+?acquire@ReferenceObject@salhelper@@UAAJXZ
+?release@ReferenceObject@salhelper@@UAAJXZ
