@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-12 10:29:04 $
+ *  last change: $Author: mba $ $Date: 2002-04-15 09:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ static const String sFrameName      = String::CreateFromAscii( "FrameName"      
 static const String sContentType    = String::CreateFromAscii( "ContentType"    );
 static const String sPostData       = String::CreateFromAscii( "PostData"       );
 static const String sPosSize        = String::CreateFromAscii( "PosSize"        );
+static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
 static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
 static const String sOutputStream   = String::CreateFromAscii( "OutputStream"    );
 static const String sHidden         = String::CreateFromAscii( "Hidden"         );
@@ -773,6 +774,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nProps].Name = sCharacterSet;
                 pValue[nProps++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
+
         }
     }
 
