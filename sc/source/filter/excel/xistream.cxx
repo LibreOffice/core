@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:33:43 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,8 +374,8 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
         {
             sal_uInt16 nVersion;
             rStrm >> nVersion;
-            // #i23425# there are some *really* broken documents out there...
-            if( (EXC_BOF_BIFF2 <= nVersion) && (nVersion < EXC_BOF_BIFF3) )
+            // #i23425# #i44031# there are some *really* broken documents out there...
+            if( nVersion < EXC_BOF_BIFF3 )
                 eBiff = EXC_BIFF2;
             else if( (EXC_BOF_BIFF3 <= nVersion) && (nVersion < EXC_BOF_BIFF4) )
                 eBiff = EXC_BIFF3;
@@ -554,6 +554,23 @@ sal_uInt32 XclImpStream::GetRecSize()
 sal_uInt32 XclImpStream::GetRecLeft()
 {
     return mbValid ? (GetRecSize() - GetRecPos()) : 0;
+}
+
+sal_uInt16 XclImpStream::GetNextRecId()
+{
+    sal_uInt16 nRecId = EXC_ID_UNKNOWN;
+    if( mbValidRec )
+    {
+        PushPosition();
+        while( JumpToNextContinue() );  // skip following CONTINUE records
+        if( mnNextRecPos < mnStreamSize )
+        {
+            mrStrm.Seek( mnNextRecPos );
+            mrStrm >> nRecId;
+        }
+        PopPosition();
+    }
+    return nRecId;
 }
 
 // ----------------------------------------------------------------------------
