@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-26 14:51:18 $
+ *  last change: $Author: cmc $ $Date: 2001-07-10 11:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3845,12 +3845,32 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
         case NSPECIAL: //NSPECIAL requires some sort of Entity preservation in
                     //the XML engine.
         case NMATH:
+            {
             //To fully handle generic MathML we need to implement the full
             //operator dictionary, we will generate MathML with explicit
             //stretchiness for now.
-            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
+            sal_Int16 nLength = GetAttrList().getLength();
+            sal_Bool bAddStretch=sal_True;
+            for( sal_Int16 i = 0; i < nLength; i++ )
+            {
+                rtl::OUString sLocalName;
+                sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(
+                    GetAttrList().getNameByIndex(i), &sLocalName );
+
+                if ( ( XML_NAMESPACE_MATH == nPrefix ) &&
+                    IsXMLToken(sLocalName, XML_STRETCHY) )
+                {
+                    bAddStretch = sal_False;
+                    break;
+                }
+            }
+            if (bAddStretch)
+            {
+                AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
+            }
             ExportMath(pNode,nLevel);
+            }
             break;
         case NBINHOR:
             ExportBinaryHorizontal(pNode,nLevel);
