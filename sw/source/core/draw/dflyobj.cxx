@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dflyobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:58:32 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 #include "grfatr.hxx"
 #include "pagefrm.hxx"
 
+#ifndef _SDR_PROPERTIES_EMPTYPROPERTIES_HXX
+#include <svx/sdr/properties/emptyproperties.hxx>
+#endif
+
 static FASTBOOL bInResize = FALSE;
 
 TYPEINIT1( SwFlyDrawObj, SdrObject )
@@ -122,33 +126,23 @@ TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
 |*  Letzte Aenderung    MA 28. May. 96
 |*
 *************************************************************************/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::EmptyProperties(*this);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 SwFlyDrawObj::SwFlyDrawObj()
 {
     bNotPersistent = TRUE;
-    mpLocalItemSet = NULL;
 }
 
 SwFlyDrawObj::~SwFlyDrawObj()
 {
-    if(mpLocalItemSet)
-        delete mpLocalItemSet;
-}
-
-SfxItemSet* SwFlyDrawObj::CreateNewItemSet(SfxItemPool& rPool)
-{
-    return new SfxItemSet(rPool);
-}
-
-const SfxItemSet& SwFlyDrawObj::GetItemSet() const
-{
-    if(!mpLocalItemSet)
-    {
-        ((SwFlyDrawObj*)this)->mpLocalItemSet =
-        ((SwFlyDrawObj*)this)->CreateNewItemSet((SfxItemPool&)(*GetItemPool()));
-        DBG_ASSERT(mpLocalItemSet, "Could not create an SfxItemSet(!)");
-    }
-
-    return *mpLocalItemSet;
 }
 
 /*************************************************************************
@@ -160,7 +154,7 @@ const SfxItemSet& SwFlyDrawObj::GetItemSet() const
 |*
 *************************************************************************/
 
-FASTBOOL __EXPORT SwFlyDrawObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SwFlyDrawObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
     return TRUE;
 }
@@ -204,7 +198,10 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     SdrVirtObj( rNew ),
     pFlyFrm( pFly )
 {
-    bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
+    //#110094#-1
+    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
+    bNotPersistent = bNeedColorRestore = TRUE;
+
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
@@ -246,16 +243,55 @@ SwFrmFmt *SwVirtFlyDrawObj::GetFmt()
 |*
 *************************************************************************/
 
-FASTBOOL __EXPORT SwVirtFlyDrawObj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SwVirtFlyDrawObj::DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    if ( !pFlyFrm->IsFlyInCntFrm() ) //FlyInCnt werden von den TxtPortions gepaintet.
+    //#110094#-2
+    // Moved here from SwViewImp::PaintDispatcher
+    sal_Bool bDrawObject(sal_True);
+
+    if(!SwFlyFrm::IsPaint((SdrObject*)this, pFlyFrm->GetShell()))
     {
-        //Rect auf den Fly begrenzen.
-        SwRect aRect( rInfoRec.aDirtyRect );
-        if ( rInfoRec.aDirtyRect.IsEmpty() )
-            aRect = GetFlyFrm()->Frm();
-        pFlyFrm->Paint( aRect );
+        bDrawObject = sal_False;
     }
+
+    // do this things only for objects on the highest level
+    // what means directly insetrted at the page
+    if(GetPage() && GetPage() == GetObjList())
+    {
+        const BYTE nHellId = pFlyFrm->GetShell()->GetDoc()->GetHellId();
+
+        if(nHellId == GetLayer())
+        {
+            //Fuer Rahmen in der Hoelle gelten andere Regeln:
+            //1. Rahmen mit einem Parent werden nie direkt, sondern von ihren
+            //   Parents gepaintet.
+            //1a.Es sei denn, der Parent steht nicht in der Hoelle.
+            //2. Rahmen mit Childs painten zuerst die Childs in
+            //   umgekehrter Z-Order.
+            SwFlyFrm *pFly = (SwFlyFrm*)GetFlyFrm();
+            const sal_Bool bInFly = pFly->GetAnchor()->IsInFly();
+
+            if(!bInFly || (bInFly && pFly->GetAnchor()->FindFlyFrm()->GetVirtDrawObj()->GetLayer() != nHellId))
+            {
+                SwDrawView* pDrawView = pFlyFrm->GetShell()->Imp()->GetDrawView();
+                pDrawView->Imp().PaintFlyChilds( pFly, rOut, rInfoRec );
+                bDrawObject = sal_False;
+            }
+        }
+    }
+
+    if(bDrawObject)
+    {
+        if ( !pFlyFrm->IsFlyInCntFrm() ) //FlyInCnt werden von den TxtPortions gepaintet.
+        {
+            //Rect auf den Fly begrenzen.
+            SwRect aRect( rInfoRec.aDirtyRect );
+            if ( rInfoRec.aDirtyRect.IsEmpty() )
+                aRect = GetFlyFrm()->Frm();
+            pFlyFrm->Paint( aRect );
+        }
+    }
+
     return TRUE;
 }
 
@@ -309,7 +345,7 @@ SdrObject* __EXPORT SwVirtFlyDrawObj::CheckHit( const Point& rPnt, USHORT nTol,
                 //for ( UINT32 i = GetOrdNumDirect()+1; i < pPg->GetObjCount(); ++i )
                 //{
                 //  SdrObject *pObj = pPg->GetObj( i );
-                //  if ( pObj->IsWriterFlyFrame() &&
+                //  if ( pObj->ISA(SwVirtFlyDrawObj) &&
                 //       ((SwVirtFlyDrawObj*)pObj)->GetBoundRect().IsInside( rPnt ) )
                 //      return 0;
                 //}
@@ -384,7 +420,7 @@ void SwVirtFlyDrawObj::SetRect() const
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetBoundRect() const
+const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
@@ -412,10 +448,10 @@ const Rectangle& __EXPORT SwVirtFlyDrawObj::GetSnapRect()  const
 
 void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& rRect)
 {
-    Rectangle aTmp( aOutRect );
+    Rectangle aTmp( GetLastBoundRect() );
     SetRect();
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall!=NULL)
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
@@ -436,10 +472,10 @@ const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLogicRect() const
 
 void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& rRect)
 {
-    Rectangle aTmp( aOutRect );
+    Rectangle aTmp( GetLastBoundRect() );
     SetRect();
     SetChanged();
-    SendRepaintBroadcast();
+    BroadcastObjectChange();
     if (pUserCall!=NULL)
         pUserCall->Changed(*this, SDRUSERCALL_RESIZE, aTmp);
 }
