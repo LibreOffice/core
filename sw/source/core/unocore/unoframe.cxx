@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:55:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1700,21 +1700,21 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
                                             ->GetIndex() + 1 ]->GetOLENode();
             uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
-            uno::Reference < embed::XClassifiedObject > xClass( xIP, uno::UNO_QUERY );
-            uno::Reference < embed::XComponentSupplier > xSup( xIP, uno::UNO_QUERY );
             OUString aHexCLSID;
-            if(xClass.is() && xSup.is())
             {
-                SvGlobalName aClassName( xClass->getClassID() );
+                SvGlobalName aClassName( xIP->getClassID() );
                 aHexCLSID = aClassName.GetHexName();
                 if(FN_UNO_CLSID != pCur->nWID)
                 {
-                    uno::Reference < lang::XComponent > xComp( xSup->getComponent(), uno::UNO_QUERY );
-                    uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
-                    if ( xModel.is() )
-                        aAny <<= xModel;
-                    else if ( FN_UNO_COMPONENT == pCur->nWID )
-                        aAny <<= xComp;
+                    if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
+                    {
+                        uno::Reference < lang::XComponent > xComp( xIP->getComponent(), uno::UNO_QUERY );
+                        uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
+                        if ( xModel.is() )
+                            aAny <<= xModel;
+                        else if ( FN_UNO_COMPONENT == pCur->nWID )
+                            aAny <<= xComp;
+                    }
                 }
             }
 
@@ -2256,6 +2256,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 {
                     //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
+
+                    // TODO/LEAN: VisualArea still needs running state
+                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
                     //The Size should be suggested by the OLE server if not manually set
                     MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
@@ -3056,10 +3059,9 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
         SwOLENode* pOleNode =  pDoc->GetNodes()[ pCnt->GetCntntIdx()
                                         ->GetIndex() + 1 ]->GetOLENode();
         uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
-        uno::Reference < embed::XComponentSupplier > xSup( xIP, uno::UNO_QUERY );
-        if (xSup.is())
+        if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
-            xRet = uno::Reference < lang::XComponent >( xSup->getComponent(), uno::UNO_QUERY );
+            xRet = uno::Reference < lang::XComponent >( xIP->getComponent(), uno::UNO_QUERY );
             uno::Reference< util::XModifyBroadcaster >  xBrdcst( xRet, uno::UNO_QUERY);
             uno::Reference< frame::XModel > xModel( xRet, uno::UNO_QUERY);
             if( xBrdcst.is() && xModel.is() )
