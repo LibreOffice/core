@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-25 11:37:23 $
+ *  last change: $Author: hjs $ $Date: 2000-09-25 17:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                             bBackup,
                             bAutoSave,
                             bAutoSavePrompt,
+                            bCreateBackup,
                             bDocInfSave,
                             bSaveWorkingSet,
                             bSaveDocWins,
