@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: hjs $ $Date: 2002-02-08 15:18:05 $
+#   last change: $Author: hjs $ $Date: 2002-02-08 15:54:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -541,7 +541,7 @@ $(SHL$(TNR)TARGETN) : \
 ALLTAR : runtest_$(SHL$(TNR)TARGET)
 
 runtest_$(SHL$(TNR)TARGET) : $(SHL$(TNR)TARGETN)
-    testshl $(SHL$(TNR)TARGETN) sce\$(SHL$(TNR)TARGET).sce -msg
+    testshl $(SHL$(TNR)TARGETN) sce\$(SHL$(TNR)TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""

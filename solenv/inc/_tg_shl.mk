@@ -441,7 +441,7 @@ $(SHL1TARGETN) : \
 ALLTAR : runtest_$(SHL1TARGET)
 
 runtest_$(SHL1TARGET) : $(SHL1TARGETN)
-    testshl $(SHL1TARGETN) sce\$(SHL1TARGET).sce -msg
+    testshl $(SHL1TARGETN) sce\$(SHL1TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL1TARGETN)"!=""
@@ -890,7 +890,7 @@ $(SHL2TARGETN) : \
 ALLTAR : runtest_$(SHL2TARGET)
 
 runtest_$(SHL2TARGET) : $(SHL2TARGETN)
-    testshl $(SHL2TARGETN) sce\$(SHL2TARGET).sce -msg
+    testshl $(SHL2TARGETN) sce\$(SHL2TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL2TARGETN)"!=""
@@ -1339,7 +1339,7 @@ $(SHL3TARGETN) : \
 ALLTAR : runtest_$(SHL3TARGET)
 
 runtest_$(SHL3TARGET) : $(SHL3TARGETN)
-    testshl $(SHL3TARGETN) sce\$(SHL3TARGET).sce -msg
+    testshl $(SHL3TARGETN) sce\$(SHL3TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL3TARGETN)"!=""
@@ -1788,7 +1788,7 @@ $(SHL4TARGETN) : \
 ALLTAR : runtest_$(SHL4TARGET)
 
 runtest_$(SHL4TARGET) : $(SHL4TARGETN)
-    testshl $(SHL4TARGETN) sce\$(SHL4TARGET).sce -msg
+    testshl $(SHL4TARGETN) sce\$(SHL4TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL4TARGETN)"!=""
@@ -2237,7 +2237,7 @@ $(SHL5TARGETN) : \
 ALLTAR : runtest_$(SHL5TARGET)
 
 runtest_$(SHL5TARGET) : $(SHL5TARGETN)
-    testshl $(SHL5TARGETN) sce\$(SHL5TARGET).sce -msg
+    testshl $(SHL5TARGETN) sce\$(SHL5TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL5TARGETN)"!=""
@@ -2686,7 +2686,7 @@ $(SHL6TARGETN) : \
 ALLTAR : runtest_$(SHL6TARGET)
 
 runtest_$(SHL6TARGET) : $(SHL6TARGETN)
-    testshl $(SHL6TARGETN) sce\$(SHL6TARGET).sce -msg
+    testshl $(SHL6TARGETN) sce\$(SHL6TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL6TARGETN)"!=""
@@ -3135,7 +3135,7 @@ $(SHL7TARGETN) : \
 ALLTAR : runtest_$(SHL7TARGET)
 
 runtest_$(SHL7TARGET) : $(SHL7TARGETN)
-    testshl $(SHL7TARGETN) sce\$(SHL7TARGET).sce -msg
+    testshl $(SHL7TARGETN) sce\$(SHL7TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL7TARGETN)"!=""
@@ -3584,7 +3584,7 @@ $(SHL8TARGETN) : \
 ALLTAR : runtest_$(SHL8TARGET)
 
 runtest_$(SHL8TARGET) : $(SHL8TARGETN)
-    testshl $(SHL8TARGETN) sce\$(SHL8TARGET).sce -msg
+    testshl $(SHL8TARGETN) sce\$(SHL8TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL8TARGETN)"!=""
@@ -4033,7 +4033,7 @@ $(SHL9TARGETN) : \
 ALLTAR : runtest_$(SHL9TARGET)
 
 runtest_$(SHL9TARGET) : $(SHL9TARGETN)
-    testshl $(SHL9TARGETN) sce\$(SHL9TARGET).sce -msg
+    testshl $(SHL9TARGETN) sce\$(SHL9TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL9TARGETN)"!=""
@@ -4482,7 +4482,7 @@ $(SHL10TARGETN) : \
 ALLTAR : runtest_$(SHL10TARGET)
 
 runtest_$(SHL10TARGET) : $(SHL10TARGETN)
-    testshl $(SHL10TARGETN) sce\$(SHL10TARGET).sce -msg
+    testshl $(SHL10TARGETN) sce\$(SHL10TARGET).sce -msg -skip
 .ENDIF			# "$(NO_TESTS)"==""
 .ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL10TARGETN)"!=""
