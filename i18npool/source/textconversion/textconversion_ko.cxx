@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:54:00 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <x_rtl_ustring.h>
-#include <unicode.hxx>
+#include <i18nutil/x_rtl_ustring.h>
+#include <i18nutil/unicode.hxx>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
@@ -136,31 +136,16 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
 sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
 {
     static ScriptTypeList typeList[] = {
-        { UnicodeScript_kHangulJamo, SCRIPT_HANGUL }, // 29
-        { UnicodeScript_kCJKRadicalsSupplement, SCRIPT_HANJA },     // 57,
-        { UnicodeScript_kKangxiRadicals,        SCRIPT_HANJA },     // 58,
-        { UnicodeScript_kIdeographicDescriptionCharacters, SCRIPT_HANJA },  // 59,
-        { UnicodeScript_kCJKSymbolPunctuation,  SCRIPT_HANJA },     // 60,
-        { UnicodeScript_kHiragana,          SCRIPT_HANJA },     // 61,
-        { UnicodeScript_kKatakana,          SCRIPT_HANJA },     // 62,
-        { UnicodeScript_kBopomofo,          SCRIPT_HANJA },     // 63,
-        { UnicodeScript_kHangulCompatibilityJamo,   SCRIPT_HANGUL },        // 64,
-        { UnicodeScript_kKanbun,            SCRIPT_HANJA },     // 65,
-        { UnicodeScript_kBopomofoExtended,      SCRIPT_HANJA },     // 66,
-        { UnicodeScript_kEnclosedCJKLetterMonth,    SCRIPT_HANJA },     // 67,
-        { UnicodeScript_kCJKCompatibility,      SCRIPT_HANJA },     // 68,
-        { UnicodeScript_k_CJKUnifiedIdeographsExtensionA, SCRIPT_HANJA },   // 69,
-        { UnicodeScript_kCJKUnifiedIdeograph,   SCRIPT_HANJA },     // 70,
-        { UnicodeScript_kYiSyllables,       SCRIPT_HANJA },     // 71,
-        { UnicodeScript_kYiRadicals,        SCRIPT_HANJA },     // 72,
-        { UnicodeScript_kHangulSyllable,        SCRIPT_HANGUL },        // 73,
-        { UnicodeScript_kCJKCompatibilityIdeograph, SCRIPT_HANJA },     // 78,
-        { UnicodeScript_kCombiningHalfMark,     SCRIPT_HANJA },     // 81,
-        { UnicodeScript_kCJKCompatibilityForm,  SCRIPT_HANJA },     // 82,
-        { UnicodeScript_kSmallFormVariant,      SCRIPT_HANJA },     // 83,
-        { UnicodeScript_kHalfwidthFullwidthForm,    SCRIPT_HANJA },     // 86,
+        { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, SCRIPT_HANGUL }, // 29
+        { UnicodeScript_kCJKRadicalsSupplement, UnicodeScript_kBopomofo, SCRIPT_HANJA },// 57-63
+        { UnicodeScript_kHangulCompatibilityJamo, UnicodeScript_kHangulCompatibilityJamo, SCRIPT_HANGUL },      // 64,
+        { UnicodeScript_kKanbun, UnicodeScript_kYiRadicals, SCRIPT_HANJA },     // 65-72
+        { UnicodeScript_kHangulSyllable, UnicodeScript_kHangulSyllable, SCRIPT_HANGUL },// 73,
+        { UnicodeScript_kCJKCompatibilityIdeograph, UnicodeScript_kCJKCompatibilityIdeograph, SCRIPT_HANJA },       // 78,
+        { UnicodeScript_kCombiningHalfMark, UnicodeScript_kSmallFormVariant, SCRIPT_HANJA },// 81-83
+        { UnicodeScript_kHalfwidthFullwidthForm, UnicodeScript_kHalfwidthFullwidthForm, SCRIPT_HANJA },     // 86,
 
-        { UnicodeScript_kScriptCount, SCRIPT_OTHERS } // 87,
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, SCRIPT_OTHERS } // 87,
     };
 
     return unicode::getUnicodeScriptType(c, typeList, SCRIPT_OTHERS);
@@ -304,7 +289,8 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                     result.Candidates += candidates;
                 }
                 if (len == 1) {
-                    if (!toHanja && !result.Candidates.hasElements()) {
+                    if (!toHanja && !result.Candidates.hasElements() &&
+                            !(nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)) {
                         // do whole word character 2 character conversion
                         result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
                         if (result.Candidates.hasElements())
