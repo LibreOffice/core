@@ -181,7 +181,7 @@ public class XmlUpdater extends Thread {
         String[] dirs = {
         "java" + File.separator + "Highlight",
         "java" + File.separator + "MemoryUsage",
-        "java" + File.separator + "EventHelper",
+        "java" + File.separator + "ScriptFrmwrkHelper",
             "beanshell" + File.separator + "InteractiveBeanShell",
             "beanshell" + File.separator + "Highlight",
             "beanshell" + File.separator + "MemoryUsage"
@@ -196,10 +196,10 @@ public class XmlUpdater extends Thread {
             "java/MemoryUsage/MemoryUsage.class",
             "java/MemoryUsage/parcel-descriptor.xml",
             "java/MemoryUsage/ExampleSpreadSheet.sxc",
-            "java/EventHelper/parcel-descriptor.xml",
-            "java/EventHelper/EventHelper.java",
-            "java/EventHelper/EventHelper.class",
-            "java/EventHelper/EventHelper.jar",
+            "java/ScriptFrmwrkHelper/parcel-descriptor.xml",
+            "java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.java",
+            "java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.class",
+            "java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar",
             "beanshell/InteractiveBeanShell/parcel-descriptor.xml",
             "beanshell/InteractiveBeanShell/interactive.bsh",
             "beanshell/Highlight/parcel-descriptor.xml",
