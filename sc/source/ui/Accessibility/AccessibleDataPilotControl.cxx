@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:05 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,11 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 ::rtl::OUString SAL_CALL ScAccessibleDataPilotControl::createAccessibleDescription(void)
         throw (uno::RuntimeException)
 {
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    if (mpDPFieldWindow)
+        return mpDPFieldWindow->GetDescription();
+
     return rtl::OUString();
 }
 

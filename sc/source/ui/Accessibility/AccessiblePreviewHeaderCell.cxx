@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ rtl::OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleName() thr
         {
             //! name for corner cell?
 
-            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column/Row Header"));
+//          sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column/Row Header"));
         }
         else
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:38:29 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,8 +415,9 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServic
 ::rtl::OUString SAL_CALL ScAccessiblePageHeader::createAccessibleName(void)
                     throw (uno::RuntimeException)
 {
-    rtl::OUString sName = String(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
-    return sName;
+    String sName(ScResId(mbHeader ? STR_ACC_HEADER_NAME : STR_ACC_FOOTER_NAME));
+    sName.SearchAndReplaceAscii("%1", String(ScResId(SCSTR_UNKNOWN)));
+    return rtl::OUString( sName );
 }
 
 Rectangle ScAccessiblePageHeader::GetBoundingBoxOnScreen() const throw (uno::RuntimeException)

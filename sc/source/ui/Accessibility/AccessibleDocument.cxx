@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-23 09:29:00 $
+ *  last change: $Author: sab $ $Date: 2002-09-24 13:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,8 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
             {
                 mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos),
-                    mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(), GetCurrentCellDescription(), CellInEditMode);
+                    mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
+                    rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), CellInEditMode);
                 uno::Reference<XAccessible> xAcc = mpTempAccEdit;
 
                 AddChild(xAcc, sal_True);
