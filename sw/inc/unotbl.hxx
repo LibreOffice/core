@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-01 13:58:20 $
+ *  last change: $Author: os $ $Date: 2001-11-15 15:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ class SwXCell : public SwXCellBaseClass,
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     sal_Bool                            IsValid();
 public:
     SwXCell(SwFrmFmt* pTblFmt, SwTableBox* pBox, const String& rCellName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-25 16:07:25 $
+ *  last change: $Author: os $ $Date: 2001-11-15 15:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     //
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
     INT16   ComparePositions(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos1, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange>& xPos2) throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException);
     BOOL    CheckForOwnMember(const SwXTextRange* pRange1, const SwXTextCursor* pCursor1)throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     //
@@ -969,7 +969,7 @@ class SwXFootnote : public SwXFootnoteBaseClass,
 
 protected:
     virtual const SwStartNode *GetStartNode() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
 public:
     SwXFootnote(BOOL bEndnote);
     SwXFootnote(SwDoc* pDoc, const SwFmtFtn& rFmt);
@@ -1306,7 +1306,7 @@ class SwXHeadFootText : public SwXHeadFootTextBaseClass,
     BOOL                bIsHeader;
 protected:
     virtual const SwStartNode *GetStartNode() const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
 public:
     SwXHeadFootText(SwFrmFmt& rHeadFootFmt, BOOL bHeader);
     ~SwXHeadFootText();

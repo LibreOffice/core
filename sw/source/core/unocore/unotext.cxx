@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-10 17:00:21 $
+ *  last change: $Author: os $ $Date: 2001-11-15 15:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _SWUNDO_HXX //autogen
+#include <swundo.hxx>
 #endif
 #ifndef _SECTION_HXX //autogen
 #include <section.hxx>
@@ -927,9 +930,28 @@ OUString SwXText::getString(void) throw( uno::RuntimeException )
 void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    const SwStartNode* pStartNode = GetStartNode();
+    if(!pStartNode)
+        throw uno::RuntimeException();
+
+    GetDoc()->StartUndo(UNDO_START);
+    //insert an empty paragraph at the start and at the end to ensure that
+    //all tables and sections can be removed by the selecting XTextCursor
+    {
+        SwPosition aStartPos(*pStartNode);
+        GetDoc()->AppendTxtNode( aStartPos );
+        const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
+        SwNodeIndex aIdx(*pEnd);
+        aIdx--;
+        SwPosition aEndPos(aIdx.GetNode());
+        SwPaM aPam(aEndPos);
+        GetDoc()->AppendTxtNode( *aPam.Start() );
+    }
+
     uno::Reference< XTextCursor >  xRet = createCursor();
     if(!xRet.is())
     {
+        GetDoc()->EndUndo(UNDO_END);
         RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
@@ -939,6 +961,7 @@ void SwXText::setString(const OUString& aString) throw( uno::RuntimeException )
         xRet->gotoEnd(sal_True);
     }
     xRet->setString(aString);
+    GetDoc()->EndUndo(UNDO_END);
 }
 /* -----------------------------28.03.00 11:12--------------------------------
     Description: Checks if pRange/pCursor are member of the same text interface.
@@ -1440,7 +1463,7 @@ const SwStartNode *SwXHeadFootText::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< XTextCursor >   SwXHeadFootText::createCursor()
+uno::Reference< XTextCursor >   SwXHeadFootText::createCursor() throw(uno::RuntimeException)
 {
     return createTextCursor();
 }
@@ -1507,6 +1530,11 @@ uno::Reference< XTextCursor >  SwXHeadFootText::createTextCursor(void) throw( un
         SwUnoCrsr* pUnoCrsr = pCrsr->GetCrsr();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
+        //save current start node to be able to check if there is content after the table -
+        //otherwise the cursor would be in the body text!
+
+        const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(
+                        bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
         //steht hier eine Tabelle?
         SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
         SwCntntNode* pCont = 0;
@@ -1518,7 +1546,15 @@ uno::Reference< XTextCursor >  SwXHeadFootText::createTextCursor(void) throw( un
         }
         if(pCont)
             pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
-
+        const SwStartNode* pNewStartNode = pUnoCrsr->GetNode()->FindSttNodeByType(
+                        bIsHeader ? SwHeaderStartNode : SwFooterStartNode);
+        if(!pNewStartNode || pNewStartNode != pOwnStartNode)
+        {
+            delete pCrsr;
+            uno::RuntimeException aExcept;
+            aExcept.Message = S2U("no text available");
+            throw aExcept;
+        }
         xRet =  (XWordCursor*)pCrsr;
     }
     else
