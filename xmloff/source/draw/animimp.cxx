@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animimp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:47 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #endif
 
-#include <stl/list>
+#include <list>
 
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>

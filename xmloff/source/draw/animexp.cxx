@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-21 18:36:35 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #endif
 
-#include <stl/list>
+#include <list>
 
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-17 14:46:32 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 16:29:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #endif
 
-#include <stl/list>
+#include <list>
 
 #ifndef _XMLOFF_SHAPEIMPORT_HXX
 #include "shapeimport.hxx"
