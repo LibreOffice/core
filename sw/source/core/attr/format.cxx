@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:36:10 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ SwFmt::SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
             const USHORT* pWhichRanges, SwFmt *pDrvdFrm, USHORT nFmtWhich )
     : SwModify( pDrvdFrm ),
     aSet( rPool, pWhichRanges ),
+    nWhichId( nFmtWhich ),
+    nFmtId( 0 ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX ),
-    nFmtId( 0 ),
-    nWhichId( nFmtWhich )
+    nPoolHlpFileId( UCHAR_MAX )
 {
     aFmtName.AssignAscii( pFmtNm );
     bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
@@ -114,11 +114,11 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm,
     : SwModify( pDrvdFrm ),
     aFmtName( rFmtNm ),
     aSet( rPool, pWhichRanges ),
+    nWhichId( nFmtWhich ),
+    nFmtId( 0 ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX ),
-    nFmtId( 0 ),
-    nWhichId( nFmtWhich )
+    nPoolHlpFileId( UCHAR_MAX )
 {
     bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
@@ -133,11 +133,11 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm, USHORT nWhich1,
     : SwModify( pDrvdFrm ),
     aFmtName( rFmtNm ),
     aSet( rPool, nWhich1, nWhich2 ),
+    nWhichId( nFmtWhich ),
+    nFmtId( 0 ),
     nPoolFmtId( USHRT_MAX ),
     nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX ),
-    nFmtId( 0 ),
-    nWhichId( nFmtWhich )
+    nPoolHlpFileId( UCHAR_MAX )
 {
     bWritten = bFmtInDTOR = bAutoUpdateFmt = bLayerFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
@@ -150,11 +150,11 @@ SwFmt::SwFmt( const SwFmt& rFmt )
     : SwModify( rFmt.DerivedFrom() ),
     aFmtName( rFmt.aFmtName ),
     aSet( rFmt.aSet ),
+    nWhichId( rFmt.nWhichId ),
+    nFmtId( 0 ),
     nPoolFmtId( rFmt.GetPoolFmtId() ),
     nPoolHelpId( rFmt.GetPoolHelpId() ),
-    nPoolHlpFileId( rFmt.GetPoolHlpFileId() ),
-    nFmtId( 0 ),
-    nWhichId( rFmt.nWhichId )
+    nPoolHlpFileId( rFmt.GetPoolHlpFileId() )
 {
     bWritten = bFmtInDTOR = bLayerFmt = FALSE; // LAYER_IMPL
     bAutoFmt = rFmt.bAutoFmt;
@@ -257,7 +257,6 @@ void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
 void SwFmt::CopyAttrs( const SwFmt& rFmt, BOOL bReplace )
 {
     // kopiere nur das Attribut-Delta Array
-    register SwCharFmt* pDropCharFmt = 0;
 
     if ( IsInCache() )
     {
