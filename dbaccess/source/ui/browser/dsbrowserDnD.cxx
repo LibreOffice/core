@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCOLUMNLOCATE_HPP_
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XROWLOCATE_HPP_
+#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
@@ -236,12 +239,20 @@ namespace dbaui
                    const Reference<XPropertySet>& _xDestTable,
                    const Reference<XDatabaseMetaData>& _xMetaData,
                    sal_Bool bIsAutoIncrement,
-                   const Sequence<Any>& _aSelection) throw(SQLException, RuntimeException)
+                   const Sequence<Any>& _aSelection,
+                   sal_Bool _bBookmarkSelection
+                   ) throw(SQLException, RuntimeException)
     {
         Reference< XResultSetMetaDataSupplier> xSrcMetaSup(xSrcRs,UNO_QUERY);
         Reference<XRow> xRow(xSrcRs,UNO_QUERY);
-        if(!xSrcRs.is() || !xRow.is())
+        Reference< XRowLocate > xRowLocate( xSrcRs, UNO_QUERY );
+        sal_Bool bUseSelection  = _aSelection.getLength() > 0;
+
+        if ( !xRow.is() || ( bUseSelection && _bBookmarkSelection && !xRowLocate.is() ) )
+        {
+            DBG_ERROR( "insertRows: bad arguments!" );
             return;
+        }
 
         ::rtl::OUString aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
         ::rtl::OUString sComposedTableName;
@@ -300,7 +311,6 @@ namespace dbaui
         sal_Int32 nRowCount = 0;
         const Any* pSelBegin    = _aSelection.getConstArray();
         const Any* pSelEnd      = pSelBegin + _aSelection.getLength();
-        sal_Bool bUseSelection  = _aSelection.getLength() > 0;
         sal_Bool bNext = sal_True;
         do // loop as long as there are more rows or the selection ends
         {
@@ -308,9 +318,16 @@ namespace dbaui
             {
                 if ( pSelBegin != pSelEnd )
                 {
-                    sal_Int32 nPos = 0;
-                    *pSelBegin >>= nPos;
-                    bNext = xSrcRs->absolute( nPos );
+                    if ( _bBookmarkSelection )
+                    {
+                        xRowLocate->moveToBookmark( *pSelBegin );
+                    }
+                    else
+                    {
+                        sal_Int32 nPos = 0;
+                        *pSelBegin >>= nPos;
+                        bNext = xSrcRs->absolute( nPos );
+                    }
                     ++pSelBegin;
                 }
                 else
@@ -685,6 +702,7 @@ namespace dbaui
                 Reference<XConnection> xSrcConnection;
                 Reference<XResultSet>   xSrcRs;         // the source resultset may be empty
                 Sequence< Any > aSelection;
+                sal_Bool bBookmarkSelection;
                 ::rtl::OUString sCommand,sSrcDataSourceName;
                 _rPasteData[daDataSource]       >>= sSrcDataSourceName;
                 _rPasteData[daCommand]          >>= sCommand;
@@ -692,6 +710,8 @@ namespace dbaui
                     _rPasteData[daConnection]   >>= xSrcConnection;
                 if ( _rPasteData.has(daSelection) )
                     _rPasteData[daSelection]    >>= aSelection;
+                if ( _rPasteData.has(daBookmarkSelection) )
+                    _rPasteData[daBookmarkSelection]    >>= bBookmarkSelection;
                 if ( _rPasteData.has(daCursor) )
                     _rPasteData[daCursor]       >>= xSrcRs;
 
@@ -832,7 +852,8 @@ namespace dbaui
                                                 xTable,
                                                 xDestConnection->getMetaData(),
                                                 aWizard.isAutoincrementEnabled(),
-                                                aSelection);
+                                                aSelection,
+                                                bBookmarkSelection);
                                 }
                                 break;
                             case OCopyTableWizard::WIZARD_DEF_VIEW:
