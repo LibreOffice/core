@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:41:44 $
+ *  last change: $Author: pb $ $Date: 2000-10-10 15:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
         String* pExt = NULL;
         if ( pFilter )
         {
-            pExt = new String( pFilter->GetWildcard()() );
+            pExt = new String( pFilter->GetWildcard()().GetToken(0) );
             // erase the '*' from the extension (e.g. "*.sdw")
             pExt->Erase( 0, 1 );
         }
