@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-01-19 15:13:33 $
+ *  last change: $Author: fme $ $Date: 2002-08-13 07:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,6 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     aPageLbl    (this, SW_RES( FT_PAGE       )),
     aParaLbl    (this, SW_RES( FT_PARA       )),
     aWordLbl    (this, SW_RES( FT_WORD       )),
-    aWordDelimFT(this, SW_RES( FT_WORD_DELIM )),
-    aWordDelim  (this, SW_RES( ED_WORD_DELIM )),
     aCharLbl    (this, SW_RES( FT_CHAR       )),
     aTableNo    (this, SW_RES( FT_TABLE_COUNT)),
     aGrfNo      (this, SW_RES( FT_GRF_COUNT  )),
@@ -175,9 +173,6 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 
 BOOL  SwDocStatPage::FillItemSet(SfxItemSet &rSet)
 {
-    // evtl UserData setzen
-    String sEd(SwModuleOptions::ConvertWordDelimiter(aWordDelim.GetText(), TRUE));
-    SW_MOD()->GetModuleConfig()->SetWordDelimiter(sEd);
     return FALSE;
 }
 
@@ -188,12 +183,6 @@ BOOL  SwDocStatPage::FillItemSet(SfxItemSet &rSet)
 
 void  SwDocStatPage::Reset(const SfxItemSet &rSet)
 {
-    // Im Set befindet sich die DocInfo
-    // bei Bedarf UserData auswerten
-    String sDelim(SW_MOD()->GetDocStatWordDelim());
-    String sEd(SwModuleOptions::ConvertWordDelimiter(sDelim, FALSE));
-    aWordDelim.SetText(sEd);
-    aWordDelim.ClearModifyFlag();
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Aktualisieren / Setzen der Daten
@@ -240,9 +229,6 @@ void SwDocStatPage::Update()
 --------------------------------------------------*/
 IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, pButton)
 {
-    FillItemSet(*(SfxItemSet *)0);  // Worttrenner setzen
-    aDocStat.bModified |= aWordDelim.IsModified();
-    aWordDelim.ClearModifyFlag();
     Update();
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
@@ -250,102 +236,4 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, pButton)
     //pButton->Disable();
     return 0;
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/11/20 14:44:37  jp
-    UpdateDocState without second parameter
-
-    Revision 1.1.1.1  2000/09/18 17:14:34  hr
-    initial import
-
-    Revision 1.43  2000/09/18 16:05:20  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.42  2000/05/22 16:26:16  jp
-    Changes for Unicode
-
-    Revision 1.41  2000/04/13 08:01:20  os
-    UNICODE
-
-    Revision 1.40  1999/07/08 17:16:10  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.39   08 Jul 1999 19:16:10   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.38   26 May 1998 12:04:42   OM
-   #50480 Worttrenner aktualisieren
-
-      Rev 1.37   15 May 1998 12:48:22   OM
-   Worttrenner
-
-      Rev 1.36   14 May 1998 16:46:54   OM
-   Worttrenner konfigurierbar
-
-      Rev 1.35   01 Sep 1997 13:15:08   OS
-   DLL-Umstellung
-
-      Rev 1.34   27 Aug 1997 09:53:10   MH
-   chg: header
-
-      Rev 1.33   26 Aug 1997 14:53:38   TRI
-   VCL includes
-
-      Rev 1.32   23 Jun 1997 10:57:00   OS
-   LineCount: nicht die akt. Psition
-
-      Rev 1.31   20 Jun 1997 16:46:58   HJS
-   sexport -> __export
-
-      Rev 1.30   20 Jun 1997 16:41:40   HJS
-   sexport -> __export
-
-      Rev 1.29   19 Jun 1997 17:29:00   OS
-   Zeilen zaehlen
-
-      Rev 1.28   11 Nov 1996 09:31:16   MA
-   ResMgr
-
-      Rev 1.27   01 Nov 1996 10:32:20   OM
-   Statistik-TP auf Standardgroesse gebracht
-
-      Rev 1.26   28 Aug 1996 10:10:00   OS
-   includes
-
-      Rev 1.25   02 Jul 1996 18:43:38   MA
-   Wait-Umstellung 325
-
-      Rev 1.24   19 Jan 1996 20:07:42   MA
-   fix#24463# UpdateDocStat in Seitenansicht
-
-      Rev 1.23   24 Nov 1995 16:58:16   OM
-   PCH->PRECOMPILED
-
-      Rev 1.22   26 Feb 1995 15:37:28   MA
-   fix: SEXPORT nachgeruestet.
-
-      Rev 1.21   24 Jan 1995 12:49:46   SWG
-   Map entfernt
-
-      Rev 1.20   18 Jan 1995 19:12:48   ER
-   fld.hxx -> *fld*.hxx
-
-      Rev 1.19   09 Dec 1994 18:26:00   MS
-   DocStat geaendert
-
-      Rev 1.18   07 Dec 1994 17:00:20   MS
-   DocStat -> TabPage
-
-      Rev 1.17   25 Oct 1994 16:31:12   ER
-   add: PCH
-
-      Rev 1.16   17 Oct 1994 16:26:38   PK
-   ausgeboxtes wieder reingeboxt
-
-
-------------------------------------------------------------------------*/
-
 
