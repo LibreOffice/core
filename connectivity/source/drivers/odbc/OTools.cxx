@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-06 17:26:32 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,8 @@ void OTools::getBindTypes(sal_Bool _bUseWChar,sal_Bool _bUseOldTimeDate,
                                     fSqlType    = SQL_INTEGER; break;
         case SQL_BIGINT:            fCType      = _bUseWChar ? SQL_C_WCHAR : SQL_C_CHAR;
                                     fSqlType    = SQL_BIGINT; break;
+        case SQL_FLOAT:             fCType      = SQL_C_FLOAT;
+                                    fSqlType    = SQL_FLOAT; break;
         case SQL_REAL:              fCType      = SQL_C_FLOAT;
                                     fSqlType    = SQL_REAL; break;
         case SQL_DOUBLE:            fCType      = SQL_C_DOUBLE;

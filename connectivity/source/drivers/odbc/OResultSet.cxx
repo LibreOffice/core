@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 14:36:07 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
             case DataType::BIGINT:
                 m_aBindVector.push_back(new ::rtl::OString());
                 break;
+            case DataType::FLOAT:
+                m_aBindVector.push_back(new float(0.0));
+                break;
             case DataType::DOUBLE:
                 m_aBindVector.push_back(new double(0.0));
                 break;
@@ -257,6 +260,9 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
             case DataType::VARBINARY:
                 m_aBindVector.push_back(new sal_Int8[xMeta->getPrecision(i)]);
                 break;
+            default:
+                OSL_ENSHURE(0,"Unknown type");
+                m_aBindVector.push_back(NULL);
         }
     }
     m_aLengthVector.resize(nLen + 1);
@@ -271,6 +277,7 @@ void OResultSet::releaseBuffer()
     void** pValue = m_aBindVector.begin() + 1;
     for(sal_Int32 i = 1; i<=nLen; ++i, ++pValue)
     {
+        OSL_ENSHURE(pValue != m_aBindVector.end(),"Iterator is equal end!");
         switch (xMeta->getColumnType(i))
         {
             case DataType::CHAR:
@@ -281,6 +288,9 @@ void OResultSet::releaseBuffer()
             case DataType::NUMERIC:
             case DataType::BIGINT:
                 delete static_cast< ::rtl::OString* >(*pValue);
+                break;
+            case DataType::FLOAT:
+                delete static_cast< float* >(*pValue);
                 break;
             case DataType::DOUBLE:
                 delete static_cast< double* >(*pValue);

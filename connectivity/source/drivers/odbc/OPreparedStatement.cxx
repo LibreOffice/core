@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2000-11-29 12:39:56 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,17 +565,24 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     if (sqlType == SQL_CHAR)
         prec = 1;
 
-    N3SQLBindParameter(m_aStatementHandle,
+    SQLSMALLINT fCType = 0;
+    SQLSMALLINT fSqlType = 0;
+    SQLUINTEGER nColumnSize = 0;
+    SQLSMALLINT nDecimalDigits = 0;
+    OTools::getBindTypes(sal_False,sal_False,sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
+
+    SQLRETURN nReturn = N3SQLBindParameter(m_aStatementHandle,
                             parameterIndex,
                             SQL_PARAM_INPUT,
-                            SQL_C_DEFAULT,
-                            sqlType,
-                            prec,
-                            0,
+                            fCType,
+                            fSqlType,
+                            nDecimalDigits,
+                            nColumnSize,
                             NULL,
                             0,
                             (SDWORD*)lenBuf
                             );
+    OTools::ThrowException(nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
 // -------------------------------------------------------------------------
 
@@ -1255,4 +1262,5 @@ void OPreparedStatement::prepareStatement()
     initBoundParam();
 }
 // -----------------------------------------------------------------------------
+
 
