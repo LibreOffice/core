@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 17:07:37 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,8 @@
 #include <svx/clipfmtitem.hxx>
 #include <svx/blnkitem.hxx>
 #include <svtools/slstitm.hxx>
+#include <svx/paravertalignitem.hxx>
+#include <svx/charreliefitem.hxx>
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
@@ -321,6 +323,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.10  2002/06/10 17:07:37  mba
+    #100118#: new items used for recording
+
     Revision 1.9  2002/05/27 14:48:39  mba
     #98405#: Slots reorganized
 

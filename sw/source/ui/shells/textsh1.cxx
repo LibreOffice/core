@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-10 17:09:01 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,26 @@ void SwTextShell::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case FN_INSERT_SYMBOL:
-            InsertSymbol(aEmptyStr,aEmptyStr);
+        {
+            String aChars;
+            String aFont;
+            if ( pItem )
+            {
+                aChars = ((const SfxStringItem*)pItem)->GetValue();
+                pArgs->GetItemState( GetPool().GetWhich(FN_INSERT_STRING), FALSE, &pItem);
+                if ( pItem )
+                    aFont = ((const SfxStringItem*)pItem)->GetValue();
+            }
+
+            InsertSymbol(aChars,aFont);
+            if ( aChars.Len() )
+            {
+                rReq.AppendItem( SfxStringItem( GetPool().GetWhich(nSlot), aChars ) );
+                if ( aFont.Len() )
+                    rReq.AppendItem( SfxStringItem( GetPool().GetWhich(FN_INSERT_STRING), aFont ) );
+                rReq.Done();
+            }
+        }
         break;
         case FN_INSERT_FOOTNOTE:
         case FN_INSERT_ENDNOTE:
@@ -590,7 +609,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case SID_PARA_VERTALIGN :
+        case SID_ATTR_LRSPACE :
+        case SID_ATTR_ULSPACE :
         case SID_ATTR_PARA_NUMRULE :
+        case SID_ATTR_PARA_REGISTER :
+        case SID_ATTR_PARA_PAGENUM :
+        case SID_ATTR_BRUSH :
         case FN_FORMAT_LINENUMBER :
         case FN_NUMBER_NEWSTART :
         case FN_NUMBER_NEWSTART_AT :
@@ -699,8 +724,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if ( pSet )
                 {
-                    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
                     rReq.Done( *pSet );
+                    ::SfxToSwPageDescAttr( rWrtSh, *pSet );
                     if( pSet->Count() )
                     {
                         rWrtSh.StartAction();

@@ -4994,7 +4994,7 @@ SfxVoidItem InsertSoftHyphen FN_INSERT_SOFT_HYPHEN
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertSymbol FN_INSERT_SYMBOL
-()
+( SfxStringItem Symbols FN_INSERT_SYMBOL, SfxStringItem FontName FN_INSERT_STRING )
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9121,8 +9121,8 @@ SfxBoolItem WrapThroughTransparent FN_FRAME_WRAPTHRU_TRANSP
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Insert FN_INSERT_STRING
-(SfxStringItem StringName FN_INSERT_STRING)
+SfxVoidItem InsertText FN_INSERT_STRING
+(SfxStringItem Text FN_INSERT_STRING)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9244,4 +9244,55 @@ SwFmtLineNumber LineNumber FN_FORMAT_LINENUMBER
     ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
+
+SfxUInt16Item PageNumber SID_ATTR_PARA_PAGENUM
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+SwRegisterItem RegisterTrue SID_ATTR_PARA_REGISTER
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
 

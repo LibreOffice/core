@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-07 08:43:31 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,12 +446,20 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     switch (nSlot)
     {
         case SID_ATTR_PARA_ADJUST:
-            if(pArgs &&  SFX_ITEM_SET == pArgs->GetItemState( RES_PARATR_ADJUST) )
+        {
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_PARATR_ADJUST) )
             {
-                eAdjst = ((const SvxAdjustItem&)pArgs->Get(
-                                RES_PARATR_ADJUST)).GetAdjust();
-                goto SET_ADJUST;
+                const SvxAdjustItem& rAdj = (const SvxAdjustItem&) pArgs->Get(RES_PARATR_ADJUST);
+                SvxAdjustItem aAdj( rAdj.GetAdjust(), RES_PARATR_ADJUST );
+                if ( rAdj.GetAdjust() == SVX_ADJUST_BLOCK )
+                {
+                    aAdj.SetLastBlock( rAdj.GetLastBlock() );
+                    aAdj.SetOneWord( rAdj.GetOneWord() );
+                }
+
+                aSet.Put(aAdj);
             }
+        }
         break;
         case SID_ATTR_PARA_ADJUST_LEFT:     eAdjst =  SVX_ADJUST_LEFT;      goto SET_ADJUST;
         case SID_ATTR_PARA_ADJUST_RIGHT:    eAdjst =  SVX_ADJUST_RIGHT;     goto SET_ADJUST;
@@ -459,7 +467,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
         case SID_ATTR_PARA_ADJUST_BLOCK:    eAdjst =  SVX_ADJUST_BLOCK;     goto SET_ADJUST;
 SET_ADJUST:
         {
-            aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST ));
+            aSet.Put(SvxAdjustItem(eAdjst,RES_PARATR_ADJUST));
             rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), TRUE ) );
         }
         break;
@@ -776,6 +784,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/06/07 08:43:31  mba
+    #99911#: support for ParagraphAlignment recording
+
     Revision 1.4  2001/07/19 16:57:34  mtg
     #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
 
