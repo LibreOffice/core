@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-05 12:49:42 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 09:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Size = MAP_APPFONT ( 125, 93 ) ;
         Border = TRUE;
         TabStop = TRUE;
+        HelpId = HID_SQLERROR_EXCHAIN_ERRORS;
     };
     FixedText FT_DESCRIPTION
     {
@@ -269,6 +270,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Size = MAP_APPFONT ( 125 , 93 ) ;
         TabStop = TRUE ;
         VScroll = TRUE ;
+        HelpId = HID_SQLERROR_EXCHAIN_TEXT;
     };
     OKButton PB_OK
     {
@@ -422,6 +424,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/05 12:49:42  fs
+ *  #80539# forgot to include the helpid declarations
+ *
  *  Revision 1.5  2000/12/05 11:37:45  fs
  *  #80539# help id
  *
