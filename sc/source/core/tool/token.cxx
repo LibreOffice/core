@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:52:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,7 +1818,8 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
             case svDoubleRef :
             {
                 SingleRefData& rRef2 = pCode[j]->GetSingleRef2();
-                if ( rRef2.IsFlag3D() )
+                // Also adjust if the reference is of the form Sheet1.A2:A3
+                if ( rRef2.IsFlag3D() || pCode[j]->GetSingleRef().IsFlag3D() )
                 {
                     rRef2.CalcAbsIfRel( rOldPos );
                     rRef2.CalcRelFromAbs( rNewPos );
