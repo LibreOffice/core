@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 13:18:44 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:23:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -207,6 +207,7 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)$/cppu \
     $(INCOUT)$/cppuhelper \
     $(INCOUT)$/bridges \
+    $(INCOUT)$/registry \
     $(INCOUT)$/stl
 
 .IF "$(GUI)"=="WNT"
