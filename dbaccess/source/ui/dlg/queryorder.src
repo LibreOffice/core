@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:02:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,8 +849,10 @@ ModalDialog DLG_ORDERCRIT
     Text[ czech ] = "Pořadí řazení";
     Text[ hebrew ] = "Sortierung";
     Text[ hindi ] = "सोर्ट क्रम";
-    Text[ slovak ] = "Poradie radenia";
+    Text[ slovak ] = "Poradie triedenia";
 };
+
+
 
 
 
