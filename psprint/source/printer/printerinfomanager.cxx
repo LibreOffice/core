@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-15 11:06:36 $
+ *  last change: $Author: pl $ $Date: 2001-06-19 16:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ void PrinterInfoManager::initialize()
     {
 #ifdef DEBUG
         fprintf( stderr, "Error: no SGENPRT available, shutting down psprint...\n" );
-        return;
 #endif
+        return;
     }
 
     sal_Int32 nIndex = 0;
