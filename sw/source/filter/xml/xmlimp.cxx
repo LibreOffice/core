@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-20 17:51:03 $
+ *  last change: $Author: mib $ $Date: 2002-07-03 13:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _PAM_HXX //autogen wg. SwPaM
 #include <pam.hxx>
+#endif
+#ifndef _EDITSH_HXX
+#include <editsh.hxx>
 #endif
 
 #ifndef _XMLIMP_HXX
@@ -483,6 +486,19 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
     return SvXMLImport::getSomething( rId );
 }
 
+SwXTextCursor *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
+{
+    Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
+    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xCrsrTunnel.is() )
+        return 0;
+    SwXTextCursor *pTxtCrsr =
+        (SwXTextCursor *)xCrsrTunnel->getSomething(
+                                            SwXTextCursor::getUnoTunnelId() );
+    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+    return pTxtCrsr;
+}
+
 void SwXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -498,25 +514,56 @@ void SwXMLImport::startDocument( void )
 
     // There only is a text cursor by now if we are in insert mode. In any
     // other case we have to create one at the start of the document.
-    Reference < XTextCursor > xTextCursor = GetTextImport()->GetCursor();
+    // We also might change into the insert mode later, so we have to make
+    // sure to first set the insert mode and then create the text import
+    // helper. Otherwise it won't have the insert flag set!
+    SwXTextCursor *pTxtCrsr = 0;
+    Reference < XTextCursor > xTextCursor;
+    if( HasTextImport() )
+           xTextCursor = GetTextImport()->GetCursor();
     if( !xTextCursor.is() )
     {
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         Reference < XText > xText = xTextDoc->getText();
         xTextCursor = xText->createTextCursor();
-        GetTextImport()->SetCursor( xTextCursor );
+        SwCrsrShell *pCrsrSh = 0;
+        SwDoc *pDoc = 0;
+        if( IMPORT_ALL == getImportFlags() )
+        {
+            pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
+            ASSERT( pTxtCrsr, "SwXTextCursor missing" );
+            if( !pTxtCrsr )
+                return;
+
+            pDoc = pTxtCrsr->GetDoc();
+            ASSERT( pDoc, "SwDoc missing" );
+            if( !pDoc )
+                return;
+
+            // Is there a edit shell. If yes, then we are currently inserting
+            // a document. We then have to insert at the current edit shell's
+            // cursor position. That not quite clean code, but there is no other
+            // way currently.
+            pCrsrSh = pDoc->GetEditShell();
+        }
+        if( pCrsrSh )
+        {
+            Reference<XTextRange> xInsertTextRange(
+                SwXTextRange::CreateTextRangeFromPosition(
+                                pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
+            setTextInsertMode( xInsertTextRange );
+            xTextCursor = GetTextImport()->GetCursor();
+            pTxtCrsr = 0;
+        }
+        else
+            GetTextImport()->SetCursor( xTextCursor );
     }
 
     if( (getImportFlags() & (IMPORT_CONTENT|IMPORT_MASTERSTYLES)) == 0 )
         return;
 
-    Reference<XUnoTunnel> xCrsrTunnel( xTextCursor, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    if( !xCrsrTunnel.is() )
-        return;
-    SwXTextCursor *pTxtCrsr =
-                (SwXTextCursor*)xCrsrTunnel->getSomething(
-                                            SwXTextCursor::getUnoTunnelId() );
+    if( !pTxtCrsr  )
+        pTxtCrsr = lcl_xml_GetSwXTextCursor( xTextCursor );
     ASSERT( pTxtCrsr, "SwXTextCursor missing" );
     if( !pTxtCrsr )
         return;

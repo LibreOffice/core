@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-01 11:22:11 $
+ *  last change: $Author: mib $ $Date: 2002-07-03 13:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,7 +1166,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         if( rFilter.Len() )
         {
             pSfxFlt =  SwIoSystem::GetFilterOfFilterTxt( rFilter );
-            if( pSfxFlt && !SwIoSystem::IsFileFilter( *pMed, pSfxFlt->GetUserData() ))
+            if( pSfxFlt && !SwIoSystem::IsFileFilter( *pMed, pSfxFlt->GetUserData() ) && (pSfxFlt->GetFilterFlags() & SFX_FILTER_STARONEFILTER) == 0 )
                 pSfxFlt = 0;        // dann neu detecten lassen
         }
 

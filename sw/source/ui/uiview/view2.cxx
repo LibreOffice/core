@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 11:57:55 $
+ *  last change: $Author: mib $ $Date: 2002-07-03 13:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,7 +1372,8 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
         {
             SwReader* pRdr;
             Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, pWrtShell );
-            if( pRead )
+            if( pRead ||
+                (pMed->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
             {
                 String sTmpBaseURL( INetURLObject::GetBaseURL() );
                 INetURLObject::SetBaseURL( pMed->GetName() );
@@ -1384,8 +1385,16 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                     pWrtShell->StartAllAction();
                     if ( pWrtShell->HasSelection() )
                         pWrtShell->DelRight();      // Selektionen loeschen
-                    nErrno = pRdr->Read( *pRead );  // und Dokument einfuegen
-                    delete pRdr;
+                    if( pRead )
+                    {
+                        nErrno = pRdr->Read( *pRead );  // und Dokument einfuegen
+                        delete pRdr;
+                    }
+                    else
+                    {
+                        nErrno = pDocSh->ImportFrom( *pMed ) ? 0
+                                                : ERR_SWG_READ_ERROR;
+                    }
 
                     INetURLObject::SetBaseURL( sTmpBaseURL );
                 }
