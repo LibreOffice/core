@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:36 $
+ *  last change: $Author: mt $ $Date: 2001-03-20 16:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,7 +465,7 @@ long SpinField::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_COMMAND )
     {
-        if ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL )
+        if ( ( rNEvt.GetCommandEvent()->GetCommand() == COMMAND_WHEEL ) && !IsReadOnly() )
         {
             const CommandWheelData* pData = rNEvt.GetCommandEvent()->GetWheelData();
             if ( pData->GetMode() == COMMAND_WHEEL_SCROLL )
