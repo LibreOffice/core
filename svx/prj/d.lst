@@ -4,6 +4,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US
+mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
@@ -722,5 +723,6 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\xml\AccessibleEditableTextPara.xml %_DEST%\xml%_EXT%\AccessibleEditableTextPara.xml
 
 ..\uiconfig\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\en-US\*.xml
+..\uiconfig\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
