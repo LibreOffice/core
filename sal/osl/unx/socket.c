@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-27 11:01:32 $
+ *  last change: $Author: jbu $ $Date: 2001-05-02 11:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,7 +720,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
         nAddr = htonl(nAddr);
     }
 
-    pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, Port, nAddr );
+    pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, htons(Port), nAddr );
     return pAddr;
 }
 
@@ -765,7 +765,7 @@ oslSocketAddr SAL_CALL osl_psz_createInetSocketAddr (
     if(Addr != -1)
     {
         /* valid dotted addr */
-        pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, Port , Addr );
+        pAddr = __osl_createSocketAddrWithFamily( osl_Socket_FamilyInet, htons(Port) , Addr );
     }
     return pAddr;
 }
