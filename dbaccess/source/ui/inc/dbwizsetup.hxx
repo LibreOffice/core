@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:06:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ public:
 
     // forwards to ODbDataSourceAdministrationHelper
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > createConnection();
+    virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
     virtual DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
@@ -200,12 +200,11 @@ protected:
 
 private:
     sal_Bool StartTableWizard(); //const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-    void RegisterDataSourceByLocation(::rtl::OUString sPath);
-    void OpenDatabaseDocument(::rtl::OUString sPath);
+    void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
+    void OpenDatabaseDocument(const ::rtl::OUString& _sPath);
     sal_Bool SaveDatabaseDocument();
     void activateDatabasePath(OGeneralPage* _pTabpage);
     void createUniqueFileName(INetURLObject* pURL);
-    ::rtl::OUString createUniqueName(com::sun::star::uno::Sequence< ::rtl::OUString > sContent, ::rtl::OUString _ElementName);
     void CreateDatabase();
     void createUniqueFolderName(INetURLObject* pURL);
     DATASOURCE_TYPE VerifyDataSourceType(const DATASOURCE_TYPE _DatabaseType) const;
