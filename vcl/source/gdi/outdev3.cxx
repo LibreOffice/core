@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:45:31 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,10 +443,12 @@ static sal_Unicode const aHGHeiseiMin[] = { 'h', 'g', 0x5E73, 0x6210, 0x660E, 0x
 static sal_Unicode const aSunDotum[] = { 0xC36C, 0xB3CB, 0xC6C0, 0, 0 };
 static sal_Unicode const aSunGulim[] = { 0xC36C, 0xAD74, 0xB9BC, 0, 0 };
 static sal_Unicode const aSunBatang[] = { 0xC36C, 0xBC14, 0xD0D5, 0, 0 };
+static sal_Unicode const aBaekmukDotum[] = { 0xBC31, 0xBB35, 0xB3CB, 0xC6C0, 0, 0 };
+static sal_Unicode const aBaekmukGulim[] = { 0xBC31, 0xBB35, 0xAD74, 0xB9BC, 0, 0 };
+static sal_Unicode const aBaekmukBatang[] = { 0xBC31, 0xBB35, 0xBC14, 0xD0D5, 0, 0 };
 static sal_Unicode const aFzHeiTi[] = { 0x65B9, 0x6B63, 0x9ED1, 0x9AD4, 0, 0 };
 static sal_Unicode const aFzMingTi[] = { 0x65B9, 0x6B63, 0x660E, 0x9AD4, 0, 0 };
 static sal_Unicode const aFzSongTi[] = { 0x65B9, 0x6B63, 0x5B8B, 0x4F53, 0, 0 };
-
 static sal_Unicode const aHYMyeongJoExtra[]         = { 'h', 'y', 0xACAC, 0xBA85, 0xC870, 0, 0 };
 static sal_Unicode const aHYSinMyeongJoMedium[]     = { 'h', 'y', 0xC2E0, 0xBA85, 0xC870, 0, 0 };
 static sal_Unicode const aHYGothicMedium[]          = { 'h', 'y', 0xC911, 0xACE0, 0xB515, 0, 0 };
@@ -524,6 +526,9 @@ static ImplLocaliziedFontName const aImplLocaliziedNamesList[] =
 {   "sundotum",             aSunDotum },
 {   "sungulim",             aSunGulim },
 {   "sunbatang",            aSunBatang },
+{   "baekmukdotum",         aBaekmukDotum },
+{   "baekmukgulim",         aBaekmukGulim },
+{   "baekmukbatang",        aBaekmukBatang },
 {   "fzheiti",              aFzHeiTi },
 {   "fzmingti",             aFzMingTi },
 {   "fzsongti",             aFzSongTi },
@@ -2660,14 +2665,14 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
     {
         // TODO: implement dynamic lists or improve static lists
         #define FALLBACKFONT_NAMELIST \
-            "Arial Unicode MS;Andale Sans UI;Tahoma;Cyberbit;StarSymbol;Lucida TypeWriter;"  \
-            "FZMingTi;SunBatang;SunDotum;"                                \
-            "HGMinchoLightJ;MSungLightSC;MSungLightTC;HYMyeongJoLight K;" \
-            "Lucida Sans;"                              \
-            "Shree;Mangal;Raavi;Shruti;Tunga;Latha;"    \
-            "Shayyal MT;Nask MT;David;"                 \
-            "Norasi;AngsanaUPC;"                                   \
-            "Gulim;Batang;Dotum;MS Mincho"
+            "arialunicodems;andalesansui;cyberbit;starsymbol;lucidatypeWriter;"  \
+            "fzmingti;sunbatang;sundotum;baekmukdotum;"                     \
+            "hgmincholightj;msunglightsc;msunglighttc;hymyeongjolightk;"    \
+            "lucidasans;tahoma;"                                            \
+            "shree;mangal;raavi;shruti;tunga;latha;"                        \
+            "shayyalmt;naskmt;david;nachlieli;lucidagrande;"                \
+            "norasi;angsanaupc;"                                            \
+            "gulim;batang;dotum;msmincho"
         String aNameList( RTL_CONSTASCII_USTRINGPARAM(FALLBACKFONT_NAMELIST) );
         int nMaxLevel = 0;
         ImplDevFontListData** pFallbackList = NULL;
@@ -3802,7 +3807,13 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
         {
             if( mpFontEntry->mnOrientation )
                 ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
-            SalLayout* pSalLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN, Point(nX,nY) );
+
+            // strikeout text has to be left aligned
+            ULONG nOrigTLM = mnTextLayoutMode;
+            mnTextLayoutMode = TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_COMPLEX_DISABLED;
+            SalLayout* pSalLayout = ImplLayout( aStrikeoutText, 0, STRING_LEN );
+            mnTextLayoutMode = nOrigTLM;
+
             if( pSalLayout )
             {
                 pSalLayout->DrawBase() = Point( nX+mnTextOffX, nY+mnTextOffY );
