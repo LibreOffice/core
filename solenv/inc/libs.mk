@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-03 13:24:43 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:42:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,8 +59,7 @@
 #
 #
 #*************************************************************************
-
-LIBSMKREV!:="$$Revision: 1.71 $$"
+LIBSMKREV!:="$$Revision: 1.72 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -215,6 +214,9 @@ SCLIB=-lsclib
 SDLIB=-lsdlib
 SDLLIB=-lsdl
 SWLIB=-lswlib
+ISWLIB=-lsw$(OFFICEUPD)$(DLLPOSTFIX)
+ISCLIB=-lsc$(OFFICEUPD)$(DLLPOSTFIX)
+ISDLIB=-lsd$(OFFICEUPD)$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
 SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
@@ -377,6 +379,9 @@ SCLIB=$(LIBPRE) sclib.lib
 SDLIB=$(LIBPRE) sdlib.lib
 SDLLIB=$(LIBPRE) sdl.lib
 SWLIB=$(LIBPRE) swlib.lib
+ISWLIB=$(LIBPRE) _sw.lib
+ISCLIB=$(LIBPRE) sci.lib
+ISDLIB=$(LIBPRE) sdi.lib
 SVLIB=$(LIBPRE) ivcl.lib
 VCLLIB=$(SVLIB)
 BASEGFXLIB=$(LIBPRE) ibasegfx.lib
