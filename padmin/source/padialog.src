@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:05:48 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:19:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text [ English ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
         Text[ english_us ] = "Please select the folder from which you want to import fonts. Add the selected fonts by clicking the OK button.";
         Text[ portuguese ] = "Seleccione primeiro a pasta a partir da qual deseja importar os tipos de letra e clique depois no botгo OK para iniciar o processo.";
-        Text[ russian ] = "¬ыберите сначала папку, из которой необходимо импортировать шрифты. «атем нажатием на кнопку OK запустите вставку выбранных шрифтов.";
+        Text[ russian ] = "¬ыберите папку, из которой необходимо импортировать шрифты. ƒобавьте выбранные шрифты, нажав кнопку 'ƒа'.";
         Text[ greek ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
         Text[ dutch ] = "Kies eerst de map waaruit u lettertypen wilt importeren. Start dan het toevoegen van de geselecteerde lettertypen met de OK-knop.";
         Text[ french ] = "Sйlectionnez le dossier а partir duquel vous souhaitez importer des polices, puis cliquez sur OK pour ajouter les polices sйlectionnйes.";
@@ -159,7 +159,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ portuguese ] = "Criar apenas ligaзхes simbуlicas";
         Text[ russian ] = "—оздать только ссылку";
         Text[ greek ] = "Create ~Softlinks only";
-        Text[ dutch ] = "Bij het toevoegen alleen ~softlinks aanleggen";
+        Text[ dutch ] = "Bij het toevoegen alleen ~softlinks maken";
         Text[ french ] = "Crйer uniquement des soft links";
         Text[ spanish ] = "~Crear sуlo enlaces simbуlicos";
         Text[ finnish ] = "Luo vain ~nдennдislinkkejд";
@@ -224,7 +224,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ portuguese ] = "Adicionar tipos de letra";
         Text[ russian ] = "ƒобавить шрифты";
         Text[ greek ] = "≈йубгщгё гсбммбфпуейсюн";
-        Text[ dutch ] = "Lettertypen worden toegevoegd";
+        Text[ dutch ] = "Voeg lettertypen toe";
         Text[ french ] = "Ajout des polices";
         Text[ spanish ] = "Aсade fuentes";
         Text[ finnish ] = "Lisдд fontteja";
@@ -248,7 +248,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ English ] = "Do you really want to replace this font file?\n   %s";
         Text[ english_us ] = "Do you really want to overwrite this font file?\n   %s";
         Text[ portuguese ] = "Substituir realmente o ficheiro dos\ntipos de letra   %s?";
-        Text[ russian ] = "¬ы действительно хотите заменить файл шрифтов \n   %s?";
+        Text[ russian ] = "¬ы действительно хотите перезаписать файл шрифтов \n   %s?";
         Text[ greek ] = "»Ёлефе уягпхсб нб бнфйкбфбуфбиея з гсбммбфпуейс№\n   %s ;";
         Text[ dutch ] = "Wilt u dit lettertypenbestand\n %s\n werkelijk overschrijven?";
         Text[ french ] = "Voulez-vous vraiment йcraser\nle fichier de polices\n   %s ?";
@@ -300,7 +300,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text [ English ] = "None";
         Text[ english_us ] = "None";
         Text[ portuguese ] = "Nenhum";
-        Text[ russian ] = "Ѕез";
+        Text[ russian ] = "Ќет";
         Text[ greek ] = " бнЁнб";
         Text[ dutch ] = "Geen";
         Text[ french ] = "Aucun(e)";
@@ -327,9 +327,9 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text [ English ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory." ;
         Text[ english_us ] = "A format file (with an .afm extension) has not been found for the font\n%s\ntherefore, the font cannot be installed. Format files can be created with ghostscript, for example, and have to be located in the same directory as the font files or its afm subdirectory.";
         Text[ portuguese ] = "Foi impossнvel encontrar o ficheiro de formato (com extensгo .afm) para o ficheiro do tipo de letra\n%s\n. Por esta razгo nгo foi possнvel instalб-lo. Os ficheiros de formato podem ser criados com ghostscript (por exemplo), devendo ser guardados no directуrio contendo os ficheiros dos tipos de letra ou num dos respectivos subdirectуrios afm.";
-        Text[ russian ] = "ƒл€ файла шрифта \n%s\n файл формата (с расширением .afm) не найден. ѕоэтому инсталлировать его невозможно. ‘айлы формата можно создать, например, при помощи ghostscript и помещаютс€ в тот же каталог, что и файлы шрифта или в его подкаталоге, в котором наход€тс€ afm.";
+        Text[ russian ] = "ƒл€ файла шрифта \n%s\n не найден файл формата (с расширением .afm). ѕоэтому его невозможно установить. ‘айлы формата можно создать, например, при помощи ghostscript и они помещаютс€ в тот же каталог, что и файлы шрифта или в его подкаталоге, в котором наход€тс€ afm-файлы.";
         Text[ greek ] = "ƒен еянбй дхнбфё з егкбф№уфбуз фпх бсчеяпх гсбммбфпуейс№т\n%s\n ерейдё ден всЁизке фп кбф№ллзлп бсчеяп мпсцёт ( ме фзн рспЁкфбуз .afm ). ‘б бсчеяб мпсцёт мрпспэн нб дзмйпхсгзипэн р.ч. ме фп ghostscript кбй рсЁрей нб хр№счпхн уфпн ядйп кбф№лпгп ме фб бсчеяб гсбммбфпуейсюн ё уфпн хрпкбф№лпгп бхфюн ме фзн пнпмбуяб 'afm'.";
-        Text[ dutch ] = "Lettertypenbestand\n%s\n kan niet worden geпnstalleerd daar geen bijbehorend formaatbestand (met extensie .afm) werd gevonden. Formaatbestanden kunnen worden gemaakt met bijv. ghostscript en moeten worden opgeslagen in de directory waarin de lettertypenbestanden staan of in een subdirectory daarvan.";
+        Text[ dutch ] = "Lettertypenbestand\n%s\n kan niet worden geпnstalleerd omdat er geen bijbehorend formaatbestand (met extensie .afm) is gevonden. Formaatbestanden kunnen worden gemaakt met bijvoorbeeld ghostscript en moeten worden opgeslagen in de directory waarin de lettertypenbestanden staan of in een subdirectory daarvan.";
         Text[ french ] = "Aucun fichier de format (d'extension .afm) n'a йtй dйtectй pour le fichier de police\n%s\n ; la police ne peut donc pas кtre installйe. Les fichiers de format peuvent par ex. кtre crйй avec ghostscript et doivent кtre placйs dans le mкme rйpertoire que celui des fichiers de police ou dans le sous-rйpertoire afm.";
         Text[ spanish ] = "No se encontrу ningъn archivo de formato (extensiуn .afm) para el archivo de fuente\n%s\n por lo que no se puede instalar la fuente. Los archivos de formato se pueden crear p.ej. con ghostscript y deben encontrarse en el mismo directorio que los archivos de fuentes o en el subdirectorio afm.";
         Text[ italian ] = "Impossibile installare il font\n%s\nperchй non и stato trovato il rispettivo file di formato (con estensione .afm). I file di formato si possono creare ad esempio con ghostscript e si devono trovare nella stessa cartella dei font oppure nella rispettiva sottocartella afm.";
@@ -343,7 +343,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "ж≤ТжЬЙжЙЊеИ∞е≠ЧеЮЛ\n%s\nзЪДж†ЉеЉПж™Фж°И(еЙѓж™ФеРН .afm )пЉМеЫ†ж≠§зД°ж≥ХеЃЙи£ЭйАЩеАЛе≠ЧеЮЛгАВж†ЉеЉПж™Фж°ИжШѓзФ± ghostscript зФЯжИРпЉМеєґе≠ШжФЊеЬ®зЫЄеРМзЪДе≠ЧеЮЛзЫЃйМДжИЦеЕґе≠РзЫЃйМД afm дєЛдЄ≠гАВ";
         Text[ turkish ] = "Noo format file ( with .afm extension ) for font\n%s\n was found, hence the font will not be installed. Format files can be made e.g. with ghostscript and have to reside in the same directory as the font file or in its afm subdir ectory.";
         Text[ arabic ] = "бг н г «бЏЋж— Џбм гбЁ  д”нё (»«б«г ѕ«ѕ .afm) бгбЁ «бќЎ \n%s\nбе–« бд нгяд  Ћ»н е. нгяд ≈д‘«Ѕ гбЁ«  «б д”нё° Џбм ”»нб «бгЋ«б° »№ ghostscript ° жнћ» √д  я?";
-        Text[ finnish ] = "Muotoilutiedostoa (tunniste .afm) ei lцytynyt fontille\n%s,\njoten fonttia ei voi asentaa. Muotoilutiedostoja voi luoda esimerkiksi Ghostscriptin avulla, ja muotoilutiedoston on sijaittava samassa hakemistossa fonttitiedostojen kanssa tai fonttitiedostojen afm-alihakemistossa.";
+        Text[ finnish ] = "Muotoilutiedostoa (tunniste .afm) ei lцytynyt fontille\n%s,\njoten fonttia ei voi asentaa. Muotoilutiedostoja voi luoda esimerkiksi Ghostscriptin avulla, ja niiden on sijaittava samassa hakemistossa fonttitiedostojen kanssa tai fonttitiedostojen afm-alihakemistossa.";
         Text[ catalan ] = "No s'ha trobat cap fitxer de format (amb extensiу .afm) per al fitxer de tipus de lletra\n%s\n i no es pot instal.lar. Els fitxers de format es poden crear amb el ghostscript, per exemple, i han de ser en el mateix directori que els fitxers de tipus de lletra o en el seu subdirectori afm.";
         Text[ thai ] = "аєДаЄ°аєИаЄЮаЄЪаЄ£аЄєаЄЫаєБаЄЪаЄЪаєБаЄЯаєЙаЄ° (аЄФаєЙаЄІаЄҐаЄ™аєИаЄІаЄЩаЄВаЄҐаЄ≤аЄҐ .afm ) аЄ™аЄ≥аЄЂаЄ£аЄ±аЄЪаЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£\n%s\nаєАаЄЩаЄЈаєИаЄ≠аЄЗаЄИаЄ≤аЄБаєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£аєДаЄФаєЙ аЄХаЄ±аЄІаЄ≠аЄҐаєИаЄ≤аЄЗаєАаЄКаєИаЄЩ  аЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄ™аЄ£аєЙаЄ≤аЄЗаЄ£аЄєаЄЫаєБаЄЪаЄЪаєБаЄЯаєЙаЄ°аЄФаєЙаЄІаЄҐаєВаЄБаЄ™аЄХаєМаЄ™аЄ£аЄіаЄЫаЄХаєМ  аєБаЄ•аЄ∞аЄХаєЙаЄ≠аЄЗаЄ≠аЄҐаЄєаєИаєГаЄЩаєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИаєАаЄФаЄµаЄҐаЄІаЄБаЄ±аЄЩаєАаЄЫаєЗаЄЩаєБаЄЯаєЙаЄ°аЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£аЄЂаЄ£аЄЈаЄ≠аєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИаЄҐаєИаЄ≠аЄҐаЄВаЄ≠аЄЗ afm ";
     };
@@ -353,9 +353,9 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text [ English ] = "The metric file for font file\n   %s\ncould not be copied. The font wille not be installed.";
         Text[ english_us ] = "The metric file for the font file\n   %s\ncould not be copied. The font will not be installed.";
         Text[ portuguese ] = "Foi impossнvel copiar o ficheiro mйtrico para o ficheiro do tipo de letra\n...%s\n. O tipo de letra nгo serб instalado.";
-        Text[ russian ] = "‘айл метрики дл€ файла шрифта\n   %s\nскопировать невозможно. Ўрифт инсталлирован не будет.";
+        Text[ russian ] = "Ќевозможно скопировать файл характеристик шрифта\n   %s.\n Ўрифт не будет установлен.";
         Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з бнфйгсбцё фпх бсчеяпх мефсйкёт фпх бсчеяпх фзт гсбммбфпуейс№т\n   %s\n. « гсбммбфпуейс№ ден иб егкбфбуфбиея.";
-        Text[ dutch ] = "Het lettertype werd niet geпnstalleerd daar het metrische bestand voor lettertypenbestand\n %s\nniet kon worden gekopieerd.  ";
+        Text[ dutch ] = "Het lettertype is niet geпnstalleerd omdat het metrische bestand voor lettertypenbestand\n %s\nniet kan worden gekopieerd.";
         Text[ french ] = "Copie du fichier mйtrique pour le fichier\n   %s\nimpossible, donc impossibilitй d'installer la police !";
         Text[ spanish ] = "No se pudo copiar el archivo de mйtrica correspondiente al de la fuente\n   %s\n, por lo que no se instalarб la fuente.";
         Text[ italian ] = "Impossibile copiare il file metrico per il file dei font\n...%s\n. Il font non и stato installato.";
@@ -379,9 +379,9 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text [ English ] = "The font file\n   %s\ncould not be copied. The font wille not be installed.";
         Text[ english_us ] = "The font file\n   %s\ncould not be copied. The font will not be installed.";
         Text[ portuguese ] = "Foi impossнvel copiar o ficheiro dos tipos de letra\n   %s\n. O tipo de letra nгo serб instalado.";
-        Text[ russian ] = "—копировать файл шрифта\n   %s\nневозможно. Ётот шрифт инсталлирован не будет.";
+        Text[ russian ] = "Ќевозможно скопировать файл шрифта\n   %s.\n Ўрифт не будет установлен.";
         Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з бнфйгсбцё фпх бсчеяпх гсбммбфпуейс№т\n   %s\n« гсбммбфпуейс№ ден иб егкбфбуфбиея.";
-        Text[ dutch ] = "Het lettertype wordt niet geпnstalleerd daar het lettertypenbestand \n %s\n niet kon worden gekopieerd.";
+        Text[ dutch ] = "Het lettertype wordt niet geпnstalleerd omdat het lettertypenbestand \n %s\n niet kan worden gekopieerd.";
         Text[ french ] = "Copie du fichier de police\n   %s\n impossible, donc impossibilitй d'installer la police !";
         Text[ spanish ] = "No se pudo copiar el archivo de fuente\n   %s\n, por lo que no se instalarб la fuente.";
         Text[ italian ] = "Impossibile compiare il file di font\n   %s\n. Il font non и stato installato.";
@@ -405,9 +405,9 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ English ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ english_us ] = "A directory containing a writable fonts.dir file is not located in the Fontpath. Therefore, fonts cannot be installed.";
         Text[ portuguese ] = "Foi impossнvel encontrar o directуrio no \"fontpath\", contendo um ficheiro de escrita fonts.dir. … impossнvel instalar os tipos de letra.";
-        Text[ russian ] = " аталог, который содержит файл fonts.dir, возможный записать, в Fontpath не обнаружен. »нсталлировать шрифты поэтому невозможно.";
+        Text[ russian ] = "Ќевозможно установить шрифты.  аталог, содержащий файл записываемых шрифтов fonts.dir не расположен по данному пути.";
         Text[ greek ] = "ƒен всЁизке кбф№лпгпт уфп Fontpath, п прпяпт нб ресйЁчей Ёнб кбф№ллзлп бсчеяп еггсбцёт fonts.dir. ƒен еянбй дхнбфё з егкбф№уфбуз гсбммбфпуейсюн.";
-        Text[ dutch ] = "Er konden geen lettertypen worden geпnstalleerd daar er in het pad voor de lettertypen geen directory werd aangetroffen met een beschrijfbaar bestand fonts.dir.";
+        Text[ dutch ] = "Er kunnen geen lettertypen worden geпnstalleerd omdat er in het pad voor de lettertypen geen directory is aangetroffen met een beschrijfbaar bestand fonts.dir.";
         Text[ french ] = "Aucun rйpertoire contenant un fichier d'йcriture fonts.dir ne se trouve dans le chemin de police (fontpath). Impossible d'installer des polices !";
         Text[ spanish ] = "No se encontrу ningъn directorio en la ruta de fuentes con un archivo de escritura fonts.dir. Imposible instalar fuentes.";
         Text[ italian ] = "Impossibile trovare in Fontpath una cartella con un file font.dir scrivibile. Non и possibile installare i font.";
@@ -421,7 +421,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ chinese_traditional ] = "е≠ЧеЮЛиЈѓеЊСдєЛдЄ≠ж≤ТжЬЙжЬЙжХИзЪДеПѓиЃАеѓЂзЪД fonts.dir ж™Фж°ИгАВеЫ†ж≠§зД°ж≥ХеЃЙи£ЭдїїдљХе≠ЧеЮЛгАВ";
         Text[ turkish ] = "In the fontpath there is no directory containing a writeable fonts.dir file. Therefore no fonts can be installed.";
         Text[ arabic ] = "Ён г”«— «бќЎ° бг н г «бЏЋж— Џбм ѕбнб нЌ жн Џбм гбЁ fonts.dir ё«»б ббя «»…. бе–« б« нгяд  Ћ»н  «бќЎжЎ.";
-        Text[ finnish ] = "Kirjoitettavan tiedoston fonts.dir sisдltдvдд hakemistoa ei ole kohteessa Fontpath, joten fontteja ei voi asentaa.";
+        Text[ finnish ] = "Kirjoitettavan tiedoston fonts.dir sisдltдvдд hakemistoa ei ole kohteessa Fontpath. Fontteja ei voi asentaa.";
         Text[ catalan ] = "Al Fontpath no hi ha cap directori que contingui el fitxer modificable fonts.dir. Per tant, els tipus de lletra no es poden instal.lar.";
         Text[ thai ] = "аєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИаЄ°аЄµаєБаЄЯаєЙаЄ°аЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£.dir аЄЧаЄµаєИаєАаЄВаЄµаЄҐаЄЩаєДаЄФаєЙаєДаЄ°аєИаєДаЄФаєЙаЄ≠аЄҐаЄєаєИаєГаЄЩаєАаЄ™аєЙаЄЩаЄЧаЄ≤аЄЗаЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£  аєАаЄЩаЄЈаєИаЄ≠аЄЗаЄИаЄ≤аЄБаєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£аєДаЄФаєЙ";
     };
@@ -433,7 +433,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ portuguese ] = "Instalados %d novos tipos de letra.";
         Text[ russian ] = "ƒобавлено %d новых шрифта(ов).";
         Text[ greek ] = "Єчпхн егкбфбуфбиея %d нЁет гсбммбфпуейсЁт.";
-        Text[ dutch ] = "Er werden %d nieuwe lettertypen toegevoegd.";
+        Text[ dutch ] = "Er zijn %d nieuwe lettertypen toegevoegd.";
         Text[ french ] = "%d nouvelles polices ont йtй installйes.";
         Text[ spanish ] = "Se aсadieron %d nuevas fuentes.";
         Text[ finnish ] = "%d uutta fonttia lisдttiin.";
@@ -528,7 +528,7 @@ ModalDialog RID_PADIALOG
         Text [ english ]  = "Installed printers";
         Text[ english_us ] = "Installed ~printers";
         Text[ portuguese ] = "~Impressoras instaladas";
-        Text[ russian ] = "»нсталлированные принтеры";
+        Text[ russian ] = "”становленные принтеры";
         Text[ greek ] = "≈гкбфеуфзмЁнпй екфхрщфЁт";
         Text[ dutch ] = "~Geпnstalleerde printers";
         Text[ french ] = "Imprimantes installйes";
@@ -544,7 +544,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "еЈ≤зґУи®≠зљЃзЪДеН∞и°®ж©Я(~P)";
         Text[ turkish ] = "Configured printers";
         Text[ arabic ] = "«бЎ«»Џ«  «бгЋ» …";
-        Text[ finnish ] = "Asennetut tulostimet";
+        Text[ finnish ] = "Asennetut ~tulostimet";
         Text[ catalan ] = "Impressores configurades";
         Text[ thai ] = "аЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ";
     };
@@ -612,7 +612,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "й©ЕеЛХз®ЛеЉПпЉЪ";
         Text[ turkish ] = "Driver :";
         Text[ arabic ] = "»—д«гћ «б ‘џнб :";
-        Text[ finnish ] = "Ajuri:";
+        Text[ finnish ] = "Ohjain:";
         Text[ catalan ] = "Programa de control :";
         Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ :";
     };
@@ -629,7 +629,7 @@ ModalDialog RID_PADIALOG
         Text [english] = "Location:";
         Text[ english_us ] = "Location:";
         Text[ portuguese ] = "Posiзгo:";
-        Text[ russian ] = "–асположение:";
+        Text[ russian ] = "ѕуть:";
         Text[ greek ] = "‘прпиеуяб :";
         Text[ dutch ] = "Locatie:";
         Text[ french ] = "Emplacement :";
@@ -664,7 +664,7 @@ ModalDialog RID_PADIALOG
         Text[ portuguese ] = "Comentбrio:";
         Text[ russian ] = " омментарий:";
         Text[ greek ] = "”чьлйп :";
-        Text[ dutch ] = "Commentaar:";
+        Text[ dutch ] = "Opmerkingen:";
         Text[ french ] = "Commentaire :";
         Text[ spanish ] = "Comentario:";
         Text[ italian ] = "Commento :";
@@ -711,7 +711,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "е±ђжАІ...";
         Text[ turkish ] = "Co~nfigure...";
         Text[ arabic ] = "ќ’«∆’...";
-        Text[ finnish ] = "Ominaisuudet";
+        Text[ finnish ] = "Ominaisuudet...";
         Text[ catalan ] = "Propietats...";
         Text[ thai ] = "аЄДаЄЄаЄУаЄ™аЄ°аЄЪаЄ±аЄХаЄі...";
     };
@@ -723,7 +723,7 @@ ModalDialog RID_PADIALOG
         Text [english] = "~Rename...";
         Text[ english_us ] = "R~ename...";
         Text[ portuguese ] = "~Mudar nome...";
-        Text[ russian ] = "ѕереименовать...";
+        Text[ russian ] = "ѕереименовать";
         Text[ greek ] = "ћефпнпмбуяб...";
         Text[ dutch ] = "N~aam wijzigen...";
         Text[ french ] = "R~enommer...";
@@ -739,7 +739,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "йЗНеСљеРН(~E)...";
         Text[ turkish ] = "R~ename...";
         Text[ arabic ] = "≈Џ«ѕ…  ”гн…...";
-        Text[ finnish ] = "~Nimeд uudelleen";
+        Text[ finnish ] = "Nimeд ~uudelleen...";
         Text[ catalan ] = "R~eanomena...";
         Text[ thai ] = "аєА~аЄЫаЄ•аЄµаєИаЄҐаЄЩаЄКаЄЈаєИаЄ≠...";
     };
@@ -768,7 +768,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "йїШи™НеН∞и°®ж©Я(~D)";
         Text[ turkish ] = "~Set as default Printer";
         Text[ arabic ] = "«Ё —«÷н…";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ finnish ] = "~Oletus";
         Text[ catalan ] = "Per defecte";
         Text[ thai ] = "аЄДаєИаЄ≤аєАаЄ£аЄіаєИаЄ°аЄХаєЙаЄЩ";
     };
@@ -780,7 +780,7 @@ ModalDialog RID_PADIALOG
         Text [english] = "~Remove...";
         Text[ english_us ] = "Remo~ve...";
         Text[ portuguese ] = "~Remover...";
-        Text[ russian ] = "~”брать...";
+        Text[ russian ] = "~”далить...";
         Text[ greek ] = "ƒйбгсбцё...";
         Text[ dutch ] = "~Verwijderen...";
         Text[ french ] = "Supprimer...";
@@ -796,7 +796,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "зІїйЩ§(~V)...";
         Text[ turkish ] = "~Remove...";
         Text[ arabic ] = "≈“«б…...";
-        Text[ finnish ] = "Poista";
+        Text[ finnish ] = "P~oista...";
         Text[ catalan ] = "Elimina...";
         Text[ thai ] = "аєАаЄ≠аЄ≤аЄ≠аЄ≠аЄБ...";
     };
@@ -808,7 +808,7 @@ ModalDialog RID_PADIALOG
         Text [english] = "~Test page";
         Text[ english_us ] = "Test ~Page";
         Text[ portuguese ] = "Pбgi~na-teste";
-        Text[ russian ] = "ѕробна€ страница";
+        Text[ russian ] = "“ест";
         Text[ greek ] = "”елядб дпкймёт";
         Text[ dutch ] = "test ~pagina";
         Text[ french ] = "Page de ~test";
@@ -824,7 +824,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "и©¶еИЧеН∞(~P)";
         Text[ turkish ] = "test ~page";
         Text[ arabic ] = "’ЁЌ… «ќ »«—";
-        Text[ finnish ] = "~Koesivu";
+        Text[ finnish ] = "Testi~sivu";
         Text[ catalan ] = "~Pаgina de verificaciу";
         Text[ thai ] = " ~аЄЂаЄЩаєЙаЄ≤аЄЧаЄФаЄ™аЄ≠аЄЪ";
     };
@@ -853,7 +853,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "е≠ЧеЮЛ(~T)...";
         Text[ turkish ] = "Add\nfon~ts..";
         Text[ arabic ] = "ќЎжЎ...";
-        Text[ finnish ] = "F~ontit";
+        Text[ finnish ] = "Fo~ntit...";
         Text[ catalan ] = "~Tipus de lletra...";
         Text[ thai ] = "аЄХаЄ±аЄІ~аЄ≠аЄ±аЄБаЄ©аЄ£...";
     };
@@ -881,7 +881,7 @@ ModalDialog RID_PADIALOG
         Text[ chinese_traditional ] = "жЦ∞еҐЮеН∞и°®ж©Я...";
         Text[ turkish ] = "~Add new printer";
         Text[ arabic ] = "Ў«»Џ… ћѕнѕ…...";
-        Text[ finnish ] = "Uusi tulostin";
+        Text[ finnish ] = "Uusi tulostin...";
         Text[ catalan ] = "Impressora nova...";
         Text[ thai ] = "аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаєГаЄЂаЄ°аєИ...";
     };
@@ -1007,9 +1007,9 @@ String RID_ERR_NOPRINTER
     Text [ English ] = "Could not open printer %s." ;
     Text[ english_us ] = "Could not open printer %s.";
     Text[ portuguese ] = "Foi impossнvel abrir a impressora %s.";
-    Text[ russian ] = "ќткрыть принтер %s не удаетс€.";
+    Text[ russian ] = "Ќевозможно открыть принтер %s.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб бнпйчфея п екфхрщфёт %s.";
-    Text[ dutch ] = "Printer %s kon niet worden geopend.";
+    Text[ dutch ] = "Printer %s kan niet worden geopend.";
     Text[ french ] = "Impossible d'ouvrir l'imprimante %s.";
     Text[ spanish ] = "No se pudo abrir la impresora %s.";
     Text[ italian ] = "Impossibile aprire la stampante %s.";
@@ -1036,7 +1036,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ portuguese ] = "A impressгo da pбgina-teste estб concluнda. Queira verificar os resultados.";
     Text[ russian ] = "ѕробна€ страница напечатана. ѕроверьте, пожалуйста, качество.";
     Text[ greek ] = "« екфэрщуз фзт уелядбт дпкймёт плпклзсюизке ерйфхчют. –бсбкблю елЁгофе фп брпфЁлеумб фзт екфэрщузт.";
-    Text[ dutch ] = "De testpagina werd met succes afgedrukt. Controleer het resultaat.";
+    Text[ dutch ] = "De testpagina is afgedrukt. Controleer het resultaat.";
     Text[ french ] = "L'impression de la page de test est terminйe. Veuillez en vйrifier le rйsultat.";
     Text[ spanish ] = "La impresiуn de la pбgina de prueba ha finalizado. Compruebe el resultado.";
     Text[ italian ] = "La pagina di prova и stata stampata. Controllate il risultato.";
@@ -1050,7 +1050,7 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text[ chinese_traditional ] = "и©¶еИЧеН∞жИРеКЯгАВиЂЛж™ҐжЯ•еИЧеН∞зµРжЮЬгАВ";
     Text[ turkish ] = "The test page was printed succesfully. Please check the resulting output.";
     Text[ arabic ] = " г Ў»«Џ… ’ЁЌ… «б«ќ »«— »дћ«Ќ. гд Ё÷бя «ќ »— «бд нћ….";
-    Text[ finnish ] = "Koesivu tulostettiin onnistuneesti. Tarkista tulos.";
+    Text[ finnish ] = "Testisivun tulostaminen onnistui. Tarkista tulos.";
     Text[ catalan ] = "La pаgina de verificaciу s'ha imprиs amb иxit. Si us plau, comproveu el resultat.";
     Text[ thai ] = "аЄЮаЄіаЄ°аЄЮаєМаЄЂаЄЩаєЙаЄ≤аЄЧаЄФаЄ™аЄ≠аЄЪаЄ™аЄ≥аєАаЄ£аєЗаЄИ аЄБаЄ£аЄЄаЄУаЄ≤аЄХаЄ£аЄІаЄИаЄ™аЄ≠аЄЪаЄЬаЄ•аЄЧаЄµаєИаєДаЄФаєЙ";
 };
@@ -1066,7 +1066,7 @@ String RID_QRY_PRTNAME
     Text[ dutch ] = "~Nieuwe printernaam";
     Text[ french ] = "Nouveau nom d'imprimante";
     Text[ spanish ] = "Nuevo nombre de impresora";
-    Text[ finnish ] = "Uusi tulostimen nimi";
+    Text[ finnish ] = "Uusi tulostimen ~nimi";
     Text[ italian ] = "Nuovo nome stampante.";
     Text[ danish ] = "~Nyt printernavn";
     Text[ swedish ] = "~Nytt skrivarnamn";
@@ -1144,7 +1144,7 @@ String RID_TXT_TESTPAGE_COMMENT
     Text[ portuguese ] = "Comentбrio";
     Text[ russian ] = " омментарий";
     Text[ greek ] = "–бсбфёсзуз";
-    Text[ dutch ] = "Commentaar";
+    Text[ dutch ] = "Opmerkingen";
     Text[ french ] = "Commentaire";
     Text[ spanish ] = "Comentario";
     Text[ italian ] = "Commento";
@@ -1291,12 +1291,12 @@ ModalDialog RID_FONTNAMEDIALOG
         Text [ English ] = "Re~name";
         Text[ english_us ] = "Re~name...";
         Text[ portuguese ] = "~Mudar nome...";
-        Text[ russian ] = "ѕереименовать...";
+        Text[ russian ] = "ѕереименовать";
         Text[ greek ] = "Re~name";
         Text[ dutch ] = "~Naam wijzigen...";
         Text[ french ] = "Renommer...";
         Text[ spanish ] = "~Cambiar nombre...";
-        Text[ finnish ] = "Re~name";
+        Text[ finnish ] = "Nimeд ~uudelleen...";
         Text[ italian ] = "~Rinomina...";
         Text[ danish ] = "~Omdшb...";
         Text[ swedish ] = "B~yt namn...";
@@ -1319,7 +1319,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text [ English ] = "~Remove..." ;
         Text[ english_us ] = "~Remove...";
         Text[ portuguese ] = "~Remover...";
-        Text[ russian ] = "~”брать...";
+        Text[ russian ] = "~”далить...";
         Text[ greek ] = "ƒйбгсбцё";
         Text[ dutch ] = "~Verwijderen...";
         Text[ french ] = "Supprimer...";
@@ -1335,7 +1335,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ chinese_traditional ] = "зІїйЩ§(~R)...";
         Text[ turkish ] = "~Remove";
         Text[ arabic ] = "≈“«б…";
-        Text[ finnish ] = "~Poista";
+        Text[ finnish ] = "~Poista...";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "аєА~аЄ≠аЄ≤аЄ≠аЄ≠аЄБ";
     };
@@ -1352,7 +1352,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ dutch ] = "~Toevoegen...";
         Text[ french ] = "Ajouter...";
         Text[ spanish ] = "~Aсadir...";
-        Text[ finnish ] = "~Lisдд";
+        Text[ finnish ] = "~Lisдд...";
         Text[ italian ] = "Importa...";
         Text[ danish ] = "Ti~lfшj...";
         Text[ swedish ] = "~Lдgg till...";
@@ -1384,9 +1384,9 @@ ModalDialog RID_FONTNAMEDIALOG
         Text [ English ] = "Hint: the fonts are avalable for the application only.";
         Text[ english_us ] = "Note: The fonts are only available to the applications.";
         Text[ portuguese ] = "Observaзгo: os tipos de letra sу estгo disponнveis para a aplicaзгo.";
-        Text[ russian ] = "”казание: шрифты доступны только дл€ этого приложени€";
+        Text[ russian ] = "ѕримечание: шрифты доступны только в этом приложении";
         Text[ greek ] = "‘п ьнпмб Xwindow фзт гсбммбфпуейс№т дзмйпхсгеяфбй\nбрь фйт йдйьфзфЁт фзт.";
-        Text[ dutch ] = "Let op: de lettertypen zijn alleen beschikbaar voor deze applicatie";
+        Text[ dutch ] = "Let op: de lettertypen zijn alleen beschikbaar voor deze toepassing";
         Text[ french ] = "Remarque : Les polices ne sont disponibles que pour l'application.";
         Text[ spanish ] = "Nota: Las fuentes estбn disponibles sуlo para la aplicaciуn.";
         Text[ finnish ] = "Huomautus: Fontit ovat vain sovellusten kдytettдvissд.";
@@ -1415,7 +1415,7 @@ ModalDialog RID_FONTNAMEDIALOG
         Text[ dutch ] = "~Nieuwe naam voor %s";
         Text[ french ] = "Nouveau nom pour %s";
         Text[ spanish ] = "~Nuevo nombre para %s";
-        Text[ finnish ] = "~New font name";
+        Text[ finnish ] = "~Uusi nimi kohteelle %s";
         Text[ italian ] = "~Nuovo nome per %s";
         Text[ danish ] = "~Nyt navn til %s";
         Text[ swedish ] = "~Nytt namn fцr %s";
@@ -1436,12 +1436,12 @@ ModalDialog RID_FONTNAMEDIALOG
         Text [ English ] = "~New name for %s (%d1 of %d2)";
         Text[ english_us ] = "~New name for %s (%d1 of %d2)";
         Text[ portuguese ] = "~Novo nome para (%d1 de %d2)";
-        Text[ russian ] = "~Ќовое им€ дл€ %s (%d1 из %d2)";
+        Text[ russian ] = "~Ќовое им€ дл€ %s (% из %)";
         Text[ greek ] = "~New font name (%d1 of %d2)";
         Text[ dutch ] = "~Nieuwe naam voor %s (%d1 van %d2)";
         Text[ french ] = "Nouveau nom pour %s (%d1 de %d2)";
         Text[ spanish ] = "~Nuevo nombre para %s (%d1 de %d2)";
-        Text[ finnish ] = "~New font name (%d1 of %d2)";
+        Text[ finnish ] = "~Uusi nimi kohteelle %s (%d1 / %d2)";
         Text[ italian ] = "~Nuovo nome per %S (%d1 di %d2)";
         Text[ danish ] = "~Nyt navn til %s (%d1 fra %d2)";
         Text[ swedish ] = "~Nytt namn fцr %s (%d1 av %d2)";
@@ -1462,12 +1462,12 @@ ModalDialog RID_FONTNAMEDIALOG
         Text [ English ] = "The font %s cannot be renamed due to missing write permission.";
         Text[ english_us ] = "The font %s cannot be renamed due to missing write permission.";
         Text[ portuguese ] = "Impossнvel mudar o nome ao tipo de letra %s devido а falta de direitos de escrita.";
-        Text[ russian ] = "ѕереименовать шрифт %s невозможно: недостаточно прав на внесение изменений.";
+        Text[ russian ] = "Ќевозможно переименовать шрифт %s: отсутствие прав на запись.";
         Text[ greek ] = "The font %s cannot be renamed due to missing write permission.";
-        Text[ dutch ] = "Daar u geen schrijfrechten heeft kunt u de naam van lettertype %s kan niet wijzigen.";
+        Text[ dutch ] = "Omdat u geen schrijfrechten heeft kunt u de naam van lettertype %s niet wijzigen.";
         Text[ french ] = "Impossible de renommer la police %s : droits d'йcriture insuffisants.";
         Text[ spanish ] = "No es posible cambiar el nombre de la fuente %s. Faltan derechos de escritura.";
-        Text[ finnish ] = "The font %s cannot be renamed due to missing write permission.";
+        Text[ finnish ] = "Fonttia %s ei voi nimetд uudelleen puuttuvien kirjoitusoikeuksien vuoksi.";
         Text[ italian ] = "Impossibile cambiare il nome al carattere %s in quanto mancano i diritti di scrittura";
         Text[ danish ] = "Skrifttypen %s kan ikke omdшbes, fordi du ikke har de nшdvendige skriverettigheder.";
         Text[ swedish ] = "Det gеr inte att dцpa om teckensnittet %s eftersom skrivrдttigheter saknas.";
@@ -1510,7 +1510,7 @@ String RID_BXT_TESTPAGE
     Text [ English ] = "Testpage" ;
     Text[ english_us ] = "Test page";
     Text[ portuguese ] = "Pбgina-teste";
-    Text[ russian ] = "ѕробна€ страница";
+    Text[ russian ] = "“ест";
     Text[ greek ] = "”елядб дпкймёт";
     Text[ dutch ] = "Testpagina";
     Text[ french ] = "Page de test";
@@ -1526,7 +1526,7 @@ String RID_BXT_TESTPAGE
     Text[ chinese_traditional ] = "и©¶еИЧеН∞";
     Text[ turkish ] = "Testpage";
     Text[ arabic ] = "’ЁЌ… «ќ »«—";
-    Text[ finnish ] = "Koesivu";
+    Text[ finnish ] = "Testisivu";
     Text[ catalan ] = "Pаgina de verificaciу";
     Text[ thai ] = "аЄЂаЄЩаєЙаЄ≤аЄЧаЄФаЄ™аЄ≠аЄЪ";
 };
@@ -1536,9 +1536,9 @@ String RID_BXT_ENVIRONMENT
     Text [ English ] = "Wrong environment" ;
     Text[ english_us ] = "Wrong environment";
     Text[ portuguese ] = "Ambiente defeituoso";
-    Text[ russian ] = "ƒефектна€ среда";
+    Text[ russian ] = "Ќеверна€ конфигураци€";
     Text[ greek ] = "Ћ№ипт ресйв№ллпн";
-    Text[ dutch ] = "Verkeerde omgeving";
+    Text[ dutch ] = "Foutieve omgeving";
     Text[ french ] = "Environnement dйfectueux";
     Text[ spanish ] = "Entorno errуneo";
     Text[ italian ] = "Ambiente non corretto";
@@ -1563,7 +1563,7 @@ String RID_YOU_SURE
     Text [ English ] = "Are you sure ?" ;
     Text[ english_us ] = "Are you sure ?";
     Text[ portuguese ] = "Tem a certeza?";
-    Text[ russian ] = "¬ы уверены ?";
+    Text[ russian ] = "¬ы уверены?";
     Text[ greek ] = "≈яуфе уягпхспй;";
     Text[ dutch ] = "Wilt u dat werkelijk?";
     Text[ french ] = " tes-vous sыr ?";
@@ -1641,7 +1641,7 @@ String RID_AFMERROR_NO_FONT_NAME
     Text [ English ] = "The metric does not contain a 'FontName' entry." ;
     Text[ english_us ] = "The metric does not contain a 'FontName' entry.";
     Text[ portuguese ] = "A mйtrica nгo contйm a entrada 'FontName'.";
-    Text[ russian ] = "ћетрика не содержит запись 'FontName'.";
+    Text[ russian ] = "’арактеристика не содержит запись 'FontName'.";
     Text[ greek ] = "« мефсйкё ден ресйЁчей фзн еггсбцё 'FontName'.";
     Text[ dutch ] = "De metriek bevat geen item 'FontName'.";
     Text[ french ] = "La mйtrique ne contient aucune entrйe 'FontName'.";
@@ -1657,7 +1657,7 @@ String RID_AFMERROR_NO_FONT_NAME
     Text[ chinese_traditional ] = "е≠ЧеЮЛеЇ¶йЗПж™Фж°Иж≤ТжЬЙ<FontName>й†ЕзЫЃгАВ";
     Text[ turkish ] = "The metric does not contain a 'FontName' entry.";
     Text[ arabic ] = "б«  ‘ гб жЌѕ«  «бён«” Џбм ≈ѕќ«б'FontName' .";
-    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд 'FontName'.";
+    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд FontName.";
     Text[ catalan ] = "El mиtric no contй cap entrada 'FontName'.";
     Text[ thai ] = "аєАаЄ°аЄХаЄ£аЄіаЄБаєДаЄ°аєИаЄ°аЄµаЄ£аЄ≤аЄҐаЄБаЄ≤аЄ£ 'FontName' ";
 };
@@ -1667,7 +1667,7 @@ String RID_AFMERROR_NO_FULL_NAME
     Text [ English ] = "The metric does not contain a 'FullName' entry." ;
     Text[ english_us ] = "The metric does not contain a 'FullName' entry.";
     Text[ portuguese ] = "A mйtrica nгo contйm a entrada 'FullName'.";
-    Text[ russian ] = "ћетрика не содержит запись 'FullName'.";
+    Text[ russian ] = "’арактеристика не содержит запись 'FullName'.";
     Text[ greek ] = "« мефсйкё ден ресйЁчей фзн еггсбцё 'FullName'.";
     Text[ dutch ] = "De metriek bevat geen item 'FullName'.";
     Text[ french ] = "La mйtrique ne contient aucune entrйe 'FullName'.";
@@ -1683,7 +1683,7 @@ String RID_AFMERROR_NO_FULL_NAME
     Text[ chinese_traditional ] = "е≠ЧеЮЛеЇ¶йЗПж™Фж°Иж≤ТжЬЙ<FullName>й†ЕзЫЃгАВ";
     Text[ turkish ] = "The metric does not contain a 'FullName' entry.";
     Text[ arabic ] = "б«  ‘ гб жЌѕ«  «бён«” Џбм ≈ѕќ«б 'FullName'.";
-    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд 'FullName'.";
+    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд FullName.";
     Text[ catalan ] = "El mиtric no contй cap entrada 'FullName'.";
     Text[ thai ] = "аєАаЄ°аЄХаЄ£аЄіаЄБаєДаЄ°аєИаЄ°аЄµаЄ£аЄ≤аЄҐаЄБаЄ≤аЄ£ 'FullName' ";
 };
@@ -1693,7 +1693,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text [ English ] = "The metric does not contain a 'FamilyName' entry." ;
     Text[ english_us ] = "The metric does not contain a 'FamilyName' entry.";
     Text[ portuguese ] = "A mйtrica nгo contйm a entrada 'FamilyName'.";
-    Text[ russian ] = "ћетрика не содержит запись 'FamilyName'.";
+    Text[ russian ] = "’арактеристика не содержит запись 'FamilyName'.";
     Text[ greek ] = "« мефсйкё ден ресйЁчей фзн еггсбцё 'FamilyName'.";
     Text[ dutch ] = "De metriek bevat geen item 'FamilyName'.";
     Text[ french ] = "La mйtrique ne contient aucune entrйe 'FamilyName'.";
@@ -1709,7 +1709,7 @@ String RID_AFMERROR_NO_FAMILY_NAME
     Text[ chinese_traditional ] = "е≠ЧеЮЛеЇ¶йЗПж™Фж°Иж≤ТжЬЙ<FamilyName>й†ЕзЫЃгАВ";
     Text[ turkish ] = "The metric does not contain a 'FamilyName' entry.";
     Text[ arabic ] = "б«  ‘ гб жЌѕ«  «бён«” Џбм ≈ѕќ«б 'FamilyName'.";
-    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд 'FamilyName'.";
+    Text[ finnish ] = "Mittatiedosto ei sisдllд merkintдд FamilyName.";
     Text[ catalan ] = "El mиtric no contй cap entrada 'FamilyName'.";
     Text[ thai ] = "аєАаЄ°аЄХаЄ£аЄіаЄБаєДаЄ°аєИаЄ°аЄµаЄ£аЄ≤аЄҐаЄБаЄ≤аЄ£ 'FamilyName' ";
 };
@@ -1719,9 +1719,9 @@ String RID_AFMERROR_MOVETO_FAILED
     Text [ English ] = "The converted metric could not be written." ;
     Text[ english_us ] = "The converted metric could not be written.";
     Text[ portuguese ] = "Impossнvel escrever a mйtrica convertida.";
-    Text[ russian ] = "ѕреобразованна€ метрика допустима только дл€ чтени€.";
+    Text[ russian ] = "Ќевозможно записать преобразованную характеристику.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з еггсбцё фзт мефбфсерьмензт мефсйкёт.";
-    Text[ dutch ] = "De geconverteerde metriek kon niet worden geschreven.";
+    Text[ dutch ] = "De geconverteerde metriek kan niet worden geschreven.";
     Text[ french ] = "…criture de la mйtrique convertie impossible.";
     Text[ spanish ] = "La mйtrica convertida no se puede escribir.";
     Text[ italian ] = "Impossibile scrivere la metrica convertita.";
@@ -1745,9 +1745,9 @@ String RID_AFMERROR_STREAM_READ_FAILED
     Text [ English ] = "The metric could not be read." ;
     Text[ english_us ] = "The metric could not be read.";
     Text[ portuguese ] = "Foi impossнvel ler mйtrica.";
-    Text[ russian ] = "ѕрочитать метрику невозможно.";
+    Text[ russian ] = "Ќевозможно считать характеристику.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з бн№гнщуз фзт мефсйкёт.";
-    Text[ dutch ] = "De metriek kon niet worden gelezen.";
+    Text[ dutch ] = "De metriek kan niet worden gelezen.";
     Text[ french ] = "Lecture de la mйtrique impossible.";
     Text[ spanish ] = "No se pudo leer la mйtrica.";
     Text[ italian ] = "Impossibile leggere la metrica.";
@@ -1771,9 +1771,9 @@ String RID_AFMERROR_STREAM_WRITE_FAILED
     Text [ English ] = "No temporary file could be created." ;
     Text[ english_us ] = "A temporary file could not be created.";
     Text[ portuguese ] = "Foi impossнvel criar ficheiro temporбrio.";
-    Text[ russian ] = "—оздать временный файл не удалось.";
+    Text[ russian ] = "Ќевозможно создать временный файл.";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб дзмйпхсгзиея рспущсйнь бсчеяп.";
-    Text[ dutch ] = "Er kon geen tijdelijk bestand worden aangelegd.";
+    Text[ dutch ] = "Er kan geen tijdelijk bestand worden gemaakt.";
     Text[ french ] = "Impossible de crйer un fichier temporaire !";
     Text[ spanish ] = "No se pudo crear ningъn archivo temporal.";
     Text[ italian ] = "Impossibile creare file temporanei.";
@@ -1797,7 +1797,7 @@ STRING RID_AFMERROR_NOT_A_METRIC
     Text [ English ] = "The file does not contain a metric." ;
     Text[ english_us ] = "The file does not contain a metric.";
     Text[ portuguese ] = "O ficheiro nгo contйm mйtrica.";
-    Text[ russian ] = "ƒанный файл не содержит метрики.";
+    Text[ russian ] = "ƒанный файл не содержит характеристик.";
     Text[ greek ] = "‘п бсчеяп ден ресйЁчей мефсйкё.";
     Text[ dutch ] = "Het bestand bevat geen metriek.";
     Text[ french ] = "Le fichier ne contient aucune mйtrique.";
@@ -1823,9 +1823,9 @@ String RID_AFMERROR_BOX_TXT
     Text [ English ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n" ;
     Text[ english_us ] = "The metric\n\n%s\n\ncould not be converted for the following reason:\n\n";
     Text[ portuguese ] = "Foi impossнvel converter a mйtrica\n\n%s\n\npela seguinte razгo:\n\n";
-    Text[ russian ] = "ѕреобразовать метрику\n\n%s\n\nневозможно по следующей причине:\n\n";
+    Text[ russian ] = "ѕреобразовать характеристику\n\n%s\n\nневозможно по следующей причине:\n\n";
     Text[ greek ] = "ƒен ёфбн дхнбфьн нб гяней з мефбфспрё фзт мефсйкёт\n\n%s\n\n гйб фпн еоёт льгп:\n\n";
-    Text[ dutch ] = "De metriek\n\n%s\n\nkon niet worden geconverteerd om de volgende reden:\n\n";
+    Text[ dutch ] = "De metriek\n\n%s\n\nkan niet worden geconverteerd om de volgende reden:\n\n";
     Text[ french ] = "Impossible de convertir la mйtrique\n\n%s\n\npour la raison suivante :\n\n";
     Text[ spanish ] = "La mйtrica\n\n%s\n\nno se pudo convetir por el motivo siguiente:\n\n";
     Text[ italian ] = "Impossibile convertire la metrica\n\n%s\n\nper il motivo seguente:\n\n";
@@ -1872,12 +1872,12 @@ ModelessDialog RID_PROGRESS_DLG
         Text [ English ] = "Progress";
         Text[ english_us ] = "Progress";
         Text[ portuguese ] = "Processed";
-        Text[ russian ] = "ќтредактирован";
+        Text[ russian ] = "¬ыполнение";
         Text[ greek ] = "Processed";
-        Text[ dutch ] = "Reeds bewerkt";
+        Text[ dutch ] = "Voortgang";
         Text[ french ] = "Progression";
         Text[ spanish ] = "Progresiуn";
-        Text[ finnish ] = "Processed";
+        Text[ finnish ] = "Eteneminen";
         Text[ italian ] = "Progresso";
         Text[ danish ] = "Fremgang";
         Text[ swedish ] = "Framsteg";
@@ -1907,7 +1907,7 @@ ModelessDialog RID_PROGRESS_DLG
     };
     Text[ english_us ] = "Please wait";
     Text[ portuguese ] = "Aguarde um momento...";
-    Text[ russian ] = "ѕросьба подождать";
+    Text[ russian ] = "ѕожалуйста, подождите";
     Text[ greek ] = "–бсбкблю ресймЁнефе";
     Text[ dutch ] = "Even geduld a.u.b.";
     Text[ french ] = "Veuillez patienter...";
@@ -1934,8 +1934,8 @@ String RID_OPERATION_CONVERTMETRIC
     Text [ English ] = "Converting font metrics";
     Text[ english_us ] = "Font metrics conversion";
     Text[ portuguese ] = "Conversгo das mйtricas dos tipos de letra";
-    Text[ russian ] = "ѕреобразование метрик шрифта";
-    Text[ dutch ] = "Lettertypen-metrieken converteren";
+    Text[ russian ] = "ѕреобразование характеристик шрифта";
+    Text[ dutch ] = "Lettertypenmetrieken converteren";
     Text[ french ] = "Conversion des mйtriques de polices";
     Text[ spanish ] = "Conversiуn de las mйtricas de fuente";
     Text[ italian ] = "Conversione dei font di metrica";
@@ -1990,7 +1990,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ chinese_traditional ] = "й©ЕеЛХз®ЛеЉПзЫЃйМД(~V)";
         Text[ turkish ] = "Driver directory";
         Text[ arabic ] = "ѕбнб »—д«гћ «б ‘џнб";
-        Text[ finnish ] = "Driver directory";
+        Text[ finnish ] = "Ohjain~hakemisto";
         Text[ catalan ] = "Directori de controladors";
         Text[ thai ] = "аєДаЄФаЄ£аєЙ~аЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИ";
     };
@@ -2004,7 +2004,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ portuguese ] = "Seleccione o directуrio contendo os ficheiros do controlador.";
         Text[ russian ] = "¬ыберите каталог драйверов.";
         Text[ greek ] = "–бсбкблю ерйлЁофе фпн кбф№лпгп ме фб бсчеяб фщн рспгсбмм№фщн пдёгзузт.";
-        Text[ dutch ] = "Selecteer de driver directory.";
+        Text[ dutch ] = "Selecteer de driverdirectory.";
         Text[ french ] = "Sйlectionnez le rйpertoire contenant les fichiers du pilote.";
         Text[ spanish ] = "Seleccione el directorio del controlador.";
         Text[ italian ] = "Seleziona la cartella con i file del driver";
@@ -2018,7 +2018,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ chinese_traditional ] = "иЂЛйБЄжУЗдЄАеАЛеРЂжЬЙй©ЕеЛХз®ЛеЉПзЪДзЫЃйМДгАВ";
         Text[ turkish ] = "Please select the driver directory.";
         Text[ arabic ] = "«б—ћ«Ѕ «ќ н«— «бѕбнб «б–н нЌ жн Џбм гбЁ«  »—д«гћ «б ‘џнб.";
-        Text[ finnish ] = "Valitse ajurihakemisto.";
+        Text[ finnish ] = "Valitse ohjainhakemisto.";
         Text[ catalan ] = "Si us plau, seleccioneu el directori del programa de control.";
         Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аєАаЄ•аЄЈаЄ≠аЄБаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИ";
     };
@@ -2041,7 +2041,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ portuguese ] = "~Pesquisar...";
         Text[ russian ] = "~ќбзор...";
         Text[ greek ] = "Ѕнбжёфзуз...";
-        Text[ dutch ] = "~Doorzoeken...";
+        Text[ dutch ] = "Bla~deren...";
         Text[ french ] = "~Parcourir...";
         Text[ spanish ] = "~Examinar...";
         Text[ italian ] = "Sfoglia...";
@@ -2055,7 +2055,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ chinese_traditional ] = "жРЬе∞Л...";
         Text[ turkish ] = "~Search...";
         Text[ arabic ] = "«” Џ—«÷...";
-        Text[ finnish ] = "Selaa";
+        Text[ finnish ] = "Selaa...";
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "аєАаЄ£аЄµаЄҐаЄБаЄФаЄє...";
     };
@@ -2084,7 +2084,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ chinese_traditional ] = "йБЄжУЗй©ЕеЛХз®ЛеЉП(~S)";
         Text[ turkish ] = "Installable drivers";
         Text[ arabic ] = "«ќ н«— »—«гћ «б ‘џнб";
-        Text[ finnish ] = "Installable drivers";
+        Text[ finnish ] = "Ohjain~valikoima";
         Text[ catalan ] = "Selecciу de controlador";
         Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаЄЧаЄµаєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаєДаЄФаєЙ";
     };
@@ -2122,7 +2122,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ chinese_traditional ] = "йБЄдЄ≠и¶БеЃЙи£ЭзЪДй©ЕеЛХз®ЛеЉПдєЛеЊМжМЙдЄАдЄЛжМЙйИХ %s гАВ";
         Text[ turkish ] = "Please select the drivers to install and press \"%s\".";
         Text[ arabic ] = "«б—ћ«Ѕ «ќ н«— »—«гћ «б ‘џнб «б–н  —џ» Ёне« Ћг «÷џЎ Џбм \"%s\" бб √янѕ.";
-        Text[ finnish ] = "Valitse asennettavat ohjaimet ja paina \"%s\".";
+        Text[ finnish ] = "Valitse asennettavat ohjaimet ja paina %s.";
         Text[ catalan ] = "Seleccioneu els programes de control desitjats i confirmeu-ho amb el botу \"%s\".";
         Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аєАаЄ•аЄЈаЄ≠аЄБаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєАаЄЮаЄЈаєИаЄ≠аЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаєБаЄ•аЄ∞аЄБаЄФ \"%s\"";
     };
@@ -2166,9 +2166,9 @@ ModalDialog RID_PPDIMPORT_DLG
 
     Text[ english_us ] = "Driver Installation";
     Text[ portuguese ] = "Instalaзгo de controlador";
-    Text[ russian ] = "»нсталл€ци€ драйверов";
+    Text[ russian ] = "”становка драйверов";
     Text[ greek ] = "≈гкбф№уфбуз рспгс№ммбфпт пдёгзузт";
-    Text[ dutch ] = "Driver installatie";
+    Text[ dutch ] = "Driverinstallatie";
     Text[ french ] = "Installation du pilote";
     Text[ spanish ] = "Instalaciуn del controlador";
     Text[ italian ] = "Installazione driver";
@@ -2193,9 +2193,9 @@ String RID_QUERY_REMOVEDRIVER
     Text [ English ] = "Do you really want to remove the driver \"%s\" ?";
     Text[ english_us ] = "Do you really want to remove the driver \"%s\"?";
     Text[ portuguese ] = "Eliminar o controlador \"%s\"?";
-    Text[ russian ] = "¬ы действительно хотите убрать драйвер \"%s\"?";
+    Text[ russian ] = "¬ы действительно хотите удалить драйвер \"%s\"?";
     Text[ greek ] = "»Ёлефе уягпхсб нб дйбгсбцея бхфп фп рсьгсбммб пдёгзузт;";
-    Text[ dutch ] = "Wilt u driver \"%s\" werkelijk verwijderen ?";
+    Text[ dutch ] = "Wilt u driver \"%s\" werkelijk verwijderen?";
     Text[ french ] = "Voulez-vous vraiment supprimer le pilote \"%s\" ?";
     Text[ spanish ] = "њDesea realmente eliminar el controlador \"%s\"?";
     Text[ italian ] = "Volete davvero rimuovere il driver \"%s\"?";
@@ -2209,7 +2209,7 @@ String RID_QUERY_REMOVEDRIVER
     Text[ chinese_traditional ] = "зЬЯи¶БзІїйЩ§й©ЕеЛХз®ЛеЉП<%s>пЉЯ";
     Text[ turkish ] = "Do you really want to remove this driver ?";
     Text[ arabic ] = "еб  —нѕ »«бЁЏб Ќ–Ё »—д«гћ «б ‘џнб \"%s\"њ";
-    Text[ finnish ] = "Haluatko varmasti poistaa ajurin \"%s\"?";
+    Text[ finnish ] = "Haluatko varmasti poistaa ohjaimen %s?";
     Text[ catalan ] = "Voleu eliminar aquest programa de control?";
     Text[ thai ] = "аЄДаЄЄаЄУаЄХаєЙаЄ≠аЄЗаЄБаЄ≤аЄ£аєАаЄ≠аЄ≤аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаЄ≠аЄ≠аЄБаЄЂаЄ£аЄЈаЄ≠аєДаЄ°аєИ\"%s\"?";
 };
@@ -2220,9 +2220,9 @@ String RID_QUERY_REMOVEPRINTER
     Text [ English ] = "Do you really want to remove this printer ?";
     Text[ english_us ] = "Do you really want to remove this printer ?";
     Text[ portuguese ] = "Eliminar esta impressora?";
-    Text[ russian ] = "¬ы действительно хотите убрать этот принтер ?";
+    Text[ russian ] = "¬ы действительно хотите удалить этот принтер ?";
     Text[ greek ] = "»Ёлефе уягпхсб нб дйбгсбцея бхфьт п екфхрщфёт;";
-    Text[ dutch ] = "Wilt u deze printer werkelijk verwijderen ?";
+    Text[ dutch ] = "Wilt u deze printer werkelijk verwijderen?";
     Text[ french ] = "Voulez-vous vraiment supprimer cette imprimante ?";
     Text[ spanish ] = "њDesea realmente eliminar esta impresora?";
     Text[ italian ] = "Volete davvero rimuovere la stampante?";
@@ -2236,7 +2236,7 @@ String RID_QUERY_REMOVEPRINTER
     Text[ chinese_traditional ] = "зЬЯи¶БзІїйЩ§йАЩеАЛеН∞и°®ж©ЯпЉЯ";
     Text[ turkish ] = "Do you really want to remove this printer ?";
     Text[ arabic ] = "еб  —нѕ Ќ–Ё е–е «бЎ«»Џ… »«бЁЏбњ";
-    Text[ finnish ] = "Haluatko varmasti poistaa tдmдn tulostimen ?";
+    Text[ finnish ] = "Haluatko varmasti poistaa tдmдn tulostimen?";
     Text[ catalan ] = "Segur que voleu suprimir aquesta impressora?";
     Text[ thai ] = "аЄДаЄЄаЄУаЄХаєЙаЄ≠аЄЗаЄБаЄ≤аЄ£аєАаЄ≠аЄ≤аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄЩаЄµаєЙаЄ≠аЄ≠аЄБаЄЂаЄ£аЄЈаЄ≠аєДаЄ°аєИ ?";
 };
@@ -2247,9 +2247,9 @@ String RID_QUERY_REMOVEFONTFROMLIST
     Text [ English ] = "Do you really want to remove the selected fonts ?";
     Text[ english_us ] = "Do you really want to remove the selected fonts ?";
     Text[ portuguese ] = "Eliminar os tipos de letra seleccionados?";
-    Text[ russian ] = "¬ы действительно хотите убрать помеченные шрифты ?";
+    Text[ russian ] = "¬ы действительно хотите удалить выбранные шрифты ?";
     Text[ greek ] = "»Ёлефе уягпхсб нб дйбгсбцпэн пй ерйлегмЁнет гсбммбфпуейсЁт;";
-    Text[ dutch ] = "Wilt u de geselecteerde lettertypen werkelijk verwijderen ?";
+    Text[ dutch ] = "Wilt u de geselecteerde lettertypen werkelijk verwijderen?";
     Text[ french ] = "Voulez-vous vraiment supprimer les polices sйlectionnйes ?";
     Text[ spanish ] = "њDesea realmente eliminar las fuentes seleccionadas?";
     Text[ italian ] = "Volete davvero rimuovere i font selezionati?";
@@ -2263,7 +2263,7 @@ String RID_QUERY_REMOVEFONTFROMLIST
     Text[ chinese_traditional ] = "зЬЯи¶БеИ™йЩ§йБЄдЄ≠зЪДе≠ЧеЮЛпЉЯ";
     Text[ turkish ] = "Do you really want to remove the selected fonts ?";
     Text[ arabic ] = "еб  —нѕ »«бЁЏб Ќ–Ё «бќЎжЎ «бгЌѕѕ…њ";
-    Text[ finnish ] = "Haluatko varmasti poistaa valitut fontit ?";
+    Text[ finnish ] = "Haluatko varmasti poistaa valitut fontit?";
     Text[ catalan ] = "Segur que voleu suprimir els tipus de lletra seleccionats?";
     Text[ thai ] = "аЄДаЄЄаЄУаЄХаєЙаЄ≠аЄЗаЄБаЄ≤аЄ£аєАаЄ≠аЄ≤аЄХаЄ±аЄІаЄ≠аЄ±аЄБаЄ©аЄ£аЄЧаЄµаєИаєАаЄ•аЄЈаЄ≠аЄБаЄ≠аЄ≠аЄБаЄЂаЄ£аЄЈаЄ≠аєДаЄ°аєИ ?";
 };
@@ -2274,9 +2274,9 @@ String RID_QUERY_DRIVERUSED
     Text [ English ] = "The driver \"%s\" is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ english_us ] = "There are still printers using the driver \"%s\". Do you really want to remove it? The corresponding printers will also be removed.";
     Text[ portuguese ] = "Existem ainda impressoras a utilizar o controlador \"%s\". Ao removк-lo estarб tambйm a remover as respectivas impressoras. Continuar?";
-    Text[ russian ] = "»меютс€ принтеры, которые используют драйвер \"%s\". ¬ы действительно хотите его удалить? ¬ случае удалени€ этого драйвера удал€тс€ и соответствующие принтеры.";
+    Text[ russian ] = "—уществуют принтеры, которые используют драйвер \"%s\". ¬ы действительно хотите его удалить? ¬ случае удалени€ этого драйвера удал€тс€ и соответствующие принтеры.";
     Text[ greek ] = "’р№счпхн бкьмз екфхрщфЁт, пй прпяпй чсзуймпрпйпэн бхфь фп рсьгсбммб пдёгзузт. »Ёлефе рсбгмбфйк№ нб кбфбсгзиея; ”е бхфё фз ресярфщуз иб гян? ";
-    Text[ dutch ] = "Driver \"%s\" is nog in gebruik voor enkele printers. Wilt u hem werkelijk verwijderen? De desbetreffende printers worden dan eveneens verwijderd.";
+    Text[ dutch ] = "Driver \"%s\" is nog in gebruik voor enkele printers. Wilt u deze werkelijk verwijderen? De desbetreffende printers worden dan eveneens verwijderd.";
     Text[ french ] = "D'autres imprimantes utilisent le pilote \"%s\". Voulez-vous vraiment le supprimer ? Ceci entraоnera йgalement la suppression des imprimantes correspondantes.";
     Text[ spanish ] = "Aъn hay impresoras que utilizan el controlador \"%s\". њDesea realmente eliminarlo? Las impresoras correspondientes tambiйn se eliminarбn.";
     Text[ italian ] = "Ci sono ancora stampanti che utilizzano il driver \"%s\". Volete ugualmente rimuoverlo? Le stampanti corrispondenti verranno cosм rimosse.";
@@ -2290,7 +2290,7 @@ String RID_QUERY_DRIVERUSED
     Text[ chinese_traditional ] = "йВДе≠ШеЬ®дЄАдЇЫдљњзФ®<%s>й©ЕеЛХз®ЛеЉПзЪДеН∞и°®ж©ЯгАВзЬЯзЪДи¶БеИ™йЩ§йАЩеАЛй©ЕеЛХз®ЛеЉПпЉЯйАЩж®£жЬГдЄАиµЈзІїйЩ§зЫЄйЧЬзЪДеН∞и°®ж©ЯгАВ";
     Text[ turkish ] = "This driver is used by configured printers. Do you relly want to remove it ? The corresponding printers will be removed also.";
     Text[ arabic ] = "г«“«б  ед«я Ў«»Џ«   ” ќѕг »—д«гћ «б ‘џнб \"%s\". еб  —нѕ Ќ–Ёе »«бЁЏбњ ”жЁ нƒѕн –бя бЌ–Ё «бЎ«»Џ«  «бгЏдн… √н÷«р.";
-    Text[ finnish ] = "Jotkin tulostimet kдyttдvдt yhд ajuria \"%s\". Haluatko varmasti poistaa ajurin? Sitд kдyttдvдt tulostimet poistetaan myцs.";
+    Text[ finnish ] = "Jotkin tulostimet kдyttдvдt yhд ohjainta %s. Haluatko varmasti poistaa ohjaimen? Myцs sitд kдyttдvдt tulostimet poistetaan.";
     Text[ catalan ] = "Encara hi ha impressores que utilitzen aquest controlador. Vol eliminar-lo? Tambй s'eliminaran les impressores corresponents.";
     Text[ thai ] = "аЄ°аЄµаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄЧаЄµаєИаєГаЄКаєЙаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ \"%s\"аЄ≠аЄҐаЄєаєИ  аЄДаЄЄаЄУаЄХаєЙаЄ≠аЄЗаЄБаЄ≤аЄ£аєАаЄ≠аЄ≤аЄ≠аЄ≠аЄБаЄЂаЄ£аЄЈаЄ≠аєДаЄ°аєИ? аЄИаЄ∞аєАаЄ≠аЄ≤аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄЧаЄµаєИаЄ°аЄµаЄ•аЄ±аЄБаЄ©аЄУаЄ∞аєАаЄКаєИаЄЩаєАаЄФаЄµаЄҐаЄІаЄБаЄ±аЄЩаЄ≠аЄ≠аЄБаЄФаєЙаЄІаЄҐ";
 };
@@ -2355,9 +2355,9 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text [ English ] = "The driver \"%s\" is used by your standard printer. Therefore it cannot be removed.";
     Text[ english_us ] = "The driver \"%s\" is used by your default printer. Therefore, it cannot be removed.";
     Text[ portuguese ] = "O controlador \"%s\" й utilizado pela impressora padrгo, sendo portanto impossнvel removк-lo.";
-    Text[ russian ] = "ƒрайвер \"%s\" используетс€ ¬ашим принтером по умолчанию. ѕоэтому удалить его невозможно.";
+    Text[ russian ] = "ƒрайвер \"%s\" используетс€ принтером по умолчанию. ѕоэтому удалить его невозможно.";
     Text[ greek ] = "ƒен еянбй дхнбфьн нб дйбгсбцея бхфь фп рсьгсбммб пдёгзузт ерейдё чсзуймпрпйеяфбй брь фпн екфхрщфё рсперйлпгёт.";
-    Text[ dutch ] = "Driver \"%s\" kan niet worden verwijderd daar deze wordt gebruikt voor uw standaardprinter.";
+    Text[ dutch ] = "Driver \"%s\" kan niet worden verwijderd omdat deze wordt gebruikt voor uw standaardprinter.";
     Text[ french ] = "Votre imprimante par dйfaut utilise le pilote \"%s\". Impossible de le supprimer.";
     Text[ spanish ] = "La impresora predeterminada utiliza el controlador \"%s\". Su eliminaciуn no es posible.";
     Text[ italian ] = "Questo driver и utilizzato dalla vostra stampante standard, per questo non puт essere eliminato.";
@@ -2371,7 +2371,7 @@ String RID_ERR_REMOVEDEFAULTDRIVER
     Text[ chinese_traditional ] = "йїШи™НеН∞и°®ж©ЯдљњзФ®йАЩеАЛй©ЕеЛХз®ЛеЉП<%s>гАВеЫ†ж≠§зД°ж≥ХеИ™йЩ§йАЩеАЛй©ЕеЛХз®ЛеЉПгАВ";
     Text[ turkish ] = "This driver is used by your standard printer. Therefore it cannot be removed.";
     Text[ arabic ] = "н г «” ќѕ«г ће«“ «б ‘џнб \"%s\" гд ёц»уб Ў«»Џ я «б«Ё —«÷н…° бе–« б« нгядя ≈“«б е.";
-    Text[ finnish ] = "Ajuri \"%s\" on oletustulostimen kдytцssд. Ajuria ei poisteta.";
+    Text[ finnish ] = "Ohjain %s on oletustulostimen kдytцssд. Ohjainta ei poisteta.";
     Text[ catalan ] = "No es pot eliminar aquest programa de control perquи l'utilitza la impressora estаndard.";
     Text[ thai ] = "аєГаЄКаєЙаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ \"%s\" аєВаЄФаЄҐаЄДаєИаЄ≤аєАаЄ£аЄіаєИаЄ°аЄХаєЙаЄЩаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄВаЄ≠аЄЗаЄДаЄЄаЄУ  аєАаЄЩаЄЈаєИаЄ≠аЄЗаЄИаЄ≤аЄБаєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаєАаЄ≠аЄ≤аЄ°аЄ±аЄЩаЄ≠аЄ≠аЄБаєДаЄФаєЙ";
 };
@@ -2382,7 +2382,7 @@ String RID_ERR_PRINTERNOTREMOVEABLE
     Text [ English ] = "The printer %s cannot be removed.";
     Text[ english_us ] = "The printer %s cannot be removed.";
     Text[ portuguese ] = "Impossнvel remover a impressora %s.";
-    Text[ russian ] = "”брать принтер %s невозможно.";
+    Text[ russian ] = "Ќевозможно удалить принтер %s.";
     Text[ greek ] = "ƒен еянбй дхнбфьн нб кбфбсгзиея п екфхрщфёт %s.";
     Text[ dutch ] = "Printer %s kan niet worden verwijderd.";
     Text[ french ] = "Impossible de supprimer l'imprimante %s.";
@@ -2411,7 +2411,7 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text[ portuguese ] = "A impressora com o nome \"%s\" jб existe. Esta nгo serб importada.";
     Text[ russian ] = "ѕринтер с именем \"%s\" уже существует. ѕоэтому данный принтер импортирован не будет.";
     Text[ greek ] = "’р№счей ёдз Ёнбт екфхрщфёт ме фп ьнпмб \"%s\". ѕ екфхрщфёт бхфьт ден иб ейубчиея.";
-    Text[ dutch ] = "Deze printer wordt niet geпmporteerd daar er reeds een printer met de naam \"%s\" voorkomt in uw systeem.";
+    Text[ dutch ] = "Deze printer wordt niet geпmporteerd omdat er reeds een printer met de naam \"%s\" voorkomt op uw systeem.";
     Text[ french ] = "Une imprimante nommйe \"%s\" existe dйjа. Cette imprimante ne va pas кtre importйe.";
     Text[ spanish ] = "Ya existe una impresora con el nombre \"%s\". Esta impresora no se importarб.";
     Text[ italian ] = "Una stampante dal nome \"%s\" esiste giа. La stampante non verrа importata.";
@@ -2425,7 +2425,7 @@ String RID_TXT_PRINTERALREADYEXISTS
     Text[ chinese_traditional ] = "еЈ≤зґУе≠ШеЬ®дЄАеАЛеРМеРН<%s>еН∞и°®ж©ЯгАВеЫ†ж≠§дЄНеК†еЕ•йАЩеАЛи®≠еВЩгАВ";
     Text[ turkish ] = "A printer with the name \"%s\" already exists. This printer will not be imported.";
     Text[ arabic ] = " жћѕ »«бЁЏб Ў«»Џ… »«б«”г \"%s\". бд н г «” н—«ѕ е–е «бЎ«»Џ….";
-    Text[ finnish ] = "Tulostin \"%s\" on jo olemassa. Tдtд tulostinta ei tuoda.";
+    Text[ finnish ] = "Tulostin %s on jo olemassa. Tдtд tulostinta ei tuoda.";
     Text[ catalan ] = "Ja existeix una impressora amb el nom \"%s\". Aquesta impressora no s'importa.";
     Text[ thai ] = "аЄКаЄЈаєИаЄ≠аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ \"%s\" аЄ°аЄµаЄ≠аЄҐаЄєаєИаєБаЄ•аєЙаЄІ  аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄЩаЄµаєЙаЄИаЄ∞аєДаЄ°аєИаЄЦаЄєаЄБаЄЩаЄ≥аєАаЄВаєЙаЄ≤";
 };
@@ -2436,9 +2436,9 @@ String RID_TXT_PRINTERWITHOUTCOMMAND
     Text [ English ] = "The printer \"%s\" has no valid configuration and therefore cannot be imported.";
     Text[ english_us ] = "The printer \"%s\" has no valid configuration and, therefore, cannot be imported.";
     Text[ portuguese ] = "A configuraзгo da impressora \"%s\" nгo estб completa, nгo podendo portanto ser importada.";
-    Text[ russian ] = " онфигураци€ принтера \"%s\" €вл€етс€ неполной. ѕоэтому импортировать этот принтер невозможно.";
+    Text[ russian ] = "Ќеполна€ конфигураци€ принтера \"%s\". Ќевозможно импортировать принтер.";
     Text[ greek ] = "ѕ екфхрщфёт \"%s\" ден еянбй дхнбфьн нб ейубчиея ерейдё ден Ёчей плпклзсщиея з егкбф№уфбуё фпх.";
-    Text[ dutch ] = "Printer \"%s\" kan niet worden geпmporteerd daar deze geen geldige configuratie heeft.";
+    Text[ dutch ] = "Printer \"%s\" kan niet worden geпmporteerd omdat deze geen geldige configuratie heeft.";
     Text[ french ] = "L'imprimante \"%s\" n'a pas йtй correctement configurйe et ne peut donc pas кtre importйe.";
     Text[ spanish ] = "La impresora \"%s\" no estб correctamente configurada, por lo que no se puede importar.";
     Text[ italian ] = "La stampante \"%s\" ha una configuraziopne non valida e per questo non puу essere importata.";
@@ -2452,7 +2452,7 @@ String RID_TXT_PRINTERWITHOUTCOMMAND
     Text[ chinese_traditional ] = "еН∞и°®ж©Я<%s>зЪДйЕНзљЃдЄНеЃМжХігАВеЫ†ж≠§зД°ж≥ХеК†еЕ•йАЩеАЛи®≠еВЩгАВ";
     Text[ turkish ] = "The printer \"%s\" has no valid configuration and therefore cannot be imported.";
     Text[ arabic ] = "бг н г  яжнд «бЎ«»Џ… \"%s\"   »‘яб я«гб° бе–« бд н г «” н—«ѕе«.";
-    Text[ finnish ] = "Tulostimella \"%s\" ei ole kelvollisia kokoonpanotietoja, joten sitд ei voi tuoda.";
+    Text[ finnish ] = "Tulostimella %s ei ole kelvollisia kokoonpanotietoja, joten sitд ei voi tuoda.";
     Text[ catalan ] = "La impressora \"%s\" no estа configurada correctament i, per tant, no es pot importar.";
     Text[ thai ] = "аЄБаЄ≥аЄЂаЄЩаЄФаЄДаєИаЄ≤аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ \"%s\" аєДаЄ°аєИаЄЦаЄєаЄБаЄХаєЙаЄ≠аЄЗ  аєБаЄ•аЄ∞аєАаЄЩаЄЈаєИаЄ≠аЄЗаЄИаЄ≤аЄБаєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄЩаЄ≥аєАаЄВаєЙаЄ≤аєДаЄФаєЙ";
 };
@@ -2463,9 +2463,9 @@ String RID_TXT_DRIVERDOESNOTEXIST
     Text [ English ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
     Text[ english_us ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
     Text[ portuguese ] = "O controlador para a impressora \"%s1\" (%s2) nгo estб instalado, sendo portanto impossнvel importar a impressora.";
-    Text[ russian ] = "ƒрайвер дл€ принтера \"%s1\" (%s2) не инсталлирован. ѕоэтому импортировать принтер невозможно.";
+    Text[ russian ] = "ƒрайвер дл€ принтера \"%\" (%) не установлен. Ќевозможно импортировать принтер.";
     Text[ greek ] = "‘п рсьгсбммб пдёгзузт гйб фпн екфхрщфё \"%s1\" (%s2) ден Ёчей егкбфбуфбиея. √йб бхфь ден еянбй дхнбфё з ейубгщгё фпх екфхрщфё.";
-    Text[ dutch ] = "Printer \"%s1\" (%s2) kon niet worden geпmporteerd daar er geen driver voor deze printer is geпnstalleerd.";
+    Text[ dutch ] = "Printer \"%s1\" (%s2) kan niet worden geпmporteerd omdat er geen driver voor deze printer is geпnstalleerd.";
     Text[ french ] = "Le pilote pour l'imprimante \"%s1\" (%s2) n'est pas installй. Impossible d'importer l'imprimante !";
     Text[ spanish ] = "No estб instalado el controlador para la impresora \"%s1\" (%s2), por lo que no se puede importar la impresora.";
     Text[ italian ] = "Il driver della stampante \"%s1\" (%s2) non и installato, per questo la stampante non puт essere importata.";
@@ -2479,7 +2479,7 @@ String RID_TXT_DRIVERDOESNOTEXIST
     Text[ chinese_traditional ] = "еН∞и°®ж©Я<%s1> (%s2) жЙАйЬАзЪДй©ЕеЛХз®ЛеЉПж≤ТжЬЙеЃЙи£Эе•љгАВеЫ†ж≠§зД°ж≥ХеҐЮеК†йАЩеАЛи®≠еВЩгАВ";
     Text[ turkish ] = "The driver for the printer \"%s1\" (%s2) is not installed. Therefore the printer cannot be imported.";
     Text[ arabic ] = "»—д«гћ  ‘џнб «бЎ«»Џ… \"%s1\" (%s2) џн— гхЋ ». бе–« б« нгяд «” н—«ѕ «бЎ«»Џ….";
-    Text[ finnish ] = "Tulostimen \"%s1\" ajuria (%s2) ei ole asennettu, joten tulostinta ei voi tuoda.";
+    Text[ finnish ] = "Tulostimen \"%s1\" ohjainta (%s2) ei ole asennettu. Tulostinta ei voi tuoda.";
     Text[ catalan ] = "No estа instal.lat el programa de control per a la impressora \"%s1\" (%s2). La impressora no es pot importar.";
     Text[ thai ] = "аєДаЄ°аєИаєДаЄФаєЙаЄХаЄіаЄФаЄХаЄ±аєЙаЄЗаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ \"%s1\" (%s2) аєАаЄЩаЄЈаєИаЄ≠аЄЗаЄИаЄ≤аЄБаєДаЄ°аєИаЄ™аЄ≤аЄ°аЄ≤аЄ£аЄЦаЄЩаЄ≥аєАаЄВаєЙаЄ≤аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаєДаЄФаєЙ";
 };
@@ -2553,7 +2553,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ portuguese ] = "~Seguinte >>";
         Text[ russian ] = "~ƒалее >>";
         Text[ greek ] = "≈рьмен~п >>";
-        Text[ dutch ] = "~Next >>";
+        Text[ dutch ] = "Volge~nde >>";
         Text[ french ] = "Suivant >>";
         Text[ spanish ] = "~Avanzar >>";
         Text[ italian ] = "~Avanti >>";
@@ -2595,7 +2595,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
         Text[ chinese_traditional ] = "<< ињФеЫЮ(~B)";
         Text[ turkish ] = "<< ~Back";
         Text[ arabic ] = ">> «б”«»ё";
-        Text[ finnish ] = "<< Edellinen";
+        Text[ finnish ] = "<< ~Edellinen";
         Text[ catalan ] = "<<~Enrere";
         Text[ thai ] = "<< ~аЄБаЄ•аЄ±аЄЪаєДаЄЫ";
     };
@@ -2638,7 +2638,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ dutch ] = "Kies een driver";
         Text[ french ] = "Sйlection d'un pilote";
         Text[ spanish ] = "Seleccionar un controlador";
-        Text[ finnish ] = "Choose a driver";
+        Text[ finnish ] = "Valitse ohjain";
         Text[ italian ] = "Selezionate un driver";
         Text[ danish ] = "Vжlg en driver";
         Text[ swedish ] = "Vдlj en drivrutin";
@@ -2661,7 +2661,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text [english] = "Please select an auspicous ~driver";
         Text[ english_us ] = "Please select a s~uitable driver.";
         Text[ portuguese ] = "~Seleccione um controlador compatнvel";
-        Text[ russian ] = "¬ыберите, пожалуйста, подход€щий драйвер";
+        Text[ russian ] = "¬ыберите подход€щий драйвер";
         Text[ greek ] = "Please select an auspicous driver";
         Text[ dutch ] = "Kies een passende ~driver";
         Text[ french ] = "Sйlectionnez un pilote appropriй.";
@@ -2677,7 +2677,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ chinese_traditional ] = "иЂЛйБЄжУЗдЄАеАЛеРИйБ©зЪДй©ЕеЛХз®ЛеЉП(~U)гАВ";
         Text[ turkish ] = "Please select an auspicous driver";
         Text[ arabic ] = "«б—ћ«Ѕ «ќ н«— »—д«гћ  ‘џнб гд«”»";
-        Text[ finnish ] = "Valitse soveltuva ajuri";
+        Text[ finnish ] = "Valitse soveltuva ~ohjain.";
         Text[ catalan ] = "Si us plau, seleccioneu un programa de control adequat";
         Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аєАаЄ•аЄЈаЄ≠аЄБаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаЄЧаЄµаєИаєАаЄЂаЄ°аЄ≤аЄ∞аЄ™аЄ°";
     };
@@ -2712,7 +2712,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ chinese_traditional ] = "еМѓеЕ•(~I)...";
         Text[ turkish ] = "~Import...";
         Text[ arabic ] = "...«” н—«ѕ";
-        Text[ finnish ] = "~Tuo";
+        Text[ finnish ] = "~Tuo...";
         Text[ catalan ] = "~Importa...";
         Text[ thai ] = "~аЄЩаЄ≥аєАаЄВаєЙаЄ≤...";
     };
@@ -2766,7 +2766,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
         Text[ chinese_traditional ] = "зІїйЩ§й©ЕеЛХз®ЛеЉП";
         Text[ turkish ] = "Delete driver";
         Text[ arabic ] = "Ќ–Ё »—д«гћ «б ‘џнб";
-        Text[ finnish ] = "Poista ajuri";
+        Text[ finnish ] = "Poista ohjain";
         Text[ catalan ] = "Suprimeix el programa de control";
         Text[ thai ] = "аЄ•аЄЪаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ";
     };
@@ -2788,7 +2788,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ dutch ] = "Kies een apparaattype";
         Text[ french ] = "Sйlection d'un type de pйriphйrique";
         Text[ spanish ] = "Seleccione un tipo de dispositivo";
-        Text[ finnish ] = "Choose a device type";
+        Text[ finnish ] = "Valitse laitetyyppi";
         Text[ italian ] = "Selezionate una periferica";
         Text[ danish ] = "Vжlg en enhedstype";
         Text[ swedish ] = "Vдlj en enhetstyp";
@@ -2872,7 +2872,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ dutch ] = "een fa~x aansluiten";
         Text[ french ] = "Connecter un pйriphйrique fax";
         Text[ spanish ] = "Conectar a un fa~x";
-        Text[ finnish ] = "Yhdistд ~faksilaite";
+        Text[ finnish ] = "Kytke ~faksilaite";
         Text[ italian ] = "Aggingi un fa~x";
         Text[ danish ] = "tilknytte en fa~xlшsning";
         Text[ swedish ] = "Anslut en fa~xlцsning";
@@ -2895,12 +2895,12 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text [english] = "connect to a P~DF converter";
         Text[ english_us ] = "Connect a P~DF converter";
         Text[ portuguese ] = "Adicionar um conversor ~PDF";
-        Text[ russian ] = "ѕодключить преобразователь P~DF";
+        Text[ russian ] = "ѕодключение P~DF конвертора";
         Text[ greek ] = "add a P~DF printer";
         Text[ dutch ] = "een P~DF-converter aansluiten";
         Text[ french ] = "Connecter un convertisseur PDF";
         Text[ spanish ] = "conectar un convertidor P~DF";
-        Text[ finnish ] = "Yhdistд ~PDF-muunto-ohjelma";
+        Text[ finnish ] = "Kytke P~DF-muunto-ohjelma";
         Text[ italian ] = "Aggiungi un convertitore ~PDF";
         Text[ danish ] = "tilknytte en ~PDF-konverter";
         Text[ swedish ] = "Anslut en ~PDF-konverterare";
@@ -2923,9 +2923,9 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text [english] = "~import printers from a StarOffice installation";
         Text[ english_us ] = "~Import printers from a StarOffice installation";
         Text[ portuguese ] = "~Importar impressoras de uma instalaзгo do StarOffice";
-        Text[ russian ] = "~»мпорт принтера из инсталл€ции StarOffice";
+        Text[ russian ] = "~»мпорт принтера из установки StarOffice";
         Text[ greek ] = "~import printers from a StarOffice installation";
-        Text[ dutch ] = "~printers uit een StarOffice installatie importeren";
+        Text[ dutch ] = "~printers uit een StarOffice-installatie importeren";
         Text[ french ] = "~Importer une ou des imprimantes depuis une installation StarOffice";
         Text[ spanish ] = "~Importar impresoras desde una instalaciуn de StarOffice";
         Text[ italian ] = "~Importa le stampanti da un'installazione StarOffice";
@@ -2939,7 +2939,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
         Text[ chinese_traditional ] = "еЊЮ StarSu~ite еЃЙи£Эз®ЛеЉПеМѓеЕ•еН∞и°®ж©Я";
         Text[ turkish ] = "~import printers from a StarOffice installation";
         Text[ arabic ] = "«” н—«ѕ Ў«»Џ«  гд  Ћ»н  StarOffice";
-        Text[ finnish ] = "T~uo tulostimia StarOffice-asennuksesta";
+        Text[ finnish ] = "Tuo tulostimia Star~Office-asennuksesta";
         Text[ catalan ] = "~Importa les impressores des d'una instal.laciу StarOffice";
         Text[ thai ] = "~аЄЩаЄ≥аєАаЄВаєЙаЄ≤аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄИаЄ≤аЄБаЄБаЄ≤аЄ£аЄХаЄіаЄФаЄХаЄ±аєЙаЄЗ StarOffice ";
     };
@@ -2956,12 +2956,12 @@ TabPage RID_ADDP_PAGE_NAME
         Text [ English ] = "Choose a name";
         Text[ english_us ] = "Choose a name";
         Text[ portuguese ] = "Seleccionar nome";
-        Text[ russian ] = "¬ыбрать им€";
+        Text[ russian ] = "¬ыберите им€";
         Text[ greek ] = "Choose a name";
         Text[ dutch ] = "Kies een naam";
         Text[ french ] = "Sйlection d'un nom";
         Text[ spanish ] = "Seleccione un nombre";
-        Text[ finnish ] = "Choose a name";
+        Text[ finnish ] = "Valitse nimi";
         Text[ italian ] = "Indicate un nome";
         Text[ danish ] = "Vжlg et navn";
         Text[ swedish ] = "Vдlj ett namn";
@@ -2984,9 +2984,9 @@ TabPage RID_ADDP_PAGE_NAME
         Text [english] = "Please enter a ~name for the printer";
         Text[ english_us ] = "Please enter a name for the printer.";
         Text[ portuguese ] = "I~ndique um nome para a impressora.";
-        Text[ russian ] = "¬ведите, пожалуйста, им€ принтера";
+        Text[ russian ] = "¬ведите им€ принтера";
         Text[ greek ] = "Please enter a name for the printer";
-        Text[ dutch ] = "Geef een printernaam aan";
+        Text[ dutch ] = "Geef een printernaam op";
         Text[ french ] = "Spйcifiez un nom pour l'imprimante.";
         Text[ spanish ] = "Introduzca un nombre para la impresora";
         Text[ italian ] = "Indicate un nome per la stampante";
@@ -3000,7 +3000,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "иЂЛжВ®иЉЄеЕ•дЄАеАЛеН∞и°®ж©ЯзЪДеРНз®±гАВ";
         Text[ turkish ] = "Please enter a name for the printer";
         Text[ arabic ] = "«б—ћ«Ѕ ≈ѕќ«б «”г «бЎ«»Џ…";
-        Text[ finnish ] = "Kirjoita tulostimen nimi:";
+        Text[ finnish ] = "Anna tulostimen nimi:";
         Text[ catalan ] = "Si us plau, introduпu un nom per a la impressora";
         Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аєГаЄ™аєИаЄКаЄЈаєИаЄ≠аєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ";
     };
@@ -3012,12 +3012,12 @@ TabPage RID_ADDP_PAGE_NAME
         Text [english] = "Please enter a ~name for the fax connection";
         Text[ english_us ] = "Please enter a name for the fax connection.";
         Text[ portuguese ] = "~Indique um nome para o perifйrico fax.";
-        Text[ russian ] = "¬ведите, пожалуйста, им€ дл€ подключени€ факса";
+        Text[ russian ] = "¬ведите им€ подключаемого факса";
         Text[ greek ] = "Please enter a name for the fax device";
-        Text[ dutch ] = "Geef een naam aan voor de ~faxaansluiting";
+        Text[ dutch ] = "Geef een naam op voor de ~faxaansluiting";
         Text[ french ] = "Spйcifiez un nom pour la connexion fax.";
         Text[ spanish ] = "Introduzca un nombre para el dispositivo de fax";
-        Text[ finnish ] = "Kirjoita faksilaitteen nimi:";
+        Text[ finnish ] = "Anna faksiyhteyden nimi:";
         Text[ italian ] = "Indicate il nome del fax:";
         Text[ danish ] = "Indtast et ~navn for faxtilknytningen";
         Text[ swedish ] = "Ange ett ~namn fцr faxanslutningen";
@@ -3040,12 +3040,12 @@ TabPage RID_ADDP_PAGE_NAME
         Text [english] = "Please enter a ~name for the PDF connection";
         Text[ english_us ] = "Please enter a name for the PDF connection.";
         Text[ portuguese ] = "Indique um nome para o conversor PDF.";
-        Text[ russian ] = "¬ведите, пожалуйста, им€ дл€ подключени€ PDF";
+        Text[ russian ] = "¬ведите им€ подключени€ PDF";
         Text[ greek ] = "Please enter a name for the PDF printer";
-        Text[ dutch ] = "Geef een naam aan voor de ~PDF-aansluiting";
+        Text[ dutch ] = "Geef een naam op voor de ~PDF-aansluiting";
         Text[ french ] = "Spйcifiez un nom pour la connexion PDF.";
         Text[ spanish ] = "Introduzca un nombre para la conexiуn PDF";
-        Text[ finnish ] = "Kirjoita PDF-yhteyden nimi:";
+        Text[ finnish ] = "Anna PDF-yhteyden nimi:";
         Text[ italian ] = "Indicate il nome della stampante PDF";
         Text[ danish ] = "Indtast et ~navn pе PDF-tilknytningen";
         Text[ swedish ] = "Ange ett ~namn fцr PDF-anslutningen";
@@ -3077,7 +3077,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ portuguese ] = "Impressora fax";
         Text[ russian ] = "‘акс-принтер";
         Text[ greek ] = "Fax printer";
-        Text[ dutch ] = "Fax printer";
+        Text[ dutch ] = "Faxprinter";
         Text[ french ] = "Imprimante fax";
         Text[ spanish ] = "Impresora de fax";
         Text[ italian ] = "Stampante Fax";
@@ -3104,7 +3104,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text [english] = "PDF converter";
         Text[ english_us ] = "PDF converter";
         Text[ portuguese ] = "Conversor PDF";
-        Text[ russian ] = "ѕреобразователь PDF";
+        Text[ russian ] = " онвертор PDF";
         Text[ greek ] = "PDF printer";
         Text[ dutch ] = "PDF-converter";
         Text[ french ] = "Convertisseur PDF";
@@ -3148,7 +3148,7 @@ TabPage RID_ADDP_PAGE_NAME
         Text[ chinese_traditional ] = "и®≠еЃЪжИРйїШи™НеН∞и°®ж©Я(~U)";
         Text[ turkish ] = "~Set as default printer";
         Text[ arabic ] = "«” ќѕ«г яЎ«»Џ… «Ё —«÷н…";
-        Text[ finnish ] = "~Kдytд oletustulostimena";
+        Text[ finnish ] = "Kдytд ~oletustulostimena";
         Text[ catalan ] = "~Utilitza com a impressora per defecte";
         Text[ thai ] = "аєГ~аЄКаєЙаєАаЄЫаєЗаЄЩаЄДаєИаЄ≤аєАаЄ£аЄіаєИаЄ°аЄХаєЙаЄЩаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ";
     };
@@ -3198,7 +3198,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ dutch ] = "Kies een commandoregel";
         Text[ french ] = "Sйlection d'une ligne de commande";
         Text[ spanish ] = "Seleccione una lнnea de comando";
-        Text[ finnish ] = "Choose a command line";
+        Text[ finnish ] = "Valitse komentorivi";
         Text[ italian ] = "Selezionate una riga di comando";
         Text[ danish ] = "Vжlg en kommandolinje";
         Text[ swedish ] = "Vдlj en kommandorad";
@@ -3222,9 +3222,9 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text [english] = "Please enter a command ~line appropriate for this device";
         Text[ english_us ] = "Please enter a c~ommand line appropriate for this device.";
         Text[ portuguese ] = "Indique uma ~linha de comando que permita contactar este perifйrico.";
-        Text[ russian ] = "¬ведите, пожалуйста, командную строку, посредством которой необходимо вызывать данное устройство.";
+        Text[ russian ] = " омандна€ строка, соответствующа€ данному устройству.";
         Text[ greek ] = "Please enter a command line appropriate for this device";
-        Text[ dutch ] = "Geef een ~commandoregel aan, waarmee dit apparaat kan worden opgeroepen";
+        Text[ dutch ] = "Geef een ~commandoregel op waarmee dit apparaat kan worden aangeroepen";
         Text[ french ] = "Saisissez une ligne de commande permettant de contacter ce pйriphйrique.";
         Text[ spanish ] = "Introduzca una lнnea de comando para comunicarse con este dispositivo.";
         Text[ italian ] = "~Indicate una riga di comando per collegarvi alla periferica";
@@ -3238,7 +3238,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ chinese_traditional ] = "иЂЛиЉЄеЕ•дЄАеАЛиГље§†и™њзФ®йАЩеАЛи®≠еВЩзЪДжМЗдї§(~O)гАВ";
         Text[ turkish ] = "Please enter a command line appropriate for this device";
         Text[ arabic ] = "«б—ћ«Ѕ ≈ѕќ«б ”Ў— √г— гд«”» бе–« «бће«“";
-        Text[ finnish ] = "Syцtд tдlle laitteelle soveltuva komentorivi.";
+        Text[ finnish ] = "Syцtд tдlle laitteelle soveltuva ~komentorivi.";
         Text[ catalan ] = "Si us plau, introduпu una lнnia d'ordres adequada per a aquest dispositiu.";
         Text[ thai ] = "аЄБаЄ£аЄЄаЄУаЄ≤аєГаЄ™аєИаЄЪаЄ£аЄ£аЄЧаЄ±аЄФаЄДаЄ≥аЄ™аЄ±аєИаЄЗаЄЧаЄµаєИаєАаЄЂаЄ°аЄ≤аЄ∞аЄ™аЄ°аЄ™аЄ≥аЄЂаЄ£аЄ±аЄЪаЄ≠аЄЄаЄЫаЄБаЄ£аЄУаєМаЄЩаЄµаєЙ";
     };
@@ -3262,9 +3262,9 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text [ english ] = "PDF ~target directory";
         Text[ english_us ] = "PDF ~target directory";
         Text[ portuguese ] = "Directуrio destino ~PDF:";
-        Text[ russian ] = " онечна€ папка PDF";
+        Text[ russian ] = "÷елевой каталог PDF";
         Text[ greek ] = "PDF target directory :";
-        Text[ dutch ] = "PDF ~doeldirectory";
+        Text[ dutch ] = "PDF-~doeldirectory";
         Text[ french ] = "Rйpertoire cible PDF";
         Text[ spanish ] = "Directorio destino PDF:";
         Text[ italian ] = "Cartella destinazione PDF :";
@@ -3278,7 +3278,7 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text[ chinese_traditional ] = "PDF зЫЃж®ЩзЫЃйМД(~T)";
         Text[ turkish ] = "PDF target directory :";
         Text[ arabic ] = "«бѕбнб PDF «беѕЁ:";
-        Text[ finnish ] = "PDF-kohdehakemisto :";
+        Text[ finnish ] = "P~DF-kohdehakemisto";
         Text[ catalan ] = "Directori destн PDF :";
         Text[ thai ] = "аєДаЄФаєАаЄ£аєЗаЄБаЄЧаЄ≠аЄ£аЄµаєИаєАаЄЫаєЙаЄ≤аЄЂаЄ°аЄ≤аЄҐ PDF :";
     };
@@ -3328,9 +3328,9 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text [ English ] = "The command line for PDF converters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ english_us ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
         Text[ portuguese ] = "A linha de comando dos conversores PDF й executada da seguinte maneira: em todos os documentos impressos, o \"(TMP)\" й substituнdo por um ficheiro temporбrio e o \"(OUTFILE)\" pelo ficheiro a ser criado. Quando \"(TMP)\" aparece na linha de comando, o cуdigo PostScript й transmitido para um ficheiro; caso contrбrio й transmitido para a entrada padrгo (na forma de pipe).";
-        Text[ russian ] = " омандна€ строка дл€ преобразователей PDF обрабатываетс€ следующим образом: в каждом печатаемом документе в командной строке замен€етс€ \"(TMP)\" временным файлом, а \"(OUTFILE)\" - файлом PDF, который необходимо создать. ≈сли в командной строке находитс€ \"(TMP)\", то код PostScript передаетс€ в файле, в противном случае посредством стандартного ввода (т.е. как pipe).";
+        Text[ russian ] = " омандна€ строка дл€ преобразователей PDF обрабатываетс€ следующим образом: в каждом печатаемом документе замен€етс€ \"(TMP)\" в командной строке временным файлом, а \"(OUTFILE)\" - файлом PDF, который необходимо создать. ≈сли в командной строке находитс€ \"(TMP)\", то код PostScript передаетс€ в файле, иначе он передаетс€ посредством стандартного ввода (то есть как pipe).";
         Text[ greek ] = "The command line for PDF filters is executed in the following way: on each document printed in the command line \"(TMP)\" will be replaced by a temporary file and \"(OUTFILE)\" by the target PDF file name. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het aan te leggen bestand. Als er \"(TMP)\" staat in de commandoregel wordt de PostScript-code in een bestand opgeslagen, in het andere geval via de standaardinvoer (bijv. als Pipe) doorgegeven.";
+        Text[ dutch ] = "De commandoregel voor PDF-converters wordt als volgt uitgevoerd: bij ieder afgedrukt document wordt de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(OUTFILE)\" door het te maken PDF-bestand. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code in een bestand opgeslagen ofwel via de standaardinvoer (bijvoorbeeld als Pipe) doorgegeven.";
         Text[ french ] = "Traitement de la ligne de commande pour les convertisseurs PDF : pour chaque document imprimй, \"(TMP)\" est remplacй par un fichier temporaire et \"(OUTFILE)\" par le fichier PDF а gйnйrer. Si \"(TMP)\" apparaоt dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrйe par dйfaut (c'est-а-dire comme tube (pipe)).";
         Text[ spanish ] = "La lнnea de comandos en convertidores PDF se tratarб de esta forma: con cada documento que se imprima se sustituirб en la lнnea de comandos \"(TMP)\" por un archivo temporal y \"(OUTFILE)\" por el archivo PDF que se cree. Si \"(TMP)\" aparece en la lнnea de comandos, el cуdigo PostScript se transferirб en un archivo, de lo contrario, a travйs de una entrada estбndar, o sea, como pipe.";
         Text[ italian ] = "La riga di comando nei convertitori PDF viene modificata come segue: per ogni documento stampato viene sostituito rispettivamente il file \"(TMP)\" da un file temporaneo e \"(OUTFILE)\" da un un file PDF. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrа trasmesso a un file, altrimenti verrа trasemsso come immissione standard (cioи come pipe).";
@@ -3354,9 +3354,9 @@ TabPage RID_ADDP_PAGE_COMMAND
         Text [ English ] = "The command line for fax connections is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
         Text[ english_us ] = "The command line for fax connections is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
         Text[ portuguese ] = "A linha de comando para aparelhos de telefax й executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" й substituнdo por um ficheiro temporбrio e \"(PHONE)\" pelo nъmero de fax. Quando \"(TMP)\" aparece na linha de comando, o cуdigo PostScript й transmitido para um ficheiro, caso contrбrio para a entrada padrгo (na forma de pipe).";
-        Text[ russian ] = " омандна€ строка при подключении факсов обрабатываетс€ следующим образом: во врем€ передачи каждого факса в командной строке \"(TMP)\" замен€етс€ временным файлом, а \"(PHONE)\" - номером факса. ≈сли в командной строке уже существует \"(TMP)\", то код PostScript передаетс€ в файле, в противном случае посредством стандартного ввода (т.е. как pipe).";
+        Text[ russian ] = " омандна€ строка при подключении факсов обрабатываетс€ следующим образом: во врем€ передачи каждого факса \"(TMP)\" замен€етс€ временным файлом в командной строке, а \"(PHONE)\" - номером факса. ≈сли в командной строке уже существует \"(TMP)\", то код PostScript передаетс€ в файле, иначе он передаетс€ посредством стандартного ввода (например, как pipe).";
         Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ dutch ] = "De commandoregel voor faxaansluitingen wordt als volgt uitgevoerd: op iedere fax wordt bij het verzenden de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel wordt de PostScript-code in een bestand opgeslagen, in het andere geval via de standaardinvoer (bijv. als Pipe) doorgegeven.";
+        Text[ dutch ] = "De commandoregel voor faxaansluitingen wordt als volgt uitgevoerd: op iedere fax wordt bij het verzenden de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel, wordt de PostScript-code in een bestand opgeslagen ofwel via de standaardinvoer (bijvoorbeeld als Pipe) doorgegeven.";
         Text[ french ] = "Traitement de la ligne de commande pour les connexions fax : pour chaque envoi de fax, \"(TMP)\" est remplacй par un fichier temporaire et \"(PHONE)\" par le numйro de fax. Si \"(TMP)\" apparaоt dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrйe par dйfaut (c'est-а-dire comme tube (pipe)).";
         Text[ spanish ] = "La lнnea de comando en conexiones de fax se ejecutarб de esta forma: Para cada fax enviado se sustituirб en la fila de comando \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un nъmero de fax. Si \"(TMP)\" aparece en la fila de comando se transmitirб el cуdigo PostScript a un archivo; en caso contrario se harб mediante entrada estбndar (es decir, como pipe).";
         Text[ finnish ] = "Faksiyhteyksien komentorivi suoritetaan seuraavasti: kunkin lдhetetyn faksin osalta komentorivillд oleva merkkijono \"(TMP)\" korvataan vдliaikaistiedostolla ja komentorivillд oleva merkkijono \"(PHONE)\" korvataan faksinumerolla. Jos \"(TMP)\" on komentorivillд, PostScript-koodi toimitetaan tiedoston kautta, muussa tapauksessa normaalisyцtteenд eli vдlitysyhteyttд kдyttдen.";
@@ -3392,7 +3392,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ dutch ] = "Printers van oudere versies importeren";
         Text[ french ] = "Import des imprimantes provenant de versions prйcйdentes";
         Text[ spanish ] = "Importar impresoras de versiones anteriores";
-        Text[ finnish ] = "Import printers from old versions";
+        Text[ finnish ] = "Tuo tulostimet vanhoista versioista";
         Text[ italian ] = "Importa stampanti di versioni precedenti";
         Text[ danish ] = "Importer en printer af en жldre version";
         Text[ swedish ] = "Importera skrivare frеn дldre versioner";
@@ -3421,7 +3421,7 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Text[ dutch ] = "~Deze printers kunnen worden geпmporteerd. Kies de printers die u wilt importeren.";
         Text[ french ] = "Ces imprimantes peuvent кtre importйes ; sйlectionnez celles qui vous intйressent.";
         Text[ spanish ] = "Estas impresoras se pueden importar. Seleccione las que desee importar.";
-        Text[ finnish ] = "Nдmд tulostimet voidaan tuoda. Valitse tuotava tulostin tai tuotavat tulostimet.";
+        Text[ finnish ] = "~Nдmд tulostimet voidaan tuoda. Valitse tuotavat tulostimet.";
         Text[ italian ] = "» possibile importare queste stampanti. Selezionate quelle che volete importare.";
         Text[ danish ] = "~Disse printere kan importeres. Vжlg dem, du vil importere.";
         Text[ swedish ] = "~De hдr skrivarna kan importeras. Vдlj de som du vill importera.";
@@ -3488,7 +3488,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ dutch ] = "Kies een driver";
         Text[ french ] = "Sйlection d'un pilote";
         Text[ spanish ] = "Seleccionar un controlador";
-        Text[ finnish ] = "Choose a driver";
+        Text[ finnish ] = "Valitse ohjain";
         Text[ italian ] = "Seleziona un driver";
         Text[ danish ] = "Vжlg en driver";
         Text[ swedish ] = "Vдlj en drivrutin";
@@ -3512,12 +3512,12 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text [english] = "Use the following driver for this fax connection";
         Text[ english_us ] = "Use the following driver for this fax connection";
         Text[ portuguese ] = "Controlador a ser utilizado pelo perifйrico fax:";
-        Text[ russian ] = "ƒл€ этого подключени€ факса необходмио использовать следующий драйвер:";
+        Text[ russian ] = "ƒл€ этого подключени€ факса необходимо использовать следующий драйвер:";
         Text[ greek ] = "Use the following driver for this fax device:";
         Text[ dutch ] = "Voor deze faxaansluiting moet u de volgende driver gebruiken";
         Text[ french ] = "Pilote а utiliser pour la connexion fax :";
         Text[ spanish ] = "Para esta conexiуn de fax se debe utilizar el siguiente controlador:";
-        Text[ finnish ] = "Kдytд tдssд faksiyhteydessд seuraavaa ajuria:";
+        Text[ finnish ] = "Kдytд tдssд faksiyhteydessд seuraavaa ohjainta:";
         Text[ italian ] = "Per questo fax utilizzate il driver seguente:";
         Text[ danish ] = "Til faxtilknytningen skal fшlgende driver anvendes";
         Text[ swedish ] = "Fцljande drivrutin ska anvдndas fцr den hдr faxanslutningen";
@@ -3556,7 +3556,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ chinese_traditional ] = "йїШи™НзЪДй©ЕеЛХз®ЛеЉП(~H)";
         Text[ turkish ] = "the default driver";
         Text[ arabic ] = "»—д«гћ «б ‘џнб «б«Ё —«÷н";
-        Text[ finnish ] = "Oletusajuri";
+        Text[ finnish ] = "Oletus~ohjain";
         Text[ catalan ] = "el programa de control per defecte";
         Text[ thai ] = "аЄДаєИаЄ≤аєАаЄ£аЄіаєИаЄ°аЄХаєЙаЄЩаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ";
     };
@@ -3570,7 +3570,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ portuguese ] = "Controlador e~specнfico para adaptar o formato a outra impressora";
         Text[ russian ] = "—пециальный драйвер дл€ согласовани€ формата с другим принтером";
         Text[ greek ] = "a specific driver to format identical to a certain printer";
-        Text[ dutch ] = "een speciale ~driver voor het aanpassen van de opmaakattributen aan een andere printer";
+        Text[ dutch ] = "een speciale ~driver voor het aanpassen van de opmaakattributen aan die van een andere printer";
         Text[ french ] = "Pilote spйcifique pour adaptation du formatage а une autre imprimante";
         Text[ spanish ] = "~Controlador especнfico para adaptar el formato a otra impresora";
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stamapante";
@@ -3584,7 +3584,7 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Text[ chinese_traditional ] = "дЄАеАЛзЙєжЃКзЪДйБ©зФ®жЦЉеЕґдїЦеН∞и°®ж©Яж†ЉеЉПзЪДй©ЕеЛХз®ЛеЉП(~F)";
         Text[ turkish ] = "a specific driver to format identical to a certain printer";
         Text[ arabic ] = "»—д«гћ  ‘џнб ќ«’ б ен∆… «б д”нё бЎ«»Џ… √ќ—м.";
-        Text[ finnish ] = "Mддritetty ajuri, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
+        Text[ finnish ] = "Mддritetty ~ohjain, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
         Text[ catalan ] = "un programa de control especнfic per a formatar com una impressora determinada";
         Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєАаЄЙаЄЮаЄ≤аЄ∞аєАаЄЮаЄЈаєИаЄ≠аЄЫаЄ£аЄ±аЄЪаЄ£аЄєаЄЫаєБаЄЪаЄЪаєАаЄЫаєЗаЄЩаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄ≠аЄЈаєИаЄЩ";
     };
@@ -3606,7 +3606,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ dutch ] = "Kies een driver";
         Text[ french ] = "Sйlection d'un pilote";
         Text[ spanish ] = "Seleccione un controlador";
-        Text[ finnish ] = "Choose a driver";
+        Text[ finnish ] = "Valitse ohjain";
         Text[ italian ] = "Selezionate un driver";
         Text[ danish ] = "Vжlg en driver";
         Text[ swedish ] = "Vдlj en drivrutin";
@@ -3646,7 +3646,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ chinese_traditional ] = "иЂЛйБЄжУЗдї•дЄЛйБ©зФ®жЦЉйАЩеАЛ PDF иљЙжПЫеЩ®зЪДй©ЕеЛХз®ЛеЉПгАВ";
         Text[ turkish ] = "Use the following driver for this PDF printer:";
         Text[ arabic ] = "«” ќѕг »—д«гћ «б ‘џнб «б «бн бгЌжб PDF е–«:";
-        Text[ finnish ] = "Kдytд tдssд PDF-muunto-ohjelmassa seuraavaa ajuria:";
+        Text[ finnish ] = "Kдytд tдssд PDF-muunto-ohjelmassa seuraavaa ohjainta:";
         Text[ catalan ] = "Utilitza el segьent programa de control per aquesta impressora PDF:";
         Text[ thai ] = "аєГаЄКаєЙаєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаЄЩаЄµаєЙаЄ™аЄ≥аЄЂаЄ£аЄ±аЄЪаЄХаЄ±аЄІаєБаЄЫаЄ•аЄЗ PDF аЄЩаЄµаєЙ:";
     };
@@ -3674,7 +3674,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ chinese_traditional ] = "йїШи™НзЪДй©ЕеЛХз®ЛеЉП(~H)";
         Text[ turkish ] = "the default driver";
         Text[ arabic ] = "»—д«гћ «б ‘џнб «б«Ё —«÷н";
-        Text[ finnish ] = "Ohjaimen oletusarvo";
+        Text[ finnish ] = "Oletus~ohjain";
         Text[ catalan ] = "la impressora per defecte";
         Text[ thai ] = "аЄДаєИаЄ≤аєАаЄ£аЄіаєИаЄ°аЄХаєЙаЄЩаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМ";
     };
@@ -3688,7 +3688,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ portuguese ] = "Controlador A~dobe Distiller(tm)";
         Text[ russian ] = "ƒрайвер Adobe Distiller(tm)";
         Text[ greek ] = "the Adobe Distiller(tm) driver";
-        Text[ dutch ] = "De Adobe ~Distiller(tm) driver";
+        Text[ dutch ] = "De Adobe ~Distiller(tm)-driver";
         Text[ french ] = "Pilote Adobe Distiller(tm)";
         Text[ spanish ] = "C~ontrolador Adobe Distiller(tm)";
         Text[ italian ] = "Driver Adobe Distiller(tm)";
@@ -3702,7 +3702,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ chinese_traditional ] = "Adobe D~istiller(tm) й©ЕеЛХз®ЛеЉП";
         Text[ turkish ] = "the Adobe Distiller(tm) driver";
         Text[ arabic ] = "»—д«гћ  ‘џнб Adobe Distiller(tm)";
-        Text[ finnish ] = "Adobe Distiller(tm) -ajuri";
+        Text[ finnish ] = "Adobe ~Distiller(tm) -ohjain";
         Text[ catalan ] = "el programa de control de Adobe Distiller(tm)";
         Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМ  Adobe Distiller(tm) ";
     };
@@ -3716,7 +3716,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ portuguese ] = "Cont~rolador especнfico para adaptar o formato a outra impressora";
         Text[ russian ] = "—пециальный драйвер дл€ согласовани€ формата с другим принтером";
         Text[ greek ] = "a specific driver to format identical to a certain printer";
-        Text[ dutch ] = "Een speciale ~driver voor het aanpassen van de opmaakattributen aan een andere printer";
+        Text[ dutch ] = "Een speciale ~driver voor het aanpassen van de opmaakattributen aan die van een andere printer";
         Text[ french ] = "Pilote spйcifique pour adaptation du formatage а une autre imprimante";
         Text[ spanish ] = "C~ontrolador especнfico para adaptar el formato a otra impresora";
         Text[ italian ] = "un driver specifico per adattare la formattazione a un'altra stampante";
@@ -3730,7 +3730,7 @@ TabPage RID_ADDP_PAGE_PDFDRIVER
         Text[ chinese_traditional ] = "дЄАеАЛзЙєжЃКзЪДйБ©зФ®жЦЉеЕґдїЦеН∞и°®ж©Яж†ЉеЉПзЪДй©ЕеЛХз®ЛеЉП(~I)";
         Text[ turkish ] = "a specific driver to format identical to a certain printer";
         Text[ arabic ] = "»—д«гћ  ‘џнб ќ«’ б ен∆… «б д”нё бЎ«»Џ… √ќ—м";
-        Text[ finnish ] = "Mддritetty ajuri, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
+        Text[ finnish ] = "Mддritetty ~ohjain, jonka avulla muotoilu sovitetaan toiseen tulostimeen";
         Text[ catalan ] = "un programa de control especнfic per a formatar igual que una impressora determinada";
         Text[ thai ] = "аєДаЄФаЄ£аєЙаЄЯаєМаєАаЄІаЄ≠аЄ£аєМаєАаЄЙаЄЮаЄ≤аЄ∞аєГаЄЩаЄБаЄ≤аЄ£аЄЫаЄ£аЄ±аЄЪаЄ£аЄєаЄЫаєБаЄЪаЄЪаєАаЄЫаєЗаЄЩаєАаЄДаЄ£аЄЈаєИаЄ≠аЄЗаЄЮаЄіаЄ°аЄЮаєМаЄ≠аЄЈаєИаЄЩ";
     };
@@ -3742,12 +3742,12 @@ String RID_TXT_FONT_ITALIC
     Text [ english ] = "Italic";
     Text[ english_us ] = "Italic";
     Text[ portuguese ] = "Itбlico";
-    Text[ russian ] = " урсивный";
+    Text[ russian ] = " урсив";
     Text[ greek ] = "–л№гйб";
     Text[ dutch ] = "Cursief";
     Text[ french ] = "Italic";
     Text[ spanish ] = "Cursiva";
-    Text[ finnish ] = "Kursivointi";
+    Text[ finnish ] = "Kursivoitu";
     Text[ italian ] = "Corsivo";
     Text[ danish ] = "Kursiv";
     Text[ swedish ] = "Kursiv";
@@ -3774,7 +3774,7 @@ String RID_TXT_FONT_OBLIQUE
     Text[ dutch ] = "Schuin";
     Text[ french ] = "Oblique";
     Text[ spanish ] = "Oblicuo";
-    Text[ finnish ] = "Kiinteд";
+    Text[ finnish ] = "Vino";
     Text[ italian ] = "Obliquo";
     Text[ danish ] = "Skrе";
     Text[ swedish ] = "Kursiv";
@@ -3825,7 +3825,7 @@ String RID_TXT_FONT_ULTRALIGHT
     Text[ portuguese ] = "Ultra-claro";
     Text[ russian ] = "—верхсветлый";
     Text[ greek ] = "Ultralight";
-    Text[ dutch ] = "Ultralight";
+    Text[ dutch ] = "Extra light";
     Text[ french ] = "Ultralight";
     Text[ spanish ] = "Ultraligero";
     Text[ finnish ] = "Erittдin kevyt";
@@ -3852,7 +3852,7 @@ String RID_TXT_FONT_SEMILIGHT
     Text[ portuguese ] = "Semi-claro";
     Text[ russian ] = "ѕолусветлый";
     Text[ greek ] = "Semilight";
-    Text[ dutch ] = "Half licht";
+    Text[ dutch ] = "Halflight";
     Text[ french ] = "Semilight";
     Text[ spanish ] = "Semiligero";
     Text[ finnish ] = "Puolikevyt";
@@ -3882,7 +3882,7 @@ String RID_TXT_FONT_LIGHT
     Text[ dutch ] = "Light";
     Text[ french ] = "Light";
     Text[ spanish ] = "Ligero";
-    Text[ finnish ] = "Kevyt";
+    Text[ finnish ] = "Vaalea";
     Text[ italian ] = "Chiaro";
     Text[ danish ] = "Fin";
     Text[ swedish ] = "Mager";
@@ -3909,7 +3909,7 @@ String RID_TXT_FONT_SEMIBOLD
     Text[ dutch ] = "Halfvet";
     Text[ french ] = "Semi-gras";
     Text[ spanish ] = "Seminegrita";
-    Text[ finnish ] = "Puolilihavointi";
+    Text[ finnish ] = "Puolilihavoitu";
     Text[ italian ] = "Semigrassetto";
     Text[ danish ] = "Halvfed";
     Text[ swedish ] = "Halvfet";
@@ -3936,7 +3936,7 @@ String RID_TXT_FONT_BOLD
     Text[ dutch ] = "Vet";
     Text[ french ] = "Gras";
     Text[ spanish ] = "Negrita";
-    Text[ finnish ] = "Lihavointi";
+    Text[ finnish ] = "Lihavoitu";
     Text[ italian ] = "Grassetto";
     Text[ danish ] = "Fed";
     Text[ swedish ] = "Fet";
@@ -3960,10 +3960,10 @@ String RID_TXT_FONT_ULTRABOLD
     Text[ portuguese ] = "Ultra-negrito";
     Text[ russian ] = "—верхжирный";
     Text[ greek ] = "Ultrabold";
-    Text[ dutch ] = "Extravet";
+    Text[ dutch ] = "Extra vet";
     Text[ french ] = "Ultragras";
     Text[ spanish ] = "Ultranegrita";
-    Text[ finnish ] = "Paksu lihavointi";
+    Text[ finnish ] = "Erittдin lihavoitu";
     Text[ italian ] = "Extra grassetto";
     Text[ danish ] = "Ultrafed";
     Text[ swedish ] = "Extra fet";
@@ -3987,7 +3987,7 @@ String RID_TXT_FONT_ULTRACONDENSED
     Text[ portuguese ] = "Ultracondensado";
     Text[ russian ] = "—верхузкий";
     Text[ greek ] = "Ultracondensed";
-    Text[ dutch ] = "Ultragecondenseerd";
+    Text[ dutch ] = "Extra versmald";
     Text[ french ] = "Ultracondensй";
     Text[ spanish ] = "Ultracondensado";
     Text[ finnish ] = "Erittдin tiivis";
@@ -4014,7 +4014,7 @@ String RID_TXT_FONT_EXTRACONDENSED
     Text[ portuguese ] = "Extra-condensado";
     Text[ russian ] = "Ёкстраузкий";
     Text[ greek ] = "Extracondensed";
-    Text[ dutch ] = "Extra vermsmald";
+    Text[ dutch ] = "Extra versmald";
     Text[ french ] = "Extracondensй";
     Text[ spanish ] = "Extracondensado";
     Text[ finnish ] = "Lisдtiivistetty";
@@ -4041,7 +4041,7 @@ String RID_TXT_FONT_CONDENSED
     Text[ portuguese ] = "Condensado";
     Text[ russian ] = "”зкий";
     Text[ greek ] = "Condensed";
-    Text[ dutch ] = "Gecondenseerd";
+    Text[ dutch ] = "Versmald";
     Text[ french ] = "Condensй";
     Text[ spanish ] = "Condensado";
     Text[ finnish ] = "Tiivistetty";
@@ -4176,7 +4176,7 @@ String RID_TXT_FONT_ULTRAEXPANDED
     Text[ portuguese ] = "Ultra-expandido";
     Text[ russian ] = "—верхширокий";
     Text[ greek ] = "Ultraexpanded";
-    Text[ dutch ] = "Ultra verbreed";
+    Text[ dutch ] = "Extra verbreed";
     Text[ french ] = "Ultra-йtendu";
     Text[ spanish ] = "Ultraexpandido";
     Text[ finnish ] = "Erittдin laajennettu";
@@ -4206,7 +4206,7 @@ String RID_TXT_FONT_REGULAR
     Text[ dutch ] = "Standaard";
     Text[ french ] = "Normal";
     Text[ spanish ] = "Predeterminado";
-    Text[ finnish ] = "Tavallinen";
+    Text[ finnish ] = "Sддnnцllinen";
     Text[ italian ] = "Standard";
     Text[ danish ] = "Standard";
     Text[ swedish ] = "Standard";
