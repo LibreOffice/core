@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2001-12-17 12:47:36 $
+ *  last change: $Author: obo $ $Date: 2001-12-20 21:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,7 +1414,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ russian ] = "Ρξηδΰςό ξςδελόνϋε ηΰδΰνθÿ οεχΰςθ";
         Text[ polish ] = "Utwσrz pojedyncze zadania wydruku";
         Text[ japanese ] = "ε€‹ε¥ε°ε·γ‚Έγƒ§γƒ–γ®δ½ζ(~I)";
-        Text[ chinese_traditional ] = "η”Άη”ε–®ε€‹ε—ε°δ»»ε‹™(~I)";
+        Text[ chinese_traditional ] = "η”Άη”ε–®ι …ε—ε°δ½ζ¥­(~I)";
         Text[ arabic ] = "ΕδΤΗΑ ζΩΗΖέ ΨΘΗΪΙ έΡΟνΙ";
         Text[ greek ] = "Δημιουργία μεμονωμένων εργασιών εκτύπωσης";
         Text[ korean ] = "κ°κ°μ  μΈμ‡„ μ‘μ—…λ§λ“¤κΈ°(~I)";
@@ -2841,7 +2841,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese ] = "~Hνfens opcionais" ;
         Text [ finnish ] = "~Valinnaiset tavuviivat" ;
         Text [ danish ] = "Blψde skilletegn" ;
-        Text [ french ] = "Traits d'union ~utilisateur" ;
+        Text [ french ] = "Tirets ~utilisateur" ;
         Text [ swedish ] = "An~vδndardefinierade bindestreck" ;
         Text [ dutch ] = "~Door gebruiker gedefinieerde afbreektekens" ;
         Text [ spanish ] = "Separaciσn ma~nual" ;
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
