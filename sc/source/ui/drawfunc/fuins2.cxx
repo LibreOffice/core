@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:23:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,7 +594,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     // und 1 1/2 Zeilen unterhalb des Starts
                     ScDocument* pScDoc = pData->GetDocument();
                     ULONG x = 0, y = 0;
-                    for( USHORT i = 0; i <= nC1; i++ )
+                    USHORT i;
+                    for( i = 0; i <= nC1; i++ )
                         x += pScDoc->GetColWidth( i, nT0 );
                     while( ++i <= MAXCOL )
                     {
