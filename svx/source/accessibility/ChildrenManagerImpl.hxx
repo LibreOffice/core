@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-05-08 09:47:01 $
+ *  last change: $Author: af $ $Date: 2002-05-13 12:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,9 +259,8 @@ public:
     */
     void AddAccessibleShape (std::auto_ptr<AccessibleShape> pShape);
 
-    /** Clear the list of accessible shapes.  It can be rebuild with calls
-        to the <member>AddAccessibleShape</member> method.  Other lists are
-        not modified.
+    /** Clear the lists of accessible shapes and that of visible accessible
+        shapes.  The list of UNO shapes is not modified.
     */
     void ClearAccessibleShapeList (void);
 
@@ -367,7 +366,7 @@ protected:
 
     /** Bundel of information passed down the shape tree.
     */
-    AccessibleShapeTreeInfo mShapeTreeInfo;
+    AccessibleShapeTreeInfo maShapeTreeInfo;
 
     /** Reference to an accessible context object that is used to inform its
         listeners of new and remved children.
@@ -468,11 +467,11 @@ public:
     */
     AccessibleShape* GetAccessibleShape (void) const;
 
-    /**  This flag is set during the visibility calculation and indicates
-         that at one time in this process an event is sent that informs the
-         listners of the creation of a new accessible object.  This flags is
-         not reset afterwards.  Don't use it unless you know exactly what
-         you are doing.
+    /** This flag is set during the visibility calculation and indicates
+        that at one time in this process an event is sent that informs the
+        listners of the creation of a new accessible object.  This flags is
+        not reset afterwards.  Don't use it unless you know exactly what you
+        are doing.
     */
     bool mbCreateEventPending;
 
@@ -489,14 +488,9 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible>& rxAccessibleShape);
 
 
-    bool operator == (const ChildDescriptor& aDescriptor)
-    {
-        return mxShape == aDescriptor.mxShape;
-    }
-    bool operator < (const ChildDescriptor& aDescriptor)
-    {
-        return mxShape < aDescriptor.mxShape;
-    }
+    bool operator == (const ChildDescriptor& aDescriptor);
+    bool operator < (const ChildDescriptor& aDescriptor);
+
 };
 
 
