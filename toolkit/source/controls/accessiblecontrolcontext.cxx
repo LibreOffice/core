@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblecontrolcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-29 08:10:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -97,7 +97,7 @@ namespace toolkit
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //====================================================================
     //= OAccessibleControlContext
@@ -355,7 +355,7 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAt( const awt::Point& /* _rPoint */ ) throw (RuntimeException)
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAtPoint( const awt::Point& /* _rPoint */ ) throw (RuntimeException)
     {
         // no children at all
         return NULL;
@@ -427,6 +427,12 @@ namespace toolkit
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4.58.1  2003/04/11 17:26:19  mt
+ *  #108656# Moved accessibility from drafts to final
+ *
+ *  Revision 1.4  2002/10/29 08:10:15  fs
+ *  #65293# must-change not done: new methods for XAccessibleComponent implemented
+ *
  *  Revision 1.3  2002/06/12 13:16:58  fs
  *  #100126# exception thrown in wrong situation
  *
