@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2000-12-07 16:21:03 $
+ *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@
 #endif
 
 #include <unowrap.hxx>
+#include <dndlcon.hxx>
 
 #pragma hdrstop
 
@@ -3787,6 +3788,12 @@ Window::~Window()
 {
     DBG_DTOR( Window, ImplDbgCheckWindow );
 
+    // shutdown drag and drop
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XComponent > xComponent( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+
+    if( xComponent.is() )
+        xComponent->dispose();
+
     mbInDtor = TRUE;
 
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
@@ -6498,7 +6505,7 @@ const SystemEnvData* Window::GetSystemData() const
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
 #ifndef REMOTE_APPSERVER
-    return mpFrame->GetSystemData();
+    return mpFrame ? mpFrame->GetSystemData() : NULL;
 #else
     return NULL;
 #endif
@@ -6574,4 +6581,32 @@ void Window::ImplCallActivateListeners( Window *pOld )
         if ( ImplGetParent() )
             ImplGetParent()->ImplCallActivateListeners( pOld );
     }
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > Window::GetDropTarget()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if( ! mxDNDListenerContainer.is() )
+        mxDNDListenerContainer = static_cast < ::com::sun::star::datatransfer::dnd::XDropTarget * > ( new DNDListenerContainer() );
+
+    // this object is located in the same process, so there will be no runtime exception
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >
+        ( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > Window::GetDragGestureRecognizer()
+{
+    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
+
+    if( ! mxDNDListenerContainer.is() )
+        mxDNDListenerContainer = static_cast < ::com::sun::star::datatransfer::dnd::XDropTarget * > ( new DNDListenerContainer() );
+
+    // this object is located in the same process, so there will be no runtime exception
+    return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer >
+        ( mxDNDListenerContainer, ::com::sun::star::uno::UNO_QUERY );
 }

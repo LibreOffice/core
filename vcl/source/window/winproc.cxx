@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2000-12-15 13:46:47 $
+ *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,13 @@
 #include <brdwin.hxx>
 #endif
 #undef private
+
+#include <dndlcon.hxx>
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
+#endif
+
 
 #pragma hdrstop
 
@@ -633,6 +640,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                          !(((nMouseY-nDragH) <= pMouseDownWin->mpFrameData->mnFirstMouseY) &&
                            ((nMouseY+nDragH) >= pMouseDownWin->mpFrameData->mnFirstMouseY)) )
                     {
+#if 1
                         pMouseDownWin->mpFrameData->mbStartDragCalled  = TRUE;
                         Point aCmdMousePos( pMouseDownWin->mpFrameData->mnFirstMouseX,
                                             pMouseDownWin->mpFrameData->mnFirstMouseY );
@@ -646,6 +654,30 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                         if ( aDelData.IsDelete() )
                             return 1;
                         pMouseDownWin->ImplRemoveDel( &aDelData );
+#else
+                        pMouseDownWin->mpFrameData->mbStartDragCalled  = TRUE;
+
+                        // query DropTarget from child window
+                        ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
+                            pMouseDownWin->GetDragGestureRecognizer();
+
+                        if( xDragGestureRecognizer.is() )
+                        {
+                            // retrieve mouse position relative to mouse down window
+                            Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
+                                pMouseDownWin->mpFrameData->mnFirstMouseX,
+                                pMouseDownWin->mpFrameData->mnFirstMouseX ) );
+
+                            // FIXME: where do I get Action from ?
+                            // FIXME: Fill any with data.
+
+                            // fire...Event returns the number of listeners found
+                            static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
+                                ::com::sun::star::awt::Point( relLoc.X(), relLoc.Y() ),
+                                pMouseDownWin->GetSystemWindow()->mxDragSource,
+                                ::com::sun::star::uno::Any() );
+                        }
+#endif
                     }
                 }
             }

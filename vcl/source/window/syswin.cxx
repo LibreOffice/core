@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-24 18:50:30 $
+ *  last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,12 +103,30 @@
 #endif
 
 #include <unowrap.hxx>
+#include <dndevdis.hxx>
 
 #ifdef REMOTE_APPSERVER
 #include "rmwindow.hxx"
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDRAGSOURCE_HPP_
+#include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETFACTORY_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTargetFactory.hpp>
+#endif
+
 #pragma hdrstop
+using namespace rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::datatransfer::dnd;
 
 // =======================================================================
 
@@ -125,6 +143,62 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbDockBtn           = FALSE;
     mbHideBtn           = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
+
+    try {
+#ifdef REMOTE_APPSERVER
+    //  Reference< XMultiServiceFactory > xFactory;
+
+#else
+
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        if ( xFactory.is() )
+        {
+            Sequence< sal_Int8 > windowId( 4 );
+
+            /*
+             * IMHO this belongs in the platform dependend part of vcl, but the vcl guys say it
+             * is better to implement it here to reduce dependencies on the other ports like Mac etc.
+             */
+
+            const SystemEnvData * pEnvData = GetSystemData();
+            if( pEnvData )
+            {
+                Reference< XInterface > xInstance;
+
+#if defined WNT
+                xInstance = xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragAndDrop" ) );
+                * ( reinterpret_cast < HWND * > ( windowId.getArray() ) ) = pEnvData->hWnd;
+#elif defined UNX
+                xInstance = xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.dnd.X11DragAndDrop" ) );
+                * ( reinterpret_cast < long * > ( windowId.getArray() ) ) = pEnvData->aWindow;
+#endif
+
+                // FIXME: add service names for macos etc. here
+
+                // remember drag source
+                mxDragSource = Reference< XDragSource >( xInstance, UNO_QUERY );
+
+                // create drop target
+                Reference< XDropTargetFactory > xDropTargetFactory( xInstance, UNO_QUERY );
+                if( xDropTargetFactory.is() )
+                {
+                    mxDropTarget = xDropTargetFactory->createDropTarget( windowId );
+                }
+            }
+        }
+#endif
+
+        if( mxDropTarget.is() )
+            mxDropTarget->addDropTargetListener( new DNDEventDispatcher( this ) );
+    }
+
+    // createInstance can throw any exception
+    catch( Exception exc )
+    {
+        // release all instances
+        mxDropTarget.clear();
+        mxDragSource.clear();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -152,6 +226,14 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 BOOL SystemWindow::Close()
 {
+    // shutdown drag and drop for this window
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxDropTarget, ::com::sun::star::uno::UNO_QUERY );
+
+    // DNDEventDispatcher does not hold a reference of the DropTarget,
+    // so it's ok if it does not support XComponent
+    if( xComponent.is() )
+        xComponent->dispose();
+
     if ( mxWindowPeer.is() )
     {
         // #76482# This window can be destroyed in WindowEvent_Close.

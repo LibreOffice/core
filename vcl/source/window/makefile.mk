@@ -2,9 +2,9 @@
 #
 #	$RCSfile: makefile.mk,v $
 #
-#	$Revision: 1.2 $
+#	$Revision: 1.3 $
 #
-#	last change: $Author: th $ $Date: 2000-11-03 09:05:08 $
+#	last change: $Author: obr $ $Date: 2001-02-05 09:45:05 $
 #
 #	The Contents of this file are made available subject to the terms of
 #	either of the following licenses
@@ -105,7 +105,9 @@ SLOFILES=	$(SLO)$/accel.obj		\
             $(SLO)$/window2.obj 	\
             $(SLO)$/winproc.obj 	\
             $(SLO)$/wrkwin.obj		\
-            $(SLO)$/scrwnd.obj
+            $(SLO)$/scrwnd.obj		\
+            $(SLO)$/dndevdis.obj	\
+            $(SLO)$/dndlcon.obj
 
 .IF "$(remote)"!=""
 EXCEPTIONSFILES=					\
@@ -127,10 +129,15 @@ EXCEPTIONSFILES=					\
             $(SLO)$/tabpage.obj 	\
             $(SLO)$/toolbox.obj 	\
             $(SLO)$/toolbox2.obj	\
-            $(SLO)$/dialog.obj
+            $(SLO)$/dialog.obj		\
+            $(SLO)$/dndevdis.obj	\
+            $(SLO)$/dndlcon.obj
 .ELSE
 EXCEPTIONSFILES=					\
-            $(SLO)$/window.obj
+            $(SLO)$/window.obj		\
+            $(SLO)$/syswin.obj		\
+            $(SLO)$/dndevdis.obj	\
+            $(SLO)$/dndlcon.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
