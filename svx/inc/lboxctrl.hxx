@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-10 08:25:48 $
+ *  last change: $Author: tl $ $Date: 2001-04-25 09:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,12 @@ class SvxPopupWindowListBox;
 class SvxListBoxControl : public SfxToolBoxControl
 {
 protected:
+    String                  aActionStr;
     SvxPopupWindowListBox * pPopupWin;
     USHORT                  nItemId;
 
     DECL_LINK( PopupModeEndHdl, void * );
+    DECL_LINK( SelectHdl, void * );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
