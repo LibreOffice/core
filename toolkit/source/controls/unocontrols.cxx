@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2001-09-04 09:13:28 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:31:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,7 @@ uno::Any UnoControlFormattedFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     uno::Any aReturn;
     switch (nPropId)
     {
-        case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ) );
+        case BASEPROPERTY_DEFAULTCONTROL: aReturn <<= ::rtl::OUString( ::rtl::OUString::createFromAscii( szServiceName_UnoControlFormattedField ) ); break;
 
         case BASEPROPERTY_TREATASNUMBER: aReturn <<= (sal_Bool)sal_True; break;
 
