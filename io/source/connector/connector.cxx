@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
+ *  last change: $Author: jbu $ $Date: 2001-01-08 13:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ namespace stoc_connector
         if( ! container.getTokenCount() )
         {
             OUString message(RTL_CONSTASCII_USTRINGPARAM("Connector: empty connection string"));
+            throw ConnectionSetupException( message , Reference< XInterface > () );
         }
 
         Reference< XConnection > r;
