@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:47:41 $
+ *  last change: $Author: kz $ $Date: 2001-07-19 20:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text [ dutch ] = "Gebruikersgegevens" ;
     Text [ portuguese_brazilian ] = "Benutzerdaten" ;
     Text [ portuguese ] = "Dados de utilizador" ;
-    Text[ chinese_simplified ] = "ÓÃ»§×ÊÁÏ";
+    Text[ chinese_simplified ] = "Ê¹ÓÃÕßÊı¾İ";
     Text[ russian ] = "Äàííûå ïîëüçîâàòåëÿ";
     Text[ polish ] = "Dane u¿ytkownika";
     Text[ japanese ] = "Õ°»Ş°ÃŞ°À";
@@ -589,7 +589,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ polish ] = "Nale¿y uwzglêdniæ, ¿e podanie nazwy ulicy, kodu pocztowego i miejscowoœci wymagane jest do utworzenia klucza rejestracyjnego. Do czasu rejestracji danych tych nie bêdzie mo¿na zmieniæ. Czy chcesz je zmieniæ teraz?";
         Text[ portuguese_brazilian ] = "Bitte beachten Sie, da? Stra?e, Postleitzahl und Ort f? die Berechnung des Registrierungsschl?sels herangezogen werden. Bis zur Registrierung k?nen diese Benutzerdaten nicht mehr ge?ndert werden.  Wollen Sie diese Benutzerdaten jetzt noch ?ndern?";
         Text[ japanese ] = "s’¬‘º–¼A—X•Ö”Ô†A“s“¹•{Œ§–¼‚Í“o˜^·°‚ğ”­s‚·‚éè‚ª‚©‚è‚Æ‚È‚è‚Ü‚·B“o˜^‚ªÏ‚Ş‚Ü‚Å‚ÍÕ°»Ş°ÃŞ°À‚Í•ÏX‚Å‚«‚Ü‚¹‚ñB‚±‚ÌÕ°»Ş°ÃŞ°À‚ğ¡•ÏX‚µ‚Ü‚·‚©H";
-        Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏÂğ£¿";
+        Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©Ê¹ÓÃÕß×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©Ê¹ÓÃÕß×ÊÁÏÂğ£¿";
         Text[ chinese_traditional ] = "½Ğµù·N±z¿é¤Jªºµó¹D¤Î«°¥«µ¥¸ê®Æ¬O¥Î¨Ó²£¥Íµù¥UÁä½X¡C¥¿¦¡µù¥U®É±z¤£¯à­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡C±z²{¦b­n­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡H";
         Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇáÈíÇäÇÊ ÇáÎÇÕÉ ÈÇáÔÇÑÚ æÇáÑãÒ ÇáÈÑíÏí æÇáãÏíäÉ ÊÏÎá Öãä ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãİÊÇÍ ÇáÊÓÌíá. áÇ íãßäß ÊÛííÑ ÈíÇäÇÊ Çáã";
         Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ç ïäüò, ï Ô.Ê. êáé ç ğüëç ÷ñçóéìïğïéïıíôáé ãéá ôïí äçìéïõñãßá ôïõ êëåéäéïı äŞëùóçò. ¸ùò ôçí äŞëùóç äåí èá ìğïñİóåôå íá ? ";
@@ -626,7 +626,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ portuguese ] = "Modificou os dados de utilizador.\nNão se esqueça de que o seu registo expirará.\nPor esta razão necessitará de um novo código de registo dentro do prazo de 30 dias.\nEncontrará o formulário de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
     Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten ge?ndert.\nBitte bedenken Sie, da? dadurch die Registrierung verf?llt.\nSie ben?igen einen neuen Registrierungsschl?sel, der innerhalb der n?chsten 30 Tage eingegeben werden mu?.\nDas Registrierungsformular finden Sie im Men?Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ?ndern?";
     Message[ danish ] = "Du har ændret brugerdataene.\nBemærk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnøgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjælp - Registrering...\nEr du sikker på, at du vil ændre brugerdataene?";
-    Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥¡°°ïÖú - ×¢²á...¡±´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÓÃ»§×ÊÁÏ£¿";
+    Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥¡°°ïÖú - ×¢²á...¡±´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÊ¹ÓÃÕß×ÊÁÏ£¿";
     Message[ russian ] = "Âû èçìåíèëè äàííûå ïîëüçîâàòåëÿ.\nÏîæàëóéñòà, ïîìíèòå, ÷òî èç-çà ıòîãî Âû óòğàòèòå ğåãèñòğàöèş.\nÂàì ïîíîäîáèòñÿ íîâûé ğåãèñòğàöèîííûé êëş÷, êîòîğûé íåîáõîäèìî áóäåò ââåñòè â òå÷åíèå 30 äíåé.\nĞåãèñòğàöèîííûé ôîğìóëÿğ Âû íàéäåòå â ìåíş Ñïğàâêà - Ğåãèñòğàöèÿ...\nÂû äåéñòâèòåëüíî õîòèòå èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
     Message[ polish ] = "Zmieniono dane u¿ytkownika.\nNale¿y uwzglêdniæ, ¿e przez to traci wa¿noœæ rejestracja.\nWymagany bêdzie nowy klucz rejestracyjny, który nale¿y wprowadziæ w ci¹gu nastêpnych 30 dni.\nFormularz rejestracyjny znajduje siê w menu Pomoc - Rejestracja...\nCzy na pewno zmieniæ dane u¿ytkownika?";
     Message[ japanese ] = "Õ°»Ş°ÃŞ°À‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n‚»‚Ì‚½‚ß“o˜^‚ª¸Œø‚·‚é‚Ì‚Í–Æ‚ê‚Ü‚¹‚ñB\nV‚µ‚¢“o˜^·°‚ª•K—v‚Æ‚È‚è¤‚»‚ê‚ğ30“úˆÈ“à‚ÉÏ‚Ü‚³‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n“o˜^—p†‚Í[ÒÆ­°ÍÙÌß/“o˜^...]‚É‚ ‚è‚Ü‚·B\nÕ°»Ş°ÃŞ°À‚ğ–{“–‚É•ÏX‚µ‚Ü‚·‚©?";
@@ -935,6 +935,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
 
  // ********************************************************************** EOF
+
 
 
 
