@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:32:04 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@
 #include <svtools/helpopt.hxx>
 
 #include <drafts/com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #pragma hdrstop
@@ -1189,6 +1190,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     }
                     else
                     {
+                        bool bCaughtException = FALSE;
+                        Any aException;
+
                         try
                         {
                             Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
@@ -1207,12 +1211,50 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                             Any aRet = xScript->invoke( args, outIndex, outArgs );
                         }
-                        catch( ::com::sun::star::uno::Exception& e )
+                        catch ( provider::ScriptFrameworkErrorException& se )
                         {
-                            OSL_TRACE("Failed to execute script for url %s, error: %s",
-                                ::rtl::OUStringToOString( scriptURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                                ::rtl::OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                            aException = makeAny( se );
+                            bCaughtException = TRUE;
                         }
+                        catch ( ::com::sun::star::reflection::InvocationTargetException& ite )
+                        {
+                            aException = makeAny( ite );
+                            bCaughtException = TRUE;
+                        }
+                        catch ( ::com::sun::star::lang::IllegalArgumentException& iae )
+                        {
+                            aException = makeAny( iae );
+                            bCaughtException = TRUE;
+                        }
+                        catch ( ::com::sun::star::uno::RuntimeException& rte )
+                        {
+                            aException = makeAny( rte );
+                            bCaughtException = TRUE;
+                        }
+                        catch ( ::com::sun::star::uno::Exception& e )
+                        {
+                            aException = makeAny( e );
+                            bCaughtException = TRUE;
+                        }
+
+                         if ( bCaughtException )
+                        {
+                            SfxAbstractDialogFactory* pFact =
+                                SfxAbstractDialogFactory::Create();
+
+                            if ( pFact != NULL )
+                            {
+                                VclAbstractDialog* pDlg =
+                                    pFact->CreateScriptErrorDialog(
+                                        NULL, aException );
+
+                                if ( pDlg != NULL )
+                                {
+                                    pDlg->Execute();
+                                    delete pDlg;
+                                }
+                            }
+                           }
                     }
                 }
             }
