@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-29 14:31:52 $
+ *  last change: $Author: pl $ $Date: 2001-10-29 19:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2872,6 +2872,8 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
 
 void SvImpLBox::Command( const CommandEvent& rCEvt )
 {
+    if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
+        aEditTimer.Stop();
     // Rollmaus-Event?
     if( (rCEvt.GetCommand() == COMMAND_WHEEL) ||
         (rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL) ||
