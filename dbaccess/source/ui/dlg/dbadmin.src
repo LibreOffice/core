@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,12 @@ TabPage PAGE_GENERAL
         Text =  "Diese Datenquelle haben Sie gelöscht.";
         Text [ english ] = "This data source is scheduled to be deleted.";
         Text [ english_us ] = "This data source is scheduled to be deleted.";
+    };
+    String STR_COULDNOTLOAD_ODBCLIB
+    {
+        Text = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Auswahl ist nicht verfügbar.";
+        Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
+        Text [ english_us ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source selection is not available.";
     };
 };
 
@@ -1436,6 +1442,9 @@ Menu MENU_DATASOURCELIST_POPUP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/20 09:53:17  fs
+ *  handling for the SuppresVersionColumns property of a data source
+ *
  *  Revision 1.4  2000/10/12 16:20:42  fs
  *  new implementations ... still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
 #endif
+#ifndef _IODLG_HXX
+#include <sfx2/iodlg.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -114,8 +120,26 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
+#include <com/sun/star/sdbc/XRow.hpp>
+#endif
+
+#include <stdlib.h>
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _DBAUI_DSSELECT_HXX_
+#include "dsselect.hxx"
+#endif
+#ifndef _DBAUI_ODBC_CONFIG_HXX_
+#include "odbcconfig.hxx"
+#endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
@@ -235,6 +259,7 @@ OGeneralPage::OGeneralPage(Window* pParent, const SfxItemSet& _rItems)
     m_aDatasourceType.SetSelectHdl(LINK(this, OGeneralPage, OnDatasourceTypeSelected));
     m_aName.SetModifyHdl(LINK(this, OGeneralPage, OnNameModified));
     m_aConnection.SetModifyHdl(getControlModifiedLink());
+    m_aBrowseConnection.SetClickHdl(LINK(this, OGeneralPage, OnBrowseConnections));
 }
 
 //-------------------------------------------------------------------------
@@ -419,6 +444,115 @@ IMPL_LINK(OGeneralPage, OnNameModified, Edit*, _pBox)
         m_aSpecialMessage.SetText(sNameMessage);
     }
 
+    return 0L;
+}
+
+//-------------------------------------------------------------------------
+IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
+{
+    switch (GetSelectedType())
+    {
+        case DST_DBASE:
+        case DST_TEXT:
+        {
+            SfxFileDialog aFileDlg(GetParent(), WB_3DLOOK | WB_STDMODAL | WB_OPEN | SFXWB_PATHDIALOG);
+
+            String sOldPath = m_aConnection.GetTextNoPrefix();
+            if (sOldPath.Len())
+                aFileDlg.SetPath(sOldPath);
+            if (RET_OK == aFileDlg.Execute())
+            {
+                m_aConnection.SetTextNoPrefix(aFileDlg.GetPath());
+                callModifiedHdl();
+            }
+        }
+        break;
+        case DST_ADABAS:
+        {
+            // collect the names of the installed databases
+            StringBag aInstalledDBs;
+
+            String sAdabasConfigDir; sAdabasConfigDir.AssignAscii(getenv("DBCONFIG"));
+            if(sAdabasConfigDir.Len())
+            {
+                INetURLObject aNormalizer;
+                aNormalizer.SetSmartProtocol(INET_PROT_FILE);
+                aNormalizer.SetSmartURL(sAdabasConfigDir);
+                sAdabasConfigDir = aNormalizer.GetMainURL();
+
+                if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
+                    sAdabasConfigDir.AppendAscii("config");
+                else
+                    sAdabasConfigDir.AppendAscii("/config");
+
+                ::ucb::Content aAdabasConfigDir;
+                try
+                {
+                    aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+                }
+                catch(::ucb::ContentCreationException &e)
+                {
+                    e;  // make compiler happy
+                    DBG_ERROR("OGeneralPage::OnBrowseConnections: could not create the UCB content for the adabas config directory!");
+                }
+
+                if (aAdabasConfigDir.get().is())
+                {   // we have a content for the directory, loop through all entries
+                    Sequence< ::rtl::OUString > aProperties(1);
+                    aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+
+                    try
+                    {
+                        Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, ::ucb::INCLUDE_DOCUMENTS_ONLY);
+                        Reference< XRow > xRow(xFiles, UNO_QUERY);
+                        xFiles->beforeFirst();
+                        while (xFiles->next())
+                            aInstalledDBs.insert(xRow->getString(1));
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_ERROR("OGeneralPage::OnBrowseConnections: could not enumerate the adabas config files!");
+                    }
+
+                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, GetSelectedType());
+                    if (RET_OK == aSelector.Execute())
+                    {
+                        m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
+                        callModifiedHdl();
+                    }
+                }
+            }
+        }
+        break;
+        case DST_ODBC:
+        {
+            // collect all ODBC data source names
+            StringBag aOdbcDatasources;
+            OOdbcEnumeration aEnumeration;
+            if (!aEnumeration.isLoaded())
+            {
+                // show an error message
+                OLocalResourceAccess aLocRes(PAGE_GENERAL, RSC_TABPAGE);
+                String sError(ModuleRes(STR_COULDNOTLOAD_ODBCLIB));
+                sError.SearchAndReplaceAscii("#lib#", aEnumeration.getLibraryName());
+                ErrorBox aDialog(this, WB_OK, sError);
+                aDialog.Execute();
+                return 1L;
+            }
+            else
+            {
+                aEnumeration.getDatasourceNames(aOdbcDatasources);
+                // excute the select dialog
+                ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, GetSelectedType());
+                if (RET_OK == aSelector.Execute())
+                {
+                    m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
+                    callModifiedHdl();
+                }
+            }
+        }
+        break;
+    }
     return 0L;
 }
 
@@ -1623,6 +1757,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2000/10/20 09:53:17  fs
+ *  handling for the SuppresVersionColumns property of a data source
+ *
  *  Revision 1.6  2000/10/18 08:48:16  obo
  *  Syntax error with linux compiler #65293#
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@
 #define STR_NO_WILDCARDS                    12
 #define STR_NAMEINVALID                     13
 #define STR_DATASOURCEDELETED               14
+#define STR_COULDNOTLOAD_ODBCLIB            15
 
 //========================================================================
 // menu item ids
@@ -157,6 +158,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/20 09:53:17  fs
+ *  handling for the SuppresVersionColumns property of a data source
+ *
  *  Revision 1.4  2000/10/12 16:20:42  fs
  *  new implementations ... still under construction
  *

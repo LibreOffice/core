@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:53:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ protected:
     void initializeHistory();
 
     DECL_LINK(OnDatasourceTypeSelected, ListBox*);
+    DECL_LINK(OnBrowseConnections, PushButton*);
     DECL_LINK(OnNameModified, Edit*);
 };
 
@@ -457,6 +458,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/10/20 09:53:17  fs
+ *  handling for the SuppresVersionColumns property of a data source
+ *
  *  Revision 1.5  2000/10/13 16:03:34  fs
  *  Separator changed to string / getDetailIds
  *
