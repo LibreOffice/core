@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-19 14:41:08 $
+#   last change: $Author: hr $ $Date: 2001-07-30 12:52:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,7 @@ NO_SHL_DESCRIPTION=TRUE
 
 # --- Files --------------------------------------------------------
 
-DEPOBJFILES=$(SLO)$/GenInfoParser.obj
+#DEPOBJFILES=$(SLO)$/GenInfoParser.obj
 
 OBJFILES=\
     $(OBJ)$/gen_info.obj	\
@@ -88,22 +88,22 @@ SLOFILES=\
     $(SLO)$/gi_parse.obj    \
     $(SLO)$/st_gilrw.obj
 
-SHL1TARGET=     GenInfoParser
-SHL1LIBS=       $(SLB)$/soltools_support.lib $(SLB)$/soltools_giparser.lib
-SHL1IMPLIB=     i$(TARGET)
-SHL1DEF=	    $(MISC)$/$(SHL1TARGET).def
-SHL1OBJS=       $(SLO)$/GenInfoParser.obj
-#perl libraries not in LD_LIBRARY_PATH
-SHL1NOCHECK=TRUE
+#SHL1TARGET=     GenInfoParser
+#SHL1LIBS=       $(SLB)$/soltools_support.lib $(SLB)$/soltools_giparser.lib
+#SHL1IMPLIB=     i$(TARGET)
+#SHL1DEF=	    $(MISC)$/$(SHL1TARGET).def
+#SHL1OBJS=       $(SLO)$/GenInfoParser.obj
+##perl libraries not in LD_LIBRARY_PATH
+#SHL1NOCHECK=TRUE
 
-.IF "$(GUI)"=="WNT"
-SHL1STDLIBS=    msvcirt.lib $(PERLLIB)
-.ENDIF
+#.IF "$(GUI)"=="WNT"
+#SHL1STDLIBS=    msvcirt.lib $(PERLLIB)
+#.ENDIF
 
-DEF1NAME=	    $(SHL1TARGET)
-DEF1DEPN=	    makefile.mk
-DEF1DES=        GenInfoParser
-DEF1EXPORTFILE= geninfoparser.dxp
+#DEF1NAME=	    $(SHL1TARGET)
+#DEF1DEPN=	    makefile.mk
+#DEF1DES=        GenInfoParser
+#DEF1EXPORTFILE= geninfoparser.dxp
 
 # --- Targets ------------------------------------------------------
 
