@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloc.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: mhu $ $Date: 2001-10-15 06:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@ extern "C" {
     @param  Bytes [in] memory size.
     @return pointer to allocated memory.
  */
-void * SAL_CALL rtl_allocateMemory (sal_uInt32 Bytes);
+void * SAL_CALL rtl_allocateMemory (
+    sal_uInt32 Bytes
+) SAL_THROW_EXTERN_C();
 
 
 /** Reallocate memory.
@@ -83,21 +85,28 @@ void * SAL_CALL rtl_allocateMemory (sal_uInt32 Bytes);
     @param  Bytes [in] new memory size.
     @return pointer to reallocated memory. May differ from Ptr.
  */
-void * SAL_CALL rtl_reallocateMemory (void *Ptr, sal_uInt32 Bytes);
+void * SAL_CALL rtl_reallocateMemory (
+    void *     Ptr,
+    sal_uInt32 Bytes
+) SAL_THROW_EXTERN_C();
 
 
 /** Free memory.
     @param  Ptr   [in] pointer to previously allocated memory.
     @return none. Memory is released. Ptr is invalid.
  */
-void SAL_CALL rtl_freeMemory (void *Ptr);
+void SAL_CALL rtl_freeMemory (
+    void * Ptr
+) SAL_THROW_EXTERN_C();
 
 
 /** Allocate and zero memory.
     @param  Bytes [in] memory size.
     @return pointer to allocated and zero'ed memory.
  */
-void * SAL_CALL rtl_allocateZeroMemory (sal_uInt32 Bytes);
+void * SAL_CALL rtl_allocateZeroMemory (
+    sal_uInt32 Bytes
+) SAL_THROW_EXTERN_C();
 
 
 /** Zero and free memory.
@@ -105,7 +114,10 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_uInt32 Bytes);
     @param  Bytes [in] memory size.
     @return none. Memory is zero'ed and released. Ptr is invalid.
  */
-void SAL_CALL rtl_freeZeroMemory (void *Ptr, sal_uInt32 Bytes);
+void SAL_CALL rtl_freeZeroMemory (
+    void *     Ptr,
+    sal_uInt32 Bytes
+) SAL_THROW_EXTERN_C();
 
 
 #ifdef __cplusplus
