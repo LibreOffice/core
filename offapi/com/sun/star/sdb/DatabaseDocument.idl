@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #endif
 
  module com {  module sun {  module star {  module sdbcx {
-interface XDataDescriptorFactory;
-interface XRename;
+ published interface XDataDescriptorFactory;
+ published interface XRename;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
@@ -86,7 +86,7 @@ interface XRename;
     could be a form or a report.
     </p>
  */
-service DatabaseDocument
+published service DatabaseDocument
 {
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
