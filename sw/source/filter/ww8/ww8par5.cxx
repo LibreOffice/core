@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-16 18:19:48 $
+ *  last change: $Author: cmc $ $Date: 2002-01-17 11:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2991,6 +2991,7 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
 
 void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 {
+    const int nChunk = 64;  //number of characters to read at one time
     //Meaningless in a style
     if (pAktColl)
         return;
@@ -3016,21 +3017,48 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
 
     bIgnoreText = TRUE;
     long nOldPos = pStrm->Tell();
-    USHORT nFieldLen;
 
     WW8_CP nStartCp = pSBase->WW8Fc2Cp( nOldPos );
     String sFieldName;
-    nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp,
-                                         500, eStructCharSet );
-    pStrm->Seek( nOldPos );
+    USHORT nFieldLen;
+    nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp, nChunk,
+        eStructCharSet );
+    nStartCp+=nFieldLen;
 
     xub_StrLen nC = 0;
-    if( 0x13 != sFieldName.GetChar( nC )) // Field Start Mark
+    //If the first chunk did not start with a field start then
+    //reset the stream position and give up
+    if( !nFieldLen || (0x13 != sFieldName.GetChar( nC ))) // Field Start // Mark
     {
-        if( 0x15 == sFieldName.GetChar( nC ))       // Field End Mark found
+        // If Field End Mark found
+        if( nFieldLen && (0x15 == sFieldName.GetChar( nC )))
             bIgnoreText = FALSE;
+        pStrm->Seek( nOldPos );
         return;                 // kein Feld zu finden
     }
+
+    xub_StrLen nFnd;
+    //If this chunk does not contain a field end, keep reading chunks
+    //until we find one, or we run out of text,
+    while (STRING_NOTFOUND == (nFnd = sFieldName.Search(0x15)))
+    {
+        String sTemp;
+        nFieldLen = pSBase->WW8ReadString( *pStrm, sTemp,
+        nStartCp, nChunk, eStructCharSet );
+        sFieldName+=sTemp;
+        nStartCp+=nFieldLen;
+        if (!nFieldLen)
+            break;
+    }
+
+    pStrm->Seek( nOldPos );
+
+    //if we have no 0x15 give up, otherwise erase everything from the 0x15
+    //onwards
+    if (STRING_NOTFOUND == nFnd)
+        return;
+    else
+        sFieldName.Erase(nFnd);
 
     nC++;
     while( ' '  == sFieldName.GetChar( nC ))
