@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CfgParser.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-06-11 16:24:38 $
+ *  last change:$Date: 2004-11-02 11:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,26 +104,57 @@ public class CfgParser {
 
                 if (pName.equals("TestDocumentPath")) {
                     System.setProperty("DOCPTH",(String)pValue);
+                    param.put("DOCPTH",(String)pValue);
                 }
             }
+        }
+
+        //check for platform dependend parameters
+        //this would have a $OperatingSystem as prefix
+        String os = (String) param.get("OperatingSystem");
+        if (os != null) {
+            //found something that could be a prefex
+            //check all parameters for this
+            Enumeration keys = param.keys();
+            while (keys.hasMoreElements()) {
+                String key = (String) keys.nextElement();
+                Object oldValue = param.get(key);
+                if (key.startsWith(os)) {
+                    String newKey = key.substring(os.length()+1);
+                    param.remove(key);
+                    param.put(newKey,oldValue);
+                }
+            }
+
         }
     }
 
     protected Properties getProperties(String name) {
+        // get the resource file
         Properties prop = new Properties();
         if ( debug ) {
             System.out.println("Looking for "+name);
         }
-        FileInputStream propFile = null;
         try {
-            propFile = new FileInputStream(name);
+            FileInputStream propFile = new FileInputStream(name);
             prop.load(propFile);
             System.out.println("Parsing properties from "+name);
             propFile.close();
         } catch (Exception e) {
-            //Exception while reading prop-file, returning null
-            return null;
+            try {
+                java.net.URL url = this.getClass().getResource("/"+name);
+                if (url != null) {
+                    System.out.println("Parsing properties from "+name);
+                    java.net.URLConnection connection = url.openConnection();
+                    java.io.InputStream in = connection.getInputStream();
+                    prop.load(in);
+                }
+            } catch (Exception ex) {
+                //Exception while reading prop-file, returning null
+                return null;
+            }
         }
+
         return prop;
     }
 
