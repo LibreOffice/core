@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:40:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ czech ] = "Následující sloupce jsou skryty. Prosím označte pole, které chcete zobrazit a stiskněte OK.";
         Text[ hebrew ] = "‮העמודות הבאות מוסתרות כעת. נא לציין את השדות שיש להציגם וללחוץ OK.‬";
         Text[ hindi ] = "निम्नलिखित स्तंभो को अभी छिपाकर रखा है । कृपया दिखाने वाले क्षेत्र को आप चिह्नित करो और ठीक को चुनो ।";
+        Text[ slovak ] = "Nasledujúce stĺpce sú momentálne skryté. Prosím označte pole, ktoré chcete zobraziť a stisnite OK.";
     };
 
     ListBox 1
@@ -155,7 +156,10 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ czech ] = "Zobrazit sloupce";
     Text[ hebrew ] = "‮הצגת עמודות‬";
     Text[ hindi ] = "स्तंभो को दिखाओ";
+    Text[ slovak ] = "Zobraziť stĺpce";
 };
+
+
 
 
 
