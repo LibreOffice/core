@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:14:17 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,4 +406,42 @@ uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass
     if ( !xCharClass.is() )
         xCharClass = vcl::unohelper::CreateCharacterClassification();
     return xCharClass;
+}
+
+// -----------------------------------------------------------------------
+
+String MnemonicGenerator::EraseAllMnemonicChars( const String& rStr )
+{
+    String      aStr = rStr;
+    xub_StrLen  nLen = aStr.Len();
+    xub_StrLen  i    = 0;
+
+    while ( i < nLen )
+    {
+        if ( aStr.GetChar( i ) == '~' )
+        {
+            // check for CJK-style mnemonic
+            if( i > 0 && (i+2) < nLen )
+            {
+                sal_Unicode c = aStr.GetChar(i+1);
+                if( aStr.GetChar( i-1 ) == '(' &&
+                    aStr.GetChar( i+2 ) == ')' &&
+                    c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
+                {
+                    aStr.Erase( i-1, 4 );
+                    nLen -= 4;
+                    i--;
+                    continue;
+                }
+            }
+
+            // remove standard mnemonics
+            aStr.Erase( i, 1 );
+            nLen--;
+        }
+        else
+            i++;
+    }
+
+    return aStr;
 }
