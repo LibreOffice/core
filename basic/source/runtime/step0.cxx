@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,13 +777,21 @@ void SbiRuntime::StepINITFOR()
     PushFor();
 }
 
+void SbiRuntime::StepINITFOREACH()
+{
+    PushForEach();
+}
+
 // FOR-Variable inkrementieren
 
 void SbiRuntime::StepNEXT()
 {
     if( !pForStk )
+    {
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-    else
+        return;
+    }
+    if( pForStk->eForType == FOR_TO )
         pForStk->refVar->Compute( SbxPLUS, *pForStk->refInc );
 }
 
