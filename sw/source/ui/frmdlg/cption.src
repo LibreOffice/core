@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:23:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ ModalDialog DLG_CAPTION
         Text[ swedish ] = "Ö~verta inramning och skugga";
         Text[ polish ] = "Przejmij obramowanie i cieñ";
         Text[ portuguese_brazilian ] = "~Copy border and shadow";
-        Text[ japanese ] = "ŠO˜g‚Æ‰e‚ðˆø—p(~A)";
+        Text[ japanese ] = "ŠO˜g‚Æ‰e‚Ì“K—p(~A)";
         Text[ korean ] = "¿Ü°û¼±°ú ±×¸²ÀÚ Àû¿ë(~A)";
         Text[ chinese_simplified ] = "Ì×ÓÃ±ß¿òºÍÒõÓ°(~A)";
         Text[ chinese_traditional ] = "±Ä¥ÎÃä®Ø©M³±¼v(~A)";
@@ -677,7 +677,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
-        Text [ french ] = "~Séparateurs" ;
+        Text [ french ] = "~Séparateur" ;
         Text [ dutch ] = "~Scheidingsteken" ;
         Text [ portuguese ] = "~Separador" ;
         Text[ chinese_simplified ] = "·Ö¸ô·û(~S)";
