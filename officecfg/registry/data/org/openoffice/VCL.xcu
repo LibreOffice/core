@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-19 08:00:53 $
+ *  last change: $Author: ssa $ $Date: 2002-09-24 10:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,19 +101,19 @@
         <value>Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS</value>
+        <value>Lucida Sans;Tahoma;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS</value>
+        <value>Lucida Sans;Tahoma;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS</value>
+        <value>Lucida Sans;Tahoma;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS</value>
+        <value>Lucida Sans;Tahoma;Arial Unicode MS</value>
       </prop>
       <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Arial Unicode MS</value>
+        <value>Lucida Sans;Tahoma;Arial Unicode MS</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
         <value>Albany;Arial;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -138,9 +138,24 @@
       </prop>
     </node>
     <node oor:name="ar" oor:op="replace">
-    <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+     <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>Tahoma;Traditional Arabic;Simplified Arabic;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif</value>
-    </prop>
+     </prop>
+     <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Tahoma;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Tahoma;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Tahoma;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Tahoma;Lucida Sans;Arial Unicode MS</value>
+     </prop>
+     <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Tahoma;Lucida Sans;Arial Unicode MS</value>
+     </prop>
     </node>
     <node oor:name="ja-jp" oor:op="replace">
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
