@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:48:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1156,7 +1156,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                     bRet = TRUE;
                 }
             }
-            else if( pSh->Prt( rOpt, rProgress ) )
+            else if( pSh->Prt( rOpt, &rProgress ) )
                 bRet = TRUE;
             bMergeLock = FALSE;
 
@@ -1299,7 +1299,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
                 bRet = TRUE;
             }
         }
-        else if( pSh->Prt( rOpt, rProgress ) )
+        else if( pSh->Prt( rOpt, &rProgress ) )
             bRet = TRUE;
         bMergeLock = FALSE;
 
