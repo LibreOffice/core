@@ -1,0 +1,44 @@
+		General Handling
+		----------------
+
+- The developer inserts the OpenOffice.org version intop the @since tag.
+
+- @since-Tag may contain any string which needs to end with a Version number.
+  The first cipher following immediately on a white space is interpreted as start of the version number.
+
+- The @since Tag must stay completely within one line to allow tool support for retargeting.
+
+- To see @since entries in the generated documentation, one needs to use the command line option
+  
+  -sincefile <file-path>
+
+  This option has to occur immediately after the -html option.
+
+
+
+
+		Format of the @since Tag Transformation File
+		--------------------------------------------
+
+Example
+-------
+
+***** BEGIN OF FILE ******
+"1.1" "StarOffice 7.0"
+"2.0" "StarOffice 8.0"
+"2.1" "StarOffice 9.0"
+***** END OF FILE ******
+
+
+Rules and Restrictions
+----------------------
+
+*	Each line contains two strings within "".
+	The first string is the OpenOffice.org version number which is found in the @since tag.
+	The second string is the string to display for this version.
+*	No specific order among product versions is needed.
+*	Empty lines and whitespaces are allowed, except:
+	- Non empty lines must not start with white space.
+	- Within OpenOffice.org version strings, no whitespace is allowed.
+*	Whitespace within display strings is displayed as it is.
+   
