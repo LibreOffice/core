@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: od $ $Date: 2002-11-04 13:20:25 $
+ *  last change: $Author: od $ $Date: 2002-11-14 11:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,16 @@ SwFrmNotify::~SwFrmNotify()
         const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
             pFrm->SetCompletePaint();
+    }
+    else
+    {
+        // OD 13.11.2002 #97597# - consider case that *only* margins between
+        // frame and printing area has changed. Then, frame has to be repainted,
+        // in order to force paint of the margin areas.
+        if ( !bAbsP && (bChgWidth || bChgHeight) )
+        {
+            pFrm->SetCompletePaint();
+        }
     }
 
     const FASTBOOL bPrtP = POS_DIFF( aPrt, pFrm->Prt() );
