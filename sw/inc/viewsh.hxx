@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:08:51 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef _VIEWSH_HXX
 #define _VIEWSH_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
+#include <com/sun/star/embed/XClassifiedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -89,6 +96,7 @@ namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
 #endif
 
+class SfxObjectShellRef;
 class SwDoc;
 class SfxPrinter;
 class VirtualDevice;
@@ -111,7 +119,6 @@ class SwFrm;
 struct SwPrintData;
 class SvtAccessibilityOptions;
 class Fraction;
-class SvEmbeddedObjectRef;
 // OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
 
@@ -326,7 +333,7 @@ public:
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SvEmbeddedObjectRef &rDocShellRef );
+    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef& );
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
