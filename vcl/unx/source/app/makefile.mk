@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 15:56:00 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:38:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,10 @@ CFLAGS+=$(LIBSN_CFLAGS)
 
 .IF "$(WITH_WIDGETSET)"!=""
 CFLAGS+= $(WIDGETSET_CFLAGS)
+.ENDIF
+
+.IF "$(USE_XINERAMA)" != "no"
+CFLAGS+=-DUSE_XINERAMA
 .ENDIF
 
 .IF "$(OS)$(CPU)" == "SOLARISS"
