@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-20 09:23:41 $
+ *  last change: $Author: jp $ $Date: 2001-02-23 14:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,9 @@ USHORT SwEditShell::GetScriptType() const
                                     nLen = aIdx == nEnd
                                                 ? pEnd->nContent.GetIndex()
                                                 : rTxt.Len();
+                        ASSERT( nLen <= rTxt.Len(), "Index outside the range - endless loop!" );
+                        if( nLen > rTxt.Len() )
+                            nLen = rTxt.Len();
 
                         USHORT nScript = pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
