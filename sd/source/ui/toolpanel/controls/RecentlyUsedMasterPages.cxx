@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,15 @@ RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
 
 
 
+RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
+{
+    MasterPageObserver::Instance().RemoveEventListener(
+        LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
+}
+
+
+
+
 void RecentlyUsedMasterPages::LateInit (void)
 {
     LoadPersistentValues ();
@@ -319,6 +328,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                 MasterPageContainer::Token aToken (
                     MasterPageContainer::Instance().PutMasterPage(
                         aMasterPages[j].first,
+                        OUString(),
                         aMasterPages[j].second,
                         NULL,
                         Image()));
@@ -381,7 +391,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
                     aValue <<= OUString(GetURL(i));
                     xChild->replaceByName (sURLMemberName, aValue);
 
-                    aValue <<= OUString(GetMasterPageName(i));
+                    aValue <<= OUString(GetMasterPageStyleName(i));
                     xChild->replaceByName (sNameMemberName, aValue);
                 }
             }
@@ -395,15 +405,6 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
     {
         // Ignore exception.
     }
-}
-
-
-
-
-RecentlyUsedMasterPages::~RecentlyUsedMasterPages (void)
-{
-    MasterPageObserver::Instance().RemoveEventListener(
-        LINK(this,RecentlyUsedMasterPages,MasterPageChangeListener));
 }
 
 
@@ -461,6 +462,15 @@ String RecentlyUsedMasterPages::GetMasterPageName (int nIndex) const
 
 
 
+String RecentlyUsedMasterPages::GetMasterPageStyleName (int nIndex) const
+{
+    MasterPageContainer::Token aToken (maMasterPages[nIndex]);
+    return MasterPageContainer::Instance().GetStyleNameForToken (aToken);
+}
+
+
+
+
 SdPage* RecentlyUsedMasterPages::GetSlide (int nIndex) const
 {
     MasterPageContainer::Token aToken (maMasterPages[nIndex]);
@@ -511,15 +521,14 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageChangeListener,
         case MasterPageObserverEvent::ET_MASTER_PAGE_ADDED:
         case MasterPageObserverEvent::ET_MASTER_PAGE_EXISTS:
             AddMasterPage(
-                MasterPageContainer::Instance().GetTokenForPageName(
+                MasterPageContainer::Instance().GetTokenForStyleName(
                     pEvent->mrMasterPageName));
             break;
 
         case MasterPageObserverEvent::ET_MASTER_PAGE_REMOVED:
             // Do not change the list of recently master pages (the deleted
-            // page was recently used) but tell the listeners how may want
-            // to update their lists of recently used master pages that are
-            // not currently in used.
+            // page was recently used) but tell the listeners.  They may want
+            // to update their lists.
             SendEvent();
             break;
     }
