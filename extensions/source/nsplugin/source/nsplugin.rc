@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nsplugin.rc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2004-09-02 14:00:31 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,5 +60,5 @@
  ************************************************************************/
 #define ADDITIONAL_VERINFO1     value "FileExtents", "sdc|sds|sda|sdd|sdp|smf|vor|sgl|sdw|sxc|stc|sxd|std|sxi|sti|sxm|sxw|sxg|stw|doc|xls|ppt|oot|ott|oom|oth|oos|ots|ood|otd|oop|otp|oof\0"\
     value "FileOpenName", "StarCalc 3.0 - 5.0|StarChart 3.0 - 5.0|StarDraw 3.0 - 5.0|StarImpress 3.0 - 5.0|StarImpress-packed 3.0 - 5.0|StarMath 3.0 - 5.0|StarWriter Template 3.0 - 5.0|StarWriter Global 3.0 - 5.0|StarWriter 3.0 - 5.0|StarCalc|StarCalc Template|StarDraw|StarDraw Template|StarImpress|StarImpress Template|StarMath|StarWriter|StarWriter Global|StarWriter Template|Microsoft Word Document|Microsoft Excel Document|Microsoft Powerpoint Document|Open Office Text|Open Office Text Template|Open Office Master Document|HTML Document Template|Open Office Spreadsheet|Open Office Spreadsheet Template|Open Office Drawing|Open Office Drawing Template|Open Office Presentation|Open Office Presentation Template|Open Office Formula\0"
-#define ADDITIONAL_VERINFO2             value "MIMEType",   "application/vnd.stardivision.calc|application/vnd.stardivision.chart|application/vnd.stardivision.draw|application/vnd.stardivision.impress|application/vnd.stardivision.impress-packed|application/vnd.stardivision.math|application/vnd.stardivision.writer|application/vnd.stardivision.writer-global|application/vnd.staroffice.writer|application/vnd.sun.xml.calc|application/vnd.sun.xml.calc.template|application/vnd.sun.xml.draw|application/vnd.sun.xml.draw.template|"
+#define ADDITIONAL_VERINFO2    value "FileDescription", "StarOffice/StarSuite Plug-in handles all its documents" value "ProductName", "StarOffice/StarSuite Plug-in"  value "MIMEType",   "application/vnd.stardivision.calc|application/vnd.stardivision.chart|application/vnd.stardivision.draw|application/vnd.stardivision.impress|application/vnd.stardivision.impress-packed|application/vnd.stardivision.math|application/vnd.stardivision.writer|application/vnd.stardivision.writer-global|application/vnd.staroffice.writer|application/vnd.sun.xml.calc|application/vnd.sun.xml.calc.template|application/vnd.sun.xml.draw|application/vnd.sun.xml.draw.template|"
 #define ADDITIONAL_VERINFO3     "application/vnd.sun.xml.impress|application/vnd.sun.xml.impress.template|application/vnd.sun.xml.math|application/vnd.sun.xml.writer|application/vnd.sun.xml.writer.global|application/vnd.sun.xml.writer.template|application/msword|application/vnd.ms-excel|application/vnd.ms-powerpoint|application/x-vnd.oasis.openoffice.text|application/x-vnd.oasis.openoffice-template|application/x-vnd.oasis.openoffice.text-master|application/x-vnd.oasis.openoffice.text-web|application/x-vnd.oasis.openoffice.spreadsheet|application/x-vnd.oasis.openoffice.spreadsheet-template|application/x-vnd.oasis.openoffice.drawing|application/x-vnd.oasis.openoffice.drawing-template|application/x-vnd.oasis.openoffice.presentation|application/x-vnd.oasis.openoffice.presentation-template|application/x-vnd.oasis.openoffice.formula\0"
