@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:28:22 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <comphelper/types.hxx>
+
+#ifndef _SVX_EXTRUSION_CONTROLS_HXX
+#include <svx/extrusioncontrols.hxx>
+#endif
 
 #include <svtools/parhtml.hxx>
 #include <sot/formats.hxx>
@@ -266,7 +270,6 @@ void ScDLL::Init()
     ScGraphicShell      ::RegisterInterface(pMod);
     ScPageBreakShell    ::RegisterInterface(pMod);
 
-
     //  eigene Controller
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
@@ -319,6 +322,13 @@ void ScDLL::Init()
     // Svx-Menue-Controller
     SvxFontMenuControl              ::RegisterControl(SID_ATTR_CHAR_FONT,       pMod);
     SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
+
+    // CustomShape extrusion controller
+    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
+    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
+    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
+    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
+    svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
 
     //  Child-Windows
 
@@ -381,6 +391,7 @@ void ScDLL::Init()
     pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, pMod->GetAppOptions().GetAppMetric() ) );
 
     //  StarOne Services are now handled in the registry
+
 }
 
 void ScDLL::Exit()
