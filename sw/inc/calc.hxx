@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:30 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,16 @@
 #ifndef _CALC_HXX
 #define _CALC_HXX
 
-
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
 #endif
 
 #ifndef __SBX_SBXVALUE //autogen
 #include <svtools/sbxvar.hxx>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 class CharClass;
@@ -260,7 +263,7 @@ public:
     static FASTBOOL Str2Double( const String& rStr, xub_StrLen& rPos,
                                 double& rVal, SwDoc* pDoc );
 
-    static FASTBOOL IsValidVarName( const String& rStr,
+    SW_DLLPUBLIC static FASTBOOL IsValidVarName( const String& rStr,
                                     String* pValidName = 0 );
 };
 
