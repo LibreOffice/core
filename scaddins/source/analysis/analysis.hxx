@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-18 06:44:16 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,11 +204,11 @@ public:
     virtual STRING SAL_CALL     getImln( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImlog10( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImproduct( const STRING& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImproduct( const SEQSEQ( STRING )& aNum1, const SEQ_ANY& aNumList ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getImreal( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsin( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsum( const STRING& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsum( const SEQSEQ( STRING )& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,6 +492,14 @@ public:
 
 
 
+enum ComplListAppendHandl
+{
+    AH_EmptyAsErr,
+    AH_EmpyAs0,
+    AH_IgnoreEmpty
+};
+
+
 class ComplexList : protected MyList
 {
 public:
@@ -504,10 +512,8 @@ public:
     MyList::Count;
 
     inline void             Append( Complex* pNew );
-    void                    Append( const SEQSEQ( STRING )& rComplexNumList,
-                                    sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
-    void                    Append( const SEQ( ANY )& aMultPars,
-                                    sal_Bool bEmptyStringAs0 = sal_True ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQSEQ( STRING )& rComplexNumList, ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQ( ANY )& aMultPars,ComplListAppendHandl eAH = AH_EmpyAs0 ) THROWDEF_RTE_IAE;
 };
 
 

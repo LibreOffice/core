@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-18 06:44:16 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,15 +1195,21 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( const STRING& aNum ) THROWDEF_RTE_IAE
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImproduct( const STRING& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImproduct( const SEQSEQ( STRING )& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
-    Complex         z( aNum1 );
+    ComplexList     z_list;
 
-    ComplexList     aNumList;
+    z_list.Append( aNum1, AH_IgnoreEmpty );
+    z_list.Append( aNL, AH_IgnoreEmpty );
 
-    aNumList.Append( aNL );
+    const Complex*  p = z_list.First();
 
-    for( const Complex* p = aNumList.First(); p ; p = aNumList.Next() )
+    if( !p )
+        return Complex( 0 ).GetString();
+
+    Complex         z( *p );
+
+    for( p = z_list.Next() ; p ; p = z_list.Next() )
         z.Mult( *p );
 
     return z.GetString();
@@ -1236,15 +1242,21 @@ STRING SAL_CALL AnalysisAddIn::getImsub( const STRING& aNum1, const STRING& aNum
 }
 
 
-STRING SAL_CALL AnalysisAddIn::getImsum( const STRING& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
+STRING SAL_CALL AnalysisAddIn::getImsum( const SEQSEQ( STRING )& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
-    Complex         z( aNum1 );
-
     ComplexList     z_list;
 
-    z_list.Append( aFollowingPars );
+    z_list.Append( aNum1, AH_IgnoreEmpty );
+    z_list.Append( aFollowingPars, AH_IgnoreEmpty );
 
-    for( const Complex* p = z_list.First() ; p ; p = z_list.Next() )
+    const Complex*  p = z_list.First();
+
+    if( !p )
+        return Complex( 0 ).GetString();
+
+    Complex         z( *p );
+
+    for( p = z_list.Next() ; p ; p = z_list.Next() )
         z.Add( *p );
 
     return z.GetString();

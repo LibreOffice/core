@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2379,11 +2379,13 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const SEQSEQ( STRING )& r, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQSEQ( STRING )& r, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
     sal_Int32   nE2;
+    sal_Bool    bEmpty0 = eAH == AH_EmpyAs0;
+    sal_Bool    bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( n1 = 0 ; n1 < nE1 ; n1++ )
     {
@@ -2398,16 +2400,18 @@ void ComplexList::Append( const SEQSEQ( STRING )& r, sal_Bool bEmpty0 ) THROWDEF
                 Append( new Complex( rStr ) );
             else if( bEmpty0 )
                 Append( new Complex( 0.0 ) );
-            else
+            else if( bErrOnEmpty )
                 THROW_IAE;
         }
     }
 }
 
 
-void ComplexList::Append( const SEQ( ANY )& aMultPars, sal_Bool bEmpty0 ) THROWDEF_RTE_IAE
+void ComplexList::Append( const SEQ( ANY )& aMultPars, ComplListAppendHandl eAH ) THROWDEF_RTE_IAE
 {
     sal_Int32       nE = aMultPars.getLength();
+    sal_Bool        bEmpty0 = eAH == AH_EmpyAs0;
+    sal_Bool        bErrOnEmpty = eAH == AH_EmptyAsErr;
 
     for( sal_Int32 n = 0 ; n < nE ; n++ )
     {
@@ -2423,7 +2427,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, sal_Bool bEmpty0 ) THROWD
                     Append( new Complex( *( STRING* ) r.getValue() ) );
                 else if( bEmpty0 )
                     Append( new Complex( 0.0 ) );
-                else
+                else if( bErrOnEmpty )
                     THROW_IAE;
                 }
                 break;
@@ -2438,7 +2442,7 @@ void ComplexList::Append( const SEQ( ANY )& aMultPars, sal_Bool bEmpty0 ) THROWD
                     sal_Int32           nE = aValArr.getLength();
                     const SEQ( ANY )*   pArr = aValArr.getConstArray();
                     for( sal_Int32 n = 0 ; n < nE ; n++ )
-                        Append( pArr[ n ], bEmpty0 );
+                        Append( pArr[ n ], eAH );
                 }
                 else
                     THROW_IAE;

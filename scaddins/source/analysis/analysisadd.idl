@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-18 13:00:32 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ module addin
         string getImlog2( [in] string Num );
 
         /// improduct.
-        string getImproduct( [in] string Num1, [in] sequence<any> NumberList );
+        string getImproduct( [in] sequence< sequence<string> > Num1, [in] sequence<any> NumberList );
 
         /// imreal.
         double getImreal( [in] string Num );
@@ -259,7 +259,7 @@ module addin
         string getImsub( [in] string Num1, [in] string Num2 );
 
         /// imsum.
-        string getImsum( [in] string Num1, [in] sequence<any> OptNums );
+        string getImsum( [in] sequence< sequence<string> > Num1, [in] sequence<any> OptNums );
 
         /// imsqrt.
         string getImsqrt( [in] string Num );
