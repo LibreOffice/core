@@ -1,5 +1,5 @@
 <!--
-	$Id: chart.mod,v 1.4 2000-11-23 19:48:03 cl Exp $
+	$Id: chart.mod,v 1.5 2000-11-24 09:46:19 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -54,7 +54,7 @@
 -->
 
 
-<!ENTITY % chart-class "(line|area|circle|ring|scatter|radar|bar|stock)">
+<!ENTITY % chart-class "(line|area|circle|ring|scatter|radar|bar|stock|add-in)">
 <!ENTITY % chart-solid-type "(cuboid|cylinder|cone|pyramid)">
 
 <!-- Chart element -->
@@ -63,6 +63,7 @@
 						table:table )>
 <!ATTLIST chart:chart
 		  chart:class %chart-class; #REQUIRED
+		  chart:add-in-name: %string; #IMPLIED
 		  svg:width %length; #IMPLIED
 		  svg:height %length; #IMPLIED
 		  chart:style-name %styleName; #IMPLIED>
