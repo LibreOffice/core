@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-03 11:18:32 $
+ *  last change: $Author: dv $ $Date: 2001-05-04 11:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #ifndef  _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
 #include <com/sun/star/ui/FilePickerElementID.hpp>
 #endif
-#ifndef  _COM_SUN_STAR_UI_XEXTENDEDFILEPICKER_HPP_
-#include <com/sun/star/ui/XExtendedFilePicker.hpp>
+#ifndef  _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_XFILEPICKER_HPP_
 #include <com/sun/star/ui/XFilePicker.hpp>
@@ -1594,27 +1594,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 #else
             // get the filename by dialog ...
             // create the file dialog
-            OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
-            Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-            Reference< XFilePicker > xFileDlg( xFactory->createInstance( aService ), UNO_QUERY );
-
-            Reference< XFilterManager > xFltMgr( xFileDlg, UNO_QUERY );
-
-            if ( ! xFileDlg.is() || ! xFltMgr.is() )
-            {
-                SetError(ERRCODE_IO_ABORT);
-                return sal_False;
-            }
-
-            Reference< XInitialization > xInit( xFileDlg, UNO_QUERY );
-            if ( xInit.is() )
-            {
-                Sequence < Any > aServiceName(1);
-                aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_SAVE_AUTOEXT_PWDBOX ) );
-                xInit->initialize( aServiceName );
-            }
-
-            ::sfx2::AddFiltersToDialog( GetFactory(), SFX_FILTER_EXPORT, xFltMgr );
+            sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
 
             if ( HasName() )
             {
@@ -1632,53 +1612,32 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         aObj.setFinalSlash();
                         aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
-                        OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
-                                         INetURLObject::DECODE_WITH_CHARSET ) );
-                        aObj.removeSegment();
-                        xFileDlg->setDisplayDirectory( aObj.GetMainURL() );
-                        xFileDlg->setDefaultName( aTitle );
+                        aFileDlg.SetDisplayDirectory( aObj.GetMainURL() );
                     }
 
-                    xFltMgr->setCurrentFilter( pFilt->GetName() );
+                    aFileDlg.SetCurrentFilter( pFilt->GetName() );
                 }
                 else
                 {
                     if( aLastName.Len() )
-                    {
-                        INetURLObject aObj( aLastName, INET_PROT_FILE );
-                        OUString aTitle( aObj.getName( INetURLObject::LAST_SEGMENT, true,
-                                         INetURLObject::DECODE_WITH_CHARSET ) );
-                        aObj.removeSegment();
-                        xFileDlg->setDisplayDirectory( aObj.GetMainURL() );
-                        xFileDlg->setDefaultName( aTitle );
-                    }
+                        aFileDlg.SetDisplayDirectory( aLastName );
 
-                    xFltMgr->setCurrentFilter( pMedFilter->GetName() );
+                    aFileDlg.SetCurrentFilter( pMedFilter->GetName() );
                 }
             }
             else
             {
-                xFileDlg->setDisplayDirectory( SvtPathOptions().GetWorkPath() );
+                aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
             }
 
-            if ( xFileDlg->execute() == FileDialogResults::CANCEL )
+            if ( aFileDlg.Execute() != ERRCODE_NONE )
             {
                 SetError(ERRCODE_IO_ABORT);
                 return sal_False;
             }
 
             // get the path from the dialog
-            Sequence < OUString > aPathSeq = xFileDlg->getPath();
-            if ( aPathSeq.getLength() == 1 )
-            {
-                aURL.SetURL( aPathSeq[0] );
-            }
-            else
-            {
-                DBG_ERRORFILE( "FileDialog returned wrong number of pathes!" );
-                SetError(ERRCODE_IO_ABORT);
-                return sal_False;
-            }
+            aURL.SetURL( aFileDlg.GetPath() );
 
             // gibt es schon ein Doc mit dem Namen?
             const String aName(aURL.GetMainURL());
@@ -1699,12 +1658,12 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
 
             // Parameter aus Dialog holen
-            const String aFilter( xFltMgr->getCurrentFilter() );
+            const String aFilter( aFileDlg.GetCurrentFilter() );
             if( aFilter.Len() )
                 aFilterName = aFilter;
 
             // --**-- pParams->Put( *pDlg->GetItemSet() );
-            Reference< XExtendedFilePicker > xExtFileDlg( xFileDlg, UNO_QUERY );
+            Reference< XFilePickerControlAccess > xExtFileDlg( aFileDlg.GetFilePicker(), UNO_QUERY );
             if ( xExtFileDlg.is() )
             {
                 try
@@ -1776,46 +1735,19 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 #else
         // get the filename by dialog ...
         // create the file dialog
-        OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
-        Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-        Reference< XFilePicker > xFileDlg( xFactory->createInstance( aService ), UNO_QUERY );
-        Reference< XFilterManager > xFltMgr( xFileDlg, UNO_QUERY );
+        sfx2::FileDialogHelper aFileDlg( WB_SAVEAS | SFXWB_PASSWORD, GetFactory() );
 
-        if ( ! xFileDlg.is() || ! xFltMgr.is() )
+        if ( aFileDlg.Execute() != ERRCODE_NONE )
         {
             SetError(ERRCODE_IO_ABORT);
             return sal_False;
         }
 
-        Reference< XInitialization > xInit( xFileDlg, UNO_QUERY );
-        if ( xInit.is() )
-        {
-            Sequence < Any > aServiceName(1);
-            aServiceName[0] <<= OUString( RTL_CONSTASCII_USTRINGPARAM( FILE_SAVE_AUTOEXT_PWDBOX ) );
-            xInit->initialize( aServiceName );
-        }
-
-        ::sfx2::AddFiltersToDialog( GetFactory(), SFX_FILTER_EXPORT, xFltMgr );
-
-        if ( xFileDlg->execute() == FileDialogResults::CANCEL )
-        {
-            SetError(ERRCODE_IO_ABORT);
-            return sal_False;
-        }
         // get the path from the dialog
-        Sequence < OUString > aPathSeq = xFileDlg->getPath();
-        if ( aPathSeq.getLength() == 1 )
-        {
-            aURL.SetURL( aPathSeq[0] );
-        }
-        else
-        {
-            DBG_ERRORFILE( "FileDialog returned wrong number of pathes!" );
-            SetError(ERRCODE_IO_ABORT);
-            return sal_False;
-        }
+        aURL.SetURL( aFileDlg.GetPath() );
+
         // get the filter name from the dialog
-        aFilterName = xFltMgr->getCurrentFilter();
+        aFilterName = aFileDlg.GetCurrentFilter();
 #endif
     }
     else if ( pFileNameItem )
