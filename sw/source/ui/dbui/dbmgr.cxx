@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 12:03:23 $
+ *  last change: $Author: os $ $Date: 2001-05-07 10:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1566,6 +1566,7 @@ BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguag
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextMergeRecord()
 {
+    BOOL bRet = TRUE;
     DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
     if(!pMergeData || !pMergeData->xResultSet.is() || pMergeData->bEndOfDB)
     {
@@ -1580,6 +1581,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
             pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
                     (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
             pMergeData->CheckEndOfDB();
+            bRet = !pMergeData->bEndOfDB;
             if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
                 pMergeData->bEndOfDB = TRUE;
         }
@@ -1587,6 +1589,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
             pMergeData->CheckEndOfDB();
+            bRet = !pMergeData->bEndOfDB;
             ++pMergeData->nSelectionIndex;
         }
     }
@@ -1594,7 +1597,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
     {
         DBG_ERROR("exception caught")
     }
-    return !pMergeData->bEndOfDB;
+    return bRet;
 }
 /* -----------------------------13.07.00 17:23--------------------------------
     synchronized labels contain a next record field at their end
