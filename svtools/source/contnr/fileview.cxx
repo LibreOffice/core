@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 07:33:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-#include <functional>
 #include "fileview.hxx"
 #include "svtdata.hxx"
 #include "imagemgr.hxx"
@@ -122,12 +121,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef _VECTOR_
-#include <vector>
-#endif
-#ifndef _ALGORITHM_
 #include <algorithm>
-#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -154,9 +148,7 @@
 #ifndef INCLUDED_RTL_MATH_H
 #include <rtl/math.hxx>
 #endif
-#ifndef _WLDCRD_HXX
-#include <tools/wldcrd.hxx>
-#endif
+
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
@@ -230,6 +222,28 @@ static sal_Bool isHighContrast( const Window* _pView )
 
 // -----------------------------------------------------------------------
 
+void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters)
+{
+    if( _rFilterList.Len() )
+    {// filter is given
+        xub_StrLen nCount = _rFilterList.GetTokenCount();
+        _rFilters.reserve( nCount );
+        xub_StrLen nIndex = 0;
+        OUString sToken;
+        do
+        {
+            sToken = _rFilterList.GetToken( 0, ';', nIndex );
+            if ( sToken.getLength() )
+            {
+                _rFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
+            }
+        }
+        while ( nIndex != STRING_NOTFOUND );
+    }
+    else
+        // no filter is given -> match all
+        _rFilters.push_back( WildCard( String::CreateFromAscii( "*" ) ) );
+}
 // structs   -------------------------------------------------------------
 
 struct SortingData_Impl
@@ -685,6 +699,7 @@ public:
     void                    Clear();
 
     sal_Bool                GetFolderContent_Impl( const String& rFolder );
+    sal_Bool                GetFolderContent_Impl( Content& _rContent);
     void                    FilterFolderContent_Impl( const OUString &rFilter );
 
     void                    OpenFolder_Impl();
@@ -1333,8 +1348,7 @@ String SvtFileView::GetCurrentURL() const
         aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
     return aURL;
 }
-
-// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 sal_Bool SvtFileView::CreateNewFolder( const String& rNewFolder )
 {
@@ -1442,7 +1456,25 @@ sal_Bool SvtFileView::Initialize( const String& rURL, const String& rFilter )
     mpImp->maOpenDoneLink.Call( this );
     return sal_True;
 }
+// -----------------------------------------------------------------------------
+sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter  )
+{
+    WaitObject aWaitCursor( this );
 
+    mpImp->Clear();
+    Content aCnt(_xContent,Reference< XCommandEnvironment >());
+    if ( !mpImp->GetFolderContent_Impl( aCnt ) )
+        return sal_False;
+
+    mpImp->FilterFolderContent_Impl( rFilter );
+
+    mpImp->SortFolderContent_Impl();    // possibly not necessary!!!!!!!!!!
+    mpImp->CreateDisplayText_Impl();
+    mpImp->OpenFolder_Impl();
+
+    mpImp->maOpenDoneLink.Call( this );
+    return sal_True;
+}
 // -----------------------------------------------------------------------
 
 sal_Bool SvtFileView::Initialize( const String& rURL, const Sequence< OUString >& aContents )
@@ -1683,7 +1715,6 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     USHORT nTokenCount = rCfgStr.GetTokenCount();
-    DBG_ASSERT( pBar->GetItemCount() == ( nTokenCount / 2 - 1 ), "invalid config string" );
 
     USHORT nIdx = 0;
     mpImp->mnSortColumn = (USHORT)rCfgStr.GetToken( 0, ';', nIdx ).ToInt32();
@@ -1843,19 +1874,38 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    SortingData_Impl* pData;
-
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 
-    sal_Bool bSuccess = sal_False;
-
+    Content aCnt;
     try
     {
         // prepare name translation
         SetActualFolder( aFolderObj );
+        aCnt = Content( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
+    }
+    catch( CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "GetFolderContents: CommandAbortedException" );
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
+    }
 
-        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
+
+    return GetFolderContent_Impl( aCnt );
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtFileView_Impl::GetFolderContent_Impl( Content& _rContent )
+{
+
+    SortingData_Impl* pData;
+    sal_Bool bSuccess = sal_False;
+
+    try
+    {
+
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(12);
 
@@ -1876,7 +1926,7 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         {
             Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
             ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-            xDynResultSet = aCnt.createDynamicCursor( aProps, eInclude );
+            xDynResultSet = _rContent.createDynamicCursor( aProps, eInclude );
 
             if ( xDynResultSet.is() )
                 xResultSet = xDynResultSet->getStaticResultSet();
@@ -1903,17 +1953,21 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                 {
                     sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
                     // don't show hidden files
-                    if ( !bIsHidden )
+                    if ( !bIsHidden || xRow->wasNull() )
                     {
                         pData = NULL;
 
                         aDT = xRow->getTimestamp( ROW_DATE_MOD );
-                        if ( xRow->wasNull() )
+                        sal_Bool bContainsDate = !xRow->wasNull();
+                        if ( !bContainsDate )
+                        {
                             aDT = xRow->getTimestamp( ROW_DATE_CREATE );
+                            bContainsDate = !xRow->wasNull();
+                        }
 
                         OUString aContentURL = xContentAccess->queryContentIdentifierString();
                         OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
-                        sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
+                        sal_Bool bHasTargetURL = !xRow->wasNull() && aTargetURL.getLength() > 0;
 
                         OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
 
@@ -1924,12 +1978,12 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                         pData = new SortingData_Impl;
                         pData->maTargetURL = sRealURL;
 
-                        pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
-                        pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME );
-                        pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE );
-                        pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE );
-                        pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY );
-                        pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC );
+                        pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER ) && !xRow->wasNull();
+                        pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME ) && !xRow->wasNull();
+                        pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE ) && !xRow->wasNull();
+                        pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE ) && !xRow->wasNull();
+                        pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY ) && !xRow->wasNull();
+                        pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC ) && !xRow->wasNull();
                         pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
                         pData->maSize = xRow->getLong( ROW_SIZE );
 
@@ -1941,7 +1995,10 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                             aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDT;
                         }
 
-                        CONVERT_DATETIME( aDT, pData->maModDate );
+                        if ( bContainsDate )
+                        {
+                            CONVERT_DATETIME( aDT, pData->maModDate );
+                        }
 
                         if ( pData->mbIsFolder )
                         {
@@ -2000,23 +2057,6 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
     return bSuccess;
 }
 // -----------------------------------------------------------------------
-namespace
-{
-    struct FilterMatch : public ::std::unary_function< bool, WildCard >
-    {
-    private:
-        const String&   m_rCompareString;
-    public:
-        FilterMatch( const String& _rCompareString ) : m_rCompareString( _rCompareString ) { }
-
-        bool operator()( const WildCard& _rMatcher )
-        {
-            return _rMatcher.Matches( m_rCompareString ) ? true : false;
-        }
-    };
-}
-
-// -----------------------------------------------------------------------
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
     sal_Bool bHideTransFile = mbReplaceNames && mpNameTrans;
@@ -2054,24 +2094,8 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
     // collect the filter tokens
     ::std::vector< WildCard > aFilters;
-    if( rFilter.getLength() )
-    {// filter is given
-        aFilters.reserve( nTokens );
-        sal_Int32 nIndex = 0;
-        OUString sToken;
-        do
-        {
-            sToken = rFilter.getToken( 0, ';', nIndex );
-            if ( sToken.getLength() )
-            {
-                aFilters.push_back( WildCard( sToken.toAsciiUpperCase() ) );
-            }
-        }
-        while ( nIndex >= 0 );
-    }
-    else
-        // no filter is given -> match all
-        aFilters.push_back( WildCard( String::CreateFromAscii( "*" ) ) );
+    FilterMatch::createWildCardFilterList(rFilter,aFilters);
+
 
     // do the filtering
     ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
