@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 17:04:14 $
+ *  last change: $Author: cd $ $Date: 2001-05-04 06:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,10 +311,10 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
                     delete pBmkAttributes;
                     pBmkMenu->SetUserValue( nItemId, 0 );
                 }
-/*
-                Image aImage = GetImage( aItemCommand, Reference< XFrame >() );
-                pMenu->SetItemImage( nItemId, aImage );
-*/
+
+                Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                if ( !!aImage )
+                    pBmkMenu->SetItemImage( nItemId, aImage );
 
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
             }
@@ -445,35 +445,67 @@ throw ( RuntimeException )
 
 void SAL_CALL MenuManager::disposing( const EVENTOBJECT& Source ) throw ( RUNTIMEEXCEPTION )
 {
-    MenuItemHandler* pMenuItemDisposing = NULL;
-
+    if ( Source.Source == m_xFrame )
     {
         LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::disposing" )
+
+        // disposing called from parent dispatcher
+        // remove all listener to prepare shutdown
+        REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
 
         std::vector< MenuItemHandler* >::iterator p;
         for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
         {
-            MenuItemHandler* pMenuItemHandler = *p;
-            if ( pMenuItemHandler->xMenuItemDispatch == Source.Source )
+            MenuItemHandler* pItemHandler = *p;
+            if ( pItemHandler->xMenuItemDispatch.is() )
             {
-                pMenuItemDisposing = pMenuItemHandler;
-                break;
+                URL aTargetURL;
+                aTargetURL.Complete = pItemHandler->aMenuItemURL;
+                xTrans->parseStrict( aTargetURL );
+
+                pItemHandler->xMenuItemDispatch->removeStatusListener(
+                    SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
             }
+
+            pItemHandler->xMenuItemDispatch = REFERENCE< XDISPATCH >();
+            if ( pItemHandler->pSubMenuManager )
+                pItemHandler->pSubMenuManager->disposing( Source );
         }
     }
-
-    if ( pMenuItemDisposing )
+    else
     {
-        URL aTargetURL;
-        aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
+        // disposing called from menu item dispatcher, remove listener
+        MenuItemHandler* pMenuItemDisposing = NULL;
 
-        REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
-        xTrans->parseStrict( aTargetURL );
+        {
+            LOCK_MUTEX( aGuard, m_aMutex, "MenuManager::disposing" )
 
-        pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
-            SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
-        pMenuItemDisposing->xMenuItemDispatch = REFERENCE< XDISPATCH >();
+            std::vector< MenuItemHandler* >::iterator p;
+            for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); p++ )
+            {
+                MenuItemHandler* pMenuItemHandler = *p;
+                if ( pMenuItemHandler->xMenuItemDispatch == Source.Source )
+                {
+                    pMenuItemDisposing = pMenuItemHandler;
+                    break;
+                }
+            }
+
+            if ( pMenuItemDisposing )
+            {
+                URL aTargetURL;
+                aTargetURL.Complete = pMenuItemDisposing->aMenuItemURL;
+
+                REFERENCE< XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
+                xTrans->parseStrict( aTargetURL );
+
+                pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
+                    SAL_STATIC_CAST( XSTATUSLISTENER*, this ), aTargetURL );
+                pMenuItemDisposing->xMenuItemDispatch = REFERENCE< XDISPATCH >();
+            }
+        }
     }
 }
 
