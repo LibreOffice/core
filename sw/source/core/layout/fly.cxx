@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:42:31 $
+ *  last change: $Author: ama $ $Date: 2001-04-19 13:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,6 +1145,26 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                         else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
                             nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
                         pFrm = pFrm->GetNext();
+                    }
+                }
+                if ( GetDrawObjs() )
+                {
+                    USHORT nCnt = GetDrawObjs()->Count();
+                    SwTwips nTop = Frm().Top() + Frm().Height()-Prt().Height();
+                    for ( USHORT i = 0; i < nCnt; ++i )
+                    {
+                        SdrObject *pO = (*GetDrawObjs())[i];
+                        if ( pO->IsWriterFlyFrame() )
+                        {
+                            SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                            if( pFly->IsFlyLayFrm() )
+                            {
+                                SwTwips nBottom = pFly->Frm().Top() +
+                                                  pFly->Frm().Height();
+                                if( nBottom > nTop + nRemaining )
+                                    nRemaining = nBottom - nTop;
+                            }
+                        }
                     }
                 }
             }

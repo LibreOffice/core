@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-18 09:26:23 $
+ *  last change: $Author: ama $ $Date: 2001-04-19 13:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,6 +572,7 @@ SwLayNotify::~SwLayNotify()
     //Lower benachrichtigen wenn sich die Position veraendert hat.
     const BOOL bPrtPos = pLay->Prt().Pos() != aPrt.Pos();
     const BOOL bPos = bPrtPos || pLay->Frm().Pos() != aFrm.Pos();
+    const BOOL bSize = pLay->Frm().SSize() != aFrm.SSize();
 
     if ( bPos && pLay->Lower() && !IsLowersComplete() )
         pLay->Lower()->InvalidatePos();
@@ -580,7 +581,7 @@ SwLayNotify::~SwLayNotify()
         pLay->SetCompletePaint();
 
     //Nachfolger benachrichtigen wenn sich die SSize geaendert hat.
-    if ( pLay->Frm().SSize() != aFrm.SSize() )
+    if ( bSize )
     {
         if( pLay->GetNext() )
         {
@@ -605,6 +606,9 @@ SwLayNotify::~SwLayNotify()
         aDiff -= aFrm.Pos();
         lcl_MoveLowerFlys( pLay, aDiff, pLay->FindPageFrm() );
     }
+    if( ( bPos || bSize ) && pLay->IsFlyFrm() && ((SwFlyFrm*)pLay)->GetAnchor()
+          && ((SwFlyFrm*)pLay)->GetAnchor()->IsFlyFrm() )
+        ((SwFlyFrm*)pLay)->GetAnchor()->InvalidateSize();
 }
 
 /*************************************************************************
