@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:48:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-08 13:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,10 +384,10 @@ TabPage RID_SVXPAGE_CHAR_STD
     };
     StringList [ catalan ] =
     {
-            < "Normal" ;
-        < "Cursiva" ;
-        < "Negrita" ;
-        < "Cursiva negrita" ;
+         "Normal" ;
+         "Cursiva" ;
+         "Negrita" ;
+         "Cursiva negrita" ;
     };
     };
     FixedText FT_SIZE
@@ -2739,10 +2739,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     StringList [ catalan ] =
     {
-            < "Normal" ;
-        < "Cursiva" ;
-        < "Negrita" ;
-        < "Negrita cursiva" ;
+         "Normal" ;
+         "Cursiva" ;
+         "Negrita" ;
+         "Negrita cursiva" ;
     };
     };
     FixedText FT_WEST_SIZE
@@ -3044,10 +3044,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
     };
     StringList [ catalan ] =
     {
-            < "Normal" ;
-        < "Cursiva" ;
-        < "Negrita" ;
-        < "Negrita cursiva" ;
+         "Normal" ;
+         "Cursiva" ;
+         "Negrita" ;
+         "Negrita cursiva" ;
     };
     };
     FixedText FT_EAST_SIZE
