@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:03:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,7 @@ void SvxDrawPage::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             pModel = NULL;
             delete pView;
             pView = NULL;
+            pPage = NULL;
         }
     }
 }
