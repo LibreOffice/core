@@ -1,0 +1,44 @@
+er	extras									usr30073	-	none	 NULL
+er	extras									usr1	-	all	er_mkout NULL
+er	extras\source\autotext\lang				nmake	-	all	er_atxt NULL
+er	extras\source\database					nmake	-	all	er_datbs NULL
+er	extras\source\database\lang				nmake	-	all	er_datal NULL
+er	extras\source\gallery					nmake	-	all	er_gal NULL
+er	extras\source\gallery\bullets			nmake	-	all	er_gbull NULL
+er	extras\source\gallery\gallery_sound		nmake	-	all	er_gsnd NULL
+er	extras\source\gallery\gallery_system	nmake	-	all	er_gsys NULL
+er	extras\source\gallery\htmlexpo			nmake	-	all	er_ghtml NULL
+er	extras\source\gallery\rulers			nmake	-	all	er_grulr NULL
+er	extras\source\gallery\sounds			nmake	-	all	er_gsnds NULL
+er	extras\source\gallery\www-back			nmake	-	all	er_gwbck NULL
+er	extras\source\misc_config				nmake	-	all	er_mcnf NULL
+er	extras\source\misc_config\lang			nmake	-	all	er_mcnfl er_mcnf NULL
+er	extras\source\newmenu					nmake	-	all	er_nmenu NULL
+er	extras\source\palettes\lang				nmake	-	all	er_pall er_mcnfl NULL
+er	extras\source\palettes					nmake	-	all	er_palet NULL
+er	extras\source\symbols					nmake	-	all	er_symb NULL
+er	extras\source\templates\layout\lang		nmake	-	all	er_tlal NULL
+er	extras\source\templates\presnt\lang		nmake	-	all	er_tprel NULL
+er	extras\source\templates\wizard\agenda\lang			nmake	-	all	er_twagl NULL
+er	extras\source\templates\wizard\bitmap	nmake	-	all	er_twbmp NULL
+er	extras\source\templates\wizard\desktop	nmake	-	all	er_twdk NULL
+er	extras\source\templates\wizard\desktop\lang			nmake	-	all	er_twdkl NULL
+er	extras\source\templates\wizard\fax\lang	nmake	-	all	er_twfal NULL
+er	extras\source\templates\wizard\letter\lang			nmake	-	all	er_twlel NULL
+er	extras\source\templates\wizard\memo\lang			nmake	-	all	er_twmel NULL
+er	extras\source\templates\wizard\styles\lang			nmake	-	all	er_stls NULL
+er	extras\source\templates\wizard\web\lang	nmake	-	all	er_stwwebl NULL
+er	extras\source\wizardmenu				nmake	-	all	er_wmenu NULL
+er	extras\source\wordbook					nmake	-	all	er_wrdb NULL
+er	extras\source\wordbook\lang				nmake	-	all	er_wrdbl NULL
+er	extras\unx\source\bitmaps				nmake	-	all	er_bmpu NULL
+er	extras\unx\source\cde					nmake	-	all	er_cdeu NULL
+er	extras\unx\source\cde\lang				nmake	-	all	er_cdelu er_cdeu NULL
+er	extras\unx\source\fonts\fonts\75dpi		nmake	-	all	er_ffdu NULL
+er	extras\unx\source\fonts\fonts\75dpi\bdf	nmake	-	all	er_ffdbu NULL
+er	extras\unx\source\fonts\fonts\type1		nmake	-	all	er_fftu NULL
+er	extras\unx\source\kde\applnk			nmake	-	all	er_kdau NULL
+er	extras\unx\source\kde\icons				nmake	-	all	er_kdiu NULL
+er	extras\unx\source\kde\icons\mini		nmake	-	all	er_kdimu NULL
+er	extras\unx\source\kde\mimelnk\application			nmake	-	all	er_kdmau NULL
+er	extras\unx\source\kde\mimelnk\text		nmake	-	all	er_kdmtu NULL
