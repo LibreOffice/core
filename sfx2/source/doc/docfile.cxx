@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:34:23 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 12:33:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,7 +1128,6 @@ SvStorage* SfxMedium::GetStorage()
 
     if ( bResetSorage )
     {
-        SetError( aStorage->GetError() );
         aStorage.Clear();
         pStream->Seek( 0L );
     }
