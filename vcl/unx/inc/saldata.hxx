@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:24:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 #include <osl/module.h>
 #endif
 
+#ifndef _VCL_DLLAPI_H
+#include <dllapi.h>
+#endif
+
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
 class SalDisplay;
@@ -98,7 +102,7 @@ typedef unsigned int pthread_t;
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class SalData
+class VCL_DLLPUBLIC SalData
 {
 protected:
             BOOL                bNoExceptions_;
