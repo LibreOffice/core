@@ -6102,7 +6102,7 @@ SfxVoidItem RenamePageQuick SID_RENAMEPAGE_QUICK
     AccelConfig = FALSE,
     MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_FORMAT;
 ]
 
