@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:43:12 $
+ *  last change: $Author: os $ $Date: 2002-09-03 08:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@
 
 // ------------------------------------------------------------------------
 
-#define IMAGE_COL_TRANSPARENT       COL_LIGHTGRAY
+#define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
 // STATIC DATA -----------------------------------------------------------
