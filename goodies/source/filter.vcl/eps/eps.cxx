@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-04 16:12:44 $
+ *  last change: $Author: sj $ $Date: 2002-08-16 11:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1860,75 +1860,35 @@ void PSWriter::ImplText( const String& rUniString, const Point& rPos, const INT3
         aVirDev.SetMapMode( aMapMode );
         aVirDev.SetFont( aNotRotatedFont );
 
-        Size    aNormSize;
-        long*   pOwnArray;
-        long*   pDX;
-
-        // get text sizes
-        if( pDXArry )
-        {
-            pOwnArray = NULL;
-            aNormSize = Size( aVirDev.GetTextWidth( rUniString ), 0 );
-            pDX = (long*) pDXArry;
-        }
-        else
-        {
-            pOwnArray = new long[ nLen ];
-            aNormSize = Size( aVirDev.GetTextArray( rUniString, pOwnArray ), 0 );
-            pDX = pOwnArray;
-        }
-        if( nLen > 1 )
-        {
-            aNormSize.Width() = pDX[ nLen - 2 ] + aVirDev.GetTextWidth( rUniString.GetChar( nLen - 1 ) );
-
-            if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
-            {
-                const double fFactor = (double) nWidth / aNormSize.Width();
-
-                for( i = 0; i < ( nLen - 1 ); i++ )
-                    pDX[ i ] = FRound( pDX[ i ] * fFactor );
-            }
-        }
-        const FontMetric aMetric( aVirDev.GetFontMetric() );
-        aNormSize.Height() = aMetric.GetLineHeight();
-
-//
-
         sal_Int16 nRotation = maFont.GetOrientation();
         Polygon aPolyDummy( 1 );
 
-        for ( i = 0; i < nLen; i++ )
+        PolyPolygon aPolyPoly;
+        Point aPos( rPos );
+        if ( nRotation )
         {
-            PolyPolygon aPolyPoly;
-            sal_Unicode nChar = rUniString.GetChar( i );
-
-            Point aPos( rPos );
-            if ( i > 0 )
-                aPos.X() += pDX[ i - 1 ];
+            aPolyDummy.SetPoint( aPos, 0 );
+            aPolyDummy.Rotate( rPos, nRotation );
+            aPos = aPolyDummy.GetPoint( 0 );
+        }
+        std::vector<PolyPolygon> aPolyPolyVec;
+        if ( aVirDev.GetTextOutlines( aPolyPolyVec, rUniString ) )
+        {
+            ImplWriteLine( "pum" );
+            // always adjust text position to match baseline alignment
+            ImplTranslate( aPos.X() * fXScaling, aPos.Y() * fYScaling );
             if ( nRotation )
             {
-                aPolyDummy.SetPoint( aPos, 0 );
-                aPolyDummy.Rotate( rPos, nRotation );
-                aPos = aPolyDummy.GetPoint( 0 );
+                ImplWriteF( nRotation, 1 );
+                *mpPS << "r ";
             }
-            String aString( nChar );
-            if ( aVirDev.GetTextOutline( aPolyPoly, aString ) )
-            {
-                ImplWriteLine( "pum" );
-                // always adjust text position to match baseline alignment
-                ImplTranslate( aPos.X() * fXScaling, aPos.Y() * fYScaling );
-                if ( nRotation )
-                {
-                    ImplWriteF( nRotation, 1 );
-                    *mpPS << "r ";
-                }
-                ImplPolyPoly( aPolyPoly, sal_True );
-                ImplWriteLine( "pom" );
-            }
-//          else
-//              ImplGenerateBitmap( nChar, 300, aVirDev, aPos, aSize, nWidth );
+            std::vector<PolyPolygon>::iterator aIter( aPolyPolyVec.begin() );
+            while ( aIter != aPolyPolyVec.end() )
+                ImplPolyPoly( *aIter++, sal_True );
+            ImplWriteLine( "pom" );
         }
-        delete[] pOwnArray;
+//      else
+//          ImplGenerateBitmap( nChar, 300, aVirDev, aPos, aSize, nWidth );
     }
     else
     {
