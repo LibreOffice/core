@@ -27,7 +27,7 @@ SLOFILES = \
 
 SHL1TARGET=$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1STDLIBS=-ljawt -lsal
+SHL1STDLIBS=-ljawt
 
 .IF "$(OS)" == "LINUX"
 .IF "$(CPUNAME)" == "S390"
