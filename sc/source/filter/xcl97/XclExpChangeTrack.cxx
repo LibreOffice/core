@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:36 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 //___________________________________________________________________
+
+#include <sot/storage.hxx>
 
 #ifndef SC_XCLEXPCHANGETRACK_HXX
 #include "XclExpChangeTrack.hxx"
@@ -1275,7 +1277,7 @@ sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
     sal_Bool bRet = sal_False;
     const XclExpRoot& rRoot = *pExcRoot->pER;
-    SvStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
+    SotStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
     DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
     if( xSvStrm.Is() )
     {
@@ -1298,7 +1300,7 @@ void XclExpChangeTrack::Write()
     if( WriteUserNamesStream() )
     {
         const XclExpRoot& rRoot = *pExcRoot->pER;
-        SvStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_REVLOG );
+        SotStorageStreamRef xSvStrm = rRoot.OpenStream( EXC_STREAM_REVLOG );
         DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
         if( xSvStrm.Is() )
         {
