@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 10:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,25 +997,39 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     {
         case PROPERTY_ID_QUERYTIMEOUT:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getQueryTimeOut());
+            break;
+
         case PROPERTY_ID_MAXFIELDSIZE:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxFieldSize());
+            break;
+
         case PROPERTY_ID_MAXROWS:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getMaxRows());
+            break;
+
         case PROPERTY_ID_CURSORNAME:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getCursorName());
+            break;
+
         case PROPERTY_ID_RESULTSETCONCURRENCY:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetConcurrency());
+            break;
+
         case PROPERTY_ID_RESULTSETTYPE:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getResultSetType());
+            break;
+
         case PROPERTY_ID_FETCHDIRECTION:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            break;
+
         case PROPERTY_ID_FETCHSIZE:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
-        case PROPERTY_ID_ESCAPEPROCESSING:
-            //  bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
+
         case PROPERTY_ID_USEBOOKMARKS:
             bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
+            break;
 
         default:
             ;
@@ -1050,9 +1064,6 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
             break;
         case PROPERTY_ID_FETCHSIZE:
             setFetchSize(comphelper::getINT32(rValue));
-            break;
-        case PROPERTY_ID_ESCAPEPROCESSING:
-            //  return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bAsLink);
             break;
         case PROPERTY_ID_USEBOOKMARKS:
             setUsingBookmarks(comphelper::getBOOL(rValue));
@@ -1089,8 +1100,6 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             break;
         case PROPERTY_ID_FETCHSIZE:
             rValue <<= getFetchSize();
-            break;
-        case PROPERTY_ID_ESCAPEPROCESSING:
             break;
         case PROPERTY_ID_USEBOOKMARKS:
             rValue <<= cppu::bool2any(isUsingBookmarks());
