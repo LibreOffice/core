@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-27 14:35:44 $
+#   last change: $Author: mba $ $Date: 2001-05-03 10:15:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,12 +81,16 @@ CFLAGS += -nomapcr
 
 # --- Files --------------------------------------------------------
 
+IMGLST_SRS=$(SRS)$/misc.srs
+#BMP_IN=$(PRJ)$/win/res
+
 SRS1NAME=misc
 SRC1FILES=\
     config.src	\
     demo.src	\
     pver.src	\
     iniman.src 	\
+        imagemgr.src      \
     ehdl.src
 
 SRS2NAME=ehdl
@@ -95,7 +99,7 @@ SRC2FILES=\
 
 SRS3NAME=mediatyp
 SRC3FILES=\
-    mediatyp.src
+        mediatyp.src
 
 SLOFILES=\
     $(LIB2OBJFILES)	\
@@ -119,6 +123,7 @@ LIB2OBJFILES=\
 
 LIB3TARGET=$(SLB)$/misc2.lib
 LIB3OBJFILES=\
+        $(SLO)$/imagemgr.obj              \
     $(SLO)$/agprop.obj		\
     $(SLO)$/config.obj		\
     $(SLO)$/confitem.obj	\
@@ -147,7 +152,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/iniman.obj		\
     $(SLO)$/transfer.obj	\
     $(SLO)$/transfer2.obj	\
-    $(SLO)$/stringtransfer.obj	
+    $(SLO)$/stringtransfer.obj
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb

@@ -1,0 +1,398 @@
+/*************************************************************************
+ *
+ *  $RCSfile: imagemgr.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mba $ $Date: 2001-05-03 10:15:50 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// includes --------------------------------------------------------------
+
+#include "imagemgr.hxx"
+
+#ifndef _TOOLS_DEBUG_HXX //autogen
+#include <tools/debug.hxx>
+#endif
+#ifndef _SV_SYSTEM_HXX //autogen
+#include <vcl/system.hxx>
+#endif
+#ifndef _SV_WRKWIN_HXX
+#include <vcl/wrkwin.hxx>
+#endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
+
+#pragma hdrstop
+
+#if defined( OS2 ) || defined( MAC )
+#ifndef _EXTATTR_HXX //autogen
+#include <svtools/extattr.hxx>
+#endif
+#endif
+
+#include "svtools.hrc"
+#include "imagemgr.hrc"
+#include "svtdata.hxx"
+
+// globals *******************************************************************
+
+static ImageList* _pSmallImageList = NULL;
+static ImageList* _pBigImageList = NULL;
+
+struct SvtExtensionResIdMapping_Impl
+{
+    char*   _pExt;
+    BOOL    _bExt;
+    USHORT  _nStrId;
+    USHORT  _nImgId;
+};
+
+#define RID_DESCRIPTION_START               256
+
+#define STR_DESCRIPTION_WORKPLACE                   (RID_DESCRIPTION_START +  0)
+#define STR_DESCRIPTION_FOLDER                      (RID_DESCRIPTION_START +  1)
+#define STR_DESCRIPTION_FILE                        (RID_DESCRIPTION_START +  2)
+#define STR_DESCRIPTION_DESKTOP                     (RID_DESCRIPTION_START +  3)
+#define STR_DESCRIPTION_MAILSRV_INBOX               (RID_DESCRIPTION_START +  4)
+#define STR_DESCRIPTION_TEXTFILE                    (RID_DESCRIPTION_START +  5)
+#define STR_DESCRIPTION_BOOKMARKFILE                (RID_DESCRIPTION_START +  6)
+#define STR_DESCRIPTION_HTMLFILE                    (RID_DESCRIPTION_START +  7)
+#define STR_DESCRIPTION_CFGFILE                     (RID_DESCRIPTION_START +  8)
+#define STR_DESCRIPTION_SYSFILE                     (RID_DESCRIPTION_START +  9)
+#define STR_DESCRIPTION_ARCHIVFILE                  (RID_DESCRIPTION_START + 10)
+#define STR_DESCRIPTION_APPLICATION                 (RID_DESCRIPTION_START + 11)
+#define STR_DESCRIPTION_LINK                        (RID_DESCRIPTION_START + 12)
+#define STR_DESCRIPTION_SWRITER_DOC                 (RID_DESCRIPTION_START + 13)
+#define STR_DESCRIPTION_SCALC_DOC                   (RID_DESCRIPTION_START + 14)
+#define STR_DESCRIPTION_SIMPRESS_DOC                (RID_DESCRIPTION_START + 15)
+#define STR_DESCRIPTION_SDRAW_DOC                   (RID_DESCRIPTION_START + 16)
+#define STR_DESCRIPTION_SCHART_DOC                  (RID_DESCRIPTION_START + 17)
+#define STR_DESCRIPTION_SMATH_DOC                   (RID_DESCRIPTION_START + 18)
+#define STR_DESCRIPTION_SIMAGE_DOC                  (RID_DESCRIPTION_START + 19)
+#define STR_DESCRIPTION_GLOBALDOC                   (RID_DESCRIPTION_START + 20)
+#define STR_DESCRIPTION_GRAPHIC_DOC                 (RID_DESCRIPTION_START + 21)
+#define STR_DESCRIPTION_WORD_DOC                    (RID_DESCRIPTION_START + 22)
+#define STR_DESCRIPTION_EXCEL_DOC                   (RID_DESCRIPTION_START + 23)
+#define STR_DESCRIPTION_EXCEL_TEMPLATE_DOC          (RID_DESCRIPTION_START + 24)
+#define STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC        (RID_DESCRIPTION_START + 25)
+#define STR_DESCRIPTION_SOFFICE_FRAMESET_DOC        (RID_DESCRIPTION_START + 26)
+#define STR_DESCRIPTION_HELP_DOC                    (RID_DESCRIPTION_START + 27)
+#define STR_DESCRIPTION_DATABASE_TABLE              (RID_DESCRIPTION_START + 28)
+#define STR_DESCRIPTION_LOGFILE                     (RID_DESCRIPTION_START + 29)
+#define STR_DESCRIPTION_SOURCEFILE                  (RID_DESCRIPTION_START + 30)
+#define STR_DESCRIPTION_BATCHFILE                   (RID_DESCRIPTION_START + 31)
+#define STR_DESCRIPTION_ALREADYEXISTOVERWRITE       (RID_DESCRIPTION_START + 32)
+#define STR_DESCRIPTION_IODLG_FAVORITES_ADD         (RID_DESCRIPTION_START + 33)
+#define STR_DESCRIPTION_IODLG_FAVORITES_REMOVE      (RID_DESCRIPTION_START + 34)
+#define STR_DESCRIPTION_IODLG_FAVORITES_TITLE       (RID_DESCRIPTION_START + 35)
+#define STR_DESCRIPTION_IODLG_FAVORITES_PATH        (RID_DESCRIPTION_START + 36)
+#define STR_DESCRIPTION_IODLG_COLUMN_TITLE          (RID_DESCRIPTION_START + 37)
+#define STR_DESCRIPTION_IODLG_COLUMN_SIZE           (RID_DESCRIPTION_START + 38)
+#define STR_DESCRIPTION_IODLG_COLUMN_DATE           (RID_DESCRIPTION_START + 39)
+#define STR_DESCRIPTION_IODLG_ERROR_MAKEFOLDER      (RID_DESCRIPTION_START + 40)
+
+
+static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
+{
+    // "fld",       0,                             IMG_FOLDER,
+    "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+#ifndef WNT
+    "bat",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
+#endif
+    "bmk",   FALSE, STR_DESCRIPTION_BOOKMARKFILE,          0,
+    "bmp",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_BITMAP,
+    "c",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "cfg",   FALSE, STR_DESCRIPTION_CFGFILE,               0,
+#ifndef WNT
+    "cmd",   TRUE,  STR_DESCRIPTION_BATCHFILE,             IMG_APP,
+#endif
+    "cob",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "com",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
+    "cxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "dbf",   TRUE,  STR_DESCRIPTION_DATABASE_TABLE,        IMG_TABLE,
+    "def",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "dll",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
+    "doc",   FALSE, STR_DESCRIPTION_WORD_DOC,              IMG_WORD,
+    "dxf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_DXF,
+#ifndef WNT
+    "exe",   TRUE,  STR_DESCRIPTION_APPLICATION,           IMG_APP,
+#endif
+    "gif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_GIF,
+    "h",     TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "hlp",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_HELP,
+    "hrc",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "htm",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
+    "html",  FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
+    "asp",   FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
+    "hxx",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "ini",   FALSE, STR_DESCRIPTION_CFGFILE,               0,
+    "java",  TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "jpeg",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG,
+    "jpg",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_JPG,
+    "lha",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+#ifdef WNT
+    "lnk",   FALSE, 0,                              0,
+#endif
+    "log",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
+    "lst",   TRUE,  STR_DESCRIPTION_LOGFILE,               0,
+    "met",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_MET,
+    "mml",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
+    "mod",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "pas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "pcd",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCD,
+    "pct",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCT,
+    "pcx",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PCX,
+    "pl",    TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "png",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_PNG,
+    "rar",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "sbl",   FALSE, 0,                             IMG_MACROLIB,
+    "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0,
+    "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
+    "sdb",   FALSE, 0,                             IMG_DATABASE,
+    "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
+    "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
+    "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED,
+    "sds",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
+    "sdw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
+    "sga",   FALSE, 0,                             IMG_GALLERY,
+    "sgf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGF,
+    "sgl",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
+    "sgv",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SGV,
+    "shtml", FALSE, STR_DESCRIPTION_HTMLFILE,              IMG_HTML,
+    "sim",   FALSE, STR_DESCRIPTION_SIMAGE_DOC,            IMG_SIM,
+    "smf",   FALSE, STR_DESCRIPTION_SMATH_DOC,             IMG_MATH,
+    "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
+    "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_SVHELP,
+    "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM,
+    "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
+    "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
+    "sxi",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS,
+    "sxs",   FALSE, STR_DESCRIPTION_SCHART_DOC,            IMG_CHART,
+    "sxw",   FALSE, STR_DESCRIPTION_SWRITER_DOC,           IMG_WRITER,
+    "sys",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
+    "tif",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF,
+    "tiff",  TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_TIFF,
+    "txt",   FALSE, STR_DESCRIPTION_TEXTFILE,              IMG_TEXTFILE,
+    "url",   FALSE, STR_DESCRIPTION_LINK,                  IMG_HTML,
+    "vor",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE,
+    "vxd",   TRUE,  STR_DESCRIPTION_SYSFILE,               0,
+    "wmf",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_WMF,
+    "xls",   FALSE, STR_DESCRIPTION_EXCEL_DOC,             IMG_EXCEL,
+    "xlt",   FALSE, STR_DESCRIPTION_EXCEL_TEMPLATE_DOC,    IMG_EXCELTEMPLATE,
+    "uu",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "uue",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "z",     TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "zip",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "zoo",   TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    "gz",    TRUE,  STR_DESCRIPTION_ARCHIVFILE,            0,
+    0, FALSE, 0, 0
+};
+
+#ifdef MAC
+    SvtExtensionResIdMapping_Impl Mappings[] =
+    {
+        "SW/©0", FALSE, STR_DESCRIPTION_SWRITER_DOC,    IMG_WRITER,
+        "SVsa0", FALSE, STR_DESCRIPTION_SDRAW_DOC,      IMG_DRAW,
+        "SVsd0", FALSE, STR_DESCRIPTION_SIMPRESS_DOC,   IMG_IMPRESS,
+        "SVsc0", FALSE, STR_DESCRIPTION_SCALC_DOC,      IMG_CALC,
+        "SVch0", FALSE, STR_DESCRIPTION_SCHART_DOC,     IMG_CHART,
+        "SVsm0", FALSE, STR_DESCRIPTION_SMATH_DOC,      IMG_MATH,
+        "sW/©1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC, IMG_WRITERTEMPLATE,
+        "sVsa1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC, IMG_DRAWTEMPLATE,
+        "sVsd1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC, IMG_IMPRESSTEMPLATE,
+        "sVsc1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC, IMG_CALCTEMPLATE,
+        "sVsm1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC, IMG_MATHTEMPLATE,
+        "BMPp0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_BITMAP,
+        "DXFl0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_SIM,
+        "GIFf0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_GIF,
+        "JPEG0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_JPG,
+        "MET 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_SIM,
+        "PCD 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_PCD,
+        "PICT0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_PCT,
+        "PCX 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_PCX,
+        "PNG 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_SIM,
+        "SVM 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_SIM,
+        "TIFF0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_TIFF,
+        "WMF 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_WMF,
+        "XBM 0", FALSE, STR_DESCRIPTION_GRAPHIC_DOC,    IMG_BITMAP,
+        NULL, 0
+    };
+#endif
+#ifdef OS2
+    SvtExtensionResIdMapping_Impl Mappings[] =
+    {
+        "StarWriter 4.0",           FALSE, STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER,
+        "StarWriter 3.0",           FALSE, STR_DESCRIPTION_SWRITER_DOC, IMG_WRITER,
+        "StarCalc 4.0",             FALSE, STR_DESCRIPTION_SCALC_DOC,   IMG_CALC,
+        "StarCalc 3.0",             FALSE, STR_DESCRIPTION_SCALC_DOC,   IMG_CALC,
+        "StarImpress 4.0",          FALSE, STR_DESCRIPTION_SIMPRESS_DOC,IMG_IMPRESS,
+        "StarDraw 4.0",             FALSE, STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW,
+        "StarDraw 3.0",             FALSE, STR_DESCRIPTION_SDRAW_DOC,   IMG_DRAW,
+        "StarChart 3.0",            FALSE, STR_DESCRIPTION_SCHART_DOC,  IMG_CHART,
+        "StarChart 4.0",            FALSE, STR_DESCRIPTION_SCHART_DOC,  IMG_CHART,
+        "Bitmap",                   FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP,
+        "AutoCAD",                  FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM,
+        "Gif-File",                 FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_GIF,
+        "JPEG-File",                FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_JPG,
+        "Metafile ",                FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM,
+        "Photo-CD ",                FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCD,
+        "Mac Pict",                 FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCT,
+        "PCX-File ",                FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_PCX,
+        "PNG-File",                 FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM,
+        "SV-Metafile",              FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_SIM,
+        "TIFF-File",                FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF,
+        "MS-Metafile",              FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF,
+        "XBM-File",                 FALSE, STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP,
+        "UniformResourceLocator",   FALSE, STR_DESCRIPTION_LINK,        IMG_URL,
+        NULL, 0
+    };
+#endif
+
+//****************************************************************************
+
+USHORT GetImageId_Impl( const String& rExtension )
+{
+    USHORT nImage = IMG_FILE;
+    if ( !rExtension.Len() )
+        return nImage;
+    USHORT nIndex = 0;
+    String aExt = rExtension;
+    aExt.ToLowerAscii();
+    while ( ExtensionMap_Impl[ nIndex ]._pExt )
+    {
+        if ( aExt.EqualsAscii(ExtensionMap_Impl[ nIndex ]._pExt) )
+        {
+            nImage = ExtensionMap_Impl[ nIndex]._nImgId;
+            if ( !nImage )
+                nImage = IMG_FILE;
+            break;
+        }
+        ++nIndex;
+    }
+
+    return nImage;
+}
+
+USHORT GetImageId_Impl( const INetURLObject& rObject )
+{
+    String aExt = rObject.getExtension();
+    if ( aExt.EqualsAscii( "vor" ) )
+    {
+        SotStorageRef aStorage = new SotStorage( rObject.GetMainURL(), STREAM_STD_READ );
+        USHORT nId = IMG_WRITERTEMPLATE;
+        if ( !aStorage->GetError() )
+        {
+            SvGlobalName aGlobalName = aStorage->GetClassName();
+            if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
+                nId = IMG_CALCTEMPLATE;
+            else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
+                nId = IMG_DRAWTEMPLATE;
+            else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
+                    aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
+                nId = IMG_IMPRESSTEMPLATE;
+            else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
+                nId = IMG_MATHTEMPLATE;
+        }
+
+        return nId;
+    }
+
+    USHORT nImage = IMG_FILE;
+#if defined( OS2 ) || defined( MAC )
+    SvEaMgr aMgr( rObject.GetMainURL() );
+    String aType;
+    if( aMgr.GetFileType( aType ) )
+    {
+        for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
+            if ( Mappings[ nIndex ]._pExt == aType )
+                nImage = Mappings[ nIndex ]._nImgId;
+    }
+#endif
+    if( nImage == IMG_FILE )
+        nImage = GetImageId_Impl( aExt );
+    return nImage;
+}
+
+//****************************************************************************
+
+
+Image SvImageManager::GetImage( const INetURLObject& rObject, BOOL bBig )
+{
+    USHORT nImage = GetImageId_Impl( rObject );
+    DBG_ASSERT( nImage, "invalid ImageId" );
+
+    ImageList* pList = NULL;
+    if ( bBig )
+    {
+        if ( !_pBigImageList )
+            _pBigImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_BIG ) );
+        pList = _pBigImageList;
+    }
+    else
+    {
+        if ( !_pSmallImageList )
+            _pSmallImageList = new ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_SMALL ) );
+        pList = _pSmallImageList;
+    }
+
+    return pList->GetImage( nImage );
+}
+
