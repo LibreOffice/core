@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 12:59:50 $
+ *  last change: $Author: os $ $Date: 2002-08-16 14:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,8 +357,7 @@ hidspecial HID_SEND_HTML_CTRL_CONTROL_FILEVIEW             { HelpId = HID_SEND_H
 hidspecial HID_SEND_HTML_CTRL_EDIT_FILEURL                 { HelpId = HID_SEND_HTML_CTRL_EDIT_FILEURL             ;};
 hidspecial HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION       { HelpId = HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION   ;};
 hidspecial HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE             { HelpId = HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE         ;};
-
-
+hidspecial HID_COLUMN_VALUESET                             { HelpId = HID_COLUMN_VALUESET                         ;};
 
 
 

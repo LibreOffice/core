@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-06-19 14:05:07 $
+ *  last change: $Author: os $ $Date: 2002-08-16 14:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <svtools/languageoptions.hxx>
 #endif
 
+#include <helpid.h>
 #include "globals.hrc"
 #include "swtypes.hxx"
 #include "wrtsh.hxx"
@@ -539,6 +540,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
+    aDefaultVS.SetHelpId(HID_COLUMN_VALUESET);
     aDefaultVS.SetColCount( 5 );
     aDefaultVS.SetStyle(  aDefaultVS.GetStyle()
                             | WB_ITEMBORDER

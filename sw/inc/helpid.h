@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2002-08-08 12:56:03 $
+ *  last change: $Author: os $ $Date: 2002-08-16 14:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@
 #define HID_SEND_HTML_CTRL_DUMMY                    (HID_BASE + 2174 )
 
 #define HID_INSERT_IDX_MRK_PHONETIC_READING         (HID_BASE + 2175 )
-
+#define HID_COLUMN_VALUESET                         (HID_BASE + 2176 )
 
 
 
