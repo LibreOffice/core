@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@
 #include <svx/frmdiritem.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 
 static void CheckRootSize( SwFrm *pRoot )
 {
@@ -245,7 +245,7 @@ SwFrm::SwFrm( SwModify *pMod ) :
 {
 #ifndef PRODUCT
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     static USHORT nStopAt = USHRT_MAX;
     if ( nFrmId == nStopAt )
     {
@@ -469,7 +469,7 @@ void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 {
-#if defined(DEBUG) && !defined(PRODUCT)
+#if (OSL_DEBUG_LEVEL > 1) && !defined(PRODUCT)
     static USHORT nStop = 0;
     if ( nStop == GetFrmId() )
     {
