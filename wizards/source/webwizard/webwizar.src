@@ -1,0 +1,493 @@
+/*************************************************************************
+ *
+ *  $RCSfile: webwizar.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: tv $ $Date: 2001-04-23 11:18:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define WEBDIALOG  1000
+#define WEBERROR 1100
+// --------------------------------------------------------------------
+
+String WEBDIALOG + 1
+{
+    Text = "AutoPilot Web-Seite";
+    Text[English] = "Web Page AutoPilot";
+    Text[ English_us ] = "AutoPilot Web Page";
+    Text[ french ] = "AutoPilote de page Web";
+    Text[ italian ] = "Pilota Automatico Pagina WEB";
+    Text[ spanish ] = "AutoPiloto para página Web";
+    Text[ portuguese ] = "AutoPiloto - Página Web";
+    Text[ dutch ] = "AutoPiloot webpagina";
+    Text[ swedish ] = "AutoPilot för webbsida";
+    Text[ greek ] = "ÁõôïĞéëüôïò óåëßäáò Web";
+    Text[ russian ] = "Àâòîïèëîò web-ñòğàíèöû";
+    Text[ danish ] = "AutoPilot - Web-side";
+    Text[ polish ] = "AutoPilot - Strona WWW";
+    Text[ portuguese_brazilian ] = "Web Page AutoPilot";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä WebÍß°¼Ş ";
+    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ À¥ÆäÀÌÁö";
+    Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ÍòÎ¬ÍøÒ³";
+    Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z Web ­¶";
+    Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí áÕİÍÉ æíÈ";
+    Text[ turkish ] = "OtoPilot Web sayfası";
+};
+
+
+
+
+String WEBDIALOG + 2
+{
+    Text = "A~bbrechen";
+    Text[English] = "~Cancel";
+    Text[ English_us ] = "~Cancel";
+    Text[ french ] = "A~nnuler";
+    Text[ italian ] = "A~nnulla";
+    Text[ spanish ] = "C~ancelar";
+    Text[ portuguese ] = "C~ancelar";
+    Text[ dutch ] = "A~nnuleren";
+    Text[ swedish ] = "~Avbryt";
+    Text[ greek ] = "Áêıñùóç";
+    Text[ russian ] = "~Îòìåíà";
+    Text[ danish ] = "~Annuller";
+    Text[ polish ] = "Anuluj";
+    Text[ portuguese_brazilian ] = "~Cancel";
+    Text[ japanese ] = "·¬İ¾Ù";
+    Text[ korean ] = "~Ãë¼Ò";
+    Text[ chinese_simplified ] = "È¡Ïû";
+    Text[ chinese_traditional ] = "¨ú®ø";
+    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
+    Text[ turkish ] = "~İptal";
+    Text[ language_user1 ] = " ";
+};
+
+String WEBDIALOG + 3
+{
+    Text = "~Fertig stellen";
+    Text[English] = "~Complete";
+    Text[ English_us ] = "C~reate";
+    Text[ french ] = "~Créer";
+    Text[ italian ] = "~Crea";
+    Text[ spanish ] = "~Crear";
+    Text[ portuguese ] = "~Criar";
+    Text[ dutch ] = "~Voltooien";
+    Text[ swedish ] = "~Färdigställ";
+    Text[ greek ] = "ÏëïêëŞñùóç";
+    Text[ russian ] = "~Ãîòîâî";
+    Text[ danish ] = "~Udfør";
+    Text[ polish ] = "Utwórz";
+    Text[ portuguese_brazilian ] = "~Complete";
+    Text[ japanese ] = "Š®—¹";
+    Text[ korean ] = "¸¸µé±â";
+    Text[ chinese_simplified ] = "Íê³É";
+    Text[ chinese_traditional ] = "§¹¦¨";
+    Text[ arabic ] = "ÅäÔÇÁ";
+    Text[ turkish ] = "~Oluştur";
+};
+
+
+String WEBDIALOG + 4
+{
+    Text = "Welche Vorlage soll verwendet werden ?";
+    Text[English] = "Which template should be used?";
+    Text[ English_us ] = "Which template should be used?";
+    Text[ french ] = "Sélectionnez le modèle à utiliser :";
+    Text[ italian ] = "Quale modello si intende usare ?";
+    Text[ spanish ] = "¿Qué plantilla desea utilizar?";
+    Text[ portuguese ] = "Qual o modelo que deseja utilizar ?";
+    Text[ dutch ] = "Welke sjabloon wilt u gebruiken?";
+    Text[ swedish ] = "Vilken mall ska användas ?";
+    Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï";
+    Text[ dutch ] = "Welke sjabloon wilt u gebruiken?";
+    Text[ swedish ] = "Vilken mall ska användas ?";
+    Text[ russian ] = "Êàêîé øàáëîí ñëåäóåò ïğèìåíèòü?";
+    Text[ danish ] = "Hvilken skabelon vil du bruge?";
+    Text[ polish ] = "Którego szablonu u¿yæ?";
+    Text[ portuguese_brazilian ] = "Which template should be used?";
+    Text[ japanese ] = "‚Ç‚ÌÃİÌßÚ°Ä‚ğg—p‚µ‚Ü‚·‚©B";
+    Text[ korean ] = "¾î´À ¼­½ÄÆÄÀÏÀ» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ chinese_simplified ] = "ÒªÊ¹ÓÃÄÄÒ»ÖÖÑùÊ½£¿";
+    Text[ chinese_traditional ] = "­n±Ä¥Î­ş¤@­Ó¼Ë¦¡¡H";
+    Text[ arabic ] = "Ãí ŞÇáÈ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
+    Text[ turkish ] = "Hangi şablon kullanılsın ?";
+};
+
+String WEBDIALOG + 5
+{
+    Text = "Welcher Stil soll verwendet werden ?";
+    Text[English] = "Which style should be used?";
+    Text[ English_us ] = "Which layout should be used?";
+    Text[ french ] = "Sélectionnez le style à utiliser :";
+    Text[ italian ] = "Quale stile si intende usare ?";
+    Text[ spanish ] = "¿Qué estilo desea utilizar?";
+    Text[ portuguese ] = "Qual o estilo que deseja utilizar ?";
+    Text[ dutch ] = "Welk lay-out wilt u gebruiken?";
+    Text[ swedish ] = "Vilken stil skall användas ?";
+    Text[ greek ] = "Åğéëİîôå İíá óôõë";
+    Text[ russian ] = "Êàêîé ñòèëü ñëåäóåò ïğèìåíèòü?";
+    Text[ danish ] = "Hvilken type vil du bruge?";
+    Text[ polish ] = "Którego stylu u¿yæ?";
+    Text[ portuguese_brazilian ] = "Which style should be used?";
+    Text[ japanese ] = "‚Ç‚ÌÚ²±³Ä‚ğg—p‚µ‚Ü‚·‚©B";
+    Text[ korean ] = "¾î´À ½ºÅ¸ÀÏÀ» »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ chinese_simplified ] = "ÒªÊ¹ÓÃÄÄÒ»ÖÖ·ç¸ñ£¿";
+    Text[ chinese_traditional ] = "­n±Ä¥Î­ş¤@Ïú­·®æ¡H";
+    Text[ arabic ] = "Ãí äãØ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
+    Text[ turkish ] = "Hangi biçim kullanılsın ?";
+    Text[ language_user1 ] = "The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
+};
+
+
+String WEBDIALOG + 6
+{
+    Text = "Hintergrundbild";
+    Text[English] = "Background Picture";
+    Text[ English_us ] = "Background Image";
+    Text[ portuguese ] = "Background Picture";
+    Text[ russian ] = "Êàğòèíêà íà ôîíå";
+    Text[ greek ] = "Åéêüíá öüíôïõ";
+    Text[ dutch ] = "Background Picture";
+    Text[ french ] = "Image d'arrière-plan";
+    Text[ spanish ] = "Background Picture";
+    Text[ italian ] = "Background Picture";
+    Text[ danish ] = "Background Picture";
+    Text[ swedish ] = "Bakgrundsbild";
+    Text[ polish ] = "Ilustracja t³a";
+    Text[ portuguese_brazilian ] = "Background Picture";
+    Text[ japanese ] = "”wŒiÃŞ»Ş²İ";
+    Text[ korean ] = "Background Picture";
+    Text[ chinese_simplified ] = "±³¾°ÑÕÉ«";
+    Text[ chinese_traditional ] = "­I´º¹Ï¤ù";
+    Text[ turkish ] = "Background Picture";
+    Text[ arabic ] = "ÕæÑÉ ÇáÎáİíÉ";
+};
+
+
+
+String WEBDIALOG + 7
+{
+    Text = "~Gekachelt";
+    Text[English] = "~Tiled";
+    Text[ English_us ] = "~Tiled";
+    Text[ portuguese ] = "Tiling";
+    Text[ russian ] = "Ïëèòêè";
+    Text[ greek ] = "Óå ğáñÜèåóç";
+    Text[ dutch ] = "Tiling";
+    Text[ french ] = "Carrela~ge";
+    Text[ spanish ] = "Tiling";
+    Text[ italian ] = "Tiling";
+    Text[ danish ] = "Tiling";
+    Text[ swedish ] = "Sida vid sida";
+    Text[ polish ] = "P³ytki";
+    Text[ portuguese_brazilian ] = "Tiling";
+    Text[ japanese ] = "À²Ùó(~T)";
+    Text[ korean ] = "~Tiling";
+    Text[ chinese_simplified ] = "Æ½ÆÌ(~T)";
+    Text[ chinese_traditional ] = "¥­¾Q(~T)";
+    Text[ turkish ] = "Tiling";
+    Text[ arabic ] = "Tiling";
+};
+
+
+String WEBDIALOG + 8
+{
+    Text = "~Skaliert";
+    Text[English] = "~Scaled";
+    Text[ English_us ] = "~Scaled";
+    Text[ portuguese ] = "~Scaled";
+    Text[ russian ] = "~Ìàñøòàáèğîâàíèå";
+    Text[ greek ] = "ÊëéìÜêù~óç";
+    Text[ dutch ] = "~Scaled";
+    Text[ french ] = "~Gradué";
+    Text[ spanish ] = "~Scaled";
+    Text[ italian ] = "~Scaled";
+    Text[ danish ] = "~Scaled";
+    Text[ swedish ] = "~Skalat";
+    Text[ polish ] = "Skalowany";
+    Text[ portuguese_brazilian ] = "~Scaled";
+    Text[ japanese ] = "’iŠKó(~S)";
+    Text[ korean ] = "~Scaled";
+    Text[ chinese_simplified ] = "²ÉÓÃÏÔÊ¾±ÈÀı(~S)";
+    Text[ chinese_traditional ] = "±Ä¥ÎÅã¥Ü¤ñ¨Ò(~S)";
+    Text[ turkish ] = "~Scaled";
+    Text[ arabic ] = "~Scaled";
+};
+
+
+String WEBDIALOG + 9
+{
+    Text = "Dokument bearbeiten";
+    Text[English] = "Edit Document";
+    Text[ English_us ] = "Edit document";
+    Text[ portuguese ] = "Edit Document";
+    Text[ russian ] = "Ïğàâêà äîêóìåíòà ";
+    Text[ greek ] = "Åğåîåñãáóßá åããñÜöïõ";
+    Text[ dutch ] = "Edit Document";
+    Text[ french ] = "Éditer le document";
+    Text[ spanish ] = "Edit Document";
+    Text[ italian ] = "Edit Document";
+    Text[ danish ] = "Edit Document";
+    Text[ swedish ] = "Redigera dokument";
+    Text[ polish ] = "Edytuj dokument";
+    Text[ portuguese_brazilian ] = "Edit Document";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ•ÒW‚·‚é";
+    Text[ korean ] = "Edit Document";
+    Text[ chinese_simplified ] = "±à¼­ÎÄµµ";
+    Text[ chinese_traditional ] = "½s¿è¤å¥ó";
+    Text[ turkish ] = "Edit Document";
+    Text[ arabic ] = "ÊÍÑíÑ ÇáãÓÊäÏ";
+};
+
+String WEBDIALOG + 10
+{
+    Text = "Vorlage erzeugen";
+    Text[English] = "Create template";
+    Text[ English_us ] = "Create template";
+    Text[ french ] = "Créer un modèle";
+    Text[ italian ] = "Creazione modelli";
+    Text[ spanish ] = "Crear plantilla";
+    Text[ portuguese ] = "Criar modelo";
+    Text[ dutch ] = "Sjabloon maken";
+    Text[ swedish ] = "Skapa mall";
+    Text[ greek ] = "Äçìéïõñãßá ğñïôığïõ";
+    Text[ dutch ] = "Sjabloon maken";
+    Text[ swedish ] = "Skapa mall";
+    Text[ russian ] = "Ñîçäàòü øàáëîí";
+    Text[ danish ] = "Opret skabelon";
+    Text[ polish ] = "Utwórz szablon";
+    Text[ portuguese_brazilian ] = "Create template";
+    Text[ japanese ] = "ÃİÌßÚ°Ä‚ğì¬‚·‚é";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÛ¼º";
+    Text[ chinese_simplified ] = "Éú³ÉÑùÊ½";
+    Text[ chinese_traditional ] = "»s§@¼Ë¦¡";
+    Text[ arabic ] = "ÅäÔÇÁ ŞÇáÈ";
+    Text[ turkish ] = "Şablon oluştur";
+    Text[ language_user1 ] = " ";
+};
+
+
+String WEBERROR + 1
+{
+    Text = "Es wurde keine Vorlage für den Seitenaufbau gefunden.";
+    Text[English] = "No template for the page content could be found.";
+    Text[ English_us ] = "A template for the page setup could not be found.";
+    Text[ portuguese ] = "Foi impossível encontrar qualquer estilo de configuração de página.";
+    Text[ russian ] = "Øàáëîí äëÿ ñîçäàíèÿ ñòğàíèöû íå íàéäåí.";
+    Text[ greek ] = "Äåí âñİèçêå ğñüôõğï ãéá ôçí äçìéïõñãßá ôçò óåëßäáò.";
+    Text[ dutch ] = "Geen sjabloon voor de paginaopbouw gevonden.";
+    Text[ french ] = "Impossible de détecter un modèle pour la mise en page !";
+    Text[ spanish ] = "No se encontró ninguna plantilla para la página.";
+    Text[ italian ] = "Non è stato trovato nessun modello per il layout di pagina.";
+    Text[ danish ] = "Der blev ikke fundet en skabelon til sideopsætningen.";
+    Text[ swedish ] = "Det hittades ingen mall för siduppbyggnaden.";
+    Text[ polish ] = "Nie znaleziono ¿adnego stylu struktury strony.";
+    Text[ portuguese_brazilian ] = "No template for the page content could be found.";
+    Text[ japanese ] = "Íß°¼Ş\\¬—p‚ÌÃİÌßÚ°Ä‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "ÂÊ ±¸¼ºÀ» À§ÇÑ ¼­½ÄÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³ÃæÉèÖÃµÄÑùÊ½¡£";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞÇáÈ áÅÚÏÇÏ ÇáÕİÍÉ.";
+    Text[ turkish ] = "Sayfa yapısı için şablon bulunamadı.";
+};
+
+String WEBERROR + 2
+{
+    Text = "Es wurde keine Vorlage für den Seitenstil gefunden.";
+    Text[English] = "No template for the page style could be found.";
+    Text[ English_us ] = "A Style for the Page Style could not be found.";
+    Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM \"Seitenstil\" in Dt should be \"Seitenvorlage\"!! I asked TV. Maybe the Dt sentence will be changed.16.5.00EM";
+    Text[ portuguese ] = "Foi impossível encontrar qualquer estilo de página.";
+    Text[ russian ] = "Øàáëîí äëÿ ñòèëÿ ñòğàíèöû íå íàéäåí.";
+    Text[ greek ] = "Äåí âñİèçêå ğñüôõğï ãéá ôï óôõë ôçò óåëßäáò";
+    Text[ dutch ] = "Geen sjabloon voor paginaopmaak gevonden.";
+    Text[ french ] = "Impossible de détecter un style pour le style de page !";
+    Text[ spanish ] = "No se encontró ningún estilo para la página.";
+    Text[ italian ] = "Non è stato trovato nessun modello per lo stile di pagina.";
+    Text[ danish ] = "Der blev ikke fundet en skabelon til sidetypografien.";
+    Text[ swedish ] = "Det hittades ingen mall för sidformatmallen.";
+    Text[ polish ] = "Nie znaleziono ¿adnego stylu strony.";
+    Text[ portuguese_brazilian ] = "No template for the page style could be found.";
+    Text[ japanese ] = "Íß°¼Ş½À²Ù—p‚ÌÃİÌßÚ°Ä‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+    Text[ korean ] = "ÂÊ À¯ÇüÀ» À§ÇÑ ¼­½ÄÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½ÓÃÓÚÒ³Ãæ·ç¸ñÉè¶¨µÄÑùÊ½¡£";
+    Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì äãØ áäãØ ÇáÕİÍÉ.";
+    Text[ turkish ] = "Sayfa biçimi için şablon bulunamadı.";
+};
+
+String WEBERROR + 3
+{
+    Text = "Bei der Auswertung der Vorlagen ist ein Fehler aufgetreten.";
+    Text[English] = "An error occurred during the interpretation of the template.";
+    Text[ English_us ] = "An error occurred while interpreting the templates.";
+    Text[ french ] = "Une erreur s'est produite lors de l'évaluation du modèle.";
+    Text[ italian ] = "Durante la valutazione dello stile si è verificato un errore.";
+    Text[ spanish ] = "Ha ocurrido un error al verificar las plantillas.";
+    Text[ portuguese ] = "Surgiu um erro ao explorar o modelo.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí áíÜëõóç ôùí ğñïôığùí.";
+    Text[ dutch ] = "Bij het verwerken van de sjabloon is een fout opgetreden.";
+    Text[ swedish ] = "Ett fel uppstod vid utvärderingen av mallarna.";
+    Text[ russian ] = "Âî âğåìÿ èíòåğïğåòàöèè øàáëîíîâ ïğîèçîøëà îøèáêà.";
+    Text[ danish ] = "Der opstod en fejl under fortolkning af skabelonen.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas oceny szablonu.";
+    Text[ portuguese_brazilian ] = "An error occurred during the interpretation of the template.";
+    Text[ japanese ] = "ÃİÌßÚ°Ä‚ÌŠm”F’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ Æò°¡½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚ´¦ÀíÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b³B²z¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáŞæÇáÈ.";
+    Text[ turkish ] = "Şablon değerlendirilirken bir hata oluştu.";
+};
+
+String WEBERROR + 4
+{
+    Text = "Bei der Aktualisierung der Vorlage ist ein Fehler aufgetreten.";
+    Text[English] = "An error occurred while reloading the template.";
+    Text[ English_us ] = "An error occurred while refreshing the template.";
+    Text[ french ] = "Une erreur s'est produite lors de l'actualisation du modèle.";
+    Text[ italian ] = "Durante l'aggiornamento di uno stile si è verificato un errore.";
+    Text[ spanish ] = "Ha ocurido un error al actualizar la plantilla.";
+    Text[ portuguese ] = "Surgiu um erro ao actualizar o modelo.";
+    Text[ dutch ] = "Bij het actualiseren van de sjabloon is een fout opgetreden.";
+    Text[ swedish ] = "Ett fel uppstod vid uppdateringen av mallen.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí åíçìİñùóç ôïõ ğñïôığïõ.";
+    Text[ russian ] = "Âî âğåìÿ îáíîâëåíèÿ øàáëîíà ïğîèçîøëà îøèáêà.";
+    Text[ danish ] = "Der opstod en fejl under opdatering af skabelonen.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas aktualizacji szablonu.";
+    Text[ portuguese_brazilian ] = "An error occurred while reloading the template.";
+    Text[ japanese ] = "ÃİÌßÚ°Ä‚ÌXV’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+    Text[ korean ] = "¼­½ÄÆÄÀÏÀ» °»½Å½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚ¸üĞÂÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b§ó·s¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÏíË ÇáŞÇáÈ.";
+    Text[ turkish ] = "Şablon güncellenirken bir hata oluştu.";
+};
+
+String WEBERROR + 5
+{
+    Text = "Bei der Zuweisung der Formatvorlagen ist ein Fehler aufgetreten.";
+    Text[English] = "An error occurred while applying the styles.";
+    Text[ English_us ] = "An error occurred while applying the Styles.";
+    Text[ french ] = "Une erreur s'est produite lors de l'attribution des styles.";
+    Text[ italian ] = "Si è verificato un errore. Impossibile assegnare lo stile.";
+    Text[ spanish ] = "Ha ocurrido un error al asignar la plantilla del formato.";
+    Text[ portuguese ] = "Surgiu um erro durante a atribuição dos estilos.";
+    Text[ dutch ] = "Bij het toewijzen van de opmaakprofielen is een fout opgetreden.";
+    Text[ swedish ] = "Ett fel uppstod vid tilldelning av formatmallarna.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí åöáñìïãŞ ôùí ğñïôığùí ìïñöïğïßçóçò.";
+    Text[ russian ] = "Ïğè íàçíà÷åíèè ñòèëåé ôîğìàòà ïğîèçîøëà îøèáêà.";
+    Text[ danish ] = "Der opstod en fejl under tildeling af formattypografien.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas przypisywania stylów.";
+    Text[ portuguese_brazilian ] = "An error occurred while applying the styles.";
+    Text[ japanese ] = "‘®½À²Ù‚Ì“K—p’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+    Text[ korean ] = "¼­½Ä À¯Çü Àû¿ë½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚÖ¸¶¨Ê¹ÓÃ¸ñÊ½ÑùÊ½Ê±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b«ü©w³o­Ó®æ¦¡¼Ë¦¡®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ÃäãÇØ ÇáÊäÓíŞ.";
+    Text[ turkish ] = "Format şablonları uygulanırken bir hata oluştu.";
+    Text[ language_user1 ] = "- All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
+};
+
+String WEBERROR + 6
+{
+    Text = "Bei der Auswertung der Dokumente ist ein Fehler aufgetreten.";
+    Text[English] = "An error occcurred while interpreting the document.";
+    Text[ English_us ] = "An error occurred while interpreting the documents.";
+    Text[ french ] = "Une erreur s'est produite lors de l'évaluation des documents.";
+    Text[ italian ] = "Errore durante la valutazione del documento.";
+    Text[ spanish ] = "Ha ocurrido un error al verificar el documento.";
+    Text[ portuguese ] = "Surgiu um erro ao explorar o documento.";
+    Text[ dutch ] = "Bij het verwerken van het document is een fout opgetreden.";
+    Text[ swedish ] = "Ett fel uppstod vid utvärderingen av dokumenten.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí áíÜëõóç ôùí åããñÜöùí.";
+    Text[ russian ] = "Âî âğåìÿ èíòåğïğåòàöèè äîêóìåíòîâ ïğîèçîøëà îøèáêà.";
+    Text[ danish ] = "Der opstod en fejl under fortolkning af dokumenterne.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas oceny dokumentów.";
+    Text[ portuguese_brazilian ] = "An error occcurred while interpreting the document.";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌŠm”F’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+    Text[ korean ] = "¹®¼­ Æò°¡½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚ´¦ÀíÎÄµµÊ±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b³B²z³o­Ó¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáãÓÊäÏÇÊ.";
+    Text[ turkish ] = "Belgeler değerlendirilirken bir hata oluştu.";
+};
+
+String WEBERROR + 7
+{
+    Text = "Bei der Ausführung des AutoPiloten ist ein Fehler aufgetreten.";
+    Text[English] = "An error occurred during the AutoPilot processing.";
+    Text[ English_us ] = "An error occurred while running the AutoPilot.";
+    Text[ french ] = "Une erreur s'est produite lors de l'exécution de l'AutoPilote.";
+    Text[ italian ] = "Errore durante l'esecuzione del Pilota Automatico.";
+    Text[ spanish ] = "Ha ocurrido un error al ejecutar el AutoPiloto.";
+    Text[ portuguese ] = "Surgiu um erro durante a execução do AutoPiloto.";
+    Text[ dutch ] = "Bij het uitvoeren van de autopiloot is een fout opgetreden.";
+    Text[ swedish ] = "Ett fel uppstod när AutoPiloten kördes.";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá êáôÜ ôçí åêôİëåóç ôïõ ÁõôïĞéëüôïõ.";
+    Text[ russian ] = "Âî âğåìÿ ğàáîòû Àâòîïèëîòà ïğîèçîøëà îøèáêà.";
+    Text[ danish ] = "Der opstod en fejl under udførelse af AutoPiloten.";
+    Text[ polish ] = "Wyst¹pi³ b³¹d podczas pracy AutoPilota.";
+    Text[ portuguese_brazilian ] = "An error occurred during the AutoPilot processing.";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚ÌÀs’†‚ÉA´×°‚ª”­¶‚µ‚Ü‚µ‚½B";
+    Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ ¼öÇà½Ã ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÔÚÖ´ĞĞ×Ô¶¯ÎÄ¼şÖúÀíÊ±·¢ÉúÒ»¸ö´íÎó¡£";
+    Text[ chinese_traditional ] = "¦b°õ¦æ¦Û°ÊÀÉ®×§U²z®Éµo¥Í¤@­Ó¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊäİíĞ ÇáãÑÔÏ ÇáÂáí.";
+    Text[ turkish ] = "OtoPilot çalıştırılırken bir hata oluştu.";
+};
+
+
+
