@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: as $ $Date: 2000-11-20 10:04:31 $
+#   last change: $Author: as $ $Date: 2000-11-23 14:16:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,7 +98,8 @@ IDLFILES=\
     ImportFilter.idl\
     ExportFilter.idl\
     FilterFactory.idl\
-    MediaDescriptor.idl
+    MediaDescriptor.idl\
+    XExtendedFilterDetection.idl
 
 # ------------------------------------------------------------------
 
