@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-13 14:35:08 $
+ *  last change: $Author: fs $ $Date: 2001-09-24 12:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,10 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen."
+        Text = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen. "
             "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\n"
             "Dieser AutoPilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
-        Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\n"
+        Text [ english ] = "%PRODUCTNAME allows you to access address data which is already present in your system. "
             "For this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\n"
             "This auto pilot will assist you in the creation of this data source.";
         Text [ english_us ] = "%PRODUCTNAME lets you access address data already present in your system.\nTo do this, a new %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
@@ -1028,6 +1028,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/09/13 14:35:08  fs
+ *  #92121# corrected some german spellings
+ *
  *  Revision 1.14  2001/09/06 20:25:28  kz
  *  Merge SRC640: 06.09.01 - 22:26:44 (NoBranch)
  *
