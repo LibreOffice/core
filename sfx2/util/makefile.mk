@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-28 17:08:18 $
+#   last change: $Author: mh $ $Date: 2001-10-04 16:28:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,6 @@ ENABLE_EXCEPTIONS=TRUE
 PRJNAME=sfx2
 TARGET=sfx
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
 #sfx.hid generieren
 GEN_HID=TRUE
 
@@ -208,9 +207,9 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+all : $(SRS)$/hidother.hid ALLTAR
 
-ALLTAR : $(SRS)$/hidother.hid
+.INCLUDE :  target.mk
 
 # --- SFX-Filter-Datei ---
 
