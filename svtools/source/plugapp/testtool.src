@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:07:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:06:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,8 @@ class FlagToolBoxState
             Text[ portuguese_brazilian ] = "Langname immer Anzeigen";
             Text[ japanese ] = "í‚ÉÛİ¸ŞÈ°Ñ‚Ì•\\¦";
             Text[ korean ] = "±ä ÀÌ¸§ Ç×»ó Ç¥½Ã";
-            Text[ chinese_simplified ] = "×ÜÊÇÏÔÊ¾³¤Ãû³Æ(È«³Æ)";
-            Text[ chinese_traditional ] = "Á`¬OÅã¥Üªø¦WºÙ";
+            Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾³¤Ãû³Æ";
+            Text[ chinese_traditional ] = "¦Û°ÊÅã¥Üªø¦WºÙ";
             Text[ arabic ] = "ÅÙåÇÑ ÇáÇÓã ÇáØæíá ÏÇÆãÇğ";
             Text[ turkish ] = "Tam adı daima görüntüle";
             Text[ catalan ] = "Mostrar siempre los nombres largos";
@@ -604,7 +604,7 @@ ErrorBox TT_NO_CONTROL {
     Message[ portuguese_brazilian ] = "The Control is no longer valid. The Translation cannot be saved.";
     Message[ japanese ] = "ºİÄÛ°Ù‚Í‚à‚¤—LŒø‚Å‚Í‚ ‚è‚Ü‚¹‚ñB–|–ó‚ğ•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
     Message[ chinese_simplified ] = "Õâ¸ö¿Ø¼şÒÑ¾­ÎŞĞ§¡£ÎŞ·¨´æÅÌ·­ÒëÄÚÈİ¡£";
-    Message[ chinese_traditional ] = "³o­Ó±±¨î¶µ¤w¸gµL®Ä¡CµLªkÀx¦sÂ½Ä¶¤º®e¡C";
+    Message[ chinese_traditional ] = "³o­Ó±±»s¶µ¤w¸gµL®Ä¡CµLªkÀx¦sÂ½Ä¶¤º®e¡C";
     Message[ arabic ] = "ÚäÕÑ ÇáÊÍßã åĞÇ áã íÚÏ ÕÇáÍÇğ. áÇ íãßä ÍİÙ ÇáÊÑÌãÉ.";
     Message[ greek ] = "Ôï óôïé÷åßï åëİã÷ïõ äåí åßíáé ğëİïí İãêõñï. Äåí åßíáé äõíáôüí íá áğïèçêåõôåß ç ìåôÜöñáóç.";
     Message[ korean ] = "ÄÁÆ®·ÑÀÌ ´õ ÀÌ»ó À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù. ¹ø¿ªÇÑ °ÍÀ» ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
@@ -663,6 +663,7 @@ String TT_ALTERNATE_CAPTION
     Text[ catalan ] = "HelpID difiere de UniqueID:";
     Text[ finnish ] = "Ohjetunnus ei täsmää seuraavan yksilöllisen tunnuksen kanssa: ";
 };
+
 
 
 
