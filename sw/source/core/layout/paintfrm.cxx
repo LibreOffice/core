@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:54:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1295,7 +1295,8 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
 
         if ( !pFly->GetFmt()->GetPrint().GetValue() &&
-                (!pGlobalShell->GetWin() || pGlobalShell->IsPreView()))
+                (OUTDEV_PRINTER == pGlobalShell->GetOut()->GetOutDevType() ||
+                pGlobalShell->IsPreView()))
             continue;
 
         const FASTBOOL bLowerOfSelf = pSelfFly && pFly->IsLowerOf( pSelfFly ) ?
@@ -1954,7 +1955,7 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     ASSERT( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     Rectangle aTestNewRect( aSizedRect );
     /// check Left()
     --aSizedRect.Left();
