@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-24 15:50:11 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -869,5 +869,12 @@ struct WW8_TablePos
 #ifdef __WW8_NEEDS_PACK
 #pragma pack()
 #endif
+
+class wwUtility
+{
+public:
+    static sal_uInt32 BGRToRGB(sal_uInt32 nColour);
+    static sal_uInt32 RGBToBGR(sal_uInt32 nColour) { return BGRToRGB(nColour); }
+};
 
 #endif

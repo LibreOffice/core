@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6185,7 +6185,7 @@ static SprmInfo aWwSprmTab[] = {
     0xCA78, 0, L_VAR, // undocumented "sprmCDoubleLine ?" i.e. variable length thing.
     0x6649, 4, L_FIX, // undocumented
     0xF614, 3, L_FIX, // undocumented
-    0xD612, 0, L_VAR, // undocumented
+    0xD612, 0, L_VAR, // undocumented, new background colours.
     0xD613, 0, L_VAR, // undocumented
     0xD61A, 0, L_VAR, // undocumented
     0xD61B, 0, L_VAR, // undocumented
@@ -6214,7 +6214,17 @@ static SprmInfo aWwSprmTab[] = {
     0x244C, 1, L_FIX, // undocumented, must be subtable "sprmPFTtp" equiv
     0x940E, 2, L_FIX, // undocumented
     0x940F, 2, L_FIX, // undocumented
-    0x9410, 2, L_FIX  // undocumented
+    0x9410, 2, L_FIX, // undocumented
+    0x6815, 4, L_FIX, // undocumented
+    0x6816, 4, L_FIX, // undocumented
+    0x6870, 4, L_FIX, // undocumented, text colour
+    0xC64D, 0, L_VAR, // undocumented, para back colour
+    0x6467, 4, L_FIX, // undocumented
+    0x646B, 4, L_FIX, // undocumented
+    0xF617, 3, L_FIX, // undocumented
+    0xD660, 0, L_VAR, //undocumented, something to do with colour.
+    0xD670, 0, L_VAR, //undocumented, something to do with colour.
+    0xCA71, 0, L_VAR  //undocumented, text backcolour
 };
 
 extern "C"

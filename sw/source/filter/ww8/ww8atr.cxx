@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,13 +1186,19 @@ static Writer& OutWW8_SwColor( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SvxColorItem& rAttr = (const SvxColorItem&)rHt;
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    if( rWrtWW8.bWrtWW8 )
-        rWrtWW8.InsUInt16( 0x2A42 );
+    if (rWrtWW8.bWrtWW8)
+        rWrtWW8.InsUInt16(0x2A42);
     else
-        rWrtWW8.pO->Insert( 98, rWrtWW8.pO->Count() );
+        rWrtWW8.pO->Insert(98, rWrtWW8.pO->Count());
 
-    rWrtWW8.pO->Insert( rWrtWW8.TransCol( rAttr.GetValue() ),
+    rWrtWW8.pO->Insert(rWrtWW8.TransCol(rAttr.GetValue()),
         rWrtWW8.pO->Count() );
+
+    if (rWrtWW8.bWrtWW8)
+    {
+        rWrtWW8.InsUInt16(0x6870);
+        rWrtWW8.InsUInt32(wwUtility::RGBToBGR(rAttr.GetValue().GetColor()));
+    }
     return rWrt;
 }
 
@@ -1210,6 +1216,14 @@ static Writer& OutWW8_SwFmtCharBackground( Writer& rWrt, const SfxPoolItem& rHt 
             // sprmCShd
             rWW8Wrt.InsUInt16( 0x4866 );
             rWW8Wrt.InsUInt16( aSHD.GetValue() );
+
+            //Quite a few unknowns, some might be transparency or something
+            //of that nature...
+            rWW8Wrt.InsUInt16(0xCA71);
+            rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
+            rWW8Wrt.InsUInt32(0xFF000000);
+            rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(rBack.GetColor().GetColor()));
+            rWW8Wrt.InsUInt16(0x0000);
         }
     }
     return rWrt;
@@ -3310,16 +3324,27 @@ static Writer& OutWW8_SwFmtBackground( Writer& rWrt, const SfxPoolItem& rHt )
         if( rWW8Wrt.TransBrush( rBack.GetColor(), aSHD ) )
         {
             // sprmPShd
-            if( rWW8Wrt.bWrtWW8 )
-                rWW8Wrt.InsUInt16( 0x442D );
+            if (rWW8Wrt.bWrtWW8)
+                rWW8Wrt.InsUInt16(0x442D);
             else
-                rWW8Wrt.pO->Insert( 47, rWW8Wrt.pO->Count() );
+                rWW8Wrt.pO->Insert(47, rWW8Wrt.pO->Count());
             rWW8Wrt.InsUInt16( aSHD.GetValue() );
+
+            //Quite a few unknowns, some might be transparency or something
+            //of that nature...
+            if (rWW8Wrt.bWrtWW8)
+            {
+                rWW8Wrt.InsUInt16(0xC64D);
+                rWW8Wrt.pO->Insert(10, rWW8Wrt.pO->Count());
+                rWW8Wrt.InsUInt32(0xFF000000);
+                rWW8Wrt.InsUInt32(wwUtility::RGBToBGR(
+                    rBack.GetColor().GetColor()));
+                rWW8Wrt.InsUInt16(0x0000);
+            }
         }
     }
     return rWrt;
 }
-
 
 WW8_BRC SwWW8Writer::TranslateBorderLine( const SvxBorderLine& rLine,
     USHORT nDist, BOOL bShadow )

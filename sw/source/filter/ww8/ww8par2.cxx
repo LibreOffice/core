@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-10 14:10:47 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ struct WW8TabBandDesc
     BOOL bREmptyCol;    // SW: dito rechts
     WW8_TCell* pTCs;
     WW8_SHD* pSHDs;
+    sal_uInt32 *pNewSHDs;
     WW8_BRC aDefBrcs[6];
 
 
@@ -214,14 +215,15 @@ struct WW8TabBandDesc
 
     WW8TabBandDesc() {  memset( this, 0, sizeof( *this ) ); };
     WW8TabBandDesc( WW8TabBandDesc& rBand );    // tief kopieren
-    ~WW8TabBandDesc() { delete[] pTCs; delete[] pSHDs; };
+    ~WW8TabBandDesc() { delete[] pTCs; delete[] pSHDs; delete[] pNewSHDs;};
     static void setcelldefaults(WW8_TCell *pCells, short nCells);
     void ReadDef( BOOL bVer67, const BYTE* pS );
     void ProcessSprmTSetBRC( BOOL bVer67, const BYTE* pParamsTSetBRC );
     void ProcessSprmTDxaCol(const BYTE* pParamsTDxaCol);
     void ProcessSprmTDelete(const BYTE* pParamsTDelete);
     void ProcessSprmTInsert(const BYTE* pParamsTInsert);
-    void ReadShd( SVBT16* pS );
+    void ReadShd(const BYTE* pS );
+    void ReadNewShd(const BYTE* pS );
 };
 
 class WW8TabDesc
@@ -903,11 +905,22 @@ static BOOL IsEqual( WW8TabBandDesc* p1, WW8TabBandDesc* p2 )
         if( memcmp( p1->pTCs, p2->pTCs, ( p1->nWwCols ) * sizeof( WW8_TCell ) ) )
             return FALSE;
     }
-    if( p1->pSHDs || p2->pSHDs ){           // mindestens einer mit SHDs
+    if( p1->pSHDs || p2->pSHDs )
+    {
+        // mindestens einer mit SHDs
         if( !p1->pSHDs || !p2->pSHDs )
             return FALSE;                   // einer ohne SHDs
 
         if( memcmp( p1->pSHDs, p2->pSHDs, ( p1->nWwCols ) * sizeof( WW8_SHD ) ) )
+            return FALSE;
+    }
+    if( p1->pNewSHDs || p2->pNewSHDs )
+    {
+        // mindestens einer mit SHDs
+        if( !p1->pNewSHDs || !p2->pNewSHDs )
+            return FALSE;                   // einer ohne SHDs
+
+        if( memcmp( p1->pNewSHDs, p2->pNewSHDs, ( p1->nWwCols ) * sizeof(sal_uInt32) ) )
             return FALSE;
     }
     return TRUE;
@@ -925,6 +938,11 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
     {
         pSHDs = new WW8_SHD[nWwCols];
         memcpy( pSHDs, rBand.pSHDs, nWwCols * sizeof( WW8_SHD ) );
+    }
+    if( rBand.pNewSHDs )
+    {
+        pNewSHDs = new sal_uInt32[nWwCols];
+        memcpy( pNewSHDs, rBand.pNewSHDs, nWwCols * sizeof( sal_uInt32 ) );
     }
     memcpy(aDefBrcs, rBand.aDefBrcs, sizeof(aDefBrcs));
 }
@@ -954,6 +972,7 @@ void WW8TabBandDesc::ReadDef( BOOL bVer67, const BYTE* pS )
     {
         delete[] pTCs, pTCs = 0;
         delete[] pSHDs, pSHDs = 0;
+        delete[] pNewSHDs, pNewSHDs = 0;
     }
 
     short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // wirklich abgespeichert
@@ -1209,9 +1228,9 @@ void WW8TabBandDesc::ProcessSprmTDelete(const BYTE* pParamsTDelete)
 
 // ReadShd liest ggfs die Hintergrundfarben einer Zeile ein.
 // Es muss vorher ReadDef aufgerufen worden sein
-void WW8TabBandDesc::ReadShd( SVBT16* pS )
+void WW8TabBandDesc::ReadShd(const BYTE* pS )
 {
-    BYTE nLen = ( pS ) ? *( (BYTE*)pS - 1 ) : 0 ;
+    BYTE nLen = pS ? *(pS - 1) : 0;
     if( !nLen )
         return;
 
@@ -1221,13 +1240,34 @@ void WW8TabBandDesc::ReadShd( SVBT16* pS )
         memset( pSHDs, 0, nWwCols * sizeof( WW8_SHD ) );
     }
 
-    BYTE nAnz = nLen >> 1;
-    if( nAnz > nWwCols )
-        nAnz = (BYTE)nWwCols;
-    int i;
+    short nAnz = nLen >> 1;
+    if (nAnz > nWwCols)
+        nAnz = nWwCols;
+
     SVBT16* pShd;
-    for( i=0, pShd = pS; i<nAnz; i++, pShd++ )
+    int i;
+    for(i=0, pShd = (SVBT16*)pS; i<nAnz; i++, pShd++ )
         pSHDs[i].SetWWValue( *pShd );
+}
+
+void WW8TabBandDesc::ReadNewShd(const BYTE* pS )
+{
+    BYTE nLen = pS ? *(pS - 1) : 0;
+    if( !nLen )
+        return;
+
+    if( !pNewSHDs )
+    {
+        pNewSHDs = new sal_uInt32[nWwCols];
+        memset( pNewSHDs, 0, nWwCols * sizeof(sal_uInt32) );
+    }
+
+    short nAnz = nLen >> 1;
+    if (nAnz > nWwCols)
+        nAnz = nWwCols;
+
+    for(int i=0; i<nAnz; i++)
+        pNewSHDs[i] = SwWW8ImplReader::ExtractColour(pS);
 }
 
 void WW8TabBandDesc::setcelldefaults(WW8_TCell *pCells, short nCols)
@@ -1288,6 +1328,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         pNewBand->nLineHeight  = 0;
         BOOL bTabRowJustRead   = FALSE;
         const BYTE* pShadeSprm = 0;
+        const BYTE* pNewShadeSprm = 0;
         WW8_TablePos *pTabPos  = 0;
 
         // Suche Ende einer TabZeile
@@ -1367,10 +1408,11 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
                     break;
                 case 191:
                 case 0xD609:
-                    {
-                        // TableShades
-                        pShadeSprm = pParams;
-                    }
+                    // TableShades
+                    pShadeSprm = pParams;
+                    break;
+                case 0xD612:
+                    pNewShadeSprm = pParams;
                     break;
                 //
                 // * * * * Bug #69885#: the following codes were added * * * *
@@ -1433,8 +1475,13 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         // TabRowEnd, daher kann TestApo() mit letztem Parameter FALSE und
         // damit wirksam gerufen werden.
 
-        if( bTabRowJustRead && pShadeSprm )
-            pNewBand->ReadShd( (SVBT16*)pShadeSprm );
+        if (bTabRowJustRead)
+        {
+            if (pShadeSprm && !pNewShadeSprm)
+                pNewBand->ReadShd(pShadeSprm);
+            else if (pNewShadeSprm)
+                pNewBand->ReadNewShd(pNewShadeSprm);
+        }
 
         if( nTabeDxaNew < SHRT_MAX )
         {
@@ -2426,13 +2473,21 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
         return;                 // kuenstlich erzeugte Zellen -> Keine Farbe
-    WW8_SHD& rSHD = pActBand->pSHDs[nWwIdx];
-    if( !rSHD.GetValue() )      // alles weiss
-        return;
+    if (pActBand->pSHDs && !pActBand->pNewSHDs)
+    {
+        WW8_SHD& rSHD = pActBand->pSHDs[nWwIdx];
+        if( !rSHD.GetValue() )      // alles weiss
+            return;
 
-    SwWW8Shade aSh( pIo->bVer67, rSHD );
+        SwWW8Shade aSh( pIo->bVer67, rSHD );
 
-    pBox->GetFrmFmt()->SetAttr( SvxBrushItem( aSh.aColor ) );
+        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aSh.aColor));
+    }
+    else if (pActBand->pNewSHDs)
+    {
+        Color aColor(pActBand->pNewSHDs[nWwIdx]);
+        pBox->GetFrmFmt()->SetAttr(SvxBrushItem(aColor));
+    }
 }
 
 void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
@@ -2523,10 +2578,10 @@ void WW8TabDesc::AdjustNewBand()
         // verringern
         pBox->ClaimFrmFmt();
 
-        SetTabBorders( pBox, j );
-        SetTabVertAlign( pBox, j );
-        if( pActBand->pSHDs )
-            SetTabShades( pBox, j );
+        SetTabBorders(pBox, j);
+        SetTabVertAlign(pBox, j);
+        if( pActBand->pSHDs || pActBand->pNewSHDs)
+            SetTabShades(pBox, j);
         j++;
 
         aFS.SetWidth( nW );
@@ -3327,7 +3382,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
         ImportGrupx( nSkip, pStd->sgc == 1, pSI->nFilePos & 1);
                         // Alle moeglichen Attribut-Flags zuruecksetzen,
                         // da es in Styles keine Attr-Enden gibt
-        pIo->bHasBorder = pIo->bTxtCol = pIo->bShdTxtCol = pIo->bCharShdTxtCol
+        pIo->bHasBorder = pIo->bShdTxtCol = pIo->bCharShdTxtCol
         = pIo->bSpec = pIo->bObj = pIo->bSymbol = FALSE;
         pIo->nCharFmt = -1;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3533,11 +3533,12 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( USHORT, const BYTE* pData,
 
 void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
 {
+    //Has newer colour varient, ignore this old varient
+    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0x6870))
+        return;
+
     if( nLen < 0 )
-    {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-        bTxtCol = FALSE;
-    }
     else
     {
         BYTE b = *pData;            // Parameter: 0 = Auto, 1..16 Farben
@@ -3546,8 +3547,30 @@ void SwWW8ImplReader::Read_TxtColor( USHORT, const BYTE* pData, short nLen )
             b = 0;
 
         NewAttr( SvxColorItem( Color( eSwWW8ColA[b] ) ) );
-        bTxtCol = TRUE;             // SHD darf nicht Farbe einschalten
-        if( pAktColl && pStyles )
+        if (pAktColl && pStyles)
+            pStyles->bTxtColChanged = TRUE;
+    }
+}
+
+sal_uInt32 wwUtility::BGRToRGB(sal_uInt32 nColor)
+{
+    sal_uInt8
+        r(static_cast<sal_uInt8>(nColor&0xFF)),
+        g(static_cast<sal_uInt8>(((nColor)>>8)&0xFF)),
+        b(static_cast<sal_uInt8>((nColor>>16)&0xFF));
+    nColor = (r<<16) + (g<<8) + b;
+    return nColor;
+}
+
+void SwWW8ImplReader::Read_TxtForeColor(USHORT, const BYTE* pData, short nLen)
+{
+    if( nLen < 0 )
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
+    else
+    {
+        Color aColor(wwUtility::BGRToRGB(SVBT32ToLong(pData)));
+        NewAttr(SvxColorItem(aColor));
+        if (pAktColl && pStyles)
             pStyles->bTxtColChanged = TRUE;
     }
 }
@@ -3879,6 +3902,10 @@ void SwWW8ImplReader::Read_FontKern( USHORT, const BYTE* , short nLen )
 
 void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
 {
+    //Has newer colour varient, ignore this old varient
+    if (!bVer67 && pPlcxMan && pPlcxMan->GetChpPLCF()->HasSprm(0xCA71))
+        return;
+
     if( nLen <= 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
@@ -3896,6 +3923,28 @@ void SwWW8ImplReader::Read_CharShadow(  USHORT, const BYTE* pData, short nLen )
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
+    }
+}
+
+void SwWW8ImplReader::Read_TxtBackColor(USHORT, const BYTE* pData, short nLen )
+{
+    if( nLen <= 0 )
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
+        if( bCharShdTxtCol )
+        {
+            // Zeichenfarbe auch
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
+            bCharShdTxtCol = FALSE;
+        }
+    }
+    else
+    {
+        ASSERT(nLen == 10, "Len of para back colour not 10!");
+        if (nLen != 10)
+            return;
+        Color aColour(ExtractColour(pData));
+        NewAttr(SvxBrushItem(aColour, RES_CHRATR_BACKGROUND));
     }
 }
 
@@ -4571,14 +4620,16 @@ static ULONG __READONLY_DATA eMSGrayScale[] = {
     }
 }
 
-
 void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
 {
-    if( nLen <= 0 )
+    if (!bVer67 && pPlcxMan && pPlcxMan->GetPapPLCF()->HasSprm(0xC64D))
+        return;
+
+    if (nLen <= 0)
     {
         // Ende des Attributes
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BACKGROUND );
-        if( bShdTxtCol )
+        if (bShdTxtCol)
         {
             // Zeichenfarbe auch
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
@@ -4591,8 +4642,40 @@ void SwWW8ImplReader::Read_Shade( USHORT, const BYTE* pData, short nLen )
         aSHD.SetWWValue( *(SVBT16*)pData );
         SwWW8Shade aSh( bVer67, aSHD );
 
-        NewAttr( SvxBrushItem( aSh.aColor ) );
+        NewAttr(SvxBrushItem(aSh.aColor));
     }
+}
+
+void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
+{
+    if (nLen <= 0)
+    {
+        // Ende des Attributes
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_BACKGROUND );
+        if (bShdTxtCol)
+        {
+            // Zeichenfarbe auch
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
+            bShdTxtCol = FALSE;
+        }
+    }
+    else
+    {
+        ASSERT(nLen == 10, "Len of para back colour not 10!");
+        if (nLen != 10)
+            return;
+        NewAttr(SvxBrushItem(Color(ExtractColour(pData))));
+    }
+}
+
+sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData)
+{
+    ASSERT(SVBT32ToLong(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
+    rpData+=4;
+    sal_uInt32 nRet = wwUtility::BGRToRGB(SVBT32ToLong(rpData));
+    rpData+=4;
+    ASSERT(SVBT16ToShort(rpData) == 0x0000, "Unknown 2 not 0xff000000");
+    return nRet;
 }
 
 void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
@@ -5373,7 +5456,17 @@ SprmReadInfo aSprmReadTab[] = {
     0x303B, (FNReadRecord)0, //undocumented
     0x244B, (FNReadRecord)0, // undocumented, must be subtable "sprmPFInTable"
     // undocumented, must be subtable "sprmPFTtp"
-    0x244C, &SwWW8ImplReader::Read_TabRowEnd
+    0x244C, &SwWW8ImplReader::Read_TabRowEnd,
+    0x6815, (FNReadRecord)0, //undocumented
+    0x6816, (FNReadRecord)0, //undocumented
+    0x6870, &SwWW8ImplReader::Read_TxtForeColor,
+    0xC64D, &SwWW8ImplReader::Read_ParaBackColor,
+    0x6467, (FNReadRecord)0, //undocumented
+    0x6467, (FNReadRecord)0, //undocumented
+    0xF617, (FNReadRecord)0, //undocumented
+    0xD660, (FNReadRecord)0, //undocumented
+    0xD670, (FNReadRecord)0, //undocumented
+    0xCA71, &SwWW8ImplReader::Read_TxtBackColor  //undocumented
 };
 
 //-----------------------------------------

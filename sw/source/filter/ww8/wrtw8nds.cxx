@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 09:50:28 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1654,6 +1654,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                 aAt.Insert( (BYTE)191, aAt.Count() );
             aAt.Insert( (BYTE)(nBackg * 2), aAt.Count() );  // Len
 
+            Color *pColors = new Color[nBackg];
+
             const SfxPoolItem* pI;
             for( nBox = 0, nRealBox = 0; nRealBox < nBackg; ++nBox )
             {
@@ -1667,16 +1669,32 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
                     || 0 != ( pI = pCell->GetBackground() )
                     || 0 != ( pI = pRow->GetBackground() ) )
                 {
-                    WW8_SHD aShd;
-                    rWW8Wrt.TransBrush( ((const SvxBrushItem*)pI)->
-                                        GetColor(), aShd );
-                    nValue = aShd.GetValue();
+                    pColors[nRealBox] = ((const SvxBrushItem*)pI)->GetColor();
                 }
-                else
-                    nValue = 0;
-                SwWW8Writer::InsUInt16( aAt, nValue );
                 ++nRealBox;
             }
+
+            for(USHORT nI = 0; nI < nBackg; ++nI)
+            {
+                WW8_SHD aShd;
+                rWW8Wrt.TransBrush(pColors[nI], aShd);
+                SwWW8Writer::InsUInt16(aAt, aShd.GetValue());
+            }
+
+            if( rWW8Wrt.bWrtWW8 )
+            {
+                SwWW8Writer::InsUInt16( aAt, 0xD612 );
+                aAt.Insert( (BYTE)(nBackg * 10), aAt.Count() ); // Len
+                for(USHORT nI = 0; nI < nBackg; ++nI)
+                {
+                    SwWW8Writer::InsUInt32(aAt, 0xFF000000);
+                    SwWW8Writer::InsUInt32(aAt,
+                        wwUtility::RGBToBGR(pColors[nI].GetColor()));
+                    SwWW8Writer::InsUInt16(aAt, 0x0000);
+                }
+            }
+
+            delete[] pColors;
         }
 
         rWW8Wrt.pPapPlc->AppendFkpEntry( rWrt.Strm().Tell(),

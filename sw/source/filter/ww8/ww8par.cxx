@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,7 +2322,7 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     nTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bApo = bTxbxFlySection
                = bHasBorder = bSymbol = bIgnoreText = bDontCreateSep
-               = bTableInApo = bWasTabRowEnd = bTxtCol = FALSE;
+               = bTableInApo = bWasTabRowEnd = FALSE;
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bSectionHasATitlePage
                = bIsUnicode = bCpxStyle = bStyNormal = bWWBugNormal  = FALSE;

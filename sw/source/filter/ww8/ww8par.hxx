@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-11 14:06:35 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,7 +769,6 @@ friend class WW8FormulaControl;
      int  nTable;           // wird gerade eine Tabelle eingelesen
     BOOL bTableInApo;       // Table is contained in Apo
     BOOL bWasTabRowEnd;     // Tabelle : Row End Mark
-    BOOL bTxtCol;           // TextFarbe direkt gesetzt
     BOOL bShdTxtCol;        // Textfarbe indirekt gesetzt ( Hintergrund sw )
     BOOL bCharShdTxtCol;    // Textfarbe indirekt gesetzt ( Zeichenhintergrund sw )
     BOOL bAnl;              // Nummerierung in Bearbeitung
@@ -1185,6 +1184,11 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_StyleCode(USHORT, const BYTE* pData, short nLen);
     void Read_Majority(USHORT, const BYTE* , short );
     void Read_DoubleLine_Rotate( USHORT, const BYTE* pDATA, short nLen);
+
+    void Read_TxtForeColor(USHORT, const BYTE* pData, short nLen);
+    void Read_TxtBackColor(USHORT, const BYTE* pData, short nLen);
+    void Read_ParaBackColor(USHORT, const BYTE* pData, short nLen);
+    static sal_uInt32 ExtractColour(const BYTE* &rpData);
 
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
         const String &rData);
