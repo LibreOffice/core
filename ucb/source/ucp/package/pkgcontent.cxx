@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-15 09:12:03 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 13:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
         m_aProps.bIsFolder    = sal_True;
         m_aProps.bIsDocument  = sal_False;
         m_aProps.nSize        = 0;
+        m_aProps.bCompressed  = sal_False;
     }
     else
     {
@@ -299,6 +300,7 @@ Content::Content( const Reference< XMultiServiceFactory >& rxSMgr,
         m_aProps.bIsFolder    = sal_False;
         m_aProps.bIsDocument  = sal_True;
         m_aProps.nSize        = 0;
+        m_aProps.bCompressed  = sal_False;
     }
 }
 
@@ -798,6 +800,16 @@ Reference< XRow > Content::getPropertyValues(
             {
                 xRow->appendLong   ( rProp, rData.nSize );
             }
+#if SUPD>616
+            else if ( rProp.Name.compareToAscii( "Compressed" ) == 0 )
+            {
+                // Property only available for streams.
+                if ( rData.bIsDocument )
+                    xRow->appendBoolean( rProp, rData.bCompressed );
+                else
+                    xRow->appendVoid( rProp );
+            }
+#endif
             else
             {
                 // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -869,6 +881,17 @@ Reference< XRow > Content::getPropertyValues(
                       getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                       PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
             rData.nSize );
+
+#if SUPD>616
+        // Property only available for streams.
+        if ( rData.bIsDocument )
+            xRow->appendBoolean(
+                Property( OUString::createFromAscii( "Compressed" ),
+                          -1,
+                          getCppuBooleanType(),
+                          PropertyAttribute::BOUND ),
+                rData.bCompressed );
+#endif
 
         // Append all Additional Core Properties.
 
@@ -976,6 +999,26 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
         {
             // Read-only property!
         }
+#if SUPD>616
+        else if ( rValue.Name.compareToAscii( "Compressed" ) == 0 )
+        {
+            // Property only available for streams.
+            if ( m_aProps.bIsDocument )
+            {
+                sal_Bool bNewValue;
+                if ( rValue.Value >>= bNewValue )
+                {
+                    if ( bNewValue != m_aProps.bCompressed )
+                    {
+                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                        m_aProps.bCompressed = bNewValue;
+                          nChanged++;
+                        bStore = sal_True;
+                    }
+                }
+            }
+        }
+#endif
         else
         {
             // Not a Core Property! Maybe it's an Additional Core Property?!
@@ -1799,6 +1842,36 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 rProps.bIsFolder = sal_False;
             }
 
+#if SUPD>616
+            // Compressed ( only available for streams )
+            if ( rProps.bIsDocument )
+            {
+                try
+                {
+                    Any aCompressed
+                        = xPropSet->getPropertyValue(
+                            OUString::createFromAscii( "Compressed" ) );
+                    if ( !( aCompressed >>= rProps.bCompressed ) )
+                    {
+                        VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Commpressed value!" );
+                        return sal_False;
+                    }
+                }
+                catch ( UnknownPropertyException & )
+                {
+                    VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Compressed value!" );
+                    return sal_False;
+                }
+                catch ( WrappedTargetException & )
+                {
+                    VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Compressed value!" );
+                    return sal_False;
+                }
+            }
+#endif
             return sal_True;
         }
     }
@@ -1964,6 +2037,11 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 
         xPropSet->setPropertyValue( OUString::createFromAscii( "MediaType" ),
                                     makeAny( m_aProps.aMediaType ) );
+
+#if SUPD>616
+        xPropSet->setPropertyValue( OUString::createFromAscii( "Compressed" ),
+                                    makeAny( m_aProps.bCompressed ) );
+#endif
 
         //////////////////////////////////////////////////////////////////
         // Store data stream...

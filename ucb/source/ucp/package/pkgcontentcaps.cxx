@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-27 13:05:27 $
+ *  last change: $Author: kso $ $Date: 2001-01-15 13:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
     MediaType            (x)      x
     Size                  x       x
     Title                 x       x
+#if SUPD>616
+    Compress                      x
+#endif
 
     getCommandInfo        x       x
     getPropertySetInfo    x       x
@@ -134,70 +137,148 @@ const ::ucb::PropertyInfoTableEntry& Content::getPropertyInfoTable()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    //=================================================================
-    //
-    // Supported properties
-    //
-    //=================================================================
-
-    static ::ucb::PropertyInfoTableEntry aPropertyInfoTable[] =
+    if ( isFolder() )
     {
-        ///////////////////////////////////////////////////////////////
-        // Required properties
-        ///////////////////////////////////////////////////////////////
+        //=================================================================
+        //
+        // Folder: Supported properties
+        //
+        //=================================================================
+
+        static ::ucb::PropertyInfoTableEntry aFolderPropertyInfoTable[] =
         {
-            "ContentType",
-            -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
+            ///////////////////////////////////////////////////////////////
+            // Required properties
+            ///////////////////////////////////////////////////////////////
+            {
+                "ContentType",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "IsDocument",
+                -1,
+                &getCppuBooleanType(),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "IsFolder",
+                -1,
+                &getCppuBooleanType(),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "Title",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND
+            },
+            ///////////////////////////////////////////////////////////////
+            // Optional standard properties
+            ///////////////////////////////////////////////////////////////
+            {
+                "MediaType",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND
+            },
+            {
+                "Size",
+                -1,
+                &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            ///////////////////////////////////////////////////////////////
+            // New properties
+            ///////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////
+            // EOT
+            ///////////////////////////////////////////////////////////////
+            {
+                0,  // name
+                0,  // handle
+                0,  // type
+                0   // attributes
+            }
+        };
+        return *aFolderPropertyInfoTable;
+    }
+    else
+    {
+        //=================================================================
+        //
+        // Stream: Supported properties
+        //
+        //=================================================================
+
+        static ::ucb::PropertyInfoTableEntry aStreamPropertyInfoTable[] =
         {
-            "IsDocument",
-            -1,
-            &getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "IsFolder",
-            -1,
-            &getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        {
-            "Title",
-            -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND
-        },
-        ///////////////////////////////////////////////////////////////
-        // Optional standard properties
-        ///////////////////////////////////////////////////////////////
-        {
-            "MediaType",
-            -1,
-            &getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND
-        },
-        {
-            "Size",
-            -1,
-            &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        },
-        ///////////////////////////////////////////////////////////////
-        // New properties
-        ///////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////
-        // EOT
-        ///////////////////////////////////////////////////////////////
-        {
-            0,  // name
-            0,  // handle
-            0,  // type
-            0   // attributes
-        }
-    };
-    return *aPropertyInfoTable;
+            ///////////////////////////////////////////////////////////////
+            // Required properties
+            ///////////////////////////////////////////////////////////////
+            {
+                "ContentType",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "IsDocument",
+                -1,
+                &getCppuBooleanType(),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "IsFolder",
+                -1,
+                &getCppuBooleanType(),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            {
+                "Title",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND
+            },
+            ///////////////////////////////////////////////////////////////
+            // Optional standard properties
+            ///////////////////////////////////////////////////////////////
+            {
+                "MediaType",
+                -1,
+                &getCppuType( static_cast< const OUString * >( 0 ) ),
+                PropertyAttribute::BOUND
+            },
+            {
+                "Size",
+                -1,
+                &getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            },
+            ///////////////////////////////////////////////////////////////
+            // New properties
+            ///////////////////////////////////////////////////////////////
+#if SUPD>616
+            {
+                "Compress",
+                -1,
+                &getCppuType( static_cast< const sal_Bool * >( 0 ) ),
+                PropertyAttribute::BOUND
+            },
+#endif
+            ///////////////////////////////////////////////////////////////
+            // EOT
+            ///////////////////////////////////////////////////////////////
+            {
+                0,  // name
+                0,  // handle
+                0,  // type
+                0   // attributes
+            }
+        };
+        return *aStreamPropertyInfoTable;
+    }
 }
 
 //=========================================================================
