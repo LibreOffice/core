@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockingarea.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:10:38 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 09:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -209,7 +208,8 @@ void DockingAreaWindow::Paint( const Rectangle& rRect )
         if( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
             // draw a single toolbar background covering the whole docking area
-            Region aCtrlRegion( Rectangle( Point(), GetOutputSizePixel() ) );
+            Point tmp;
+            Region aCtrlRegion( Rectangle( tmp, GetOutputSizePixel() ) );
 
             DrawNativeControl( CTRL_TOOLBAR, IsHorizontal() ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,
                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
