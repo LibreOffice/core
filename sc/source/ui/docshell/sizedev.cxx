@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sizedev.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-15 13:41:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,10 +85,12 @@ ScSizeDeviceProvider::ScSizeDeviceProvider( ScDocShell* pDocSh )
 
         aOldMapMode = pDevice->GetMapMode();
         pDevice->SetMapMode( MAP_PIXEL );       // GetNeededSize needs pixel MapMode
+        // printer has right DigitLanguage already
     }
     else
     {
         pDevice = new VirtualDevice;
+        pDevice->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         bOwner = TRUE;
     }
 
