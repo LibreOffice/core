@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 10:58:47 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 15:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ arabic ] = "ΝέΩ ΤέΗέ";
         Text[ dutch ] = "~Transparant opslaan";
         Text[ chinese_simplified ] = "΄ζΕΜΝΈΓχ(~T)";
-        Text[ greek ] = "Δια~φανές αποθήκευση";
+        Text[ greek ] = "Αποθήκευση διαφανές";
         Text[ korean ] = "ΕυΈν Έπµε ΐϊΐε(~T)";
         Text[ turkish ] = "Saydam biηimde kaydet";
         Text[ language_user1 ] = " ";
