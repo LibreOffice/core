@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-05-30 16:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
@@ -2623,7 +2626,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
         util::Date aNullDate;
         aAny >>= aNullDate;
         if (bCalcAsShown || bIgnoreCase || !bLookUpLabels || !bMatchWholeCell || !bUseRegularExpressions ||
-            bIsIterationEnabled || nIterationCount != 100 || fIterationEpsilon != 0.001 ||
+            bIsIterationEnabled || nIterationCount != 100 || !SolarMath::ApproxEqual(fIterationEpsilon, 0.001) ||
             aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899 || nYear2000 != 1930)
         {
             if (bIgnoreCase)
