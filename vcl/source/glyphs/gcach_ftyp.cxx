@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.23 $
- *  last change: $Author: hdu $ $Date: 2001-03-30 09:05:50 $
+ *  $Revision: 1.24 $
+ *  last change: $Author: hdu $ $Date: 2001-03-30 12:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,18 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
     rGD.SetSize( Size( (aBbox.xMax-aBbox.xMin+1), (aBbox.yMax-aBbox.yMin) ) );
 
     FT_Done_Glyph( aGlyphFT );
+}
+
+// -----------------------------------------------------------------------
+
+bool FreetypeServerFont::GetAntialiasAdvice( void ) const
+{
+    bool bAdviseAA = (mnLoadFlags & FT_LOAD_NO_HINTING) != 0;
+    int nHeight = GetFontSelData().mnHeight;
+    // TODO: use GASP & EBDT tables
+    bAdviseAA |= (nHeight > 12);
+    bAdviseAA |= (nHeight < 8);
+    return bAdviseAA;
 }
 
 // -----------------------------------------------------------------------

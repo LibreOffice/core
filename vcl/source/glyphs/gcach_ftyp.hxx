@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-14 16:41:48 $
+ *  last change: $Author: hdu $ $Date: 2001-03-30 12:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ class FreetypeServerFont : public ServerFont
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
     virtual int                 GetGlyphIndex( sal_Unicode ) const;
+    virtual bool                GetAntialiasAdvice( void ) const;
     virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_vdev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 16:09:05 $
+ *  last change: $Author: hdu $ $Date: 2001-03-30 12:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,13 @@ void VirtDevServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 // -----------------------------------------------------------------------
 
+bool VirtDevServerFont::GetAntialiasAdvice( void ) const
+{
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
 bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
 {
 #if 0
@@ -223,6 +230,7 @@ bool VirtDevServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const
     vdev.DrawText( Point(0,0)-rGD.GetMetric().GetOffset(), nGlyphIndex );
 
     // create new glyph item
+
     const Bitmap& rBitmap = vdev.GetBitmap( Point(0,0), aSize );
     rGD.SetBitmap( new Bitmap( rBitmap ) );
     return true;
