@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: er $ $Date: 2002-03-19 15:48:24 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-26 13:33:32 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -80,7 +80,9 @@ debug!=
 MY_MISC_CXXFILES = \
     $(MISC)$/localedata_af_ZA.cxx  \
     $(MISC)$/localedata_ar_EG.cxx  \
+    $(MISC)$/localedata_ar_LB.cxx  \
     $(MISC)$/localedata_ar_SA.cxx  \
+    $(MISC)$/localedata_ar_TN.cxx  \
     $(MISC)$/localedata_ca_ES.cxx  \
     $(MISC)$/localedata_cs_CZ.cxx  \
     $(MISC)$/localedata_da_DK.cxx  \
@@ -270,7 +272,9 @@ DEFLIB4NAME=	$(SHL4TARGET)
 SHL4OBJS= \
     $(SLO)$/localedata_af_ZA.obj \
     $(SLO)$/localedata_ar_EG.obj \
+    $(SLO)$/localedata_ar_LB.obj \
     $(SLO)$/localedata_ar_SA.obj \
+    $(SLO)$/localedata_ar_TN.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hu_HU.obj \
     $(SLO)$/localedata_id_ID.obj \
