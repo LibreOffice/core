@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,10 @@
 #ifndef _SV_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #endif
 #pragma hdrstop

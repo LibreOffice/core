@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,10 @@
 #include <svtools/prnsetup.hxx>
 #endif
 #endif
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
+#endif
 #endif
 #ifndef _SFXFLAGITEM_HXX //autogen
 #include <svtools/flagitem.hxx>
@@ -96,6 +98,10 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+#ifndef _SFXAPP_HXX
+#include <sfx2/app.hxx>
+#endif
+#include <svtools/useroptions.hxx>
 #pragma hdrstop
 
 #include "viewsh.hxx"
@@ -105,7 +111,9 @@
 #include "sfxresid.hxx"
 #include "request.hxx"
 #include "objsh.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxtypes.hxx"
 #include "docinf.hxx"
 #include "event.hxx"
@@ -654,8 +662,12 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         // unter Windows mu\s das so, weil sonst kein Querdruck funkt,
         // unter OS/2 sollte man das nutzen - Apps kommen aber nicht klar
         // WP: 07.12.95: SV macht das jetzt richtig
+#if SUPD<613//MUSTINI
         SfxIniManager *pIniMgr = SFX_INIMANAGER();
         String aPages( pIniMgr->Get(SFX_KEY_PAGEQUEUESIZE) );
+#else
+        String aPages;
+#endif
         pPrinter->SetPageQueueSize( aPages.Len() ? (int) aPages.ToInt32() : 1 );
 
 #ifdef OS2
@@ -672,7 +684,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         SfxStamp aOldStamp = pInfo->GetPrinted();
         // Abfrage, ob die Benutzerdaten
         // f"ur die Eigenschaften verwendet werden sollen
+#if SUPD<613//MUSTINI
         String aUserName = pIniMgr->GetUserFullName();
+#else
+        String aUserName = SvtUserOptions().GetFullName();
+#endif
 
         if ( !pInfo->IsUseUserData() )
             aUserName.Erase();

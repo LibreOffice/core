@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-03 12:05:20 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ using namespace ::com::sun::star::ucb;
 #include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
-#include <unotools/localfilehelper.hxx>
+#include <svtools/pathoptions.hxx>
 #include <ucbhelper/contentbroker.hxx>
 
 #include "ucbhelp.hxx"
@@ -177,7 +177,9 @@ using namespace ::com::sun::star::ucb;
 #include "doc.hrc"          // MSG_WARNING_BACKUP, MSG_OPEN_READONLY
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"       // Backup Path
+#endif
 
 #define MAX_REDIRECT 5
 
@@ -1301,7 +1303,11 @@ void SfxMedium::DoBackup_Impl()
     INetURLObject   aSource = GetURLObject();
     String          aParentURL;
     String          aName;
+#if SUPD<613//MUSTINI
     String          aBakDir = SFX_INIMANAGER()->Get(SFX_KEY_BACKUP_PATH);
+#else
+    String          aBakDir = SvtPathOptions().GetBackupPath();
+#endif
     BOOL            bTryTransfer = FALSE;
     sal_Bool        bSuccess = sal_False;
     Reference < XContent > xContent;

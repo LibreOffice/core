@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,10 @@
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
+#endif
 #endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
@@ -137,6 +139,8 @@
 #endif
 
 #include <svtools/undoopt.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/useroptions.hxx>
 
 #pragma hdrstop
 
@@ -528,7 +532,11 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     // Ncht den vom BasicManager, falls inzwischen der Pfad geaendert wurde !?
     // So wird natuerlich auch das erste Dir genommen, wenn der BasicManager
     // vorher im zweiten gefunden wurde...
+/*MUSTINI-----------------------------------------------------------------------------
     String aBasicPath( GetIniManager()->Get( SFX_KEY_BASIC_PATH ) );
+*/
+    String aBasicPath( SvtPathOptions().GetBasicPath() );
+/*MUSTINI-----------------------------------------------------------------------------*/
     INetURLObject aAppBasicObj( aBasicPath.GetToken(0), INET_PROT_FILE );
     aAppBasicObj.insertName( Application::GetAppName() );
     aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
@@ -617,13 +625,22 @@ BasicManager* SfxApplication::GetBasicManager()
     if ( !pImp->pBasicMgr )
     {
         // Directory bestimmen
-        SfxIniManager* pIniMgr = GetIniManager();
+#if SUPD<613//MUSTINI
+         SfxIniManager* pIniMgr = GetIniManager();
         String aAppBasicDir( pIniMgr->Get( SFX_KEY_BASIC_PATH ) );
         if ( !aAppBasicDir.Len() )
         {
             aAppBasicDir = pIniMgr->GetProgramPath();
             pIniMgr->Set( aAppBasicDir, SFX_KEY_BASIC_PATH );
         }
+#else
+        SvtPathOptions aPathCFG;
+        String aAppBasicDir( aPathCFG.GetBasicPath() );
+        if ( !aAppBasicDir.Len() )
+        {
+            aPathCFG.SetBasicPath( aPathCFG.SubstituteVariable( String::CreateFromAscii("$(insturl)") ) );
+        }
+#endif
 
         // #58293# soffice.new nur im ::com::sun::star::sdbcx::User-Dir suchen => erstes Verzeichnis
         String aAppFirstBasicDir = aAppBasicDir.GetToken(0);
@@ -896,8 +913,9 @@ void SfxApplication::EventState_Impl
 //-------------------------------------------------------------------------
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
+#if SUPD<613//MUSTINI
     SfxIniManager *pIniMgr = GetIniManager();
-
+#endif
     const SfxItemSet *pArgs = rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
@@ -934,7 +952,11 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_DEFAULTFILEPATH:
         {
             SFX_REQUEST_ARG(rReq, pPathItem, SfxStringItem, nSID, sal_False);
+#if SUPD<613//MUSTINI
             pIniMgr->Set(pPathItem->GetValue(), SFX_KEY_WORK_PATH );
+#else
+            SvtPathOptions().SetWorkPath( pPathItem->GetValue() );
+#endif
             break;
         }
 
@@ -1016,6 +1038,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
+#if SUPD<613//MUSTINI
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {
@@ -1035,14 +1058,25 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             }
             break;
         }
-
+#else
+        case SID_OFFICE_PRIVATE_USE:
+        case SID_OFFICE_COMMERCIAL_USE:
+        {
+            DBG_ASSERT( sal_False, "SfxApplication::PropExec_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
+            break;
+        }
+#endif
         case SID_OFFICE_CUSTOMERNUMBER:
         {
             SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
 
             if ( pStringItem )
+#if SUPD<613//MUSTINI
                 pIniMgr->Set( pStringItem->GetValue(),
                               SFX_KEY_CUSTOMERNUMBER );
+#else
+                SvtUserOptions().SetCustomerNumber( pStringItem->GetValue() );
+#endif
             break;
         }
     }
@@ -1052,8 +1086,9 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
+#if SUPD<613//MUSTINI
     SfxIniManager *pIniMgr = GetIniManager();
-
+#endif
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -1134,7 +1169,11 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_DEFAULTFILEPATH:
+#if SUPD<613//MUSTINI
                 rSet.Put( SfxStringItem( SID_DEFAULTFILEPATH, pIniMgr->Get(SFX_KEY_WORK_PATH) ) );
+#else
+                rSet.Put( SfxStringItem( SID_DEFAULTFILEPATH, SvtPathOptions().GetWorkPath() ) );
+#endif
                 break;
 
             case SID_PROGFILENAME:
@@ -1142,7 +1181,11 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_PROGPATH:
+#if SUPD<613//MUSTINI
                 rSet.Put( SfxStringItem( SID_PROGPATH, pIniMgr->GetProgramPath() ) );
+#else
+                rSet.Put( SfxStringItem( SID_PROGPATH, SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(prog)") ) ) );
+#endif
                 break;
 
             case SID_INTERACTIVEMODE:
@@ -1262,6 +1305,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             }
             break;
 
+#if SUPD<613//MUSTINI
             case SID_OFFICE_PRIVATE_USE:
             case SID_OFFICE_COMMERCIAL_USE:
             {
@@ -1275,11 +1319,23 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 rSet.Put( SfxStringItem( nSID, aRet ) );
                 break;
             }
+#else
+            case SID_OFFICE_PRIVATE_USE:
+            case SID_OFFICE_COMMERCIAL_USE:
+            {
+                DBG_ASSERT( sal_False, "SfxApplication::PropState_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
+                break;
+            }
+#endif
 
             case SID_OFFICE_CUSTOMERNUMBER:
             {
+#if SUPD<613//MUSTINI
                 String aCustomerNumber = pIniMgr->Get(SFX_KEY_CUSTOMERNUMBER);
                 rSet.Put( SfxStringItem( nSID, aCustomerNumber ) );
+#else
+                rSet.Put( SfxStringItem( nSID, SvtUserOptions().GetCustomerNumber() ) );
+#endif
                 break;
             }
         }

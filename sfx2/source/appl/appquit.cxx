@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:23 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,9 @@ void SfxApplication::Deinitialize()
         return;
 
     // Falls man nochmal beim Runterfahren in ein Reschedule l"auft
+#if SUPD<613//MUSTINI
     pAppData_Impl->EndListening( *pAppIniMgr );
+#endif
     pAppData_Impl->EndListening( *this );
     if ( pAppData_Impl->pCancelMgr )
         pAppData_Impl->EndListening( *pAppData_Impl->pCancelMgr );
@@ -341,7 +343,9 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pInitLinkList);
 #endif
 
+#if SUPD<613//MUSTINI
     pAppIniMgr->LeaveLock();
+#endif
     DELETEZ(pCfgMgr);
 
 #ifndef PRODUCT

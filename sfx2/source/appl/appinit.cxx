@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-06 18:05:33 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,15 @@
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/historyoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #pragma hdrstop
@@ -657,10 +666,11 @@ FASTBOOL SfxApplication::Initialize_Impl()
     Help::EnableContextHelp();
     Help::EnableExtHelp();
     Help::EnableQuickHelp();
-
+#ifdef ENABLE_INIMANAGER//MUSTINI
     // falls der IniManager nicht schon durch CreateResManager erzeugt wurde
     if ( !pAppIniMgr )
         pAppIniMgr = CreateIniManager();
+#endif
 
     // StarObjects initialisieren
     if ( !SvFactory::Init() )
@@ -672,7 +682,11 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
     pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
     SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
+#if SUPD<613//MUSTINI
     INetURLHistory::GetOrCreate()->SetLocation( GetIniManager()->Get( SFX_KEY_USERCONFIG_PATH ) );
+#else
+    INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
+#endif
 
     // merken, falls Applikation normal gestartet wurde
     if ( pAppData_Impl->bDirectAliveCount )
@@ -696,9 +710,13 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     // diverse Pointer
     pImp->pAutoSaveTimer = new Timer;
+#if SUPD<613//MUSTINI
     String aPickSize = GetIniManager()->Get( SFX_KEY_PICKLIST );
     int nPickSize = !aPickSize.Len() ? 4 : (int) aPickSize.ToInt32();
     SfxPickList_Impl::GetOrCreate( Min(9, nPickSize) );
+#else
+    SfxPickList_Impl::GetOrCreate( SvtHistoryOptions().GetSize( ePICKLIST ) );
+#endif
 
     /////////////////////////////////////////////////////////////////
 
@@ -761,6 +779,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
         SFX_FILTER_REDIRECT | SFX_FILTER_IMPORT | SFX_FILTER_ALIEN |
         SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINCHOOSER );
   */
+#if SUPD<613//MUSTINI
     if( _nFeatures & SFX_FEATURE_SCALC &&
         _nFeatures & SFX_FEATURE_SIMPRESS &&
         _nFeatures & SFX_FEATURE_SDRAW &&
@@ -768,6 +787,14 @@ FASTBOOL SfxApplication::Initialize_Impl()
         _nFeatures & SFX_FEATURE_SCHART &&
         _nFeatures & SFX_FEATURE_SMATH &&
         _nFeatures & SFX_FEATURE_SWRITER )
+#else
+    if( _nFeatures & FEATUREFLAG_CALC &&
+        _nFeatures & FEATUREFLAG_IMPRESS &&
+        _nFeatures & FEATUREFLAG_DRAW &&
+        _nFeatures & FEATUREFLAG_CHART &&
+        _nFeatures & FEATUREFLAG_MATH &&
+        _nFeatures & FEATUREFLAG_WRITER )
+#endif
     {
         // Office Filter registrieren
         SfxFilterContainer* pContainer =
@@ -845,7 +872,7 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
     ::com::sun::star::uno::Reference< ::com::sun::star::installation::XInstallationCheck >  xInst( xMgr->createInstance( DEFINE_CONST_UNICODE("com.sun.star.installation.FontCheck") ), ::com::sun::star::uno::UNO_QUERY );
     if ( xInst.is() )
         xInst->checkWithDialog( sal_False );
-
+#if SUPD<613//MUSTINI
     String aWizard = GetIniManager()->Get( DEFINE_CONST_UNICODE("Common"), 0, 0, DEFINE_CONST_UNICODE("RunWizard") );
     sal_Bool bRunWizard = (sal_Bool) (sal_uInt16) aWizard.ToInt32();
     if ( bRunWizard )
@@ -867,7 +894,19 @@ IMPL_LINK( SfxApplication, SpecialService_Impl, void*, pVoid )
         if( nRegKey == 0 )
             GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
     }
-
+#else
+    if ( !pAppData_Impl->bBean )
+    {
+        // StarOffice registration
+        INetURLObject aORegObj( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
+        aORegObj.insertName( DEFINE_CONST_UNICODE( "oreg.ini" ) );
+        Config aCfg( aORegObj.PathToFileName() );
+        aCfg.SetGroup( "reg" );
+        sal_uInt16 nRegKey = (sal_uInt16) aCfg.ReadKey( "registration", "0" ).ToInt32();
+        if( nRegKey == 0 )
+            GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
+    }
+#endif
     return 0;
 }
 

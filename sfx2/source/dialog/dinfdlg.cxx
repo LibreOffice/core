@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,12 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #include <svtools/urihelper.hxx>
+#include <svtools/useroptions.hxx>
 
 #pragma hdrstop
 
@@ -80,7 +84,9 @@
 #include "viewfrm.hxx"
 #include "request.hxx"
 #include "expfile.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "exptypes.hxx"
 #include "helper.hxx"
 
@@ -348,7 +354,11 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
 {
     SfxStamp aCreated;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
+#if SUPD<613//MUSTINI
         aCreated.SetName( SFX_INIMANAGER()->GetUserFullName() );
+#else
+        aCreated.SetName( SvtUserOptions().GetFullName() );
+#endif
     aCreateValFt.SetText( ConvertDateTime_Impl( aCreated ) );
     XubString aEmpty;
     aChangeValFt.SetText( aEmpty );
@@ -428,7 +438,11 @@ BOOL SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfo aInfo( pInfoItem->GetDocInfo() );
             SfxStamp aCreated;
             if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
+#if SUPD<613//MUSTINI
                 aCreated.SetName( SFX_INIMANAGER()->GetUserFullName() );
+#else
+                aCreated.SetName( SvtUserOptions().GetFullName() );
+#endif
             aInfo.SetCreated( aCreated );
             SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
             aInfo.SetChanged( aInvalid );

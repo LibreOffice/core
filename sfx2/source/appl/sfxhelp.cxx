@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:23 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,10 @@
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
+#endif
 #endif
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
@@ -107,6 +109,7 @@
 #endif
 
 #include <automation/automation.hxx>
+#include <svtools/pathoptions.hxx>
 #pragma hdrstop
 
 #ifndef _SFXENUMITEM_HXX //autogen
@@ -953,10 +956,14 @@ void SfxHelp_Impl::AssertValidHelpDocInfo()
 
 String SfxHelp_Impl::GetHelpPath()
 {
+#if SUPD<613//MUSTINI
     SfxIniManager* pIni = SFX_INIMANAGER()->Find( SFX_KEY_HELP_DIR );
     if ( !pIni )
         pIni = SFX_INIMANAGER();
     String aHelpDir = pIni->Get( SFX_KEY_HELP_DIR );
+#else
+    String aHelpDir = SvtPathOptions().GetHelpPath();
+#endif
 
     if ( aHelpDir.Len() )
     {
@@ -1083,11 +1090,25 @@ void SfxHelp_Impl::ResetPIStarterList()
 
 String SfxHelp_Impl::GetConfigDir( BOOL bGetSharedConfig )
 {
+#if SUPD<613//MUSTINI
     ULONG nKey = bGetSharedConfig ? SFX_KEY_CONFIG_DIR : SFX_KEY_USERCONFIG_PATH;
     SfxIniManager* pIni = SFX_INIMANAGER()->Find( nKey );
     if ( !pIni )
         pIni = SFX_INIMANAGER();
     return pIni->Get( nKey );
+#else
+    String sConfigDir;
+    SvtPathOptions aPathCFG;
+    if( bGetSharedConfig == sal_True )
+    {
+        sConfigDir = aPathCFG.GetConfigPath();
+    }
+    else
+    {
+        sConfigDir = aPathCFG.GetUserConfigPath();
+    }
+    return sConfigDir;
+#endif
 }
 
 String SfxHelp_Impl::GetHelpAgentConfig()

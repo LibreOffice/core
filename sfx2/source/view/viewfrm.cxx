@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:04:49 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,11 @@
 
 #ifndef _IPENV_HXX //autogen
 #include <so3/ipenv.hxx>
+#endif
+#ifdef ENABLE_INIMANAGER//MUSTINI
+    #ifndef _SFXINIMGR_HXX
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
@@ -489,8 +494,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         pMed->Close();
                         pMed->GetItemSet()->ClearItem( SID_DOC_READONLY );
                         pMed->SetOpenMode( nOpenMode, pMed->IsDirect() );
-                        if ( nOpenMode == SFX_STREAM_READONLY )
-                            pMed->CheckOpenMode_Impl(sal_False,sal_True);
+//AS                        if ( nOpenMode == SFX_STREAM_READONLY )
+//AS                            pMed->CheckOpenMode_Impl(sal_False,sal_True);
                         pMed->ReOpen();
                         if ( !pMed->GetErrorCode() )
                             bOK = sal_True;
@@ -2023,6 +2028,7 @@ void SfxViewFrame::HideStatusText()
 
 
 //--------------------------------------------------------------------
+#ifdef ENABLE_INIMANAGER//MUSTINI
 SfxIniManager* SfxViewFrame::GetIniManager() const
 {
 /*  SfxIniManager *pIniMgr = GetObjectShell()
@@ -2032,6 +2038,7 @@ SfxIniManager* SfxViewFrame::GetIniManager() const
         return SFX_APP()->GetAppIniManager();
 //  return pIniMgr;
 }
+#endif
 
 //--------------------------------------------------------------------
 void SfxViewFrame::DoAdjustPosSizePixel //! teilen in Inner.../Outer...

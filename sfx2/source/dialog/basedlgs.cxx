@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,10 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 
 #pragma hdrstop
@@ -82,7 +84,9 @@
 #include "viewfrm.hxx"
 #include "tabdlg.hxx"
 #include "app.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "bindings.hxx"
 #include "dispatch.hxx"
 #include "sfxhelp.hxx"
@@ -111,6 +115,7 @@ void SetDialogData_Impl(SfxViewFrame *pFrame, Window *pDlg,
                         sal_uInt16 nId, const String &rExtraData = aEmptyString)
 {
     // Konfiguration in Ini-Manager abspeichern
+#if SUPD<613//MUSTINI
     SfxIniManager *pIniMgr =
         pFrame ? pFrame->GetIniManager() : SFX_APP()->GetAppIniManager();
     String aDlgData( pIniMgr->GetString( pDlg->GetPosPixel(), Size() ) );
@@ -120,6 +125,7 @@ void SetDialogData_Impl(SfxViewFrame *pFrame, Window *pDlg,
         aDlgData += rExtraData;
     }
     pIniMgr->Set( aDlgData, SFX_KEY_DIALOG, nId );
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -135,6 +141,7 @@ String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
 {
     String aRetString;
     // Konfiguration vorhanden?
+#if SUPD<613//MUSTINI
     SfxIniManager *pIniMgr =
         pFrame ? pFrame->GetIniManager() : SFX_APP()->GetAppIniManager();
     String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nId ) );
@@ -156,6 +163,7 @@ String GetDialogData_Impl( SfxViewFrame *pFrame, Window *pDlg, sal_uInt16 nId)
             }
         }
     }
+#endif
     return aRetString;
 }
 
@@ -748,12 +756,16 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
     if ( bModified )
     {
         // auch noch schnell User-Daten im IniManager abspeichern
+#if SUPD<613//MUSTINI
         SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
+#endif
         pPage->FillUserData();
         String sData( pPage->GetUserData() );
 
+#if SUPD<613//MUSTINI
         if ( sData.Len() )
             pIniMgr->Set( sData, SFX_KEY_PAGE, GetUniqId() );
+#endif
         EndDialog( RET_OK );
     }
     else
@@ -943,8 +955,12 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( pPage )
     {
         // erstmal die User-Daten besorgen, dann erst Reset()
+#if SUPD<613//MUSTINI
         SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
         pPage->SetUserData( pIniMgr->Get( SFX_KEY_PAGE, GetUniqId() ) );
+#else
+        pPage->SetUserData( String() );
+#endif
         pPage->Reset( *pOptions );
         pPage->Show();
 

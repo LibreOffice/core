@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,15 @@
 #endif
 
 #include <svtools/saveopt.hxx>
+#include <svtools/useroptions.hxx>
+#include <svtools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 
 #include "objsh.hxx"
 #include "childwin.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxdir.hxx"
 #include "request.hxx"
 #include "sfxresid.hxx"
@@ -745,7 +749,11 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             if ( pAuthorItem )
                 aAuthor = pAuthorItem->GetValue();
             else
+#if SUPD<613//MUSTINI
                 aAuthor = SFX_INIMANAGER()->GetUserFullName();
+#else
+                aAuthor = SvtUserOptions().GetFullName();
+#endif
 
             aInfo.aCreateStamp.SetName( aAuthor );
 
@@ -1453,7 +1461,11 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         String aPath( aLastName );
 
                         bool bWasAbsolute = FALSE;
+#if SUPD<613//MUSTINI
                         INetURLObject aObj( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ) );
+#else
+                        INetURLObject aObj( SvtPathOptions().GetWorkPath() );
+#endif
                         aObj.smartRel2Abs( aPath, bWasAbsolute );
 
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
@@ -1476,7 +1488,11 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             }
             else
             {
+#if SUPD<613//MUSTINI
                 pDlg->SetSmartPath( SFX_INIMANAGER()->Get(SFX_KEY_WORK_PATH) );
+#else
+                pDlg->SetSmartPath( SvtPathOptions().GetWorkPath() );
+#endif
             }
 
             if ( pDlg->Execute() == RET_CANCEL )
@@ -2010,8 +2026,12 @@ void SfxObjectShell::AddXMLAsZipToTheStorage( SvStorage& rRoot )
             // 1. check if the option is set and unequal 0 or is not set
             String sStr( String::CreateFromAscii( "Add_XML_to_Storage_" ));
             sStr.AppendAscii( pArr->pModuleNm );
+#if SUPD<613//MUSTINI
             String sCfgEntry( SFX_APP()->GetIniManager()->Get(
                                         SFX_GROUP_WORKINGSET_IMPL, sStr ));
+#else
+            String sCfgEntry;
+#endif
             if( sCfgEntry.Len() && 0 != sCfgEntry.ToInt32() )
             {
                 // the flag is set

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,10 @@
  *
  ************************************************************************/
 
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
+#endif
 #endif
 #ifndef _TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
@@ -223,7 +225,8 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
 //    if ( SFX_APP()->Get_Impl()->bBean )
 //        return;
-
+#if SUPD<613//MUSTINI
+/* TODO: Which key we can use to save this information in our configuration? */
     SfxIniManager *pIniMgr = SFX_INIMANAGER();
     char cToken = pIniMgr->GetToken();;
     String aWinData('V');
@@ -240,6 +243,7 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
         aWinData += rInfo.aExtraString;
     }
     pIniMgr->Set( aWinData, SFX_KEY_WINDOW, GetType() );
+#endif
     pImp->pFact->aInfo = rInfo;
 }
 
@@ -282,8 +286,12 @@ sal_uInt16 SfxChildWindow::GetPosition()
 void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWinInfo& rInfo )
 {
     // Konfiguration aus Ini-Manager laden
+#if SUPD<613//MUSTINI
     SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
     String aWinData( pAppIniMgr->Get( SFX_KEY_WINDOW, nId ) );
+#else
+    String aWinData;
+#endif
 
     if ( /*!SFX_APP()->Get_Impl()->bBean && */ aWinData.Len() )
     {
@@ -296,11 +304,16 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
         aWinData.Erase(0,1);
 
         // Version lesen
+#if SUPD<613//MUSTINI
         char cToken = pAppIniMgr->GetToken();
+#else
+        char cToken = ',';
+#endif
         sal_uInt16 nPos = aWinData.Search( cToken );
         sal_uInt16 nVersion = (sal_uInt16) aWinData.Copy( 0, nPos+1 ).ToInt32();
         aWinData.Erase(0,nPos+1);
 
+#if SUPD<613//MUSTINI
         // Gr"o\se und Position laden
         Point aPos;
         Size  aSize;
@@ -311,13 +324,17 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
             rInfo.aPos = aPos;
             rInfo.aSize = aSize;
         }
+#endif
         aWinData.Erase(0,aWinData.Search(cToken));
 
         // Sichtbarkeit laden: ist als ein char codiert
         rInfo.bVisible = (aWinData.Copy(1,1) == 0x0056); // 'V' = 56h
         aWinData.Erase(1,1);
-
+#if SUPD<613//MUSTINI
         nPos = aWinData.Search( pAppIniMgr->GetToken(), 2 );
+#else
+        nPos = aWinData.Search( cToken, 2 );
+#endif
         if (nPos != STRING_NOTFOUND)
         {
             // es gibt noch Extra-Information
@@ -561,6 +578,7 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
         // Dockt nicht in einem Splitwindow
         return sal_True;
     aStr.Erase(0, nPos+1);
+#if SUPD<613//MUSTINI
     SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
     Point aPos;
     Size aSize;
@@ -574,7 +592,7 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
             *pPos = (sal_uInt16) aPos.Y();
         return sal_True;
     }
-
+#endif
     return sal_False;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#include <svtools/pathoptions.hxx>
+
 #pragma hdrstop
 
 #include "appimp.hxx"
@@ -138,7 +140,9 @@
 #include "new.hxx"
 #include "docinf.hxx"
 #include "templdlg.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxtypes.hxx"
 #include "sfxbasic.hxx"
 #include "tabdlg.hxx"
@@ -197,6 +201,7 @@ BOOL SfxApplication::InitOfficeAppType_Impl( USHORT nAppId, ApplicationType& rTy
         return FALSE;
     // App in Config suchen
     String aAppName = String( SfxResId( nAppId ) );
+#if SUPD<613//MUSTINI
     SfxIniManager* pIni = SFX_INIMANAGER();
     DBG_ASSERT( pIni, "Kein IniManager?!" );
     String aFullName;
@@ -206,6 +211,9 @@ BOOL SfxApplication::InitOfficeAppType_Impl( USHORT nAppId, ApplicationType& rTy
         if ( !aFullName.Len() )
             pIni = pIni->GetSubManager();
     }
+#else
+    String aFullName;
+#endif
 
     if ( !aFullName.Len() )
     {
@@ -381,8 +389,11 @@ void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
                             INetURLObject aOld( aFileName, INET_PROT_FILE );
                             aDest = aOld.GetName();
                         }
-
+#if SUPD<613//MUSTINI
                         INetURLObject aNew( SFX_INIMANAGER()->Get( SFX_KEY_BASIC_PATH ).GetToken( 0, ';' ), INET_PROT_FILE );
+#else
+                        INetURLObject aNew( SvtPathOptions().GetBasicPath().GetToken( 0, ';' ), INET_PROT_FILE );
+#endif
                         aNew.SetExtension( aExt );
                         pMgr->SetLibStorageName( nLib, aNew.GetFull() );
                         SaveBasicManager();
@@ -627,7 +638,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         if ( aObj.HasError() )
                         {
                             // Wenn relativ, ConfigDir verwenden
+#if SUPD<613//MUSTINI
                             aObj.SetSmartURL( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH) );
+#else
+                            aObj.SetSmartURL( SvtPathOptions().GetUserConfigPath() );
+#endif
                             aObj.insertName( pStringItem->GetValue() );
                             aCfgName = aObj.PathToFileName();
                         }
@@ -690,7 +705,11 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         if ( aObj.HasError() )
                         {
                             // Wenn relativ, ConfigDir verwenden
+#if SUPD<613//MUSTINI
                             aObj.SetSmartURL( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH) );
+#else
+                            aObj.SetSmartURL( SvtPathOptions().GetUserConfigPath() );
+#endif
                             aObj.insertName( pStringItem->GetValue() );
                             aCfgName = aObj.PathToFileName();
                         }

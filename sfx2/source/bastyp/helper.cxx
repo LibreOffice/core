@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:09:32 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
+        //DBG_ERRORFILE( "CommandAbortedException" );
     }
     catch( ::com::sun::star::ucb::IllegalIdentifierException& )
     {

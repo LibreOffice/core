@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,10 @@
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #pragma hdrstop
 
@@ -76,7 +78,9 @@
 #include "workwin.hxx"
 #include "dockwin.hxx"
 #include "app.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "dialog.hrc"
 #include "sfxresid.hxx"
 #include "mnumgr.hxx"
@@ -287,44 +291,52 @@ SfxSplitWindow::SfxSplitWindow( Window* pParent, SfxChildAlignment eAl,
     if ( bWithButtons )
     {
         // Konfiguration einlesen
-        SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
-        if ( pAppIniMgr )
-        {
-            String aWinData( pAppIniMgr->Get( SFX_KEY_SPLITWINDOW, (USHORT) eTbxAlign ) );
-            if ( aWinData.Len() && aWinData.GetChar( (USHORT) 0 ) == 'V' )
+#if SUPD<613//MUSTINI
+    #ifndef ENABLE_DIALOGCFG//MUSTINI
+            SfxIniManager *pAppIniMgr = SFX_APP()->GetAppIniManager();
+            if ( pAppIniMgr )
             {
-                pEmptyWin->nState = aWinData.GetToken( 1, ',' ).ToInt32();
-                if ( pEmptyWin->nState & 2 )
-                    pEmptyWin->bFadeIn = TRUE;
-                bPinned = !( pEmptyWin->nState & 1 );
-
-                USHORT i=2;
-                USHORT nCount = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
-                for ( USHORT n=0; n<nCount; n++ )
+                String aWinData( pAppIniMgr->Get( SFX_KEY_SPLITWINDOW, (USHORT) eTbxAlign ) );
+                if ( aWinData.Len() && aWinData.GetChar( (USHORT) 0 ) == 'V' )
                 {
-                    SfxDock_Impl *pDock = new SfxDock_Impl;
-                    pDock->pWin = 0;
-                    pDock->bNewLine = FALSE;
-                    pDock->bHide = TRUE;
-                    pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
-                    if ( !pDock->nType )
+                    pEmptyWin->nState = aWinData.GetToken( 1, ',' ).ToInt32();
+                    if ( pEmptyWin->nState & 2 )
+                        pEmptyWin->bFadeIn = TRUE;
+                    bPinned = !( pEmptyWin->nState & 1 );
+
+                    USHORT i=2;
+                    USHORT nCount = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
+                    for ( USHORT n=0; n<nCount; n++ )
                     {
-                        // K"onnte NewLine bedeuten
+                        SfxDock_Impl *pDock = new SfxDock_Impl;
+                        pDock->pWin = 0;
+                        pDock->bNewLine = FALSE;
+                        pDock->bHide = TRUE;
                         pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
                         if ( !pDock->nType )
                         {
-                            // Lesefehler
-                            delete pDock;
-                            break;
+                            // K"onnte NewLine bedeuten
+                            pDock->nType = (USHORT) aWinData.GetToken(i++, ',').ToInt32();
+                            if ( !pDock->nType )
+                            {
+                                // Lesefehler
+                                delete pDock;
+                                break;
+                            }
+                            else
+                                pDock->bNewLine = TRUE;
                         }
-                        else
-                            pDock->bNewLine = TRUE;
-                    }
 
-                    pDockArr->Insert(pDock,n);
+                        pDockArr->Insert(pDock,n);
+                    }
                 }
             }
-        }
+    #else
+        #ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+                DBG_ASSERT(sal_False, "SfxSplitWindow::SfxSplitWindow()\nThere exist no config item for splitwindow!\n");
+        #endif
+    #endif
+#endif
     }
     else
     {
@@ -371,9 +383,10 @@ SfxSplitWindow::~SfxSplitWindow()
             aWinData += ',';
             aWinData += String::CreateFromInt32( pDock->nType);
         }
-
+#if SUPD<613//MUSTINI
         SfxIniManager *pIniMgr = SFX_INIMANAGER();
         pIniMgr->Set( aWinData, SFX_KEY_SPLITWINDOW, GetAlign() );
+#endif
     }
 
     if ( pEmptyWin )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,10 @@
 #ifndef _GOODIES_IMAPRECT_HXX
 #include <svtools/imaprect.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SVSTDARR_ULONGS_DECL
 #define _SVSTDARR_ULONGS
@@ -116,8 +118,9 @@
 #endif
 
 #include "sfxhtml.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
-
+#endif
 sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
 sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,10 @@
 #include <svtools/sbxobj.hxx>
 #include <svtools/urihelper.hxx>
 #include <comphelper/processfactory.hxx>
+
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -789,6 +793,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
             BOOL bBookmark=TRUE;
             if( aURLObj.GetProtocol() == INET_PROT_FILE )
             {
+#if SUPD<613//MUSTINI
                 SfxIniManager* pMgr = GetIniManager();
                 SfxIniKey aKey[] =
                 {
@@ -818,6 +823,24 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
                     }
                     ++nIndex;
                 }
+#else
+                SvtPathOptions aPathCFG;
+                USHORT nPathLevel = aURLObj.getSegmentCount();
+                INetURLObject aNewPathObj = INetURLObject( aPathCFG.GetNewMenuPath(), INET_PROT_FILE );
+                USHORT nNewLevel = aNewPathObj.getSegmentCount();
+                int nOffset = nPathLevel;
+                nOffset -= nNewLevel;
+                if ( nOffset >= 0 )
+                {
+                    INetURLObject aTempObj = aURLObj;
+                    for ( ; nOffset > 0; nOffset-- )
+                        aTempObj.removeSegment();
+                    if ( aTempObj == aNewPathObj )
+                    {
+                        bBookmark = FALSE;
+                    }
+                }
+#endif
             }
 
             if ( !bBookmark && pPath )
@@ -1036,6 +1059,7 @@ SfxFrame* SfxApplication::GetTargetFrame_Impl( const SfxItemSet* pSet, BOOL& rbO
         aURLObj.SetSmartURL( pRefererItem->GetValue() );
         if ( aURLObj.GetProtocol() == INET_PROT_FILE && ( !pFrame || pFrame->IsTop() ) )
         {
+#if SUPD<613//MUSTINI
             SfxIniManager* pIniMgr = GetIniManager();
             INetURLObject aStartMenuObj( pIniMgr->Get( SFX_KEY_STARTMENU_DIR ), INET_PROT_FILE );
             INetURLObject aQuickStartObj( pIniMgr->Get( SFX_KEY_QUICKSTART_DIR ), INET_PROT_FILE );
@@ -1044,6 +1068,13 @@ SfxFrame* SfxApplication::GetTargetFrame_Impl( const SfxItemSet* pSet, BOOL& rbO
                 aTargetName = String::CreateFromAscii( "_blank" );
                 pTargetItem = NULL;
             }
+#else
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+            DBG_ASSERT(sal_False, "SfxApplication::GetTargetFrame_Impl()\nStartMenu-Dir & QuickStart-Dir no longer supported!\n");
+#endif
+            aTargetName = String::CreateFromAscii( "_blank" );
+            pTargetItem = NULL;
+#endif
         }
     }
 
@@ -1148,7 +1179,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         String aPath;
         if ( nSID == SID_OPENTEMPLATE )
         {
+#if SUPD<613//MUSTINI
             aPath = GetIniManager()->Get( SFX_KEY_TEMPLATE_PATH );
+#else
+            aPath = SvtPathOptions().GetTemplatePath();
+#endif
             aPath = aPath.GetToken(0,';');
         }
 

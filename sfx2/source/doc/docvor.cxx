@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <svtools/ehdl.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <svtools/pathoptions.hxx>
 #pragma hdrstop
 
 #include "helpid.hrc"
@@ -101,7 +102,9 @@
 #include "sfxtypes.hxx"
 #include "app.hxx"
 #include "dispatch.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxresid.hxx"
 #include "iodlg.hxx"
 #include "doc.hrc"
@@ -202,8 +205,12 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     aLeftLb.SetHelpId( HID_CTL_ORGANIZER_LEFT );
     aRightLb.SetHelpId( HID_CTL_ORGANIZER_RIGHT );
 
+#if SUPD<613//MUSTINI
     SfxIniManager* pIniMgr = SFX_INIMANAGER();
     String aWorkPath = pIniMgr->Get( SFX_KEY_WORK_PATH );
+#else
+    String aWorkPath = SvtPathOptions().GetWorkPath();
+#endif
     if ( aWorkPath.Len() )
     {
         INetURLObject aObj( aWorkPath, INET_PROT_FILE );

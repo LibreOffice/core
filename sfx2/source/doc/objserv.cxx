@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 14:03:54 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,18 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX //autogen
-#include <inimgr.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFX_INIMGR_HXX //autogen
+    #include <inimgr.hxx>
+    #endif
 #endif
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -90,6 +94,8 @@
 #endif
 
 #include <svtools/sbx.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/useroptions.hxx>
 
 #pragma hdrstop
 
@@ -319,7 +325,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SFX_REQUEST_ARG( rReq, pWarnItem, SfxBoolItem, SID_FAIL_ON_WARNING, FALSE);
                 if ( pWarnItem && pWarnItem->GetValue() )
                 {
+#if SUPD<613//MUSTINI
                     INetURLObject aObj( SFX_INIMANAGER()->Get(SFX_KEY_WORK_PATH), INET_PROT_FILE );
+#else
+                    INetURLObject aObj( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
+#endif
                     aObj.insertName( GetTitle(), false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
                     const SfxFilter* pFilter = GetFactory().GetFilter(0);
                     String aExtension( pFilter->GetDefaultExtension().Copy(2) );
@@ -750,7 +760,11 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SfxDocumentInfo *pInfo = new SfxDocumentInfo;
                 pInfo->CopyUserData(GetDocInfo());
                 pInfo->SetTitle( aTemplateName );
+#if SUPD<613//MUSTINI
                 pInfo->SetChanged( SfxStamp(SFX_INIMANAGER()->GetUserFullName()));
+#else
+                pInfo->SetChanged( SfxStamp(SvtUserOptions().GetFullName()));
+#endif
                 SvStorageRef aRef = aMedium.GetStorage();
                 if ( aRef.Is() )
                 {

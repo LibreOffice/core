@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:23 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,7 +408,11 @@ MenuBar* SfxTopFrame::GetMenuBar_Impl() const
 String SfxTopFrame::GetWindowData()
 {
     String aActWinData;
+#if SUPD<613//MUSTINI
     char cToken = SfxIniManager::GetToken();
+#else
+    char cToken = ',';
+#endif
 
     SfxViewFrame *pActFrame = SfxViewFrame::Current();
     SfxViewFrame *pFrame = GetCurrentViewFrame();
@@ -425,8 +429,9 @@ String SfxTopFrame::GetWindowData()
 
     aWinData += '1';                    // former attribute "isfloating"
     aWinData += cToken;
-
+#if SUPD<613//MUSTINI
     aWinData += SfxIniManager::GetString( pImp->pWindow->GetPosPixel(), pImp->pWindow->GetSizePixel() );
+#endif
 
     // aktives kennzeichnen
     aWinData += cToken;
@@ -989,8 +994,10 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
 void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
 {
     sal_uInt16 nSlotId = rRequest.GetSlot();
+#if SUPD<613//MUSTINI
     SfxApplication* pApp = SFX_APP();
     SfxIniManager*  pIniMgr  = pApp->GetIniManager();
+#endif
 
     switch( nSlotId )
     {
@@ -1009,7 +1016,11 @@ void SfxTopViewFrame::INetExecute_Impl( SfxRequest &rRequest )
         case SID_BROWSE_HOME:
         {
             // Anzeige Homepage
+#if SUPD<613//MUSTINI
             String aHome = pIniMgr->Get( SFX_KEY_INET_HOME );
+#else
+            String aHome;
+#endif
             if( aHome.Len() )
             {
                 SfxStringItem aUrl( SID_FILE_NAME,

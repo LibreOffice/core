@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:32:44 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "ucbhelp.hxx"
 #include "appuno.hxx"
 
@@ -212,11 +214,13 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 
 void SfxAppData_Impl::Notify( SfxBroadcaster &rBC, const SfxHint &rHint )
 {
+#if SUPD<613//MUSTINI
     const SfxIniManagerHint* pIniManHint = PTR_CAST(SfxIniManagerHint, &rHint);
     if ( pIniManHint && pIniManHint->GetIniKey() == SFX_KEY_DONTHIDE_DISABLEDENTRIES )
     {
         sal_Bool bDontHide = (sal_Bool)(sal_uInt16)pIniManHint->GetNewValue().ToInt32();
         UpdateApplicationSettings( bDontHide );
     }
+#endif
 }
 

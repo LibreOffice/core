@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:17 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,9 @@ using namespace ::rtl;
 #include "sfxuno.hxx"
 #include "appdata.hxx"
 #include "app.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxsids.hrc"
 #include "msg.hxx"
 #include "msgpool.hxx"
@@ -310,8 +312,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 String aPar = *((::rtl::OUString*)rProp.Value.getValue());
                 Size aSize;
                 Point aPos;
+#if SUPD<613//MUSTINI
                 if ( SfxIniManager::GetPosSize( aPar, aPos, aSize ) )
                     rSet.Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPos, aSize ) ) );
+#else
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+                DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
+#endif
+#endif
             }
 
             // CharacterSet-Property?
@@ -486,7 +494,13 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         {
             pValue[nItems].Name = sPosSize;
             Rectangle aRect = pRectItem->GetValue();
+#if SUPD<613//MUSTINI
             pValue[nItems++].Value <<= (  ::rtl::OUString(SfxIniManager::GetString( aRect.TopLeft(), aRect.GetSize() ) ) );
+#else
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+            DBG_ASSERT(sal_False, "TransformItems()\nSfxIniManager::GetString used to set property \"PosSize\" ...!\n");
+#endif
+#endif
         }
 
         SFX_ITEMSET_ARG( &rSet, pRefItem, SfxRefItem, SID_POSTLOCKBYTES, sal_False );
@@ -718,10 +732,12 @@ void SfxComponentFactory::Init_Impl()
     {
         Reference< XFrameLoader >  xLoader;
 #ifdef WNT
+#if SUPD<613//MUSTINI module iexplorer no longer supported!
         SfxIniManager* pIni = SfxIniManager::Get();
         if( !Application::IsRemoteServer() && pIni->IsInternetExplorerAvailable() )
             xLoader = Reference< XFrameLoader >( createInstance( DEFINE_CONST_UNICODE("private:iexplorer") ), ::com::sun::star::uno::UNO_QUERY );
         if ( !xLoader.is() )
+#endif
 #endif
             xLoader = Reference< XFrameLoader >( createInstance( DEFINE_CONST_UNICODE(".component:Text") ), ::com::sun::star::uno::UNO_QUERY );
         return xLoader;

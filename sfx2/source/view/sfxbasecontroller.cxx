@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 14:30:14 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,10 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_PARTWIN );
                 REFERENCE < XFRAME > xFrame( pChildWin->GetFrame() );
                 if ( xFrame.is() )
+                {
                     xFrame->setName( sTargetFrameName );
+
+                }
 
                 REFERENCE < XDISPATCHPROVIDER > xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
                 if ( xProv.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,10 @@
 #include <tools/list.hxx>
 #include <tools/table.hxx>
 
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _HTMLTOKN_H
 #include <svtools/htmltokn.h>
@@ -87,8 +89,9 @@
 #include "request.hxx"
 #include "fcontnr.hxx"
 #include "sfxtypes.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
-
+#endif
 #define SFX_HTMLFRMSIZE_REL 0x0001
 #define SFX_HTMLFRMSIZE_PERCENT 0x0002
 

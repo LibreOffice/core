@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-17 13:39:45 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,10 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
@@ -87,15 +89,17 @@
 #endif
 #include <tools/fsys.hxx>
 #include <tools/string.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include "doctempl.hxx"
 #include "docfac.hxx"
 #include "docfile.hxx"
 #include "objsh.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "sfxtypes.hxx"
 #include "app.hxx"
-#include "inimgr.hxx"
 #include "sfxresid.hxx"
 #include "docfilt.hxx"
 #include "fltfnc.hxx"
@@ -2216,7 +2220,11 @@ SfxDocumentTemplates::SfxDocumentTemplates()
     Konstruktor
 */
 
+#if SUPD<613//MUSTINI
 :   aDirs(SFX_INIMANAGER()->Get(SFX_KEY_TEMPLATE_PATH)),
+#else
+:   aDirs(SvtPathOptions().GetTemplatePath()),
+#endif
     pDirs(0)
 {
 }

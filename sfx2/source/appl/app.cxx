@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-26 16:01:05 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,9 @@
 #include <svtools/saveopt.hxx>
 #include <svtools/undoopt.hxx>
 #include <svtools/helpopt.hxx>
+#include <svtools/menuoptions.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/workingsetoptions.hxx>
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
@@ -257,7 +260,9 @@ SfxApplication::SfxApplication()
     , pAppDispat( 0 )
     , bDispatcherLocked( sal_False )
     , pResMgr( 0 )
+#ifdef ENABLE_INIMANAGER//MUSTINI
     , pAppIniMgr( 0 )
+#endif
     , pCfgMgr( 0 )
     , pSlotPool( 0 )
     , pInterfaces( 0 )
@@ -287,10 +292,15 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
+#ifdef ENABLE_INIMANAGER//MUSTINI
     pAppIniMgr = CreateIniManager();
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->StartListening( *pAppIniMgr );
     pAppData_Impl->UpdateApplicationSettings( pAppIniMgr->IsDontHideDisabledEntries() );
+#else
+    pAppData_Impl = new SfxAppData_Impl( this );
+    pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
+#endif
     pApp->PreInit();
 
     pAppData_Impl->pSaveOptions = new SvtSaveOptions;
@@ -324,7 +334,9 @@ SfxApplication::~SfxApplication()
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
     delete pImp;
     delete pAppData_Impl;
+#ifdef ENABLE_INIMANAGER//MUSTINI
     SfxIniManager::Close();
+#endif
     utl::ConfigManager::RemoveConfigManager();
     pApp = 0;
 }
@@ -822,7 +834,11 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         if ( !pSh )
         {
             // Wenn es ein Dokument gibt, wird die BaseURL im Activate gesetzt
+#if SUPD<613//MUSTINI
             INetURLObject aObject( GetIniManager()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
+#else
+            INetURLObject aObject( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
+#endif
             aObject.setFinalSlash();
             INetURLObject::SetBaseURL( aObject.GetMainURL() );
         }
@@ -1212,10 +1228,10 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
     CntSystem::Flush();
 #endif
 
+#if SUPD<613//MUSTINI
     INetURLObject aSaveObj( pAppIniMgr->Get( SFX_KEY_BACKUP_PATH ), INET_PROT_FILE );
     if ( Application::IsInExecute() )
     {
-        // save all modified documents and close all documents
         SfxObjectShell *pIter, *pNext;
         sal_uInt16 n = 0;
         for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
@@ -1276,7 +1292,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                         aEntry += DEFINE_CONST_UNICODE("title;"),
                         aEntry += aOldName;
                     }
-
                     pAppIniMgr->Set( aEntry, SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n++ );
                 }
                 /*catch ( ::Exception & )
@@ -1284,7 +1299,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
                 }*/
             }
         }
-
         pAppIniMgr->Flush();
 
         if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
@@ -1295,7 +1309,100 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
     }
     else
         pAppIniMgr->Flush();
+#else//MUSTINI
+    INetURLObject aSaveObj( SvtPathOptions().GetBackupPath(), INET_PROT_FILE );
+    // save all modified documents and close all documents
+    // Do it only, if it's allowed! Ask configuration for right flag.
+    if(
+        ( Application::IsInExecute()                                    ) &&
+        ( pAppData_Impl->pSaveOptions->IsSaveWorkingSet() == sal_True   )
+    )
+    {
+        SfxObjectShell *pIter, *pNext;
+        sal_uInt16 n = 0;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString > seqWindowList;
+        for(pIter = SfxObjectShell::GetFirst(); pIter; pIter = pNext)
+        {
+            pNext = SfxObjectShell::GetNext(*pIter);
+            if( pIter->IsModified() && pIter->GetName().CompareToAscii("BasicIDE") != COMPARE_EQUAL && !pIter->IsLoading() )
+            {
+                //try
+                {
+                    // backup unsaved document
+                    SFX_ITEMSET_ARG( pIter->GetMedium()->GetItemSet(), pPassItem, SfxStringItem, SID_PASSWORD, sal_False );
+                    SfxRequest aReq(SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pIter->GetPool());
 
+                    sal_Bool bHadName = pIter->HasName();
+                    INetURLObject aOldURL = pIter->GetMedium()->GetURLObject();
+                    String aOldName = pIter->GetTitle();
+
+                    const SfxFilter *pFilter = pIter->GetMedium()->GetFilter();
+                    const SfxFilter *pOrigFilter = pFilter;
+                    if ( !pFilter || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) || !( pFilter->GetFilterFlags() & SFX_FILTER_EXPORT ) )
+                        // packed files must be saved with default format, but remember original filter !
+                        pFilter = pIter->GetFactory().GetFilter(0);
+
+                    String aSaveName, aSavePath = aSaveObj.GetMainURL();
+                    String aFilterName;
+                    if ( pFilter )
+                    {
+                        aFilterName = pFilter->GetName();
+                        TempFile aTempFile( &aSavePath );
+                        aSaveName = aTempFile.GetName();
+                    }
+                    else
+                    {
+                        String aExt( DEFINE_CONST_UNICODE( ".sav" ) );
+                        TempFile aTempFile( DEFINE_CONST_UNICODE( "exc" ), &aExt, &aSavePath );
+                        aSaveName = aTempFile.GetName();
+                    }
+
+                    aReq.AppendItem( SfxStringItem( SID_FILE_NAME, aSaveName ) );
+                    aReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
+                    if ( pPassItem )
+                        aReq.AppendItem( *pPassItem );
+
+                    pIter->ExecuteSlot(aReq);
+
+                    String aEntry( n );
+                    aEntry += aSaveName;
+                    aEntry += DEFINE_CONST_UNICODE(";");
+                    aEntry += pOrigFilter ? pOrigFilter->GetName() : aFilterName;
+                    aEntry += DEFINE_CONST_UNICODE(";");
+
+                    if ( bHadName && INET_PROT_FILE == aOldURL.GetProtocol() )
+                    {
+                        aEntry += DEFINE_CONST_UNICODE("url;"),
+                        aEntry += aOldURL.GetMainURL();
+                    }
+                    else
+                    {
+                        aEntry += DEFINE_CONST_UNICODE("title;"),
+                        aEntry += aOldName;
+                    }
+
+                    seqWindowList.realloc(n+1);
+                    seqWindowList[n] = aEntry;
+                    ++n;
+                }
+                /*catch ( ::Exception & )
+                {
+                }*/
+            }
+        }
+
+        SvtWorkingSetOptions().SetWindowList( seqWindowList );
+
+        if ( ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
+        {
+            Window *pTopWindow = GetTopWindow(); // GCC needs temporary
+            WarningBox( pTopWindow, SfxResId(STR_RECOVER_PREPARED) ).Execute();
+        }
+    }
+#endif//MUSTINI
+
+#if SUPD<613//MUSTINI
+/*TODO: We need a new key to save informations for SenCrashMail feature.*/
     sal_Bool bSendMail = (sal_uInt16) pAppIniMgr->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("SendCrashMail") ).ToInt32();
     if ( !pAppData_Impl->bBean && bSendMail )
     {
@@ -1351,7 +1458,7 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
             pAppIniMgr->Flush();
         }
     }
-
+#endif//MUSTINI
     switch( nError & EXC_MAJORTYPE )
     {
         case EXC_USER:
@@ -1376,8 +1483,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
 
 ResMgr* SfxApplication::CreateResManager( const char *pPrefix )
 {
-    DBG_ASSERT( pAppIniMgr, "call CreateIniManger() before!" )
-
     String aMgrName = String::CreateFromAscii( pPrefix );
     aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
     return ResMgr::CreateResMgr(U2S(aMgrName));

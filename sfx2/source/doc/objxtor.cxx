@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-20 17:12:47 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,11 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
 #endif
-
+#endif
 #include "objsh.hxx"
 
 #ifndef _BASIC_SBUNO_HXX
@@ -105,6 +106,7 @@
 #endif
 
 #include <svtools/urihelper.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include "picklist.hxx"
 #include "docfac.hxx"
@@ -607,8 +609,12 @@ void SfxObjectShell::InitBasicManager_Impl
 
         // load BASIC-manager
         SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, GetTitle() );
+#if SUPD<613//MUSTINI
         SfxIniManager *pIniMgr = SFX_APP()->GetIniManager();
         String aAppBasicDir( pIniMgr->Get(SFX_KEY_BASIC_PATH) );
+#else
+        String aAppBasicDir = SvtPathOptions().GetBasicPath();
+#endif
         pImp->pBasicMgr = new SfxBasicManager( *pStor, pAppBasic, &aAppBasicDir );
         if ( pImp->pBasicMgr->HasErrors() )
         {

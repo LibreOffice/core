@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-26 16:06:18 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,10 @@
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SV_DRAG_HXX //autogen
 #include <vcl/drag.hxx>
@@ -119,6 +121,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <svtools/securityoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -166,7 +169,9 @@ using namespace ::com::sun::star::ucb;
 #include "module.hxx"
 #include "macrconf.hxx"
 #include "docfac.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "ucbhelp.hxx"
 #include "helper.hxx"
 
@@ -1405,7 +1410,11 @@ sal_Bool SfxObjectShell::IsSecure()
     }
 
     INetURLObject aURL( "macro:" );
+#if SUPD<613//MUSTINI
     if ( SFX_APP()->IsSecureURL( aURL, &aReferer ) )
+#else
+    if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
+#endif
     {
         if ( GetMedium()->GetContent().is() )
         {

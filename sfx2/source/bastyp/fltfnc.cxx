@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-24 11:41:38 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,10 @@
 #ifndef _INTN_HXX //autogen
 #include <tools/intn.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -221,6 +223,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <rtl/ustring.hxx>
 #include <vos/process.hxx>
+#include <svtools/pathoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -243,7 +246,9 @@ using namespace ::vos;
 #include <unotools/charclass.hxx>
 #endif
 
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "app.hxx"
 #include "fltdlg.hxx"
 #include "sfxhelp.hxx"
@@ -660,6 +665,7 @@ void SfxFilterContainer::RealLoad_Impl()
         }
     }
     Config* pConfig = SFX_APP()->GetFilterIni();
+#if SUPD<613//MUSTINI
     SfxIniManager *pMgr = SFX_INIMANAGER();
     SfxIniManager *pSubMgr = pMgr->GetSubManager();
     if( pSubMgr )
@@ -675,6 +681,18 @@ void SfxFilterContainer::RealLoad_Impl()
     {
         aName = pArg->bInstallIni ? String(S2U(pConfig->GetKeyName( n ))) : pMgr->GetKeyName( aString, n );
         aLine = pArg->bInstallIni ? String(S2U(pConfig->ReadKey( n ))) : pMgr->ReadKey( aString, aName );
+#else
+    if( pArg->bInstallIni )
+        pConfig->SetGroup( U2S(aString) );
+
+    sal_uInt16 nCount = pArg->bInstallIni ? pConfig->GetKeyCount() : 0;
+    String aOver( DEFINE_CONST_UNICODE(SFX_STR_OVERRIDE) );
+    String aName, aLine, aUIType, aMimeType, aClipFormat, aMacType, aTypeName, aWild, aFlags, aDefaultTemplate, aUserData;
+    for( sal_uInt16 n = 0; n < nCount; n++ )
+    {
+        aName = pArg->bInstallIni ? String(S2U(pConfig->GetKeyName( n ))) : String();
+        aLine = pArg->bInstallIni ? String(S2U(pConfig->ReadKey( n ))) : String();
+#endif
         sal_uInt16 nTokCount = aLine.GetTokenCount( ',' );
         if( nTokCount < 8 )
         {
@@ -930,6 +948,7 @@ void SfxFilterContainer::SaveFilters( const String& rGroup, SfxFilterFlags nMask
 {
     String aString( rGroup);
     aString+=DEFINE_CONST_UNICODE("-Filters");
+#if SUPD<613//MUSTINI
     SfxIniManager *pMgr = SFX_INIMANAGER();
     SfxIniManager *pSubMgr = pMgr->GetSubManager();
     if( pSubMgr )
@@ -977,6 +996,52 @@ void SfxFilterContainer::SaveFilters( const String& rGroup, SfxFilterFlags nMask
         aKey += String::CreateFromInt32( n++ );
         pMgr->WriteKey( aString, aKey, aLine );
     }
+#else
+    Config* pMgr = SFX_APP()->GetFilterIni();
+    pMgr->DeleteGroup( U2S(aString) );
+
+    SfxFilterMatcher aMatcher( ( SfxFilterContainer* ) this );
+    SfxFilterMatcherIter aIter( &aMatcher, nMask );
+    sal_uInt16 n = 1;
+    String aLine, aKey;
+    for( const SfxFilter* pFilter = aIter.First(); pFilter; pFilter = aIter.Next() )
+    {
+        if ( pFilter->GetURLPattern().Len() )
+            // Filter mit URLPattern k"onnen wir nicht einlesen, also auch nicht speichern!
+            continue;
+
+        aLine = pFilter->GetUIName();
+        aLine += ',';
+        aLine += pFilter->GetMimeType();
+        aLine+=',';
+        sal_uInt32 nFormat = pFilter->GetFormat();
+        if( nFormat )
+            aLine += Exchange::GetFormatName( pFilter->GetFormat() );
+        aLine += ',';
+        aLine += pFilter->GetMacType();
+        aLine+=',';
+        aLine += pFilter->GetRealTypeName();
+        aLine+=',';
+        aLine += pFilter->GetWildcard()();
+        aLine+=',';
+        aLine += String::CreateFromInt32( pFilter->GetDocIconId() );
+        aLine+=',';
+        aLine += pFilter->GetUserData();
+        aLine+=',';
+        if( pFilter->GetVersion() != SOFFICE_FILEFORMAT_NOW )
+            aLine += String::CreateFromInt32( pFilter->GetVersion() );
+        aLine += ',';
+        aLine += FlagsToName_Impl( pFilter->GetFilterFlags() );
+        aLine += ',';
+        aLine += pFilter->GetDefaultTemplate();
+        aKey = pFilter->GetFilterName();
+        if ( !aKey.Len() )
+            aKey = DEFINE_CONST_UNICODE( SFX_STR_OVERRIDE );
+        aKey += String::CreateFromInt32( n++ );
+        pMgr->SetGroup( U2S(aString) );
+        pMgr->WriteKey( U2S(aKey), U2S(aLine) );
+    }
+#endif
 }
 
 //-------------------------------------------------------------------------
@@ -1132,7 +1197,11 @@ sal_Bool SfxIsHelpEntryURL( const String &rURL, const String &rExtMask )
     if ( aURL.GetProtocol() == INET_PROT_FILE && aURL.GetMainURL().Len() > 8 )
     {
         String aExt = aURL.getExtension().ToLowerAscii();
+#if SUPD<613//MUSTINI
         INetURLObject aHelpDir( SFX_INIMANAGER()->Get( SFX_KEY_HELP_DIR ), INET_PROT_FILE );
+#else
+        INetURLObject aHelpDir( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
+#endif
         if ( WildCard( aHelpDir.GetMainURL() ).Matches( rURL ) && WildCard( rExtMask ).Matches( aExt ) )
             return sal_True;
     }
@@ -1521,7 +1590,11 @@ sal_uInt32 SfxExecutableFilterContainer::Execute(
             }
             else
             {
+#if SUPD<613//MUSTINI
                 INetURLObject aHelpDir( SFX_INIMANAGER()->Get(SFX_KEY_HELP_DIR ), INET_PROT_FILE );
+#else
+                INetURLObject aHelpDir( SvtPathOptions().GetHelpPath(), INET_PROT_FILE );
+#endif
                 aHelpDir.setFinalSlash();
                 String aNewURL = DEFINE_CONST_UNICODE(".component:Help/Content.Contents;\001");
                 aNewURL += aObj.getBase();

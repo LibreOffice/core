@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <so3/linkmgr.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <svtools/pathoptions.hxx>
 #pragma hdrstop
 
 #include "app.hxx"
@@ -97,7 +98,9 @@
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "sfxsids.hrc"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "helper.hxx"
 
 //========================================================================
@@ -514,7 +517,11 @@ BOOL SfxApplication::InitializeDde()
         pAppData_Impl->pDdeService->AddFormat( FORMAT_RTF );
 
         // Config-Pfad als Topic wegen Mehrfachstart
+#if SUPD<613//MUSTINI
         INetURLObject aOfficeLockFile( GetIniManager()->Get( SFX_KEY_USERCONFIG_PATH ), INET_PROT_FILE );
+#else
+        INetURLObject aOfficeLockFile( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
+#endif
         aOfficeLockFile.insertName( DEFINE_CONST_UNICODE( "soffice.lck" ) );
         String aService( SfxDdeServiceName_Impl( aOfficeLockFile.PathToFileName() ) );
         aService.ToUpperAscii();
@@ -617,7 +624,11 @@ BOOL ImplDdeService::MakeTopic( const String& rNm )
 
     if( !bRet )
     {
+#if SUPD<613//MUSTINI
         INetURLObject aWorkPath( SFX_INIMANAGER()->Get( SFX_KEY_WORK_PATH ), INET_PROT_FILE );
+#else
+        INetURLObject aWorkPath( SvtPathOptions().GetWorkPath(), INET_PROT_FILE );
+#endif
         INetURLObject aFile;
         if ( aWorkPath.GetNewAbsURL( rNm, &aFile ) &&
              SfxContentHelper::IsDocument( aFile.GetMainURL() ) )

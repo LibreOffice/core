@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-03 12:02:31 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
+#include <svtools/internaloptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_REGISTRY_INVALIDREGISTRYEXCEPTION_HPP_
@@ -307,9 +313,11 @@ void SfxApplication::OpenClients()
     if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
     {
         // Crash-Recovery
+#if SUPD<613//MUSTINI
         SfxIniManager *pIni = GetIniManager();
         sal_Bool bSendMail = (sal_uInt16) pIni->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("SendCrashMail") ).ToInt32();
         String aFileName = pIni->ReadKey( pIni->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ), DEFINE_CONST_UNICODE("Info") );
+
         if ( bSendMail && aFileName.Len() )
         {
             SvFileStream aStr( aFileName, STREAM_STD_READ );
@@ -336,11 +344,25 @@ void SfxApplication::OpenClients()
                 SfxContentHelper::Kill( aFileName );
             }
         }
+#else
+        sal_Bool bSendMail = SvtInternalOptions().CrashMailEnabled();
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+        DBG_ASSERT(!(bSendMail==sal_True),"SfxApplication::OpenClients()\nSendCrashMail not full supported yet!\n");
+#endif
+#endif
+
 
         sal_Bool bCancel = sal_False;
         for ( sal_uInt16 n = 0; sal_True; ++n )
         {
+#if SUPD<613//MUSTINI
             String aEntry( pIni->Get( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n ) );
+#else
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+            DBG_ASSERT(sal_False, "SfxApplication::OpenClients()\nsoffice.ini key \"WorkingSet\\Recover\" no longer supported ...\n");
+#endif
+            String aEntry;
+#endif
             if ( !aEntry.GetTokenCount() )
                 break;
 
@@ -389,14 +411,18 @@ void SfxApplication::OpenClients()
 
                 case RET_NO: // skip this file
                     // remove ini-entry
+#if SUPD<613//MUSTINI
                     pIni->Delete( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n );
+#endif
                     if ( nRet == RET_NO )
                         SfxContentHelper::Kill( aTempFileName );
                     break;
 
                 case RET_CANCEL: // cancel recovering
                     // remove ini-entry
+#if SUPD<613//MUSTINI
                     pIni->Delete( SFX_GROUP_WORKINGSET_IMPL, DEFINE_CONST_UNICODE("Recover"), n );
+#endif
                     SfxContentHelper::Kill( aTempFileName );
                     bCancel = sal_True; // and all following
                     break;
@@ -437,7 +463,14 @@ void SfxApplication::OpenClients()
         SfxAllItemSet aSet( GetPool() );
 
         // Dateiname
+#if SUPD<613//MUSTINI
         String aName = SFX_INIMANAGER()->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("StartDocument") );
+#else
+#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
+        DBG_ASSERT(sal_False, "SfxApplication::OpenClients()\nsoffice.ini key \"Common\\StartDocument\" no longer supported ...\n");
+#endif
+        String aName;
+#endif
         if ( !aName.Len() )
             aName = String( DEFINE_CONST_UNICODE("private:factory/swriter" ) );
         SfxStringItem aNameItem( SID_FILE_NAME, aName );
@@ -700,7 +733,7 @@ void SfxApplication::StoreConfig()
 #ifdef WNT
 extern String GetUserID();
 #endif
-
+#ifdef ENABLE_INIMANAGER//MUSTINI
 SfxIniManager* SfxApplication::CreateIniManager()
 {
     SfxIniManager *pIniMgr = NULL;
@@ -782,7 +815,7 @@ SfxIniManager* SfxApplication::GetIniManager() const
 {
     return pViewFrame ? pViewFrame->GetIniManager() : pAppIniMgr;
 }
-
+#endif//MUSTINI!
 //------------------------------------------------------------------------
 
 SfxProgress* SfxApplication::GetProgress() const
@@ -915,19 +948,28 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
     if ( !pList )
     {
         // Gibt es eine Slotdatei ?
+#if SUPD<613//MUSTINI
         INetURLObject aObj( GetIniManager()->Get( SFX_KEY_CONFIG_DIR ), INET_PROT_FILE );
+#else
+        INetURLObject aObj( SvtPathOptions().GetConfigPath(), INET_PROT_FILE );
+#endif
         aObj.insertName( DEFINE_CONST_UNICODE( "slots.cfg" ) );
         SvFileStream aStrm( aObj.GetMainURL(), STREAM_STD_READ );
 
         // Speziell f"ur AK: wenn in der INI "Slots=AK" steht, slots.cfg
         // ignorieren und weitermachen
+#if SUPD<613//MUSTINI
         String aSlotEntry = GetIniManager()->Get( SFX_KEY_SLOTLIST );
         if ( aSlotEntry.CompareIgnoreCaseToAscii( "AK" ) == COMPARE_EQUAL )
             return NULL;
-
         sal_uInt16 nSlotEntry = (sal_uInt16) aSlotEntry.ToInt32();
         if ( nSlotEntry )
         {
+#else
+        if( SvtInternalOptions().SlotCFGEnabled() == sal_True )
+        {
+#endif
+
             // Gibt es einen "Slotlist"-Eintrag ??
             if ( aStrm.GetError() )
             {
@@ -998,6 +1040,7 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 
 Config* SfxApplication::GetFilterIni()
 {
+#if SUPD<613//MUSTINI
     if( !pAppData_Impl->pFilterIni )
     {
         String aIniFile( DEFINE_CONST_UNICODE( FILTER_INI ) );
@@ -1009,6 +1052,14 @@ Config* SfxApplication::GetFilterIni()
             pAppData_Impl->pFilterIni = new Config();
     }
     return pAppData_Impl->pFilterIni;
+#else
+    if( !pAppData_Impl->pFilterIni )
+    {
+        String aIniFile( SvtPathOptions().GetModulePath() + DEFINE_CONST_UNICODE("/") + DEFINE_CONST_UNICODE( FILTER_INI ) );
+        pAppData_Impl->pFilterIni = new Config( aIniFile );
+    }
+    return pAppData_Impl->pFilterIni;
+#endif
 }
 
 
@@ -1090,6 +1141,7 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 
 PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
 {
+#if SUPD<613//MUSTINI
     String aPath;
     SfxBmkMenu** ppMenu;
     sal_uInt16 nKey;
@@ -1119,6 +1171,37 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
         (*ppMenu)->Initialize();
     }
     return ppMenu ? *ppMenu : NULL;
+#else
+    String aPath;
+    SfxBmkMenu** ppMenu;
+    String sKey;
+    switch( nSID )
+    {
+        case SID_NEWDOCDIRECT:
+            ppMenu = &pNewMenu;
+            sKey = SvtPathOptions().GetNewMenuPath();
+            break;
+        case SID_AUTOPILOTMENU:
+            ppMenu = &pAutoPilotMenu;
+            sKey = SvtPathOptions().GetAutoPilotPath();
+            break;
+        default:
+            ppMenu = 0;
+            DBG_ERROR( "Menu ID unknown!" );
+            break;
+    }
+
+    if( ppMenu && ( !*ppMenu || bNew ) )
+    {
+        INetURLObject aObj( sKey, INET_PROT_FILE );
+        String aURL = aObj.GetMainURL();
+        if ( *ppMenu )
+            delete *ppMenu;
+        *ppMenu = new SfxBmkMenu( aURL, aURL );
+        (*ppMenu)->Initialize();
+    }
+    return ppMenu ? *ppMenu : NULL;
+#endif
 }
 
 SfxMenuBarManager* SfxApplication::GetMenuBarManager() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-30 11:58:19 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <sot/factory.hxx>
 #include <vcl/system.hxx>
+#include <svtools/menuoptions.hxx>
 #pragma hdrstop
 
 #include "virtmenu.hxx"
@@ -560,8 +561,12 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
     if ( pMenu )
     {
+#if SUPD<613//MUSTINI
         sal_Bool bDontHide = (sal_Bool)(sal_uInt16)
             SFX_INIMANAGER()->Get( SFX_KEY_DONTHIDE_DISABLEDENTRIES ).ToInt32();
+#else
+        sal_Bool bDontHide = SvtMenuOptions().IsEntryHidingEnabled();
+#endif
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
             nFlag &= ~MENU_FLAG_HIDEDISABLEDENTRIES;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-30 11:56:58 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #include "sfxresid.hxx"
 #include "sfxdefs.hxx"
 #include "app.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 
 #include "dialog.hrc"
 
@@ -150,7 +152,9 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     bNormal ( TRUE )
 
 {
+#if SUPD<613//MUSTINI
     SfxIniManager* pIniMgr = SFX_INIMANAGER();
+#endif
 
     // Transparenter Font
     Font aFont = GetFont();

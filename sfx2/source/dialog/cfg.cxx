@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:36:18 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,16 @@
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
+#if SUPD<613//MUSTINI
+    #ifndef _SFXINIMGR_HXX //autogen
+    #include <svtools/iniman.hxx>
+    #endif
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
 #include <tools/urlobj.hxx>
+#include <svtools/pathoptions.hxx>
 #pragma hdrstop
 
 #include "cfg.hxx"
@@ -114,7 +117,9 @@
 #include "tbxopdlg.hxx"
 #include "minfitem.hxx"
 #include "iodlg.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "viewfrm.hxx"
 #include "workwin.hxx"
 
@@ -1342,7 +1347,11 @@ String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const S
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_CFG)),DEFINE_CONST_UNICODE("*.cfg") );
 #endif
     aFileDlg.AddFilter( String(SfxResId(STR_FILTERNAME_ALL) ), DEFINE_CONST_UNICODE(FILEDIALOG_FILTER_ALL) );
+#if SUPD<613//MUSTINI
     INetURLObject aFilePath( SFX_INIMANAGER()->Get( SFX_KEY_USERCONFIG_PATH ), INET_PROT_FILE );
+#else
+    INetURLObject aFilePath( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
+#endif
     aFilePath.setFinalSlash();
     String aCfgName = aFilePath.PathToFileName();
 #ifndef MAC

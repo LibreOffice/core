@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <svtools/intitem.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/itemset.hxx>
+#include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "versdlg.hrc"
@@ -73,7 +74,9 @@
 #include "objsh.hxx"
 #include "sfxsids.hrc"
 #include "dispatch.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "request.hxx"
 
 // **************************************************************************
@@ -243,7 +246,11 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if ( pButton == &aSaveButton )
     {
         SfxVersionInfo aInfo;
+#if SUPD<613//MUSTINI
         aInfo.aCreateStamp = SfxStamp( SFX_INIMANAGER()->GetUserFullName() );
+#else
+        aInfo.aCreateStamp = SfxStamp( SvtUserOptions().GetFullName() );
+#endif
         SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, TRUE );
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
+#include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"
 #include "msg.hxx"
@@ -91,8 +92,9 @@
 #include "msgpool.hxx"
 
 // SFX_INIMANAGER()
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
-
+#endif
 #include "sfx.hrc"
 #include "menu.hrc"
 
@@ -108,8 +110,15 @@ DECL_PTRSTACK(SfxMenuCfgItemArrStack, SfxMenuCfgItemArr*, 4, 4 );
 void TryToHideDisabledEntries_Impl( Menu* pMenu )
 {
     DBG_ASSERT( pMenu, "invalid menu" );
+#if SUPD<613//MUSTINI
     if ( !SFX_INIMANAGER()->IsDontHideDisabledEntries() )
         pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+#else
+    if( SvtMenuOptions().IsEntryHidingEnabled() == sal_False )
+    {
+        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES );
+    }
+#endif
 }
 
 //-------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:21 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 #include "module.hxx"
 #include "mnumgr.hxx"
 #include "accmgr.hxx"
+#if SUPD<613//MUSTINI
 #include <inimgr.hxx>
+#endif
 #include <sfxresid.hxx>
 #include <sfxuno.hxx>
 #include "doc.hrc"
@@ -561,6 +563,7 @@ void SfxObjectFactory::SetStandardTemplate( const String& rFactoryURL, const Str
     if ( pFactory )
     {
         ((SfxObjectFactory*)pFactory)->pImpl->aStandardTemplate = rTemplate;
+#if SUPD<613//MUSTINI
         SfxIniManager* pIni = SFX_INIMANAGER();
         if ( !rTemplate.Len() )
             pIni->DeleteKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
@@ -568,6 +571,7 @@ void SfxObjectFactory::SetStandardTemplate( const String& rFactoryURL, const Str
         else
             pIni->WriteKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
                             String::CreateFromAscii( pFactory->pShortName ), rTemplate );
+#endif
     }
 }
 
@@ -576,9 +580,11 @@ const String& SfxObjectFactory::GetStandardTemplate() const
     if (!pImpl->bTemplateInitialized )
     {
         pImpl->bTemplateInitialized = sal_True;
+#if SUPD<613//MUSTINI
         SfxIniManager *pIni = SFX_INIMANAGER();
         pImpl->aStandardTemplate = pIni->SubstPathVars( pIni->ReadKey( DEFINE_CONST_UNICODE( "StandardTemplates"),
                                                                 String::CreateFromAscii( pShortName ) ) );
+#endif
     }
 
     return pImpl->aStandardTemplate;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,10 @@
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
+#if SUPD<613//MUSTINI
 #ifndef _SFXINIMGR_HXX //autogen
 #include <svtools/iniman.hxx>
+#endif
 #endif
 #ifndef _CSTITEM_HXX //autogen
 #include <svtools/cstitem.hxx>
@@ -83,7 +85,9 @@
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
-
+#ifndef INCLUDED_SVTOOLS_STARTOPTIONS_HXX
+#include <svtools/startoptions.hxx>
+#endif
 #include <svtools/itempool.hxx>
 #include <svtools/urihelper.hxx>
 #include <svtools/helpopt.hxx>
@@ -112,7 +116,9 @@
 #include "objuno.hxx"
 #include "app.hrc"
 #include "docfile.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 
 #ifdef WNT
 #include <tools/svwin.h>
@@ -363,6 +369,7 @@ void SfxApplication::StartUpScreen( const char* pLabelPrefix )
              pAppData_Impl->nAppEvent != DISPATCH_PRINT && pAppData_Impl->nAppEvent != DISPATCH_SERVER )
         {
             // und es nicht ausgeschaltet ist
+#if SUPD<613//MUSTINI
             String aIntroIni = pAppIniMgr->Get(SFX_KEY_SHOW_INTRO);
             ULONG nDisplayTime = ULONG(aIntroIni.ToInt32());
 
@@ -384,6 +391,18 @@ void SfxApplication::StartUpScreen( const char* pLabelPrefix )
                 pImp->pIntro = new IntroWindow_Impl(
                     Bitmap( ResId( nResId, pAppData_Impl->pLabelResMgr ) ) );
             }
+#else
+            sal_Bool bIntro = SvtStartOptions().IsIntroEnabled();
+            if( bIntro == sal_True )
+            {
+                USHORT nResId = RID_DEFAULTINTRO;
+                if ( Application::IsRemoteServer() )
+                    nResId = RID_DEFAULTINTRO_PORTAL;
+                // die ggf. im System eingestellte Zeit wird hier nicht ber"ucksichtigt
+                pImp->pIntro = new IntroWindow_Impl(
+                    Bitmap( ResId( nResId, pAppData_Impl->pLabelResMgr ) ) );
+            }
+#endif
         }
     }
     else
@@ -475,7 +494,9 @@ IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
     {
         // LateInit ist fertig
         DELETEZ (pAppData_Impl->pInitLinkList);
+#if SUPD<613//MUSTINI
         pAppIniMgr->ResetLock();
+#endif
     }
     return 0;
 }
@@ -550,6 +571,7 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 
 BOOL SfxApplication::IsStandalone() const
 {
+#if SUPD<613//MUSTINI
     // Wenn ohne UI gestartet, nat"urlich niemals integrierter Desktop
     if ( pAppData_Impl->bBean )
         return TRUE;
@@ -572,4 +594,7 @@ BOOL SfxApplication::IsStandalone() const
         return TRUE;
 #endif
     }
+#else//MUSTINI
+    return FALSE;
+#endif
 }

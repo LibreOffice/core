@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-30 13:45:53 $
+ *  last change: $Author: as $ $Date: 2000-11-08 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <math.h>
 
 #include <svtools/saveopt.hxx>
+#include <svtools/useroptions.hxx>
 
 #include "sfxresid.hxx"
 #include "stbmgr.hxx"
@@ -100,7 +101,9 @@
 #include "fltfnc.hxx"
 #include "docfac.hxx"
 #include "cfgmgr.hxx"
+#if SUPD<613//MUSTINI
 #include "inimgr.hxx"
+#endif
 #include "viewsh.hxx"
 #include "objsh.hxx"
 #include "objshimp.hxx"
@@ -185,7 +188,11 @@ FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
             SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
             Window* pWin = pTop->GetTopWindow_Impl();
 
+#if SUPD<613//MUSTINI
             char cToken = SfxIniManager::GetToken();
+#else
+            char cToken = ',';
+#endif
             const BOOL bActWin = pActFrame == pFrame;
             String aUserData;
             pFrame->GetViewShell()->WriteUserData(aUserData);
@@ -201,7 +208,9 @@ FASTBOOL SfxObjectShell::SaveWindows_Impl( SvStorage &rStor ) const
                 aWinData += SFX_WINSIZE_MIN;
             else
 */
+#if SUPD<613//MUSTINI
             aWinData += SfxIniManager::GetString( pWin->GetPosPixel(), pWin->GetSizePixel() );
+#endif
             aWinData += cToken;
             aWinData += aUserData;
 
@@ -261,7 +270,11 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     // alle gespeicherten Fenster "offnen
     SfxViewFrame *pActiveFrame = 0;
     String aWinData;
+#if SUPD<613//MUSTINI
     char cToken = SfxIniManager::GetToken();
+#else
+    char cToken =',';
+#endif
     SfxItemSet *pSet = GetMedium()->GetItemSet();
 
     pImp->bLoadingWindows = TRUE;
@@ -286,9 +299,9 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
                 aUserData = aWinData.GetToken( 2, cToken );
                 bActive = aWinData.GetToken( 3, cToken ).ToInt32();
 
-                if ( aPosSize.EqualsAscii( SFX_WINSIZE_MAX ) )
+                if ( aPosSize.EqualsAscii( "min" ) )
                     bMaximized = TRUE;
-                else if ( aPosSize.EqualsAscii( SFX_WINSIZE_MIN ) )
+                else if ( aPosSize.EqualsAscii( "min" ) )
                 {
                     bMaximized = TRUE;
                     bActive = FALSE;
@@ -306,8 +319,10 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 
             Point aPt;
             Size aSz;
+#if SUPD<613//MUSTINI
             if ( !bMaximized )
                 SfxIniManager::GetPosSize( aPosSize, aPt, aSz );
+#endif
 
             // nur aktives soll geladen werden, es ist aber nicht das aktive?
             if ( !bLoadDocWins && !bActive )
@@ -403,7 +418,11 @@ void SfxObjectShell::UpdateDocInfoForSave()
     if ( IsModified() )
     {
         // Keine Unterschiede mehr zwischen Save, SaveAs
+#if SUPD<613//MUSTII
         String aUserName = SFX_INIMANAGER()->GetUserFullName();
+#else
+        String aUserName = SvtUserOptions().GetFullName();
+#endif
         if ( !rDocInfo.IsUseUserData() )
             aUserName.Erase();
 
@@ -1506,8 +1525,12 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 // template was found
                 // check if template filename differs from the specified one
                 // if comparing filenames is enabled ask user, otherwise accept the different file name
+#if SUPD<613//MUSTINI
                 if( aTemplFileName.Len() && aTemplFileName != aFoundName &&
                         (USHORT)SFX_INIMANAGER()->Get( SFX_KEY_SEARCHTEMPLATE ).ToInt32() )
+#else
+                if( aTemplFileName.Len() && aTemplFileName != aFoundName )
+#endif
                 {
                     // template with given template name was found but with a different filename
                     SfxMedium aSfxMedium( aFoundName, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
