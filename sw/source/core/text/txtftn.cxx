@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 16:02:36 $
+ *  last change: $Author: fme $ $Date: 2002-02-01 08:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,20 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
     {
         const SwFtnContFrm *pCont = pBoss->FindFtnCont();
         sal_Bool bReArrange = sal_True;
+
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+        if ( pCont && (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
+                                          (Frm().*fnRect->fnGetBottom)() ) > 0 )
+        {
+            pBoss->RearrangeFtns( (Frm().*fnRect->fnGetBottom)(), sal_False,
+                                  pFtn->GetAttr() );
+#else
         if ( pCont && pCont->Frm().Top() > Frm().Bottom() )
         {
             pBoss->RearrangeFtns( Frm().Height() + Frm().Top(), sal_False,
                                   pFtn->GetAttr() );
+#endif
             ValidateBodyFrm();
             ValidateFrm();
             pFtn = pBoss->FindFirstFtn( this );
