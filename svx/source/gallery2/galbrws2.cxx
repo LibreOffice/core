@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *  last change: $Author: ka $ $Date: 2000-09-26 11:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <sfx2/exchobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "impgrf.hxx"
 #include "brshitem.hxx"
@@ -260,11 +261,11 @@ public:
 // ------------------------------------------------------------------------
 
 GalleryBackgroundPopup::GalleryBackgroundPopup( const GalleryTheme* pTheme, ULONG nObjectPos ) :
-            SfxControllerItem   ( SID_GALLERY_BG_BRUSH, SFX_BINDINGS() ),
+            SfxControllerItem   ( SID_GALLERY_BG_BRUSH, SfxViewFrame::Current()->GetBindings() ),
             mpTheme             ( pTheme ),
             mnObjectPos         ( nObjectPos )
 {
-    SFX_BINDINGS().Update( SID_GALLERY_BG_BRUSH );
+    SfxViewFrame::Current()->GetBindings().Update( SID_GALLERY_BG_BRUSH );
     RemoveDisabledEntries();
 }
 
@@ -313,7 +314,7 @@ void GalleryBackgroundPopup::Select()
     const SfxUInt16Item aPosItem( SID_GALLERY_BG_POS, GetCurItemId() - 1 );
     const SfxStringItem aPathItem( SID_FILE_NAME, aFilePath );
 
-    SFX_DISPATCHER().Execute( SID_GALLERY_BG_BRUSH,
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_GALLERY_BG_BRUSH,
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                               &aBrushItem, &aPosItem, &aPathItem, 0L );
 }
@@ -341,7 +342,7 @@ public:
 
 GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectPos, BOOL bPreview ) :
     PopupMenu           ( GAL_RESID( RID_SVXMN_GALLERY2 ) ),
-    SfxControllerItem   ( SID_GALLERY_ENABLE_ADDCOPY, SFX_BINDINGS() ),
+    SfxControllerItem   ( SID_GALLERY_ENABLE_ADDCOPY, SfxViewFrame::Current()->GetBindings() ),
     maBackgroundPopup   ( pTheme, nObjectPos ),
     mpTheme             ( pTheme ),
     mnObjectPos         ( nObjectPos ),
@@ -349,7 +350,7 @@ GalleryThemePopup::GalleryThemePopup( const GalleryTheme* pTheme, ULONG nObjectP
 {
     const SgaObjKind    eObjKind = mpTheme->GetObjectKind( mnObjectPos );
     PopupMenu*          pAddMenu = GetPopupMenu( MN_ADDMENU );
-    SfxBindings&        rBindings = SFX_BINDINGS();
+    SfxBindings&        rBindings = SfxViewFrame::Current()->GetBindings();
 
     pAddMenu->EnableItem( MN_ADD_LINK, SGA_OBJ_SVDRAW != eObjKind );
     CheckItem( MN_PREVIEW, mbPreview );
@@ -511,7 +512,7 @@ void GalleryBrowser2::Command( const CommandEvent& rCEvt )
         if( !mbIsPreview )
             mpValueSet->SelectItem( nId );
 
-        SfxBindings& rBindings = SFX_BINDINGS();
+        SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
         rBindings.ENTERREGISTRATIONS();
         GalleryThemePopup aMenu( mpCurTheme, nId - 1, mbIsPreview );
         rBindings.LEAVEREGISTRATIONS();
@@ -791,7 +792,8 @@ IMPL_LINK( GalleryBrowser2, MenuSelectHdl, Menu*, pMenu )
                 }
 
                 const SfxUInt32Item aItem( SID_GALLERY_FORMATS, nFormat );
-                SFX_DISPATCHER().Execute( SID_GALLERY_FORMATS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+                SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute(
+                    SID_GALLERY_FORMATS, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
             }
             break;
 
