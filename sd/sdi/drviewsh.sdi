@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:20:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:22:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,19 +263,19 @@ interface ImpressEditView : DrawView
     ]
 }
 
-shell SdDrawViewShell : SfxViewShell
-{
-    import ImpressEditView[Automation];
-}
-
-shell SdPresViewShell : SfxViewShell
-{
-    import ImpressEditView[Automation];
-}
-
-shell SdPreviewViewShell : SfxViewShell
+shell DrawViewShell
 {
     import ImpressEditView[Automation];
 }
 
 
+shell PresentationViewShell
+{
+    import ImpressEditView[Automation];
+}
+
+
+shell PreviewViewShell
+{
+    import ImpressEditView[Automation];
+}
