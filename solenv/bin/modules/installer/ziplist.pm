@@ -2,9 +2,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 10:48:16 $
+#   last change: $Author: rt $ $Date: 2005-03-29 15:36:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -752,6 +752,27 @@ sub replace_variables_in_ziplist_variables
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
         if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }
+    }
+}
+
+###########################################################
+# Adding the lowercase variables into the variableshashref
+###########################################################
+
+sub add_variables_to_allvariableshashref
+{
+    my ($variableshashref) = @_;
+
+    my $lcvariable = lc($variableshashref->{'PRODUCTNAME'});
+    $variableshashref->{'LCPRODUCTNAME'} = $lcvariable;
+
+    if ($variableshashref->{'SHORT_PRODUCTEXTENSION'})
+    {
+        $variableshashref->{'LCPRODUCTEXTENSION'} = "\-" . lc($variableshashref->{'SHORT_PRODUCTEXTENSION'}); # including the "-" !
+    }
+    else
+    {
+        $variableshashref->{'LCPRODUCTEXTENSION'} = "";
     }
 }
 
