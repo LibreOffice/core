@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:44:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:06:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2141,7 +2141,10 @@ UUIInteractionHandler::handleGenericErrorRequest(
             xApprove = star::uno::Reference< star::task::XInteractionApprove >( rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
-    sal_Bool bWarning = (rRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+    // Note: It's important to convert the transported long to the required unsigned long value.
+    // Otherwhise using as flag field can fail ...
+    ErrCode  nError   = (ErrCode)rRequest.ErrCode;
+    sal_Bool bWarning = !ERRCODE_TOERROR(nError);
     ErrorHandler::HandleError(rRequest.ErrCode);
 
     if (xApprove.is() && bWarning)
