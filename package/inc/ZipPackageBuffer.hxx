@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 12:20:40 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,26 +64,24 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX
+#include <cppuhelper/implbase3.hxx>
 #endif
-#include <string.h> // for memcpy
 
 class ZipPackage;
 
-class ZipPackageBuffer : public com::sun::star::io::XInputStream,
-                         public com::sun::star::io::XOutputStream,
-                         public com::sun::star::io::XSeekable,
-                         public cppu::OWeakObject
+class ZipPackageBuffer : public ::cppu::WeakImplHelper3
+<
+    com::sun::star::io::XInputStream,
+    com::sun::star::io::XOutputStream,
+    com::sun::star::io::XSeekable
+>
 {
 protected:
     com::sun::star::uno::Sequence < sal_Int8 > m_aBuffer;
@@ -97,12 +95,7 @@ public:
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
     inline const sal_Int8 * getConstArray () const { return m_aBuffer.getConstArray(); }
     inline const com::sun::star::uno::Sequence < sal_Int8> & getSequence () const { return m_aBuffer; }
-    virtual com::sun::star::uno::Any SAL_CALL queryInterface( const com::sun::star::uno::Type& rType )
-        throw(com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(void)
-        throw();
-    virtual void SAL_CALL release(void)
-        throw();
+
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
