@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-07 13:06:40 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1688,15 +1688,14 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL bRem
                                 const Fraction& rZoomX, const Fraction& rZoomY )
 {
     BOOL* pUsed = new BOOL[MAXROW+1];
-    USHORT i;
-    for (i=0; i<=MAXROW; i++)
-        pUsed[i] = FALSE;
+    memset( pUsed, 0, sizeof(BOOL) * (MAXROW+1) );
 
     USHORT nCol;
     for (nCol=0; nCol<=MAXCOL; nCol++)
         aCol[nCol].FindStyleSheet( pStyleSheet, pUsed, bRemoved );
 
     BOOL bFound = FALSE;
+    USHORT i;
     USHORT nStart;
     USHORT nEnd;
     for (i=0; i<=MAXROW; i++)

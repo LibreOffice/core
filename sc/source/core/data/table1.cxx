@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:33:50 $
+ *  last change: $Author: er $ $Date: 2002-11-21 16:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,9 +328,7 @@ BOOL ScTable::SetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT nExtra,
                             ScGlobal::GetRscString(STR_PROGRESS_HEIGHTING), GetWeightedCount() );
 
     USHORT* pHeight = new USHORT[nCount];                   // Twips !
-    USHORT i;
-    for (i=0; i<nCount; i++)
-        pHeight[i] = 0;
+    memset( pHeight, 0, sizeof(USHORT) * nCount );
 
     //  zuerst einmal ueber den ganzen Bereich
     //  (mit der letzten Spalte in der Hoffnung, dass die am ehesten noch auf
@@ -368,6 +366,7 @@ BOOL ScTable::SetOptimalHeight( USHORT nStartRow, USHORT nEndRow, USHORT nExtra,
     USHORT nRngStart;
     USHORT nRngEnd;
     USHORT nLast = 0;
+    USHORT i;
     for (i=0; i<nCount; i++)
     {
         if ( (pRowFlags[nStartRow+i] & CR_MANUALSIZE) == 0 || bForce )
