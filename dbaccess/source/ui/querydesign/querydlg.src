@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:43:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,7 @@ ModalDialog DLG_QRY_JOIN
     SVLook = TRUE ;
     HelpId = HID_DLG_QRY_JOIN ;
     Size = MAP_APPFONT ( 265, 205 ) ;
-    Text = "Verbundeigenschaften" ;
-    Text [ ENGLISH ] = "Join properties" ;
+    Text [ de ] = "Verbundeigenschaften" ;
 
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -89,35 +88,8 @@ ModalDialog DLG_QRY_JOIN
         {
             Pos = MAP_APPFONT ( 6 , 3 ) ;
             Size = MAP_APPFONT ( 191 , 8 ) ;
-            Text = "beteiligte Tabellen" ;
-            Text [ English ] = "involved tables" ;
-            Text[ english_us ] = "Tables involved";
-            Text[ portuguese ] = "Tabelas consideradas";
-            Text[ russian ] = "âêëş÷åííûå òàáëèöû";
-            Text[ greek ] = "åìğëåêüìåíïé ğßíáêåò";
-            Text[ dutch ] = "betrokken tabellen";
-            Text[ french ] = "Tables impliquées";
-            Text[ spanish ] = "Tablas implicadas";
-            Text[ italian ] = "Tabelle considerate";
-            Text[ danish ] = "involverede tabeller";
-            Text[ swedish ] = "inkluderade tabeller";
-            Text[ polish ] = "implikowane tabele";
-            Text[ portuguese_brazilian ] = "tabelas consideradas";
-            Text[ japanese ] = "é–¢é€£ãƒ†ãƒ¼ãƒ–ãƒ«";
-            Text[ korean ] = "ê´€ë ¨ í…Œì´ë¸”";
-            Text[ chinese_simplified ] = "æœ‰å…³è”çš„è¡¨æ ¼";
-            Text[ chinese_traditional ] = "ç›¸é—œçš„è¡¨æ ¼";
-            Text[ arabic ] = "ÇáÌÏÇæá ÇáãÚäíÉ";
-            Text[ turkish ] = "İçerilen tablolar";
-            Text[ catalan ] = "taules implicades";
-            Text[ finnish ] = "Tables involved";
-            Text[ thai ] = "Tables involved";
-            Text[ czech ] = "PouÅ¾itÃ© tabulky";
-            Text[ hebrew ] = "beteiligte Tabellen";
-            Text[ hindi ] = "Tables involved";
-            Text[ slovak ] = "ZahrnutÃ© tabuÄ¾ky";
-            Text[ hungarian ] = "Ã‰rintett tÃ¡blÃ¡k";
-            Text[ slovenian ] = "VkljuÄene so tabele";
+            Text [ de ] = "beteiligte Tabellen" ;
+            Text [ en-US ] = "Tables involved";
         };
 
         ListBox LB_LEFT_TABLE
@@ -144,35 +116,8 @@ ModalDialog DLG_QRY_JOIN
         {
             Pos = MAP_APPFONT ( 6 , 29 ) ;
             Size = MAP_APPFONT ( 191 , 8 ) ;
-            Text = "beteiligte Felder" ;
-            Text [ English ] = "involved fields" ;
-            Text[ english_us ] = "Fields involved";
-            Text[ portuguese ] = "Campos considerados";
-            Text[ russian ] = "âêëş÷åííûå ïîëÿ";
-            Text[ greek ] = "åìğëåêüìåíá ğåäßá";
-            Text[ dutch ] = "betrokken velden";
-            Text[ french ] = "Champs impliqués";
-            Text[ spanish ] = "Campos implicados";
-            Text[ italian ] = "Campi considerati";
-            Text[ danish ] = "involverede felter";
-            Text[ swedish ] = "inkluderade fält";
-            Text[ polish ] = "implikowane pola";
-            Text[ portuguese_brazilian ] = "campos considerados";
-            Text[ japanese ] = "é–¢é€£ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰";
-            Text[ korean ] = "ê´€ë ¨ í•„ë“œ";
-            Text[ chinese_simplified ] = "æœ‰å…³è”çš„å­—æ®µ";
-            Text[ chinese_traditional ] = "ç›¸é—œçš„æ¬„ä½";
-            Text[ arabic ] = "ÇáÍŞæá ÇáãÚäíÉ";
-            Text[ turkish ] = "İçerilen alanlar";
-            Text[ catalan ] = "camps implicats";
-            Text[ finnish ] = "Fields involved";
-            Text[ thai ] = "Fields involved";
-            Text[ czech ] = "PouÅ¾itÃ¡ pole";
-            Text[ hebrew ] = "beteiligte Felder";
-            Text[ hindi ] = "Fields involved";
-            Text[ slovak ] = "ZahrnutÃ© polia";
-            Text[ hungarian ] = "Ã‰rintett mezÅ‘k";
-            Text[ slovenian ] = "VkljuÄena so polja";
+            Text [ de ] = "beteiligte Felder" ;
+            Text [ en-US ] = "Fields involved";
         };
     };
 
@@ -180,38 +125,9 @@ ModalDialog DLG_QRY_JOIN
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 191 , 8 ) ;
-        Text = "Optionen" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text[ english_us ] = "Options";
-        Text[ portuguese ] = "Opções";
-        Text[ russian ] = "Ïàğàìåòğû ñîåäèíåíèÿ";
-        Text[ dutch ] = "Opties";
-        Text[ french ] = "Options";
-        Text[ spanish ] = "Opciones";
-        Text[ italian ] = "Opzioni";
-        Text[ danish ] = "Indstillinger";
-        Text[ swedish ] = "Alternativ";
-        Text[ polish ] = "Opcje";
-        Text[ portuguese_brazilian ] = "Opções";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_simplified ] = "é€‰é¡¹";
-        Text[ chinese_traditional ] = "é¸é …";
-        Text[ dutch ] = "Opties";
-        Text[ chinese_simplified ] = "é€‰é¡¹";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "ì˜µì…˜";
-        Text[ arabic ] = "ÎíÇÑÇÊ";
-        Text[ turkish ] = "Seçenekler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions";
-        Text[ finnish ] = "Asetukset";
-        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "Volby";
-        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "MoÅ¾nosti";
+        Text [ de ] = "Optionen" ;
+        Text [ en-US ] = "Options";
+        Text [ x-comment ] = " ";
     };
 
     FixedText FT_LISTBOXTITLE
@@ -219,35 +135,8 @@ ModalDialog DLG_QRY_JOIN
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
 
-        Text = "~Art" ;
-        Text [ ENGLISH ] = "~Type" ;
-        Text[ english_us ] = "~Type";
-        Text[ portuguese ] = "T~ipo";
-        Text[ russian ] = "Òèï";
-        Text[ greek ] = "Ôığïò";
-        Text[ dutch ] = "~Type";
-        Text[ french ] = "Type";
-        Text[ spanish ] = "~Tipo";
-        Text[ finnish ] = "~Tyyppi";
-        Text[ italian ] = "~Tipo";
-        Text[ danish ] = "~Type";
-        Text[ swedish ] = "~Typ";
-        Text[ polish ] = "Typ";
-        Text[ portuguese_brazilian ] = "~Tipo";
-        Text[ japanese ] = "ç¨®é¡(~T)";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ chinese_simplified ] = "ç±»å‹(~T)";
-        Text[ chinese_traditional ] = "é¡å‹(~T)";
-        Text[ turkish ] = "~Tür";
-        Text[ arabic ] = "ÇáäæÚ";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~Type";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
+        Text [ de ] = "~Art" ;
+        Text [ en-US ] = "~Type";
     };
 
     ListBox LB_JOINTYPE
@@ -256,217 +145,28 @@ ModalDialog DLG_QRY_JOIN
         Size            = MAP_APPFONT ( 90 , 60 ) ;
         HelpId          = HID_DLG_QRY_JOINTYPE ;
 
-        StringList =
+        StringList [ de ] =
         {
             < "Innerer" ; Default; > ;
             < "Linker" ; Default; > ;
             < "Rechter" ; Default; > ;
             < "Vollständiger"  ; Default; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Inner" ; Default; > ;
-            < "Left" ; Default; > ;
-            < "Right" ; Default; > ;
-            < "Full"  ; Default; > ;
-        };
         DropDown        = TRUE;
         DDExtraWidth    = TRUE;
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
          < "; Innerer" ; Default; > ;
         < "; Linker" ; Default; > ;
         < "; Rechter" ; Default; > ;
         < "; Vollständiger"  ; Default; > ;
     };
-    StringList [ english_us ] =
+    StringList [ en-US ] =
     {
          < "Inner join" ; Default; > ;
         < "Left join" ; Default; > ;
         < "Right join" ; Default; > ;
         < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ portuguese ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ russian ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Vollständiger"  ; Default; > ;
-    };
-    StringList [ greek ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ dutch ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ french ] =
-    {
-         < "Interne" ; Default; > ;
-        < "Gauche" ; Default; > ;
-        < "Droite" ; Default; > ;
-        < "Complète"  ; Default; > ;
-    };
-    StringList [ spanish ] =
-    {
-         < "Interna" ; Default; > ;
-        < "Izquierda" ; Default; > ;
-        < "Derecha" ; Default; > ;
-        < "Completa"  ; Default; > ;
-    };
-    StringList [ finnish ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ italian ] =
-    {
-         < "Relazione interna" ; Default; > ;
-        < "Relazione sinistra" ; Default; > ;
-        < "Relazione destra" ; Default; > ;
-        < "Relazione completa"  ; Default; > ;
-    };
-    StringList [ danish ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ swedish ] =
-    {
-         < "Inre" ; Default; > ;
-        < "Vänster" ; Default; > ;
-        < "Höger" ; Default; > ;
-        < "Fullständig"  ; Default; > ;
-    };
-    StringList [ polish ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-         < "Interno" ; Default; > ;
-        < "Esquerda" ; Default; > ;
-        < "Direita" ; Default; > ;
-        < "Completo"  ; Default; > ;
-    };
-    StringList [ japanese ] =
-    {
-         < "å†…éƒ¨çµåˆ(I)" ; Default; > ;
-        < "å·¦çµåˆ(L)" ; Default; > ;
-        < "å³çµåˆ(R)" ; Default; > ;
-        < "å®Œå…¨å¤–éƒ¨çµåˆ"  ; Default; > ;
-    };
-    StringList [ korean ] =
-    {
-         < "ë‚´ë¶€ ì¡°ì¸" ; Default; > ;
-        < "ì™¼ìª½ ì¡°ì¸" ; Default; > ;
-        < "ì˜¤ë¥¸ìª½ ì¡°ì¸" ; Default; > ;
-        < "ì™„ì „ ì™¸ë¶€ ì¡°ì¸"  ; Default; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-         < "å†…éƒ¨è¿ç»“" ; Default; > ;
-        < "å·¦å‘è¿ç»“" ; Default; > ;
-        < "å³å‘è¿ç»“" ; Default; > ;
-        < "å®Œæ•´çš„è¿ç»“"  ; Default; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-         < "å…§éƒ¨é€£çµ" ; Default; > ;
-        < "å·¦å‘é€£çµ" ; Default; > ;
-        < "å³å‘é€£çµ" ; Default; > ;
-        < "å®Œæ•´çš„é€£çµ"  ; Default; > ;
-    };
-    StringList [ turkish ] =
-    {
-         < "İç birleştirme" ; Default; > ;
-        < "Sol birleştirme" ; Default; > ;
-        < "Sağ birleştirme" ; Default; > ;
-        < "Tüm (dış) birleştirme"  ; Default; > ;
-    };
-    StringList [ arabic ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Vollständiger"  ; Default; > ;
-    };
-    StringList [ catalan ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "VnitÅ™nÃ­ spoj" ; Default; > ;
-        < "LevÃ½ spoj" ; Default; > ;
-        < "PravÃ½ spoj" ; Default; > ;
-        < "PlnÃ½ (vnÄ›jÅ¡Ã­) spoj"  ; Default; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "VollstÃ¤ndiger"  ; Default; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "Inner join" ; Default; > ;
-        < "Left join" ; Default; > ;
-        < "Right join" ; Default; > ;
-        < "Full (outer) join"  ; Default; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "VnÃºtornÃ© spojenie" ; Default; > ;
-        < "Ä½avÃ© spojenie" ; Default; > ;
-        < "PravÃ© spojenie" ; Default; > ;
-        < "PlnÃ© spojenie"  ; Default; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "BelsÅ‘ Ã¶sszekapcsolÃ¡s" ; Default; > ;
-        < "Bal oldali Ã¶sszekapcsolÃ¡s" ; Default; > ;
-        < "Jobb oldali Ã¶sszekapcsolÃ¡s" ; Default; > ;
-        < "Teljes (kÃ¼lsÅ‘) Ã¶sszekapcsolÃ¡s"  ; Default; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "Notranji spoj" ; Default; > ;
-        < "Levi spoj" ; Default; > ;
-        < "Desni spoj" ; Default; > ;
-        < "Polni (zunanji) spoj"  ; Default; > ;
     };
     };
 
@@ -499,189 +199,35 @@ ModalDialog DLG_QRY_JOIN
         TabStop = TRUE ;
     };
 
-    Text[ english_us ] = "Join Properties";
-    Text[ portuguese ] = "Propriedades relacionais";
-    Text[ russian ] = "Ñâîéñòâà ñâÿçè";
-    Text[ dutch ] = "Verbindingseigenschappen";
-    Text[ french ] = "Propriétés de la jointure";
-    Text[ spanish ] = "Propiedades de la unión";
-    Text[ italian ] = "Proprietà relazioni";
-    Text[ danish ] = "Egenskaber for Join";
-    Text[ swedish ] = "Egenskaper för sammanslagning (join)";
-    Text[ polish ] = "W³aœciwoœci z³¹czenia";
-    Text[ portuguese_brazilian ] = "Propriedades relacionais";
-    Text[ japanese ] = "çµåˆå±æ€§";
-    Text[ chinese_simplified ] = "è¿ç»“å±æ€§";
-    Text[ chinese_traditional ] = "é€£çµå±¬æ€§";
-    Text[ dutch ] = "Verbindingseigenschappen";
-    Text[ chinese_simplified ] = "è¿ç»“å±æ€§";
-    Text[ greek ] = "Éäéüôçôåò óõíäİóìïõ";
-    Text[ korean ] = "ì¡°ì¸ ë“±ë¡ ì •ë³´";
-    Text[ arabic ] = "ÎÕÇÆÕ ÇáÑÈØ";
-    Text[ turkish ] = "Bağlantı özellikleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Propietats de la unió";
-    Text[ finnish ] = "Yhteyden ominaisuudet";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
-    Text[ czech ] = "Vlastnosti spojenÃ­ (join)";
-    Text[ hebrew ] = "Verbundeigenschaften";
-    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼ à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
-    Text[ slovak ] = "Vlastnosti spojenia";
-    Text[ hungarian ] = "Ã–sszekapcsolÃ¡s tulajdonsÃ¡gai";
-    Text[ slovenian ] = "Lastnosti spoja";
+    Text [ en-US ] = "Join Properties";
+    Text [ x-comment ] = " ";
 };
 
 String STR_JOIN_TYPE_HINT
 {
-    Text = "Bitte beachten Sie, daß einige Datenbanken eventuell diese Art der Verknüpfung nicht unterstützen.";
-    Text [ english ] = "Please note that some databases may not support this join type.";
-    Text [ english_us ] = "Please note that some databases may not support this join type.";
-    Text[ chinese_simplified ] = "è¯·æ³¨é‡Šä¸€äº›æ•°æ®åº“å¯èƒ½ä¸æ”¯æŒæ­¤è”æ¥ç±»å‹ã€‚";
+    Text [ de ] = "Bitte beachten Sie, daß einige Datenbanken eventuell diese Art der Verknüpfung nicht unterstützen.";
+    Text [ en-US ] = "Please note that some databases may not support this join type.";
 };
 
 String STR_QUERY_INNER_JOIN
 {
-    Text = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
-    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ english_us ] = "Includes only records for which the contents of the related fields of both tables are identical.";
-    Text[ portuguese ] = "Contém apenas os registos de dados, cujos conteúdos dos campos ligados sejam iguais em ambas as tabelas.";
-    Text[ russian ] = "Ñîäåğæèò òîëüêî çàïèñè, â êîòîğûõ ñîäåğæèìîå ñâÿçàííûõ ïîëåé îáåèõ òàáëèö îäèíàêîâî.";
-    Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ french ] = "Contient uniquement les enregistrements pour lesquels les contenus des champs liés des deux tables sont identiques.";
-    Text[ spanish ] = "Contiene sólo los registros en los que los contenidos de los campos vinculados de ambas tablas sean iguales.";
-    Text[ italian ] = "Contiene solamente i record di dati in cui i contenuti dei campi collegati di entrambe le tabelle sono uguali.";
-    Text[ danish ] = "Indeholder kun de dataposter, hvor indholdet i de kædede felter i de to tabeller er ens.";
-    Text[ swedish ] = "Innehåller bara de dataposter där innehållet i de länkade fälten är lika i båda tabellerna.";
-    Text[ polish ] = "Zawiera tylko te rekordy, których zawartoœci w powi¹zanych polach s¹ takie same w obu tabelach.";
-    Text[ portuguese_brazilian ] = "Contém apenas os registros para os quais o conteúdo dos campos relacionados de ambas as tabelas são idênticos.";
-    Text[ japanese ] = "ä¸¡æ–¹ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã§ãƒªãƒ³ã‚¯ã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å†…å®¹ãŒä¸€è‡´ã™ã‚‹ãƒ¬ã‚³ãƒ¼ãƒ‰ã ã‘ã‚’å«ã¿ã¾ã™ã€‚";
-    Text[ chinese_simplified ] = "åªåŒ…å«ä¸¤ä¸ªè¡¨æ ¼ä¸­å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
-    Text[ chinese_traditional ] = "åƒ…åŒ…å«å…©å€‹è¡¨æ ¼ä¸­é€£çµæ¬„ä½ç›¸åŒçš„è³‡æ–™æ¢ç›®ã€‚";
-    Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ chinese_simplified ] = "åªåŒ…å«ä¸¤ä¸ªè¡¨æ ¼ä¸­å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
-    Text[ greek ] = "Ğåñéİ÷åé ìüíï ôéò åããñáöİò ôùí äåäïìİíùí óôéò ïğïßåò ôáõôßæïíôáé ôá ğåñéå÷üìåíá ôùí óõíäåäåìİíùí ğåäßùí êáé óôïõò äıï ğßíáêåò.";
-    Text[ korean ] = "ë‘ í…Œì´ë¸”ì˜ ê´€ê³„ëœ í•„ë“œ ë‚´ìš©ì´ ì¼ì¹˜í•˜ëŠ” ë ˆì½”ë“œë§Œì„ í¬í•¨í•©ë‹ˆë‹¤.";
-    Text[ arabic ] = "ıáÇ íÍÊæí ÅáÇ Úáì ÇáÓÌáÇÊ ÇáÊí íÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä.";
-    Text[ turkish ] = "Aynı iki tabela içeriği ile bağlantıda olan tutanakları içerir.";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inclou només els registres per als quals el contingut dels camps afins de les dues taules és idèntic.";
-    Text[ finnish ] = "Sisältää vain tietueet, joissa toisiinsa liittyvät kentät ovat identtiset molemmissa tauluissa.";
-    Text[ thai ] = "à¸£à¸§à¸¡à¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¸‚à¸­à¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œà¸à¸±à¸™à¸‚à¸­à¸‡à¸—à¸±à¹‰à¸‡à¸ªà¸­à¸‡à¸•à¸²à¸£à¸²à¸‡à¸—à¸µà¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
-    Text[ czech ] = "Zahrnuje pouze zÃ¡znamy, pro kterÃ© jsou obsahy spojovanÃ½ch polÃ­ identickÃ©.";
-    Text[ hebrew ] = "Beinhaltet nur die DatensÃ¤tze, bei denen die Inhalte der verknÃ¼pften Felder beider Tabellen gleich sind.";
-    Text[ hindi ] = "à¤¦à¥‹à¤¨à¥‹à¤‚ à¤¸à¤¾à¤°à¤£à¤¿à¤¯à¥‹à¤‚ à¤•à¤¾ à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¤¿à¤¤ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¤¾ à¤µà¤¿à¤·à¤¯ à¤¸à¤®à¤¾à¤¨ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤…à¤­à¤¿à¤²à¥‡à¤–à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "ZahÅ•Åˆa len zÃ¡znamy ktorÃ½ch obsah v danÃ½ch poliach je rovnakÃ½ pre obe tabuÄ¾ky.";
-    Text[ hungarian ] = "Csak azokat a rekordokat tartalmazza, amelyeknÃ©l mindkÃ©t tÃ¡bla kapcsolÃ³dÃ³ mezÅ‘inek tartalma megegyezik.";
-    Text[ slovenian ] = "VkljuÄuje samo zapise, v katerih je vsebina povezanih polj obeh tabel enaka.";
+    Text [ de ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
+    Text [ en-US ] = "Includes only records for which the contents of the related fields of both tables are identical.";
+    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
 {
-    Text = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
-    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ english_us ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
-    Text[ portuguese ] = "Contém TODOS os registos de dados de '%1' e somente os registos de dados de '%2', cujos conteúdos dos campos ligados sejam iguais em ambas as tabelas.";
-    Text[ russian ] = "Ñîäåğæèò ÂÑÅ çàïèñè èç '%1', à òàêæå òîëüêî òå çàïèñè èç '%2', â êîòîğûõ ñîäåğæèìîå ñâÿçàííûõ ïîëåé îáåèõ òàáëèö ÿâëÿåòñÿ îäèíàêîâûì.";
-    Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ french ] = "Contient TOUS les enregistrements de '%1', et uniquement les enregistrements de '%2' pour lesquels les contenus des champs liés des deux tables sont identiques.";
-    Text[ spanish ] = "Contiene TODOS los registros de la tabla '%1' y sólo los registros de la tabla '%2' para los que los contenidos de los campos vinculados de las dos tablas son iguales.";
-    Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
-    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og kun de dataposter fra '%2', hvor indholdet i de relaterede felter i de to tabeller er ens.";
-    Text[ swedish ] = "Innehåller ALLA dataposter från '%1' och bara de dataposter från '%2' där innehållet i de länkade fälten är lika i båda tabellerna.";
-    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z tabeli %1 i podzbiór rekordów z tabeli %2 o równych wartoœciach w powi¹zanych polach.";
-    Text[ portuguese_brazilian ] = "Contém TODOS os registros da tabela \"%1\" mas somente os registros da tabela \"%2\", cujos conteúdos dos campos relacionados sejam idênticos. ";
-    Text[ japanese ] = "'%1' ã®ã™ã¹ã¦ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã€ãŠã‚ˆã³ä¸¡æ–¹ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã§ãƒªãƒ³ã‚¯ã•ã‚ŒãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å†…å®¹ãŒä¸€è‡´ã™ã‚‹ '%2' ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã ã‘ã‚’å«ã¿ã¾ã™ã€‚";
-    Text[ chinese_simplified ] = "å«æœ‰'%1'ä¸­çš„æ‰€æœ‰æ•°æ®æ¡ç›®å’Œ'%2'ä¸­ä¸¤ä¸ªè¡¨æ ¼å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
-    Text[ chinese_traditional ] = "å«æœ‰<%1>ä¸­çš„æ‰€æœ‰è³‡æ–™æ¢ç›®å’Œ<%2>ä¸­å…©å€‹è¡¨æ ¼çš„é€£çµæ¬„ä½ç›¸åŒçš„è³‡æ–™æ¢ç›®ã€‚";
-    Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ chinese_simplified ] = "å«æœ‰'%1'ä¸­çš„æ‰€æœ‰æ•°æ®æ¡ç›®å’Œ'%2'ä¸­ä¸¤ä¸ªè¡¨æ ¼å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
-    Text[ greek ] = "Ğåñéİ÷åé ¼ËÅÓ ôéò åããñáöİò áğü ôïí ğßíáêá '%1', áëëÜ ìüíï ôéò åããñáöİò áğü ôïí ğßíáêá '%2' üğïõ ôá ó÷åôéêÜ ğåäßá óõìöùíïıí.";
-    Text[ korean ] = "í…Œì´ë¸” '%1'ì—ëŠ” ëª¨ë“  ë ˆì½”ë“œê°€ í…Œì´ë¸” '%2'ì—ëŠ” ë‘ í…Œì´ë¸”ì˜ ê´€ê³„ëœ í•„ë“œ ë‚´ìš©ì´ ì¼ì¹˜í•˜ëŠ” ë ˆì½”ë“œë§Œì´ í¬í•¨ë©ë‹ˆë‹¤.";
-    Text[ arabic ] = "íÍÊæí Úáì ßá ÓÌáÇÊ '%1'¡ æÓÌáÇÊ '%2' ÇáÊí ÊÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä İŞØ.";
-    Text[ turkish ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conté TOTS els registres de dades de '%1' i només els registres de '%2' en els que els continguts dels camps vinculats a totes dues taules són iguals.";
-    Text[ finnish ] = "Sisältää KAIKKI taulun '%1' tietueet, mutta vain sellaiset taulun '%2' tietueet, joissa ensimmäiseen tauluun liittyvien kenttien arvot ovat identtiset.";
-    Text[ thai ] = "à¸¡à¸µà¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸²à¸à¸•à¸²à¸£à¸²à¸‡ '%1' à¹à¸•à¹ˆà¸šà¸²à¸‡à¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™à¸ˆà¸²à¸à¸•à¸²à¸£à¸²à¸‡ '%2' à¸—à¸µà¹ˆà¸„à¹ˆà¸²à¹ƒà¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œà¸à¸±à¸™à¸•à¸£à¸‡à¸à¸±à¸™";
-    Text[ czech ] = "Obsahuje vÅ¡echny zÃ¡znamy z tabulky '%1', ale pouze takovÃ© zÃ¡znamy z tabulky '%2', pro kterÃ© jsou obsahy spojovanÃ½ch polÃ­ identickÃ©.";
-    Text[ hebrew ] = "Beinhaltet ALLE DatensÃ¤tze aus '%1' und nur die DatensÃ¤tze aus '%2', bei denen die Inhalte der verknÃ¼pften Felder beider Tabellen gleich sind.";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ '%1' à¤•à¤¾ à¤¸à¤­à¥€ à¤…à¤­à¤¿à¤²à¥‡à¤–à¥‹à¤‚ à¤•à¥‹ , à¤²à¥‡à¤•à¤¿à¤¨ à¤¸à¤¾à¤°à¤£à¥€ '%2' à¤•à¤¾ à¤•à¥‡à¤µà¤² à¤‰à¤¨ à¤…à¤­à¤¿à¤²à¥‡à¤–à¥‹à¤‚ à¤•à¥‹ à¤œà¤¿à¤¨à¤•à¤¾ à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¤¿à¤¤ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¤¾ à¤µà¤¿à¤·à¤¯ à¤¸à¤®à¤¾à¤¨ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "ZahÅ•Åˆa vÅ¡etky zÃ¡znamy z tabuÄ¾ky '%1' ale z tabuÄ¾ky '%2' len tie zÃ¡znamy, kde sÃº zhodnÃ© zÃ¡znamy v danÃ½ch poliach.";
-    Text[ hungarian ] = "A(z) '%1' tÃ¡bla Ã¶sszes rekordjÃ¡t tartalmazza, de a(z) '%2' tÃ¡blÃ¡bÃ³l csak azokat, amelyekben a kapcsolÃ³dÃ³ mezÅ‘k Ã©rtÃ©kei egyeznek.";
-    Text[ slovenian ] = "Vsebuje VSE zapise iz tabele '%1' in samo tiste zapise iz tabele '%2', v katerih se vrednosti povezanih polj ujemajo.";
+    Text [ de ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
+    Text [ en-US ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
+    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_FULL_JOIN
 {
-    Text = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
-    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ english_us ] = "Contains ALL records from '%1' and from '%2'.";
-    Text[ portuguese ] = "Contém TODOS os registos de dados de '%1' e de '%2'.";
-    Text[ russian ] = "Ñîäåğæèò ÂÑÅ çàïèñè èç '%1' è èç '%2'.";
-    Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
-    Text[ french ] = "Contient TOUS les enregistrements de '%1' et de '%2'.";
-    Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
-    Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e da '%2'.";
-    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og '%2'.";
-    Text[ swedish ] = "Innehåller ALLA dataposter från '%1' och från '%2'.";
-    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z tabel %1 i %2.";
-    Text[ portuguese_brazilian ] = "Contém TODOS os registros de dados de \"%1\" e de \"%2\".";
-    Text[ japanese ] = "'%1' ã¨ '%2' ã®ã™ã¹ã¦ã®ãƒ¬ã‚³ãƒ¼ãƒ‰ã‚’å«ã¿ã¾ã™ã€‚";
-    Text[ chinese_simplified ] = "å«æœ‰ '%1'å’Œ'%2'å†…å…¨éƒ¨çš„æ•°æ®æ¡ç›®";
-    Text[ chinese_traditional ] = "å«æœ‰<%1>å’Œ<%2>å…§å…¨éƒ¨çš„è³‡æ–™æ¢ç›®";
-    Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
-    Text[ chinese_simplified ] = "å«æœ‰ '%1'å’Œ'%2'å†…å…¨éƒ¨çš„æ•°æ®æ¡ç›®";
-    Text[ greek ] = "Ğåñéİ÷åé ÏËÅÓ ôéò åããñáöİò ôùí '%1' êáé '%2'.";
-    Text[ korean ] = "'%1' ì™€(ê³¼) '%2'ì˜ ëª¨ë“  ë ˆì½”ë“œë¥¼ í¬í•¨í•©ë‹ˆë‹¤.";
-    Text[ arabic ] = "íÍÊæí Úáì ßá ÇáÓÌáÇÊ ãä '%1' æ '%2'.";
-    Text[ turkish ] = "Tüm kayıtlar '%1'  ve '%2''den içerir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conté TOTS els registres de dades '%1' i de '%2'";
-    Text[ finnish ] = "Sisältää KAIKKI tietueet kohteista '%1' ja '%2'.";
-    Text[ thai ] = "à¸¡à¸µà¸£à¸°à¹€à¸šà¸µà¸¢à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸²à¸ '%1' à¹à¸¥à¸°à¸ˆà¸²à¸ '%2'";
-    Text[ czech ] = "Obsahuje vÅ¡echny zÃ¡znamy z tabulky '%1' a tabulky '%2'.";
-    Text[ hebrew ] = "Beinhaltet ALLE DatensÃ¤tze aus '%1' und aus '%2'.";
-    Text[ hindi ] = "'%1' à¤”à¤° '%2' à¤•à¥‡ à¤¸à¤¬ à¤…à¤­à¤¿à¤²à¥‡à¤– à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¹à¥ˆ";
-    Text[ slovak ] = "ZahÅ•Åˆa vÅ¡etky zÃ¡znamy z tabuÄ¾ky'%1' a '%2'.";
-    Text[ hungarian ] = "'%1' Ã©s '%2' Ã¶sszes rekordjÃ¡t tartalmazza.";
-    Text[ slovenian ] = "Vsebuje VSE zapise iz '%1' in '%2'.";
+    Text [ de ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
+    Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
+    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
