@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:07:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,15 @@
 #ifndef _VCL_VCLENUM_HXX
 #include <enum.hxx>
 #endif
+#ifndef _VCL_OUTFONT_HXX
+#include <outfont.hxx>
+#endif
+
+#include <vector>
 
 class Xlfd;
 class AttributeProvider;
-class ImplFontData;
+class ImplDevFontList;
 class ByteString;
 
 // --------------------------------------------------------------------------
@@ -88,23 +93,17 @@ class ByteString;
 
 // base class
 
-class VirtualXlfd;
-class XlfdStorage;
-
-class ExtendedXlfd {
-
-    friend class VirtualXlfd;
-    friend class XlfdStorage;
-
+class ExtendedXlfd : public ImplDevFontAttributes
+{
     public:
-                             ExtendedXlfd();
+                             ExtendedXlfd( bool bScalable );
         virtual             ~ExtendedXlfd();
-        virtual Bool        AddEncoding( const Xlfd *pXlfd );
-        Bool                HasEncoding( rtl_TextEncoding nEncoding ) const;
+        virtual bool        AddEncoding( const Xlfd* );
+        bool                HasEncoding( rtl_TextEncoding ) const;
         int                 GetEncodingIdx( rtl_TextEncoding nEncoding ) const;
         unsigned short      NumEncodings() const
                                     { return mnEncodings; }
-        virtual unsigned short  GetPixelSize() const
+        virtual int             GetPixelSize() const
                                     { return 0; }
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
@@ -114,54 +113,43 @@ class ExtendedXlfd {
                                      char* pMatricsString,
                                        rtl_TextEncoding nEncoding  ) const;
 
-        virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
-        virtual FontType    GetFontType() const { return TYPE_DONTKNOW; }
-        FontFamily          GetFamily() const;
-        FontWeight          GetWeight() const;
-        FontItalic          GetItalic() const;
-        FontWidth           GetWidth() const;
-        virtual FontPitch   GetSpacing() const;
-        virtual FontPitch   GetSpacing( rtl_TextEncoding nEnc ) const;
-        rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
-        rtl_TextEncoding    GetEncoding() const;
-        rtl_TextEncoding    GetEncoding( int i ) const;
+        virtual ImplFontData* GetImplFontData() const = 0;
+        bool                  IsScalable() const { return mbScalable; }
+        virtual FontFamily    GetFamilyType() const;
+        virtual FontWeight    GetWeight() const;
+        virtual FontItalic    GetSlant() const;
+        virtual FontWidth     GetWidthType() const;
+        virtual FontPitch     GetPitch() const;
+        virtual FontPitch     GetPitch( rtl_TextEncoding ) const;
+        rtl_TextEncoding      GetAsciiEncoding( int *pAsciiRange = NULL ) const;
+        rtl_TextEncoding      GetEncoding() const;
+        rtl_TextEncoding      GetEncoding( int i ) const;
 
         int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
-        #if OSL_DEBUG_LEVEL > 1
-        void                Dump() const;
-        #endif
-
     protected:
-
         AttributeProvider*  mpFactory;
 
-    #ifdef GCC
     public:
-    #endif
-
         unsigned short      mnFoundry;
         unsigned short      mnFamily;
         unsigned short      mnWeight;
         unsigned short      mnSlant;
         unsigned short      mnSetwidth;
+        bool                mbScalable;
 
-    #ifdef GCC
     protected:
-    #endif
-
         unsigned short      mnEncodings;
+        unsigned short      mnEncCapacity;
         struct EncodingInfo {
             unsigned char       mcSpacing;
             unsigned short      mnResolutionX;
             unsigned short      mnResolutionY;
             unsigned short      mnAddstyle;
             unsigned short      mnCharset;
-
             rtl_TextEncoding    mnEncoding;
 
             EncodingInfo&       operator= ( const Xlfd *pXlfd );
-            EncodingInfo&       operator= ( const EncodingInfo& rInfo );
         } *mpEncodingInfo;
 };
 
@@ -180,9 +168,7 @@ class ScalableBitmapXlfd : public ExtendedXlfd {
                                     char* pMatricsString,
                                     rtl_TextEncoding nEncoding ) const;
 
-        virtual void        ToImplFontData( ImplFontData *pFontData ) const;
-        virtual FontType    GetFontType() const
-                                    { return TYPE_SCALABLE; }
+        virtual ImplFontData* GetImplFontData() const ;
 };
 
 // class to handle true bitmap fonts
@@ -194,9 +180,8 @@ class BitmapXlfd : public ExtendedXlfd {
     public:
                             BitmapXlfd();
                             ~BitmapXlfd();
-        Bool                AddEncoding( const Xlfd *pXlfd );
-        Bool                AddEncoding( const ScalableXlfd *pXlfd );
-        virtual unsigned short  GetPixelSize() const
+        bool                AddEncoding( const Xlfd* );
+        virtual int     GetPixelSize() const
                                     { return mnPixelSize; }
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
@@ -205,9 +190,7 @@ class BitmapXlfd : public ExtendedXlfd {
                                     unsigned short nPixelSize,
                                     char* pMatricsString,
                                     rtl_TextEncoding nEncoding ) const;
-        virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
-        virtual FontType    GetFontType() const
-                                    { return TYPE_RASTER; }
+        virtual ImplFontData* GetImplFontData() const ;
     protected:
 
         unsigned short      mnPixelSize;
@@ -232,9 +215,7 @@ class ScalableXlfd : public ExtendedXlfd {
                                     unsigned short nPixelSize,
                                     char* pMatricsString,
                                     rtl_TextEncoding  nEncoding ) const;
-        virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
-        virtual FontType    GetFontType() const
-                                    { return TYPE_SCALABLE; }
+        virtual ImplFontData* GetImplFontData() const ;
 };
 
 // class to maintain a list of fonts ( bitmap and scalable )
@@ -243,28 +224,18 @@ class XlfdStorage {
 
     public:
                             XlfdStorage();
-                            ~XlfdStorage();
 
         void                Dispose();
         void                Reset();
 
         void                Add( const ExtendedXlfd *pXlfd );
         void                Add( const XlfdStorage *pXlfd );
-        unsigned short      GetCount() const
-                                    { return mnCount; }
-        const ExtendedXlfd* Get(int nIdx) const;
-        #if OSL_DEBUG_LEVEL > 1
-        void                Dump() const ;
-        #endif
+        void                AnnounceFonts( ImplDevFontList* ) const;
 
     protected:
 
-        void                Enlarge();
-
-        unsigned short      mnCount;
-        unsigned short      mnSize;
-        const ExtendedXlfd**
-                            mpList;
+    typedef ::std::vector<const ExtendedXlfd*> XlfdList;
+    XlfdList                maXlfdList;
 };
 
 // list of fonts specific for bitmap fonts
@@ -288,7 +259,7 @@ class VirtualXlfd : public ExtendedXlfd
     public:
                              VirtualXlfd();
         virtual             ~VirtualXlfd();
-        virtual Bool        AddEncoding( const Xlfd *pXlfd );
+        virtual bool        AddEncoding( const Xlfd* );
         void                FilterInterfaceFont (const Xlfd *pXlfd);
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
@@ -298,13 +269,11 @@ class VirtualXlfd : public ExtendedXlfd
                                      char* pMatricsString,
                                        rtl_TextEncoding nEncoding  ) const;
 
-        virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
-        virtual FontType    GetFontType() const
-                                    { return TYPE_SCALABLE; }
+        virtual ImplFontData* GetImplFontData() const ;
     protected:
 
+        unsigned short      mnExtCapacity;
         struct ExtEncodingInfo {
-
             unsigned short      mnFoundry;
             unsigned short      mnFamily;
             unsigned short      mnWeight;
@@ -312,11 +281,27 @@ class VirtualXlfd : public ExtendedXlfd
             unsigned short      mnSetwidth;
 
             ExtEncodingInfo&    operator= ( const Xlfd *pXlfd );
-            ExtEncodingInfo&    operator= ( const ExtEncodingInfo& rInfo );
         } *mpExtEncodingInfo;
 
     friend class ExtEncodingInfo;
 };
 
-#endif /* XLFD_EXTENDED_HXX */
 
+// class to describe a X11 physically available font face
+
+class ImplX11FontData : public ImplFontData
+{
+private:
+    enum { X11IFD_MAGIC = 0x111FDA1C };
+    const ExtendedXlfd&   mrXlfd;
+
+public:
+                            ImplX11FontData( const ExtendedXlfd&, int nHeight );
+    const ExtendedXlfd&     GetExtendedXlfd() const { return mrXlfd; }
+    virtual ImplFontData*   Clone() const           { return new ImplX11FontData( *this ); }
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+
+    static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( X11IFD_MAGIC ); }
+};
+
+#endif /* XLFD_EXTENDED_HXX */
