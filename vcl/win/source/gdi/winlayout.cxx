@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-11 15:49:45 $
+ *  last change: $Author: hdu $ $Date: 2002-04-18 12:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,8 +537,8 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
     mpGlyphOffsets  = new GOFFSET[ mnGlyphCapacity ];
     mpVisualAttrs   = new SCRIPT_VISATTR[ mnGlyphCapacity ];
 
-    int nGlyphsProcessed = 0;
     // layout script items
+    int nGlyphsProcessed = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         mpGlyphCounts[ nItem ] = 0;
@@ -666,8 +666,9 @@ bool UniscribeLayout::GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex
             {
                 int n = mpLogClusters[ i ];
                 if( (n < nEndIndex) && (n > nMaxIndex) )
-                    nEndIndex = n;
+                    nMaxIndex = n;
             }
+            nEndIndex = nMaxIndex + 1;
         }
     }
 
