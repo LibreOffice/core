@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: er $ $Date: 2002-07-17 19:27:20 $
+#   last change: $Author: obo $ $Date: 2002-10-08 14:17:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,25 +74,52 @@ PACKAGE=com$/sun$/star$/i18n
 
 IDLFILES=\
     AmPmValue.idl \
+    Boundary.idl \
     BreakIterator.idl \
+    BreakType.idl \
     Calendar.idl \
     CalendarDisplayIndex.idl \
     CalendarFieldIndex.idl \
     CalendarItem.idl \
     ChapterCollator.idl \
     CharacterClassification.idl \
+    CharacterIteratorMode.idl \
+    CharType.idl \
     Collator.idl \
     Currency.idl \
+    DirectionProperty.idl \
+    ForbiddenCharacters.idl \
+    FormatElement.idl \
+    Implementation.idl \
     IndexEntrySupplier.idl \
+    KCharacterType.idl \
+    KNumberFormatType.idl \
+    KNumberFormatUsage.idl \
+    KParseTokens.idl \
+    KParseType.idl \
     LanguageCountryInfo.idl \
+    LineBreakHyphenationOptions.idl  \
+    LineBreakResults.idl \
+    LineBreakUserOptions.idl  \
     LocaleCalendar.idl \
     LocaleData.idl \
+    LocaleDataItem.idl \
     LocaleItem.idl \
     Months.idl \
+    NumberFormatCode.idl \
     NumberFormatIndex.idl \
     NumberFormatMapper.idl \
+    ParseResult.idl \
+    reservedWords.idl \
+    ScriptType.idl \
     Transliteration.idl \
+    TransliterationModules.idl \
+    TransliterationModulesNew.idl \
+    TransliterationType.idl \
+    UnicodeScript.idl \
+    UnicodeType.idl \
     Weekdays.idl \
+    WordType.idl \
     XBreakIterator.idl \
     XCalendar.idl \
     XCharacterClassification.idl \
