@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ParcelContentsIterator.java,v $
+ *  $RCSfile: JavaScriptIterator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-16 17:51:45 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-16 17:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,21 +96,17 @@ import org.openoffice.netbeans.modules.office.utils.PackageRemover;
  *
  * @author tomaso
  */
-public class ParcelContentsIterator implements TemplateWizard.Iterator {
+public class JavaScriptIterator implements TemplateWizard.Iterator {
 
 
     // private static final long serialVersionUID = ...L;
 
     // You should define what panels you want to use here:
 
-    public static final String PROP_LANGUAGE =
-        ParcelFolder.LANGUAGE_ATTRIBUTE;
-
     protected WizardDescriptor.Panel[] createPanels() {
         return new WizardDescriptor.Panel[] {
             // keep the default 2nd panel:
-            // wiz.targetChooser(),
-            new ParcelPropertiesPanel(),
+            wiz.targetChooser(),
         };
     }
 
@@ -118,8 +114,7 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
 
     protected String[] createSteps() {
         return new String[] {
-            // null,
-            "Parcel Properties",
+            null,
         };
     }
 
@@ -155,16 +150,6 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
         DataFolder targetFolder = wiz.getTargetFolder();
         targetFolder = checkTarget(targetFolder);
 
-        String sourceFile = "Templates/OfficeScripting/EmptyScript/Empty";
-        String language = (String)wiz.getProperty(PROP_LANGUAGE);
-
-        if (language.toLowerCase().equals("java"))
-            sourceFile += ".java";
-        else if (language.toLowerCase().equals("beanshell"))
-            sourceFile += ".bsh";
-        else
-            sourceFile = null;
-
         DataObject template = wiz.getTemplate();
         DataObject result;
         if (name == null) {
@@ -174,37 +159,18 @@ public class ParcelContentsIterator implements TemplateWizard.Iterator {
             result = template.createFromTemplate(targetFolder, name);
         }
 
-        FileObject recipe = result.getPrimaryFile();
-        recipe.setAttribute(ParcelFolder.LANGUAGE_ATTRIBUTE, language);
-        System.out.println("Called setAttribute from wizard: " + language);
-
-        FileObject contents =
-            recipe.getFileObject(ParcelZipper.CONTENTS_DIRNAME);
-
-        if (contents != null) {
-            DataFolder parent = DataFolder.findFolder(contents);
-
-            FileSystem fs = Repository.getDefault().getDefaultFileSystem();
-            DataObject dObj = DataObject.find(fs.findResource(sourceFile));
-            dObj.createFromTemplate(parent);
-
-            DataObject[] objs = parent.getChildren();
-
-            for (int i = 0; i < objs.length; i++) {
-                FileObject fo = objs[i].getPrimaryFile();
-                if (fo.getExt().equals("java")) {
-                    try {
-                        PackageRemover.removeDeclaration(FileUtil.toFile(fo));
-                    }
-                    catch (IOException ioe) {
-                        NotifyDescriptor d = new NotifyDescriptor.Message(
-                         "Error removing package declaration from file: " +
-                         fo.getNameExt() +
-                         ". You should manually remove this declaration " +
-                         "before building the Parcel Recipe");
-                        TopManager.getDefault().notify(d);
-                    }
-                }
+        FileObject tmp = result.getPrimaryFile();
+        if (tmp.getExt().equals("java")) {
+            try {
+                PackageRemover.removeDeclaration(FileUtil.toFile(tmp));
+            }
+            catch (IOException ioe) {
+                NotifyDescriptor d = new NotifyDescriptor.Message(
+                 "Error removing package declaration from file: " +
+                 tmp.getNameExt() +
+                 ". You should manually remove this declaration " +
+                 "before building the Parcel Recipe");
+                TopManager.getDefault().notify(d);
             }
         }
 
