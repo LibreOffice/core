@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:31:19 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 21:03:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,7 +533,7 @@ TabDialog DLG_TEMPLATE_2
                 Text [ norwegian ] = "Drop Caps" ;
                 Text [ italian ] = "Capolettera" ;
                 Text [ portuguese_brazilian ] = "Capitulares descidas" ;
-                Text [ portuguese ] = "Iniciais" ;
+                Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
                 Text [ french ] = "Lettrines" ;
