@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:39:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,12 @@ Display*        X11SalOpenGL::mpDisplay    = 0;
 XVisualInfo*    X11SalOpenGL::mpVisualInfo = 0;
 BOOL            X11SalOpenGL::mbHaveGLVisual = FALSE;
 
+#ifdef MACOSX
+oslModule      X11SalOpenGL::mpGLLib    = 0;
+#else
 void *      X11SalOpenGL::mpGLLib    = 0;
+#endif
+
 ULONG       X11SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
 GLXContext (*X11SalOpenGL::pCreateContext)( Display *, XVisualInfo *, GLXContext, Bool ) = 0;
@@ -275,7 +280,11 @@ void X11SalOpenGL::ImplFreeLib()
     {
         if( maGLXContext && pDestroyContext )
             pDestroyContext( mpDisplay, maGLXContext );
+#ifdef MACOSX
+        osl_unloadModule( (oslModule) mpGLLib );
+#else
         osl_unloadModule( mpGLLib );
+#endif
 
         mpGLLib             = 0;
         pCreateContext      = 0;
@@ -295,7 +304,11 @@ void* X11SalOpenGL::resolveSymbol( const char* pSymbol )
     if( mpGLLib )
     {
         OUString aSym = OUString::createFromAscii( pSymbol );
+#ifdef MACOSX
+        pSym = osl_getSymbol( (oslModule) mpGLLib, aSym.pData );
+#else
         pSym = osl_getSymbol( mpGLLib, aSym.pData );
+#endif
     }
     return pSym;
 }
