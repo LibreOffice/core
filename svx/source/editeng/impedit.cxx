@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-30 13:34:52 $
+ *  last change: $Author: mt $ $Date: 2001-07-31 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1696,7 +1696,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     HideDDCursor();
                     ShowDDCursor(aEditCursor );
                 }
-                rDTDE.Context->acceptDrag( nSupportedActions );
+                rDTDE.Context->acceptDrag( rDTDE.DropAction );
             }
         }
     }
