@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:23:45 $
+ *  last change: $Author: hr $ $Date: 2004-12-10 17:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 , aVersionString( this, ResId( RID_VERSIONSTRING ) )
 , aOk  ( this, ResId( RID_OK ) )
 {
-    aVersionString.SetText( UniString::CreateFromAscii( _UPD ).Append( UniString::CreateFromAscii( _LAST_MINOR ) )
-                            .AppendAscii( " BUILD:" ).Append( UniString::CreateFromAscii( _BUILD ) ) );
     FreeResource();
 }
 
