@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-10-25 17:31:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ class Xlfd {
         Bool            SameFontoutline( const Xlfd *pComparedTo ) const ;
         XlfdFonttype    Fonttype() const ;
         unsigned short  GetEncoding() const ;
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         const char*     ToString( ByteString &rString ) const ;
         void            Dump() const;
         #endif
