@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2000-10-25 06:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,7 +54,7 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Kai Sommerfeld ( kso@sun.com )
  *
  *
  ************************************************************************/
@@ -68,9 +68,6 @@
 #ifndef __HASH_MAP__
 #include <stl/hash_map>
 #endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -82,12 +79,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XPROPERTYSETREGISTRY_HPP_
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XSIMPLEREGISTRY_HPP_
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
-#include <com/sun/star/frame/XConfigManager.hpp>
 #endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
@@ -102,11 +93,8 @@
 #include <ucbhelper/contenthelper.hxx>
 #endif
 
-#define PROPSET_REGISTRY_FILE_NAME "dynprops.rdb"
-
 using namespace rtl;
 using namespace com::sun::star::container;
-using namespace com::sun::star::frame;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
@@ -391,80 +379,15 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
                     "ContentProviderImplHelper::getAdditionalPropertySet - "
                     "No UCB-Store service!" );
 
-        Reference< XSimpleRegistry > xCfgReg(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                               "com.sun.star.config.SpecialConfigManager" ) ),
-                UNO_QUERY );
-
-        VOS_ENSURE( xCfgReg.is(),
-                    "ContentProviderImplHelper::getAdditionalPropertySet - "
-                    "No ConfigManager service!" );
-
-        Reference< XConfigManager > xCfgMgr;
-        if ( xCfgReg.is() )
-            xCfgMgr = Reference< XConfigManager >( xCfgReg, UNO_QUERY );
-
-        VOS_ENSURE( xCfgMgr.is(),
-                    "ContentProviderImplHelper::getAdditionalPropertySet - "
-                    "No XConfigManager!" );
-
-        if ( xRegFac.is() && xCfgReg.is() && xCfgMgr.is() )
+        if ( xRegFac.is() )
         {
-            OUString aRegURL;
+            // Open/create a registry.
+            m_pImpl->m_xPropertySetRegistry
+                            = xRegFac->createPropertySetRegistry( OUString() );
 
-            try
-            {
-                Reference< XRegistryKey > xRegistryKey( xCfgReg->getRootKey() );
-                if ( xRegistryKey.is() )
-                    xRegistryKey = xRegistryKey->openKey(
-                        OUString::createFromAscii( "Directories/Storage-Dir") );
-
-                if ( xRegistryKey.is() )
-                    aRegURL = xRegistryKey->getStringValue();
-            }
-            catch ( InvalidRegistryException& )
-            {
-            }
-
-            aRegURL = xCfgMgr->substituteVariables( aRegURL );
-
-            VOS_ENSURE( aRegURL.getLength(),
-                        "ContentProviderImplHelper::getAdditionalPropertySet - "
-                        "Unable to get Store-directory!" );
-
-            if ( aRegURL.getLength() )
-            {
-                // Convert path to a URL.
-                OUString aUNCPath;
-                osl::FileBase::RC
-                eErr = osl::FileBase::normalizePath( aRegURL, aUNCPath );
-
-                if ( eErr == osl::FileBase::E_None )
-                {
-                    eErr = osl::FileBase::getFileURLFromNormalizedPath(
-                                                        aUNCPath, aRegURL );
-                    if ( eErr == osl::FileBase::E_None )
-                    {
-                        OUString aLastChar(
-                                    aRegURL.copy( aRegURL.getLength() - 1 ) );
-                        OUString aTmpOWStr = OUString::createFromAscii ( "/" );
-                        if ( aLastChar != aTmpOWStr )
-                            aRegURL += aTmpOWStr;
-
-                        aRegURL += OUString::createFromAscii(
-                                                PROPSET_REGISTRY_FILE_NAME );
-
-                        // Open/create a registry.
-                        m_pImpl->m_xPropertySetRegistry
-                            = xRegFac->createPropertySetRegistry( aRegURL );
-                    }
-                }
-
-                VOS_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
+            VOS_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
                     "ContentProviderImplHelper::getAdditionalPropertySet - "
                     "Error opening registry!" );
-            }
         }
     }
 
