@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:03:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
 #endif
-#ifndef _SCEXTOPT_HXX
+#ifndef SC_SCEXTOPT_HXX
 #include "scextopt.hxx"
 #endif
 
@@ -627,6 +627,7 @@ const sal_uInt8 EXC_TABBUF_EXTERN   = 0x02;     /// Sheet is linked externally.
 const sal_uInt8 EXC_TABBUF_SKIPMASK = 0x0F;     /// Sheet will be skipped, if any flag is set.
 const sal_uInt8 EXC_TABBUF_VISIBLE  = 0x10;     /// Sheet is visible.
 const sal_uInt8 EXC_TABBUF_SELECTED = 0x20;     /// Sheet is selected.
+const sal_uInt8 EXC_TABBUF_MIRRORED = 0x40;     /// Sheet is mirrored (right-to-left).
 
 // ----------------------------------------------------------------------------
 
@@ -635,19 +636,18 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
     mnScCnt( 0 ),
     mnXclCnt( 0 ),
     mnXclExtCnt( 0 ),
-    mnXclCodeCnt( 0 ),
-    mnXclSelected( 0 ),
-    mnXclActive( 0 ),
-    mnXclFirstVis( 0 )
+    mnXclSelCnt( 0 ),
+    mnDisplXclTab( 0 ),
+    mnFirstVisXclTab( 0 )
 {
     ScDocument& rDoc = GetDoc();
-    ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
+    ScExtDocOptions& rDocOpt = GetExtDocOptions();
 
     mnScCnt = rDoc.GetTableCount();
 
     SCTAB nScTab;
-    SCTAB nScFirstVis = SCTAB_INVALID;  // first visible sheet
-    SCTAB nScFirstExp = SCTAB_INVALID;  // first exported sheet
+    SCTAB nFirstVisScTab = SCTAB_INVALID;   // first visible sheet
+    SCTAB nFirstExpScTab = SCTAB_INVALID;   // first exported sheet
 
     // --- initialize the flags in the index buffer ---
 
@@ -673,62 +673,61 @@ XclExpTabInfo::XclExpTabInfo( const XclExpRoot& rRoot ) :
             rDoc.GetName( nScTab, maTabInfoVec[ nScTab ].maScName );
 
             // remember first exported sheet
-            if( nScFirstExp == SCTAB_INVALID )
-               nScFirstExp = nScTab;
+            if( nFirstExpScTab == SCTAB_INVALID )
+               nFirstExpScTab = nScTab;
             // remember first visible exported sheet
-            if( (nScFirstVis == SCTAB_INVALID) && rDoc.IsVisible( nScTab ) )
-               nScFirstVis = nScTab;
+            if( (nFirstVisScTab == SCTAB_INVALID) && rDoc.IsVisible( nScTab ) )
+               nFirstVisScTab = nScTab;
 
             // sheet visible (only exported sheets)
             SetFlag( nScTab, EXC_TABBUF_VISIBLE, rDoc.IsVisible( nScTab ) );
 
             // sheet selected (only exported sheets)
-            if( const ScExtTabOptions* pExtTabOpt = rExtDocOpt.GetExtTabOptions( nScTab ) )
-                SetFlag( nScTab, EXC_TABBUF_SELECTED, pExtTabOpt->bSelected );
+            if( const ScExtTabSettings* pTabSett = rDocOpt.GetTabSettings( nScTab ) )
+                SetFlag( nScTab, EXC_TABBUF_SELECTED, pTabSett->mbSelected );
+
+            // sheet mirrored (only exported sheets)
+            SetFlag( nScTab, EXC_TABBUF_MIRRORED, rDoc.IsLayoutRTL( nScTab ) );
         }
     }
 
     // --- visible/selected sheets ---
 
+    SCTAB nDisplScTab = rDocOpt.GetDocSettings().mnDisplTab;
+
     // #112908# find first visible exported sheet
-    if( (nScFirstVis == SCTAB_INVALID) || !IsExportTab( nScFirstVis ) )
+    if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
     {
         // no exportable visible sheet -> use first exportable sheet
-        nScFirstVis = nScFirstExp;
-        if( (nScFirstVis == SCTAB_INVALID) || !IsExportTab( nScFirstVis ) )
+        nFirstVisScTab = nFirstExpScTab;
+        if( (nFirstVisScTab == SCTAB_INVALID) || !IsExportTab( nFirstVisScTab ) )
         {
             // no exportable sheet at all -> use active sheet and export it
-            nScFirstVis = static_cast<SCTAB>(rExtDocOpt.nActTab);
-            SetFlag( nScFirstVis, EXC_TABBUF_SKIPMASK, false ); // clear skip flags
+            nFirstVisScTab = nDisplScTab;
+            SetFlag( nFirstVisScTab, EXC_TABBUF_SKIPMASK, false ); // clear skip flags
         }
-        SetFlag( nScFirstVis, EXC_TABBUF_VISIBLE ); // must be visible, even if originally hidden
+        SetFlag( nFirstVisScTab, EXC_TABBUF_VISIBLE ); // must be visible, even if originally hidden
     }
 
-    // find current active sheet
-    SCTAB nScActive = static_cast<SCTAB>(rExtDocOpt.nActTab);
-    if( !IsExportTab( nScActive ) ) // selected sheet not exported (i.e. scenario) -> use first visible
-        nScActive = nScFirstVis;
-    SetFlag( nScActive, EXC_TABBUF_VISIBLE | EXC_TABBUF_SELECTED );
+    // find currently displayed sheet
+    if( !IsExportTab( nDisplScTab ) )   // selected sheet not exported (i.e. scenario) -> use first visible
+        nDisplScTab = nFirstVisScTab;
+    SetFlag( nDisplScTab, EXC_TABBUF_VISIBLE | EXC_TABBUF_SELECTED );
 
     // number of selected sheets
     for( nScTab = 0; nScTab < mnScCnt; ++nScTab )
         if( IsSelectedTab( nScTab ) )
-            ++mnXclSelected;
+            ++mnXclSelCnt;
 
     // --- calculate resulting Excel sheet indexes ---
 
     CalcXclIndexes();
-    mnXclFirstVis = GetXclTab( nScFirstVis );
-    mnXclActive = GetXclTab( nScActive );
+    mnFirstVisXclTab = GetXclTab( nFirstVisScTab );
+    mnDisplXclTab = GetXclTab( nDisplScTab );
 
     // --- sorted vectors for index lookup ---
 
     CalcSortedIndexes();
-
-    // --- VB codenames ---
-
-    if( CodenameList* pCList = rExtDocOpt.GetCodenames() )
-        mnXclCodeCnt = ulimit_cast< sal_uInt16 >( pCList->Count() );
 }
 
 bool XclExpTabInfo::IsExportTab( SCTAB nScTab ) const
@@ -754,10 +753,15 @@ bool XclExpTabInfo::IsSelectedTab( SCTAB nScTab ) const
     return GetFlag( nScTab, EXC_TABBUF_SELECTED );
 }
 
-bool XclExpTabInfo::IsActiveTab( SCTAB nScTab ) const
+bool XclExpTabInfo::IsDisplayedTab( SCTAB nScTab ) const
 {
     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::IsActiveTab - sheet out of range" );
-    return GetXclTab( nScTab ) == mnXclActive;
+    return GetXclTab( nScTab ) == mnDisplXclTab;
+}
+
+bool XclExpTabInfo::IsMirroredTab( SCTAB nScTab ) const
+{
+    return GetFlag( nScTab, EXC_TABBUF_MIRRORED );
 }
 
 const String& XclExpTabInfo::GetScTabName( SCTAB nScTab ) const
@@ -1159,7 +1163,7 @@ void XclExpExternSheet::Save( XclExpStream& rStrm )
 
 void XclExpExternSheet::Init( const String& rEncUrl )
 {
-    DBG_ASSERT_BIFF( GetBiff() <= xlBiff7 );
+    DBG_ASSERT_BIFF( GetBiff() <= EXC_BIFF5 );
     maTabName.AssignByte( rEncUrl, GetCharSet(), EXC_STR_8BITLENGTH );
     SetRecSize( maTabName.GetSize() );
 }
@@ -1273,7 +1277,7 @@ void XclExpSupbook::Save( XclExpStream& rStrm )
 
 const XclExpString* XclExpSupbook::GetTabName( sal_uInt16 nSBTab ) const
 {
-    const XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
+    XclExpXctRef xXct = maXctList.GetRecord( nSBTab );
     return xXct.is() ? &xXct->GetTabName() : 0;
 }
 
@@ -1311,7 +1315,7 @@ XclExpSupbookBuffer::XclExpSupbookBuffer( const XclExpRoot& rRoot ) :
 {
     XclExpTabInfo& rTabInfo = GetTabInfo();
     sal_uInt16 nXclCnt = rTabInfo.GetXclTabCount();
-    sal_uInt16 nCodeCnt = rTabInfo.GetXclCodenameCount();
+    sal_uInt16 nCodeCnt = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
     size_t nCount = nXclCnt + rTabInfo.GetXclExtTabCount();
 
     DBG_ASSERT( nCount > 0, "XclExpSupbookBuffer::XclExpSupbookBuffer - no sheets to export" );
@@ -1358,7 +1362,7 @@ XclExpXti XclExpSupbookBuffer::GetXti( sal_uInt16 nFirstXclTab, sal_uInt16 nLast
         {
             pRefLogEntry->mnFirstXclTab = nFirstXclTab;
             pRefLogEntry->mnLastXclTab = nLastXclTab;
-            const XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
+            XclExpSupbookRef xSupbook = maSupbookList.GetRecord( aXti.mnSupbook );
             if( xSupbook.is() )
                 xSupbook->FillRefLogEntry( *pRefLogEntry, aXti.mnFirstSBTab, aXti.mnLastSBTab );
         }
@@ -1744,11 +1748,10 @@ XclExpLinkManager::XclExpLinkManager( const XclExpRoot& rRoot ) :
 {
     switch( GetBiff() )
     {
-        case xlBiff5:
-        case xlBiff7:
+        case EXC_BIFF5:
             mxImpl.reset( new XclExpLinkManagerImpl5( rRoot ) );
         break;
-        case xlBiff8:
+        case EXC_BIFF8:
             mxImpl.reset( new XclExpLinkManagerImpl8( rRoot ) );
         break;
         default:
