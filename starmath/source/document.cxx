@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-17 11:56:25 $
+ *  last change: $Author: jp $ $Date: 2002-01-30 11:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,13 +342,20 @@ void SmDocShell::SetText(const String& rBuffer)
 {
     if (rBuffer != aText)
     {
+        BOOL bIsEnabled = IsEnableSetModified();
+        if( bIsEnabled )
+            EnableSetModified( FALSE );
+
         aText = rBuffer;
         Parse();
         SetFormulaArranged(FALSE);
         Resize();
         SmViewShell *pViewSh = SmGetActiveView();
-        if (pViewSh)
+        if( pViewSh )
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
+
+        if ( bIsEnabled )
+            EnableSetModified( bIsEnabled );
         SetModified(TRUE);
     }
 }
@@ -656,7 +663,7 @@ void SmDocShell::OnDocumentPrinterChanged( Printer *pPrt )
     SM_MOD1()->GetRectCache()->Reset();
     Size aOldSize = GetVisArea().GetSize();
     Resize();
-    if ( aOldSize != GetVisArea().GetSize() )
+    if( aOldSize != GetVisArea().GetSize() && aText.Len() )
         SetModified( TRUE );
     pTmpPrinter = 0;
 }
@@ -1973,7 +1980,8 @@ ULONG SmDocShell::GetMiscStatus() const
 
 void SmDocShell::SetModified(BOOL bModified)
 {
-    SfxObjectShell::SetModified(bModified);
+    if( IsEnableSetModified() )
+        SfxObjectShell::SetModified( bModified );
     Broadcast(SfxSimpleHint(SFX_HINT_DOCCHANGED));
 }
 
