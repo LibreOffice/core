@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:57:15 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,7 @@ ModalDialog DLG_BIB_BASE
         Text[ turkish ] = "Y~eniden adlandýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cambiar nombre";
+        Text[ finnish ] = "~Nimeä uudelleen";
     };
     GroupBox GB_BIB
     {
@@ -182,7 +183,7 @@ ModalDialog DLG_BIB_BASE
         Text [ italian ] = "Sezione" ;
         Text [ portuguese_brazilian ] = "Grupo" ;
         Text [ portuguese ] = "Categoria" ;
-        Text [ finnish ] = "Ryhmä" ;
+        Text [ finnish ] = "Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "Catégorie" ;
         Text [ swedish ] = "Område" ;
@@ -267,6 +268,7 @@ ModalDialog DLG_BIB_BASE
     Text[ turkish ] = "Kategorileri düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar áreas";
+    Text[ finnish ] = "Muokkaa luokkia";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
