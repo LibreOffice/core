@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:15:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1950,7 +1950,7 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
             return SvxTextAttrPage::Create;
             break;
         case RID_SVXPAGE_ALIGNMENT :
-            return SvxAlignmentTabPage::Create;
+            return svx::AlignmentTabPage::Create;
             break;
         case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
@@ -2063,7 +2063,7 @@ GetTabPageRanges AbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
             return SvxTextAttrPage::GetRanges;
             break;
         case RID_SVXPAGE_ALIGNMENT :
-            return SvxAlignmentTabPage::GetRanges;
+            return svx::AlignmentTabPage::GetRanges;
             break;
         case RID_SW_TP_BACKGROUND :
         case RID_SVXPAGE_BACKGROUND :
