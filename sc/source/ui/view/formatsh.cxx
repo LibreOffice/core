@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:53:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,18 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef  _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
 
 //------------------------------------------------------------------
 
@@ -343,6 +355,16 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         const SfxPoolItem* pFamItem;
         if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY, TRUE, &pFamItem ) )
             eFamily = (SfxStyleFamily)((const SfxUInt16Item*)pFamItem)->GetValue();
+        else
+        if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME, TRUE, &pFamItem ) )
+        {
+            String sFamily = ((const SfxStringItem*)pFamItem)->GetValue();
+            if (sFamily.CompareToAscii("CellStyles") == COMPARE_EQUAL)
+                eFamily = SFX_STYLE_FAMILY_PARA;
+            else
+            if (sFamily.CompareToAscii("PageStyles") == COMPARE_EQUAL)
+                eFamily = SFX_STYLE_FAMILY_PAGE;
+        }
 
         String                  aStyleName;
         USHORT                  nRetMask = 0xffff;
@@ -374,9 +396,32 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 }
                 break;
 
+            case SID_STYLE_APPLY:
+            {
+                SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_APPLY_STYLE, sal_False );
+                SFX_REQUEST_ARG( rReq, pFamilyItem, SfxStringItem, SID_STYLE_FAMILYNAME, sal_False );
+                if ( pFamilyItem && pNameItem )
+                {
+                    com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xModel(pDocSh->GetModel(), com::sun::star::uno::UNO_QUERY);
+                    try
+                    {
+                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xStyles;
+                        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xCont = xModel->getStyleFamilies();
+                        xCont->getByName(pFamilyItem->GetValue()) >>= xStyles;
+                        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xInfo;
+                        xStyles->getByName( pNameItem->GetValue() ) >>= xInfo;
+                        ::rtl::OUString aUIName;
+                        xInfo->getPropertyValue( ::rtl::OUString::createFromAscii("DisplayName") ) >>= aUIName;
+                        if ( aUIName.getLength() )
+                            rReq.AppendItem( SfxStringItem( SID_STYLE_APPLY, aUIName ) );
+                    }
+                    catch( com::sun::star::uno::Exception& )
+                    {
+                    }
+                }
+            }
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
-            case SID_STYLE_APPLY:
             case SID_STYLE_NEW_BY_EXAMPLE:
                 {
                     const SfxPoolItem* pNameItem;
