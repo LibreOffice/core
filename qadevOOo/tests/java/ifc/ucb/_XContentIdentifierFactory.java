@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XContentIdentifierFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:38 $
+ *  last change:$Date: 2003-05-27 12:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package ifc.ucb;
 import lib.MultiMethodTest;
 import util.utils;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentIdentifier;
 import com.sun.star.ucb.XContentIdentifierFactory;
 
@@ -91,7 +92,7 @@ public class _XContentIdentifierFactory extends MultiMethodTest {
      */
     public void _createContentIdentifier() {
         // creating a content identifier string - tmp url
-        String tmpDir = utils.getOfficeTemp(tParam.getMSF());
+        String tmpDir = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
 
         String contentId = utils.getFullURL(tmpDir);
 

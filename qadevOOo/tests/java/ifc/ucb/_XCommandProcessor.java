@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCommandProcessor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:39 $
+ *  last change:$Date: 2003-05-27 12:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.CommandInfo;
@@ -226,7 +227,7 @@ public class _XCommandProcessor extends MultiMethodTest {
             String commandName = "globalTransfer";
 
             String srcURL = util.utils.getFullTestURL("solibrary.jar") ;
-            String tmpURL = util.utils.getOfficeTemp(tParam.getMSF()) ;
+            String tmpURL = util.utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) ;
             log.println("Copying '" + srcURL + "' to '" + tmpURL) ;
 
             GlobalTransferCommandArgument arg = new
