@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:41:53 $
+ *  last change: $Author: fs $ $Date: 2002-01-29 12:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,11 +548,12 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     :OGenericUnoController(_rM)
     ,::comphelper::OPropertyContainer(getBroadcastHelper())
     ,m_pLoadThread(NULL)
-    ,m_bClosingKillOpen(sal_False)
+    ,m_bClosingKillOpen( sal_False )
+    ,m_bLoadCanceled( sal_False )
     ,m_nPendingLoadFinished(0)
     ,m_sLoadStopperCaption(ModuleRes(RID_STR_LOADING_DATASOURCE))
     ,m_nFormActionNestingLevel(0)
-    ,m_bErrorOccured(false)
+    ,m_bErrorOccured( sal_False )
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_aAsyncGetCellFocus(LINK(this, SbaXDataBrowserController, OnAsyncGetCellFocus))
@@ -611,7 +612,7 @@ sal_Bool SbaXDataBrowserController::reloadForm(const Reference< XLoadable >& _rx
 {
     WaitObject aWO(getBrowserView());
 
-    m_bLoadCanceled = sal_False;
+    setLoadingStarted();
 
     FormErrorHelper aReportError(this);
     if (_rxLoadable->isLoaded())
@@ -1349,7 +1350,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
 
         if (!pParamValues->wasSelected())
         {   // canceled
-            m_bLoadCanceled = sal_True;
+            setLoadingCancelled();
             return sal_False;
         }
 
@@ -1358,7 +1359,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         if (aFinalValues.getLength() != aRequest.Parameters->getCount())
         {
             DBG_ERROR("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
-            m_bLoadCanceled = sal_True;
+            setLoadingCancelled();
             return sal_False;
         }
         const PropertyValue* pFinalValues = aFinalValues.getConstArray();
@@ -1625,7 +1626,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
 
         try
         {
-            if (m_bLoadCanceled || !reloadForm(m_xLoadable))
+            if (loadingCancelled() || !reloadForm(m_xLoadable))
                 criticalFail();
         }
         catch(Exception&)
@@ -1668,7 +1669,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
 
         try
         {
-            if (m_bLoadCanceled || !reloadForm(m_xLoadable))
+            if (loadingCancelled() || !reloadForm(m_xLoadable))
                 criticalFail();
         }
         catch(Exception&)
@@ -2316,7 +2317,9 @@ IMPL_LINK(SbaXDataBrowserController, OnOpenFinishedMainThread, void*, EMPTYARG)
         return 0;
     m_nPendingLoadFinished = 0;
 
-    m_bLoadCanceled |= ((LoadFormThread*)m_pLoadThread)->WasCanceled();
+    if ( static_cast< LoadFormThread* >( m_pLoadThread )->WasCanceled() )
+        setLoadingCancelled();
+
     delete m_pLoadThread;
     m_pLoadThread = NULL;
 
