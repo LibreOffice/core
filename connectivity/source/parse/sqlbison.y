@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.22 2001-04-04 07:28:24 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.23 2001-04-12 12:34:59 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-04-04 07:28:24 $ $Revision: 1.22 $
+//	$Author: oj $ $Date: 2001-04-12 12:34:59 $ $Revision: 1.23 $
 //
 // Description:
 //
@@ -3227,7 +3227,8 @@ OSQLParser::~OSQLParser()
 			s_pGarbageCollector = NULL;
 			// is only set the first time so we should delete it only when there no more instances
 			s_xLocaleData = NULL;
-		}		
+		}
+		m_pParseTree = NULL;
 	}
 }
 // -------------------------------------------------------------------------
