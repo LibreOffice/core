@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 10:02:09 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -176,14 +179,17 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     AddTabPage(TP_CHAR_TWOLN, SvxCharTwoLinesPage::Create, 0);
     AddTabPage(TP_CHAR_URL, SwCharURLPage::Create, 0);
     AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
+
+    SvtCJKOptions aCJKOptions;
     if(bIsDrwTxtMode)
     {
         RemoveTabPage( TP_CHAR_URL );
         RemoveTabPage( TP_BACKGROUND );
         RemoveTabPage( TP_CHAR_TWOLN );
     }
+    else if(!aCJKOptions.IsDoubleLinesEnabled())
+        RemoveTabPage( TP_CHAR_TWOLN );
 }
-
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -429,6 +435,9 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/27 10:02:09  jp
+    Task #80425#: remove tabpage two lines if drawobject selected
+
     Revision 1.3  2000/11/27 08:58:45  jp
     Task #80425#: new tabpages
 

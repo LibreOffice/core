@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:45:13 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,9 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
-
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
@@ -614,7 +616,16 @@ ASK_ESCAPE:
                         ((SfxBoolItem&)aEditAttr.Get(
                             SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT )).GetValue();
             break;
-
+        case SID_TRANSLITERATE_HALFWIDTH:
+        case SID_TRANSLITERATE_FULLWIDTH:
+        case SID_TRANSLITERATE_HIRAGANA:
+        case SID_TRANSLITERATE_KATAGANA:
+        {
+            SvtCJKOptions aCJKOptions;
+            if(!aCJKOptions.IsChangeCaseMapEnabled())
+                rSet.DisableItem(nWhich);
+        }
+        break;
         default:
             nSlotId = 0;                // don't know this slot
             break;

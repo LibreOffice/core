@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-06 08:55:52 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,9 @@
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
-
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 #ifndef _FMTINFMT_HXX //autogen
 #include <fmtinfmt.hxx>
@@ -1002,6 +1004,15 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                     rSet.DisableItem( nWhich );
             break;
             case SID_RUBY_DIALOG:
+            {
+                SvtCJKOptions aCJKOptions;
+                if(!aCJKOptions.IsRubyEnabled())
+                {
+                    rSet.DisableItem(nWhich);
+                    break;
+                }
+            }
+            //no break!
             case SID_HYPERLINK_DIALOG:
                 if(!GetView().GetViewFrame()->HasChildWindow(nWhich)  && rSh.HasReadonlySel())
                     rSet.DisableItem(nWhich);
@@ -1020,154 +1031,20 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 }
             }
             break;
+            case SID_TRANSLITERATE_HALFWIDTH:
+            case SID_TRANSLITERATE_FULLWIDTH:
+            case SID_TRANSLITERATE_HIRAGANA:
+            case SID_TRANSLITERATE_KATAGANA:
+            {
+                SvtCJKOptions aCJKOptions;
+                if(!aCJKOptions.IsChangeCaseMapEnabled())
+                    rSet.DisableItem(nWhich);
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/02/02 17:43:37  jp
-    use new clipboard
-
-    Revision 1.3  2001/01/10 16:07:03  os
-    Ruby dialog
-
-    Revision 1.2  2000/10/06 13:36:37  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.171  2000/09/18 16:06:06  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.170  2000/09/12 14:11:19  os
-    SfxApplication::ChildWindowExecute removed
-
-    Revision 1.169  2000/09/11 06:52:45  os
-    Get/Set/Has/ToggleChildWindow SfxApplication -> SfxViewFrame
-
-    Revision 1.168  2000/09/08 08:12:52  os
-    Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-    Revision 1.167  2000/09/07 15:59:30  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.166  2000/08/31 11:32:07  jp
-    add missing include
-
-    Revision 1.165  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.164  2000/05/10 11:53:02  os
-    Basic API removed
-
-    Revision 1.163  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.162  2000/04/04 15:11:48  os
-    #74685# hyperlink button only disabled in readonly sections
-
-    Revision 1.161  2000/03/03 15:17:03  os
-    StarView remainders removed
-
-    Revision 1.160  2000/02/11 14:57:58  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.159  2000/01/12 16:43:04  os
-    #71278# edit hyperlink: use the new dialog
-
-    Revision 1.158  2000/01/03 08:38:28  os
-    #71278# edit hyperlink slot
-
-    Revision 1.157  1999/07/08 13:58:46  MA
-    Use internal object to toggle wait cursor
-
-
-      Rev 1.156   08 Jul 1999 15:58:46   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.155   15 Apr 1999 14:02:44   OS
-   #64801# keine Endnoten in Rahmen
-
-      Rev 1.154   23 Mar 1999 18:28:12   JP
-   Bug #63449#: vorm Formeledit alle Zellveraenderungen pruefen
-
-      Rev 1.153   18 Mar 1999 14:41:18   OS
-   #61169# #61489# Masseinheiten fuer Text u. HTML am Module setzen, nicht an der App
-
-      Rev 1.152   05 Feb 1999 17:05:48   OS
-   #61547# InsertEndnoteDirect
-
-      Rev 1.151   15 Jan 1999 15:45:30   JP
-   Bug #60203#: MoveLeftMargin - optional um Betrag verschieben
-
-      Rev 1.150   13 Jan 1999 14:54:02   TJ
-   include
-
-      Rev 1.149   13 Jan 1999 08:14:18   OS
-   #60380# HelpIds fuer AutoFormat - QueryBox
-
-      Rev 1.148   27 Nov 1998 14:55:38   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.147   06 Nov 1998 16:34:50   OS
-   #58450# Fussnoten auch im HTML
-
-      Rev 1.146   21 Oct 1998 10:56:54   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.145   20 Oct 1998 17:52:46   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.144   20 Oct 1998 11:39:34   OM
-   #57586# Redlining nach Autoformat
-
-      Rev 1.143   30 Sep 1998 14:05:26   OS
-   #52654# C40_Insert
-
-      Rev 1.142   30 Sep 1998 10:28:56   OS
-   #52654# Sortable und SortDescriptor eingebaut, auf- und absteigend fuer jeden Schluessel
-
-      Rev 1.141   08 Sep 1998 17:03:02   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.140   09 Jul 1998 14:04:12   OS
-   Kapitelnumerierung jetzt TabDialog
-
-      Rev 1.139   26 May 1998 15:34:00   JP
-   neu: Kopf-/Fusszeilen per Menu ein-/ausschalten
-
-      Rev 1.138   13 May 1998 14:58:10   OM
-   Autokorrektur/Autoformat umgestaltet und zusammengefasst
-
-      Rev 1.137   08 May 1998 17:02:48   OM
-   AutoFormat-Optionen an Ofa und Svx verschoben
-
-      Rev 1.136   07 May 1998 12:58:40   OM
-   AutoFormat-Optionen Umstellung
-
-      Rev 1.135   12 Mar 1998 13:08:00   OS
-   Numerierungsbutton nicht mehr gecheckt und nicht disabled
-
-      Rev 1.134   04 Mar 1998 14:16:26   OM
-   Dokument Merge/Compare
-
-      Rev 1.133   05 Feb 1998 14:46:26   OS
-   Numerierungsstart nur bei gesetzer Numerierung putten
-
-      Rev 1.132   02 Feb 1998 09:12:52   OS
-   neue Num-Tabpage
-
-      Rev 1.131   12 Dec 1997 13:57:36   OS
-   neuer Bookmark-Typ
-
-      Rev 1.130   03 Dec 1997 17:02:34   OS
-   Numerierungsumbau
-
-------------------------------------------------------------------------*/
 
 

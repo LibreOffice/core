@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pardlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-29 17:13:48 $
+ *  last change: $Author: os $ $Date: 2001-04-18 09:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,9 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svtools/svstdarr.hxx>
 #endif
-
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 #include "docsh.hxx"
 #include "wrtsh.hxx"
 #include "frmatr.hxx"
@@ -158,7 +160,8 @@ SwParaDlg::SwParaDlg(Window *pParent,
     else
         RemoveTabPage(TP_PARA_EXT);
 
-    if (!bHtmlMode)
+    SvtCJKOptions aCJKOptions;
+    if(!bHtmlMode && aCJKOptions.IsAsianTypographyEnabled())
         AddTabPage(TP_PARA_ASIAN,  SvxAsianTabPage::Create,SvxAsianTabPage::GetRanges);
     else
         RemoveTabPage(TP_PARA_ASIAN);
@@ -269,6 +272,9 @@ void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/29 17:13:48  os
+    #80913# forbidden rules
+
     Revision 1.1.1.1  2000/09/18 17:14:32  hr
     initial import
 
