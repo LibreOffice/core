@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuleSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:41:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module ucb {
     objects to which the rule should by applied and the <type>RuleAction</type>
     which should be performed on the matching objects.
 */
-struct RuleSet
+published struct RuleSet
 {
     //-------------------------------------------------------------------------
     /** conatains a number of rules.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RuleAction.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 15:53:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ module com { module sun { module star { module ucb {
 
      @see RuleSet
 */
-constants RuleAction
+published constants RuleAction
 {
     //-------------------------------------------------------------------------
     /** "None" - Do nothing.
