@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 06:52:59 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,15 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 m_aPB_OK.SetPosPixel(Point(m_aPB_OK.GetPosPixel().X(),aPos.Y()));
                 m_aPB_CANCEL.SetPosPixel(Point(m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
                 m_aPB_HELP.SetPosPixel(Point(m_aPB_HELP.GetPosPixel().X(),aPos.Y()));
+
+
+                sal_Int32 nLength = _rxMetaData->getMaxTableNameLength();
+                nLength = nLength ? nLength : EDIT_NOLIMIT;
+
+                m_aTitle.SetMaxTextLen(nLength);
+                m_aSchema.SetMaxTextLen(nLength);
+                m_aCatalog.SetMaxTextLen(nLength);
+
 
                 Size aSize = GetSizePixel();
                 aSize.Height() =
