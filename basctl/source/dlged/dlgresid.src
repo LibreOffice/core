@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:10:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ czech ] = "Vlastnosti: ";
     Text[ hebrew ] = "‮מאפינים:‬";
     Text[ hindi ] = "विशेषतायें: ";
+    Text[ slovak ] = "Vlastnosti: ";
 };
 String RID_STR_BRWTITLE_NO_PROPERTIES
 {
@@ -208,6 +209,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ czech ] = "Není označeno žádné ovládací pole";
     Text[ hebrew ] = "Kein Kontrollelement markiert";
     Text[ hindi ] = "कोई नियंत्रण सूचित नहीं किया है";
+    Text[ slovak ] = "Nie Ovládací prvok";
 };
 String RID_STR_BRWTITLE_MULTISELECT
 {
@@ -237,9 +239,12 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ czech ] = "Vícenásobný výběr";
     Text[ hebrew ] = "‮בחירה מרובה‬";
     Text[ hindi ] = "बहुमुखी चुनाव";
+    Text[ slovak ] = "Viacnásobný výber";
 };
 
 // -----------------------------------------------------------------------
+
+
 
 
 
