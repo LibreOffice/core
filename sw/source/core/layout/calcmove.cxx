@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-13 12:10:46 $
+ *  last change: $Author: fme $ $Date: 2002-09-20 07:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,6 +919,9 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         SwTwips nUpper = 0;
         if ( bTxtFrm && ((SwTxtFrm*)this)->IsHiddenNow() )
         {
+            if ( ((SwTxtFrm*)this)->HasFollow() )
+                ((SwTxtFrm*)this)->JoinFrm();
+
             if( (Prt().*fnRect->fnGetHeight)() )
                 ((SwTxtFrm*)this)->HideHidden();
             Prt().Pos().X() = Prt().Pos().Y() = 0;
