@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 12:58:34 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5318,7 +5318,7 @@ String RID_DB_REPORT_WIZARD_START + 66
     Text[ greek ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ dutch ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ french ] = "Impossible de lire le contrôle suivant masqué dans le formulaire '<FORMNAME>' : '<CONTROLNAME>'.";
-    Text[ spanish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
+    Text[ spanish ] = "No se ha podido leer el control siguiente oculto en el formulario '<REPORTFORM>' : '<CONTROLNAME>'.";
     Text[ finnish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ italian ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
     Text[ danish ] = "The following hidden control in the form '<FORMNAME>' could not be read: '<CONTROLNAME>'.";
