@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 14:59:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1282,7 +1282,7 @@ sal_Bool XMLTransformerBase::NegPercent( OUString& rValue )
 sal_Bool XMLTransformerBase::AddNamespacePrefix( ::rtl::OUString& rName,
                              sal_uInt16 nPrefix ) const
 {
-    rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName );
+    rName = GetNamespaceMap().GetQNameByKey( nPrefix, rName, sal_False );
     return sal_True;
 }
 
@@ -1291,7 +1291,7 @@ sal_Bool XMLTransformerBase::RemoveNamespacePrefix( ::rtl::OUString& rName,
 {
     OUString aLocalName;
     sal_uInt16 nPrefix =
-        GetNamespaceMap().GetKeyByAttrName( rName, &aLocalName );
+        GetNamespaceMap()._GetKeyByAttrName( rName, &aLocalName, sal_False );
     sal_Bool bRet = XML_NAMESPACE_UNKNOWN != nPrefix &&
                     (USHRT_MAX == nPrefixOnly || nPrefix == nPrefixOnly);
     if( bRet )
