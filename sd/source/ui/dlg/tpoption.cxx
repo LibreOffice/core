@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-23 15:50:13 $
+ *  last change: $Author: os $ $Date: 2001-04-27 06:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,6 +707,7 @@ void    SdTpOptionsMisc::SetDrawMode()
     lcl_MoveWin( aCbxCopy, nDiff );
     lcl_MoveWin( aCbxMarkedHitMovesAlways, nDiff );
     lcl_MoveWin( aCbxCrookNoContortion, nDiff );
+    nDiff -= aCbxCrookNoContortion.GetPosPixel().Y() - aCbxMarkedHitMovesAlways.GetPosPixel().Y();
     lcl_MoveWin( aTxtMetric, nDiff );
     lcl_MoveWin( aLbMetric, nDiff );
     lcl_MoveWin( aTxtTabstop, nDiff );

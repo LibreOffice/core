@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:40:49 $
+ *  last change: $Author: os $ $Date: 2001-04-27 06:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,14 +861,14 @@ TabPage TP_OPTIONS_MISC
     FixedLine GRP_SCALE
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 6 , 109 ) ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         SCALE_TEXT
     };
     FixedText FT_ORIGINAL
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 135 , 120 ) ;
+        Pos = MAP_APPFONT ( 135 , 133 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Original" ;
         Text [ ENGLISH ] = "Original" ;
@@ -894,7 +894,7 @@ TabPage TP_OPTIONS_MISC
     FixedText FT_EQUIVALENT
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 185 , 120 ) ;
+        Pos = MAP_APPFONT ( 185 , 133 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Text = "Entspricht" ;
         Text [ ENGLISH ] = "Equivalent to" ;
@@ -920,14 +920,14 @@ TabPage TP_OPTIONS_MISC
     FixedText FT_SCALE
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 12 , 136 ) ;
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 36 , 70 ) ;
         SCALE_TEXT
     };
     ComboBox CB_SCALE
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 52 , 134 ) ;
+        Pos = MAP_APPFONT ( 52 , 147 ) ;
         Size = MAP_APPFONT ( 30 , 70 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -935,7 +935,7 @@ TabPage TP_OPTIONS_MISC
     FixedText FT_PAGEWIDTH
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 85 , 136 ) ;
+        Pos = MAP_APPFONT ( 85 , 149 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         Text = "Seitenbreite" ;
         Text [ ENGLISH ] = "Page width" ;
@@ -962,14 +962,14 @@ TabPage TP_OPTIONS_MISC
     FixedText FI_INFO_1
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 135 , 136 ) ;
+        Pos = MAP_APPFONT ( 135 , 149 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
     };
     MetricField MTR_FLD_ORIGINAL_WIDTH
     {
         Hide = TRUE;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 134 ) ;
+        Pos = MAP_APPFONT ( 185 , 147 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -986,7 +986,7 @@ TabPage TP_OPTIONS_MISC
     FixedText FT_PAGEHEIGHT
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 85 , 152 ) ;
+        Pos = MAP_APPFONT ( 85 , 165 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         Text = "Seitenhöhe" ;
         Text [ ENGLISH ] = "Page height" ;
@@ -1013,14 +1013,14 @@ TabPage TP_OPTIONS_MISC
     FixedText FI_INFO_2
     {
         Hide = TRUE;
-        Pos = MAP_APPFONT ( 135 , 152 ) ;
+        Pos = MAP_APPFONT ( 135 , 165 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
     };
     MetricField MTR_FLD_ORIGINAL_HEIGHT
     {
         Hide = TRUE;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 185 , 150 ) ;
+        Pos = MAP_APPFONT ( 185 , 163 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
