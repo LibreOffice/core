@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:51:10 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
+#endif
+// OD 06.08.2003 #i17174#
+#ifndef _SVX_SHADITEM_HXX
+#include <svx/shaditem.hxx>
 #endif
 
 #ifndef _FMTFSIZE_HXX //autogen
@@ -2307,12 +2311,16 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     // dann muss es jetzt auf absolute umgerechnet werden.
     SwTable& rTab = *pTab->GetTable();
     const SwFmtFrmSize& rTblFrmSz = rTab.GetFrmFmt()->GetFrmSize();
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pTab )
-    long nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
-#else
-    long nPrtWidth = pTab->Prt().Width();
-#endif
+    // OD 06.08.2003 #i17174# - With fix for #i9040# the shadow size is taken
+    // from the table width. Thus, add its left and right size to current table
+    // printing area width in order to get the correct table size attribute.
+    SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+    {
+        SvxShadowItem aShadow( rTab.GetFrmFmt()->GetShadow() );
+        nPrtWidth += aShadow.CalcShadowSpace( SHADOW_LEFT ) +
+                     aShadow.CalcShadowSpace( SHADOW_RIGHT );
+    }
     if( nPrtWidth != rTblFrmSz.GetWidth() )
     {
         SwFmtFrmSize aSz( rTblFrmSz );
