@@ -52,9 +52,9 @@ ___tfv
 ___dynamic_cast
 
 # Global symbols
-component_getImplementationEnvironment;
-component_writeInfo;
-component_getFactory;
+_component_getImplementationEnvironment;
+_component_writeInfo;
+_component_getFactory;
 _release__Q29configmgr22OConfigurationRegistry
 _acquire__Q29configmgr22OConfigurationRegistry
 _checkOpen__Q29configmgr22OConfigurationRegistry
