@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-04 15:07:43 $
+ *  last change: $Author: kz $ $Date: 2001-12-06 22:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,26 @@ TabPage RID_SVXPAGE_INET_PROXY
     {
         Text = "Browsereinstellungen verwenden";
         Text[English] = "Use browser settings";
+        Text[ english_us ] = "Use browser settings";
+        Text[ portuguese ] = "Use browser settings";
+        Text[ russian ] = "Use browser settings";
+        Text[ greek ] = "Use browser settings";
+        Text[ dutch ] = "Use browser settings";
+        Text[ french ] = "Use browser settings";
+        Text[ spanish ] = "Use browser settings";
+        Text[ finnish ] = "Use browser settings";
+        Text[ italian ] = "Use browser settings";
+        Text[ danish ] = "Use browser settings";
+        Text[ swedish ] = "Use browser settings";
+        Text[ polish ] = "Use browser settings";
+        Text[ portuguese_brazilian ] = "Use browser settings";
+        Text[ japanese ] = "ÔæåÔæûÔæóÔΩ≥ÔΩªÔæûË®≠ÂÆö„Çí‰ΩøÁî®";
+        Text[ korean ] = "Use browser settings";
+        Text[ chinese_simplified ] = "Use browser settings";
+        Text[ chinese_traditional ] = "Use browser settings";
+        Text[ turkish ] = "Use browser settings";
+        Text[ arabic ] = "Use browser settings";
+        Text[ catalan ] = "Use browser settings";
     };
     FixedText FT_HTTP_PROXY
     {
@@ -504,11 +524,11 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ danish ] = "Ingen proxy for" ;
         Text [ portuguese_brazilian ] = "Kein Proxy f~?:" ;
         Text [ portuguese ] = "N~enhum Proxy para:" ;
-        Text[ chinese_simplified ] = "¥˙¿Ì∑˛ŒÒ∆˜≤ª  ”√”⁄(~N)";
+        Text[ chinese_simplified ] = "‰∏çÁî®‰ª£ÁêÜÊúçÂä°Âô®(~N)";
         Text[ russian ] = "¡ÂÁ ÔÓÍÒË ‰Îˇ ";
         Text[ polish ] = "Brak Proxy dla";
         Text[ japanese ] = "Ãﬂ€∑ºÇ»Çµ(~N)";
-        Text[ chinese_traditional ] = "•N≤z¶¯™Aæπ§£æA•Œ©Û(~N)";
+        Text[ chinese_traditional ] = "‰∏çÁî®‰ª£ÁêÜ‰º∫ÊúçÂô®(~N)";
         Text[ arabic ] = "·« ÌÊÃœ Proxy ·‹:";
         Text[ greek ] = "~ ·Ì›Ì· Proxy „È·";
         Text[ korean ] = "«¡∑œΩ√ æ¯¿Ω(~N):";
@@ -1409,6 +1429,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 53 , 8 ) ;
         Text = "~Makro ausf¸hren" ;
         Text [ English ] = "~Run macro" ;
+        Text[ english_us ] = "~Run macro";
+        Text[ portuguese ] = "~Run macro";
+        Text[ russian ] = "~Run macro";
+        Text[ greek ] = "~Run macro";
+        Text[ dutch ] = "~Run macro";
+        Text[ french ] = "~Run macro";
+        Text[ spanish ] = "~Run macro";
+        Text[ finnish ] = "~Run macro";
+        Text[ italian ] = "~Run macro";
+        Text[ danish ] = "~Run macro";
+        Text[ swedish ] = "~Run macro";
+        Text[ polish ] = "~Run macro";
+        Text[ portuguese_brazilian ] = "~Run macro";
+        Text[ japanese ] = "~Run macro";
+        Text[ korean ] = "~Run macro";
+        Text[ chinese_simplified ] = "~Run macro";
+        Text[ chinese_traditional ] = "~Run macro";
+        Text[ turkish ] = "~Run macro";
+        Text[ arabic ] = "~Run macro";
+        Text[ catalan ] = "~Run macro";
     };
     ListBox LB_EXEC_MACRO
     {
@@ -1428,6 +1468,132 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
             < "According to path list" ; > ;
             < "Always" ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+         < "Nie" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Immer" ; > ;
+    };
+    StringList [ english_us ] =
+    {
+         < "Never" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Always" ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+         < "Nunca" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Sempre" ; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "ÕËÍÓ„‰‡" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "¬ÒÂ„‰‡" ; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "–ÔÙ›" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "–‹ÌÙ·" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Nooit" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Altijd" ; > ;
+    };
+    StringList [ french ] =
+    {
+         < "Jamais" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Chaque fois" ; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Nunca" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Siempre" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Ei koskaan" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Aina" ; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Mai" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Sempre" ; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Aldrig" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Altid" ; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Aldrig" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Alltid" ; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Nie" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Zawsze" ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Nie" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Immer" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+         < "Nie" ; > ;
+        < "GemÔøΩÔøΩ Pfadliste" ; > ;
+        < "„Åô„Åπ„Å¶„ÅÆÔæçÔæüÔΩ∞ÔΩºÔæû" ; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "Ï†àÎåÄ ÏóÜÏùå" ; > ;
+        < "GemÔøΩÔøΩ Pfadliste" ; > ;
+        < "Ìï≠ÏÉÅ" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "‰ªé‰∏ç" ; > ;
+        < "GemÔøΩÔøΩ Pfadliste" ; > ;
+        < "ÊÄªÊòØ" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "Âæû‰∏ç" ; > ;
+        < "GemÔøΩÔøΩ Pfadliste" ; > ;
+        < "Á∏ΩÊòØ" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "HiÁbir zaman" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Her zaman" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "» « «" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "œ«∆„«" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Nie" ; > ;
+        < "Gem‰ﬂ Pfadliste" ; > ;
+        < "Sempre" ; > ;
+    };
     };
     CheckBox CB_CONFIRM
     {
@@ -1435,6 +1601,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Nachfragen bei anderen Dokumentquellen" ;
         Text [ English ] = "C~onfirm in case of other document sources" ;
+        Text[ english_us ] = "C~onfirm in case of other document sources";
+        Text[ portuguese ] = "C~onfirm in case of other document sources";
+        Text[ russian ] = "C~onfirm in case of other document sources";
+        Text[ greek ] = "C~onfirm in case of other document sources";
+        Text[ dutch ] = "C~onfirm in case of other document sources";
+        Text[ french ] = "C~onfirm in case of other document sources";
+        Text[ spanish ] = "C~onfirm in case of other document sources";
+        Text[ finnish ] = "C~onfirm in case of other document sources";
+        Text[ italian ] = "C~onfirm in case of other document sources";
+        Text[ danish ] = "C~onfirm in case of other document sources";
+        Text[ swedish ] = "C~onfirm in case of other document sources";
+        Text[ polish ] = "C~onfirm in case of other document sources";
+        Text[ portuguese_brazilian ] = "C~onfirm in case of other document sources";
+        Text[ japanese ] = "C~onfirm in case of other document sources";
+        Text[ korean ] = "C~onfirm in case of other document sources";
+        Text[ chinese_simplified ] = "C~onfirm in case of other document sources";
+        Text[ chinese_traditional ] = "C~onfirm in case of other document sources";
+        Text[ turkish ] = "C~onfirm in case of other document sources";
+        Text[ arabic ] = "C~onfirm in case of other document sources";
+        Text[ catalan ] = "C~onfirm in case of other document sources";
     };
     CheckBox CB_WARNING
     {
@@ -1442,6 +1628,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 176 , 10 ) ;
         Text = "~Vor Ausf¸hrung immer warnen" ;
         Text [ English ] = "Show ~warning before running macro" ;
+        Text[ english_us ] = "Show ~warning before running macro";
+        Text[ portuguese ] = "Show ~warning before running macro";
+        Text[ russian ] = "Show ~warning before running macro";
+        Text[ greek ] = "Show ~warning before running macro";
+        Text[ dutch ] = "Show ~warning before running macro";
+        Text[ french ] = "Show ~warning before running macro";
+        Text[ spanish ] = "Show ~warning before running macro";
+        Text[ finnish ] = "Show ~warning before running macro";
+        Text[ italian ] = "Show ~warning before running macro";
+        Text[ danish ] = "Show ~warning before running macro";
+        Text[ swedish ] = "Show ~warning before running macro";
+        Text[ polish ] = "Show ~warning before running macro";
+        Text[ portuguese_brazilian ] = "Show ~warning before running macro";
+        Text[ japanese ] = "Show ~warning before running macro";
+        Text[ korean ] = "Show ~warning before running macro";
+        Text[ chinese_simplified ] = "Show ~warning before running macro";
+        Text[ chinese_traditional ] = "Show ~warning before running macro";
+        Text[ turkish ] = "Show ~warning before running macro";
+        Text[ arabic ] = "Show ~warning before running macro";
+        Text[ catalan ] = "Show ~warning before running macro";
     };
     FixedText FT_PATH_LIST
     {
@@ -1449,6 +1655,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "Pfa~dliste" ;
         Text [ English ] = "~Path list" ;
+        Text[ english_us ] = "~Path list";
+        Text[ portuguese ] = "~Path list";
+        Text[ russian ] = "~Path list";
+        Text[ greek ] = "~Path list";
+        Text[ dutch ] = "~Path list";
+        Text[ french ] = "~Path list";
+        Text[ spanish ] = "~Path list";
+        Text[ finnish ] = "~Path list";
+        Text[ italian ] = "~Path list";
+        Text[ danish ] = "~Path list";
+        Text[ swedish ] = "~Path list";
+        Text[ polish ] = "~Path list";
+        Text[ portuguese_brazilian ] = "~Path list";
+        Text[ japanese ] = "~Path list";
+        Text[ korean ] = "~Path list";
+        Text[ chinese_simplified ] = "~Path list";
+        Text[ chinese_traditional ] = "~Path list";
+        Text[ turkish ] = "~Path list";
+        Text[ arabic ] = "~Path list";
+        Text[ catalan ] = "~Path list";
     };
     ListBox LB_SCRIPT_EXEC
     {
@@ -1519,6 +1745,26 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "N~euer Pfad" ;
         Text [ English ] = "New pa~th" ;
+        Text[ english_us ] = "New pa~th";
+        Text[ portuguese ] = "New pa~th";
+        Text[ russian ] = "New pa~th";
+        Text[ greek ] = "New pa~th";
+        Text[ dutch ] = "New pa~th";
+        Text[ french ] = "New pa~th";
+        Text[ spanish ] = "New pa~th";
+        Text[ finnish ] = "New pa~th";
+        Text[ italian ] = "New pa~th";
+        Text[ danish ] = "New pa~th";
+        Text[ swedish ] = "New pa~th";
+        Text[ polish ] = "New pa~th";
+        Text[ portuguese_brazilian ] = "New pa~th";
+        Text[ japanese ] = "New pa~th";
+        Text[ korean ] = "New pa~th";
+        Text[ chinese_simplified ] = "New pa~th";
+        Text[ chinese_traditional ] = "New pa~th";
+        Text[ turkish ] = "New pa~th";
+        Text[ arabic ] = "New pa~th";
+        Text[ catalan ] = "New pa~th";
     };
     Edit ED_SCRIPT_EXEC
     {
@@ -2054,6 +2300,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
