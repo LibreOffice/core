@@ -3,9 +3,9 @@
 #
 #   $RCSfile: big5hkscs2001.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2002-02-25 15:07:49 $
+#   last change: $Author: sb $ $Date: 2002-02-27 09:19:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,9 +60,19 @@
 #
 #*************************************************************************
 
-# The following file must be available in a ./input subdir:
+# The following files must be available in a ./input subdir:
 
 # <http://www.info.gov.hk/digital21/eng/hkscs/download/big5-iso.txt>
+
+# <http://www.unicode.org/Public/MAPPINGS/OBSOLETE/EASTASIA/OTHER/BIG5.TXT>:
+#  "Unicode version: 1.1    Table version: 0.0d3    Date: 11 February 1994"
+#  Only used to track Unicode characters that are mapped from both Big5 and
+#  HKSCS.
+
+# <http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP950.TXT>:
+#  "Unicode version: 2.0    Table version: 2.01    Date: 1/7/2000"
+#  Only used to track Unicode characters that are mapped from both CP950 and
+#  HKSCS.
 
 $surrogates = 0; # set to 1 to allow mappings to Unicode beyond Plane 0
 
@@ -156,6 +166,66 @@ sub addMapping
               printBig5($big5_1), ", NOT ", ($comp ? "compat " : ""),
               printBig5($big5), "\n";
     }
+}
+
+# Build mappings to track Unicode characters that are mapped from both Big5/
+# CP950 and HKSCS:
+{
+    $filename = "BIG5.TXT";
+    open IN, ("input/" . $filename) or die "Cannot read " . $filename;
+    while (<IN>)
+    {
+        if (/(0x[0-9A-F][0-9A-F][0-9A-F][0-9A-F])[ \t]+(0x[0-9A-F]+)[ \t]+\#.*$/)
+        {
+            $big5 = oct($1);
+            $utf32 = oct($2);
+            isValidBig5($big5)
+                or die "Bad Big5 char " . printBig5($big5);
+            isValidUtf32($utf32)
+                or die "Bad UTF32 char " . printUtf32($utf32);
+            if ($utf32 != 0xFFFD)
+            {
+                if (defined($underlying_big5[$utf32]))
+                {
+                    print "WARNING!  In ", $filename, ", both ",
+                          printBig5($underlying_big5[$utf32]), " and ",
+                          printBig5($big5), " map to ", printUtf32($utf32),
+                          "\n";
+                }
+                else
+                {
+                    $underlying_big5[$utf32] = $big5;
+                }
+            }
+        }
+    }
+    close IN;
+
+    $filename = "CP950.TXT";
+    open IN, ("input/" . $filename) or die "Cannot read " . $filename;
+    while (<IN>)
+    {
+        if (/(0x[0-9A-F][0-9A-F][0-9A-F][0-9A-F])[ \t]+(0x[0-9A-F]+)[ \t]+\#.*$/)
+        {
+            $big5 = oct($1);
+            $utf32 = oct($2);
+            isValidBig5($big5)
+                or die "Bad Big5 char " . printBig5($big5);
+            isValidUtf32($utf32)
+                or die "Bad UTF32 char " . printUtf32($utf32);
+            if (defined($underlying_cp950[$utf32]))
+            {
+                print "WARNING!  In ", $filename, ", both ",
+                      printBig5($underlying_cp950[$utf32]), " and ",
+                      printBig5($big5), " map to ", printUtf32($utf32), "\n";
+            }
+            else
+            {
+                $underlying_cp950[$utf32] = $big5;
+            }
+        }
+    }
+    close IN;
 }
 
 # The following are mapped by the underlying RTL_TEXTENCODING_BIG5 to some
@@ -279,13 +349,62 @@ while (<IN>)
         isValidBig5($big5)
             or die "Bad Big5 char " . printBig5($big5);
         isValidUtf32($utf32_1993)
-            or die "Bad UTF32 char " . printUtf32($utf32_2000);
+            or die "Bad UTF32 char " . printUtf32($utf32_1993);
         isValidUtf32($utf32_2000)
             or die "Bad UTF32 char " . printUtf32($utf32_2000);
         isValidUtf32($utf32_2001)
             or die "Bad UTF32 char " . printUtf32($utf32_2001);
 
         $utf32 = $surrogates ? $utf32_2001 : $utf32_2000;
+
+        if (defined($underlying_big5[$utf32])
+            || defined($underlying_cp950[$utf32]))
+        {
+            if (defined($underlying_big5[$utf32])
+                && defined($underlying_cp950[$utf32])
+                && $underlying_big5[$utf32] == $underlying_cp950[$utf32]
+                && $underlying_big5[$utf32] == $big5
+                ||
+                defined($underlying_big5[$utf32])
+                && !defined($underlying_cp950[$utf32])
+                && $underlying_big5[$utf32] == $big5
+                ||
+                !defined($underlying_big5[$utf32])
+                && defined($underlying_cp950[$utf32])
+                && $underlying_cp950[$utf32] == $big5)
+            {
+                # ignore
+
+                # Depending on real underlying mapping (cf.
+                # ../convertbig5hkscs.tab), it would be possible to save some
+                # table space by dropping those HKSCS code points that are
+                # already covered by the underlying mapping.
+            }
+            else
+            {
+                print "XXX mapping underlying";
+                if (defined($underlying_big5[$utf32])
+                    && defined($underlying_cp950[$utf32])
+                    && $underlying_big5[$utf32] == $underlying_cp950[$utf32])
+                {
+                    print " Big5/CP950 ", printBig5($underlying_big5[$utf32]);
+                }
+                else
+                {
+                    if (defined($underlying_big5[$utf32]))
+                    {
+                        print " Big5 ", printBig5($underlying_big5[$utf32]);
+                    }
+                    if (defined($underlying_cp950[$utf32]))
+                    {
+                        print " CP950 ", printBig5($underlying_cp950[$utf32]);
+                    }
+                }
+                print " and HKSCS ", printBig5($big5), " to ",
+                      printUtf32($utf32), "\n";
+            }
+        }
+
         if ($utf32 >= 0xE000 && $utf32 <= 0xF8FF)
         {
             ++$pua;
